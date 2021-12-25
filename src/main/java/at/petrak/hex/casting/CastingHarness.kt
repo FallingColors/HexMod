@@ -7,10 +7,14 @@ import at.petrak.hex.HexUtils.deserializeVec3FromNBT
 import at.petrak.hex.HexUtils.serializeToNBT
 import at.petrak.hex.casting.operators.SpellOperator
 import at.petrak.hex.hexes.HexAngle
+import at.petrak.hex.hexes.HexCoord
 import at.petrak.hex.hexes.HexDir
 import at.petrak.hex.hexes.HexPattern
+import com.mojang.math.Matrix3f
+import com.mojang.math.Vector3f
 import net.minecraft.nbt.*
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.math.*
@@ -35,10 +39,8 @@ class CastingHarness private constructor(
                     HexMod.LOGGER.info("Started drawing new pattern")
                     this.patternDrawState = PatternDrawState.JustStarted(caster.lookAngle)
                     worldPoints.add(mutableListOf(caster.lookAngle.add(caster.position())))
-                    CastResult.Nothing
-                } else {
-                    CastResult.QuitCasting
                 }
+                CastResult.Nothing
             }
             is PatternDrawState.JustStarted -> {
                 val (anchor) = patternDrawState as PatternDrawState.JustStarted
@@ -74,8 +76,8 @@ class CastingHarness private constructor(
                     // Finish the current pattern!
                     patternDrawState = PatternDrawState.BetweenPatterns
                     try {
-
                         val operator = SpellOperator.fromPattern(pat)
+                        HexMod.LOGGER.info("Executing operator: $operator")
                         // now execute the operator
                         if (operator.argc > this.stack.size)
                             throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, operator.argc, this.stack.size)
@@ -85,6 +87,8 @@ class CastingHarness private constructor(
                             this.stack.removeLast()
                         val newData = operator.execute(args, this.ctx)
                         this.stack.addAll(newData)
+
+                        HexMod.LOGGER.info("Added new data to stack: ${this.stack}")
 
                         if (this.stack.isEmpty()) {
                             return CastResult.QuitCasting
@@ -156,7 +160,7 @@ class CastingHarness private constructor(
 
                 CastingHarness(stack, pds, points, ctx)
             } catch (exn: Exception) {
-                HexMod.LOGGER.warn("Couldn't load harness from nbt tag, falling back to default: ${exn.message}")
+                HexMod.LOGGER.warn("Couldn't load harness from nbt tag, falling back to default: $nbt: $exn")
                 CastingHarness(mutableListOf(), PatternDrawState.BetweenPatterns, mutableListOf(), ctx)
             }
         }
@@ -164,12 +168,51 @@ class CastingHarness private constructor(
         // this is on a unit sphere, where 0 is straight ahead and 1 is straight up (or similar)
         const val HEX_GRID_SPACING = 1.0 / 8.0
 
-        /** Check if the two vectors are far enough apart to be more than one hex coord apart */
-        private fun Vec3.hexDirBetween(look: Vec3): Optional<HexDir> {
+        private fun screenToLookMat(look: Vec3): Matrix3f {
+            val towardsZenith = Vec3(0.0, 1.0, 0.0).subtract(look).normalize()
+            val towardsRight = look.cross(towardsZenith).normalize()
+
+            val ihatPrime = Vector3f(look.add(towardsRight))
+            val jhatPrime = Vector3f(look.add(towardsZenith))
+            val khatPrime = Vector3f(look)
+
+            val neo = Matrix3f()
+            neo.set(0, 0, ihatPrime.x())
+            neo.set(0, 1, ihatPrime.y())
+            neo.set(0, 2, ihatPrime.z())
+            neo.set(1, 0, jhatPrime.x())
+            neo.set(1, 1, jhatPrime.y())
+            neo.set(1, 2, jhatPrime.z())
+            neo.set(2, 0, khatPrime.x())
+            neo.set(2, 1, khatPrime.y())
+            neo.set(2, 2, khatPrime.z())
+            return neo
+        }
+
+        private fun Vec3.screenAngle(offset: Vec3): Double {
             // https://gist.github.com/Alwinfy/d6f3e9b22e4432f4446a58ace8812a3c
             // no idea how any of this works
             fun pythag(x: Double, y: Double): Double = sqrt(x * x + y * y)
 
+            val yaw = atan2(this.x, this.z)
+            val pitch = atan2(this.y, pythag(this.x, this.z))
+            val zeroYaw = offset.yRot(-yaw.toFloat())
+            val zeroPitch = zeroYaw.xRot(-pitch.toFloat()).normalize()
+
+            return atan2(asin(zeroPitch.y), asin(-zeroPitch.x))
+        }
+
+        private fun Vec3.screenVec(offset: Vec3): Vec2 {
+            val angle = this.screenAngle(offset)
+            val dy = sin(angle)
+            val dx = cos(angle)
+
+            val dist = (this.normalize().subtract(offset.normalize())).length()
+            return Vec2((dx * dist).toFloat(), (dy * dist).toFloat())
+        }
+
+        /** Check if the two vectors are far enough apart to be more than one hex coord apart */
+        private fun Vec3.hexDirBetween(look: Vec3): Optional<HexDir> {
             if (look.x.absoluteValue <= 1e-30 || look.z.absoluteValue <= 1e-30)
                 return Optional.empty()
 
@@ -177,15 +220,24 @@ class CastingHarness private constructor(
             if (dist < HEX_GRID_SPACING)
                 return Optional.empty()
 
-            val yaw = atan2(this.x, this.z)
-            val pitch = atan2(this.y, pythag(this.x, this.z))
-            val zeroYaw = look.yRot(-yaw.toFloat())
-            val zeroPitch = zeroYaw.xRot(-pitch.toFloat()).normalize()
-
-            val angle = atan2(asin(zeroPitch.y), asin(-zeroPitch.x))
+            // val angle = this.screenAngle(look)
+            val neo = screenToLookMat(this)
+            neo.invert()
+            val lookScreen = Vector3f(look)
+            lookScreen.transform(neo)
+            HexMod.LOGGER.info(lookScreen)
+            val angle = atan2(lookScreen.y(), lookScreen.x())
             // 0 is right, increases clockwise(?)
             val snappedAngle = angle.div(TAU).mod(6.0).times(6).roundToInt()
             return Optional.of(HexDir.values()[(-snappedAngle + 1).mod(6)])
+        }
+
+        /**
+         * Taking this as a look vector, get the look vector that is this vector offset
+         * by the given coordinate in draw-space.
+         */
+        private fun Vec3.hexOffsetFrom(offset: HexCoord): Vec3 {
+            TODO()
         }
     }
 

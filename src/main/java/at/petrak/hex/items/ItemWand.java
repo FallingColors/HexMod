@@ -34,7 +34,10 @@ public class ItemWand extends Item {
             CastingHarness harness = CastingHarness.DeserializeFromNBT(stack.getOrCreateTag(), player);
             CastResult res = harness.update();
 
-            if (!(res instanceof CastResult.Nothing)) {
+            if (res instanceof CastResult.Nothing) {
+                // Save back the context
+                stack.setTag(harness.serializeToNBT());
+            } else {
                 if (res instanceof CastResult.Success) {
                     CastResult.Success success = (CastResult.Success) res;
                     success.getSpell().cast(harness.getCtx());
@@ -44,9 +47,6 @@ public class ItemWand extends Item {
                 }
                 // In any case clear the tag, we're through
                 stack.setTag(new CompoundTag());
-            } else {
-                // Save back the context
-                stack.setTag(harness.serializeToNBT());
             }
         }
     }

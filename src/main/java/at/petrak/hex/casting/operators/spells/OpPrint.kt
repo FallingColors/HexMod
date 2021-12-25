@@ -17,7 +17,7 @@ object OpPrint : SpellOperator {
     class Spell(private val datum: SpellDatum<*>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             ctx.caster.sendMessage(
-                TextComponent(datum.toString()),
+                TextComponent(if (datum.payload is Unit) "null" else datum.payload.toString()),
                 Util.NIL_UUID
             )
         }

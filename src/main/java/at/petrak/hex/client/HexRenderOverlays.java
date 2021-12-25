@@ -36,8 +36,7 @@ public class HexRenderOverlays {
             if (tag.contains(CastingHarness.TAG_POINTS)) {
                 PoseStack ps = e.getMatrixStack();
                 Minecraft mc = Minecraft.getInstance();
-                MultiBufferSource buffers = mc.renderBuffers().bufferSource();
-
+                MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
 
                 Vec3 camPos = mc.gameRenderer.getMainCamera().getPosition();
                 Vec3 eyePos = player.getEyePosition(e.getPartialTicks());
@@ -70,10 +69,11 @@ public class HexRenderOverlays {
                             VertexConsumer buf1 = buffers.getBuffer(RenderType.LINES);
                             addVertex(ps, buf1, player.position().add(player.getLookAngle()));
                         }
-
                     }
                 }
                 ps.popPose();
+                buffers.endBatch();
+
             }
 
         }
@@ -82,6 +82,7 @@ public class HexRenderOverlays {
     private static void addVertex(PoseStack ps, VertexConsumer buf, Vec3 vert) {
         buf.vertex(ps.last().pose(), (float) vert.x, (float) vert.y, (float) vert.z)
                 .color(128, 128, 255, 255)
+                .normal(0.0f, 1.0f, 0.0f)
                 .endVertex();
     }
 }

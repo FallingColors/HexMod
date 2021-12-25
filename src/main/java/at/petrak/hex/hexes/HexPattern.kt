@@ -65,7 +65,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     }
 
     override fun toString(): String = buildString {
-        append("[HexPattern ")
+        append("HexPattern[")
         append(this@HexPattern.startDir)
         append(", ")
         append(this@HexPattern.anglesSignature())

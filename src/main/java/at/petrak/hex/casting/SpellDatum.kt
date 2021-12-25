@@ -13,6 +13,7 @@ import net.minecraft.world.phys.Vec3
  *  * [Entity]
  *  * [Double]
  *  * [Vec3][net.minecraft.world.phys.Vec3] as both position and (when normalized) direction
+ *  * [RenderedSpell]
  *  * [Unit] as our type-safe null
  *  * [ArrayList<SpellDatum<*>>][ArrayList]
  * The constructor guarantees we won't pass a type that isn't one of those types.
@@ -30,7 +31,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             else
                 payload
         } else {
-            throw CastException(CastException.Reason.OP_WRONG_TYPE, U::class.java, clazz)
+            throw CastException(CastException.Reason.OP_WRONG_TYPE, U::class.java, this.payload)
         }
 
     fun serializeToNBT(): CompoundTag {
@@ -60,6 +61,13 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
 
         return out
     }
+
+    override fun toString(): String =
+        buildString {
+            append("SpellDatum[")
+            append(this@SpellDatum.payload.toString())
+            append(']')
+        }
 
     companion object {
         fun <T : Any> make(payload: T): SpellDatum<T> =
@@ -102,6 +110,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             Entity::class.java,
             Double::class.java,
             Vec3::class.java,
+            RenderedSpell::class.java,
             Unit::class.java,
             ArrayList::class.java,
         )
