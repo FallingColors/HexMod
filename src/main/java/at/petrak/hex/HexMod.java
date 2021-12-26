@@ -2,6 +2,7 @@ package at.petrak.hex;
 
 import at.petrak.hex.client.HexRenderOverlays;
 import at.petrak.hex.items.HexItems;
+import at.petrak.hex.network.HexMessages;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -20,5 +21,6 @@ public class HexMod {
         MinecraftForge.EVENT_BUS.register(this);
         HexItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         MinecraftForge.EVENT_BUS.register(HexRenderOverlays.class);
+        HexMessages.register();
     }
 }

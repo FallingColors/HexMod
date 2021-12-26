@@ -1,5 +1,9 @@
 package at.petrak.hex.hexes
 
+import net.minecraft.nbt.ByteArrayTag
+import net.minecraft.nbt.ByteTag
+import net.minecraft.nbt.CompoundTag
+
 /**
  * Sequence of angles to define a pattern traced.
  */
@@ -46,6 +50,14 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         return out
     }
 
+    fun serializeToNBT(): CompoundTag {
+        val out = CompoundTag()
+        out.put(TAG_START_DIR, ByteTag.valueOf(this.startDir.ordinal.toByte()))
+        val anglesTag = ByteArrayTag(this.angles.map { it.ordinal.toByte() })
+        out.put(TAG_ANGLES, anglesTag)
+        return out
+    }
+
     // Terrible shorthand method for easy matching
     fun anglesSignature(): String {
         return buildString {
@@ -70,5 +82,17 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         append(", ")
         append(this@HexPattern.anglesSignature())
         append("]")
+    }
+
+    companion object {
+        const val TAG_START_DIR = "start_dir"
+        const val TAG_ANGLES = "angles"
+
+        @JvmStatic
+        fun DeserializeFromNBT(tag: CompoundTag): HexPattern {
+            val startDir = HexDir.values()[tag.getByte(TAG_START_DIR).toInt()]
+            val angles = tag.getByteArray(TAG_ANGLES).map { HexAngle.values()[it.toInt()] }
+            return HexPattern(startDir, angles.toMutableList())
+        }
     }
 }

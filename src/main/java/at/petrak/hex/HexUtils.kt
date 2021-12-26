@@ -1,6 +1,7 @@
 package at.petrak.hex
 
 import net.minecraft.nbt.LongArrayTag
+import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 
 object HexUtils {
@@ -14,6 +15,17 @@ object HexUtils {
             Double.fromBits(tag[0]),
             Double.fromBits(tag[1]),
             Double.fromBits(tag[2])
+        )
+
+    @JvmStatic
+    fun Vec2.serializeToNBT(): LongArrayTag =
+        LongArrayTag(longArrayOf(this.x.toDouble().toRawBits(), this.y.toDouble().toRawBits()))
+
+    @JvmStatic
+    fun deserializeVec2FromNBT(tag: LongArray): Vec2 =
+        Vec2(
+            Double.fromBits(tag[0]).toFloat(),
+            Double.fromBits(tag[1]).toFloat(),
         )
 
     const val TAU = Math.PI * 2.0
