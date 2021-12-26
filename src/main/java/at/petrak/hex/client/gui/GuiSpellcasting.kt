@@ -47,6 +47,7 @@ class GuiSpellcasting : Screen(TextComponent("")) {
         if (anchor != null) {
             val mouse = Vec2(pMouseX.toFloat(), pMouseY.toFloat())
             if (anchor.distanceToSqr(mouse) >= this.hexSize() * this.hexSize()) {
+                HexMod.LOGGER.info("($pMouseX, $pMouseY) was sufficiently far from (${anchor.x}, ${anchor.y})")
                 val delta = mouse.add(anchor.negated())
                 val angle = atan2(delta.y, delta.x)
                 // 0 is right, increases clockwise(?)
@@ -66,7 +67,7 @@ class GuiSpellcasting : Screen(TextComponent("")) {
                     val success = ds.wipPattern.tryAppendDir(newdir)
                     if (success) {
                         ds.current = idealNextLoc
-                        HexMod.LOGGER.info("Added to pattern: ${ds.wipPattern} ; New current pos: ${ds.current}")
+                        HexMod.LOGGER.info("Added to pattern: ${ds.wipPattern} ; New current pos: (${ds.current.x}, ${ds.current.y})")
                     }
                 }
             }
@@ -103,7 +104,7 @@ class GuiSpellcasting : Screen(TextComponent("")) {
     override fun render(poseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(poseStack, pMouseX, pMouseY, pPartialTick)
 
-        // oh god
+        // they spell it wrong at mojang lmao
         val tess = Tesselator.getInstance()
         val buf = tess.builder
 
@@ -116,7 +117,7 @@ class GuiSpellcasting : Screen(TextComponent("")) {
                 val pix = this.coordToPx(coord, origin)
                 buf.vertex(pix.x.toDouble(), pix.y.toDouble(), 0.0).color(127, 127, 255, 255).endVertex()
             }
-            buf.end()
+            tess.end()
         }
 
         // Now draw the currently WIP pattern
@@ -135,10 +136,8 @@ class GuiSpellcasting : Screen(TextComponent("")) {
             }
 
             buf.vertex(pMouseX.toDouble(), pMouseY.toDouble(), 0.0).color(240, 240, 255, 255).endVertex()
-            buf.end()
+            tess.end()
         }
-
-        tess.end()
     }
 
     // why the hell is this default true
@@ -152,7 +151,7 @@ class GuiSpellcasting : Screen(TextComponent("")) {
         origin.add(
             Vec2(
                 sqrt(3.0f) * coord.q.toFloat() + sqrt(3.0f) / 2.0f * coord.r.toFloat(),
-                1.5f * coord.r
+                -1.5f * coord.r
             ).scale(this.hexSize())
         )
 
