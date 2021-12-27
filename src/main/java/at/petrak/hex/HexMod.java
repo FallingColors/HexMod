@@ -1,8 +1,8 @@
 package at.petrak.hex;
 
 import at.petrak.hex.client.HexRenderOverlays;
-import at.petrak.hex.items.HexItems;
-import at.petrak.hex.network.HexMessages;
+import at.petrak.hex.common.items.HexItems;
+import at.petrak.hex.common.network.HexMessages;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
