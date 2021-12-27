@@ -9,7 +9,10 @@ import at.petrak.hex.network.HexMessages
 import at.petrak.hex.network.MsgNewSpellPatternSyn
 import at.petrak.hex.network.MsgQuitSpellcasting
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.*
+import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.Tesselator
+import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Matrix4f
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
@@ -68,7 +71,6 @@ class GuiSpellcasting : Screen(TextComponent("")) {
                     val ds = (this.drawState as PatternDrawState.Drawing)
                     val success = ds.wipPattern.tryAppendDir(newdir)
                     if (success) {
-                        val poses = ds.wipPattern.positions()
                         ds.current = idealNextLoc
                         HexMod.LOGGER.info("Added to pattern: ${ds.wipPattern} ; New current pos: (${ds.current.x}, ${ds.current.y})")
                     }
@@ -94,8 +96,9 @@ class GuiSpellcasting : Screen(TextComponent("")) {
                 }
             }
             is PatternDrawState.Drawing -> {
-                val (tstart, current, pat) = this.drawState as PatternDrawState.Drawing
+                val (start, _, pat) = this.drawState as PatternDrawState.Drawing
                 this.drawState = PatternDrawState.BetweenPatterns
+                this.patterns.add(Pair(pat, start))
 
                 HexMessages.getNetwork().sendToServer(MsgNewSpellPatternSyn(0, pat))
             }
@@ -113,17 +116,17 @@ class GuiSpellcasting : Screen(TextComponent("")) {
     override fun render(poseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(poseStack, pMouseX, pMouseY, pPartialTick)
 
-        fun drawLineSeq(buf: BufferBuilder, mat: Matrix4f, points: List<Vec2>, color: Int) {
+        fun drawLineSeq(mat: Matrix4f, points: List<Vec2>, color: Int) {
+            // they spell it wrong at mojang lmao
+            val tess = Tesselator.getInstance()
+            val buf = tess.builder
             buf.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR)
             for (pos in points) {
                 buf.vertex(mat, pos.x, pos.y, 0f).color(color).endVertex()
             }
-            buf.end()
+            tess.end()
         }
 
-        // they spell it wrong at mojang lmao
-        val tess = Tesselator.getInstance()
-        val buf = tess.builder
         val mat = poseStack.last().pose()
 
         val posColorShader = GameRenderer.getPositionColorShader()
@@ -131,7 +134,7 @@ class GuiSpellcasting : Screen(TextComponent("")) {
         RenderSystem.setShader { posColorShader }
 
         for ((pat, origin) in this.patterns) {
-            drawLineSeq(buf, mat, pat.positions().map { pos -> this.coordToPx(pos, origin) }, 0xaaaaff)
+            drawLineSeq(mat, pat.positions().map { pos -> this.coordToPx(pos, origin) }, 0xaaaaff)
         }
 
         // Now draw the currently WIP pattern
@@ -150,7 +153,7 @@ class GuiSpellcasting : Screen(TextComponent("")) {
             }
 
             points.add(Vec2(pMouseX.toFloat(), pMouseY.toFloat()))
-            drawLineSeq(buf, mat, points, 0xccccff)
+            drawLineSeq(mat, points, 0xccccff)
         }
 
         RenderSystem.setShader { prevShader }
