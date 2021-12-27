@@ -25,5 +25,7 @@ public class HexMessages {
                 MsgNewSpellPatternSyn::deserialize, MsgNewSpellPatternSyn::handle);
         NETWORK.registerMessage(messageIdx++, MsgNewSpellPatternAck.class, MsgNewSpellPatternAck::serialize,
                 MsgNewSpellPatternAck::deserialize, MsgNewSpellPatternAck::handle);
+        NETWORK.registerMessage(messageIdx++, MsgQuitSpellcasting.class, MsgQuitSpellcasting::serialize,
+                MsgQuitSpellcasting::deserialize, MsgQuitSpellcasting::handle);
     }
 }

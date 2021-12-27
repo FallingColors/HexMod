@@ -18,8 +18,9 @@ public class HexMod {
 
     public HexMod() {
         // Register ourselves for server and other game events we are interested in
+        var evbus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.register(this);
-        HexItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        HexItems.ITEMS.register(evbus);
         MinecraftForge.EVENT_BUS.register(HexRenderOverlays.class);
         HexMessages.register();
     }

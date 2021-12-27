@@ -7,6 +7,7 @@ import at.petrak.hex.hexes.HexPattern;
 import at.petrak.hex.items.ItemWand;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,7 +55,16 @@ public record MsgNewSpellPatternSyn(int windowID, HexPattern pattern) {
                         sender.sendMessage(new TextComponent(error.getExn().toString()), Util.NIL_UUID);
                     }
 
-                    var quit = !(res instanceof CastResult.Nothing);
+                    boolean quit;
+                    if (res instanceof CastResult.Nothing) {
+                        // save the changes
+                        held.setTag(harness.serializeToNBT());
+                        quit = false;
+                    } else {
+                        // Else we requested to quit in some way or another
+                        held.setTag(new CompoundTag());
+                        quit = true;
+                    }
                     HexMessages.getNetwork()
                             .send(PacketDistributor.PLAYER.with(() -> sender),
                                     new MsgNewSpellPatternAck(this.windowID, quit));

@@ -46,7 +46,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
             out.add(cursor)
             compass *= a
         }
-        out.add(cursor.shiftedBy(compass))
+        out.add(cursor + compass)
         return out
     }
 
