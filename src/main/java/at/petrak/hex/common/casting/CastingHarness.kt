@@ -13,6 +13,9 @@ import net.minecraft.server.level.ServerPlayer
  */
 class CastingHarness private constructor(
     val stack: MutableList<SpellDatum<*>>,
+    var parenCount: Int,
+    var parenthesized: MutableList<HexPattern>,
+    var escapeNext: Boolean,
     val ctx: CastingContext,
 ) {
     /**
@@ -21,19 +24,92 @@ class CastingHarness private constructor(
      */
     fun update(newPat: HexPattern): CastResult {
         return try {
-            val operator = SpellOperator.fromPattern(newPat)
-            HexMod.LOGGER.info("Executing operator: $operator")
-            operator.modifyStack(this.stack, this.ctx)
-            HexMod.LOGGER.info("Modified stack: ${this.stack}")
-
-            if (this.stack.isEmpty()) {
-                return CastResult.QuitCasting
+            var exn: CastException? = null
+            val operator = try {
+                SpellOperator.fromPattern(newPat)
+            } catch (e: CastException) {
+                exn = e
+                null
             }
-            val maybeSpell = this.stack[0]
-            if (this.stack.size == 1 && maybeSpell.payload is RenderedSpell) {
-                CastResult.Success(maybeSpell.payload)
+            if (this.parenCount > 0) {
+                if (this.escapeNext) {
+                    this.escapeNext = false
+                    this.parenthesized.add(newPat)
+                    HexMod.LOGGER.info("Escaping onto parenthesized")
+                } else if (operator == SpellWidget.ESCAPE) {
+                    this.escapeNext = true
+                } else if (operator == SpellWidget.OPEN_PAREN) {
+                    // we have escaped the parens onto the stack; we just also record our count.
+                    this.parenthesized.add(newPat)
+                    this.parenCount++
+                } else if (operator == SpellWidget.CLOSE_PAREN) {
+                    this.parenCount--
+                    if (this.parenCount == 0) {
+                        HexMod.LOGGER.info("Finished parenthesizing things")
+                        this.stack.add(SpellDatum.make(this.parenthesized.map { SpellDatum.make(it) }))
+                    } else if (this.parenCount < 0) {
+                        throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
+                    } else {
+                        // we have this situation: "(()"
+                        // we need to add the close paren
+                        this.parenthesized.add(newPat)
+                    }
+                } else {
+                    this.parenthesized.add(newPat)
+                }
+            } else if (this.escapeNext) {
+                this.escapeNext = false
+                HexMod.LOGGER.info("Escaping onto stack")
+                this.stack.add(SpellDatum.make(newPat))
             } else {
-                CastResult.Nothing
+                // Plain ol operator
+                val sig = newPat.anglesSignature()
+                if (sig.startsWith("aqaa") || sig.startsWith("dedd")) {
+                    val negate = sig.startsWith("dedd")
+                    var accumulator = 0.0
+                    for (chr in sig.substring(4)) {
+                        when (chr) {
+                            'w' -> accumulator += 1
+                            'q' -> accumulator += 5
+                            'e' -> accumulator += 10
+                            'a' -> accumulator *= 2
+                            'd' -> accumulator /= 2
+                        }
+                    }
+                    if (negate) {
+                        accumulator = -accumulator
+                    }
+                    this.stack.add(SpellDatum.make(accumulator))
+                } else if (exn != null) {
+                    // there was a problem finding the pattern and it was NOT due to numbers
+                    throw exn
+                } else if (operator == SpellWidget.OPEN_PAREN) {
+                    this.parenCount++
+                } else if (operator == SpellWidget.CLOSE_PAREN) {
+                    throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
+                } else {
+                    // we know the operator is ok here
+                    operator!!.modifyStack(this.stack, this.ctx)
+                }
+            }
+
+            if (this.parenCount > 0) {
+                HexMod.LOGGER.info("Paren level ${this.parenCount}; ${this.parenthesized}")
+            }
+            HexMod.LOGGER.info("New stack: ${this.stack}")
+            if (this.stack.isEmpty()) {
+                if (this.parenCount == 0) {
+                    CastResult.QuitCasting
+                } else {
+                    CastResult.Nothing
+                }
+            } else {
+                val maybeSpell = this.stack[0]
+                if (this.stack.size == 1 && maybeSpell.payload is RenderedSpell) {
+                    CastResult.Success(maybeSpell.payload)
+                } else {
+                    CastResult.Nothing
+                }
             }
         } catch (e: CastException) {
             CastResult.Error(e)
@@ -48,8 +124,13 @@ class CastingHarness private constructor(
             stackTag.add(datum.serializeToNBT())
         out.put(TAG_STACK, stackTag)
 
-        val pointsTag = ListTag()
-        out.put(TAG_POINTS, pointsTag)
+        out.putInt(TAG_PAREN_COUNT, this.parenCount)
+        out.putBoolean(TAG_ESCAPE_NEXT, this.escapeNext)
+
+        val parensTag = ListTag()
+        for (pat in this.parenthesized)
+            parensTag.add(pat.serializeToNBT())
+        out.put(TAG_PARENTHESIZED, parensTag)
 
         return out
     }
@@ -57,6 +138,9 @@ class CastingHarness private constructor(
     companion object {
         const val TAG_STACK = "stack"
         const val TAG_POINTS = "points"
+        const val TAG_PAREN_COUNT = "open_parens"
+        const val TAG_PARENTHESIZED = "parenthesized"
+        const val TAG_ESCAPE_NEXT = "escape_next"
 
         @JvmStatic
         fun DeserializeFromNBT(nbt: Tag?, caster: ServerPlayer): CastingHarness {
@@ -71,12 +155,24 @@ class CastingHarness private constructor(
                     stack.add(datum)
                 }
 
-                CastingHarness(stack, ctx)
+                val parenthesized = mutableListOf<HexPattern>()
+                val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND.toInt())
+                for (subtag in parenTag) {
+                    parenthesized.add(HexPattern.DeserializeFromNBT(subtag as CompoundTag))
+                }
+
+                val parenCount = nbt.getInt(TAG_PAREN_COUNT)
+                val escapeNext = nbt.getBoolean(TAG_ESCAPE_NEXT)
+
+                CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx)
             } catch (exn: Exception) {
                 HexMod.LOGGER.warn("Couldn't load harness from nbt tag, falling back to default: $nbt: $exn")
-                CastingHarness(mutableListOf(), ctx)
+                Default(ctx)
             }
         }
+
+        internal fun Default(ctx: CastingContext): CastingHarness =
+            CastingHarness(mutableListOf(), 0, mutableListOf(), false, ctx)
     }
 
     sealed class CastResult {

@@ -3,7 +3,7 @@ package at.petrak.hex.common.casting
 import at.petrak.hex.hexmath.HexPattern
 import net.minecraft.world.phys.Vec3
 
-class CastException(val reason: at.petrak.hex.common.casting.CastException.Reason, vararg val data: Any) : Exception() {
+class CastException(val reason: Reason, vararg val data: Any) : Exception() {
     enum class Reason {
         // Compilation
         /**
@@ -36,6 +36,13 @@ class CastException(val reason: at.petrak.hex.common.casting.CastException.Reaso
          */
         NOT_ENOUGH_ARGS,
 
+        /**
+         * There are too many close parentheses.
+         *
+         * `no args`
+         */
+        TOO_MANY_CLOSE_PARENS,
+
         // Execution
         /**
          * Tried to interact with a vector that was too far away
@@ -47,10 +54,11 @@ class CastException(val reason: at.petrak.hex.common.casting.CastException.Reaso
 
     override val message: String
         get() = when (this.reason) {
-            at.petrak.hex.common.casting.CastException.Reason.INVALID_PATTERN -> "could not match pattern to operator: ${this.data[0] as HexPattern}"
-            at.petrak.hex.common.casting.CastException.Reason.INVALID_TYPE -> "cannot use ${this.data[0]} as a SpellDatum (type ${this.data[0].javaClass.typeName})"
-            at.petrak.hex.common.casting.CastException.Reason.OP_WRONG_TYPE -> "operator expected ${(this.data[0] as Class<*>).typeName} but got ${this.data[1]} (type ${this.data[1].javaClass.typeName})"
-            at.petrak.hex.common.casting.CastException.Reason.NOT_ENOUGH_ARGS -> "required at least ${this.data[0] as Int} args on the stack but only had ${this.data[1] as Int}"
-            at.petrak.hex.common.casting.CastException.Reason.TOO_FAR -> "tried to interact with something too far away at ${this.data[0] as Vec3}"
+            Reason.INVALID_PATTERN -> "could not match pattern to operator: ${this.data[0] as HexPattern}"
+            Reason.INVALID_TYPE -> "cannot use ${this.data[0]} as a SpellDatum (type ${this.data[0].javaClass.typeName})"
+            Reason.OP_WRONG_TYPE -> "operator expected ${(this.data[0] as Class<*>).typeName} but got ${this.data[1]} (type ${this.data[1].javaClass.typeName})"
+            Reason.NOT_ENOUGH_ARGS -> "required at least ${this.data[0] as Int} args on the stack but only had ${this.data[1] as Int}"
+            Reason.TOO_MANY_CLOSE_PARENS -> "too many close parentheses"
+            Reason.TOO_FAR -> "tried to interact with something too far away at ${this.data[0] as Vec3}"
         }
 }

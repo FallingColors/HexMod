@@ -48,7 +48,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     if (res instanceof CastResult.Success success) {
                         success.getSpell().cast(new CastingContext(sender));
                     } else if (res instanceof CastResult.Error error) {
-                        sender.sendMessage(new TextComponent(error.getExn().toString()), Util.NIL_UUID);
+                        sender.sendMessage(new TextComponent(error.getExn().getMessage()), Util.NIL_UUID);
                     }
 
                     boolean quit;

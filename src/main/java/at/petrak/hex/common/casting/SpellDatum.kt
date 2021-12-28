@@ -17,7 +17,7 @@ import net.minecraft.world.phys.Vec3
  *  * [Vec3][net.minecraft.world.phys.Vec3] as both position and (when normalized) direction
  *  * [RenderedSpell]
  *  * [SpellWidget]; [SpellWidget.NULL] is used as our null value
- *  * [ArrayList<SpellDatum<*>>][ArrayList]
+ *  * [List<SpellDatum<*>>][List]
  *  * [HexPattern]! Yes, we have meta-evaluation everyone.
  * The constructor guarantees we won't pass a type that isn't one of those types.
  *
@@ -87,9 +87,15 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         }
 
     companion object {
-        fun <T : Any> make(payload: T): SpellDatum<T> =
+        fun make(payload: Any): SpellDatum<*> =
             if (!IsValidType(payload)) {
-                throw CastException(CastException.Reason.INVALID_TYPE, payload)
+                // Check to see if it's a java boxed double
+                if (payload is java.lang.Double) {
+                    val num = payload.toDouble()
+                    SpellDatum(if (num.isFinite()) num else 0.0)
+                } else {
+                    throw CastException(CastException.Reason.INVALID_TYPE, payload)
+                }
             } else {
                 SpellDatum(payload)
             }
@@ -148,9 +154,9 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             Double::class.java,
             Vec3::class.java,
             RenderedSpell::class.java,
-            ArrayList::class.java,
+            List::class.java,
             SpellWidget::class.java,
-            PatternList::class.java,
+            HexPattern::class.java,
         )
 
         // Mapping of string keys for spell implers to their implementation
@@ -168,8 +174,10 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         const val TAG_PATTERN = "pattern"
 
         fun <T : Any> IsValidType(checkee: T): Boolean =
-            if (checkee is ArrayList<*>) {
-                checkee.all { it is SpellDatum<*> && IsValidType(it) }
+            if (checkee is List<*>) {
+                // note it should be impossible to pass a spell datum that doesn't contain a valid type,
+                // but we best make sure.
+                checkee.all { it is SpellDatum<*> && IsValidType(it.payload) }
             } else {
                 ValidTypes.any { clazz -> clazz.isAssignableFrom(checkee.javaClass) }
             }

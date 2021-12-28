@@ -1,6 +1,5 @@
 package at.petrak.hex;
 
-import at.petrak.hex.client.HexRenderOverlays;
 import at.petrak.hex.common.items.HexItems;
 import at.petrak.hex.common.network.HexMessages;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,7 +20,6 @@ public class HexMod {
         var evbus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.register(this);
         HexItems.ITEMS.register(evbus);
-        MinecraftForge.EVENT_BUS.register(HexRenderOverlays.class);
         HexMessages.register();
     }
 }

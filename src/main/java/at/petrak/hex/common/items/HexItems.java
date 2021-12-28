@@ -14,6 +14,8 @@ public class HexItems {
             () -> new ItemWand(unstackable()));
     public static final RegistryObject<Item> FOCUS = ITEMS.register(LibItemNames.FOCUS,
             () -> new ItemFocus(props()));
+    public static final RegistryObject<Item> SPELLBOOK = ITEMS.register(LibItemNames.SPELLBOOK,
+            () -> new ItemSpellbook(unstackable()));
 
     public static Item.Properties props() {
         return new Item.Properties();

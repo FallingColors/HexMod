@@ -1,0 +1,7 @@
+{
+    "item.hex.wand": "Staff",
+    "item.hex.focus": "Focus",
+    "item.hex.spellbook": "Spellbook",
+    "hex.spellbook.tooltip.page": "Selected Page %d/%d",
+    "hex.spelldata.desc.entity": "Entity %s"
+}

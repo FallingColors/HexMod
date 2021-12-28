@@ -6,19 +6,21 @@ import at.petrak.hex.common.items.ItemFocus;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class ItemModelProvider extends net.minecraftforge.client.model.generators.ItemModelProvider {
-    public ItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+public class ItemModels extends ItemModelProvider {
+    public ItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, HexMod.MOD_ID, existingFileHelper);
     }
 
     @Override
     protected void registerModels() {
         simpleItem(HexItems.WAND.get());
+        simpleItem(HexItems.SPELLBOOK.get());
 
-        simpleItem(modLoc("focus_none"));
+        simpleItem(modLoc("focus_empty"));
         simpleItem(modLoc("focus_entity"));
         simpleItem(modLoc("focus_double"));
         simpleItem(modLoc("focus_vec3"));
@@ -29,7 +31,7 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
         getBuilder(HexItems.FOCUS.get().getRegistryName().getPath())
                 .override()
                 .predicate(ItemFocus.PREDICATE, -0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_none")))
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_empty")))
                 .end()
                 .override()
                 .predicate(ItemFocus.PREDICATE, 1 - 0.01f)

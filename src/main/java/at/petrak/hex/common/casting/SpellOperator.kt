@@ -1,6 +1,7 @@
 package at.petrak.hex.common.casting
 
 import at.petrak.hex.common.casting.operators.*
+import at.petrak.hex.common.casting.operators.spells.OpAddMotion
 import at.petrak.hex.common.casting.operators.spells.OpExplode
 import at.petrak.hex.common.casting.operators.spells.OpPrint
 import at.petrak.hex.hexmath.HexPattern
@@ -23,6 +24,7 @@ interface SpellOperator {
     companion object {
         val PatternMap: Map<String, SpellOperator> = mapOf(
             // == Getters ==
+
             // diamond shape to get the caster
             "qaq" to OpGetCaster,
             "ede" to OpGetCaster,
@@ -41,6 +43,7 @@ interface SpellOperator {
             "weaqa" to OpEntityRaycast,
 
             // == Modify Stack ==
+
             // CCW hook for undo
             "a" to OpUndo,
             // and CW for null
@@ -57,6 +60,15 @@ interface SpellOperator {
             "aq" to OpPrint,
             // nuclear sign for explosion
             "aawaawaa" to OpExplode,
+            "weeewdq" to OpAddMotion,
+
+            // == Meta stuff ==
+            "qqq" to SpellWidget.OPEN_PAREN,
+            "eee" to SpellWidget.CLOSE_PAREN,
+            "aaaqw" to SpellWidget.ESCAPE,
+            // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
+            // eval being a space filling curve feels apt doesn't it
+            "deaqq" to OpEval
         )
 
         /**
@@ -78,14 +90,8 @@ interface SpellOperator {
          * Try to get a value of the given type.
          */
         @JvmStatic
-        inline fun <reified T : Any> List<SpellDatum<*>>.getChecked(idx: Int): T {
-            val datum = this[idx]
-            val casted = datum.tryGet<T>()
-            return if (casted is Double && !casted.isFinite())
-                0.0 as T
-            else
-                casted
-        }
+        inline fun <reified T : Any> List<SpellDatum<*>>.getChecked(idx: Int): T =
+            this[idx].tryGet()
 
         /**
          * Check if the value at the given index is OK. Will throw an error otherwise.

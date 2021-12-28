@@ -1,0 +1,52 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "hex:datatype": -0.01
+      },
+      "model": "hex:item/focus_empty"
+    },
+    {
+      "predicate": {
+        "hex:datatype": 0.99
+      },
+      "model": "hex:item/focus_entity"
+    },
+    {
+      "predicate": {
+        "hex:datatype": 1.99
+      },
+      "model": "hex:item/focus_double"
+    },
+    {
+      "predicate": {
+        "hex:datatype": 2.99
+      },
+      "model": "hex:item/focus_vec3"
+    },
+    {
+      "predicate": {
+        "hex:datatype": 3.99
+      },
+      "model": "hex:item/focus_spell"
+    },
+    {
+      "predicate": {
+        "hex:datatype": 4.99
+      },
+      "model": "hex:item/focus_widget"
+    },
+    {
+      "predicate": {
+        "hex:datatype": 5.99
+      },
+      "model": "hex:item/focus_list"
+    },
+    {
+      "predicate": {
+        "hex:datatype": 6.99
+      },
+      "model": "hex:item/focus_patterns"
+    }
+  ]
+}
