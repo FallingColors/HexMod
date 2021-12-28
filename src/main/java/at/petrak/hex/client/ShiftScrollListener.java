@@ -17,7 +17,6 @@ import net.minecraftforge.fml.common.Mod;
 public class ShiftScrollListener {
     @SubscribeEvent
     public static void onScroll(InputEvent.MouseScrollEvent evt) {
-        HexMod.LOGGER.info("scrolling {}", evt.getScrollDelta());
         LocalPlayer player = Minecraft.getInstance().player;
         if (player.isCrouching()) {
             InteractionHand hand = null;

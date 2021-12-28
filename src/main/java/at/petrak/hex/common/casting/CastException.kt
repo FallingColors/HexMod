@@ -50,6 +50,13 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
          * `vec: Vec3`
          */
         TOO_FAR,
+
+        /**
+         * An operator needed a spellbook in the offhand.
+         *
+         * `no args`
+         */
+        REQUIRES_SPELLBOOK,
     }
 
     override val message: String
@@ -60,5 +67,6 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
             Reason.NOT_ENOUGH_ARGS -> "required at least ${this.data[0] as Int} args on the stack but only had ${this.data[1] as Int}"
             Reason.TOO_MANY_CLOSE_PARENS -> "too many close parentheses"
             Reason.TOO_FAR -> "tried to interact with something too far away at ${this.data[0] as Vec3}"
+            Reason.REQUIRES_SPELLBOOK -> "required a spellbook in the other hand"
         }
 }

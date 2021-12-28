@@ -1,6 +1,7 @@
 package at.petrak.hex
 
 import net.minecraft.nbt.LongArrayTag
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 
@@ -10,7 +11,7 @@ object HexUtils {
         LongArrayTag(longArrayOf(this.x.toRawBits(), this.y.toRawBits(), this.z.toRawBits()))
 
     @JvmStatic
-    fun deserializeVec3FromNBT(tag: LongArray): Vec3 =
+    fun DeserializeVec3FromNBT(tag: LongArray): Vec3 =
         Vec3(
             Double.fromBits(tag[0]),
             Double.fromBits(tag[1]),
@@ -22,11 +23,15 @@ object HexUtils {
         LongArrayTag(longArrayOf(this.x.toDouble().toRawBits(), this.y.toDouble().toRawBits()))
 
     @JvmStatic
-    fun deserializeVec2FromNBT(tag: LongArray): Vec2 =
+    fun DeserializeVec2FromNBT(tag: LongArray): Vec2 =
         Vec2(
             Double.fromBits(tag[0]).toFloat(),
             Double.fromBits(tag[1]).toFloat(),
         )
+
+    @JvmStatic
+    fun OtherHand(hand: InteractionHand) =
+        if (hand == InteractionHand.MAIN_HAND) InteractionHand.OFF_HAND else InteractionHand.MAIN_HAND
 
     const val TAU = Math.PI * 2.0
 }

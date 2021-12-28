@@ -12,7 +12,8 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 /**
- * Sent client->server when the client shift+scrolls with a shift-scrollable item.
+ * Sent client->server when the client shift+scrolls with a shift-scrollable item
+ * or scrolls in the spellcasting UI.
  */
 public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta) {
     public static MsgShiftScrollSyn deserialize(ByteBuf buffer) {

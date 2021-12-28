@@ -65,10 +65,12 @@ interface SpellOperator {
             // == Meta stuff ==
             "qqq" to SpellWidget.OPEN_PAREN,
             "eee" to SpellWidget.CLOSE_PAREN,
-            "aaaqw" to SpellWidget.ESCAPE,
+            "qqqaw" to SpellWidget.ESCAPE,
             // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
             // eval being a space filling curve feels apt doesn't it
-            "deaqq" to OpEval
+            "deaqq" to OpEval,
+            "aqqqqq" to OpReadFromSpellbook,
+            "deeeee" to OpWriteToSpellbook,
         )
 
         /**

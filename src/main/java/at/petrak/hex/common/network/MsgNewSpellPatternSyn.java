@@ -42,11 +42,11 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 var held = sender.getItemInHand(this.handUsed);
                 if (held.getItem() instanceof ItemWand) {
                     var tag = held.getOrCreateTag();
-                    var harness = CastingHarness.DeserializeFromNBT(tag, sender);
+                    var harness = CastingHarness.DeserializeFromNBT(tag, sender, this.handUsed);
 
                     var res = harness.update(this.pattern);
                     if (res instanceof CastResult.Success success) {
-                        success.getSpell().cast(new CastingContext(sender));
+                        success.getSpell().cast(new CastingContext(sender, this.handUsed));
                     } else if (res instanceof CastResult.Error error) {
                         sender.sendMessage(new TextComponent(error.getExn().getMessage()), Util.NIL_UUID);
                     }

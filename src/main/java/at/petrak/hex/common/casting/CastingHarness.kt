@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
 
 /**
  * Keeps track of a player casting a spell on the server.
@@ -143,8 +144,8 @@ class CastingHarness private constructor(
         const val TAG_ESCAPE_NEXT = "escape_next"
 
         @JvmStatic
-        fun DeserializeFromNBT(nbt: Tag?, caster: ServerPlayer): CastingHarness {
-            val ctx = CastingContext(caster)
+        fun DeserializeFromNBT(nbt: Tag?, caster: ServerPlayer, wandHand: InteractionHand): CastingHarness {
+            val ctx = CastingContext(caster, wandHand)
             return try {
                 val nbt = nbt as CompoundTag
 

@@ -114,7 +114,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     SpellDatum(if (entity == null || !entity.isAlive) SpellWidget.NULL else entity)
                 }
                 TAG_DOUBLE -> SpellDatum(nbt.getDouble(key))
-                TAG_VEC3 -> SpellDatum(HexUtils.deserializeVec3FromNBT(nbt.getLongArray(key)))
+                TAG_VEC3 -> SpellDatum(HexUtils.DeserializeVec3FromNBT(nbt.getLongArray(key)))
                 TAG_LIST -> {
                     val arr = nbt.getList(key, Tag.TAG_COMPOUND.toInt())
                     val out = ArrayList<SpellDatum<*>>(arr.size)

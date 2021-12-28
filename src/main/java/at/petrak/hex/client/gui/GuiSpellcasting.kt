@@ -1,7 +1,11 @@
 package at.petrak.hex.client.gui
 
 import at.petrak.hex.HexMod
+import at.petrak.hex.HexUtils
 import at.petrak.hex.HexUtils.TAU
+import at.petrak.hex.common.items.ItemSpellbook
+import at.petrak.hex.common.network.HexMessages
+import at.petrak.hex.common.network.MsgShiftScrollSyn
 import at.petrak.hex.hexmath.HexAngle
 import at.petrak.hex.hexmath.HexCoord
 import at.petrak.hex.hexmath.HexDir
@@ -101,7 +105,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 this.drawState = PatternDrawState.BetweenPatterns
                 this.patterns.add(Pair(pat, start))
 
-                at.petrak.hex.common.network.HexMessages.getNetwork().sendToServer(
+                HexMessages.getNetwork().sendToServer(
                     at.petrak.hex.common.network.MsgNewSpellPatternSyn(
                         this.handOpenedWith,
                         pat
@@ -111,6 +115,16 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         }
 
         return false
+    }
+
+    override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pDelta: Double): Boolean {
+        super.mouseScrolled(pMouseX, pMouseY, pDelta)
+
+        val otherHand = HexUtils.OtherHand(this.handOpenedWith)
+        if (Minecraft.getInstance().player!!.getItemInHand(otherHand).item is ItemSpellbook)
+            HexMessages.getNetwork().sendToServer(MsgShiftScrollSyn(otherHand, pDelta))
+
+        return true
     }
 
     override fun onClose() {
