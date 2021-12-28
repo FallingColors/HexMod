@@ -23,6 +23,8 @@ import net.minecraft.network.chat.TextComponent
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
+import net.minecraft.world.level.levelgen.XoroshiroRandomSource
+import net.minecraft.world.level.levelgen.synth.PerlinNoise
 import kotlin.math.atan2
 import kotlin.math.roundToInt
 
@@ -31,6 +33,10 @@ const val SQRT_3 = 1.7320508f
 class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(TextComponent("")) {
     private var patterns: MutableList<Pair<HexPattern, Vec2>> = mutableListOf()
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
+
+    companion object {
+        val NOISE = PerlinNoise.create(XoroshiroRandomSource(9001L), listOf(0, 1, 2, 3, 4))
+    }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         if (super.mouseClicked(pMouseX, pMouseY, pButton)) {
@@ -137,11 +143,60 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     override fun render(poseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(poseStack, pMouseX, pMouseY, pPartialTick)
 
-        fun drawLineSeq(mat: Matrix4f, points: List<Vec2>, r: Int, g: Int, b: Int, a: Int) {
+        // Split up a sequence of lines with a lightning effect
+        // hops: rough number of points to subdivide each segment into
+        // speed: rate at which the lightning effect should move/shake/etc
+        fun makeZappy(points: List<Vec2>, hops: Float, variance: Float, speed: Float): List<Vec2> {
+            // Nothing in, nothing out
+            if (points.isEmpty()) {
+                return emptyList()
+            }
+            val zSeed = (Minecraft.getInstance().getFrameTime().toDouble() + Minecraft.getInstance().level!!.getLevelData().getGameTime()) * speed
+            // Create our output list of zap points
+            val zappyPts = mutableListOf(points[0])
+            // For each segment in the original...
+            for ((i, pair) in points.zipWithNext().withIndex()) {
+                val (src, target) = pair
+                // Compute distance-squared to the destination, then scale it down by # of hops
+                // to know how long each individual hop should be (squared)
+                val hopDistSqr = src.distanceToSqr(target) / (hops * hops)
+                // Then take the square root to find the actual hop distance
+                val hopDist = Mth.sqrt(hopDistSqr)
+                // Compute how big the radius of variance should be
+                val maxVariance = hopDist * variance
+                
+                var position = src
+                var j = 0
+                while (position.distanceToSqr(target) > hopDistSqr) {
+                    // Add the next hop...
+                    val hop = target.add(position.negated()).normalized().scale(hopDist)
+                    // as well as some random variance...
+                    // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
+                    // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
+                    val theta = (3 * NOISE.getValue(i.toDouble(), j.toDouble(), zSeed) * TAU).toFloat()
+                    val r = NOISE.getValue(i.inv().toDouble(), j.toDouble(), zSeed).toFloat() * maxVariance
+                    val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
+                    position = position.add(hop).add(randomHop)
+                    // Then record the new location.
+                    zappyPts.add(position)
+                    j += 1
+                }
+                // Finally, we hit the destination, add that too
+                zappyPts.add(target)
+            }
+            return zappyPts
+        }
+
+        fun drawLineSeq(mat: Matrix4f, points: List<Vec2>, width: Float, z: Float, r: Int, g: Int, b: Int, a: Int) {
             // they spell it wrong at mojang lmao
             val tess = Tesselator.getInstance()
             val buf = tess.builder
 
+            // We use one single TRIANGLE_STRIP
+            // in order to connect adjacent segments together and not get the weird hinge effect.
+            // There's still some artifacting but this is passable, at least.
+            buf.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR)
+            
             for ((p1, p2) in points.zipWithNext()) {
                 // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
                 // GuiComponent::innerFill line 52
@@ -151,20 +206,26 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 // normal x and y, presumably?
                 val nx = -dy
                 val ny = dx
-                val width = 1.5f
                 // thickness?
                 val tlen = Mth.sqrt(nx * nx + ny * ny) / (width * 0.5f)
                 val tx = nx / tlen
                 val ty = ny / tlen
 
-                buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
-                buf.vertex(mat, p1.x + tx, p1.y + ty, 0f).color(r, g, b, a).endVertex()
-                buf.vertex(mat, p2.x + tx, p2.y + ty, 0f).color(r, g, b, a).endVertex()
-                buf.vertex(mat, p2.x - tx, p2.y - ty, 0f).color(r, g, b, a).endVertex()
-                buf.vertex(mat, p1.x - tx, p1.y - ty, 0f).color(r, g, b, a).endVertex()
-
-                tess.end()
+                buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(r, g, b, a).endVertex()
+                buf.vertex(mat, p1.x - tx, p1.y - ty, z).color(r, g, b, a).endVertex()
+                buf.vertex(mat, p2.x + tx, p2.y + ty, z).color(r, g, b, a).endVertex()
+                buf.vertex(mat, p2.x - tx, p2.y - ty, z).color(r, g, b, a).endVertex()
             }
+
+            tess.end()
+        }
+
+        fun drawPattern(mat: Matrix4f, points: List<Vec2>, r: Int, g: Int, b: Int, a: Int) {
+            fun screen(n: Int): Int { return (n + 255) / 2 }
+
+            val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f)
+            drawLineSeq(mat, zappyPts, 5f, 0f, r, g, b, a)
+            drawLineSeq(mat, zappyPts, 2f, 1f, screen(r), screen(g), screen(b), a)
         }
 
         fun drawSpot(mat: Matrix4f, point: Vec2, r: Int, g: Int, b: Int, a: Int) {
@@ -197,7 +258,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         RenderSystem.disableCull()
 
         for ((pat, origin) in this.patterns) {
-            drawLineSeq(mat, pat.positions().map { pos -> this.coordToPx(pos, origin) }, 127, 127, 255, 200)
+            drawPattern(mat, pat.positions().map { pos -> this.coordToPx(pos, origin) }, 127, 127, 255, 200)
         }
 
         // Now draw the currently WIP pattern
@@ -230,7 +291,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             }
 
             points.add(Vec2(pMouseX.toFloat(), pMouseY.toFloat()))
-            drawLineSeq(mat, points, 200, 200, 255, 255)
+            drawPattern(mat, points, 100, 200, 255, 255)
 
             for (dir in dirs) {
                 val pos = this.coordToPx(dir.asDelta(), spotAnchor)
