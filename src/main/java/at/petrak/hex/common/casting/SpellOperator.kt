@@ -1,6 +1,7 @@
 package at.petrak.hex.common.casting
 
 import at.petrak.hex.common.casting.operators.*
+import at.petrak.hex.common.casting.operators.math.*
 import at.petrak.hex.common.casting.operators.spells.OpAddMotion
 import at.petrak.hex.common.casting.operators.spells.OpExplode
 import at.petrak.hex.common.casting.operators.spells.OpPrint
@@ -52,6 +53,14 @@ interface SpellOperator {
             "aadaa" to OpDuplicate,
             // Two opposing triangles to swap
             "aawdd" to OpSwap,
+
+            // == Math ==
+            "waaw" to OpAdd,
+            "wddw" to OpSub,
+            "waqaw" to OpMulDot,
+            "wdedw" to OpDivCross,
+            "wqaqw" to OpAbsLen,
+            "wedew" to OpPowProj,
 
             // == Spells ==
 

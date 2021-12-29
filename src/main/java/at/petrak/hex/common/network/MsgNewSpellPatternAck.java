@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -28,10 +27,6 @@ public record MsgNewSpellPatternAck(boolean quitCasting) {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() ->
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    if (ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT) {
-                        return;
-                    }
-
                     if (quitCasting) {
                         Minecraft.getInstance().setScreen(null);
                     }

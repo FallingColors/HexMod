@@ -7,8 +7,12 @@ import at.petrak.hex.common.casting.SpellDatum
 import at.petrak.hex.common.casting.SpellOperator.Companion.getChecked
 import at.petrak.hex.common.casting.SpellOperator.Companion.spellListOf
 import at.petrak.hex.common.casting.operators.SimpleOperator
+import at.petrak.hex.common.network.HexMessages
+import at.petrak.hex.common.network.MsgAddMotionAck
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.network.PacketDistributor
 
 object OpAddMotion : SimpleOperator, RenderedSpellImpl {
     override val argc: Int
@@ -23,6 +27,13 @@ object OpAddMotion : SimpleOperator, RenderedSpellImpl {
     override fun cast(args: List<SpellDatum<*>>, ctx: CastingContext) {
         val target = args.getChecked<Entity>(0)
         val motion = args.getChecked<Vec3>(1)
-        target.deltaMovement = target.deltaMovement.add(motion)
+
+        if (target is ServerPlayer) {
+            // Player movement is apparently handled on the client; who knew
+            // There's apparently some magic flag I can set to auto-sync it but I can't find it
+            HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { target }, MsgAddMotionAck(motion))
+        } else {
+            target.deltaMovement = target.deltaMovement.add(motion)
+        }
     }
 }

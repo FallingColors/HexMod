@@ -29,5 +29,7 @@ public class HexMessages {
                 MsgQuitSpellcasting::deserialize, MsgQuitSpellcasting::handle);
         NETWORK.registerMessage(messageIdx++, MsgShiftScrollSyn.class, MsgShiftScrollSyn::serialize,
                 MsgShiftScrollSyn::deserialize, MsgShiftScrollSyn::handle);
+        NETWORK.registerMessage(messageIdx++, MsgAddMotionAck.class, MsgAddMotionAck::serialize,
+                MsgAddMotionAck::deserialize, MsgAddMotionAck::handle);
     }
 }

@@ -7,7 +7,6 @@ import at.petrak.hex.common.casting.SpellOperator.Companion.getChecked
 import at.petrak.hex.common.casting.SpellWidget
 import net.minecraft.world.entity.projectile.ProjectileUtil
 import net.minecraft.world.phys.AABB
-import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 
 object OpEntityRaycast : SimpleOperator {
@@ -26,11 +25,7 @@ object OpEntityRaycast : SimpleOperator {
             SpellOperator.MAX_DISTANCE
         )
         return SpellOperator.spellListOf(
-            if (entityHitResult != null && entityHitResult.type == HitResult.Type.ENTITY) {
-                entityHitResult.entity
-            } else {
-                SpellWidget.NULL
-            }
+            entityHitResult?.entity ?: SpellWidget.NULL
         )
     }
 }
