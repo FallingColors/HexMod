@@ -7,7 +7,7 @@ import at.petrak.hex.common.network.MsgShiftScrollSyn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,21 +22,20 @@ public class ShiftScrollListener {
         // yes, this does work if you remap your sneak key
         if (player.isShiftKeyDown()) {
             InteractionHand hand = null;
-            if (player.getMainHandItem().getItem() != Items.AIR) {
+            if (IsScrollableItem(player.getMainHandItem().getItem())) {
                 hand = InteractionHand.MAIN_HAND;
-            } else if (player.getOffhandItem().getItem() != Items.AIR) {
+            } else if (IsScrollableItem(player.getOffhandItem().getItem())) {
                 hand = InteractionHand.OFF_HAND;
             }
 
             if (hand != null) {
-                var item = player.getItemInHand(hand).getItem();
-                if (item instanceof ItemSpellbook) {
-                    evt.setCanceled(true);
-
-                    HexMessages.getNetwork().sendToServer(new MsgShiftScrollSyn(hand, evt.getScrollDelta()));
-                }
+                evt.setCanceled(true);
+                HexMessages.getNetwork().sendToServer(new MsgShiftScrollSyn(hand, evt.getScrollDelta()));
             }
         }
+    }
 
+    private static boolean IsScrollableItem(Item item) {
+        return item instanceof ItemSpellbook;
     }
 }

@@ -37,7 +37,6 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta) {
 
                 if (stack.getItem() instanceof ItemSpellbook) {
                     spellbook(sender, stack);
-
                 }
             }
         });
