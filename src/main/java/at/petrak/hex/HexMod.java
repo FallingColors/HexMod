@@ -1,7 +1,9 @@
 package at.petrak.hex;
 
+import at.petrak.hex.client.RegisterClientStuff;
 import at.petrak.hex.common.items.HexItems;
 import at.petrak.hex.common.network.HexMessages;
+import at.petrak.hex.server.RegisterServerStuff;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -21,5 +23,9 @@ public class HexMod {
         MinecraftForge.EVENT_BUS.register(this);
         HexItems.ITEMS.register(evbus);
         HexMessages.register();
+
+        // Init the client and server to make the subscribe events work
+        new RegisterServerStuff();
+        new RegisterClientStuff();
     }
 }

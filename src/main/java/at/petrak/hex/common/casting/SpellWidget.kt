@@ -1,7 +1,7 @@
 package at.petrak.hex.common.casting
 
-import at.petrak.hex.common.casting.SpellOperator.Companion.spellListOf
-import at.petrak.hex.common.casting.operators.SimpleOperator
+import at.petrak.hex.api.SimpleOperator
+import at.petrak.hex.api.SpellOperator.Companion.spellListOf
 
 /**
  * Miscellaneous spell datums used as markers, etc.

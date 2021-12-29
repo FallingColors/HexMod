@@ -1,5 +1,6 @@
 package at.petrak.hex.common.casting.operators
 
+import at.petrak.hex.api.SimpleOperator
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.SpellDatum
 

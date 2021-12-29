@@ -87,6 +87,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         }
 
     companion object {
+        @JvmStatic
         fun make(payload: Any): SpellDatum<*> =
             if (!IsValidType(payload)) {
                 // Check to see if it's a java boxed double

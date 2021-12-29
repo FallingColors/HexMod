@@ -1,6 +1,7 @@
 package at.petrak.hex.common.casting
 
 import at.petrak.hex.HexMod
+import at.petrak.hex.api.PatternRegistry
 import at.petrak.hex.hexmath.HexPattern
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
@@ -27,7 +28,7 @@ class CastingHarness private constructor(
         return try {
             var exn: CastException? = null
             val operator = try {
-                SpellOperator.fromPattern(newPat)
+                PatternRegistry.lookupPattern(newPat)
             } catch (e: CastException) {
                 exn = e
                 null
@@ -64,24 +65,7 @@ class CastingHarness private constructor(
                 this.stack.add(SpellDatum.make(newPat))
             } else {
                 // Plain ol operator
-                val sig = newPat.anglesSignature()
-                if (sig.startsWith("aqaa") || sig.startsWith("dedd")) {
-                    val negate = sig.startsWith("dedd")
-                    var accumulator = 0.0
-                    for (chr in sig.substring(4)) {
-                        when (chr) {
-                            'w' -> accumulator += 1
-                            'q' -> accumulator += 5
-                            'e' -> accumulator += 10
-                            'a' -> accumulator *= 2
-                            'd' -> accumulator /= 2
-                        }
-                    }
-                    if (negate) {
-                        accumulator = -accumulator
-                    }
-                    this.stack.add(SpellDatum.make(accumulator))
-                } else if (exn != null) {
+                if (exn != null) {
                     // there was a problem finding the pattern and it was NOT due to numbers
                     throw exn
                 } else if (operator == SpellWidget.OPEN_PAREN) {

@@ -1,9 +1,8 @@
-package at.petrak.hex.common.casting.operators
+package at.petrak.hex.api
 
 import at.petrak.hex.common.casting.CastException
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.SpellDatum
-import at.petrak.hex.common.casting.SpellOperator
 
 /**
  * An operator that acts in the expected method of popping some arguments

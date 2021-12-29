@@ -1,12 +1,12 @@
 package at.petrak.hex.common.casting.operators.spells
 
+import at.petrak.hex.api.SimpleOperator
+import at.petrak.hex.api.SpellOperator.Companion.getChecked
+import at.petrak.hex.api.SpellOperator.Companion.spellListOf
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.RenderedSpell
 import at.petrak.hex.common.casting.RenderedSpellImpl
 import at.petrak.hex.common.casting.SpellDatum
-import at.petrak.hex.common.casting.SpellOperator.Companion.getChecked
-import at.petrak.hex.common.casting.SpellOperator.Companion.spellListOf
-import at.petrak.hex.common.casting.operators.SimpleOperator
 import net.minecraft.Util
 import net.minecraft.network.chat.TextComponent
 

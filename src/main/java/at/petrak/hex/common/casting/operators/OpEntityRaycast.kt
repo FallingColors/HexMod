@@ -1,9 +1,10 @@
 package at.petrak.hex.common.casting.operators
 
+import at.petrak.hex.api.SimpleOperator
+import at.petrak.hex.api.SpellOperator
+import at.petrak.hex.api.SpellOperator.Companion.getChecked
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.SpellDatum
-import at.petrak.hex.common.casting.SpellOperator
-import at.petrak.hex.common.casting.SpellOperator.Companion.getChecked
 import at.petrak.hex.common.casting.SpellWidget
 import net.minecraft.world.entity.projectile.ProjectileUtil
 import net.minecraft.world.phys.AABB
