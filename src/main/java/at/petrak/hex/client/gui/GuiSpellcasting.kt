@@ -5,8 +5,8 @@ import at.petrak.hex.HexUtils
 import at.petrak.hex.HexUtils.TAU
 import at.petrak.hex.common.items.ItemSpellbook
 import at.petrak.hex.common.network.HexMessages
+import at.petrak.hex.common.network.MsgQuitSpellcasting
 import at.petrak.hex.common.network.MsgShiftScrollSyn
-import at.petrak.hex.hexmath.HexAngle
 import at.petrak.hex.hexmath.HexCoord
 import at.petrak.hex.hexmath.HexDir
 import at.petrak.hex.hexmath.HexPattern
@@ -22,17 +22,19 @@ import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.phys.Vec2
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource
 import net.minecraft.world.level.levelgen.synth.PerlinNoise
+import net.minecraft.world.phys.Vec2
+import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.roundToInt
 
 const val SQRT_3 = 1.7320508f
 
 class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(TextComponent("")) {
-    private var patterns: MutableList<Pair<HexPattern, Vec2>> = mutableListOf()
+    private var patterns: MutableList<Pair<HexPattern, HexCoord>> = mutableListOf()
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
+    private val usedSpots: MutableSet<HexCoord> = HashSet()
 
     companion object {
         val NOISE = PerlinNoise.create(XoroshiroRandomSource(9001L), listOf(0, 1, 2, 3, 4))
@@ -44,7 +46,10 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         }
 
         if (this.drawState is PatternDrawState.BetweenPatterns) {
-            this.drawState = PatternDrawState.JustStarted(Vec2(pMouseX.toFloat(), pMouseY.toFloat()))
+            val coord = this.pxToCoord(Vec2(pMouseX.toFloat(), pMouseY.toFloat()))
+            if (!this.usedSpots.contains(coord)) {
+                this.drawState = PatternDrawState.JustStarted(coord)
+            }
         }
 
         return false
@@ -55,12 +60,13 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             return true
         }
 
-        val anchor = when (this.drawState) {
+        val anchorCoord = when (this.drawState) {
             PatternDrawState.BetweenPatterns -> null
             is PatternDrawState.JustStarted -> (this.drawState as PatternDrawState.JustStarted).start
             is PatternDrawState.Drawing -> (this.drawState as PatternDrawState.Drawing).current
         }
-        if (anchor != null) {
+        if (anchorCoord != null) {
+            val anchor = this.coordToPx(anchorCoord)
             val mouse = Vec2(pMouseX.toFloat(), pMouseY.toFloat())
             if (anchor.distanceToSqr(mouse) >= this.hexSize() * this.hexSize()) {
                 val delta = mouse.add(anchor.negated())
@@ -70,20 +76,21 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 val newdir = HexDir.values()[(snappedAngle.times(6).roundToInt() + 1).mod(6)]
                 // The player might have a lousy aim, so set the new anchor point to the "ideal"
                 // location as if they had hit it exactly on the nose.
-                val idealNextLoc = this.coordToPx(newdir.asDelta(), anchor)
+                val idealNextLoc = anchorCoord + newdir
+                if (!this.usedSpots.contains(idealNextLoc)) {
+                    if (this.drawState is PatternDrawState.JustStarted) {
+                        val pat = HexPattern(newdir)
 
-                if (this.drawState is PatternDrawState.JustStarted) {
-                    val pat = HexPattern(newdir)
-
-                    this.drawState = PatternDrawState.Drawing(anchor, idealNextLoc, pat)
-                    HexMod.LOGGER.info("Started drawing new pattern: $pat")
-                } else if (this.drawState is PatternDrawState.Drawing) {
-                    // how anyone gets around without a borrowck is beyond me
-                    val ds = (this.drawState as PatternDrawState.Drawing)
-                    val success = ds.wipPattern.tryAppendDir(newdir)
-                    if (success) {
-                        ds.current = idealNextLoc
-                        HexMod.LOGGER.info("Added to pattern: ${ds.wipPattern}")
+                        this.drawState = PatternDrawState.Drawing(anchorCoord, idealNextLoc, pat)
+                        HexMod.LOGGER.info("Started drawing new pattern: $pat")
+                    } else if (this.drawState is PatternDrawState.Drawing) {
+                        // how anyone gets around without a borrowck is beyond me
+                        val ds = (this.drawState as PatternDrawState.Drawing)
+                        val success = ds.wipPattern.tryAppendDir(newdir)
+                        if (success) {
+                            ds.current = idealNextLoc
+                            HexMod.LOGGER.info("Added to pattern: ${ds.wipPattern}")
+                        }
                     }
                 }
             }
@@ -111,6 +118,8 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 this.drawState = PatternDrawState.BetweenPatterns
                 this.patterns.add(Pair(pat, start))
 
+                this.usedSpots.addAll(pat.positions(start))
+
                 HexMessages.getNetwork().sendToServer(
                     at.petrak.hex.common.network.MsgNewSpellPatternSyn(
                         this.handOpenedWith,
@@ -134,8 +143,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     }
 
     override fun onClose() {
-        at.petrak.hex.common.network.HexMessages.getNetwork()
-            .sendToServer(at.petrak.hex.common.network.MsgQuitSpellcasting())
+        HexMessages.getNetwork().sendToServer(MsgQuitSpellcasting())
 
         super.onClose()
     }
@@ -151,7 +159,8 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             if (points.isEmpty()) {
                 return emptyList()
             }
-            val zSeed = (Minecraft.getInstance().getFrameTime().toDouble() + Minecraft.getInstance().level!!.getLevelData().getGameTime()) * speed
+            val mc = Minecraft.getInstance()
+            val zSeed = (mc.frameTime.toDouble() + mc.level!!.levelData.gameTime) * speed
             // Create our output list of zap points
             val zappyPts = mutableListOf(points[0])
             // For each segment in the original...
@@ -164,7 +173,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 val hopDist = Mth.sqrt(hopDistSqr)
                 // Compute how big the radius of variance should be
                 val maxVariance = hopDist * variance
-                
+
                 var position = src
                 var j = 0
                 while (position.distanceToSqr(target) > hopDistSqr) {
@@ -196,7 +205,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             // in order to connect adjacent segments together and not get the weird hinge effect.
             // There's still some artifacting but this is passable, at least.
             buf.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR)
-            
+
             for ((p1, p2) in points.zipWithNext()) {
                 // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
                 // GuiComponent::innerFill line 52
@@ -221,14 +230,16 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         }
 
         fun drawPattern(mat: Matrix4f, points: List<Vec2>, r: Int, g: Int, b: Int, a: Int) {
-            fun screen(n: Int): Int { return (n + 255) / 2 }
+            fun screen(n: Int): Int {
+                return (n + 255) / 2
+            }
 
             val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f)
             drawLineSeq(mat, zappyPts, 5f, 0f, r, g, b, a)
             drawLineSeq(mat, zappyPts, 2f, 1f, screen(r), screen(g), screen(b), a)
         }
 
-        fun drawSpot(mat: Matrix4f, point: Vec2, r: Int, g: Int, b: Int, a: Int) {
+        fun drawSpot(mat: Matrix4f, point: Vec2, r: Float, g: Float, b: Float, a: Float) {
             val tess = Tesselator.getInstance()
             val buf = tess.builder
             // https://stackoverflow.com/questions/20394727/gl-triangle-strip-vs-gl-triangle-fan
@@ -237,8 +248,9 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             buf.vertex(mat, point.x, point.y, 0f).color(r, g, b, a).endVertex()
 
             // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L98
-            val fracOfCircle = 32
-            val radius = 1.0f
+            // yes they are gonna be little hexagons fite me
+            val fracOfCircle = 6
+            val radius = 1.5f
             // run 0 AND last; this way the circle closes 
             for (i in 0..32) {
                 val theta = i.toFloat() / fracOfCircle * TAU.toFloat()
@@ -251,52 +263,59 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         }
 
         val mat = poseStack.last().pose()
-
         val prevShader = RenderSystem.getShader()
         RenderSystem.setShader(GameRenderer::getPositionColorShader)
         RenderSystem.disableDepthTest()
         RenderSystem.disableCull()
 
+        // Draw guide dots around the cursor
+        val mousePos = Vec2(pMouseX.toFloat(), pMouseY.toFloat())
+        // snap it to the center
+        val mouseCoord = this.pxToCoord(mousePos)
+        val radius = 3
+        for (dotCoord in mouseCoord.rangeAround(radius)) {
+            val dotPx = this.coordToPx(dotCoord)
+            val delta = dotPx.add(mousePos.negated()).length()
+            // when right on top of the cursor, 1.0
+            // when at the full radius, 0! this is so we don't have dots suddenly appear/disappear.
+            // we subtract size from delta so there's a little "island" of 100% bright points by the mouse
+            val scaledDist = Mth.clamp(
+                1.0f - ((delta - this.hexSize()) / (radius.toFloat() * this.hexSize())),
+                0f,
+                1f
+            )
+            drawSpot(
+                mat,
+                dotPx,
+                Mth.lerp(scaledDist, 0.4f, 0.5f),
+                Mth.lerp(scaledDist, 0.8f, 1.0f),
+                Mth.lerp(scaledDist, 0.7f, 0.9f),
+                scaledDist
+            )
+        }
+        RenderSystem.defaultBlendFunc()
+
         for ((pat, origin) in this.patterns) {
-            drawPattern(mat, pat.positions().map { pos -> this.coordToPx(pos, origin) }, 127, 127, 255, 200)
+            drawPattern(mat, pat.positions(origin).map(this::coordToPx), 127, 127, 255, 200)
         }
 
         // Now draw the currently WIP pattern
         if (this.drawState !is PatternDrawState.BetweenPatterns) {
             val points = mutableListOf<Vec2>()
 
-            val (dirs, spotAnchor) = if (this.drawState is PatternDrawState.JustStarted) {
+            if (this.drawState is PatternDrawState.JustStarted) {
                 val ds = this.drawState as PatternDrawState.JustStarted
-                points.add(ds.start)
-                Pair(HexDir.values().toList(), ds.start)
+                points.add(this.coordToPx(ds.start))
             } else if (this.drawState is PatternDrawState.Drawing) {
                 val ds = this.drawState as PatternDrawState.Drawing
                 for (pos in ds.wipPattern.positions()) {
-                    val pix = this.coordToPx(pos, ds.start)
+                    val pix = this.coordToPx(pos + ds.start)
                     points.add(pix)
                 }
-                val finalDir = ds.wipPattern.finalDir()
-                Pair(
-                    HexAngle.values().flatMap {
-                        if (it == HexAngle.BACK) {
-                            emptyList()
-                        } else {
-                            listOf(finalDir * it)
-                        }
-                    },
-                    ds.current
-                )
-            } else {
-                throw NotImplementedError("unreachable")
             }
 
-            points.add(Vec2(pMouseX.toFloat(), pMouseY.toFloat()))
+            points.add(mousePos)
             drawPattern(mat, points, 100, 200, 255, 255)
-
-            for (dir in dirs) {
-                val pos = this.coordToPx(dir.asDelta(), spotAnchor)
-                drawSpot(mat, pos, 200, 200, 230, 255)
-            }
         }
 
         RenderSystem.setShader { prevShader }
@@ -307,26 +326,38 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     override fun isPauseScreen(): Boolean = false
 
     /** Distance between adjacent hex centers */
-    fun hexSize(): Float =
-        this.width.toFloat() / 32.0f
+    fun hexSize(): Float = this.width.toFloat() / 32.0f
+    fun coordsOffset(): Vec2 = Vec2(0f, this.hexSize())
 
+    fun coordToPx(coord: HexCoord) =
+        Vec2(
+            SQRT_3 * coord.q.toFloat() + SQRT_3 / 2.0f * coord.r.toFloat(),
+            1.5f * coord.r.toFloat()
+        ).scale(this.hexSize()).add(this.coordsOffset())
 
-    fun coordToPx(coord: HexCoord, origin: Vec2) =
-        origin.add(
-            Vec2(
-                SQRT_3 * coord.q.toFloat() + SQRT_3 / 2.0f * coord.r.toFloat(),
-                1.5f * coord.r.toFloat()
-            ).scale(this.hexSize())
-        )
+    fun pxToCoord(px: Vec2): HexCoord {
+        val offsetted = px.add(this.coordsOffset().negated())
+        var qf = (SQRT_3 / 3.0f * offsetted.x - 0.33333f * offsetted.y) / hexSize()
+        var rf = (0.66666f * offsetted.y) / hexSize()
+
+        val q = qf.roundToInt()
+        val r = rf.roundToInt()
+        qf -= q
+        rf -= r
+        return if (q.absoluteValue >= r.absoluteValue)
+            HexCoord(q + (qf + 0.5f * rf).roundToInt(), r)
+        else
+            HexCoord(q, r + (rf + 0.5 * qf).roundToInt())
+    }
 
     private sealed class PatternDrawState {
         /** We're waiting on the player to right-click again */
         object BetweenPatterns : PatternDrawState()
 
         /** We just started drawing and haven't drawn the first line yet. */
-        data class JustStarted(val start: Vec2) : PatternDrawState()
+        data class JustStarted(val start: HexCoord) : PatternDrawState()
 
         /** We've started drawing a pattern for real. */
-        data class Drawing(val start: Vec2, var current: Vec2, val wipPattern: HexPattern) : PatternDrawState()
+        data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) : PatternDrawState()
     }
 }

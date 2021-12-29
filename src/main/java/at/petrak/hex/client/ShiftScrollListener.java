@@ -18,7 +18,9 @@ public class ShiftScrollListener {
     @SubscribeEvent
     public static void onScroll(InputEvent.MouseScrollEvent evt) {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player.isCrouching()) {
+        // not .isCrouching! that fails for players who are not on the ground
+        // yes, this does work if you remap your sneak key
+        if (player.isShiftKeyDown()) {
             InteractionHand hand = null;
             if (player.getMainHandItem().getItem() != Items.AIR) {
                 hand = InteractionHand.MAIN_HAND;
