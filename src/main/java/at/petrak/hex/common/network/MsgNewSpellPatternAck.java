@@ -1,5 +1,6 @@
 package at.petrak.hex.common.network;
 
+import at.petrak.hex.client.gui.GuiSpellcasting;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -27,7 +28,7 @@ public record MsgNewSpellPatternAck(boolean quitCasting) {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() ->
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    if (quitCasting) {
+                    if (quitCasting && Minecraft.getInstance().screen instanceof GuiSpellcasting) {
                         Minecraft.getInstance().setScreen(null);
                     }
                 })

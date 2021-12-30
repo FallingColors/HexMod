@@ -6,12 +6,12 @@ import at.petrak.hex.common.casting.SpellDatum;
 import at.petrak.hex.common.casting.SpellWidget;
 import at.petrak.hex.common.casting.operators.*;
 import at.petrak.hex.common.casting.operators.math.*;
-import at.petrak.hex.common.casting.operators.spells.OpAddMotion;
-import at.petrak.hex.common.casting.operators.spells.OpExplode;
-import at.petrak.hex.common.casting.operators.spells.OpPrint;
+import at.petrak.hex.common.casting.operators.spells.*;
 import at.petrak.hex.common.items.HexItems;
 import at.petrak.hex.common.network.HexMessages;
+import at.petrak.hex.server.TickScheduler;
 import com.mojang.datafixers.util.Pair;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,6 +24,14 @@ import org.apache.logging.log4j.Logger;
 public class HexMod {
     // hmm today I will use a popular logging framework :clueless:
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final HexConfig CONFIG;
+    public static final ForgeConfigSpec CONFIG_SPEC;
+
+    static {
+        final var specPair = new ForgeConfigSpec.Builder().configure(HexConfig::new);
+        CONFIG = specPair.getLeft();
+        CONFIG_SPEC = specPair.getRight();
+    }
 
     public static final String MOD_ID = "hex";
 
@@ -32,8 +40,10 @@ public class HexMod {
         var evbus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.register(this);
         evbus.register(HexMod.class);
+
         HexItems.ITEMS.register(evbus);
         HexMessages.register();
+        MinecraftForge.EVENT_BUS.register(TickScheduler.INSTANCE);
     }
 
     // I guess this means the client will have a big empty map for patterns
@@ -44,32 +54,22 @@ public class HexMod {
             for (Pair<String, SpellOperator> p : new Pair[]{
                     // == Getters ==
 
-                    // diamond shape to get the caster
                     new Pair<>("qaq", OpGetCaster.INSTANCE),
                     new Pair<>("ede", OpGetCaster.INSTANCE),
-                    // small triangle to get the entity pos
                     new Pair<>("aa", OpEntityPos.INSTANCE),
                     new Pair<>("dd", OpEntityPos.INSTANCE),
-                    // Arrow to get the look vector
                     new Pair<>("wa", OpEntityLook.INSTANCE),
                     new Pair<>("wd", OpEntityLook.INSTANCE),
 
-                    // CCW battleaxe for block raycast
                     new Pair<>("wqaawdd", OpBlockRaycast.INSTANCE),
-                    // and CW for axis raycast
                     new Pair<>("weddwaa", OpBlockAxisRaycast.INSTANCE),
-                    // CCW diamond mace thing for entity raycast
                     new Pair<>("weaqa", OpEntityRaycast.INSTANCE),
 
                     // == Modify Stack ==
 
-                    // CCW hook for undo
                     new Pair<>("a", OpUndo.INSTANCE),
-                    // and CW for null
                     new Pair<>("d", SpellWidget.NULL),
-                    // Two triangles holding hands to duplicate
                     new Pair<>("aadaa", OpDuplicate.INSTANCE),
-                    // Two opposing triangles to swap
                     new Pair<>("aawdd", OpSwap.INSTANCE),
 
                     // == Math ==
@@ -82,12 +82,13 @@ public class HexMod {
 
                     // == Spells ==
 
-                    // hook for debug
                     new Pair<>("de", OpPrint.INSTANCE),
                     new Pair<>("aq", OpPrint.INSTANCE),
-                    // nuclear sign for explosion
                     new Pair<>("aawaawaa", OpExplode.INSTANCE),
                     new Pair<>("weeewdq", OpAddMotion.INSTANCE),
+                    new Pair<>("qaqqqqq", OpPlaceBlock.INSTANCE),
+                    new Pair<>("eeeeede", OpBreakBlock.INSTANCE),
+                    new Pair<>("waadwawdaaweewq", OpLightning.INSTANCE),
 
                     // == Meta stuff ==
                     new Pair<>("qqq", SpellWidget.OPEN_PAREN),
@@ -96,8 +97,8 @@ public class HexMod {
                     // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
                     // eval being a space filling curve feels apt doesn't it
                     new Pair<>("deaqq", OpEval.INSTANCE),
-                    new Pair<>("aqqqqq", OpReadFromSpellbook.INSTANCE),
-                    new Pair<>("deeeee", OpWriteToSpellbook.INSTANCE),
+                    new Pair<>("aqqqqq", OpRead.INSTANCE),
+                    new Pair<>("deeeee", OpWrite.INSTANCE),
             }) {
                 PatternRegistry.addRegularPattern(p.getFirst(), p.getSecond());
                 count++;

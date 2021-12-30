@@ -17,7 +17,7 @@ public class RegisterClientStuff {
         evt.enqueueWork(() -> ItemProperties.register(HexItems.FOCUS.get(), ItemFocus.PREDICATE,
                 (stack, level, holder, holderID) -> {
                     if (stack.hasTag()) {
-                        var tagname = stack.getTag().getAllKeys().iterator().next();
+                        var tagname = stack.getTag().getCompound(ItemFocus.TAG_DATA).getAllKeys().iterator().next();
                         return switch (tagname) {
                             case SpellDatum.TAG_ENTITY -> 1f;
                             case SpellDatum.TAG_DOUBLE -> 2f;

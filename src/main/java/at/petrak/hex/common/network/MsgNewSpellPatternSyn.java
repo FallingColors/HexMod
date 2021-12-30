@@ -42,7 +42,8 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 var held = sender.getItemInHand(this.handUsed);
                 if (held.getItem() instanceof ItemWand) {
                     var tag = held.getOrCreateTag();
-                    var harness = CastingHarness.DeserializeFromNBT(tag, sender, this.handUsed);
+                    var harness = CastingHarness.DeserializeFromNBT(tag.getCompound(ItemWand.TAG_HARNESS), sender,
+                            this.handUsed);
 
                     var res = harness.update(this.pattern);
                     if (res instanceof CastResult.Success success) {
@@ -52,15 +53,17 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     }
 
                     boolean quit;
+                    CompoundTag nextHarnessTag;
                     if (res instanceof CastResult.Nothing) {
                         // save the changes
-                        held.setTag(harness.serializeToNBT());
+                        nextHarnessTag = harness.serializeToNBT();
                         quit = false;
                     } else {
                         // Else we requested to quit in some way or another
-                        held.setTag(new CompoundTag());
+                        nextHarnessTag = new CompoundTag();
                         quit = true;
                     }
+                    tag.put(ItemWand.TAG_HARNESS, nextHarnessTag);
                     HexMessages.getNetwork()
                             .send(PacketDistributor.PLAYER.with(() -> sender),
                                     new MsgNewSpellPatternAck(quit));

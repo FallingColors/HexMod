@@ -1,6 +1,5 @@
 package at.petrak.hex.api
 
-import at.petrak.hex.common.casting.CastException
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.SpellDatum
 import net.minecraft.world.phys.Vec3
@@ -14,10 +13,10 @@ import net.minecraft.world.phys.Vec3
  * Implementors MUST NOT mutate the context.
  */
 interface SpellOperator {
-    val manaCost: Int
-        get() = 0
-
-    fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext)
+    /**
+     * Operate on the stack and return the mana cost.
+     */
+    fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): Int
 
     companion object {
         // I see why vzakii did this: you can't raycast out to infinity!
@@ -42,15 +41,6 @@ interface SpellOperator {
             this.getChecked<T>(idx)
         }
 
-        /**
-         * Make sure the vector is in range of the player.
-         */
-        @JvmStatic
-        fun assertVecInRange(vec: Vec3, ctx: CastingContext) {
-            if (vec.distanceToSqr(ctx.caster.position()) > MAX_DISTANCE * MAX_DISTANCE)
-                throw CastException(CastException.Reason.TOO_FAR, vec)
-        }
-
         @JvmStatic
         fun spellListOf(vararg vs: Any): List<SpellDatum<*>> {
             val out = ArrayList<SpellDatum<*>>(vs.size)
@@ -61,11 +51,12 @@ interface SpellOperator {
         }
 
         @JvmStatic
-        fun makeConstantOp(x: SpellDatum<*>): SpellOperator = object : SimpleOperator {
+        fun makeConstantOp(x: SpellDatum<*>): SpellOperator = object : ConstManaOperator {
             override val argc: Int
                 get() = 0
 
-            override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> = listOf(x)
+            override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> =
+                listOf(x)
         }
     }
 }

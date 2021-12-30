@@ -57,6 +57,20 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
          * `no args`
          */
         REQUIRES_SPELLBOOK,
+
+        /**
+         * An operator needed a data holder in the offhand.
+         *
+         * `no args`
+         */
+        REQUIRES_DATA_HOLDER,
+
+        /**
+         * We went too deep!
+         *
+         * `maxDepth: Int, gotDepth: Int`
+         */
+        TOO_MANY_RECURSIVE_EVALS,
     }
 
     override val message: String
@@ -68,5 +82,7 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
             Reason.TOO_MANY_CLOSE_PARENS -> "too many close parentheses"
             Reason.TOO_FAR -> "tried to interact with something too far away at ${this.data[0] as Vec3}"
             Reason.REQUIRES_SPELLBOOK -> "required a spellbook in the other hand"
+            Reason.REQUIRES_DATA_HOLDER -> "required a data holder in the other hand"
+            Reason.TOO_MANY_RECURSIVE_EVALS -> "can only recursively call OpEval ${this.data[0] as Int} times but called it ${this.data[1] as Int} times"
         }
 }

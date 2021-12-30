@@ -1,6 +1,6 @@
 package at.petrak.hex.common.casting.operators
 
-import at.petrak.hex.api.SimpleOperator
+import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.api.SpellOperator.Companion.getChecked
 import at.petrak.hex.api.SpellOperator.Companion.spellListOf
 import at.petrak.hex.common.casting.CastingContext
@@ -8,7 +8,7 @@ import at.petrak.hex.common.casting.SpellDatum
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 
-object OpEntityPos : SimpleOperator {
+object OpEntityPos : ConstManaOperator {
     override val argc = 1
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {

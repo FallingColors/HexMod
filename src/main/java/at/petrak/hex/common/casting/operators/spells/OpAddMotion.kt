@@ -18,10 +18,13 @@ object OpAddMotion : SimpleOperator, RenderedSpellImpl {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<List<SpellDatum<*>>, Int> {
         val target = args.getChecked<Entity>(0)
         val motion = args.getChecked<Vec3>(1)
-        return spellListOf(RenderedSpell(OpAddMotion, spellListOf(target, motion)))
+        return Pair(
+            spellListOf(RenderedSpell(OpAddMotion, spellListOf(target, motion))),
+            motion.lengthSqr().toInt() * 100
+        )
     }
 
     override fun cast(args: List<SpellDatum<*>>, ctx: CastingContext) {

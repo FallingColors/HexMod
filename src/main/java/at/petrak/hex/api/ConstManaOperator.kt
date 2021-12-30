@@ -7,7 +7,7 @@ import at.petrak.hex.common.casting.SpellDatum
 /**
  * A SimpleOperator that always costs the same amount of mana.
  */
-interface SimpleFreeOperator : SpellOperator {
+interface ConstManaOperator : SpellOperator {
     val argc: Int
     val manaCost: Int
         get() = 0

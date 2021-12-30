@@ -1,6 +1,6 @@
 package at.petrak.hex.common.casting.operators.spells
 
-import at.petrak.hex.api.SimpleOperator
+import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.api.SpellOperator.Companion.getChecked
 import at.petrak.hex.api.SpellOperator.Companion.spellListOf
 import at.petrak.hex.common.casting.CastingContext
@@ -10,7 +10,7 @@ import at.petrak.hex.common.casting.SpellDatum
 import net.minecraft.Util
 import net.minecraft.network.chat.TextComponent
 
-object OpPrint : SimpleOperator, RenderedSpellImpl {
+object OpPrint : ConstManaOperator, RenderedSpellImpl {
     override val argc = 1
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val datum = args.getChecked<Any>(0)

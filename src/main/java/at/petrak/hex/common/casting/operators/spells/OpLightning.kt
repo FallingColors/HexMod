@@ -7,35 +7,28 @@ import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.RenderedSpell
 import at.petrak.hex.common.casting.RenderedSpellImpl
 import at.petrak.hex.common.casting.SpellDatum
-import net.minecraft.util.Mth
-import net.minecraft.world.level.Explosion
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.phys.Vec3
 
-object OpExplode : SimpleOperator, RenderedSpellImpl {
+object OpLightning : SimpleOperator, RenderedSpellImpl {
     override val argc: Int
-        get() = 2
+        get() = 1
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<List<SpellDatum<*>>, Int> {
-        val pos = args.getChecked<Vec3>(0)
-        val strength = args.getChecked<Double>(1)
-        ctx.assertVecInRange(pos)
+        val target = args.getChecked<Vec3>(0)
+        ctx.assertVecInRange(target)
         return Pair(
-            spellListOf(RenderedSpell(OpExplode, spellListOf(pos, strength))),
-            (strength * 100.0).toInt(),
+            spellListOf(RenderedSpell(OpLightning, spellListOf(target))),
+            1500
         )
     }
 
     override fun cast(args: List<SpellDatum<*>>, ctx: CastingContext) {
-        val pos = args.getChecked<Vec3>(0)
-        val strength = args.getChecked<Double>(1)
+        val target = args.getChecked<Vec3>(0)
 
-        ctx.world.explode(
-            ctx.caster,
-            pos.x,
-            pos.y,
-            pos.z,
-            Mth.clamp(strength.toFloat(), 0f, 10f),
-            Explosion.BlockInteraction.BREAK
-        )
+        val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, ctx.world)
+        lightning.setPosRaw(target.x, target.y, target.z)
+        ctx.world.addWithUUID(lightning) // why the hell is it called this it doesnt even involve a uuid
     }
 }

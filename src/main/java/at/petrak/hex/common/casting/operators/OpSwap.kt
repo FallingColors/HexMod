@@ -1,12 +1,12 @@
 package at.petrak.hex.common.casting.operators
 
-import at.petrak.hex.api.SimpleOperator
+import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.api.SpellOperator.Companion.getChecked
 import at.petrak.hex.api.SpellOperator.Companion.spellListOf
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.SpellDatum
 
-object OpSwap : SimpleOperator {
+object OpSwap : ConstManaOperator {
     override val argc: Int
         get() = 2
 

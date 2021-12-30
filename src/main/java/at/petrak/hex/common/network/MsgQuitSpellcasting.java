@@ -26,7 +26,7 @@ public record MsgQuitSpellcasting() {
                 var held = sender.getMainHandItem();
                 if (held.getItem() instanceof ItemWand) {
                     // Todo: appropriate consequences for quitting a spell like this
-                    held.setTag(new CompoundTag());
+                    held.getOrCreateTag().put(ItemWand.TAG_HARNESS, new CompoundTag());
                 }
             }
         });

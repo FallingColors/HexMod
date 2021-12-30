@@ -1,6 +1,6 @@
 package at.petrak.hex.common.casting
 
-import at.petrak.hex.api.SimpleOperator
+import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.api.SpellOperator.Companion.spellListOf
 
 /**
@@ -8,7 +8,7 @@ import at.petrak.hex.api.SpellOperator.Companion.spellListOf
  *
  * They act as operators that push themselves.
  */
-enum class SpellWidget : SimpleOperator {
+enum class SpellWidget : ConstManaOperator {
     NULL,
     OPEN_PAREN, CLOSE_PAREN, ESCAPE;
 

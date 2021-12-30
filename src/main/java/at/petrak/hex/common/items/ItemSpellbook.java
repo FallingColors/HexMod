@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ItemSpellbook extends Item {
+public class ItemSpellbook extends ItemDataHolder {
     public static String TAG_SELECTED_PAGE = "page_idx";
     // this is a CompoundTag of string numerical keys to SpellData\
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
@@ -64,7 +63,29 @@ public class ItemSpellbook extends Item {
                 tag.getCompound(ItemSpellbook.TAG_PAGES).isEmpty();
     }
 
-    public static void WriteDatum(CompoundTag tag, SpellDatum<?> datum) {
+
+    @Nullable
+    public SpellDatum<?> readDatum(CompoundTag tag, CastingContext ctx) {
+        int idx;
+        if (tag.contains(TAG_SELECTED_PAGE)) {
+            idx = tag.getInt(TAG_SELECTED_PAGE);
+        } else {
+            idx = 0;
+        }
+        var key = String.valueOf(idx);
+        if (tag.contains(TAG_PAGES)) {
+            var pagesTag = tag.getCompound(TAG_PAGES);
+            if (pagesTag.contains(key)) {
+                return SpellDatum.DeserializeFromNBT(pagesTag.getCompound(key), ctx);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
         int idx;
         if (tag.contains(TAG_SELECTED_PAGE)) {
             idx = tag.getInt(TAG_SELECTED_PAGE);
@@ -82,27 +103,6 @@ public class ItemSpellbook extends Item {
             var pagesTag = new CompoundTag();
             pagesTag.put(key, datum.serializeToNBT());
             tag.put(TAG_PAGES, pagesTag);
-        }
-    }
-
-    @Nullable
-    public static SpellDatum<?> ReadDatum(CompoundTag tag, CastingContext ctx) {
-        int idx;
-        if (tag.contains(TAG_SELECTED_PAGE)) {
-            idx = tag.getInt(TAG_SELECTED_PAGE);
-        } else {
-            idx = 0;
-        }
-        var key = String.valueOf(idx);
-        if (tag.contains(TAG_PAGES)) {
-            var pagesTag = tag.getCompound(TAG_PAGES);
-            if (pagesTag.contains(key)) {
-                return SpellDatum.DeserializeFromNBT(pagesTag.getCompound(key), ctx);
-            } else {
-                return null;
-            }
-        } else {
-            return null;
         }
     }
 

@@ -1,18 +1,18 @@
 package at.petrak.hex.common.casting.operators
 
-import at.petrak.hex.api.SimpleOperator
+import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.api.SpellOperator.Companion.spellListOf
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.SpellDatum
-import at.petrak.hex.common.items.ItemSpellbook
+import at.petrak.hex.common.items.ItemDataHolder
 
-object OpWriteToSpellbook : SimpleOperator {
-    override val argc: Int
-        get() = 1
+object OpWrite : ConstManaOperator {
+    override val argc = 1
+    override val manaCost = 10
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val spellbook = ctx.getSpellbook()
-        ItemSpellbook.WriteDatum(spellbook.orCreateTag, args[0])
+        val dataer = ctx.getDataHolder()
+        (dataer.item as ItemDataHolder).writeDatum(dataer.orCreateTag, args[0])
         return spellListOf()
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
+import kotlin.math.max
 
 /**
  * Keeps track of a player casting a spell on the server.
@@ -63,19 +64,23 @@ class CastingHarness private constructor(
                 this.escapeNext = false
                 HexMod.LOGGER.info("Escaping onto stack")
                 this.stack.add(SpellDatum.make(newPat))
+            } else if (operator == SpellWidget.ESCAPE) {
+                this.escapeNext = true
+            } else if (exn != null) {
+                // there was a problem finding the pattern and it was NOT due to numbers
+                throw exn
+            } else if (operator == SpellWidget.OPEN_PAREN) {
+                this.parenCount++
+            } else if (operator == SpellWidget.CLOSE_PAREN) {
+                throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
             } else {
-                // Plain ol operator
-                if (exn != null) {
-                    // there was a problem finding the pattern and it was NOT due to numbers
-                    throw exn
-                } else if (operator == SpellWidget.OPEN_PAREN) {
-                    this.parenCount++
-                } else if (operator == SpellWidget.CLOSE_PAREN) {
-                    throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
-                } else {
-                    // we know the operator is ok here
-                    operator!!.modifyStack(this.stack, this.ctx)
-                }
+                // we know the operator is ok here
+                val manaCost = operator!!.modifyStack(this.stack, this.ctx)
+
+                // prevent poor impls from gaining you mana
+                ctx.withdrawMana(max(0, manaCost), true)
+                if (ctx.caster.isDeadOrDying)
+                    return CastResult.Died
             }
 
             if (this.parenCount > 0) {
@@ -172,5 +177,8 @@ class CastingHarness private constructor(
 
         /** uh-oh */
         data class Error(val exn: CastException) : CastResult()
+
+        /** YOU DIED due to casting too hard from hit points. */
+        object Died : CastResult()
     }
 }
