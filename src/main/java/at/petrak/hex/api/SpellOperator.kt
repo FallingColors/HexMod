@@ -65,8 +65,7 @@ interface SpellOperator {
             override val argc: Int
                 get() = 0
 
-            override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> =
-                spellListOf(x)
+            override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> = listOf(x)
         }
     }
 }

@@ -274,24 +274,26 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         val mouseCoord = this.pxToCoord(mousePos)
         val radius = 3
         for (dotCoord in mouseCoord.rangeAround(radius)) {
-            val dotPx = this.coordToPx(dotCoord)
-            val delta = dotPx.add(mousePos.negated()).length()
-            // when right on top of the cursor, 1.0
-            // when at the full radius, 0! this is so we don't have dots suddenly appear/disappear.
-            // we subtract size from delta so there's a little "island" of 100% bright points by the mouse
-            val scaledDist = Mth.clamp(
-                1.0f - ((delta - this.hexSize()) / (radius.toFloat() * this.hexSize())),
-                0f,
-                1f
-            )
-            drawSpot(
-                mat,
-                dotPx,
-                Mth.lerp(scaledDist, 0.4f, 0.5f),
-                Mth.lerp(scaledDist, 0.8f, 1.0f),
-                Mth.lerp(scaledDist, 0.7f, 0.9f),
-                scaledDist
-            )
+            if (!this.usedSpots.contains(dotCoord)) {
+                val dotPx = this.coordToPx(dotCoord)
+                val delta = dotPx.add(mousePos.negated()).length()
+                // when right on top of the cursor, 1.0
+                // when at the full radius, 0! this is so we don't have dots suddenly appear/disappear.
+                // we subtract size from delta so there's a little "island" of 100% bright points by the mouse
+                val scaledDist = Mth.clamp(
+                    1.0f - ((delta - this.hexSize()) / (radius.toFloat() * this.hexSize())),
+                    0f,
+                    1f
+                )
+                drawSpot(
+                    mat,
+                    dotPx,
+                    Mth.lerp(scaledDist, 0.4f, 0.5f),
+                    Mth.lerp(scaledDist, 0.8f, 1.0f),
+                    Mth.lerp(scaledDist, 0.7f, 0.9f),
+                    scaledDist
+                )
+            }
         }
         RenderSystem.defaultBlendFunc()
 
