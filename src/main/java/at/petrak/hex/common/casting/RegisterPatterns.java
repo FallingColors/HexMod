@@ -1,8 +1,8 @@
 package at.petrak.hex.common.casting;
 
 import at.petrak.hex.HexMod;
+import at.petrak.hex.api.Operator;
 import at.petrak.hex.api.PatternRegistry;
-import at.petrak.hex.api.SpellOperator;
 import at.petrak.hex.common.casting.operators.*;
 import at.petrak.hex.common.casting.operators.math.*;
 import at.petrak.hex.common.casting.operators.spells.*;
@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-public class RegisterSpells {
+public class RegisterPatterns {
     // I guess this means the client will have a big empty map for patterns
     @SubscribeEvent
     public static void registerSpellPatterns(FMLCommonSetupEvent evt) {
@@ -20,7 +20,7 @@ public class RegisterSpells {
             // In general:
             // - CCW is the normal or construction version
             // - CW is the special or destruction version
-            for (Pair<String, SpellOperator> p : new Pair[]{
+            for (Pair<String, Operator> p : new Pair[]{
                     // == Getters ==
 
                     new Pair<>("qaq", OpGetCaster.INSTANCE),
@@ -37,7 +37,7 @@ public class RegisterSpells {
                     // == Modify Stack ==
 
                     new Pair<>("a", OpUndo.INSTANCE),
-                    new Pair<>("d", SpellWidget.NULL),
+                    new Pair<>("d", Widget.NULL),
                     new Pair<>("aadaa", OpDuplicate.INSTANCE),
                     new Pair<>("aawdd", OpSwap.INSTANCE),
 
@@ -62,9 +62,9 @@ public class RegisterSpells {
                     new Pair<>("waadwawdaaweewq", OpLightning.INSTANCE),
 
                     // == Meta stuff ==
-                    new Pair<>("qqq", SpellWidget.OPEN_PAREN),
-                    new Pair<>("eee", SpellWidget.CLOSE_PAREN),
-                    new Pair<>("qqqaw", SpellWidget.ESCAPE),
+                    new Pair<>("qqq", Widget.OPEN_PAREN),
+                    new Pair<>("eee", Widget.CLOSE_PAREN),
+                    new Pair<>("qqqaw", Widget.ESCAPE),
                     // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
                     // eval being a space filling curve feels apt doesn't it
                     new Pair<>("deaqq", OpEval.INSTANCE),
@@ -72,13 +72,13 @@ public class RegisterSpells {
                     new Pair<>("deeeee", OpWrite.INSTANCE),
 
                     // == Consts ==
-                    new Pair<>("qqqqqqea", SpellOperator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 0.0)))),
-                    new Pair<>("qqqqqqew", SpellOperator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 1.0, 0.0)))),
-                    new Pair<>("qqqqqqed", SpellOperator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 1.0)))),
-                    new Pair<>("eeeeeeqa", SpellOperator.makeConstantOp(SpellDatum.make(new Vec3(-1.0, 0.0, 0.0)))),
-                    new Pair<>("eeeeeeqw", SpellOperator.makeConstantOp(SpellDatum.make(new Vec3(1.0, -1.0, 0.0)))),
-                    new Pair<>("eeeeeeqd", SpellOperator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, -1.0)))),
-                    
+                    new Pair<>("qqqqqea", Operator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 0.0)))),
+                    new Pair<>("qqqqqew", Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 1.0, 0.0)))),
+                    new Pair<>("qqqqqed", Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 1.0)))),
+                    new Pair<>("eeeeeqa", Operator.makeConstantOp(SpellDatum.make(new Vec3(-1.0, 0.0, 0.0)))),
+                    new Pair<>("eeeeeqw", Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, -1.0, 0.0)))),
+                    new Pair<>("eeeeeqd", Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, -1.0)))),
+
             }) {
                 PatternRegistry.addRegularPattern(p.getFirst(), p.getSecond());
                 count++;
@@ -109,7 +109,7 @@ public class RegisterSpells {
                 if (negate) {
                     accumulator = -accumulator;
                 }
-                return SpellOperator.makeConstantOp(SpellDatum.make(accumulator));
+                return Operator.makeConstantOp(SpellDatum.make(accumulator));
             } else {
                 return null;
             }

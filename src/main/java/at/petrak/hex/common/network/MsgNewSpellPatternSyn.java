@@ -46,27 +46,26 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                             this.handUsed);
 
                     var res = harness.update(this.pattern);
-                    if (res instanceof CastResult.Success success) {
-                        success.getSpell().cast(new CastingContext(sender, this.handUsed));
+                    if (res instanceof CastResult.Cast success) {
+                        var castCtx = new CastingContext(sender, this.handUsed);
+                        for (var spell : success.getSpells()) {
+                            spell.cast(castCtx);
+                        }
                     } else if (res instanceof CastResult.Error error) {
                         sender.sendMessage(new TextComponent(error.getExn().getMessage()), Util.NIL_UUID);
                     }
 
-                    boolean quit;
                     CompoundTag nextHarnessTag;
-                    if (res instanceof CastResult.Nothing) {
+                    if (!res.shouldQuit()) {
                         // save the changes
                         nextHarnessTag = harness.serializeToNBT();
-                        quit = false;
                     } else {
-                        // Else we requested to quit in some way or another
                         nextHarnessTag = new CompoundTag();
-                        quit = true;
                     }
                     tag.put(ItemWand.TAG_HARNESS, nextHarnessTag);
                     HexMessages.getNetwork()
                             .send(PacketDistributor.PLAYER.with(() -> sender),
-                                    new MsgNewSpellPatternAck(quit));
+                                    new MsgNewSpellPatternAck(res.shouldQuit()));
                 }
             }
         });

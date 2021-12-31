@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap
  * operator (the diamond) are `"qaq"` and `"ede"`.
  */
 object PatternRegistry {
-    private val regularPatterns: ConcurrentMap<String, SpellOperator> = ConcurrentHashMap()
+    private val regularPatterns: ConcurrentMap<String, Operator> = ConcurrentHashMap()
     private val specialHandlers: ConcurrentLinkedDeque<SpecialHandler> = ConcurrentLinkedDeque()
 
 
@@ -27,7 +27,7 @@ object PatternRegistry {
      */
     @JvmStatic
     @Throws(RegisterPatternException::class)
-    fun addRegularPattern(signature: String, operator: SpellOperator) {
+    fun addRegularPattern(signature: String, operator: Operator) {
         if (this.regularPatterns.containsKey(signature))
             throw RegisterPatternException("The signature `$signature` already exists")
         this.regularPatterns[signature] = operator
@@ -38,7 +38,7 @@ object PatternRegistry {
      */
     @JvmStatic
     @Throws(RegisterPatternException::class)
-    fun addRegularPatternAndMirror(signature: String, operator: SpellOperator) {
+    fun addRegularPatternAndMirror(signature: String, operator: Operator) {
         this.addRegularPattern(signature, operator)
         val flipped = mirrorSig(signature)
         if (flipped != signature) {
@@ -54,7 +54,7 @@ object PatternRegistry {
         this.specialHandlers.add(handler)
     }
 
-    fun lookupPattern(pat: HexPattern): SpellOperator {
+    fun lookupPattern(pat: HexPattern): Operator {
         for (handler in specialHandlers) {
             val op = handler.handlePattern(pat)
             if (op != null) return op
@@ -73,7 +73,7 @@ object PatternRegistry {
      * In the base mod, this is used for number patterns.
      */
     fun interface SpecialHandler {
-        fun handlePattern(pattern: HexPattern): SpellOperator?
+        fun handlePattern(pattern: HexPattern): Operator?
     }
 
     private fun mirrorSig(sig: String): String = buildString {

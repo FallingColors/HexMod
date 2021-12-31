@@ -27,6 +27,7 @@ class CastingHarness private constructor(
      */
     fun update(newPat: HexPattern): CastResult {
         return try {
+            var spellsToCast = emptyList<RenderedSpell>()
             var exn: CastException? = null
             val operator = try {
                 PatternRegistry.lookupPattern(newPat)
@@ -39,13 +40,13 @@ class CastingHarness private constructor(
                     this.escapeNext = false
                     this.parenthesized.add(newPat)
                     HexMod.LOGGER.info("Escaping onto parenthesized")
-                } else if (operator == SpellWidget.ESCAPE) {
+                } else if (operator == Widget.ESCAPE) {
                     this.escapeNext = true
-                } else if (operator == SpellWidget.OPEN_PAREN) {
+                } else if (operator == Widget.OPEN_PAREN) {
                     // we have escaped the parens onto the stack; we just also record our count.
                     this.parenthesized.add(newPat)
                     this.parenCount++
-                } else if (operator == SpellWidget.CLOSE_PAREN) {
+                } else if (operator == Widget.CLOSE_PAREN) {
                     this.parenCount--
                     if (this.parenCount == 0) {
                         HexMod.LOGGER.info("Finished parenthesizing things")
@@ -64,18 +65,19 @@ class CastingHarness private constructor(
                 this.escapeNext = false
                 HexMod.LOGGER.info("Escaping onto stack")
                 this.stack.add(SpellDatum.make(newPat))
-            } else if (operator == SpellWidget.ESCAPE) {
+            } else if (operator == Widget.ESCAPE) {
                 this.escapeNext = true
             } else if (exn != null) {
                 // there was a problem finding the pattern and it was NOT due to numbers
                 throw exn
-            } else if (operator == SpellWidget.OPEN_PAREN) {
+            } else if (operator == Widget.OPEN_PAREN) {
                 this.parenCount++
-            } else if (operator == SpellWidget.CLOSE_PAREN) {
+            } else if (operator == Widget.CLOSE_PAREN) {
                 throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
             } else {
                 // we know the operator is ok here
-                val manaCost = operator!!.modifyStack(this.stack, this.ctx)
+                val (manaCost, spells) = operator!!.modifyStack(this.stack, this.ctx)
+                spellsToCast = spells
 
                 // prevent poor impls from gaining you mana
                 ctx.withdrawMana(max(0, manaCost), true)
@@ -87,19 +89,17 @@ class CastingHarness private constructor(
                 HexMod.LOGGER.info("Paren level ${this.parenCount}; ${this.parenthesized}")
             }
             HexMod.LOGGER.info("New stack: ${this.stack}")
-            if (this.stack.isEmpty()) {
+
+            if (!spellsToCast.isEmpty()) {
+                CastResult.Cast(spellsToCast, this.stack.isEmpty())
+            } else if (this.stack.isEmpty()) {
                 if (this.parenCount == 0) {
                     CastResult.QuitCasting
                 } else {
                     CastResult.Nothing
                 }
             } else {
-                val maybeSpell = this.stack[0]
-                if (this.stack.size == 1 && maybeSpell.payload is RenderedSpell) {
-                    CastResult.Success(maybeSpell.payload)
-                } else {
-                    CastResult.Nothing
-                }
+                CastResult.Nothing
             }
         } catch (e: CastException) {
             CastResult.Error(e)
@@ -127,7 +127,6 @@ class CastingHarness private constructor(
 
     companion object {
         const val TAG_STACK = "stack"
-        const val TAG_POINTS = "points"
         const val TAG_PAREN_COUNT = "open_parens"
         const val TAG_PARENTHESIZED = "parenthesized"
         const val TAG_ESCAPE_NEXT = "escape_next"
@@ -173,12 +172,19 @@ class CastingHarness private constructor(
         object QuitCasting : CastResult()
 
         /** Finished casting */
-        data class Success(val spell: RenderedSpell) : CastResult()
+        data class Cast(val spells: List<RenderedSpell>, val quit: Boolean) : CastResult()
 
         /** uh-oh */
         data class Error(val exn: CastException) : CastResult()
 
         /** YOU DIED due to casting too hard from hit points. */
         object Died : CastResult()
+
+        fun shouldQuit(): Boolean =
+            when (this) {
+                QuitCasting, Died, is Error -> true
+                is Cast -> this.quit
+                else -> false
+            }
     }
 }

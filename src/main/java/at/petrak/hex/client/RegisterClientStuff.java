@@ -25,10 +25,9 @@ public class RegisterClientStuff {
                             case SpellDatum.TAG_ENTITY -> 1f;
                             case SpellDatum.TAG_DOUBLE -> 2f;
                             case SpellDatum.TAG_VEC3 -> 3f;
-                            case SpellDatum.TAG_SPELL -> 4f;
-                            case SpellDatum.TAG_WIDGET -> 5f;
-                            case SpellDatum.TAG_LIST -> 6f;
-                            case SpellDatum.TAG_PATTERN -> 7f;
+                            case SpellDatum.TAG_WIDGET -> 4f;
+                            case SpellDatum.TAG_LIST -> 5f;
+                            case SpellDatum.TAG_PATTERN -> 6f;
                             default -> 0f; // uh oh
                         };
                     } else {

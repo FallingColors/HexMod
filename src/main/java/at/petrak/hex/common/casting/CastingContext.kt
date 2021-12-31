@@ -2,7 +2,7 @@ package at.petrak.hex.common.casting
 
 import at.petrak.hex.HexMod
 import at.petrak.hex.HexUtils
-import at.petrak.hex.api.SpellOperator
+import at.petrak.hex.api.Operator
 import at.petrak.hex.common.items.ItemDataHolder
 import at.petrak.hex.common.items.ItemSpellbook
 import at.petrak.hex.common.items.ItemWand
@@ -90,7 +90,7 @@ data class CastingContext(
     }
 
     fun assertVecInRange(vec: Vec3) {
-        if (vec.distanceToSqr(this.caster.position()) > SpellOperator.MAX_DISTANCE * SpellOperator.MAX_DISTANCE)
+        if (vec.distanceToSqr(this.caster.position()) > Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
             throw CastException(CastException.Reason.TOO_FAR, vec)
     }
 

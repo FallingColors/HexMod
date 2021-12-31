@@ -1,6 +1,6 @@
 package at.petrak.hex;
 
-import at.petrak.hex.common.casting.RegisterSpells;
+import at.petrak.hex.common.casting.RegisterPatterns;
 import at.petrak.hex.common.items.HexItems;
 import at.petrak.hex.common.network.HexMessages;
 import at.petrak.hex.server.TickScheduler;
@@ -36,6 +36,6 @@ public class HexMod {
         HexMessages.register();
         MinecraftForge.EVENT_BUS.register(TickScheduler.INSTANCE);
 
-        evbus.register(RegisterSpells.class);
+        evbus.register(RegisterPatterns.class);
     }
 }

@@ -1,27 +1,24 @@
 package at.petrak.hex.common.casting.operators.spells
 
-import at.petrak.hex.api.ConstManaOperator
-import at.petrak.hex.api.SpellOperator.Companion.getChecked
-import at.petrak.hex.api.SpellOperator.Companion.spellListOf
+import at.petrak.hex.api.SpellOperator
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.RenderedSpell
-import at.petrak.hex.common.casting.RenderedSpellImpl
 import at.petrak.hex.common.casting.SpellDatum
 import net.minecraft.Util
 import net.minecraft.network.chat.TextComponent
 
-object OpPrint : ConstManaOperator, RenderedSpellImpl {
+object OpPrint : SpellOperator {
     override val argc = 1
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val datum = args.getChecked<Any>(0)
-        return spellListOf(RenderedSpell(OpPrint, spellListOf(datum)))
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+        return Pair(Spell(args[0]), 0)
     }
 
-    override fun cast(args: List<SpellDatum<*>>, ctx: CastingContext) {
-        val datum = args[0]
-        ctx.caster.sendMessage(
-            TextComponent(datum.payload.toString()),
-            Util.NIL_UUID
-        )
+    private data class Spell(val datum: SpellDatum<*>) : RenderedSpell {
+        override fun cast(ctx: CastingContext) {
+            ctx.caster.sendMessage(
+                TextComponent(datum.payload.toString()),
+                Util.NIL_UUID
+            )
+        }
     }
 }

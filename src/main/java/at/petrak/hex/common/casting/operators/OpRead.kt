@@ -3,7 +3,7 @@ package at.petrak.hex.common.casting.operators
 import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.SpellDatum
-import at.petrak.hex.common.casting.SpellWidget
+import at.petrak.hex.common.casting.Widget
 import at.petrak.hex.common.items.ItemDataHolder
 
 object OpRead : ConstManaOperator {
@@ -13,6 +13,6 @@ object OpRead : ConstManaOperator {
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val dataer = ctx.getDataHolder()
         val datum = (dataer.item as ItemDataHolder).readDatum(dataer.orCreateTag, ctx)
-        return listOf(datum ?: SpellDatum.make(SpellWidget.NULL))
+        return listOf(datum ?: SpellDatum.make(Widget.NULL))
     }
 }

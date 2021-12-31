@@ -21,7 +21,7 @@ public class ItemModels extends ItemModelProvider {
         simpleItem(HexItems.SPELLBOOK.get());
 
         String[] focusTypes = new String[]{
-                "empty", "entity", "double", "vec3", "spell", "widget", "list", "pattern"
+                "empty", "entity", "double", "vec3", "widget", "list", "pattern"
         };
         for (int i = 0, stringsLength = focusTypes.length; i < stringsLength; i++) {
             String type = focusTypes[i];
@@ -35,7 +35,7 @@ public class ItemModels extends ItemModelProvider {
                     .predicate(ItemFocus.PREDICATE, -0.01f + 100 + i)
                     .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_" + type + "_sealed")))
                     .end();
-            
+
         }
     }
 
