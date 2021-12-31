@@ -20,47 +20,23 @@ public class ItemModels extends ItemModelProvider {
         simpleItem(HexItems.WAND.get());
         simpleItem(HexItems.SPELLBOOK.get());
 
-        simpleItem(modLoc("focus_empty"));
-        simpleItem(modLoc("focus_entity"));
-        simpleItem(modLoc("focus_double"));
-        simpleItem(modLoc("focus_vec3"));
-        simpleItem(modLoc("focus_spell"));
-        simpleItem(modLoc("focus_widget"));
-        simpleItem(modLoc("focus_list"));
-        simpleItem(modLoc("focus_patterns"));
-        getBuilder(HexItems.FOCUS.get().getRegistryName().getPath())
-                .override()
-                .predicate(ItemFocus.PREDICATE, -0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_empty")))
-                .end()
-                .override()
-                .predicate(ItemFocus.PREDICATE, 1 - 0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_entity")))
-                .end()
-                .override()
-                .predicate(ItemFocus.PREDICATE, 2 - 0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_double")))
-                .end()
-                .override()
-                .predicate(ItemFocus.PREDICATE, 3 - 0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_vec3")))
-                .end()
-                .override()
-                .predicate(ItemFocus.PREDICATE, 4 - 0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_spell")))
-                .end()
-                .override()
-                .predicate(ItemFocus.PREDICATE, 5 - 0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_widget")))
-                .end()
-                .override()
-                .predicate(ItemFocus.PREDICATE, 6 - 0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_list")))
-                .end()
-                .override()
-                .predicate(ItemFocus.PREDICATE, 7 - 0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_patterns")))
-                .end();
+        String[] focusTypes = new String[]{
+                "empty", "entity", "double", "vec3", "spell", "widget", "list", "pattern"
+        };
+        for (int i = 0, stringsLength = focusTypes.length; i < stringsLength; i++) {
+            String type = focusTypes[i];
+            simpleItem(modLoc("focus_" + type));
+            getBuilder(HexItems.FOCUS.get().getRegistryName().getPath())
+                    .override()
+                    .predicate(ItemFocus.PREDICATE, -0.01f + i)
+                    .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_" + type)))
+                    .end()
+                    .override()
+                    .predicate(ItemFocus.PREDICATE, -0.01f + 100 + i)
+                    .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_" + type + "_sealed")))
+                    .end();
+            
+        }
     }
 
     public void simpleItem(Item item) {

@@ -8,6 +8,9 @@ import at.petrak.hex.common.casting.RenderedSpell
 import at.petrak.hex.common.casting.RenderedSpellImpl
 import at.petrak.hex.common.casting.SpellDatum
 import net.minecraft.core.BlockPos
+import net.minecraft.core.particles.BlockParticleOption
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.context.UseOnContext
@@ -63,6 +66,14 @@ object OpPlaceBlock : SimpleOperator, RenderedSpellImpl {
                     ctx.caster.setItemInHand(ctx.wandHand, oldStack)
                     if (res != InteractionResult.FAIL) {
                         ctx.withdrawItem(placee, 1, true)
+
+                        ctx.world.playSound(
+                            ctx.caster,
+                            vec.x, vec.y, vec.z, bstate.soundType.placeSound, SoundSource.BLOCKS, 1.0f,
+                            1.0f + (Math.random() * 0.5 - 0.25).toFloat()
+                        )
+                        val particle = BlockParticleOption(ParticleTypes.BLOCK, bstate)
+                        ctx.world.sendParticles(particle, vec.x, vec.y, vec.z, 4, 0.1, 0.2, 0.1, 0.1)
                     }
                 }
             }

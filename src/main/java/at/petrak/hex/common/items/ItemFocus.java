@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 public class ItemFocus extends ItemDataHolder {
     public static final ResourceLocation PREDICATE = new ResourceLocation(HexMod.MOD_ID, "datatype");
     public static final String TAG_DATA = "data";
+    public static final String TAG_SEALED = "sealed";
 
     public ItemFocus(Properties pProperties) {
         super(pProperties);

@@ -169,10 +169,11 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         const val TAG_VEC3 = "vec3"
         const val TAG_LIST = "list"
         const val TAG_SPELL = "spell"
-        const val TAG_SPELL_NAME = "impler"
-        const val TAG_SPELL_ARGS = "args"
         const val TAG_WIDGET = "widget"
         const val TAG_PATTERN = "pattern"
+
+        const val TAG_SPELL_NAME = "impler"
+        const val TAG_SPELL_ARGS = "args"
 
         fun <T : Any> IsValidType(checkee: T): Boolean =
             if (checkee is List<*>) {

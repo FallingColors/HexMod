@@ -29,7 +29,14 @@ object OpBlockRaycast : ConstManaOperator {
 
         return SpellOperator.spellListOf(
             if (blockHitResult.type == HitResult.Type.BLOCK) {
-                blockHitResult.location
+                // the position on the bhr is the position of the specific *hit point*, which is actually on the outside of the block
+                // this is weird (for example, casting OpBreakBlock at this position will not break the block we're looking at)
+                // so we return the block pos instead
+                Vec3(
+                    blockHitResult.blockPos.x.toDouble(),
+                    blockHitResult.blockPos.y.toDouble(),
+                    blockHitResult.blockPos.z.toDouble()
+                )
             } else {
                 SpellWidget.NULL
             }

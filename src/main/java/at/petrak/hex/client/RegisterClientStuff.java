@@ -16,9 +16,12 @@ public class RegisterClientStuff {
     public static void init(final FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> ItemProperties.register(HexItems.FOCUS.get(), ItemFocus.PREDICATE,
                 (stack, level, holder, holderID) -> {
+                    var tag = stack.getOrCreateTag();
+                    var isSealed = tag.getBoolean(ItemFocus.TAG_SEALED);
+                    var baseNum = isSealed ? 100f : 0f;
                     if (stack.hasTag()) {
-                        var tagname = stack.getTag().getCompound(ItemFocus.TAG_DATA).getAllKeys().iterator().next();
-                        return switch (tagname) {
+                        var typename = tag.getCompound(ItemFocus.TAG_DATA).getAllKeys().iterator().next();
+                        return baseNum + switch (typename) {
                             case SpellDatum.TAG_ENTITY -> 1f;
                             case SpellDatum.TAG_DOUBLE -> 2f;
                             case SpellDatum.TAG_VEC3 -> 3f;
@@ -29,7 +32,7 @@ public class RegisterClientStuff {
                             default -> 0f; // uh oh
                         };
                     } else {
-                        return 0f;
+                        return baseNum;
                     }
                 }));
     }
