@@ -19,7 +19,7 @@ object OpBreakBlock : SpellOperator {
         ctx.assertVecInRange(pos)
         return Pair(
             Spell(pos),
-            100
+            100_000
         )
     }
 

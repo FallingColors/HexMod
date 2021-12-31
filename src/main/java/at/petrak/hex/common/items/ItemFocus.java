@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 public class ItemFocus extends ItemDataHolder {
-    public static final ResourceLocation PREDICATE = new ResourceLocation(HexMod.MOD_ID, "datatype");
+    public static final ResourceLocation DATATYPE_PRED = new ResourceLocation(HexMod.MOD_ID, "datatype");
     public static final String TAG_DATA = "data";
     public static final String TAG_SEALED = "sealed";
 
@@ -27,6 +27,8 @@ public class ItemFocus extends ItemDataHolder {
 
     @Override
     public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
-        tag.put(TAG_DATA, datum.serializeToNBT());
+        if (!tag.getBoolean(TAG_SEALED)) {
+            tag.put(TAG_DATA, datum.serializeToNBT());
+        }
     }
 }

@@ -13,7 +13,7 @@ object OpEval : Operator {
         val instrs: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
         val ctxDeeper = ctx.withIncDepth()
-        val harness = CastingHarness.Default(ctxDeeper)
+        val harness = CastingHarness(ctxDeeper)
         harness.stack.addAll(stack)
         stack.clear()
         val spellsToCast = mutableListOf<RenderedSpell>()

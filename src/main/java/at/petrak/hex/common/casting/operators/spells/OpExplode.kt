@@ -19,7 +19,7 @@ object OpExplode : SpellOperator {
         ctx.assertVecInRange(pos)
         return Pair(
             Spell(pos, strength),
-            (strength * 100.0).toInt(),
+            (strength * 100_000.0).toInt(),
         )
     }
 

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "hex:item/focus_spell"
+    "layer0": "hex:item/focus_entity_sealed"
   }
 }

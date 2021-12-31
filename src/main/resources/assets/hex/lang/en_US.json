@@ -2,6 +2,11 @@
     "item.hex.wand": "Staff",
     "item.hex.focus": "Focus",
     "item.hex.spellbook": "Spellbook",
+    "item.hex.cypher": "Cypher",
+    "item.hex.trinket": "Trinket",
+    "item.hex.artifact": "Artifact",
+    "death.attack.hex.overcast": "%s's mind was consumed into energy",
+
     "hex.spellbook.tooltip.page": "Selected Page %d/%d",
     "hex.spelldata.desc.entity": "Entity %s",
 

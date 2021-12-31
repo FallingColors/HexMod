@@ -18,7 +18,7 @@ object OpLightning : SpellOperator {
         ctx.assertVecInRange(target)
         return Pair(
             Spell(target),
-            1500
+            1_500_000
         )
     }
 

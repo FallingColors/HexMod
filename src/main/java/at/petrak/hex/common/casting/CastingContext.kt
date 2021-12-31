@@ -4,8 +4,8 @@ import at.petrak.hex.HexMod
 import at.petrak.hex.HexUtils
 import at.petrak.hex.api.Operator
 import at.petrak.hex.common.items.ItemDataHolder
+import at.petrak.hex.common.items.ItemManaHolder
 import at.petrak.hex.common.items.ItemSpellbook
-import at.petrak.hex.common.items.ItemWand
 import at.petrak.hex.common.lib.LibDamageSources
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -14,7 +14,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 import java.util.function.Predicate
-import kotlin.math.max
 import kotlin.math.min
 
 /**
@@ -22,11 +21,11 @@ import kotlin.math.min
  */
 data class CastingContext(
     val caster: ServerPlayer,
-    val wandHand: InteractionHand,
+    val castingHand: InteractionHand,
 ) {
     private var depth: Int = 0
     val world: ServerLevel get() = caster.getLevel()
-    val otherHand: InteractionHand get() = HexUtils.OtherHand(this.wandHand)
+    val otherHand: InteractionHand get() = HexUtils.OtherHand(this.castingHand)
 
     fun getSpellbook(): ItemStack {
         val handItem =
@@ -34,7 +33,7 @@ data class CastingContext(
         return if (handItem.item is ItemSpellbook) {
             handItem
         } else {
-            throw CastException(CastException.Reason.REQUIRES_SPELLBOOK)
+            throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemSpellbook::class.java, handItem)
         }
     }
 
@@ -44,7 +43,7 @@ data class CastingContext(
         return if (handItem.item is ItemDataHolder) {
             handItem
         } else {
-            throw CastException(CastException.Reason.REQUIRES_DATA_HOLDER)
+            throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemDataHolder::class.java, handItem)
         }
     }
 
@@ -69,13 +68,11 @@ data class CastingContext(
     fun withdrawMana(manaCost: Int, allowOvercast: Boolean): Int {
         var costLeft = manaCost
 
-        val held = caster.getItemInHand(this.wandHand)
-        if (held.item is ItemWand) {
-            val tag = held.orCreateTag
-            val manaHere = tag.getInt(ItemWand.TAG_MANA)
-            val manaLeft = manaHere - costLeft
-            tag.putInt(ItemWand.TAG_MANA, max(0, manaLeft))
-            costLeft = max(0, costLeft - manaHere)
+        val held = caster.getItemInHand(this.castingHand)
+        val tag = held.orCreateTag
+        val item = held.item
+        if (item is ItemManaHolder) {
+            costLeft = item.withdrawMana(tag, manaCost)
         }
         if (allowOvercast && costLeft > 0) {
             // Cast from HP!
@@ -110,7 +107,7 @@ data class CastingContext(
                 InteractionHand.OFF_HAND -> 150
             }
         }
-        val anchorSlot = when (this.wandHand) {
+        val anchorSlot = when (this.castingHand) {
             // slot to the right of the wand
             InteractionHand.MAIN_HAND -> (this.caster.inventory.selected + 1) % 9
             // first hotbar slot

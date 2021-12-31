@@ -27,7 +27,7 @@ object OpPlaceBlock : SpellOperator {
         ctx.assertVecInRange(pos)
         return Pair(
             Spell(pos),
-            30
+            20_000
         )
     }
 
@@ -50,18 +50,18 @@ object OpPlaceBlock : SpellOperator {
                         MinecraftForge.EVENT_BUS.post(evt)
 
                         // we temporarily give the player the stack, place it using mc code, then give them the old stack back.
-                        val oldStack = ctx.caster.getItemInHand(ctx.wandHand)
+                        val oldStack = ctx.caster.getItemInHand(ctx.castingHand)
                         val spoofedStack = placeeStack.copy()
                         spoofedStack.count = 1
-                        ctx.caster.setItemInHand(ctx.wandHand, spoofedStack)
+                        ctx.caster.setItemInHand(ctx.castingHand, spoofedStack)
 
                         val blockHit = BlockHitResult(
                             Vec3.ZERO, ctx.caster.direction, pos, false
                         )
-                        val itemUseCtx = UseOnContext(ctx.caster, ctx.wandHand, blockHit)
+                        val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
                         val res = spoofedStack.useOn(itemUseCtx)
 
-                        ctx.caster.setItemInHand(ctx.wandHand, oldStack)
+                        ctx.caster.setItemInHand(ctx.castingHand, oldStack)
                         if (res != InteractionResult.FAIL) {
                             ctx.withdrawItem(placee, 1, true)
 

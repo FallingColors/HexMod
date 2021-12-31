@@ -21,6 +21,8 @@ class CastingHarness private constructor(
     var escapeNext: Boolean,
     val ctx: CastingContext,
 ) {
+    constructor(ctx: CastingContext) : this(mutableListOf(), 0, mutableListOf(), false, ctx)
+
     /**
      * When the server gets a packet from the client with a new pattern,
      * handle it.
@@ -90,7 +92,7 @@ class CastingHarness private constructor(
             }
             HexMod.LOGGER.info("New stack: ${this.stack}")
 
-            if (!spellsToCast.isEmpty()) {
+            if (spellsToCast.isNotEmpty()) {
                 CastResult.Cast(spellsToCast, this.stack.isEmpty())
             } else if (this.stack.isEmpty()) {
                 if (this.parenCount == 0) {
@@ -156,12 +158,9 @@ class CastingHarness private constructor(
                 CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx)
             } catch (exn: Exception) {
                 HexMod.LOGGER.warn("Couldn't load harness from nbt tag, falling back to default: $nbt: $exn")
-                Default(ctx)
+                CastingHarness(ctx)
             }
         }
-
-        internal fun Default(ctx: CastingContext): CastingHarness =
-            CastingHarness(mutableListOf(), 0, mutableListOf(), false, ctx)
     }
 
     sealed class CastResult {

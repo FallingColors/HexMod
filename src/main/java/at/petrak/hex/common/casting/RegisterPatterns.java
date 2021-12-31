@@ -6,6 +6,9 @@ import at.petrak.hex.api.PatternRegistry;
 import at.petrak.hex.common.casting.operators.*;
 import at.petrak.hex.common.casting.operators.math.*;
 import at.petrak.hex.common.casting.operators.spells.*;
+import at.petrak.hex.common.items.ItemArtifact;
+import at.petrak.hex.common.items.ItemCypher;
+import at.petrak.hex.common.items.ItemTrinket;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -60,6 +63,12 @@ public class RegisterPatterns {
                     new Pair<>("qaqqqqq", OpPlaceBlock.INSTANCE),
                     new Pair<>("eeeeede", OpBreakBlock.INSTANCE),
                     new Pair<>("waadwawdaaweewq", OpLightning.INSTANCE),
+                    new Pair<>("waqqqqq", new OpMakePackagedSpell<>(ItemCypher.class, 500_000)),
+                    new Pair<>("wwaqqqqqeaqeaeqqqeaeq", new OpMakePackagedSpell<>(ItemTrinket.class, 1_000_000)),
+                    new Pair<>(
+                            "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq",
+                            new OpMakePackagedSpell<>(ItemArtifact.class, 4_000_000)
+                    ),
 
                     // == Meta stuff ==
                     new Pair<>("qqq", Widget.OPEN_PAREN),
