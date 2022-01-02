@@ -31,10 +31,11 @@ object OpBreakBlock : SpellOperator {
             val tier =
                 HexMod.CONFIG.opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort
 
-            if (!blockstate.isAir && (!blockstate.requiresCorrectToolForDrops() || TierSortingRegistry.isCorrectTierForDrops(
-                    tier,
-                    blockstate
-                ))
+            if (
+                !blockstate.isAir
+                && blockstate.getDestroySpeed(ctx.world, pos) >= 0f
+                && (!blockstate.requiresCorrectToolForDrops()
+                        || TierSortingRegistry.isCorrectTierForDrops(tier, blockstate))
             ) {
                 ctx.world.destroyBlock(pos, true, ctx.caster)
             } // TODO: else some kind of failureific particle effect?

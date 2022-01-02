@@ -1,6 +1,7 @@
 package at.petrak.hex.common.casting
 
 import at.petrak.hex.hexmath.HexPattern
+import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
 
 class CastException(val reason: Reason, vararg val data: Any) : Exception() {
@@ -64,6 +65,13 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
          * `Class<Item> expected, ItemStack got`
          */
         BAD_OFFHAND_ITEM,
+
+        /**
+         * Required an inventory at the given position.
+         *
+         * `BlockPos pos`
+         */
+        REQUIRES_INVENTORY
     }
 
     override val message: String
@@ -76,5 +84,6 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
             Reason.TOO_FAR -> "tried to interact with something too far away at ${this.data[0] as Vec3}"
             Reason.TOO_MANY_RECURSIVE_EVALS -> "can only recursively call OpEval ${this.data[0] as Int} times but called it ${this.data[1] as Int} times"
             Reason.BAD_OFFHAND_ITEM -> "operator expected ${(this.data[0] as Class<*>).typeName} in offhand but got ${this.data[1]}"
+            Reason.REQUIRES_INVENTORY -> "required an inventory at ${this.data[0] as BlockPos}"
         }
 }

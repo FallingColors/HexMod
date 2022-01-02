@@ -18,5 +18,7 @@ public class DataGenerators {
         if (ev.includeServer()) {
             // recipes
         }
+        // On both sides
+        gen.addProvider(new LootModifiers(gen));
     }
 }

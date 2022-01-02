@@ -1,14 +1,16 @@
-package at.petrak.hex.common.casting;
+package at.petrak.hex.common.lib;
 
 import at.petrak.hex.HexMod;
 import at.petrak.hex.api.Operator;
 import at.petrak.hex.api.PatternRegistry;
+import at.petrak.hex.common.casting.SpellDatum;
+import at.petrak.hex.common.casting.Widget;
 import at.petrak.hex.common.casting.operators.*;
 import at.petrak.hex.common.casting.operators.math.*;
 import at.petrak.hex.common.casting.operators.spells.*;
-import at.petrak.hex.common.items.ItemArtifact;
-import at.petrak.hex.common.items.ItemCypher;
-import at.petrak.hex.common.items.ItemTrinket;
+import at.petrak.hex.common.items.magic.ItemArtifact;
+import at.petrak.hex.common.items.magic.ItemCypher;
+import at.petrak.hex.common.items.magic.ItemTrinket;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

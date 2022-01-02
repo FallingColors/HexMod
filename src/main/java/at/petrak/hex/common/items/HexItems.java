@@ -1,10 +1,11 @@
 package at.petrak.hex.common.items;
 
 import at.petrak.hex.HexMod;
+import at.petrak.hex.common.items.magic.ItemArtifact;
+import at.petrak.hex.common.items.magic.ItemCypher;
+import at.petrak.hex.common.items.magic.ItemTrinket;
 import at.petrak.hex.common.lib.LibItemNames;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,39 +23,26 @@ public class HexItems {
 
         @Override
         public void fillItemList(NonNullList<ItemStack> items) {
-            // Make the wand spawn with some sensible NBT
-            for (Pair<Integer, RegistryObject<Item>> p : new Pair[]{
-                    new Pair<>(HexMod.CONFIG.wandMaxMana.get(), WAND),
-                    new Pair<>(HexMod.CONFIG.cypherMaxMana.get(), CYPHER),
-                    new Pair<>(HexMod.CONFIG.trinketMaxMana.get(), TRINKET),
-                    new Pair<>(HexMod.CONFIG.artifactMaxMana.get(), ARTIFACT),
-            }) {
-                var mana = p.getFirst();
-                var stack = new ItemStack(p.getSecond()::get);
-
-                var tag = new CompoundTag();
-                tag.putInt(ItemManaHolder.TAG_MANA, mana);
-                tag.putInt(ItemWand.TAG_MAX_MANA, mana);
-                stack.setTag(tag);
-                items.add(stack);
-            }
-
             super.fillItemList(items);
         }
     };
 
     public static final RegistryObject<Item> WAND = ITEMS.register(LibItemNames.WAND,
-            () -> new ItemWand(new Item.Properties().stacksTo(1)));
+            () -> new ItemWand(unstackable()));
     public static final RegistryObject<Item> FOCUS = ITEMS.register(LibItemNames.FOCUS,
             () -> new ItemFocus(props()));
     public static final RegistryObject<Item> SPELLBOOK = ITEMS.register(LibItemNames.SPELLBOOK,
             () -> new ItemSpellbook(unstackable()));
     public static final RegistryObject<Item> CYPHER = ITEMS.register(LibItemNames.CYPHER,
-            () -> new ItemCypher(new Item.Properties().stacksTo(1)));
+            () -> new ItemCypher(unstackable()));
     public static final RegistryObject<Item> TRINKET = ITEMS.register(LibItemNames.TRINKET,
-            () -> new ItemTrinket(new Item.Properties().stacksTo(1)));
+            () -> new ItemTrinket(unstackable()));
     public static final RegistryObject<Item> ARTIFACT = ITEMS.register(LibItemNames.ARTIFACT,
-            () -> new ItemArtifact(new Item.Properties().stacksTo(1)));
+            () -> new ItemArtifact(unstackable()));
+    public static final RegistryObject<Item> AMETHYST_DUST = ITEMS.register(LibItemNames.AMETHYST_DUST,
+            () -> new Item(props()));
+    public static final RegistryObject<Item> CHARGED_AMETHYST = ITEMS.register(LibItemNames.CHARGED_AMETHYST,
+            () -> new Item(props()));
 
     public static Item.Properties props() {
         return new Item.Properties().tab(TAB);

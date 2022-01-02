@@ -1,8 +1,9 @@
 package at.petrak.hex;
 
-import at.petrak.hex.common.casting.RegisterPatterns;
 import at.petrak.hex.common.items.HexItems;
+import at.petrak.hex.common.lib.RegisterPatterns;
 import at.petrak.hex.common.network.HexMessages;
+import at.petrak.hex.datagen.LootModifiers;
 import at.petrak.hex.server.TickScheduler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +36,7 @@ public class HexMod {
         HexItems.ITEMS.register(evbus);
         HexMessages.register();
         MinecraftForge.EVENT_BUS.register(TickScheduler.INSTANCE);
+        LootModifiers.LOOT_MODS.register(evbus);
 
         evbus.register(RegisterPatterns.class);
     }

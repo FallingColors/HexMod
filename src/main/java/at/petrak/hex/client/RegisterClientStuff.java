@@ -4,7 +4,7 @@ import at.petrak.hex.HexMod;
 import at.petrak.hex.common.casting.SpellDatum;
 import at.petrak.hex.common.items.HexItems;
 import at.petrak.hex.common.items.ItemFocus;
-import at.petrak.hex.common.items.ItemPackagedSpell;
+import at.petrak.hex.common.items.magic.ItemPackagedSpell;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;

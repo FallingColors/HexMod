@@ -8,35 +8,27 @@ public class HexConfig {
 
     public final ForgeConfigSpec.DoubleValue healthToManaRate;
 
-    public final ForgeConfigSpec.IntValue wandMaxMana;
-    public final ForgeConfigSpec.IntValue wandRechargeRate;
-    public final ForgeConfigSpec.IntValue cypherMaxMana;
-    public final ForgeConfigSpec.IntValue trinketMaxMana;
-    public final ForgeConfigSpec.IntValue artifactMaxMana;
-    public final ForgeConfigSpec.IntValue artifactRechargeRate;
+    public final ForgeConfigSpec.IntValue batteryMaxMana;
+    public final ForgeConfigSpec.IntValue dustManaAmount;
+    public final ForgeConfigSpec.IntValue shardManaAmount;
+    public final ForgeConfigSpec.IntValue chargedCrystalManaAmount;
 
     public final ForgeConfigSpec.IntValue opBreakHarvestLevel;
     public final ForgeConfigSpec.IntValue maxRecurseDepth;
 
     public HexConfig(ForgeConfigSpec.Builder builder) {
-
-
         healthToManaRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-                .defineInRange("healthToManaRate", 1_000_000.0 / 20.0, 0.0, 1_000_000.0);
+                .defineInRange("healthToManaRate", 1_000_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
 
         builder.push("items");
-        wandMaxMana = builder.comment("The maximum amount of mana a wand can store.")
-                .defineInRange("wandMaxMana", 1_000_000, 0, Integer.MAX_VALUE);
-        wandRechargeRate = builder.comment("How many mana points a wand recharges per tick")
-                .defineInRange("wandRechargeRate", 2_000, 0, Integer.MAX_VALUE);
-        cypherMaxMana = builder.comment("The maximum amount of mana a cypher can store.")
-                .defineInRange("cypherMaxMana", 8_000_000, 0, Integer.MAX_VALUE);
-        trinketMaxMana = builder.comment("The maximum amount of mana a trinket can store.")
-                .defineInRange("trinketMaxMana", 4_000_000, 0, Integer.MAX_VALUE);
-        artifactMaxMana = builder.comment("The maximum amount of mana an artifact can store.")
-                .defineInRange("artifactMaxMana", 1_000_000, 0, Integer.MAX_VALUE);
-        artifactRechargeRate = builder.comment("How many mana points an artifact recharges per tick")
-                .defineInRange("artifactRechargeRate", 1_500, 0, Integer.MAX_VALUE);
+        batteryMaxMana = builder.comment("The maximum amount of mana a mana battery can store.")
+                .defineInRange("batteryMaxMana", 1_000_000, 0, Integer.MAX_VALUE);
+        dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")
+                .defineInRange("dustManaAmount", 100_000, 0, Integer.MAX_VALUE);
+        shardManaAmount = builder.comment("How much mana a single Amethyst Shard item is worth")
+                .defineInRange("shardManaAmount", 500_000, 0, Integer.MAX_VALUE);
+        chargedCrystalManaAmount = builder.comment("How much mana a single Charged Amethyst Crystal item is worth")
+                .defineInRange("chargedCrystalManaAmount", 1_000_000, 0, Integer.MAX_VALUE);
         builder.pop();
 
         builder.push("spells");

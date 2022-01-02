@@ -5,6 +5,8 @@
     "item.hex.cypher": "Cypher",
     "item.hex.trinket": "Trinket",
     "item.hex.artifact": "Artifact",
+    "item.hex.amethyst_dust": "Amethyst Dust",
+    "item.hex.charged_amethyst": "Charged Amethyst Crystal",
     "death.attack.hex.overcast": "%s's mind was consumed into energy",
 
     "hex.spellbook.tooltip.page": "Selected Page %d/%d",

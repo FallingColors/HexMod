@@ -3,7 +3,7 @@ package at.petrak.hex.datagen;
 import at.petrak.hex.HexMod;
 import at.petrak.hex.common.items.HexItems;
 import at.petrak.hex.common.items.ItemFocus;
-import at.petrak.hex.common.items.ItemPackagedSpell;
+import at.petrak.hex.common.items.magic.ItemPackagedSpell;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +22,8 @@ public class ItemModels extends ItemModelProvider {
     protected void registerModels() {
         simpleItem(HexItems.WAND.get());
         simpleItem(HexItems.SPELLBOOK.get());
+        simpleItem(HexItems.AMETHYST_DUST.get());
+        simpleItem(HexItems.CHARGED_AMETHYST.get());
 
         String[] focusTypes = new String[]{
                 "empty", "entity", "double", "vec3", "widget", "list", "pattern"

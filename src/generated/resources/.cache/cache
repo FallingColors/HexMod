@@ -1,5 +1,7 @@
+72b0863df1de5bd50917aa626e6a27933cc7c485 assets/hex/models/item/amethyst_dust.json
 a310c1d496f4930955d1484ff271487d811bafd4 assets/hex/models/item/artifact.json
 007d82b95d0c976ef5e1f726542ae752111efb8b assets/hex/models/item/artifact_filled.json
+c3bfbb78256d5698e5df065e5fcbb1fcddb0505a assets/hex/models/item/charged_amethyst.json
 fcd283e7b444ffacb8ba71462d2a0aff383fe4a2 assets/hex/models/item/cypher.json
 9dcb4967450238440e0db6b25e81a6d9704d4835 assets/hex/models/item/cypher_filled.json
 17b322e41c7789c5e6e91b53f7821446d7de6714 assets/hex/models/item/focus.json
@@ -21,3 +23,5 @@ a354a2dc83d220c43d4c9f156059cbd8255e9e19 assets/hex/models/item/spellbook.json
 eaddd1e5ae74293d784748e56e4a238a7607e34c assets/hex/models/item/trinket.json
 f0cce957861ee854cbd68984015da2c530c9ef6d assets/hex/models/item/trinket_filled.json
 837e7ed749afa44bd3be4114c7d81f3b8fe47852 assets/hex/models/item/wand.json
+2ac42506f03235f4335dd62f0d6a0c4f23ca61b9 data/forge/loot_modifiers/global_loot_modifiers.json
+a46281d65532086be7fbb63beb8c515edf2baaee data/hex/loot_modifiers/amethyst_cluster.json

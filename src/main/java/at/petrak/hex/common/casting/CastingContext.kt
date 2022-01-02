@@ -4,8 +4,9 @@ import at.petrak.hex.HexMod
 import at.petrak.hex.HexUtils
 import at.petrak.hex.api.Operator
 import at.petrak.hex.common.items.ItemDataHolder
-import at.petrak.hex.common.items.ItemManaHolder
 import at.petrak.hex.common.items.ItemSpellbook
+import at.petrak.hex.common.items.ItemWand
+import at.petrak.hex.common.items.magic.ItemPackagedSpell
 import at.petrak.hex.common.lib.LibDamageSources
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -13,6 +14,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
+import java.util.*
 import java.util.function.Predicate
 import kotlin.math.min
 
@@ -64,22 +66,40 @@ data class CastingContext(
 
     /**
      * Might cast from hitpoints.
-     * Returns the mana cost still remaining after we deplete everything. It will be <= 0 if we could pay for it. */
+     * Returns the mana cost still remaining after we deplete everything. It will be <= 0 if we could pay for it.
+     */
     fun withdrawMana(manaCost: Int, allowOvercast: Boolean): Int {
+        if (this.caster.isCreative) return 0
         var costLeft = manaCost
 
-        val held = caster.getItemInHand(this.castingHand)
-        val tag = held.orCreateTag
-        val item = held.item
-        if (item is ItemManaHolder) {
-            costLeft = item.withdrawMana(tag, manaCost)
+        val casterStack = this.caster.getItemInHand(this.castingHand)
+        val casterItem = casterStack.item
+        val ipsCanDrawFromInv = if (casterItem is ItemPackagedSpell) {
+            val tag = casterStack.orCreateTag
+            val manaAvailable = tag.getInt(ItemPackagedSpell.TAG_MANA)
+            val manaToTake = min(costLeft, manaAvailable)
+            tag.putInt(ItemPackagedSpell.TAG_MANA, manaAvailable - manaToTake)
+            costLeft -= manaToTake
+            casterItem.canDrawManaFromInventory()
+        } else {
+            false
         }
+        if (casterItem is ItemWand || ipsCanDrawFromInv) {
+            val manableItems = this.caster.inventory.items
+                .filter { !Objects.isNull(ManaHelper.priority(it)) }
+                .sortedByDescending(ManaHelper::priority)
+            for (stack in manableItems) {
+                costLeft -= ManaHelper.extractMana(stack, costLeft)!!
+                if (costLeft <= 0)
+                    return costLeft
+            }
+        }
+
         if (allowOvercast && costLeft > 0) {
             // Cast from HP!
             val healthToMana = HexMod.CONFIG.healthToManaRate.get()
             val healthtoRemove = healthToMana * costLeft.toDouble()
-            val manaAbleToCastFromHP =
-                if (caster.isInvulnerable) Double.POSITIVE_INFINITY else caster.health / healthToMana
+            val manaAbleToCastFromHP = caster.health / healthToMana
             caster.hurt(LibDamageSources.OVERCAST, healthtoRemove.toFloat())
             costLeft = (costLeft.toDouble() - manaAbleToCastFromHP).toInt()
         }

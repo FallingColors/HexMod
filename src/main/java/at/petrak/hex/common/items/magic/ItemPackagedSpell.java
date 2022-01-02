@@ -1,8 +1,9 @@
-package at.petrak.hex.common.items;
+package at.petrak.hex.common.items.magic;
 
 import at.petrak.hex.HexMod;
 import at.petrak.hex.common.casting.CastingContext;
 import at.petrak.hex.common.casting.CastingHarness;
+import at.petrak.hex.common.casting.ManaHelper;
 import at.petrak.hex.hexmath.HexPattern;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +16,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
@@ -25,7 +27,9 @@ import java.util.List;
 /**
  * Item that holds a list of patterns in it ready to be cast
  */
-public abstract class ItemPackagedSpell extends ItemManaHolder {
+public abstract class ItemPackagedSpell extends Item {
+    public static final String TAG_MANA = "hex:mana";
+    public static final String TAG_START_MANA = "hex:start_mana";
     public static final String TAG_PATTERNS = "patterns";
     public static final ResourceLocation HAS_PATTERNS_PRED = new ResourceLocation(HexMod.MOD_ID, "has_patterns");
 
@@ -33,7 +37,9 @@ public abstract class ItemPackagedSpell extends ItemManaHolder {
         super(pProperties);
     }
 
-    abstract boolean singleUse();
+    public abstract boolean singleUse();
+
+    public abstract boolean canDrawManaFromInventory();
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand usedHand) {
@@ -77,6 +83,7 @@ public abstract class ItemPackagedSpell extends ItemManaHolder {
         player.getCooldowns().addCooldown(this, 20);
 
         if (singleUse()) {
+            stack.shrink(1);
             return InteractionResultHolder.consume(stack);
         } else {
             return InteractionResultHolder.success(stack);
@@ -96,9 +103,24 @@ public abstract class ItemPackagedSpell extends ItemManaHolder {
     @Override
     public boolean isBarVisible(ItemStack pStack) {
         var tag = pStack.getOrCreateTag();
-        return !singleUse() && tag.contains(TAG_PATTERNS);
+        return tag.contains(TAG_PATTERNS);
     }
 
+    @Override
+    public int getBarColor(ItemStack pStack) {
+        var tag = pStack.getOrCreateTag();
+        var mana = tag.getInt(TAG_MANA);
+        var maxMana = tag.getInt(TAG_START_MANA);
+        return ManaHelper.INSTANCE.barColor(mana, maxMana);
+    }
+
+    @Override
+    public int getBarWidth(ItemStack pStack) {
+        var tag = pStack.getOrCreateTag();
+        var mana = tag.getInt(TAG_MANA);
+        var maxMana = tag.getInt(TAG_START_MANA);
+        return ManaHelper.INSTANCE.barWidth(mana, maxMana);
+    }
 
     private static List<HexPattern> getPatterns(CompoundTag tag) {
         var out = new ArrayList<HexPattern>();
