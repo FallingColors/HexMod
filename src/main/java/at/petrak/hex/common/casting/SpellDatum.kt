@@ -75,17 +75,24 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
     companion object {
         @JvmStatic
         fun make(payload: Any): SpellDatum<*> =
-            if (!IsValidType(payload)) {
-                // Check to see if it's a java boxed double
-                if (payload is java.lang.Double) {
-                    val num = payload.toDouble()
-                    SpellDatum(if (num.isFinite()) num else 0.0)
-                } else {
-                    throw CastException(CastException.Reason.INVALID_TYPE, payload)
-                }
-            } else {
+            if (payload is List<*>) {
+                SpellDatum(payload.map {
+                    when (it) {
+                        null -> make(Widget.NULL)
+                        is SpellDatum<*> -> it
+                        else -> make(it)
+                    }
+                })
+            } else if (IsValidType(payload)) {
                 SpellDatum(payload)
+            } else if (payload is java.lang.Double) {
+                // Check to see if it's a java *boxed* double, for when we call this from Java
+                val num = payload.toDouble()
+                SpellDatum(if (num.isFinite()) num else 0.0)
+            } else {
+                throw CastException(CastException.Reason.INVALID_TYPE, payload)
             }
+
 
         @JvmStatic
         fun DeserializeFromNBT(nbt: CompoundTag, ctx: CastingContext): SpellDatum<*> {

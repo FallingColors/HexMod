@@ -1,4 +1,4 @@
-package at.petrak.hex.common.casting.operators
+package at.petrak.hex.common.casting.operators.selectors
 
 import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.api.Operator

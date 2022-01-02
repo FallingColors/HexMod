@@ -6,7 +6,14 @@ import at.petrak.hex.api.PatternRegistry;
 import at.petrak.hex.common.casting.SpellDatum;
 import at.petrak.hex.common.casting.Widget;
 import at.petrak.hex.common.casting.operators.*;
+import at.petrak.hex.common.casting.operators.lists.OpAppend;
+import at.petrak.hex.common.casting.operators.lists.OpConcat;
+import at.petrak.hex.common.casting.operators.lists.OpForEach;
+import at.petrak.hex.common.casting.operators.lists.OpIndex;
 import at.petrak.hex.common.casting.operators.math.*;
+import at.petrak.hex.common.casting.operators.selectors.OpGetCaster;
+import at.petrak.hex.common.casting.operators.selectors.OpGetEntitiesBy;
+import at.petrak.hex.common.casting.operators.selectors.OpGetEntityAt;
 import at.petrak.hex.common.casting.operators.spells.*;
 import at.petrak.hex.common.items.magic.ItemArtifact;
 import at.petrak.hex.common.items.magic.ItemCypher;
@@ -38,6 +45,24 @@ public class RegisterPatterns {
                     new Pair<>("wqaawdd", OpBlockRaycast.INSTANCE),
                     new Pair<>("weddwaa", OpBlockAxisRaycast.INSTANCE),
                     new Pair<>("weaqa", OpEntityRaycast.INSTANCE),
+                    new Pair<>("wqded", OpGetEntityAt.INSTANCE),
+
+                    new Pair<>("edqde", OpAppend.INSTANCE),
+                    new Pair<>("qaeaq", OpConcat.INSTANCE),
+                    new Pair<>("deeed", OpIndex.INSTANCE),
+                    new Pair<>("dadad", OpForEach.INSTANCE),
+
+                    new Pair<>("qqqqqwded", new OpGetEntitiesBy(e -> true, false)),
+                    new Pair<>("qqqqqwdedewa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false)),
+                    new Pair<>("eeeeewaqaawa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, true)),
+                    new Pair<>("qqqqqwdedewq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, false)),
+                    new Pair<>("eeeeewaqaawq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, true)),
+                    new Pair<>("qqqqqwdedeww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, false)),
+                    new Pair<>("eeeeewaqaaww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, true)),
+                    new Pair<>("qqqqqwdedewe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, false)),
+                    new Pair<>("eeeeewaqaawe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, true)),
+                    new Pair<>("qqqqqwdedewd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, false)),
+                    new Pair<>("eeeeewaqaawd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, true)),
 
                     // == Modify Stack ==
 

@@ -28,6 +28,7 @@ data class CastingContext(
     private var depth: Int = 0
     val world: ServerLevel get() = caster.getLevel()
     val otherHand: InteractionHand get() = HexUtils.OtherHand(this.castingHand)
+    val position: Vec3 get() = caster.position()
 
     fun getSpellbook(): ItemStack {
         val handItem =
