@@ -53,15 +53,11 @@ data class CastingContext(
     /**
      * Throws if we get too deep
      */
-    fun withIncDepth(): CastingContext {
-        val next = this.copy()
-        next.depth++
-
+    fun incDepth() {
+        this.depth++
         val maxAllowedDepth = HexMod.CONFIG.maxRecurseDepth.get()
-        if (next.depth > maxAllowedDepth) {
-            throw CastException(CastException.Reason.TOO_MANY_RECURSIVE_EVALS, maxAllowedDepth, next.depth)
-        } else {
-            return next
+        if (this.depth > maxAllowedDepth) {
+            throw CastException(CastException.Reason.TOO_MANY_RECURSIVE_EVALS, maxAllowedDepth, this.depth)
         }
     }
 

@@ -31,5 +31,7 @@ public class HexMessages {
                 MsgShiftScrollSyn::deserialize, MsgShiftScrollSyn::handle);
         NETWORK.registerMessage(messageIdx++, MsgAddMotionAck.class, MsgAddMotionAck::serialize,
                 MsgAddMotionAck::deserialize, MsgAddMotionAck::handle);
+        NETWORK.registerMessage(messageIdx++, MsgBlinkAck.class, MsgBlinkAck::serialize,
+                MsgBlinkAck::deserialize, MsgBlinkAck::handle);
     }
 }

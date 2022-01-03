@@ -18,7 +18,7 @@ public class HexConfig {
 
     public HexConfig(ForgeConfigSpec.Builder builder) {
         healthToManaRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-                .defineInRange("healthToManaRate", 1_000_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
+                .defineInRange("healthToManaRate", 20.0 / 1_000_000.0, 0.0, Double.POSITIVE_INFINITY);
 
         builder.push("items");
         batteryMaxMana = builder.comment("The maximum amount of mana a mana battery can store.")

@@ -15,6 +15,7 @@ import at.petrak.hex.common.casting.operators.selectors.OpGetCaster;
 import at.petrak.hex.common.casting.operators.selectors.OpGetEntitiesBy;
 import at.petrak.hex.common.casting.operators.selectors.OpGetEntityAt;
 import at.petrak.hex.common.casting.operators.spells.*;
+import at.petrak.hex.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hex.common.items.magic.ItemArtifact;
 import at.petrak.hex.common.items.magic.ItemCypher;
 import at.petrak.hex.common.items.magic.ItemTrinket;
@@ -53,16 +54,16 @@ public class RegisterPatterns {
                     new Pair<>("dadad", OpForEach.INSTANCE),
 
                     new Pair<>("qqqqqwded", new OpGetEntitiesBy(e -> true, false)),
-                    new Pair<>("qqqqqwdedewa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false)),
+                    new Pair<>("qqqqqwdeddwa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false)),
                     new Pair<>("eeeeewaqaawa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, true)),
-                    new Pair<>("qqqqqwdedewq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, false)),
+                    new Pair<>("qqqqqwdeddwq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, false)),
                     new Pair<>("eeeeewaqaawq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, true)),
-                    new Pair<>("qqqqqwdedeww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, false)),
+                    new Pair<>("qqqqqwdeddww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, false)),
                     new Pair<>("eeeeewaqaaww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, true)),
-                    new Pair<>("qqqqqwdedewe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, false)),
+                    new Pair<>("qqqqqwdeddwe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, false)),
                     new Pair<>("eeeeewaqaawe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, true)),
-                    new Pair<>("qqqqqwdedewd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, false)),
-                    new Pair<>("eeeeewaqaawd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, true)),
+                    new Pair<>("qqqqqwdeddwd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, false)),
+                    new Pair<>("eeeeewaqqawd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, true)),
 
                     // == Modify Stack ==
 
@@ -87,6 +88,7 @@ public class RegisterPatterns {
                     new Pair<>("aq", OpPrint.INSTANCE),
                     new Pair<>("aawaawaa", OpExplode.INSTANCE),
                     new Pair<>("weeewdq", OpAddMotion.INSTANCE),
+                    new Pair<>("wqqqwae", OpBlink.INSTANCE),
                     new Pair<>("qaqqqqq", OpPlaceBlock.INSTANCE),
                     new Pair<>("eeeeede", OpBreakBlock.INSTANCE),
                     new Pair<>("waadwawdaaweewq", OpLightning.INSTANCE),
@@ -96,6 +98,7 @@ public class RegisterPatterns {
                             "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq",
                             new OpMakePackagedSpell<>(ItemArtifact.class, 4_000_000)
                     ),
+                    new Pair<>("eawwaeawawaa", OpFlight.INSTANCE),
 
                     // == Meta stuff ==
                     new Pair<>("qqq", Widget.OPEN_PAREN),
@@ -104,6 +107,7 @@ public class RegisterPatterns {
                     // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
                     // eval being a space filling curve feels apt doesn't it
                     new Pair<>("deaqq", OpEval.INSTANCE),
+                    new Pair<>("aqdee", OpEvalDelay.INSTANCE),
                     new Pair<>("aqqqqq", OpRead.INSTANCE),
                     new Pair<>("deeeee", OpWrite.INSTANCE),
 

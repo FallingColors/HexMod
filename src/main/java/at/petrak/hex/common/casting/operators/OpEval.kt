@@ -12,10 +12,12 @@ object OpEval : Operator {
     override fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         val instrs: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
-        val ctxDeeper = ctx.withIncDepth()
-        val harness = CastingHarness(ctxDeeper)
+
+        ctx.incDepth()
+        val harness = CastingHarness(ctx)
         harness.stack.addAll(stack)
         stack.clear()
+        
         val spellsToCast = mutableListOf<RenderedSpell>()
         for (pat in instrs) {
             val res = harness.update(pat.tryGet())

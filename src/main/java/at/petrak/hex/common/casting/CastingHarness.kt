@@ -90,7 +90,7 @@ class CastingHarness private constructor(
             if (this.parenCount > 0) {
                 HexMod.LOGGER.info("Paren level ${this.parenCount}; ${this.parenthesized}")
             }
-            HexMod.LOGGER.info("New stack: ${this.stack}")
+            HexMod.LOGGER.info("New stack: ${this.stack.map { it.display() }}")
 
             if (spellsToCast.isNotEmpty()) {
                 CastResult.Cast(spellsToCast, this.stack.isEmpty())

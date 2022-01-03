@@ -72,6 +72,35 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             append(']')
         }
 
+    fun display(): String = buildString {
+        when (val pl = this@SpellDatum.payload) {
+            is List<*> -> {
+                append("[")
+                for ((i, v) in pl.withIndex()) {
+                    append((v as SpellDatum<*>).display())
+                    if (i != pl.lastIndex) {
+                        append(", ")
+                    }
+                }
+                append("]")
+            }
+            is Vec3 -> {
+                append("(${pl.x}, ${pl.y}, ${pl.z})")
+            }
+            is HexPattern -> {
+                append("HexPattern(")
+                append(pl.startDir)
+                append(" ")
+                append(pl.angles)
+                append(")")
+            }
+            is Entity -> {
+                append(pl.displayName.string)
+            }
+            else -> append(pl.toString())
+        }
+    }
+
     companion object {
         @JvmStatic
         fun make(payload: Any): SpellDatum<*> =

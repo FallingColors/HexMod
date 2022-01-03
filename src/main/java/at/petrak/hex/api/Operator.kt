@@ -1,5 +1,6 @@
 package at.petrak.hex.api
 
+import at.petrak.hex.common.casting.CastException
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.SpellDatum
 import net.minecraft.world.phys.Vec3
@@ -30,8 +31,10 @@ interface Operator {
          * Try to get a value of the given type.
          */
         @JvmStatic
-        inline fun <reified T : Any> List<SpellDatum<*>>.getChecked(idx: Int): T =
-            this[idx].tryGet()
+        inline fun <reified T : Any> List<SpellDatum<*>>.getChecked(idx: Int): T {
+            val x = this.getOrElse(idx) { throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, idx, this.size) }
+            return x.tryGet()
+        }
 
         /**
          * Check if the value at the given index is OK. Will throw an error otherwise.

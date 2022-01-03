@@ -23,8 +23,8 @@ object OpForEach : Operator {
         val outvalues = mutableListOf<SpellDatum<*>>()
         val spellsToCast = mutableListOf<RenderedSpell>()
         for (v in vals) {
-            val subctx = ctx.withIncDepth()
-            val harness = CastingHarness(subctx)
+            ctx.incDepth()
+            val harness = CastingHarness(ctx)
             // Put the entire current stack on there, then the next value
             harness.stack.addAll(stack)
             harness.stack.add(v)

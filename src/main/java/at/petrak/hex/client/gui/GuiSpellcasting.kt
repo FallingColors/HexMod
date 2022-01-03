@@ -1,6 +1,5 @@
 package at.petrak.hex.client.gui
 
-import at.petrak.hex.HexMod
 import at.petrak.hex.HexUtils
 import at.petrak.hex.HexUtils.TAU
 import at.petrak.hex.common.items.ItemSpellbook
@@ -82,14 +81,12 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                         val pat = HexPattern(newdir)
 
                         this.drawState = PatternDrawState.Drawing(anchorCoord, idealNextLoc, pat)
-                        HexMod.LOGGER.info("Started drawing new pattern: $pat")
                     } else if (this.drawState is PatternDrawState.Drawing) {
                         // how anyone gets around without a borrowck is beyond me
                         val ds = (this.drawState as PatternDrawState.Drawing)
                         val success = ds.wipPattern.tryAppendDir(newdir)
                         if (success) {
                             ds.current = idealNextLoc
-                            HexMod.LOGGER.info("Added to pattern: ${ds.wipPattern}")
                         }
                     }
                 }
