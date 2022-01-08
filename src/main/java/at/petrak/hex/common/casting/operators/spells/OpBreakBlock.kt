@@ -33,7 +33,7 @@ object OpBreakBlock : SpellOperator {
 
             if (
                 !blockstate.isAir
-                && blockstate.getDestroySpeed(ctx.world, pos) >= 0f
+                && blockstate.getDestroySpeed(ctx.world, pos) >= 0f // fix being able to break bedrock &c
                 && (!blockstate.requiresCorrectToolForDrops()
                         || TierSortingRegistry.isCorrectTierForDrops(tier, blockstate))
             ) {

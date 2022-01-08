@@ -16,7 +16,7 @@ public class DataGenerators {
             gen.addProvider(new ItemModels(gen, efh));
         }
         if (ev.includeServer()) {
-            // recipes
+            gen.addProvider(new Recipes(gen));
         }
         // On both sides
         gen.addProvider(new LootModifiers(gen));
