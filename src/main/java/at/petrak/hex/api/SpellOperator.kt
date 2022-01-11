@@ -2,8 +2,6 @@ package at.petrak.hex.api
 
 import at.petrak.hex.common.casting.CastException
 import at.petrak.hex.common.casting.CastingContext
-import at.petrak.hex.common.casting.RenderedSpell
-import at.petrak.hex.common.casting.SpellDatum
 
 interface SpellOperator : Operator {
     val argc: Int

@@ -24,6 +24,9 @@ public class ItemModels extends ItemModelProvider {
         simpleItem(HexItems.SPELLBOOK.get());
         simpleItem(HexItems.AMETHYST_DUST.get());
         simpleItem(HexItems.CHARGED_AMETHYST.get());
+        simpleItem(HexItems.SUBMARINE_SANDWICH.get());
+
+        simpleItem(modLoc("patchouli_book"));
 
         String[] focusTypes = new String[]{
                 "empty", "entity", "double", "vec3", "widget", "list", "pattern"

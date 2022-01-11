@@ -8,9 +8,9 @@
     "item.hex.amethyst_dust": "Amethyst Dust",
     "item.hex.charged_amethyst": "Charged Amethyst Crystal",
     "death.attack.hex.overcast": "%s's mind was consumed into energy",
-
     "hex.spellbook.tooltip.page": "Selected Page %d/%d",
     "hex.spelldata.desc.entity": "Entity %s",
-
+    "advancement.hex:root": "Hex        ",
+    "advancement.hex:root.desc": "Enter an amethyst geode deep underground, a concentrated source of media.",
     "itemGroup.hex": "Hex"
 }

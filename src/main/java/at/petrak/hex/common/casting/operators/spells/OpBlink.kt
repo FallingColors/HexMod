@@ -1,10 +1,10 @@
 package at.petrak.hex.common.casting.operators.spells
 
 import at.petrak.hex.api.Operator.Companion.getChecked
+import at.petrak.hex.api.RenderedSpell
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.api.SpellOperator
 import at.petrak.hex.common.casting.CastingContext
-import at.petrak.hex.common.casting.RenderedSpell
-import at.petrak.hex.common.casting.SpellDatum
 import at.petrak.hex.common.network.HexMessages
 import at.petrak.hex.common.network.MsgBlinkAck
 import net.minecraft.server.level.ServerPlayer
@@ -41,7 +41,7 @@ object OpBlink : SpellOperator {
                 max(0.0, look.y * delta)
             }
             val dz = look.z * delta
-            
+
             val dvec = Vec3(dx, dy, dz)
             target.setPos(target.position().add(dvec))
             if (target is ServerPlayer) {

@@ -1,0 +1,15 @@
+{
+    "components": [
+        {
+            "type": "patchouli:header",
+            "text": "#header"
+        },
+        { "type": "patchouli:separator" },
+        {
+            "type": "patchouli:custom",
+            "class": "at.petrak.hex.interop.patchouli.PatternComponent",
+            "signature": "#signature",
+            "startdir": "#startdir"
+        }
+    ]
+}

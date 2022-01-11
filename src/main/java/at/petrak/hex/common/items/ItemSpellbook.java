@@ -1,7 +1,7 @@
 package at.petrak.hex.common.items;
 
+import at.petrak.hex.api.SpellDatum;
 import at.petrak.hex.common.casting.CastingContext;
-import at.petrak.hex.common.casting.SpellDatum;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;

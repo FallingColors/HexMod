@@ -2,6 +2,8 @@ package at.petrak.hex.common.casting
 
 import at.petrak.hex.HexMod
 import at.petrak.hex.api.PatternRegistry
+import at.petrak.hex.api.RenderedSpell
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.hexmath.HexPattern
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag

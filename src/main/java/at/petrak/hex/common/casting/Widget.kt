@@ -2,6 +2,7 @@ package at.petrak.hex.common.casting
 
 import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.api.Operator.Companion.spellListOf
+import at.petrak.hex.api.SpellDatum
 
 /**
  * Miscellaneous spell datums used as markers, etc.

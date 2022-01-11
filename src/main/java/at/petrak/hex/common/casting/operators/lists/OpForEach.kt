@@ -3,7 +3,11 @@ package at.petrak.hex.common.casting.operators.lists
 import at.petrak.hex.api.OperationResult
 import at.petrak.hex.api.Operator
 import at.petrak.hex.api.Operator.Companion.getChecked
-import at.petrak.hex.common.casting.*
+import at.petrak.hex.api.RenderedSpell
+import at.petrak.hex.api.SpellDatum
+import at.petrak.hex.common.casting.CastException
+import at.petrak.hex.common.casting.CastingContext
+import at.petrak.hex.common.casting.CastingHarness
 import at.petrak.hex.hexmath.HexPattern
 
 object OpForEach : Operator {

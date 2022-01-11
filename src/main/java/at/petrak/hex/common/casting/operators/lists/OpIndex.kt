@@ -3,8 +3,8 @@ package at.petrak.hex.common.casting.operators.lists
 import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.api.Operator.Companion.getChecked
 import at.petrak.hex.api.Operator.Companion.spellListOf
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.common.casting.CastingContext
-import at.petrak.hex.common.casting.SpellDatum
 import at.petrak.hex.common.casting.Widget
 import kotlin.math.roundToInt
 

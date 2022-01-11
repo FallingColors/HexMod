@@ -1,4 +1,6 @@
-package at.petrak.hex.common.casting
+package at.petrak.hex.api
+
+import at.petrak.hex.common.casting.CastingContext
 
 /**
  * The implementation of a spellcast.

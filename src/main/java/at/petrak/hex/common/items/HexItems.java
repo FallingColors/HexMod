@@ -6,6 +6,7 @@ import at.petrak.hex.common.items.magic.ItemCypher;
 import at.petrak.hex.common.items.magic.ItemTrinket;
 import at.petrak.hex.common.lib.LibItemNames;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,6 +44,9 @@ public class HexItems {
             () -> new Item(props()));
     public static final RegistryObject<Item> CHARGED_AMETHYST = ITEMS.register(LibItemNames.CHARGED_AMETHYST,
             () -> new Item(props()));
+    // I am very funny
+    public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register(LibItemNames.SUBMARINE_SANDWICH,
+            () -> new Item(props().food(new FoodProperties.Builder().nutrition(4).build())));
 
     public static Item.Properties props() {
         return new Item.Properties().tab(TAB);

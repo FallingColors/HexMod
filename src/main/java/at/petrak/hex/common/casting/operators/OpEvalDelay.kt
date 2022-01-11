@@ -3,10 +3,10 @@ package at.petrak.hex.common.casting.operators
 import at.petrak.hex.api.OperationResult
 import at.petrak.hex.api.Operator
 import at.petrak.hex.api.Operator.Companion.getChecked
+import at.petrak.hex.api.RenderedSpell
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.CastingHarness
-import at.petrak.hex.common.casting.RenderedSpell
-import at.petrak.hex.common.casting.SpellDatum
 import at.petrak.hex.server.TickScheduler
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -42,7 +42,7 @@ object OpEvalDelay : Operator {
                 spell.cast(ctx)
             }
         }
-        
+
         return OperationResult(80_000, emptyList())
     }
 }

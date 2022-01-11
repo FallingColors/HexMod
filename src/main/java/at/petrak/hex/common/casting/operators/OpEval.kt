@@ -3,10 +3,10 @@ package at.petrak.hex.common.casting.operators
 import at.petrak.hex.api.OperationResult
 import at.petrak.hex.api.Operator
 import at.petrak.hex.api.Operator.Companion.getChecked
+import at.petrak.hex.api.RenderedSpell
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.common.casting.CastingContext
 import at.petrak.hex.common.casting.CastingHarness
-import at.petrak.hex.common.casting.RenderedSpell
-import at.petrak.hex.common.casting.SpellDatum
 
 object OpEval : Operator {
     override fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
@@ -17,7 +17,7 @@ object OpEval : Operator {
         val harness = CastingHarness(ctx)
         harness.stack.addAll(stack)
         stack.clear()
-        
+
         val spellsToCast = mutableListOf<RenderedSpell>()
         for (pat in instrs) {
             val res = harness.update(pat.tryGet())

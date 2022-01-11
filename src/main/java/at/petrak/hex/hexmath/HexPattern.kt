@@ -1,8 +1,10 @@
 package at.petrak.hex.hexmath
 
+import at.petrak.hex.client.RenderLib
 import net.minecraft.nbt.ByteArrayTag
 import net.minecraft.nbt.ByteTag
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.phys.Vec2
 
 /**
  * Sequence of angles to define a pattern traced.
@@ -16,6 +18,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         // Two restrictions:
         // - No adding a pos/dir pair we previously added
         // - No backtracking
+        // TODO this doesn't seem to work very well
         val linesSeen = mutableSetOf<Pair<HexCoord, HexDir>>()
 
         var compass = this.startDir
@@ -81,6 +84,22 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         }
     }
 
+    /**
+     * Return the "center of mass" of the pattern.
+     * Drawing the pattern with the returned vector as the origin will center the pattern around it.
+     */
+    fun getCenter(hexRadius: Float): Vec2 {
+        var acc = Vec2(0f, 0f)
+        val poses = this.positions()
+        for (pos in poses) {
+            acc = acc.add(RenderLib.coordToPx(pos, hexRadius, Vec2.ZERO))
+        }
+        return Vec2(
+            -acc.x / poses.size,
+            -acc.y / poses.size
+        )
+    }
+
     override fun toString(): String = buildString {
         append("HexPattern[")
         append(this@HexPattern.startDir)
@@ -98,6 +117,31 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
             val startDir = HexDir.values()[tag.getByte(TAG_START_DIR).toInt()]
             val angles = tag.getByteArray(TAG_ANGLES).map { HexAngle.values()[it.toInt()] }
             return HexPattern(startDir, angles.toMutableList())
+        }
+
+        @JvmStatic
+        @JvmOverloads
+        fun FromAnglesSig(signature: String, startDir: HexDir, origin: HexCoord = HexCoord(0, 0)): HexPattern {
+            val out = HexPattern(startDir)
+            var compass = startDir
+            for (c in signature) {
+                var angle = when (c) {
+                    'w' -> HexAngle.FORWARD
+                    'e' -> HexAngle.RIGHT
+                    'd' -> HexAngle.RIGHT_BACK
+                    // for completeness ...
+                    's' -> HexAngle.BACK
+                    'a' -> HexAngle.LEFT_BACK
+                    'q' -> HexAngle.LEFT
+                    else -> throw IllegalArgumentException("Cannot match $c to a direction")
+                }
+                compass *= angle
+                val success = out.tryAppendDir(compass)
+                if (!success) {
+                    throw IllegalStateException("Adding the angle $c made the pattern invalid by looping back on itself")
+                }
+            }
+            return out
         }
     }
 }

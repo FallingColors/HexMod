@@ -1,7 +1,10 @@
-package at.petrak.hex.common.casting
+package at.petrak.hex.api
 
 import at.petrak.hex.HexUtils
 import at.petrak.hex.HexUtils.serializeToNBT
+import at.petrak.hex.common.casting.CastException
+import at.petrak.hex.common.casting.CastingContext
+import at.petrak.hex.common.casting.Widget
 import at.petrak.hex.hexmath.HexPattern
 import net.minecraft.nbt.*
 import net.minecraft.world.entity.Entity

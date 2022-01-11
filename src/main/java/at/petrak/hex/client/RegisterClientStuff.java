@@ -1,7 +1,7 @@
 package at.petrak.hex.client;
 
 import at.petrak.hex.HexMod;
-import at.petrak.hex.common.casting.SpellDatum;
+import at.petrak.hex.api.SpellDatum;
 import at.petrak.hex.common.items.HexItems;
 import at.petrak.hex.common.items.ItemFocus;
 import at.petrak.hex.common.items.magic.ItemPackagedSpell;

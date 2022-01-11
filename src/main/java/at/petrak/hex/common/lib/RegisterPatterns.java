@@ -3,7 +3,7 @@ package at.petrak.hex.common.lib;
 import at.petrak.hex.HexMod;
 import at.petrak.hex.api.Operator;
 import at.petrak.hex.api.PatternRegistry;
-import at.petrak.hex.common.casting.SpellDatum;
+import at.petrak.hex.api.SpellDatum;
 import at.petrak.hex.common.casting.Widget;
 import at.petrak.hex.common.casting.operators.*;
 import at.petrak.hex.common.casting.operators.lists.OpAppend;

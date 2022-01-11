@@ -2,8 +2,8 @@ package at.petrak.hex.common.casting.operators.selectors
 
 import at.petrak.hex.api.ConstManaOperator
 import at.petrak.hex.api.Operator
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.common.casting.CastingContext
-import at.petrak.hex.common.casting.SpellDatum
 import net.minecraft.world.entity.Entity
 
 object OpGetCaster : ConstManaOperator {

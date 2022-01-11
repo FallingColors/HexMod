@@ -1,8 +1,12 @@
 package at.petrak.hex.common.casting.operators.spells
 
 import at.petrak.hex.api.Operator.Companion.getChecked
+import at.petrak.hex.api.RenderedSpell
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.api.SpellOperator
-import at.petrak.hex.common.casting.*
+import at.petrak.hex.common.casting.CastException
+import at.petrak.hex.common.casting.CastingContext
+import at.petrak.hex.common.casting.ManaHelper
 import at.petrak.hex.common.items.magic.ItemPackagedSpell
 import at.petrak.hex.hexmath.HexPattern
 import net.minecraft.nbt.ListTag

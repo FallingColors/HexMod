@@ -1,8 +1,8 @@
 package at.petrak.hex.common.items;
 
 import at.petrak.hex.HexMod;
+import at.petrak.hex.api.SpellDatum;
 import at.petrak.hex.common.casting.CastingContext;
-import at.petrak.hex.common.casting.SpellDatum;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;

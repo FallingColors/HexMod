@@ -1,10 +1,10 @@
 package at.petrak.hex.common.casting.operators.spells
 
 import at.petrak.hex.api.Operator.Companion.getChecked
+import at.petrak.hex.api.RenderedSpell
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.api.SpellOperator
 import at.petrak.hex.common.casting.CastingContext
-import at.petrak.hex.common.casting.RenderedSpell
-import at.petrak.hex.common.casting.SpellDatum
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.phys.Vec3

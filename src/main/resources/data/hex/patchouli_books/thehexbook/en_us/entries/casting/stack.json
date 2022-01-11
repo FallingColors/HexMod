@@ -1,0 +1,31 @@
+{
+    "name": "Stacks",
+    "category": "hex:casting",
+    "icon": "minecraft:piston",
+    "sortnum": 1,
+    "advancement": "hex:root",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "A $(thing)Stack/$ is a concept borrowed from computer science. In short, it's a list of things where you can only interact with the top part.$(br2)Think of a stack of plates: if you want to get the third plate from the top, you have to remove the plates above it in order to get a hold of it."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Because a stack is so simple, there's only so many things you can do with it:$(li)$(italic)Push/$, or add an element to the top$(li)$(italic)Pop/$, or remove the top element$(li)$(italic)Peek/$, or look at the top element without removing it."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Actions are (on the most part) restricted to interacting with the casting stack in these ways. They will pop some number of \"arguments,\" process them, and push some number of results.$(br2)Of course, these numbers may be 0. $(action)Eye's Reflection/$, as previously mentioned, doesn't pop anything and pushes the caster, and spells don't push anything after popping their arguments."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Even more complicated actions can be expressed in terms of pushing, popping, and peeking. For example, $(action)Jester's Gambit/$ swaps the top two items of the stack. This can be thought of as popping two items and pushing them in opposite order. $(action)Trivial Decomposition/$ duplicates the top of the stack, or peeks it and pushes a copy of what it finds."
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Test Pattern",
+            "signature": "qaq",
+            "startdir": "NORTH_EAST"
+        }
+    ]
+}

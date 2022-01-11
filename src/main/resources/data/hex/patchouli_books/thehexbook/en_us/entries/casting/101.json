@@ -1,0 +1,32 @@
+{
+    "name": "Hexing 101",
+    "category": "hex:casting",
+    "icon": "hex:wand",
+    "advancement": "hex:root",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "No wonder this art was lost to time! Casting Hexes is quite difficult, so I'll have to re-read my notes carefully.$(br2)In short, though, there's a pipeline to follow:$(li)$(italic)Patterns/$ are matched to...$(li)$(italic)Actions/$, which manipulate...$(li)$(italic)The Stack/$, which consists of...$(li)$(italic)Iotas/$."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "First, $(thing)patterns/$ are the shimmering lines drawn in the air with a wand. They're my means of interacting with and manipulating the media around me. Second, certain patterns are associated with $(thing)actions/$. Actions are what actually $(italic)do/$ the magic.$(br2)Of course, not all patterns are actually associated with any action. Drawing a nonsense pattern in the middle of a spell can be disastrous."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "A Hex was cast via a sequence of (valid) actions. Each action might do one of a few things:$(li)Gather some information about the environment.$(li)Do some kind of operation on the gathered data, mathematic or otherwise. (These actions are called \"spells.\")$(li)Perform some magical effect, like summoning lightning or an explosion.$(li)And of course, a magical mishap due to a mistake."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "When I start casting a _Hex, it creates an empty stack. Actions do what they do via manipulating that stack.$(br2)For example, $(action)Eye's Reflection/$ will push a reference to $(italic)me/$, the caster, onto the stack. $(action)Compass' Purification/$ will pop an entity reference and push its location.$(br2)So, casting them in that order would result in my position on the stack."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "In many ways, it reminds me of the spells cast by the practitioners of the $(thing)Psionic/$ arts during the 1.12 Renaissance, headed by a certain master of mathematics and railguns. $(br2)If I find I am not quite sure what a stack is, I might want to read $(l:casting/stack)this entry on the subject$(/l)."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Those pieces of information, like me and my position, are called $(thing)Iotas/$. There are several different types:$(li)Number (which some legends call a \"double\"$(li)Vector, a collection of three numbers representing a position, movement, or direction in the world$(li)Entity, like me or an animal$(li)Influence, a peculiar type of thing that doesn't seem to represent anything about the world$(li)A pattern itself, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$$(li)And a list of any of the above."
+        }
+    ]
+}

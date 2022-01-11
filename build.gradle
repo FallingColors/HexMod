@@ -75,6 +75,10 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
+            // unbreak patchi??
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             mods {
                 hex {
                     source sourceSets.main
@@ -97,6 +101,9 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             mods {
                 hex {
                     source sourceSets.main
@@ -118,6 +125,9 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
+
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', 'hex', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
@@ -143,6 +153,7 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+    maven { url 'https://maven.blamejared.com' }
 }
 
 dependencies {
@@ -162,6 +173,8 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-64:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-64")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

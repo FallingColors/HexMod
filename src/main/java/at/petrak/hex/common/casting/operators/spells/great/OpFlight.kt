@@ -4,10 +4,10 @@ import at.petrak.hex.HexUtils
 import at.petrak.hex.HexUtils.serializeToNBT
 import at.petrak.hex.api.Operator.Companion.MAX_DISTANCE
 import at.petrak.hex.api.Operator.Companion.getChecked
+import at.petrak.hex.api.RenderedSpell
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.api.SpellOperator
 import at.petrak.hex.common.casting.CastingContext
-import at.petrak.hex.common.casting.RenderedSpell
-import at.petrak.hex.common.casting.SpellDatum
 import at.petrak.hex.common.lib.LibCapabilities
 import at.petrak.hex.common.network.HexMessages
 import at.petrak.hex.common.network.MsgAddMotionAck

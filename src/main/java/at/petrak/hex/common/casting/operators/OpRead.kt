@@ -1,8 +1,8 @@
 package at.petrak.hex.common.casting.operators
 
 import at.petrak.hex.api.ConstManaOperator
+import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.common.casting.CastingContext
-import at.petrak.hex.common.casting.SpellDatum
 import at.petrak.hex.common.casting.Widget
 import at.petrak.hex.common.items.ItemDataHolder
 

@@ -1,7 +1,5 @@
 package at.petrak.hex.api
 
-import at.petrak.hex.common.casting.RenderedSpell
-
 /**
  * What happens when an operator is through?
  *

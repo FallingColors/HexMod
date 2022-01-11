@@ -1,0 +1,22 @@
+{
+    "name": "Naming Actions",
+    "category": "hex:casting",
+    "icon": "minecraft:name_tag",
+    "sortnum": 2,
+    "advancement": "hex:root",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The names given to actions by the ancients were certainly peculiar, but I think I'm finding some common threads.$(br2)There seem to be classes of actions with common names, named for the number of iotas they push and pop."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "$(li)A $(thing)Reflection/$ pops no arguments and pushes some number.$(li)A $(thing)Purification/$ pops one and pushes one.$(li)A $(thing)Distillation/$ pops two and pushes one.$(li)An $(thing)Exaltation/$ pops three or more and pushes one.$(li)A $(thing)Decomposition/$ pops one argument and pushes two.$(li)A $(thing)Disintegration/$ pops one and pushes three or more.$(li)Finally, a $(thing)Gambit/$ pushes or pops some other number."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Spells seem to be exempt from this nomenclature and are more or less named after what they do."
+        }
+
+    ]
+}
