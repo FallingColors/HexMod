@@ -14,7 +14,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "A Hex was cast via a sequence of (valid) actions. Each action might do one of a few things:$(li)Gather some information about the environment.$(li)Do some kind of operation on the gathered data, mathematic or otherwise. (These actions are called \"spells.\")$(li)Perform some magical effect, like summoning lightning or an explosion.$(li)And of course, a magical mishap due to a mistake."
+            "text": "A _Hex was cast via a sequence of (valid) actions. Each action might do one of a few things:$(li)Gather some information about the environment.$(li)Do some kind of operation on the gathered data, mathematic or otherwise. (These actions are called \"spells.\")$(li)Perform some magical effect, like summoning lightning or an explosion.$(li)And of course, a magical mishap due to a mistake."
         },
         {
             "type": "patchouli:text",
@@ -26,7 +26,19 @@
         },
         {
             "type": "patchouli:text",
-            "text": "Those pieces of information, like me and my position, are called $(thing)Iotas/$. There are several different types:$(li)Number (which some legends call a \"double\"$(li)Vector, a collection of three numbers representing a position, movement, or direction in the world$(li)Entity, like me or an animal$(li)Influence, a peculiar type of thing that doesn't seem to represent anything about the world$(li)A pattern itself, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$$(li)And a list of any of the above."
+            "text": "Those pieces of information, like me and my position, are called $(thing)Iotas/$. There are several different types:$(li)Number (which some legends call a \"double\")$(li)Vector, a collection of three numbers representing a position, movement, or direction in the world$(li)Entity, like me or an animal$(li)Influence, a peculiar type of thing that doesn't seem to represent anything about the world$(li)A pattern itself, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$$(li)And a list of any of the above."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Of course, there's no such thing as a free lunch. All spells, and certain other actions, require media as payment.$(br2)The best I can figure, a _Hex is a little bit like a plan of action presented to Nature. The media is used to provide the arguments to back it up, so Nature will accept your plan and carry it out."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "That aside, it doesn't seem like anyone has done much research on exactly how $(italic)much/$ any particular piece of amethyst is valued. The best I can tell, an $(item)Amethyst Shard/$ is worth about five $(item)Amethyst Dusts/$, and a $(item)Charged Amethyst Crystal/$ is worth about ten $(item)Amethyst Dusts/$.$(br2)Strangely enough, it seems like no other form of amethyst is suitable to be used in the casting of a _Hex. I suspect that whole blocks or crystals are too solid to be easily unraveled into media."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "It's worth noting that each action will consume the media it needs individually, not all at once when the Hex finishes. Also, an action will always consume entire items. An action that only requires one $(item)Amethyst Dust/$'s worth of media will consume an entire $(item)Charged Amethyst Crystal/$, if that's all that's present in my inventory.$(br2)So, it might be salient to $(italic)not/$ always use a Fortune pick when mining crystals so as not to waste media..."
         }
     ]
 }

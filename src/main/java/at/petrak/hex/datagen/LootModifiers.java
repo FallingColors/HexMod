@@ -62,8 +62,9 @@ public class LootModifiers extends GlobalLootModifierProvider {
             var rand = context.getRandom();
             var tool = context.getParamOrNull(LootContextParams.TOOL);
             var fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
-            var dustCount = 1 + Math.round(rand.nextFloat() * fortuneLevel);
+
             var hasCharged = (rand.nextFloat() * (fortuneLevel / 2f + 1)) > this.chargedChance;
+            var dustCount = hasCharged ? 0 : 1 + Math.round(rand.nextFloat() * fortuneLevel);
 
             generatedLoot.add(new ItemStack(HexItems.AMETHYST_DUST.get(), dustCount));
             generatedLoot.add(new ItemStack(HexItems.CHARGED_AMETHYST.get(), hasCharged ? 1 : 0));

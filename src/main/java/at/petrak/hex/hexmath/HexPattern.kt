@@ -95,8 +95,8 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
             acc = acc.add(RenderLib.coordToPx(pos, hexRadius, Vec2.ZERO))
         }
         return Vec2(
-            -acc.x / poses.size,
-            -acc.y / poses.size
+            acc.x / poses.size,
+            acc.y / poses.size
         )
     }
 
@@ -125,7 +125,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
             val out = HexPattern(startDir)
             var compass = startDir
             for (c in signature) {
-                var angle = when (c) {
+                val angle = when (c) {
                     'w' -> HexAngle.FORWARD
                     'e' -> HexAngle.RIGHT
                     'd' -> HexAngle.RIGHT_BACK
