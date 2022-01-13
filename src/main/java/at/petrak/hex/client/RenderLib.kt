@@ -3,7 +3,6 @@ package at.petrak.hex.client
 import at.petrak.hex.HexUtils
 import at.petrak.hex.client.gui.SQRT_3
 import at.petrak.hex.hexmath.HexCoord
-import at.petrak.hex.hexmath.HexPattern
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
@@ -14,6 +13,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource
 import net.minecraft.world.level.levelgen.synth.PerlinNoise
 import net.minecraft.world.phys.Vec2
 import kotlin.math.absoluteValue
+import kotlin.math.pow
 import kotlin.math.roundToInt
 
 /**
@@ -27,10 +27,27 @@ object RenderLib {
 
 
     /**
-     * Draw a sequence of lines spanning the given points
+     * Draw a sequence of linePoints spanning the given points.
+     *
+     * Please make sure to enable the right asinine shaders; see [GuiSpellcasting][at.petrak.hex.client.gui.GuiSpellcasting]
      */
     @JvmStatic
-    fun drawLineSeq(mat: Matrix4f, points: List<Vec2>, width: Float, z: Float, r: Int, g: Int, b: Int, a: Int) {
+    @JvmOverloads
+    fun drawLineSeq(
+        mat: Matrix4f,
+        points: List<Vec2>,
+        width: Float,
+        z: Float,
+        r: Int,
+        g: Int,
+        b: Int,
+        a: Int,
+        animTime: Float? = null,
+        animDelta: Float = 0.5f,
+        animMid: Float = 0.5f
+    ) {
+        if (points.size <= 1) return
+
         // they spell it wrong at mojang lmao
         val tess = Tesselator.getInstance()
         val buf = tess.builder
@@ -40,6 +57,7 @@ object RenderLib {
         // There's still some artifacting but this is passable, at least.
         buf.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR)
 
+        var idx = 0
         for ((p1, p2) in points.zipWithNext()) {
             // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
             // GuiComponent::innerFill line 52
@@ -54,10 +72,31 @@ object RenderLib {
             val tx = nx / tlen
             val ty = ny / tlen
 
-            buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(r, g, b, a).endVertex()
-            buf.vertex(mat, p1.x - tx, p1.y - ty, z).color(r, g, b, a).endVertex()
-            buf.vertex(mat, p2.x + tx, p2.y + ty, z).color(r, g, b, a).endVertex()
-            buf.vertex(mat, p2.x - tx, p2.y - ty, z).color(r, g, b, a).endVertex()
+            // https://github.com/gamma-delta/haxagon/blob/main/assets/shaders/pattern_beam.frag
+            fun colAmt(t: Float): Float =
+                if (animTime != null) {
+                    val speed = 120f
+                    // 0.8f factor here to make there a small pause between the start and end of the pattern
+                    Mth.cos(Mth.PI * t * 0.8f - animTime * speed / points.size).absoluteValue.pow(100) * animDelta + animMid
+                } else {
+                    1f
+                }
+
+            val amt1 = colAmt(idx.toFloat() / points.size)
+            val amt2 = colAmt((idx + 1).toFloat() / points.size)
+            val r1 = Mth.clamp((r.toFloat() * amt1).toInt(), 0, 255)
+            val g1 = Mth.clamp((g.toFloat() * amt1).toInt(), 0, 255)
+            val b1 = Mth.clamp((b.toFloat() * amt1).toInt(), 0, 255)
+            val r2 = Mth.clamp((r.toFloat() * amt2).toInt(), 0, 255)
+            val g2 = Mth.clamp((g.toFloat() * amt2).toInt(), 0, 255)
+            val b2 = Mth.clamp((b.toFloat() * amt2).toInt(), 0, 255)
+
+
+            buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(r1, g1, b1, a).endVertex()
+            buf.vertex(mat, p1.x - tx, p1.y - ty, z).color(r1, g1, b1, a).endVertex()
+            buf.vertex(mat, p2.x + tx, p2.y + ty, z).color(r2, g2, b2, a).endVertex()
+            buf.vertex(mat, p2.x - tx, p2.y - ty, z).color(r2, g2, b2, a).endVertex()
+            idx++
         }
 
         tess.end()
@@ -68,18 +107,18 @@ object RenderLib {
      * you have to do the conversion yourself.)
      */
     @JvmStatic
-    fun drawPattern(mat: Matrix4f, points: List<Vec2>, r: Int, g: Int, b: Int, a: Int) {
+    fun drawPattern(mat: Matrix4f, points: List<Vec2>, r: Int, g: Int, b: Int, a: Int, animTime: Float? = null) {
         fun screen(n: Int): Int {
             return (n + 255) / 2
         }
 
         val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f)
-        drawLineSeq(mat, zappyPts, 5f, 0f, r, g, b, a)
-        drawLineSeq(mat, zappyPts, 2f, 1f, screen(r), screen(g), screen(b), a)
+        drawLineSeq(mat, zappyPts, 5f, 0f, r, g, b, a, null)
+        drawLineSeq(mat, zappyPts, 2f, 1f, screen(r), screen(g), screen(b), a, animTime)
     }
 
     /**
-     * Split up a sequence of lines with a lightning effect
+     * Split up a sequence of linePoints with a lightning effect
      * @param hops: rough number of points to subdivide each segment into
      * @param speed: rate at which the lightning effect should move/shake/etc
      */
@@ -144,7 +183,7 @@ object RenderLib {
         val fracOfCircle = 6
         val radius = 1.5f
         // run 0 AND last; this way the circle closes
-        for (i in 0..32) {
+        for (i in 0..fracOfCircle) {
             val theta = i.toFloat() / fracOfCircle * HexUtils.TAU.toFloat()
             val rx = Mth.cos(theta) * radius + point.x
             val ry = Mth.sin(theta) * radius + point.y
@@ -154,20 +193,14 @@ object RenderLib {
         tess.end()
     }
 
-    /**
-     * Convert a hex pattern into a sequence of straight lines spanning its points.
-     */
     @JvmStatic
-    fun hexPatternToLines(pat: HexPattern, hexSize: Float, origin: Vec2): List<Vec2> =
-        pat.positions().map { coordToPx(it, hexSize, origin) }
-
-
     fun coordToPx(coord: HexCoord, size: Float, offset: Vec2) =
         Vec2(
             SQRT_3 * coord.q.toFloat() + SQRT_3 / 2.0f * coord.r.toFloat(),
             1.5f * coord.r.toFloat()
         ).scale(size).add(offset)
 
+    @JvmStatic
     fun pxToCoord(px: Vec2, size: Float, offset: Vec2): HexCoord {
         val offsetted = px.add(offset.negated())
         var qf = (SQRT_3 / 3.0f * offsetted.x - 0.33333f * offsetted.y) / size

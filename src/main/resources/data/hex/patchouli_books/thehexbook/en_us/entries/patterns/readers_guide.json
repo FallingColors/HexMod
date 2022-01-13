@@ -1,0 +1,21 @@
+{
+    "name": "How to Read this Section",
+    "category": "hex:patterns",
+    "icon": "minecraft:knowledge_book",
+    "advancement": "hex:root",
+    "priority": true,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "I've decided to put all the valid patterns I've discovered in this section of my notebook. $(br2)Ideally, I would have to go on quests to the dungeons and ancient libraries of the world to discover these. However, a strange force guides my hand calling itself the \"mod developer,\" raving the strangest things about how she \"wants to get the mod out already\" and \"is sick of typing JSON\" and \"wonders how many levels of fourth-wall breaking we're on.\"$(br2)It's probably a delusion from staring at hexagons too often, but I do wonder."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Anyways, I've divided the actions into sections based on what they do, more or less. I've written the stroke order of the patterns as well, shown as a point moving along the pattern. I mark the start of the pattern with a red dot.$(br2)If an action is associated with multiple patterns, as is the case with some simple actions, I'll write all of them together."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "I also write the iotas the action takes, with the types the action pops, a \"->\", and the types the action pushes. For example, \"vector, number -> vector,\" means it pops two a vector and a number, and pushes a vector. (The number needs to be on the top of the stack, with the vector write below it.) \"-> entity\", means it takes no iotas and pushes an entity. \"entity, vector\" means it pops an entity and a vector, and doesn't push anything."
+        }
+    ]
+}

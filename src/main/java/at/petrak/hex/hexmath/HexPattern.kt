@@ -88,17 +88,26 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
      * Return the "center of mass" of the pattern.
      * Drawing the pattern with the returned vector as the origin will center the pattern around it.
      */
-    fun getCenter(hexRadius: Float): Vec2 {
+    @JvmOverloads
+    fun getCenter(hexRadius: Float, origin: HexCoord = HexCoord.Origin): Vec2 {
         var acc = Vec2(0f, 0f)
         val poses = this.positions()
+        val vecOrigin = RenderLib.coordToPx(origin, hexRadius, Vec2.ZERO);
         for (pos in poses) {
-            acc = acc.add(RenderLib.coordToPx(pos, hexRadius, Vec2.ZERO))
+            acc = acc.add(RenderLib.coordToPx(pos, hexRadius, vecOrigin))
         }
         return Vec2(
             acc.x / poses.size,
             acc.y / poses.size
         )
     }
+
+
+    /**
+     * Convert a hex pattern into a sequence of straight linePoints spanning its points.
+     */
+    fun toLines(hexSize: Float, origin: Vec2): List<Vec2> =
+        this.positions().map { RenderLib.coordToPx(it, hexSize, origin) }
 
     override fun toString(): String = buildString {
         append("HexPattern[")
@@ -121,7 +130,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
 
         @JvmStatic
         @JvmOverloads
-        fun FromAnglesSig(signature: String, startDir: HexDir, origin: HexCoord = HexCoord(0, 0)): HexPattern {
+        fun FromAnglesSig(signature: String, startDir: HexDir): HexPattern {
             val out = HexPattern(startDir)
             var compass = startDir
             for (c in signature) {
@@ -143,5 +152,6 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
             }
             return out
         }
+
     }
 }

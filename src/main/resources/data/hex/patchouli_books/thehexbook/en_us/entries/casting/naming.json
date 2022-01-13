@@ -11,12 +11,11 @@
         },
         {
             "type": "patchouli:text",
-            "text": "$(li)A $(thing)Reflection/$ pops no arguments and pushes some number.$(li)A $(thing)Purification/$ pops one and pushes one.$(li)A $(thing)Distillation/$ pops two and pushes one.$(li)An $(thing)Exaltation/$ pops three or more and pushes one.$(li)A $(thing)Decomposition/$ pops one argument and pushes two.$(li)A $(thing)Disintegration/$ pops one and pushes three or more.$(li)Finally, a $(thing)Gambit/$ pushes or pops some other number."
+            "text": "They are:$(li)A $(thing)Reflection/$ pops no arguments and pushes some number.$(li)A $(thing)Purification/$ pops one and pushes one.$(li)A $(thing)Distillation/$ pops two and pushes one.$(li)An $(thing)Exaltation/$ pops three or more and pushes one.$(li)A $(thing)Decomposition/$ pops one argument and pushes two.$(li)A $(thing)Disintegration/$ pops one and pushes three or more.$(li)Finally, a $(thing)Gambit/$ pushes or pops some other number."
         },
         {
             "type": "patchouli:text",
             "text": "Spells seem to be exempt from this nomenclature and are more or less named after what they do."
         }
-
     ]
 }

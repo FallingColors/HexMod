@@ -1,61 +1,130 @@
 package at.petrak.hex.interop.patchouli;
 
 import at.petrak.hex.client.RenderLib;
+import at.petrak.hex.hexmath.HexCoord;
 import at.petrak.hex.hexmath.HexDir;
 import at.petrak.hex.hexmath.HexPattern;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.SerializedName;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.phys.Vec2;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
 import vazkii.patchouli.api.IVariable;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * Page that has a hex pattern on it
  */
 public class PatternComponent implements ICustomComponent {
-    public String signature;
-    public String startdir;
+    @SerializedName("patterns")
+    public String patternsRaw;
 
-    protected transient HexPattern pattern;
-    protected transient List<Vec2> straightPoints;
+    protected transient List<PatternEntry> patterns;
     protected transient int x, y;
+    protected transient List<Vec2> pathfinderDots;
 
-    private static final float RADIUS = 20f;
+    private static final float RADIUS = 10f;
 
     /**
      * Pass -1, -1 to center it.
      */
     @Override
     public void build(int x, int y, int pagenum) {
-        this.x = x;
-        this.y = y;
+        this.x = x == -1 ? 116 / 2 : x;
+        this.y = y == -1 ? 70 : y;
     }
 
     @Override
     public void render(PoseStack poseStack, IComponentRenderContext ctx, float partialTicks, int mouseX, int mouseY) {
         poseStack.pushPose();
-        poseStack.translate(this.x, this.y, 0);
-        RenderLib.drawPattern(poseStack.last().pose(), this.straightPoints, 230, 230, 230, 200);
+        poseStack.translate(this.x, this.y, 1);
+        var mat = poseStack.last().pose();
+        var prevShader = RenderSystem.getShader();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+//        RenderSystem.disableDepthTest();
+        RenderSystem.disableCull();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        // just try to render anything at all oh my god please
-        RenderLib.drawLineSeq(poseStack.last().pose(), Arrays.asList(Vec2.ZERO, new Vec2(116, 156)), 2f, 1, 255, 255,
-                255,
-                255);
+        // mark center
+//        RenderLib.drawSpot(mat, Vec2.ZERO, 0f, 0f, 0f, 1f);
+
+
+        for (var pat : this.patterns) {
+            var zappyPts = RenderLib.makeZappy(pat.linePoints, 20f, 0.8f, 0f);
+            RenderLib.drawLineSeq(mat, zappyPts, 5f, 0, 210, 200, 200, 255, null);
+            RenderLib.drawLineSeq(mat, zappyPts, 2f, 0, 200, 190, 190, 200, ctx.getTicksInBook() / 20f, 0.5f);
+
+            RenderLib.drawSpot(mat, pat.linePoints.get(0), 1f, 0.1f, 0.15f, 0.6f);
+        }
+
+        for (var dot : this.pathfinderDots) {
+            RenderLib.drawSpot(mat, dot, 0.82f, 0.8f, 0.8f, 0.5f);
+        }
+
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(() -> prevShader);
+
         poseStack.popPose();
     }
 
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
-        var dirstr = lookup.apply(IVariable.wrap(this.startdir)).asString("EAST");
-        var dir = HexDir.valueOf(dirstr.toUpperCase());
-        var sig = lookup.apply(IVariable.wrap(this.signature)).asString("");
-        this.pattern = HexPattern.FromAnglesSig(sig, dir);
+        var patsRaw = lookup.apply(IVariable.wrap(patternsRaw)).asListOrSingleton();
 
-        var com = this.pattern.getCenter(RADIUS);
-        this.straightPoints = RenderLib.hexPatternToLines(this.pattern, RADIUS, com);
+        // Center the whole thing so the center of all pieces is in the center.
+        var comAcc = new Vec2(0, 0);
+        var pointsCount = 0;
+        this.patterns = new ArrayList<>(patsRaw.size());
+        if (patsRaw.isEmpty()) {
+            return;
+        }
+        var seenPoints = new HashSet<HexCoord>();
+        for (var ivar : patsRaw) {
+            JsonElement json = ivar.unwrap();
+            RawPattern raw = new Gson().fromJson(json, RawPattern.class);
+
+            var dir = HexDir.valueOf(raw.startdir);
+            var pat = HexPattern.FromAnglesSig(raw.signature, dir);
+            var origin = new HexCoord(raw.q, raw.r);
+            for (var pos : pat.positions(origin)) {
+                comAcc = comAcc.add(RenderLib.coordToPx(pos, RADIUS, Vec2.ZERO));
+                pointsCount++;
+            }
+            this.patterns.add(new PatternEntry(pat, origin, new ArrayList<>()));
+            seenPoints.addAll(pat.positions(origin));
+        }
+
+        var comOffset = comAcc.scale(1f / pointsCount).negated();
+
+        for (var pat : this.patterns) {
+            var localOrigin = RenderLib.coordToPx(pat.origin, RADIUS, comOffset);
+            pat.linePoints.addAll(pat.pattern.toLines(RADIUS, localOrigin));
+        }
+
+        this.pathfinderDots = seenPoints.stream()
+                .map(coord -> RenderLib.coordToPx(coord, RADIUS, comOffset))
+                .collect(Collectors.toList());
+    }
+
+    private record PatternEntry(HexPattern pattern, HexCoord origin, List<Vec2> linePoints) {
+    }
+
+    private static class RawPattern {
+        String startdir;
+        String signature;
+        int q, r;
+
+        RawPattern() {
+        }
     }
 }

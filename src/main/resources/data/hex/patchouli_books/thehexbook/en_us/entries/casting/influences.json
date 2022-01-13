@@ -1,0 +1,21 @@
+{
+    "name": "Influences",
+    "category": "hex:casting",
+    "icon": "minecraft:spyglass",
+    "sortnum": 3,
+    "advancement": "hex:root",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Influences are ... strange, to say the least. Whereas most iotas seem to represent something about the world, influences represent ... something more abstract and formless.$(br2)For example, one influence I've named Null seems to represent nothing at all, or perhaps the concept of nothingness. It's returned when there isn't a suitable answer for a question I ask Nature, such as the entity at a given position when there are no entities there."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Anyways, what follows is a list of all the influences I've discovered.$(li)Null, representing nothingness.$(li)Introspection and Retrospection. Drawing Introspection, a bunch of patterns, and then Retrospection will push those middle patterns onto the stack as a list of patterns. The pair is used for the crafting of magical items."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "$(li)Consideration. Drawing this and then another pattern will \"escape\" the second pattern and push it onto the stack, instead of trying to match it to an action."
+        }
+    ]
+}

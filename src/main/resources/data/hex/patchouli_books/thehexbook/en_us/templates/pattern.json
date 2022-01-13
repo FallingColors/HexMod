@@ -14,10 +14,14 @@
         {
             "type": "patchouli:custom",
             "class": "at.petrak.hex.interop.patchouli.PatternComponent",
-            "x": 0,
-            "y": 0,
-            "signature": "#signature",
-            "startdir": "#startdir"
+            "x": 58,
+            "y": 60,
+            "patterns": "#patterns"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "#text",
+            "y": 100
         }
     ]
 }

@@ -175,8 +175,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         RenderSystem.defaultBlendFunc()
 
         val alreadyPats = this.patterns.map { (pat, origin) ->
-            RenderLib.hexPatternToLines(
-                pat,
+            pat.toLines(
                 this.hexSize(),
                 this.coordToPx(origin)
             )

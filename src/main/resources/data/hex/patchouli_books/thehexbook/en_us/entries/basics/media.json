@@ -3,18 +3,19 @@
     "icon": "hex:amethyst_dust",
     "category": "hex:basics",
     "sortnum": 1,
+    "priority": true,
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "$(thing)Media/$ is a form of mental energy external to a mind. All living creatures generate media in trace amounts when thinking about anything, and after their thought is over it is released into the environment.$(br2)The art of casting $(thing)Hexes/$ is all about manipulating media to do your bidding."
+            "text": "_Media is a form of mental energy external to a mind. All living creatures generate _media in trace amounts when thinking about anything, and after their thought is over it is released into the environment.$(br2)The art of casting $(thing)Hexes/$ is all about manipulating _media to do your bidding."
         },
         {
             "type": "patchouli:text",
-            "text": "Media can attract and repel itself, and the strength and mode of influence can be manipulated by drawing media out into patterns. Scholars of the art used a concentrated blob of media on the end of a stick: by waving it in the air in precise configurations, they are able to manipulate enough media with enough ease to influence the world itself, in the form of a Hex."
+            "text": "_Media can attract and repel itself, and the strength and mode of influence can be manipulated by drawing _media out into patterns. Scholars of the art used a concentrated blob of _media on the end of a stick: by waving it in the air in precise configurations, they are able to manipulate enough _media with enough ease to influence the world itself, in the form of a Hex."
         },
         {
             "type": "patchouli:text",
-            "text": "Sadly, even a fully sentient being (like me, presumably) generates so little media by themself it would be quite impractical to try and use my own brainpower to cast Hexes.$(br2)But, legend has it there are places deep under the earth where media slowly accumulates, and grows into a crystalline form..."
+            "text": "Sadly, even a fully sentient being (like me, presumably) generates so little _media by themself it would be quite impractical to try and use my own brainpower to cast Hexes.$(br2)But, legend has it there are places deep under the earth where _media slowly accumulates, and grows into a crystalline form..."
         }
     ]
 }

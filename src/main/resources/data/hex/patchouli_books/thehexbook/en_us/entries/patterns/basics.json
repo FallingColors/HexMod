@@ -1,0 +1,105 @@
+{
+    "name": "Basic Patterns",
+    "category": "hex:patterns",
+    "icon": "minecraft:wooden_pickaxe",
+    "sortnum": 0,
+    "advancement": "hex:root",
+    "pages": [
+        {
+            "type": "hex:pattern",
+            "header": "Mind's Reflection",
+            "anchor": "OpGetCaster",
+            "text": "-> entity$(br)Returns me, the caster.",
+            "patterns": [{
+                "startdir": "SOUTH_WEST",
+                "signature": "qaq"
+            }, {
+                "startdir": "SOUTH_EAST",
+                "signature": "ede",
+                "q": 3
+            }]
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Compass Purification",
+            "anchor": "OpEntityPos",
+            "text": "entity -> vector$(br)Returns the entity's position.",
+            "patterns": [{
+                "startdir": "SOUTH_WEST",
+                "signature": "aa"
+            }, {
+                "startdir": "SOUTH_EAST",
+                "signature": "dd",
+                "q": 3
+            }]
+            
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Alidade Purification",
+            "anchor": "OpEntityLook",
+            "text": "entity -> vector$(br)Returns the direction the entity is looking in as a unit vector.",
+            "patterns": [{
+                "startdir": "EAST",
+                "signature": "wa"
+            }, {
+                "startdir": "WEST",
+                "signature": "wd",
+                "q": 2,
+                "r": 2
+            }]
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Nullary Reflection",
+            "text": "-> influence$(br)Pushes the Null influence",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "a"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Archer's Distillation",
+            "anchor": "OpBlockRaycast",
+            "text": "vector, vector -> vector$(br)Return the coordinate of the first block hit by a line starting at the first vector and going in the direction of the second vector, or Null if it doesn't hit anything.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "wqaawdd"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "For example, casting this with my position and look vectors will return the coordinates of the block I am looking at."
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Architect's Distillation",
+            "anchor": "OpBlockAxisRaycast",
+            "text": "vector, vector -> vector$(br)Like $(l:patterns/basics#OpBlockRaycast)$(action)Archer's Distillation$(/l), but instead returns a vector representing the $(italic)side/$ of the block the line hits.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "weddwaa"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "More specifically, it returns the $(italic)normal vector/$ of the face hit, or a vector with length 1 pointing perpendicular to the face.$(li)If I am looking at a floor, it will return (0, 1, 0).$(li)If I am looking at the south face of a block, it will return (0, 0, 1).$(br)"
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Axial Reflection +X/-X",
+            "text": "-> vector$(br)The left-hand counter-clockwise pattern pushes (1, 0, 0); the right-hand clockwise pattern pushes (-1, 0, 0).",
+            "patterns": [{
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqea",
+                "q": -1,
+                "r": -1
+            }, {
+                "startdir": "NORTH_EAST",
+                "signature": "eeeeeqa",
+                "r": 1
+            }]
+        }
+    ]
+}

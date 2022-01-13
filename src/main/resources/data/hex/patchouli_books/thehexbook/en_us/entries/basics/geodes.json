@@ -7,7 +7,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "Aha! While mining deep underground, I found an enormous geode crackling with energy, energy pressing against my skull and my thoughts. This $(0)must/$ be the place spoken about in legends where media accumulates.$(br2)These amethyst crystals must be a $(thing)convenient, solidified form of Media/$."
+            "text": "Aha! While mining deep underground, I found an enormous geode crackling with energy, energy pressing against my skull and my thoughts. This $(italic)must/$ be the place spoken about in legends where _media accumulates.$(br2)These amethyst crystals must be a $(thing)convenient, solidified form of _Media/$."
         },
         {
             "type": "patchouli:text",
@@ -15,7 +15,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "Connections are flashing wildly in my mind as I take the beauty of the geode in. It's like the media in the air is entering me, empoweing me, elucidating me ... It feels wonderful.$(br2)I suppose this is where my study into the arcane starts to make any kind of sense! Let me study those old legends again now that I know what I'm looking at."
+            "text": "Connections are flashing wildly in my mind as I take the beauty of the geode in. It's like the _media in the air is entering me, empoweing me, elucidating me ... It feels wonderful.$(br2)I suppose this is where my study into the arcane starts to make any kind of sense! Let me study those old legends again now that I know what I'm looking at."
         }
     ]
 }
