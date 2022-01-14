@@ -1,0 +1,31 @@
+{
+    "name": "Amethyst",
+    "icon": "minecraft:amethyst_shard",
+    "category": "hex:items",
+    "priority": true,
+    "sortnum": 0,
+    "advancement": "hex:root",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "item": "hex:amethyst_dust",
+            "anchor": "dust",
+            "link_recipe": true,
+            "text": "It seems I might get three different forms of amethyst when breaking a crystal inside a geode. The first is a small pile of shimmering dust, worth a small amount of _media."
+        },
+        {
+            "type": "patchouli:spotlight",
+            "item": "minecraft:amethyst_shard",
+            "anchor": "shard",
+            "link_recipe": true,
+            "text": "The second is a shard of amethyst, of the type I might be used to. This has about as much _media inside as five $(item)Amethyst Dust/$s."
+        },
+        {
+            "type": "patchouli:spotlight",
+            "item": "hex:charged_amethyst",
+            "anchor": "charged",
+            "link_recipe": true,
+            "text": "Finally, a large crystal crackling with energy. This has about as much _media inside as ten $(item)Amethyst Dust/$s (and therefore two $(item)Amethyst Shard/$s)."
+        }
+    ]
+}

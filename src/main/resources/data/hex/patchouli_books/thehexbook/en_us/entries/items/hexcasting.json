@@ -1,0 +1,41 @@
+{
+    "name": "Hexcasting Items",
+    "category": "hex:items",
+    "icon": "hex:artifact{patterns:[]}",
+    "sortnum": 3,
+    "advancement": "hex:root",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Although the flexibility that casting _Hexes \"on the go\" with my $(l:items/staff)$(item)Staff/$ is quite helpful, it's often a pain to spend a minute or two waving it around for a common task. I might also want to share my _Hexes with friends less obsessed with this esoteric study."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "To do this, I can craft one of three types of magic items: $(item)Cypher/$s, $(item)Trinket/$s, or $(item)Artifact/$s. All of them hold the patterns of a given _Hex inside, along with a non-rechargable battery of _media.$(br2)Simply holding one and pressing $(thing)$(k:use)/$ will cast the patterns inside, as if the holder had cast them out of a staff, using its internal battery to power the casting."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The three items have some differences, of course.$(br2)$(item)Cypher/$s are single-use: they are destroyed after the _Hex is cast.$(br2)$(item)Trinket/$s have no especial peculiarities. The _Hex inside can be cast as much as the holder likes, as long as there's enough _media left."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "$(item)Artifact/$s are very powerful. After their _media is depleted, they can use $(l:items/amethyst)$(item)Amethyst/$ from the holder's inventory to pay for the _Hex, just as I do when casting with a $(item)Staff/$. Of course, this also means the spell might consume their mind if there's not enough $(item)Amethyst/$.$(br2)Once I've made an empty hexcasting item in a mundane crafting bench, I infuse the _Hex into it using (what else but) a spell appropriate to the item. $(l:patterns/hexcasting)I've catalogued the patterns here./$"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Each spell takes an entity and a list of patterns. The entity must be a _media-holding item entity, which is consumed and forms the battery.$(br2)It seems that the _media in the battery is not consumed in chunks as it is when casting with a $(item)Staff/$. Rather, the _media \"melts down\" into one continuous pool. So, if I store a _Hex that only takes as one $(item)Amethyst Dust/$'s worth of mana, and provide one $(item)Charged Crystal/$ as the battery, I'll be able to cast it all 10 times."
+        },
+        {
+            "type": "patchouli:crafting",
+            "anchor": "cypher_trinket",
+            "recipe": "hex:cypher",
+            "recipe2": "hex:trinket"
+        },
+        {
+            "type": "patchouli:crafting",
+            "anchor": "artifact",
+            "recipe": "hex:artifact",
+            "text": "$(italic)We have a saying in our field: 'Magic isn't'. It doesn't 'just work', it doesn't respond to your thoughts, you can't throw fireballs or create a roast dinner from thin air or turn a bunch of muggers into frogs and snails./$"
+        }
+    ]
+}

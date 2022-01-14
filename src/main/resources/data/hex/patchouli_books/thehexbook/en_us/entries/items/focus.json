@@ -1,0 +1,22 @@
+{
+    "name": "Focus",
+    "icon": "hex:focus",
+    "category": "hex:items",
+    "sortnum": 1,
+    "advancement": "hex:root",
+    "pages": [
+        {
+            "type": "patchouli:text", 
+            "text": "A $(item)Focus stores an iota.$(br2)It starts with nothing in it. Using $(action)Scribe's Gambit/$ while holding one in my other hand will pop the stack and save the iota into the $(item)Focus. Using $(action)Scribe's Reflection$/ will copy whatever's in the $(item)Focus/$ and push it onto the stack."
+        },
+        {
+            "type": "patchouli:text", 
+            "text": "It occurs to me I could store a list of patterns in a $(item)Focus/$, and later recall them and evaluate them with $(action)Hermes' Gambit/$ to cast complex spells, or parts of spells, without having to draw them over and over."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "hex:focus",
+            "text": "$(italic)Grow the lawn and mow the lawn./$"
+        }
+    ]
+}

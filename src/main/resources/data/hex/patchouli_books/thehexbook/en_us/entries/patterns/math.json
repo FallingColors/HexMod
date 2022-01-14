@@ -1,0 +1,122 @@
+{
+    "name": "Math",
+    "category": "hex:patterns",
+    "icon": "minecraft:stick",
+    "sortnum": 3,
+    "advancement": "hex:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Many mathematical operations function on both numbers and vectors. Such arguments are written as \"num/vec\"."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "(I left this page blank so I can have a given pattern and its extended description side-by-side.)"
+        },
+        {    
+            "type": "hex:pattern",
+            "header": "Add Distillation",
+            "anchor": "OpAdd",
+            "text": "$(n)num/vec, num/vec -> num/vec/$$(br)Perform addition.",
+            "patterns": {
+                "startdir": "NORTH_EAST",
+                "signature": "waaw"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "As such:$(li)With two numbers, sums them and returns a number.$(li)With a number and a vector, adds the number to each element of the vector and returns a vector.$(li)With two vectors, adds each component and returns a vector."
+        },
+        {    
+            "type": "hex:pattern",
+            "header": "Subtract Dstln.",
+            "anchor": "OpSub",
+            "text": "$(n)num/vec, num/vec -> num/vec$(br)Perform subtraction",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "wddw"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "As such:$(li)With two numbers, subtracts them and returns a number.$(li)With a number and a vector, subtracts the number with each element of the vector and returns a vector.$(li)With two vectors, subtracts each component and returns a vector.$(br2)In all cases, the second argument or its components are subtracted $(italic)from/$ the first argument."
+        },
+        {    
+            "type": "hex:pattern",
+            "header": "Multiply Dstln.",
+            "anchor": "OpMulDot",
+            "text": "$(n)num/vec, num/vec -> num/vec$(br)Perform multiplication or the dot product.",
+            "patterns": {
+                "startdir": "SOUTH_EAST",
+                "signature": "waqaw"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "As such:$(li)With two numbers, multiplies them and returns a number.$(li)With a number and a vector, scales the vector by the number and returns a vector.$(li)With two vectors, performs the $(l:https://www.mathsisfun.com/algebra/vectors-dot-product.html)dot product/$ and returns a number."
+        },
+        {    
+            "type": "hex:pattern",
+            "header": "Division Dstln.",
+            "anchor": "OpDivCross",
+            "text": "$(n)num/vec, num/vec -> num/vec$(br)Perform division or the cross product.",
+            "patterns": {
+                "startdir": "NORTH_EAST",
+                "signature": "wdedw"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "As such:$(li)With two numbers, divides them and returns a number.$(li)With a number and a vector, divides the number with each element of the vector and returns a vector.$(li)With two vectors, performs the $(l:https://www.mathsisfun.com/algebra/vectors-cross-product.html)dot product/$ and returns a vector.$(br2)In the first and second cases, the first argument or its components are the dividend, and the second argument or its components are the divisor."
+        },
+        {    
+            "type": "hex:pattern",
+            "header": "Length Distillation",
+            "anchor": "OpAbsLen",
+            "text": "$(n)num/vec -> number$(br)Compute the absolute value or length.",
+            "patterns": {
+                "startdir": "NORTH_EAST",
+                "signature": "wqaqw"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "As such:$(li)With a number, computes the absolute value and returns a number.$(li)With a vector, computes its length and returns a number."
+        },
+        {    
+            "type": "hex:pattern",
+            "header": "Power Distillation",
+            "anchor": "OpPowProj",
+            "text": "$(n)num/vec, num/vec -> num/vec$(br)Perform exponentiation or vector projection",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "wedew"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "As such:$(li)With two numbers, computes exponentiation and returns a number.$(li)With a number and a vector, computes exponentiation with each element of the vector and returns a vector.$(li)With two vectors, computes $(l:https://en.wikipedia.org/wiki/Vector_projection)vector projection./$$(br2)In the first and second cases, the first argument or its components are the base, and the second argument or its components are the exponent."
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Vector Exaltation",
+            "anchor": "OpConstructVec",
+            "text": "$(n)number, number, number -> vector$(br)Make a vector with the three numbers as its X, Y, and Z components.",
+            "patterns": {
+                "startdir": "WEST",
+                "signature": "eqqqqq"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Vector Disintegration",
+            "anchor": "OpDeconstructVec",
+            "text": "$(n)vector -> number, number, number$(br)Push the X, Y, and Z components of the vector onto the stack.",
+            "patterns": {
+                "startdir": "WEST",
+                "signature": "qeeeee"
+            }
+        }
+    ]
+}

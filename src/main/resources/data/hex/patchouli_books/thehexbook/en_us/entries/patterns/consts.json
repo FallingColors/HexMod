@@ -1,0 +1,64 @@
+{
+    "name": "Constants",
+    "category": "hex:patterns",
+    "icon": "minecraft:bedrock",
+    "sortnum": 2,
+    "advancement": "hex:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hex:pattern",
+            "header": "Axial Reflection +X/-X",
+            "text": "$(bold)-> vector/$$(br)The left-hand counter-clockwise pattern pushes (1, 0, 0); the right-hand clockwise pattern pushes (-1, 0, 0).",
+            "patterns": [{
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqea",
+                "q": -1,
+                "r": -1
+            }, {
+                "startdir": "NORTH_EAST",
+                "signature": "eeeeeqa",
+                "r": 1
+            }]
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Axial Reflection +Y/-Y",
+            "text": "$(bold)-> vector/$$(br)The left-hand counter-clockwise pattern pushes (0, 1, 0); the right-hand clockwise pattern pushes (0, -1, 0).",
+            "patterns": [{
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqew",
+                "q": -1,
+                "r": -1
+            }, {
+                "startdir": "NORTH_EAST",
+                "signature": "eeeeeqw",
+                "r": 1
+            }]
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Axial Reflection +Z/-Z",
+            "text": "$(bold)-> vector/$$(br)The left-hand counter-clockwise pattern pushes (0, 0, 1); the right-hand clockwise pattern pushes (0, 0, -1).",
+            "patterns": [{
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqed",
+                "q": -1,
+                "r": -1
+            }, {
+                "startdir": "NORTH_EAST",
+                "signature": "eeeeeqd",
+                "r": 1
+            }]
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Nullary Reflection",
+            "text": "$(bold)-> influence/$$(br)Pushes the Null influence",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "a"
+            }
+        }
+    ]
+}

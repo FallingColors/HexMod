@@ -4,6 +4,7 @@
     "icon": "minecraft:comparator",
     "sortnum": 1,
     "advancement": "hex:root",
+    "read_by_default": true,
     "pages": [
         {
             "type": "hex:pattern",
