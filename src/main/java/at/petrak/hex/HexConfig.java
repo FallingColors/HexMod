@@ -18,17 +18,17 @@ public class HexConfig {
 
     public HexConfig(ForgeConfigSpec.Builder builder) {
         healthToManaRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-                .defineInRange("healthToManaRate", 20.0 / 1_000_000.0, 0.0, Double.POSITIVE_INFINITY);
+                .defineInRange("healthToManaRate", 20.0 / 100_000.0, 0.0, Double.POSITIVE_INFINITY);
 
-        builder.push("items");
+        builder.push("items.json");
         batteryMaxMana = builder.comment("The maximum amount of mana a mana battery can store.")
                 .defineInRange("batteryMaxMana", 1_000_000, 0, Integer.MAX_VALUE);
         dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")
-                .defineInRange("dustManaAmount", 100_000, 0, Integer.MAX_VALUE);
+                .defineInRange("dustManaAmount", 10_000, 0, Integer.MAX_VALUE);
         shardManaAmount = builder.comment("How much mana a single Amethyst Shard item is worth")
-                .defineInRange("shardManaAmount", 500_000, 0, Integer.MAX_VALUE);
+                .defineInRange("shardManaAmount", 50_000, 0, Integer.MAX_VALUE);
         chargedCrystalManaAmount = builder.comment("How much mana a single Charged Amethyst Crystal item is worth")
-                .defineInRange("chargedCrystalManaAmount", 1_000_000, 0, Integer.MAX_VALUE);
+                .defineInRange("chargedCrystalManaAmount", 100_000, 0, Integer.MAX_VALUE);
         builder.pop();
 
         builder.push("spells");

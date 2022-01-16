@@ -154,6 +154,17 @@ repositories {
     //     dir 'libs'
     // }
     maven { url 'https://maven.blamejared.com' }
+
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 }
 
 dependencies {
@@ -173,8 +184,13 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-64:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-64")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-65-SNAPSHOT:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-65-SNAPSHOT")
+
+    // compile against the JEI API but do not include it at runtime
+    compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.3.78:api")
+    // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.3.78")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

@@ -10,7 +10,9 @@
             "type": "hex:pattern",
             "header": "Novice's Gambit",
             "anchor": "OpUndo",
-            "text": "$(bold)any$(br)Pops the stack and does nothing with it. This is handy when I make a mistake.",
+            "input": "any",
+            "output": "",
+            "text": "Pops the stack and does nothing with it. This is handy when I make a mistake.",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "a"
@@ -18,9 +20,11 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Gemini Decompisition",
+            "header": "Gemini Decomposition",
             "anchor": "OpDuplicate",
-            "text": "$(bold)any -> any, any$(br)Duplicates the top iota of the stack.",
+            "input": "any",
+            "output": "any, any",
+            "text": "Duplicates the top iota of the stack.",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "aadaa"
@@ -30,7 +34,9 @@
             "type": "hex:pattern",
             "header": "Jester's Gambit",
             "anchor": "OpSwap",
-            "text": "$(bold)any, any -> any, any$(br)Swaps the top two iotas of the stack.",
+            "input": "any, any",
+            "output": "any, any",
+            "text": "Swaps the top two iotas of the stack.",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "aawdd"

@@ -3,11 +3,11 @@
     "icon": "hex:lens",
     "category": "hex:items",
     "advancement": "hex:root",
-    "sortnum": 0,
+    "sortnum": 1,
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "It's often hard to keep track of everything going on in my spells. I have to keep mental track of all the iotas on the stack, and I find myself making mistakes.$(br2)Fortunately, if I hold a $(item)Scrying Lens/$ in my other hand, I will be able to see the iotas in my stack."
+            "text": "It's often hard to keep track of everything going on in my spells. I have to keep mental track of all the iotas on the stack, and I find myself making mistakes.$(br2)Fortunately, if I hold a $(item)Scrying Lens/$ in my other hand, I will be able to simply $(italic)see/$ the iotas in my stack, a description appearing before my eyes. How convenient!"
         },
         {
             "type": "patchouli:crafting",

@@ -1,0 +1,37 @@
+{
+    "name": "Great Spells",
+    "category": "hex:greatwork",
+    "icon": "minecraft:textures/mob_effect/conduit_power.png",
+    "sortnum": 0,
+    "advancement": "hex:enlightenment",
+    "pages": [
+        {
+            "type": "hex:pattern",
+            "header": "Flight",
+            "anchor": "OpFlight",
+            "input": "entity, number, number",
+            "output": "",
+            "text": "The power of flight! I have wrestled Nature to its knees. But Nature is vengeful, and itches for me to break its contract so it may break my shins.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "eawwaeawawaa"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The entity (which must be a player) is the recipient of the power of flight. The first number is the number of seconds they will gain flight for, and the second number is the radius in blocks the spell is active within. If the recipient exits that radius from the point the spell is cast at, or their timer runs out, they immediately fall to the earth at supernatural speed.$(br2)There is no way to tell the time left or the safe area once the spell is cast.$(br2)It costs approximately 1 $(item)Amethyst Dust/$ per the time in seconds mutiplied by the radius."
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Smite",
+            "anchor": "OpLightning",
+            "input": "vector",
+            "output": "",
+            "text": "I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "waadwawdaaweewq"
+            }
+        }
+    ]
+}

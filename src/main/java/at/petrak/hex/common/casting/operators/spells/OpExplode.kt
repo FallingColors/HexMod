@@ -9,7 +9,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.level.Explosion
 import net.minecraft.world.phys.Vec3
 
-object OpExplode : SpellOperator {
+class OpExplode(val fire: Boolean) : SpellOperator {
     override val argc: Int
         get() = 2
 
@@ -18,12 +18,12 @@ object OpExplode : SpellOperator {
         val strength = args.getChecked<Double>(1)
         ctx.assertVecInRange(pos)
         return Pair(
-            Spell(pos, strength),
-            (strength * 100_000.0).toInt(),
+            Spell(pos, strength, this.fire),
+            ((1 + strength + if (this.fire) 2 else 0) * 50_000.0).toInt(),
         )
     }
 
-    private data class Spell(val pos: Vec3, val strength: Double) : RenderedSpell {
+    private data class Spell(val pos: Vec3, val strength: Double, val fire: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             ctx.world.explode(
                 ctx.caster,
@@ -31,6 +31,7 @@ object OpExplode : SpellOperator {
                 pos.y,
                 pos.z,
                 Mth.clamp(strength.toFloat(), 0f, 10f),
+                this.fire,
                 Explosion.BlockInteraction.BREAK
             )
         }

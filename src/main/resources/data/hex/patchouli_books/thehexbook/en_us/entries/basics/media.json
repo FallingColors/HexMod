@@ -2,7 +2,6 @@
     "name": "Media",
     "icon": "hex:amethyst_dust",
     "category": "hex:basics",
-    "sortnum": 1,
     "priority": true,
     "pages": [
         {

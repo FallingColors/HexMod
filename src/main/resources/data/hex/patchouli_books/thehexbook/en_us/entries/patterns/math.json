@@ -16,9 +16,11 @@
         },
         {    
             "type": "hex:pattern",
-            "header": "Add Distillation",
+            "header": "Addition Distillation",
             "anchor": "OpAdd",
-            "text": "$(n)num/vec, num/vec -> num/vec/$$(br)Perform addition.",
+            "input": "num/vec, num/vec",
+            "output": "num/vec",
+            "text": "Perform addition.",
             "patterns": {
                 "startdir": "NORTH_EAST",
                 "signature": "waaw"
@@ -30,9 +32,11 @@
         },
         {    
             "type": "hex:pattern",
-            "header": "Subtract Dstln.",
+            "header": "Subtraction Dstln.",
             "anchor": "OpSub",
-            "text": "$(n)num/vec, num/vec -> num/vec$(br)Perform subtraction",
+            "input": "num/vec, num/vec",
+            "output": "num/vec",
+            "text": "Perform subtraction",
             "patterns": {
                 "startdir": "NORTH_WEST",
                 "signature": "wddw"
@@ -44,9 +48,11 @@
         },
         {    
             "type": "hex:pattern",
-            "header": "Multiply Dstln.",
+            "header": "Multiplication Dstln.",
             "anchor": "OpMulDot",
-            "text": "$(n)num/vec, num/vec -> num/vec$(br)Perform multiplication or the dot product.",
+            "input": "num/vec, num/vec",
+            "output": "num/vec",
+            "text": "Perform multiplication or the dot product.",
             "patterns": {
                 "startdir": "SOUTH_EAST",
                 "signature": "waqaw"
@@ -60,7 +66,9 @@
             "type": "hex:pattern",
             "header": "Division Dstln.",
             "anchor": "OpDivCross",
-            "text": "$(n)num/vec, num/vec -> num/vec$(br)Perform division or the cross product.",
+            "input": "num/vec, num/vec",
+            "output": "num/vec",
+            "text": "Perform division or the cross product.",
             "patterns": {
                 "startdir": "NORTH_EAST",
                 "signature": "wdedw"
@@ -68,13 +76,15 @@
         },
         {
             "type": "patchouli:text",
-            "text": "As such:$(li)With two numbers, divides them and returns a number.$(li)With a number and a vector, divides the number with each element of the vector and returns a vector.$(li)With two vectors, performs the $(l:https://www.mathsisfun.com/algebra/vectors-cross-product.html)dot product/$ and returns a vector.$(br2)In the first and second cases, the first argument or its components are the dividend, and the second argument or its components are the divisor."
+            "text": "As such:$(li)With two numbers, divides them and returns a number.$(li)With a number and a vector, divides the number with each element of the vector and returns a vector.$(li)With two vectors, performs the $(l:https://www.mathsisfun.com/algebra/vectors-cross-product.html)cross product/$ and returns a vector.$(br2)In the first and second cases, the first argument or its components are the dividend, and the second argument or its components are the divisor."
         },
         {    
             "type": "hex:pattern",
             "header": "Length Distillation",
             "anchor": "OpAbsLen",
-            "text": "$(n)num/vec -> number$(br)Compute the absolute value or length.",
+            "input": "num/vec",
+            "output": "number",
+            "text": "Compute the absolute value or length.",
             "patterns": {
                 "startdir": "NORTH_EAST",
                 "signature": "wqaqw"
@@ -88,7 +98,9 @@
             "type": "hex:pattern",
             "header": "Power Distillation",
             "anchor": "OpPowProj",
-            "text": "$(n)num/vec, num/vec -> num/vec$(br)Perform exponentiation or vector projection",
+            "input": "num/vec, num/vec",
+            "output": "num/vec",
+            "text": "Perform exponentiation or vector projection.",
             "patterns": {
                 "startdir": "NORTH_WEST",
                 "signature": "wedew"
@@ -102,7 +114,9 @@
             "type": "hex:pattern",
             "header": "Vector Exaltation",
             "anchor": "OpConstructVec",
-            "text": "$(n)number, number, number -> vector$(br)Make a vector with the three numbers as its X, Y, and Z components.",
+            "input": "num, num, num",
+            "output": "vector",
+            "text": "Make a vector with the three numbers as its X, Y, and Z components.",
             "patterns": {
                 "startdir": "WEST",
                 "signature": "eqqqqq"
@@ -112,7 +126,9 @@
             "type": "hex:pattern",
             "header": "Vector Disintegration",
             "anchor": "OpDeconstructVec",
-            "text": "$(n)vector -> number, number, number$(br)Push the X, Y, and Z components of the vector onto the stack.",
+            "input": "vector",
+            "output": "num, num, num",
+            "text": "Push the X, Y, and Z components of the vector onto the stack.",
             "patterns": {
                 "startdir": "WEST",
                 "signature": "qeeeee"

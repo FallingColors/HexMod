@@ -15,7 +15,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "I also write the iotas the action takes, with the types the action pops, a \"->\", and the types the action pushes. For example, \"vector, number -> vector,\" means it pops two a vector and a number, and pushes a vector. (The number needs to be on the top of the stack, with the vector write below it.) \"-> entity\", means it takes no iotas and pushes an entity. \"entity, vector\" means it pops an entity and a vector, and doesn't push anything."
+            "text": "I also write the iotas the action takes, with the types the action pops, a \"\u2192\", and the types the action pushes. For example, \"$(n)vector, number/$ \u2192 $(n)vector/$\" means it pops two a vector and a number, and pushes a vector. (The number needs to be on the top of the stack, with the vector write below it.) \"\u2192 $(n)entity/$\", means it takes no iotas and pushes an entity. \"$(n)entity, vector/$ \u2192\" means it pops an entity and a vector, and doesn't push anything."
         }
     ]
 }

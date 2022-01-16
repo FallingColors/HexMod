@@ -19,7 +19,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "Even more complicated actions can be expressed in terms of pushing, popping, and peeking. For example, $(action)Jester's Gambit/$ swaps the top two items of the stack. This can be thought of as popping two items and pushing them in opposite order. $(action)Trivial Decomposition/$ duplicates the top of the stack, or peeks it and pushes a copy of what it finds."
+            "text": "Even more complicated actions can be expressed in terms of pushing, popping, and peeking. For example, $(l:patterns/stackmanip#OpSwap)$(action)Jester's Gambit/$ swaps the top two items of the stack. This can be thought of as popping two items and pushing them in opposite order. $(l:patterns/stackmanip#OpDuplicate)$(action)Gemini Decomposition/$ duplicates the top of the stack, or peeks it and pushes a copy of what it finds."
         }
     ]
 }

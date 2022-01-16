@@ -8,6 +8,7 @@ import at.petrak.hex.common.items.ItemSpellbook
 import at.petrak.hex.common.items.ItemWand
 import at.petrak.hex.common.items.magic.ItemPackagedSpell
 import at.petrak.hex.common.lib.LibDamageSources
+import at.petrak.hex.datagen.Advancements
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -97,8 +98,14 @@ data class CastingContext(
             val healthToMana = HexMod.CONFIG.healthToManaRate.get()
             val healthtoRemove = healthToMana * costLeft.toDouble()
             val manaAbleToCastFromHP = caster.health / healthToMana
+
+            val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
+            Advancements.OVERCAST_TRIGGER.trigger(caster, manaToActuallyPayFor)
+
             caster.hurt(LibDamageSources.OVERCAST, healthtoRemove.toFloat())
             costLeft = (costLeft.toDouble() - manaAbleToCastFromHP).toInt()
+
+
         }
         return costLeft
     }
@@ -109,7 +116,7 @@ data class CastingContext(
     }
 
     /**
-     * Return the slot from which to take blocks and items.
+     * Return the slot from which to take blocks and items.json.
      */
     // https://wiki.vg/Inventory is WRONG
     // slots 0-8 are the hotbar
@@ -160,7 +167,7 @@ data class CastingContext(
         }
         if (presentCount < count) return false
 
-        // now that we know we have enough items, if we don't need to remove anything we're through.
+        // now that we know we have enough items.json, if we don't need to remove anything we're through.
         if (!actuallyRemove) return true
 
         var remaining = count

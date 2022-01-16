@@ -47,6 +47,8 @@ public class HexItems {
     // I am very funny
     public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register(LibItemNames.SUBMARINE_SANDWICH,
             () -> new Item(props().food(new FoodProperties.Builder().nutrition(4).build())));
+    public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register(LibItemNames.LENS,
+            () -> new Item(unstackable()));
 
     public static Item.Properties props() {
         return new Item.Properties().tab(TAB);

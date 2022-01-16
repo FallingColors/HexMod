@@ -15,6 +15,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
+import java.util.ArrayList;
 import java.util.function.Supplier;
 
 /**
@@ -63,9 +64,15 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                         nextHarnessTag = new CompoundTag();
                     }
                     tag.put(ItemWand.TAG_HARNESS, nextHarnessTag);
+
+                    var descs = new ArrayList<String>(harness.getStack().size());
+                    for (var datum : harness.getStack()) {
+                        descs.add(datum.display());
+                    }
+
                     HexMessages.getNetwork()
                             .send(PacketDistributor.PLAYER.with(() -> sender),
-                                    new MsgNewSpellPatternAck(res.shouldQuit()));
+                                    new MsgNewSpellPatternAck(res.shouldQuit(), descs));
                 }
             }
         });

@@ -88,7 +88,10 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 append("]")
             }
             is Vec3 -> {
-                append("(${pl.x}, ${pl.y}, ${pl.z})")
+                append(String.format("(%.2f, %.2f, %.2f)", pl.x, pl.y, pl.z))
+            }
+            is Double -> {
+                append(String.format("%.2f", pl))
             }
             is HexPattern -> {
                 append("HexPattern(")

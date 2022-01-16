@@ -27,7 +27,7 @@ object OpPlaceBlock : SpellOperator {
         ctx.assertVecInRange(pos)
         return Pair(
             Spell(pos),
-            20_000
+            10_000
         )
     }
 

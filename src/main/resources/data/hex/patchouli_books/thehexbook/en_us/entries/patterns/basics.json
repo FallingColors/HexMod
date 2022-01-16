@@ -10,65 +10,86 @@
             "type": "hex:pattern",
             "header": "Mind's Reflection",
             "anchor": "OpGetCaster",
-            "text": "$(bold)-> entity$/$(br)Returns me, the caster.",
-            "patterns": [{
-                "startdir": "SOUTH_WEST",
-                "signature": "qaq"
-            }, {
-                "startdir": "SOUTH_EAST",
-                "signature": "ede",
-                "q": 3
-            }]
+            "input": "",
+            "output": "entity",
+            "text": "Returns me, the caster.",
+            "patterns": [
+                {
+                    "startdir": "SOUTH_WEST",
+                    "signature": "qaq"
+                },
+                {
+                    "startdir": "SOUTH_EAST",
+                    "signature": "ede",
+                    "q": 3
+                }
+            ]
         },
         {
             "type": "hex:pattern",
             "header": "Compass Purification",
             "anchor": "OpEntityPos",
-            "text": "$(bold)entity -> vector/$$(br)Returns the entity's position.",
-            "patterns": [{
-                "startdir": "SOUTH_WEST",
-                "signature": "aa"
-            }, {
-                "startdir": "SOUTH_EAST",
-                "signature": "dd",
-                "q": 3
-            }]
-            
+            "input": "entity",
+            "output": "vector",
+            "text": "Returns the entity's position.",
+            "patterns": [
+                {
+                    "startdir": "SOUTH_WEST",
+                    "signature": "aa"
+                },
+                {
+                    "startdir": "SOUTH_EAST",
+                    "signature": "dd",
+                    "q": 3
+                }
+            ]
         },
         {
             "type": "hex:pattern",
             "header": "Alidade Purification",
             "anchor": "OpEntityLook",
-            "text": "$(bold)entity -> vector/$$(br)Returns the direction the entity is looking in as a unit vector.",
-            "patterns": [{
-                "startdir": "EAST",
-                "signature": "wa"
-            }, {
-                "startdir": "WEST",
-                "signature": "wd",
-                "q": 2,
-                "r": 2
-            }]
+            "input": "entity",
+            "output": "vector",
+            "text": "Returns the direction the entity is looking in as a unit vector.",
+            "patterns": [
+                {
+                    "startdir": "EAST",
+                    "signature": "wa"
+                },
+                {
+                    "startdir": "WEST",
+                    "signature": "wd",
+                    "q": 2,
+                    "r": 2
+                }
+            ]
         },
         {
             "type": "hex:pattern",
             "header": "Examine",
             "anchor": "OpPrint",
-            "text": "$(bold)any -> any/$$(br)Displays the top iota of the stack to me.",
-            "patterns": [{
-                "startdir": "NORTH_EAST",
-                "signature": "de"
-            }, {
-                "startdir": "NORTH_WEST",
-                "signature": "aq",
-                "q": 3
-            }]
+            "input": "any",
+            "output": "any",
+            "text": "Displays the top iota of the stack to me.",
+            "patterns": [
+                {
+                    "startdir": "NORTH_EAST",
+                    "signature": "de"
+                },
+                {
+                    "startdir": "NORTH_WEST",
+                    "signature": "aq",
+                    "q": 3
+                }
+            ]
         },
         {
             "type": "hex:pattern",
             "header": "Archer's Distillation",
             "anchor": "OpBlockRaycast",
-            "text": "$(bold)vector, vector -> vector/$$(br)Return the coordinate of the first block hit by a line starting at the first vector and going in the direction of the second vector, or Null if it doesn't hit anything.",
+            "input": "vector, vector",
+            "output": "vector",
+            "text": "Return the coordinate of the first block hit by a line starting at the first vector and going in the direction of the second vector, or Null if it doesn't hit anything.",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "wqaawdd"
@@ -82,7 +103,9 @@
             "type": "hex:pattern",
             "header": "Architect's Distillation",
             "anchor": "OpBlockAxisRaycast",
-            "text": "$(bold)vector, vector -> vector/$$(br)Like $(l:patterns/basics#OpBlockRaycast)$(action)Archer's Distillation$(/l), but instead returns a vector representing the $(italic)side/$ of the block the line hits.",
+            "input": "vector, vector",
+            "output": "vector",
+            "text": "Like $(l:patterns/basics#OpBlockRaycast)$(action)Archer's Distillation$(/l), but instead returns a vector representing the $(italic)side/$ of the block the line hits.",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "weddwaa"

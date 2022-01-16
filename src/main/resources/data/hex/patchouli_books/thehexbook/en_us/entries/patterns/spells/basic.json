@@ -1,0 +1,66 @@
+{
+    "name": "Basic Spells",
+    "category": "hex:patterns/spells",
+    "icon": "minecraft:bookshelf",
+    "sortnum": 0,
+    "advancement": "hex:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hex:pattern",
+            "header": "Explosion",
+            "anchor": "OpExplode",
+            "input": "vector, number",
+            "output": "",
+            "text": "Create an explosion at the given location with the given power.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "aawaawaa"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "A power of 3 is about as much as a Creeper's blast; 4 is about as much as a TNT blast. The power is capped at 10.$(br2)Costs about one $(item)Amethyst Shard/$ per point of explosion power, plus one $(item)Amethyst Shard/$."
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Fireball",
+            "anchor": "OpExplodeFire",
+            "input": "vector, number",
+            "output": "",
+            "text": "Create a fiery explosion at the given location with the given power.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "ddwddwdd"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Costs about one $(item)Amethyst Shard/$ per point of explosion power, plus three $(item)Amethyst Shard/$s. Otherwise, the same as $(l:hex:patterns/spells/basic#OpExplode)$(action)Explosion/$."
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Impulse",
+            "anchor": "OpAddMotion",
+            "input": "entity, vector",
+            "output": "",
+            "text": "Propel the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs about 1 $(item)Amethyst Dust/$ per length of the vector squared.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "weeewdq"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Blink",
+            "anchor": "OpBlink",
+            "input": "entity, number",
+            "output": "",
+            "text": "Teleport the given entity along its look vector by the given length.$(br)Costs about 2 $(item)Amethyst Dust/$s per distance teleported, squared.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "wqqqwae"
+            }
+        }
+    ]
+}

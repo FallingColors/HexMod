@@ -21,13 +21,8 @@
         },
         {
             "type": "patchouli:text",
-            "text": "$(n)#input#/$ \u2192 $(n)#output#/$",
-            "y": 80
-        },
-        {
-            "type": "patchouli:text",
             "text": "#text#",
-            "y": 89
+            "y": 80
         }
     ]
 }

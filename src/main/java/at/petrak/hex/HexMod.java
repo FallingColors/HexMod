@@ -5,11 +5,14 @@ import at.petrak.hex.common.items.HexItems;
 import at.petrak.hex.common.lib.LibCapabilities;
 import at.petrak.hex.common.lib.RegisterPatterns;
 import at.petrak.hex.common.network.HexMessages;
+import at.petrak.hex.datagen.Advancements;
 import at.petrak.hex.datagen.LootModifiers;
 import at.petrak.hex.server.TickScheduler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,5 +47,12 @@ public class HexMod {
         MinecraftForge.EVENT_BUS.register(OpFlight.INSTANCE);
 
         evbus.register(RegisterPatterns.class);
+    }
+
+    @SubscribeEvent
+    public void commonSetup(final FMLCommonSetupEvent evt) {
+        evt.enqueueWork(() -> {
+            Advancements.registerTriggers();
+        });
     }
 }

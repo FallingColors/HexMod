@@ -58,7 +58,7 @@ public class Recipes extends RecipeProvider {
                 .pattern(" F ")
                 .pattern("FAF")
                 .pattern(" F ")
-                .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
+                .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.TRINKET.get())
                 .define('F', Tags.Items.INGOTS_GOLD)
@@ -66,7 +66,7 @@ public class Recipes extends RecipeProvider {
                 .pattern(" F ")
                 .pattern("FAF")
                 .pattern(" F ")
-                .unlockedBy("has_item", has(Items.AMETHYST_SHARD)).save(recipes);
+                .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.ARTIFACT.get())
                 .define('F', Tags.Items.INGOTS_GOLD)
@@ -79,6 +79,14 @@ public class Recipes extends RecipeProvider {
                 .pattern(" F ")
                 .pattern("FAF")
                 .pattern(" D ")
-                .unlockedBy("has_item", has(HexItems.CHARGED_AMETHYST.get())).save(recipes);
+                .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
+
+        ShapedRecipeBuilder.shaped(HexItems.SCRYING_LENS.get())
+                .define('G', Tags.Items.GLASS)
+                .define('A', HexItems.AMETHYST_DUST.get())
+                .pattern(" G ")
+                .pattern("GAG")
+                .pattern(" G ")
+                .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
     }
 }

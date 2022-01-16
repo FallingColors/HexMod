@@ -1,6 +1,6 @@
 {
     "name": "Items",
-    "icon": "hex:wand",
-    "description": "Magical and mysterious items I might encounter in my studies",
+    "icon": "hex:focus",
+    "description": "Magical and mysterious items I might encounter in my studies.$(br2)It seems like many of these items have use when held in the hand I'm $(italic)not/$ holding my staff in. I suppose I will have to pick carefully what goes in my other hand.",
     "sortnum": 2
 }

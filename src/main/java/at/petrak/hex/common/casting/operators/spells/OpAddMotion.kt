@@ -21,7 +21,7 @@ object OpAddMotion : SpellOperator {
         val motion = args.getChecked<Vec3>(1)
         return Pair(
             Spell(target, motion),
-            (motion.lengthSqr() * 100_000f).toInt()
+            (motion.lengthSqr() * 10_000f).toInt()
         )
     }
 

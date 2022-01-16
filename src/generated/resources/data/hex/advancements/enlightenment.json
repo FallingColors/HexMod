@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:music_disc_11"
+    },
+    "title": {
+      "translate": "advancement.hex:enlightenment"
+    },
+    "description": {
+      "translate": "advancement.hex:enlightenment.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "health_used": {
+      "trigger": "hex:overcast",
+      "conditions": {
+        "health_used": {
+          "min": 19.0
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "health_used"
+    ]
+  ]
+}

@@ -6,11 +6,14 @@
     "item.hex.trinket": "Trinket",
     "item.hex.artifact": "Artifact",
     "item.hex.amethyst_dust": "Amethyst Dust",
-    "item.hex.charged_amethyst": "Charged Amethyst Crystal",
+    "item.hex.charged_amethyst": "Charged Amethyst",
+    "item.hex.lens": "Scrying Lens",
     "death.attack.hex.overcast": "%s's mind was consumed into energy",
     "hex.spellbook.tooltip.page": "Selected Page %d/%d",
     "hex.spelldata.desc.entity": "Entity %s",
-    "advancement.hex:root": "Hex        ",
+    "advancement.hex:root": "Hex            ",
     "advancement.hex:root.desc": "Enter an amethyst geode deep underground, a concentrated source of media.",
+    "advancement.hex:enlightenment": "Achieve Enlightenment",
+    "advancement.hex:enlightenment.desc": "Go nearly insane from casting a Hex from almost all of your health.",
     "itemGroup.hex": "Hex"
 }

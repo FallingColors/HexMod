@@ -24,7 +24,7 @@ object OpBlink : SpellOperator {
 
         return Pair(
             Spell(target, delta),
-            1_000 * (delta * delta).roundToInt(),
+            20_000 * (delta * delta).roundToInt(),
         )
     }
 

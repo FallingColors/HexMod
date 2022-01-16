@@ -28,12 +28,13 @@ import java.util.stream.Collectors;
 public class PatternComponent implements ICustomComponent {
     @SerializedName("patterns")
     public String patternsRaw;
+    @SerializedName("hex_size")
+    public String hexSizeRaw;
 
     protected transient List<PatternEntry> patterns;
     protected transient int x, y;
     protected transient List<Vec2> pathfinderDots;
-
-    private static final float RADIUS = 10f;
+    protected transient float hexSize;
 
     /**
      * Pass -1, -1 to center it.
@@ -60,11 +61,10 @@ public class PatternComponent implements ICustomComponent {
 
 
         for (var pat : this.patterns) {
-            var zappyPts = RenderLib.makeZappy(pat.linePoints, 20f, 0.8f, 0f);
-            RenderLib.drawLineSeq(mat, zappyPts, 5f, 0, 210, 200, 200, 255, null);
-            RenderLib.drawLineSeq(mat, zappyPts, 2f, 0, 200, 190, 190, 200, ctx.getTicksInBook() / 20f, 0.5f);
+            RenderLib.drawLineSeq(mat, pat.zappyPoints, 5f, 0, 210, 200, 200, 255, null);
+            RenderLib.drawLineSeq(mat, pat.zappyPoints, 2f, 0, 200, 190, 190, 200, ctx.getTicksInBook() / 20f, 0.5f);
 
-            RenderLib.drawSpot(mat, pat.linePoints.get(0), 1f, 0.1f, 0.15f, 0.6f);
+            RenderLib.drawSpot(mat, pat.zappyPoints.get(0), 1f, 0.1f, 0.15f, 0.6f);
         }
 
         for (var dot : this.pathfinderDots) {
@@ -79,6 +79,8 @@ public class PatternComponent implements ICustomComponent {
 
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
+        this.hexSize = lookup.apply(IVariable.wrap(hexSizeRaw)).asNumber(10f).floatValue();
+
         var patsRaw = lookup.apply(IVariable.wrap(patternsRaw)).asListOrSingleton();
 
         // Center the whole thing so the center of all pieces is in the center.
@@ -97,7 +99,7 @@ public class PatternComponent implements ICustomComponent {
             var pat = HexPattern.FromAnglesSig(raw.signature, dir);
             var origin = new HexCoord(raw.q, raw.r);
             for (var pos : pat.positions(origin)) {
-                comAcc = comAcc.add(RenderLib.coordToPx(pos, RADIUS, Vec2.ZERO));
+                comAcc = comAcc.add(RenderLib.coordToPx(pos, this.hexSize, Vec2.ZERO));
                 pointsCount++;
             }
             this.patterns.add(new PatternEntry(pat, origin, new ArrayList<>()));
@@ -107,16 +109,17 @@ public class PatternComponent implements ICustomComponent {
         var comOffset = comAcc.scale(1f / pointsCount).negated();
 
         for (var pat : this.patterns) {
-            var localOrigin = RenderLib.coordToPx(pat.origin, RADIUS, comOffset);
-            pat.linePoints.addAll(pat.pattern.toLines(RADIUS, localOrigin));
+            var localOrigin = RenderLib.coordToPx(pat.origin, this.hexSize, comOffset);
+            var points = pat.pattern.toLines(this.hexSize, localOrigin);
+            pat.zappyPoints.addAll(RenderLib.makeZappy(points, 10f, 0.8f, 0f));
         }
 
         this.pathfinderDots = seenPoints.stream()
-                .map(coord -> RenderLib.coordToPx(coord, RADIUS, comOffset))
+                .map(coord -> RenderLib.coordToPx(coord, this.hexSize, comOffset))
                 .collect(Collectors.toList());
     }
 
-    private record PatternEntry(HexPattern pattern, HexCoord origin, List<Vec2> linePoints) {
+    private record PatternEntry(HexPattern pattern, HexCoord origin, List<Vec2> zappyPoints) {
     }
 
     private static class RawPattern {

@@ -1,6 +1,6 @@
 {
     "name": "Patterns",
-    "icon": "hex:artifact",
+    "icon": "minecraft:paper",
     "description": "A list of all the patterns in the mod.",
     "sortnum": 100
 }

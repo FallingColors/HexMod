@@ -3,6 +3,7 @@
     "icon": "hex:wand",
     "category": "hex:items",
     "priority": true,
+    "sortnum": 1,
     "advancement": "hex:root",
     "pages": [
         {
@@ -12,7 +13,7 @@
         {
             "type": "patchouli:crafting",
             "recipe": "hex:wand",
-            "text": "$(italic)Don't fight, flame, light, ignite, burn bright./$"
+            "text": "$(italic)Don't fight; flame, light; ignite; burn bright./$"
         }
     ]
 }

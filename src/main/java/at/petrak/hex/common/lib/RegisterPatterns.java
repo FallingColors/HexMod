@@ -16,6 +16,7 @@ import at.petrak.hex.common.casting.operators.selectors.OpGetEntitiesBy;
 import at.petrak.hex.common.casting.operators.selectors.OpGetEntityAt;
 import at.petrak.hex.common.casting.operators.spells.*;
 import at.petrak.hex.common.casting.operators.spells.great.OpFlight;
+import at.petrak.hex.common.casting.operators.spells.great.OpLightning;
 import at.petrak.hex.common.items.magic.ItemArtifact;
 import at.petrak.hex.common.items.magic.ItemCypher;
 import at.petrak.hex.common.items.magic.ItemTrinket;
@@ -86,7 +87,8 @@ public class RegisterPatterns {
 
                     new Pair<>("de", OpPrint.INSTANCE),
                     new Pair<>("aq", OpPrint.INSTANCE),
-                    new Pair<>("aawaawaa", OpExplode.INSTANCE),
+                    new Pair<>("aawaawaa", new OpExplode(false)),
+                    new Pair<>("ddwddwdd", new OpExplode(true)),
                     new Pair<>("weeewdq", OpAddMotion.INSTANCE),
                     new Pair<>("wqqqwae", OpBlink.INSTANCE),
                     new Pair<>("qaqqqqq", OpPlaceBlock.INSTANCE),

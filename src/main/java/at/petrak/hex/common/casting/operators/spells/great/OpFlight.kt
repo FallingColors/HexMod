@@ -2,7 +2,6 @@ package at.petrak.hex.common.casting.operators.spells.great
 
 import at.petrak.hex.HexUtils
 import at.petrak.hex.HexUtils.serializeToNBT
-import at.petrak.hex.api.Operator.Companion.MAX_DISTANCE
 import at.petrak.hex.api.Operator.Companion.getChecked
 import at.petrak.hex.api.RenderedSpell
 import at.petrak.hex.api.SpellDatum
@@ -34,8 +33,8 @@ object OpFlight : SpellOperator {
         // Convert to ticks
         val time = (timeRaw * 20.0).roundToInt()
         return Pair(
-            Spell(target, time, radiusRaw + MAX_DISTANCE, ctx.position),
-            1_000 * (timeRaw * radiusRaw + 1.0).roundToInt()
+            Spell(target, time, radiusRaw, ctx.position),
+            10_000 * (timeRaw * radiusRaw + 1.0).roundToInt()
         )
     }
 

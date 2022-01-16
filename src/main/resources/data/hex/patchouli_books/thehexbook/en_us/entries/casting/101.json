@@ -18,7 +18,7 @@
             "text": "First, $(thing)patterns/$. As mentioned before, they're my means of interacting with and manipulating the _media around me. Certain patterns are associated with $(thing)actions/$. Actions are what actually $(italic)do/$ the magic; the _media is moved in particular ways by all patterns, and when it ends up doing something useful, we call it an action.$(br2)_Media is fickle; if I draw a pattern that is $(italic)not/$ a valid action, it usually causes a mishap."
         },
         {
-            "type": "hex:pattern",
+            "type": "hex:pattern_nosig",
             "header": "An Example",
             "text": "It's interesting to note that the $(italic)direction/$ I draw a pattern in doesn't seem to matter at all. These two patterns both match to $(action)Mind's Reflection/$, for example.",
             "patterns": [{
@@ -67,6 +67,10 @@
             "text": "I have also found an amusing tidbit on why so many practitioners of magic in general seem to go mad, which I may like as some light and flavorful reading not canonical to my world.$(br2)$(italic)Content Warning: some body horror and suggestive elements./$",
             "link_text": "Read it Here",
             "url": "https://goblinpunch.blogspot.com/2014/05/a-digression-about-wizards.html"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Finally, it seems spells have a maximum range of influence, about 32 blocks from my position. Trying to affect anything outside of that will cause the spell to fail."
         }
     ]
 }

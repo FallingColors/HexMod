@@ -3,6 +3,7 @@ package at.petrak.hex.client.gui
 import at.petrak.hex.HexUtils
 import at.petrak.hex.HexUtils.TAU
 import at.petrak.hex.client.RenderLib
+import at.petrak.hex.common.items.HexItems
 import at.petrak.hex.common.items.ItemSpellbook
 import at.petrak.hex.common.network.HexMessages
 import at.petrak.hex.common.network.MsgQuitSpellcasting
@@ -28,6 +29,8 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     private var patterns: MutableList<Pair<HexPattern, HexCoord>> = mutableListOf()
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
+
+    var stackDescs: List<String> = emptyList()
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         if (super.mouseClicked(pMouseX, pMouseY, pButton)) {
@@ -205,6 +208,16 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
         RenderSystem.setShader { prevShader }
         RenderSystem.enableDepthTest()
+
+        val mc = Minecraft.getInstance()
+        if (mc.player?.getItemInHand(HexUtils.OtherHand(handOpenedWith))?.`is`(HexItems.SCRYING_LENS.get()) == true) {
+
+            val font = mc.font
+            for ((i, s) in this.stackDescs.withIndex()) {
+                val offsetIdx = this.stackDescs.size - i - 1
+                font.draw(poseStack, s, 10f, 10f + 9f * offsetIdx, -1)
+            }
+        }
     }
 
     // why the hell is this default true

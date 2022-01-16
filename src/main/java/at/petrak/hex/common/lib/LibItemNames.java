@@ -10,4 +10,5 @@ public class LibItemNames {
     public static final String AMETHYST_DUST = "amethyst_dust";
     public static final String CHARGED_AMETHYST = "charged_amethyst";
     public static final String SUBMARINE_SANDWICH = "sub_sandwich";
+    public static final String LENS = "lens";
 }

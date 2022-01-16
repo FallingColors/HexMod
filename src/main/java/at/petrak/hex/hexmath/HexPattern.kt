@@ -92,7 +92,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     fun getCenter(hexRadius: Float, origin: HexCoord = HexCoord.Origin): Vec2 {
         var acc = Vec2(0f, 0f)
         val poses = this.positions()
-        val vecOrigin = RenderLib.coordToPx(origin, hexRadius, Vec2.ZERO);
+        val vecOrigin = RenderLib.coordToPx(origin, hexRadius, Vec2.ZERO)
         for (pos in poses) {
             acc = acc.add(RenderLib.coordToPx(pos, hexRadius, vecOrigin))
         }

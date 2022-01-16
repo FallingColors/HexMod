@@ -80,7 +80,7 @@ public abstract class ItemPackagedSpell extends Item {
         }
         player.awardStat(stat);
 
-        player.getCooldowns().addCooldown(this, 20);
+        player.getCooldowns().addCooldown(this, 5);
 
         if (singleUse()) {
             stack.shrink(1);
