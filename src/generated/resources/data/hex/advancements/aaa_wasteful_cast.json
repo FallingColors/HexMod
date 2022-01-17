@@ -1,0 +1,29 @@
+{
+  "parent": "hex:root",
+  "display": {
+    "icon": {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    "title": {
+      "translate": "advancement.hex:wasteful_cast"
+    },
+    "description": {
+      "translate": "advancement.hex:wasteful_cast.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "waste_amt": {
+      "trigger": "hex:spend_mana",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "waste_amt"
+    ]
+  ]
+}

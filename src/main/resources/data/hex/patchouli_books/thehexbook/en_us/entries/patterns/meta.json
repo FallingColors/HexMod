@@ -4,10 +4,10 @@
     "icon": "minecraft:shulker_box",
     "sortnum": 6,
     "advancement": "hex:root",
-    "read_by_default",
+    "read_by_default": true,
     "pages": [
         {
-            "type": "hex:patterns",
+            "type": "hex:pattern",
             "header": "Hermes' Gambit",
             "anchor": "OpEval",
             "input": "list of patterns",
@@ -23,7 +23,7 @@
             "text": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$; see that entry for my thoughts on the subject.$(br2)It also makes the bureaucracy of Nature a \"turing-complete\" system, according to one esoteric scroll I found.$(br2)It seems there's a limit to how many times a _Hex can cast itself, to avoid runaway spells."
         },
         {
-            "type": "hex:patterns",
+            "type": "hex:pattern",
             "header": "Thoth's Gambit",
             "anchor": "OpEval",
             "input": "list of patterns, list",

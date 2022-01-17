@@ -1,10 +1,11 @@
 package at.petrak.hex;
 
+import at.petrak.hex.common.casting.RegisterPatterns;
 import at.petrak.hex.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hex.common.items.HexItems;
 import at.petrak.hex.common.lib.LibCapabilities;
-import at.petrak.hex.common.lib.RegisterPatterns;
 import at.petrak.hex.common.network.HexMessages;
+import at.petrak.hex.common.stats.HexStatistics;
 import at.petrak.hex.datagen.Advancements;
 import at.petrak.hex.datagen.LootModifiers;
 import at.petrak.hex.server.TickScheduler;
@@ -42,6 +43,7 @@ public class HexMod {
         HexMessages.register();
         MinecraftForge.EVENT_BUS.register(TickScheduler.INSTANCE);
         LootModifiers.LOOT_MODS.register(evbus);
+        HexStatistics.register();
         MinecraftForge.EVENT_BUS.register(LibCapabilities.class);
 
         MinecraftForge.EVENT_BUS.register(OpFlight.INSTANCE);

@@ -2,6 +2,8 @@ package at.petrak.hex.datagen;
 
 import at.petrak.hex.HexMod;
 import at.petrak.hex.common.advancement.OvercastTrigger;
+import at.petrak.hex.common.advancement.SpendManaTrigger;
+import at.petrak.hex.common.items.HexItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.DisplayInfo;
@@ -21,9 +23,12 @@ import java.util.function.Consumer;
 
 public class Advancements extends AdvancementProvider {
     public static Advancement ROOT;
+    public static Advancement BIG_CAST;
+    public static Advancement WASTEFUL_CAST;
     public static Advancement ENLIGHTENMENT;
 
     public static final OvercastTrigger OVERCAST_TRIGGER = new OvercastTrigger();
+    public static final SpendManaTrigger SPEND_MANA_TRIGGER = new SpendManaTrigger();
 
     public Advancements(DataGenerator generatorIn, ExistingFileHelper fileHelperIn) {
         super(generatorIn, fileHelperIn);
@@ -38,7 +43,7 @@ public class Advancements extends AdvancementProvider {
                         new TranslatableComponent("advancement.hex:root"),
                         new TranslatableComponent("advancement.hex:root.desc"),
                         new ResourceLocation("minecraft", "textures/block/calcite.png"),
-                        FrameType.TASK, true, true, false))
+                        FrameType.TASK, true, true, true))
                 // the only thing making this vaguely tolerable is the knowledge the json files are worse somehow
                 .addCriterion("on_thingy", new TickTrigger.TriggerInstance(EntityPredicate.Composite.wrap(
                         EntityPredicate.Builder.entity()
@@ -49,6 +54,22 @@ public class Advancements extends AdvancementProvider {
                                         .setY(MinMaxBounds.Doubles.between(-64.0, 30.0)).build())
                                 .build())))
                 .save(consumer, prefix("root")); // how the hell does one even read this
+
+        // weird names so we have alphabetical parity
+        WASTEFUL_CAST = Advancement.Builder.advancement()
+                .display(simple(Items.GLISTERING_MELON_SLICE, "wasteful_cast", FrameType.TASK))
+                .parent(ROOT)
+                .addCriterion("waste_amt", new SpendManaTrigger.Instance(EntityPredicate.Composite.ANY,
+                        MinMaxBounds.Ints.ANY,
+                        MinMaxBounds.Ints.atLeast(89_000)))
+                .save(consumer, prefix("aaa_wasteful_cast"));
+        BIG_CAST = Advancement.Builder.advancement()
+                .display(simple(HexItems.CHARGED_AMETHYST.get(), "big_cast", FrameType.TASK))
+                .parent(ROOT)
+                .addCriterion("cast_amt", new SpendManaTrigger.Instance(EntityPredicate.Composite.ANY,
+                        MinMaxBounds.Ints.atLeast(6_400_000),
+                        MinMaxBounds.Ints.ANY))
+                .save(consumer, prefix("aab_big_cast"));
 
         ENLIGHTENMENT = Advancement.Builder.advancement()
                 .display(new DisplayInfo(new ItemStack(Items.MUSIC_DISC_11),

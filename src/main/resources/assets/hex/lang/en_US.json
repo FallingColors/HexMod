@@ -15,5 +15,11 @@
     "advancement.hex:root.desc": "Enter an amethyst geode deep underground, a concentrated source of media.",
     "advancement.hex:enlightenment": "Achieve Enlightenment",
     "advancement.hex:enlightenment.desc": "Go nearly insane from casting a Hex from almost all of your health.",
+    "advancement.hex:wasteful_cast": "Waste Not...",
+    "advancement.hex:wasteful_cast.desc": "Waste a large amount of Media when casting a Hex.",
+    "advancement.hex:big_cast": "... Want Not",
+    "advancement.hex:big_cast.desc": "Cast a spell requiring a truly huge amount of Media.",
+    "stat.hex.mana_used": "Media consumed (in dusts)",
+    "stat.hex.mana_overcasted": "Media overcasted (in dusts)",
     "itemGroup.hex": "Hex"
 }

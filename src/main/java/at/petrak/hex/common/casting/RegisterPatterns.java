@@ -1,10 +1,9 @@
-package at.petrak.hex.common.lib;
+package at.petrak.hex.common.casting;
 
 import at.petrak.hex.HexMod;
 import at.petrak.hex.api.Operator;
 import at.petrak.hex.api.PatternRegistry;
 import at.petrak.hex.api.SpellDatum;
-import at.petrak.hex.common.casting.Widget;
 import at.petrak.hex.common.casting.operators.*;
 import at.petrak.hex.common.casting.operators.lists.OpAppend;
 import at.petrak.hex.common.casting.operators.lists.OpConcat;

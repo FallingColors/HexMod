@@ -1,0 +1,33 @@
+{
+  "parent": "hex:root",
+  "display": {
+    "icon": {
+      "item": "hex:charged_amethyst"
+    },
+    "title": {
+      "translate": "advancement.hex:big_cast"
+    },
+    "description": {
+      "translate": "advancement.hex:big_cast.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "cast_amt": {
+      "trigger": "hex:spend_mana",
+      "conditions": {
+        "mana_spent": {
+          "min": 6400000
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cast_amt"
+    ]
+  ]
+}

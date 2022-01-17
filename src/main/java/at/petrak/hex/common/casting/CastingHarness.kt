@@ -4,13 +4,20 @@ import at.petrak.hex.HexMod
 import at.petrak.hex.api.PatternRegistry
 import at.petrak.hex.api.RenderedSpell
 import at.petrak.hex.api.SpellDatum
+import at.petrak.hex.common.items.ItemWand
+import at.petrak.hex.common.items.magic.ItemPackagedSpell
+import at.petrak.hex.common.lib.LibDamageSources
+import at.petrak.hex.common.stats.HexStatistics
+import at.petrak.hex.datagen.Advancements
 import at.petrak.hex.hexmath.HexPattern
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
+import java.util.*
 import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Keeps track of a player casting a spell on the server.
@@ -84,7 +91,7 @@ class CastingHarness private constructor(
                 spellsToCast = spells
 
                 // prevent poor impls from gaining you mana
-                ctx.withdrawMana(max(0, manaCost), true)
+                this.withdrawMana(max(0, manaCost), true)
                 if (ctx.caster.isDeadOrDying)
                     return CastResult.Died
             }
@@ -110,6 +117,64 @@ class CastingHarness private constructor(
         }
     }
 
+    /**
+     * Might cast from hitpoints.
+     * Returns the mana cost still remaining after we deplete everything. It will be <= 0 if we could pay for it.
+     *
+     * Also awards stats and achievements and such
+     */
+    fun withdrawMana(manaCost: Int, allowOvercast: Boolean): Int {
+        if (this.ctx.caster.isCreative) return 0
+        var costLeft = manaCost
+
+        val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
+        val casterItem = casterStack.item
+        val ipsCanDrawFromInv = if (casterItem is ItemPackagedSpell) {
+            val tag = casterStack.orCreateTag
+            val manaAvailable = tag.getInt(ItemPackagedSpell.TAG_MANA)
+            val manaToTake = min(costLeft, manaAvailable)
+            tag.putInt(ItemPackagedSpell.TAG_MANA, manaAvailable - manaToTake)
+            costLeft -= manaToTake
+            casterItem.canDrawManaFromInventory()
+        } else {
+            false
+        }
+        if (casterItem is ItemWand || ipsCanDrawFromInv) {
+            val manableItems = this.ctx.caster.inventory.items
+                .filter { !Objects.isNull(ManaHelper.priority(it)) }
+                .sortedByDescending(ManaHelper::priority)
+            for (stack in manableItems) {
+                costLeft -= ManaHelper.extractMana(stack, costLeft)!!
+                if (costLeft <= 0)
+                    break
+            }
+        }
+
+        if (allowOvercast && costLeft > 0) {
+            // Cast from HP!
+            val healthToMana = HexMod.CONFIG.healthToManaRate.get()
+            val healthtoRemove = healthToMana * costLeft.toDouble()
+            val manaAbleToCastFromHP = this.ctx.caster.health / healthToMana
+
+            val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
+            Advancements.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
+            this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
+
+            this.ctx.caster.hurt(LibDamageSources.OVERCAST, healthtoRemove.toFloat())
+            costLeft = (costLeft.toDouble() - manaAbleToCastFromHP).toInt()
+        }
+
+        // this might be more than the mana cost! for example if we waste a lot of mana from an item
+        this.ctx.caster.awardStat(HexStatistics.MANA_USED, manaCost - costLeft)
+        Advancements.SPEND_MANA_TRIGGER.trigger(
+            this.ctx.caster,
+            manaCost - costLeft,
+            if (costLeft < 0) -costLeft else 0
+        )
+
+        return costLeft
+    }
+
     fun serializeToNBT(): CompoundTag {
         val out = CompoundTag()
 
@@ -128,6 +193,7 @@ class CastingHarness private constructor(
 
         return out
     }
+
 
     companion object {
         const val TAG_STACK = "stack"
