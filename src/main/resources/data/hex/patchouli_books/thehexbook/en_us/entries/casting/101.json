@@ -40,7 +40,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "In many ways, it reminds me of the spells cast by the practitioners of the $(thing)Psionic/$ arts during the 1.12 Renaissance, headed by a certain master of mathematics and railguns. $(br2)If I find I am not quite sure what a stack is, I might want to read $(l:casting/stack)this entry on the subject$(/l)."
+            "text": "If I find I am not quite sure what a stack is, I might want to read $(l:casting/stack)this entry on the subject$(/l). $(br2)In many ways, the whole system reminds me of the spells cast by the practitioners of the $(thing)Psionic/$ arts during the 1.12 Renaissance, headed by a certain master of mathematics and railguns."
         },
         {
             "type": "patchouli:text",
@@ -65,7 +65,7 @@
         {
             "type": "patchouli:link",
             "text": "I have also found an amusing tidbit on why so many practitioners of magic in general seem to go mad, which I may like as some light and flavorful reading not canonical to my world.$(br2)$(italic)Content Warning: some body horror and suggestive elements./$",
-            "link_text": "Read it Here",
+            "link_text": "Goblin Punch",
             "url": "https://goblinpunch.blogspot.com/2014/05/a-digression-about-wizards.html"
         },
         {

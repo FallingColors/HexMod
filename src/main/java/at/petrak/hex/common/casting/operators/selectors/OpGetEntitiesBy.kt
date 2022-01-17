@@ -21,7 +21,6 @@ import java.util.function.Predicate
 
 class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : ConstManaOperator {
     override val argc = 2
-    override val manaCost = 2000
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val pos = args.getChecked<Vec3>(0)
         val maybeRadius = args.getChecked<Double>(1)

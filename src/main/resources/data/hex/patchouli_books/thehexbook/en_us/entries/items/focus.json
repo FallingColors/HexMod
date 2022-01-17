@@ -16,7 +16,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "It occurs to me I could store a list of patterns in a $(item)Focus/$, and later recall them and evaluate them with $(action)Hermes' Gambit/$. This way I can cast complex spells, or parts of spells, without having to draw them over and over.$(br2)I can use this like a slightly-less-convenient $(l:items/hexcasting#artifact)$(item)Artifact/$, but the real power comes from putting common \"phrases\" in a $(item)Focus/$, like the patterns for raycasting from my position and look."
+            "text": "It occurs to me I could store a list of patterns in a $(item)Focus/$, and later recall them and evaluate them with $(l:patterns/meta#OpEval)$(action)Hermes' Gambit/$. This way I can cast complex spells, or parts of spells, without having to draw them over and over.$(br2)I can use this like a slightly-less-convenient $(l:items/hexcasting#artifact)$(item)Artifact/$, but the real power comes from putting common \"phrases\" in a $(item)Focus/$, like the patterns for raycasting from my position and look."
         },
         {
             "type": "patchouli:text",

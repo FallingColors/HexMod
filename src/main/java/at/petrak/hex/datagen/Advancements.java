@@ -56,6 +56,7 @@ public class Advancements extends AdvancementProvider {
                         new TranslatableComponent("advancement.hex:enlightenment.desc"),
                         null,
                         FrameType.CHALLENGE, true, true, true))
+                .parent(ROOT)
                 .addCriterion("health_used",
                         new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
                                 MinMaxBounds.Ints.ANY,

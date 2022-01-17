@@ -116,7 +116,7 @@ data class CastingContext(
     }
 
     /**
-     * Return the slot from which to take blocks and items.json.
+     * Return the slot from which to take blocks and itempicking.json.
      */
     // https://wiki.vg/Inventory is WRONG
     // slots 0-8 are the hotbar
@@ -167,7 +167,7 @@ data class CastingContext(
         }
         if (presentCount < count) return false
 
-        // now that we know we have enough items.json, if we don't need to remove anything we're through.
+        // now that we know we have enough itempicking.json, if we don't need to remove anything we're through.
         if (!actuallyRemove) return true
 
         var remaining = count

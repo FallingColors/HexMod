@@ -4,6 +4,7 @@
     "icon": "minecraft:textures/mob_effect/conduit_power.png",
     "sortnum": 0,
     "advancement": "hex:enlightenment",
+    "entry_color": "54398a",
     "pages": [
         {
             "type": "hex:pattern",
@@ -19,7 +20,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "The entity (which must be a player) is the recipient of the power of flight. The first number is the number of seconds they will gain flight for, and the second number is the radius in blocks the spell is active within. If the recipient exits that radius from the point the spell is cast at, or their timer runs out, they immediately fall to the earth at supernatural speed.$(br2)There is no way to tell the time left or the safe area once the spell is cast.$(br2)It costs approximately 1 $(item)Amethyst Dust/$ per the time in seconds mutiplied by the radius."
+            "text": "The entity (which must be a player) is the recipient of the power of flight. The first number is the number of seconds they will gain flight for, and the second number is the radius in blocks the spell is active within. If the recipient exits that radius from the point the spell is cast at, or their timer runs out, they immediately fall to the earth at supernatural speed.$(br2)It costs approximately 1 $(item)Amethyst Dust/$ per the time in seconds mutiplied by the radius."
         },
         {
             "type": "hex:pattern",
@@ -28,6 +29,7 @@
             "input": "vector",
             "output": "",
             "text": "I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it.",
+            "hex_size": 6,
             "patterns": {
                 "startdir": "EAST",
                 "signature": "waadwawdaaweewq"

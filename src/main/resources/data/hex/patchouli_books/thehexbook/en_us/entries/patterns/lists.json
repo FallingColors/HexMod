@@ -1,0 +1,46 @@
+{
+    "name": "List Manipulation",
+    "category": "hex:patterns",
+    "icon": "minecraft:oak_sign",
+    "sortnum": 5,
+    "advancement": "hex:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hex:pattern",
+            "header": "Selection Distillation",
+            "anchor": "OpIndex",
+            "input": "list, number",
+            "output": "any",
+            "text": "Select the nth element from the list.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "deeed"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Integration Distillation",
+            "anchor": "OpAppend",
+            "input": "list, any",
+            "output": "any",
+            "text": "Put the value onto the end of the list.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "edqde"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Combination Distillation",
+            "anchor": "OpConcat",
+            "input": "list, list",
+            "output": "list",
+            "text": "Join the two lists together, putting the second list's elements after the first list's.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qaeaq"
+            }
+        }
+    ]
+}

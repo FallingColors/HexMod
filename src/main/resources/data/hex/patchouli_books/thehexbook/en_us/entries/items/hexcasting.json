@@ -2,7 +2,7 @@
     "name": "Hexcasting Items",
     "category": "hex:items",
     "icon": "hex:artifact{patterns:[]}",
-    "sortnum": 3,
+    "sortnum": 4,
     "advancement": "hex:root",
     "pages": [
         {
@@ -19,7 +19,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "$(item)Artifact/$s are very powerful. After their _media is depleted, they can use $(l:items/amethyst)$(item)Amethyst/$ from the holder's inventory to pay for the _Hex, just as I do when casting with a $(item)Staff/$. Of course, this also means the spell might consume their mind if there's not enough $(item)Amethyst/$.$(br2)Once I've made an empty hexcasting item in a mundane crafting bench, I infuse the _Hex into it using (what else but) a spell appropriate to the item. $(l:patterns/hexcasting)I've catalogued the patterns here./$"
+            "text": "$(item)Artifact/$s are very powerful. After their _media is depleted, they can use $(l:items/amethyst)$(item)Amethyst/$ from the holder's inventory to pay for the _Hex, just as I do when casting with a $(item)Staff/$. Of course, this also means the spell might consume their mind if there's not enough $(item)Amethyst/$.$(br2)Once I've made an empty hexcasting item in a mundane crafting bench, I infuse the _Hex into it using (what else but) a spell appropriate to the item. $(l:patterns/spells/hexcasting)I've catalogued the patterns here./$"
         },
         {
             "type": "patchouli:text",

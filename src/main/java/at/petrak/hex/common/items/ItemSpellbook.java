@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 public class ItemSpellbook extends ItemDataHolder {
     public static String TAG_SELECTED_PAGE = "page_idx";
-    // this is a CompoundTag of string numerical keys to SpellData\
+    // this is a CompoundTag of string numerical keys to SpellData
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
     public static String TAG_PAGES = "pages";
 

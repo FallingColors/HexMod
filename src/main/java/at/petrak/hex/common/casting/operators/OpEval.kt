@@ -30,6 +30,6 @@ object OpEval : Operator {
         }
         stack.addAll(harness.stack)
 
-        return OperationResult(50_000, spellsToCast)
+        return OperationResult(500_000, spellsToCast)
     }
 }

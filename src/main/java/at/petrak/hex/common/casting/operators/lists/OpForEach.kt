@@ -45,6 +45,6 @@ object OpForEach : Operator {
         }
 
         stack.addAll(outvalues)
-        return OperationResult(10_000, spellsToCast)
+        return OperationResult(100_000, spellsToCast)
     }
 }

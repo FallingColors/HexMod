@@ -47,13 +47,18 @@ public class RegisterPatterns {
                     new Pair<>("wqaawdd", OpBlockRaycast.INSTANCE),
                     new Pair<>("weddwaa", OpBlockAxisRaycast.INSTANCE),
                     new Pair<>("weaqa", OpEntityRaycast.INSTANCE),
-                    new Pair<>("wqded", OpGetEntityAt.INSTANCE),
 
                     new Pair<>("edqde", OpAppend.INSTANCE),
                     new Pair<>("qaeaq", OpConcat.INSTANCE),
                     new Pair<>("deeed", OpIndex.INSTANCE),
                     new Pair<>("dadad", OpForEach.INSTANCE),
 
+                    new Pair<>("qqqqqdaqa", new OpGetEntityAt(e -> true)),
+                    new Pair<>("qqqqqdaqaqwa", new OpGetEntityAt(OpGetEntitiesBy::isAnimal)),
+                    new Pair<>("qqqqqdaqaqwq", new OpGetEntityAt(OpGetEntitiesBy::isMonster)),
+                    new Pair<>("qqqqqdaqaqww", new OpGetEntityAt(OpGetEntitiesBy::isItem)),
+                    new Pair<>("qqqqqdaqaqwe", new OpGetEntityAt(OpGetEntitiesBy::isPlayer)),
+                    new Pair<>("qqqqqdaqaqwd", new OpGetEntityAt(OpGetEntitiesBy::isLiving)),
                     new Pair<>("qqqqqwded", new OpGetEntitiesBy(e -> true, false)),
                     new Pair<>("qqqqqwdeddwa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false)),
                     new Pair<>("eeeeewaqaawa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, true)),
@@ -94,11 +99,11 @@ public class RegisterPatterns {
                     new Pair<>("qaqqqqq", OpPlaceBlock.INSTANCE),
                     new Pair<>("eeeeede", OpBreakBlock.INSTANCE),
                     new Pair<>("waadwawdaaweewq", OpLightning.INSTANCE),
-                    new Pair<>("waqqqqq", new OpMakePackagedSpell<>(ItemCypher.class, 500_000)),
-                    new Pair<>("wwaqqqqqeaqeaeqqqeaeq", new OpMakePackagedSpell<>(ItemTrinket.class, 1_000_000)),
+                    new Pair<>("waqqqqq", new OpMakePackagedSpell<>(ItemCypher.class, 100_000)),
+                    new Pair<>("wwaqqqqqeaqeaeqqqeaeq", new OpMakePackagedSpell<>(ItemTrinket.class, 500_000)),
                     new Pair<>(
                             "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq",
-                            new OpMakePackagedSpell<>(ItemArtifact.class, 4_000_000)
+                            new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000)
                     ),
                     new Pair<>("eawwaeawawaa", OpFlight.INSTANCE),
 

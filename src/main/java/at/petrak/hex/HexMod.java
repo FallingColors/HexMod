@@ -50,7 +50,7 @@ public class HexMod {
     }
 
     @SubscribeEvent
-    public void commonSetup(final FMLCommonSetupEvent evt) {
+    public static void commonSetup(final FMLCommonSetupEvent evt) {
         evt.enqueueWork(() -> {
             Advancements.registerTriggers();
         });

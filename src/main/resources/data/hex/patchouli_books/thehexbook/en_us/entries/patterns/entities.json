@@ -1,0 +1,214 @@
+{
+    "name": "Entities",
+    "category": "hex:patterns",
+    "icon": "minecraft:pig_spawn_egg",
+    "sortnum": 4,
+    "advancement": "hex:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hex:pattern",
+            "header": "Entity Reflection",
+            "anchor": "OpGetEntityAt",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Get an entity at the given position, or null if there isn't one.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqa"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Entity Rfxn.: Animal",
+            "anchor": "OpGetEntityAtAnimal",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Get an animal entity at the given position, or null if there isn't one.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaawa"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Entity Rfxn.: Monster",
+            "anchor": "OpGetEntityAtMonster",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Get a monster entity at the given position, or null if there isn't one.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaawq"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Entity Rfxn.: Item",
+            "anchor": "OpGetEntityAtItem",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Get an item entity at the given position, or null if there isn't one.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaaww"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Entity Rfxn.: Player",
+            "anchor": "OpGetEntityAtPlayer",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Get a player entity at the given position, or null if there isn't one.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaawe"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Entity Rfxn.: Living",
+            "anchor": "OpGetEntityAtLiving",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Get a living entity at the given position, or null if there isn't one.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaawd"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Any",
+            "anchor": "OpGetEntitiesBy",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwded"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Animal",
+            "anchor": "OpGetEntitiesByAnimal",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all animal entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddwa"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Non-Animal",
+            "anchor": "OpGetEntitiesByAnimalNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all non-animal entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaawa"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Monster",
+            "anchor": "OpGetEntitiesByMonster",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all monster entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddwq"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Non-Monster",
+            "anchor": "OpGetEntitiesByMonsterNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all non-monster entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaawq"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Item",
+            "anchor": "OpGetEntitiesByItem",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all item entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddww"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Non-Item",
+            "anchor": "OpGetEntitiesByItemNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all non-item entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaaww"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Player",
+            "anchor": "OpGetEntitiesByPlayer",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all player entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddwe"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Non-Player",
+            "anchor": "OpGetEntitiesByPkaterNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all non-player entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaawe"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Living",
+            "anchor": "OpGetEntitiesByLiving",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all living entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddwd"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Rfxn.: Non-Living",
+            "anchor": "OpGetEntitiesByLivingNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Get all non-living entities within the given radius of the given point.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaawd"
+            }
+        }
+    ]
+}

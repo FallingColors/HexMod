@@ -20,7 +20,7 @@ public class HexConfig {
         healthToManaRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
                 .defineInRange("healthToManaRate", 20.0 / 100_000.0, 0.0, Double.POSITIVE_INFINITY);
 
-        builder.push("items.json");
+        builder.push("itempicking.json");
         batteryMaxMana = builder.comment("The maximum amount of mana a mana battery can store.")
                 .defineInRange("batteryMaxMana", 1_000_000, 0, Integer.MAX_VALUE);
         dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")

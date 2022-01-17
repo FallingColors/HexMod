@@ -7,7 +7,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "Influences are ... strange, to say the least. Whereas most iotas seem to represent something about the world, influences represent ... something more abstract and formless.$(br2)For example, one influence I've named Null seems to represent nothing at all, or perhaps the concept of nothingness. It's returned when there isn't a suitable answer for a question I ask Nature, such as the entity at a given position when there are no entities there."
+            "text": "Influences are ... strange, to say the least. Whereas most iotas seem to represent something about the world, influences represent ... something more abstract and formless.$(br2)For example, one influence I've named Null seems to represent nothing at all. It's returned when there isn't a suitable answer for a question I ask Nature, such as the entity at a given position when there are no entities there."
         },
         {
             "type": "patchouli:text",
