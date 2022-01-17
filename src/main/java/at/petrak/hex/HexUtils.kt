@@ -33,5 +33,8 @@ object HexUtils {
     fun OtherHand(hand: InteractionHand) =
         if (hand == InteractionHand.MAIN_HAND) InteractionHand.OFF_HAND else InteractionHand.MAIN_HAND
 
+    @JvmStatic
+    fun FixNANs(x: Double): Double = if (x.isFinite()) x else 0.0
+    
     const val TAU = Math.PI * 2.0
 }

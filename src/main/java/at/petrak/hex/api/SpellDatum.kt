@@ -29,11 +29,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
 
     inline fun <reified U> tryGet(): U =
         if (payload is U) {
-            // learning from psi's mistakes
-            if (payload is Double && !payload.isFinite())
-                0.0 as U
-            else
-                payload
+            payload
         } else {
             throw CastException(CastException.Reason.OP_WRONG_TYPE, U::class.java, this.payload)
         }
@@ -118,12 +114,20 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                         else -> make(it)
                     }
                 })
+            } else if (payload is Vec3) {
+                SpellDatum(
+                    Vec3(
+                        HexUtils.FixNANs(payload.x),
+                        HexUtils.FixNANs(payload.y),
+                        HexUtils.FixNANs(payload.z),
+                    )
+                )
             } else if (IsValidType(payload)) {
                 SpellDatum(payload)
             } else if (payload is java.lang.Double) {
                 // Check to see if it's a java *boxed* double, for when we call this from Java
                 val num = payload.toDouble()
-                SpellDatum(if (num.isFinite()) num else 0.0)
+                SpellDatum(HexUtils.FixNANs(num))
             } else {
                 throw CastException(CastException.Reason.INVALID_TYPE, payload)
             }
