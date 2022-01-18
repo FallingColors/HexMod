@@ -1,0 +1,35 @@
+{
+    "casting.start_pattern": {
+        "sounds": [
+            {
+                "name": "hex:add_line",
+                "volume": 1.0,
+                "pitch": 0.8
+            }
+        ]
+    },
+    "casting.add_line": {
+        "sounds": [
+            {
+                "name": "hex:add_line",
+                "volume": 0.8,
+                "pitch": 1.0
+            }
+        ]
+    },
+    "casting.add_pattern": {
+        "sounds": [
+            "hex:add_pattern"
+        ]
+    },
+    "casting.ambience": {
+        "sounds": [
+            "hex:casting_ambience"
+        ]
+    },
+    "casting.cast": {
+        "sounds": [
+            "hex:cast_hex"
+        ]
+    }
+}

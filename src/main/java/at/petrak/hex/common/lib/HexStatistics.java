@@ -1,4 +1,4 @@
-package at.petrak.hex.common.stats;
+package at.petrak.hex.common.lib;
 
 import at.petrak.hex.HexMod;
 import net.minecraft.core.Registry;

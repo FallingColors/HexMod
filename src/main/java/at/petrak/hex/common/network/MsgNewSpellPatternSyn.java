@@ -4,6 +4,7 @@ import at.petrak.hex.common.casting.CastingContext;
 import at.petrak.hex.common.casting.CastingHarness;
 import at.petrak.hex.common.casting.CastingHarness.CastResult;
 import at.petrak.hex.common.items.ItemWand;
+import at.petrak.hex.common.lib.HexSounds;
 import at.petrak.hex.hexmath.HexPattern;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
@@ -52,6 +54,9 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                         for (var spell : success.getSpells()) {
                             spell.cast(castCtx);
                         }
+                        sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
+                                HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
+                                1f + ((float) Math.random() - 0.5f) * 0.2f);
                     } else if (res instanceof CastResult.Error error) {
                         sender.sendMessage(new TextComponent(error.getExn().getMessage()), Util.NIL_UUID);
                     }

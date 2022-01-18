@@ -7,7 +7,7 @@ import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.common.items.ItemWand
 import at.petrak.hex.common.items.magic.ItemPackagedSpell
 import at.petrak.hex.common.lib.LibDamageSources
-import at.petrak.hex.common.stats.HexStatistics
+import at.petrak.hex.common.lib.HexStatistics
 import at.petrak.hex.datagen.Advancements
 import at.petrak.hex.hexmath.HexPattern
 import net.minecraft.nbt.CompoundTag

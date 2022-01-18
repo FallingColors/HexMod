@@ -5,6 +5,7 @@ import at.petrak.hex.HexUtils.TAU
 import at.petrak.hex.client.RenderLib
 import at.petrak.hex.common.items.HexItems
 import at.petrak.hex.common.items.ItemSpellbook
+import at.petrak.hex.common.lib.HexSounds
 import at.petrak.hex.common.network.HexMessages
 import at.petrak.hex.common.network.MsgQuitSpellcasting
 import at.petrak.hex.common.network.MsgShiftScrollSyn
@@ -16,7 +17,11 @@ import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
+import net.minecraft.client.resources.sounds.AbstractSoundInstance
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.network.chat.TextComponent
+import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
@@ -30,7 +35,26 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
+    private var ambianceSoundInstance: AbstractSoundInstance? = null
+
     var stackDescs: List<String> = emptyList()
+
+    override fun init() {
+        this.ambianceSoundInstance = SimpleSoundInstance(
+            HexSounds.CASTING_AMBIANCE.get().location,
+            SoundSource.PLAYERS,
+            1f,
+            1f,
+            true,
+            0,
+            SoundInstance.Attenuation.NONE,
+            0.0,
+            0.0,
+            0.0,
+            true // this means is it relative to the *player's ears*, not to a given point, thanks mojank
+        )
+        Minecraft.getInstance().soundManager.play(this.ambianceSoundInstance!!)
+    }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         if (super.mouseClicked(pMouseX, pMouseY, pButton)) {
@@ -41,6 +65,12 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             val coord = this.pxToCoord(Vec2(pMouseX.toFloat(), pMouseY.toFloat()))
             if (!this.usedSpots.contains(coord)) {
                 this.drawState = PatternDrawState.JustStarted(coord)
+                Minecraft.getInstance().soundManager.play(
+                    SimpleSoundInstance.forUI(
+                        HexSounds.START_PATTERN.get(),
+                        1f
+                    )
+                )
             }
         }
 
@@ -69,11 +99,12 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 // The player might have a lousy aim, so set the new anchor point to the "ideal"
                 // location as if they had hit it exactly on the nose.
                 val idealNextLoc = anchorCoord + newdir
-                if (!this.usedSpots.contains(idealNextLoc)) {
+                val success = if (!this.usedSpots.contains(idealNextLoc)) {
                     if (this.drawState is PatternDrawState.JustStarted) {
                         val pat = HexPattern(newdir)
 
                         this.drawState = PatternDrawState.Drawing(anchorCoord, idealNextLoc, pat)
+                        true
                     } else if (this.drawState is PatternDrawState.Drawing) {
                         // how anyone gets around without a borrowck is beyond me
                         val ds = (this.drawState as PatternDrawState.Drawing)
@@ -81,7 +112,21 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                         if (success) {
                             ds.current = idealNextLoc
                         }
+                        success
+                    } else {
+                        false
                     }
+                } else {
+                    false
+                }
+
+                if (success) {
+                    Minecraft.getInstance().soundManager.play(
+                        SimpleSoundInstance.forUI(
+                            HexSounds.ADD_LINE.get(),
+                            1f + (Math.random().toFloat() - 0.5f) * 0.1f
+                        )
+                    )
                 }
             }
         }
@@ -116,6 +161,12 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                         pat
                     )
                 )
+                Minecraft.getInstance().soundManager.play(
+                    SimpleSoundInstance.forUI(
+                        HexSounds.ADD_PATTERN.get(),
+                        1f + (Math.random().toFloat() - 0.5f) * 0.1f
+                    )
+                )
             }
         }
 
@@ -134,6 +185,8 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
     override fun onClose() {
         HexMessages.getNetwork().sendToServer(MsgQuitSpellcasting())
+
+        this.ambianceSoundInstance?.let { Minecraft.getInstance().soundManager.stop(it) }
 
         super.onClose()
     }

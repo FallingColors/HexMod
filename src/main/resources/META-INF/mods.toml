@@ -9,15 +9,13 @@ modId = "hex"
 version = "${file.jarVersion}"
 displayName = "Hex"
 displayURL = "https://github.com/gamma-delta/HexMod"
-logoFile = "examplemod.png"
+logoFile = "logo.png"
 credits = '''
-- Alwinfy for visual effects help
+- Alwinfy for visual effects
 - Kra3tor for sound effects
 '''
 authors = "petrak@ (aka gamma-delta)"
-description = '''
-Cast complex spells by drawing patterns in the air!
-'''
+description = "Cast powerful Hexes on the fly by drawing patterns with a staff."
 
 [[dependencies.hex]]
 modId = "forge"
@@ -30,5 +28,12 @@ side = "BOTH"
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.18.1,1.19)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.hex]]
+modId = "patchouli"
+mandatory = true
+versionRange = "[1.18.1-65-SNAPSHOT,)"
 ordering = "NONE"
 side = "BOTH"

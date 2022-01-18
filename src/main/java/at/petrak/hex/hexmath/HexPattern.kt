@@ -25,6 +25,8 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         var cursor = HexCoord.Origin
         for (a in this.angles) {
             linesSeen.add(Pair(cursor, compass))
+            // Line from here to there also blocks there to here
+            linesSeen.add(Pair(cursor + compass, compass.rotatedBy(HexAngle.BACK)))
             cursor += compass
             compass *= a
         }
