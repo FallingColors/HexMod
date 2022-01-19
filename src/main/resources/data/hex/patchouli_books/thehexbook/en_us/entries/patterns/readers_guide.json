@@ -15,7 +15,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "I also write the types of iota that the action will consume or modify, a \"\u2192\", and the types of iota the action will create.$(p)For example, \"$(n)vector, number/$ \u2192 $(n)vector/$\" means the action will remove a vector and a number from the top of the stack, and then add a vector; or, put another way, will remove a number from the stack, and then modify the vector at the top of the stack. (The number needs to be on the top of the stack, with the vector write below it.)"
+            "text": "I also write the types of iota that the action will consume or modify, a \"\u2192\", and the types of iota the action will create.$(p)For example, \"$(n)vector, number/$ \u2192 $(n)vector/$\" means the action will remove a vector and a number from the top of the stack, and then add a vector; or, put another way, will remove a number from the stack, and then modify the vector at the top of the stack. (The number needs to be on the top of the stack, with the vector right below it.)"
 	},
         {
             "type": "patchouli:text",

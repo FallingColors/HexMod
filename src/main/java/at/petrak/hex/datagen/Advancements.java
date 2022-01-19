@@ -91,6 +91,7 @@ public class Advancements extends AdvancementProvider {
 
     public static void registerTriggers() {
         CriteriaTriggers.register(OVERCAST_TRIGGER);
+        CriteriaTriggers.register(SPEND_MANA_TRIGGER);
     }
 
     protected static DisplayInfo simple(ItemLike icon, String name, FrameType frameType) {

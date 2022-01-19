@@ -2,7 +2,7 @@
     "name": "Math",
     "category": "hex:patterns",
     "icon": "minecraft:stick",
-    "sortnum": 3,
+    "sortnum": 2,
     "advancement": "hex:root",
     "read_by_default": true,
     "pages": [
@@ -79,7 +79,7 @@
         },
         {    
             "type": "hex:pattern",
-            "header": "Length Distill",
+            "header": "Length Dstln.",
             "anchor": "OpAbsLen",
             "input": "num/vec",
             "output": "number",
@@ -107,7 +107,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "As such:$(li)With two numbers, combines them by raising the first to the power of the second.$(li)With a number and a vector, removes the number and raises each component of the vector to the number's power.$(li)With two vectors, combines them into the $(l:https://en.wikipedia.org/wiki/Vector_projection)vector projection of the top of the stack onto the second-from-the-top./$$(br2)In the first and second cases, the first argument or its components are the base, and the second argument or its components are the exponent."
+            "text": "$(li)With two numbers, combines them by raising the first to the power of the second.$(li)With a number and a vector, removes the number and raises each component of the vector to the number's power.$(li)With two vectors, combines them into the $(l:https://en.wikipedia.org/wiki/Vector_projection)vector projection/$ of the top of the stack onto the second-from-the-top.$(br2)In the first and second cases, the first argument or its components are the base, and the second argument or its components are the exponent."
         },
         {
             "type": "hex:pattern",

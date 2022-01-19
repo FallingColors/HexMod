@@ -2,7 +2,7 @@
     "name": "Constants",
     "category": "hex:patterns",
     "icon": "minecraft:bedrock",
-    "sortnum": 2,
+    "sortnum": 3,
     "advancement": "hex:root",
     "read_by_default": true,
     "pages": [

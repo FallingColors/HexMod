@@ -1,5 +1,5 @@
 {
-    "name": "Hexcasting Items",
+    "name": "Crafting Hexcasting Items",
     "category": "hex:patterns/spells",
     "icon": "hex:artifact{patterns:[]}",
     "sortnum": 2,
@@ -8,7 +8,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "These three spells each create an item that casts a _Hex.$(br)They all require me to hold the empty item in my off-hand, and require two things: the list of patterns to be cast, and an entity represetning a dropped stack of $(item)Amethyst/$ to form the item's battery.$(br2)See $(l:items/hexcasting)this entry/$ for more information."
+            "text": "These three spells each create an item that casts a _Hex.$(br)They all require me to hold the empty item in my off-hand, and require two things: the list of patterns to be cast, and an entity representing a dropped stack of $(item)Amethyst/$ to form the item's battery.$(br2)See $(l:items/hexcasting)this entry/$ for more information."
         },
         {
             "type": "hex:pattern",

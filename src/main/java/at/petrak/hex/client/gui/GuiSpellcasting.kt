@@ -9,6 +9,7 @@ import at.petrak.hex.common.lib.HexSounds
 import at.petrak.hex.common.network.HexMessages
 import at.petrak.hex.common.network.MsgQuitSpellcasting
 import at.petrak.hex.common.network.MsgShiftScrollSyn
+import at.petrak.hex.hexmath.HexAngle
 import at.petrak.hex.hexmath.HexCoord
 import at.petrak.hex.hexmath.HexDir
 import at.petrak.hex.hexmath.HexPattern
@@ -99,28 +100,37 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 // The player might have a lousy aim, so set the new anchor point to the "ideal"
                 // location as if they had hit it exactly on the nose.
                 val idealNextLoc = anchorCoord + newdir
-                val success = if (!this.usedSpots.contains(idealNextLoc)) {
+                var playSound = false
+                if (!this.usedSpots.contains(idealNextLoc)) {
                     if (this.drawState is PatternDrawState.JustStarted) {
                         val pat = HexPattern(newdir)
 
                         this.drawState = PatternDrawState.Drawing(anchorCoord, idealNextLoc, pat)
-                        true
+                        playSound = true
                     } else if (this.drawState is PatternDrawState.Drawing) {
                         // how anyone gets around without a borrowck is beyond me
                         val ds = (this.drawState as PatternDrawState.Drawing)
-                        val success = ds.wipPattern.tryAppendDir(newdir)
-                        if (success) {
-                            ds.current = idealNextLoc
+                        val lastDir = ds.wipPattern.finalDir()
+                        if (newdir == lastDir.rotatedBy(HexAngle.BACK)) {
+                            // We're diametrically opposite! Do a backtrack
+                            if (ds.wipPattern.angles.isEmpty()) {
+                                this.drawState = PatternDrawState.JustStarted(ds.current + newdir)
+                            } else {
+                                ds.current += newdir
+                                ds.wipPattern.angles.removeLast()
+                            }
+                            playSound = true
+                        } else {
+                            val success = ds.wipPattern.tryAppendDir(newdir)
+                            if (success) {
+                                ds.current = idealNextLoc
+                            }
+                            playSound = success
                         }
-                        success
-                    } else {
-                        false
                     }
-                } else {
-                    false
                 }
 
-                if (success) {
+                if (playSound) {
                     Minecraft.getInstance().soundManager.play(
                         SimpleSoundInstance.forUI(
                             HexSounds.ADD_LINE.get(),
@@ -278,7 +288,10 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
     /** Distance between adjacent hex centers */
     fun hexSize(): Float = this.width.toFloat() / 32.0f
-    fun coordsOffset(): Vec2 = Vec2(0f, this.hexSize())
+    fun coordsOffset(): Vec2 = Vec2(
+        (this.width / 2) % hexSize(),
+        (this.height / 2) % hexSize(),
+    ).negated()
 
     fun coordToPx(coord: HexCoord) = RenderLib.coordToPx(coord, this.hexSize(), this.coordsOffset())
     fun pxToCoord(px: Vec2) = RenderLib.pxToCoord(px, this.hexSize(), this.coordsOffset())

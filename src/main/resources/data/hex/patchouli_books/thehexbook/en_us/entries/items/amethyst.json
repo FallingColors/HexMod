@@ -26,6 +26,10 @@
             "anchor": "charged",
             "link_recipe": true,
             "text": "Finally, I'll rarely find a large crystal crackling with energy. This has about as much _media inside as ten units of $(item)Amethyst Dust/$s (or two $(item)Amethyst Shard/$s)."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "$(italic)The old man sighed and raised a hand toward the fire. He unlocked a part of his brain that held the memories of the mountains around them. He pulled the energies from those lands, as he learned to do in Terisia City with Drafna, Hurkyl, the archimandrite, and the other mages of the Ivory Towers. He concentrated, and the flames writhed as they rose from the logs, twisting upon themselves until they finally formed a soft smile./$"
         }
     ]
 }

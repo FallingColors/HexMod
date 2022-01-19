@@ -8,13 +8,37 @@
     "pages": [
         {
             "type": "hex:pattern",
+            "header": "Scribe's Gambit",
+            "anchor": "OpWrite",
+            "input": "any",
+            "output": "",
+            "text": "Remove the top iota from the stack and save it into the $(item)Focus/$ or $(item)Spellbook/$ in my other hand.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "deeeee"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Scribe's Reflection",
+            "anchor": "OpRead",
+            "input": "",
+            "output": "any",
+            "text": "Copy the iota stored in the $(item)Focus/$ or $(item)Spellbook/$ in my other hand, and add it to the stack.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "aqqqqq"
+            }
+        },
+        {
+            "type": "hex:pattern",
             "header": "Hermes' Gambit",
             "anchor": "OpEval",
             "input": "list of patterns",
             "output": "many",
-            "text": "Remove a list of patterns from the stack, then cast them sequentially, as if I had drawn them myself with my $(item)Staff/$.$(br)Costs about five $(item)Charged Crystal/$s.",
+            "text": "Remove a list of patterns from the stack, then cast them sequentially, as if I had drawn them myself with my $(item)Staff/$.$(br)Costs about five $(item)Charged Amethyst/$s.",
             "patterns": {
-                "startdir": "SOUTH_WEST",
+                "startdir": "SOUTH_EAST",
                 "signature": "deaqq"
             }
         },
@@ -30,7 +54,7 @@
             "output": "many",
             "text": "Remove a list of patterns and a list from the stack, then cast the given pattern over each element of the second list.$(br)Costs about 10 $(item)Charged Amethyst/$s.",
             "patterns": {
-                "startdir": "SOUTH_WEST",
+                "startdir": "NORTH_EAST",
                 "signature": "dadad"
             }
         },

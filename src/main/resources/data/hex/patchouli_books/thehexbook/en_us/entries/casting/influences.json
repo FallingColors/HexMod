@@ -11,11 +11,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "Anyways, what follows is a list of all the influences I've discovered:$(li)Null, representing nothingness.$(li)Introspection and Retrospection. Drawing Introspection, a bunch of patterns, and then Retrospection will push those middle patterns onto the stack as a list of patterns. The pair is used for the crafting of magical items."
-        },
-        {
-            "type": "patchouli:text",
-            "text": "$(li)Consideration. Drawing this and then another pattern will \"escape\" the second pattern and push it onto the stack, instead of trying to match it to an action."
+            "text": "In addition, I've discovered a curious triplet of influences I've named Consideration, Introspection, and Retrospection. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:casting/patterns_as_iotas)My notes on the subject are here/$."
         }
-    ]
+    ] 
 }

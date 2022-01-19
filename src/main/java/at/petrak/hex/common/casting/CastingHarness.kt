@@ -6,8 +6,8 @@ import at.petrak.hex.api.RenderedSpell
 import at.petrak.hex.api.SpellDatum
 import at.petrak.hex.common.items.ItemWand
 import at.petrak.hex.common.items.magic.ItemPackagedSpell
-import at.petrak.hex.common.lib.LibDamageSources
 import at.petrak.hex.common.lib.HexStatistics
+import at.petrak.hex.common.lib.LibDamageSources
 import at.petrak.hex.datagen.Advancements
 import at.petrak.hex.hexmath.HexPattern
 import net.minecraft.nbt.CompoundTag
@@ -50,7 +50,6 @@ class CastingHarness private constructor(
                 if (this.escapeNext) {
                     this.escapeNext = false
                     this.parenthesized.add(newPat)
-                    HexMod.LOGGER.info("Escaping onto parenthesized")
                 } else if (operator == Widget.ESCAPE) {
                     this.escapeNext = true
                 } else if (operator == Widget.OPEN_PAREN) {
@@ -60,8 +59,8 @@ class CastingHarness private constructor(
                 } else if (operator == Widget.CLOSE_PAREN) {
                     this.parenCount--
                     if (this.parenCount == 0) {
-                        HexMod.LOGGER.info("Finished parenthesizing things")
                         this.stack.add(SpellDatum.make(this.parenthesized.map { SpellDatum.make(it) }))
+                        this.parenthesized.clear()
                     } else if (this.parenCount < 0) {
                         throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
                     } else {
@@ -74,7 +73,6 @@ class CastingHarness private constructor(
                 }
             } else if (this.escapeNext) {
                 this.escapeNext = false
-                HexMod.LOGGER.info("Escaping onto stack")
                 this.stack.add(SpellDatum.make(newPat))
             } else if (operator == Widget.ESCAPE) {
                 this.escapeNext = true
@@ -95,11 +93,6 @@ class CastingHarness private constructor(
                 if (ctx.caster.isDeadOrDying)
                     return CastResult.Died
             }
-
-            if (this.parenCount > 0) {
-                HexMod.LOGGER.info("Paren level ${this.parenCount}; ${this.parenthesized}")
-            }
-            HexMod.LOGGER.info("New stack: ${this.stack.map { it.display() }}")
 
             if (spellsToCast.isNotEmpty()) {
                 CastResult.Cast(spellsToCast, this.stack.isEmpty())

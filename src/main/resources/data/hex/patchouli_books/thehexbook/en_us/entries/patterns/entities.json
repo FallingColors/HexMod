@@ -20,7 +20,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Rfxn.: Animal",
+            "header": "Entity Dstln.: Animal",
             "anchor": "OpGetEntityAtAnimal",
             "input": "vector",
             "output": "entity or null",
@@ -32,7 +32,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Rfxn.: Monster",
+            "header": "Entity Dstln.: Monster",
             "anchor": "OpGetEntityAtMonster",
             "input": "vector",
             "output": "entity or null",
@@ -44,7 +44,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Rfxn.: Item",
+            "header": "Entity Dstln.: Item",
             "anchor": "OpGetEntityAtItem",
             "input": "vector",
             "output": "entity or null",
@@ -56,7 +56,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Rfxn.: Player",
+            "header": "Entity Dstln.: Player",
             "anchor": "OpGetEntityAtPlayer",
             "input": "vector",
             "output": "entity or null",
@@ -68,7 +68,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Rfxn.: Living",
+            "header": "Entity Dstln.: Living",
             "anchor": "OpGetEntityAtLiving",
             "input": "vector",
             "output": "entity or null",
@@ -80,7 +80,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Any",
+            "header": "Zone Dstln.: Any",
             "anchor": "OpGetEntitiesBy",
             "input": "vector, number",
             "output": "list of entities",
@@ -92,7 +92,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Animal",
+            "header": "Zone Dstln.: Animal",
             "anchor": "OpGetEntitiesByAnimal",
             "input": "vector, number",
             "output": "list of entities",
@@ -104,7 +104,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Non-Animal",
+            "header": "Zone Dstln.: Non-Animal",
             "anchor": "OpGetEntitiesByAnimalNot",
             "input": "vector, number",
             "output": "list of entities",
@@ -116,7 +116,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Monster",
+            "header": "Zone Dstln.: Monster",
             "anchor": "OpGetEntitiesByMonster",
             "input": "vector, number",
             "output": "list of entities",
@@ -128,7 +128,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Non-Monster",
+            "header": "Zone Dstln.: Non-Monster",
             "anchor": "OpGetEntitiesByMonsterNot",
             "input": "vector, number",
             "output": "list of entities",
@@ -140,7 +140,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Item",
+            "header": "Zone Dstln.: Item",
             "anchor": "OpGetEntitiesByItem",
             "input": "vector, number",
             "output": "list of entities",
@@ -152,7 +152,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Non-Item",
+            "header": "Zone Dstln.: Non-Item",
             "anchor": "OpGetEntitiesByItemNot",
             "input": "vector, number",
             "output": "list of entities",
@@ -164,7 +164,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Player",
+            "header": "Zone Dstln.: Player",
             "anchor": "OpGetEntitiesByPlayer",
             "input": "vector, number",
             "output": "list of entities",
@@ -176,7 +176,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Non-Player",
+            "header": "Zone Dstln.: Non-Player",
             "anchor": "OpGetEntitiesByPkaterNot",
             "input": "vector, number",
             "output": "list of entities",
@@ -188,7 +188,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Living",
+            "header": "Zone Dstln.: Living",
             "anchor": "OpGetEntitiesByLiving",
             "input": "vector, number",
             "output": "list of entities",
@@ -200,7 +200,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Zone Rfxn.: Non-Living",
+            "header": "Zone Dstln.: Non-Living",
             "anchor": "OpGetEntitiesByLivingNot",
             "input": "vector, number",
             "output": "list of entities",
