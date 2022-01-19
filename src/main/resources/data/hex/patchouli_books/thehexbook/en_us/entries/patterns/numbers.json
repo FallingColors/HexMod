@@ -57,7 +57,7 @@
         {
             "type": "hex:pattern_nosig",
             "header": "Example 4",
-            "text": "This pattern pushes 4.5: 5 / 2 + 1 + 1",
+            "text": "This pattern pushes 4.5: 5 / 2 + 1 + 1.",
             "patterns": {
                 "startdir": "SOUTH_EAST",
                 "signature": "aqaaqdww"

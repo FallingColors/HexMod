@@ -22,9 +22,9 @@
             "hex:add_pattern"
         ]
     },
-    "casting.ambience": {
+    "casting.ambiance": {
         "sounds": [
-            "hex:casting_ambience"
+            "hex:casting_ambiance"
         ]
     },
     "casting.cast": {

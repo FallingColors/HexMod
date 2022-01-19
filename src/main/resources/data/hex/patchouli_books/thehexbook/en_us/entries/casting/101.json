@@ -7,7 +7,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "Casting a _Hex is quite difficult-- no wonder this art was lost to time! I'll have to re-read my notes carefully.$(br2)I can start a _Hex by pressing $(k:use) with a $(item)Staff/$ in my hand-- this will cause a triangular grid of dots to appear in front of me. Then I can click and drag from dot to dot to draw patterns in the _media of the grid; finishing a pattern will run its corresponding action (more on that later)."
+            "text": "Casting a _Hex is quite difficult-- no wonder this art was lost to time! I'll have to re-read my notes carefully.$(br2)I can start a _Hex by pressing $(k:use) with a $(item)Staff/$ in my hand-- this will cause a hexagonal grid of dots to appear in front of me. Then I can click and drag from dot to dot to draw patterns in the _media of the grid; finishing a pattern will run its corresponding action (more on that later)."
         },
         {
             "type": "patchouli:text",
@@ -20,7 +20,7 @@
         {
             "type": "hex:pattern_nosig",
             "header": "An Example",
-            "text": "It's interesting to note that the $(italic)rotation/$ of a pattern in doesn't seem to matter at all. These two patterns both perform the $(action)Mind's Reflection/$, for example.",
+            "text": "It's interesting to note that the $(italic)rotation/$ of a pattern doesn't seem to matter at all. These two patterns both perform the $(action)Mind's Reflection/$, for example.",
             "patterns": [{
                 "startdir": "NORTH_EAST",
                 "signature": "qaq"
@@ -36,7 +36,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "For example, the $(l:patterns/basic#OpGetCaster)$(action)Mind's Reflection/$ will create an iota representing $(italic)me/$, the caster, and add it to the top of the stack. The $(l:patterns/basic#OpentityPos)$(action)Compass Purification/$ will take the iota at the top the stack, if it represents an entity, and transform it into an iota representing that entity's location.$(br2)So, drawing those patterns in that order would result in an iota on the stack representing my position.$(p)(If I find I am not quite sure what a stack is, I might want to read $(l:casting/stack)this entry on the subject$(/l).)"
+            "text": "For example, the $(l:patterns/basic#OpGetCaster)$(action)Mind's Reflection/$ will create an iota representing $(italic)me/$, the caster, and add it to the top of the stack. The $(l:patterns/basic#OpentityPos)$(action)Compass Purification/$ will take the iota at the top the stack, if it represents an entity, and transform it into an iota representing that entity's location.$(br2)So, drawing those patterns in that order would result in an iota on the stack representing my position."
         },
         {
             "type": "patchouli:text",
@@ -44,7 +44,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "$(li)Entities, like myself, chickens, and minecarts;$(li)Influences, peculiar types of iota that seem to represent abstract ideas; and$(li)Patterns themselves, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$$(li)And a list of several of the above, gathered into a single iota."
+            "text": "$(li)Entities, like myself, chickens, and minecarts;$(li)Influences, peculiar types of iota that seem to represent abstract ideas;$(li)Patterns themselves, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$; and$(li)A list of several of the above, gathered into a single iota."
         },
         {
             "type": "patchouli:text",

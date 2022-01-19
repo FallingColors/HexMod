@@ -35,7 +35,7 @@
             "type": "patchouli:crafting",
             "anchor": "artifact",
             "recipe": "hex:artifact",
-            "text": "$(italic)We have a saying in our field: 'Magic isn't'. It doesn't 'just work', it doesn't respond to your thoughts, you can't throw fireballs or create a roast dinner from thin air or turn a bunch of muggers into frogs and snails./$"
+            "text": "$(italic)We have a saying in our field: \"Magic isn't\". It doesn't \"just work,\" it doesn't respond to your thoughts, you can't throw fireballs or create a roast dinner from thin air or turn a bunch of muggers into frogs and snails./$"
         }
     ]
 }

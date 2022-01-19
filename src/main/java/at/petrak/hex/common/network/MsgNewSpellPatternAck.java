@@ -1,6 +1,7 @@
 package at.petrak.hex.common.network;
 
 import at.petrak.hex.client.gui.GuiSpellcasting;
+import at.petrak.hex.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -53,7 +54,9 @@ public record MsgNewSpellPatternAck(boolean quitCasting, List<String> stackDesc)
                     var screen = Minecraft.getInstance().screen;
                     if (screen instanceof GuiSpellcasting) {
                         if (this.quitCasting) {
-                            Minecraft.getInstance().setScreen(null);
+                            var mc = Minecraft.getInstance();
+                            mc.setScreen(null);
+                            mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getId(), null);
                         } else {
                             var spellGui = (GuiSpellcasting) screen;
                             spellGui.setStackDescs(this.stackDesc);

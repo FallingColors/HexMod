@@ -196,7 +196,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     override fun onClose() {
         HexMessages.getNetwork().sendToServer(MsgQuitSpellcasting())
 
-        this.ambianceSoundInstance?.let { Minecraft.getInstance().soundManager.stop(it) }
+        Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.id, null)
 
         super.onClose()
     }

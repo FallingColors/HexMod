@@ -8,7 +8,7 @@
     "pages": [
         {
             "type": "hex:pattern",
-            "header": "Entity Distillation",
+            "header": "Entity Purification",
             "anchor": "OpGetEntityAt",
             "input": "vector",
             "output": "entity or null",
@@ -20,7 +20,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Dstln.: Animal",
+            "header": "Entity Prfn.: Animal",
             "anchor": "OpGetEntityAtAnimal",
             "input": "vector",
             "output": "entity or null",
@@ -32,7 +32,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Dstln.: Monster",
+            "header": "Entity Prfn.: Monster",
             "anchor": "OpGetEntityAtMonster",
             "input": "vector",
             "output": "entity or null",
@@ -44,7 +44,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Dstln.: Item",
+            "header": "Entity Prfn.: Item",
             "anchor": "OpGetEntityAtItem",
             "input": "vector",
             "output": "entity or null",
@@ -56,7 +56,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Dstln.: Player",
+            "header": "Entity Prfn.: Player",
             "anchor": "OpGetEntityAtPlayer",
             "input": "vector",
             "output": "entity or null",
@@ -68,7 +68,7 @@
         },
         {
             "type": "hex:pattern",
-            "header": "Entity Dstln.: Living",
+            "header": "Entity Prfn.: Living",
             "anchor": "OpGetEntityAtLiving",
             "input": "vector",
             "output": "entity or null",
@@ -76,18 +76,6 @@
             "patterns": {
                 "startdir": "NORTH_WEST",
                 "signature": "qqqqqdaqaawd"
-            }
-        },
-        {
-            "type": "hex:pattern",
-            "header": "Zone Dstln.: Any",
-            "anchor": "OpGetEntitiesBy",
-            "input": "vector, number",
-            "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of entities near the position.",
-            "patterns": {
-                "startdir": "NORTH_WEST",
-                "signature": "qqqqqwded"
             }
         },
         {
@@ -208,6 +196,18 @@
             "patterns": {
                 "startdir": "SOUTH_WEST",
                 "signature": "eeeeewaqaawd"
+            }
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Zone Dstln.: Any",
+            "anchor": "OpGetEntitiesBy",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of all entities near the position.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwded"
             }
         }
     ]
