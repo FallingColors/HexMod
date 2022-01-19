@@ -25,16 +25,15 @@ data class HexCoord(val q: Int, val r: Int) {
 
     // https://docs.rs/hex2d/1.1.0/src/hex2d/lib.rs.html#785
     private class RingIter(val center: HexCoord, val radius: Int) : Iterator<HexCoord> {
-        var q: Int = -center.r
-        var r: Int = max(-center.r, -(-center.r) - center.r) // i could not tell you what the hell this line does
+        var q: Int = -radius
+        var r: Int = max(-radius, 0)
 
-        // de bruin's rule on the original code? i have no idea what any of this does?
-        override fun hasNext(): Boolean = r <= min(radius, -q + radius) || this.q < radius
+        override fun hasNext(): Boolean = r <= radius + min(0, -q) || q < radius
 
         override fun next(): HexCoord {
-            if (r > min(radius, -q + radius)) {
+            if (r > radius + min(0, -q)) {
                 q++
-                r = max(-center.r, -q - center.r)
+                r = -radius + max(0, -q)
             }
             val out = HexCoord(center.q + q, center.r + r)
             r++

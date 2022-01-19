@@ -288,10 +288,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
     /** Distance between adjacent hex centers */
     fun hexSize(): Float = this.width.toFloat() / 32.0f
-    fun coordsOffset(): Vec2 = Vec2(
-        (this.width / 2) % hexSize(),
-        (this.height / 2) % hexSize(),
-    ).negated()
+    fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)
 
     fun coordToPx(coord: HexCoord) = RenderLib.coordToPx(coord, this.hexSize(), this.coordsOffset())
     fun pxToCoord(px: Vec2) = RenderLib.pxToCoord(px, this.hexSize(), this.coordsOffset())
