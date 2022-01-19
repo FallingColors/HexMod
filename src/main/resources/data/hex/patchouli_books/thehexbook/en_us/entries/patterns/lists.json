@@ -12,7 +12,7 @@
             "anchor": "OpIndex",
             "input": "list, number",
             "output": "any",
-            "text": "Select the nth element from the list.",
+            "text": "Remove the number at the top of the stack, then replace the list at the top with the nth element of that list (where n is the number you removed). Replaces the list with Null if the number is out of bounds.",
             "patterns": {
                 "startdir": "NORTH_WEST",
                 "signature": "deeed"
@@ -24,7 +24,7 @@
             "anchor": "OpAppend",
             "input": "list, any",
             "output": "any",
-            "text": "Put the value onto the end of the list.",
+            "text": "Remove the top of the stack, then add it to the end of the list at the top of the stack.",
             "patterns": {
                 "startdir": "SOUTH_WEST",
                 "signature": "edqde"
@@ -36,7 +36,7 @@
             "anchor": "OpConcat",
             "input": "list, list",
             "output": "list",
-            "text": "Join the two lists together, putting the second list's elements after the first list's.",
+            "text": "Remove the list at the top of the stack, then add all its elements to the end of the list at the top of the stack.",
             "patterns": {
                 "startdir": "NORTH_WEST",
                 "signature": "qaeaq"

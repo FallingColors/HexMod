@@ -7,7 +7,7 @@
     "pages": [
         {
             "type": "patchouli:text", 
-            "text": "A $(item)Focus/$ stores an iota.$(br2)When I craft it, it starts with nothing in it. Using $(action)Scribe's Gambit/$ while holding one in my other hand will pop the stack and save the iota into the $(item)Focus/$. Using $(action)Scribe's Reflection/$ will copy whatever's in the $(item)Focus/$ and push it onto the stack."
+            "text": "A $(item)Focus/$ can store a single iota.$(br2)When I craft it, it holds the Null influence by default. Using the $(action)Scribe's Gambit/$ while holding a $(item)Focus/$ in my other hand will remove the top of the stack and save it into the $(item)Focus/$. Using the $(action)Scribe's Reflection/$ will copy whatever iota's in the $(item)Focus/$ and add it to the stack."
         },
         {
             "type": "patchouli:crafting",
@@ -16,11 +16,11 @@
         },
         {
             "type": "patchouli:text",
-            "text": "It occurs to me I could store a list of patterns in a $(item)Focus/$, and later recall them and evaluate them with $(l:patterns/meta#OpEval)$(action)Hermes' Gambit/$. This way I can cast complex spells, or parts of spells, without having to draw them over and over.$(br2)I can use this like a slightly-less-convenient $(l:items/hexcasting#artifact)$(item)Artifact/$, but the real power comes from putting common \"phrases\" in a $(item)Focus/$, like the patterns for raycasting from my position and look."
+            "text": "It occurs to me that I could conceivably store a whole list of patterns in a $(item)Focus/$, then recall them and evaluate them with $(l:patterns/meta#OpEval)$(action)Hermes' Gambit/$. This way I can cast complex spells, or parts of spells, without having to draw them over and over.$(br2)I could use this like a slightly less convenient $(l:items/hexcasting#artifact)$(item)Artifact/$, but I think I could get much better dividends by putting common \"phrases\" in a $(item)Focus/$, like the patterns for figuring out where I'm looking."
         },
         {
             "type": "patchouli:text",
-            "text": "Also, if I store an entity in a $(item)Focus/$ and try to recall it after it has died or otherwise disappeared, it will read Null instead."
+            "text": "Also, if I store an entity in a $(item)Focus/$ and try to recall it after the referenced entity has died or otherwise disappeared, the $(action)Scribe's Reflection/$ will add Null to the stack instead."
         }
     ]
 }

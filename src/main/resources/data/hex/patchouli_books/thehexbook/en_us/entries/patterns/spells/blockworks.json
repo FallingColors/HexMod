@@ -12,7 +12,7 @@
             "anchor": "OpPlaceBlock",
             "input": "vector",
             "output": "",
-            "text": "Pick a block item and place it at the given location.$(br)Costs about 1 $(item)Amethyst Dust/$.",
+            "text": "Remove a location from the stack, then pick a block item and place it at the given location.$(br)Costs about 1 $(item)Amethyst Dust/$.",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "qaqqqqq"
@@ -24,7 +24,7 @@
             "anchor": "OpBreakBlock",
             "input": "vector",
             "output": "",
-            "text": "Break the block at the given location, up to anything a Diamond Pickaxe can break.$(br)Costs about 3 $(item)Amethyst Dust/$s.",
+            "text": "Remove a location from the stack, then break the block at the given location. This spell can break nearly anything a Diamond Pickaxe can break.$(br)Costs about 3 $(item)Amethyst Dust/$s.",
             "patterns": {
                 "startdir": "SOUTH_EAST",
                 "signature": "eeeeede"

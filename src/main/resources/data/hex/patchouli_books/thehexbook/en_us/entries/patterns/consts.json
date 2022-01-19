@@ -11,7 +11,7 @@
             "header": "Axial Reflection +X/-X",
             "input": "",
             "output": "vector",
-            "text": "The left-hand counter-clockwise pattern pushes (1, 0, 0); the right-hand clockwise pattern pushes (-1, 0, 0).",
+            "text": "The left-hand counter-clockwise pattern adds (1, 0, 0) to the stack; the right-hand clockwise pattern adds (-1, 0, 0).",
             "patterns": [{
                 "startdir": "NORTH_WEST",
                 "signature": "qqqqqea",
@@ -28,7 +28,7 @@
             "header": "Axial Reflection +Y/-Y",
             "input": "",
             "output": "vector",
-            "text": "The left-hand counter-clockwise pattern pushes (0, 1, 0); the right-hand clockwise pattern pushes (0, -1, 0).",
+            "text": "The left-hand counter-clockwise pattern adds (0, 1, 0) to the stack; the right-hand clockwise pattern adds (0, -1, 0).",
             "patterns": [{
                 "startdir": "NORTH_WEST",
                 "signature": "qqqqqew",
@@ -45,7 +45,7 @@
             "header": "Axial Reflection +Z/-Z",
             "input": "",
             "output": "vector",
-            "text": "The left-hand counter-clockwise pattern pushes (0, 0, 1); the right-hand clockwise pattern pushes (0, 0, -1).",
+            "text": "The left-hand counter-clockwise pattern adds (0, 0, 1); the right-hand clockwise pattern adds (0, 0, -1).",
             "patterns": [{
                 "startdir": "NORTH_WEST",
                 "signature": "qqqqqed",
@@ -62,7 +62,7 @@
             "header": "Nullary Reflection",
             "input": "",
             "output": "influence",
-            "text": "Pushes the Null influence.",
+            "text": "Adds the Null influence to the top of the stack.",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "a"

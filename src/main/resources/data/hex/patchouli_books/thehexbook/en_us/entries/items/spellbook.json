@@ -7,7 +7,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "A $(item)Spellbook/$ might be considered the culmination of my art. It acts much like an entire library of $(l:items/focus)$(item)Foci/$.$(br2)Each page can hold a single iota. I can select the active page that reads and writes will happen on by sneak-scrolling while holding it, or simply scrolling if it's in my other hand while casting a _Hex."
+            "text": "A $(item)Spellbook/$ is the culmination of my art-- it acts like an entire library of $(l:items/focus)$(item)Foci/$.$(br2)Each page can hold a single iota, and I can select the active page (the page that iotas are saved to and copied from) by sneak-scrolling while holding it, or simply holding it in my off-hand and scrolling while casting a _Hex."
         },
         {
             "type": "patchouli:crafting",

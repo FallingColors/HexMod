@@ -14,7 +14,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "Secondly, it seems the practitioners of the $(thing)Psionic/$ arts had composed some quite effective lessons on vectors to teach their acolytes. I've taken the liberty of making a link on the next page.$(br2)Psionicists use different language for their spellcasting:$(li)A \"Spell Piece\" is their name for an action$(li)A \"Trick\" is their name for a spell$(li)An \"Operator\" is their name for a non-spell action"
+            "text": "Additionally, it seems that the mages who manipulated $(thing)Psi energy/$ (the so-called \"spellslingers\"), despite their poor naming sense, had some quite-effective lessons on vectors to teach their acolytes. I've taken the liberty of linking to one of their texts on the next page.$(br2)They seem to have used different language for their spellcasting:$(li)A \"Spell Piece\" was their name for an action;$(li)a \"Trick\" was their name for a spell; and$(li)an \"Operator\" was their name for a non-spell Action."
         },
         {
             "type": "patchouli:link",

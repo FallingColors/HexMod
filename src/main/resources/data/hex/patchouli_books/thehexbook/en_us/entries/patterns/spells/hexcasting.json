@@ -8,7 +8,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "These three spells each create an item that casts a _Hex.$(br)They all require me to hold the empty item in my off-hand, and provide a stack of $(item)Amethyst/$ as an $(italic)item entity/$ to form the item's battery, as well as the list of patterns to be cast.$(br2)See $(l:items/hexcasting)this entry/$ for more information."
+            "text": "These three spells each create an item that casts a _Hex.$(br)They all require me to hold the empty item in my off-hand, and require two things: the list of patterns to be cast, and an entity represetning a dropped stack of $(item)Amethyst/$ to form the item's battery.$(br2)See $(l:items/hexcasting)this entry/$ for more information."
         },
         {
             "type": "hex:pattern",

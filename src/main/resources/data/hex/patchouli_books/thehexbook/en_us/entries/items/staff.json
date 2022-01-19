@@ -8,7 +8,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "A $(item)Staff/$ is my entry into casting _Hexes. By holding it and pressing $(thing)$(k:use)/$, I start casting a _Hex, and can click and drag to draw patterns.$(br2)It's little more than a chunk of _media on the end of a stick, for that's all that is needed."
+            "text": "A $(item)Staff/$ is my entry point into casting all _Hexes, large and small. By holding it and pressing $(thing)$(k:use)/$, I begin casting a _Hex; then I can click and drag to draw patterns.$(br2)It's little more than a chunk of _media on the end of a stick; that's all that's needed, after all."
         },
         {
             "type": "patchouli:crafting",

@@ -12,7 +12,7 @@
             "anchor": "OpEval",
             "input": "list of patterns",
             "output": "many",
-            "text": "Evaluate a list of patterns, as if I had drawn them myself with my $(item)Staff/$.$(br)Costs about five $(item)Charged Crystal/$s.",
+            "text": "Remove a list of patterns from the stack, then cast them sequentially, as if I had drawn them myself with my $(item)Staff/$.$(br)Costs about five $(item)Charged Crystal/$s.",
             "patterns": {
                 "startdir": "SOUTH_WEST",
                 "signature": "deaqq"
@@ -20,7 +20,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$; see that entry for my thoughts on the subject.$(br2)It also makes the bureaucracy of Nature a \"turing-complete\" system, according to one esoteric scroll I found.$(br2)It seems there's a limit to how many times a _Hex can cast itself, to avoid runaway spells."
+            "text": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$.$(br2)It also makes the bureaucracy of Nature a \"Turing-complete\" system, according to one esoteric scroll I found.$(br2)However, it seems there's a limit to how many times a _Hex can cast itself-- Nature doesn't look kindly on runaway spells!"
         },
         {
             "type": "hex:pattern",
@@ -28,7 +28,7 @@
             "anchor": "OpEval",
             "input": "list of patterns, list",
             "output": "many",
-            "text": "Cast a _Hex over each element of the second list.$(br)Costs about 10 $(item)Charged Amethyst/$s.",
+            "text": "Remove a list of patterns and a list from the stack, then cast the given pattern over each element of the second list.$(br)Costs about 10 $(item)Charged Amethyst/$s.",
             "patterns": {
                 "startdir": "SOUTH_WEST",
                 "signature": "dadad"
@@ -36,7 +36,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "More specifically, for each element in the second list:$(li)Creates a new stack, with everything on the current stack plus that element$(li)Draws all the patterns in the first list$(li)Saves all the iotas on the sub-stack$(br)Then, after all is said and done, pushes all the iotas saved from the sub-stacks onto the main stack.$(br2)No wonder all the practitioners of this art go mad."
+            "text": "More specifically, for each element in the second list, it will:$(li)Creates a new stack, with everything on the current stack plus that element$(li)Draw all the patterns in the first list$(li)Save all the iotas remaining on the stack to a list$(br)Then, after all is said and done, pushes the list of saved iotas onto the main stack.$(br2)No wonder all the practitioners of this art go mad."
         }
     ]
 }

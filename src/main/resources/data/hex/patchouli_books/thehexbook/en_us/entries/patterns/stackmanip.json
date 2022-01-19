@@ -12,7 +12,7 @@
             "anchor": "OpUndo",
             "input": "any",
             "output": "",
-            "text": "Pops the stack and does nothing with it. This is handy when I make a mistake.",
+            "text": "Removes the top of the stack and does nothing with it. This is handy when I make a mistake.",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "a"

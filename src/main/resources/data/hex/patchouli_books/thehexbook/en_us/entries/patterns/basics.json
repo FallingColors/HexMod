@@ -12,7 +12,7 @@
             "anchor": "OpGetCaster",
             "input": "",
             "output": "entity",
-            "text": "Returns me, the caster.",
+            "text": "Adds me, the caster, to the stack.",
             "patterns": [
                 {
                     "startdir": "SOUTH_WEST",
@@ -31,7 +31,7 @@
             "anchor": "OpEntityPos",
             "input": "entity",
             "output": "vector",
-            "text": "Returns the entity's position.",
+            "text": "Transforms an entity on the stack into its position.",
             "patterns": [
                 {
                     "startdir": "SOUTH_WEST",
@@ -50,7 +50,7 @@
             "anchor": "OpEntityLook",
             "input": "entity",
             "output": "vector",
-            "text": "Returns the direction the entity is looking in as a unit vector.",
+            "text": "Transforms an entity on the stack into the direction it's looking in, as a unit vector.",
             "patterns": [
                 {
                     "startdir": "EAST",
@@ -89,7 +89,7 @@
             "anchor": "OpBlockRaycast",
             "input": "vector, vector",
             "output": "vector",
-            "text": "Return the coordinate of the first block hit by a line starting at the first vector and going in the direction of the second vector, or Null if it doesn't hit anything.",
+            "text": "Combines two vectors (a position and a direction) into the answer to the question: If I stood at the position and looked in the direction, what block would I be looking at? If it doesn't hit anything, the vectors will combine into Null.",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "wqaawdd"
@@ -97,7 +97,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "For example, casting this with my position and look vectors will return the coordinates of the block I am looking at."
+            "text": "For example, casting this with my own position and look vectors will return the coordinates of the block I am looking at."
         },
         {
             "type": "hex:pattern",
@@ -105,7 +105,7 @@
             "anchor": "OpBlockAxisRaycast",
             "input": "vector, vector",
             "output": "vector",
-            "text": "Like $(l:patterns/basics#OpBlockRaycast)$(action)Archer's Distillation$(/l), but instead returns a vector representing the $(italic)side/$ of the block the line hits.",
+            "text": "Like $(l:patterns/basics#OpBlockRaycast)$(action)Archer's Distillation$(/l), but instead returns a vector representing the answer to the question: Which $(italic)side/$ of the block am I looking at?",
             "patterns": {
                 "startdir": "EAST",
                 "signature": "weddwaa"

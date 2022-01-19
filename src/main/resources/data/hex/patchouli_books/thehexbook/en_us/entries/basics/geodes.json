@@ -7,15 +7,15 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "Aha! While mining deep underground, I found an enormous geode crackling with energy, energy pressing against my skull and my thoughts. This $(italic)must/$ be the place spoken about in legends where _media accumulates.$(br2)These amethyst crystals must be a $(thing)convenient, solidified form of _Media/$."
+            "text": "Aha! While mining deep underground, I found an enormous geode resonating with energy-- energy which pressed against my skull and my thoughts. This $(italic)must/$ be the place spoken about in legends where _media accumulates.$(br2)These amethyst crystals must contain a $(thing)convenient, solidified form of _Media/$."
         },
         {
             "type": "patchouli:text",
-            "text": "It appears that, in addition to the $(item)Amethyst Shards/$ I may be used to, these crystals also drop $(item)Amethyst Dust/$ or $(item)Charged Amethyst Crystals/$. It looks like I'll have a better chance of finding a crystal cluster with a $(item)Charged Amethyst Crystal/$ in it by using a Fortune pickaxe."
+            "text": "It appears that, in addition to the $(item)Amethyst Shards/$ I usually see, these crystals can also drop $(item)Amethyst Dust/$ and $(item)Charged Amethyst Crystals/$. It looks like I'll have a better chance of finding $(item)Charged Amethyst Crystals/$ by using a Fortune pickaxe."
         },
         {
             "type": "patchouli:text",
-            "text": "Connections are flashing wildly in my mind as I take the beauty of the geode in. It's like the _media in the air is entering me, empowering me, elucidating me ... It feels wonderful.$(br2)I suppose this is where my study into the arcane starts to make any kind of sense! Let me study those old legends again now that I know what I'm looking at."
+            "text": "As I take the beauty of the geode in, I can feel connections flashing wildly in my mind. It's like the _media in the air is entering me, empowering me, elucidating me... It feels wonderful.$(br2)Finally, my study into the arcane is starting to make some sense!$(p)Let me reread those old legends again, now that I know what I'm looking at."
         }
     ]
 }

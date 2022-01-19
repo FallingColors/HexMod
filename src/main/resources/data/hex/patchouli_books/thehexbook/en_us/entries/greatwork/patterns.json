@@ -20,7 +20,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "The entity (which must be a player) is the recipient of the power of flight. The first number is the number of seconds they will gain flight for, and the second number is the radius in blocks the spell is active within. If the recipient exits that radius from the point the spell is cast at, or their timer runs out, they immediately fall to the earth at supernatural speed.$(br2)It costs approximately 1 $(item)Amethyst Dust/$ per the time in seconds mutiplied by the radius."
+            "text": "The entity (which must be a player) will receive the power of flight. The first number is the number of seconds they may fly for, and the second number is the radius of the zone they may fly in. If the recipient exits that zone, or their timer runs out while midair, the gravity that they spurned will get its revenge. Painfully.$(br2)It costs approximately 1 $(item)Amethyst Dust/$ multiplied by the radius, per second of flight."
         },
         {
             "type": "hex:pattern",
@@ -28,7 +28,7 @@
             "anchor": "OpLightning",
             "input": "vector",
             "output": "",
-            "text": "I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it.",
+            "text": "I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it.$(p)...I should probably not cast it on my own location.",
             "hex_size": 6,
             "patterns": {
                 "startdir": "EAST",
