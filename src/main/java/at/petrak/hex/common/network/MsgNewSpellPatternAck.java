@@ -51,12 +51,15 @@ public record MsgNewSpellPatternAck(boolean quitCasting, List<String> stackDesc)
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() ->
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                    var mc = Minecraft.getInstance();
+                    if (this.quitCasting) {
+                        // don't pay attention to the screen, so it also stops when we die
+                        mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getId(), null);
+                    }
                     var screen = Minecraft.getInstance().screen;
                     if (screen instanceof GuiSpellcasting) {
                         if (this.quitCasting) {
-                            var mc = Minecraft.getInstance();
                             mc.setScreen(null);
-                            mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getId(), null);
                         } else {
                             var spellGui = (GuiSpellcasting) screen;
                             spellGui.setStackDescs(this.stackDesc);

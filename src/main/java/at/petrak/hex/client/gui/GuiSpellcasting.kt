@@ -156,6 +156,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 this.drawState = PatternDrawState.BetweenPatterns
                 if (this.patterns.isEmpty()) {
                     Minecraft.getInstance().setScreen(null)
+                    Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.id, null)
                 }
             }
             is PatternDrawState.Drawing -> {
