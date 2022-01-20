@@ -107,14 +107,30 @@ object RenderLib {
      * you have to do the conversion yourself.)
      */
     @JvmStatic
-    fun drawPattern(mat: Matrix4f, points: List<Vec2>, drawLast: Boolean, r: Int, g: Int, b: Int, a: Int, animTime: Float? = null) {
-        fun dodge(n: Int): Float { return n * 0.9f }
+    fun drawPattern(
+        mat: Matrix4f,
+        points: List<Vec2>,
+        drawLast: Boolean,
+        r: Int,
+        g: Int,
+        b: Int,
+        a: Int,
+        animTime: Float? = null
+    ) {
+        fun dodge(n: Int): Float {
+            return n * 0.9f
+        }
+
         fun screen(n: Int): Int {
             return (n + 255) / 2
         }
 
         val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f)
-        val nodes = if (drawLast) { points } else { points.dropLast(1) }
+        val nodes = if (drawLast) {
+            points
+        } else {
+            points.dropLast(1)
+        }
         drawLineSeq(mat, zappyPts, 5f, 0f, r, g, b, a, null)
         drawLineSeq(mat, zappyPts, 2f, 1f, screen(r), screen(g), screen(b), a, animTime)
         for (node in nodes) {
@@ -189,8 +205,8 @@ object RenderLib {
         // run 0 AND last; this way the circle closes
         for (i in 0..fracOfCircle) {
             val theta = i.toFloat() / fracOfCircle * HexUtils.TAU.toFloat()
-            val rx = Mth.sin(theta) * radius + point.x
-            val ry = Mth.cos(theta) * radius + point.y
+            val rx = Mth.cos(theta) * radius + point.x
+            val ry = Mth.sin(theta) * radius + point.y
             buf.vertex(mat, rx, ry, 1f).color(r, g, b, a).endVertex()
         }
 
