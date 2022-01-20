@@ -8,7 +8,6 @@ import at.petrak.hex.common.lib.HexStatistics;
 import at.petrak.hex.common.lib.LibCapabilities;
 import at.petrak.hex.common.network.HexMessages;
 import at.petrak.hex.datagen.Advancements;
-import at.petrak.hex.datagen.LootModifiers;
 import at.petrak.hex.server.TickScheduler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,7 +40,6 @@ public class HexMod {
         evbus.register(HexMod.class);
 
         HexItems.ITEMS.register(evbus);
-        LootModifiers.LOOT_MODS.register(evbus);
         HexSounds.SOUNDS.register(evbus);
 
         MinecraftForge.EVENT_BUS.register(TickScheduler.INSTANCE);
