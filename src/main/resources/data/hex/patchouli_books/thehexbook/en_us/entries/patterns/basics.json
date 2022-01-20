@@ -114,6 +114,18 @@
         {
             "type": "patchouli:text",
             "text": "More specifically, it returns the $(italic)normal vector/$ of the face hit, or a vector with length 1 pointing perpendicular to the face.$(li)If I am looking at a floor, it will return (0, 1, 0).$(li)If I am looking at the south face of a block, it will return (0, 0, 1).$(br)"
+        },
+        {
+            "type": "hex:pattern",
+            "header": "Scout's Distillation",
+            "anchor": "OpEntityRaycast",
+            "input": "vector, vector",
+            "output": "entity",
+            "text": "Like $(l:patterns/basics#OpBlockRaycast)$(action)Archer's Distillation$(/l), but instead returns the $(italic)entity/$ I am looking at.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "weaqa"
+            }
         }
     ]
 }
