@@ -19,6 +19,7 @@ public class DataGenerators {
             gen.addProvider(new Recipes(gen));
         }
         // On both sides
+        gen.addProvider(new LootModifiers(gen));
         gen.addProvider(new Advancements(gen, efh));
     }
 }
