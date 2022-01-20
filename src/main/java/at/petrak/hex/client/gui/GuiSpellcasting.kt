@@ -231,6 +231,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 RenderLib.drawSpot(
                     mat,
                     dotPx,
+                    scaledDist * 2f,
                     Mth.lerp(scaledDist, 0.4f, 0.5f),
                     Mth.lerp(scaledDist, 0.8f, 1.0f),
                     Mth.lerp(scaledDist, 0.7f, 0.9f),
@@ -247,7 +248,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             )
         }
         for (pat in alreadyPats) {
-            RenderLib.drawPattern(mat, pat, 127, 127, 255, 200)
+            RenderLib.drawPattern(mat, pat, true, 127, 127, 255, 200)
         }
 
         // Now draw the currently WIP pattern
@@ -266,7 +267,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             }
 
             points.add(mousePos)
-            RenderLib.drawPattern(mat, points, 100, 200, 255, 255)
+            RenderLib.drawPattern(mat, points, false, 100, 200, 255, 255)
         }
 
         RenderSystem.setShader { prevShader }

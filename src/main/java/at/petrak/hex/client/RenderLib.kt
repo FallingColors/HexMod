@@ -107,14 +107,19 @@ object RenderLib {
      * you have to do the conversion yourself.)
      */
     @JvmStatic
-    fun drawPattern(mat: Matrix4f, points: List<Vec2>, r: Int, g: Int, b: Int, a: Int, animTime: Float? = null) {
+    fun drawPattern(mat: Matrix4f, points: List<Vec2>, drawLast: Boolean, r: Int, g: Int, b: Int, a: Int, animTime: Float? = null) {
+        fun dodge(n: Int): Float { return n * 0.9f }
         fun screen(n: Int): Int {
             return (n + 255) / 2
         }
 
         val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f)
+        val nodes = if (drawLast) { points } else { points.dropLast(1) }
         drawLineSeq(mat, zappyPts, 5f, 0f, r, g, b, a, null)
         drawLineSeq(mat, zappyPts, 2f, 1f, screen(r), screen(g), screen(b), a, animTime)
+        for (node in nodes) {
+            drawSpot(mat, node, 2f, dodge(r) / 255f, dodge(g) / 255f, dodge(b) / 255f, a / 255f);
+        }
     }
 
     /**
@@ -170,24 +175,23 @@ object RenderLib {
      * include primitive drawing code...
      */
     @JvmStatic
-    fun drawSpot(mat: Matrix4f, point: Vec2, r: Float, g: Float, b: Float, a: Float) {
+    fun drawSpot(mat: Matrix4f, point: Vec2, radius: Float, r: Float, g: Float, b: Float, a: Float) {
         val tess = Tesselator.getInstance()
         val buf = tess.builder
         // https://stackoverflow.com/questions/20394727/gl-triangle-strip-vs-gl-triangle-fan
         // Starting point is the center
         buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR)
-        buf.vertex(mat, point.x, point.y, 0f).color(r, g, b, a).endVertex()
+        buf.vertex(mat, point.x, point.y, 1f).color(r, g, b, a).endVertex()
 
         // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L98
         // yes they are gonna be little hexagons fite me
         val fracOfCircle = 6
-        val radius = 1.5f
         // run 0 AND last; this way the circle closes
         for (i in 0..fracOfCircle) {
             val theta = i.toFloat() / fracOfCircle * HexUtils.TAU.toFloat()
-            val rx = Mth.cos(theta) * radius + point.x
-            val ry = Mth.sin(theta) * radius + point.y
-            buf.vertex(mat, rx, ry, 0f).color(r, g, b, a).endVertex()
+            val rx = Mth.sin(theta) * radius + point.x
+            val ry = Mth.cos(theta) * radius + point.y
+            buf.vertex(mat, rx, ry, 1f).color(r, g, b, a).endVertex()
         }
 
         tess.end()

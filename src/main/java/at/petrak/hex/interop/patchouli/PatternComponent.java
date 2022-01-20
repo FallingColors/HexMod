@@ -64,11 +64,11 @@ public class PatternComponent implements ICustomComponent {
             RenderLib.drawLineSeq(mat, pat.zappyPoints, 5f, 0, 210, 200, 200, 255, null);
             RenderLib.drawLineSeq(mat, pat.zappyPoints, 2f, 0, 200, 190, 190, 200, ctx.getTicksInBook() / 20f, 0.5f);
 
-            RenderLib.drawSpot(mat, pat.zappyPoints.get(0), 1f, 0.1f, 0.15f, 0.6f);
+            RenderLib.drawSpot(mat, pat.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
         }
 
         for (var dot : this.pathfinderDots) {
-            RenderLib.drawSpot(mat, dot, 0.82f, 0.8f, 0.8f, 0.5f);
+            RenderLib.drawSpot(mat, dot, 1.5f, 0.82f, 0.8f, 0.8f, 0.5f);
         }
 
         RenderSystem.defaultBlendFunc();
