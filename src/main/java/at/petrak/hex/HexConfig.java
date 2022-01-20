@@ -6,7 +6,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 public class HexConfig {
 
-    public final ForgeConfigSpec.DoubleValue healthToManaRate;
+    public final ForgeConfigSpec.DoubleValue manaToHealthRate;
 
     public final ForgeConfigSpec.IntValue batteryMaxMana;
     public final ForgeConfigSpec.IntValue dustManaAmount;
@@ -17,8 +17,8 @@ public class HexConfig {
     public final ForgeConfigSpec.IntValue maxRecurseDepth;
 
     public HexConfig(ForgeConfigSpec.Builder builder) {
-        healthToManaRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-                .defineInRange("healthToManaRate", 20.0 / 100_000.0, 0.0, Double.POSITIVE_INFINITY);
+        manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
+                .defineInRange("manaToHealthRate", 100_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
 
         builder.push("itempicking.json");
         batteryMaxMana = builder.comment("The maximum amount of mana a mana battery can store.")

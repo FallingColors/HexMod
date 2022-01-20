@@ -16,7 +16,6 @@ import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import java.util.*
-import kotlin.math.max
 import kotlin.math.min
 
 /**
@@ -88,8 +87,8 @@ class CastingHarness private constructor(
                 val (manaCost, spells) = operator!!.modifyStack(this.stack, this.ctx)
                 spellsToCast = spells
 
-                // prevent poor impls from gaining you mana
-                this.withdrawMana(max(0, manaCost), true)
+
+                this.withdrawMana(manaCost, true)
                 if (ctx.caster.isDeadOrDying)
                     return CastResult.Died
             }
@@ -117,7 +116,8 @@ class CastingHarness private constructor(
      * Also awards stats and achievements and such
      */
     fun withdrawMana(manaCost: Int, allowOvercast: Boolean): Int {
-        if (this.ctx.caster.isCreative) return 0
+        // prevent poor impls from gaining you mana
+        if (this.ctx.caster.isCreative || manaCost <= 0) return 0
         var costLeft = manaCost
 
         val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
@@ -145,16 +145,16 @@ class CastingHarness private constructor(
 
         if (allowOvercast && costLeft > 0) {
             // Cast from HP!
-            val healthToMana = HexMod.CONFIG.healthToManaRate.get()
-            val healthtoRemove = healthToMana * costLeft.toDouble()
-            val manaAbleToCastFromHP = this.ctx.caster.health / healthToMana
+            val manaToHealth = HexMod.CONFIG.manaToHealthRate.get()
+            val healthtoRemove = costLeft.toDouble() / manaToHealth
+            val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
 
             val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
             Advancements.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
             this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
 
             this.ctx.caster.hurt(LibDamageSources.OVERCAST, healthtoRemove.toFloat())
-            costLeft = (costLeft.toDouble() - manaAbleToCastFromHP).toInt()
+            costLeft -= manaToActuallyPayFor
         }
 
         // this might be more than the mana cost! for example if we waste a lot of mana from an item

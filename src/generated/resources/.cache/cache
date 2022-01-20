@@ -26,9 +26,10 @@ a354a2dc83d220c43d4c9f156059cbd8255e9e19 assets/hex/models/item/spellbook.json
 eaddd1e5ae74293d784748e56e4a238a7607e34c assets/hex/models/item/trinket.json
 f0cce957861ee854cbd68984015da2c530c9ef6d assets/hex/models/item/trinket_filled.json
 837e7ed749afa44bd3be4114c7d81f3b8fe47852 assets/hex/models/item/wand.json
+2ac42506f03235f4335dd62f0d6a0c4f23ca61b9 data/forge/loot_modifiers/global_loot_modifiers.json
 40eee88282c6d02518aab36a1da1d2f7d5c0a051 data/hex/advancements/aaa_wasteful_cast.json
 f6d43f5b05b88aeebb1529aa700cc3dcc24bbc32 data/hex/advancements/aab_big_cast.json
-9c6cc95ec58d62db530e5f717f130249c9a2e476 data/hex/advancements/enlightenment.json
+8d527492a35c60baaaf73387310ae06d7aa681be data/hex/advancements/enlightenment.json
 912115e8811b07c3484f5ac781143c450d561023 data/hex/advancements/recipes/hex/artifact.json
 33d503ee36d30d6fac2c96000faba800521130ac data/hex/advancements/recipes/hex/cypher.json
 4a8e31487e2b1a74166af3e31e706b1534adbca7 data/hex/advancements/recipes/hex/focus.json
@@ -37,6 +38,7 @@ f6d43f5b05b88aeebb1529aa700cc3dcc24bbc32 data/hex/advancements/aab_big_cast.json
 e27f5d32775d3965f03db2c6e58f6f5da78b62df data/hex/advancements/recipes/hex/trinket.json
 2bcb08b33e9cbc9d17285c0eff9ce4f7f0f35159 data/hex/advancements/recipes/hex/wand.json
 31e2e34bcb1ff2294af8a44ff9942d0bd8d9a765 data/hex/advancements/root.json
+a46281d65532086be7fbb63beb8c515edf2baaee data/hex/loot_modifiers/amethyst_cluster.json
 247829c255cc76b9f82d60ce057e8cf5bea0dc84 data/hex/recipes/artifact.json
 b438e051fc58c58c93dddf88ea858cea6ae9fc13 data/hex/recipes/cypher.json
 d31bc9597a6320a886a059579edc610b24ad225b data/hex/recipes/focus.json

@@ -24,7 +24,6 @@ public class LibCapabilities {
     @SubscribeEvent
     public static void attachCaps(AttachCapabilitiesEvent<Entity> evt) {
         if (evt.getObject() instanceof ServerPlayer) {
-            HexMod.LOGGER.info("Registering flight for {}", evt.getObject());
             evt.addCapability(new ResourceLocation(HexMod.MOD_ID, OpFlight.CAP_NAME),
                     OpFlight.INSTANCE.getDummyInstanceIHateForge().resolve().get());
         }

@@ -7,16 +7,14 @@ import at.petrak.hex.common.items.ItemFocus;
 import at.petrak.hex.common.items.magic.ItemPackagedSpell;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = HexMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class RegisterClientStuff {
     @SubscribeEvent
-    public static void init(final FMLClientSetupEvent evt) {
+    public static void init(FMLClientSetupEvent evt) {
+        HexMod.getLogger().info("register client stuff");
         evt.enqueueWork(() -> {
             ItemProperties.register(HexItems.FOCUS.get(), ItemFocus.DATATYPE_PRED,
                     (stack, level, holder, holderID) -> {

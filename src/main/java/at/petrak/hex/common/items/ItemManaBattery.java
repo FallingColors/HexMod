@@ -47,7 +47,7 @@ public class ItemManaBattery extends Item {
     public int getBarColor(ItemStack pStack) {
         var tag = pStack.getOrCreateTag();
         var mana = getMana(tag);
-        var maxMana = HexMod.CONFIG.batteryMaxMana.get();
+        var maxMana = HexMod.getConfig().batteryMaxMana.get();
         return ManaHelper.INSTANCE.barColor(mana, maxMana);
     }
 
@@ -55,7 +55,7 @@ public class ItemManaBattery extends Item {
     public int getBarWidth(ItemStack pStack) {
         var tag = pStack.getOrCreateTag();
         var mana = getMana(tag);
-        var maxMana = HexMod.CONFIG.batteryMaxMana.get();
+        var maxMana = HexMod.getConfig().batteryMaxMana.get();
         return ManaHelper.INSTANCE.barWidth(mana, maxMana);
     }
 

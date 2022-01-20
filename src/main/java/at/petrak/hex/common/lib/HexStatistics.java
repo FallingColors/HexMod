@@ -8,10 +8,10 @@ import net.minecraft.stats.Stats;
 
 public class HexStatistics {
     public static final ResourceLocation MANA_USED = makeCustomStat(HexMod.MOD_ID + ":mana_used",
-            (manamount) -> String.valueOf(manamount / HexMod.CONFIG.dustManaAmount.get())
+            (manamount) -> String.valueOf(manamount / HexMod.getConfig().dustManaAmount.get())
     );
     public static final ResourceLocation MANA_OVERCASTED = makeCustomStat(HexMod.MOD_ID + ":mana_overcasted",
-            (manamount) -> String.valueOf(manamount / HexMod.CONFIG.dustManaAmount.get())
+            (manamount) -> String.valueOf(manamount / HexMod.getConfig().dustManaAmount.get())
     );
 
     public static void register() {

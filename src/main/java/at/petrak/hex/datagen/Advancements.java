@@ -83,7 +83,7 @@ public class Advancements extends AdvancementProvider {
                                 MinMaxBounds.Ints.ANY,
                                 // add a little bit of slop here
                                 MinMaxBounds.Doubles.atLeast(17.95),
-                                MinMaxBounds.Doubles.atMost(1.05)))
+                                MinMaxBounds.Doubles.atMost(2.05)))
                 .save(consumer, prefix("enlightenment"));
 
 //        super.registerAdvancements(consumer, fileHelper);

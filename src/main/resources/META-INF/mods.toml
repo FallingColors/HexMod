@@ -1,5 +1,5 @@
-modLoader = "javafml"
-loaderVersion = "[39,)"
+modLoader = "kotlinforforge"
+loaderVersion = "[3,)"
 license = "MIT"
 
 issueTrackerURL = "https://github.com/gamma-delta/HexMod/issues"
@@ -35,12 +35,5 @@ side = "BOTH"
 modId = "patchouli"
 mandatory = true
 versionRange = "[1.18.1-65-SNAPSHOT,)"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.hex]]
-modId = "kotlinforforge"
-mandatory = true
-versionRange = "[3.1.0,)"
 ordering = "NONE"
 side = "BOTH"

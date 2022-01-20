@@ -161,6 +161,6 @@ public class RegisterPatterns {
             }
         });
 
-        HexMod.LOGGER.info("Registered {} patterns", count);
+        HexMod.getLogger().info("Registered {} patterns", count);
     }
 }
