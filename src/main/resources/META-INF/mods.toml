@@ -37,3 +37,10 @@ mandatory = true
 versionRange = "[1.18.1-65-SNAPSHOT,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.hex]]
+modId = "kotlinforforge"
+mandatory = true
+versionRange = "[3.1.0,)"
+ordering = "NONE"
+side = "BOTH"
