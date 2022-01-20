@@ -29,7 +29,8 @@ f0cce957861ee854cbd68984015da2c530c9ef6d assets/hex/models/item/trinket_filled.j
 2ac42506f03235f4335dd62f0d6a0c4f23ca61b9 data/forge/loot_modifiers/global_loot_modifiers.json
 40eee88282c6d02518aab36a1da1d2f7d5c0a051 data/hex/advancements/aaa_wasteful_cast.json
 f6d43f5b05b88aeebb1529aa700cc3dcc24bbc32 data/hex/advancements/aab_big_cast.json
-8d527492a35c60baaaf73387310ae06d7aa681be data/hex/advancements/enlightenment.json
+d341fdd252063ed5355a161f0e50f1c425e84d7b data/hex/advancements/enlightenment.json
+bf38859bbc413252bca5f271a56c3f8dde1f0457 data/hex/advancements/opened_eyes.json
 912115e8811b07c3484f5ac781143c450d561023 data/hex/advancements/recipes/hex/artifact.json
 33d503ee36d30d6fac2c96000faba800521130ac data/hex/advancements/recipes/hex/cypher.json
 4a8e31487e2b1a74166af3e31e706b1534adbca7 data/hex/advancements/recipes/hex/focus.json

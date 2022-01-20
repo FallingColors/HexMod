@@ -25,6 +25,7 @@ public class Advancements extends AdvancementProvider {
     public static Advancement ROOT;
     public static Advancement BIG_CAST;
     public static Advancement WASTEFUL_CAST;
+    public static Advancement OPENED_EYES;
     public static Advancement ENLIGHTENMENT;
 
     public static final OvercastTrigger OVERCAST_TRIGGER = new OvercastTrigger();
@@ -71,13 +72,24 @@ public class Advancements extends AdvancementProvider {
                         MinMaxBounds.Ints.ANY))
                 .save(consumer, prefix("aab_big_cast"));
 
+        OPENED_EYES = Advancement.Builder.advancement()
+                .display(simple(Items.ENDER_EYE, "opened_eyes", FrameType.TASK))
+                .parent(ROOT)
+                .addCriterion("health_used",
+                        new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
+                                MinMaxBounds.Ints.ANY,
+                                MinMaxBounds.Doubles.ANY,
+                                // you can't just kill yourself
+                                MinMaxBounds.Doubles.atLeast(0.1)))
+                .save(consumer, prefix("opened_eyes"));
+
         ENLIGHTENMENT = Advancement.Builder.advancement()
                 .display(new DisplayInfo(new ItemStack(Items.MUSIC_DISC_11),
                         new TranslatableComponent("advancement.hex:enlightenment"),
                         new TranslatableComponent("advancement.hex:enlightenment.desc"),
                         null,
                         FrameType.CHALLENGE, true, true, true))
-                .parent(ROOT)
+                .parent(OPENED_EYES)
                 .addCriterion("health_used",
                         new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
                                 MinMaxBounds.Ints.ANY,

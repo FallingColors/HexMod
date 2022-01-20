@@ -1,0 +1,29 @@
+{
+  "parent": "hex:root",
+  "display": {
+    "icon": {
+      "item": "minecraft:ender_eye"
+    },
+    "title": {
+      "translate": "advancement.hex:opened_eyes"
+    },
+    "description": {
+      "translate": "advancement.hex:opened_eyes.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "health_used": {
+      "trigger": "hex:overcast",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "health_used"
+    ]
+  ]
+}

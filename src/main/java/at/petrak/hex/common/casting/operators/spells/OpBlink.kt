@@ -35,7 +35,7 @@ object OpBlink : SpellOperator {
             // IIRC this is to prevent you from teleporting into blocks because people tend to look a little bit down
             // ... but isn't the condition backwards?
             val dx = look.x * delta
-            val dy = if (target == ctx.caster) {
+            val dy = if (target != ctx.caster) {
                 look.y * delta
             } else {
                 max(0.0, look.y * delta)
