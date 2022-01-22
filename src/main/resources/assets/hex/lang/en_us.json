@@ -8,6 +8,7 @@
   "item.hex.amethyst_dust": "Amethyst Dust",
   "item.hex.charged_amethyst": "Charged Amethyst",
   "item.hex.lens": "Scrying Lens",
+  "item.hex.scroll": "Scroll",
   "death.attack.hex.overcast": "%s's mind was consumed into energy",
   "hex.spellbook.tooltip.page": "Selected Page %d/%d",
   "hex.spelldata.desc.entity": "Entity %s",
@@ -23,5 +24,14 @@
   "advancement.hex:opened_eyes.desc": "Have nature take just a §olittle§r of your mind as payment for a Hex.",
   "stat.hex.mana_used": "Media consumed (in dusts)",
   "stat.hex.mana_overcasted": "Media overcasted (in dusts)",
-  "itemGroup.hex": "Hex"
+  "itemGroup.hex": "Hex",
+  "hex.spell.hex:explode": "Explosion",
+  "hex.spell.hex:explode/fireball": "Fireball",
+  "hex.spell.hex:add_motion": "Add Motion",
+  "hex.spell.hex:blink": "Blink",
+  "hex.spell.hex:break_block": "Break Block",
+  "hex.spell.hex:place_block": "Place Block",
+  "hex.spell.hex:make_cypher": "Craft Cypher",
+  "hex.spell.hex:make_trinket": "Craft Trinket",
+  "hex.spell.hex:make_artifact": "Craft Artifact"
 }

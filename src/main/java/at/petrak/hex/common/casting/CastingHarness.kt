@@ -13,6 +13,7 @@ import at.petrak.hex.hexmath.HexPattern
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import java.util.*
@@ -35,12 +36,12 @@ class CastingHarness private constructor(
      * When the server gets a packet from the client with a new pattern,
      * handle it.
      */
-    fun update(newPat: HexPattern): CastResult {
+    fun update(newPat: HexPattern, world: ServerLevel): CastResult {
         return try {
             var spellsToCast = emptyList<RenderedSpell>()
             var exn: CastException? = null
             val operator = try {
-                PatternRegistry.lookupPattern(newPat)
+                PatternRegistry.lookupPattern(newPat, world)
             } catch (e: CastException) {
                 exn = e
                 null

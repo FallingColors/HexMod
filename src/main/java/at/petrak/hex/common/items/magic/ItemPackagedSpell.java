@@ -57,7 +57,7 @@ public abstract class ItemPackagedSpell extends Item {
         var harness = new CastingHarness(ctx);
         List<HexPattern> patterns = getPatterns(tag);
         for (var pattern : patterns) {
-            var res = harness.update(pattern);
+            var res = harness.update(pattern, sPlayer.getLevel());
             if (res instanceof CastingHarness.CastResult.Error) {
                 CastingHarness.CastResult.Error error = (CastingHarness.CastResult.Error) res;
                 sPlayer.sendMessage(new TextComponent(error.getExn().getMessage()), Util.NIL_UUID);

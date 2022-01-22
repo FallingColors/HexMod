@@ -48,7 +48,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     var harness = CastingHarness.DeserializeFromNBT(tag.getCompound(ItemWand.TAG_HARNESS), sender,
                             this.handUsed);
 
-                    var res = harness.update(this.pattern);
+                    var res = harness.update(this.pattern, sender.getLevel());
                     if (res instanceof CastResult.Cast success) {
                         var castCtx = new CastingContext(sender, this.handUsed);
                         for (var spell : success.getSpells()) {

@@ -3,14 +3,16 @@ package at.petrak.hex
 import at.petrak.hex.client.RegisterClientStuff
 import at.petrak.hex.common.casting.RegisterPatterns
 import at.petrak.hex.common.casting.operators.spells.great.OpFlight
+import at.petrak.hex.common.command.HexCommands
 import at.petrak.hex.common.items.HexItems
+import at.petrak.hex.common.items.ItemScroll
 import at.petrak.hex.common.lib.HexSounds
 import at.petrak.hex.common.lib.HexStatistics
 import at.petrak.hex.common.lib.LibCapabilities
 import at.petrak.hex.common.network.HexMessages
 import at.petrak.hex.datagen.Advancements
 import at.petrak.hex.datagen.DataGenerators
-import at.petrak.hex.datagen.LootModifiers
+import at.petrak.hex.datagen.lootmods.HexLootModifiers
 import at.petrak.hex.server.TickScheduler
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.eventbus.api.SubscribeEvent
@@ -46,12 +48,15 @@ object HexMod {
         modBus.register(DataGenerators::class.java)
 
         HexItems.ITEMS.register(modBus)
-        LootModifiers.LOOT_MODS.register(modBus)
+        HexLootModifiers.LOOT_MODS.register(modBus)
         HexSounds.SOUNDS.register(modBus)
 
+        evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)
         evBus.register(LibCapabilities::class.java)
         evBus.register(OpFlight)
+        evBus.register(ItemScroll::class.java)
+
 
         // and then things that don't require busses
         HexMessages.register()
@@ -61,7 +66,6 @@ object HexMod {
 
     @SubscribeEvent
     fun commonSetup(evt: FMLCommonSetupEvent) {
-        LOGGER.info("commonSetup")
         evt.enqueueWork { Advancements.registerTriggers() }
     }
 

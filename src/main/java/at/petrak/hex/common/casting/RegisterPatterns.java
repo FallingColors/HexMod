@@ -19,10 +19,13 @@ import at.petrak.hex.common.casting.operators.spells.great.OpLightning;
 import at.petrak.hex.common.items.magic.ItemArtifact;
 import at.petrak.hex.common.items.magic.ItemCypher;
 import at.petrak.hex.common.items.magic.ItemTrinket;
-import com.mojang.datafixers.util.Pair;
+import at.petrak.hex.hexmath.HexDir;
+import at.petrak.hex.hexmath.HexPattern;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+
+import static at.petrak.hex.common.lib.RegisterHelper.prefix;
 
 public class RegisterPatterns {
     // I guess this means the client will have a big empty map for patterns
@@ -33,102 +36,108 @@ public class RegisterPatterns {
             // In general:
             // - CCW is the normal or construction version
             // - CW is the special or destruction version
-            for (Pair<String, Operator> p : new Pair[]{
-                    // == Getters ==
+            // == Getters ==
 
-                    new Pair<>("qaq", OpGetCaster.INSTANCE),
-                    new Pair<>("ede", OpGetCaster.INSTANCE),
-                    new Pair<>("aa", OpEntityPos.INSTANCE),
-                    new Pair<>("dd", OpEntityPos.INSTANCE),
-                    new Pair<>("wa", OpEntityLook.INSTANCE),
-                    new Pair<>("wd", OpEntityLook.INSTANCE),
+            PatternRegistry.addRegularPatternAndMirror("qaq", OpGetCaster.INSTANCE);
+            PatternRegistry.addRegularPatternAndMirror("aa", OpEntityPos.INSTANCE);
+            PatternRegistry.addRegularPatternAndMirror("wa", OpEntityLook.INSTANCE);
 
-                    new Pair<>("wqaawdd", OpBlockRaycast.INSTANCE),
-                    new Pair<>("weddwaa", OpBlockAxisRaycast.INSTANCE),
-                    new Pair<>("weaqa", OpEntityRaycast.INSTANCE),
+            PatternRegistry.addRegularPattern("wqaawdd", OpBlockRaycast.INSTANCE);
+            PatternRegistry.addRegularPattern("weddwaa", OpBlockAxisRaycast.INSTANCE);
+            PatternRegistry.addRegularPattern("weaqa", OpEntityRaycast.INSTANCE);
 
-                    new Pair<>("edqde", OpAppend.INSTANCE),
-                    new Pair<>("qaeaq", OpConcat.INSTANCE),
-                    new Pair<>("deeed", OpIndex.INSTANCE),
-                    new Pair<>("dadad", OpForEach.INSTANCE),
+            PatternRegistry.addRegularPattern("edqde", OpAppend.INSTANCE);
+            PatternRegistry.addRegularPattern("qaeaq", OpConcat.INSTANCE);
+            PatternRegistry.addRegularPattern("deeed", OpIndex.INSTANCE);
+            PatternRegistry.addRegularPattern("dadad", OpForEach.INSTANCE);
 
-                    new Pair<>("qqqqqdaqa", new OpGetEntityAt(e -> true)),
-                    new Pair<>("qqqqqdaqaqwa", new OpGetEntityAt(OpGetEntitiesBy::isAnimal)),
-                    new Pair<>("qqqqqdaqaqwq", new OpGetEntityAt(OpGetEntitiesBy::isMonster)),
-                    new Pair<>("qqqqqdaqaqww", new OpGetEntityAt(OpGetEntitiesBy::isItem)),
-                    new Pair<>("qqqqqdaqaqwe", new OpGetEntityAt(OpGetEntitiesBy::isPlayer)),
-                    new Pair<>("qqqqqdaqaqwd", new OpGetEntityAt(OpGetEntitiesBy::isLiving)),
-                    new Pair<>("qqqqqwded", new OpGetEntitiesBy(e -> true, false)),
-                    new Pair<>("qqqqqwdeddwa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false)),
-                    new Pair<>("eeeeewaqaawa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, true)),
-                    new Pair<>("qqqqqwdeddwq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, false)),
-                    new Pair<>("eeeeewaqaawq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, true)),
-                    new Pair<>("qqqqqwdeddww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, false)),
-                    new Pair<>("eeeeewaqaaww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, true)),
-                    new Pair<>("qqqqqwdeddwe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, false)),
-                    new Pair<>("eeeeewaqaawe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, true)),
-                    new Pair<>("qqqqqwdeddwd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, false)),
-                    new Pair<>("eeeeewaqqawd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, true)),
+            PatternRegistry.addRegularPattern("qqqqqdaqa", new OpGetEntityAt(e -> true));
+            PatternRegistry.addRegularPattern("qqqqqdaqaqwa", new OpGetEntityAt(OpGetEntitiesBy::isAnimal));
+            PatternRegistry.addRegularPattern("qqqqqdaqaqwq", new OpGetEntityAt(OpGetEntitiesBy::isMonster));
+            PatternRegistry.addRegularPattern("qqqqqdaqaqww", new OpGetEntityAt(OpGetEntitiesBy::isItem));
+            PatternRegistry.addRegularPattern("qqqqqdaqaqwe", new OpGetEntityAt(OpGetEntitiesBy::isPlayer));
+            PatternRegistry.addRegularPattern("qqqqqdaqaqwd", new OpGetEntityAt(OpGetEntitiesBy::isLiving));
+            PatternRegistry.addRegularPattern("qqqqqwded", new OpGetEntitiesBy(e -> true, false));
+            PatternRegistry.addRegularPattern("qqqqqwdeddwa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false));
+            PatternRegistry.addRegularPattern("eeeeewaqaawa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, true));
+            PatternRegistry.addRegularPattern("qqqqqwdeddwq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, false));
+            PatternRegistry.addRegularPattern("eeeeewaqaawq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, true));
+            PatternRegistry.addRegularPattern("qqqqqwdeddww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, false));
+            PatternRegistry.addRegularPattern("eeeeewaqaaww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, true));
+            PatternRegistry.addRegularPattern("qqqqqwdeddwe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, false));
+            PatternRegistry.addRegularPattern("eeeeewaqaawe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, true));
+            PatternRegistry.addRegularPattern("qqqqqwdeddwd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, false));
+            PatternRegistry.addRegularPattern("eeeeewaqqawd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, true));
 
-                    // == Modify Stack ==
+            // == Modify Stack ==
 
-                    new Pair<>("a", OpUndo.INSTANCE),
-                    new Pair<>("d", Widget.NULL),
-                    new Pair<>("aadaa", OpDuplicate.INSTANCE),
-                    new Pair<>("aawdd", OpSwap.INSTANCE),
+            PatternRegistry.addRegularPattern("a", OpUndo.INSTANCE);
+            PatternRegistry.addRegularPattern("d", Widget.NULL);
+            PatternRegistry.addRegularPattern("aadaa", OpDuplicate.INSTANCE);
+            PatternRegistry.addRegularPattern("aawdd", OpSwap.INSTANCE);
 
-                    // == Math ==
-                    new Pair<>("waaw", OpAdd.INSTANCE),
-                    new Pair<>("wddw", OpSub.INSTANCE),
-                    new Pair<>("waqaw", OpMulDot.INSTANCE),
-                    new Pair<>("wdedw", OpDivCross.INSTANCE),
-                    new Pair<>("wqaqw", OpAbsLen.INSTANCE),
-                    new Pair<>("wedew", OpPowProj.INSTANCE),
-                    new Pair<>("eqqqqq", OpConstructVec.INSTANCE),
-                    new Pair<>("qeeeee", OpDeconstructVec.INSTANCE),
+            // == Math ==
+            PatternRegistry.addRegularPattern("waaw", OpAdd.INSTANCE);
+            PatternRegistry.addRegularPattern("wddw", OpSub.INSTANCE);
+            PatternRegistry.addRegularPattern("waqaw", OpMulDot.INSTANCE);
+            PatternRegistry.addRegularPattern("wdedw", OpDivCross.INSTANCE);
+            PatternRegistry.addRegularPattern("wqaqw", OpAbsLen.INSTANCE);
+            PatternRegistry.addRegularPattern("wedew", OpPowProj.INSTANCE);
+            PatternRegistry.addRegularPattern("eqqqqq", OpConstructVec.INSTANCE);
+            PatternRegistry.addRegularPattern("qeeeee", OpDeconstructVec.INSTANCE);
 
-                    // == Spells ==
+            // == Spells ==
 
-                    new Pair<>("de", OpPrint.INSTANCE),
-                    new Pair<>("aq", OpPrint.INSTANCE),
-                    new Pair<>("aawaawaa", new OpExplode(false)),
-                    new Pair<>("ddwddwdd", new OpExplode(true)),
-                    new Pair<>("weeewdq", OpAddMotion.INSTANCE),
-                    new Pair<>("wqqqwae", OpBlink.INSTANCE),
-                    new Pair<>("qaqqqqq", OpPlaceBlock.INSTANCE),
-                    new Pair<>("eeeeede", OpBreakBlock.INSTANCE),
-                    new Pair<>("waadwawdaaweewq", OpLightning.INSTANCE),
-                    new Pair<>("waqqqqq", new OpMakePackagedSpell<>(ItemCypher.class, 100_000)),
-                    new Pair<>("wwaqqqqqeaqeaeqqqeaeq", new OpMakePackagedSpell<>(ItemTrinket.class, 500_000)),
-                    new Pair<>(
-                            "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq",
-                            new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000)
-                    ),
-                    new Pair<>("eawwaeawawaa", OpFlight.INSTANCE),
+            PatternRegistry.addRegularPatternAndMirror("de", OpPrint.INSTANCE);
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("aawaawaa", HexDir.EAST),
+                    prefix("explode"), new OpExplode(false));
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("aawqaqwaa", HexDir.EAST),
+                    prefix("explode/fireball"), new OpExplode(true));
 
-                    // == Meta stuff ==
-                    new Pair<>("qqq", Widget.OPEN_PAREN),
-                    new Pair<>("eee", Widget.CLOSE_PAREN),
-                    new Pair<>("qqqaw", Widget.ESCAPE),
-                    // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
-                    // eval being a space filling curve feels apt doesn't it
-                    new Pair<>("deaqq", OpEval.INSTANCE),
-                    new Pair<>("aqdee", OpEvalDelay.INSTANCE),
-                    new Pair<>("aqqqqq", OpRead.INSTANCE),
-                    new Pair<>("deeeee", OpWrite.INSTANCE),
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("waqwaeawa", HexDir.EAST),
+                    prefix("add_motion"), OpAddMotion.INSTANCE);
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("aqwaeawq", HexDir.EAST),
+                    prefix("blink"), OpBlink.INSTANCE);
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("qaqqqqq", HexDir.EAST),
+                    prefix("break_block"), OpBreakBlock.INSTANCE);
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("weeeeedqe", HexDir.NORTH_EAST),
+                    prefix("place_block"), OpPlaceBlock.INSTANCE);
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST),
+                    prefix("make_cypher"), new OpMakePackagedSpell<>(ItemCypher.class, 100_000));
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
+                    prefix("make_trinket"), new OpMakePackagedSpell<>(ItemTrinket.class, 500_000));
+            PatternRegistry.addRegularPatternPerWorld(
+                    HexPattern.FromAnglesSig("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
+                    prefix("make_artifact"), new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000));
+            // great spells are revealed to you automatically ... for now
+            PatternRegistry.addRegularPattern("waadwawdaaweewq", OpLightning.INSTANCE);
+            PatternRegistry.addRegularPattern("eawwaeawawaa", OpFlight.INSTANCE);
 
-                    // == Consts ==
-                    new Pair<>("qqqqqea", Operator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 0.0)))),
-                    new Pair<>("qqqqqew", Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 1.0, 0.0)))),
-                    new Pair<>("qqqqqed", Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 1.0)))),
-                    new Pair<>("eeeeeqa", Operator.makeConstantOp(SpellDatum.make(new Vec3(-1.0, 0.0, 0.0)))),
-                    new Pair<>("eeeeeqw", Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, -1.0, 0.0)))),
-                    new Pair<>("eeeeeqd", Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, -1.0)))),
+            // == Meta stuff ==
+            PatternRegistry.addRegularPattern("qqq", Widget.OPEN_PAREN);
+            PatternRegistry.addRegularPattern("eee", Widget.CLOSE_PAREN);
+            PatternRegistry.addRegularPattern("qqqaw", Widget.ESCAPE);
+            // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
+            // eval being a space filling curve feels apt doesn't it
+            PatternRegistry.addRegularPattern("deaqq", OpEval.INSTANCE);
+            PatternRegistry.addRegularPattern("aqdee", OpEvalDelay.INSTANCE);
+            PatternRegistry.addRegularPattern("aqqqqq", OpRead.INSTANCE);
+            PatternRegistry.addRegularPattern("deeeee", OpWrite.INSTANCE);
 
-            }) {
-                PatternRegistry.addRegularPattern(p.getFirst(), p.getSecond());
-                count++;
-            }
+            // == Consts ==
+            PatternRegistry.addRegularPattern("qqqqqea",
+                    Operator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 0.0))));
+            PatternRegistry.addRegularPattern("qqqqqew",
+                    Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 1.0, 0.0))));
+            PatternRegistry.addRegularPattern("qqqqqed",
+                    Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 1.0))));
+            PatternRegistry.addRegularPattern("eeeeeqa",
+                    Operator.makeConstantOp(SpellDatum.make(new Vec3(-1.0, 0.0, 0.0))));
+            PatternRegistry.addRegularPattern("eeeeeqw",
+                    Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, -1.0, 0.0))));
+            PatternRegistry.addRegularPattern("eeeeeqd",
+                    Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, -1.0))));
+
         } catch (PatternRegistry.RegisterPatternException exn) {
             exn.printStackTrace();
         }

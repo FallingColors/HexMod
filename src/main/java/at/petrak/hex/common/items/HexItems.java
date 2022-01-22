@@ -49,6 +49,8 @@ public class HexItems {
             () -> new Item(props().food(new FoodProperties.Builder().nutrition(4).build())));
     public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register(LibItemNames.LENS,
             () -> new Item(unstackable()));
+    public static final RegistryObject<Item> SCROLL = ITEMS.register(LibItemNames.SCROLL,
+            () -> new ItemScroll(unstackable()));
 
     public static Item.Properties props() {
         return new Item.Properties().tab(TAB);

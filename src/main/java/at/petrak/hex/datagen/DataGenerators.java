@@ -1,5 +1,6 @@
 package at.petrak.hex.datagen;
 
+import at.petrak.hex.datagen.lootmods.HexLootModifiers;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,7 +18,7 @@ public class DataGenerators {
             gen.addProvider(new Recipes(gen));
         }
         // On both sides
-        gen.addProvider(new LootModifiers(gen));
+        gen.addProvider(new HexLootModifiers(gen));
         gen.addProvider(new Advancements(gen, efh));
     }
 }

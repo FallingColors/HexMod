@@ -46,6 +46,8 @@ public class RegisterClientStuff {
                                 stack.getOrCreateTag().contains(ItemPackagedSpell.TAG_PATTERNS) ? 1f : 0f
                 );
             }
+
+            HexTooltips.init();
         });
     }
 }

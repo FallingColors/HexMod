@@ -1,7 +1,12 @@
 package at.petrak.hex.api
 
 import at.petrak.hex.common.casting.CastException
+import at.petrak.hex.hexmath.EulerPathFinder
 import at.petrak.hex.hexmath.HexPattern
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.level.saveddata.SavedData
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.ConcurrentMap
@@ -19,6 +24,7 @@ import java.util.concurrent.ConcurrentMap
  */
 object PatternRegistry {
     private val regularPatterns: ConcurrentMap<String, Operator> = ConcurrentHashMap()
+    private val perWorldPatterns: ConcurrentMap<ResourceLocation, Pair<HexPattern, Operator>> = ConcurrentHashMap()
     private val specialHandlers: ConcurrentLinkedDeque<SpecialHandler> = ConcurrentLinkedDeque()
 
 
@@ -42,8 +48,25 @@ object PatternRegistry {
         this.addRegularPattern(signature, operator)
         val flipped = mirrorSig(signature)
         if (flipped != signature) {
-            this.addRegularPattern(signature, operator)
+            this.addRegularPattern(flipped, operator)
         }
+    }
+
+    /**
+     * Associate a given *pattern shape* with a SpellOperator.
+     * The pattern will be different per world, but it will have the same shape.
+     * (Different stroke order, same look.)
+     *
+     * Also, give it some kind of unique name so that it can be recalled from SavedData later.
+     */
+    @JvmStatic
+    @Throws(RegisterPatternException::class)
+    fun addRegularPatternPerWorld(pattern: HexPattern, id: ResourceLocation, operator: Operator) {
+        if (this.perWorldPatterns.containsKey(id)) {
+            throw RegisterPatternException("The id `$id` already exists")
+        }
+
+        this.perWorldPatterns[id] = Pair(pattern, operator)
     }
 
     /**
@@ -54,16 +77,51 @@ object PatternRegistry {
         this.specialHandlers.add(handler)
     }
 
-    fun lookupPattern(pat: HexPattern): Operator {
+    /**
+     * Internal use only.
+     */
+    @JvmStatic
+    fun lookupPattern(pat: HexPattern, overworld: ServerLevel): Operator {
+        // Pipeline:
+        // patterns are registered here every time the game boots
+        // when we try to look
         for (handler in specialHandlers) {
             val op = handler.handlePattern(pat)
             if (op != null) return op
         }
+
+        // Is it global?
         val sig = pat.anglesSignature()
-        return this.regularPatterns.getOrElse(sig) {
-            throw CastException(CastException.Reason.INVALID_PATTERN, pat)
-        }
+        this.regularPatterns[sig]?.let { return it }
+
+        // Look it up in the world?
+        val ds = overworld.dataStorage
+        val perWorldPatterns: Save =
+            ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
+        perWorldPatterns.lookup[sig]?.let { return this.perWorldPatterns[it]!!.second }
+
+        throw CastException(CastException.Reason.INVALID_PATTERN, pat)
     }
+
+    /**
+     * Internal use only.
+     */
+    @JvmStatic
+    fun getPerWorldPatterns(overworld: ServerLevel): Map<String, ResourceLocation> {
+        val ds = overworld.dataStorage
+        val perWorldPatterns: Save =
+            ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
+        return perWorldPatterns.lookup
+    }
+
+    /**
+     * Internal use only.
+     */
+    @JvmStatic
+    fun lookupPerWorldPattern(opId: ResourceLocation): Pair<HexPattern, Operator> =
+        this.perWorldPatterns.getOrElse(opId) {
+            throw IllegalArgumentException("could not find a pattern for $opId")
+        }
 
     /**
      * Special handling of a pattern. Before checking any of the normal angle-signature based patterns,
@@ -91,4 +149,39 @@ object PatternRegistry {
     }
 
     class RegisterPatternException(msg: String) : java.lang.Exception(msg)
+
+    /**
+     * Maps angle sigs to resource locations so we can look them up in the main registry
+     */
+    private class Save(val lookup: MutableMap<String, ResourceLocation>) : SavedData() {
+        override fun save(tag: CompoundTag): CompoundTag {
+            for ((sig, id) in this.lookup) {
+                tag.putString(sig, id.toString())
+            }
+            return tag
+        }
+
+        companion object {
+            fun load(tag: CompoundTag): Save {
+                val map = HashMap<String, ResourceLocation>()
+                for (sig in tag.allKeys) {
+                    map[sig] = ResourceLocation.tryParse(tag.getString(sig))!!
+                }
+                return Save(map)
+            }
+
+            fun create(seed: Long): Save {
+                val map = mutableMapOf<String, ResourceLocation>()
+                for ((opId, v) in PatternRegistry.perWorldPatterns) {
+                    // waugh why doesn't kotlin recursively destructure things
+                    val (pat, _) = v
+                    val scrungled = EulerPathFinder.findAltDrawing(pat, seed)
+                    map[scrungled.anglesSignature()] = opId
+                }
+                return Save(map)
+            }
+        }
+    }
+
+    private const val TAG_SAVED_DATA = "hex.per-world-patterns"
 }

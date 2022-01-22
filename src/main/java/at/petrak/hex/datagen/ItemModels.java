@@ -26,6 +26,7 @@ public class ItemModels extends ItemModelProvider {
         simpleItem(HexItems.CHARGED_AMETHYST.get());
         simpleItem(HexItems.SUBMARINE_SANDWICH.get());
         simpleItem(HexItems.SCRYING_LENS.get());
+        simpleItem(HexItems.SCROLL.get());
 
         simpleItem(modLoc("patchouli_book"));
 

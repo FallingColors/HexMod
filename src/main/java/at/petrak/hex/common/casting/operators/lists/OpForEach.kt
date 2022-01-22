@@ -33,7 +33,7 @@ object OpForEach : Operator {
             harness.stack.addAll(stack)
             harness.stack.add(v)
             for (pat in program) {
-                val res = harness.update(pat)
+                val res = harness.update(pat, ctx.world)
                 when (res) {
                     is CastingHarness.CastResult.Error -> throw res.exn
                     is CastingHarness.CastResult.Cast -> spellsToCast.addAll(res.spells)

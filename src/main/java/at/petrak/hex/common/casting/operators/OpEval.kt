@@ -20,7 +20,7 @@ object OpEval : Operator {
 
         val spellsToCast = mutableListOf<RenderedSpell>()
         for (pat in instrs) {
-            val res = harness.update(pat.tryGet())
+            val res = harness.update(pat.tryGet(), ctx.world)
             when (res) {
                 is CastingHarness.CastResult.Error -> throw res.exn
                 is CastingHarness.CastResult.Cast -> spellsToCast.addAll(res.spells)
