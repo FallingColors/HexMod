@@ -1,0 +1,18 @@
+{
+    "name": "Spellbook",
+    "category": "hexcasting:items",
+    "icon": "hexcasting:spellbook",
+    "sortnum": 3,
+    "advancement": "hexcasting:root",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "A $(item)Spellbook/$ is the culmination of my art-- it acts like an entire library of $(l:items/focus)$(item)Foci/$.$(br2)Each page can hold a single iota, and I can select the active page (the page that iotas are saved to and copied from) by sneak-scrolling while holding it, or simply holding it in my off-hand and scrolling while casting a _Hex."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "hexcasting:spellbook",
+            "text": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first."
+        }
+    ]
+}

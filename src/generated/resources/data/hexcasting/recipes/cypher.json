@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "FAF",
+    " F "
+  ],
+  "key": {
+    "F": {
+      "tag": "forge:nuggets/iron"
+    },
+    "A": {
+      "item": "hexcasting:amethyst_dust"
+    }
+  },
+  "result": {
+    "item": "hexcasting:cypher"
+  }
+}

@@ -5,15 +5,12 @@ license = "MIT"
 issueTrackerURL = "https://github.com/gamma-delta/HexMod/issues"
 
 [[mods]]
-modId = "hex"
+modId = "hexcasting"
 version = "${file.jarVersion}"
 displayName = "Hex"
 displayURL = "https://github.com/gamma-delta/HexMod"
 logoFile = "logo.png"
-credits = '''
-- Alwinfy for visual effects and proofreading
-- Kra3tor for sound effects
-'''
+credits = "Alwinfy for visual effects and proofreading; Kra3tor for sound effects"
 authors = "petrak@ (aka gamma-delta)"
 description = "Cast powerful Hexes on the fly by drawing patterns with a staff."
 

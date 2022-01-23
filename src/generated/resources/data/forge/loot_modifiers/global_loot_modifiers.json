@@ -1,12 +1,12 @@
 {
   "replace": false,
   "entries": [
-    "hex:scroll_bastion",
-    "hex:amethyst_cluster",
-    "hex:scroll_dungeon",
-    "hex:scroll_stronghold_library",
-    "hex:scroll_jungle",
-    "hex:scroll_cartographer",
-    "hex:scroll_shipwreck"
+    "hexcasting:scroll_bastion",
+    "hexcasting:amethyst_cluster",
+    "hexcasting:scroll_dungeon",
+    "hexcasting:scroll_stronghold_library",
+    "hexcasting:scroll_jungle",
+    "hexcasting:scroll_cartographer",
+    "hexcasting:scroll_shipwreck"
   ]
 }

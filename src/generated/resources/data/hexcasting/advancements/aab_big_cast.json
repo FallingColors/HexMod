@@ -1,0 +1,33 @@
+{
+  "parent": "hexcasting:root",
+  "display": {
+    "icon": {
+      "item": "hexcasting:charged_amethyst"
+    },
+    "title": {
+      "translate": "advancement.hexcasting:big_cast"
+    },
+    "description": {
+      "translate": "advancement.hexcasting:big_cast.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "cast_amt": {
+      "trigger": "hexcasting:spend_mana",
+      "conditions": {
+        "mana_spent": {
+          "min": 6400000
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cast_amt"
+    ]
+  ]
+}

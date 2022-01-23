@@ -1,0 +1,72 @@
+{
+    "name": "Constants",
+    "category": "hexcasting:patterns",
+    "icon": "minecraft:bedrock",
+    "sortnum": 3,
+    "advancement": "hexcasting:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hexcasting:pattern",
+            "header": "Axial Reflection +X/-X",
+            "input": "",
+            "output": "vector",
+            "text": "The left-hand counter-clockwise pattern adds (1, 0, 0) to the stack; the right-hand clockwise pattern adds (-1, 0, 0).",
+            "patterns": [{
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqea",
+                "q": -1,
+                "r": -1
+            }, {
+                "startdir": "NORTH_EAST",
+                "signature": "eeeeeqa",
+                "r": 1
+            }]
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Axial Reflection +Y/-Y",
+            "input": "",
+            "output": "vector",
+            "text": "The left-hand counter-clockwise pattern adds (0, 1, 0) to the stack; the right-hand clockwise pattern adds (0, -1, 0).",
+            "patterns": [{
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqew",
+                "q": -1,
+                "r": -1
+            }, {
+                "startdir": "NORTH_EAST",
+                "signature": "eeeeeqw",
+                "r": 1
+            }]
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Axial Reflection +Z/-Z",
+            "input": "",
+            "output": "vector",
+            "text": "The left-hand counter-clockwise pattern adds (0, 0, 1); the right-hand clockwise pattern adds (0, 0, -1).",
+            "patterns": [{
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqed",
+                "q": -1,
+                "r": -1
+            }, {
+                "startdir": "NORTH_EAST",
+                "signature": "eeeeeqd",
+                "r": 1
+            }]
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Nullary Reflection",
+            "input": "",
+            "output": "influence",
+            "text": "Adds the Null influence to the top of the stack.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "a"
+            }
+        }
+    ]
+}

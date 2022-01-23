@@ -1,6 +1,6 @@
-import at.petrak.hex.hexmath.EulerPathFinder.findAltDrawing
-import at.petrak.hex.hexmath.HexDir
-import at.petrak.hex.hexmath.HexPattern.Companion.FromAnglesSig
+import at.petrak.hexcasting.hexmath.EulerPathFinder.findAltDrawing
+import at.petrak.hexcasting.hexmath.HexDir
+import at.petrak.hexcasting.hexmath.HexPattern.Companion.FromAnglesSig
 import org.testng.annotations.Test
 
 internal class EulerPathFinderTest {

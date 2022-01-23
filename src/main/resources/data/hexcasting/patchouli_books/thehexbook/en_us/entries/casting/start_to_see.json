@@ -1,0 +1,26 @@
+{
+    "name": "WHAT DID I SEE",
+    "category": "hexcasting:casting",
+    "icon": "minecraft:textures/mob_effect/blindness.png",
+    "priority": true,
+    "sortnum": 3,
+    "advancement": "hexcasting:opened_eyes",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The texts weren't lying. Nature took its due."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "That was... one of the worst things I've experienced. I offered my plan, and Nature smiled firmly at me and ripped away a part of myself alongside my payment. I feel lucky to have $(italic)survived/$, much less have sagacity enough to write this.$(br2)I should declare the matter closed, double-check my math before I cast any more _Hexes, and make sure I have the _media I need..."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "...But.$(br2)For the scarcest instant, that part of myself ... saw ... $(italic)something/$. A place, or a design perhaps-- I was abstract enough that there was no distinction. A ... membrane separating myself from a realm of raw thought and light and energy. I remember-- or, I don't remember, but I find myself thinking of --the barrier fuzzing at the edges just a little bit. I wanted $(italic)through./$"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "I know I shouldn't. It's dangerous. It's too dangerous. I'd have to bring myself within a hairsbreadth of Death.$(br2)But I'm SO CLOSE. $(italic)THIS/$ is the culmination of my art, the $(#54398a)Enlightenment/$ I've been seeking.$(br2)I need more. I need to see it again. What is the price of my mortal mind against immortal glory? Just once more... I need to see it. I WILL see it."
+        }
+    ]
+}

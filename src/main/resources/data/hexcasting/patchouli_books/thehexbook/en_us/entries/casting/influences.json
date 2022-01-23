@@ -1,0 +1,17 @@
+{
+    "name": "Influences",
+    "category": "hexcasting:casting",
+    "icon": "minecraft:spyglass",
+    "sortnum": 3,
+    "advancement": "hexcasting:root",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Influences are ... strange, to say the least. Whereas most iotas seem to represent something about the world, influences represent ... something more abstract and formless.$(br2)For example, one influence I've named Null seems to represent nothing at all. It's created when there isn't a suitable answer to a question asked, such as the Entity Distillation on a block with no entity there."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "In addition, I've discovered a curious triplet of influences I've named Consideration, Introspection, and Retrospection. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:casting/patterns_as_iotas)My notes on the subject are here/$."
+        }
+    ] 
+}

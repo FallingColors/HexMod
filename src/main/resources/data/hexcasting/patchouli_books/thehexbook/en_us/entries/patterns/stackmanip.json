@@ -1,0 +1,46 @@
+{
+    "name": "Stack Manipulation",
+    "category": "hexcasting:patterns",
+    "icon": "minecraft:piston",
+    "sortnum": 3,
+    "advancement": "hexcasting:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hexcasting:pattern",
+            "header": "Novice's Gambit",
+            "anchor": "OpUndo",
+            "input": "any",
+            "output": "",
+            "text": "Removes the top of the stack and does nothing with it. This is handy when I make a mistake.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "a"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Gemini Decomposition",
+            "anchor": "OpDuplicate",
+            "input": "any",
+            "output": "any, any",
+            "text": "Duplicates the top iota of the stack.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "aadaa"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Jester's Gambit",
+            "anchor": "OpSwap",
+            "input": "any, any",
+            "output": "any, any",
+            "text": "Swaps the top two iotas of the stack.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "aawdd"
+            }
+        }
+    ]
+}

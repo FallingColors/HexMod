@@ -1,0 +1,26 @@
+{
+    "name": "Focus",
+    "icon": "hexcasting:focus",
+    "category": "hexcasting:items",
+    "sortnum": 2,
+    "advancement": "hexcasting:root",
+    "pages": [
+        {
+            "type": "patchouli:text", 
+            "text": "A $(item)Focus/$ can store a single iota.$(br2)When I craft it, it holds the Null influence by default. Using the $(action)$(l:patterns/meta#OpWrite)Scribe's Gambit/$ while holding a $(item)Focus/$ in my other hand will remove the top of the stack and save it into the $(item)Focus/$. Using the $(action)$(l:patterns/meta#OpRead)Scribe's Reflection/$ will copy whatever iota's in the $(item)Focus/$ and add it to the stack."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "hexcasting:focus",
+            "text": "$(italic)Poison apples, poison worms./$"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "It occurs to me that I could conceivably store a whole list of patterns in a $(item)Focus/$, then recall them and evaluate them with $(l:patterns/meta#OpEval)$(action)Hermes' Gambit/$. This way I can cast complex spells, or parts of spells, without having to draw them over and over.$(br2)I could use this like a slightly less convenient $(l:items/hexcasting#artifact)$(item)Artifact/$, but I think I could get much better dividends by putting common \"phrases\" in a $(item)Focus/$, like the patterns for figuring out where I'm looking."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Also, if I store an entity in a $(item)Focus/$ and try to recall it after the referenced entity has died or otherwise disappeared, the $(action)Scribe's Reflection/$ will add Null to the stack instead."
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "FAF",
+    " F "
+  ],
+  "key": {
+    "F": {
+      "tag": "forge:ingots/gold"
+    },
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "result": {
+    "item": "hexcasting:trinket"
+  }
+}

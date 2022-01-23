@@ -1,0 +1,6 @@
+{
+  "name": "Spells",
+  "icon": "minecraft:textures/item/enchanted_book.png",
+  "description": "Patterns and actions that perform a magical effect on the world.",
+  "parent": "hexcasting:patterns"
+}

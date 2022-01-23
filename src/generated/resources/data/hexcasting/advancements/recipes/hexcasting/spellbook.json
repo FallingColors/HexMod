@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "hexcasting:spellbook"
+    ]
+  },
+  "criteria": {
+    "has_focus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "hexcasting:focus"
+            ]
+          }
+        ]
+      }
+    },
+    "has_chorus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:chorus_fruit"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "hexcasting:spellbook"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_focus",
+      "has_chorus",
+      "has_the_recipe"
+    ]
+  ]
+}

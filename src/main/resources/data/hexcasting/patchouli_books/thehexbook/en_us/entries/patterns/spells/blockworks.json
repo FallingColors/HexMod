@@ -1,0 +1,36 @@
+{
+    "name": "Blockworks",
+    "category": "hexcasting:patterns/spells",
+    "icon": "minecraft:cobblestone",
+    "sortnum": 1,
+    "advancement": "hexcasting:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hexcasting:pattern",
+            "header": "Place Block",
+            "anchor": "OpPlaceBlock",
+            "input": "vector",
+            "output": "",
+            "text": "Remove a location from the stack, then pick a block item and place it at the given location.$(br)Costs about 1 $(item)Amethyst Dust/$.",
+            "stroke_order": false,
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "weeeeedqe"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Break Block",
+            "anchor": "OpBreakBlock",
+            "input": "vector",
+            "output": "",
+            "text": "Remove a location from the stack, then break the block at the given location. This spell can break nearly anything a Diamond Pickaxe can break.$(br)Costs about 3 $(item)Amethyst Dust/$s.",
+            "stroke_order": false,
+            "patterns": {
+                "startdir": "SOUTH_EAST",
+                "signature": "eeeeede"
+            }
+        }
+    ]
+}

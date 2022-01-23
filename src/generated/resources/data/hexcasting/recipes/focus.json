@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LQL",
+    "QAQ",
+    "LQL"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:leather"
+    },
+    "Q": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "A": {
+      "item": "hexcasting:charged_amethyst"
+    }
+  },
+  "result": {
+    "item": "hexcasting:focus"
+  }
+}

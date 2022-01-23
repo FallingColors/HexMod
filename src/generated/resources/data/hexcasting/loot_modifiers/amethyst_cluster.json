@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:blocks/amethyst_cluster"
+    },
+    {
+      "condition": "minecraft:inverted",
+      "term": {
+        "condition": "minecraft:match_tool",
+        "predicate": {
+          "enchantments": [
+            {
+              "enchantment": "minecraft:silk_touch"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "chargedChance": 0.95,
+  "type": "hexcasting:amethyst_cluster"
+}

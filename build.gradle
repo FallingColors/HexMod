@@ -17,9 +17,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '0.1.1'
-group = 'at.petra-k.hex' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'hex'
+version = '0.2.0'
+group = 'at.petra-k.hexcasting' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'hexcasting'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -80,7 +80,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
-                hex {
+                hexcasting {
                     source sourceSets.main
                 }
             }
@@ -105,7 +105,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
-                hex {
+                hexcasting {
                     source sourceSets.main
                 }
             }
@@ -130,10 +130,10 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'hex', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'hexcasting', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                hex {
+                hexcasting {
                     source sourceSets.main
                 }
             }
@@ -199,7 +199,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "hex",
+                "Specification-Title"     : "hexcasting",
                 "Specification-Vendor"    : "petrak-at",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,

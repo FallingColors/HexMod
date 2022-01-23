@@ -1,0 +1,55 @@
+{
+    "name": "Crafting Hexcasting Items",
+    "category": "hexcasting:patterns/spells",
+    "icon": "hexcasting:artifact{patterns:[]}",
+    "sortnum": 2,
+    "advancement": "hexcasting:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "These three spells each create an item that casts a _Hex.$(br)They all require me to hold the empty item in my off-hand, and require two things: the list of patterns to be cast, and an entity representing a dropped stack of $(item)Amethyst/$ to form the item's battery.$(br2)See $(l:items/hexcasting)this entry/$ for more information."
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Craft Cypher",
+            "anchor": "OpMakePackagedSpellCypher",
+            "input": "entity, list of patterns",
+            "output": "",
+            "text": "Costs about one $(item)Charged Amethyst/$.",
+            "stroke_order": false,
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "waqqqqq"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Craft Trinket",
+            "anchor": "OpMakePackagedSpellTrinket",
+            "input": "entity, list of patterns",
+            "output": "",
+            "text": "Costs about five $(item)Charged Amethyst/$s.",
+            "stroke_order": false,
+            "hex_size": 8,
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "wwaqqqqqeaqeaeqqqeaeq"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Craft Artifact",
+            "anchor": "OpMakePackagedSpellArtifact",
+            "input": "entity, list of patterns",
+            "output": "",
+            "text": "Costs about ten $(item)Charged Amethyst/$s.",
+            "stroke_order": false,
+            "hex_size": 5,
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq"
+           }
+        }
+    ]
+}

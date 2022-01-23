@@ -1,0 +1,214 @@
+{
+    "name": "Entities",
+    "category": "hexcasting:patterns",
+    "icon": "minecraft:pig_spawn_egg",
+    "sortnum": 4,
+    "advancement": "hexcasting:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hexcasting:pattern",
+            "header": "Entity Purification",
+            "anchor": "OpGetEntityAt",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Transform the position on the stack into the entity at that location (or null if there isn't one).",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqa"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Entity Prfn.: Animal",
+            "anchor": "OpGetEntityAtAnimal",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Transform the position on the stack into the animal at that location (or null if there isn't one).",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaawa"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Entity Prfn.: Monster",
+            "anchor": "OpGetEntityAtMonster",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Transform the position on the stack into the monster at that location (or null if there isn't one).",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaawq"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Entity Prfn.: Item",
+            "anchor": "OpGetEntityAtItem",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Transform the position on the stack into the dropped item at that location (or null if there isn't one).",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaaww"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Entity Prfn.: Player",
+            "anchor": "OpGetEntityAtPlayer",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Transform the position on the stack into the player at that location (or null if there isn't one).",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaawe"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Entity Prfn.: Living",
+            "anchor": "OpGetEntityAtLiving",
+            "input": "vector",
+            "output": "entity or null",
+            "text": "Transform the position on the stack into the living creature at that location (or null if there isn't one).",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqdaqaawd"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Animal",
+            "anchor": "OpGetEntitiesByAnimal",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of animals near the position.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddwa"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Non-Animal",
+            "anchor": "OpGetEntitiesByAnimalNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-animal entities near the position.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaawa"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Monster",
+            "anchor": "OpGetEntitiesByMonster",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of monsters near the position.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddwq"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Non-Monster",
+            "anchor": "OpGetEntitiesByMonsterNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-monster entities near the position.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaawq"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Item",
+            "anchor": "OpGetEntitiesByItem",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of dropped items near the position.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddww"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Non-Item",
+            "anchor": "OpGetEntitiesByItemNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-dropped-item entities near the position.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaaww"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Player",
+            "anchor": "OpGetEntitiesByPlayer",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of players near the position.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddwe"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Non-Player",
+            "anchor": "OpGetEntitiesByPkaterNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-player characters near the position.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaawe"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Living",
+            "anchor": "OpGetEntitiesByLiving",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of living creatures near the position.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwdeddwd"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Non-Living",
+            "anchor": "OpGetEntitiesByLivingNot",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-living entities near the position.",
+            "patterns": {
+                "startdir": "SOUTH_WEST",
+                "signature": "eeeeewaqaawd"
+            }
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Zone Dstln.: Any",
+            "anchor": "OpGetEntitiesBy",
+            "input": "vector, number",
+            "output": "list of entities",
+            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of all entities near the position.",
+            "patterns": {
+                "startdir": "NORTH_WEST",
+                "signature": "qqqqqwded"
+            }
+        }
+    ]
+}

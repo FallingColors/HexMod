@@ -1,0 +1,131 @@
+{
+    "name": "Basic Patterns",
+    "category": "hexcasting:patterns",
+    "icon": "minecraft:wooden_pickaxe",
+    "sortnum": 0,
+    "advancement": "hexcasting:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hexcasting:pattern",
+            "header": "Mind's Reflection",
+            "anchor": "OpGetCaster",
+            "input": "",
+            "output": "entity",
+            "text": "Adds me, the caster, to the stack.",
+            "patterns": [
+                {
+                    "startdir": "SOUTH_WEST",
+                    "signature": "qaq"
+                },
+                {
+                    "startdir": "SOUTH_EAST",
+                    "signature": "ede",
+                    "q": 3
+                }
+            ]
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Compass Purification",
+            "anchor": "OpEntityPos",
+            "input": "entity",
+            "output": "vector",
+            "text": "Transforms an entity on the stack into its position.",
+            "patterns": [
+                {
+                    "startdir": "SOUTH_WEST",
+                    "signature": "aa"
+                },
+                {
+                    "startdir": "SOUTH_EAST",
+                    "signature": "dd",
+                    "q": 3
+                }
+            ]
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Alidade Purification",
+            "anchor": "OpEntityLook",
+            "input": "entity",
+            "output": "vector",
+            "text": "Transforms an entity on the stack into the direction it's looking in, as a unit vector.",
+            "patterns": [
+                {
+                    "startdir": "EAST",
+                    "signature": "wa"
+                },
+                {
+                    "startdir": "WEST",
+                    "signature": "wd",
+                    "q": 2,
+                    "r": 2
+                }
+            ]
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Examine",
+            "anchor": "OpPrint",
+            "input": "any",
+            "output": "any",
+            "text": "Displays the top iota of the stack to me.",
+            "patterns": [
+                {
+                    "startdir": "NORTH_EAST",
+                    "signature": "de"
+                },
+                {
+                    "startdir": "NORTH_WEST",
+                    "signature": "aq",
+                    "q": 3
+                }
+            ]
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Archer's Distillation",
+            "anchor": "OpBlockRaycast",
+            "input": "vector, vector",
+            "output": "vector",
+            "text": "Combines two vectors (a position and a direction) into the answer to the question: If I stood at the position and looked in the direction, what block would I be looking at?",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "wqaawdd"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "If it doesn't hit anything, the vectors will combine into Null.$(br2)For example, casting this with my own position and look vectors will return the coordinates of the block I am looking at."
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Architect's Distillation",
+            "anchor": "OpBlockAxisRaycast",
+            "input": "vector, vector",
+            "output": "vector",
+            "text": "Like $(l:patterns/basics#OpBlockRaycast)$(action)Archer's Distillation$(/l), but instead returns a vector representing the answer to the question: Which $(italic)side/$ of the block am I looking at?",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "weddwaa"
+            }
+        },
+        {
+            "type": "patchouli:text",
+            "text": "More specifically, it returns the $(italic)normal vector/$ of the face hit, or a vector with length 1 pointing perpendicular to the face.$(li)If I am looking at a floor, it will return (0, 1, 0).$(li)If I am looking at the south face of a block, it will return (0, 0, 1).$(br)"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "header": "Scout's Distillation",
+            "anchor": "OpEntityRaycast",
+            "input": "vector, vector",
+            "output": "entity",
+            "text": "Like $(l:patterns/basics#OpBlockRaycast)$(action)Archer's Distillation$(/l), but instead returns the $(italic)entity/$ I am looking at.",
+            "patterns": {
+                "startdir": "EAST",
+                "signature": "weaqa"
+            }
+        }
+    ]
+}
