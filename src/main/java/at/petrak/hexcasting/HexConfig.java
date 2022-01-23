@@ -20,7 +20,7 @@ public class HexConfig {
 
     public HexConfig(ForgeConfigSpec.Builder builder) {
         manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-            .defineInRange("manaToHealthRate", 100_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
+            .defineInRange("manaToHealthRate", 200_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
         patternPointSpeedMultiplier = builder.comment(
                 "How fast the point showing you the stroke order on patterns moves")
             .defineInRange("manaToHealthRate", 1.0, 0.0, Double.POSITIVE_INFINITY);

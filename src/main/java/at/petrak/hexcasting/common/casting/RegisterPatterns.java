@@ -14,8 +14,10 @@ import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
 import at.petrak.hexcasting.common.casting.operators.spells.*;
+import at.petrak.hexcasting.common.casting.operators.spells.great.OpCreateLava;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpLightning;
+import at.petrak.hexcasting.common.casting.operators.spells.great.OpTeleport;
 import at.petrak.hexcasting.common.items.magic.ItemArtifact;
 import at.petrak.hexcasting.common.items.magic.ItemCypher;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
@@ -100,12 +102,19 @@ public class RegisterPatterns {
                 new OpMakePackagedSpell<>(ItemTrinket.class, 500_000));
             PatternRegistry.addRegularPattern("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq",
                 new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000));
+            PatternRegistry.addRegularPattern("aqawqadaq", OpCreateWater.INSTANCE);
+            PatternRegistry.addRegularPattern("dedwedade", OpDestroyWater.INSTANCE);
 
 
             PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("waadwawdaaweewq", HexDir.EAST),
                 prefix("lightning"), OpLightning.INSTANCE);
             PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("eawwaeawawaa", HexDir.NORTH_EAST),
                 prefix("flight"), OpFlight.INSTANCE);
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("eaqawqadaqd", HexDir.EAST),
+                prefix("create_lava"), OpCreateLava.INSTANCE);
+            PatternRegistry.addRegularPatternPerWorld(
+                HexPattern.FromAnglesSig("wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq", HexDir.EAST),
+                prefix("teleport"), OpTeleport.INSTANCE);
 
             // == Meta stuff ==
             PatternRegistry.addRegularPattern("qqq", Widget.OPEN_PAREN);

@@ -21,6 +21,7 @@ object OpBlink : SpellOperator {
         val delta = args.getChecked<Double>(1)
 
         ctx.assertVecInRange(target.position())
+        ctx.assertVecInRange(target.position().add(target.lookAngle.scale(delta)))
 
         return Pair(
             Spell(target, delta),
@@ -28,7 +29,7 @@ object OpBlink : SpellOperator {
         )
     }
 
-    class Spell(val target: Entity, val delta: Double) : RenderedSpell {
+    private data class Spell(val target: Entity, val delta: Double) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val look = target.lookAngle
             // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/entity/PieceTrickBlink.java#L74

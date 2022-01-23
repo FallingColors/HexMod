@@ -58,14 +58,16 @@ data class CastingContext(
         }
     }
 
-
+    /**
+     * Check to make sure a vec is in range
+     */
     fun assertVecInRange(vec: Vec3) {
         if (vec.distanceToSqr(this.caster.position()) > Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
             throw CastException(CastException.Reason.TOO_FAR, vec)
     }
 
     /**
-     * Return the slot from which to take blocks and itempicking.json.
+     * Return the slot from which to take blocks and itemsn.
      */
     // https://wiki.vg/Inventory is WRONG
     // slots 0-8 are the hotbar
@@ -97,7 +99,7 @@ data class CastingContext(
     }
 
     /**
-     * Remove the given gound of the specified item from somewhere in the inventory, favoring slots not in the hotbar.
+     * Remove the given count of the specified item from somewhere in the inventory, favoring slots not in the hotbar.
      * Return whether the withdrawal was successful.
      */
     // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143

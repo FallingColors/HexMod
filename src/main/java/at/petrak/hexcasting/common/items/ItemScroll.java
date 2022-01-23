@@ -88,8 +88,9 @@ public class ItemScroll extends Item {
             if (this.pattern != null) {
                 // Do two passes: one with a random size to find a good COM and one with the real calculations
 
+                // TODO: i should never have been finding the center of mass, but the center of the smallest bounding square
                 var com1 = this.pattern.getCenter(1);
-                var lines1 = this.pattern.toLines(1, com1.negated());
+                var lines1 = this.pattern.toLines(1, Vec2.ZERO);
 
 
                 var maxDist = -1f;
@@ -99,7 +100,7 @@ public class ItemScroll extends Item {
                         maxDist = dist;
                     }
                 }
-                this.scale = Math.min(10, this.getHeight() / 1.5f / maxDist);
+                this.scale = Math.min(10, this.getHeight() / 2.5f / maxDist);
 
                 var com2 = this.pattern.getCenter(this.scale);
                 var lines2 = this.pattern.toLines(this.scale, com2.negated());

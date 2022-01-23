@@ -30,5 +30,7 @@
   "stat.hexcasting.mana_overcasted": "Media overcasted (in dusts)",
   "itemGroup.hexcasting": "hexcasting",
   "hexcasting.spell.hexcasting:flight": "Flight",
-  "hexcasting.spell.hexcasting:lightning": "Summon Lightning"
+  "hexcasting.spell.hexcasting:lightning": "Summon Lightning",
+  "hexcasting.spell.hexcasting:create_lava": "Create Lava",
+  "hexcasting.spell.hexcasting:teleport": "Greater Teleport"
 }

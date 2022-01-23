@@ -87,6 +87,13 @@ class CastingHarness private constructor(
                 // we know the operator is ok here
                 val (manaCost, spells) = operator!!.modifyStack(this.stack, this.ctx)
 
+
+                val leftover = this.withdrawMana(manaCost, ctx.canOvercast)
+                if (ctx.caster.isDeadOrDying)
+                    return CastResult.Died
+                else if (leftover > 0)
+                    return CastResult.QuitCasting
+
                 // is great IMPLIES caster is enlightened
                 if (!operator.isGreat || ctx.isCasterEnlightened) {
                     spellsToCast = spells
@@ -94,9 +101,6 @@ class CastingHarness private constructor(
                     Advancements.FAIL_GREAT_SPELL_TRIGGER.trigger(ctx.caster)
                 }
 
-                this.withdrawMana(manaCost, ctx.canOvercast)
-                if (ctx.caster.isDeadOrDying)
-                    return CastResult.Died
             }
 
             if (spellsToCast.isNotEmpty()) {
