@@ -99,7 +99,7 @@ public class ItemScroll extends Item {
                         maxDist = dist;
                     }
                 }
-                this.scale = Math.min(10, this.getHeight() / 2.1f / maxDist);
+                this.scale = Math.min(10, this.getHeight() / 1.5f / maxDist);
 
                 var com2 = this.pattern.getCenter(this.scale);
                 var lines2 = this.pattern.toLines(this.scale, com2.negated());
@@ -139,8 +139,8 @@ public class ItemScroll extends Item {
                 RenderLib.drawLineSeq(mat, this.zappyPoints, 5f, 0,
                     210, 200, 200, 255, null);
                 RenderLib.drawLineSeq(mat, this.zappyPoints, 2f, 0,
-                    200, 190, 190, 200,
-                    ClientTickCounter.getTickCount() / 40f, 0.5f);
+                    100, 95, 95, 200,
+                    ClientTickCounter.getTickCount() / 40f);
                 RenderLib.drawSpot(mat, this.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
 
                 for (var dot : this.pathfinderDots) {

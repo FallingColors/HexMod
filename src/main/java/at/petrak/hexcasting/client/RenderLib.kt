@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client
 
+import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.client.gui.SQRT_3
 import at.petrak.hexcasting.hexmath.HexCoord
@@ -13,7 +14,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource
 import net.minecraft.world.level.levelgen.synth.PerlinNoise
 import net.minecraft.world.phys.Vec2
 import kotlin.math.absoluteValue
-import kotlin.math.pow
+import kotlin.math.floor
 import kotlin.math.roundToInt
 
 /**
@@ -42,8 +43,6 @@ object RenderLib {
         b: Int,
         a: Int,
         animTime: Float? = null,
-        animDelta: Float = 0.5f,
-        animMid: Float = 0.5f
     ) {
         if (points.size <= 1) return
 
@@ -56,7 +55,6 @@ object RenderLib {
         // There's still some artifacting but this is passable, at least.
         buf.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR)
 
-        var idx = 0
         for ((p1, p2) in points.zipWithNext()) {
             // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
             // GuiComponent::innerFill line 52
@@ -71,34 +69,38 @@ object RenderLib {
             val tx = nx / tlen
             val ty = ny / tlen
 
-            // https://github.com/gamma-delta/haxagon/blob/main/assets/shaders/pattern_beam.frag
-            fun colAmt(t: Float): Float =
-                if (animTime != null) {
-                    val speed = 120f
-                    // 0.8f factor here to make there a small pause between the start and end of the pattern
-                    Mth.cos(Mth.PI * t * 0.8f - animTime * speed / points.size).absoluteValue.pow(100) * animDelta + animMid
-                } else {
-                    1f
-                }
-
-            val amt1 = colAmt(idx.toFloat() / points.size)
-            val amt2 = colAmt((idx + 1).toFloat() / points.size)
-            val r1 = Mth.clamp((r.toFloat() * amt1).toInt(), 0, 255)
-            val g1 = Mth.clamp((g.toFloat() * amt1).toInt(), 0, 255)
-            val b1 = Mth.clamp((b.toFloat() * amt1).toInt(), 0, 255)
-            val r2 = Mth.clamp((r.toFloat() * amt2).toInt(), 0, 255)
-            val g2 = Mth.clamp((g.toFloat() * amt2).toInt(), 0, 255)
-            val b2 = Mth.clamp((b.toFloat() * amt2).toInt(), 0, 255)
-
-
-            buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(r1, g1, b1, a).endVertex()
-            buf.vertex(mat, p1.x - tx, p1.y - ty, z).color(r1, g1, b1, a).endVertex()
-            buf.vertex(mat, p2.x + tx, p2.y + ty, z).color(r2, g2, b2, a).endVertex()
-            buf.vertex(mat, p2.x - tx, p2.y - ty, z).color(r2, g2, b2, a).endVertex()
-            idx++
+            buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(r, g, b, a).endVertex()
+            buf.vertex(mat, p1.x - tx, p1.y - ty, z).color(r, g, b, a).endVertex()
+            buf.vertex(mat, p2.x + tx, p2.y + ty, z).color(r, g, b, a).endVertex()
+            buf.vertex(mat, p2.x - tx, p2.y - ty, z).color(r, g, b, a).endVertex()
         }
-
         tess.end()
+
+        if (animTime != null) {
+            val pointCircuit =
+                (animTime * 30f * HexMod.CONFIG.patternPointSpeedMultiplier.get().toFloat()) % (points.size + 10)
+            // subtract 1 to avoid the point appearing between the end and start for 1 frame
+            if (pointCircuit < points.size - 1) {
+                val pointMacro = floor(pointCircuit).toInt()
+                val pointMicro = pointCircuit - pointMacro
+
+                val p1 = points[pointMacro]
+                val p2 = points[(pointMacro + 1) % points.size]
+                val drawPos = Vec2(
+                    p1.x + (p2.x - p1.x) * pointMicro,
+                    p1.y + (p2.y - p1.y) * pointMicro,
+                )
+                drawSpot(
+                    mat,
+                    drawPos,
+                    2f,
+                    (r + 255) / 2f / 255f,
+                    (g + 255) / 2f / 255f,
+                    (b + 255) / 2f / 255f,
+                    a / 1.2f / 255f
+                )
+            }
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class HexConfig {
 
     public final ForgeConfigSpec.DoubleValue manaToHealthRate;
+    public final ForgeConfigSpec.DoubleValue patternPointSpeedMultiplier;
 
     public final ForgeConfigSpec.IntValue batteryMaxMana;
     public final ForgeConfigSpec.IntValue dustManaAmount;
@@ -16,27 +17,31 @@ public class HexConfig {
     public final ForgeConfigSpec.IntValue opBreakHarvestLevel;
     public final ForgeConfigSpec.IntValue maxRecurseDepth;
 
+
     public HexConfig(ForgeConfigSpec.Builder builder) {
         manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-                .defineInRange("manaToHealthRate", 100_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
+            .defineInRange("manaToHealthRate", 100_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
+        patternPointSpeedMultiplier = builder.comment(
+                "How fast the point showing you the stroke order on patterns moves")
+            .defineInRange("manaToHealthRate", 1.0, 0.0, Double.POSITIVE_INFINITY);
 
-        builder.push("itempicking.json");
+        builder.push("items");
         batteryMaxMana = builder.comment("The maximum amount of mana a mana battery can store.")
-                .defineInRange("batteryMaxMana", 1_000_000, 0, Integer.MAX_VALUE);
+            .defineInRange("batteryMaxMana", 1_000_000, 0, Integer.MAX_VALUE);
         dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")
-                .defineInRange("dustManaAmount", 10_000, 0, Integer.MAX_VALUE);
+            .defineInRange("dustManaAmount", 10_000, 0, Integer.MAX_VALUE);
         shardManaAmount = builder.comment("How much mana a single Amethyst Shard item is worth")
-                .defineInRange("shardManaAmount", 50_000, 0, Integer.MAX_VALUE);
+            .defineInRange("shardManaAmount", 50_000, 0, Integer.MAX_VALUE);
         chargedCrystalManaAmount = builder.comment("How much mana a single Charged Amethyst Crystal item is worth")
-                .defineInRange("chargedCrystalManaAmount", 100_000, 0, Integer.MAX_VALUE);
+            .defineInRange("chargedCrystalManaAmount", 100_000, 0, Integer.MAX_VALUE);
         builder.pop();
 
         builder.push("spells");
         maxRecurseDepth = builder.comment("How many times a spell can recursively cast other spells")
-                .defineInRange("maxRecurseDepth", 15, 0, Integer.MAX_VALUE);
+            .defineInRange("maxRecurseDepth", 15, 0, Integer.MAX_VALUE);
         opBreakHarvestLevel = builder.comment(
-                "The harvest level of the Break Block spell.",
-                "0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite."
+            "The harvest level of the Break Block spell.",
+            "0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite."
         ).defineInRange("opBreakHarvestLevel", 3, 0, 4);
         builder.pop();
     }

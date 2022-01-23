@@ -65,15 +65,11 @@ public class PatternComponent implements ICustomComponent {
 
         for (var pat : this.patterns) {
             RenderLib.drawLineSeq(mat, pat.zappyPoints, 5f, 0, 210, 200, 200, 255, null);
-
+            RenderLib.drawLineSeq(mat, pat.zappyPoints, 2f, 0, 100, 95, 95, 200,
+                this.strokeOrder ? ctx.getTicksInBook() / 20f : null);
 
             if (this.strokeOrder) {
-                RenderLib.drawLineSeq(mat, pat.zappyPoints, 2f, 0, 200, 190, 190, 200,
-                        ctx.getTicksInBook() / 20f, 0.5f);
                 RenderLib.drawSpot(mat, pat.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
-            } else {
-                RenderLib.drawLineSeq(mat, pat.zappyPoints, 2f, 0, 100, 95, 95, 200,
-                        null);
             }
         }
 
@@ -126,8 +122,8 @@ public class PatternComponent implements ICustomComponent {
         }
 
         this.pathfinderDots = seenPoints.stream()
-                .map(coord -> RenderLib.coordToPx(coord, this.hexSize, comOffset))
-                .collect(Collectors.toList());
+            .map(coord -> RenderLib.coordToPx(coord, this.hexSize, comOffset))
+            .collect(Collectors.toList());
     }
 
     private record PatternEntry(HexPattern pattern, HexCoord origin, List<Vec2> zappyPoints) {
