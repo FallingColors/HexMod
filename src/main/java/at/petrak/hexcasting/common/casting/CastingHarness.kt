@@ -86,10 +86,15 @@ class CastingHarness private constructor(
             } else {
                 // we know the operator is ok here
                 val (manaCost, spells) = operator!!.modifyStack(this.stack, this.ctx)
-                spellsToCast = spells
 
+                // is great IMPLIES caster is enlightened
+                if (!operator.isGreat || ctx.isCasterEnlightened) {
+                    spellsToCast = spells
+                } else if (operator.isGreat) {
+                    Advancements.FAIL_GREAT_SPELL_TRIGGER.trigger(ctx.caster)
+                }
 
-                this.withdrawMana(manaCost, true)
+                this.withdrawMana(manaCost, ctx.canOvercast)
                 if (ctx.caster.isDeadOrDying)
                     return CastResult.Died
             }
@@ -168,6 +173,7 @@ class CastingHarness private constructor(
 
         return costLeft
     }
+
 
     fun serializeToNBT(): CompoundTag {
         val out = CompoundTag()

@@ -18,6 +18,11 @@ interface Operator {
      */
     fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult
 
+    /**
+     * Do you need to be enlightened to cast this spell?
+     */
+    val isGreat: Boolean get() = false
+
     companion object {
         // I see why vzakii did this: you can't raycast out to infinity!
         const val MAX_DISTANCE: Double = 32.0

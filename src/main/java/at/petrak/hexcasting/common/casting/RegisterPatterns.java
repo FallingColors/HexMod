@@ -89,29 +89,23 @@ public class RegisterPatterns {
             // == Spells ==
 
             PatternRegistry.addRegularPatternAndMirror("de", OpPrint.INSTANCE);
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("aawaawaa", HexDir.EAST),
-                    prefix("explode"), new OpExplode(false));
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("aawqaqwaa", HexDir.EAST),
-                    prefix("explode/fireball"), new OpExplode(true));
+            PatternRegistry.addRegularPattern("aawaawaa", new OpExplode(false));
+            PatternRegistry.addRegularPattern("ddwddwdd", new OpExplode(true));
+            PatternRegistry.addRegularPattern("ewdqdwedw", OpAddMotion.INSTANCE);
+            PatternRegistry.addRegularPattern("ewdqdwed", OpBlink.INSTANCE);
+            PatternRegistry.addRegularPattern("qaqqqqq", OpBreakBlock.INSTANCE);
+            PatternRegistry.addRegularPattern("eeeeede", OpPlaceBlock.INSTANCE);
+            PatternRegistry.addRegularPattern("waqqqqq", new OpMakePackagedSpell<>(ItemCypher.class, 100_000));
+            PatternRegistry.addRegularPattern("wwaqqqqqeaqeaeqqqeaeq",
+                new OpMakePackagedSpell<>(ItemTrinket.class, 500_000));
+            PatternRegistry.addRegularPattern("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq",
+                new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000));
 
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("waqwaeawq", HexDir.EAST),
-                    prefix("add_motion"), OpAddMotion.INSTANCE);
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("aqwaeawq", HexDir.EAST),
-                    prefix("blink"), OpBlink.INSTANCE);
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("qaqqqqq", HexDir.EAST),
-                    prefix("break_block"), OpBreakBlock.INSTANCE);
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("weeeeedqe", HexDir.NORTH_EAST),
-                    prefix("place_block"), OpPlaceBlock.INSTANCE);
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST),
-                    prefix("make_cypher"), new OpMakePackagedSpell<>(ItemCypher.class, 100_000));
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
-                    prefix("make_trinket"), new OpMakePackagedSpell<>(ItemTrinket.class, 500_000));
-            PatternRegistry.addRegularPatternPerWorld(
-                    HexPattern.FromAnglesSig("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
-                    prefix("make_artifact"), new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000));
-            // great spells are revealed to you automatically ... for now
-            PatternRegistry.addRegularPattern("waadwawdaaweewq", OpLightning.INSTANCE);
-            PatternRegistry.addRegularPattern("eawwaeawawaa", OpFlight.INSTANCE);
+
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("waadwawdaaweewq", HexDir.EAST),
+                prefix("lightning"), OpLightning.INSTANCE);
+            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("eawwaeawawaa", HexDir.NORTH_EAST),
+                prefix("flight"), OpFlight.INSTANCE);
 
             // == Meta stuff ==
             PatternRegistry.addRegularPattern("qqq", Widget.OPEN_PAREN);
@@ -126,17 +120,17 @@ public class RegisterPatterns {
 
             // == Consts ==
             PatternRegistry.addRegularPattern("qqqqqea",
-                    Operator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 0.0))));
+                Operator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 0.0))));
             PatternRegistry.addRegularPattern("qqqqqew",
-                    Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 1.0, 0.0))));
+                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 1.0, 0.0))));
             PatternRegistry.addRegularPattern("qqqqqed",
-                    Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 1.0))));
+                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 1.0))));
             PatternRegistry.addRegularPattern("eeeeeqa",
-                    Operator.makeConstantOp(SpellDatum.make(new Vec3(-1.0, 0.0, 0.0))));
+                Operator.makeConstantOp(SpellDatum.make(new Vec3(-1.0, 0.0, 0.0))));
             PatternRegistry.addRegularPattern("eeeeeqw",
-                    Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, -1.0, 0.0))));
+                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, -1.0, 0.0))));
             PatternRegistry.addRegularPattern("eeeeeqd",
-                    Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, -1.0))));
+                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, -1.0))));
 
         } catch (PatternRegistry.RegisterPatternException exn) {
             exn.printStackTrace();

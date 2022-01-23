@@ -22,18 +22,13 @@
   "advancement.hexcasting:wasteful_cast.desc": "Waste a large amount of Media when casting a hexcasting.",
   "advancement.hexcasting:big_cast": "... Want Not",
   "advancement.hexcasting:big_cast.desc": "Cast a spell requiring a truly huge amount of Media.",
+  "advancement.hexcasting:y_u_no_cast_angy": "Blind Diversion",
+  "advancement.hexcasting:y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
   "advancement.hexcasting:opened_eyes": "Opened Eyes",
   "advancement.hexcasting:opened_eyes.desc": "Have nature take just a §olittle§r of your mind as payment for a hexcasting.",
   "stat.hexcasting.mana_used": "Media consumed (in dusts)",
   "stat.hexcasting.mana_overcasted": "Media overcasted (in dusts)",
   "itemGroup.hexcasting": "hexcasting",
-  "hexcasting.spell.hexcasting:explode": "Explosion",
-  "hexcasting.spell.hexcasting:explode/fireball": "Fireball",
-  "hexcasting.spell.hexcasting:add_motion": "Impulse",
-  "hexcasting.spell.hexcasting:blink": "Blink",
-  "hexcasting.spell.hexcasting:break_block": "Break Block",
-  "hexcasting.spell.hexcasting:place_block": "Place Block",
-  "hexcasting.spell.hexcasting:make_cypher": "Craft Cypher",
-  "hexcasting.spell.hexcasting:make_trinket": "Craft Trinket",
-  "hexcasting.spell.hexcasting:make_artifact": "Craft Artifact"
+  "hexcasting.spell.hexcasting:flight": "Flight",
+  "hexcasting.spell.hexcasting:lightning": "Summon Lightning"
 }

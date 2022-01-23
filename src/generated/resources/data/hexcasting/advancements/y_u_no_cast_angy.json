@@ -1,0 +1,28 @@
+{
+  "parent": "hexcasting:root",
+  "display": {
+    "icon": {
+      "item": "minecraft:blaze_powder"
+    },
+    "title": {
+      "translate": "advancement.hexcasting:y_u_no_cast_angy"
+    },
+    "description": {
+      "translate": "advancement.hexcasting:y_u_no_cast_angy.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "did_the_thing": {
+      "trigger": "hexcasting:fail_to_cast_great_spell"
+    }
+  },
+  "requirements": [
+    [
+      "did_the_thing"
+    ]
+  ]
+}

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.api.Operator
 import at.petrak.hexcasting.common.items.ItemDataHolder
 import at.petrak.hexcasting.common.items.ItemSpellbook
+import at.petrak.hexcasting.common.lib.RegisterHelper.prefix
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -57,7 +58,7 @@ data class CastingContext(
         }
     }
 
-    
+
     fun assertVecInRange(vec: Vec3) {
         if (vec.distanceToSqr(this.caster.position()) > Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
             throw CastException(CastException.Reason.TOO_FAR, vec)
@@ -115,7 +116,7 @@ data class CastingContext(
         }
         if (presentCount < count) return false
 
-        // now that we know we have enough itempicking.json, if we don't need to remove anything we're through.
+        // now that we know we have enough items, if we don't need to remove anything we're through.
         if (!actuallyRemove) return true
 
         var remaining = count
@@ -132,4 +133,18 @@ data class CastingContext(
         }
         throw RuntimeException("unreachable")
     }
+
+    val canOvercast: Boolean
+        get() {
+            val adv = this.world.server.advancements.getAdvancement(prefix("y_u_no_cast_angy"))
+            val advs = this.caster.advancements
+            return advs.getOrStartProgress(adv!!).isDone
+        }
+
+    val isCasterEnlightened: Boolean
+        get() {
+            val adv = this.world.server.advancements.getAdvancement(prefix("enlightenment"))
+            val advs = this.caster.advancements
+            return advs.getOrStartProgress(adv!!).isDone
+        }
 }

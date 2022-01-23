@@ -1,0 +1,26 @@
+{
+  "name": "A Frusturation",
+  "category": "hexcasting:basics",
+  "icon": "minecraft:textures/mob_effect/nausea.png",
+  "priority": true,
+  "sortnum": 1,
+  "advancement": "hexcasting:y_u_no_cast_angy",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ARGH! Why won't it let me cast the spell?!$(br2)The scroll I found rings with authenticity. I can feel it, right there. The pattern is true. The spell is RIGHT THERE on the other side of some membrane, and it tried to come over but it COULD NOT."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "It felt like that barrier got a $(italic)little/$ weaker from the power banging against it from the other side, but it REFUSES to cross through. It's maddening. THIS is what my studies into the arcane give me? An impotence at my crowning moment?$(br2)I should take a deep breath. I should meditate on what I have learned, even if it wasn't very much..."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "I have discovered one thing. It seems ... I may have unlocked the ability, or perhaps curse, to cast spells using my health instead of $(item)amethyst/$, like I read about in those old legends. I'm not sure why I think this. It just... the truth is there, and I see it.$(br2)I even get a sense of scale; I would get approximately two $(item)Charged Amethyst/$'s worth of _media out of my health at its prime."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "I shudder to think about it-- I've managed to keep my mind mostly intact so far --but there's a tenuous link here, between me and some other side. The walls have thinned from that trauma, and the glory is right there. I find myself wanting to try it."
+    }
+  ]
+}

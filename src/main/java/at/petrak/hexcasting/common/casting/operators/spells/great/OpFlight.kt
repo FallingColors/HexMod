@@ -25,6 +25,7 @@ import kotlin.math.roundToInt
 
 object OpFlight : SpellOperator {
     override val argc = 3
+    override val isGreat = true
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
         val target = args.getChecked<ServerPlayer>(0)
         val timeRaw = max(args.getChecked(1), 0.0)

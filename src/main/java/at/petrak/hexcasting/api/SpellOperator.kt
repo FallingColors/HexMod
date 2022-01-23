@@ -5,6 +5,7 @@ import at.petrak.hexcasting.common.casting.CastingContext
 
 interface SpellOperator : Operator {
     val argc: Int
+
     fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int>
 
     override fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {

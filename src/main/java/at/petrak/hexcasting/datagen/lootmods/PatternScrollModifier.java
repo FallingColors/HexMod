@@ -37,6 +37,9 @@ public class PatternScrollModifier extends LootModifier {
         var seenPats = new HashSet<String>();
         var scrollAmt = rand.nextGaussian(0.0, this.countStddev);
         for (int i = 0; i < scrollAmt; i++) {
+            if (seenPats.size() == allOpIds.size()) {
+                break;
+            }
             String pattern;
             do {
                 pattern = allOpIds.get(rand.nextInt(allOpIds.size()));
@@ -49,7 +52,7 @@ public class PatternScrollModifier extends LootModifier {
             tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
             var prototypePat = PatternRegistry.lookupPerWorldPattern(opId).getFirst();
             tag.put(ItemScroll.TAG_PATTERN,
-                    HexPattern.FromAnglesSig(pattern, prototypePat.startDir()).serializeToNBT());
+                HexPattern.FromAnglesSig(pattern, prototypePat.startDir()).serializeToNBT());
 
             var stack = new ItemStack(HexItems.SCROLL.get());
             stack.setTag(tag);
@@ -65,7 +68,7 @@ public class PatternScrollModifier extends LootModifier {
 
         @Override
         public PatternScrollModifier read(ResourceLocation location, JsonObject json,
-                LootItemCondition[] conditions) {
+            LootItemCondition[] conditions) {
             var stddev = GsonHelper.getAsFloat(json, "stddev");
             return new PatternScrollModifier(conditions, stddev);
         }

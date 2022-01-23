@@ -67,7 +67,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "In any case, I think I could get one $(item)Charged Amethyst Crystal/$'s worth of mana from a healthy mind before I die of exertion-- not that I should make a habit of it.$(p)Even small amounts of damage, accumulated over time, can cause long-term issues, or so I've heard."
+      "text": "Or, it $(italic) should/$ be like that. In my experiments, I've never managed to do it; if I run out of _media, the spell will simply fail to cast. It feels as if there's some sort of ... barrier in my mind that appears when I try. $(br2)It would be interesting to get to the bottom of the conundrum, but for now I suppose it keeps me safe."
     },
     {
       "type": "patchouli:link",

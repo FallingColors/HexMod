@@ -13,7 +13,7 @@
       "type": "patchouli:spotlight",
       "item": "hexcasting:scroll",
       "link_recipe": true,
-      "text": "For many patterns, however, I was $(italic)not/$ able to find the stroke order, just the shape. I suspect the order to draw them in are out there, locked away in the ancient libraries and dungeons of the world.$(br2)In such cases I just draw the pattern without any information on the order to draw it in."
+      "text": "For a few patterns, however, I was $(italic)not/$ able to find the stroke order, just the shape. I suspect the order to draw them in are out there, locked away in the ancient libraries and dungeons of the world.$(br2)In such cases I just draw the pattern without any information on the order to draw it in."
     },
     {
       "type": "patchouli:text",

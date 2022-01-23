@@ -10,8 +10,8 @@ import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.phys.Vec3
 
 object OpLightning : SpellOperator {
-    override val argc: Int
-        get() = 1
+    override val argc = 1
+    override val isGreat = true
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
         val target = args.getChecked<Vec3>(0)
