@@ -20,12 +20,18 @@ public class ItemWand extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if (world.isClientSide()) {
-            Minecraft.getInstance().setScreen(new GuiSpellcasting(hand));
+            ClientAccess.openSpellcastGui(hand);
         }
 
         player.awardStat(Stats.ITEM_USED.get(this));
 
         return InteractionResultHolder.success(player.getItemInHand(hand));
+    }
+
+    private static class ClientAccess {
+        public static void openSpellcastGui(InteractionHand hand) {
+            Minecraft.getInstance().setScreen(new GuiSpellcasting(hand));
+        }
     }
 
 }
