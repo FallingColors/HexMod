@@ -34,12 +34,14 @@ public class ListPatsCommand {
                 if (sender instanceof ServerPlayer player) {
                     var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
 
-                    lookup.forEach((pattern, opId) -> {
+                    lookup.forEach((pattern, entry) -> {
+                        var opId = entry.component1();
+                        var startDir = entry.component2();
+
                         var tag = new CompoundTag();
                         tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
-                        var prototypePat = PatternRegistry.lookupPattern(opId).getPrototype();
                         tag.put(ItemScroll.TAG_PATTERN,
-                            HexPattern.FromAnglesSig(pattern, prototypePat.startDir()).serializeToNBT());
+                            HexPattern.FromAnglesSig(pattern, startDir).serializeToNBT());
 
                         var stack = new ItemStack(HexItems.SCROLL.get());
                         stack.setTag(tag);

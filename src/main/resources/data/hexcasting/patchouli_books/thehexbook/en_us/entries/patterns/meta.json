@@ -28,7 +28,7 @@
             "anchor": "hexcasting:eval",
             "input": "list of patterns",
             "output": "many",
-            "text": "Remove a list of patterns from the stack, then cast them sequentially, as if I had drawn them myself with my $(item)Staff/$.$(br)Costs about five $(item)Charged Amethyst/$s."
+            "text": "Remove a list of patterns from the stack, then cast them sequentially, as if I had drawn them myself with my $(item)Staff/$.$(br)Costs about one $(item)Amethyst Shard/$."
         },
         {
             "type": "patchouli:text",
@@ -40,7 +40,7 @@
             "anchor": "hexcasting:for_each",
             "input": "list of patterns, list",
             "output": "many",
-            "text": "Remove a list of patterns and a list from the stack, then cast the given pattern over each element of the second list.$(br)Costs about 10 $(item)Charged Amethyst/$s."
+            "text": "Remove a list of patterns and a list from the stack, then cast the given pattern over each element of the second list.$(br)Costs about one $(item)Charged Amethyst/$."
         },
         {
             "type": "patchouli:text",

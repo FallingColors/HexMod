@@ -7,7 +7,7 @@
   ],
   "key": {
     "F": {
-      "tag": "forge:nuggets/iron"
+      "item": "minecraft:copper_ingot"
     },
     "A": {
       "item": "hexcasting:amethyst_dust"

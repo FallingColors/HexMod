@@ -79,14 +79,14 @@ object PatternRegistry {
         // Is it global?
         val sig = pat.anglesSignature()
         this.regularPatternLookup[sig]?.let {
-            this.operatorLookup[it.opId] ?: throw CastException(CastException.Reason.INVALID_PATTERN, pat)
+            return this.operatorLookup[it.opId] ?: throw CastException(CastException.Reason.INVALID_PATTERN, pat)
         }
 
         // Look it up in the world?
         val ds = overworld.dataStorage
         val perWorldPatterns: Save =
             ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
-        perWorldPatterns.lookup[sig]?.let { return this.operatorLookup[it]!! }
+        perWorldPatterns.lookup[sig]?.let { return this.operatorLookup[it.first]!! }
 
         throw CastException(CastException.Reason.INVALID_PATTERN, pat)
     }
@@ -95,7 +95,7 @@ object PatternRegistry {
      * Internal use only.
      */
     @JvmStatic
-    fun getPerWorldPatterns(overworld: ServerLevel): Map<String, ResourceLocation> {
+    fun getPerWorldPatterns(overworld: ServerLevel): Map<String, Pair<ResourceLocation, HexDir>> {
         val ds = overworld.dataStorage
         val perWorldPatterns: Save =
             ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
@@ -140,37 +140,47 @@ object PatternRegistry {
     data class PatternEntry(val prototype: HexPattern, val operator: Operator, val isPerWorld: Boolean)
 
     /**
-     * Maps angle sigs to resource locations so we can look them up in the main registry
+     * Maps angle sigs to resource locations and their preferred start dir so we can look them up in the main registry
      */
-    private class Save(val lookup: MutableMap<String, ResourceLocation>) : SavedData() {
+    private class Save(val lookup: MutableMap<String, Pair<ResourceLocation, HexDir>>) : SavedData() {
         override fun save(tag: CompoundTag): CompoundTag {
-            for ((sig, id) in this.lookup) {
-                tag.putString(sig, id.toString())
+            for ((sig, rhs) in this.lookup) {
+                val (id, startDir) = rhs
+                val entry = CompoundTag()
+                entry.putString(TAG_OP_ID, id.toString())
+                entry.putInt(TAG_START_DIR, startDir.ordinal)
+                tag.put(sig, entry)
             }
             return tag
         }
 
         companion object {
             fun load(tag: CompoundTag): Save {
-                val map = HashMap<String, ResourceLocation>()
+                val map = HashMap<String, Pair<ResourceLocation, HexDir>>()
                 for (sig in tag.allKeys) {
-                    map[sig] = ResourceLocation.tryParse(tag.getString(sig))!!
+                    val entry = tag.getCompound(sig)
+                    val opId = ResourceLocation.tryParse(entry.getString(TAG_OP_ID))!!
+                    val startDir = HexDir.values()[entry.getInt(TAG_START_DIR)]
+                    map[sig] = Pair(opId, startDir)
                 }
                 return Save(map)
             }
 
             fun create(seed: Long): Save {
-                val map = mutableMapOf<String, ResourceLocation>()
-                for ((opId, v) in PatternRegistry.perWorldPatternLookup) {
+                val map = mutableMapOf<String, Pair<ResourceLocation, HexDir>>()
+                for ((opId, entry) in PatternRegistry.perWorldPatternLookup) {
                     // waugh why doesn't kotlin recursively destructure things
-                    val (pat, _) = v
-                    val scrungled = EulerPathFinder.findAltDrawing(pat, seed)
-                    map[scrungled.anglesSignature()] = opId
+                    val scrungled = EulerPathFinder.findAltDrawing(entry.prototype, seed)
+                    map[scrungled.anglesSignature()] = Pair(opId, scrungled.startDir)
                 }
-                return Save(map)
+                val save = Save(map)
+                save.setDirty()
+                return save
             }
         }
     }
 
     private const val TAG_SAVED_DATA = "hex.per-world-patterns"
+    private const val TAG_OP_ID = "op_id"
+    private const val TAG_START_DIR = "start_dir"
 }

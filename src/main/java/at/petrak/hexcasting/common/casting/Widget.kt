@@ -11,7 +11,8 @@ import at.petrak.hexcasting.api.SpellDatum
  */
 enum class Widget : ConstManaOperator {
     NULL,
-    OPEN_PAREN, CLOSE_PAREN, ESCAPE;
+    OPEN_PAREN, CLOSE_PAREN, ESCAPE,
+    GARBAGE;
 
     override val argc: Int
         get() = 0

@@ -12,6 +12,10 @@
         {
             "type": "patchouli:text",
             "text": "In addition, I've discovered a curious triplet of influences I've named Consideration, Introspection, and Retrospection. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:casting/patterns_as_iotas)My notes on the subject are here/$."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Finally, there is an influence, or perhaps infinite family of influences, that seem to just be a tangled mess of _media. I've named it $(action)Garbage/$, as it is completely useless. It appears somewhere in my stack when I drawn an invalid pattern, and viewing it through a $(l:items/lens)$(item)Scrying Lens/$ just gives a nonsense jumble."
         }
     ] 
 }

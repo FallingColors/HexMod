@@ -20,7 +20,7 @@ public class ItemModels extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        simpleItem(HexItems.WAND.get());
+        brandishedItem(HexItems.WAND.get());
         simpleItem(HexItems.SPELLBOOK.get());
         simpleItem(HexItems.AMETHYST_DUST.get());
         simpleItem(HexItems.CHARGED_AMETHYST.get());
@@ -31,41 +31,41 @@ public class ItemModels extends ItemModelProvider {
         simpleItem(modLoc("patchouli_book"));
 
         String[] focusTypes = new String[]{
-                "empty", "entity", "double", "vec3", "widget", "list", "pattern"
+            "empty", "entity", "double", "vec3", "widget", "list", "pattern"
         };
         for (int i = 0, stringsLength = focusTypes.length; i < stringsLength; i++) {
             String type = focusTypes[i];
             simpleItem(modLoc("focus_" + type));
             simpleItem(modLoc("focus_" + type + "_sealed"));
             getBuilder(HexItems.FOCUS.get().getRegistryName().getPath())
-                    .override()
-                    .predicate(ItemFocus.DATATYPE_PRED, -0.01f + i)
-                    .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_" + type)))
-                    .end()
-                    .override()
-                    .predicate(ItemFocus.DATATYPE_PRED, -0.01f + 100 + i)
-                    .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_" + type + "_sealed")))
-                    .end();
+                .override()
+                .predicate(ItemFocus.DATATYPE_PRED, -0.01f + i)
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_" + type)))
+                .end()
+                .override()
+                .predicate(ItemFocus.DATATYPE_PRED, -0.01f + 100 + i)
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_" + type + "_sealed")))
+                .end();
 
         }
 
         Pair<RegistryObject<Item>, String>[] packagers = new Pair[]{
-                new Pair(HexItems.CYPHER, "cypher"),
-                new Pair(HexItems.TRINKET, "trinket"),
-                new Pair(HexItems.ARTIFACT, "artifact"),
+            new Pair(HexItems.CYPHER, "cypher"),
+            new Pair(HexItems.TRINKET, "trinket"),
+            new Pair(HexItems.ARTIFACT, "artifact"),
         };
         for (Pair<RegistryObject<Item>, String> p : packagers) {
             simpleItem(modLoc(p.getSecond()));
             simpleItem(modLoc(p.getSecond() + "_filled"));
             getBuilder(p.getFirst().get().getRegistryName().getPath())
-                    .override()
-                    .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, -0.01f)
-                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + p.getSecond())))
-                    .end()
-                    .override()
-                    .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, 1f - 0.01f)
-                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + p.getSecond() + "_filled")))
-                    .end();
+                .override()
+                .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, -0.01f)
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/" + p.getSecond())))
+                .end()
+                .override()
+                .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, 1f - 0.01f)
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/" + p.getSecond() + "_filled")))
+                .end();
         }
     }
 
@@ -74,7 +74,16 @@ public class ItemModels extends ItemModelProvider {
     }
 
     public void simpleItem(ResourceLocation path) {
+        singleTexture(path.getPath(), new ResourceLocation("item/generated"),
+            "layer0", new ResourceLocation(HexMod.MOD_ID, "item/" + path.getPath()));
+    }
+
+    public void brandishedItem(Item item) {
+        brandishedItem(item.getRegistryName());
+    }
+
+    public void brandishedItem(ResourceLocation path) {
         singleTexture(path.getPath(), new ResourceLocation("item/handheld"),
-                "layer0", new ResourceLocation(HexMod.MOD_ID, "item/" + path.getPath()));
+            "layer0", new ResourceLocation(HexMod.MOD_ID, "item/" + path.getPath()));
     }
 }

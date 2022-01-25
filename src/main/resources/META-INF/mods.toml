@@ -10,7 +10,7 @@ version = "${file.jarVersion}"
 displayName = "Hex"
 displayURL = "https://github.com/gamma-delta/HexMod"
 logoFile = "logo.png"
-credits = "Alwinfy for visual effects and proofreading; Kra3tor for sound effects"
+credits = "Alwinfy for visual effects, proofreading, and code help; Kra3tor for sound effects; Falkory for textures; and all of Vazcord for alpha-testing and supporting me!"
 authors = "petrak@ (aka gamma-delta)"
 description = "Cast powerful Hexes on the fly by drawing patterns with a staff."
 

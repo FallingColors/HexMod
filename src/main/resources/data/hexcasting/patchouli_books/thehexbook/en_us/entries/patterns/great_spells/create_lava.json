@@ -1,0 +1,18 @@
+{
+  "name": "hexcasting.spell.hexcasting:create_lava",
+  "category": "hexcasting:patterns/great_spells",
+  "icon": "minecraft:lava_bucket",
+  "sortnum": 0,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:create_lava",
+      "anchor": "hexcasting:create_lava",
+      "input": "vector",
+      "output": "",
+      "text": "Summon a block of lava or insert a bucket's worth into a block at the given position. Costs about one $(item)Charged Amethyst/$."
+    }
+  ]
+}

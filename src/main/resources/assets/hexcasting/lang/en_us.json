@@ -11,9 +11,12 @@
   "item.hexcasting.scroll": "Scroll",
   "item.hexcasting.scroll.of": "Scroll of %s",
   "item.hexcasting.scroll.empty": "Empty Scroll",
-  "death.attack.hexcasting.overcast": "%s's mind was consumed into energy",
+  "item.hexcasting.sub_sandwich": "Submarine Sandwich",
+  "itemGroup.hexcasting": "hexcasting",
+  
   "hexcasting.spellbook.tooltip.page": "Selected Page %d/%d",
   "hexcasting.spelldata.desc.entity": "Entity %s",
+  
   "advancement.hexcasting:root": "Hexcasting Research",
   "advancement.hexcasting:root.desc": "Enter an amethyst geode deep underground, a concentrated source of media.",
   "advancement.hexcasting:enlightenment": "Achieve Enlightenment",
@@ -26,9 +29,14 @@
   "advancement.hexcasting:y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
   "advancement.hexcasting:opened_eyes": "Opened Eyes",
   "advancement.hexcasting:opened_eyes.desc": "Have nature take just a §olittle§r of your mind as payment for a hexcasting.",
+  
   "stat.hexcasting.mana_used": "Media consumed (in dusts)",
   "stat.hexcasting.mana_overcasted": "Media overcasted (in dusts)",
-  "itemGroup.hexcasting": "hexcasting",
+
+  "death.attack.hexcasting.overcast": "%s's mind was consumed into energy",
+
+  "hexcasting.message.cant_overcast": "That Hex needed more media than I had... I should double-check my math.",
+  "hexcasting.message.cant_great_spell": "The spell failed, somehow... am I not skilled enough?",
 
   "hexcasting.spell.hexcasting:get_caster": "Mind's Reflection",
   "hexcasting.spell.hexcasting:get_entity_pos": "Compass' Distillation",
@@ -81,6 +89,16 @@
   "hexcasting.spell.hexcasting:craft/artifact": "Craft Artifact",
   "hexcasting.spell.hexcasting:create_water": "Create Water",
   "hexcasting.spell.hexcasting:destroy_water": "Destroy Water",
+  "hexcasting.spell.hexcasting:potion/weakness": "White Sun's Nadir",
+  "hexcasting.spell.hexcasting:potion/levitation": "Blue Sun's Nadir",
+  "hexcasting.spell.hexcasting:potion/wither": "Black Sun's Nadir",
+  "hexcasting.spell.hexcasting:potion/poison": "Red Sun's Nadir",
+  "hexcasting.spell.hexcasting:potion/slowness": "Green Sun's Nadir",
+  "hexcasting.spell.hexcasting:potion/regeneration": "White Sun's Zenith",
+  "hexcasting.spell.hexcasting:potion/night_vision": "Blue Sun's Zenith",
+  "hexcasting.spell.hexcasting:potion/absorption": "Black Sun's Zenith",
+  "hexcasting.spell.hexcasting:potion/haste": "Red Sun's Zenith",
+  "hexcasting.spell.hexcasting:potion/strength": "Green Sun's Zenith",
   "hexcasting.spell.hexcasting:flight": "Flight",
   "hexcasting.spell.hexcasting:lightning": "Summon Lightning",
   "hexcasting.spell.hexcasting:create_lava": "Create Lava",

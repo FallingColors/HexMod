@@ -45,8 +45,7 @@ object EulerPathFinder {
         val angles = dirs.zipWithNext { a, b -> b.angleFrom(a) }
         return HexPattern(dirs[0], angles.toMutableList())
     }
-
-    /** bitmap of active directions */
+    
     private fun toGraph(pat: HexPattern): HashMap<HexCoord, EnumSet<HexDir>> {
         val graph = HashMap<HexCoord, EnumSet<HexDir>>()
 

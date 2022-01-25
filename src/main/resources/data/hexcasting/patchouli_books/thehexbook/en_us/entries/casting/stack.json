@@ -15,11 +15,11 @@
         },
         {
             "type": "patchouli:text",
-            "text": "Actions are (on the most part) restricted to interacting with the casting stack in these ways. They will pop some iotas they're interested in (known as \"arguments\" or \"parameters\"), process them, and push some number of results.$(br2)Of course, some actions (e.g. the $(l:patterns/basics#OpGetCaster)$(action)Mind's Reflection/$) might pop no arguments, and some actions (particularly spells) might push nothing afterwards."
+            "text": "Actions are (on the most part) restricted to interacting with the casting stack in these ways. They will pop some iotas they're interested in (known as \"arguments\" or \"parameters\"), process them, and push some number of results.$(br2)Of course, some actions (e.g. the $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$) might pop no arguments, and some actions (particularly spells) might push nothing afterwards."
         },
         {
             "type": "patchouli:text",
-            "text": "Even more complicated actions can be expressed in terms of pushing, popping, and peeking. For example, the $(l:patterns/stackmanip#OpSwap)$(action)Jester's Gambit/$ swaps the top two items of the stack. This can be thought of as popping two items and pushing them in opposite order. For another, $(l:patterns/stackmanip#OpDuplicate)$(action)Gemini Decomposition/$ duplicates the top of the stack-- in other words, it peeks the stack and pushes a copy of what it finds."
+            "text": "Even more complicated actions can be expressed in terms of pushing, popping, and peeking. For example, the $(l:patterns/stackmanip#hexcasting:swap)$(action)Jester's Gambit/$ swaps the top two items of the stack. This can be thought of as popping two items and pushing them in opposite order. For another, $(l:patterns/stackmanip#hexcasting:duplicate)$(action)Gemini Decomposition/$ duplicates the top of the stack-- in other words, it peeks the stack and pushes a copy of what it finds."
         }
     ]
 }

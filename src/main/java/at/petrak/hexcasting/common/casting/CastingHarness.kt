@@ -10,14 +10,18 @@ import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.common.lib.LibDamageSources
 import at.petrak.hexcasting.datagen.Advancements
 import at.petrak.hexcasting.hexmath.HexPattern
+import net.minecraft.Util
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
+import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import java.util.*
 import kotlin.math.min
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 /**
  * Keeps track of a player casting a spell on the server.
@@ -91,13 +95,25 @@ class CastingHarness private constructor(
                 val leftover = this.withdrawMana(manaCost, ctx.canOvercast)
                 if (ctx.caster.isDeadOrDying)
                     return CastResult.Died
-                else if (leftover > 0)
+                else if (leftover > 0) {
+                    if (!ctx.canOvercast) {
+                        ctx.caster.sendMessage(
+                            TranslatableComponent("hexcasting.message.cant_overcast"),
+                            Util.NIL_UUID
+                        )
+                    }
                     return CastResult.QuitCasting
+                }
+
 
                 // is great IMPLIES caster is enlightened
                 if (!operator.isGreat || ctx.isCasterEnlightened) {
                     spellsToCast = spells
                 } else if (operator.isGreat) {
+                    ctx.caster.sendMessage(
+                        TranslatableComponent("hexcasting.message.cant_great_spell"),
+                        Util.NIL_UUID
+                    )
                     Advancements.FAIL_GREAT_SPELL_TRIGGER.trigger(ctx.caster)
                 }
 
@@ -105,17 +121,24 @@ class CastingHarness private constructor(
 
             if (spellsToCast.isNotEmpty()) {
                 CastResult.Cast(spellsToCast, this.stack.isEmpty())
-            } else if (this.stack.isEmpty()) {
+            } else if (this.stack.isEmpty() && !this.escapeNext) {
                 if (this.parenCount == 0) {
                     CastResult.QuitCasting
                 } else {
-                    CastResult.Nothing
+                    CastResult.Continue(false)
                 }
             } else {
-                CastResult.Nothing
+                CastResult.Continue(false)
             }
         } catch (e: CastException) {
-            CastResult.Error(e)
+            if (e.reason == CastException.Reason.INVALID_PATTERN) {
+                val idx = Random.nextInt(0..this.stack.size)
+                this.stack.add(idx, SpellDatum.make(Widget.GARBAGE))
+                CastResult.Continue(true)
+            } else {
+                CastResult.Error(e)
+            }
+
         }
     }
 
@@ -237,7 +260,7 @@ class CastingHarness private constructor(
 
     sealed class CastResult {
         /** Casting still in progress */
-        object Nothing : CastResult()
+        data class Continue(val prevPatternBad: Boolean) : CastResult()
 
         /** Non-catastrophic quit */
         object QuitCasting : CastResult()
@@ -251,11 +274,19 @@ class CastingHarness private constructor(
         /** YOU DIED due to casting too hard from hit points. */
         object Died : CastResult()
 
-        fun shouldQuit(): Boolean =
+        fun quitStatus(): QuitStatus =
             when (this) {
-                QuitCasting, Died, is Error -> true
-                is Cast -> this.quit
-                else -> false
+                QuitCasting, Died, is Error -> QuitStatus.QUIT
+                is Cast -> if (this.quit) QuitStatus.QUIT else QuitStatus.OK
+                is Continue -> if (this.prevPatternBad) QuitStatus.LAST_PATTERN_INVALID else QuitStatus.OK
             }
+    }
+
+    enum class QuitStatus {
+        OK,
+
+        /** Keep going, but the pattern you just drew was sussy */
+        LAST_PATTERN_INVALID,
+        QUIT
     }
 }

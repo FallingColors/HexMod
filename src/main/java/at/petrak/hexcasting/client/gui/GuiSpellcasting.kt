@@ -32,13 +32,26 @@ import kotlin.math.roundToInt
 const val SQRT_3 = 1.7320508f
 
 class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(TextComponent("")) {
-    private var patterns: MutableList<Pair<HexPattern, HexCoord>> = mutableListOf()
+    private var patterns: MutableList<PatternEntry> = mutableListOf()
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
     private var ambianceSoundInstance: AbstractSoundInstance? = null
 
-    var stackDescs: List<String> = emptyList()
+    private var stackDescs: List<String> = emptyList()
+
+    fun recvServerUpdate(stackDescs: List<String>, prevPatternBad: Boolean) {
+        this.stackDescs = stackDescs
+        this.patterns.lastOrNull()?.let { it.valid = if (prevPatternBad) PatternValidity.ERROR else PatternValidity.OK }
+
+        val sound = if (prevPatternBad) HexSounds.FAIL_PATTERN.get() else HexSounds.ADD_PATTERN.get()
+        Minecraft.getInstance().soundManager.play(
+            SimpleSoundInstance.forUI(
+                sound,
+                1f + (Math.random().toFloat() - 0.5f) * 0.1f
+            )
+        )
+    }
 
     override fun init() {
         this.ambianceSoundInstance = SimpleSoundInstance(
@@ -162,7 +175,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             is PatternDrawState.Drawing -> {
                 val (start, _, pat) = this.drawState as PatternDrawState.Drawing
                 this.drawState = PatternDrawState.BetweenPatterns
-                this.patterns.add(Pair(pat, start))
+                this.patterns.add(PatternEntry(pat, start, PatternValidity.UNKNOWN))
 
                 this.usedSpots.addAll(pat.positions(start))
 
@@ -170,12 +183,6 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                     at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn(
                         this.handOpenedWith,
                         pat
-                    )
-                )
-                Minecraft.getInstance().soundManager.play(
-                    SimpleSoundInstance.forUI(
-                        HexSounds.ADD_PATTERN.get(),
-                        1f + (Math.random().toFloat() - 0.5f) * 0.1f
                     )
                 )
             }
@@ -241,14 +248,21 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         }
         RenderSystem.defaultBlendFunc()
 
-        val alreadyPats = this.patterns.map { (pat, origin) ->
-            pat.toLines(
-                this.hexSize(),
-                this.coordToPx(origin)
+        val alreadyPats = this.patterns.map { (pat, origin, valid) ->
+            val colors = when (valid) {
+                PatternValidity.UNKNOWN -> listOf(127, 127, 127, 200)
+                PatternValidity.OK -> listOf(127, 127, 255, 200)
+                PatternValidity.ERROR -> listOf(255, 127, 127, 200)
+            }
+            Pair(
+                pat.toLines(
+                    this.hexSize(),
+                    this.coordToPx(origin)
+                ), colors
             )
         }
-        for (pat in alreadyPats) {
-            RenderLib.drawPatternFromPoints(mat, pat, true, 127, 127, 255, 200)
+        for ((pat, color) in alreadyPats) {
+            RenderLib.drawPatternFromPoints(mat, pat, true, color[0], color[1], color[2], color[3])
         }
 
         // Now draw the currently WIP pattern
@@ -304,5 +318,13 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
         /** We've started drawing a pattern for real. */
         data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) : PatternDrawState()
+    }
+
+    private data class PatternEntry(val pattern: HexPattern, val origin: HexCoord, var valid: PatternValidity)
+
+    private enum class PatternValidity {
+        UNKNOWN,
+        OK,
+        ERROR
     }
 }

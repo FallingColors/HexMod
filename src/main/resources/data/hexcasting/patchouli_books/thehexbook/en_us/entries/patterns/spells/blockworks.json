@@ -37,6 +37,14 @@
       "input": "vector",
       "output": "",
       "text": "Destroy a great deal of water around the given position. Costs about two $(item)Amethyst Crystal/$s."
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:bonemeal",
+      "anchor": "hexcasting:bonemeal",
+      "input": "vector",
+      "output": "",
+      "text": "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs about one $(item)Amethyst Dust/$."
     }
   ]
 }

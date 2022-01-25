@@ -2,7 +2,7 @@
   "name": "Crafting Hexcasting Items",
   "category": "hexcasting:patterns/spells",
   "icon": "hexcasting:artifact{patterns:[]}",
-  "sortnum": 2,
+  "sortnum": 3,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [

@@ -33,7 +33,7 @@ object OpEvalDelay : Operator {
                     is CastingHarness.CastResult.Cast -> spellsToCast.addAll(res.spells)
                     else -> {}
                 }
-                if (res.shouldQuit()) break
+                if (res.quitStatus() == CastingHarness.QuitStatus.QUIT) break
             }
             // god i hate how this would just work too
             // stack.addAll(harness.stack)

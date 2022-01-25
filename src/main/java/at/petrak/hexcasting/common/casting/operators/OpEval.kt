@@ -26,10 +26,10 @@ object OpEval : Operator {
                 is CastingHarness.CastResult.Cast -> spellsToCast.addAll(res.spells)
                 else -> {}
             }
-            if (res.shouldQuit()) break
+            if (res.quitStatus() == CastingHarness.QuitStatus.QUIT) break
         }
         stack.addAll(harness.stack)
 
-        return OperationResult(500_000, spellsToCast)
+        return OperationResult(50_000, spellsToCast)
     }
 }

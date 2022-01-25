@@ -22,6 +22,11 @@
       "hexcasting:add_pattern"
     ]
   },
+  "casting.fail_pattern": {
+    "sounds": [
+      "hexcasting:fail_pattern"
+    ]
+  },
   "casting.ambiance": {
     "sounds": [
       "hexcasting:casting_ambiance"

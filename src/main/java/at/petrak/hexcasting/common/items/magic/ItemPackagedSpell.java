@@ -58,16 +58,14 @@ public abstract class ItemPackagedSpell extends Item {
         List<HexPattern> patterns = getPatterns(tag);
         for (var pattern : patterns) {
             var res = harness.update(pattern, sPlayer.getLevel());
-            if (res instanceof CastingHarness.CastResult.Error) {
-                CastingHarness.CastResult.Error error = (CastingHarness.CastResult.Error) res;
+            if (res instanceof CastingHarness.CastResult.Error error) {
                 sPlayer.sendMessage(new TextComponent(error.getExn().getMessage()), Util.NIL_UUID);
-            } else if (res instanceof CastingHarness.CastResult.Cast) {
-                CastingHarness.CastResult.Cast cast = (CastingHarness.CastResult.Cast) res;
+            } else if (res instanceof CastingHarness.CastResult.Cast cast) {
                 for (var spell : cast.getSpells()) {
                     spell.cast(ctx);
                 }
             }
-            if (res.shouldQuit()) {
+            if (res.quitStatus() == CastingHarness.QuitStatus.QUIT) {
                 break;
             }
         }

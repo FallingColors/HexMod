@@ -87,7 +87,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 append(String.format("(%.2f, %.2f, %.2f)", pl.x, pl.y, pl.z))
             }
             is Double -> {
-                append(String.format("%.2f", pl))
+                append(String.format("%.4f", pl))
             }
             is HexPattern -> {
                 append("HexPattern(")
@@ -98,6 +98,9 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             }
             is Entity -> {
                 append(pl.displayName.string)
+            }
+            Widget.GARBAGE -> {
+                append("§karimfexendrapuse§r")
             }
             else -> append(pl.toString())
         }

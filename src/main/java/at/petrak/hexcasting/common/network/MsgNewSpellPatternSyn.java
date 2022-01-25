@@ -46,7 +46,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 if (held.getItem() instanceof ItemWand) {
                     var tag = held.getOrCreateTag();
                     var harness = CastingHarness.DeserializeFromNBT(tag.getCompound(ItemWand.TAG_HARNESS), sender,
-                            this.handUsed);
+                        this.handUsed);
 
                     var res = harness.update(this.pattern, sender.getLevel());
                     if (res instanceof CastResult.Cast success) {
@@ -55,18 +55,19 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                             spell.cast(castCtx);
                         }
                         sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
-                                HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
-                                1f + ((float) Math.random() - 0.5f) * 0.2f);
+                            HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
+                            1f + ((float) Math.random() - 0.5f) * 0.2f);
                     } else if (res instanceof CastResult.Error error) {
                         sender.sendMessage(new TextComponent(error.getExn().getMessage()), Util.NIL_UUID);
                     }
 
                     CompoundTag nextHarnessTag;
-                    if (!res.shouldQuit()) {
+                    if (res.quitStatus() == CastingHarness.QuitStatus.QUIT) {
+                        // discard the changes
+                        nextHarnessTag = new CompoundTag();
+                    } else {
                         // save the changes
                         nextHarnessTag = harness.serializeToNBT();
-                    } else {
-                        nextHarnessTag = new CompoundTag();
                     }
                     tag.put(ItemWand.TAG_HARNESS, nextHarnessTag);
 
@@ -76,8 +77,8 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     }
 
                     HexMessages.getNetwork()
-                            .send(PacketDistributor.PLAYER.with(() -> sender),
-                                    new MsgNewSpellPatternAck(res.shouldQuit(), descs));
+                        .send(PacketDistributor.PLAYER.with(() -> sender),
+                            new MsgNewSpellPatternAck(res.quitStatus(), descs));
                 }
             }
         });
