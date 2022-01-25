@@ -15,15 +15,11 @@
         },
         {    
             "type": "hexcasting:pattern",
-            "header": "Additive Distillation",
-            "anchor": "OpAdd",
+            "op_id": "hexcasting:add",
+            "anchor": "hexcasting:add",
             "input": "num/vec, num/vec",
             "output": "num/vec",
-            "text": "Perform addition.",
-            "patterns": {
-                "startdir": "NORTH_EAST",
-                "signature": "waaw"
-            }
+            "text": "Perform addition."
         },
         {
             "type": "patchouli:text",
@@ -31,15 +27,11 @@
         },
         {    
             "type": "hexcasting:pattern",
-            "header": "Subtractive Dstln.",
-            "anchor": "OpSub",
+            "op_id": "hexcasting:sub",
+            "anchor": "hexcasting:sub",
             "input": "num/vec, num/vec",
             "output": "num/vec",
-            "text": "Perform subtraction",
-            "patterns": {
-                "startdir": "NORTH_WEST",
-                "signature": "wddw"
-            }
+            "text": "Perform subtraction."
         },
         {
             "type": "patchouli:text",
@@ -47,15 +39,11 @@
         },
         {    
             "type": "hexcasting:pattern",
-            "header": "Multiplicative Dstln.",
-            "anchor": "OpMulDot",
+            "op_id": "hexcasting:mul_dot",
+            "anchor": "hexcasting:mul_dot",
             "input": "num/vec, num/vec",
             "output": "num/vec",
-            "text": "Perform multiplication or the dot product.",
-            "patterns": {
-                "startdir": "SOUTH_EAST",
-                "signature": "waqaw"
-            }
+            "text": "Perform multiplication or the dot product."
         },
         {
             "type": "patchouli:text",
@@ -63,15 +51,11 @@
         },
         {    
             "type": "hexcasting:pattern",
-            "header": "Division Dstln.",
-            "anchor": "OpDivCross",
+            "op_id": "hexcasting:div_cross",
+            "anchor": "hexcasting:div_cross",
             "input": "num/vec, num/vec",
             "output": "num/vec",
-            "text": "Perform division or the cross product.",
-            "patterns": {
-                "startdir": "NORTH_EAST",
-                "signature": "wdedw"
-            }
+            "text": "Perform division or the cross product."
         },
         {
             "type": "patchouli:text",
@@ -79,15 +63,11 @@
         },
         {    
             "type": "hexcasting:pattern",
-            "header": "Length Dstln.",
-            "anchor": "OpAbsLen",
+            "op_id": "hexcasting:abs_len",
+            "anchor": "hexcasting:abs_len",
             "input": "num/vec",
             "output": "number",
-            "text": "Compute the absolute value or length.",
-            "patterns": {
-                "startdir": "NORTH_EAST",
-                "signature": "wqaqw"
-            }
+            "text": "Compute the absolute value or length."
         },
         {
             "type": "patchouli:text",
@@ -95,15 +75,11 @@
         },
         {    
             "type": "hexcasting:pattern",
-            "header": "Power Distillation",
-            "anchor": "OpPowProj",
+            "op_id": "hexcasting:pow_proj",
+            "anchor": "hexcasting:pow_proj",
             "input": "num/vec, num/vec",
             "output": "num/vec",
-            "text": "Perform exponentiation or vector projection.",
-            "patterns": {
-                "startdir": "NORTH_WEST",
-                "signature": "wedew"
-            }
+            "text": "Perform exponentiation or vector projection."
         },
         {
             "type": "patchouli:text",
@@ -111,27 +87,19 @@
         },
         {
             "type": "hexcasting:pattern",
-            "header": "Vector Exaltation",
-            "anchor": "OpConstructVec",
+            "op_id": "hexcasting:construct_vec",
+            "anchor": "hexcasting:construct_vec",
             "input": "num, num, num",
             "output": "vector",
-            "text": "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (top to bottom).",
-            "patterns": {
-                "startdir": "WEST",
-                "signature": "eqqqqq"
-            }
+            "text": "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (top to bottom)."
         },
         {
             "type": "hexcasting:pattern",
-            "header": "Vector Disintegration",
-            "anchor": "OpDeconstructVec",
+            "op_id": "hexcasting:deconstruct_vec",
+            "anchor": "hexcasting:deconstruct_vec",
             "input": "vector",
             "output": "num, num, num",
-            "text": "Split a vector into its X, Y, and Z components (top to bottom).",
-            "patterns": {
-                "startdir": "WEST",
-                "signature": "qeeeee"
-            }
+            "text": "Split a vector into its X, Y, and Z components (top to bottom)."
         }
     ]
 }

@@ -37,7 +37,7 @@ public class ListPatsCommand {
                     lookup.forEach((pattern, opId) -> {
                         var tag = new CompoundTag();
                         tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
-                        var prototypePat = PatternRegistry.lookupPerWorldPattern(opId).getFirst();
+                        var prototypePat = PatternRegistry.lookupPattern(opId).getPrototype();
                         tag.put(ItemScroll.TAG_PATTERN,
                             HexPattern.FromAnglesSig(pattern, prototypePat.startDir()).serializeToNBT());
 

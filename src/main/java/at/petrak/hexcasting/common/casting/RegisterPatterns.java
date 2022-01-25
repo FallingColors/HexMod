@@ -40,105 +40,175 @@ public class RegisterPatterns {
             // - CW is the special or destruction version
             // == Getters ==
 
-            PatternRegistry.addRegularPatternAndMirror("qaq", OpGetCaster.INSTANCE);
-            PatternRegistry.addRegularPatternAndMirror("aa", OpEntityPos.INSTANCE);
-            PatternRegistry.addRegularPatternAndMirror("wa", OpEntityLook.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaq", HexDir.NORTH_EAST), prefix("get_caster"),
+                OpGetCaster.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aa", HexDir.EAST), prefix("get_entity_pos"),
+                OpEntityPos.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wa", HexDir.EAST), prefix("get_entity_look"),
+                OpEntityLook.INSTANCE);
 
-            PatternRegistry.addRegularPattern("wqaawdd", OpBlockRaycast.INSTANCE);
-            PatternRegistry.addRegularPattern("weddwaa", OpBlockAxisRaycast.INSTANCE);
-            PatternRegistry.addRegularPattern("weaqa", OpEntityRaycast.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaawdd", HexDir.EAST), prefix("raycast"),
+                OpBlockRaycast.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("weddwaa", HexDir.EAST), prefix("raycast/axis"),
+                OpBlockAxisRaycast.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("weaqa", HexDir.EAST), prefix("raycast/entity"),
+                OpEntityRaycast.INSTANCE);
 
-            PatternRegistry.addRegularPattern("edqde", OpAppend.INSTANCE);
-            PatternRegistry.addRegularPattern("qaeaq", OpConcat.INSTANCE);
-            PatternRegistry.addRegularPattern("deeed", OpIndex.INSTANCE);
-            PatternRegistry.addRegularPattern("dadad", OpForEach.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("edqde", HexDir.SOUTH_WEST), prefix("append"),
+                OpAppend.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaeaq", HexDir.NORTH_WEST), prefix("concat"),
+                OpConcat.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deeed", HexDir.NORTH_EAST), prefix("index"),
+                OpIndex.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dadad", HexDir.NORTH_EAST), prefix("for_each"),
+                OpForEach.INSTANCE);
 
-            PatternRegistry.addRegularPattern("qqqqqdaqa", new OpGetEntityAt(e -> true));
-            PatternRegistry.addRegularPattern("qqqqqdaqaqwa", new OpGetEntityAt(OpGetEntitiesBy::isAnimal));
-            PatternRegistry.addRegularPattern("qqqqqdaqaqwq", new OpGetEntityAt(OpGetEntitiesBy::isMonster));
-            PatternRegistry.addRegularPattern("qqqqqdaqaqww", new OpGetEntityAt(OpGetEntitiesBy::isItem));
-            PatternRegistry.addRegularPattern("qqqqqdaqaqwe", new OpGetEntityAt(OpGetEntitiesBy::isPlayer));
-            PatternRegistry.addRegularPattern("qqqqqdaqaqwd", new OpGetEntityAt(OpGetEntitiesBy::isLiving));
-            PatternRegistry.addRegularPattern("qqqqqwded", new OpGetEntitiesBy(e -> true, false));
-            PatternRegistry.addRegularPattern("qqqqqwdeddwa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false));
-            PatternRegistry.addRegularPattern("eeeeewaqaawa", new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, true));
-            PatternRegistry.addRegularPattern("qqqqqwdeddwq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, false));
-            PatternRegistry.addRegularPattern("eeeeewaqaawq", new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, true));
-            PatternRegistry.addRegularPattern("qqqqqwdeddww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, false));
-            PatternRegistry.addRegularPattern("eeeeewaqaaww", new OpGetEntitiesBy(OpGetEntitiesBy::isItem, true));
-            PatternRegistry.addRegularPattern("qqqqqwdeddwe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, false));
-            PatternRegistry.addRegularPattern("eeeeewaqaawe", new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, true));
-            PatternRegistry.addRegularPattern("qqqqqwdeddwd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, false));
-            PatternRegistry.addRegularPattern("eeeeewaqqawd", new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, true));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqdaqa", HexDir.SOUTH_WEST), prefix("get_entity"),
+                new OpGetEntityAt(e -> true));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqdaqaawa", HexDir.SOUTH_WEST),
+                prefix("get_entity/animal"),
+                new OpGetEntityAt(OpGetEntitiesBy::isAnimal));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqdaqaawq", HexDir.SOUTH_WEST),
+                prefix("get_entity/monster"),
+                new OpGetEntityAt(OpGetEntitiesBy::isMonster));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqdaqaaww", HexDir.SOUTH_WEST),
+                prefix("get_entity/item"),
+                new OpGetEntityAt(OpGetEntitiesBy::isItem));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqdaqaawe", HexDir.SOUTH_WEST),
+                prefix("get_entity/player"),
+                new OpGetEntityAt(OpGetEntitiesBy::isPlayer));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqdaqaawd", HexDir.SOUTH_WEST),
+                prefix("get_entity/living"),
+                new OpGetEntityAt(OpGetEntitiesBy::isLiving));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwded", HexDir.SOUTH_WEST), prefix("zone_entity"),
+                new OpGetEntitiesBy(e -> true, false));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwdeddwa", HexDir.SOUTH_WEST),
+                prefix("zone_entity/animal"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeewaqaawa", HexDir.NORTH_WEST),
+                prefix("zone_entity/not_animal"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, true));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwdeddwq", HexDir.SOUTH_WEST),
+                prefix("zone_entity/monster"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, false));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeewaqaawq", HexDir.NORTH_WEST),
+                prefix("zone_entity/not_monster"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, true));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwdeddww", HexDir.SOUTH_WEST),
+                prefix("zone_entity/item"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isItem, false));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeewaqaaww", HexDir.NORTH_WEST),
+                prefix("zone_entity/not_item"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isItem, true));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwdeddwe", HexDir.SOUTH_WEST),
+                prefix("zone_entity/player"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, false));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeewaqaawe", HexDir.NORTH_WEST),
+                prefix("zone_entity/not_player"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, true));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwdeddwd", HexDir.SOUTH_WEST),
+                prefix("zone_entity/living"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, false));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeewaqaawd", HexDir.NORTH_WEST),
+                prefix("zone_entity/not_living"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, true));
 
             // == Modify Stack ==
 
-            PatternRegistry.addRegularPattern("a", OpUndo.INSTANCE);
-            PatternRegistry.addRegularPattern("d", Widget.NULL);
-            PatternRegistry.addRegularPattern("aadaa", OpDuplicate.INSTANCE);
-            PatternRegistry.addRegularPattern("aawdd", OpSwap.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("a", HexDir.EAST), prefix("undo"), OpUndo.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("d", HexDir.EAST), prefix("const/null"), Widget.NULL);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aadaa", HexDir.EAST), prefix("duplicate"),
+                OpDuplicate.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawdd", HexDir.EAST), prefix("swap"), OpSwap.INSTANCE);
 
             // == Math ==
-            PatternRegistry.addRegularPattern("waaw", OpAdd.INSTANCE);
-            PatternRegistry.addRegularPattern("wddw", OpSub.INSTANCE);
-            PatternRegistry.addRegularPattern("waqaw", OpMulDot.INSTANCE);
-            PatternRegistry.addRegularPattern("wdedw", OpDivCross.INSTANCE);
-            PatternRegistry.addRegularPattern("wqaqw", OpAbsLen.INSTANCE);
-            PatternRegistry.addRegularPattern("wedew", OpPowProj.INSTANCE);
-            PatternRegistry.addRegularPattern("eqqqqq", OpConstructVec.INSTANCE);
-            PatternRegistry.addRegularPattern("qeeeee", OpDeconstructVec.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waaw", HexDir.NORTH_EAST), prefix("add"),
+                OpAdd.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wddw", HexDir.NORTH_WEST), prefix("sub"),
+                OpSub.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqaw", HexDir.SOUTH_EAST), prefix("mul_dot"),
+                OpMulDot.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wdedw", HexDir.NORTH_EAST), prefix("div_cross"),
+                OpDivCross.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaqw", HexDir.NORTH_EAST), prefix("abs_len"),
+                OpAbsLen.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wedew", HexDir.NORTH_WEST), prefix("pow_proj"),
+                OpPowProj.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqqqqq", HexDir.EAST), prefix("construct_vec"),
+                OpConstructVec.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qeeeee", HexDir.EAST), prefix("deconstruct_vec"),
+                OpDeconstructVec.INSTANCE);
 
             // == Spells ==
 
-            PatternRegistry.addRegularPatternAndMirror("de", OpPrint.INSTANCE);
-            PatternRegistry.addRegularPattern("aawaawaa", new OpExplode(false));
-            PatternRegistry.addRegularPattern("ddwddwdd", new OpExplode(true));
-            PatternRegistry.addRegularPattern("ewdqdwedw", OpAddMotion.INSTANCE);
-            PatternRegistry.addRegularPattern("ewdqdwed", OpBlink.INSTANCE);
-            PatternRegistry.addRegularPattern("qaqqqqq", OpBreakBlock.INSTANCE);
-            PatternRegistry.addRegularPattern("eeeeede", OpPlaceBlock.INSTANCE);
-            PatternRegistry.addRegularPattern("waqqqqq", new OpMakePackagedSpell<>(ItemCypher.class, 100_000));
-            PatternRegistry.addRegularPattern("wwaqqqqqeaqeaeqqqeaeq",
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("de", HexDir.NORTH_EAST), prefix("print"),
+                OpPrint.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawaawaa", HexDir.EAST), prefix("explode"),
+                new OpExplode(false));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddwddwdd", HexDir.EAST), prefix("explode/fire"),
+                new OpExplode(true));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("awqqqwaqw", HexDir.SOUTH_EAST), prefix("add_motion"),
+                OpAddMotion.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("awqqqwaq", HexDir.SOUTH_EAST), prefix("blink"),
+                OpBlink.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaqqqqq", HexDir.EAST), prefix("break_block"),
+                OpBreakBlock.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeede", HexDir.SOUTH_WEST), prefix("place_block"),
+                OpPlaceBlock.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
+                new OpMakePackagedSpell<>(ItemCypher.class, 100_000));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
+                prefix("craft/trinket"),
                 new OpMakePackagedSpell<>(ItemTrinket.class, 500_000));
-            PatternRegistry.addRegularPattern("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq",
+            PatternRegistry.mapPattern(
+                HexPattern.FromAnglesSig("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
+                prefix("craft/artifact"),
                 new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000));
-            PatternRegistry.addRegularPattern("aqawqadaq", OpCreateWater.INSTANCE);
-            PatternRegistry.addRegularPattern("dedwedade", OpDestroyWater.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqawqadaq", HexDir.SOUTH_EAST), prefix("create_water"),
+                OpCreateWater.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedwedade", HexDir.SOUTH_WEST),
+                prefix("destroy_water"), OpDestroyWater.INSTANCE);
 
 
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("waadwawdaaweewq", HexDir.EAST),
-                prefix("lightning"), OpLightning.INSTANCE);
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("eawwaeawawaa", HexDir.NORTH_EAST),
-                prefix("flight"), OpFlight.INSTANCE);
-            PatternRegistry.addRegularPatternPerWorld(HexPattern.FromAnglesSig("eaqawqadaqd", HexDir.EAST),
-                prefix("create_lava"), OpCreateLava.INSTANCE);
-            PatternRegistry.addRegularPatternPerWorld(
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waadwawdaaweewq", HexDir.EAST),
+                prefix("lightning"), OpLightning.INSTANCE, true);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eawwaeawawaa", HexDir.NORTH_WEST),
+                prefix("flight"), OpFlight.INSTANCE, true);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eaqawqadaqd", HexDir.EAST),
+                prefix("create_lava"), OpCreateLava.INSTANCE, true);
+            PatternRegistry.mapPattern(
                 HexPattern.FromAnglesSig("wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq", HexDir.EAST),
-                prefix("teleport"), OpTeleport.INSTANCE);
+                prefix("teleport"), OpTeleport.INSTANCE, true);
 
             // == Meta stuff ==
-            PatternRegistry.addRegularPattern("qqq", Widget.OPEN_PAREN);
-            PatternRegistry.addRegularPattern("eee", Widget.CLOSE_PAREN);
-            PatternRegistry.addRegularPattern("qqqaw", Widget.ESCAPE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqq", HexDir.WEST), prefix("open_paren"),
+                Widget.OPEN_PAREN);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eee", HexDir.EAST), prefix("close_paren"),
+                Widget.CLOSE_PAREN);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqaw", HexDir.WEST), prefix("escape"), Widget.ESCAPE);
             // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
             // eval being a space filling curve feels apt doesn't it
-            PatternRegistry.addRegularPattern("deaqq", OpEval.INSTANCE);
-            PatternRegistry.addRegularPattern("aqdee", OpEvalDelay.INSTANCE);
-            PatternRegistry.addRegularPattern("aqqqqq", OpRead.INSTANCE);
-            PatternRegistry.addRegularPattern("deeeee", OpWrite.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deaqq", HexDir.SOUTH_EAST), prefix("eval"),
+                OpEval.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqdee", HexDir.SOUTH_WEST), prefix("eval/delay"),
+                OpEvalDelay.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqqqqq", HexDir.EAST), prefix("read"),
+                OpRead.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deeeee", HexDir.EAST), prefix("write"),
+                OpWrite.INSTANCE);
 
             // == Consts ==
-            PatternRegistry.addRegularPattern("qqqqqea",
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqea", HexDir.NORTH_WEST), prefix("const/vec/px"),
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 0.0))));
-            PatternRegistry.addRegularPattern("qqqqqew",
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqew", HexDir.NORTH_WEST), prefix("const/vec/py"),
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 1.0, 0.0))));
-            PatternRegistry.addRegularPattern("qqqqqed",
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqed", HexDir.NORTH_WEST), prefix("const/vec/pz"),
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 1.0))));
-            PatternRegistry.addRegularPattern("eeeeeqa",
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeeqa", HexDir.SOUTH_WEST), prefix("const/vec/nx"),
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(-1.0, 0.0, 0.0))));
-            PatternRegistry.addRegularPattern("eeeeeqw",
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeeqw", HexDir.SOUTH_WEST), prefix("const/vec/ny"),
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, -1.0, 0.0))));
-            PatternRegistry.addRegularPattern("eeeeeqd",
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeeqd", HexDir.SOUTH_WEST), prefix("const/vec/nz"),
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, -1.0))));
 
         } catch (PatternRegistry.RegisterPatternException exn) {

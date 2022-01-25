@@ -12,41 +12,29 @@
     },
     {
       "type": "hexcasting:pattern",
-      "header": "Craft Cypher",
-      "anchor": "OpMakePackagedSpellCypher",
+      "op_id": "hexcasting:craft/cypher",
+      "anchor": "hexcasting:craft/cypher",
       "input": "entity, list of patterns",
       "output": "",
-      "text": "Costs about one $(item)Charged Amethyst/$.",
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "waqqqqq"
-      }
+      "text": "Costs about one $(item)Charged Amethyst/$."
     },
     {
       "type": "hexcasting:pattern",
-      "header": "Craft Trinket",
-      "anchor": "OpMakePackagedSpellTrinket",
+      "op_id": "hexcasting:craft/trinket",
+      "anchor": "hexcasting:craft/trinket",
       "input": "entity, list of patterns",
       "output": "",
       "text": "Costs about five $(item)Charged Amethyst/$s.",
-      "hex_size": 8,
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "wwaqqqqqeaqeaeqqqeaeq"
-      }
+      "hex_size": 8
     },
     {
       "type": "hexcasting:pattern",
-      "header": "Craft Artifact",
-      "anchor": "OpMakePackagedSpellArtifact",
+      "op_id": "hexcasting:craft/artifact",
+      "anchor": "hexcasting:craft/artifact",
       "input": "entity, list of patterns",
       "output": "",
       "text": "Costs about ten $(item)Charged Amethyst/$s.",
-      "hex_size": 5,
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq"
-      }
+      "hex_size": 5
     }
   ]
 }

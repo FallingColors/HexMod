@@ -8,39 +8,27 @@
     "pages": [
         {
             "type": "hexcasting:pattern",
-            "header": "Selection Distillation",
-            "anchor": "OpIndex",
+            "op_id": "hexcasting:index",
+            "anchor": "hexcasting:index",
             "input": "list, number",
             "output": "any",
-            "text": "Remove the number at the top of the stack, then replace the list at the top with the nth element of that list (where n is the number you removed). Replaces the list with Null if the number is out of bounds.",
-            "patterns": {
-                "startdir": "NORTH_WEST",
-                "signature": "deeed"
-            }
+            "text": "Remove the number at the top of the stack, then replace the list at the top with the nth element of that list (where n is the number you removed). Replaces the list with Null if the number is out of bounds."
         },
         {
             "type": "hexcasting:pattern",
-            "header": "Integration Distillation",
-            "anchor": "OpAppend",
+            "op_id": "hexcasting:append",
+            "anchor": "hexcasting:append",
             "input": "list, any",
             "output": "any",
-            "text": "Remove the top of the stack, then add it to the end of the list at the top of the stack.",
-            "patterns": {
-                "startdir": "SOUTH_WEST",
-                "signature": "edqde"
-            }
+            "text": "Remove the top of the stack, then add it to the end of the list at the top of the stack."
         },
         {
             "type": "hexcasting:pattern",
-            "header": "Combination Distillation",
-            "anchor": "OpConcat",
+            "op_id": "hexcasting:concat",
+            "anchor": "hexcasting:concat",
             "input": "list, list",
             "output": "list",
-            "text": "Remove the list at the top of the stack, then add all its elements to the end of the list at the top of the stack.",
-            "patterns": {
-                "startdir": "NORTH_WEST",
-                "signature": "qaeaq"
-            }
+            "text": "Remove the list at the top of the stack, then add all its elements to the end of the list at the top of the stack."
         }
     ]
 }

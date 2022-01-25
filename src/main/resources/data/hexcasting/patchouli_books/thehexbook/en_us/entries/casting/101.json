@@ -18,7 +18,7 @@
       "text": "First, $(thing)patterns/$. These are essential-- they're what I use to manipulate the _media around me. Certain patterns, when drawn, will cause $(thing)actions/$ to happen. Actions are what actually $(italic)do/$ the magic; all patterns influence _media in particular ways, and when those influences end up doing something useful, we call it an action.$(br2)_Media can be fickle; if I draw a pattern that is $(italic)not/$ a valid action, it'll usually cause a mishap."
     },
     {
-      "type": "hexcasting:pattern_nosig",
+      "type": "hexcasting:manual_pattern_nosig",
       "header": "An Example",
       "text": "It's interesting to note that the $(italic)rotation/$ of a pattern doesn't seem to matter at all. These two patterns both perform the $(action)Mind's Reflection/$, for example.",
       "patterns": [

@@ -14,9 +14,9 @@
             "text": "Fortunately, Nature has provided me with a set of $(l:casting/influences)influences/$ that I can use to work with patterns directly.$(br2)In short, $(action)Consideration/$ lets me add one pattern to the stack, and $(action)Introspection/$ and $(action)Retrospection/$ let me add a whole list."
         },
         {
-            "type": "hexcasting:pattern_nosig",
-            "header": "Consideration",
-            "anchor": "OpEscape",
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:escape",
+            "anchor": "hexcasting:escape",
             "text": "To use $(action)Consideration/$, I draw it, then another arbitrary pattern. That second pattern is added to the stack.",
             "patterns": {
                 "startdir": "WEST",
@@ -28,9 +28,9 @@
             "text": "I may find it helpful to think of this as \"escaping\" the pattern onto the stack, if I happen to be familiar with the term from computer science.$(br2)To be honest, I haven't found too much use for this pattern yet, but I imagine it could be helpful with advanced _Hexes casting other _Hexes."
         },
         {
-            "type": "hexcasting:pattern_nosig",
-            "header": "Introspection",
-            "anchor": "OpOpenParen",
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:open_paren",
+            "anchor": "hexcasting:open_paren",
             "text": "Drawing $(action)Introspection/$ makes my drawing of patterns act differently, for a time. Until I draw $(action)Retrospection/$, any pattern I draw is saved to a list. Then, when I draw $(action)Retrospection/$, the list is pushed to the stack as a list iota.",
             "patterns": {
                 "startdir": "WEST",
@@ -38,9 +38,9 @@
             }
         },
         {
-            "type": "hexcasting:pattern_nosig",
-            "header": "Retrospection",
-            "anchor": "OpCloseParen",
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:close_paren",
+            "anchor": "hexcasting:close_paren",
             "text": "If I draw another $(action)Introspection/$, it will still be saved, but I'll then have to draw $(italic)two/$ $(action)Retrospection/$s to get back to normal casting.",
             "patterns": {
                 "startdir": "EAST",

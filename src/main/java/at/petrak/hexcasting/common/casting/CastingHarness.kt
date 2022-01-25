@@ -41,7 +41,7 @@ class CastingHarness private constructor(
             var spellsToCast = emptyList<RenderedSpell>()
             var exn: CastException? = null
             val operator = try {
-                PatternRegistry.lookupPattern(newPat, world)
+                PatternRegistry.matchPattern(newPat, world)
             } catch (e: CastException) {
                 exn = e
                 null

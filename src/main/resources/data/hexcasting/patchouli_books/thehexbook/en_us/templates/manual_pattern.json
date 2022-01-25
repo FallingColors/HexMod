@@ -2,7 +2,7 @@
   "components": [
     {
       "type": "patchouli:header",
-      "text": "hexcasting.spell.#op_id#",
+      "text": "#header",
       "x": -1,
       "y": -1
     },
@@ -13,11 +13,12 @@
     },
     {
       "type": "patchouli:custom",
-      "class": "at.petrak.hexcasting.interop.patchouli.LookupPatternComponent",
+      "class": "at.petrak.hexcasting.interop.patchouli.ManualPatternComponent",
       "x": 58,
       "y": 50,
-      "op_id": "#op_id",
-      "hex_size": "#hex_size"
+      "patterns": "#patterns",
+      "hex_size": "#hex_size",
+      "stroke_order": "#stroke_order"
     },
     {
       "type": "patchouli:text",

@@ -8,39 +8,27 @@
     "pages": [
         {
             "type": "hexcasting:pattern",
-            "header": "Novice's Gambit",
-            "anchor": "OpUndo",
+            "op_id": "hexcasting:undo",
+            "anchor": "hexcasting:undo",
             "input": "any",
             "output": "",
-            "text": "Removes the top of the stack and does nothing with it. This is handy when I make a mistake.",
-            "patterns": {
-                "startdir": "EAST",
-                "signature": "a"
-            }
+            "text": "Removes the top of the stack and does nothing with it. This is handy when I make a mistake."
         },
         {
             "type": "hexcasting:pattern",
-            "header": "Gemini Decomposition",
-            "anchor": "OpDuplicate",
+            "op_id": "hexcasting:duplicate",
+            "anchor": "hexcasting:duplicate",
             "input": "any",
             "output": "any, any",
-            "text": "Duplicates the top iota of the stack.",
-            "patterns": {
-                "startdir": "EAST",
-                "signature": "aadaa"
-            }
+            "text": "Duplicates the top iota of the stack."
         },
         {
             "type": "hexcasting:pattern",
-            "header": "Jester's Gambit",
-            "anchor": "OpSwap",
+            "op_id": "hexcasting:swap",
+            "anchor": "hexcasting:swap",
             "input": "any, any",
             "output": "any, any",
-            "text": "Swaps the top two iotas of the stack.",
-            "patterns": {
-                "startdir": "EAST",
-                "signature": "aawdd"
-            }
+            "text": "Swaps the top two iotas of the stack."
         }
     ]
 }

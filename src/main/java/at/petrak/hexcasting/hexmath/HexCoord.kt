@@ -57,6 +57,7 @@ data class HexCoord(val q: Int, val r: Int) {
     }
 
     companion object {
+        @JvmStatic
         val Origin = HexCoord(0, 0)
     }
 }

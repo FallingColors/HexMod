@@ -50,7 +50,7 @@ public class PatternScrollModifier extends LootModifier {
             var opId = worldLookup.get(pattern);
             var tag = new CompoundTag();
             tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
-            var prototypePat = PatternRegistry.lookupPerWorldPattern(opId).getFirst();
+            var prototypePat = PatternRegistry.lookupPattern(opId).getPrototype();
             tag.put(ItemScroll.TAG_PATTERN,
                 HexPattern.FromAnglesSig(pattern, prototypePat.startDir()).serializeToNBT());
 

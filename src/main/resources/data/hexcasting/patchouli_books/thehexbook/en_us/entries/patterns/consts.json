@@ -7,7 +7,7 @@
     "read_by_default": true,
     "pages": [
         {
-            "type": "hexcasting:pattern",
+            "type": "hexcasting:manual_pattern",
             "header": "Axial Reflection +X/-X",
             "input": "",
             "output": "vector",
@@ -24,7 +24,7 @@
             }]
         },
         {
-            "type": "hexcasting:pattern",
+            "type": "hexcasting:manual_pattern",
             "header": "Axial Reflection +Y/-Y",
             "input": "",
             "output": "vector",
@@ -41,7 +41,7 @@
             }]
         },
         {
-            "type": "hexcasting:pattern",
+            "type": "hexcasting:manual_pattern",
             "header": "Axial Reflection +Z/-Z",
             "input": "",
             "output": "vector",
@@ -59,14 +59,10 @@
         },
         {
             "type": "hexcasting:pattern",
-            "header": "Nullary Reflection",
+            "op_id": "hexcasting:const/null",
             "input": "",
             "output": "influence",
-            "text": "Adds the Null influence to the top of the stack.",
-            "patterns": {
-                "startdir": "EAST",
-                "signature": "a"
-            }
+            "text": "Adds the Null influence to the top of the stack."
         }
     ]
 }

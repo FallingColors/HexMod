@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api
 
 import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.hexmath.EulerPathFinder
+import at.petrak.hexcasting.hexmath.HexDir
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
@@ -23,51 +24,36 @@ import java.util.concurrent.ConcurrentMap
  * operator (the diamond) are `"qaq"` and `"ede"`.
  */
 object PatternRegistry {
-    private val regularPatterns: ConcurrentMap<String, Operator> = ConcurrentHashMap()
-    private val perWorldPatterns: ConcurrentMap<ResourceLocation, Pair<HexPattern, Operator>> = ConcurrentHashMap()
+    private val operatorLookup = ConcurrentHashMap<ResourceLocation, Operator>()
     private val specialHandlers: ConcurrentLinkedDeque<SpecialHandler> = ConcurrentLinkedDeque()
 
+    // Map signatures to the "preferred" direction they start in and their operator ID.
+    private val regularPatternLookup: ConcurrentMap<String, RegularEntry> =
+        ConcurrentHashMap()
+
+    private val perWorldPatternLookup: ConcurrentMap<ResourceLocation, PerWorldEntry> =
+        ConcurrentHashMap()
 
     /**
      * Associate a given angle signature with a SpellOperator.
      */
     @JvmStatic
+    @JvmOverloads
     @Throws(RegisterPatternException::class)
-    fun addRegularPattern(signature: String, operator: Operator) {
-        if (this.regularPatterns.containsKey(signature))
-            throw RegisterPatternException("The signature `$signature` already exists")
-        this.regularPatterns[signature] = operator
-    }
-
-    /**
-     * Associate a given angle signature and its mirror image with a SpellOperator.
-     */
-    @JvmStatic
-    @Throws(RegisterPatternException::class)
-    fun addRegularPatternAndMirror(signature: String, operator: Operator) {
-        this.addRegularPattern(signature, operator)
-        val flipped = mirrorSig(signature)
-        if (flipped != signature) {
-            this.addRegularPattern(flipped, operator)
-        }
-    }
-
-    /**
-     * Associate a given *pattern shape* with a SpellOperator.
-     * The pattern will be different per world, but it will have the same shape.
-     * (Different stroke order, same look.)
-     *
-     * Also, give it some kind of unique name so that it can be recalled from SavedData later.
-     */
-    @JvmStatic
-    @Throws(RegisterPatternException::class)
-    fun addRegularPatternPerWorld(pattern: HexPattern, id: ResourceLocation, operator: Operator) {
-        if (this.perWorldPatterns.containsKey(id)) {
-            throw RegisterPatternException("The id `$id` already exists")
+    fun mapPattern(pattern: HexPattern, id: ResourceLocation, operator: Operator, isPerWorld: Boolean = false) {
+        this.operatorLookup[id]?.let {
+            throw RegisterPatternException("The operator with id `$id` was already registered to: $it")
         }
 
-        this.perWorldPatterns[id] = Pair(pattern, operator)
+        this.operatorLookup[id] = operator
+        if (isPerWorld) {
+            this.perWorldPatternLookup[id] = PerWorldEntry(pattern, id)
+        } else {
+            this.regularPatternLookup[pattern.anglesSignature()] = RegularEntry(pattern.startDir, id)
+        }
+
     }
+
 
     /**
      * Add a special handler, to take an arbitrary pattern and return whatever kind of operator you like.
@@ -81,7 +67,7 @@ object PatternRegistry {
      * Internal use only.
      */
     @JvmStatic
-    fun lookupPattern(pat: HexPattern, overworld: ServerLevel): Operator {
+    fun matchPattern(pat: HexPattern, overworld: ServerLevel): Operator {
         // Pipeline:
         // patterns are registered here every time the game boots
         // when we try to look
@@ -92,13 +78,15 @@ object PatternRegistry {
 
         // Is it global?
         val sig = pat.anglesSignature()
-        this.regularPatterns[sig]?.let { return it }
+        this.regularPatternLookup[sig]?.let {
+            this.operatorLookup[it.opId] ?: throw CastException(CastException.Reason.INVALID_PATTERN, pat)
+        }
 
         // Look it up in the world?
         val ds = overworld.dataStorage
         val perWorldPatterns: Save =
             ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
-        perWorldPatterns.lookup[sig]?.let { return this.perWorldPatterns[it]!!.second }
+        perWorldPatterns.lookup[sig]?.let { return this.operatorLookup[it]!! }
 
         throw CastException(CastException.Reason.INVALID_PATTERN, pat)
     }
@@ -118,10 +106,19 @@ object PatternRegistry {
      * Internal use only.
      */
     @JvmStatic
-    fun lookupPerWorldPattern(opId: ResourceLocation): Pair<HexPattern, Operator> =
-        this.perWorldPatterns.getOrElse(opId) {
-            throw IllegalArgumentException("could not find a pattern for $opId")
+    fun lookupPattern(opId: ResourceLocation): PatternEntry {
+        this.perWorldPatternLookup[opId]?.let {
+            return PatternEntry(it.prototype, this.operatorLookup[it.opId]!!, true)
         }
+        for ((sig, entry) in this.regularPatternLookup) {
+            if (entry.opId == opId) {
+                val pattern = HexPattern.FromAnglesSig(sig, entry.preferredStart)
+                return PatternEntry(pattern, this.operatorLookup[entry.opId]!!, false)
+            }
+        }
+
+        throw IllegalArgumentException("could not find a pattern for $opId")
+    }
 
     /**
      * Special handling of a pattern. Before checking any of the normal angle-signature based patterns,
@@ -134,21 +131,13 @@ object PatternRegistry {
         fun handlePattern(pattern: HexPattern): Operator?
     }
 
-    private fun mirrorSig(sig: String): String = buildString {
-        for (c in sig.chars()) {
-            append(
-                when (c.toChar()) {
-                    'q' -> 'e'
-                    'a' -> 'd'
-                    'e' -> 'q'
-                    'd' -> 'a'
-                    else -> c
-                }
-            )
-        }
-    }
-
     class RegisterPatternException(msg: String) : java.lang.Exception(msg)
+
+    private data class RegularEntry(val preferredStart: HexDir, val opId: ResourceLocation)
+    private data class PerWorldEntry(val prototype: HexPattern, val opId: ResourceLocation)
+
+    // Fake class we pretend to use internally
+    data class PatternEntry(val prototype: HexPattern, val operator: Operator, val isPerWorld: Boolean)
 
     /**
      * Maps angle sigs to resource locations so we can look them up in the main registry
@@ -172,7 +161,7 @@ object PatternRegistry {
 
             fun create(seed: Long): Save {
                 val map = mutableMapOf<String, ResourceLocation>()
-                for ((opId, v) in PatternRegistry.perWorldPatterns) {
+                for ((opId, v) in PatternRegistry.perWorldPatternLookup) {
                     // waugh why doesn't kotlin recursively destructure things
                     val (pat, _) = v
                     val scrungled = EulerPathFinder.findAltDrawing(pat, seed)

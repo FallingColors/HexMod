@@ -8,15 +8,11 @@
   "pages": [
     {
       "type": "hexcasting:pattern",
-      "header": "Explosion",
-      "anchor": "OpExplode",
+      "op_id": "hexcasting:explode",
+      "anchor": "hexcasting:explode",
       "input": "vector, number",
       "output": "",
-      "text": "Remove a number and vector from the stack, then create an explosion at the given location with the given power.",
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "aawaawaa"
-      }
+      "text": "Remove a number and vector from the stack, then create an explosion at the given location with the given power."
     },
     {
       "type": "patchouli:text",
@@ -24,15 +20,11 @@
     },
     {
       "type": "hexcasting:pattern",
-      "header": "Fireball",
-      "anchor": "OpExplodeFire",
+      "op_id": "hexcasting:explode/fire",
+      "anchor": "hexcasting:explode/fire",
       "input": "vector, number",
       "output": "",
-      "text": "Remove a number and vector from the stack, then create a fiery explosion at the given location with the given power.",
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "aawqaqwaa"
-      }
+      "text": "Remove a number and vector from the stack, then create a fiery explosion at the given location with the given power."
     },
     {
       "type": "patchouli:text",
@@ -40,27 +32,19 @@
     },
     {
       "type": "hexcasting:pattern",
-      "header": "Impulse",
-      "anchor": "OpAddMotion",
+      "op_id": "hexcasting:add_motion",
+      "anchor": "hexcasting:add_motion",
       "input": "entity, vector",
       "output": "",
-      "text": "Remove an entity and direction from the stack, then give a push to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(item)Amethyst Dust/$ proportional to the square of the length of the vector; thus a push vector of length 5 would consume five $(item)Amethyst Shards$(0) or equivalent.",
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "waqwaeawq"
-      }
+      "text": "Remove an entity and direction from the stack, then give a push to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(item)Amethyst Dust/$ proportional to the square of the length of the vector; thus a push vector of length 5 would consume five $(item)Amethyst Shards$(0) or equivalent."
     },
     {
       "type": "hexcasting:pattern",
-      "header": "Blink",
-      "anchor": "OpBlink",
+      "op_id": "hexcasting:blink",
+      "anchor": "hexcasting:blink",
       "input": "entity, number",
       "output": "",
-      "text": "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about 2 $(item)Amethyst Dust/$s times the square of the distance teleported-- thus, teleporting 5 blocks would cost five $(item)Charged Amethyst Crystals$(0) or equivalent.",
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "aqwaeawq"
-      }
+      "text": "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about 2 $(item)Amethyst Dust/$s times the square of the distance teleported-- thus, teleporting 5 blocks would cost five $(item)Charged Amethyst Crystals$(0) or equivalent."
     }
   ]
 }

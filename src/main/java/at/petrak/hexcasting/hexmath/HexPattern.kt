@@ -131,11 +131,11 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         }
 
         @JvmStatic
-        @JvmOverloads
         fun FromAnglesSig(signature: String, startDir: HexDir): HexPattern {
             val out = HexPattern(startDir)
             var compass = startDir
-            for (c in signature) {
+
+            for ((idx, c) in signature.withIndex()) {
                 val angle = when (c) {
                     'w' -> HexAngle.FORWARD
                     'e' -> HexAngle.RIGHT
@@ -144,12 +144,12 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
                     's' -> HexAngle.BACK
                     'a' -> HexAngle.LEFT_BACK
                     'q' -> HexAngle.LEFT
-                    else -> throw IllegalArgumentException("Cannot match $c to a direction")
+                    else -> throw IllegalArgumentException("Cannot match $c at idx $idx to a direction")
                 }
                 compass *= angle
                 val success = out.tryAppendDir(compass)
                 if (!success) {
-                    throw IllegalStateException("Adding the angle $c made the pattern invalid by looping back on itself")
+                    throw IllegalStateException("Adding the angle $c at index $idx made the pattern invalid by looping back on itself")
                 }
             }
             return out

@@ -7,7 +7,7 @@
     "read_by_default": true,
     "pages": [
         {
-            "type": "hexcasting:pattern",
+            "type": "hexcasting:manual_pattern",
             "header": "Numerical Reflection",
             "anchor": "Numbers",
             "input": "",
@@ -28,7 +28,7 @@
             "text": "First, I draw one of the two shapes shown on the other page. Next, the $(italic)angles/$ following will modify a running count starting at 0.$(li)Forward: Add 1$(li)Left: Add 5$(li)Right: Add 10$(li)Sharp Left: Multiply by 2$(li)Sharp Right: Divide by 2.$(br)The clockwise version of the pattern, on the right of the other page, will negate the value at the very end. (The left-hand counter-clockwise version keeps the number positive).$(p)Once I finish drawing, the number's pushed to the top of the stack."
         },
         {
-            "type": "hexcasting:pattern_nosig",
+            "type": "hexcasting:manual_pattern_nosig",
             "header": "Example 1",
             "text": "This pattern pushes 10.",
             "patterns": {
@@ -37,7 +37,7 @@
             }
         },
         {
-            "type": "hexcasting:pattern_nosig",
+            "type": "hexcasting:manual_pattern_nosig",
             "header": "Example 2",
             "text": "This pattern pushes 7: 5 + 1 + 1.",
             "patterns": {
@@ -46,7 +46,7 @@
             }
         },
         {
-            "type": "hexcasting:pattern_nosig",
+            "type": "hexcasting:manual_pattern_nosig",
             "header": "Example 3",
             "text": "This pattern pushes -32: negate 1 + 5 + 10 * 2.",
             "patterns": {
@@ -55,7 +55,7 @@
             }
         },
         {
-            "type": "hexcasting:pattern_nosig",
+            "type": "hexcasting:manual_pattern_nosig",
             "header": "Example 4",
             "text": "This pattern pushes 4.5: 5 / 2 + 1 + 1.",
             "patterns": {

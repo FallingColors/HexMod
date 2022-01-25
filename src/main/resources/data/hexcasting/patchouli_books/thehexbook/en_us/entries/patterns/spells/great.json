@@ -7,43 +7,28 @@
   "pages": [
     {
       "type": "hexcasting:pattern",
-      "header": "Smite",
-      "anchor": "OpLightning",
+      "op_id": "hexcasting:lightning",
+      "anchor": "hexcasting:lightning",
       "input": "vector",
       "output": "",
-      "stroke_order": false,
-      "text": "I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it. Costs about 3 $(item)Amethyst Shard/$s.",
       "hex_size": 6,
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "waadwawdaaweewq"
-      }
+      "text": "I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it. Costs about 3 $(item)Amethyst Shard/$s."
     },
     {
       "type": "hexcasting:pattern",
-      "header": "Create Lava",
-      "anchor": "OpCreateLava",
+      "op_id": "hexcasting:create_lava",
+      "anchor": "hexcasting:create_lava",
       "input": "vector",
       "output": "",
-      "stroke_order": false,
-      "text": "Summon a block of lava or insert a bucket's worth into a block at the given position. Costs about one $(item)Charged Amethyst/$.",
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "eaqawqadaqd"
-      }
+      "text": "Summon a block of lava or insert a bucket's worth into a block at the given position. Costs about one $(item)Charged Amethyst/$."
     },
     {
       "type": "hexcasting:pattern",
-      "header": "Flight",
-      "anchor": "OpFlight",
+      "op_id": "hexcasting:flight",
+      "anchor": "hexcasting:flight",
       "input": "entity, number, number",
       "output": "",
-      "stroke_order": false,
-      "text": "The power of flight! I have wrestled Nature to its knees. But Nature is vengeful, and itches for me to break its contract so it may break my shins.",
-      "patterns": {
-        "startdir": "NORTH_WEST",
-        "signature": "eawwaeawawaa"
-      }
+      "text": "The power of flight! I have wrestled Nature to its knees. But Nature is vengeful, and itches for me to break its contract so it may break my shins."
     },
     {
       "type": "patchouli:text",
@@ -51,17 +36,12 @@
     },
     {
       "type": "hexcasting:pattern",
-      "header": "Greater Teleport",
-      "anchor": "OpTeleport",
+      "op_id": "hexcasting:teleport",
+      "anchor": "hexcasting:teleport",
       "input": "entity, vector",
       "output": "",
-      "stroke_order": false,
       "hex_size": 8,
-      "text": "Far more powerful than $(l:patterns/spells/basic#OpBlink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to.",
-      "patterns": {
-        "startdir": "WEST",
-        "signature": "wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq"
-      }
+      "text": "Far more powerful than $(l:patterns/spells/basic#OpBlink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to."
     },
     {
       "type": "patchouli:text",
