@@ -10,9 +10,11 @@ import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Matrix4f
 import net.minecraft.client.Minecraft
 import net.minecraft.util.Mth
+import net.minecraft.util.FastColor.ARGB32 as FC
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource
 import net.minecraft.world.level.levelgen.synth.PerlinNoise
 import net.minecraft.world.phys.Vec2
+import net.minecraft.core.BlockPos
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -38,13 +40,19 @@ object RenderLib {
         points: List<Vec2>,
         width: Float,
         z: Float,
-        r: Int,
-        g: Int,
-        b: Int,
-        a: Int,
+        first: Int,
+        second: Int,
         animTime: Float? = null,
     ) {
         if (points.size <= 1) return
+
+        val r1 = FC.red(first).toFloat()
+        val g1 = FC.green(first).toFloat()
+        val b1 = FC.blue(first).toFloat()
+        val a = FC.alpha(first)
+        val r2 = FC.red(second).toFloat()
+        val g2 = FC.green(second).toFloat()
+        val b2 = FC.blue(second).toFloat()
 
         // they spell it wrong at mojang lmao
         val tess = Tesselator.getInstance()
@@ -55,7 +63,10 @@ object RenderLib {
         // There's still some artifacting but this is passable, at least.
         buf.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR)
 
-        for ((p1, p2) in points.zipWithNext()) {
+        val n = points.size
+        for ((i, pair) in points.zipWithNext().withIndex()) {
+            val i = i.toFloat()
+            val (p1, p2) = pair
             // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
             // GuiComponent::innerFill line 52
             // fedor have useful variable names challenge (99% can't beat)
@@ -69,10 +80,13 @@ object RenderLib {
             val tx = nx / tlen
             val ty = ny / tlen
 
-            buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(r, g, b, a).endVertex()
-            buf.vertex(mat, p1.x - tx, p1.y - ty, z).color(r, g, b, a).endVertex()
-            buf.vertex(mat, p2.x + tx, p2.y + ty, z).color(r, g, b, a).endVertex()
-            buf.vertex(mat, p2.x - tx, p2.y - ty, z).color(r, g, b, a).endVertex()
+            fun color(time: Float): BlockPos = BlockPos(Mth.lerp(time, r1, r2).toInt(), Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
+            val color1 = color(i / n)
+            val color2 = color((i + 1) / n)
+            buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(color1.x, color1.y, color1.z, a).endVertex()
+            buf.vertex(mat, p1.x - tx, p1.y - ty, z).color(color1.x, color1.y, color1.z, a).endVertex()
+            buf.vertex(mat, p2.x + tx, p2.y + ty, z).color(color2.x, color2.y, color2.z, a).endVertex()
+            buf.vertex(mat, p2.x - tx, p2.y - ty, z).color(color2.x, color2.y, color2.z, a).endVertex()
         }
         tess.end()
 
@@ -94,9 +108,9 @@ object RenderLib {
                     mat,
                     drawPos,
                     2f,
-                    (r + 255) / 2f / 255f,
-                    (g + 255) / 2f / 255f,
-                    (b + 255) / 2f / 255f,
+                    (r1 + 255) / 2f / 255f,
+                    (g1 + 255) / 2f / 255f,
+                    (b1 + 255) / 2f / 255f,
                     a / 1.2f / 255f
                 )
             }
@@ -112,18 +126,20 @@ object RenderLib {
         mat: Matrix4f,
         points: List<Vec2>,
         drawLast: Boolean,
-        r: Int,
-        g: Int,
-        b: Int,
-        a: Int,
+        first: Int,
+        second: Int,
         animTime: Float? = null
     ) {
-        fun dodge(n: Int): Float {
-            return n * 0.9f
-        }
+        fun dodge(n: Int): Float = n * 0.9f
+        fun screen(n: Int): Int = (n + 255) / 2
 
-        fun screen(n: Int): Int {
-            return (n + 255) / 2
+        fun screenCol(n: Int): Int {
+            return FC.color(
+                FC.alpha(n),
+                screen(FC.red(n)),
+                screen(FC.green(n)),
+                screen(FC.blue(n)),
+            )
         }
 
         val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f)
@@ -132,10 +148,10 @@ object RenderLib {
         } else {
             points.dropLast(1)
         }
-        drawLineSeq(mat, zappyPts, 5f, 0f, r, g, b, a, null)
-        drawLineSeq(mat, zappyPts, 2f, 1f, screen(r), screen(g), screen(b), a, animTime)
+        drawLineSeq(mat, zappyPts, 5f, 0f, first, second, null)
+        drawLineSeq(mat, zappyPts, 2f, 1f, screenCol(first), screenCol(second), animTime)
         for (node in nodes) {
-            drawSpot(mat, node, 2f, dodge(r) / 255f, dodge(g) / 255f, dodge(b) / 255f, a / 255f);
+            drawSpot(mat, node, 2f, dodge(FC.red(first)) / 255f, dodge(FC.green(first)) / 255f, dodge(FC.blue(first)) / 255f, FC.alpha(first) / 255f);
         }
     }
 

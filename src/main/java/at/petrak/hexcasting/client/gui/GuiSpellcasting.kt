@@ -249,10 +249,10 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         RenderSystem.defaultBlendFunc()
 
         val alreadyPats = this.patterns.map { (pat, origin, valid) ->
-            val colors = when (valid) {
-                PatternValidity.UNKNOWN -> listOf(127, 127, 127, 200)
-                PatternValidity.OK -> listOf(127, 127, 255, 200)
-                PatternValidity.ERROR -> listOf(255, 127, 127, 200)
+            val colors: Pair<Int, Int> = when (valid) {
+                PatternValidity.UNKNOWN -> Pair(0xc87f7f7fu.toInt(), 0xc87f7f7fu.toInt())
+                PatternValidity.OK -> Pair(0xc83f3fafu.toInt(), 0xc87f7fffu.toInt())
+                PatternValidity.ERROR -> Pair(0xc8a06060u.toInt(), 0xc8a06060u.toInt())
             }
             Pair(
                 pat.toLines(
@@ -262,7 +262,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             )
         }
         for ((pat, color) in alreadyPats) {
-            RenderLib.drawPatternFromPoints(mat, pat, true, color[0], color[1], color[2], color[3])
+            RenderLib.drawPatternFromPoints(mat, pat, true, color.first, color.second)
         }
 
         // Now draw the currently WIP pattern
@@ -281,7 +281,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             }
 
             points.add(mousePos)
-            RenderLib.drawPatternFromPoints(mat, points, false, 100, 200, 255, 255)
+            RenderLib.drawPatternFromPoints(mat, points, false, 0xff64c8ffu.toInt(), 0xffce9be6u.toInt())
         }
 
         RenderSystem.setShader { prevShader }

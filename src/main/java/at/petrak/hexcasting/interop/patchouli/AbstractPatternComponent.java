@@ -62,8 +62,10 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
 
         var strokeOrder = this.showStrokeOrder();
         for (var pat : this.patterns) {
-            RenderLib.drawLineSeq(mat, pat.zappyPoints, 5f, 0, 210, 200, 200, 255, null);
-            RenderLib.drawLineSeq(mat, pat.zappyPoints, 2f, 0, 100, 95, 95, 200,
+            var outer = 0xffd2c8c8;
+            var inner = 0xc8645f5f;
+            RenderLib.drawLineSeq(mat, pat.zappyPoints, 5f, 0, outer, outer, null);
+            RenderLib.drawLineSeq(mat, pat.zappyPoints, 2f, 0, inner, inner,
                 strokeOrder ? ctx.getTicksInBook() / 20f : null);
 
             if (strokeOrder) {

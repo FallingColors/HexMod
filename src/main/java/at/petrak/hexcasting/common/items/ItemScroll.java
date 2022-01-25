@@ -137,10 +137,12 @@ public class ItemScroll extends Item {
                 ps.translate(width / 2f, height / 2f, 1);
 
                 var mat = ps.last().pose();
+                var outer = 0xffd2c8c8;
+                var inner = 0xc8645f5f;
                 RenderLib.drawLineSeq(mat, this.zappyPoints, 5f, 0,
-                    210, 200, 200, 255, null);
+                    outer, outer, null);
                 RenderLib.drawLineSeq(mat, this.zappyPoints, 2f, 0,
-                    100, 95, 95, 200,
+                    inner, inner,
                     ClientTickCounter.getTickCount() / 40f);
                 RenderLib.drawSpot(mat, this.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
 
