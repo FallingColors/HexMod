@@ -8,7 +8,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, raised to the power of the potency if it is present."
+            "text": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, multiplied by the potency."
         },
         {
             "type": "patchouli:text",

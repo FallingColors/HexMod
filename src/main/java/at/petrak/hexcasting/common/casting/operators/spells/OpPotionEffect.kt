@@ -9,7 +9,6 @@ import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import kotlin.math.max
-import kotlin.math.pow
 
 class OpPotionEffect(val effect: MobEffect, val baseCost: Int, val potency: Boolean) : SpellOperator {
     override val argc: Int
@@ -22,7 +21,7 @@ class OpPotionEffect(val effect: MobEffect, val baseCost: Int, val potency: Bool
             max(args.getChecked(2), 1.0)
         else 1.0
 
-        val cost = (this.baseCost * duration).pow(potency)
+        val cost = this.baseCost * duration * potency
         return Pair(
             Spell(effect, target, duration, potency),
             cost.toInt()
@@ -32,7 +31,7 @@ class OpPotionEffect(val effect: MobEffect, val baseCost: Int, val potency: Bool
     private class Spell(val effect: MobEffect, val target: LivingEntity, val duration: Double, val potency: Double) :
         RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt())
+            val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt() - 1)
             target.addEffect(effectInst)
         }
     }

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
 import at.petrak.hexcasting.common.casting.ManaHelper;
+import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -78,7 +80,10 @@ public abstract class ItemPackagedSpell extends Item {
         }
         player.awardStat(stat);
 
-        player.getCooldowns().addCooldown(this, 5);
+        sPlayer.getCooldowns().addCooldown(this, 5);
+        sPlayer.level.playSound(null, sPlayer.getX(), sPlayer.getY(), sPlayer.getZ(),
+            HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
+            1f + ((float) Math.random() - 0.5f) * 0.2f);
 
         if (singleUse()) {
             stack.shrink(1);

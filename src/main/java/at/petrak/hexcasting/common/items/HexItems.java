@@ -16,7 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class HexItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, HexMod.MOD_ID);
-    public static final CreativeModeTab TAB = new CreativeModeTab("hexcasting") {
+    public static final CreativeModeTab TAB = new CreativeModeTab(HexMod.MOD_ID) {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(SPELLBOOK::get);
@@ -46,7 +46,7 @@ public class HexItems {
         () -> new Item(props()));
     // I am very funny
     public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register(LibItemNames.SUBMARINE_SANDWICH,
-        () -> new Item(props().food(new FoodProperties.Builder().nutrition(4).build())));
+        () -> new Item(props().food(new FoodProperties.Builder().nutrition(12).saturationMod(1.2f).build())));
     public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register(LibItemNames.LENS,
         () -> new Item(unstackable()));
     public static final RegistryObject<Item> SCROLL = ITEMS.register(LibItemNames.SCROLL,
