@@ -41,6 +41,10 @@ object OpFlight : SpellOperator {
 
     data class Spell(val target: ServerPlayer, val time: Int, val radius: Double, val origin: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
+            if (target.abilities.mayfly) {
+                // Don't accidentally clobber someone else's flight
+                return
+            }
             val maybeCap = target.getCapability(LibCapabilities.FLIGHT).resolve()
             if (!maybeCap.isPresent) {
                 // uh oh
@@ -60,13 +64,10 @@ object OpFlight : SpellOperator {
     const val TAG_ORIGIN = "origin"
     const val TAG_RADIUS = "radius"
 
-    val dummyInstanceIHateForge: LazyOptional<CapFlight> =
-        LazyOptional.of { CapFlight(false, 0, Vec3.ZERO, 0.0) }
-
     class CapFlight(var allowed: Boolean, var flightTime: Int, var origin: Vec3, var radius: Double) :
         ICapabilitySerializable<CompoundTag> {
         override fun <T : Any?> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> =
-            LibCapabilities.FLIGHT.orEmpty(cap, dummyInstanceIHateForge)
+            LibCapabilities.FLIGHT.orEmpty(cap, LazyOptional.of { this })
 
         override fun serializeNBT(): CompoundTag {
             val out = CompoundTag()
@@ -107,7 +108,10 @@ object OpFlight : SpellOperator {
                     entity.fallDistance = 1_000_000f
                     val move = entity.deltaMovement
                     HexMessages.getNetwork()
-                        .send(PacketDistributor.PLAYER.with { entity }, MsgAddMotionAck(Vec3(move.x, -100.0, move.z)))
+                        .send(
+                            PacketDistributor.PLAYER.with { entity },
+                            MsgAddMotionAck(Vec3(0.0, -move.y - 100.0, 0.0))
+                        )
                 }
                 cap.allowed = false
             }
