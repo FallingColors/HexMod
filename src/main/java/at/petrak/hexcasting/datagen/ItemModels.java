@@ -20,13 +20,15 @@ public class ItemModels extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        brandishedItem(HexItems.WAND.get());
         simpleItem(HexItems.SPELLBOOK.get());
         simpleItem(HexItems.AMETHYST_DUST.get());
         simpleItem(HexItems.CHARGED_AMETHYST.get());
         simpleItem(HexItems.SUBMARINE_SANDWICH.get());
         simpleItem(HexItems.SCRYING_LENS.get());
         simpleItem(HexItems.SCROLL.get());
+
+        singleTexture(HexItems.WAND.getId().getPath(), new ResourceLocation("item/handheld_rod"),
+            "layer0", new ResourceLocation(HexMod.MOD_ID, "item/" + HexItems.WAND.getId().getPath()));
 
         simpleItem(modLoc("patchouli_book"));
 
