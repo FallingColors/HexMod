@@ -250,9 +250,9 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
         val alreadyPats = this.patterns.map { (pat, origin, valid) ->
             val colors: Pair<Int, Int> = when (valid) {
-                PatternValidity.UNKNOWN -> Pair(0xc87f7f7fu.toInt(), 0xc87f7f7fu.toInt())
-                PatternValidity.OK -> Pair(0xc83f3fafu.toInt(), 0xc87f7fffu.toInt())
-                PatternValidity.ERROR -> Pair(0xc8a06060u.toInt(), 0xc8a06060u.toInt())
+                PatternValidity.UNKNOWN -> Pair(0xc8_7f7f7f_u.toInt(), 0xc8_7f7f7f_u.toInt())
+                PatternValidity.OK -> Pair(0xc8_7385de_u.toInt(), 0xc8_fecbe6_u.toInt())
+                PatternValidity.ERROR -> Pair(0xc8_de6262_u.toInt(), 0xc8_e6755c_u.toInt())
             }
             Pair(
                 pat.toLines(
@@ -281,7 +281,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             }
 
             points.add(mousePos)
-            RenderLib.drawPatternFromPoints(mat, points, false, 0xff64c8ffu.toInt(), 0xffce9be6u.toInt())
+            RenderLib.drawPatternFromPoints(mat, points, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt())
         }
 
         RenderSystem.setShader { prevShader }

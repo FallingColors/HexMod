@@ -9,15 +9,16 @@ import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Matrix4f
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
-import net.minecraft.util.FastColor.ARGB32 as FC
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource
 import net.minecraft.world.level.levelgen.synth.PerlinNoise
 import net.minecraft.world.phys.Vec2
-import net.minecraft.core.BlockPos
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.roundToInt
+import net.minecraft.util.FastColor.ARGB32 as FC
 
 /**
  * Common draw code
@@ -40,19 +41,23 @@ object RenderLib {
         points: List<Vec2>,
         width: Float,
         z: Float,
-        first: Int,
-        second: Int,
+        tail: Int,
+        head: Int,
         animTime: Float? = null,
     ) {
         if (points.size <= 1) return
 
-        val r1 = FC.red(first).toFloat()
-        val g1 = FC.green(first).toFloat()
-        val b1 = FC.blue(first).toFloat()
-        val a = FC.alpha(first)
-        val r2 = FC.red(second).toFloat()
-        val g2 = FC.green(second).toFloat()
-        val b2 = FC.blue(second).toFloat()
+        val r1 = FC.red(tail).toFloat()
+        val g1 = FC.green(tail).toFloat()
+        val b1 = FC.blue(tail).toFloat()
+        val a = FC.alpha(tail)
+        val headSource = if (Screen.hasControlDown() != HexMod.CONFIG.ctrlTogglesOffStrokeOrder.get())
+            head
+        else
+            tail
+        val r2 = FC.red(headSource).toFloat()
+        val g2 = FC.green(headSource).toFloat()
+        val b2 = FC.blue(headSource).toFloat()
 
         // they spell it wrong at mojang lmao
         val tess = Tesselator.getInstance()
@@ -80,7 +85,9 @@ object RenderLib {
             val tx = nx / tlen
             val ty = ny / tlen
 
-            fun color(time: Float): BlockPos = BlockPos(Mth.lerp(time, r1, r2).toInt(), Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
+            fun color(time: Float): BlockPos =
+                BlockPos(Mth.lerp(time, r1, r2).toInt(), Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
+
             val color1 = color(i / n)
             val color2 = color((i + 1) / n)
             buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(color1.x, color1.y, color1.z, a).endVertex()
@@ -126,8 +133,8 @@ object RenderLib {
         mat: Matrix4f,
         points: List<Vec2>,
         drawLast: Boolean,
-        first: Int,
-        second: Int,
+        tail: Int,
+        head: Int,
         animTime: Float? = null
     ) {
         fun dodge(n: Int): Float = n * 0.9f
@@ -148,10 +155,18 @@ object RenderLib {
         } else {
             points.dropLast(1)
         }
-        drawLineSeq(mat, zappyPts, 5f, 0f, first, second, null)
-        drawLineSeq(mat, zappyPts, 2f, 1f, screenCol(first), screenCol(second), animTime)
+        drawLineSeq(mat, zappyPts, 5f, 0f, tail, head, null)
+        drawLineSeq(mat, zappyPts, 2f, 1f, screenCol(tail), screenCol(head), animTime)
         for (node in nodes) {
-            drawSpot(mat, node, 2f, dodge(FC.red(first)) / 255f, dodge(FC.green(first)) / 255f, dodge(FC.blue(first)) / 255f, FC.alpha(first) / 255f);
+            drawSpot(
+                mat,
+                node,
+                2f,
+                dodge(FC.red(head)) / 255f,
+                dodge(FC.green(head)) / 255f,
+                dodge(FC.blue(head)) / 255f,
+                FC.alpha(head) / 255f
+            );
         }
     }
 

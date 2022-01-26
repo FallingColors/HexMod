@@ -21,7 +21,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "\"\u2192 $(n)entity/$\" means it'll just push an entity. \"$(n)entity, vector/$ \u2192\" means it removes an entity and a vector, and doesn't push anything."
+      "text": "\"\u2192 $(n)entity/$\" means it'll just push an entity. \"$(n)entity, vector/$ \u2192\" means it removes an entity and a vector, and doesn't push anything.$(br2)Finally, if I find the little dot marking the stroke order too slow or confusing, I can press $(thing)Control/Command/$ to display a gradient, where the start of the pattern is darkest and the end is lightest. This works on scrolls and when casting, too!"
     }
   ]
 }

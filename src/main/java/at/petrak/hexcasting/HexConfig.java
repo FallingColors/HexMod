@@ -8,6 +8,7 @@ public class HexConfig {
 
     public final ForgeConfigSpec.DoubleValue manaToHealthRate;
     public final ForgeConfigSpec.DoubleValue patternPointSpeedMultiplier;
+    public final ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
 
     public final ForgeConfigSpec.IntValue batteryMaxMana;
     public final ForgeConfigSpec.IntValue dustManaAmount;
@@ -24,6 +25,10 @@ public class HexConfig {
         patternPointSpeedMultiplier = builder.comment(
                 "How fast the point showing you the stroke order on patterns moves")
             .defineInRange("manaToHealthRate", 1.0, 0.0, Double.POSITIVE_INFINITY);
+        ctrlTogglesOffStrokeOrder = builder.comment(
+                "Whether the ctrl key will instead turn *off* the color gradient on patterns")
+            .define("ctrlTogglesOffStrokeOrder", false);
+
 
         builder.push("items");
         batteryMaxMana = builder.comment("The maximum amount of mana a mana battery can store.")
