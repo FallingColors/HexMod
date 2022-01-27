@@ -31,7 +31,7 @@ object OpColorizeSentinel : SpellOperator {
             val color = DyeColor.getColor(otherHandItem)
             if (color != null) {
                 otherHandItem.shrink(1)
-                cap.color = color.textColor
+                cap.color = color.textColor or 0xff_000000u.toInt()
 
                 HexMessages.getNetwork()
                     .send(PacketDistributor.PLAYER.with { ctx.caster }, MsgSentinelStatusUpdateAck(cap))

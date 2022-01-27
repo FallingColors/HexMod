@@ -32,7 +32,7 @@ object OpCreateSentinel : SpellOperator {
             val cap = maybeCap.get()
             cap.hasSentinel = true
             cap.position = target
-            
+
             HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { ctx.caster }, MsgSentinelStatusUpdateAck(cap))
         }
     }
