@@ -5,6 +5,7 @@ import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.api.Operator
 import at.petrak.hexcasting.common.items.ItemDataHolder
 import at.petrak.hexcasting.common.items.ItemSpellbook
+import at.petrak.hexcasting.common.lib.LibCapabilities
 import at.petrak.hexcasting.common.lib.RegisterHelper.prefix
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -62,8 +63,17 @@ data class CastingContext(
      * Check to make sure a vec is in range
      */
     fun assertVecInRange(vec: Vec3) {
-        if (vec.distanceToSqr(this.caster.position()) > Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
-            throw CastException(CastException.Reason.TOO_FAR, vec)
+        if (vec.distanceToSqr(this.caster.position()) < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
+            return
+
+        val maybeSentinel = this.caster.getCapability(LibCapabilities.SENTINEL).resolve()
+        if (maybeSentinel.isPresent) {
+            val sentinel = maybeSentinel.get()
+            if (sentinel.hasSentinel && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL)
+                return
+        }
+        
+        throw CastException(CastException.Reason.TOO_FAR, vec)
     }
 
     /**

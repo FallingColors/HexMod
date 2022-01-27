@@ -27,12 +27,12 @@ public class ItemSpellbook extends ItemDataHolder {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
-            TooltipFlag isAdvanced) {
+        TooltipFlag isAdvanced) {
         var tag = stack.getOrCreateTag();
         if (tag.contains(TAG_SELECTED_PAGE)) {
             var pageIdx = tag.getInt(TAG_SELECTED_PAGE);
             var pages = tag.getCompound(ItemSpellbook.TAG_PAGES);
-            tooltip.add(new TranslatableComponent("hex.spellbook.tooltip.page", pageIdx, HighestPage(pages)));
+            tooltip.add(new TranslatableComponent("hexcasting.spellbook.tooltip.page", pageIdx, HighestPage(pages)));
 
             var key = String.valueOf(pageIdx);
             if (pages.contains(key)) {
@@ -60,7 +60,7 @@ public class ItemSpellbook extends ItemDataHolder {
 
     public static boolean ArePagesEmpty(CompoundTag tag) {
         return !tag.contains(ItemSpellbook.TAG_PAGES) ||
-                tag.getCompound(ItemSpellbook.TAG_PAGES).isEmpty();
+            tag.getCompound(ItemSpellbook.TAG_PAGES).isEmpty();
     }
 
 

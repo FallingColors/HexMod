@@ -18,6 +18,7 @@ import at.petrak.hexcasting.common.casting.operators.spells.great.OpCreateLava;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpLightning;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpTeleport;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.*;
 import at.petrak.hexcasting.common.items.magic.ItemArtifact;
 import at.petrak.hexcasting.common.items.magic.ItemCypher;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
@@ -148,6 +149,22 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawawaeqqqqdd", HexDir.EAST),
                 prefix("potion/strength"),
                 new OpPotionEffect(MobEffects.DAMAGE_BOOST, 10_000 / 3, true), true);
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawae", HexDir.EAST),
+                prefix("sentinel/create"),
+                OpCreateSentinel.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qdwdqdw", HexDir.NORTH_EAST),
+                prefix("sentinel/destroy"),
+                OpDestroySentinel.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaede", HexDir.EAST),
+                prefix("sentinel/get_pos"),
+                OpGetSentinelPos.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaedwa", HexDir.EAST),
+                prefix("sentinel/wayfind"),
+                OpGetSentinelWayfind.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaeqqqwqwqqwq", HexDir.EAST),
+                prefix("sentinel/colorize"),
+                OpColorizeSentinel.INSTANCE);
 
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waadwawdaaweewq", HexDir.EAST),
