@@ -11,19 +11,19 @@ import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.network.PacketDistributor
 
-object OpCreateSentinel : SpellOperator {
+class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
     override val argc = 1
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
         val target = args.getChecked<Vec3>(0)
         ctx.assertVecInRange(target)
 
         return Pair(
-            Spell(target),
+            Spell(target, this.extendsRange),
             10_000
         )
     }
 
-    private data class Spell(val target: Vec3) : RenderedSpell {
+    private data class Spell(val target: Vec3, val extendsRange: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val maybeCap = ctx.caster.getCapability(LibCapabilities.SENTINEL).resolve()
             if (!maybeCap.isPresent)
@@ -31,6 +31,7 @@ object OpCreateSentinel : SpellOperator {
 
             val cap = maybeCap.get()
             cap.hasSentinel = true
+            cap.extendsRange = extendsRange
             cap.position = target
 
             HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { ctx.caster }, MsgSentinelStatusUpdateAck(cap))

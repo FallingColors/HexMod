@@ -69,10 +69,13 @@ data class CastingContext(
         val maybeSentinel = this.caster.getCapability(LibCapabilities.SENTINEL).resolve()
         if (maybeSentinel.isPresent) {
             val sentinel = maybeSentinel.get()
-            if (sentinel.hasSentinel && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL)
+            if (sentinel.hasSentinel
+                && sentinel.extendsRange
+                && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
+            )
                 return
         }
-        
+
         throw CastException(CastException.Reason.TOO_FAR, vec)
     }
 

@@ -152,7 +152,10 @@ public class RegisterPatterns {
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawae", HexDir.EAST),
                 prefix("sentinel/create"),
-                OpCreateSentinel.INSTANCE);
+                new OpCreateSentinel(false));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaeqqqwqwqqwq", HexDir.EAST),
+                prefix("sentinel/create/great"),
+                new OpCreateSentinel(true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qdwdqdw", HexDir.NORTH_EAST),
                 prefix("sentinel/destroy"),
                 OpDestroySentinel.INSTANCE);

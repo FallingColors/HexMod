@@ -1,7 +1,7 @@
 package at.petrak.hexcasting
 
 import at.petrak.hexcasting.client.ClientTickCounter
-import at.petrak.hexcasting.client.HexRenderOverlays
+import at.petrak.hexcasting.client.HexAdditionalRenderers
 import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
@@ -60,7 +60,7 @@ object HexMod {
         evBus.register(LibCapabilities::class.java)
         evBus.register(OpFlight)
         evBus.register(ItemScroll::class.java)
-        evBus.register(HexRenderOverlays::class.java)
+        evBus.register(HexAdditionalRenderers::class.java)
 
 
         // and then things that don't require busses

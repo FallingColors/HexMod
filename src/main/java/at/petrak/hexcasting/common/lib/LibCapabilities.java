@@ -33,7 +33,7 @@ public class LibCapabilities {
                 // generate a new instance of the capability
                 new OpFlight.CapFlight(false, 0, Vec3.ZERO, 0.0));
             evt.addCapability(new ResourceLocation(HexMod.MOD_ID, CapSentinel.CAP_NAME),
-                new CapSentinel(false, Vec3.ZERO, 0xff_ffffff));
+                new CapSentinel(false, false, Vec3.ZERO, 0xff_ffffff));
         }
     }
 }

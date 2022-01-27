@@ -15,10 +15,6 @@
       "text": "It has several interesting properties:$(li)It does not appear to be an entity; no one else can interact with it.$(li)Once summoned, it stays in place until banished.$(li)I am always able to see it, even through blocks."
     },
     {
-      "type": "patchouli:text",
-      "text": "Most interestingly, however, the range in which my spells can work is extended to a small region around my sentinel, about 16 blocks. In other words, no matter where in the world I am, I can interact with things around my sentinel (the mysterious forces of chunkloading notwithstanding)."
-    },
-    {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:sentinel/create",
       "anchor": "hexcasting:sentinel/create",

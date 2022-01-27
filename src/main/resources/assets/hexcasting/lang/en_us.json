@@ -91,6 +91,7 @@
   "hexcasting.spell.hexcasting:create_water": "Create Water",
   "hexcasting.spell.hexcasting:destroy_water": "Destroy Water",
   "hexcasting.spell.hexcasting:sentinel/create": "Summon Sentinel",
+  "hexcasting.spell.hexcasting:sentinel/create/great": "Summon Greater Sentinel",
   "hexcasting.spell.hexcasting:sentinel/destroy": "Banish Sentinel",
   "hexcasting.spell.hexcasting:sentinel/get_pos": "Locate Sentinel",
   "hexcasting.spell.hexcasting:sentinel/wayfind": "Wayfind Sentinel",

@@ -18,11 +18,11 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class HexLootModifiers extends GlobalLootModifierProvider {
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODS = DeferredRegister.create(
-            ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, HexMod.MOD_ID);
+        ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, HexMod.MOD_ID);
     private static final RegistryObject<AmethystClusterModifier.Serializer> AMETHYST_CLUSTER = LOOT_MODS.register(
-            "amethyst_cluster", AmethystClusterModifier.Serializer::new);
+        "amethyst_cluster", AmethystClusterModifier.Serializer::new);
     private static final RegistryObject<PatternScrollModifier.Serializer> SCROLLS_IN_CHESTS = LOOT_MODS.register(
-            "scrolls", PatternScrollModifier.Serializer::new);
+        "scrolls", PatternScrollModifier.Serializer::new);
 
     public HexLootModifiers(DataGenerator gen) {
         super(gen, HexMod.MOD_ID);
@@ -31,33 +31,33 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
     @Override
     protected void start() {
         add("amethyst_cluster", AMETHYST_CLUSTER.get(), new AmethystClusterModifier(new LootItemCondition[]{
-                LootTableIdCondition.builder(new ResourceLocation("minecraft:blocks/amethyst_cluster")).build(),
-                MatchTool.toolMatches(
-                                ItemPredicate.Builder.item().hasEnchantment(
-                                        new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
-                        .invert().build(),
-        }, 0.95f));
+            LootTableIdCondition.builder(new ResourceLocation("minecraft:blocks/amethyst_cluster")).build(),
+            MatchTool.toolMatches(
+                    ItemPredicate.Builder.item().hasEnchantment(
+                        new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
+                .invert().build(),
+        }, 0.9f));
 
 
         add("scroll_jungle", SCROLLS_IN_CHESTS.get(), new PatternScrollModifier(new LootItemCondition[]{
-                LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/jungle_temple")).build()
+            LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/jungle_temple")).build()
         }, 1.0));
         add("scroll_bastion", SCROLLS_IN_CHESTS.get(), new PatternScrollModifier(new LootItemCondition[]{
-                LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/bastion_treasure")).build()
+            LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/bastion_treasure")).build()
         }, 2.0));
         add("scroll_dungeon", SCROLLS_IN_CHESTS.get(), new PatternScrollModifier(new LootItemCondition[]{
-                LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/simple_dungeon")).build()
+            LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/simple_dungeon")).build()
         }, 1.0));
         add("scroll_stronghold_library", SCROLLS_IN_CHESTS.get(), new PatternScrollModifier(new LootItemCondition[]{
-                LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/stronghold_library")).build()
+            LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/stronghold_library")).build()
         }, 3.0));
         // Why is there not a village library chest
         add("scroll_cartographer", SCROLLS_IN_CHESTS.get(), new PatternScrollModifier(new LootItemCondition[]{
-                LootTableIdCondition.builder(
-                        new ResourceLocation("minecraft:chests/village/village_cartographer")).build()
+            LootTableIdCondition.builder(
+                new ResourceLocation("minecraft:chests/village/village_cartographer")).build()
         }, 1.0));
         add("scroll_shipwreck", SCROLLS_IN_CHESTS.get(), new PatternScrollModifier(new LootItemCondition[]{
-                LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/shipwreck_map")).build()
+            LootTableIdCondition.builder(new ResourceLocation("minecraft:chests/shipwreck_map")).build()
         }, 1.0));
     }
 }

@@ -18,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.function.Consumer;
 
-public class HexRenderOverlays {
+public class HexAdditionalRenderers {
     @SubscribeEvent
     public static void overlay(RenderLevelLastEvent evt) {
         var player = Minecraft.getInstance().player;
@@ -49,6 +49,9 @@ public class HexRenderOverlays {
         ps.translate(0, Mth.sin(bobSpeed * time) * magnitude, 0);
         var spinSpeed = 1f / 30;
         ps.mulPose(Quaternion.fromXYZ(new Vector3f(0, spinSpeed * time, 0)));
+        if (sentinel.extendsRange) {
+            ps.mulPose(Quaternion.fromXYZ(new Vector3f(spinSpeed * time / 8f, 0, 0)));
+        }
 
         float scale = 0.5f;
         ps.scale(scale, scale, scale);

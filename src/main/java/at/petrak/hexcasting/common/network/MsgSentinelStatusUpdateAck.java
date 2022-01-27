@@ -20,7 +20,7 @@ public record MsgSentinelStatusUpdateAck(CapSentinel update) {
         var buf = new FriendlyByteBuf(buffer);
 
         var tag = buf.readAnySizeNbt();
-        var sentinel = new CapSentinel(false, Vec3.ZERO, 0);
+        var sentinel = new CapSentinel(false, false, Vec3.ZERO, 0);
         sentinel.deserializeNBT(tag);
         return new MsgSentinelStatusUpdateAck(sentinel);
     }
@@ -41,6 +41,7 @@ public record MsgSentinelStatusUpdateAck(CapSentinel update) {
 
                 var cap = maybeCap.get();
                 cap.hasSentinel = update().hasSentinel;
+                cap.extendsRange = update().hasSentinel;
                 cap.position = update().position;
                 cap.color = update().color;
             })

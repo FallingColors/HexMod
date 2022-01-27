@@ -32,7 +32,7 @@ public final class AmethystClusterModifier extends LootModifier {
         var fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
 
         var hasCharged = (rand.nextFloat() * (fortuneLevel / 2f + 1)) > this.chargedChance;
-        var dustCount = hasCharged ? 0 : 1 + Math.round(rand.nextFloat() * fortuneLevel);
+        var dustCount = hasCharged ? 0 : 1 + Math.round(rand.nextFloat() * 3 * fortuneLevel);
 
         generatedLoot.add(new ItemStack(HexItems.AMETHYST_DUST.get(), dustCount));
         generatedLoot.add(new ItemStack(HexItems.CHARGED_AMETHYST.get(), hasCharged ? 1 : 0));
@@ -42,7 +42,7 @@ public final class AmethystClusterModifier extends LootModifier {
     public static class Serializer extends GlobalLootModifierSerializer<AmethystClusterModifier> {
         @Override
         public AmethystClusterModifier read(ResourceLocation location, JsonObject object,
-                LootItemCondition[] conditions) {
+            LootItemCondition[] conditions) {
             var chargedChance = GsonHelper.getAsFloat(object, "chargedChance");
             return new AmethystClusterModifier(conditions, chargedChance);
         }
