@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.lib;
 
-public class LibItemNames {
+public class HexItemNames {
     public static final String WAND = "wand";
     public static final String FOCUS = "focus";
     public static final String SPELLBOOK = "spellbook";
@@ -12,4 +12,6 @@ public class LibItemNames {
     public static final String SUBMARINE_SANDWICH = "sub_sandwich";
     public static final String LENS = "lens";
     public static final String SCROLL = "scroll";
+    public static final String DYE_COLORIZER_STUB = "dye_colorizer_";
+    public static final String UUID_COLORIZER = "uuid_colorizer";
 }

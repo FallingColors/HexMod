@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.Widget
-import at.petrak.hexcasting.common.lib.LibCapabilities
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import net.minecraft.world.phys.Vec3
 
 object OpGetSentinelWayfind : ConstManaOperator {
@@ -15,7 +15,7 @@ object OpGetSentinelWayfind : ConstManaOperator {
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val from = args.getChecked<Vec3>(0)
 
-        val maybeCap = ctx.caster.getCapability(LibCapabilities.SENTINEL).resolve()
+        val maybeCap = ctx.caster.getCapability(HexCapabilities.SENTINEL).resolve()
         if (!maybeCap.isPresent)
             return spellListOf(Widget.NULL)
 

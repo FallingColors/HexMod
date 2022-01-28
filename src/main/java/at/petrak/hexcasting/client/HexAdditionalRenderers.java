@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel;
-import at.petrak.hexcasting.common.lib.LibCapabilities;
+import at.petrak.hexcasting.common.lib.HexCapabilities;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -22,7 +22,7 @@ public class HexAdditionalRenderers {
     @SubscribeEvent
     public static void overlay(RenderLevelLastEvent evt) {
         var player = Minecraft.getInstance().player;
-        var maybeSentinelCap = player.getCapability(LibCapabilities.SENTINEL).resolve();
+        var maybeSentinelCap = player.getCapability(HexCapabilities.SENTINEL).resolve();
         if (maybeSentinelCap.isPresent()) {
             var cap = maybeSentinelCap.get();
             if (cap.hasSentinel) {

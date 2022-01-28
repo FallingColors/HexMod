@@ -5,7 +5,7 @@ import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.api.Operator
 import at.petrak.hexcasting.common.items.ItemDataHolder
 import at.petrak.hexcasting.common.items.ItemSpellbook
-import at.petrak.hexcasting.common.lib.LibCapabilities
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.RegisterHelper.prefix
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -66,7 +66,7 @@ data class CastingContext(
         if (vec.distanceToSqr(this.caster.position()) < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
             return
 
-        val maybeSentinel = this.caster.getCapability(LibCapabilities.SENTINEL).resolve()
+        val maybeSentinel = this.caster.getCapability(HexCapabilities.SENTINEL).resolve()
         if (maybeSentinel.isPresent) {
             val sentinel = maybeSentinel.get()
             if (sentinel.hasSentinel

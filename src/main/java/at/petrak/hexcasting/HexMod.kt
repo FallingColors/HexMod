@@ -8,9 +8,9 @@ import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.HexCommands
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemScroll
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.HexStatistics
-import at.petrak.hexcasting.common.lib.LibCapabilities
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.datagen.Advancements
 import at.petrak.hexcasting.datagen.DataGenerators
@@ -57,7 +57,7 @@ object HexMod {
         evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)
         evBus.register(ClientTickCounter::class.java)
-        evBus.register(LibCapabilities::class.java)
+        evBus.register(HexCapabilities::class.java)
         evBus.register(OpFlight)
         evBus.register(ItemScroll::class.java)
         evBus.register(HexAdditionalRenderers::class.java)

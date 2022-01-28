@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.lib.LibCapabilities
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgAddMotionAck
 import net.minecraft.core.Direction
@@ -45,7 +45,7 @@ object OpFlight : SpellOperator {
                 // Don't accidentally clobber someone else's flight
                 return
             }
-            val maybeCap = target.getCapability(LibCapabilities.FLIGHT).resolve()
+            val maybeCap = target.getCapability(HexCapabilities.FLIGHT).resolve()
             if (!maybeCap.isPresent) {
                 // uh oh
                 return
@@ -67,7 +67,7 @@ object OpFlight : SpellOperator {
     class CapFlight(var allowed: Boolean, var flightTime: Int, var origin: Vec3, var radius: Double) :
         ICapabilitySerializable<CompoundTag> {
         override fun <T : Any?> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> =
-            LibCapabilities.FLIGHT.orEmpty(cap, LazyOptional.of { this })
+            HexCapabilities.FLIGHT.orEmpty(cap, LazyOptional.of { this })
 
         override fun serializeNBT(): CompoundTag {
             val out = CompoundTag()
@@ -94,7 +94,7 @@ object OpFlight : SpellOperator {
     fun tickDownFlight(evt: LivingEvent.LivingUpdateEvent) {
         val entity = evt.entityLiving
         if (entity !is ServerPlayer) return
-        val maybeCap = entity.getCapability(LibCapabilities.FLIGHT).resolve()
+        val maybeCap = entity.getCapability(HexCapabilities.FLIGHT).resolve()
         if (!maybeCap.isPresent) {
             // nah we were just capping
             return

@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.lib.LibCapabilities
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck
 import net.minecraft.world.item.DyeColor
@@ -21,7 +21,7 @@ object OpColorizeSentinel : SpellOperator {
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val maybeCap = ctx.caster.getCapability(LibCapabilities.SENTINEL).resolve()
+            val maybeCap = ctx.caster.getCapability(HexCapabilities.SENTINEL).resolve()
             if (!maybeCap.isPresent)
                 return
 

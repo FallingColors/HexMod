@@ -6,8 +6,8 @@ import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
+import at.petrak.hexcasting.common.lib.HexDamageSources
 import at.petrak.hexcasting.common.lib.HexStatistics
-import at.petrak.hexcasting.common.lib.LibDamageSources
 import at.petrak.hexcasting.datagen.Advancements
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.Util
@@ -186,7 +186,7 @@ class CastingHarness private constructor(
             Advancements.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
             this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
 
-            this.ctx.caster.hurt(LibDamageSources.OVERCAST, healthtoRemove.toFloat())
+            this.ctx.caster.hurt(HexDamageSources.OVERCAST, healthtoRemove.toFloat())
             costLeft -= manaToActuallyPayFor
         }
 

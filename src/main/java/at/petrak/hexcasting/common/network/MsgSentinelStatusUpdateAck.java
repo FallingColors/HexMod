@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel;
-import at.petrak.hexcasting.common.lib.LibCapabilities;
+import at.petrak.hexcasting.common.lib.HexCapabilities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -34,7 +34,7 @@ public record MsgSentinelStatusUpdateAck(CapSentinel update) {
         ctx.get().enqueueWork(() ->
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 var player = Minecraft.getInstance().player;
-                var maybeCap = player.getCapability(LibCapabilities.SENTINEL).resolve();
+                var maybeCap = player.getCapability(HexCapabilities.SENTINEL).resolve();
                 if (!maybeCap.isPresent()) {
                     return;
                 }
