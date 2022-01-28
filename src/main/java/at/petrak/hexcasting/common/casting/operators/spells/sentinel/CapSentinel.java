@@ -2,18 +2,12 @@ package at.petrak.hexcasting.common.casting.operators.spells.sentinel;
 
 import at.petrak.hexcasting.HexUtils;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
-import at.petrak.hexcasting.common.network.HexMessages;
-import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 // it *really* doesn't like this being kotlin
@@ -54,33 +48,5 @@ public class CapSentinel implements ICapabilitySerializable<CompoundTag> {
         this.hasSentinel = tag.getBoolean(TAG_EXISTS);
         this.extendsRange = tag.getBoolean(TAG_EXTENDS_RANGE);
         this.position = HexUtils.DeserializeVec3FromNBT(tag.getLongArray(TAG_POSITION));
-    }
-
-    @SubscribeEvent
-    public void syncSentinelToClient(PlayerEvent evt) {
-        var player = evt.getPlayer();
-        // this apparently defines it in outside scope. the more you know.
-        if (!(player instanceof ServerPlayer splayer)) {
-            return;
-        }
-
-        var doSync = false;
-        if (evt instanceof PlayerEvent.PlayerLoggedInEvent) {
-            doSync = true;
-        } else if (evt instanceof PlayerEvent.Clone clone) {
-            doSync = clone.isWasDeath();
-        }
-
-        if (doSync) {
-            var maybeCap = splayer.getCapability(HexCapabilities.SENTINEL).resolve();
-            if (maybeCap.isEmpty()) {
-                return;
-            }
-
-            var cap = maybeCap.get();
-
-            HexMessages.getNetwork()
-                .send(PacketDistributor.PLAYER.with(() -> splayer), new MsgSentinelStatusUpdateAck(cap));
-        }
     }
 }

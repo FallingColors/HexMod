@@ -31,7 +31,7 @@ public class HexItems {
         }
     };
 
-    public static final RegistryObject<Item> WAND = ITEMS.register(HexItemNames.WAND,
+    public static final RegistryObject<ItemWand> WAND = ITEMS.register(HexItemNames.WAND,
         () -> new ItemWand(unstackable()));
 
     public static final RegistryObject<Item> AMETHYST_DUST = ITEMS.register(HexItemNames.AMETHYST_DUST,
@@ -44,20 +44,20 @@ public class HexItems {
     public static final RegistryObject<Item> SCROLL = ITEMS.register(HexItemNames.SCROLL,
         () -> new ItemScroll(unstackable()));
 
-    public static final RegistryObject<Item> FOCUS = ITEMS.register(HexItemNames.FOCUS,
+    public static final RegistryObject<ItemFocus> FOCUS = ITEMS.register(HexItemNames.FOCUS,
         () -> new ItemFocus(props()));
-    public static final RegistryObject<Item> SPELLBOOK = ITEMS.register(HexItemNames.SPELLBOOK,
+    public static final RegistryObject<ItemSpellbook> SPELLBOOK = ITEMS.register(HexItemNames.SPELLBOOK,
         () -> new ItemSpellbook(unstackable()));
 
-    public static final RegistryObject<Item> CYPHER = ITEMS.register(HexItemNames.CYPHER,
+    public static final RegistryObject<ItemCypher> CYPHER = ITEMS.register(HexItemNames.CYPHER,
         () -> new ItemCypher(unstackable()));
-    public static final RegistryObject<Item> TRINKET = ITEMS.register(HexItemNames.TRINKET,
+    public static final RegistryObject<ItemTrinket> TRINKET = ITEMS.register(HexItemNames.TRINKET,
         () -> new ItemTrinket(unstackable()));
-    public static final RegistryObject<Item> ARTIFACT = ITEMS.register(HexItemNames.ARTIFACT,
+    public static final RegistryObject<ItemArtifact> ARTIFACT = ITEMS.register(HexItemNames.ARTIFACT,
         () -> new ItemArtifact(unstackable()));
 
-    public static final RegistryObject<Item>[] DYE_COLORIZERS = new RegistryObject[16];
-    public static final RegistryObject<Item>[] POLITICAL_COLORIZERS = new RegistryObject[14];
+    public static final RegistryObject<ItemDyeColorizer>[] DYE_COLORIZERS = new RegistryObject[16];
+    public static final RegistryObject<ItemPoliticalColorizer>[] POLITICAL_COLORIZERS = new RegistryObject[14];
 
     static {
         for (int i = 0; i < DYE_COLORIZERS.length; i++) {

@@ -1,5 +1,5 @@
 {
-  "name": "Internalizing Pigment",
+  "name": "hexcasting.spell.hexcasting:colorize",
   "category": "hexcasting:patterns/spells",
   "icon": "hexcasting:political_colorizer_1",
   "sortnum": 8,

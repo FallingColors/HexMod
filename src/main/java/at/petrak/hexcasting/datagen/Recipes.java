@@ -5,6 +5,9 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
@@ -99,5 +102,52 @@ public class Recipes extends RecipeProvider {
             .pattern(" C ")
             .pattern(" B ")
             .unlockedBy("has_item", has(Items.AMETHYST_SHARD)).save(recipes);
+
+        for (var dyeColorizer : HexItems.DYE_COLORIZERS) {
+            var item = dyeColorizer.get();
+            ShapedRecipeBuilder.shaped(item)
+                .define('B', Items.BOWL)
+                .define('D', HexItems.AMETHYST_DUST.get())
+                .define('C', DyeItem.byColor(DyeColor.values()[item.getDyeIdx()]))
+                .pattern(" C ")
+                .pattern(" D ")
+                .pattern(" B ")
+                .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
+        }
+        Item[] politicsInMyVidya = new Item[]{
+            Items.EGG,
+            Items.STONE_BRICK_WALL,
+            Items.GLASS,
+            Items.BREAD,
+            Items.WHEAT,
+            Items.CARROT,
+            Items.GLASS_BOTTLE,
+            Items.RAW_COPPER,
+            Items.STONE,
+            Items.HONEYCOMB,
+            Items.RAW_IRON,
+            Items.WATER_BUCKET,
+            Items.ENDER_PEARL,
+            Items.ARROW,
+        };
+        for (int i = 0; i < politicsInMyVidya.length; i++) {
+            var item = HexItems.POLITICAL_COLORIZERS[i].get();
+            ShapedRecipeBuilder.shaped(item)
+                .define('B', Items.BOWL)
+                .define('D', HexItems.AMETHYST_DUST.get())
+                .define('C', politicsInMyVidya[i])
+                .pattern(" C ")
+                .pattern(" D ")
+                .pattern(" B ")
+                .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
+        }
+        ShapedRecipeBuilder.shaped(HexItems.UUID_COLORIZER.get())
+            .define('B', Items.BOWL)
+            .define('D', HexItems.AMETHYST_DUST.get())
+            .define('C', Items.AMETHYST_SHARD)
+            .pattern(" C ")
+            .pattern(" D ")
+            .pattern(" B ")
+            .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
     }
 }

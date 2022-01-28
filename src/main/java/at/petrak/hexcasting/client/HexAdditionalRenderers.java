@@ -66,7 +66,7 @@ public class HexAdditionalRenderers {
         RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
         RenderSystem.disableDepthTest();
         RenderSystem.disableCull();
-        RenderSystem.lineWidth(5f);
+        RenderSystem.lineWidth(15f);
 
         var maybeColorizerCap = owner.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
         CapPreferredColorizer cap = null;

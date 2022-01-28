@@ -6,7 +6,6 @@ import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.common.ContributorList
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel
 import at.petrak.hexcasting.common.command.HexCommands
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemScroll
@@ -61,7 +60,6 @@ object HexMod {
         evBus.register(ClientTickCounter::class.java)
         evBus.register(HexCapabilities::class.java)
         evBus.register(OpFlight)
-        evBus.register(CapSentinel::class.java)
         evBus.register(ItemScroll::class.java)
         evBus.register(HexAdditionalRenderers::class.java)
 
