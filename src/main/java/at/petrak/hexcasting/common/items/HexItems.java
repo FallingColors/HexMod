@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
+import at.petrak.hexcasting.common.items.colorizer.ItemPoliticalColorizer;
 import at.petrak.hexcasting.common.items.magic.ItemArtifact;
 import at.petrak.hexcasting.common.items.magic.ItemCypher;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
@@ -55,15 +56,21 @@ public class HexItems {
         () -> new ItemScroll(unstackable()));
 
     public static final RegistryObject<Item>[] DYE_COLORIZERS = new RegistryObject[16];
+    public static final RegistryObject<Item>[] POLITICAL_COLORIZERS = new RegistryObject[14];
     public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register(HexItemNames.UUID_COLORIZER,
         () -> new Item(unstackable()));
 
     static {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < DYE_COLORIZERS.length; i++) {
             var dye = DyeColor.values()[i];
             final var finalI = i;
             DYE_COLORIZERS[i] = ITEMS.register(HexItemNames.DYE_COLORIZER_STUB + dye.getName(),
                 () -> new ItemDyeColorizer(finalI, unstackable()));
+        }
+        for (int i = 0; i < POLITICAL_COLORIZERS.length; i++) {
+            final var finalI = i;
+            POLITICAL_COLORIZERS[i] = ITEMS.register(HexItemNames.POLITICAL_COLORIZER_STUB + i,
+                () -> new ItemPoliticalColorizer(finalI, unstackable()));
         }
     }
 

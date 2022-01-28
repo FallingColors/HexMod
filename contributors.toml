@@ -1,11 +1,19 @@
+# The version of night-config Forge packages still has this bug:
+# https://github.com/TheElectronWill/night-config/issues/96
+# So we use int codes. aa.
+
 [petra_the_kat]
-colorizer = [0xebad1c, 0xc7c7bd, 0x7c2e94, 0x2e060f]
+# colorizer = [0xebad1c, 0xc7c7bd, 0x7c2e94, 0x2e060f]
+colorizer = [15445276, 13092797, 8137012, 3016207]
 
 [Hudeler]
-colorizer = [0x825ec2]
+#colorizer = [0x825ec2]
+colorizer = [8543938]
 
 [AmyMiyalee]
-colorizer = [0xb992ff]
+#colorizer = [0xb992ff]
+colorizer = [12161791]
 
 [Alwinfy]
-colorizer = [0x327e3]
+#colorizer = [0x3327e3]
+colorizer = [3352547]

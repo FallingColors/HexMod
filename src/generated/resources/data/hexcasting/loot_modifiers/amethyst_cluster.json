@@ -18,6 +18,6 @@
       }
     }
   ],
-  "chargedChance": 0.95,
+  "chargedChance": 0.9,
   "type": "hexcasting:amethyst_cluster"
 }

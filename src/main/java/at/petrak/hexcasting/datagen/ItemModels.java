@@ -69,6 +69,15 @@ public class ItemModels extends ItemModelProvider {
                 .model(new ModelFile.UncheckedModelFile(modLoc("item/" + p.getSecond() + "_filled")))
                 .end();
         }
+
+        for (int i = 0; i < 16; i++) {
+            singleTexture(HexItems.DYE_COLORIZERS[i].getId().getPath(), new ResourceLocation("item/generated"),
+                "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/dye" + i));
+        }
+        for (int i = 0; i < 14; i++) {
+            singleTexture(HexItems.DYE_COLORIZERS[i].getId().getPath(), new ResourceLocation("item/generated"),
+                "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/political" + i));
+        }
     }
 
     public void simpleItem(Item item) {

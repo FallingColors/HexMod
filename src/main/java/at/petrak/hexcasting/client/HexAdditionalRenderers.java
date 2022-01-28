@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -13,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -66,11 +68,24 @@ public class HexAdditionalRenderers {
         RenderSystem.disableCull();
         RenderSystem.lineWidth(5f);
 
-        // we have to put *something* in the normal lest flickering
-        Consumer<float[]> v = (point) -> buf.vertex(neo, point[0], point[1], point[2])
-            .color(sentinel.color)
-            .normal(point[0], point[1], point[2])
-            .endVertex();
+        var maybeColorizerCap = owner.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
+        CapPreferredColorizer cap = null;
+        if (maybeColorizerCap.isPresent()) {
+            cap = maybeColorizerCap.get();
+        }
+
+        CapPreferredColorizer finalCap = cap;
+        Consumer<float[]> v = (point) -> {
+            var color = -1;
+            if (finalCap != null) {
+                color = finalCap.getColor(owner, time, new Vec3(point[0], point[1], point[2]));
+            }
+            buf.vertex(neo, point[0], point[1], point[2])
+                .color(color)
+                // we have to put *something* in the normal lest flickering
+                .normal(point[0], point[1], point[2])
+                .endVertex();
+        };
 
         // Icosahedron inscribed inside the unit sphere
         for (int side = 0; side <= 1; side++) {

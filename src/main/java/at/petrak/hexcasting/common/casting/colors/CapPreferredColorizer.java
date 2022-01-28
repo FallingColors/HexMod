@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.common.casting.colors;
 
+import at.petrak.hexcasting.common.ContributorList;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
+import at.petrak.hexcasting.common.items.colorizer.ItemPoliticalColorizer;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Direction;
@@ -9,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
@@ -30,6 +33,12 @@ public class CapPreferredColorizer implements ICapabilitySerializable<CompoundTa
         this.colorizer = colorizer;
     }
 
+    public static boolean isColorizer(Item item) {
+        return item instanceof ItemDyeColorizer
+            || item instanceof ItemPoliticalColorizer
+            || item == HexItems.UUID_COLORIZER.get();
+    }
+
     /**
      * @param time     absolute world time in ticks
      * @param position a position for the icosahedron, a randomish number for particles.
@@ -38,9 +47,22 @@ public class CapPreferredColorizer implements ICapabilitySerializable<CompoundTa
     public int getColor(LocalPlayer asker, float time, Vec3 position) {
         var proto = this.colorizer.getItem();
         if (proto instanceof ItemDyeColorizer dye) {
-            return DyeColor.values()[dye.getDyeIdx()].getTextColor();
+            return DyeColor.values()[dye.getDyeIdx()].getTextColor() | 0xff_000000;
+        } else if (proto instanceof ItemPoliticalColorizer politics) {
+            var colors = politics.getColors();
+            return morphBetweenColors(colors, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
         } else if (proto == HexItems.UUID_COLORIZER.get()) {
-            
+            var playerName = asker.getName().getContents();
+            var info = ContributorList.getContributor(playerName);
+            if (info != null) {
+                return morphBetweenColors(info.getColorizer(), new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
+            } else {
+                var uuid = asker.getUUID();
+                return FastColor.ARGB32.color(255,
+                    (int) (uuid.getLeastSignificantBits() & 0xff),
+                    (int) (uuid.getLeastSignificantBits() >>> 32 & 0xff),
+                    (int) (uuid.getMostSignificantBits() & 0xff));
+            }
         }
 
         return 0xff_ff00dc; // missing color

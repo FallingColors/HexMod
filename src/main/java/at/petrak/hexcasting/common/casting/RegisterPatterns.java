@@ -18,7 +18,10 @@ import at.petrak.hexcasting.common.casting.operators.spells.great.OpCreateLava;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpLightning;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpTeleport;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.*;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSentinel;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
 import at.petrak.hexcasting.common.items.magic.ItemArtifact;
 import at.petrak.hexcasting.common.items.magic.ItemCypher;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
@@ -99,15 +102,9 @@ public class RegisterPatterns {
                 OpBreakBlock.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeede", HexDir.SOUTH_WEST), prefix("place_block"),
                 OpPlaceBlock.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
-                new OpMakePackagedSpell<>(ItemCypher.class, 100_000));
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
-                prefix("craft/trinket"),
-                new OpMakePackagedSpell<>(ItemTrinket.class, 500_000));
-            PatternRegistry.mapPattern(
-                HexPattern.FromAnglesSig("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
-                prefix("craft/artifact"),
-                new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("awdwqawqwawq", HexDir.EAST),
+                prefix("colorize"),
+                OpColorize.INSTANCE, false);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqawqadaq", HexDir.SOUTH_EAST), prefix("create_water"),
                 OpCreateWater.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedwedade", HexDir.SOUTH_WEST),
@@ -117,6 +114,16 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwaeaeaeaeaea", HexDir.NORTH_WEST),
                 prefix("recharge"),
                 OpRecharge.INSTANCE);
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
+                new OpMakePackagedSpell<>(ItemCypher.class, 100_000));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
+                prefix("craft/trinket"),
+                new OpMakePackagedSpell<>(ItemTrinket.class, 500_000));
+            PatternRegistry.mapPattern(
+                HexPattern.FromAnglesSig("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
+                prefix("craft/artifact"),
+                new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000));
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaqwawaw", HexDir.NORTH_WEST),
                 prefix("potion/weakness"),
@@ -153,9 +160,6 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawae", HexDir.EAST),
                 prefix("sentinel/create"),
                 new OpCreateSentinel(false));
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaeqqqwqwqqwq", HexDir.EAST),
-                prefix("sentinel/create/great"),
-                new OpCreateSentinel(true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qdwdqdw", HexDir.NORTH_EAST),
                 prefix("sentinel/destroy"),
                 OpDestroySentinel.INSTANCE);
@@ -165,9 +169,6 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaedwa", HexDir.EAST),
                 prefix("sentinel/wayfind"),
                 OpGetSentinelWayfind.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaeqqqwqwqqwq", HexDir.EAST),
-                prefix("sentinel/colorize"),
-                OpColorizeSentinel.INSTANCE);
 
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waadwawdaaweewq", HexDir.EAST),
@@ -179,6 +180,10 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(
                 HexPattern.FromAnglesSig("wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq", HexDir.EAST),
                 prefix("teleport"), OpTeleport.INSTANCE, true);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaeqqqwqwqqwq", HexDir.EAST),
+                prefix("sentinel/create/great"),
+                new OpCreateSentinel(true), true);
+
 
             // == Meta stuff ==
 
