@@ -110,6 +110,6 @@ public class CapPreferredColorizer implements ICapabilitySerializable<CompoundTa
     @Override
     public void deserializeNBT(CompoundTag nbt) {
         var itemTag = nbt.getCompound(TAG_COLOR);
-        this.colorizer.deserializeNBT(itemTag);
+        this.colorizer = ItemStack.of(itemTag);
     }
 }

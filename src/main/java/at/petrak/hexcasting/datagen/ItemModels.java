@@ -78,7 +78,8 @@ public class ItemModels extends ItemModelProvider {
             singleTexture(HexItems.POLITICAL_COLORIZERS[i].getId().getPath(), new ResourceLocation("item/generated"),
                 "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/political" + i));
         }
-        simpleItem(HexItems.UUID_COLORIZER.get());
+        singleTexture(HexItems.UUID_COLORIZER.getId().getPath(), new ResourceLocation("item/generated"),
+            "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/uuid"));
     }
 
     public void simpleItem(Item item) {
