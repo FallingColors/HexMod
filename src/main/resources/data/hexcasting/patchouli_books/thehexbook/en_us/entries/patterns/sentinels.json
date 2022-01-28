@@ -45,14 +45,6 @@
       "input": "vector",
       "output": "vector",
       "text": "Transform the position vector on the top of the stack into a normalized vector pointing from its old position to my sentinel, or Null if it isn't summoned. Costs a negligible amount of _media."
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:sentinel/colorize",
-      "anchor": "hexcasting:sentinel/colorize",
-      "input": "",
-      "output": "",
-      "text": "I must be holding a piece of dye in my other hand to cast this spell. When I do, it will consume the dye and permanently change the color of my sentinel (at least, until I cast the spell again). Costs about 1 $(item)Amethyst Dust/$."
     }
   ]
 }

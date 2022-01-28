@@ -104,7 +104,7 @@ public class RegisterPatterns {
                 OpPlaceBlock.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("awdwqawqwawq", HexDir.EAST),
                 prefix("colorize"),
-                OpColorize.INSTANCE, false);
+                OpColorize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqawqadaq", HexDir.SOUTH_EAST), prefix("create_water"),
                 OpCreateWater.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedwedade", HexDir.SOUTH_WEST),

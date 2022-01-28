@@ -1,0 +1,14 @@
+{
+  "name": "Pigments",
+  "category": "hexcasting:items",
+  "icon": "hexcasting:uuid_pigment",
+  "sortnum": 5,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "aaaaaaaaaaaa"
+    }
+  ]
+}

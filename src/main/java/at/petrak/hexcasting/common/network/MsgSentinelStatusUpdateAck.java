@@ -41,7 +41,7 @@ public record MsgSentinelStatusUpdateAck(CapSentinel update) {
 
                 var cap = maybeCap.get();
                 cap.hasSentinel = update().hasSentinel;
-                cap.extendsRange = update().hasSentinel;
+                cap.extendsRange = update().extendsRange;
                 cap.position = update().position;
             })
         );

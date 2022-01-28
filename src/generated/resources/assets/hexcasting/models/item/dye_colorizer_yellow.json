@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "hexcasting:item/colorizer/dye4"
+    "layer0": "hexcasting:item/colorizer/dye_political4"
   }
 }
