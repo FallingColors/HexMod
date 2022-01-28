@@ -73,7 +73,8 @@ public class CapPreferredColorizer implements ICapabilitySerializable<CompoundTa
 
         int baseIdx = Mth.floor(fIdx);
         float tRaw = fIdx - baseIdx;
-        float t = -(float) (Math.cbrt(Mth.cos(tRaw * Mth.PI)) / 2) + 0.5f;
+//        float t = -(float) (Math.cbrt(Mth.cos(tRaw * Mth.PI)) / 2) + 0.5f;
+        float t = tRaw;
         int start = colors[baseIdx];
         int end = colors[(baseIdx + 1) % colors.length];
 

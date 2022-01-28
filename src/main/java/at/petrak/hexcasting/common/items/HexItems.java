@@ -33,32 +33,31 @@ public class HexItems {
 
     public static final RegistryObject<Item> WAND = ITEMS.register(HexItemNames.WAND,
         () -> new ItemWand(unstackable()));
+
+    public static final RegistryObject<Item> AMETHYST_DUST = ITEMS.register(HexItemNames.AMETHYST_DUST,
+        () -> new Item(props()));
+    public static final RegistryObject<Item> CHARGED_AMETHYST = ITEMS.register(HexItemNames.CHARGED_AMETHYST,
+        () -> new Item(props()));
+
+    public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register(HexItemNames.LENS,
+        () -> new Item(unstackable()));
+    public static final RegistryObject<Item> SCROLL = ITEMS.register(HexItemNames.SCROLL,
+        () -> new ItemScroll(unstackable()));
+
     public static final RegistryObject<Item> FOCUS = ITEMS.register(HexItemNames.FOCUS,
         () -> new ItemFocus(props()));
     public static final RegistryObject<Item> SPELLBOOK = ITEMS.register(HexItemNames.SPELLBOOK,
         () -> new ItemSpellbook(unstackable()));
+
     public static final RegistryObject<Item> CYPHER = ITEMS.register(HexItemNames.CYPHER,
         () -> new ItemCypher(unstackable()));
     public static final RegistryObject<Item> TRINKET = ITEMS.register(HexItemNames.TRINKET,
         () -> new ItemTrinket(unstackable()));
     public static final RegistryObject<Item> ARTIFACT = ITEMS.register(HexItemNames.ARTIFACT,
         () -> new ItemArtifact(unstackable()));
-    public static final RegistryObject<Item> AMETHYST_DUST = ITEMS.register(HexItemNames.AMETHYST_DUST,
-        () -> new Item(props()));
-    public static final RegistryObject<Item> CHARGED_AMETHYST = ITEMS.register(HexItemNames.CHARGED_AMETHYST,
-        () -> new Item(props()));
-    // I am very funny
-    public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register(HexItemNames.SUBMARINE_SANDWICH,
-        () -> new Item(props().food(new FoodProperties.Builder().nutrition(12).saturationMod(1.2f).build())));
-    public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register(HexItemNames.LENS,
-        () -> new Item(unstackable()));
-    public static final RegistryObject<Item> SCROLL = ITEMS.register(HexItemNames.SCROLL,
-        () -> new ItemScroll(unstackable()));
 
     public static final RegistryObject<Item>[] DYE_COLORIZERS = new RegistryObject[16];
     public static final RegistryObject<Item>[] POLITICAL_COLORIZERS = new RegistryObject[14];
-    public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register(HexItemNames.UUID_COLORIZER,
-        () -> new Item(unstackable()));
 
     static {
         for (int i = 0; i < DYE_COLORIZERS.length; i++) {
@@ -73,6 +72,13 @@ public class HexItems {
                 () -> new ItemPoliticalColorizer(finalI, unstackable()));
         }
     }
+
+    public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register(HexItemNames.UUID_COLORIZER,
+        () -> new Item(unstackable()));
+
+    // I am very funny
+    public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register(HexItemNames.SUBMARINE_SANDWICH,
+        () -> new Item(props().food(new FoodProperties.Builder().nutrition(12).saturationMod(1.2f).build())));
 
     public static Item.Properties props() {
         return new Item.Properties().tab(TAB);
