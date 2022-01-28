@@ -3,6 +3,7 @@ package at.petrak.hexcasting
 import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.HexAdditionalRenderers
 import at.petrak.hexcasting.client.RegisterClientStuff
+import at.petrak.hexcasting.common.ContributorList
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.HexCommands
@@ -66,7 +67,7 @@ object HexMod {
         // and then things that don't require busses
         HexMessages.register()
         HexStatistics.register()
-
+        ContributorList.loadContributors()
     }
 
     @SubscribeEvent
