@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api
 
 import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.OperatorSideEffect
 
 /**
  * A SimpleOperator that always costs the same amount of mana.
@@ -13,15 +14,15 @@ interface ConstManaOperator : Operator {
 
     fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>>
 
-    override fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         if (this.argc > stack.size)
             throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, this.argc, stack.size)
-        val args = stack.takeLast(this.argc)
-        // there's gotta be a better way to do this
-        for (_idx in 0 until this.argc)
-            stack.removeLast()
+        val args = stack.dropLast(this.argc)
         val newData = this.execute(args, ctx)
         stack.addAll(newData)
-        return OperationResult(this.manaCost, emptyList())
+
+        val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMana(this.manaCost))
+
+        return OperationResult(stack, sideEffects)
     }
 }

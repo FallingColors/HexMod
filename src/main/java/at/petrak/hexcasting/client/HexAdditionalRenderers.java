@@ -78,7 +78,8 @@ public class HexAdditionalRenderers {
         Consumer<float[]> v = (point) -> {
             var color = -1;
             if (finalCap != null) {
-                color = finalCap.getColor(owner, time, new Vec3(point[0], point[1], point[2]));
+                color = CapPreferredColorizer.getColor(finalCap.colorizer, owner, time,
+                    new Vec3(point[0], point[1], point[2]));
             }
             buf.vertex(neo, point[0], point[1], point[2])
                 .color(color)

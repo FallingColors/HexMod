@@ -16,12 +16,13 @@ object OpAddMotion : SpellOperator {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val target = args.getChecked<Entity>(0)
         val motion = args.getChecked<Vec3>(1)
-        return Pair(
+        return Triple(
             Spell(target, motion),
-            (motion.lengthSqr() * 10_000f).toInt()
+            (motion.lengthSqr() * 10_000f).toInt(),
+            listOf(),
         )
     }
 

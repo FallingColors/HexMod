@@ -14,12 +14,18 @@ import net.minecraft.world.phys.Vec3
  */
 interface Operator {
     /**
-     * Operate on the stack and return the mana cost.
+     * Operate on the stack. Return the new stack and any side effects of the cast.
+     *
+     * Although this is passed a [MutableList], this is only for the convenience of implementors.
+     * It is a clone of the stack and modifying it does nothing. You must return the new stack
+     * with the [OperationResult].
+     *
+     * A particle effect at the cast site and various messages and advancements are done automagically.
      */
-    fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult
+    fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult
 
     /**
-     * Do you need to be enlightened to cast this spell?
+     * Do you need to be enlightened to use this operator?
      */
     val isGreat: Boolean get() = false
 

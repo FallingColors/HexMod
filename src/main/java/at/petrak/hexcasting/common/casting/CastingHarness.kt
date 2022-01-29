@@ -2,22 +2,22 @@ package at.petrak.hexcasting.common.casting
 
 import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.PatternRegistry
-import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.HexDamageSources
 import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.datagen.Advancements
 import at.petrak.hexcasting.hexmath.HexPattern
-import net.minecraft.Util
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.item.ItemStack
 import java.util.*
 import kotlin.math.min
 import kotlin.random.Random
@@ -33,8 +33,11 @@ class CastingHarness private constructor(
     var parenthesized: MutableList<HexPattern>,
     var escapeNext: Boolean,
     val ctx: CastingContext,
+    val prepackagedColorizer: ItemStack?
 ) {
-    constructor(ctx: CastingContext) : this(mutableListOf(), 0, mutableListOf(), false, ctx)
+
+    constructor(ctx: CastingContext) : this(mutableListOf(), 0, mutableListOf(), false, ctx, null)
+
 
     /**
      * When the server gets a packet from the client with a new pattern,
@@ -42,7 +45,6 @@ class CastingHarness private constructor(
      */
     fun update(newPat: HexPattern, world: ServerLevel): CastResult {
         return try {
-            var spellsToCast = emptyList<RenderedSpell>()
             var exn: CastException? = null
             val operator = try {
                 PatternRegistry.matchPattern(newPat, world)
@@ -89,34 +91,9 @@ class CastingHarness private constructor(
                 throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
             } else {
                 // we know the operator is ok here
-                val (manaCost, spells) = operator!!.modifyStack(this.stack, this.ctx)
+                val (stackPrime, sideEffects) = operator!!.operate(this.stack, this.ctx)
 
-
-                val leftover = this.withdrawMana(manaCost, ctx.canOvercast)
-                if (ctx.caster.isDeadOrDying)
-                    return CastResult.Died
-                else if (leftover > 0) {
-                    if (!ctx.canOvercast) {
-                        ctx.caster.sendMessage(
-                            TranslatableComponent("hexcasting.message.cant_overcast"),
-                            Util.NIL_UUID
-                        )
-                    }
-                    return CastResult.QuitCasting
-                }
-
-
-                // is great IMPLIES caster is enlightened
-                if (!operator.isGreat || ctx.isCasterEnlightened) {
-                    spellsToCast = spells
-                } else if (operator.isGreat) {
-                    ctx.caster.sendMessage(
-                        TranslatableComponent("hexcasting.message.cant_great_spell"),
-                        Util.NIL_UUID
-                    )
-                    Advancements.FAIL_GREAT_SPELL_TRIGGER.trigger(ctx.caster)
-                }
-
+                
             }
 
             if (spellsToCast.isNotEmpty()) {
@@ -201,6 +178,18 @@ class CastingHarness private constructor(
         return costLeft
     }
 
+    fun getColorizer(): ItemStack {
+        if (this.prepackagedColorizer != null)
+            return this.prepackagedColorizer
+
+        val maybeCap = this.ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
+        if (maybeCap.isEmpty) {
+            // uh oh
+            return ItemStack(HexItems.DYE_COLORIZERS[0].get())
+        }
+        return maybeCap.get().colorizer
+    }
+
 
     fun serializeToNBT(): CompoundTag {
         val out = CompoundTag()
@@ -218,6 +207,10 @@ class CastingHarness private constructor(
             parensTag.add(pat.serializeToNBT())
         out.put(TAG_PARENTHESIZED, parensTag)
 
+        if (this.prepackagedColorizer != null) {
+            out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serializeNBT())
+        }
+
         return out
     }
 
@@ -227,6 +220,7 @@ class CastingHarness private constructor(
         const val TAG_PAREN_COUNT = "open_parens"
         const val TAG_PARENTHESIZED = "parenthesized"
         const val TAG_ESCAPE_NEXT = "escape_next"
+        const val TAG_PREPACKAGED_COLORIZER = "prepackaged_colorizer"
 
         @JvmStatic
         fun DeserializeFromNBT(nbt: Tag?, caster: ServerPlayer, wandHand: InteractionHand): CastingHarness {
@@ -250,7 +244,13 @@ class CastingHarness private constructor(
                 val parenCount = nbt.getInt(TAG_PAREN_COUNT)
                 val escapeNext = nbt.getBoolean(TAG_ESCAPE_NEXT)
 
-                CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx)
+                val colorizer = if (nbt.contains(TAG_PREPACKAGED_COLORIZER)) {
+                    ItemStack.of(nbt.getCompound(TAG_PREPACKAGED_COLORIZER))
+                } else {
+                    null
+                }
+
+                CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx, colorizer)
             } catch (exn: Exception) {
                 HexMod.LOGGER.warn("Couldn't load harness from nbt tag, falling back to default: $nbt: $exn")
                 CastingHarness(ctx)
@@ -266,7 +266,7 @@ class CastingHarness private constructor(
         object QuitCasting : CastResult()
 
         /** Finished casting */
-        data class Cast(val spells: List<RenderedSpell>, val quit: Boolean) : CastResult()
+        data class Cast(val sideEffects: List<OperatorSideEffect>, val quit: Boolean) : CastResult()
 
         /** uh-oh */
         data class Error(val exn: CastException) : CastResult()

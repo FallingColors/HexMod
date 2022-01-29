@@ -31,7 +31,7 @@ object OpColorize : SpellOperator {
             val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
             if (CapPreferredColorizer.isColorizer(otherHandItem.item)) {
                 val copied = ItemStack(otherHandItem.item, 1)
-                otherHandItem.shrink(1)
+                ctx.withdrawItem(otherHandItem.item, 1, true)
                 cap.colorizer = copied
 
                 HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { ctx.caster }, MsgColorizerUpdateAck(cap))

@@ -1,0 +1,87 @@
+package at.petrak.hexcasting.common.casting
+
+import at.petrak.hexcasting.api.RenderedSpell
+import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer
+import at.petrak.hexcasting.datagen.Advancements
+import com.mojang.math.Vector3f
+import net.minecraft.Util
+import net.minecraft.core.particles.DustParticleOptions
+import net.minecraft.network.chat.TranslatableComponent
+import net.minecraft.util.FastColor
+import net.minecraft.world.phys.Vec3
+import kotlin.random.Random
+import kotlin.random.nextInt
+
+/**
+ * Things that happen after a spell is cast.
+ */
+sealed class OperatorSideEffect {
+    /** Return whether to cancel all further [OperatorSideEffect] */
+    abstract fun performEffect(harness: CastingHarness): Boolean
+
+    /** Try to cast a spell  */
+    data class AttemptSpell(val spell: RenderedSpell, val isGreat: Boolean) : OperatorSideEffect() {
+        override fun performEffect(harness: CastingHarness): Boolean {
+            return if (this.isGreat && !harness.ctx.isCasterEnlightened) {
+                harness.ctx.caster.sendMessage(
+                    TranslatableComponent("hexcasting.message.cant_great_spell"),
+                    Util.NIL_UUID
+                )
+                Advancements.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.ctx.caster)
+                true
+            } else {
+                this.spell.cast(harness.ctx)
+                false
+            }
+        }
+    }
+
+    data class ConsumeMana(val amount: Int) : OperatorSideEffect() {
+        override fun performEffect(harness: CastingHarness): Boolean {
+            val overcastOk = harness.ctx.canOvercast
+            val leftoverMana = harness.withdrawMana(this.amount, overcastOk)
+            if (leftoverMana > 0 && overcastOk) {
+                harness.ctx.caster.sendMessage(
+                    TranslatableComponent("hexcasting.message.cant_overcast"),
+                    Util.NIL_UUID
+                )
+            }
+            return leftoverMana > 0
+        }
+    }
+
+    data class Particles(val position: Vec3) : OperatorSideEffect() {
+        override fun performEffect(harness: CastingHarness): Boolean {
+            val colorizer = harness.getColorizer()
+
+            for (i in 0 until 6) {
+                // For the colors, pick any random time to get a mix of colors
+                val color =
+                    CapPreferredColorizer.getColor(colorizer, harness.ctx.caster, Random.nextFloat() * 256f, Vec3.ZERO)
+                val r = FastColor.ARGB32.red(color)
+                val g = FastColor.ARGB32.green(color)
+                val b = FastColor.ARGB32.blue(color)
+                harness.ctx.world.addParticle(
+                    DustParticleOptions(Vector3f(r.toFloat(), g.toFloat(), b.toFloat()), 1f),
+                    position.x,
+                    position.y,
+                    position.z,
+                    0.1,
+                    0.1,
+                    0.1
+                )
+            }
+
+            return false
+        }
+    }
+
+    object AddGarbage : OperatorSideEffect() {
+        override fun performEffect(harness: CastingHarness): Boolean {
+            val idx = Random.nextInt(0..harness.stack.size)
+            harness.stack.add(idx, SpellDatum.make(Widget.GARBAGE))
+            return false
+        }
+    }
+}

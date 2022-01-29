@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api
 
+import at.petrak.hexcasting.common.casting.OperatorSideEffect
+
 /**
  * What happens when an operator is through?
- *
- * This has the mana cost and some spells that might be cast.
  */
-data class OperationResult(val manaCost: Int, val spells: List<RenderedSpell>)
+data class OperationResult(val newStack: List<SpellDatum<*>>, val sideEffects: List<OperatorSideEffect>)

@@ -12,7 +12,7 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 object OpEvalDelay : Operator {
-    override fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         val instrs: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex - 1)
         val delay: Double = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()

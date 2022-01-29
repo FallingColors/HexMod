@@ -9,7 +9,7 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.CastingHarness
 
 object OpEval : Operator {
-    override fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         val instrs: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
 

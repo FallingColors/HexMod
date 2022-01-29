@@ -11,7 +11,7 @@ import at.petrak.hexcasting.common.casting.CastingHarness
 import at.petrak.hexcasting.hexmath.HexPattern
 
 object OpForEach : Operator {
-    override fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         val last = stack.lastIndex
         val maybeProgram = stack[last - 1]
         val vals = stack.getChecked<List<SpellDatum<*>>>(last)

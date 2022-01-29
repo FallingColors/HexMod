@@ -5,11 +5,11 @@ import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPoliticalColorizer;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -44,8 +44,8 @@ public class CapPreferredColorizer implements ICapabilitySerializable<CompoundTa
      * @param position a position for the icosahedron, a randomish number for particles.
      * @return an AARRGGBB color.
      */
-    public int getColor(LocalPlayer asker, float time, Vec3 position) {
-        var proto = this.colorizer.getItem();
+    public static int getColor(ItemStack colorizer, Player asker, float time, Vec3 position) {
+        var proto = colorizer.getItem();
         if (proto instanceof ItemDyeColorizer dye) {
             return DyeColor.values()[dye.getDyeIdx()].getTextColor() | 0xff_000000;
         } else if (proto instanceof ItemPoliticalColorizer politics) {
@@ -68,7 +68,7 @@ public class CapPreferredColorizer implements ICapabilitySerializable<CompoundTa
         return 0xff_ff00dc; // missing color
     }
 
-    private int morphBetweenColors(int[] colors, Vec3 gradientDir, float time, Vec3 position) {
+    private static int morphBetweenColors(int[] colors, Vec3 gradientDir, float time, Vec3 position) {
         float fIdx = ((time + (float) gradientDir.dot(position)) % 1f) * colors.length;
 
         int baseIdx = Mth.floor(fIdx);

@@ -9,7 +9,7 @@ import net.minecraft.Util
 import net.minecraft.network.chat.TextComponent
 
 object OpPrint : Operator {
-    override fun modifyStack(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         val datum = stack[stack.lastIndex]
         return OperationResult(0, listOf(Spell(datum)))
     }
