@@ -40,6 +40,22 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:conjure_block",
+      "anchor": "hexcasting:conjure_block",
+      "input": "vector",
+      "output": "",
+      "text": "Conjure a barrier which can be colored with a colorizer. Costs about one $(item)Amethyst Dust/$."
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:conjure_light",
+      "anchor": "hexcasting:conjure_light",
+      "input": "vector",
+      "output": "",
+      "text": "Conjure a magical light which can be colored with a colorizer. Costs about one $(item)Amethyst Dust/$."
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:bonemeal",
       "anchor": "hexcasting:bonemeal",
       "input": "vector",

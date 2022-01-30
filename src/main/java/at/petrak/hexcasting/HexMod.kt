@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.HexAdditionalRenderers
 import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.common.ContributorList
+import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.HexCommands
@@ -13,6 +14,7 @@ import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.common.network.HexMessages
+import at.petrak.hexcasting.common.particles.HexParticles
 import at.petrak.hexcasting.datagen.Advancements
 import at.petrak.hexcasting.datagen.DataGenerators
 import at.petrak.hexcasting.datagen.lootmods.HexLootModifiers
@@ -52,8 +54,11 @@ object HexMod {
         modBus.register(DataGenerators::class.java)
 
         HexItems.ITEMS.register(modBus)
+        HexBlocks.BLOCKS.register(modBus)
+        HexBlocks.BLOCK_ENTITIES.register(modBus)
         HexLootModifiers.LOOT_MODS.register(modBus)
         HexSounds.SOUNDS.register(modBus)
+        HexParticles.PARTICLES.register(modBus)
 
         evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)

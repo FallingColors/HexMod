@@ -43,6 +43,7 @@
   "item.hexcasting.political_colorizer_12": "Intersex Pigment",
   "item.hexcasting.political_colorizer_13": "Aroace Pigment",
   "item.hexcasting.uuid_colorizer": "Soulglimmer Pigment",
+  "block.hexcasting.conjured": "Conjured Block",
   "itemGroup.hexcasting": "Hexcasting",
   
   "hexcasting.spellbook.tooltip.page": "Selected Page %d/%d",
@@ -121,6 +122,8 @@
   "hexcasting.spell.hexcasting:recharge": "Recharge Item",
   "hexcasting.spell.hexcasting:create_water": "Create Water",
   "hexcasting.spell.hexcasting:destroy_water": "Destroy Water",
+  "hexcasting.spell.hexcasting:conjure_block": "Conjure Block",
+  "hexcasting.spell.hexcasting:conjure_light": "Conjure Light",
   "hexcasting.spell.hexcasting:bonemeal": "Overgrow",
   "hexcasting.spell.hexcasting:colorize": "Internalize Pigment",
   "hexcasting.spell.hexcasting:sentinel/create": "Summon Sentinel",
