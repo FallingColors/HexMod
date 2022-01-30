@@ -121,6 +121,7 @@
   "hexcasting.spell.hexcasting:recharge": "Recharge Item",
   "hexcasting.spell.hexcasting:create_water": "Create Water",
   "hexcasting.spell.hexcasting:destroy_water": "Destroy Water",
+  "hexcasting.spell.hexcasting:bonemeal": "Overgrow",
   "hexcasting.spell.hexcasting:colorize": "Internalize Pigment",
   "hexcasting.spell.hexcasting:sentinel/create": "Summon Sentinel",
   "hexcasting.spell.hexcasting:sentinel/destroy": "Banish Sentinel",

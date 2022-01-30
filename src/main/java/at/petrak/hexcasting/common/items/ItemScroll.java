@@ -12,7 +12,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -43,7 +42,7 @@ public class ItemScroll extends Item {
         var tag = pStack.getOrCreateTag();
         if (tag.contains(TAG_OP_ID)) {
             return new TranslatableComponent("item.hexcasting.scroll.of",
-                I18n.get("hexcasting.spell." + ResourceLocation.tryParse(tag.getString(TAG_OP_ID))));
+                new TranslatableComponent("hexcasting.spell." + ResourceLocation.tryParse(tag.getString(TAG_OP_ID))));
         } else if (tag.contains(TAG_PATTERN)) {
             return new TranslatableComponent("item.hexcasting.scroll");
         } else {

@@ -32,7 +32,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$.$(br2)It also makes the bureaucracy of Nature a \"Turing-complete\" system, according to one esoteric scroll I found.$(br2)However, it seems there's a limit to how many times a _Hex can cast itself-- Nature doesn't look kindly on runaway spells!"
+            "text": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$.$(br2)It also makes the bureaucracy of Nature a \"Turing-complete\" system, according to one esoteric scroll I found.$(br2)However, it seems there's a limit to how many times a _Hex can cast itself-- Nature doesn't look kindly on runaway spells!$(br2)In addition, with the energies swirling as wildly as they are, any mishap will cause the evaluation to become too unstable and immediately exit."
         },
         {
             "type": "hexcasting:pattern",

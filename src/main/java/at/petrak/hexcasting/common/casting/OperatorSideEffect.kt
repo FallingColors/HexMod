@@ -9,7 +9,6 @@ import net.minecraft.Util
 import net.minecraft.core.particles.DustParticleOptions
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.network.chat.TranslatableComponent
-import net.minecraft.util.FastColor
 import net.minecraft.world.phys.Vec3
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -59,21 +58,23 @@ sealed class OperatorSideEffect {
             for (i in 0 until 20) {
                 // For the colors, pick any random time to get a mix of colors
                 val color =
-                    CapPreferredColorizer.getColor(colorizer, harness.ctx.caster, Random.nextFloat() * 256f, Vec3.ZERO)
-                val r = FastColor.ARGB32.red(color)
-                val g = FastColor.ARGB32.green(color)
-                val b = FastColor.ARGB32.blue(color)
-                harness.ctx.world.sendParticles(
-                    DustParticleOptions(Vector3f(r.toFloat(), g.toFloat(), b.toFloat()), 1f),
-                    position.x,
-                    position.y,
-                    position.z,
-                    1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                )
+                    CapPreferredColorizer.getColor(
+                        colorizer,
+                        harness.ctx.caster,
+                        Random.nextFloat() * 256f,
+                        Vec3.ZERO
+                    ) t
+                            harness.ctx.world.sendParticles(
+                                DustParticleOptions(Vector3f(Vec3.fromRGB24(color)), 1f),
+                                position.x,
+                                position.y,
+                                position.z,
+                                1,
+                                0.1,
+                                0.1,
+                                0.1,
+                                0.1,
+                            )
             }
 
             return false

@@ -72,8 +72,9 @@ object OpFlight : SpellOperator {
 
         override fun serializeNBT(): CompoundTag {
             val out = CompoundTag()
-            out.putBoolean(TAG_ALLOWED, this.allowed)
+
             if (this.allowed) {
+                out.putBoolean(TAG_ALLOWED, this.allowed)
                 out.putInt(TAG_FLIGHT_TIME, flightTime)
                 out.put(TAG_ORIGIN, this.origin.serializeToNBT())
                 out.putDouble(TAG_RADIUS, this.radius)
@@ -115,13 +116,15 @@ object OpFlight : SpellOperator {
                         )
                 }
                 cap.allowed = false
+
+                if (!entity.isCreative && !entity.isSpectator) {
+                    val abilities = entity.abilities
+                    abilities.flying = false
+                    abilities.mayfly = false
+                    entity.onUpdateAbilities()
+                }
             }
         }
-        if (!entity.isCreative && !entity.isSpectator) {
-            val abilities = entity.abilities
-            if (!cap.allowed) abilities.flying = false
-            abilities.mayfly = cap.allowed
-            entity.onUpdateAbilities()
-        }
+
     }
 }

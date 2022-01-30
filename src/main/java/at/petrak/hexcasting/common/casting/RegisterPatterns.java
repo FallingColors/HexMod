@@ -108,7 +108,7 @@ public class RegisterPatterns {
                 OpCreateWater.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedwedade", HexDir.SOUTH_WEST),
                 prefix("destroy_water"), OpDestroyWater.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaqqqqaq", HexDir.NORTH_EAST), prefix("bonemeal"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waawawaawa", HexDir.NORTH_EAST), prefix("bonemeal"),
                 OpTheOnlyReasonAnyoneDownloadedPsi.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwaeaeaeaeaea", HexDir.NORTH_WEST),
                 prefix("recharge"),
