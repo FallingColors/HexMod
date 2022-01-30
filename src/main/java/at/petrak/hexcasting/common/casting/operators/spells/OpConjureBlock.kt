@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.blocks.BlockConjured
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
 
@@ -29,9 +30,13 @@ object OpConjureBlock : SpellOperator {
             if (ctx.world.getBlockState(BlockPos(target)).isAir) {
                 ctx.world.setBlock(BlockPos(target), HexBlocks.CONJURED.get().defaultBlockState(), 2)
 
-                val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
-                if (ctx.world.getBlockState(BlockPos(target)).block is BlockConjured && CapPreferredColorizer.isColorizer(otherHandItem.item)) {
-                    BlockConjured.setColor(ctx.world, BlockPos(target), otherHandItem)
+                val maybeCap = ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
+                if (!maybeCap.isPresent)
+                    return
+                val cap = maybeCap.get()
+
+                if (ctx.world.getBlockState(BlockPos(target)).block is BlockConjured) {
+                    BlockConjured.setColor(ctx.world, BlockPos(target), cap.colorizer)
                 }
             }
         }
