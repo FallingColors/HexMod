@@ -22,12 +22,13 @@ object OpPlaceBlock : SpellOperator {
     override val argc: Int
         get() = 1
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val pos = args.getChecked<Vec3>(0)
         ctx.assertVecInRange(pos)
-        return Pair(
+        return Triple(
             Spell(pos),
-            10_000
+            10_000,
+            listOf(pos)
         )
     }
 

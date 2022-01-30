@@ -41,9 +41,9 @@ public class HexAdditionalRenderers {
         var mc = Minecraft.getInstance();
         var playerPos = mc.gameRenderer.getMainCamera().getPosition();
         ps.translate(
-            sentinel.position.x - playerPos.x + 0.5,
-            sentinel.position.y - playerPos.y + 0.5,
-            sentinel.position.z - playerPos.z + 0.5);
+            sentinel.position.x - playerPos.x,
+            sentinel.position.y - playerPos.y,
+            sentinel.position.z - playerPos.z);
 
         var time = mc.level.getLevelData().getGameTime() + partialTicks;
         var bobSpeed = 1f / 20;

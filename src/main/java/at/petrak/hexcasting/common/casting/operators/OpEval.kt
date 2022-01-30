@@ -3,10 +3,10 @@ package at.petrak.hexcasting.common.casting.operators
 import at.petrak.hexcasting.api.OperationResult
 import at.petrak.hexcasting.api.Operator
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.CastingHarness
+import at.petrak.hexcasting.common.casting.OperatorSideEffect
 
 object OpEval : Operator {
     override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
@@ -16,20 +16,16 @@ object OpEval : Operator {
         ctx.incDepth()
         val harness = CastingHarness(ctx)
         harness.stack.addAll(stack)
-        stack.clear()
 
-        val spellsToCast = mutableListOf<RenderedSpell>()
+        val sideEffects = mutableListOf<OperatorSideEffect>()
+        /*
         for (pat in instrs) {
-            val res = harness.update(pat.tryGet(), ctx.world)
-            when (res) {
-                is CastingHarness.CastResult.Error -> throw res.exn
-                is CastingHarness.CastResult.Cast -> spellsToCast.addAll(res.spells)
-                else -> {}
-            }
-            if (res.quitStatus() == CastingHarness.QuitStatus.QUIT) break
+            val res = harness.getUpdate(pat.tryGet(), ctx.world)
+            sideEffects.addAll(res.sideEffects)
+
         }
         stack.addAll(harness.stack)
-
-        return OperationResult(50_000, spellsToCast)
+         */
+        return OperationResult(harness.stack, sideEffects)
     }
 }

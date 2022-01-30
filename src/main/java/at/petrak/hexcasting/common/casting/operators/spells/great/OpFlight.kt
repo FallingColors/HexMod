@@ -26,16 +26,17 @@ import kotlin.math.roundToInt
 object OpFlight : SpellOperator {
     override val argc = 3
     override val isGreat = true
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val target = args.getChecked<ServerPlayer>(0)
         val timeRaw = max(args.getChecked(1), 0.0)
         val radiusRaw = max(args.getChecked(2), 0.0)
 
         // Convert to ticks
         val time = (timeRaw * 20.0).roundToInt()
-        return Pair(
+        return Triple(
             Spell(target, time, radiusRaw, ctx.position),
-            10_000 * (timeRaw * radiusRaw + 1.0).roundToInt()
+            10_000 * (timeRaw * radiusRaw + 1.0).roundToInt(),
+            listOf()
         )
     }
 

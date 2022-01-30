@@ -16,38 +16,43 @@ import kotlin.math.roundToInt
 
 object OpBlink : SpellOperator {
     override val argc = 2
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val target = args.getChecked<Entity>(0)
         val delta = args.getChecked<Double>(1)
 
-        ctx.assertVecInRange(target.position())
-        ctx.assertVecInRange(target.position().add(target.lookAngle.scale(delta)))
+        val dvec = targetDelta(ctx, target, delta)
 
-        return Pair(
+        ctx.assertVecInRange(target.position())
+        ctx.assertVecInRange(target.position().add(dvec))
+
+        return Triple(
             Spell(target, delta),
-            20_000 * delta.roundToInt(),
+            50_000 * delta.roundToInt(),
+            listOf(target.position().add(dvec))
         )
     }
 
     private data class Spell(val target: Entity, val delta: Double) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val look = target.lookAngle
-            // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/entity/PieceTrickBlink.java#L74
-            // IIRC this is to prevent you from teleporting into blocks because people tend to look a little bit down
-            // ... but isn't the condition backwards?
-            val dx = look.x * delta
-            val dy = if (target != ctx.caster) {
-                look.y * delta
-            } else {
-                max(0.0, look.y * delta)
-            }
-            val dz = look.z * delta
-
-            val dvec = Vec3(dx, dy, dz)
+            val dvec = targetDelta(ctx, target, delta)
             target.setPos(target.position().add(dvec))
             if (target is ServerPlayer) {
                 HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { target }, MsgBlinkAck(dvec))
             }
         }
+    }
+
+    private fun targetDelta(ctx: CastingContext, target: Entity, delta: Double): Vec3 {
+        val look = target.lookAngle
+        // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/entity/PieceTrickBlink.java#L74
+        val dx = look.x * delta
+        val dy = if (target != ctx.caster) {
+            look.y * delta
+        } else {
+            max(0.0, look.y * delta)
+        }
+        val dz = look.z * delta
+
+        return Vec3(dx, dy, dz)
     }
 }

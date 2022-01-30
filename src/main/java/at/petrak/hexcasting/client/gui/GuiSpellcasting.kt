@@ -3,7 +3,7 @@ package at.petrak.hexcasting.client.gui
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.HexUtils.TAU
 import at.petrak.hexcasting.client.RenderLib
-import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.casting.ControllerInfo
 import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.HexMessages
@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.AbstractSoundInstance
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
+import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
@@ -38,13 +39,19 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
     private var ambianceSoundInstance: AbstractSoundInstance? = null
 
-    private var stackDescs: List<String> = emptyList()
+    private var stackDescs: List<Component> = emptyList()
 
-    fun recvServerUpdate(stackDescs: List<String>, prevPatternBad: Boolean) {
+    fun recvServerUpdate(info: ControllerInfo, stackDescs: List<Component>) {
         this.stackDescs = stackDescs
-        this.patterns.lastOrNull()?.let { it.valid = if (prevPatternBad) PatternValidity.ERROR else PatternValidity.OK }
+        this.patterns.lastOrNull()?.let {
+            it.valid = if (info.status == ControllerInfo.Status.PREV_PATTERN_INVALID)
+                PatternValidity.ERROR
+            else
+                PatternValidity.OK
+        }
 
-        val sound = if (prevPatternBad) HexSounds.FAIL_PATTERN.get() else HexSounds.ADD_PATTERN.get()
+        val sound =
+            if (info.status == ControllerInfo.Status.PREV_PATTERN_INVALID) HexSounds.FAIL_PATTERN.get() else HexSounds.ADD_PATTERN.get()
         Minecraft.getInstance().soundManager.play(
             SimpleSoundInstance.forUI(
                 sound,
@@ -288,14 +295,14 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         RenderSystem.enableDepthTest()
 
         val mc = Minecraft.getInstance()
-        if (mc.player?.getItemInHand(HexUtils.OtherHand(handOpenedWith))?.`is`(HexItems.SCRYING_LENS.get()) == true) {
+//        if (mc.player?.getItemInHand(HexUtils.OtherHand(handOpenedWith))?.`is`(HexItems.SCRYING_LENS.get()) == true) {
 
-            val font = mc.font
-            for ((i, s) in this.stackDescs.withIndex()) {
-                val offsetIdx = this.stackDescs.size - i - 1
-                font.draw(poseStack, s, 10f, 10f + 9f * offsetIdx, -1)
-            }
+        val font = mc.font
+        for ((i, s) in this.stackDescs.withIndex()) {
+            val offsetIdx = this.stackDescs.size - i - 1
+            font.draw(poseStack, s, 10f, 10f + 9f * offsetIdx, -1)
         }
+//        }
     }
 
     // why the hell is this default true

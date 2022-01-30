@@ -20,17 +20,15 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import java.util.*
 import kotlin.math.min
-import kotlin.random.Random
-import kotlin.random.nextInt
 
 /**
  * Keeps track of a player casting a spell on the server.
  * It's stored as NBT on the wand.
  */
 class CastingHarness private constructor(
-    val stack: MutableList<SpellDatum<*>>,
+    var stack: MutableList<SpellDatum<*>>,
     var parenCount: Int,
-    var parenthesized: MutableList<HexPattern>,
+    var parenthesized: List<HexPattern>,
     var escapeNext: Boolean,
     val ctx: CastingContext,
     val prepackagedColorizer: ItemStack?
@@ -38,84 +36,179 @@ class CastingHarness private constructor(
 
     constructor(ctx: CastingContext) : this(mutableListOf(), 0, mutableListOf(), false, ctx, null)
 
+    /**
+     * Given a pattern, do all the updating/side effects/etc required.
+     */
+    fun executeNewPattern(newPat: HexPattern, world: ServerLevel): ControllerInfo {
+        val result = this.getUpdate(newPat, world)
+        this.applyFunctionalData(result.newData)
+        return this.performSideEffects(result.sideEffects)
+    }
 
     /**
      * When the server gets a packet from the client with a new pattern,
-     * handle it.
+     * handle it functionally.
      */
-    fun update(newPat: HexPattern, world: ServerLevel): CastResult {
-        return try {
-            var exn: CastException? = null
-            val operator = try {
-                PatternRegistry.matchPattern(newPat, world)
-            } catch (e: CastException) {
-                exn = e
-                null
-            }
-            if (this.parenCount > 0) {
-                if (this.escapeNext) {
-                    this.escapeNext = false
-                    this.parenthesized.add(newPat)
-                } else if (operator == Widget.ESCAPE) {
-                    this.escapeNext = true
-                } else if (operator == Widget.OPEN_PAREN) {
-                    // we have escaped the parens onto the stack; we just also record our count.
-                    this.parenthesized.add(newPat)
-                    this.parenCount++
-                } else if (operator == Widget.CLOSE_PAREN) {
-                    this.parenCount--
-                    if (this.parenCount == 0) {
-                        this.stack.add(SpellDatum.make(this.parenthesized.map { SpellDatum.make(it) }))
-                        this.parenthesized.clear()
-                    } else if (this.parenCount < 0) {
-                        throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
-                    } else {
-                        // we have this situation: "(()"
-                        // we need to add the close paren
-                        this.parenthesized.add(newPat)
-                    }
-                } else {
-                    this.parenthesized.add(newPat)
-                }
-            } else if (this.escapeNext) {
-                this.escapeNext = false
-                this.stack.add(SpellDatum.make(newPat))
-            } else if (operator == Widget.ESCAPE) {
-                this.escapeNext = true
-            } else if (exn != null) {
-                // there was a problem finding the pattern and it was NOT due to numbers
-                throw exn
-            } else if (operator == Widget.OPEN_PAREN) {
-                this.parenCount++
-            } else if (operator == Widget.CLOSE_PAREN) {
-                throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
-            } else {
-                // we know the operator is ok here
-                val (stackPrime, sideEffects) = operator!!.operate(this.stack, this.ctx)
-
-                
+    fun getUpdate(newPat: HexPattern, world: ServerLevel): CastResult {
+        try {
+            // wouldn't it be nice to be able to go paren'
+            // i guess i'll call it paren2
+            val paren2 = this.handleParentheses(newPat)
+            if (paren2 != null) {
+                return CastResult(
+                    paren2,
+                    listOf(),
+                )
             }
 
-            if (spellsToCast.isNotEmpty()) {
-                CastResult.Cast(spellsToCast, this.stack.isEmpty())
-            } else if (this.stack.isEmpty() && !this.escapeNext) {
-                if (this.parenCount == 0) {
-                    CastResult.QuitCasting
-                } else {
-                    CastResult.Continue(false)
-                }
-            } else {
-                CastResult.Continue(false)
-            }
+            // Don't catch this one
+            val operator = PatternRegistry.matchPattern(newPat, world)
+            val (stack2, sideEffectsUnmut) = operator.operate(this.stack.toMutableList(), this.ctx)
+            // Stick a poofy particle effect at the caster position
+            val sideEffects = sideEffectsUnmut.toMutableList()
+            sideEffects.add(OperatorSideEffect.Particles(this.ctx.position))
+
+            val fd = this.getFunctionalData().copy(
+                stack = stack2,
+            )
+
+            return CastResult(
+                fd,
+                sideEffects,
+            )
+        } catch (exn: CastException) {
+            return CastResult(
+                this.getFunctionalData(),
+                listOf(OperatorSideEffect.Mishap(exn)),
+            )
+        }
+    }
+
+    /**
+     * Execute the side effects of a cast, and then tell the client what to think about it.
+     */
+    fun performSideEffects(sideEffects: List<OperatorSideEffect>): ControllerInfo {
+        var status = ControllerInfo.Status.NONE
+        for (haskellProgrammersShakingandCryingRN in sideEffects) {
+            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.Mishap)
+                status = ControllerInfo.Status.PREV_PATTERN_INVALID
+
+            val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
+            if (mustStop)
+                break
+
+            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell)
+                status = ControllerInfo.Status.SPELL_CAST
+        }
+
+        if (status == ControllerInfo.Status.SPELL_CAST && this.stack.isEmpty())
+            status = ControllerInfo.Status.SPELL_CAST_AND_DONE
+
+        return ControllerInfo(
+            status,
+        )
+    }
+
+    /**
+     * Return the functional update represented by the current state (for use with `copy`)
+     */
+    private fun getFunctionalData() = FunctionalData(
+        this.stack.toList(),
+        this.parenCount,
+        this.parenthesized.toList(),
+        this.escapeNext,
+    )
+
+    /**
+     * Apply the functional update.
+     */
+    private fun applyFunctionalData(data: FunctionalData) {
+        this.stack.clear()
+        this.stack.addAll(data.stack)
+        this.parenCount = data.parenCount
+        this.parenthesized = data.parenthesized
+        this.escapeNext = data.escapeNext
+    }
+
+    /**
+     * Return a non-null value if we handled this in some sort of parenthesey way,
+     * either escaping it onto the stack or changing the parenthese-handling state.
+     */
+    private fun handleParentheses(newPat: HexPattern): FunctionalData? {
+        val operator = try {
+            PatternRegistry.matchPattern(newPat, this.ctx.world)
         } catch (e: CastException) {
-            if (e.reason == CastException.Reason.INVALID_PATTERN) {
-                val idx = Random.nextInt(0..this.stack.size)
-                this.stack.add(idx, SpellDatum.make(Widget.GARBAGE))
-                CastResult.Continue(true)
-            } else {
-                CastResult.Error(e)
-            }
+            null
+        }
 
+        return if (this.parenCount > 0) {
+            if (this.escapeNext) {
+                val newParens = this.parenthesized.toMutableList()
+                newParens.add(newPat)
+                this.getFunctionalData().copy(
+                    escapeNext = false,
+                    parenthesized = newParens
+                )
+            } else if (operator == Widget.ESCAPE) {
+                this.getFunctionalData().copy(
+                    escapeNext = true,
+                )
+            } else if (operator == Widget.OPEN_PAREN) {
+                // we have escaped the parens onto the stack; we just also record our count.
+                val newParens = this.parenthesized.toMutableList()
+                newParens.add(newPat)
+                this.getFunctionalData().copy(
+                    parenthesized = newParens,
+                    parenCount = this.parenCount + 1
+                )
+            } else if (operator == Widget.CLOSE_PAREN) {
+                val newParenCount = this.parenCount - 1
+                if (newParenCount == 0) {
+                    val newStack = this.stack.toMutableList()
+                    newStack.add(SpellDatum.make(this.parenthesized.map { SpellDatum.make(it) }))
+                    this.getFunctionalData().copy(
+                        stack = newStack,
+                        parenCount = newParenCount,
+                        parenthesized = listOf()
+                    )
+                } else if (newParenCount < 0) {
+                    throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
+                } else {
+                    // we have this situation: "(()"
+                    // we need to add the close paren
+                    val newParens = this.parenthesized.toMutableList()
+                    newParens.add(newPat)
+                    this.getFunctionalData().copy(
+                        parenCount = newParenCount,
+                        parenthesized = newParens
+                    )
+                }
+            } else {
+                val newParens = this.parenthesized.toMutableList()
+                newParens.add(newPat)
+                this.getFunctionalData().copy(
+                    parenthesized = newParens
+                )
+            }
+        } else if (this.escapeNext) {
+            val newStack = this.stack.toMutableList()
+            newStack.add(SpellDatum.make(newPat))
+            this.getFunctionalData().copy(
+                stack = newStack,
+                escapeNext = false,
+            )
+        } else if (operator == Widget.ESCAPE) {
+            this.getFunctionalData().copy(
+                escapeNext = true
+            )
+        } else if (operator == Widget.OPEN_PAREN) {
+            this.getFunctionalData().copy(
+                parenCount = this.parenCount + 1
+            )
+        } else if (operator == Widget.CLOSE_PAREN) {
+            throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
+        } else {
+            null
         }
     }
 
@@ -258,35 +351,8 @@ class CastingHarness private constructor(
         }
     }
 
-    sealed class CastResult {
-        /** Casting still in progress */
-        data class Continue(val prevPatternBad: Boolean) : CastResult()
-
-        /** Non-catastrophic quit */
-        object QuitCasting : CastResult()
-
-        /** Finished casting */
-        data class Cast(val sideEffects: List<OperatorSideEffect>, val quit: Boolean) : CastResult()
-
-        /** uh-oh */
-        data class Error(val exn: CastException) : CastResult()
-
-        /** YOU DIED due to casting too hard from hit points. */
-        object Died : CastResult()
-
-        fun quitStatus(): QuitStatus =
-            when (this) {
-                QuitCasting, Died, is Error -> QuitStatus.QUIT
-                is Cast -> if (this.quit) QuitStatus.QUIT else QuitStatus.OK
-                is Continue -> if (this.prevPatternBad) QuitStatus.LAST_PATTERN_INVALID else QuitStatus.OK
-            }
-    }
-
-    enum class QuitStatus {
-        OK,
-
-        /** Keep going, but the pattern you just drew was sussy */
-        LAST_PATTERN_INVALID,
-        QUIT
-    }
+    data class CastResult(
+        val newData: FunctionalData,
+        val sideEffects: List<OperatorSideEffect>,
+    )
 }

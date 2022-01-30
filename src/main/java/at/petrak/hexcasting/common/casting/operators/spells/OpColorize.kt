@@ -9,15 +9,17 @@ import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgColorizerUpdateAck
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.phys.Vec3
 import net.minecraftforge.network.PacketDistributor
 
 object OpColorize : SpellOperator {
     override val argc = 0
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
-        return Pair(
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+        return Triple(
             Spell,
-            10_000
+            10_000,
+            listOf()
         )
     }
 

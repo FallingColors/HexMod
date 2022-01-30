@@ -33,9 +33,9 @@ object OpBlockRaycast : ConstManaOperator {
                 // this is weird (for example, casting OpBreakBlock at this position will not break the block we're looking at)
                 // so we return the block pos instead
                 Vec3(
-                    blockHitResult.blockPos.x.toDouble(),
-                    blockHitResult.blockPos.y.toDouble(),
-                    blockHitResult.blockPos.z.toDouble()
+                    blockHitResult.blockPos.x.toDouble() + 0.5,
+                    blockHitResult.blockPos.y.toDouble() + 0.5,
+                    blockHitResult.blockPos.z.toDouble() + 0.5
                 )
             } else {
                 Widget.NULL

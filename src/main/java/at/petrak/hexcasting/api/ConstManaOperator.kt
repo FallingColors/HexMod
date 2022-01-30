@@ -17,7 +17,8 @@ interface ConstManaOperator : Operator {
     override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         if (this.argc > stack.size)
             throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, this.argc, stack.size)
-        val args = stack.dropLast(this.argc)
+        val args = stack.takeLast(this.argc)
+        for (_i in 0 until this.argc) stack.removeLast()
         val newData = this.execute(args, ctx)
         stack.addAll(newData)
 

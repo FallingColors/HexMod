@@ -7,14 +7,16 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck
+import net.minecraft.world.phys.Vec3
 import net.minecraftforge.network.PacketDistributor
 
 object OpDestroySentinel : SpellOperator {
     override val argc = 0
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
-        return Pair(
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+        return Triple(
             Spell,
-            1_000
+            1_000,
+            listOf()
         )
     }
 

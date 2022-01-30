@@ -13,12 +13,13 @@ object OpLightning : SpellOperator {
     override val argc = 1
     override val isGreat = true
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val target = args.getChecked<Vec3>(0)
         ctx.assertVecInRange(target)
-        return Pair(
+        return Triple(
             Spell(target),
-            150_000
+            150_000,
+            listOf(target)
         )
     }
 

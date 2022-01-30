@@ -8,13 +8,14 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.phys.Vec3
 import kotlin.math.max
 
 class OpPotionEffect(val effect: MobEffect, val baseCost: Int, val potency: Boolean) : SpellOperator {
     override val argc: Int
         get() = if (this.potency) 3 else 2
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val target = args.getChecked<LivingEntity>(0)
         val duration = max(args.getChecked(1), 0.0)
         val potency = if (this.potency)
@@ -22,9 +23,10 @@ class OpPotionEffect(val effect: MobEffect, val baseCost: Int, val potency: Bool
         else 1.0
 
         val cost = this.baseCost * duration * potency
-        return Pair(
+        return Triple(
             Spell(effect, target, duration, potency),
-            cost.toInt()
+            cost.toInt(),
+            listOf(target.position())
         )
     }
 

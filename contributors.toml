@@ -17,3 +17,8 @@ colorizer = [12161791]
 [Alwinfy]
 #colorizer = [0x3327e3]
 colorizer = [3352547]
+
+[Dev]
+# 0xff0000 0x00ff00 0x0000ff
+# For testing purposes
+colorizer = [16711680, 65280, 255]

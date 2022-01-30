@@ -15,14 +15,15 @@ import net.minecraftforge.network.PacketDistributor
 object OpTeleport : SpellOperator {
     override val argc = 2
     override val isGreat = true
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val teleportee = args.getChecked<Entity>(0)
         val delta = args.getChecked<Vec3>(1)
 
         ctx.assertVecInRange(teleportee.position())
-        return Pair(
+        return Triple(
             Spell(teleportee, delta),
-            1_000_000
+            1_000_000,
+            listOf(teleportee.position().add(delta))
         )
     }
 

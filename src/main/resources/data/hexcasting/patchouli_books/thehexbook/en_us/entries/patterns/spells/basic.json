@@ -44,7 +44,7 @@
       "anchor": "hexcasting:blink",
       "input": "entity, number",
       "output": "",
-      "text": "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about 2 $(item)Amethyst Dust/$s times the square of the distance teleported-- thus, teleporting 5 blocks would cost five $(item)Charged Amethyst Crystals$(0) or equivalent."
+      "text": "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about 1 $(item)Amethyst Shard/$s times the the distance teleported."
     }
   ]
 }

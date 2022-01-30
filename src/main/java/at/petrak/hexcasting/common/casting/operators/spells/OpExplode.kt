@@ -13,13 +13,14 @@ class OpExplode(val fire: Boolean) : SpellOperator {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val pos = args.getChecked<Vec3>(0)
         val strength = args.getChecked<Double>(1)
         ctx.assertVecInRange(pos)
-        return Pair(
+        return Triple(
             Spell(pos, strength, this.fire),
             ((1 + strength + if (this.fire) 2 else 0) * 50_000.0).toInt(),
+            listOf(pos)
         )
     }
 

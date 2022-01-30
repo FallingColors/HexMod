@@ -10,10 +10,11 @@ import at.petrak.hexcasting.common.casting.ManaHelper
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.phys.Vec3
 
 object OpRecharge : SpellOperator {
     override val argc = 1
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
         if (otherHandItem.item !is ItemPackagedSpell) {
             throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemPackagedSpell::class.java, otherHandItem)
@@ -21,7 +22,7 @@ object OpRecharge : SpellOperator {
 
         val entity = args.getChecked<ItemEntity>(0)
 
-        return Pair(Spell(entity), 100_000)
+        return Triple(Spell(entity), 100_000, listOf(entity.position()))
     }
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {

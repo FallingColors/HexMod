@@ -14,12 +14,13 @@ object OpBreakBlock : SpellOperator {
     override val argc: Int
         get() = 1
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Pair<RenderedSpell, Int> {
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
         val pos = args.getChecked<Vec3>(0)
         ctx.assertVecInRange(pos)
-        return Pair(
+        return Triple(
             Spell(pos),
-            20_000
+            20_000,
+            listOf(pos)
         )
     }
 
@@ -38,7 +39,7 @@ object OpBreakBlock : SpellOperator {
                         || TierSortingRegistry.isCorrectTierForDrops(tier, blockstate))
             ) {
                 ctx.world.destroyBlock(pos, true, ctx.caster)
-            } // TODO: else some kind of failureific particle effect?
+            }
         }
     }
 }

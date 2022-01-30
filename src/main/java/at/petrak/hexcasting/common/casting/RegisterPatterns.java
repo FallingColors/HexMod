@@ -7,7 +7,6 @@ import at.petrak.hexcasting.api.SpellDatum;
 import at.petrak.hexcasting.common.casting.operators.*;
 import at.petrak.hexcasting.common.casting.operators.lists.OpAppend;
 import at.petrak.hexcasting.common.casting.operators.lists.OpConcat;
-import at.petrak.hexcasting.common.casting.operators.lists.OpForEach;
 import at.petrak.hexcasting.common.casting.operators.lists.OpIndex;
 import at.petrak.hexcasting.common.casting.operators.math.*;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;

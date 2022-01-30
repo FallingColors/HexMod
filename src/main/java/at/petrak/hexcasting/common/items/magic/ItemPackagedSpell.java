@@ -6,10 +6,8 @@ import at.petrak.hexcasting.common.casting.CastingHarness;
 import at.petrak.hexcasting.common.casting.ManaHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.hexmath.HexPattern;
-import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -59,15 +57,8 @@ public abstract class ItemPackagedSpell extends Item {
         var harness = new CastingHarness(ctx);
         List<HexPattern> patterns = getPatterns(tag);
         for (var pattern : patterns) {
-            var res = harness.update(pattern, sPlayer.getLevel());
-            if (res instanceof CastingHarness.CastResult.Error error) {
-                sPlayer.sendMessage(new TextComponent(error.getExn().getMessage()), Util.NIL_UUID);
-            } else if (res instanceof CastingHarness.CastResult.Cast cast) {
-                for (var spell : cast.getSpells()) {
-                    spell.cast(ctx);
-                }
-            }
-            if (res.quitStatus() == CastingHarness.QuitStatus.QUIT) {
+            var info = harness.executeNewPattern(pattern, sPlayer.getLevel());
+            if (info.shouldQuit()) {
                 break;
             }
         }

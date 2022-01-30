@@ -7,6 +7,8 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.Widget
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.nbt.*
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.TextComponent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
@@ -71,12 +73,12 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             append(']')
         }
 
-    fun display(): String = buildString {
+    fun display(): Component = TextComponent(buildString {
         when (val pl = this@SpellDatum.payload) {
             is List<*> -> {
                 append("[")
                 for ((i, v) in pl.withIndex()) {
-                    append((v as SpellDatum<*>).display())
+                    append((v as SpellDatum<*>).display().contents)
                     if (i != pl.lastIndex) {
                         append(", ")
                     }
@@ -93,7 +95,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 append("HexPattern(")
                 append(pl.startDir)
                 append(" ")
-                append(pl.angles)
+                append(pl.anglesSignature())
                 append(")")
             }
             is Entity -> {
@@ -104,7 +106,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             }
             else -> append(pl.toString())
         }
-    }
+    })
 
     companion object {
         @JvmStatic

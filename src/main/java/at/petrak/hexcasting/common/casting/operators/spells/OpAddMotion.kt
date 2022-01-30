@@ -22,7 +22,7 @@ object OpAddMotion : SpellOperator {
         return Triple(
             Spell(target, motion),
             (motion.lengthSqr() * 10_000f).toInt(),
-            listOf(),
+            listOf(target.position()),
         )
     }
 
