@@ -5,6 +5,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
@@ -74,11 +75,8 @@ public class Recipes extends RecipeProvider {
         ShapedRecipeBuilder.shaped(HexItems.ARTIFACT.get())
             .define('F', Tags.Items.INGOTS_GOLD)
             .define('A', HexItems.CHARGED_AMETHYST.get())
-            // pretty sure that's all of them
-            .define('D', Ingredient.of(Items.MUSIC_DISC_11, Items.MUSIC_DISC_13, Items.MUSIC_DISC_CAT,
-                Items.MUSIC_DISC_CHIRP, Items.MUSIC_DISC_FAR, Items.MUSIC_DISC_BLOCKS, Items.MUSIC_DISC_MALL,
-                Items.MUSIC_DISC_MELLOHI, Items.MUSIC_DISC_OTHERSIDE, Items.MUSIC_DISC_PIGSTEP,
-                Items.MUSIC_DISC_STAL, Items.MUSIC_DISC_STRAD, Items.MUSIC_DISC_WAIT, Items.MUSIC_DISC_WARD))
+            // why in god's name does minecraft have two different places for item tags
+            .define('D', ItemTags.MUSIC_DISCS)
             .pattern(" F ")
             .pattern("FAF")
             .pattern(" D ")
