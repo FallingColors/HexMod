@@ -64,17 +64,18 @@ sealed class OperatorSideEffect {
                         Random.nextFloat() * 256f,
                         Vec3.ZERO
                     )
-                            harness.ctx.world.sendParticles(
-                                DustParticleOptions(Vector3f(Vec3.fromRGB24(color)), 1f),
-                                position.x,
-                                position.y,
-                                position.z,
-                                1,
-                                0.1,
-                                0.1,
-                                0.1,
-                                0.1,
-                            )
+                    
+                harness.ctx.world.sendParticles(
+                    DustParticleOptions(Vector3f(Vec3.fromRGB24(color)), 1f),
+                    position.x,
+                    position.y,
+                    position.z,
+                    1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                )
             }
 
             return false
