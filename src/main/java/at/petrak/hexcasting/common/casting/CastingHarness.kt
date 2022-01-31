@@ -122,7 +122,7 @@ class CastingHarness private constructor(
     /**
      * Apply the functional update.
      */
-    private fun applyFunctionalData(data: FunctionalData) {
+    fun applyFunctionalData(data: FunctionalData) {
         this.stack.clear()
         this.stack.addAll(data.stack)
         this.parenCount = data.parenCount

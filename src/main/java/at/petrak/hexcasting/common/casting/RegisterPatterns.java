@@ -5,6 +5,8 @@ import at.petrak.hexcasting.api.Operator;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.SpellDatum;
 import at.petrak.hexcasting.common.casting.operators.*;
+import at.petrak.hexcasting.common.casting.operators.eval.OpEvalDelay;
+import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
 import at.petrak.hexcasting.common.casting.operators.lists.OpAppend;
 import at.petrak.hexcasting.common.casting.operators.lists.OpConcat;
 import at.petrak.hexcasting.common.casting.operators.lists.OpIndex;
