@@ -1,14 +1,26 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.SpellDatum;
+import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
+import at.petrak.hexcasting.common.particles.ConjureParticle;
+import at.petrak.hexcasting.common.particles.HexParticles;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.BiConsumer;
 
 public class RegisterClientStuff {
     @SubscribeEvent
@@ -47,5 +59,18 @@ public class RegisterClientStuff {
 
             HexTooltips.init();
         });
+
+        renderLayers(ItemBlockRenderTypes::setRenderLayer);
+    }
+
+    public static void renderLayers(BiConsumer<Block, RenderType> consumer) {
+        consumer.accept(HexBlocks.CONJURED.get(), RenderType.cutout());
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void registerParticles(ParticleFactoryRegisterEvent event) {
+        ParticleEngine particleManager = Minecraft.getInstance().particleEngine;
+        particleManager.register(HexParticles.CONJURE_BLOCK_PARTICLE.get(), ConjureParticle.BlockProvider::new);
+        particleManager.register(HexParticles.CONJURE_LIGHT_PARTICLE.get(), ConjureParticle.LightProvider::new);
     }
 }
