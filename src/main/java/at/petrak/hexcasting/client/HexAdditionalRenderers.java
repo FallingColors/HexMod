@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class HexAdditionalRenderers {
     @SubscribeEvent
@@ -39,7 +39,9 @@ public class HexAdditionalRenderers {
 
         // zero vector is the player
         var mc = Minecraft.getInstance();
-        var playerPos = mc.gameRenderer.getMainCamera().getPosition();
+        var camera = mc.gameRenderer.getMainCamera();
+        var playerPos = camera.getPosition();
+        var lookVec = camera.getLookVector();
         ps.translate(
             sentinel.position.x - playerPos.x,
             sentinel.position.y - playerPos.y,
@@ -66,7 +68,7 @@ public class HexAdditionalRenderers {
         RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
         RenderSystem.disableDepthTest();
         RenderSystem.disableCull();
-        RenderSystem.lineWidth(15f);
+        RenderSystem.lineWidth(5f);
 
         var maybeColorizerCap = owner.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
         CapPreferredColorizer cap = null;
@@ -75,50 +77,48 @@ public class HexAdditionalRenderers {
         }
 
         CapPreferredColorizer finalCap = cap;
-        Consumer<float[]> v = (point) -> {
-            var color = -1;
+        BiConsumer<float[], float[]> v = (l, r) -> {
+            int lcolor = -1, rcolor = -1;
+            var normal = new Vector3f(r[0] - l[0], r[1] - l[1], r[2] - l[2]);
+            normal.normalize();
             if (finalCap != null) {
-                color = CapPreferredColorizer.getColor(finalCap.colorizer, owner, time,
-                    new Vec3(point[0], point[1], point[2]));
+                lcolor = CapPreferredColorizer.getColor(finalCap.colorizer, owner, time,
+                    new Vec3(l[0], l[1], l[2]));
+                rcolor = CapPreferredColorizer.getColor(finalCap.colorizer, owner, time,
+                    new Vec3(r[0], r[1], r[2]));
             }
-            buf.vertex(neo, point[0], point[1], point[2])
-                .color(color)
-                // we have to put *something* in the normal lest flickering
-                .normal(point[0], point[1], point[2])
+            buf.vertex(neo, l[0], l[1], l[2])
+                .color(lcolor)
+                .normal(ps.last().normal(), normal.x(), normal.y(), normal.z())
+                .endVertex();
+            buf.vertex(neo, r[0], r[1], r[2])
+                .color(rcolor)
+                .normal(ps.last().normal(), -normal.x(), -normal.y(), -normal.z())
                 .endVertex();
         };
 
         // Icosahedron inscribed inside the unit sphere
+        buf.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
         for (int side = 0; side <= 1; side++) {
             var ring = (side == 0) ? Icos.BOTTOM_RING : Icos.TOP_RING;
             var apex = (side == 0) ? Icos.BOTTOM : Icos.TOP;
 
             // top & bottom spider
-            buf.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
             for (int i = 0; i < 5; i++) {
-                var end = ring[i];
-                v.accept(apex);
-                v.accept(end);
+                v.accept(apex, ring[i]);
             }
-            tess.end();
 
             // ring around
-            buf.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR_NORMAL);
-            for (int i = 0; i <= 5; i++) {
-                var point = ring[i % 5];
-                v.accept(point);
+            for (int i = 0; i < 5; i++) {
+                v.accept(ring[i % 5], ring[(i + 1) % 5]);
             }
-            tess.end();
         }
         // center band
-        buf.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR_NORMAL);
         for (int i = 0; i < 5; i++) {
             var bottom = Icos.BOTTOM_RING[i];
-            var top = Icos.TOP_RING[(i + 3) % 5];
-            v.accept(bottom);
-            v.accept(top);
+            v.accept(Icos.TOP_RING[(i + 2) % 5], bottom);
+            v.accept(bottom, Icos.TOP_RING[(i + 3) % 5]);
         }
-        v.accept(Icos.BOTTOM_RING[0]);
         tess.end();
 
         RenderSystem.enableDepthTest();
