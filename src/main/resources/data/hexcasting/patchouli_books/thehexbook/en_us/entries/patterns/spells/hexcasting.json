@@ -47,7 +47,18 @@
         {
             "type": "patchouli:text",
             "text": "This spell is cast in a similar method to the crafting spells; an entity representing a dropped stack of $(item)Amethyst/$ is provided, and recharges the _media battery of the item in my other hand.$(br2)This spell $(italic)cannot/$ recharge the item farther than its original battery size."
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:erase",
+            "anchor": "hexcasting:erase",
+            "input": "",
+            "output": "",
+            "text": "Erase a hex-containing item in my other hand. Costs about one $(item)Amethyst Dust/$."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "This spell voids all media stored inside the item I am erasing. The pressure inside the item from the stored media is incredible. It's all the spell can do to safely disarm it; to try and recover it would be unthinkable."
         }
-
     ]
 }

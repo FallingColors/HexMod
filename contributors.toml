@@ -18,6 +18,10 @@ colorizer = [12161791]
 #colorizer = [0x3327e3]
 colorizer = [3352547]
 
+[Noobulus]
+#colorizer = [0x92a1ff, 0x6b7fff]
+colorizer = [9609727, 7045119]
+
 [Dev]
 # 0xff0000 0x00ff00 0x0000ff
 # For testing purposes

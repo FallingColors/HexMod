@@ -33,6 +33,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
+import java.util.regex.Pattern;
+
 import static at.petrak.hexcasting.common.lib.RegisterHelper.prefix;
 
 public class RegisterPatterns {
@@ -119,6 +121,8 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwaeaeaeaeaea", HexDir.NORTH_WEST),
                 prefix("recharge"),
                 OpRecharge.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qdqawwaww", HexDir.EAST), prefix("erase"),
+                new OpErase());
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
                 new OpMakePackagedSpell<>(ItemCypher.class, 100_000));
