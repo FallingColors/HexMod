@@ -120,6 +120,7 @@
   "hexcasting.spell.hexcasting:craft/trinket": "Craft Trinket",
   "hexcasting.spell.hexcasting:craft/artifact": "Craft Artifact",
   "hexcasting.spell.hexcasting:recharge": "Recharge Item",
+  "hexcasting.spell.hexcasting:erase": "Erase Item",
   "hexcasting.spell.hexcasting:create_water": "Create Water",
   "hexcasting.spell.hexcasting:destroy_water": "Destroy Water",
   "hexcasting.spell.hexcasting:conjure_block": "Conjure Block",
