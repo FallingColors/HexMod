@@ -144,6 +144,8 @@
   "hexcasting.spell.hexcasting:potion/strength": "Green Sun's Zenith",
   "hexcasting.spell.hexcasting:flight": "Flight",
   "hexcasting.spell.hexcasting:lightning": "Summon Lightning",
+  "hexcasting.spell.hexcasting:summon_rain": "Summon Rain",
+  "hexcasting.spell.hexcasting:dispel_rain": "Dispel Rain",
   "hexcasting.spell.hexcasting:create_lava": "Create Lava",
   "hexcasting.spell.hexcasting:teleport": "Greater Teleport",
   "hexcasting.spell.hexcasting:sentinel/create/great": "Summon Greater Sentinel",

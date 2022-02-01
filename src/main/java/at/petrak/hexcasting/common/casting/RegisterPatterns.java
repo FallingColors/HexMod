@@ -15,10 +15,7 @@ import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
 import at.petrak.hexcasting.common.casting.operators.spells.*;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpCreateLava;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpLightning;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpTeleport;
+import at.petrak.hexcasting.common.casting.operators.spells.great.*;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSentinel;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
@@ -33,8 +30,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-
-import java.util.regex.Pattern;
 
 import static at.petrak.hexcasting.common.lib.RegisterHelper.prefix;
 
@@ -194,6 +189,12 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaeqqqwqwqqwq", HexDir.EAST),
                 prefix("sentinel/create/great"),
                 new OpCreateSentinel(true), true);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeewwweeewwaqqddqdqd", HexDir.EAST),
+                prefix("dispel_rain"),
+                new OpWeather(false), true);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wwweeewwweewdawdwad", HexDir.WEST),
+                prefix("summon_rain"),
+                new OpWeather(true), true);
 
 
             // == Meta stuff ==
