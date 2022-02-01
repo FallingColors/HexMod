@@ -101,6 +101,7 @@
   "hexcasting.spell.hexcasting:const/null": "Nullary Reflection",
   "hexcasting.spell.hexcasting:duplicate": "Gemini Decomposition",
   "hexcasting.spell.hexcasting:swap": "Jester's Gambit",
+  "hexcasting.spell.hexcasting:fisherman":  "Fisherman's Gambit",
   "hexcasting.spell.hexcasting:add": "Additive Distillation",
   "hexcasting.spell.hexcasting:sub": "Subtractive Distillation",
   "hexcasting.spell.hexcasting:mul_dot": "Multiplicative Dstln.",
