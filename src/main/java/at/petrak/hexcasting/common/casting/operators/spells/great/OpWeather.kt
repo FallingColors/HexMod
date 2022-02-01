@@ -15,12 +15,15 @@ class OpWeather(val rain: Boolean) : SpellOperator {
     override val isGreat = true
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
-        return Triple(Spell(true), ((if (this.rain) 2 else 1) * 50_000), listOf()) // return an empty list for shits and gigs ig
+        return Triple(Spell(rain), ((if (this.rain) 2 else 1) * 50_000), listOf()) // return an empty list for shits and gigs ig
     }
 
     private data class Spell(val rain: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            ctx.world.levelData.isRaining = rain // i bless the rains down in minecraftia
+            val w = ctx.world
+            if (w.isRaining != rain) {
+                w.levelData.isRaining = rain // i bless the rains down in minecraftia
+            }
         }
     }
 
