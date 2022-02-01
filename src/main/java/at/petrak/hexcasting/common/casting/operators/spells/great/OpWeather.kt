@@ -1,11 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.OperationResult
-import at.petrak.hexcasting.api.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.OperatorSideEffect
 import net.minecraft.world.phys.Vec3
