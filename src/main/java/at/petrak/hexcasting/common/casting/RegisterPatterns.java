@@ -5,13 +5,22 @@ import at.petrak.hexcasting.api.Operator;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.SpellDatum;
 import at.petrak.hexcasting.common.casting.operators.*;
-import at.petrak.hexcasting.common.casting.operators.eval.*;
-import at.petrak.hexcasting.common.casting.operators.lists.*;
+import at.petrak.hexcasting.common.casting.operators.eval.OpEvalDelay;
+import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
+import at.petrak.hexcasting.common.casting.operators.lists.OpAppend;
+import at.petrak.hexcasting.common.casting.operators.lists.OpConcat;
+import at.petrak.hexcasting.common.casting.operators.lists.OpIndex;
 import at.petrak.hexcasting.common.casting.operators.math.*;
-import at.petrak.hexcasting.common.casting.operators.selectors.*;
+import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
+import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
+import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
 import at.petrak.hexcasting.common.casting.operators.spells.*;
 import at.petrak.hexcasting.common.casting.operators.spells.great.*;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.*;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSentinel;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
+import at.petrak.hexcasting.common.casting.operators.eval.*;
 import at.petrak.hexcasting.common.items.magic.ItemArtifact;
 import at.petrak.hexcasting.common.items.magic.ItemCypher;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
@@ -21,8 +30,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-
-import java.util.regex.Pattern;
 
 import static at.petrak.hexcasting.common.lib.RegisterHelper.prefix;
 
@@ -286,12 +293,6 @@ public class RegisterPatterns {
                 OpIndex.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dadad", HexDir.NORTH_EAST), prefix("for_each"),
                 OpForEach.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqaeaq", HexDir.EAST), prefix("list_size"),
-                OpListSize.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("adeeed", HexDir.EAST), prefix("singleton"),
-                OpSingleton.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqaeaae", HexDir.NORTH_EAST), prefix("empty_list"),
-                OpEmptyList.INSTANCE);
 
         } catch (PatternRegistry.RegisterPatternException exn) {
             exn.printStackTrace();
