@@ -1,4 +1,5 @@
 {
+  "item.hexcasting.book": "Hex Notebook",
   "item.hexcasting.wand": "Staff",
   "item.hexcasting.focus": "Focus",
   "item.hexcasting.spellbook": "Spellbook",
@@ -46,6 +47,8 @@
   "block.hexcasting.conjured": "Conjured Block",
   "itemGroup.hexcasting": "Hexcasting",
   
+  "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.",
+
   "hexcasting.spellbook.tooltip.page": "Selected Page %d/%d",
   "hexcasting.spelldata.desc.entity": "Entity %s",
   
