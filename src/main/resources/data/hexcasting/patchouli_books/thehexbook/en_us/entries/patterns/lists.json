@@ -29,6 +29,38 @@
             "input": "list, list",
             "output": "list",
             "text": "hexcasting.page.lists3"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:empty_list",
+            "anchor": "hexcasting:empty_list",
+            "input": "",
+            "output": "list",
+            "text": "Push an empty list to the top of the stack."
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:singleton",
+            "anchor": "hexcasting:singleton",
+            "input": "any",
+            "output": "list",
+            "text": "Remove the top of the stack, then push a list containing only that element."
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:list_size",
+            "anchor": "hexcasting:list_size",
+            "input": "list",
+            "output": "num",
+            "text": "Remove the list at the top of the stack, then push the number of elements in the list to the stack."
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:reverse_list",
+            "anchor": "hexcasting:reverse_list",
+            "input": "list",
+            "output": "list",
+            "text": "Reverse the list at the top of the stack."
         }
     ]
 }
