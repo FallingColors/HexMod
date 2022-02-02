@@ -20,7 +20,7 @@ class OpWeather(val rain: Boolean) : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val w = ctx.world
             if (w.isRaining != rain) {
-                w.levelData.isRaining = rain // i bless the rains down in minecraftia
+                w.levelData.isRaining = rain // i hex the rains down in minecraftia
             }
         }
     }
