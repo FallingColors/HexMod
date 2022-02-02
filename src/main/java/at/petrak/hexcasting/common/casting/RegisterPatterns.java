@@ -291,7 +291,7 @@ public class RegisterPatterns {
                 OpSingleton.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqaeaae", HexDir.NORTH_EAST), prefix("empty_list"),
                 OpEmptyList.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqaedae", HexDir.EAST), prefix("reverse_list"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqaede", HexDir.EAST), prefix("reverse_list"),
                 OpReverski.INSTANCE);
 
         } catch (PatternRegistry.RegisterPatternException exn) {
