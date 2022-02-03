@@ -12,19 +12,23 @@ import java.util.Random;
 public class ConjureParticle extends TextureSheetParticle {
     private static final Random RANDOM = new Random();
     private final SpriteSet sprites;
+    private final boolean light;
 
     ConjureParticle(ClientLevel pLevel, double pX, double pY, double pZ, SpriteSet pSprites, boolean light) {
         super(pLevel, pX, pY, pZ, (0.5D - RANDOM.nextDouble()) * .002, 0, (0.5D - RANDOM.nextDouble()) * .002);
         this.friction = 0.96F;
-        this.gravity = light ? -0.005F : 0F;
+        this.gravity = light ? -0.01F : 0F;
         this.speedUpWhenYMotionIsBlocked = true;
         this.sprites = pSprites;
         this.yd *= 0F;
-        this.xd *= 0.1F;
-        this.zd *= 0.1F;
+        this.xd *= light ? 0.001f : 0.1F;
+        this.zd *= light ? 0.001f : 0.1F;
+        this.roll = RANDOM.nextFloat(360);
+        this.oRoll = this.roll;
+        this.light = light;
+        this.quadSize *= light ? 0.9f : 0.75f;
 
-        this.quadSize *= 0.75F;
-        this.lifetime = (int) ((light ? 64.0D : 32.0D) / (Math.random() + 1f));
+        this.lifetime = (int) ((light ? 64.0D : 32.0D) / ((Math.random() + 3f) * 0.25f));
         this.hasPhysics = false;
         this.setSpriteFromAge(pSprites);
     }
@@ -36,6 +40,15 @@ public class ConjureParticle extends TextureSheetParticle {
     public void tick() {
         super.tick();
         this.setSpriteFromAge(this.sprites);
+        if (light) this.quadSize *= 0.96f;
+    }
+
+    public void setSpriteFromAge(@NotNull SpriteSet pSprite) {
+        if (!this.removed) {
+            int age = this.age * 4;
+            if (age > this.lifetime) age /= 4;
+            this.setSprite(pSprite.get(age, this.lifetime));
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
