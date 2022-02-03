@@ -21,13 +21,13 @@ object OpLastNToList : Operator {
         if (arg < 0) {
             throw CastException(CastException.Reason.INVALID_VALUE, "integer greater than 0", arg)
         }
-        val output = emptyList<SpellDatum<*>>()
-        output.toMutableList().addAll(stack.takeLast(arg.toInt()))
+        val output = emptyList<SpellDatum<*>>().toMutableList()
+        output.addAll(stack.takeLast(arg.toInt()))
         val endSize = stack.size - output.toList().size
         while (stack.size != endSize) {
             stack.removeLast()
         }
-        stack.add(spellListOf(output))
+        stack.addAll(spellListOf(output))
 
         val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMana(this.manaCost))
 

@@ -293,6 +293,8 @@ public class RegisterPatterns {
                 OpEmptyList.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqaede", HexDir.EAST), prefix("reverse_list"),
                 OpReverski.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ewdqdwe", HexDir.SOUTH_WEST), prefix("last_n_list"),
+                OpLastNToList.INSTANCE);
 
         } catch (PatternRegistry.RegisterPatternException exn) {
             exn.printStackTrace();

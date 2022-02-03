@@ -87,6 +87,7 @@
   "hexcasting.spell.hexcasting:singleton": "Single's Purification",
   "hexcasting.spell.hexcasting:empty_list": "Vacant Reflection",
   "hexcasting.spell.hexcasting:reverse_list": "Retrograde Purification",
+  "hexcasting.spell.hexcasting:last_n_list": "Flock's Gambit",
   "hexcasting.spell.hexcasting:get_entity": "Entity Purification",
   "hexcasting.spell.hexcasting:get_entity/animal": "Entity Prfn.: Animal",
   "hexcasting.spell.hexcasting:get_entity/monster": "Entity Prfn.: Monster",
