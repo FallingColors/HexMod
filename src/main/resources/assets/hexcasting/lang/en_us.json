@@ -132,6 +132,8 @@
   "hexcasting.spell.hexcasting:erase": "Erase Item",
   "hexcasting.spell.hexcasting:create_water": "Create Water",
   "hexcasting.spell.hexcasting:destroy_water": "Destroy Water",
+  "hexcasting.spell.hexcasting:ignite": "Ignite Block",
+  "hexcasting.spell.hexcasting:extinguish": "Extinguish Area",
   "hexcasting.spell.hexcasting:conjure_block": "Conjure Block",
   "hexcasting.spell.hexcasting:conjure_light": "Conjure Light",
   "hexcasting.spell.hexcasting:bonemeal": "Overgrow",

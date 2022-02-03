@@ -11,12 +11,12 @@ import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
-import net.minecraft.tags.FluidTags
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.BucketPickup
 import net.minecraft.world.level.block.LiquidBlock
 import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.material.Material
 import net.minecraft.world.phys.Vec3
 
@@ -42,6 +42,9 @@ object OpDestroyWater : SpellOperator {
             val todo = ArrayDeque<BlockPos>()
             val seen = HashSet<BlockPos>()
             todo.add(BlockPos(target))
+            for (dir in Direction.values()) { // a little extra range on the initial cast to make it feel more intuitive
+                todo.add(BlockPos(target).relative(dir))
+            }
 
             var successes = 0
             while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
@@ -51,7 +54,7 @@ object OpDestroyWater : SpellOperator {
                 if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here)) {
                     // never seen this pos in my life
                     val fluid = ctx.world.getFluidState(here)
-                    if (fluid.`is`(FluidTags.WATER)) {
+                    if (fluid != Fluids.EMPTY.defaultFluidState()) {
                         val blockstate = ctx.world.getBlockState(here)
                         val material = blockstate.material
                         val success =
