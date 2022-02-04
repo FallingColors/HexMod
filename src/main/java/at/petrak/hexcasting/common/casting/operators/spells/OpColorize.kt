@@ -31,10 +31,12 @@ object OpColorize : SpellOperator {
 
             val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
             if (FrozenColorizer.isColorizer(otherHandItem.item)) {
-                cap.colorizer = FrozenColorizer(otherHandItem.item, ctx.caster.uuid)
-                ctx.withdrawItem(otherHandItem.item, 1, true)
-
-                HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { ctx.caster }, MsgColorizerUpdateAck(cap))
+                val item = otherHandItem.item
+                if (ctx.withdrawItem(otherHandItem.item, 1, true)) {
+                    cap.colorizer = FrozenColorizer(item, ctx.caster.uuid)
+                    HexMessages.getNetwork()
+                        .send(PacketDistributor.PLAYER.with { ctx.caster }, MsgColorizerUpdateAck(cap))
+                }
             }
         }
     }

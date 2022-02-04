@@ -41,7 +41,6 @@ public class HexAdditionalRenderers {
         var mc = Minecraft.getInstance();
         var camera = mc.gameRenderer.getMainCamera();
         var playerPos = camera.getPosition();
-        var lookVec = camera.getLookVector();
         ps.translate(
             sentinel.position.x - playerPos.x,
             sentinel.position.y - playerPos.y,
