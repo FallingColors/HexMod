@@ -19,8 +19,10 @@ import at.petrak.hexcasting.datagen.Advancements
 import at.petrak.hexcasting.datagen.DataGenerators
 import at.petrak.hexcasting.datagen.lootmods.HexLootModifiers
 import at.petrak.hexcasting.server.TickScheduler
+import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import org.apache.logging.log4j.LogManager
@@ -50,7 +52,6 @@ object HexMod {
         modBus.register(this)
         // gotta do it at *some* point
         modBus.register(RegisterPatterns::class.java)
-        modBus.register(RegisterClientStuff::class.java)
         modBus.register(DataGenerators::class.java)
 
         HexItems.ITEMS.register(modBus)
@@ -62,11 +63,17 @@ object HexMod {
 
         evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)
-        evBus.register(ClientTickCounter::class.java)
         evBus.register(HexCapabilities::class.java)
         evBus.register(OpFlight)
         evBus.register(ItemScroll::class.java)
-        evBus.register(HexAdditionalRenderers::class.java)
+
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT) {
+            Runnable {
+                modBus.register(RegisterClientStuff::class.java)
+                evBus.register(ClientTickCounter::class.java)
+                evBus.register(HexAdditionalRenderers::class.java)
+            }
+        }
 
 
         // and then things that don't require busses

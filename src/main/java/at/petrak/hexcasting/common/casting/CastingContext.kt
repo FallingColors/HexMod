@@ -123,7 +123,8 @@ data class CastingContext(
 
         val inv = this.caster.inventory
         // TODO: withdraw from ender chest given a specific ender charm?
-        val stacksToExamine = inv.items.asReversed()
+        val stacksToExamine = inv.items.asReversed().toMutableList()
+        stacksToExamine.addAll(inv.offhand)
 
         fun matches(stack: ItemStack): Boolean =
             !stack.isEmpty && stack.`is`(item)
@@ -143,7 +144,7 @@ data class CastingContext(
                 stack.shrink(toWithdraw)
 
                 remaining -= toWithdraw
-                if (remaining == 0) {
+                if (remaining <= 0) {
                     return true
                 }
             }
