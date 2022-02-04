@@ -108,7 +108,10 @@ class CastingHarness private constructor(
         }
 
         return ControllerInfo(
-            wasSpellCast, this.stack.isEmpty(), wasPrevPatternInvalid, descs
+            wasSpellCast,
+            this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
+            wasPrevPatternInvalid,
+            descs
         )
     }
 
@@ -262,7 +265,7 @@ class CastingHarness private constructor(
                 costLeft -= manaToActuallyPayFor
             }
         }
-        
+
         // this might be more than the mana cost! for example if we waste a lot of mana from an item
         this.ctx.caster.awardStat(HexStatistics.MANA_USED, manaCost - costLeft)
         Advancements.SPEND_MANA_TRIGGER.trigger(

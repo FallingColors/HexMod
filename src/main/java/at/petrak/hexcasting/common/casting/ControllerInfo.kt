@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component
  */
 data class ControllerInfo(
     val wasSpellCast: Boolean,
-    val isStackEmpty: Boolean,
+    val isStackClear: Boolean,
     val wasPrevPatternInvalid: Boolean,
     val stackDesc: List<Component>
 )
