@@ -42,7 +42,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     private var stackDescs: List<Component> = emptyList()
 
     fun recvServerUpdate(info: ControllerInfo) {
-        this.stackDescs = stackDescs
+        this.stackDescs = info.stackDesc
         this.patterns.lastOrNull()?.let {
             it.valid = if (info.wasPrevPatternInvalid)
                 PatternValidity.ERROR
