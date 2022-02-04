@@ -16,14 +16,12 @@ import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
 import at.petrak.hexcasting.common.casting.operators.spells.*;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpCreateLava;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpLightning;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpTeleport;
+import at.petrak.hexcasting.common.casting.operators.spells.great.*;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSentinel;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
+import at.petrak.hexcasting.common.casting.operators.eval.*;
 import at.petrak.hexcasting.common.items.magic.ItemArtifact;
 import at.petrak.hexcasting.common.items.magic.ItemCypher;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
@@ -68,6 +66,7 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aadaa", HexDir.EAST), prefix("duplicate"),
                 OpDuplicate.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawdd", HexDir.EAST), prefix("swap"), OpSwap.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddad", HexDir.WEST), prefix("fisherman"), OpFisherman.INSTANCE);
 
             // == Math ==
 
@@ -192,6 +191,12 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawaeqqqwqwqqwq", HexDir.EAST),
                 prefix("sentinel/create/great"),
                 new OpCreateSentinel(true), true);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeewwweeewwaqqddqdqd", HexDir.EAST),
+                prefix("dispel_rain"),
+                new OpWeather(false), true);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wwweeewwweewdawdwad", HexDir.WEST),
+                prefix("summon_rain"),
+                new OpWeather(true), true);
 
 
             // == Meta stuff ==
