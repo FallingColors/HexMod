@@ -1,6 +1,6 @@
 {
-  "name": "Hex Notebook",
-  "landing_text": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.",
+  "name": "item.hexcasting.book",
+  "landing_text": "hexcasting.landing",
   "version": 1,
   "model": "hexcasting:patchouli_book",
   "book_texture": "patchouli:textures/gui/book_purple.png",
