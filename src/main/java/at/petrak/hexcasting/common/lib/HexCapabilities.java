@@ -2,9 +2,9 @@ package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer;
+import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel;
-import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.network.HexMessages;
 import at.petrak.hexcasting.common.network.MsgColorizerUpdateAck;
 import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck;
@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -48,7 +47,7 @@ public class HexCapabilities {
             evt.addCapability(new ResourceLocation(HexMod.MOD_ID, CapSentinel.CAP_NAME),
                 new CapSentinel(false, false, Vec3.ZERO));
             evt.addCapability(new ResourceLocation(HexMod.MOD_ID, CapPreferredColorizer.CAP_NAME),
-                new CapPreferredColorizer(new ItemStack(HexItems.DYE_COLORIZERS[0].get())));
+                new CapPreferredColorizer(FrozenColorizer.DEFAULT));
         }
     }
 

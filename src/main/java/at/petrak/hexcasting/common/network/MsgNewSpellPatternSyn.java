@@ -7,14 +7,12 @@ import at.petrak.hexcasting.hexmath.HexPattern;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
-import java.util.ArrayList;
 import java.util.function.Supplier;
 
 /**
@@ -47,14 +45,14 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
 
                     var clientInfo = harness.executeNewPattern(this.pattern, sender.getLevel());
 
-                    if (clientInfo.wasSpellCast()) {
+                    if (clientInfo.getWasSpellCast()) {
                         sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
                             HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
                             1f + ((float) Math.random() - 0.5f) * 0.2f);
                     }
 
                     CompoundTag nextHarnessTag;
-                    if (clientInfo.shouldQuit()) {
+                    if (clientInfo.isStackEmpty()) {
                         // discard the changes
                         nextHarnessTag = new CompoundTag();
                     } else {
@@ -63,14 +61,8 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     }
                     tag.put(ItemWand.TAG_HARNESS, nextHarnessTag);
 
-                    var descs = new ArrayList<Component>(harness.getStack().size());
-                    for (var datum : harness.getStack()) {
-                        descs.add(datum.display());
-                    }
-
                     HexMessages.getNetwork()
-                        .send(PacketDistributor.PLAYER.with(() -> sender),
-                            new MsgNewSpellPatternAck(clientInfo, descs));
+                        .send(PacketDistributor.PLAYER.with(() -> sender), new MsgNewSpellPatternAck(clientInfo));
                 }
             }
         });

@@ -2,27 +2,41 @@
 # https://github.com/TheElectronWill/night-config/issues/96
 # So we use int codes. aa.
 
-[petra_the_kat]
+# Also we use UUID keys, this way we can just store the UUID with a block.
+# https://gameplay.tools/minecraft/uuid
+
+# petra_the_kat
+["a2ce9382-2518-4752-87b2-c6a5c97f173e"]
 # colorizer = [0xebad1c, 0xc7c7bd, 0x7c2e94, 0x2e060f]
 colorizer = [15445276, 13092797, 8137012, 3016207]
 
-[Hudeler]
+# Hudeler
+["23978392-a78c-49cf-9f52-35a151fd4083"]
 #colorizer = [0x825ec2]
 colorizer = [8543938]
 
-[AmyMiyalee]
+# AmyMialee
+["2793cdc6-7710-4e7e-9d81-cf918e067729"]
 #colorizer = [0xb992ff]
 colorizer = [12161791]
 
-[Alwinfy]
+# Alwinfy
+["64f6e5fc-981c-442c-8d6a-578e8e8cbcd3"]
 #colorizer = [0x3327e3]
 colorizer = [3352547]
 
-[Noobulus]
+# Noobulus
+["89719de3-6445-4445-abe2-509659db930d"]
 #colorizer = [0x92a1ff, 0x6b7fff]
 colorizer = [9609727, 7045119]
 
-[Dev]
+# nbyzantine
+["e055cae1-dd93-42b7-abad-8f2dc758a9f2"]
+# dfe0e8 f2da00 e66910 383138
+colorizer = [14672104, 15915520, 15100176, 3682616]
+
+# Dev
+["380df991-f603-344c-a090-369bad2a924a"]
 # 0xff0000 0x00ff00 0x0000ff
 # For testing purposes
 colorizer = [16711680, 65280, 255]

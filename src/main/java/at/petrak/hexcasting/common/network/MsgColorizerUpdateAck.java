@@ -1,12 +1,11 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer;
+import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
@@ -21,9 +20,9 @@ public record MsgColorizerUpdateAck(CapPreferredColorizer update) {
         var buf = new FriendlyByteBuf(buffer);
 
         var tag = buf.readAnySizeNbt();
-        var sentinel = new CapPreferredColorizer(new ItemStack(Items.AIR));
-        sentinel.deserializeNBT(tag);
-        return new MsgColorizerUpdateAck(sentinel);
+        var colorizer = new CapPreferredColorizer(FrozenColorizer.DEFAULT);
+        colorizer.deserializeNBT(tag);
+        return new MsgColorizerUpdateAck(colorizer);
     }
 
     public void serialize(ByteBuf buffer) {

@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting
 import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.SpellDatum
-import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import at.petrak.hexcasting.common.lib.HexCapabilities
@@ -14,10 +14,10 @@ import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.item.ItemStack
 import java.util.*
 import kotlin.math.min
 
@@ -31,7 +31,7 @@ class CastingHarness private constructor(
     var parenthesized: List<HexPattern>,
     var escapeNext: Boolean,
     val ctx: CastingContext,
-    val prepackagedColorizer: ItemStack?
+    val prepackagedColorizer: FrozenColorizer?
 ) {
 
     constructor(ctx: CastingContext) : this(mutableListOf(), 0, mutableListOf(), false, ctx, null)
@@ -88,24 +88,27 @@ class CastingHarness private constructor(
      * Execute the side effects of a cast, and then tell the client what to think about it.
      */
     fun performSideEffects(sideEffects: List<OperatorSideEffect>): ControllerInfo {
-        var status = ControllerInfo.Status.NONE
+        var wasSpellCast = false
+        var wasPrevPatternInvalid = false
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.Mishap)
-                status = ControllerInfo.Status.PREV_PATTERN_INVALID
+                wasPrevPatternInvalid = true
 
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
             if (mustStop)
                 break
 
             if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell)
-                status = ControllerInfo.Status.SPELL_CAST
+                wasSpellCast = true
         }
 
-        if (status == ControllerInfo.Status.SPELL_CAST && this.stack.isEmpty())
-            status = ControllerInfo.Status.SPELL_CAST_AND_DONE
+        val descs: ArrayList<Component> = ArrayList<Component>(this.stack.size)
+        for (datum in this.stack) {
+            descs.add(datum.display())
+        }
 
         return ControllerInfo(
-            status,
+            wasSpellCast, this.stack.isEmpty(), wasPrevPatternInvalid, descs
         )
     }
 
@@ -244,22 +247,22 @@ class CastingHarness private constructor(
                 if (costLeft <= 0)
                     break
             }
+
+            if (allowOvercast && costLeft > 0) {
+                // Cast from HP!
+                val manaToHealth = HexMod.CONFIG.manaToHealthRate.get()
+                val healthtoRemove = costLeft.toDouble() / manaToHealth
+                val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
+
+                val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
+                Advancements.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
+                this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
+
+                this.ctx.caster.hurt(HexDamageSources.OVERCAST, healthtoRemove.toFloat())
+                costLeft -= manaToActuallyPayFor
+            }
         }
-
-        if (allowOvercast && costLeft > 0) {
-            // Cast from HP!
-            val manaToHealth = HexMod.CONFIG.manaToHealthRate.get()
-            val healthtoRemove = costLeft.toDouble() / manaToHealth
-            val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
-
-            val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
-            Advancements.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
-            this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
-
-            this.ctx.caster.hurt(HexDamageSources.OVERCAST, healthtoRemove.toFloat())
-            costLeft -= manaToActuallyPayFor
-        }
-
+        
         // this might be more than the mana cost! for example if we waste a lot of mana from an item
         this.ctx.caster.awardStat(HexStatistics.MANA_USED, manaCost - costLeft)
         Advancements.SPEND_MANA_TRIGGER.trigger(
@@ -271,14 +274,14 @@ class CastingHarness private constructor(
         return costLeft
     }
 
-    fun getColorizer(): ItemStack {
+    fun getColorizer(): FrozenColorizer {
         if (this.prepackagedColorizer != null)
             return this.prepackagedColorizer
 
         val maybeCap = this.ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
         if (maybeCap.isEmpty) {
             // uh oh
-            return ItemStack(HexItems.DYE_COLORIZERS[0].get())
+            return FrozenColorizer.DEFAULT
         }
         return maybeCap.get().colorizer
     }
@@ -301,7 +304,7 @@ class CastingHarness private constructor(
         out.put(TAG_PARENTHESIZED, parensTag)
 
         if (this.prepackagedColorizer != null) {
-            out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serializeNBT())
+            out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serialize())
         }
 
         return out
@@ -338,7 +341,7 @@ class CastingHarness private constructor(
                 val escapeNext = nbt.getBoolean(TAG_ESCAPE_NEXT)
 
                 val colorizer = if (nbt.contains(TAG_PREPACKAGED_COLORIZER)) {
-                    ItemStack.of(nbt.getCompound(TAG_PREPACKAGED_COLORIZER))
+                    FrozenColorizer.deserialize(nbt.getCompound(TAG_PREPACKAGED_COLORIZER))
                 } else {
                     null
                 }

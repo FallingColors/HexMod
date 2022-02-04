@@ -82,10 +82,8 @@ public class HexAdditionalRenderers {
             var normal = new Vector3f(r[0] - l[0], r[1] - l[1], r[2] - l[2]);
             normal.normalize();
             if (finalCap != null) {
-                lcolor = CapPreferredColorizer.getColor(finalCap.colorizer, owner, time,
-                    new Vec3(l[0], l[1], l[2]));
-                rcolor = CapPreferredColorizer.getColor(finalCap.colorizer, owner, time,
-                    new Vec3(r[0], r[1], r[2]));
+                lcolor = finalCap.colorizer.getColor(time, new Vec3(l[0], l[1], l[2]));
+                rcolor = finalCap.colorizer.getColor(time, new Vec3(r[0], r[1], r[2]));
             }
             buf.vertex(neo, l[0], l[1], l[2])
                 .color(lcolor)

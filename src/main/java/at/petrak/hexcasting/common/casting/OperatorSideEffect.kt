@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.casting
 
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
-import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer
 import at.petrak.hexcasting.datagen.Advancements
 import com.mojang.math.Vector3f
 import net.minecraft.Util
@@ -57,14 +56,8 @@ sealed class OperatorSideEffect {
 
             for (i in 0 until 20) {
                 // For the colors, pick any random time to get a mix of colors
-                val color =
-                    CapPreferredColorizer.getColor(
-                        colorizer,
-                        harness.ctx.caster,
-                        Random.nextFloat() * 256f,
-                        Vec3.ZERO
-                    )
-                    
+                val color = colorizer.getColor(Random.nextFloat() * 256f, Vec3.ZERO)
+
                 harness.ctx.world.sendParticles(
                     DustParticleOptions(Vector3f(Vec3.fromRGB24(color)), 1f),
                     position.x,

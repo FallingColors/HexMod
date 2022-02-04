@@ -76,9 +76,9 @@ public class HexItems {
     public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register(HexItemNames.UUID_COLORIZER,
         () -> new Item(unstackable()));
 
-    // I am very funny
+    // BUFF SANDVICH
     public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register(HexItemNames.SUBMARINE_SANDWICH,
-        () -> new Item(props().food(new FoodProperties.Builder().nutrition(12).saturationMod(1.2f).build())));
+        () -> new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
 
     public static Item.Properties props() {
         return new Item.Properties().tab(TAB);
