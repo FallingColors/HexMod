@@ -40,7 +40,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info) {
         var buf = new FriendlyByteBuf(buffer);
 
         buf.writeBoolean(this.info.getWasSpellCast());
-        buf.writeBoolean(this.info.isStackEmpty());
+        buf.writeBoolean(this.info.isStackClear());
         buf.writeBoolean(this.info.getWasPrevPatternInvalid());
         buf.writeInt(this.info.getStackDesc().size());
         for (var desc : this.info.getStackDesc()) {
@@ -52,13 +52,13 @@ public record MsgNewSpellPatternAck(ControllerInfo info) {
         ctx.get().enqueueWork(() ->
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 var mc = Minecraft.getInstance();
-                if (this.info.isStackEmpty()) {
+                if (this.info.isStackClear()) {
                     // don't pay attention to the screen, so it also stops when we die
                     mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getId(), null);
                 }
                 var screen = Minecraft.getInstance().screen;
                 if (screen instanceof GuiSpellcasting spellGui) {
-                    if (this.info.isStackEmpty()) {
+                    if (this.info.isStackClear()) {
                         mc.setScreen(null);
                     } else {
                         spellGui.recvServerUpdate(this.info);

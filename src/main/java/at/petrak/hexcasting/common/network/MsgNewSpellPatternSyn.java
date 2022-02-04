@@ -52,7 +52,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     }
 
                     CompoundTag nextHarnessTag;
-                    if (clientInfo.isStackEmpty()) {
+                    if (clientInfo.isStackClear()) {
                         // discard the changes
                         nextHarnessTag = new CompoundTag();
                     } else {
