@@ -1,4 +1,5 @@
 {
+  "item.hexcasting.book": "Hex Notebook",
   "item.hexcasting.wand": "Staf",
   "item.hexcasting.focus": "Focus",
   "item.hexcasting.spellbook": "Toverboek",
@@ -46,6 +47,8 @@
   "block.hexcasting.conjured": "Opgeroepen blok",
   "itemGroup.hexcasting": "Hexcasting",
   
+  "hexcasting.landing": "Ik lijk een nieuwe methode van magische kunsten te hebben ontdekt, waarin men raar en wild op een hexagonaal raster patronen tekent. Het fascineert me. Ik heb besloten om een logboek van mijn gedachten en bevindingen te beginnen.",
+
   "hexcasting.spellbook.tooltip.page": "Geselecteerde pagina %d/%d",
   "hexcasting.spelldata.desc.entity": "Entiteit %s",
   
@@ -101,6 +104,7 @@
   "hexcasting.spell.hexcasting:const/null": "Nulaire reflectie",
   "hexcasting.spell.hexcasting:duplicate": "Geminidecompositie",
   "hexcasting.spell.hexcasting:swap": "Narrengok",
+  "hexcasting.spell.hexcasting:fisherman":  "Vissersgok",
   "hexcasting.spell.hexcasting:add": "Optellende destillatie",
   "hexcasting.spell.hexcasting:sub": "Aftrekkende destillatie",
   "hexcasting.spell.hexcasting:mul_dot": "Vermenigvuldigende dest.",
@@ -143,6 +147,8 @@
   "hexcasting.spell.hexcasting:potion/strength": "Zenit der groene zon",
   "hexcasting.spell.hexcasting:flight": "Vliegen",
   "hexcasting.spell.hexcasting:lightning": "Creëer bliksem",
+  "hexcasting.spell.hexcasting:summon_rain": "Creëer regen",
+  "hexcasting.spell.hexcasting:dispel_rain": "Stop regen",
   "hexcasting.spell.hexcasting:create_lava": "Creëer lava",
   "hexcasting.spell.hexcasting:teleport": "Grote teleportatie",
   "hexcasting.spell.hexcasting:sentinel/create/great": "Roep grote sentinel op",
