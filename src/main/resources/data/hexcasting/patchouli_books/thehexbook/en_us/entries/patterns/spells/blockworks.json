@@ -44,7 +44,7 @@
       "anchor": "hexcasting:conjure_block",
       "input": "vector",
       "output": "",
-      "text": "Conjure a barrier, using your colorizer. Costs about one $(item)Amethyst Dust/$."
+      "text": "Conjure a barrier, using my colorizer. Costs about one $(item)Amethyst Dust/$."
     },
     {
       "type": "hexcasting:pattern",
@@ -52,7 +52,7 @@
       "anchor": "hexcasting:conjure_light",
       "input": "vector",
       "output": "",
-      "text": "Conjure a magical light, using your colorizer. Costs about one $(item)Amethyst Dust/$."
+      "text": "Conjure a magical light, using my colorizer. Costs about one $(item)Amethyst Dust/$."
     },
     {
       "type": "hexcasting:pattern",

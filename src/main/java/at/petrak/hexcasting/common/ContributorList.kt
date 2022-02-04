@@ -39,7 +39,8 @@ object ContributorList {
             for (key in keys) {
                 val infoRaw: AbstractConfig = toml.get(key)
                 val info = ContributorInfo(
-                    infoRaw.get("colorizer")
+                    infoRaw.get<ArrayList<Int>>("colorizer").stream().mapToInt { i -> i or 0xFF_000000.toInt() }
+                        .toArray()
                 )
                 contributors[UUID.fromString(key)] = info
             }

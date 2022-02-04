@@ -35,7 +35,8 @@ colorizer = [9609727, 7045119]
 # dfe0e8 f2da00 e66910 383138
 colorizer = [14672104, 15915520, 15100176, 3682616]
 
-# [Dev]
+# Dev
+["380df991-f603-344c-a090-369bad2a924a"]
 # 0xff0000 0x00ff00 0x0000ff
 # For testing purposes
-# colorizer = [16711680, 65280, 255]
+colorizer = [16711680, 65280, 255]

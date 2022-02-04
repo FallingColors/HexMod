@@ -116,7 +116,7 @@ public class RegisterPatterns {
                 new OpConjure(false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqd", HexDir.NORTH_EAST), prefix("conjure_light"),
                 new OpConjure(true));
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waawawaawa", HexDir.NORTH_EAST), prefix("bonemeal"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waawawaaw", HexDir.NORTH_EAST), prefix("bonemeal"),
                 OpTheOnlyReasonAnyoneDownloadedPsi.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwaeaeaeaeaea", HexDir.NORTH_WEST),
                 prefix("recharge"),

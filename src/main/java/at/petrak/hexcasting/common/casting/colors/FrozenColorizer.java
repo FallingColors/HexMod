@@ -33,10 +33,14 @@ public record FrozenColorizer(Item item, UUID owner) {
     }
 
     public static FrozenColorizer deserialize(CompoundTag tag) {
-        var itemID = new ResourceLocation(tag.getString(TAG_ITEM));
-        var item = ForgeRegistries.ITEMS.getValue(itemID);
-        var uuid = tag.getUUID(TAG_OWNER);
-        return new FrozenColorizer(item, uuid);
+        try {
+            var itemID = new ResourceLocation(tag.getString(TAG_ITEM));
+            var item = ForgeRegistries.ITEMS.getValue(itemID);
+            var uuid = tag.getUUID(TAG_OWNER);
+            return new FrozenColorizer(item, uuid);
+        } catch (NullPointerException exn) {
+            return FrozenColorizer.DEFAULT;
+        }
     }
 
     public static boolean isColorizer(Item item) {
