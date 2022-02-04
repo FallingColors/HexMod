@@ -31,8 +31,9 @@ object OpColorize : SpellOperator {
 
             val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
             if (FrozenColorizer.isColorizer(otherHandItem.item)) {
+                val item = otherHandItem.item
                 if (ctx.withdrawItem(otherHandItem.item, 1, true)) {
-                    cap.colorizer = FrozenColorizer(otherHandItem.item, ctx.caster.uuid)
+                    cap.colorizer = FrozenColorizer(item, ctx.caster.uuid)
                     HexMessages.getNetwork()
                         .send(PacketDistributor.PLAYER.with { ctx.caster }, MsgColorizerUpdateAck(cap))
                 }
