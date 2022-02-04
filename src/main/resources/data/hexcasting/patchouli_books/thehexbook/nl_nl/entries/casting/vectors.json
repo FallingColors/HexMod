@@ -1,0 +1,26 @@
+{
+    "name": "A Primer on Vectors",
+    "category": "hexcasting:casting",
+    "icon": "minecraft:arrow",
+    "priority": true,
+    "sortnum": 1,
+    "advancement": "hexcasting:root",
+    "pages": [
+        {
+            "type": "patchouli:link",
+            "text": "It seems I will need to be adroit with vectors if I am to get anywhere in my studies. I have compiled some resources here on vectors if I find I do not know how to work with them.$(br2)First off, an enlightening video on the topic.",
+            "link_text": "3blue1brown",
+            "url": "https://www.youtube.com/watch?v=fNk_zzaMoSs"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Additionally, it seems that the mages who manipulated $(thing)Psi energy/$ (the so-called \"spellslingers\"), despite their poor naming sense, had some quite-effective lessons on vectors to teach their acolytes. I've taken the liberty of linking to one of their texts on the next page.$(br2)They seem to have used different language for their spellcasting:$(li)A \"Spell Piece\" was their name for an action;$(li)a \"Trick\" was their name for a spell; and$(li)an \"Operator\" was their name for a non-spell action."
+        },
+        {
+            "type": "patchouli:link",
+            "text": "Link here.",
+            "link_text": "Psi Codex",
+            "url": "https://psi.vazkii.us/codex.php#vectorPrimer"
+        }
+    ]
+}

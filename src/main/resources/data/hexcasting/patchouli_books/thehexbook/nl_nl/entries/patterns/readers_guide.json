@@ -1,0 +1,27 @@
+{
+  "name": "How to Read this Section",
+  "category": "hexcasting:patterns",
+  "icon": "minecraft:knowledge_book",
+  "advancement": "hexcasting:root",
+  "priority": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "I've divided all the valid patterns I've found into sections based on what they do, more or less. I've written down the stroke order of the patterns as well, if I managed to find it in my studies, with the start of the pattern marked with a red dot.$(br2)If an action is cast by multiple patterns, as is the case with some simple actions, I'll write them all side-by-side."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "hexcasting:scroll",
+      "link_recipe": true,
+      "text": "For a few patterns, however, I was $(italic)not/$ able to find the stroke order, just the shape. I suspect the order to draw them in are out there, locked away in the ancient libraries and dungeons of the world.$(br2)In such cases I just draw the pattern without any information on the order to draw it in."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "I also write the types of iota that the action will consume or modify, a \"\u2192\", and the types of iota the action will create.$(p)For example, \"$(n)vector, number/$ \u2192 $(n)vector/$\" means the action will remove a vector and a number from the top of the stack, and then add a vector; or, put another way, will remove a number from the stack, and then modify the vector at the top of the stack. (The number needs to be on the top of the stack, with the vector right below it.)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "\"\u2192 $(n)entity/$\" means it'll just push an entity. \"$(n)entity, vector/$ \u2192\" means it removes an entity and a vector, and doesn't push anything.$(br2)Finally, if I find the little dot marking the stroke order too slow or confusing, I can press $(thing)Control/Command/$ to display a gradient, where the start of the pattern is darkest and the end is lightest. This works on scrolls and when casting, too!"
+    }
+  ]
+}

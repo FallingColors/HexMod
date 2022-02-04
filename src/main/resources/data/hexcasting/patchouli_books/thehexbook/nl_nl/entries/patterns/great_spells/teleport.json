@@ -1,0 +1,23 @@
+{
+    "name": "hexcasting.spell.hexcasting:teleport",
+    "category": "hexcasting:patterns/great_spells",
+    "icon": "minecraft:ender_pearl",
+    "sortnum": 3,
+    "advancement": "hexcasting:root",
+    "read_by_default": true,
+    "pages": [
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:teleport",
+            "anchor": "hexcasting:teleport",
+            "input": "entity, vector",
+            "output": "",
+            "hex_size": 8,
+            "text": "Far more powerful than $(l:patterns/spells/basic#OpBlink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(item)Charged Crystal/$s.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached."
+        }
+    ]
+}

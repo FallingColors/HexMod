@@ -1,0 +1,54 @@
+{
+  "name": "Zeniths",
+  "category": "hexcasting:patterns/great_spells",
+  "icon": "minecraft:potion{Potion:'minecraft:regeneration'}",
+  "advancement": "hexcasting:root",
+  "sort_num": 4,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "This family of spells all impart a positive potion effect upon an entity.$(br2)See the $(l:patterns/spells/nadirs)$(action)Nadirs/$ for more information."
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:potion/regeneration",
+      "anchor": "hexcasting:potion/regeneration",
+      "input": "entity, number, number",
+      "output": "",
+      "text": "Bestows regeneration. Base cost is one $(item)Amethyst Dust/$ per second."
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:potion/night_vision",
+      "anchor": "hexcasting:potion/night_vision",
+      "input": "entity, number",
+      "output": "",
+      "text": "Bestows night vision. Base cost is one $(item)Amethyst Dust/$ per 5 seconds."
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:potion/absorption",
+      "anchor": "hexcasting:potion/absorption",
+      "input": "entity, number, number",
+      "output": "",
+      "text": "Bestows absorption. Base cost is one $(item)Amethyst Dust/$ per second."
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:potion/haste",
+      "anchor": "hexcasting:potion/haste",
+      "input": "entity, number, number",
+      "output": "",
+      "text": "Bestows haste. Base cost is one $(item)Amethyst Dust/$ per 3 seconds."
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:potion/strength",
+      "anchor": "hexcasting:potion/strength",
+      "input": "entity, number, number",
+      "output": "",
+      "text": "Bestows strength. Base cost is one $(item)Amethyst Dust/$ per 3 seconds."
+    }
+  ]
+}

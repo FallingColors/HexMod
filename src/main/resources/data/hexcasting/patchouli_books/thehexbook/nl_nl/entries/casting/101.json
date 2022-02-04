@@ -1,0 +1,83 @@
+{
+  "name": "Hexing 101",
+  "category": "hexcasting:casting",
+  "icon": "hexcasting:wand",
+  "advancement": "hexcasting:root",
+  "priority": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Casting a _Hex is quite difficult-- no wonder this art was lost to time! I'll have to re-read my notes carefully.$(br2)I can start a _Hex by pressing $(k:use) with a $(item)Staff/$ in my hand-- this will cause a hexagonal grid of dots to appear in front of me. Then I can click and drag from dot to dot to draw patterns in the _media of the grid; finishing a pattern will run its corresponding action (more on that later)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Once I've drawn enough patterns to cast a spell, the grid will disappear as the _media I've stored up is released. I can also press Escape if I want to quit early, if I don't mind the chance of a small mishap. (It seems that the more _media I've built up, the more likely I'll meet misfortune.)$(br2)So how do patterns work? In short:$(li)$(italic)Patterns/$ will execute...$(li)$(italic)Actions/$, which manipulate...$(li)$(italic)The Stack/$, which is a list of...$(li)$(italic)Iotas/$, which are simply units of information."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "First, $(thing)patterns/$. These are essential-- they're what I use to manipulate the _media around me. Certain patterns, when drawn, will cause $(thing)actions/$ to happen. Actions are what actually $(italic)do/$ the magic; all patterns influence _media in particular ways, and when those influences end up doing something useful, we call it an action.$(br2)_Media can be fickle: if I draw an invalid pattern, I'll get some garbage result somewhere on my stack (read on...)"
+    },
+    {
+      "type": "hexcasting:manual_pattern_nosig",
+      "header": "An Example",
+      "text": "It's interesting to note that the $(italic)rotation/$ of a pattern doesn't seem to matter at all. These two patterns both perform the $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, for example.",
+      "patterns": [
+        {
+          "startdir": "NORTH_EAST",
+          "signature": "qaq"
+        },
+        {
+          "startdir": "EAST",
+          "signature": "qaq",
+          "q": 2
+        }
+      ]
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A _Hex is cast by drawing (valid) actions in sequence. Each action might do one of a few things:$(li)Gather some information about the environment, leaving it on the top of the stack;$(li)manipulate the info gathered (e.g. adding two numbers); or$(li)perform some magical effect, like summoning lightning or an explosion. (These actions are called \"spells.\")$(p)When I start casting a _Hex, it creates an empty stack. Actions manipulate the top of that stack."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "For example, the $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$ will create an iota representing $(italic)me/$, the caster, and add it to the top of the stack. The $(l:patterns/basics#hexcasting:get_entity_pos)$(action)Compass Purification/$ will take the iota at the top the stack, if it represents an entity, and transform it into an iota representing that entity's location.$(br2)So, drawing those patterns in that order would result in an iota on the stack representing my position."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Iotas/$ can represent things like myself or my position, but there are several other types I can manipulate with $(thing)Actions$(0). Here's a comprehensive list:$(li)Numbers (which some legends called \"doubles\");$(li)Vectors, a collection of three numbers representing a position, movement, or direction in the world;"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)Entities, like myself, chickens, and minecarts;$(li)Influences, peculiar types of iota that seem to represent abstract ideas;$(li)Patterns themselves, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$; and$(li)A list of several of the above, gathered into a single iota."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Of course, there's no such thing as a free lunch. All spells, and certain other actions, require _media as payment.$(br2)The best I can figure, a _Hex is a little bit like a plan of action presented to Nature-- in this analogy, the _media is used to provide the arguments to back it up, so Nature will accept your plan and carry it out."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "That aside, it doesn't seem like anyone has done much research on exactly how $(italic)much/$ any particular piece of amethyst is valued. The best I can tell, an $(item)Amethyst Shard/$ is worth about five pieces of $(item)Amethyst Dust/$, and a $(item)Charged Amethyst Crystal/$ is worth about ten.$(br2)Strangely enough, it seems like no other form of amethyst is suitable to be used in the casting of a _Hex. I suspect that whole blocks or crystals are too solid to be easily unraveled into _media."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "It's also worth noting that each action will consume the _media it needs immediately, rather than all at once when the Hex finishes. Also, an action will always consume entire items-- an action that only requires one $(item)Amethyst Dust/$'s worth of _media will consume an entire $(item)Charged Amethyst Crystal/$, if that's all that's present in my inventory.$(br2)Thus, it might be a good idea to bring dust for spellcasting too-- waste not, want not..."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "I should also be careful to make sure I actually have enough Amethyst in my inventory-- if not, it seems Nature is happy to use my own mind as payment instead. The old texts describe the feeling as awful but strangely euphoric, \"[...] an effervescent dissolution into light and energy...\"$(br)Perhaps this is why all the old practitioners of the art went mad. I can't imagine burning pieces of my mind for power is $(italic)healthy/$."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Or, it $(italic) should/$ be like that. In my experiments, I've never managed to do it; if I run out of _media, the spell will simply fail to cast. It feels as if there's some sort of ... barrier in my mind that appears when I try. $(br2)It would be interesting to get to the bottom of the conundrum, but for now I suppose it keeps me safe."
+    },
+    {
+      "type": "patchouli:link",
+      "text": "I have also found an amusing tidbit on why so many practitioners of magic in general seem to go mad, which I may like as some light and flavorful reading not canonical to my world.$(br2)$(italic)Content Warning: some body horror and suggestive elements./$",
+      "link_text": "Goblin Punch",
+      "url": "https://goblinpunch.blogspot.com/2014/05/a-digression-about-wizards.html"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Finally, it seems spells have a maximum range of influence, about 32 blocks from my position. Trying to affect anything outside of that will cause the spell to fail."
+    }
+  ]
+}
