@@ -1,18 +1,18 @@
 {
-    "name": "Scrying Lens",
-    "icon": "hexcasting:lens",
-    "category": "hexcasting:items",
-    "advancement": "hexcasting:root",
-    "sortnum": 1,
-    "pages": [
-        {
-            "type": "patchouli:text",
-            "text": "It's often hard to keep track of everything going on in my spells. I have to remember each and every iota on the stack, and the order they're in-- often I find myself making mistakes.$(br2)Fortunately, if I hold a $(item)Scrying Lens/$ in my other hand, I will be able to simply $(italic)see/$ the iotas on my stack-- a short description of each iota will be listed, top-to-bottom. How convenient!"
-        },
-        {
-            "type": "patchouli:crafting",
-            "recipe": "hexcasting:lens",
-            "text": "$(italic)You must learn... to see what you are looking at./$"
-        }
-    ]
+  "name": "Scrying Lens",
+  "icon": "hexcasting:lens",
+  "category": "hexcasting:items",
+  "advancement": "hexcasting:root",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "This curiosity is in a strange, transitory state. Not too long ago, it allowed me to see the iotas on my stack, but now it seems I have that ability without the assistance of a lens.$(br2)I best keep my old ones around, though-- I have the feeling they will have use in the future."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:lens",
+      "text": "$(italic)You must learn... to see what you are looking at./$"
+    }
+  ]
 }
