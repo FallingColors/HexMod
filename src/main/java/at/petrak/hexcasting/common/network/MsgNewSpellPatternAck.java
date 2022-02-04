@@ -12,19 +12,19 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 
 /**
  * Sent server->client when the player finishes casting a spell.
  */
-public record MsgNewSpellPatternAck(ControllerInfo info, List<Component> stackDesc) {
-    private static final String TAG_DESC = "desc";
+public record MsgNewSpellPatternAck(ControllerInfo info) {
 
     public static MsgNewSpellPatternAck deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
-        var status = ControllerInfo.Status.values()[buf.readInt()];
+        var wasSpellCast = buf.readBoolean();
+        var isStackEmpty = buf.readBoolean();
+        var wasPrevPatternInvalid = buf.readBoolean();
         var descsLen = buf.readInt();
         var desc = new ArrayList<Component>(descsLen);
         for (int i = 0; i < descsLen; i++) {
@@ -32,17 +32,18 @@ public record MsgNewSpellPatternAck(ControllerInfo info, List<Component> stackDe
         }
 
         return new MsgNewSpellPatternAck(
-            new ControllerInfo(status),
-            desc
+            new ControllerInfo(wasSpellCast, isStackEmpty, wasPrevPatternInvalid, desc)
         );
     }
 
     public void serialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
-        buf.writeInt(this.info.getStatus().ordinal());
-        buf.writeInt(this.stackDesc.size());
-        for (var desc : this.stackDesc) {
+        buf.writeBoolean(this.info.getWasSpellCast());
+        buf.writeBoolean(this.info.isStackEmpty());
+        buf.writeBoolean(this.info.getWasPrevPatternInvalid());
+        buf.writeInt(this.info.getStackDesc().size());
+        for (var desc : this.info.getStackDesc()) {
             buf.writeComponent(desc);
         }
     }
@@ -51,16 +52,16 @@ public record MsgNewSpellPatternAck(ControllerInfo info, List<Component> stackDe
         ctx.get().enqueueWork(() ->
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 var mc = Minecraft.getInstance();
-                if (this.info.shouldQuit()) {
+                if (this.info.isStackEmpty()) {
                     // don't pay attention to the screen, so it also stops when we die
                     mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getId(), null);
                 }
                 var screen = Minecraft.getInstance().screen;
                 if (screen instanceof GuiSpellcasting spellGui) {
-                    if (this.info.shouldQuit()) {
+                    if (this.info.isStackEmpty()) {
                         mc.setScreen(null);
                     } else {
-                        spellGui.recvServerUpdate(this.info, this.stackDesc);
+                        spellGui.recvServerUpdate(this.info);
                     }
                 }
             })

@@ -8,7 +8,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(italic)Hence, away! Now all is well,$(br)One aloof stand sentinel./$$(br2)A $(thing)Sentinel/$ is a mysterious force I can summon to assist in the casting of _Hexes, like a familiar or guardian spirit. It appears as a small blob of light to my eyes, but is invisible to everyone else."
+      "text": "$(italic)Hence, away! Now all is well,$(br)One aloof stand sentinel./$$(br2)A $(thing)Sentinel/$ is a mysterious force I can summon to assist in the casting of _Hexes, like a familiar or guardian spirit. It appears as a spinning geometric shape to my eyes, but is invisible to everyone else."
     },
     {
       "type": "patchouli:text",

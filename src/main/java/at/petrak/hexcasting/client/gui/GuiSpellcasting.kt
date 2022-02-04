@@ -41,17 +41,17 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
     private var stackDescs: List<Component> = emptyList()
 
-    fun recvServerUpdate(info: ControllerInfo, stackDescs: List<Component>) {
+    fun recvServerUpdate(info: ControllerInfo) {
         this.stackDescs = stackDescs
         this.patterns.lastOrNull()?.let {
-            it.valid = if (info.status == ControllerInfo.Status.PREV_PATTERN_INVALID)
+            it.valid = if (info.wasPrevPatternInvalid)
                 PatternValidity.ERROR
             else
                 PatternValidity.OK
         }
 
         val sound =
-            if (info.status == ControllerInfo.Status.PREV_PATTERN_INVALID) HexSounds.FAIL_PATTERN.get() else HexSounds.ADD_PATTERN.get()
+            if (info.wasPrevPatternInvalid) HexSounds.FAIL_PATTERN.get() else HexSounds.ADD_PATTERN.get()
         Minecraft.getInstance().soundManager.play(
             SimpleSoundInstance.forUI(
                 sound,

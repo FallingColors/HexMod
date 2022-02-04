@@ -58,7 +58,7 @@ public abstract class ItemPackagedSpell extends Item {
         List<HexPattern> patterns = getPatterns(tag);
         for (var pattern : patterns) {
             var info = harness.executeNewPattern(pattern, sPlayer.getLevel());
-            if (info.shouldQuit()) {
+            if (info.getWasPrevPatternInvalid()) {
                 break;
             }
         }

@@ -8,11 +8,11 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Although their names were lost to time, the old practitioners of my art were often known for a color, emblematic of them and their spells. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in color.\""
+      "text": "Although the names of the old practitioners of my art were lost to time, they were often known for a color, emblematic of them and their spells. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in color.\""
     },
     {
       "type": "patchouli:text",
-      "text": "I'm not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use one, I hold it in my other hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$, which will consume the pigment and mark my mind with that color.$(br2)The pigments seem to affect the color of the spare media coming out of a staff when I cast a _Hex, as well as my $(l:hexcasting/patterns/sentinels)$(thing)Sentinel/$."
+      "text": "I'm not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use one, I hold it in my other hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$, which will consume the pigment and mark my mind with that color.$(br2)The pigments seem to affect the color of the spare media coming out of a staff when I cast a _Hex, as well as my $(l:patterns/sentinels)$(thing)Sentinel/$."
     },
     {
       "type": "hexcasting:crafting_multi",
