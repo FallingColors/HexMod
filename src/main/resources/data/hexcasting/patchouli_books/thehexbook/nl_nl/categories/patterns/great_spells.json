@@ -1,7 +1,7 @@
 {
-  "name": "Great Spells",
+  "name": "Grote spreuken",
   "icon": "minecraft:textures/mob_effect/conduit_power.png",
-  "description": "The spells catalogued here are purported to be of legendary difficulty and power, scarcely recorded (and for good reason). It's probably just traditionalists' hogwash, though-- a pattern's a pattern. What could go wrong?",
+  "description": "De spreuken die hier zijn gecatalogiseerd worden beweerd van legendarische moeilijkheid en kracht te zijn, zelden vastgelegd (en met een goede reden). Het is waarschijnlijk gewoon prietpraat van traditionalisten, echter-- een patroon is een patroon. Wat zou er nou fout kunnen gaan?",
   "parent": "hexcasting:patterns",
   "sortnum": 1
 }
