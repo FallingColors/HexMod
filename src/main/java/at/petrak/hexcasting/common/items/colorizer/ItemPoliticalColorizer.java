@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.common.items.colorizer;
 
-public class ItemPoliticalColorizer extends ItemColorizer {
+import net.minecraft.world.item.Item;
+
+public class ItemPoliticalColorizer extends Item {
     private final int idx;
 
     public ItemPoliticalColorizer(int idx, Properties pProperties) {

@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting
 import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.SpellDatum
-import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import at.petrak.hexcasting.common.lib.HexCapabilities
@@ -17,7 +17,6 @@ import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.item.ItemStack
 import java.util.*
 import kotlin.math.min
 
@@ -31,7 +30,7 @@ class CastingHarness private constructor(
     var parenthesized: List<HexPattern>,
     var escapeNext: Boolean,
     val ctx: CastingContext,
-    val prepackagedColorizer: ItemStack?
+    val prepackagedColorizer: FrozenColorizer?
 ) {
 
     constructor(ctx: CastingContext) : this(mutableListOf(), 0, mutableListOf(), false, ctx, null)
@@ -271,14 +270,14 @@ class CastingHarness private constructor(
         return costLeft
     }
 
-    fun getColorizer(): ItemStack {
+    fun getColorizer(): FrozenColorizer {
         if (this.prepackagedColorizer != null)
             return this.prepackagedColorizer
 
         val maybeCap = this.ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
         if (maybeCap.isEmpty) {
             // uh oh
-            return ItemStack(HexItems.DYE_COLORIZERS[0].get())
+            return FrozenColorizer.DEFAULT
         }
         return maybeCap.get().colorizer
     }
@@ -301,7 +300,7 @@ class CastingHarness private constructor(
         out.put(TAG_PARENTHESIZED, parensTag)
 
         if (this.prepackagedColorizer != null) {
-            out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serializeNBT())
+            out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serialize())
         }
 
         return out
@@ -338,7 +337,7 @@ class CastingHarness private constructor(
                 val escapeNext = nbt.getBoolean(TAG_ESCAPE_NEXT)
 
                 val colorizer = if (nbt.contains(TAG_PREPACKAGED_COLORIZER)) {
-                    ItemStack.of(nbt.getCompound(TAG_PREPACKAGED_COLORIZER))
+                    FrozenColorizer.deserialize(nbt.getCompound(TAG_PREPACKAGED_COLORIZER))
                 } else {
                     null
                 }

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.Operator;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.SpellDatum;
 import at.petrak.hexcasting.common.casting.operators.*;
+import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
 import at.petrak.hexcasting.common.casting.operators.eval.OpEvalDelay;
 import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
 import at.petrak.hexcasting.common.casting.operators.lists.OpAppend;
@@ -32,8 +33,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-
-import java.util.regex.Pattern;
 
 import static at.petrak.hexcasting.common.lib.RegisterHelper.prefix;
 
@@ -109,13 +108,14 @@ public class RegisterPatterns {
                 prefix("colorize"),
                 OpColorize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqawqadaq", HexDir.SOUTH_EAST), prefix("create_water"),
-                    OpCreateWater.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedwedade", HexDir.SOUTH_WEST), prefix("destroy_water"),
-                    OpDestroyWater.INSTANCE);
+                OpCreateWater.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedwedade", HexDir.SOUTH_WEST),
+                prefix("destroy_water"),
+                OpDestroyWater.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqa", HexDir.NORTH_EAST), prefix("conjure_block"),
-                    new OpConjure(false));
+                new OpConjure(false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqd", HexDir.NORTH_EAST), prefix("conjure_light"),
-                    new OpConjure(true));
+                new OpConjure(true));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waawawaawa", HexDir.NORTH_EAST), prefix("bonemeal"),
                 OpTheOnlyReasonAnyoneDownloadedPsi.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwaeaeaeaeaea", HexDir.NORTH_WEST),

@@ -1,19 +1,21 @@
 package at.petrak.hexcasting.common
 
 import at.petrak.hexcasting.HexMod
+import com.electronwill.nightconfig.core.AbstractConfig
 import com.electronwill.nightconfig.toml.TomlParser
 import net.minecraft.DefaultUncaughtExceptionHandler
 import java.io.IOException
 import java.net.URL
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 object ContributorList {
-    private val contributors = ConcurrentHashMap<String, ContributorInfo>()
+    private val contributors = ConcurrentHashMap<UUID, ContributorInfo>()
     private var startedLoading = false
 
     @JvmStatic
-    fun getContributor(name: String): ContributorInfo? =
-        this.contributors[name]
+    fun getContributor(uuid: UUID): ContributorInfo? =
+        this.contributors[uuid]
 
 
     fun loadContributors() {
@@ -35,11 +37,11 @@ object ContributorList {
 
             val keys = toml.valueMap().keys
             for (key in keys) {
-                val infoRaw: ContributorInfoInner = toml.get(key)
+                val infoRaw: AbstractConfig = toml.get(key)
                 val info = ContributorInfo(
-                    infoRaw.colorizer.stream().mapToInt { i -> i or 0xff_000000.toInt() }.toArray()
+                    infoRaw.get("colorizer")
                 )
-                contributors[key] = info
+                contributors[UUID.fromString(key)] = info
             }
             HexMod.getLogger().info("Loaded ${contributors.size} contributors!")
         } catch (e: IOException) {
@@ -47,6 +49,5 @@ object ContributorList {
         }
     }
 
-    private data class ContributorInfoInner(val colorizer: List<Int>)
     data class ContributorInfo(val colorizer: IntArray)
 }

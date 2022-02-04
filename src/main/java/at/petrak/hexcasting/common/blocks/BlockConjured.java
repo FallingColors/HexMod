@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.blocks;
 
+import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -8,7 +9,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -51,7 +51,8 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
     }
 
     @Override
-    public void animateTick(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Random pRand) {
+    public void animateTick(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos,
+        @NotNull Random pRand) {
         BlockEntity tile = pLevel.getBlockEntity(pPos);
         if (tile instanceof BlockEntityConjured) {
             ((BlockEntityConjured) tile).particleEffect();
@@ -70,21 +71,23 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
         return new BlockEntityConjured(pPos, pState);
     }
 
-    public static void setColor(LevelAccessor pLevel, BlockPos pPos, ItemStack pRecordStack) {
+    public static void setColor(LevelAccessor pLevel, BlockPos pPos, FrozenColorizer colorizer) {
         BlockEntity blockentity = pLevel.getBlockEntity(pPos);
         if (blockentity instanceof BlockEntityConjured tile) {
-            tile.setColor(pRecordStack.copy());
+            tile.setColorizer(colorizer);
         }
     }
 
     @Override
-    public void onPlace(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pOldState, boolean pIsMoving) {
+    public void onPlace(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pOldState,
+        boolean pIsMoving) {
         pLevel.sendBlockUpdated(pPos, pState, pState, Block.UPDATE_CLIENTS);
         super.onPlace(pState, pLevel, pPos, pOldState, pIsMoving);
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+        @NotNull CollisionContext context) {
         return state.getValue(LIGHT) ? LIGHT_SHAPE : super.getShape(state, level, pos, context);
     }
 
@@ -94,7 +97,8 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
     }
 
     @Override
-    public boolean propagatesSkylightDown(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos) {
+    public boolean propagatesSkylightDown(@NotNull BlockState pState, @NotNull BlockGetter pLevel,
+        @NotNull BlockPos pPos) {
         return true;
     }
 
@@ -104,17 +108,20 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction direction) {
+    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos,
+        @Nullable Direction direction) {
         return false;
     }
 
     @Override
-    public boolean isValidSpawn(BlockState state, BlockGetter world, BlockPos pos, SpawnPlacements.Type type, EntityType<?> entityType) {
+    public boolean isValidSpawn(BlockState state, BlockGetter world, BlockPos pos, SpawnPlacements.Type type,
+        EntityType<?> entityType) {
         return false;
     }
 
     @Override
-    public @NotNull VoxelShape getVisualShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
+    public @NotNull VoxelShape getVisualShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel,
+        @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         return Shapes.empty();
     }
 
@@ -129,15 +136,18 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
     }
 
     @Override
-    public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
+    public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter pLevel,
+        @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         return state.getValue(LIGHT) ? Shapes.empty() : super.getCollisionShape(state, pLevel, pPos, pContext);
     }
 
     @Override
-    protected void spawnDestroyParticles(Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState) {}
+    protected void spawnDestroyParticles(Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState) {
+    }
 
     @Override
-    public boolean addLandingEffects(BlockState state1, ServerLevel worldserver, BlockPos pos, BlockState state2, LivingEntity entity, int numberOfParticles) {
+    public boolean addLandingEffects(BlockState state1, ServerLevel worldserver, BlockPos pos, BlockState state2,
+        LivingEntity entity, int numberOfParticles) {
         BlockEntity tile = worldserver.getBlockEntity(pos);
         if (tile instanceof BlockEntityConjured) {
             ((BlockEntityConjured) tile).landParticle(entity, numberOfParticles);

@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.items.colorizer;
 
-import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 
-public class ItemDyeColorizer extends ItemColorizer {
+public class ItemDyeColorizer extends Item {
     private final int dyeIdx;
 
     public ItemDyeColorizer(int dyeIdx, Properties pProperties) {
@@ -12,10 +12,5 @@ public class ItemDyeColorizer extends ItemColorizer {
 
     public int getDyeIdx() {
         return dyeIdx;
-    }
-
-    @Override
-    public int[] getColors() {
-        return new int[]{DyeColor.byId(getDyeIdx()).getFireworkColor()};
     }
 }
