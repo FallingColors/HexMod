@@ -1,12 +1,11 @@
 {
 	"textures": [
-		"minecraft:glitter_7",
-		"minecraft:glitter_6",
-		"minecraft:glitter_5",
-		"minecraft:glitter_4",
-		"minecraft:glitter_3",
-		"minecraft:glitter_2",
-		"minecraft:glitter_1",
-		"minecraft:glitter_0"
+		"hexcasting:spin_cube_7",
+		"hexcasting:spin_cube_6",
+		"hexcasting:spin_cube_5",
+		"hexcasting:spin_cube_4",
+		"hexcasting:spin_cube_3",
+		"hexcasting:spin_cube_2",
+		"hexcasting:spin_cube_1"
 	]
 }
