@@ -1,5 +1,5 @@
 {
-    "name": "List Manipulation",
+    "name": "hexcasting.entry.lists",
     "category": "hexcasting:patterns",
     "icon": "minecraft:oak_sign",
     "sortnum": 5,
@@ -12,7 +12,7 @@
             "anchor": "hexcasting:index",
             "input": "list, number",
             "output": "any",
-            "text": "Remove the number at the top of the stack, then replace the list at the top with the nth element of that list (where n is the number you removed). Replaces the list with Null if the number is out of bounds."
+            "text": "hexcasting.page.lists1"
         },
         {
             "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
             "anchor": "hexcasting:append",
             "input": "list, any",
             "output": "any",
-            "text": "Remove the top of the stack, then add it to the end of the list at the top of the stack."
+            "text": "hexcasting.page.lists2"
         },
         {
             "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
             "anchor": "hexcasting:concat",
             "input": "list, list",
             "output": "list",
-            "text": "Remove the list at the top of the stack, then add all its elements to the end of the list at the top of the stack."
+            "text": "hexcasting.page.lists3"
         }
     ]
 }
