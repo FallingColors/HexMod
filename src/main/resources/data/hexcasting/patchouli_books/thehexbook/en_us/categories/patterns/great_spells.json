@@ -1,7 +1,7 @@
 {
-  "name": "Great Spells",
+  "name": "hexcasting.entry.great_spells",
   "icon": "minecraft:textures/mob_effect/conduit_power.png",
-  "description": "The spells catalogued here are purported to be of legendary difficulty and power, scarcely recorded (and for good reason). It's probably just traditionalists' hogwash, though-- a pattern's a pattern. What could go wrong?",
+  "description": "hexcasting.page.great_spells1",
   "parent": "hexcasting:patterns",
   "sortnum": 1
 }
