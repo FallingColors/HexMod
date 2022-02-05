@@ -1,5 +1,5 @@
 {
-    "name": "Nadirs",
+    "name": "hexcasting.entry.nadirs",
     "category": "hexcasting:patterns/spells",
     "icon": "minecraft:potion{Potion:'minecraft:poison'}",
     "advancement": "hexcasting:root",
@@ -8,11 +8,11 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, multiplied by the potency."
+            "text": "hexcasting.page.nadirs1"
         },
         {
             "type": "patchouli:text",
-            "text": "According to certain legends, these spells and their sisters, the $(l:patterns/great_spells/zeniths)$(action)Zeniths/$, were \"[...] inspired by a world near to this one, where powerful wizards would gather magic from the land and hold duels to the death. Unfortunately, much was lost in the translation ...\"$(br2)Perhaps that is the reason for their peculiar names."
+            "text": "hexcasting.page.nadirs2"
         },
         {
             "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
             "anchor": "hexcasting:potion/weakness",
             "input": "entity, number, number",
             "output": "",
-            "text": "Bestows weakness. Base cost is one $(item)Amethyst Dust/$ per 10 seconds."
+            "text": "hexcasting.page.nadirs3"
         },
         {
             "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
             "anchor": "hexcasting:potion/levitation",
             "input": "entity, number",
             "output": "",
-            "text": "Bestows levitation. Base cost is one $(item)Amethyst Dust/$ per 5 seconds."
+            "text": "hexcasting.page.nadirs4"
         },
         {
             "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
             "anchor": "hexcasting:potion/wither",
             "input": "entity, number, number",
             "output": "",
-            "text": "Bestows withering. Base cost is one $(item)Amethyst Dust/$ per second."
+            "text": "hexcasting.page.nadirs5"
         },
         {
             "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
             "anchor": "hexcasting:potion/poison",
             "input": "entity, number, number",
             "output": "",
-            "text": "Bestows poison. Base cost is one $(item)Amethyst Dust/$ per 3 seconds."
+            "text": "hexcasting.page.nadirs6"
         },
         {
             "type": "hexcasting:pattern",
@@ -52,7 +52,7 @@
             "anchor": "hexcasting:potion/slowness",
             "input": "entity, number, number",
             "output": "",
-            "text": "Bestows slowness. Base cost is one $(item)Amethyst Dust/$ per 5 seconds."
+            "text": "hexcasting.page.nadirs7"
         }
     ]
 }
