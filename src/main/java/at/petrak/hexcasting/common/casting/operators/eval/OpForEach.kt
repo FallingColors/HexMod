@@ -22,6 +22,7 @@ object OpForEach : Operator {
             ctx.incDepth()
             val harness = CastingHarness(ctx)
             harness.stack.addAll(stack)
+            harness.stack.add(subdatum)
             for (pat in instrs) {
                 val res = harness.getUpdate(pat.tryGet(), ctx.world)
                 sideEffects.addAll(res.sideEffects)
