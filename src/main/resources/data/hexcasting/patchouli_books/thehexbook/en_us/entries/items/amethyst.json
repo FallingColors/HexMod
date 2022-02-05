@@ -1,5 +1,5 @@
 {
-    "name": "Amethyst",
+    "name": "hexcasting.entry.amethyst",
     "icon": "minecraft:amethyst_shard",
     "category": "hexcasting:items",
     "priority": true,
@@ -11,25 +11,25 @@
             "item": "hexcasting:amethyst_dust",
             "anchor": "dust",
             "link_recipe": true,
-            "text": "It seems that I'll find three different forms of amethyst when breaking a crystal inside a geode. The smallest denomination seems to be a small pile of shimmering dust, worth a relatively small amount of _media."
+            "text": "hexcasting.page.amethyst1"
         },
         {
             "type": "patchouli:spotlight",
             "item": "minecraft:amethyst_shard",
             "anchor": "shard",
             "link_recipe": true,
-            "text": "The second is a whole shard of amethyst, of the type non-Hexers might be used to. This has about as much _media inside as five $(item)Amethyst Dust/$s."
+            "text": "hexcasting.page.amethyst2"
         },
         {
             "type": "patchouli:spotlight",
             "item": "hexcasting:charged_amethyst",
             "anchor": "charged",
             "link_recipe": true,
-            "text": "Finally, I'll rarely find a large crystal crackling with energy. This has about as much _media inside as ten units of $(item)Amethyst Dust/$s (or two $(item)Amethyst Shard/$s)."
+            "text": "hexcasting.page.amethyst3"
         },
         {
             "type": "patchouli:text",
-            "text": "$(italic)The old man sighed and raised a hand toward the fire. He unlocked a part of his brain that held the memories of the mountains around them. He pulled the energies from those lands, as he learned to do in Terisia City with Drafna, Hurkyl, the archimandrite, and the other mages of the Ivory Towers. He concentrated, and the flames writhed as they rose from the logs, twisting upon themselves until they finally formed a soft smile./$"
+            "text": "hexcasting.page.amethyst4"
         }
     ]
 }
