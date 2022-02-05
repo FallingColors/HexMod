@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api
 import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import net.minecraft.world.phys.Vec3
+import kotlin.math.abs
 
 /**
  * Manipulates the stack in some way, usually by popping some number of values off the stack
@@ -43,7 +44,7 @@ interface Operator {
          */
         @JvmStatic
         inline fun <reified T : Any> List<SpellDatum<*>>.getChecked(idx: Int): T {
-            val x = this.getOrElse(idx) { throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, idx, this.size) }
+            val x = this.getOrElse(idx) { throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, abs(idx), this.size) }
             return x.tryGet()
         }
 
