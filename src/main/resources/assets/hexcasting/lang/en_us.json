@@ -288,17 +288,24 @@
   "hexcasting.page.hexcasting5": "Each infusion spell requires an entity and a list of patterns on the stack. The entity must be a _media-holding item entity (i.e. amethyst crystals, dropped on the ground); the entity is consumed and forms the battery.$(br2)Usefully, it seems that the _media in the battery is not consumed in chunks as it is when casting with a $(item)Staff/$-- rather, the _media \"melts down\" into one continuous pool. Thus, if I store a _Hex that only costs one $(item)Amethyst Dust/$'s worth of mana, a $(item)Charged Crystal/$ used as the battery will allow me to cast it 10 times.",
   "hexcasting.page.hexcasting6": "$(italic)We have a saying in our field: \"Magic isn't\". It doesn't \"just work,\" it doesn't respond to your thoughts, you can't throw fireballs or create a roast dinner from thin air or turn a bunch of muggers into frogs and snails./$",
 
-  "hexcasting.entry.lens": "",
-  "hexcasting.page.lens1": "",
+  "hexcasting.entry.lens": "Scrying Lens",
+  "hexcasting.page.lens1": "This curiosity is in a strange, transitory state. Not too long ago, it allowed me to see the iotas on my stack, but now it seems I have that ability without the assistance of a lens.$(br2)I best keep my old ones around, though-- I have the feeling they will have use in the future.",
+  "hexcasting.page.lens2": "$(italic)You must learn... to see what you are looking at./$",
 
-  "hexcasting.entry.pigments": "",
-  "hexcasting.page.pigments1": "",
+  "hexcasting.entry.pigments": "Pigments",
+  "hexcasting.page.pigments1": "Although the names of the old practitioners of my art were lost to time, they were often known for a color, emblematic of them and their spells. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in color.\"",
+  "hexcasting.page.pigments2": "I'm not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use one, I hold it in my other hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$, which will consume the pigment and mark my mind with that color.$(br2)The pigments seem to affect the color of the spare media coming out of a staff when I cast a _Hex, as well as my $(l:patterns/sentinels)$(thing)Sentinel/$.",
+  "hexcasting.page.pigments3header": "Chromatic Colorizers",
+  "hexcasting.page.pigments3": "Pigments all the colors of the rainbow.",
+  "hexcasting.page.pigments4": "And finally, a pigment with a color wholly unique to me.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
 
-  "hexcasting.entry.spellbook": "",
-  "hexcasting.page.spellbook1": "",
+  "hexcasting.entry.spellbook": "Spellbook",
+  "hexcasting.page.spellbook1": "A $(item)Spellbook/$ is the culmination of my art-- it acts like an entire library of $(l:items/focus)$(item)Foci/$.$(br2)Each page can hold a single iota, and I can select the active page (the page that iotas are saved to and copied from) by sneak-scrolling while holding it, or simply holding it in my off-hand and scrolling while casting a _Hex.",
+  "hexcasting.page.spellbook2": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first.",
 
-  "hexcasting.entry.staff": "",
-  "hexcasting.page.staff1": "",
+  "hexcasting.entry.staff": "Staff",
+  "hexcasting.page.staff1": "A $(item)Staff/$ is my entry point into casting all _Hexes, large and small. By holding it and pressing $(thing)$(k:use)/$, I begin casting a _Hex; then I can click and drag to draw patterns.$(br2)It's little more than a chunk of _media on the end of a stick; that's all that's needed, after all.",
+  "hexcasting.page.staff2": "$(italic)Don't fight; flame, light; ignite; burn bright./$",
 
   "hexcasting.entry.
   "hexcasting.page.
