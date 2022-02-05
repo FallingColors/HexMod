@@ -1,5 +1,5 @@
 {
-    "name": "Mishaps",
+    "name": "",
     "category": "hexcasting:casting",
     "icon": "minecraft:textures/mob_effect/poison.png",
     "priority": "true",
@@ -8,11 +8,11 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "Unfortunately, I am not a perfect being. I make mistakes from time to time, including when casting _Hexes. For example, I might misdraw a pattern, or try an invoke an action with the wrong types of iotas. And usually, Nature does not look kindly on my mistakes, causing what is called a $(italic)mishap/$."
+            "text": "hexcasting.page.mishaps1"
         },
         {
             "type": "patchouli:text",
-            "text": "I expected some kind of horrible recompense for mishaps, some kind of alchemical disaster or virile illness as I have heard troubled the Thaumaturges of the past... but instead, I just get a cryptic (if helpful) message in my chat. How convenient!$(br2)However, a nagging feeling at the back of my mind tells me I should expect worse consequences once the \"mod updates,\" whatever that means. Perhaps I am not as immune to the madness that seems to afflict practitioners of this art as I thought."
+            "text": "hexcasting.page.mishaps2"
         }
     ]
 }
