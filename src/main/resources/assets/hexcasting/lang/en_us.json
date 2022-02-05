@@ -165,4 +165,64 @@
   "hexcasting.spell.hexcasting:const/vec/nx": "Vector Reflection -X",
   "hexcasting.spell.hexcasting:const/vec/ny": "Vector Reflection -Y",
   "hexcasting.spell.hexcasting:const/vec/nz": "Vector Reflection -Z"
+
+  "hexcasting.entry.great_spells": "Great Spells",
+  "hexcasting.page.great_spells1": "The spells catalogued here are purported to be of legendary difficulty and power, scarcely recorded (and for good reason). It's probably just traditionalists' hogwash, though-- a pattern's a pattern. What could go wrong?",
+
+  "hexcasting.entry.spells": "Spells",
+  "hexcasting.page.spells1": "Patterns and actions that perform a magical effect on the world.",
+
+  "hexcasting.entry.basics": "Getting Started",
+  "hexcasting.page.basics1": "The practitioners of this art would cast their so-called Hexes by drawing strange patterns in the air with a staff-- or craft powerful magical items to do the casting for them. How might I do the same?",
+
+  "hexcasting.entry.casting": "Hex Casting",
+  "hexcasting.page.casting1": "I've started to understand how the old masters cast their Hexes! It's a bit complicated, but I'm sure I can figure it out. Let's see...",
+
+  "hexcasting.entry.greatwork": "The Great Work",
+  "hexcasting.page.greatwork1": "I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction. I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy. I have seen I have seen I have s$(k)get stick bugged lmao/$",
+
+  "hexcasting.entry.items": "Items",
+  "hexcasting.page.items1": "I devote this section to the magical and mysterious items I might encounter in my studies.$(br2)It seems like many of these items have uses when held alongside my staff. I suppose I will have to choose what goes in my other hand carefully.",
+
+  "hexcasting.entry.patterns": "Patterns",
+  "hexcasting.page.patterns1": "A list of all the patterns in the mod.",
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
 }
