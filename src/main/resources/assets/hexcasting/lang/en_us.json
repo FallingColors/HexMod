@@ -187,17 +187,27 @@
   "hexcasting.entry.patterns": "Patterns",
   "hexcasting.page.patterns1": "A list of all the patterns in the mod.",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.couldnt_cast": "A Frusturation",
+  "hexcasting.page.couldnt_cast1": "ARGH! Why won't it let me cast the spell?!$(br2)The scroll I found rings with authenticity. I can feel it, right there. The pattern is true. The spell is RIGHT THERE on the other side of some membrane, and it tried to come over but it COULD NOT.",
+  "hexcasting.page.couldnt_cast2": "It felt like that barrier got a $(italic)little/$ weaker from the power banging against it from the other side, but it REFUSES to cross through. It's maddening. THIS is what my studies into the arcane give me? An impotence at my crowning moment?$(br2)I should take a deep breath. I should meditate on what I have learned, even if it wasn't very much...",
+  "hexcasting.page.couldnt_cast3": "I have discovered one thing. It seems ... I may have unlocked the ability, or perhaps curse, to cast spells using my health instead of $(item)amethyst/$, like I read about in those old legends. I'm not sure why I think this. It just... the truth is there, and I see it.$(br2)I even get a sense of scale; I would get approximately two $(item)Charged Amethyst/$'s worth of _media out of my health at its prime.",
+  "hexcasting.page.couldnt_cast4": "I shudder to think about it-- I've managed to keep my mind mostly intact so far --but there's a tenuous link here, between me and some other side. The walls have thinned from that trauma, and the glory is right there. I find myself wanting to try it.",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.geodes": "Geodes",
+  "hexcasting.page.geodes1": "Aha! While mining deep underground, I found an enormous geode resonating with energy-- energy which pressed against my skull and my thoughts. This $(italic)must/$ be the place spoken about in legends where _media accumulates.$(br2)These amethyst crystals must contain a $(thing)convenient, solidified form of _Media/$.",
+  "hexcasting.page.geodes2": "It appears that, in addition to the $(item)Amethyst Shards/$ I usually see, these crystals can also drop $(item)Amethyst Dust/$ and $(item)Charged Amethyst Crystals/$. It looks like I'll have a better chance of finding $(item)Charged Amethyst Crystals/$ by using a Fortune pickaxe.",
+  "hexcasting.page.geodes3": "As I take the beauty of the geode in, I can feel connections flashing wildly in my mind. It's like the _media in the air is entering me, empowering me, elucidating me... It feels wonderful.$(br2)Finally, my study into the arcane is starting to make some sense!$(p)Let me reread those old legends again, now that I know what I'm looking at.",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.media": "Media",
+  "hexcasting.page.media1": "_Media is a form of mental energy external to a mind. All living creatures generate trace amounts of _media when thinking about anything; after the thought is finished, the media is released into the environment.$(br2)The art of casting $(thing)Hexes/$ is all about manipulating _media to do your bidding.",
+  "hexcasting.page.media2": "_Media can exert influences on other media-- the strength and type of influence can be manipulated by drawing _media out into patterns.$(p)Scholars of the art used a concentrated blob of _media on the end of a stick: by waving it in the air in precise configurations, they were able to manipulate enough _media with enough precision to influence the world itself, in the form of a Hex.",
+  "hexcasting.page.media3": "Sadly, even a fully sentient being (like myself, presumably) can only generate miniscule amounts of _media. It would be quite impractical to try and use my own brainpower to cast Hexes.$(br2)But legend has it that there are underground deposits where _media slowly accumulates, growing into crystalline forms deep under the earth.$(p)If I could just find one of those...",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.start_to_see": "WHAT DID I SEE",
+  "hexcasting.page.start_to_see1": "The texts weren't lying. Nature took its due.",
+  "hexcasting.page.start_to_see2": "That was... one of the worst things I've experienced. I offered my plan, and Nature smiled firmly at me and ripped away a part of myself alongside my payment. I feel lucky to have $(italic)survived/$, much less have sagacity enough to write this.$(br2)I should declare the matter closed, double-check my math before I cast any more _Hexes, and make sure I have the _media I need...",
+  "hexcasting.page.start_to_see3": "...But.$(br2)For the scarcest instant, that part of myself ... saw ... $(italic)something/$. A place, or a design perhaps-- I was abstract enough that there was no distinction. A ... membrane separating myself from a realm of raw thought and light and energy. I remember-- or, I don't remember, but I find myself thinking of --the barrier fuzzing at the edges just a little bit. I wanted $(italic)through./$",
+  "hexcasting.page.start_to_see4": "I know I shouldn't. It's dangerous. It's too dangerous. I'd have to bring myself within a hairsbreadth of Death.$(br2)But I'm SO CLOSE. $(italic)THIS/$ is the culmination of my art, the $(#54398a)Enlightenment/$ I've been seeking.$(br2)I need more. I need to see it again. What is the price of my mortal mind against immortal glory? Just once more... I need to see it. I WILL see it.",
 
   "hexcasting.entry.
   "hexcasting.page.
