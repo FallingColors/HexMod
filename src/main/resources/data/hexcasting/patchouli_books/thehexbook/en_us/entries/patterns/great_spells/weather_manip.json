@@ -1,5 +1,5 @@
 {
-    "name": "Weather Manipulation",
+    "name": "hexcasting.entry.weather_manip",
     "category": "hexcasting:patterns/great_spells",
     "icon": "minecraft:textures/mob_effect/levitation.png",
     "sortnum": 1,
@@ -13,7 +13,7 @@
             "input": "vector",
             "output": "",
             "hex_size": 6,
-            "text": "I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it. Costs about 3 $(item)Amethyst Shard/$s."
+            "text": "hexcasting.page.weather_manip1"
         },
         {
             "type": "hexcasting:pattern",
@@ -22,7 +22,7 @@
             "input": "",
             "output": "",
             "hex_size": 6,
-            "text": "I control the clouds! This spell will summon rain across the world I cast it upon. Costs about 2 $(item)Amethyst Shard/$s. Does nothing if it is already raining."
+            "text": "hexcasting.page.weather_manip2"
         },
         {
             "type": "hexcasting:pattern",
@@ -31,7 +31,7 @@
             "input": "",
             "output": "",
             "hex_size": 6,
-            "text": "A counterpart to summoning rain. This spell will dispel rain across the world I cast it upon. Costs about 1 $(item)Amethyst Shard/$. Does nothing if the skies are already clear."
+            "text": "hexcasting.page.weather_manip3"
         }
     ]
 }
