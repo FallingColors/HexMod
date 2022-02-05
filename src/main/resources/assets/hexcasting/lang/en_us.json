@@ -94,7 +94,7 @@
   "hexcasting.spell.hexcasting:zone_entity/monster": "Zone Dstln.: Monster",
   "hexcasting.spell.hexcasting:zone_entity/item": "Zone Dstln.: Item",
   "hexcasting.spell.hexcasting:zone_entity/player": "Zone Dstln.: Player",
-  "hexcasting.spell.hexcasting:zone_entity/not_living": "Zone Dstln.: Non-Living",
+  "hexcasting.spell.hexcasting:zone_entity/living": "Zone Dstln.: Living",
   "hexcasting.spell.hexcasting:zone_entity/not_animal": "Zone Dstln.: Non-Animal",
   "hexcasting.spell.hexcasting:zone_entity/not_monster": "Zone Dstln.: Non-Monster",
   "hexcasting.spell.hexcasting:zone_entity/not_item": "Zone Dstln.: Non-Item",
@@ -164,7 +164,7 @@
   "hexcasting.spell.hexcasting:const/vec/pz": "Vector Reflection +Z",
   "hexcasting.spell.hexcasting:const/vec/nx": "Vector Reflection -X",
   "hexcasting.spell.hexcasting:const/vec/ny": "Vector Reflection -Y",
-  "hexcasting.spell.hexcasting:const/vec/nz": "Vector Reflection -Z"
+  "hexcasting.spell.hexcasting:const/vec/nz": "Vector Reflection -Z",
 
   "hexcasting.entry.great_spells": "Great Spells",
   "hexcasting.page.great_spells1": "The spells catalogued here are purported to be of legendary difficulty and power, scarcely recorded (and for good reason). It's probably just traditionalists' hogwash, though-- a pattern's a pattern. What could go wrong?",
@@ -472,5 +472,5 @@
   "hexcasting.page.stackmanip2": "Duplicates the top iota of the stack.",
   "hexcasting.page.stackmanip3": "Swaps the top two iotas of the stack.",
   "hexcasting.page.stackmanip4": "Grabs the nth element in the stack and brings it to the top.",
-  "hexcasting.page.stackmanip5": "The Fisherman's Gambit takes a number and reaches that far $(italic)down/$ the stack-- pulling it from its original position up to the top of the stack. For example, using the Gambit with the number 2 will pull the second item on the stack to the top, effectively acting as a more-cumbersome Jester's Gambit. Using the Gambit with a negative number, a fraction, or a length larger than the stack will dredge all sorts of unknowable patterns from the aether, and is liable to cause a mishap.",
+  "hexcasting.page.stackmanip5": "The Fisherman's Gambit takes a number and reaches that far $(italic)down/$ the stack-- pulling it from its original position up to the top of the stack. For example, using the Gambit with the number 2 will pull the second item on the stack to the top, effectively acting as a more-cumbersome Jester's Gambit. Using the Gambit with a negative number, a fraction, or a length larger than the stack will dredge all sorts of unknowable patterns from the aether, and is liable to cause a mishap."
 }
