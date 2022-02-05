@@ -1,5 +1,5 @@
 {
-    "name": "Crafting Hexcasting Items",
+    "name": "hexcasting.entry.hexcasting_spell",
     "category": "hexcasting:patterns/spells",
     "icon": "hexcasting:artifact{patterns:[]}",
     "sortnum": 3,
@@ -8,7 +8,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "These three spells each create an item that casts a _Hex.$(br)They all require me to hold the empty item in my off-hand, and require two things: the list of patterns to be cast, and an entity representing a dropped stack of $(item)Amethyst/$ to form the item's battery.$(br2)See $(l:items/hexcasting)this entry/$ for more information."
+            "text": "hexcasting.page.hexcasting_spell1"
         },
         {
             "type": "hexcasting:pattern",
@@ -16,7 +16,7 @@
             "anchor": "hexcasting:craft/cypher",
             "input": "entity, list of patterns",
             "output": "",
-            "text": "Costs about one $(item)Charged Amethyst/$."
+            "text": "hexcasting.page.hexcasting_spell2"
         },
         {
             "type": "hexcasting:pattern",
@@ -24,7 +24,7 @@
             "anchor": "hexcasting:craft/trinket",
             "input": "entity, list of patterns",
             "output": "",
-            "text": "Costs about five $(item)Charged Amethyst/$s.",
+            "text": "hexcasting.page.hexcasting_spell3",
             "hex_size": 8
         },
         {
@@ -33,7 +33,7 @@
             "anchor": "hexcasting:craft/artifact",
             "input": "entity, list of patterns",
             "output": "",
-            "text": "Costs about ten $(item)Charged Amethyst/$s.",
+            "text": "hexcasting.page.hexcasting_spell4",
             "hex_size": 5
         },
         {
@@ -42,11 +42,11 @@
             "anchor": "hexcasting:recharge",
             "input": "entity",
             "output": "",
-            "text": "Recharge a _media-containing item in my other hand. Costs about one $(item)Charged Amethyst/$."
+            "text": "hexcasting.page.hexcasting_spell5"
         },
         {
             "type": "patchouli:text",
-            "text": "This spell is cast in a similar method to the crafting spells; an entity representing a dropped stack of $(item)Amethyst/$ is provided, and recharges the _media battery of the item in my other hand.$(br2)This spell $(italic)cannot/$ recharge the item farther than its original battery size."
+            "text": "hexcasting.page.hexcasting_spell6"
         },
         {
             "type": "hexcasting:pattern",
@@ -54,11 +54,11 @@
             "anchor": "hexcasting:erase",
             "input": "",
             "output": "",
-            "text": "Erase a hex-containing item in my other hand. Costs about one $(item)Amethyst Dust/$."
+            "text": "hexcasting.page.hexcasting_spell7"
         },
         {
             "type": "patchouli:text",
-            "text": "This spell voids all media stored inside the item I am erasing. The pressure inside the item from the stored media is incredible. It's all the spell can do to safely disarm it; to try and recover it would be unthinkable."
+            "text": "hexcasting.page.hexcasting_spell8"
         }
     ]
 }
