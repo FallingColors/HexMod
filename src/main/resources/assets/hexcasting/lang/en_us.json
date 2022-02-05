@@ -237,6 +237,81 @@
   "hexcasting.page.mishaps1": "Unfortunately, I am not a perfect being. I make mistakes from time to time, including when casting _Hexes. For example, I might misdraw a pattern, or try an invoke an action with the wrong types of iotas. And usually, Nature does not look kindly on my mistakes, causing what is called a $(italic)mishap/$.",
   "hexcasting.page.mishaps2": "I expected some kind of horrible recompense for mishaps, some kind of alchemical disaster or virile illness as I have heard troubled the Thaumaturges of the past... but instead, I just get a cryptic (if helpful) message in my chat. How convenient!$(br2)However, a nagging feeling at the back of my mind tells me I should expect worse consequences once the \"mod updates,\" whatever that means. Perhaps I am not as immune to the madness that seems to afflict practitioners of this art as I thought.",
 
+  "hexcasting.entry.naming": "Naming Actions",
+  "hexcasting.page.naming1": "The names given to actions by the ancients were certainly peculiar, but I think there's a certain kind of logic to them.$(br2)There seem to be certain groups of actions with common names, named for the number of iotas they remove from and add to the stack.",
+  "hexcasting.page.naming2": "$(li)A $(thing)Reflection/$ pops nothing and pushes some number.$(li)A $(thing)Purification/$ pops one and pushes one.$(li)A $(thing)Distillation/$ pops two and pushes one.$(li)An $(thing)Exaltation/$ pops three or more and pushes one.$(li)A $(thing)Decomposition/$ pops one argument and pushes two.$(li)A $(thing)Disintegration/$ pops one and pushes three or more.$(li)Finally, a $(thing)Gambit/$ pushes or pops some other number.",
+  "hexcasting.page.naming3": "Spells seem to be exempt from this nomenclature and are more or less named after what they do-- after all, why call it a $(thing)Demoman's Gambit/$ when you could just say $(thing)Explosion/$?",
+
+  "hexcasting.entry.patterns_as_iotas": "Patterns as Iotas",
+  "hexcasting.page.patterns_as_iotas1": "One of the many peculiarities of the art is that $(italic)patterns themselves/$ can act as iotas, and be put onto my stack when casting.$(br2)This raises a fairly obvious question: how do I express them? If I were to simply draw a pattern, how would I inform Nature of my intent to have it matched to an action instead of adding it to my stack as an iota?",
+  "hexcasting.page.patterns_as_iotas2": "Fortunately, Nature has provided me with a set of $(l:casting/influences)influences/$ that I can use to work with patterns directly.$(br2)In short, $(action)Consideration/$ lets me add one pattern to the stack, and $(action)Introspection/$ and $(action)Retrospection/$ let me add a whole list.",
+  "hexcasting.page.patterns_as_iotas3": "To use $(action)Consideration/$, I draw it, then another arbitrary pattern. That second pattern is added to the stack.",
+  "hexcasting.page.patterns_as_iotas4": "I may find it helpful to think of this as \"escaping\" the pattern onto the stack, if I happen to be familiar with the term from computer science.$(br2)To be honest, I haven't found too much use for this pattern yet, but I imagine it could be helpful with advanced _Hexes casting other _Hexes.",
+  "hexcasting.page.patterns_as_iotas5": "Drawing $(action)Introspection/$ makes my drawing of patterns act differently, for a time. Until I draw $(action)Retrospection/$, any pattern I draw is saved to a list. Then, when I draw $(action)Retrospection/$, the list is pushed to the stack as a list iota.",
+  "hexcasting.page.patterns_as_iotas6": "If I draw another $(action)Introspection/$, it will still be saved, but I'll then have to draw $(italic)two/$ $(action)Retrospection/$s to get back to normal casting.",
+  "hexcasting.page.patterns_as_iotas7": "Also, I can escape the special behavior of $(action)Intro/Retrospection/$ by drawing a $(action)Consideration/$ before them, which will simply add them to the list without affecting the number of each I need to draw to return to normal.$(br2)If I draw two $(action)Consideration/$s in a row while introspecting, it will add the second pattern to the list.",
+
+  "hexcasting.entry.stack": "Stacks",
+  "hexcasting.page.stack1": "A $(thing)Stack/$, also known as a \"LIFO,\" is a concept borrowed from computer science. In short, it's a collection of things designed so that you can only interact with the most recently used thing.$(br2)Think of a stack of plates, where new plates are added to the top: if you want to interact with a plate halfway down the stack, you have to remove the plates above it in order to get a hold of it.",
+  "hexcasting.page.stack2": "Because a stack is so simple, there's only so many things you can do with it:$(li)$(italic)Adding something to it/$, known formally as pushing,$(li)$(italic)Removing the last added element/$, known as popping, or$(li)$(italic)Examining or modifying the last added element/$, known as peeking.$(br)We call the last-added element the \"top\" of the stack, in accordance with the dinner plate analogy.$(p)As an example, if we push 1 to a stack, then push 2, then pop, the top of the stack is now 1.",
+  "hexcasting.page.stack3": "Actions are (on the most part) restricted to interacting with the casting stack in these ways. They will pop some iotas they're interested in (known as \"arguments\" or \"parameters\"), process them, and push some number of results.$(br2)Of course, some actions (e.g. the $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$) might pop no arguments, and some actions (particularly spells) might push nothing afterwards.",
+  "hexcasting.page.stack4": "Even more complicated actions can be expressed in terms of pushing, popping, and peeking. For example, the $(l:patterns/stackmanip#hexcasting:swap)$(action)Jester's Gambit/$ swaps the top two items of the stack. This can be thought of as popping two items and pushing them in opposite order. For another, $(l:patterns/stackmanip#hexcasting:duplicate)$(action)Gemini Decomposition/$ duplicates the top of the stack-- in other words, it peeks the stack and pushes a copy of what it finds.",
+
+  "hexcasting.entry.vectors": "A Primer on Vectors",
+  "hexcasting.page.vectors1": "It seems I will need to be adroit with vectors if I am to get anywhere in my studies. I have compiled some resources here on vectors if I find I do not know how to work with them.$(br2)First off, an enlightening video on the topic.",
+  "hexcasting.page.vectors1_link_text": "3blue1brown",
+  "hexcasting.page.vectors2": "Additionally, it seems that the mages who manipulated $(thing)Psi energy/$ (the so-called \"spellslingers\"), despite their poor naming sense, had some quite-effective lessons on vectors to teach their acolytes. I've taken the liberty of linking to one of their texts on the next page.$(br2)They seem to have used different language for their spellcasting:$(li)A \"Spell Piece\" was their name for an action;$(li)a \"Trick\" was their name for a spell; and$(li)an \"Operator\" was their name for a non-spell action.",
+  "hexcasting.page.vectors3": "Link here.",
+  "hexcasting.page.vectors3_link_text": "Psi Codex",
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
+  "hexcasting.entry.
+  "hexcasting.page.
+
   "hexcasting.entry.
   "hexcasting.page.
 
