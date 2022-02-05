@@ -1,20 +1,20 @@
 {
-    "name": "Media",
+    "name": "hexcasting.entry.media",
     "icon": "hexcasting:amethyst_dust",
     "category": "hexcasting:basics",
     "priority": true,
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "_Media is a form of mental energy external to a mind. All living creatures generate trace amounts of _media when thinking about anything; after the thought is finished, the media is released into the environment.$(br2)The art of casting $(thing)Hexes/$ is all about manipulating _media to do your bidding."
+            "text": "hexcasting.page.media1"
         },
         {
             "type": "patchouli:text",
-            "text": "_Media can exert influences on other media-- the strength and type of influence can be manipulated by drawing _media out into patterns.$(p)Scholars of the art used a concentrated blob of _media on the end of a stick: by waving it in the air in precise configurations, they were able to manipulate enough _media with enough precision to influence the world itself, in the form of a Hex."
+            "text": "hexcasting.page.media2"
         },
         {
             "type": "patchouli:text",
-            "text": "Sadly, even a fully sentient being (like myself, presumably) can only generate miniscule amounts of _media. It would be quite impractical to try and use my own brainpower to cast Hexes.$(br2)But legend has it that there are underground deposits where _media slowly accumulates, growing into crystalline forms deep under the earth.$(p)If I could just find one of those..."
+            "text": "hexcasting.page.media3"
         }
     ]
 }

@@ -12,7 +12,7 @@
       "anchor": "hexcasting:colorize",
       "input": "",
       "output": "",
-      "text": "I must be holding a $(item)Pigment/$ in my other hand to cast this spell. When I do, it will consume the dye and permanently change my internal pigment (at least, until I cast the spell again). Costs about 1 $(item)Amethyst Dust/$."
+      "text": "hexcasting.page.colorize1"
     }
   ]
 }

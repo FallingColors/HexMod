@@ -12,11 +12,11 @@
             "anchor": "hexcasting:flight",
             "input": "entity, number, number",
             "output": "",
-            "text": "The power of flight! I have wrestled Nature to its knees. But Nature is vengeful, and itches for me to break its contract so it may break my shins."
+            "text": "hexcasting.page.flight1"
         },
         {
             "type": "patchouli:text",
-            "text": "The entity (which must be a player) will be endowed with flight. The first number is the number of seconds they may fly for, and the second number is the radius of the zone they may fly in. If the recipient exits that zone, or their timer runs out while midair, the gravity that they spurned will get its revenge. Painfully.$(br2)It costs approximately 1 $(item)Amethyst Dust/$ multiplied by the radius, per second of flight."
+            "text": "hexcasting.page.flight2"
         }
     ]
 }

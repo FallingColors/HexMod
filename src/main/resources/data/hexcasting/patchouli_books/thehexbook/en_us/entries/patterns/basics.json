@@ -1,5 +1,5 @@
 {
-  "name": "Basic Patterns",
+  "name": "hexcasting.entry.basics_pattern",
   "category": "hexcasting:patterns",
   "icon": "minecraft:wooden_pickaxe",
   "sortnum": 0,
@@ -12,7 +12,7 @@
       "anchor": "hexcasting:get_caster",
       "input": "",
       "output": "entity",
-      "text": "Adds me, the caster, to the stack."
+      "text": "hexcasting.page.basics_pattern1"
     },
     {
       "type": "hexcasting:pattern",
@@ -21,7 +21,7 @@
       "anchor": "OpEntityPos",
       "input": "entity",
       "output": "vector",
-      "text": "Transforms an entity on the stack into its position.",
+      "text": "hexcasting.page.basics_pattern2",
       "patterns": [
         {
           "startdir": "SOUTH_WEST",
@@ -40,7 +40,7 @@
       "anchor": "hexcasting:get_entity_look",
       "input": "entity",
       "output": "vector",
-      "text": "Transforms an entity on the stack into the direction it's looking in, as a unit vector."
+      "text": "hexcasting.page.basics_pattern3"
     },
     {
       "type": "hexcasting:pattern",
@@ -48,7 +48,7 @@
       "anchor": "hexcasting:print",
       "input": "any",
       "output": "any",
-      "text": "Displays the top iota of the stack to me."
+      "text": "hexcasting.page.basics_pattern4"
     },
     {
       "type": "hexcasting:pattern",
@@ -56,11 +56,11 @@
       "anchor": "hexcasting:raycast",
       "input": "vector, vector",
       "output": "vector",
-      "text": "Combines two vectors (a position and a direction) into the answer to the question: If I stood at the position and looked in the direction, what block would I be looking at?"
+      "text": "hexcasting.page.basics_pattern5"
     },
     {
       "type": "patchouli:text",
-      "text": "If it doesn't hit anything, the vectors will combine into Null.$(br2)For example, casting this with my own position and look vectors will return the coordinates of the block I am looking at."
+      "text": "hexcasting.page.basics_pattern6"
     },
     {
       "type": "hexcasting:pattern",
@@ -68,11 +68,11 @@
       "anchor": "hexcasting:raycast/axis",
       "input": "vector, vector",
       "output": "vector",
-      "text": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation$(/l), but instead returns a vector representing the answer to the question: Which $(italic)side/$ of the block am I looking at?"
+      "text": "hexcasting.page.basics_pattern7"
     },
     {
       "type": "patchouli:text",
-      "text": "More specifically, it returns the $(italic)normal vector/$ of the face hit, or a vector with length 1 pointing perpendicular to the face.$(li)If I am looking at a floor, it will return (0, 1, 0).$(li)If I am looking at the south face of a block, it will return (0, 0, 1).$(br)"
+      "text": "hexcasting.page.basics_pattern8"
     },
     {
       "type": "hexcasting:pattern",
@@ -80,7 +80,7 @@
       "anchor": "hexcasting:raycast/entity",
       "input": "vector, vector",
       "output": "entity",
-      "text": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation$(/l), but instead returns the $(italic)entity/$ I am looking at."
+      "text": "hexcasting.page.basics_pattern9"
     }
   ]
 }
