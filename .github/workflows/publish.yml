@@ -1,9 +1,10 @@
 name: Publish tag
 on:
-  push
+  push:
+    tags:
+      - 'v*'
 jobs:
   build:
-    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     env:
       TAG_NAME: ${{ github.ref_name }}
