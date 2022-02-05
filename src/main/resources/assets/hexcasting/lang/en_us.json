@@ -307,45 +307,69 @@
   "hexcasting.page.staff1": "A $(item)Staff/$ is my entry point into casting all _Hexes, large and small. By holding it and pressing $(thing)$(k:use)/$, I begin casting a _Hex; then I can click and drag to draw patterns.$(br2)It's little more than a chunk of _media on the end of a stick; that's all that's needed, after all.",
   "hexcasting.page.staff2": "$(italic)Don't fight; flame, light; ignite; burn bright./$",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.create_lava": "",
+  "hexcasting.page.create_lava1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.flight": "",
+  "hexcasting.page.flight1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.greater_sentinel": "",
+  "hexcasting.page.greater_sentinel1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.teleport": "",
+  "hexcasting.page.teleport1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.weather_manip": "",
+  "hexcasting.page.weather_manip1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.zeniths": "",
+  "hexcasting.page.zeniths1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.basic_spell": "",
+  "hexcasting.page.basic_spell1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.blockworks": "",
+  "hexcasting.page.blockworks1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.colorize": "",
+  "hexcasting.page.colorize1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.hexcasting_spell": "",
+  "hexcasting.page.hexcasting_spell1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.itempicking": "",
+  "hexcasting.page.itempicking1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.nadirs": "",
+  "hexcasting.page.nadirs1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.basics_pattern": "",
+  "hexcasting.page.basics_pattern1": "",
 
-  "hexcasting.entry.
-  "hexcasting.page.
+  "hexcasting.entry.consts": "",
+  "hexcasting.page.consts1": "",
+
+  "hexcasting.entry.entities": "",
+  "hexcasting.page.entities1": "",
+
+  "hexcasting.entry.lists": "",
+  "hexcasting.page.lists1": "",
+
+  "hexcasting.entry.math": "",
+  "hexcasting.page.math1": "",
+
+  "hexcasting.entry.meta": "",
+  "hexcasting.page.meta1": "",
+
+  "hexcasting.entry.numbers": "",
+  "hexcasting.page.numbers1": "",
+
+  "hexcasting.entry.readers_guide": "",
+  "hexcasting.page.readers_guide1": "",
+
+  "hexcasting.entry.sentinels": "",
+  "hexcasting.page.sentinels1": "",
+
+  "hexcasting.entry.stackmanip": "",
+  "hexcasting.page.stackmanip1": "",
 }
