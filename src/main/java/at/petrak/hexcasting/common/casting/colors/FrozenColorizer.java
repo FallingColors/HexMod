@@ -77,13 +77,13 @@ public record FrozenColorizer(Item item, UUID owner) {
     }
 
     private static int morphBetweenColors(int[] colors, Vec3 gradientDir, float time, Vec3 position) {
-        float fIdx = ((time + (float) gradientDir.dot(position)) % 1f) * colors.length;
+        float fIdx = Mth.positiveModulo(time + (float) gradientDir.dot(position), 1f) * colors.length;
 
         int baseIdx = Mth.floor(fIdx);
         float tRaw = fIdx - baseIdx;
 //        float t = -(float) (Math.cbrt(Mth.cos(tRaw * Mth.PI)) / 2) + 0.5f;
         float t = tRaw;
-        int start = colors[baseIdx];
+        int start = colors[baseIdx % colors.length];
         int end = colors[(baseIdx + 1) % colors.length];
 
         var r1 = FastColor.ARGB32.red(start);
