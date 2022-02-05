@@ -1,0 +1,22 @@
+name: Java CI with Gradle
+on:
+  [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+      - uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
+        with:
+          name: Package
+          path: build/libs

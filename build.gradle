@@ -21,6 +21,11 @@ version = '0.5.0-dev.5'
 group = 'at.petra-k.hexcasting' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'hexcasting'
 
+if (System.getenv('TAG_NAME') != null) {
+    version = System.getenv('TAG_NAME').substring(1)
+    println 'Version overridden to tag version ' + version
+}
+
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
