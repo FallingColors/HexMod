@@ -1,5 +1,5 @@
 {
-    "name": "",
+    "name": "hexcasting.entry.mishaps",
     "category": "hexcasting:casting",
     "icon": "minecraft:textures/mob_effect/poison.png",
     "priority": "true",
