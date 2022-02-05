@@ -307,23 +307,29 @@
   "hexcasting.page.staff1": "A $(item)Staff/$ is my entry point into casting all _Hexes, large and small. By holding it and pressing $(thing)$(k:use)/$, I begin casting a _Hex; then I can click and drag to draw patterns.$(br2)It's little more than a chunk of _media on the end of a stick; that's all that's needed, after all.",
   "hexcasting.page.staff2": "$(italic)Don't fight; flame, light; ignite; burn bright./$",
 
-  "hexcasting.entry.create_lava": "",
-  "hexcasting.page.create_lava1": "",
+  "hexcasting.page.create_lava1": "Summon a block of lava or insert a bucket's worth into a block at the given position. Costs about one $(item)Charged Amethyst/$.",
 
-  "hexcasting.entry.flight": "",
-  "hexcasting.page.flight1": "",
+  "hexcasting.page.flight1": "The power of flight! I have wrestled Nature to its knees. But Nature is vengeful, and itches for me to break its contract so it may break my shins.",
+  "hexcasting.page.flight2": "The entity (which must be a player) will be endowed with flight. The first number is the number of seconds they may fly for, and the second number is the radius of the zone they may fly in. If the recipient exits that zone, or their timer runs out while midair, the gravity that they spurned will get its revenge. Painfully.$(br2)It costs approximately 1 $(item)Amethyst Dust/$ multiplied by the radius, per second of flight.",
 
-  "hexcasting.entry.greater_sentinel": "",
-  "hexcasting.page.greater_sentinel1": "",
+  "hexcasting.page.greater_sentinel1": "Summon a greater version of my $(l:patterns/sentinels)$(thing)Sentinel/$. Costs about 2 $(item)Amethyst Dust/$s.",
+  "hexcasting.page.greater_sentinel2": "The stronger sentinel acts like the normal one I can summon without the use of a Great Spell, if a little more visually interesting. However, the range in which my spells can work is extended to a small region around my greater sentinel, about 16 blocks. In other words, no matter where in the world I am, I can interact with things around my sentinel (the mysterious forces of chunkloading notwithstanding).",
 
-  "hexcasting.entry.teleport": "",
-  "hexcasting.page.teleport1": "",
+  "hexcasting.page.teleport1": "Far more powerful than $(l:patterns/spells/basic#OpBlink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to.",
+  "hexcasting.page.teleport2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(item)Charged Crystal/$s.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached.",
 
-  "hexcasting.entry.weather_manip": "",
-  "hexcasting.page.weather_manip1": "",
+  "hexcasting.entry.weather_manip": "Weather Manipulation",
+  "hexcasting.page.weather_manip1": "I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it. Costs about 3 $(item)Amethyst Shard/$s.",
+  "hexcasting.page.weather_manip2": "I control the clouds! This spell will summon rain across the world I cast it upon. Costs about 2 $(item)Amethyst Shard/$s. Does nothing if it is already raining.",
+  "hexcasting.page.weather_manip3": "A counterpart to summoning rain. This spell will dispel rain across the world I cast it upon. Costs about 1 $(item)Amethyst Shard/$. Does nothing if the skies are already clear.",
 
-  "hexcasting.entry.zeniths": "",
-  "hexcasting.page.zeniths1": "",
+  "hexcasting.entry.zeniths": "Zeniths",
+  "hexcasting.page.zeniths1": "This family of spells all impart a positive potion effect upon an entity.$(br2)See the $(l:patterns/spells/nadirs)$(action)Nadirs/$ for more information.",
+  "hexcasting.page.zeniths2": "Bestows regeneration. Base cost is one $(item)Amethyst Dust/$ per second.",
+  "hexcasting.page.zeniths3": "Bestows night vision. Base cost is one $(item)Amethyst Dust/$ per 5 seconds.",
+  "hexcasting.page.zeniths4": "Bestows absorption. Base cost is one $(item)Amethyst Dust/$ per second.",
+  "hexcasting.page.zeniths5": "Bestows haste. Base cost is one $(item)Amethyst Dust/$ per 3 seconds.",
+  "hexcasting.page.zeniths6": "Bestows strength. Base cost is one $(item)Amethyst Dust/$ per 3 seconds.",
 
   "hexcasting.entry.basic_spell": "",
   "hexcasting.page.basic_spell1": "",
