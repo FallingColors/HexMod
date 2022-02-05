@@ -1,7 +1,0 @@
-{
-  "name": "Spreuken",
-  "icon": "minecraft:textures/item/enchanted_book.png",
-  "description": "Patronen en acties die magische effecten op de wereld uitoefenen.",
-  "parent": "hexcasting:patterns",
-  "sortnum": 0
-}
