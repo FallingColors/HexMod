@@ -56,6 +56,12 @@ object OpFlight : SpellOperator {
             cap.flightTime = time
             cap.radius = radius
             cap.origin = origin
+
+            target.abilities.mayfly = true
+            target.abilities.flying = true
+            // Launch the player into the air to really emphasize the flight
+            HexMessages.getNetwork()
+                .send(PacketDistributor.PLAYER.with { target }, MsgAddMotionAck(Vec3(0.0, 1.0, 0.0)))
         }
     }
 

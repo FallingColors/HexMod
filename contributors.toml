@@ -5,15 +5,12 @@
 # Also we use UUID keys, this way we can just store the UUID with a block.
 # https://gameplay.tools/minecraft/uuid
 
+# == Devs ==
+
 # petra_the_kat
 ["a2ce9382-2518-4752-87b2-c6a5c97f173e"]
 # colorizer = [0xebad1c, 0xc7c7bd, 0x7c2e94, 0x2e060f]
-colorizer = [15445276, 13092797, 8137012, 3016207]
-
-# Hudeler
-["23978392-a78c-49cf-9f52-35a151fd4083"]
-#colorizer = [0x825ec2]
-colorizer = [8543938]
+colorizer = [15445276, 13092797, 8138388, 3016207]
 
 # AmyMialee
 ["2793cdc6-7710-4e7e-9d81-cf918e067729"]
@@ -30,13 +27,52 @@ colorizer = [3352547]
 #colorizer = [0x92a1ff, 0x6b7fff]
 colorizer = [9609727, 7045119]
 
+# Hubry
+["b0a26f6b-d951-4b65-b824-b164b9bc4b90"]
+colorizer = [1107984, 15302143, 3407871]
+
+# Dev (the forge dummy player)
+["380df991-f603-344c-a090-369bad2a924a"]
+# 0xff0000 0x00ff00 0x0000ff
+# For testing purposes
+colorizer = [16711680, 65280, 255]
+
+# Todo:
+# Jane (also get her IGN)
+# Falkory
+
+# == Cool People ==
+
+# Hudeler
+["23978392-a78c-49cf-9f52-35a151fd4083"]
+#colorizer = [0x825ec2]
+colorizer = [8543938]
+
 # nbyzantine
 ["e055cae1-dd93-42b7-abad-8f2dc758a9f2"]
 # dfe0e8 f2da00 e66910 383138
 colorizer = [14672104, 15915520, 15100176, 3682616]
 
-# Dev
-["380df991-f603-344c-a090-369bad2a924a"]
-# 0xff0000 0x00ff00 0x0000ff
-# For testing purposes
-colorizer = [16711680, 65280, 255]
+# Todo:
+# wiresegal
+# SleepyEmber
+
+# == Quote Contest Winners ==
+
+# Ical92
+["d682d4df-e2eb-4b62-b41e-23becc7e01e5"]
+# cf0a8a
+colorizer = [13568650]
+
+# Goldgamesav
+["b34b707a-8429-4dbd-a7a2-a208cf2268b8"]
+# ff3939 ffd543 fffc43 ffffe3
+colorizer = [16726329, 16766275, 16776259, 16777187]
+
+# WildOats
+["968e572c-a6c1-4963-8399-0c64abd3820e"]
+colorizer = [6230410, 4267448]
+
+# Todo:
+# taswin
+# MacyMacerator
