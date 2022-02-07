@@ -1,5 +1,5 @@
 {
-    "name": "Entities",
+    "name": "hexcasting.entry.entities",
     "category": "hexcasting:patterns",
     "icon": "minecraft:pig_spawn_egg",
     "sortnum": 4,
@@ -12,7 +12,7 @@
             "anchor": "hexcasting:get_entity",
             "input": "vector",
             "output": "entity or null",
-            "text": "Transform the position on the stack into the entity at that location (or null if there isn't one)."
+            "text": "hexcasting.page.entities1"
         },
         {
             "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
             "anchor": "hexcasting:get_entity/animal",
             "input": "vector",
             "output": "entity or null",
-            "text": "Transform the position on the stack into the animal at that location (or null if there isn't one)."
+            "text": "hexcasting.page.entities2"
         },
         {
             "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
             "anchor": "hexcasting:get_entity/monster",
             "input": "vector",
             "output": "entity or null",
-            "text": "Transform the position on the stack into the monster at that location (or null if there isn't one)."
+            "text": "hexcasting.page.entities3"
         },
         {
             "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
             "anchor": "hexcasting:get_entity/item",
             "input": "vector",
             "output": "entity or null",
-            "text": "Transform the position on the stack into the dropped item at that location (or null if there isn't one)."
+            "text": "hexcasting.page.entities4"
         },
         {
             "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
             "anchor": "hexcasting:get_entity/player",
             "input": "vector",
             "output": "entity or null",
-            "text": "Transform the position on the stack into the player at that location (or null if there isn't one)."
+            "text": "hexcasting.page.entities5"
         },
         {
             "type": "hexcasting:pattern",
@@ -52,7 +52,7 @@
             "anchor": "hexcasting:get_entity/living",
             "input": "vector",
             "output": "entity or null",
-            "text": "Transform the position on the stack into the living creature at that location (or null if there isn't one)."
+            "text": "hexcasting.page.entities6"
         },
         {
             "type": "hexcasting:pattern",
@@ -60,7 +60,7 @@
             "anchor": "hexcasting:zone_entity/animal",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of animals near the position."
+            "text": "hexcasting.page.entities7"
         },
         {
             "type": "hexcasting:pattern",
@@ -68,7 +68,7 @@
             "anchor": "hexcasting:zone_entity/not_animal",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-animal entities near the position."
+            "text": "hexcasting.page.entities8"
         },
         {
             "type": "hexcasting:pattern",
@@ -76,7 +76,7 @@
             "anchor": "hexcasting:zone_entity/monster",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of monsters near the position."
+            "text": "hexcasting.page.entities9"
         },
         {
             "type": "hexcasting:pattern",
@@ -84,7 +84,7 @@
             "anchor": "hexcasting:zone_entity/not_monster",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-monster entities near the position."
+            "text": "hexcasting.page.entities10"
         },
         {
             "type": "hexcasting:pattern",
@@ -92,7 +92,7 @@
             "anchor": "hexcasting:zone_entity/item",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of dropped items near the position."
+            "text": "hexcasting.page.entities11"
         },
         {
             "type": "hexcasting:pattern",
@@ -100,7 +100,7 @@
             "anchor": "hexcasting:zone_entity/not_item",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-dropped-item entities near the position."
+            "text": "hexcasting.page.entities12"
         },
         {
             "type": "hexcasting:pattern",
@@ -108,7 +108,7 @@
             "anchor": "hexcasting:zone_entity/player",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of players near the position."
+            "text": "hexcasting.page.entities13"
         },
         {
             "type": "hexcasting:pattern",
@@ -116,7 +116,7 @@
             "anchor": "hexcasting:zone_entity/not_player",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-player characters near the position."
+            "text": "hexcasting.page.entities14"
         },
         {
             "type": "hexcasting:pattern",
@@ -124,7 +124,7 @@
             "anchor": "hexcasting:zone_entity/living",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of living creatures near the position."
+            "text": "hexcasting.page.entities15"
         },
         {
             "type": "hexcasting:pattern",
@@ -132,7 +132,7 @@
             "anchor": "hexcasting:zone_entity/not_living",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of non-living entities near the position."
+            "text": "hexcasting.page.entities16"
         },
         {
             "type": "hexcasting:pattern",
@@ -140,7 +140,7 @@
             "anchor": "hexcasting:zone_entity",
             "input": "vector, number",
             "output": "list of entities",
-            "text": "$(br)Take a position and maximum distance on the stack, and combine them into a list of all entities near the position."
+            "text": "hexcasting.page.entities17"
         }
     ]
 }

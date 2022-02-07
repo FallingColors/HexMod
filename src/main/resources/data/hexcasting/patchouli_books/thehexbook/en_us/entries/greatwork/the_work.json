@@ -1,5 +1,5 @@
 {
-    "name": "The Work",
+    "name": "hexcasting.entry.the_work",
     "category": "hexcasting:greatwork",
     "icon": "minecraft:nether_star",
     "priority": true,
@@ -8,11 +8,11 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "I have seen so many things. Unspeakable things. Innumerable things. I could write three words and turn my mind inside-out and smear my brains across the shadowed walls of my skull to decay into fluff and nothing."
+            "text": "hexcasting.page.the_work1"
         },
         {
             "type": "patchouli:text",
-            "text": "I have seen staccato-needle patterns and acrid-etched schematics written to the inside of my eyelids. They smolder there, dancing, taunting, aching. I am possessed by an intense need to draw them, create them, form them, liberate them from the gluey shackles of my mortal mind, present them in their Glory to the world so all can see them. All will see. All will see."
+            "text": "hexcasting.page.the_work2"
         }
     ]
 }

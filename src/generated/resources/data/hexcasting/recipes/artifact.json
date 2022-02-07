@@ -12,50 +12,9 @@
     "A": {
       "item": "hexcasting:charged_amethyst"
     },
-    "D": [
-      {
-        "item": "minecraft:music_disc_11"
-      },
-      {
-        "item": "minecraft:music_disc_13"
-      },
-      {
-        "item": "minecraft:music_disc_cat"
-      },
-      {
-        "item": "minecraft:music_disc_chirp"
-      },
-      {
-        "item": "minecraft:music_disc_far"
-      },
-      {
-        "item": "minecraft:music_disc_blocks"
-      },
-      {
-        "item": "minecraft:music_disc_mall"
-      },
-      {
-        "item": "minecraft:music_disc_mellohi"
-      },
-      {
-        "item": "minecraft:music_disc_otherside"
-      },
-      {
-        "item": "minecraft:music_disc_pigstep"
-      },
-      {
-        "item": "minecraft:music_disc_stal"
-      },
-      {
-        "item": "minecraft:music_disc_strad"
-      },
-      {
-        "item": "minecraft:music_disc_wait"
-      },
-      {
-        "item": "minecraft:music_disc_ward"
-      }
-    ]
+    "D": {
+      "tag": "minecraft:music_discs"
+    }
   },
   "result": {
     "item": "hexcasting:artifact"

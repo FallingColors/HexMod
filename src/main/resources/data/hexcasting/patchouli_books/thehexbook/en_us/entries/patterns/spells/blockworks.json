@@ -1,5 +1,5 @@
 {
-  "name": "Blockworks",
+  "name": "hexcasting.entry.blockworks",
   "category": "hexcasting:patterns/spells",
   "icon": "minecraft:cobblestone",
   "sortnum": 1,
@@ -12,7 +12,7 @@
       "anchor": "hexcasting:place_block",
       "input": "vector",
       "output": "",
-      "text": "Remove a location from the stack, then pick a block item and place it at the given location.$(br)Costs about 1 $(item)Amethyst Dust/$."
+      "text": "hexcasting.page.blockworks1"
     },
     {
       "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
       "anchor": "hexcasting:break_block",
       "input": "vector",
       "output": "",
-      "text": "Remove a location from the stack, then break the block at the given location. This spell can break nearly anything a Diamond Pickaxe can break.$(br)Costs about 3 $(item)Amethyst Dust/$s."
+      "text": "hexcasting.page.blockworks2"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
       "anchor": "hexcasting:create_water",
       "input": "vector",
       "output": "",
-      "text": "Summon a block of water or insert a bucket's worth into a block at the given position. Costs about one $(item)Amethyst Dust/$."
+      "text": "hexcasting.page.blockworks3"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:destroy_water",
       "input": "vector",
       "output": "",
-      "text": "Destroy a great deal of water around the given position. Costs about two $(item)Amethyst Crystal/$s."
+      "text": "hexcasting.page.blockworks4"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
       "anchor": "hexcasting:conjure_block",
       "input": "vector",
       "output": "",
-      "text": "Conjure a barrier, using my colorizer. Costs about one $(item)Amethyst Dust/$."
+      "text": "hexcasting.page.blockworks5"
     },
     {
       "type": "hexcasting:pattern",
@@ -52,7 +52,7 @@
       "anchor": "hexcasting:conjure_light",
       "input": "vector",
       "output": "",
-      "text": "Conjure a magical light, using my colorizer. Costs about one $(item)Amethyst Dust/$."
+      "text": "hexcasting.page.blockworks6"
     },
     {
       "type": "hexcasting:pattern",
@@ -60,7 +60,7 @@
       "anchor": "hexcasting:bonemeal",
       "input": "vector",
       "output": "",
-      "text": "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs about one $(item)Amethyst Dust/$."
+      "text": "hexcasting.page.blockworks7"
     }
   ]
 }

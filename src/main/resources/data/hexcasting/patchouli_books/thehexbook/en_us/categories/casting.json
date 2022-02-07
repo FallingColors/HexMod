@@ -1,6 +1,6 @@
 {
-  "name": "Hex Casting",
+  "name": "hexcasting.entry.casting",
   "icon": "hexcasting:wand",
-  "description": "I've started to understand how the old masters cast their Hexes! It's a bit complicated, but I'm sure I can figure it out. Let's see...",
+  "description": "hexcasting.page.casting1",
   "sortnum": 1
 }

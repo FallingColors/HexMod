@@ -1,5 +1,5 @@
 {
-  "name": "Pigments",
+  "name": "hexcasting.entry.pigments",
   "category": "hexcasting:items",
   "icon": "hexcasting:uuid_colorizer",
   "sortnum": 5,
@@ -8,16 +8,16 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Although the names of the old practitioners of my art were lost to time, they were often known for a color, emblematic of them and their spells. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in color.\""
+      "text": "hexcasting.page.pigments1"
     },
     {
       "type": "patchouli:text",
-      "text": "I'm not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use one, I hold it in my other hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$, which will consume the pigment and mark my mind with that color.$(br2)The pigments seem to affect the color of the spare media coming out of a staff when I cast a _Hex, as well as my $(l:patterns/sentinels)$(thing)Sentinel/$."
+      "text": "hexcasting.page.pigments2"
     },
     {
       "type": "hexcasting:crafting_multi",
-      "heading": "Chromatic Colorizers",
-      "text": "Pigments all the colors of the rainbow.",
+      "heading": "hexcasting.page.pigments3header",
+      "text": "hexcasting.page.pigments3",
       "recipes": [
         "hexcasting:dye_colorizer_white",
         "hexcasting:dye_colorizer_orange",
@@ -74,7 +74,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:uuid_colorizer",
-      "text": "And finally, a pigment with a color wholly unique to me.$(br2)$(italic)And all the colors I am inside have not been invented yet./$"
+      "text": "hexcasting.page.pigments4"
     }
   ]
 }

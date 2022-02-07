@@ -1,5 +1,5 @@
 {
-  "name": "Zeniths",
+  "name": "hexcasting.entry.zeniths",
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:potion{Potion:'minecraft:regeneration'}",
   "advancement": "hexcasting:root",
@@ -8,7 +8,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "This family of spells all impart a positive potion effect upon an entity.$(br2)See the $(l:patterns/spells/nadirs)$(action)Nadirs/$ for more information."
+      "text": "hexcasting.page.zeniths1"
     },
     {
       "type": "hexcasting:pattern",
@@ -16,7 +16,7 @@
       "anchor": "hexcasting:potion/regeneration",
       "input": "entity, number, number",
       "output": "",
-      "text": "Bestows regeneration. Base cost is one $(item)Amethyst Dust/$ per second."
+      "text": "hexcasting.page.zeniths2"
     },
     {
       "type": "hexcasting:pattern",
@@ -24,7 +24,7 @@
       "anchor": "hexcasting:potion/night_vision",
       "input": "entity, number",
       "output": "",
-      "text": "Bestows night vision. Base cost is one $(item)Amethyst Dust/$ per 5 seconds."
+      "text": "hexcasting.page.zeniths3"
     },
     {
       "type": "hexcasting:pattern",
@@ -32,7 +32,7 @@
       "anchor": "hexcasting:potion/absorption",
       "input": "entity, number, number",
       "output": "",
-      "text": "Bestows absorption. Base cost is one $(item)Amethyst Dust/$ per second."
+      "text": "hexcasting.page.zeniths4"
     },
     {
       "type": "hexcasting:pattern",
@@ -40,7 +40,7 @@
       "anchor": "hexcasting:potion/haste",
       "input": "entity, number, number",
       "output": "",
-      "text": "Bestows haste. Base cost is one $(item)Amethyst Dust/$ per 3 seconds."
+      "text": "hexcasting.page.zeniths5"
     },
     {
       "type": "hexcasting:pattern",
@@ -48,7 +48,7 @@
       "anchor": "hexcasting:potion/strength",
       "input": "entity, number, number",
       "output": "",
-      "text": "Bestows strength. Base cost is one $(item)Amethyst Dust/$ per 3 seconds."
+      "text": "hexcasting.page.zeniths6"
     }
   ]
 }

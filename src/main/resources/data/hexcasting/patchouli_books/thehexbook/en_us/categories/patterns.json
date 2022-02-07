@@ -1,6 +1,6 @@
 {
-    "name": "Patterns",
+    "name": "hexcasting.entry.patterns",
     "icon": "minecraft:bookshelf",
-    "description": "A list of all the patterns in the mod.",
+    "description": "hexcasting.page.patterns1",
     "sortnum": 100
 }

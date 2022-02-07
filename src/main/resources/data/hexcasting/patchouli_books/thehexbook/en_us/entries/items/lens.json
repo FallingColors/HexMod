@@ -1,5 +1,5 @@
 {
-  "name": "Scrying Lens",
+  "name": "hexcasting.entry.lens",
   "icon": "hexcasting:lens",
   "category": "hexcasting:items",
   "advancement": "hexcasting:root",
@@ -7,12 +7,12 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "This curiosity is in a strange, transitory state. Not too long ago, it allowed me to see the iotas on my stack, but now it seems I have that ability without the assistance of a lens.$(br2)I best keep my old ones around, though-- I have the feeling they will have use in the future."
+      "text": "hexcasting.page.lens1"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:lens",
-      "text": "$(italic)You must learn... to see what you are looking at./$"
+      "text": "hexcasting.page.lens2"
     }
   ]
 }

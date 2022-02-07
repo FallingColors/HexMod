@@ -12,7 +12,7 @@
       "anchor": "hexcasting:create_lava",
       "input": "vector",
       "output": "",
-      "text": "Summon a block of lava or insert a bucket's worth into a block at the given position. Costs about one $(item)Charged Amethyst/$."
+      "text": "hexcasting.page.create_lava1"
     }
   ]
 }

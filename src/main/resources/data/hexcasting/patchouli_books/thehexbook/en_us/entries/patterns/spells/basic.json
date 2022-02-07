@@ -1,5 +1,5 @@
 {
-  "name": "Basic Spells",
+  "name": "hexcasting.entry.basic_spell",
   "category": "hexcasting:patterns/spells",
   "icon": "minecraft:bookshelf",
   "sortnum": 0,
@@ -12,11 +12,11 @@
       "anchor": "hexcasting:explode",
       "input": "vector, number",
       "output": "",
-      "text": "Remove a number and vector from the stack, then create an explosion at the given location with the given power."
+      "text": "hexcasting.page.basic_spell1"
     },
     {
       "type": "patchouli:text",
-      "text": "A power of 3 is about as much as a Creeper's blast; 4 is about as much as a TNT blast. Nature refuses to give me a blast of more than 10 power, though.$(br2)Costs about one $(item)Amethyst Shard/$, plus an extra $(item)Amethyst Shard/$ per point of explosion power."
+      "text": "hexcasting.page.basic_spell2"
     },
     {
       "type": "hexcasting:pattern",
@@ -24,11 +24,11 @@
       "anchor": "hexcasting:explode/fire",
       "input": "vector, number",
       "output": "",
-      "text": "Remove a number and vector from the stack, then create a fiery explosion at the given location with the given power."
+      "text": "hexcasting.page.basic_spell3"
     },
     {
       "type": "patchouli:text",
-      "text": "Costs three $(item)Amethyst Shards/$, plus about one extra $(item)Amethyst Shard/$ per point of explosion power. Otherwise, the same as $(l:hexcasting:patterns/spells/basic#OpExplode)$(action)Explosion/$, except with fire."
+      "text": "hexcasting.page.basic_spell4"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:add_motion",
       "input": "entity, vector",
       "output": "",
-      "text": "Remove an entity and direction from the stack, then give a push to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(item)Amethyst Dust/$ proportional to the square of the length of the vector; thus a push vector of length 5 would consume five $(item)Amethyst Shards$(0) or equivalent."
+      "text": "hexcasting.page.basic_spell5"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
       "anchor": "hexcasting:blink",
       "input": "entity, number",
       "output": "",
-      "text": "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about 1 $(item)Amethyst Shard/$s times the the distance teleported."
+      "text": "hexcasting.page.basic_spell6"
     }
   ]
 }

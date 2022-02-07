@@ -1,5 +1,5 @@
 {
-    "name": "Stack Manipulation",
+    "name": "hexcasting.entry.stackmanip",
     "category": "hexcasting:patterns",
     "icon": "minecraft:piston",
     "sortnum": 3,
@@ -12,7 +12,7 @@
             "anchor": "hexcasting:undo",
             "input": "any",
             "output": "",
-            "text": "Removes the top of the stack and does nothing with it. This is handy when I make a mistake."
+            "text": "hexcasting.page.stackmanip1"
         },
         {
             "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
             "anchor": "hexcasting:duplicate",
             "input": "any",
             "output": "any, any",
-            "text": "Duplicates the top iota of the stack."
+            "text": "hexcasting.page.stackmanip2"
         },
         {
             "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
             "anchor": "hexcasting:swap",
             "input": "any, any",
             "output": "any, any",
-            "text": "Swaps the top two iotas of the stack."
+            "text": "hexcasting.page.stackmanip3"
         },
         {
             "type": "patchouli:empty"
@@ -39,11 +39,11 @@
             "anchor": "hexcasting:fisherman",
             "input": "num",
             "output": "any",
-            "text": "Grabs the nth element in the stack and brings it to the top."
+            "text": "hexcasting.page.stackmanip4"
         },
         {
             "type": "patchouli:text",
-            "text": "The Fisherman's Gambit takes a number and reaches that far $(italic)down/$ the stack-- pulling it from its original position up to the top of the stack. For example, using the Gambit with the number 2 will pull the second item on the stack to the top, effectively acting as a more-cumbersome Jester's Gambit. Using the Gambit with a negative number, a fraction, or a length larger than the stack will dredge all sorts of unknowable patterns from the aether, and is liable to cause a mishap."
+            "text": "hexcasting.page.stackmanip5"
         }
     ]
 }

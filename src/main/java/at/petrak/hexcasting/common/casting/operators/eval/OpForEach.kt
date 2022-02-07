@@ -4,12 +4,16 @@ import at.petrak.hexcasting.api.OperationResult
 import at.petrak.hexcasting.api.Operator
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.CastingHarness
 import at.petrak.hexcasting.common.casting.OperatorSideEffect
 
 object OpForEach : Operator {
     override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+        if (stack.size < 2)
+            throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, 2, stack.size)
+
         val instrs: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex - 1)
         val datums: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
