@@ -30,7 +30,13 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val type: Class<T>, val cost: I
     private data class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
-            if (otherHandItem.item is ItemPackagedSpell && !otherHandItem.hasTag() && itemEntity.isAlive) {
+            val tag = otherHandItem.orCreateTag
+            if (otherHandItem.item is ItemPackagedSpell
+                && !tag.contains(ItemPackagedSpell.TAG_MANA)
+                && !tag.contains(ItemPackagedSpell.TAG_START_MANA)
+                && !tag.contains(ItemPackagedSpell.TAG_PATTERNS)
+                && itemEntity.isAlive
+            ) {
                 val manaAmt = ManaHelper.extractAllMana(itemEntity.item)
                 if (manaAmt != null) {
                     val tag = otherHandItem.orCreateTag
