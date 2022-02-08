@@ -8,9 +8,11 @@ import at.petrak.hexcasting.common.casting.Widget
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.SelectorComponent
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
+import java.util.*
 
 /**
  * Data allowed into a spell.
@@ -73,40 +75,43 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             append(']')
         }
 
-    fun display(): Component = TextComponent(buildString {
+    fun display(): Component =
         when (val pl = this@SpellDatum.payload) {
             is List<*> -> {
-                append("[")
+                val out = TextComponent("[")
                 for ((i, v) in pl.withIndex()) {
-                    append((v as SpellDatum<*>).display().contents)
+                    out.append((v as SpellDatum<*>).display())
                     if (i != pl.lastIndex) {
-                        append(", ")
+                        out.append(", ")
                     }
                 }
-                append("]")
+                out.append("]")
+                out
             }
             is Vec3 -> {
-                append(String.format("(%.2f, %.2f, %.2f)", pl.x, pl.y, pl.z))
+                TextComponent(String.format("§c(%.2f, %.2f, %.2f)§r", pl.x, pl.y, pl.z))
             }
             is Double -> {
-                append(String.format("%.4f", pl))
+                TextComponent(String.format("§a%.4f§r", pl))
             }
             is HexPattern -> {
-                append("HexPattern(")
-                append(pl.startDir)
-                append(" ")
-                append(pl.anglesSignature())
-                append(")")
+                val out = TextComponent("§6HexPattern")
+                out.append(pl.startDir.toString())
+                out.append(" ")
+                out.append(pl.anglesSignature())
+                out.append(")§r")
+                out
             }
             is Entity -> {
-                append(pl.displayName.string)
+                SelectorComponent(pl.uuid.toString(), Optional.empty())
             }
             Widget.GARBAGE -> {
-                append("§karimfexendrapuse§r")
+                TextComponent("§8§karimfexendrapuse§r")
             }
-            else -> append(pl.toString())
+            is Widget -> TextComponent("§d$pl§r")
+            else -> TextComponent("bad type? $pl")
         }
-    })
+
 
     companion object {
         @JvmStatic
