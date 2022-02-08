@@ -1,0 +1,372 @@
+From 8be74616a1ca6f7c0879d92b3e347a40edf3c572 Mon Sep 17 00:00:00 2001
+From: Alwinfy <20421383+Alwinfy@users.noreply.github.com>
+Date: Mon, 31 Jan 2022 22:16:52 -0500
+Subject: [PATCH] Proofread pass 2: Electric boogaloo
+
+---
+ .../en_us/categories/patterns/great_spells.json        |  2 +-
+ .../thehexbook/en_us/entries/basics/couldnt_cast.json  |  8 ++++----
+ .../thehexbook/en_us/entries/basics/start_to_see.json  |  8 ++++----
+ .../thehexbook/en_us/entries/casting/101.json          |  4 ++--
+ .../thehexbook/en_us/entries/casting/influences.json   |  4 ++--
+ .../thehexbook/en_us/entries/casting/mishaps.json      |  4 ++--
+ .../thehexbook/en_us/entries/casting/naming.json       |  2 +-
+ .../en_us/entries/casting/patterns_as_iotas.json       | 10 +++++-----
+ .../thehexbook/en_us/entries/casting/stack.json        |  2 +-
+ .../thehexbook/en_us/entries/greatwork/the_work.json   |  4 ++--
+ .../thehexbook/en_us/entries/items/pigments.json       |  4 ++--
+ .../thehexbook/en_us/entries/patterns/basics.json      |  2 +-
+ .../thehexbook/en_us/entries/patterns/meta.json        |  2 +-
+ .../thehexbook/en_us/entries/patterns/sentinels.json   |  6 +++---
+ .../en_us/entries/patterns/spells/basic.json           |  2 +-
+ .../en_us/entries/patterns/spells/blockworks.json      |  2 +-
+ .../en_us/entries/patterns/spells/colorize.json        |  2 +-
+ .../en_us/entries/patterns/spells/nadirs.json          |  2 +-
+ 18 files changed, 35 insertions(+), 35 deletions(-)
+
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/categories/patterns/great_spells.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/categories/patterns/great_spells.json
+index 1bd1cfc..8f8db87 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/categories/patterns/great_spells.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/categories/patterns/great_spells.json
+@@ -1,7 +1,7 @@
+ {
+   "name": "Great Spells",
+   "icon": "minecraft:textures/mob_effect/conduit_power.png",
+-  "description": "The spells catalogued here are purported to be of legendary difficulty and power, scarcely recorded (and for good reason). It's probably just traditionalists' hogwash, though-- a pattern's a pattern. What could go wrong?",
++  "description": "The spells catalogued here are purported to be of legendary difficulty and power. They seem to have been recorded only sparsely (for good reason, the texts claim). It's probably just the hogwash of extinct traditionalists, though-- a pattern's a pattern. What could possibly go wrong?",
+   "parent": "hexcasting:patterns",
+   "sortnum": 1
+ }
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/couldnt_cast.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/couldnt_cast.json
+index e4d9498..69ea8df 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/couldnt_cast.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/couldnt_cast.json
+@@ -8,19 +8,19 @@
+   "pages": [
+     {
+       "type": "patchouli:text",
+-      "text": "ARGH! Why won't it let me cast the spell?!$(br2)The scroll I found rings with authenticity. I can feel it, right there. The pattern is true. The spell is RIGHT THERE on the other side of some membrane, and it tried to come over but it COULD NOT."
++      "text": "Argh! Why won't it let me cast the spell?!$(br2)The scroll I found rings with authenticity. I can $(italic)feel/$ it humming in the scroll-- the pattern is true, or as true as it can be. The spell is $(italic)right there/$.$(p)But it feels if it's on the other side of some thin membrane. I called it-- it tried to manifest-- yet it $(italic)couldn't/$."
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "It felt like that barrier got a $(italic)little/$ weaker from the power banging against it from the other side, but it REFUSES to cross through. It's maddening. THIS is what my studies into the arcane give me? An impotence at my crowning moment?$(br2)I should take a deep breath. I should meditate on what I have learned, even if it wasn't very much..."
++      "text": "It felt like the barrier may have weakened ever so slightly from the force that I exerted on the spell; yet despite my greatest efforts-- my deepest focus, my finest amethyst, my precisest drawings-- it $(italic)refuses/$ to cross the barrier. It's mad$(bolddening/$.$(p)$(italic)This/$ is where my arcane studies? Cursed by impotence, cursed to lose my rightful powers?$(br2)I should take a deep breath. I should meditate on what I have learned, even if it wasn't very much..."
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "I have discovered one thing. It seems ... I may have unlocked the ability, or perhaps curse, to cast spells using my health instead of $(item)amethyst/$, like I read about in those old legends. I'm not sure why I think this. It just... the truth is there, and I see it.$(br2)I even get a sense of scale; I would get approximately two $(item)Charged Amethyst/$'s worth of _media out of my health at its prime."
++      "text": "...After careful reflection... I have discovered a change in myself.$(p)It seems... in lieu of $(item)amethyst/$, I've unlocked the ability to cast spells using my own mind and life energy-- just as I read of in the legends of old.$(p)I'm not sure why I can now. It's just... the truth-knowledge-burden was always there, and I see it now. I know it. I bear it.$(br2)Fortunately, I feel my limits as well-- I would get approximately two $(item)Charged Amethyst/$'s worth of _media out of my health at its prime."
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "I shudder to think about it-- I've managed to keep my mind mostly intact so far --but there's a tenuous link here, between me and some other side. The walls have thinned from that trauma, and the glory is right there. I find myself wanting to try it."
++      "text": "I shudder to even consider it-- I've kept my mind mostly intact so far, in my studies. But the fact is-- I form one side of a tenuous link.$(p)I'm connected to some other side-- a side whose boundary has thinned from that trauma. A place where simple actions spell out eternal glory.$(p)Is it so wrong, to want it for myself?"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/start_to_see.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/start_to_see.json
+index df7e32a..695f4b5 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/start_to_see.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/start_to_see.json
+@@ -1,5 +1,5 @@
+ {
+-  "name": "WHAT DID I SEE",
++  "name": "What did I see.",
+   "category": "hexcasting:basics",
+   "icon": "minecraft:textures/mob_effect/blindness.png",
+   "priority": true,
+@@ -12,15 +12,15 @@
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "That was... one of the worst things I've experienced. I offered my plan, and Nature smiled firmly at me and ripped away a part of myself alongside my payment. I feel lucky to have $(italic)survived/$, much less have sagacity enough to write this.$(br2)I should declare the matter closed, double-check my math before I cast any more _Hexes, and make sure I have the _media I need..."
++      "text": "That... that was...$(p)...that was one of the $(italic)worst/$ things I've $(italic)ever/$ experienced. I offered my plan to Nature, and got a firm smile and a tearing sensation in return-- a piece of myself breaking away, like amethyst dust in the rain.$(p)I feel lucky to have $(italic)survived/$, much less have the sagacity to write this-- I should declare the matter closed, double-check my math before I cast any more _Hexes, and never make such a mistake again."
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "...But.$(br2)For the scarcest instant, that part of myself ... saw ... $(italic)something/$. A place, or a design perhaps-- I was abstract enough that there was no distinction. A ... membrane separating myself from a realm of raw thought and light and energy. I remember-- or, I don't remember, but I find myself thinking of --the barrier fuzzing at the edges just a little bit. I wanted $(italic)through./$"
++      "text": "...But.$(br2)But for the scarcest instant, that part of myself... it $(italic)saw/$... something. A place-- a design, perhaps? (Such distinctions didn't seem to matter in the face of... that.)$(p)And a... a membrane-barrier-skin-border, separating myself from a realm of raw thought-flow-light-energy. I remember-- I saw-thought-recalled-felt-- the barrier fuzzing at its edges, just so slightly.$(p)I wanted $(italic)through./$"
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "I know I shouldn't. It's dangerous. It's too dangerous. I'd have to bring myself within a hairsbreadth of Death.$(br2)But I'm SO CLOSE. $(italic)THIS/$ is the culmination of my art, the $(#54398a)Enlightenment/$ I've been seeking.$(br2)I need more. I need to see it again. What is the price of my mortal mind against immortal glory? Just once more... I need to see it. I WILL see it."
++      "text": "I shouldn't. I $(italic)know/$ I shouldn't. It's dangerous. It's too dangerous. I'd have to bring myself within a hair's breadth of Death itself.$(br2)But I'm. So. $(italic)Close/$.$(p)$(italic)This/$ is the culmination of my art. This is what I've been seeking. This is $(#54398a)Enlightenment/$.$(br2)I want more. I need to see it again. I $(italic)will/$ see it.$(p)What are a few petty neurons against immortal glory?"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/101.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/101.json
+index 9e07864..4c9a3d0 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/101.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/101.json
+@@ -63,11 +63,11 @@
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "I should also be careful to make sure I actually have enough Amethyst in my inventory-- if not, it seems Nature is happy to use my own mind as payment instead. The old texts describe the feeling as awful but strangely euphoric, \"[...] an effervescent dissolution into light and energy...\"$(br)Perhaps this is why all the old practitioners of the art went mad. I can't imagine burning pieces of my mind for power is $(italic)healthy/$."
++      "text": "I should also be careful to make sure I actually have enough Amethyst in my inventory-- some old texts say that Nature is happy to use one's own mind as payment instead. They describe the feeling as awful but strangely euphoric, \"[...] an effervescent dissolution into light and energy...\"$(br)Perhaps that's why all the old practitioners of the art went mad. I can't imagine burning pieces of my mind for power is $(italic)healthy/$."
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "Or, it $(italic) should/$ be like that. In my experiments, I've never managed to do it; if I run out of _media, the spell will simply fail to cast. It feels as if there's some sort of ... barrier in my mind that appears when I try. $(br2)It would be interesting to get to the bottom of the conundrum, but for now I suppose it keeps me safe."
++      "text": "Maybe something's changed, though. In my experiments, I've never managed to do it; if I run out of _media, the spell will simply fail to cast, as if some barrier is blocking it from harming me. $(br2)It would be interesting to get to the bottom of the mystery, but for now I suppose it'll keep me safe."
+     },
+     {
+       "type": "patchouli:link",
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/influences.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/influences.json
+index 086c897..3af4cb1 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/influences.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/influences.json
+@@ -7,7 +7,7 @@
+     "pages": [
+         {
+             "type": "patchouli:text",
+-            "text": "Influences are ... strange, to say the least. Whereas most iotas seem to represent something about the world, influences represent ... something more abstract and formless.$(br2)For example, one influence I've named Null seems to represent nothing at all. It's created when there isn't a suitable answer to a question asked, such as the Entity Distillation on a block with no entity there."
++            "text": "Influences are ... strange, to say the least. Whereas most iotas seem to represent something about the world, influences represent something more... abstract, or formless.$(br2)For example, one influence I've named Null seems to represent nothing at all. It's created when there isn't a suitable answer to a question asked, such as the Entity Distillation on a block with no entity there."
+         },
+         {
+             "type": "patchouli:text",
+@@ -15,7 +15,7 @@
+         },
+         {
+             "type": "patchouli:text",
+-            "text": "Finally, there is an influence, or perhaps infinite family of influences, that seem to just be a tangled mess of _media. I've named it $(action)Garbage/$, as it is completely useless. It appears somewhere in my stack when I drawn an invalid pattern, and viewing it through a $(l:items/lens)$(item)Scrying Lens/$ just gives a nonsense jumble."
++            "text": "Finally, there seems to be an infinite family of influences that just seem to be a tangled mess of _media. I've named them $(action)Garbage/$, as it is completely useless. They seem to appear in my stack at random, like pests, when I drawn an invalid pattern. Even viewing them through a $(l:items/lens)$(item)Scrying Lens/$, I see only a nonsense jumble."
+         }
+     ] 
+ }
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/mishaps.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/mishaps.json
+index 87bcf2a..44ec446 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/mishaps.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/mishaps.json
+@@ -8,11 +8,11 @@
+     "pages": [
+         {
+             "type": "patchouli:text",
+-            "text": "Unfortunately, I am not a perfect being. I make mistakes from time to time, including when casting _Hexes. For example, I might misdraw a pattern, or try an invoke an action with the wrong types of iotas. And usually, Nature does not look kindly on my mistakes, causing what is called a $(italic)mishap/$."
++            "text": "Unfortunately, I am not (yet) a perfect being. I make mistakes from time to time-- even in my study and casting of _Hexes; for example, misdrawing a pattern, or trying to an invoke an action with the wrong iotas. And Nature usually doesn't look too kindly on my mistakes-- causing what is called a $(italic)mishap/$."
+         },
+         {
+             "type": "patchouli:text",
+-            "text": "I expected some kind of horrible recompense for mishaps, some kind of alchemical disaster or virile illness as I have heard troubled the Thaumaturges of the past... but instead, I just get a cryptic (if helpful) message in my chat. How convenient!$(br2)However, a nagging feeling at the back of my mind tells me I should expect worse consequences once the \"mod updates,\" whatever that means. Perhaps I am not as immune to the madness that seems to afflict practitioners of this art as I thought."
++            "text": "I'd expected some kind of horrible recompense for mishaps, some kind of alchemical disaster or illness of impotence as I heard had troubled the Thaumaturges of the distant past... instead, though, I just get a cryptic (if helpful) message spoken to me. How convenient.$(br2)...But a nagging feeling at the back of my mind tells me that I should expect worse consequences at a later date-- once the \"mod updates,\" whatever those words mean. Perhaps I am not as immune to madness as I had thought."
+         }
+     ]
+ }
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/naming.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/naming.json
+index 6c4696c..6a41e0d 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/naming.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/naming.json
+@@ -11,7 +11,7 @@
+         },
+         {
+             "type": "patchouli:text",
+-            "text": "$(li)A $(thing)Reflection/$ pops nothing and pushes some number.$(li)A $(thing)Purification/$ pops one and pushes one.$(li)A $(thing)Distillation/$ pops two and pushes one.$(li)An $(thing)Exaltation/$ pops three or more and pushes one.$(li)A $(thing)Decomposition/$ pops one argument and pushes two.$(li)A $(thing)Disintegration/$ pops one and pushes three or more.$(li)Finally, a $(thing)Gambit/$ pushes or pops some other number."
++            "text": "$(li)A $(thing)Reflection/$ pops nothing and pushes some number.$(li)A $(thing)Purification/$ pops one and pushes one.$(li)A $(thing)Distillation/$ pops two and pushes one.$(li)An $(thing)Exaltation/$ pops three or more and pushes one.$(li)A $(thing)Decomposition/$ pops one argument and pushes two.$(li)A $(thing)Disintegration/$ pops one and pushes three or more.$(li)Finally, a $(thing)Gambit/$ pushes or pops some other number (or rearranges the stack in some other manner)."
+         },
+         {
+             "type": "patchouli:text",
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/patterns_as_iotas.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/patterns_as_iotas.json
+index 335e5f8..11aa009 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/patterns_as_iotas.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/patterns_as_iotas.json
+@@ -7,7 +7,7 @@
+     "pages": [
+         {
+             "type": "patchouli:text",
+-            "text": "One of the many peculiarities of the art is that $(italic)patterns themselves/$ can act as iotas, and be put onto my stack when casting.$(br2)This raises a fairly obvious question: how do I express them? If I were to simply draw a pattern, how would I inform Nature of my intent to have it matched to an action instead of adding it to my stack as an iota?"
++            "text": "One of the many peculiarities of this art is that $(italic)patterns themselves/$ can act as iotas-- I can even put them onto my stack when casting.$(br2)This raises a fairly obvious question: how do I express them? If I simply drew a pattern, it would hardly tell Nature to add it to my stack-- rather, it would simply match it to an action."
+         },
+         {
+             "type": "patchouli:text",
+@@ -25,13 +25,13 @@
+         },
+         {
+             "type": "patchouli:text",
+-            "text": "I may find it helpful to think of this as \"escaping\" the pattern onto the stack, if I happen to be familiar with the term from computer science.$(br2)To be honest, I haven't found too much use for this pattern yet, but I imagine it could be helpful with advanced _Hexes casting other _Hexes."
++            "text": "One may find it helpful to think of this as \"escaping\" the pattern onto the stack, if they happen to be familiar with the science of computers.$(br2)To be honest, I haven't found too much use for this pattern yet, but I imagine it could be helpful with _Hexes which cast other _Hexes."
+         },
+         {
+             "type": "hexcasting:pattern",
+             "op_id": "hexcasting:open_paren",
+             "anchor": "hexcasting:open_paren",
+-            "text": "Drawing $(action)Introspection/$ makes my drawing of patterns act differently, for a time. Until I draw $(action)Retrospection/$, any pattern I draw is saved to a list. Then, when I draw $(action)Retrospection/$, the list is pushed to the stack as a list iota.",
++            "text": "Drawing $(action)Introspection/$ makes my drawing of patterns act differently, for a time. Until I draw its sibling, $(action)Retrospection/$, the patterns I draw are collected into to a list. Then, when I draw $(action)Retrospection/$, the list is added to the stack as a list iota.",
+             "patterns": {
+                 "startdir": "WEST",
+                 "signature": "qqq"
+@@ -41,7 +41,7 @@
+             "type": "hexcasting:pattern",
+             "op_id": "hexcasting:close_paren",
+             "anchor": "hexcasting:close_paren",
+-            "text": "If I draw another $(action)Introspection/$, it will still be saved, but I'll then have to draw $(italic)two/$ $(action)Retrospection/$s to get back to normal casting.",
++            "text": "If I draw another $(action)Introspection/$, it'll still be saved to the list, but I'll then have to draw $(italic)two/$ $(action)Retrospection/$s to get back to normal casting.",
+             "patterns": {
+                 "startdir": "EAST",
+                 "signature": "eee"
+@@ -49,7 +49,7 @@
+         },
+         {
+             "type": "patchouli:text",
+-            "text": "Also, I can escape the special behavior of $(action)Intro/Retrospection/$ by drawing a $(action)Consideration/$ before them, which will simply add them to the list without affecting the number of each I need to draw to return to normal.$(br2)If I draw two $(action)Consideration/$s in a row while introspecting, it will add the second pattern to the list."
++            "text": "Also, I can escape the special behavior of $(action)Intro- and Retrospection/$ by drawing a $(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of Retrospections I need to return to casting.$(br2)If I draw two $(action)Consideration/$s in a row while introspecting, it will add the a single $(action)Consideration/$ to the list."
+         }
+     ]
+ }
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/stack.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/stack.json
+index 9bed264..462db01 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/stack.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/casting/stack.json
+@@ -7,7 +7,7 @@
+     "pages": [
+         {
+             "type": "patchouli:text",
+-            "text": "A $(thing)Stack/$, also known as a \"LIFO,\" is a concept borrowed from computer science. In short, it's a collection of things designed so that you can only interact with the most recently used thing.$(br2)Think of a stack of plates, where new plates are added to the top: if you want to interact with a plate halfway down the stack, you have to remove the plates above it in order to get a hold of it."
++            "text": "A $(thing)Stack/$, also known as a \"LIFO,\" is a concept borrowed from computer science. In short, it's a collection of things designed so that you can only interact with the most recently used thing.$(br2)Think of a stack of plates, where new plates are added to the top: if you want to interact with a plate halfway down the stack, you have to remove the plates above it in order to get ahold of it."
+         },
+         {
+             "type": "patchouli:text",
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/greatwork/the_work.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/greatwork/the_work.json
+index 2c65812..a4ff368 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/greatwork/the_work.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/greatwork/the_work.json
+@@ -8,11 +8,11 @@
+     "pages": [
+         {
+             "type": "patchouli:text",
+-            "text": "I have seen so many things. Unspeakable things. Innumerable things. I could write three words and turn my mind inside-out and smear my brains across the shadowed walls of my skull to decay into fluff and nothing."
++            "text": "I have seen so many things. Unspeakable things. Innumerable things. I could inscribe three words and turn my mind inside-out-- I could speak patterns which would smear my brains across the shadowed walls of my skull-- I could think thoughts that would decay my body into so much fluff and blow it away in the wind."
+         },
+         {
+             "type": "patchouli:text",
+-            "text": "I have seen staccato-needle patterns and acrid-etched schematics written to the inside of my eyelids. They smolder there, dancing, taunting, aching. I am possessed by an intense need to draw them, create them, form them, liberate them from the gluey shackles of my mortal mind, present them in their Glory to the world so all can see them. All will see. All will see."
++            "text": "I have seen staccato-needle patterns and acid-etched schematics written on the inside of my eyelids. They smolder there-- they dance, they taunt, they $(italic)ache/$. I'm possessed by an intense $(italic)need/$ to draw them, create them. Form them. Liberate them from the gluey shackles of my mortal mind-- present them in their Glory to the world for all to see.$(p)All shall see.$(p)All will see."
+         }
+     ]
+ }
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/items/pigments.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/items/pigments.json
+index 2cb28ce..8c0cfa3 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/items/pigments.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/items/pigments.json
+@@ -8,11 +8,11 @@
+   "pages": [
+     {
+       "type": "patchouli:text",
+-      "text": "Although their names were lost to time, the old practitioners of my art were often known for a color, emblematic of them and their spells. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in color.\""
++      "text": "Although their names were lost to time, the old practitioners of my art seem to have identified themselves by a color, emblematic of them and their spells. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in personal colour.\""
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "I'm not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use one, I hold it in my other hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$, which will consume the pigment and mark my mind with that color.$(br2)The pigments seem to affect the color of the spare media coming out of a staff when I cast a _Hex, as well as my $(l:hexcasting/patterns/sentinels)$(thing)Sentinel/$."
++      "text": "I'm not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use a pigment, I hold it in one hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$ with the other, consuming the pigment and marking my mind with its color.$(br2)The pigments seem to affect the color of the sparks of media emitted out of a staff when I cast a _Hex, as well as my $(l:hexcasting/patterns/sentinels)$(thing)Sentinel/$."
+     },
+     {
+       "type": "hexcasting:crafting_multi",
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/basics.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/basics.json
+index 2f0fe11..addc1fb 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/basics.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/basics.json
+@@ -60,7 +60,7 @@
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "If it doesn't hit anything, the vectors will combine into Null.$(br2)For example, casting this with my own position and look vectors will return the coordinates of the block I am looking at."
++      "text": "For example, casting this with my own position and look vectors will return the coordinates of the block I am looking at.$(br2)If it doesn't hit anything, the vectors will combine into Null."
+     },
+     {
+       "type": "hexcasting:pattern",
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/meta.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/meta.json
+index e69812a..61aef4c 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/meta.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/meta.json
+@@ -32,7 +32,7 @@
+         },
+         {
+             "type": "patchouli:text",
+-            "text": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$.$(br2)It also makes the bureaucracy of Nature a \"Turing-complete\" system, according to one esoteric scroll I found.$(br2)However, it seems there's a limit to how many times a _Hex can cast itself-- Nature doesn't look kindly on runaway spells!$(br2)In addition, with the energies swirling as wildly as they are, any mishap will cause the evaluation to become too unstable and immediately exit."
++            "text": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$.$(br2)It also makes the bureaucracy of Nature a \"Turing-complete\" system, according to one esoteric scroll I found.$(br2)However, it seems there's a limit to how many times a _Hex can cast itself-- Nature doesn't look kindly on runaway spells!$(br2)In addition, with the energies of the patterns occuring without me to guide them, any mishap will cause the remaining actions to become too unstable and immediately unravel."
+         },
+         {
+             "type": "hexcasting:pattern",
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/sentinels.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/sentinels.json
+index d45ac05..528d5ed 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/sentinels.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/sentinels.json
+@@ -8,11 +8,11 @@
+   "pages": [
+     {
+       "type": "patchouli:text",
+-      "text": "$(italic)Hence, away! Now all is well,$(br)One aloof stand sentinel./$$(br2)A $(thing)Sentinel/$ is a mysterious force I can summon to assist in the casting of _Hexes, like a familiar or guardian spirit. It appears as a small blob of light to my eyes, but is invisible to everyone else."
++      "text": "$(italic)Hence, away! Now all is well,$(br)One aloof stand sentinel./$$(br2)A $(thing)Sentinel/$ is a mysterious force I can summon to assist in the casting of _Hexes, like a familiar or guardian spirit. It appears as a small ball of light to my eyes, but is invisible to everyone else."
+     },
+     {
+       "type": "patchouli:text",
+-      "text": "It has several interesting properties:$(li)It does not appear to be an entity; no one else can interact with it.$(li)Once summoned, it stays in place until banished.$(li)I am always able to see it, even through blocks."
++      "text": "It has several interesting properties:$(li)It does not appear to be tangible; no one else can interact with it.$(li)Once summoned, it stays in place until banished.$(li)I am always able to see it, even through blocks."
+     },
+     {
+       "type": "hexcasting:pattern",
+@@ -44,7 +44,7 @@
+       "anchor": "hexcasting:sentinel/wayfind",
+       "input": "vector",
+       "output": "vector",
+-      "text": "Transform the position vector on the top of the stack into a normalized vector pointing from its old position to my sentinel, or Null if it isn't summoned. Costs a negligible amount of _media."
++      "text": "Transform the position vector on the top of the stack into a unit vector pointing from that position to my sentinel, or Null if it isn't summoned. Costs a negligible amount of _media."
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/basic.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/basic.json
+index 2ba6f39..46a9c05 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/basic.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/basic.json
+@@ -36,7 +36,7 @@
+       "anchor": "hexcasting:add_motion",
+       "input": "entity, vector",
+       "output": "",
+-      "text": "Remove an entity and direction from the stack, then give a push to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(item)Amethyst Dust/$ proportional to the square of the length of the vector; thus a push vector of length 5 would consume five $(item)Amethyst Shards$(0) or equivalent."
++      "text": "Remove an entity and direction from the stack, then give a shove to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(item)Amethyst Dust/$ proportional to the square of the length of the vector; thus a push vector of length 5 would consume five $(item)Amethyst Shards$(0) or equivalent."
+     },
+     {
+       "type": "hexcasting:pattern",
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/blockworks.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/blockworks.json
+index 9297222..6bed1de 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/blockworks.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/blockworks.json
+@@ -28,7 +28,7 @@
+       "anchor": "hexcasting:create_water",
+       "input": "vector",
+       "output": "",
+-      "text": "Summon a block of water or insert a bucket's worth into a block at the given position. Costs about one $(item)Amethyst Dust/$."
++      "text": "Summon a block of water (or insert a bucket's worth) into a block at the given position. Costs about one $(item)Amethyst Dust/$."
+     },
+     {
+       "type": "hexcasting:pattern",
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/colorize.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/colorize.json
+index 359eb99..401dd59 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/colorize.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/colorize.json
+@@ -12,7 +12,7 @@
+       "anchor": "hexcasting:colorize",
+       "input": "",
+       "output": "",
+-      "text": "I must be holding a $(item)Pigment/$ in my other hand to cast this spell. When I do, it will consume the dye and permanently change my internal pigment (at least, until I cast the spell again). Costs about 1 $(item)Amethyst Dust/$."
++      "text": "I must be holding a $(item)Pigment/$ in my other hand to cast this spell. When I do, it will consume the dye and permanently change my mind's coloration (well, until I cast the spell again). Costs about 1 $(item)Amethyst Dust/$."
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/nadirs.json b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/nadirs.json
+index 1f44da4..ce59623 100644
+--- a/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/nadirs.json
++++ b/src/main/resources/data/hexcasting/patchouli_books/thehexbook/en_us/entries/patterns/spells/nadirs.json
+@@ -12,7 +12,7 @@
+         },
+         {
+             "type": "patchouli:text",
+-            "text": "According to certain legends, these spells and their sisters, the $(l:patterns/great_spells/zeniths)$(action)Zeniths/$, were \"[...] inspired by a world near to this one, where powerful wizards would gather magic from the land and hold duels to the death. Unfortunately, much was lost in the translation ...\"$(br2)Perhaps that is the reason for their peculiar names."
++            "text": "According to certain legends, these spells and their sisters, the $(l:patterns/great_spells/zeniths)$(action)Zeniths/$, were \"[...] inspired by a world near to this one, where powerful wizards would gather magic from the land and hold duels to the death. Unfortunately, much was lost in translation...\"$(br2)Perhaps that is the reason for their peculiar names."
+         },
+         {
+             "type": "hexcasting:pattern",
+-- 
+2.25.1
+
