@@ -6,13 +6,13 @@ import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.Widget
 import at.petrak.hexcasting.hexmath.HexPattern
+import net.minecraft.ChatFormatting
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.SelectorComponent
+import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import java.util.*
 
 /**
  * Data allowed into a spell.
@@ -41,9 +41,14 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
     fun serializeToNBT(): CompoundTag {
         val out = CompoundTag()
         when (val pl = this.payload) {
-            is Entity -> out.put(
-                TAG_ENTITY, NbtUtils.createUUID(pl.uuid)
-            )
+            is Entity -> {
+                val subtag = CompoundTag()
+                subtag.put(TAG_ENTITY_UUID, NbtUtils.createUUID(pl.uuid))
+                // waayyghg
+                val json = Component.Serializer.toJson(pl.displayName)
+                subtag.putString(TAG_ENTITY_NAME_CHEATY, json)
+                out.put(TAG_ENTITY, subtag)
+            }
             is Double -> out.put(
                 TAG_DOUBLE, DoubleTag.valueOf(pl)
             )
@@ -75,42 +80,10 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             append(']')
         }
 
-    fun display(): Component =
-        when (val pl = this@SpellDatum.payload) {
-            is List<*> -> {
-                val out = TextComponent("[")
-                for ((i, v) in pl.withIndex()) {
-                    out.append((v as SpellDatum<*>).display())
-                    if (i != pl.lastIndex) {
-                        out.append(", ")
-                    }
-                }
-                out.append("]")
-                out
-            }
-            is Vec3 -> {
-                TextComponent(String.format("§c(%.2f, %.2f, %.2f)§r", pl.x, pl.y, pl.z))
-            }
-            is Double -> {
-                TextComponent(String.format("§a%.4f§r", pl))
-            }
-            is HexPattern -> {
-                val out = TextComponent("§6HexPattern")
-                out.append(pl.startDir.toString())
-                out.append(" ")
-                out.append(pl.anglesSignature())
-                out.append(")§r")
-                out
-            }
-            is Entity -> {
-                SelectorComponent(pl.uuid.toString(), Optional.empty())
-            }
-            Widget.GARBAGE -> {
-                TextComponent("§8§karimfexendrapuse§r")
-            }
-            is Widget -> TextComponent("§d$pl§r")
-            else -> TextComponent("bad type? $pl")
-        }
+    fun display(): Component {
+        val nbt = this.serializeToNBT()
+        return DisplayFromTag(nbt)
+    }
 
 
     companion object {
@@ -151,7 +124,8 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
 
             return when (val key = keys.iterator().next()) {
                 TAG_ENTITY -> {
-                    val uuid = nbt.getUUID(key)
+                    val subtag = nbt.getCompound(key)
+                    val uuid = subtag.getUUID(TAG_ENTITY_UUID) // and throw away name
                     val entity = ctx.world.getEntity(uuid)
                     // If the entity died or something return Unit
                     SpellDatum(if (entity == null || !entity.isAlive) Widget.NULL else entity)
@@ -177,6 +151,66 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             }
         }
 
+        @JvmStatic
+        fun DisplayFromTag(nbt: CompoundTag): Component {
+            val keys = nbt.allKeys
+            if (keys.size != 1)
+                throw IllegalArgumentException("Expected exactly one kv pair: $nbt")
+
+            return when (val key = keys.iterator().next()) {
+                TAG_DOUBLE -> TextComponent(String.format("§a%.4f§r", nbt.getDouble(TAG_DOUBLE)))
+                TAG_VEC3 -> {
+                    val vec = HexUtils.DeserializeVec3FromNBT(nbt.getLongArray(key))
+                    // the focus color is really more red, but we don't want to show an error-y color
+                    TextComponent(String.format("§d(%.2f, %.2f, %.2f)§r", vec.x, vec.y, vec.z))
+                }
+                TAG_LIST -> {
+                    val out = TextComponent("[")
+
+                    val arr = nbt.getList(key, Tag.TAG_COMPOUND.toInt())
+                    for ((i, subtag) in arr.withIndex()) {
+                        // this is safe because otherwise we wouldn't have been able to get the list before
+                        out.append(DisplayFromTag(subtag as CompoundTag))
+                        if (i != arr.lastIndex) {
+                            out.append(", ")
+                        }
+                    }
+
+                    out.append("]")
+                    out
+                }
+                TAG_WIDGET -> {
+                    val widget = Widget.valueOf(nbt.getString(key))
+                    TextComponent(
+                        if (widget == Widget.GARBAGE) {
+                            "§8§karimfexendrapuse§r"
+                        } else {
+                            // use dark purple instead of pink, so that vec3 can be pink instead of error red
+                            "§5$widget§r"
+                        }
+                    )
+                }
+                TAG_PATTERN -> {
+                    val pat = HexPattern.DeserializeFromNBT(nbt.getCompound(TAG_PATTERN))
+                    val out = TextComponent("§6HexPattern")
+                    out.append(pat.startDir.toString())
+                    out.append(" ")
+                    out.append(pat.anglesSignature())
+                    out.append(")§r")
+                    out
+                }
+                TAG_ENTITY -> {
+                    // whyyyy
+                    val subtag = nbt.getCompound(TAG_ENTITY)
+                    val json = subtag.getString(TAG_ENTITY_NAME_CHEATY)
+                    val out = Component.Serializer.fromJson(json)!!
+                    out.style = Style.EMPTY.withColor(ChatFormatting.AQUA)
+                    out
+                }
+                else -> throw IllegalArgumentException("Unknown key $key: $nbt")
+            }
+        }
+
         // Set of legal types to go in a spell
         val ValidTypes: Set<Class<*>> = setOf(
             Entity::class.java,
@@ -194,6 +228,11 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         const val TAG_WIDGET = "widget"
         const val TAG_PATTERN = "pattern"
 
+        const val TAG_ENTITY_UUID = "uuid"
+
+        // Also encode the entity's name as a component for the benefit of the client
+        const val TAG_ENTITY_NAME_CHEATY = "name"
+
         fun <T : Any> IsValidType(checkee: T): Boolean =
             if (checkee is List<*>) {
                 // note it should be impossible to pass a spell datum that doesn't contain a valid type,
@@ -202,5 +241,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             } else {
                 ValidTypes.any { clazz -> clazz.isAssignableFrom(checkee.javaClass) }
             }
+
+
     }
 }

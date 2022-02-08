@@ -1,18 +1,28 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.ConstManaOperator
-import at.petrak.hexcasting.api.Operator.Companion.spellListOf
+import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.api.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.items.ItemDataHolder
+import net.minecraft.world.phys.Vec3
 
-object OpWrite : ConstManaOperator {
+// we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
+object OpWrite : SpellOperator {
     override val argc = 1
-    override val manaCost = 10
+    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+        return Triple(
+            Spell(args[0]),
+            0,
+            listOf()
+        )
+    }
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val dataer = ctx.getDataHolder()
-        (dataer.item as ItemDataHolder).writeDatum(dataer.orCreateTag, args[0])
-        return spellListOf()
+    private data class Spell(val datum: SpellDatum<*>) : RenderedSpell {
+        override fun cast(ctx: CastingContext) {
+            val dataer = ctx.getDataHolder()
+            (dataer.item as ItemDataHolder).writeDatum(dataer.orCreateTag, datum)
+        }
+
     }
 }

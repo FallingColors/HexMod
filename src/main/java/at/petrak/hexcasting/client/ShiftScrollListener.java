@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
 import at.petrak.hexcasting.common.network.HexMessages;
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn;
@@ -8,12 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = HexMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ShiftScrollListener {
     @SubscribeEvent
     public static void onScroll(InputEvent.MouseScrollEvent evt) {

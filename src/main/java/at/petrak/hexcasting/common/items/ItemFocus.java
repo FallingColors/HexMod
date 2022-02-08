@@ -2,9 +2,9 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.SpellDatum;
-import at.petrak.hexcasting.common.casting.CastingContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class ItemFocus extends ItemDataHolder {
@@ -17,12 +17,16 @@ public class ItemFocus extends ItemDataHolder {
     }
 
     @Override
-    public @Nullable SpellDatum<?> readDatum(CompoundTag tag, CastingContext ctx) {
-        try {
-            return SpellDatum.DeserializeFromNBT(tag.getCompound(TAG_DATA), ctx);
-        } catch (Exception e) {
+    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
+        if (!stack.hasTag()) {
             return null;
         }
+        var tag = stack.getTag();
+        if (!tag.contains(TAG_DATA)) {
+            return null;
+        }
+
+        return tag.getCompound(TAG_DATA);
     }
 
     @Override

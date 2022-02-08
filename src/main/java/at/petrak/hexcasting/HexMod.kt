@@ -3,6 +3,7 @@ package at.petrak.hexcasting
 import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.HexAdditionalRenderers
 import at.petrak.hexcasting.client.RegisterClientStuff
+import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.common.ContributorList
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
@@ -72,6 +73,7 @@ object HexMod {
                 modBus.register(RegisterClientStuff::class.java)
                 evBus.register(ClientTickCounter::class.java)
                 evBus.register(HexAdditionalRenderers::class.java)
+                evBus.register(ShiftScrollListener::class.java)
             }
         }
 

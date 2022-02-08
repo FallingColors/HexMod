@@ -49,6 +49,6 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta) {
 
         var newIdx = tag.getInt(ItemSpellbook.TAG_SELECTED_PAGE);
         var len = ItemSpellbook.HighestPage(tag.getCompound(ItemSpellbook.TAG_PAGES));
-        sender.displayClientMessage(new TranslatableComponent("hex.spellbook.tooltip.page", newIdx, len), true);
+        sender.displayClientMessage(new TranslatableComponent("hexcasting.spellbook.tooltip.page", newIdx, len), true);
     }
 }
