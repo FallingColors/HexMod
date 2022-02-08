@@ -68,7 +68,7 @@
       "anchor": "hexcasting:ignite",
       "input": "vector",
       "output": "",
-      "text": "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied. Costs about one $(item)Amethyst Dust/$."
+      "text": "hexcasting.page.blockworks8"
     },
     {
       "type": "hexcasting:pattern",
@@ -76,7 +76,7 @@
       "anchor": "hexcasting:extinguish",
       "input": "vector",
       "output": "",
-      "text": "Extinguish blocks in a large area. Costs about two $(item)Amethyst Crystal/$s."
+      "text": "hexcasting.page.blockworks9"
     }
   ]
 }
