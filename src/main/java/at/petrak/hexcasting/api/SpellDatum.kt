@@ -11,6 +11,7 @@ import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.TextComponent
+import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
@@ -200,12 +201,16 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     out
                 }
                 TAG_ENTITY -> {
-                    // whyyyy
-                    val subtag = nbt.getCompound(TAG_ENTITY)
-                    val json = subtag.getString(TAG_ENTITY_NAME_CHEATY)
-                    val out = Component.Serializer.fromJson(json)!!
-                    out.style = Style.EMPTY.withColor(ChatFormatting.AQUA)
-                    out
+                    // handle pre-0.5.0 foci not having the tag
+                    try {
+                        val subtag = nbt.getCompound(TAG_ENTITY)
+                        val json = subtag.getString(TAG_ENTITY_NAME_CHEATY)
+                        val out = Component.Serializer.fromJson(json)!!
+                        out.style = Style.EMPTY.withColor(ChatFormatting.AQUA)
+                        out
+                    } catch (exn: NullPointerException) {
+                        TranslatableComponent("hexcasting.spelldata.entity.whoknows")
+                    }
                 }
                 else -> throw IllegalArgumentException("Unknown key $key: $nbt")
             }

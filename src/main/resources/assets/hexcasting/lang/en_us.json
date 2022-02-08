@@ -51,6 +51,7 @@
 
   "hexcasting.spellbook.tooltip.page": "§7Selected Page §a§l%d§7/§a§l%d§r",
   "hexcasting.spelldata.onitem": "§7Contains: §r%s",
+  "hexcasting.spelldata.entity.whoknows": "An Entity (this should only show up if this was stored before the 0.5.0 update, use Scribe's Reflection, Scribe's Gambit to fix)",
 
   "advancement.hexcasting:root": "Hexcasting Research",
   "advancement.hexcasting:root.desc": "Enter an amethyst geode deep underground, a concentrated source of media.",
