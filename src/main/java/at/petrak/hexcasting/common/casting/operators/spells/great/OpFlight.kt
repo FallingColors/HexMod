@@ -59,6 +59,7 @@ object OpFlight : SpellOperator {
 
             target.abilities.mayfly = true
             target.abilities.flying = true
+            target.onUpdateAbilities()
             // Launch the player into the air to really emphasize the flight
             HexMessages.getNetwork()
                 .send(PacketDistributor.PLAYER.with { target }, MsgAddMotionAck(Vec3(0.0, 1.0, 0.0)))
@@ -114,12 +115,14 @@ object OpFlight : SpellOperator {
             if (cap.flightTime < 0 || cap.origin.distanceToSqr(entity.position()) > cap.radius * cap.radius) {
                 if (!entity.isOnGround) {
                     entity.fallDistance = 1_000_000f
+                    /*
                     val move = entity.deltaMovement
                     HexMessages.getNetwork()
                         .send(
                             PacketDistributor.PLAYER.with { entity },
                             MsgAddMotionAck(Vec3(0.0, -move.y - 100.0, 0.0))
                         )
+                    */
                 }
                 cap.allowed = false
 

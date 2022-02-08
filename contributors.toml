@@ -29,6 +29,7 @@ colorizer = [9609727, 7045119]
 
 # Hubry
 ["b0a26f6b-d951-4b65-b824-b164b9bc4b90"]
+# 0x10e810, 0xe97dff, 0x33ffff
 colorizer = [1107984, 15302143, 3407871]
 
 # Dev (the forge dummy player)
@@ -69,10 +70,17 @@ colorizer = [13568650]
 # ff3939 ffd543 fffc43 ffffe3
 colorizer = [16726329, 16766275, 16776259, 16777187]
 
-# WildOats
+# WildOats (stevebutnottoomanypeoplehaveit)
 ["968e572c-a6c1-4963-8399-0c64abd3820e"]
+# 5f118a 411db8
 colorizer = [6230410, 4267448]
+
+# taswin
+["816bedca-0bfa-4239-8b36-d234463b9c33"]
+# 0x800300, 0x5f5f5f
+colorizer = [8389376, 6250335]
 
 # Todo:
 # taswin
 # MacyMacerator
+# artemisSystem
