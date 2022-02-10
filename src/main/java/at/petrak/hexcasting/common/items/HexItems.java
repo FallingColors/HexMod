@@ -57,7 +57,7 @@ public class HexItems {
         () -> new ItemArtifact(unstackable()));
 
     public static final RegistryObject<ItemDyeColorizer>[] DYE_COLORIZERS = new RegistryObject[16];
-    public static final RegistryObject<ItemPoliticalColorizer>[] POLITICAL_COLORIZERS = new RegistryObject[14];
+    public static final RegistryObject<ItemPoliticalColorizer>[] PRIDE_COLORIZERS = new RegistryObject[14];
 
     static {
         for (int i = 0; i < DYE_COLORIZERS.length; i++) {
@@ -66,9 +66,9 @@ public class HexItems {
             DYE_COLORIZERS[i] = ITEMS.register(HexItemNames.DYE_COLORIZER_STUB + dye.getName(),
                 () -> new ItemDyeColorizer(finalI, unstackable()));
         }
-        for (int i = 0; i < POLITICAL_COLORIZERS.length; i++) {
+        for (int i = 0; i < PRIDE_COLORIZERS.length; i++) {
             final var finalI = i;
-            POLITICAL_COLORIZERS[i] = ITEMS.register(HexItemNames.POLITICAL_COLORIZER_STUB + i,
+            PRIDE_COLORIZERS[i] = ITEMS.register(HexItemNames.PRIDE_COLORIZER_STUB + i,
                 () -> new ItemPoliticalColorizer(finalI, unstackable()));
         }
     }

@@ -75,8 +75,8 @@ public class ItemModels extends ItemModelProvider {
                 "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/dye" + i));
         }
         for (int i = 0; i < 14; i++) {
-            singleTexture(HexItems.POLITICAL_COLORIZERS[i].getId().getPath(), new ResourceLocation("item/generated"),
-                "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/political" + i));
+            singleTexture(HexItems.PRIDE_COLORIZERS[i].getId().getPath(), new ResourceLocation("item/generated"),
+                "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/pride" + i));
         }
         singleTexture(HexItems.UUID_COLORIZER.getId().getPath(), new ResourceLocation("item/generated"),
             "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/uuid"));

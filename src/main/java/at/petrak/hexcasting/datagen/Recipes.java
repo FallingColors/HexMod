@@ -10,7 +10,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
@@ -121,15 +120,15 @@ public class Recipes extends RecipeProvider {
             Items.CARROT,
             Items.GLASS_BOTTLE,
             Items.RAW_COPPER,
-            Items.STONE,
+            Items.MOSS_BLOCK,
             Items.HONEYCOMB,
             Items.RAW_IRON,
             Items.WATER_BUCKET,
-            Items.ENDER_PEARL,
+            Items.FEATHER,
             Items.ARROW,
         };
         for (int i = 0; i < politicsInMyVidya.length; i++) {
-            var item = HexItems.POLITICAL_COLORIZERS[i].get();
+            var item = HexItems.PRIDE_COLORIZERS[i].get();
             ShapedRecipeBuilder.shaped(item)
                 .define('B', Items.BOWL)
                 .define('D', HexItems.AMETHYST_DUST.get())
