@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting.colors;
 import at.petrak.hexcasting.common.ContributorList;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
-import at.petrak.hexcasting.common.items.colorizer.ItemPoliticalColorizer;
+import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +45,7 @@ public record FrozenColorizer(Item item, UUID owner) {
 
     public static boolean isColorizer(Item item) {
         return item instanceof ItemDyeColorizer
-            || item instanceof ItemPoliticalColorizer
+            || item instanceof ItemPrideColorizer
             || item == HexItems.UUID_COLORIZER.get();
     }
 
@@ -57,7 +57,7 @@ public record FrozenColorizer(Item item, UUID owner) {
     public int getColor(float time, Vec3 position) {
         if (this.item instanceof ItemDyeColorizer dye) {
             return DyeColor.values()[dye.getDyeIdx()].getTextColor() | 0xff_000000;
-        } else if (this.item instanceof ItemPoliticalColorizer politics) {
+        } else if (this.item instanceof ItemPrideColorizer politics) {
             var colors = politics.getColors();
             return morphBetweenColors(colors, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
         } else if (this.item == HexItems.UUID_COLORIZER.get()) {
