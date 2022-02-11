@@ -8,11 +8,10 @@ import at.petrak.hexcasting.common.items.ItemDataHolder
 
 object OpRead : ConstManaOperator {
     override val argc = 0
-    override val manaCost = 10
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val dataer = ctx.getDataHolder()
-        val datum = (dataer.item as ItemDataHolder).readDatum(dataer.orCreateTag, ctx)
+        val datum = (dataer.item as ItemDataHolder).readDatum(dataer, ctx)
         return listOf(datum ?: SpellDatum.make(Widget.NULL))
     }
 }

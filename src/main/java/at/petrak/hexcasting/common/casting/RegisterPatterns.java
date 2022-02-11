@@ -11,7 +11,10 @@ import at.petrak.hexcasting.common.casting.operators.math.*;
 import at.petrak.hexcasting.common.casting.operators.selectors.*;
 import at.petrak.hexcasting.common.casting.operators.spells.*;
 import at.petrak.hexcasting.common.casting.operators.spells.great.*;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.*;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSentinel;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
 import at.petrak.hexcasting.common.items.magic.ItemArtifact;
 import at.petrak.hexcasting.common.items.magic.ItemCypher;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
@@ -56,7 +59,8 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aadaa", HexDir.EAST), prefix("duplicate"),
                 OpDuplicate.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawdd", HexDir.EAST), prefix("swap"), OpSwap.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddad", HexDir.WEST), prefix("fisherman"), OpFisherman.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddad", HexDir.WEST), prefix("fisherman"),
+                OpFisherman.INSTANCE);
 
             // == Math ==
 
@@ -108,7 +112,7 @@ public class RegisterPatterns {
                 new OpConjure(false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqd", HexDir.NORTH_EAST), prefix("conjure_light"),
                 new OpConjure(true));
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waawawaaw", HexDir.NORTH_EAST), prefix("bonemeal"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaqwawqaqw", HexDir.NORTH_EAST), prefix("bonemeal"),
                 OpTheOnlyReasonAnyoneDownloadedPsi.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwaeaeaeaeaea", HexDir.NORTH_WEST),
                 prefix("recharge"),

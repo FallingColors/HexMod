@@ -51,35 +51,64 @@ public class HexCapabilities {
         }
     }
 
+    // if I were forge i sould simply design an actually useful and useable cap system
     @SubscribeEvent
-    public static void syncCapToNewPlayer(PlayerEvent evt) {
-        var player = evt.getPlayer();
+    public static void copyCapsOnDeath(PlayerEvent.Clone evt) {
+        var eitherSidePlayer = evt.getPlayer();
         // this apparently defines it in outside scope. the more you know.
-        if (!(player instanceof ServerPlayer splayer)) {
+        if (!(eitherSidePlayer instanceof ServerPlayer player)) {
             return;
         }
 
-        var doSync = false;
-        if (evt instanceof PlayerEvent.PlayerLoggedInEvent) {
-            doSync = true;
-        } else if (evt instanceof PlayerEvent.Clone clone) {
-            doSync = clone.isWasDeath();
+        if (evt.isWasDeath()) {
+            var proto = evt.getOriginal();
+            // Copy caps from this to new player
+            proto.reviveCaps();
+            var protoCapSentinel = proto.getCapability(SENTINEL).resolve();
+            protoCapSentinel.ifPresent(protoSentinel -> {
+                var capSentinel = player.getCapability(SENTINEL);
+                capSentinel.ifPresent(sentinel -> {
+                    sentinel.hasSentinel = protoSentinel.hasSentinel;
+                    sentinel.position = protoSentinel.position;
+                    sentinel.extendsRange = protoSentinel.extendsRange;
+                });
+            });
+            var protoCapColor = proto.getCapability(PREFERRED_COLORIZER).resolve();
+            protoCapColor.ifPresent(protoColorizer -> {
+                var capColorizer = player.getCapability(PREFERRED_COLORIZER);
+                capColorizer.ifPresent(colorizer -> {
+                    colorizer.colorizer = protoColorizer.colorizer;
+                });
+            });
+            proto.invalidateCaps();
+        }
+    }
+
+    @SubscribeEvent
+    public static void syncCapsOnLogin(PlayerEvent.PlayerLoggedInEvent evt) {
+        if (!(evt.getPlayer() instanceof ServerPlayer player)) {
+            return;
         }
 
-        if (doSync) {
-            var capSentinel = splayer.getCapability(HexCapabilities.SENTINEL).resolve();
-            if (capSentinel.isEmpty()) {
-                return;
-            }
-            HexMessages.getNetwork()
-                .send(PacketDistributor.PLAYER.with(() -> splayer), new MsgSentinelStatusUpdateAck(capSentinel.get()));
+        syncCaps(player);
+    }
 
-            var capColorizer = splayer.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
-            if (capColorizer.isEmpty()) {
-                return;
-            }
-            HexMessages.getNetwork()
-                .send(PacketDistributor.PLAYER.with(() -> splayer), new MsgColorizerUpdateAck(capColorizer.get()));
+    @SubscribeEvent
+    public static void syncCapsOnRejoin(PlayerEvent.PlayerRespawnEvent evt) {
+        if (!(evt.getPlayer() instanceof ServerPlayer player)) {
+            return;
         }
+
+        syncCaps(player);
+    }
+
+    private static void syncCaps(ServerPlayer player) {
+        var capSentinel = player.getCapability(HexCapabilities.SENTINEL).resolve();
+        capSentinel.ifPresent(sentinel -> HexMessages.getNetwork()
+            .send(PacketDistributor.PLAYER.with(() -> player), new MsgSentinelStatusUpdateAck(sentinel)));
+
+        var capColorizer = player.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
+        capColorizer.ifPresent(colorizer -> HexMessages.getNetwork()
+            .send(PacketDistributor.PLAYER.with(() -> player), new MsgColorizerUpdateAck(colorizer)));
     }
 }

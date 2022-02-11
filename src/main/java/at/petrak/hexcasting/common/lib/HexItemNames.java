@@ -13,6 +13,6 @@ public class HexItemNames {
     public static final String LENS = "lens";
     public static final String SCROLL = "scroll";
     public static final String DYE_COLORIZER_STUB = "dye_colorizer_";
-    public static final String POLITICAL_COLORIZER_STUB = "political_colorizer_";
+    public static final String PRIDE_COLORIZER_STUB = "pride_colorizer_";
     public static final String UUID_COLORIZER = "uuid_colorizer";
 }

@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.spell.hexcasting:colorize",
   "category": "hexcasting:patterns/spells",
-  "icon": "hexcasting:political_colorizer_1",
+  "icon": "hexcasting:pride_colorizer_1",
   "sortnum": 8,
   "advancement": "hexcasting:root",
   "read_by_default": true,

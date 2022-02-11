@@ -17,7 +17,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '0.5.0-dev.5'
+version = '0.5.0'
 group = 'at.petra-k.hexcasting' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'hexcasting'
 

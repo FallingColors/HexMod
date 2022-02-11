@@ -1,10 +1,8 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.SpellDatum;
-import at.petrak.hexcasting.common.casting.CastingContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -33,14 +31,9 @@ public class ItemSpellbook extends ItemDataHolder {
             var pageIdx = tag.getInt(TAG_SELECTED_PAGE);
             var pages = tag.getCompound(ItemSpellbook.TAG_PAGES);
             tooltip.add(new TranslatableComponent("hexcasting.spellbook.tooltip.page", pageIdx, HighestPage(pages)));
-
-            var key = String.valueOf(pageIdx);
-            if (pages.contains(key)) {
-                var datum = pages.getCompound(String.valueOf(pageIdx));
-                // I know this is ugly i dont care
-                tooltip.add(new TextComponent(datum.toString()));
-            }
         }
+
+        super.appendHoverText(stack, level, tooltip, isAdvanced);
     }
 
     @Override
@@ -63,9 +56,13 @@ public class ItemSpellbook extends ItemDataHolder {
             tag.getCompound(ItemSpellbook.TAG_PAGES).isEmpty();
     }
 
+    @Override
+    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
+        if (!stack.hasTag()) {
+            return null;
+        }
+        var tag = stack.getTag();
 
-    @Nullable
-    public SpellDatum<?> readDatum(CompoundTag tag, CastingContext ctx) {
         int idx;
         if (tag.contains(TAG_SELECTED_PAGE)) {
             idx = tag.getInt(TAG_SELECTED_PAGE);
@@ -76,7 +73,7 @@ public class ItemSpellbook extends ItemDataHolder {
         if (tag.contains(TAG_PAGES)) {
             var pagesTag = tag.getCompound(TAG_PAGES);
             if (pagesTag.contains(key)) {
-                return SpellDatum.DeserializeFromNBT(pagesTag.getCompound(key), ctx);
+                return pagesTag.getCompound(key);
             } else {
                 return null;
             }
