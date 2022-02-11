@@ -5,16 +5,10 @@ import at.petrak.hexcasting.api.Operator;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.SpellDatum;
 import at.petrak.hexcasting.common.casting.operators.*;
-import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
-import at.petrak.hexcasting.common.casting.operators.eval.OpEvalDelay;
-import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
-import at.petrak.hexcasting.common.casting.operators.lists.OpAppend;
-import at.petrak.hexcasting.common.casting.operators.lists.OpConcat;
-import at.petrak.hexcasting.common.casting.operators.lists.OpIndex;
+import at.petrak.hexcasting.common.casting.operators.eval.*;
+import at.petrak.hexcasting.common.casting.operators.lists.*;
 import at.petrak.hexcasting.common.casting.operators.math.*;
-import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
-import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
-import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
+import at.petrak.hexcasting.common.casting.operators.selectors.*;
 import at.petrak.hexcasting.common.casting.operators.spells.*;
 import at.petrak.hexcasting.common.casting.operators.spells.great.*;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSentinel;
@@ -108,9 +102,12 @@ public class RegisterPatterns {
                 OpColorize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqawqadaq", HexDir.SOUTH_EAST), prefix("create_water"),
                 OpCreateWater.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedwedade", HexDir.SOUTH_WEST),
-                prefix("destroy_water"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedwedade", HexDir.SOUTH_WEST), prefix("destroy_water"),
                 OpDestroyWater.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddedwdwd", HexDir.EAST), prefix("ignite"),
+                OpIgnite.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aaqawawa", HexDir.WEST), prefix("extinguish"),
+                OpExtinguish.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqa", HexDir.NORTH_EAST), prefix("conjure_block"),
                 new OpConjure(false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqd", HexDir.NORTH_EAST), prefix("conjure_light"),
@@ -295,6 +292,16 @@ public class RegisterPatterns {
                 OpIndex.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dadad", HexDir.NORTH_EAST), prefix("for_each"),
                 OpForEach.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqaeaq", HexDir.EAST), prefix("list_size"),
+                OpListSize.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("adeeed", HexDir.EAST), prefix("singleton"),
+                OpSingleton.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqaeaae", HexDir.NORTH_EAST), prefix("empty_list"),
+                OpEmptyList.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqaede", HexDir.EAST), prefix("reverse_list"),
+                OpReverski.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ewdqdwe", HexDir.SOUTH_WEST), prefix("last_n_list"),
+                OpLastNToList.INSTANCE);
 
         } catch (PatternRegistry.RegisterPatternException exn) {
             exn.printStackTrace();

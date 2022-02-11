@@ -29,6 +29,46 @@
             "input": "list, list",
             "output": "list",
             "text": "hexcasting.page.lists3"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:empty_list",
+            "anchor": "hexcasting:empty_list",
+            "input": "",
+            "output": "list",
+            "text": "hexcasting.page.lists4"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:singleton",
+            "anchor": "hexcasting:singleton",
+            "input": "any",
+            "output": "list",
+            "text": "hexcasting.page.lists5"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:last_n_list",
+            "anchor": "hexcasting:last_n_list",
+            "input": "num",
+            "output": "list",
+            "text": "hexcasting.page.lists6"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:list_size",
+            "anchor": "hexcasting:list_size",
+            "input": "list",
+            "output": "num",
+            "text": "hexcasting.page.lists7"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "hexcasting:reverse_list",
+            "anchor": "hexcasting:reverse_list",
+            "input": "list",
+            "output": "list",
+            "text": "hexcasting.page.lists8"
         }
     ]
 }
