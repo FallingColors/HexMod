@@ -46,6 +46,13 @@
   "item.hexcasting.uuid_colorizer": "Soulglimmer Pigment",
   "block.hexcasting.conjured": "Conjured Block",
   "itemGroup.hexcasting": "Hexcasting",
+  
+  "hexcasting.subtitles.start_pattern": "Starting pattern",
+  "hexcasting.subtitles.add_line": "Adding line",
+  "hexcasting.subtitles.add_pattern": "Adding pattern",
+  "hexcasting.subtitles.fail_pattern": "Pattern fails",
+  "hexcasting.subtitles.ambiance": "Hex grid hums",
+  "hexcasting.subtitles.cast": "Hex casts",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.",
 
