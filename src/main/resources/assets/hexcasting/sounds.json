@@ -1,5 +1,7 @@
 {
   "casting.start_pattern": {
+    "category": "master",
+    "subtitle": "hexcasting.subtitles.start_pattern",
     "sounds": [
       {
         "name": "hexcasting:add_line",
@@ -9,6 +11,8 @@
     ]
   },
   "casting.add_line": {
+    "category": "master",
+    "subtitle": "hexcasting.subtitles.add_line",
     "sounds": [
       {
         "name": "hexcasting:add_line",
@@ -18,21 +22,29 @@
     ]
   },
   "casting.add_pattern": {
+    "category": "master",
+    "subtitle": "hexcasting.subtitles.add_pattern",
     "sounds": [
       "hexcasting:add_pattern"
     ]
   },
   "casting.fail_pattern": {
+    "category": "master",
+    "subtitle": "hexcasting.subtitles.fail_pattern",
     "sounds": [
       "hexcasting:fail_pattern"
     ]
   },
   "casting.ambiance": {
+    "category": "master",
+    "subtitle": "hexcasting.subtitles.ambiance",
     "sounds": [
       "hexcasting:casting_ambiance"
     ]
   },
   "casting.cast": {
+    "category": "master",
+    "subtitle": "hexcasting.subtitles.cast",
     "sounds": [
       "hexcasting:cast_hex"
     ]

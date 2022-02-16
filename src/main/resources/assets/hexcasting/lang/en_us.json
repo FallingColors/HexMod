@@ -46,6 +46,13 @@
   "item.hexcasting.uuid_colorizer": "Soulglimmer Pigment",
   "block.hexcasting.conjured": "Conjured Block",
   "itemGroup.hexcasting": "Hexcasting",
+  
+  "hexcasting.subtitles.start_pattern": "Starting pattern",
+  "hexcasting.subtitles.add_line": "Adding line",
+  "hexcasting.subtitles.add_pattern": "Adding pattern",
+  "hexcasting.subtitles.fail_pattern": "Pattern fails",
+  "hexcasting.subtitles.ambiance": "Hex grid hums",
+  "hexcasting.subtitles.cast": "Hex casts",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.",
 
@@ -196,7 +203,7 @@
   "hexcasting.page.patterns1": "A list of all the patterns in the mod.",
 
   "hexcasting.entry.couldnt_cast": "A Frusturation",
-  "hexcasting.page.couldnt_cast1": "Argh! Why won't it let me cast the spell?!$(br2)The scroll I found rings with authenticity. I can $(italic)feel/$ it humming in the scroll-- the pattern is true, or as true as it can be. The spell is $(italic)right there/$.$(p)But it feels if it's on the other side of some thin membrane. I called it-- it tried to manifest-- yet it $(italic)COUKD NOT/$.",
+  "hexcasting.page.couldnt_cast1": "Argh! Why won't it let me cast the spell?!$(br2)The scroll I found rings with authenticity. I can $(italic)feel/$ it humming in the scroll-- the pattern is true, or as true as it can be. The spell is $(italic)right there/$.$(p)But it feels if it's on the other side of some thin membrane. I called it-- it tried to manifest-- yet it $(italic)COULD NOT/$.",
   "hexcasting.page.couldnt_cast2": "It felt like the barrier may have weakened ever so slightly from the force that I exerted on the spell; yet despite my greatest efforts-- my deepest focus, my finest amethyst, my precisest drawings-- it $(italic)refuses/$ to cross the barrier. It's maddening.$(p)$(italic)This/$ is where my arcane studies? Cursed by impotence, cursed to lose my rightful powers?$(br2)I should take a deep breath. I should meditate on what I have learned, even if it wasn't very much...",
   "hexcasting.page.couldnt_cast3": "...After careful reflection... I have discovered a change in myself.$(p)It seems... in lieu of $(item)amethyst/$, I've unlocked the ability to cast spells using my own mind and life energy-- just as I read of in the legends of old.$(p)I'm not sure why I can now. It's just... the truth-knowledge-burden was always there, and I see it now. I know it. I bear it.$(br2)Fortunately, I feel my limits as well-- I would get approximately two $(item)Charged Amethyst/$'s worth of _media out of my health at its prime.",
   "hexcasting.page.couldnt_cast4": "I shudder to even consider it-- I've kept my mind mostly intact so far, in my studies. But the fact is-- I form one side of a tenuous link.$(p)I'm connected to some other side-- a side whose boundary has thinned from that trauma. A place where simple actions spell out eternal glory.$(p)Is it so wrong, to want it for myself?",
@@ -260,7 +267,7 @@
   "hexcasting.page.patterns_as_iotas7": "Also, I can escape the special behavior of $(action)Intro- and Retrospection/$ by drawing a $(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of Retrospections I need to return to casting.$(br2)If I draw two $(action)Consideration/$s in a row while introspecting, it will add the a single $(action)Consideration/$ to the list.",
 
   "hexcasting.entry.stack": "Stacks",
-  "hexcasting.page.stack1": "A $(thing)Stack/$, also known as a \"LIFO,\" is a concept borrowed from computer science. In short, it's a collection of things designed so that you can only interact with the most recently used thing.$(br2)Think of a stack of plates, where new plates are added to the top: if you want to interact with a plate halfway down the stack, you have to remove the plates above it in order to get ahold of it.",
+  "hexcasting.page.stack1": "A $(thing)Stack/$, also known as a \"LIFO\", is a concept borrowed from computer science. In short, it's a collection of things designed so that you can only interact with the most recently used thing.$(br2)Think of a stack of plates, where new plates are added to the top: if you want to interact with a plate halfway down the stack, you have to remove the plates above it in order to get ahold of it.",
   "hexcasting.page.stack2": "Because a stack is so simple, there's only so many things you can do with it:$(li)$(italic)Adding something to it/$, known formally as pushing,$(li)$(italic)Removing the last added element/$, known as popping, or$(li)$(italic)Examining or modifying the last added element/$, known as peeking.$(br)We call the last-added element the \"top\" of the stack, in accordance with the dinner plate analogy.$(p)As an example, if we push 1 to a stack, then push 2, then pop, the top of the stack is now 1.",
   "hexcasting.page.stack3": "Actions are (on the most part) restricted to interacting with the casting stack in these ways. They will pop some iotas they're interested in (known as \"arguments\" or \"parameters\"), process them, and push some number of results.$(br2)Of course, some actions (e.g. the $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$) might pop no arguments, and some actions (particularly spells) might push nothing afterwards.",
   "hexcasting.page.stack4": "Even more complicated actions can be expressed in terms of pushing, popping, and peeking. For example, the $(l:patterns/stackmanip#hexcasting:swap)$(action)Jester's Gambit/$ swaps the top two items of the stack. This can be thought of as popping two items and pushing them in opposite order. For another, $(l:patterns/stackmanip#hexcasting:duplicate)$(action)Gemini Decomposition/$ duplicates the top of the stack-- in other words, it peeks the stack and pushes a copy of what it finds.",
@@ -453,7 +460,7 @@
   "hexcasting.page.meta3": "Remove a list of patterns from the stack, then cast them sequentially, as if I had drawn them myself with my $(item)Staff/$.$(br)Costs about one $(item)Amethyst Shard/$.",
   "hexcasting.page.meta4": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$.$(br2)It also makes the bureaucracy of Nature a \"Turing-complete\" system, according to one esoteric scroll I found.$(br2)However, it seems there's a limit to how many times a _Hex can cast itself-- Nature doesn't look kindly on runaway spells!$(br2)In addition, with the energies of the patterns occuring without me to guide them, any mishap will cause the remaining actions to become too unstable and immediately unravel.",
   "hexcasting.page.meta5": "Remove a list of patterns and a list from the stack, then cast the given pattern over each element of the second list.$(br)Costs about one $(item)Charged Amethyst/$.",
-  "hexcasting.page.meta6": "More specifically, for each element in the second list, it will:$(li)Creates a new stack, with everything on the current stack plus that element$(li)Draw all the patterns in the first list$(li)Save all the iotas remaining on the stack to a list$(br)Then, after all is said and done, pushes the list of saved iotas onto the main stack.$(br2)No wonder all the practitioners of this art go mad.",
+  "hexcasting.page.meta6": "More specifically, for each element in the second list, it will:$(li)Create a new stack, with everything on the current stack plus that element$(li)Draw all the patterns in the first list$(li)Save all the iotas remaining on the stack to a list$(br)Then, after all is said and done, pushes the list of saved iotas onto the main stack.$(br2)No wonder all the practitioners of this art go mad.",
 
   "hexcasting.entry.numbers": "Numbers",
   "hexcasting.page.numbers1header": "Numerical Reflection",
