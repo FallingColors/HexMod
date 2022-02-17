@@ -1,6 +1,16 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "hexcasting:item/scroll"
-  }
+  "overrides": [
+    {
+      "predicate": {
+        "hexcasting:ancient": 0.0
+      },
+      "model": "hexcasting:item/scroll_pristine"
+    },
+    {
+      "predicate": {
+        "hexcasting:ancient": 1.0
+      },
+      "model": "hexcasting:item/scroll_ancient"
+    }
+  ]
 }

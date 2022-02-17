@@ -6,11 +6,13 @@
   "item.hexcasting.cypher": "Cypher",
   "item.hexcasting.trinket": "Trinket",
   "item.hexcasting.artifact": "Artifact",
+  "item.hexcasting.battery": "Phial of Media",
+  "item.hexcasting.manaholder.amount": "§7N*merical Mana: %s/%s (%.0f%%)§r",
   "item.hexcasting.amethyst_dust": "Amethyst Dust",
   "item.hexcasting.charged_amethyst": "Charged Amethyst",
   "item.hexcasting.lens": "Scrying Lens",
   "item.hexcasting.scroll": "Scroll",
-  "item.hexcasting.scroll.of": "Scroll of %s",
+  "item.hexcasting.scroll.of": "Ancient Scroll of %s",
   "item.hexcasting.scroll.empty": "Empty Scroll",
   "item.hexcasting.sub_sandwich": "Submarine Sandwich",
   "item.hexcasting.dye_colorizer_white": "White Pigment",
@@ -71,6 +73,11 @@
 
   "death.attack.hexcasting.overcast": "%s's mind was consumed into energy",
 
+  "command.hexcasting.pats.all": "Gave you all %d scrolls",
+  "command.hexcasting.pats.specific.success": "Gave you %s with id %s",
+  "command.hexcasting.recalc": "Recalculated patterns",
+  "hexcasting.pattern.unknown": "Unknown pattern resource location %s",
+
   "hexcasting.message.cant_overcast": "That Hex needed more media than I had... I should double-check my math.",
   "hexcasting.message.cant_great_spell": "The spell failed, somehow... am I not skilled enough?",
 
@@ -129,6 +136,7 @@
   "hexcasting.spell.hexcasting:craft/cypher": "Craft Cypher",
   "hexcasting.spell.hexcasting:craft/trinket": "Craft Trinket",
   "hexcasting.spell.hexcasting:craft/artifact": "Craft Artifact",
+  "hexcasting.spell.hexcasting:craft/battery": "Craft Phial",
   "hexcasting.spell.hexcasting:recharge": "Recharge Item",
   "hexcasting.spell.hexcasting:erase": "Erase Item",
   "hexcasting.spell.hexcasting:create_water": "Create Water",
@@ -300,9 +308,15 @@
   "hexcasting.page.lens1": "This curiosity is in a strange, transitory state. Not too long ago, it allowed me to see the iotas on my stack, but now it seems I have that ability without the assistance of a lens.$(br2)I best keep my old ones around, though-- I have the feeling they will have use in the future.",
   "hexcasting.page.lens2": "$(italic)You must learn... to see what you are looking at./$",
 
+  "hexcasting.entry.phials": "Phials of Media",
+  "hexcasting.page.phials1": "I find it quite ... irritating, how Nature refuses to give me change for my work. If all I have on hand is $(item)Charged Crystal/$s, even the tiniest $(action)Archer's Purification/$ will consume the entire crystal, wasting the remaining _media.$(br2)Fortunately, it seems I've found a way somewhat allay this problem.",
+  "hexcasting.page.phials2": "I've found old scrolls describing a $(item)Glass Bottle/$ infused with _media. When casting _Hexes, my spells would then draw _media out of the phial. The liquid form of the _media would let me take exact change, so to speak; nothing would be wasted.",
+  "hexcasting.page.phials3": "It's quite like the internal battery of a $(item)Trinket/$, or similar. I cen even $(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)Recharge/$ them in the same manner. $(br2)Unfortunately, the art of actually $(italic)making/$ the things seems to have been lost to time. I've found a hint at the pattern used to craft it, but the technique is irritatingly elusive, and I can't seem to do it successfully.",
+  "hexcasting.page.phials4": "I suspect I will figure it out with study and practice, though. For now, I will simply deal with the wasted _media...$(br2)But I won't settle for it forever.$(br2)",
+
   "hexcasting.entry.pigments": "Pigments",
   "hexcasting.page.pigments1": "Although their names were lost to time, the old practitioners of my art seem to have identified themselves by a color, emblematic of them and their spells. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in personal colour.\"",
-  "hexcasting.page.pigments2": "'m not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use a pigment, I hold it in one hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$ with the other, consuming the pigment and marking my mind with its color.$(br2)The pigments seem to affect the color of the sparks of media emitted out of a staff when I cast a _Hex, as well as my $(l:patterns/sentinels)$(thing)Sentinel/$.",
+  "hexcasting.page.pigments2": "I'm not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use a pigment, I hold it in one hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$ with the other, consuming the pigment and marking my mind with its color.$(br2)The pigments seem to affect the color of the sparks of media emitted out of a staff when I cast a _Hex, as well as my $(l:patterns/sentinels)$(thing)Sentinel/$.",
   "hexcasting.page.pigments3header": "Chromatic Colorizers",
   "hexcasting.page.pigments3": "Pigments all the colors of the rainbow.",
   "hexcasting.page.pigments4": "And finally, a pigment with a color wholly unique to me.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
@@ -339,6 +353,9 @@
   "hexcasting.page.zeniths5": "Bestows haste. Base cost is one $(item)Amethyst Dust/$ per 3 seconds.",
   "hexcasting.page.zeniths6": "Bestows strength. Base cost is one $(item)Amethyst Dust/$ per 3 seconds.",
 
+  "hexcasting.page.make_battery1": "Infuse a bottle with _media to form a $(item)Phial./$",
+  "hexcasting.page.make_battery2": "Similarly to the spells for $(l:patterns/spells/hexcasting)$(action)Crafting Hexcasting Items/$, I must hold a $(item)Glass Bottle/$ in my other hand, and provide the spell with a dropped stack of $(item)Amethyst/$. See $(l:items/phials)this page/$ for more information.",
+
   "hexcasting.entry.basic_spell": "Basic Spells",
   "hexcasting.page.basic_spell1": "Remove a number and vector from the stack, then create an explosion at the given location with the given power.",
   "hexcasting.page.basic_spell2": "A power of 3 is about as much as a Creeper's blast; 4 is about as much as a TNT blast. Nature refuses to give me a blast of more than 10 power, though.$(br2)Costs about one $(item)Amethyst Shard/$, plus an extra $(item)Amethyst Shard/$ per point of explosion power.",
@@ -358,7 +375,7 @@
   "hexcasting.page.blockworks8": "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied. Costs about one $(item)Amethyst Dust/$.",
   "hexcasting.page.blockworks9": "Extinguish blocks in a large area. Costs about two $(item)Amethyst Crystal/$s.",
 
-  "hexcasting.page.colorize1": "I must be holding a $(item)Pigment/$ in my other hand to cast this spell. When I do, it will consume the dye and permanently change my mind's coloration (well, until I cast the spell again). Costs about 1 $(item)Amethyst Dust/$.",
+  "hexcasting.page.colorize1": "I must be holding a $(item)Pigment/$ in my other hand to cast this spell. When I do, it will consume the dye and permanently change my mind's coloration (at least, until I cast the spell again). Costs about 1 $(item)Amethyst Dust/$.",
 
   "hexcasting.entry.hexcasting_spell": "Crafting Hexcasting Items",
   "hexcasting.page.hexcasting_spell1": "These three spells each create an item that casts a _Hex.$(br)They all require me to hold the empty item in my off-hand, and require two things: the list of patterns to be cast, and an entity representing a dropped stack of $(item)Amethyst/$ to form the item's battery.$(br2)See $(l:items/hexcasting)this entry/$ for more information.",
@@ -367,8 +384,8 @@
   "hexcasting.page.hexcasting_spell4": "Costs about ten $(item)Charged Amethyst/$s.",
   "hexcasting.page.hexcasting_spell5": "Recharge a _media-containing item in my other hand. Costs about one $(item)Charged Amethyst/$.",
   "hexcasting.page.hexcasting_spell6": "This spell is cast in a similar method to the crafting spells; an entity representing a dropped stack of $(item)Amethyst/$ is provided, and recharges the _media battery of the item in my other hand.$(br2)This spell $(italic)cannot/$ recharge the item farther than its original battery size.",
-  "hexcasting.page.hexcasting_spell7": "Erase a hex-containing item in my other hand. Costs about one $(item)Amethyst Dust/$.",
-  "hexcasting.page.hexcasting_spell8": "This spell voids all media stored inside the item I am erasing. The pressure inside the item from the stored media is incredible. It's all the spell can do to safely disarm it; to try and recover it would be unthinkable.",
+  "hexcasting.page.hexcasting_spell7": "Erase a _Hex-containing item in my other hand. Costs about one $(item)Amethyst Dust/$.",
+  "hexcasting.page.hexcasting_spell8": "The spell will also void all the _media stored inside the item, releasing it back to Nature and returning the item to a perfectly clean slate.",
 
   "hexcasting.entry.itempicking": "Working with Items",
   "hexcasting.page.itempicking1": "Certain spells, such as $(l:hexcasting:patterns/spells/blockworks#OpPlaceBlock)$(action)Place Block/$, will consume additional items from my inventory. When this happens, the spell will first look for the item to use, and then draw from all such items in my inventory.$(br2)This process is called \"picking an item.\"",

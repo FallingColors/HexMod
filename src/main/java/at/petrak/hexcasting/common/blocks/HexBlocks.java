@@ -23,8 +23,13 @@ public class HexBlocks {
 
     public static final RegistryObject<Block> CONJURED = registerBlock("conjured",
         new BlockConjured(
-            BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.DIAMOND).sound(SoundType.AMETHYST).noDrops()
-                .instabreak().noOcclusion().isSuffocating(HexBlocks::never).isViewBlocking(HexBlocks::never)));
+            BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.DIAMOND)
+                .sound(SoundType.AMETHYST)
+                .noDrops()
+                .strength(0f, 0f)
+                .noOcclusion()
+                .isSuffocating(HexBlocks::never)
+                .isViewBlocking(HexBlocks::never)));
     public static final RegistryObject<Block> SLATE = registerBlock("slate",
         new BlockSlate(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)

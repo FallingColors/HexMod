@@ -1,9 +1,12 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.SpellDatum;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
+import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
 import at.petrak.hexcasting.common.particles.ConjureParticle;
 import at.petrak.hexcasting.common.particles.HexParticles;
@@ -56,6 +59,23 @@ public class RegisterClientStuff {
                         stack.getOrCreateTag().contains(ItemPackagedSpell.TAG_PATTERNS) ? 1f : 0f
                 );
             }
+
+            ItemProperties.register(HexItems.BATTERY.get(), ItemManaBattery.MANA_PREDICATE,
+                (stack, level, holder, holderID) -> {
+                    var item = (ItemManaBattery) stack.getItem();
+                    var tag = stack.getOrCreateTag();
+                    return item.getManaFullness(tag);
+                });
+            ItemProperties.register(HexItems.BATTERY.get(), ItemManaBattery.MAX_MANA_PREDICATE,
+                (stack, level, holder, holderID) -> {
+                    var item = (ItemManaBattery) stack.getItem();
+                    var tag = stack.getOrCreateTag();
+                    var max = item.getMaxManaAmt(tag);
+                    return (float) Math.sqrt((float) max / HexMod.getConfig().chargedCrystalManaAmount.get() / 10);
+                });
+
+            ItemProperties.register(HexItems.SCROLL.get(), ItemScroll.ANCIENT_PREDICATE,
+                (stack, level, holder, holderID) -> stack.getOrCreateTag().contains(ItemScroll.TAG_OP_ID) ? 1f : 0f);
 
             HexTooltips.init();
         });

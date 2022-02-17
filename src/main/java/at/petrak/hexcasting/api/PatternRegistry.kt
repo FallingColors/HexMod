@@ -142,7 +142,7 @@ object PatternRegistry {
     /**
      * Maps angle sigs to resource locations and their preferred start dir so we can look them up in the main registry
      */
-    private class Save(val lookup: MutableMap<String, Pair<ResourceLocation, HexDir>>) : SavedData() {
+    class Save(val lookup: MutableMap<String, Pair<ResourceLocation, HexDir>>) : SavedData() {
         override fun save(tag: CompoundTag): CompoundTag {
             for ((sig, rhs) in this.lookup) {
                 val (id, startDir) = rhs
@@ -166,6 +166,7 @@ object PatternRegistry {
                 return Save(map)
             }
 
+            @JvmStatic
             fun create(seed: Long): Save {
                 val map = mutableMapOf<String, Pair<ResourceLocation, HexDir>>()
                 for ((opId, entry) in PatternRegistry.perWorldPatternLookup) {
@@ -180,7 +181,7 @@ object PatternRegistry {
         }
     }
 
-    private const val TAG_SAVED_DATA = "hex.per-world-patterns"
+    const val TAG_SAVED_DATA = "hex.per-world-patterns"
     private const val TAG_OP_ID = "op_id"
     private const val TAG_START_DIR = "start_dir"
 }

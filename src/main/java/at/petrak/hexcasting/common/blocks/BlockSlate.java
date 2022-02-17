@@ -6,6 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -24,7 +25,7 @@ public class BlockSlate extends FaceAttachedHorizontalDirectionalBlock {
     public BlockSlate(Properties p_53182_) {
         super(p_53182_);
         this.registerDefaultState(
-            this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(FACE, AttachFace.WALL));
+            this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(FACE, AttachFace.WALL));
     }
 
     @Override
@@ -46,5 +47,10 @@ public class BlockSlate extends FaceAttachedHorizontalDirectionalBlock {
     @Override
     public PushReaction getPistonPushReaction(BlockState pState) {
         return PushReaction.DESTROY;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, FACE);
     }
 }

@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.casting
 
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.core.BlockPos
+import net.minecraft.world.item.Item
 import net.minecraft.world.phys.Vec3
 
 class CastException(val reason: Reason, vararg val data: Any) : Exception() {
@@ -75,6 +76,21 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
         BAD_OFFHAND_ITEM,
 
         /**
+         * Bad item in offhand except it uses items and not classes
+         *
+         * `Item expected, ItemStack got`
+         */
+        BAD_OFFHAND_ITEM_ITEM,
+
+        /**
+         * Needs exactly X items in the offhand
+         *
+         * `Int needed, Int got`
+         */
+        BAD_OFFHAND_COUNT,
+
+
+        /**
          * Required an inventory at the given position.
          *
          * `BlockPos pos`
@@ -93,6 +109,8 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
             Reason.TOO_FAR -> "tried to interact with something too far away at ${this.data[0] as Vec3}"
             Reason.TOO_MANY_RECURSIVE_EVALS -> "can only recursively call OpEval ${this.data[0] as Int} times but called it ${this.data[1] as Int} times"
             Reason.BAD_OFFHAND_ITEM -> "operator expected ${(this.data[0] as Class<*>).typeName} in offhand but got ${this.data[1]}"
+            Reason.BAD_OFFHAND_ITEM_ITEM -> "operator expected ${(this.data[0] as Item).registryName} in offhand but got ${this.data[1]}"
+            Reason.BAD_OFFHAND_COUNT -> "operator expected ${this.data[0]} items in the offhand but got ${this.data[1]}"
             Reason.REQUIRES_INVENTORY -> "required an inventory at ${this.data[0] as BlockPos}"
         }
 }

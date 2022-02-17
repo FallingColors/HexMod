@@ -10,7 +10,6 @@ public class HexConfig {
     public final ForgeConfigSpec.DoubleValue patternPointSpeedMultiplier;
     public final ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
 
-    public final ForgeConfigSpec.IntValue batteryMaxMana;
     public final ForgeConfigSpec.IntValue dustManaAmount;
     public final ForgeConfigSpec.IntValue shardManaAmount;
     public final ForgeConfigSpec.IntValue chargedCrystalManaAmount;
@@ -31,8 +30,6 @@ public class HexConfig {
 
 
         builder.push("items");
-        batteryMaxMana = builder.comment("The maximum amount of mana a mana battery can store.")
-            .defineInRange("batteryMaxMana", 1_000_000, 0, Integer.MAX_VALUE);
         dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")
             .defineInRange("dustManaAmount", 10_000, 0, Integer.MAX_VALUE);
         shardManaAmount = builder.comment("How much mana a single Amethyst Shard item is worth")

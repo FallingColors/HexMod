@@ -5,6 +5,7 @@ import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.magic.ItemArtifact;
 import at.petrak.hexcasting.common.items.magic.ItemCypher;
+import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
 import at.petrak.hexcasting.common.lib.HexItemNames;
 import net.minecraft.core.NonNullList;
@@ -28,6 +29,21 @@ public class HexItems {
         @Override
         public void fillItemList(NonNullList<ItemStack> items) {
             super.fillItemList(items);
+
+            var manamounts = new int[]{
+                100_000,
+                1_000_000,
+                10_000_000,
+                100_000_000,
+                1_000_000_000,
+            };
+            for (int manamount : manamounts) {
+                var stack = new ItemStack(BATTERY.get(), 1);
+                var tag = stack.getOrCreateTag();
+                tag.putInt(ItemManaBattery.TAG_MANA, manamount);
+                tag.putInt(ItemManaBattery.TAG_MAX_MANA, manamount);
+                items.add(stack);
+            }
         }
     };
 
@@ -42,7 +58,7 @@ public class HexItems {
     public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register(HexItemNames.LENS,
         () -> new Item(unstackable()));
     public static final RegistryObject<Item> SCROLL = ITEMS.register(HexItemNames.SCROLL,
-        () -> new ItemScroll(unstackable()));
+        () -> new ItemScroll(props()));
 
     public static final RegistryObject<ItemFocus> FOCUS = ITEMS.register(HexItemNames.FOCUS,
         () -> new ItemFocus(props()));
@@ -55,6 +71,9 @@ public class HexItems {
         () -> new ItemTrinket(unstackable()));
     public static final RegistryObject<ItemArtifact> ARTIFACT = ITEMS.register(HexItemNames.ARTIFACT,
         () -> new ItemArtifact(unstackable()));
+
+    public static final RegistryObject<ItemManaBattery> BATTERY = ITEMS.register(HexItemNames.BATTERY,
+        () -> new ItemManaBattery(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<ItemDyeColorizer>[] DYE_COLORIZERS = new RegistryObject[16];
     public static final RegistryObject<ItemPrideColorizer>[] PRIDE_COLORIZERS = new RegistryObject[14];

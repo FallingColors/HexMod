@@ -7,29 +7,66 @@ import at.petrak.hexcasting.hexmath.HexPattern;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 public class ListPatsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("hexcasting:listPatterns")
+        dispatcher.register(Commands.literal("hexcasting:patterns")
             .requires(dp -> dp.hasPermission(Commands.LEVEL_ADMINS))
             .then(Commands.literal("list").executes(ctx -> {
                 var bob = new StringBuilder("Patterns in this world:");
                 var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
                 lookup.forEach((sig, opId) -> {
                     bob.append('\n');
-                    bob.append(sig);
-                    bob.append(": ");
                     bob.append(opId.toString());
+                    bob.append(": ");
+                    bob.append(sig);
                 });
                 ctx.getSource().sendSuccess(new TextComponent(bob.toString()), true);
 
                 return lookup.size();
             }))
-            .then(Commands.literal("give").executes(ctx -> {
+            .then(Commands.literal("give")
+                .then(Commands.argument("patternName", PatternResLocArgument.id()).executes(ctx -> {
+                        var sender = ctx.getSource().getEntity();
+                        if (sender instanceof ServerPlayer player) {
+                            var targetId = ResourceLocationArgument.getId(ctx, "patternName");
+                            var pat = PatternResLocArgument.getPattern(ctx, "patternName");
+
+
+                            var tag = new CompoundTag();
+                            tag.putString(ItemScroll.TAG_OP_ID, targetId.toString());
+                            tag.put(ItemScroll.TAG_PATTERN,
+                                pat.serializeToNBT());
+
+                            var stack = new ItemStack(HexItems.SCROLL.get());
+                            stack.setTag(tag);
+
+                            ctx.getSource().sendSuccess(
+                                new TranslatableComponent(
+                                    "command.hexcasting.pats.specific.success",
+                                    stack.getDisplayName(),
+                                    targetId),
+                                true);
+
+                            var stackEntity = player.drop(stack, false);
+                            if (stackEntity != null) {
+                                stackEntity.setNoPickUpDelay();
+                                stackEntity.setOwner(player.getUUID());
+                            }
+
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    }
+                )))
+            .then(Commands.literal("giveAll").executes(ctx -> {
                 var sender = ctx.getSource().getEntity();
                 if (sender instanceof ServerPlayer player) {
                     var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
@@ -54,11 +91,11 @@ public class ListPatsCommand {
                     });
 
                     ctx.getSource().sendSuccess(
-                        new TextComponent(String.format("Gave you all %d scrolls", lookup.size())), true);
+                        new TranslatableComponent("command.hexcasting.pats.all", lookup.size()), true);
                     return lookup.size();
+                } else {
+                    return 0;
                 }
-
-                return 0;
             }))
         );
     }

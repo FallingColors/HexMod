@@ -3,7 +3,6 @@ package at.petrak.hexcasting.common.items.magic;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
-import at.petrak.hexcasting.common.casting.ManaHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.nbt.CompoundTag;
@@ -16,7 +15,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
@@ -27,9 +25,7 @@ import java.util.List;
 /**
  * Item that holds a list of patterns in it ready to be cast
  */
-public abstract class ItemPackagedSpell extends Item {
-    public static final String TAG_MANA = "hexcasting:mana";
-    public static final String TAG_START_MANA = "hexcasting:start_mana";
+public abstract class ItemPackagedSpell extends ItemManaHolder {
     public static final String TAG_PATTERNS = "patterns";
     public static final ResourceLocation HAS_PATTERNS_PRED = new ResourceLocation(HexMod.MOD_ID, "has_patterns");
 
@@ -93,29 +89,7 @@ public abstract class ItemPackagedSpell extends Item {
     public UseAnim getUseAnimation(ItemStack pStack) {
         return UseAnim.BLOCK;
     }
-
-    @Override
-    public boolean isBarVisible(ItemStack pStack) {
-        var tag = pStack.getOrCreateTag();
-        return tag.contains(TAG_PATTERNS);
-    }
-
-    @Override
-    public int getBarColor(ItemStack pStack) {
-        var tag = pStack.getOrCreateTag();
-        var mana = tag.getInt(TAG_MANA);
-        var maxMana = tag.getInt(TAG_START_MANA);
-        return ManaHelper.INSTANCE.barColor(mana, maxMana);
-    }
-
-    @Override
-    public int getBarWidth(ItemStack pStack) {
-        var tag = pStack.getOrCreateTag();
-        var mana = tag.getInt(TAG_MANA);
-        var maxMana = tag.getInt(TAG_START_MANA);
-        return ManaHelper.INSTANCE.barWidth(mana, maxMana);
-    }
-
+    
     private static List<HexPattern> getPatterns(CompoundTag tag) {
         var out = new ArrayList<HexPattern>();
         var patsTag = tag.getList(TAG_PATTERNS, Tag.TAG_COMPOUND);

@@ -1,18 +1,24 @@
 package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
+
+import static at.petrak.hexcasting.common.lib.RegisterHelper.prefix;
 
 public class Recipes extends RecipeProvider {
     public Recipes(DataGenerator pGenerator) {
@@ -21,6 +27,8 @@ public class Recipes extends RecipeProvider {
 
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> recipes) {
+        specialRecipe(recipes, SealFocusRecipe.SERIALIZER);
+
         // this is actually the worst system i have ever seen
         ShapedRecipeBuilder.shaped(HexItems.WAND.get())
             .define('L', Tags.Items.LEATHER)
@@ -146,5 +154,10 @@ public class Recipes extends RecipeProvider {
             .pattern(" D ")
             .pattern(" B ")
             .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
+    }
+
+    protected void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {
+        var name = Registry.RECIPE_SERIALIZER.getKey(serializer);
+        SpecialRecipeBuilder.special(serializer).save(consumer, prefix("dynamic/" + name.getPath()).toString());
     }
 }

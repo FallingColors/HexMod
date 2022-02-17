@@ -3,6 +3,8 @@ package at.petrak.hexcasting.datagen;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
+import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.DataGenerator;
@@ -25,7 +27,16 @@ public class ItemModels extends ItemModelProvider {
         simpleItem(HexItems.CHARGED_AMETHYST.get());
         simpleItem(HexItems.SUBMARINE_SANDWICH.get());
         simpleItem(HexItems.SCRYING_LENS.get());
-        simpleItem(HexItems.SCROLL.get());
+
+        simpleItem(modLoc("scroll_pristine"));
+        simpleItem(modLoc("scroll_ancient"));
+        getBuilder(HexItems.SCROLL.get().getRegistryName().getPath())
+            .override()
+            .predicate(ItemScroll.ANCIENT_PREDICATE, 0f)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_pristine"))).end()
+            .override()
+            .predicate(ItemScroll.ANCIENT_PREDICATE, 1f)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_ancient"))).end();
 
         singleTexture(HexItems.WAND.getId().getPath(), new ResourceLocation("item/handheld_rod"),
             "layer0", new ResourceLocation(HexMod.MOD_ID, "item/" + HexItems.WAND.getId().getPath()));
@@ -68,6 +79,27 @@ public class ItemModels extends ItemModelProvider {
                 .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, 1f - 0.01f)
                 .model(new ModelFile.UncheckedModelFile(modLoc("item/" + p.getSecond() + "_filled")))
                 .end();
+        }
+
+        String[] sizeNames = new String[]{
+            "small", "medium", "large",
+        };
+        int maxFill = 4;
+        for (int size = 0; size < sizeNames.length; size++) {
+            for (int fill = 0; fill <= maxFill; fill++) {
+                String name = "phial_" + sizeNames[size] + "_" + fill;
+                singleTexture(
+                    name,
+                    new ResourceLocation("item/generated"),
+                    "layer0", new ResourceLocation(HexMod.MOD_ID, "item/phial/" + name));
+
+                float fillProp = (float) fill / maxFill;
+                getBuilder(HexItems.BATTERY.getId().getPath()).override()
+                    .predicate(ItemManaBattery.MANA_PREDICATE, fillProp)
+                    .predicate(ItemManaBattery.MAX_MANA_PREDICATE, size)
+                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
+                    .end();
+            }
         }
 
         for (int i = 0; i < 16; i++) {

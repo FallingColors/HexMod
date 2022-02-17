@@ -16,6 +16,7 @@ import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.particles.HexParticles
+import at.petrak.hexcasting.common.recipe.HexCustomRecipes
 import at.petrak.hexcasting.datagen.Advancements
 import at.petrak.hexcasting.datagen.DataGenerators
 import at.petrak.hexcasting.datagen.lootmods.HexLootModifiers
@@ -61,6 +62,7 @@ object HexMod {
         HexLootModifiers.LOOT_MODS.register(modBus)
         HexSounds.SOUNDS.register(modBus)
         HexParticles.PARTICLES.register(modBus)
+        HexCustomRecipes.RECIPES.register(modBus)
 
         evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)

@@ -18,7 +18,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
-import java.util.*
 import kotlin.math.min
 
 /**
@@ -243,8 +242,8 @@ class CastingHarness private constructor(
         }
         if (casterItem is ItemWand || ipsCanDrawFromInv) {
             val manableItems = this.ctx.caster.inventory.items
-                .filter { !Objects.isNull(ManaHelper.priority(it)) }
-                .sortedByDescending(ManaHelper::priority)
+                .filter(ManaHelper::isManaItem)
+                .sortedWith(Comparator(ManaHelper::compare).reversed())
             for (stack in manableItems) {
                 costLeft -= ManaHelper.extractMana(stack, costLeft)!!
                 if (costLeft <= 0)

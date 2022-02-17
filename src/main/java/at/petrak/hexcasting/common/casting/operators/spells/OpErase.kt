@@ -8,7 +8,7 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import net.minecraft.world.phys.Vec3
 
-class OpErase: SpellOperator {
+class OpErase : SpellOperator {
     override val argc = 0
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
@@ -26,7 +26,7 @@ class OpErase: SpellOperator {
             if (otherHandItem.item is ItemPackagedSpell && otherHandItem.hasTag()) {
                 val tag = otherHandItem.orCreateTag
                 tag.remove(ItemPackagedSpell.TAG_MANA)
-                tag.remove(ItemPackagedSpell.TAG_START_MANA)
+                tag.remove(ItemPackagedSpell.TAG_MAX_MANA)
                 tag.remove(ItemPackagedSpell.TAG_PATTERNS)
             }
         }

@@ -8,5 +8,6 @@ public class HexCommands {
     public static void register(RegisterCommandsEvent evt) {
         var dp = evt.getDispatcher();
         ListPatsCommand.register(dp);
+        RecalcPatternsCommand.register(dp);
     }
 }

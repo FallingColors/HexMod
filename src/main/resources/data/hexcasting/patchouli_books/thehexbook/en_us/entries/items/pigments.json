@@ -2,7 +2,7 @@
   "name": "hexcasting.entry.pigments",
   "category": "hexcasting:items",
   "icon": "hexcasting:uuid_colorizer",
-  "sortnum": 5,
+  "sortnum": 6,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [

@@ -33,7 +33,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val type: Class<T>, val cost: I
             val tag = otherHandItem.orCreateTag
             if (otherHandItem.item is ItemPackagedSpell
                 && !tag.contains(ItemPackagedSpell.TAG_MANA)
-                && !tag.contains(ItemPackagedSpell.TAG_START_MANA)
+                && !tag.contains(ItemPackagedSpell.TAG_MAX_MANA)
                 && !tag.contains(ItemPackagedSpell.TAG_PATTERNS)
                 && itemEntity.isAlive
             ) {
@@ -41,7 +41,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val type: Class<T>, val cost: I
                 if (manaAmt != null) {
                     val tag = otherHandItem.orCreateTag
                     tag.putInt(ItemPackagedSpell.TAG_MANA, manaAmt)
-                    tag.putInt(ItemPackagedSpell.TAG_START_MANA, manaAmt)
+                    tag.putInt(ItemPackagedSpell.TAG_MAX_MANA, manaAmt)
 
                     val patsTag = ListTag()
                     for (pat in patterns) {

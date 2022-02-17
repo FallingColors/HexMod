@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
+import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.hexmath.HexPattern;
@@ -24,14 +25,23 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * TAG_OP_ID and TAG_PATTERN: "Ancient Scroll of %s" (Great Spells)
+ * <br>
+ * TAG_PATTERN: "Scroll" (custom)
+ * <br>
+ * (none): "Empty Scroll"
+ * <br>
+ * TAG_OP_ID: invalid
+ */
 public class ItemScroll extends Item {
     public static final String TAG_OP_ID = "op_id";
     public static final String TAG_PATTERN = "pattern";
+    public static final ResourceLocation ANCIENT_PREDICATE = new ResourceLocation(HexMod.MOD_ID, "ancient");
 
     public ItemScroll(Properties pProperties) {
         super(pProperties);
@@ -55,61 +65,53 @@ public class ItemScroll extends Item {
     public static void makeTooltip(RenderTooltipEvent.GatherComponents evt) {
         ItemStack stack = evt.getItemStack();
         if (!stack.isEmpty() && stack.getItem() instanceof ItemScroll) {
-            var tooltip = evt.getTooltipElements();
-
             var tag = stack.getOrCreateTag();
-            HexPattern pattern = null;
             if (tag.contains(TAG_PATTERN)) {
-                pattern = HexPattern.DeserializeFromNBT(tag.getCompound(TAG_PATTERN));
+                var pattern = HexPattern.DeserializeFromNBT(tag.getCompound(TAG_PATTERN));
+                evt.getTooltipElements().add(Either.right(new TooltipGreeble(pattern, tag.contains(TAG_OP_ID))));
             }
 
-            tooltip.add(Either.right(new TooltipGreeble(pattern)));
+
         }
     }
 
     // https://github.com/VazkiiMods/Quark/blob/master/src/main/java/vazkii/quark/content/client/tooltip/MapTooltips.java
     // yoink
     public static class TooltipGreeble implements ClientTooltipComponent, TooltipComponent {
-        private static final ResourceLocation MAP_BG = new ResourceLocation(
-            "minecraft:textures/map/map_background.png");
-        private static final float SIZE = 96f;
+        private static final ResourceLocation PRISTINE_BG = new ResourceLocation(
+            "hexcasting:textures/gui/scroll.png");
+        private static final ResourceLocation ANCIENT_BG = new ResourceLocation(
+            "hexcasting:textures/gui/scroll_ancient.png");
+        private static final float SIZE = 72f;
 
-        @Nullable
         private final HexPattern pattern;
-        @Nullable
         private final List<Vec2> zappyPoints;
-        @Nullable
         private final List<Vec2> pathfinderDots;
         private final float scale;
+        private final boolean isAncient;
 
-        public TooltipGreeble(@Nullable HexPattern pattern) {
+        public TooltipGreeble(HexPattern pattern, boolean isAncient) {
             this.pattern = pattern;
-            if (this.pattern != null) {
-                // Do two passes: one with a random size to find a good COM and one with the real calculations
+            this.isAncient = isAncient;
+            // Do two passes: one with a random size to find a good COM and one with the real calculation
+            // TODO: i should never have been finding the center of mass, but the center of the smallest bounding square
+            var com1 = this.pattern.getCenter(1);
+            var lines1 = this.pattern.toLines(1, Vec2.ZERO);
 
-                // TODO: i should never have been finding the center of mass, but the center of the smallest bounding square
-                var com1 = this.pattern.getCenter(1);
-                var lines1 = this.pattern.toLines(1, Vec2.ZERO);
 
-
-                var maxDist = -1f;
-                for (var dot : lines1) {
-                    var dist = Mth.sqrt(dot.distanceToSqr(com1));
-                    if (dist > maxDist) {
-                        maxDist = dist;
-                    }
+            var maxDist = -1f;
+            for (var dot : lines1) {
+                var dist = Mth.sqrt(dot.distanceToSqr(com1));
+                if (dist > maxDist) {
+                    maxDist = dist;
                 }
-                this.scale = Math.min(10, this.getHeight() / 2.5f / maxDist);
-
-                var com2 = this.pattern.getCenter(this.scale);
-                var lines2 = this.pattern.toLines(this.scale, com2.negated());
-                this.zappyPoints = RenderLib.makeZappy(lines2, 10f, 0.8f, 0f);
-                this.pathfinderDots = lines2.stream().distinct().collect(Collectors.toList());
-            } else {
-                this.zappyPoints = null;
-                this.pathfinderDots = null;
-                this.scale = 0f;
             }
+            this.scale = Math.min(10, this.getHeight() / 2.5f / maxDist);
+
+            var com2 = this.pattern.getCenter(this.scale);
+            var lines2 = this.pattern.toLines(this.scale, com2.negated());
+            this.zappyPoints = RenderLib.makeZappy(lines2, 10f, 0.8f, 0f);
+            this.pathfinderDots = lines2.stream().distinct().collect(Collectors.toList());
         }
 
         @Override
@@ -122,42 +124,40 @@ public class ItemScroll extends Item {
             ps.pushPose();
             ps.translate(mouseX, mouseY, 500);
             RenderSystem.enableBlend();
-            renderBG(ps);
+            renderBG(ps, this.isAncient);
 
             // renderText happens *before* renderImage for some asinine reason
-            if (this.pattern != null) {
 //                RenderSystem.disableBlend();
-                ps.translate(0, 0, 100);
+            ps.translate(0, 0, 100);
 
-                RenderSystem.setShader(GameRenderer::getPositionColorShader);
-                RenderSystem.disableCull();
-                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
-                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-                ps.translate(width / 2f, height / 2f, 1);
+            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            RenderSystem.disableCull();
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            ps.translate(width / 2f, height / 2f, 1);
 
-                var mat = ps.last().pose();
-                var outer = 0xff_d2c8c8;
-                var innerLight = 0xc8_aba2a2;
-                var innerDark = 0xc8_322b33;
-                RenderLib.drawLineSeq(mat, this.zappyPoints, 5f, 0,
-                    outer, outer, null);
-                RenderLib.drawLineSeq(mat, this.zappyPoints, 2f, 0,
-                    innerDark, innerLight,
-                    ClientTickCounter.getTickCount() / 40f);
-                RenderLib.drawSpot(mat, this.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
+            var mat = ps.last().pose();
+            var outer = 0xff_d2c8c8;
+            var innerLight = 0xc8_aba2a2;
+            var innerDark = 0xc8_322b33;
+            RenderLib.drawLineSeq(mat, this.zappyPoints, 5f, 0,
+                outer, outer, null);
+            RenderLib.drawLineSeq(mat, this.zappyPoints, 2f, 0,
+                innerDark, innerLight,
+                ClientTickCounter.getTickCount() / 40f);
+            RenderLib.drawSpot(mat, this.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
 
-                for (var dot : this.pathfinderDots) {
-                    RenderLib.drawSpot(mat, dot, 1.5f, 0.82f, 0.8f, 0.8f, 0.5f);
-                }
+            for (var dot : this.pathfinderDots) {
+                RenderLib.drawSpot(mat, dot, 1.5f, 0.82f, 0.8f, 0.8f, 0.5f);
             }
 
             ps.popPose();
         }
 
-        private static void renderBG(PoseStack ps) {
+        private static void renderBG(PoseStack ps, boolean isAncient) {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-            RenderSystem.setShaderTexture(0, MAP_BG);
+            RenderSystem.setShaderTexture(0, isAncient ? ANCIENT_BG : PRISTINE_BG);
 
 
             // i wish i liked mobius front enough ot get to the TIS puzzles
