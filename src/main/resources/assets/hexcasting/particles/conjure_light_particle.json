@@ -1,11 +1,5 @@
 {
-	"textures": [
-		"hexcasting:spin_cube_7",
-		"hexcasting:spin_cube_6",
-		"hexcasting:spin_cube_5",
-		"hexcasting:spin_cube_4",
-		"hexcasting:spin_cube_3",
-		"hexcasting:spin_cube_2",
-		"hexcasting:spin_cube_1"
-	]
+  "textures": [
+    "hexcasting:cloud"
+  ]
 }
