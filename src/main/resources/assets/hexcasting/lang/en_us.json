@@ -319,13 +319,13 @@
   "hexcasting.entry.phials": "Phials of Media",
   "hexcasting.page.phials1": "I find it quite ... irritating, how Nature refuses to give me change for my work. If all I have on hand is $(item)Charged Crystal/$s, even the tiniest $(action)Archer's Purification/$ will consume the entire crystal, wasting the remaining _media.$(br2)Fortunately, it seems I've found a way somewhat allay this problem.",
   "hexcasting.page.phials2": "I've found old scrolls describing a $(item)Glass Bottle/$ infused with _media. When casting _Hexes, my spells would then draw _media out of the phial. The liquid form of the _media would let me take exact change, so to speak; nothing would be wasted.",
-  "hexcasting.page.phials3": "It's quite like the internal battery of a $(item)Trinket/$, or similar. I cen even $(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)Recharge/$ them in the same manner. $(br2)Unfortunately, the art of actually $(italic)making/$ the things seems to have been lost to time. I've found a hint at the pattern used to craft it, but the technique is irritatingly elusive, and I can't seem to do it successfully.",
-  "hexcasting.page.phials4": "I suspect I will figure it out with study and practice, though. For now, I will simply deal with the wasted _media...$(br2)But I won't settle for it forever.$(br2)",
+  "hexcasting.page.phials3": "It's quite like the internal battery of a $(item)Trinket/$, or similar. I can even $(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)Recharge/$ them in the same manner. $(br2)Unfortunately, the art of actually $(italic)making/$ the things seems to have been lost to time. I've found a hint at the pattern used to craft it, but the technique is irritatingly elusive, and I can't seem to do it successfully.",
+  "hexcasting.page.phials4": "I suspect I will figure it out with study and practice, though. For now, I will simply deal with the wasted _media...$(br2)But I won't settle for it forever.$(br2)$(italic)Drink the milk./$",
 
   "hexcasting.entry.pigments": "Pigments",
   "hexcasting.page.pigments1": "Although their names were lost to time, the old practitioners of my art seem to have identified themselves by a color, emblematic of them and their spells. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in personal colour.\"",
   "hexcasting.page.pigments2": "I'm not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use a pigment, I hold it in one hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$ with the other, consuming the pigment and marking my mind with its color.$(br2)The pigments seem to affect the color of the sparks of media emitted out of a staff when I cast a _Hex, as well as my $(l:patterns/sentinels)$(thing)Sentinel/$.",
-  "hexcasting.page.pigments3header": "Chromatic Colorizers",
+  "hexcasting.page.pigments3header": "Chromatic Pigments",
   "hexcasting.page.pigments3": "Pigments all the colors of the rainbow.",
   "hexcasting.page.pigments4": "And finally, a pigment with a color wholly unique to me.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
 

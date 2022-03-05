@@ -19,6 +19,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.phys.Vec3
 import kotlin.math.min
 
 /**
@@ -69,10 +70,9 @@ class CastingHarness private constructor(
             sideEffects.add(
                 OperatorSideEffect.Particles(
                     ParticleSpray(
-                        this.ctx.caster.eyePosition.add(this.ctx.caster.lookAngle.scale(0.5)),
-                        this.ctx.caster.lookAngle,
-                        0.0,
-                        0.1
+                        this.ctx.position,
+                        Vec3(0.0, 1.0, 0.0),
+                        0.5, 1.0
                     )
                 )
             )

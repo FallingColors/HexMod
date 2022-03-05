@@ -132,7 +132,7 @@ public class Recipes extends RecipeProvider {
             Items.HONEYCOMB,
             Items.RAW_IRON,
             Items.WATER_BUCKET,
-            Items.FEATHER,
+            Items.AZALEA,
             Items.ARROW,
         };
         for (int i = 0; i < politicsInMyVidya.length; i++) {

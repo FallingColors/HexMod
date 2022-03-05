@@ -34,7 +34,10 @@ object OpBlink : SpellOperator {
         return Triple(
             Spell(target, delta),
             50_000 * delta.roundToInt(),
-            listOf(ParticleSpray.Cloud(targetMiddlePos, 2.0), ParticleSpray.Burst(targetMiddlePos.add(dvec), 2.0))
+            listOf(
+                ParticleSpray.Cloud(targetMiddlePos, 2.0, 50),
+                ParticleSpray.Burst(targetMiddlePos.add(dvec), 2.0, 100)
+            )
         )
     }
 

@@ -37,7 +37,9 @@ public class BlockEntityConjured extends BlockEntity {
                     pEntity.getX() + (RANDOM.nextFloat() * 0.6D) - 0.3D,
                     getBlockPos().getY() + (RANDOM.nextFloat() * 0.05D) + 0.95D,
                     pEntity.getZ() + (RANDOM.nextFloat() * 0.6D) - 0.3D,
-                    0.0, 0.0, 0.0);
+                    RANDOM.nextFloat(-0.02f, 0.02f),
+                    RANDOM.nextFloat(0.02f),
+                    RANDOM.nextFloat(-0.02f, 0.02f));
             }
         }
     }
@@ -53,14 +55,18 @@ public class BlockEntityConjured extends BlockEntity {
                     (double) getBlockPos().getX() + 0.4D + (RANDOM.nextFloat() * 0.2D),
                     (double) getBlockPos().getY() + 0.4D + (RANDOM.nextFloat() * 0.2D),
                     (double) getBlockPos().getZ() + 0.4D + (RANDOM.nextFloat() * 0.2D),
-                    0.0, 0.0, 0.0);
+                    RANDOM.nextFloat(-0.005f, 0.005f),
+                    RANDOM.nextFloat(-0.005f, 0.005f),
+                    RANDOM.nextFloat(-0.005f, 0.005f));
             } else {
                 if (RANDOM.nextFloat() < 0.7) {
                     level.addParticle(new ConjureParticleOptions(color, false),
                         (double) getBlockPos().getX() + RANDOM.nextFloat(),
                         (double) getBlockPos().getY() + RANDOM.nextFloat(),
                         (double) getBlockPos().getZ() + RANDOM.nextFloat(),
-                        0.0, 0.0, 0.0);
+                        RANDOM.nextFloat(-0.02f, 0.02f),
+                        RANDOM.nextFloat(-0.02f, 0.02f),
+                        RANDOM.nextFloat(-0.02f, 0.02f));
                 }
             }
         }

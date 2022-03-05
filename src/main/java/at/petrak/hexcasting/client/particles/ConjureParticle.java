@@ -55,15 +55,15 @@ public class ConjureParticle extends TextureSheetParticle {
     }
 
     public @NotNull ParticleRenderType getRenderType() {
-        return this.light ? I_STOLE_THIS_FROM_PSI : ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return this.light ? LIGHT_RENDER_TYPE : CONJURE_RENDER_TYPE;
     }
 
     public void tick() {
         super.tick();
         this.setSpriteFromAge(this.sprites);
+        this.alpha = 1.0f - ((float) this.age / (float) this.lifetime);
         if (light) {
             this.quadSize *= 0.96f;
-            this.alpha = 1.0f - ((float) this.age / (float) this.lifetime);
         }
     }
 
@@ -97,7 +97,7 @@ public class ConjureParticle extends TextureSheetParticle {
 
     // pretty sure this prevents the gross culling
     // https://github.com/VazkiiMods/Psi/blob/1.18/src/main/java/vazkii/psi/client/fx/FXWisp.java
-    private static final ParticleRenderType I_STOLE_THIS_FROM_PSI = new ParticleRenderType() {
+    private record ConjureRenderType(boolean light) implements ParticleRenderType {
         @Override
         public void begin(BufferBuilder buf, TextureManager texMan) {
             RenderSystem.depthMask(false);
@@ -106,7 +106,7 @@ public class ConjureParticle extends TextureSheetParticle {
 
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
             texMan.bindForSetup(TextureAtlas.LOCATION_PARTICLES);
-            texMan.getTexture(TextureAtlas.LOCATION_PARTICLES).setFilter(true, false);
+            texMan.getTexture(TextureAtlas.LOCATION_PARTICLES).setFilter(this.light, false);
             buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 
@@ -123,7 +123,10 @@ public class ConjureParticle extends TextureSheetParticle {
 
         @Override
         public String toString() {
-            return HexMod.MOD_ID + ":conjure";
+            return HexMod.MOD_ID + (light ? ":light" : ":conjure");
         }
-    };
+    }
+
+    private static final ConjureRenderType CONJURE_RENDER_TYPE = new ConjureRenderType(false);
+    private static final ConjureRenderType LIGHT_RENDER_TYPE = new ConjureRenderType(true);
 }

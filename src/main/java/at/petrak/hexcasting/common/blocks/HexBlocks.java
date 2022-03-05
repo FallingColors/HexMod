@@ -26,7 +26,7 @@ public class HexBlocks {
             BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.DIAMOND)
                 .sound(SoundType.AMETHYST)
                 .noDrops()
-                .strength(0f, 0f)
+                .instabreak()
                 .noOcclusion()
                 .isSuffocating(HexBlocks::never)
                 .isViewBlocking(HexBlocks::never)));

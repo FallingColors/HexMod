@@ -3,8 +3,6 @@ package at.petrak.hexcasting.common.network;
 import at.petrak.hexcasting.api.ParticleSpray;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,10 +31,12 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer)
         var velZ = buf.readDouble();
         var fuzziness = buf.readDouble();
         var spread = buf.readDouble();
+        var count = buf.readInt();
         var tag = buf.readAnySizeNbt();
         var colorizer = FrozenColorizer.deserialize(tag);
         return new MsgCastParticleAck(
-            new ParticleSpray(new Vec3(posX, posY, posZ), new Vec3(velX, velY, velZ), fuzziness, spread), colorizer);
+            new ParticleSpray(new Vec3(posX, posY, posZ), new Vec3(velX, velY, velZ), fuzziness, spread, count),
+            colorizer);
     }
 
     public void serialize(ByteBuf buffer) {
@@ -49,29 +49,36 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer)
         buf.writeDouble(this.spray.getVel().z);
         buf.writeDouble(this.spray.getFuzziness());
         buf.writeDouble(this.spray.getSpread());
+        buf.writeInt(this.spray.getCount());
         buf.writeNbt(this.colorizer.serialize());
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() ->
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                for (int i = 0; i < 20; i++) {
+                for (int i = 0; i < spray.getCount(); i++) {
                     // For the colors, pick any random time to get a mix of colors
                     var color = colorizer.getColor(RANDOM.nextFloat() * 256f, Vec3.ZERO);
 
-                    var offset = randomInCircle(Mth.TWO_PI).scale(spray.getSpread());
+                    var offset = randomInCircle(Mth.TWO_PI).normalize()
+                        .scale(RANDOM.nextFloat() * spray.getSpread() / 2);
                     var pos = spray.getPos().add(offset);
 
-                    // https://math.stackexchange.com/questions/56784/generate-a-random-direction-within-a-cone
-                    var northCone = randomInCircle(spray.getSpread());
-                    var velNorm = spray.getVel().normalize();
-                    var zp = new Vec3(0.0, 0.0, 1.0);
-                    var rotAxis = velNorm.cross(zp);
-                    var th = Math.acos(velNorm.dot(zp));
-                    var dagn = new Quaternion(new Vector3f(rotAxis), (float) th, false);
-                    var velf = new Vector3f(northCone);
-                    velf.transform(dagn);
-                    var vel = new Vec3(velf).scale(spray.getVel().length());
+                    var phi = Math.acos(1.0 - RANDOM.nextDouble() * (1.0 - Math.cos(spray.getSpread())));
+                    var theta = Math.PI * 2.0 * RANDOM.nextDouble();
+                    var v = spray.getVel().normalize();
+                    // pick any old vector to get a vector normal to v with
+                    Vec3 k;
+                    if (v.x == 0.0 && v.y == 0.0) {
+                        // oops, pick a *different* normal
+                        k = new Vec3(1.0, 0.0, 0.0);
+                    } else {
+                        k = v.cross(new Vec3(0.0, 0.0, 1.0));
+                    }
+                    var velUnlen = v.scale(Math.cos(phi))
+                        .add(k.scale(Math.sin(phi) * Math.cos(theta)))
+                        .add(v.cross(k).scale(Math.sin(phi) * Math.sin(theta)));
+                    var vel = velUnlen.scale(spray.getVel().length() / 20);
 
                     Minecraft.getInstance().level.addParticle(
                         new ConjureParticleOptions(color, false),
