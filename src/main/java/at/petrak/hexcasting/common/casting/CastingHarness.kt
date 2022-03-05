@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting
 
 import at.petrak.hexcasting.HexMod
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
@@ -65,7 +66,16 @@ class CastingHarness private constructor(
             val (stack2, sideEffectsUnmut) = operator.operate(this.stack.toMutableList(), this.ctx)
             // Stick a poofy particle effect at the caster position
             val sideEffects = sideEffectsUnmut.toMutableList()
-            sideEffects.add(OperatorSideEffect.Particles(this.ctx.position))
+            sideEffects.add(
+                OperatorSideEffect.Particles(
+                    ParticleSpray(
+                        this.ctx.caster.eyePosition.add(this.ctx.caster.lookAngle.scale(0.5)),
+                        this.ctx.caster.lookAngle,
+                        0.0,
+                        0.1
+                    )
+                )
+            )
 
             val fd = this.getFunctionalData().copy(
                 stack = stack2,

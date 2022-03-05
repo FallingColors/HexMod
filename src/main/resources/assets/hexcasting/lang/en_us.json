@@ -48,7 +48,7 @@
   "item.hexcasting.uuid_colorizer": "Soulglimmer Pigment",
   "block.hexcasting.conjured": "Conjured Block",
   "itemGroup.hexcasting": "Hexcasting",
-  
+
   "hexcasting.subtitles.start_pattern": "Starting pattern",
   "hexcasting.subtitles.add_line": "Adding line",
   "hexcasting.subtitles.add_pattern": "Adding pattern",
@@ -302,6 +302,7 @@
   "hexcasting.page.focus2": "$(italic)Poison apples, poison worms./$",
   "hexcasting.page.focus3": "It occurs to me that I could conceivably store a whole list of patterns in a $(item)Focus/$, then recall them and evaluate them with $(l:patterns/meta#OpEval)$(action)Hermes' Gambit/$. This way I can cast complex spells, or parts of spells, without having to draw them over and over.$(br2)I could use this like a slightly less convenient $(l:items/hexcasting#artifact)$(item)Artifact/$, but I think I could get much better dividends by putting common \"phrases\" in a $(item)Focus/$, like the patterns for figuring out where I'm looking.",
   "hexcasting.page.focus4": "Also, if I store an entity in a $(item)Focus/$ and try to recall it after the referenced entity has died or otherwise disappeared, the $(action)Scribe's Reflection/$ will add Null to the stack instead.",
+  "hexcasting.page.focus5": "Finally, it seems if I wish to protect a focus from accidentally being overwritten, I can seal it with wax by crafting it with a $(item)Honeycomb/$. Attempting to use $(action)Scribe's Gambit/$ on a sealed focus will fail.",
 
   "hexcasting.entry.hexcasting": "Hexcasting Items",
   "hexcasting.page.hexcasting1": "Although the flexibility that casting _Hexes \"on the go\" with my $(l:items/staff)$(item)Staff/$ is quite helpful, it's a huge pain to have to wave it around repeatedly just to accomplish a common task. If I could save a common spell for later reuse, it would simplify things a lot-- and allow me to share my _Hexes with friends, too.",

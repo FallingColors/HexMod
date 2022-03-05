@@ -46,21 +46,21 @@ public class ItemModels extends ItemModelProvider {
         String[] focusTypes = new String[]{
             "empty", "entity", "double", "vec3", "widget", "list", "pattern"
         };
-        for (int i = 0, stringsLength = focusTypes.length; i < stringsLength; i++) {
-            String type = focusTypes[i];
-            simpleItem(modLoc("focus_" + type));
-            simpleItem(modLoc("focus_" + type + "_sealed"));
-            getBuilder(HexItems.FOCUS.get().getRegistryName().getPath())
-                .override()
-                .predicate(ItemFocus.DATATYPE_PRED, -0.01f + i)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_" + type)))
-                .end()
-                .override()
-                .predicate(ItemFocus.DATATYPE_PRED, -0.01f + 100 + i)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/focus_" + type + "_sealed")))
-                .end();
-
+        // For stupid bad reasons we need to do this in ascending order.
+        for (int sealedIdx = 0; sealedIdx <= 1; sealedIdx++) {
+            var sealed = sealedIdx == 1;
+            for (int i = 0, stringsLength = focusTypes.length; i < stringsLength; i++) {
+                var type = focusTypes[i];
+                var name = "focus_" + type + (sealed ? "_sealed" : "");
+                simpleItem(modLoc(name));
+                getBuilder(HexItems.FOCUS.get().getRegistryName().getPath())
+                    .override()
+                    .predicate(ItemFocus.DATATYPE_PRED, -0.01f + i + (sealed ? 100 : 0))
+                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
+                    .end();
+            }
         }
+
 
         Pair<RegistryObject<Item>, String>[] packagers = new Pair[]{
             new Pair(HexItems.CYPHER, "cypher"),

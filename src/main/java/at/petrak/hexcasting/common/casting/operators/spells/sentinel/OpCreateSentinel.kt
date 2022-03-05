@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
@@ -13,14 +14,17 @@ import net.minecraftforge.network.PacketDistributor
 
 class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
     override val argc = 1
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Vec3>(0)
         ctx.assertVecInRange(target)
 
         return Triple(
             Spell(target, this.extendsRange),
             10_000,
-            listOf(target)
+            listOf(ParticleSpray.Burst(target, 2.0))
         )
     }
 

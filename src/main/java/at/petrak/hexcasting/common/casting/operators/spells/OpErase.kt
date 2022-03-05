@@ -1,17 +1,20 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
 import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
-import net.minecraft.world.phys.Vec3
 
 class OpErase : SpellOperator {
     override val argc = 0
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
         if (otherHandItem.item !is ItemPackagedSpell) {
             throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemPackagedSpell::class.java, otherHandItem)

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
@@ -12,11 +13,13 @@ import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.phys.Vec3
 
 object OpMakeBattery : SpellOperator {
     override val argc = 1
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
         if (otherHandItem.item != Items.GLASS_BOTTLE) {
             throw CastException(CastException.Reason.BAD_OFFHAND_ITEM_ITEM, Items.GLASS_BOTTLE, otherHandItem)
@@ -27,7 +30,7 @@ object OpMakeBattery : SpellOperator {
 
         val entity = args.getChecked<ItemEntity>(0)
 
-        return Triple(Spell(entity), 100_000, listOf(entity.position()))
+        return Triple(Spell(entity), 100_000, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {

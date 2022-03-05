@@ -1,12 +1,11 @@
 package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
-import at.petrak.hexcasting.common.particles.HexParticles;
+import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -33,14 +32,12 @@ public class BlockEntityConjured extends BlockEntity {
                 int color = this.colorizer.getColor(pEntity.tickCount, pEntity.position()
                     .add(new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
                         RANDOM.nextFloat() * 3)));
-                int r = FastColor.ARGB32.red(color);
-                int g = FastColor.ARGB32.green(color);
-                int b = FastColor.ARGB32.blue(color);
                 assert level != null;
-                level.addParticle(HexParticles.CONJURE_BLOCK_PARTICLE.get(),
+                level.addParticle(new ConjureParticleOptions(color, false),
                     pEntity.getX() + (RANDOM.nextFloat() * 0.6D) - 0.3D,
                     getBlockPos().getY() + (RANDOM.nextFloat() * 0.05D) + 0.95D,
-                    pEntity.getZ() + (RANDOM.nextFloat() * 0.6D) - 0.3D, r / 255d, g / 255d, b / 255d);
+                    pEntity.getZ() + (RANDOM.nextFloat() * 0.6D) - 0.3D,
+                    0.0, 0.0, 0.0);
             }
         }
     }
@@ -50,21 +47,20 @@ public class BlockEntityConjured extends BlockEntity {
             int color = this.colorizer.getColor(RANDOM.nextFloat() * 16384,
                 new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
                     RANDOM.nextFloat() * 3));
-            double r = FastColor.ARGB32.red(color) / 255d;
-            double g = FastColor.ARGB32.green(color) / 255d;
-            double b = FastColor.ARGB32.blue(color) / 255d;
             assert level != null;
             if (getBlockState().getValue(BlockConjured.LIGHT)) {
-                level.addParticle(HexParticles.CONJURE_LIGHT_PARTICLE.get(),
+                level.addParticle(new ConjureParticleOptions(color, true),
                     (double) getBlockPos().getX() + 0.4D + (RANDOM.nextFloat() * 0.2D),
                     (double) getBlockPos().getY() + 0.4D + (RANDOM.nextFloat() * 0.2D),
-                    (double) getBlockPos().getZ() + 0.4D + (RANDOM.nextFloat() * 0.2D), r, g, b);
+                    (double) getBlockPos().getZ() + 0.4D + (RANDOM.nextFloat() * 0.2D),
+                    0.0, 0.0, 0.0);
             } else {
-                if (RANDOM.nextBoolean()) {
-                    level.addParticle(HexParticles.CONJURE_BLOCK_PARTICLE.get(),
+                if (RANDOM.nextFloat() < 0.7) {
+                    level.addParticle(new ConjureParticleOptions(color, false),
                         (double) getBlockPos().getX() + RANDOM.nextFloat(),
                         (double) getBlockPos().getY() + RANDOM.nextFloat(),
-                        (double) getBlockPos().getZ() + RANDOM.nextFloat(), r, g, b);
+                        (double) getBlockPos().getZ() + RANDOM.nextFloat(),
+                        0.0, 0.0, 0.0);
                 }
             }
         }
@@ -76,14 +72,12 @@ public class BlockEntityConjured extends BlockEntity {
                 int color = this.colorizer.getColor(entity.tickCount, entity.position()
                     .add(new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
                         RANDOM.nextFloat() * 3)));
-                double r = FastColor.ARGB32.red(color) / 255d;
-                double g = FastColor.ARGB32.green(color) / 255d;
-                double b = FastColor.ARGB32.blue(color) / 255d;
                 assert level != null;
-                level.addParticle(HexParticles.CONJURE_BLOCK_PARTICLE.get(),
+                level.addParticle(new ConjureParticleOptions(color, false),
                     entity.getX() + (RANDOM.nextFloat() * 0.8D) - 0.2D,
                     getBlockPos().getY() + (RANDOM.nextFloat() * 0.05D) + 0.95D,
-                    entity.getZ() + (RANDOM.nextFloat() * 0.8D) - 0.2D, r, g, b);
+                    entity.getZ() + (RANDOM.nextFloat() * 0.8D) - 0.2D,
+                    0.0, 0.0, 0.0);
             }
         }
     }

@@ -1,26 +1,30 @@
 {
-    "name": "hexcasting.entry.focus",
-    "icon": "hexcasting:focus",
-    "category": "hexcasting:items",
-    "sortnum": 2,
-    "advancement": "hexcasting:root",
-    "pages": [
-        {
-            "type": "patchouli:text", 
-            "text": "hexcasting.page.focus1"
-        },
-        {
-            "type": "patchouli:crafting",
-            "recipe": "hexcasting:focus",
-            "text": "hexcasting.page.focus2"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.focus3"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.focus4"
-        }
-    ]
+  "name": "hexcasting.entry.focus",
+  "icon": "hexcasting:focus",
+  "category": "hexcasting:items",
+  "sortnum": 2,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.focus1"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:focus",
+      "text": "hexcasting.page.focus2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.focus3"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.focus4"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.focus5"
+    }
+  ]
 }

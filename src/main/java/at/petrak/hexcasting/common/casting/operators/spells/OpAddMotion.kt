@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
@@ -16,13 +17,23 @@ object OpAddMotion : SpellOperator {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Entity>(0)
         val motion = args.getChecked<Vec3>(1)
         return Triple(
             Spell(target, motion),
             (motion.lengthSqr() * 10_000f).toInt(),
-            listOf(target.position()),
+            listOf(
+                ParticleSpray(
+                    target.position().add(0.0, target.eyeHeight / 2.0, 0.0),
+                    motion.normalize(),
+                    0.0,
+                    0.1
+                )
+            ),
         )
     }
 

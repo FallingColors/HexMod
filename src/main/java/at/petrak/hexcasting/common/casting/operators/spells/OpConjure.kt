@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
@@ -13,14 +14,17 @@ import net.minecraft.world.phys.Vec3
 
 class OpConjure(val light: Boolean) : SpellOperator {
     override val argc = 1
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Vec3>(0)
         ctx.assertVecInRange(target)
 
         return Triple(
             Spell(target, light),
             10_000,
-            listOf(target)
+            listOf(ParticleSpray.Cloud(Vec3.atCenterOf(BlockPos(target)), 1.0))
         )
     }
 

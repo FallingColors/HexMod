@@ -1,10 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.Operator
+import at.petrak.hexcasting.api.*
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.RenderedSpell
-import at.petrak.hexcasting.api.SpellDatum
-import at.petrak.hexcasting.api.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -21,14 +18,17 @@ import net.minecraft.world.phys.Vec3
 
 object OpExtinguish : SpellOperator {
     override val argc = 1
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Vec3>(0)
         ctx.assertVecInRange(target)
 
         return Triple(
             Spell(target),
             200_000,
-            listOf(target)
+            listOf(ParticleSpray.Burst(target, 1.0))
         )
     }
 
@@ -48,37 +48,58 @@ object OpExtinguish : SpellOperator {
                 val distFromFocus =
                     ctx.caster.position().distanceToSqr(Vec3(here.x.toDouble(), here.y.toDouble(), here.z.toDouble()))
                 val distFromTarget =
-                    target.distanceTo(Vec3(here.x.toDouble(), here.y.toDouble(), here.z.toDouble())) // max distance to prevent runaway shenanigans
+                    target.distanceTo(
+                        Vec3(
+                            here.x.toDouble(),
+                            here.y.toDouble(),
+                            here.z.toDouble()
+                        )
+                    ) // max distance to prevent runaway shenanigans
                 if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && distFromTarget < 10) {
                     // never seen this pos in my life
                     val blockstate = ctx.world.getBlockState(here)
                     val success =
-                    when (blockstate.block) {
-                        is BaseFireBlock -> {ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true}
-                        is CampfireBlock -> {if (blockstate.getValue(CampfireBlock.LIT)) { // check if campfire is lit before putting it out
-                            val wilson = Items.WOODEN_SHOVEL // summon shovel from the ether to do our bidding
-                            val hereVec = (Vec3(here.x.toDouble(), here.y.toDouble(), here.z.toDouble()))
-                            wilson.useOn(UseOnContext(ctx.world, null, InteractionHand.MAIN_HAND, ItemStack(wilson.asItem()), BlockHitResult(hereVec, Direction.UP, here, false))); true}
-                            else false}
-                        is AbstractCandleBlock -> {
-                            if (blockstate.getValue(AbstractCandleBlock.LIT)) { // same check for candles
-                                AbstractCandleBlock.extinguish(null, blockstate, ctx.world, here); true}
-                            else false}
-                        is NetherPortalBlock -> {ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true}
-                        else -> false
-                    }
+                        when (blockstate.block) {
+                            is BaseFireBlock -> {
+                                ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
+                            }
+                            is CampfireBlock -> {
+                                if (blockstate.getValue(CampfireBlock.LIT)) { // check if campfire is lit before putting it out
+                                    val wilson = Items.WOODEN_SHOVEL // summon shovel from the ether to do our bidding
+                                    val hereVec = (Vec3(here.x.toDouble(), here.y.toDouble(), here.z.toDouble()))
+                                    wilson.useOn(
+                                        UseOnContext(
+                                            ctx.world,
+                                            null,
+                                            InteractionHand.MAIN_HAND,
+                                            ItemStack(wilson.asItem()),
+                                            BlockHitResult(hereVec, Direction.UP, here, false)
+                                        )
+                                    ); true
+                                } else false
+                            }
+                            is AbstractCandleBlock -> {
+                                if (blockstate.getValue(AbstractCandleBlock.LIT)) { // same check for candles
+                                    AbstractCandleBlock.extinguish(null, blockstate, ctx.world, here); true
+                                } else false
+                            }
+                            is NetherPortalBlock -> {
+                                ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
+                            }
+                            else -> false
+                        }
 
                     if (success) {
                         ctx.world.sendParticles(
-                        ParticleTypes.SMOKE,
-                        here.x + 0.5 + Math.random() * 0.4 - 0.2,
-                        here.y + 0.5 + Math.random() * 0.4 - 0.2,
-                        here.z + 0.5 + Math.random() * 0.4 - 0.2,
-                        2,
-                        0.0,
-                        0.05,
-                        0.0,
-                        0.0
+                            ParticleTypes.SMOKE,
+                            here.x + 0.5 + Math.random() * 0.4 - 0.2,
+                            here.y + 0.5 + Math.random() * 0.4 - 0.2,
+                            here.z + 0.5 + Math.random() * 0.4 - 0.2,
+                            2,
+                            0.0,
+                            0.05,
+                            0.0,
+                            0.0
                         )
                         successes++
                     }

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
@@ -16,7 +17,10 @@ import kotlin.math.roundToInt
 
 object OpBlink : SpellOperator {
     override val argc = 2
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Entity>(0)
         val delta = args.getChecked<Double>(1)
 
@@ -25,10 +29,12 @@ object OpBlink : SpellOperator {
         ctx.assertVecInRange(target.position())
         ctx.assertVecInRange(target.position().add(dvec))
 
+        val targetMiddlePos = target.position().add(0.0, target.eyeHeight / 2.0, 0.0)
+
         return Triple(
             Spell(target, delta),
             50_000 * delta.roundToInt(),
-            listOf(target.position().add(dvec))
+            listOf(ParticleSpray.Cloud(targetMiddlePos, 2.0), ParticleSpray.Burst(targetMiddlePos.add(dvec), 2.0))
         )
     }
 

@@ -81,8 +81,7 @@ public record FrozenColorizer(Item item, UUID owner) {
 
         int baseIdx = Mth.floor(fIdx);
         float tRaw = fIdx - baseIdx;
-//        float t = -(float) (Math.cbrt(Mth.cos(tRaw * Mth.PI)) / 2) + 0.5f;
-        float t = tRaw;
+        float t = tRaw < 0.5 ? 4 * tRaw * tRaw * tRaw : (float) (1 - Math.pow(-2 * tRaw + 2, 3) / 2);
         int start = colors[baseIdx % colors.length];
         int end = colors[(baseIdx + 1) % colors.length];
 

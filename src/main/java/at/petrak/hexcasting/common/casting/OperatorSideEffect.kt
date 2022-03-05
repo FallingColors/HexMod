@@ -1,20 +1,15 @@
 package at.petrak.hexcasting.common.casting
 
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
-import at.petrak.hexcasting.common.particles.HexParticles
+import at.petrak.hexcasting.common.network.HexMessages
+import at.petrak.hexcasting.common.network.MsgCastParticleAck
 import at.petrak.hexcasting.datagen.Advancements
-import com.mojang.math.Quaternion
-import com.mojang.math.Vector3f
 import net.minecraft.Util
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.network.chat.TranslatableComponent
-import net.minecraft.util.Mth
-import net.minecraft.world.phys.Vec3
-import kotlin.math.acos
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import net.minecraftforge.network.PacketDistributor
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -46,7 +41,7 @@ sealed class OperatorSideEffect {
         override fun performEffect(harness: CastingHarness): Boolean {
             val overcastOk = harness.ctx.canOvercast
             val leftoverMana = harness.withdrawMana(this.amount, overcastOk)
-            if (leftoverMana > 0 && overcastOk) {
+            if (leftoverMana > 0 && !overcastOk) {
                 harness.ctx.caster.sendMessage(
                     TranslatableComponent("hexcasting.message.cant_overcast"),
                     Util.NIL_UUID
@@ -56,43 +51,21 @@ sealed class OperatorSideEffect {
         }
     }
 
-    data class Particles(val position: Vec3, val velocity: Vec3, val fuzziness: Double, val spread: Double) :
+    data class Particles(val spray: ParticleSpray) :
         OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
             val colorizer = harness.getColorizer()
+            val pos = spray.pos
 
-            for (i in 0 until 20) {
-                // For the colors, pick any random time to get a mix of colors
-                val color = colorizer.getColor(Random.nextFloat() * 256f, Vec3.ZERO)
-
-                // https://math.stackexchange.com/questions/44689/how-to-find-a-random-axis-or-unit-vector-in-3d
-                fun randomInCircle(maxTh: Double = Mth.TWO_PI.toDouble()): Vec3 {
-                    val th = Random.nextDouble(0.0, maxTh)
-                    val z = Random.nextDouble(-1.0, 1.0)
-                    return Vec3(sqrt(1.0 - z * z) * cos(th), sqrt(1.0 - z * z) * sin(th), z)
-                }
-
-                val offset = randomInCircle().scale(fuzziness)
-                val pos = position.add(offset)
-
-                // https://math.stackexchange.com/questions/56784/generate-a-random-direction-within-a-cone
-                val northCone = randomInCircle(spread)
-                val velNorm = velocity.normalize()
-                val zp = Vec3(0.0, 0.0, 1.0)
-                val rotAxis = velNorm.cross(zp)
-                val th = acos(velNorm.dot(zp))
-                val dagn = Quaternion(Vector3f(rotAxis), th.toFloat(), false)
-                val velf = Vector3f(northCone)
-                velf.transform(dagn)
-                val vel = Vec3(velf).scale(velocity.length())
-
-                // TODO: this doesn't work because xyz velocity is a lie
-                harness.ctx.world.addParticle(
-                    HexParticles.CONJURE_BLOCK_PARTICLE.get(),
-                    pos.x, pos.y, pos.z,
-                    vel.x, vel.y, vel.z,
+            HexMessages.getNetwork().send(PacketDistributor.NEAR.with {
+                PacketDistributor.TargetPoint(
+                    pos.x,
+                    pos.y,
+                    pos.z,
+                    128.0 * 128.0,
+                    harness.ctx.world.dimension()
                 )
-            }
+            }, MsgCastParticleAck(spray, colorizer))
 
             return false
         }
@@ -113,7 +86,7 @@ sealed class OperatorSideEffect {
                 else -> {}
             }
 
-            return false
+            return true
         }
     }
 }

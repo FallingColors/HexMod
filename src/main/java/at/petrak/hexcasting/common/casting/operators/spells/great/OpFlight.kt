@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.HexUtils.serializeToNBT
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
@@ -26,7 +27,10 @@ import kotlin.math.roundToInt
 object OpFlight : SpellOperator {
     override val argc = 3
     override val isGreat = true
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<ServerPlayer>(0)
         val timeRaw = max(args.getChecked(1), 0.0)
         val radiusRaw = max(args.getChecked(2), 0.0)
@@ -36,7 +40,7 @@ object OpFlight : SpellOperator {
         return Triple(
             Spell(target, time, radiusRaw, ctx.position),
             10_000 * (timeRaw * radiusRaw + 1.0).roundToInt(),
-            listOf()
+            listOf(ParticleSpray(target.position(), Vec3(0.0, 2.0, 0.0), 0.0, 0.1))
         )
     }
 

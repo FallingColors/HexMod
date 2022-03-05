@@ -44,7 +44,7 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
     @Override
     public void stepOn(Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull Entity pEntity) {
         BlockEntity tile = pLevel.getBlockEntity(pPos);
-        if (tile instanceof BlockEntityConjured bec) {
+        if (tile instanceof BlockEntityConjured bec && !bec.getBlockState().getValue(LIGHT)) {
             bec.walkParticle(pEntity);
         }
         super.stepOn(pLevel, pPos, pState, pEntity);

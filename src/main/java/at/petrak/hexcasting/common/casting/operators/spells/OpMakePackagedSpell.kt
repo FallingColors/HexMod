@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
@@ -11,11 +12,13 @@ import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.nbt.ListTag
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.phys.Vec3
 
 class OpMakePackagedSpell<T : ItemPackagedSpell>(val type: Class<T>, val cost: Int) : SpellOperator {
     override val argc = 2
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
         if (!type.isAssignableFrom(otherHandItem.item.javaClass)) {
             throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, type, otherHandItem)
@@ -24,7 +27,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val type: Class<T>, val cost: I
         val entity = args.getChecked<ItemEntity>(0)
         val patterns = args.getChecked<List<SpellDatum<*>>>(1).map { it.tryGet<HexPattern>() }
 
-        return Triple(Spell(entity, patterns), cost, listOf(entity.position()))
+        return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }
 
     private data class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {

@@ -2,16 +2,15 @@ package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.SpellDatum;
+import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
-import at.petrak.hexcasting.common.particles.ConjureParticle;
 import at.petrak.hexcasting.common.particles.HexParticles;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -89,8 +88,9 @@ public class RegisterClientStuff {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerParticles(ParticleFactoryRegisterEvent event) {
-        ParticleEngine particleManager = Minecraft.getInstance().particleEngine;
-        particleManager.register(HexParticles.CONJURE_BLOCK_PARTICLE.get(), ConjureParticle.BlockProvider::new);
-        particleManager.register(HexParticles.CONJURE_LIGHT_PARTICLE.get(), ConjureParticle.LightProvider::new);
+        // does whatever a particle can
+        var particleMan = Minecraft.getInstance().particleEngine;
+        particleMan.register(HexParticles.LIGHT_PARTICLE.get(), ConjureParticle.Provider::new);
+        particleMan.register(HexParticles.CONJURE_PARTICLE.get(), ConjureParticle.Provider::new);
     }
 }

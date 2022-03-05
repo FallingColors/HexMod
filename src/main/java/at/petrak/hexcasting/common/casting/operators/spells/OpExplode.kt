@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
@@ -13,14 +14,17 @@ class OpExplode(val fire: Boolean) : SpellOperator {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getChecked<Vec3>(0)
         val strength = args.getChecked<Double>(1)
         ctx.assertVecInRange(pos)
         return Triple(
             Spell(pos, strength, this.fire),
             ((1 + strength + if (this.fire) 2 else 0) * 50_000.0).toInt(),
-            listOf(pos)
+            listOf(ParticleSpray.Burst(pos, strength))
         )
     }
 

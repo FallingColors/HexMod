@@ -37,5 +37,7 @@ public class HexMessages {
             MsgSentinelStatusUpdateAck::deserialize, MsgSentinelStatusUpdateAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgColorizerUpdateAck.class, MsgColorizerUpdateAck::serialize,
             MsgColorizerUpdateAck::deserialize, MsgColorizerUpdateAck::handle);
+        NETWORK.registerMessage(messageIdx++, MsgCastParticleAck.class, MsgCastParticleAck::serialize,
+            MsgCastParticleAck::deserialize, MsgCastParticleAck::handle);
     }
 }

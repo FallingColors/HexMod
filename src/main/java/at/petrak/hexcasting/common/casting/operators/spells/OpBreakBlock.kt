@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.api.SpellOperator
@@ -14,13 +15,18 @@ object OpBreakBlock : SpellOperator {
     override val argc: Int
         get() = 1
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): Triple<RenderedSpell, Int, List<Vec3>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getChecked<Vec3>(0)
         ctx.assertVecInRange(pos)
+
+        val centered = Vec3.atCenterOf(BlockPos(pos))
         return Triple(
             Spell(pos),
             20_000,
-            listOf(pos)
+            listOf(ParticleSpray.Burst(centered, 1.0))
         )
     }
 

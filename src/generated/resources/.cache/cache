@@ -1,7 +1,7 @@
 eb78f6a2b68dd772a5016fc5a3db10488a65abfa assets/hexcasting/models/item/amethyst_dust.json
 df940dd798240fac6fde700c57f8ae6aa43d1c9e assets/hexcasting/models/item/artifact.json
 1a66f279c030ebd5ed6a596f63205094b2529819 assets/hexcasting/models/item/artifact_filled.json
-9f3d25fb7fd5e4f3ee81142ac9396709ac068860 assets/hexcasting/models/item/battery.json
+1b3a4bd9dd3c2af2894e0acc1d9d3c74d16c7625 assets/hexcasting/models/item/battery.json
 dc72e3345c4375b37f3624040c9a8df435c958d1 assets/hexcasting/models/item/charged_amethyst.json
 b9916a82d647db5d3c505de2eb5f0a528169e1db assets/hexcasting/models/item/cypher.json
 5082df8eee8f56f8c0d74db71ccda37a165bc76f assets/hexcasting/models/item/cypher_filled.json
@@ -21,7 +21,7 @@ c2ceb08a8662a7e4a311401b0baced1add6f2e35 assets/hexcasting/models/item/dye_color
 f41fb9405b869644333872cd1ece40b1b07410d2 assets/hexcasting/models/item/dye_colorizer_red.json
 5894e7a1cc38ae5b09c651791c65c983d984d20c assets/hexcasting/models/item/dye_colorizer_white.json
 07959b86ed25559b4960c5f4aa7bab88bf9b5bf1 assets/hexcasting/models/item/dye_colorizer_yellow.json
-5ee629510cbd0058a5736be2bf426d3a1b6717a0 assets/hexcasting/models/item/focus.json
+f7f98a306a8a0529a54446b4876e624201525a1d assets/hexcasting/models/item/focus.json
 0146e90177ed71b25d2936ff3b2d9975e47c5142 assets/hexcasting/models/item/focus_double.json
 167b8e3f3367f12f8045369bea26d7a48e59b0d0 assets/hexcasting/models/item/focus_double_sealed.json
 3ff6209fdfc13c6f5e4741a5892787cb5700a34c assets/hexcasting/models/item/focus_empty.json
