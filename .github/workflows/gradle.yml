@@ -1,6 +1,8 @@
 name: Java CI with Gradle
 on:
-  [push, pull_request]
+  push:
+    tags:
+      - 'v*'
 jobs:
   build:
     runs-on: ubuntu-latest
