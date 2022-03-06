@@ -25,7 +25,9 @@ import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.DistExecutor
+import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -79,11 +81,11 @@ object HexMod {
             }
         }
 
-
         // and then things that don't require busses
         HexMessages.register()
         HexStatistics.register()
         ContributorList.loadContributors()
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG_SPEC)
     }
 
     @SubscribeEvent

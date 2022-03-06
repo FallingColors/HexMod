@@ -17,7 +17,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '0.6.0-dev.1'
+version = '0.6.0-dev.2'
 group = 'at.petra-k.hexcasting' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'hexcasting'
 
@@ -191,8 +191,8 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-65-SNAPSHOT:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-65-SNAPSHOT")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-65:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-65")
 
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.3.78:api")

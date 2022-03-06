@@ -7,30 +7,30 @@ issueTrackerURL = "https://github.com/gamma-delta/HexMod/issues"
 [[mods]]
 modId = "hexcasting"
 version = "${file.jarVersion}"
-displayName = "Hex"
+displayName = "Hexcasting"
 displayURL = "https://github.com/gamma-delta/HexMod"
 logoFile = "logo.png"
 credits = "Alwinfy for visual effects, proofreading, and code help; Kra3tor for sound effects; Falkory for textures; and all of Vazcord for alpha-testing and supporting me!"
 authors = "petrak@ (aka gamma-delta)"
 description = "Cast powerful Hexes on the fly by drawing patterns with a staff."
 
-[[dependencies.hex]]
+[[dependencies.hexcasting]]
 modId = "forge"
 mandatory = true
 versionRange = "[39,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.hex]]
+[[dependencies.hexcasting]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.18.1,1.19)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.hex]]
+[[dependencies.hexcasting]]
 modId = "patchouli"
 mandatory = true
-versionRange = "[1.18.1-65-SNAPSHOT,)"
+versionRange = "[1.18.1-65,)"
 ordering = "NONE"
 side = "BOTH"

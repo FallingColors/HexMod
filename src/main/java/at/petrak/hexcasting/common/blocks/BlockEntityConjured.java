@@ -51,15 +51,17 @@ public class BlockEntityConjured extends BlockEntity {
                     RANDOM.nextFloat() * 3));
             assert level != null;
             if (getBlockState().getValue(BlockConjured.LIGHT)) {
-                level.addParticle(new ConjureParticleOptions(color, true),
-                    (double) getBlockPos().getX() + 0.4D + (RANDOM.nextFloat() * 0.2D),
-                    (double) getBlockPos().getY() + 0.4D + (RANDOM.nextFloat() * 0.2D),
-                    (double) getBlockPos().getZ() + 0.4D + (RANDOM.nextFloat() * 0.2D),
-                    RANDOM.nextFloat(-0.005f, 0.005f),
-                    RANDOM.nextFloat(-0.005f, 0.005f),
-                    RANDOM.nextFloat(-0.005f, 0.005f));
+                if (RANDOM.nextFloat() < 0.5) {
+                    level.addParticle(new ConjureParticleOptions(color, true),
+                        (double) getBlockPos().getX() + 0.45D + (RANDOM.nextFloat() * 0.1D),
+                        (double) getBlockPos().getY() + 0.45D + (RANDOM.nextFloat() * 0.1D),
+                        (double) getBlockPos().getZ() + 0.45D + (RANDOM.nextFloat() * 0.1D),
+                        RANDOM.nextFloat(-0.005f, 0.005f),
+                        RANDOM.nextFloat(-0.002f, 0.02f),
+                        RANDOM.nextFloat(-0.005f, 0.005f));
+                }
             } else {
-                if (RANDOM.nextFloat() < 0.7) {
+                if (RANDOM.nextFloat() < 0.2) {
                     level.addParticle(new ConjureParticleOptions(color, false),
                         (double) getBlockPos().getX() + RANDOM.nextFloat(),
                         (double) getBlockPos().getY() + RANDOM.nextFloat(),

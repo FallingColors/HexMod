@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -29,8 +31,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
-
 public class BlockConjured extends Block implements SimpleWaterloggedBlock, EntityBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty LIGHT = BooleanProperty.create("light");
@@ -41,6 +41,23 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
         this.registerDefaultState(this.stateDefinition.any().setValue(LIGHT, false).setValue(WATERLOGGED, false));
     }
 
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
+        BlockEntityType<T> pBlockEntityType) {
+        if (pLevel.isClientSide()) {
+            return BlockConjured::tick;
+        } else {
+            return null;
+        }
+    }
+
+    private static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
+        if (t instanceof BlockEntityConjured conjured) {
+            conjured.particleEffect();
+        }
+    }
+
     @Override
     public void stepOn(Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull Entity pEntity) {
         BlockEntity tile = pLevel.getBlockEntity(pPos);
@@ -48,15 +65,6 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
             bec.walkParticle(pEntity);
         }
         super.stepOn(pLevel, pPos, pState, pEntity);
-    }
-
-    @Override
-    public void animateTick(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos,
-        @NotNull Random pRand) {
-        BlockEntity tile = pLevel.getBlockEntity(pPos);
-        if (tile instanceof BlockEntityConjured bec) {
-            bec.particleEffect();
-        }
     }
 
     @Override
