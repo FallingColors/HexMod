@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.casting.operators.eval.OpEvalDelay;
 import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
 import at.petrak.hexcasting.common.casting.operators.lists.*;
 import at.petrak.hexcasting.common.casting.operators.math.*;
+import at.petrak.hexcasting.common.casting.operators.math.logic.*;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
@@ -84,6 +85,29 @@ public class RegisterPatterns {
                 OpConstructVec.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qeeeee", HexDir.EAST), prefix("deconstruct_vec"),
                 OpDeconstructVec.INSTANCE);
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wdw", HexDir.NORTH_EAST), prefix("and"),
+                OpAnd.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waw", HexDir.SOUTH_EAST), prefix("or"),
+                OpOr.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dwa", HexDir.NORTH_WEST), prefix("xor"),
+                OpXor.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("e", HexDir.SOUTH_EAST), prefix("greater"),
+                new OpCompare((a, b) -> a > b));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("q", HexDir.SOUTH_WEST), prefix("less"),
+                new OpCompare((a, b) -> a < b));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ea", HexDir.SOUTH_EAST), prefix("greater_eq"),
+                new OpCompare((a, b) -> a >= b));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qd", HexDir.SOUTH_WEST), prefix("less_eq"),
+                new OpCompare((a, b) -> a <= b));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ad", HexDir.EAST), prefix("equals"),
+                new OpCompare((a, b) -> Math.abs(a - b) < 0.0001));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("da", HexDir.EAST), prefix("not_equals"),
+                new OpCompare((a, b) -> Math.abs(a - b) >= 0.0001));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dw", HexDir.NORTH_WEST), prefix("not"),
+                OpNot.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aw", HexDir.NORTH_EAST), prefix("identity"),
+                OpIdentityKindOf.INSTANCE);
 
             // == Spells ==
 

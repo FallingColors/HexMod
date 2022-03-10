@@ -24,7 +24,7 @@ object OpEntityRaycast : ConstManaOperator {
             endp,
             AABB(origin, endp),
             { true },
-            Operator.MAX_DISTANCE
+            1_000_000.0
         )
         return Operator.spellListOf(
             entityHitResult?.entity ?: Widget.NULL

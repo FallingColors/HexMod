@@ -2,10 +2,10 @@
   "name": "hexcasting.spell.hexcasting:colorize",
   "category": "hexcasting:patterns/spells",
   "icon": "hexcasting:pride_colorizer_1",
-  "sortnum": 8,
+  "sortnum": 5,
   "advancement": "hexcasting:root",
   "read_by_default": true,
-  "pages": [  
+  "pages": [
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:colorize",

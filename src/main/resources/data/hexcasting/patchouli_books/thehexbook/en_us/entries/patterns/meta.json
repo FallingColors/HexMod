@@ -1,50 +1,50 @@
 {
-    "name": "hexcasting.entry.meta",
-    "category": "hexcasting:patterns",
-    "icon": "minecraft:shulker_box",
-    "sortnum": 6,
-    "advancement": "hexcasting:root",
-    "read_by_default": true,
-    "pages": [
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:write",
-            "anchor": "hexcasting:write",
-            "input": "any",
-            "output": "",
-            "text": "hexcasting.page.meta1"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:read",
-            "anchor": "hexcasting:read",
-            "input": "",
-            "output": "any",
-            "text": "hexcasting.page.meta2"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:eval",
-            "anchor": "hexcasting:eval",
-            "input": "list of patterns",
-            "output": "many",
-            "text": "hexcasting.page.meta3"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.meta4"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:for_each",
-            "anchor": "hexcasting:for_each",
-            "input": "list of patterns, list",
-            "output": "many",
-            "text": "hexcasting.page.meta5"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.meta6"
-        }
-    ]
+  "name": "hexcasting.entry.meta",
+  "category": "hexcasting:patterns",
+  "icon": "minecraft:shulker_box",
+  "sortnum": 7,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:write",
+      "anchor": "hexcasting:write",
+      "input": "any",
+      "output": "",
+      "text": "hexcasting.page.meta1"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:read",
+      "anchor": "hexcasting:read",
+      "input": "",
+      "output": "any",
+      "text": "hexcasting.page.meta2"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:eval",
+      "anchor": "hexcasting:eval",
+      "input": "list of patterns",
+      "output": "many",
+      "text": "hexcasting.page.meta3"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.meta4"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:for_each",
+      "anchor": "hexcasting:for_each",
+      "input": "list of patterns, list",
+      "output": "many",
+      "text": "hexcasting.page.meta5"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.meta6"
+    }
+  ]
 }

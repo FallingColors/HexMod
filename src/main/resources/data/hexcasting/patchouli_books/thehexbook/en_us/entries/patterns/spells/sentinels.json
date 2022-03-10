@@ -1,8 +1,8 @@
 {
   "name": "hexcasting.entry.sentinels",
-  "category": "hexcasting:patterns",
+  "category": "hexcasting:patterns/spells",
   "icon": "minecraft:purple_candle",
-  "sortnum": 7,
+  "sortnum": 4,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [

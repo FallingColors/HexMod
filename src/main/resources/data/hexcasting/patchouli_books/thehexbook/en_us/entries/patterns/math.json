@@ -1,105 +1,105 @@
 {
-    "name": "hexcasting.entry.math",
-    "category": "hexcasting:patterns",
-    "icon": "minecraft:stick",
-    "sortnum": 2,
-    "advancement": "hexcasting:root",
-    "read_by_default": true,
-    "pages": [
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.math1"
-        },
-        {
-            "type": "patchouli:empty"
-        },
-        {    
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:add",
-            "anchor": "hexcasting:add",
-            "input": "num/vec, num/vec",
-            "output": "num/vec",
-            "text": "hexcasting.page.math2"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.math3"
-        },
-        {    
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:sub",
-            "anchor": "hexcasting:sub",
-            "input": "num/vec, num/vec",
-            "output": "num/vec",
-            "text": "hexcasting.page.math4"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.math5"
-        },
-        {    
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:mul_dot",
-            "anchor": "hexcasting:mul_dot",
-            "input": "num/vec, num/vec",
-            "output": "num/vec",
-            "text": "hexcasting.page.math6"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.math7"
-        },
-        {    
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:div_cross",
-            "anchor": "hexcasting:div_cross",
-            "input": "num/vec, num/vec",
-            "output": "num/vec",
-            "text": "hexcasting.page.math8"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.math9"
-        },
-        {    
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:abs_len",
-            "anchor": "hexcasting:abs_len",
-            "input": "num/vec",
-            "output": "number",
-            "text": "hexcasting.page.math10"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.math11"
-        },
-        {    
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:pow_proj",
-            "anchor": "hexcasting:pow_proj",
-            "input": "num/vec, num/vec",
-            "output": "num/vec",
-            "text": "hexcasting.page.math12"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.math13"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:construct_vec",
-            "anchor": "hexcasting:construct_vec",
-            "input": "num, num, num",
-            "output": "vector",
-            "text": "hexcasting.page.math14"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:deconstruct_vec",
-            "anchor": "hexcasting:deconstruct_vec",
-            "input": "vector",
-            "output": "num, num, num",
-            "text": "hexcasting.page.math15"
-        }
-    ]
+  "name": "hexcasting.entry.math",
+  "category": "hexcasting:patterns",
+  "icon": "minecraft:blaze_rod",
+  "sortnum": 2,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.math1"
+    },
+    {
+      "type": "patchouli:empty"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:add",
+      "anchor": "hexcasting:add",
+      "input": "num/vec, num/vec",
+      "output": "num/vec",
+      "text": "hexcasting.page.math2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.math3"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:sub",
+      "anchor": "hexcasting:sub",
+      "input": "num/vec, num/vec",
+      "output": "num/vec",
+      "text": "hexcasting.page.math4"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.math5"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:mul_dot",
+      "anchor": "hexcasting:mul_dot",
+      "input": "num/vec, num/vec",
+      "output": "num/vec",
+      "text": "hexcasting.page.math6"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.math7"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:div_cross",
+      "anchor": "hexcasting:div_cross",
+      "input": "num/vec, num/vec",
+      "output": "num/vec",
+      "text": "hexcasting.page.math8"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.math9"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:abs_len",
+      "anchor": "hexcasting:abs_len",
+      "input": "num/vec",
+      "output": "number",
+      "text": "hexcasting.page.math10"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.math11"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:pow_proj",
+      "anchor": "hexcasting:pow_proj",
+      "input": "num/vec, num/vec",
+      "output": "num/vec",
+      "text": "hexcasting.page.math12"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.math13"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:construct_vec",
+      "anchor": "hexcasting:construct_vec",
+      "input": "num, num, num",
+      "output": "vector",
+      "text": "hexcasting.page.math14"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:deconstruct_vec",
+      "anchor": "hexcasting:deconstruct_vec",
+      "input": "vector",
+      "output": "num, num, num",
+      "text": "hexcasting.page.math15"
+    }
+  ]
 }

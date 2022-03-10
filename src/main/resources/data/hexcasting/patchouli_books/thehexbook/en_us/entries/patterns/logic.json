@@ -1,0 +1,98 @@
+{
+  "name": "hexcasting.entry.logic",
+  "category": "hexcasting:patterns",
+  "icon": "minecraft:comparator",
+  "sortnum": 4,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:greater",
+      "anchor": "hexcasting:greater",
+      "input": "number, number",
+      "output": "number",
+      "text": "hexcasting.page.logic1"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:less",
+      "anchor": "hexcasting:less",
+      "input": "number, number",
+      "output": "number",
+      "text": "hexcasting.page.logic2"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:greater_eq",
+      "anchor": "hexcasting:greater_eq",
+      "input": "number, number",
+      "output": "number",
+      "text": "hexcasting.page.logic3"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:less_eq",
+      "anchor": "hexcasting:less_eq",
+      "input": "number, number",
+      "output": "number",
+      "text": "hexcasting.page.logic4"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:equals",
+      "anchor": "hexcasting:equals",
+      "input": "number, number",
+      "output": "number",
+      "text": "hexcasting.page.logic5"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:not_equals",
+      "anchor": "hexcasting:not_equals",
+      "input": "number, number",
+      "output": "number",
+      "text": "hexcasting.page.logic6"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:not",
+      "anchor": "hexcasting:not",
+      "input": "any",
+      "output": "number",
+      "text": "hexcasting.page.logic7"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:identity",
+      "anchor": "hexcasting:identity",
+      "input": "any",
+      "output": "any",
+      "text": "hexcasting.page.logic8"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:or",
+      "anchor": "hexcasting:or",
+      "input": "any, any",
+      "output": "any",
+      "text": "hexcasting.page.logic9"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:and",
+      "anchor": "hexcasting:and",
+      "input": "any, any",
+      "output": "any",
+      "text": "hexcasting.page.logic10"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:xor",
+      "anchor": "hexcasting:xor",
+      "input": "any, any",
+      "output": "any",
+      "text": "hexcasting.page.logic11"
+    }
+  ]
+}
