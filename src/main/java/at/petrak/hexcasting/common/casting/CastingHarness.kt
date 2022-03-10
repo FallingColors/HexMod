@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting
 
+import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.PatternRegistry
@@ -52,6 +53,7 @@ class CastingHarness private constructor(
      */
     fun getUpdate(newPat: HexPattern, world: ServerLevel): CastResult {
         try {
+            this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
             // wouldn't it be nice to be able to go paren'
             // i guess i'll call it paren2
             val paren2 = this.handleParentheses(newPat)
@@ -111,7 +113,7 @@ class CastingHarness private constructor(
                 wasSpellCast = true
         }
 
-        val descs: ArrayList<Component> = ArrayList<Component>(this.stack.size)
+        val descs: ArrayList<Component> = ArrayList(this.stack.size)
         for (datum in this.stack) {
             descs.add(datum.display())
         }
@@ -262,7 +264,7 @@ class CastingHarness private constructor(
 
             if (allowOvercast && costLeft > 0) {
                 // Cast from HP!
-                val manaToHealth = HexMod.CONFIG.manaToHealthRate.get()
+                val manaToHealth = HexConfig.manaToHealthRate.get()
                 val healthtoRemove = costLeft.toDouble() / manaToHealth
                 val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
 

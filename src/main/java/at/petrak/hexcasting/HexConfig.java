@@ -6,28 +6,20 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 public class HexConfig {
 
-    public final ForgeConfigSpec.DoubleValue manaToHealthRate;
-    public final ForgeConfigSpec.DoubleValue patternPointSpeedMultiplier;
-    public final ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
+    public static ForgeConfigSpec.DoubleValue manaToHealthRate;
 
-    public final ForgeConfigSpec.IntValue dustManaAmount;
-    public final ForgeConfigSpec.IntValue shardManaAmount;
-    public final ForgeConfigSpec.IntValue chargedCrystalManaAmount;
 
-    public final ForgeConfigSpec.IntValue opBreakHarvestLevel;
-    public final ForgeConfigSpec.IntValue maxRecurseDepth;
+    public static ForgeConfigSpec.IntValue dustManaAmount;
+    public static ForgeConfigSpec.IntValue shardManaAmount;
+    public static ForgeConfigSpec.IntValue chargedCrystalManaAmount;
+
+    public static ForgeConfigSpec.IntValue opBreakHarvestLevel;
+    public static ForgeConfigSpec.IntValue maxRecurseDepth;
 
 
     public HexConfig(ForgeConfigSpec.Builder builder) {
         manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
             .defineInRange("manaToHealthRate", 200_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
-        patternPointSpeedMultiplier = builder.comment(
-                "How fast the point showing you the stroke order on patterns moves")
-            .defineInRange("manaToHealthRate", 1.0, 0.0, Double.POSITIVE_INFINITY);
-        ctrlTogglesOffStrokeOrder = builder.comment(
-                "Whether the ctrl key will instead turn *off* the color gradient on patterns")
-            .define("ctrlTogglesOffStrokeOrder", false);
-
 
         builder.push("items");
         dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")
@@ -51,8 +43,8 @@ public class HexConfig {
     /**
      * i'm not kidding look upon net.minecraftforge.common.TierSortingRegistry and weep
      */
-    public Tier getOpBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort() {
-        return switch (this.opBreakHarvestLevel.get()) {
+    public static Tier getOpBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort() {
+        return switch (opBreakHarvestLevel.get()) {
             case 0 -> Tiers.WOOD;
             case 1 -> Tiers.STONE;
             case 2 -> Tiers.IRON;
@@ -60,5 +52,20 @@ public class HexConfig {
             case 4 -> Tiers.NETHERITE;
             default -> throw new RuntimeException("unreachable");
         };
+    }
+
+    public static class Client {
+        public static ForgeConfigSpec.DoubleValue patternPointSpeedMultiplier;
+        public static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
+
+        public Client(ForgeConfigSpec.Builder builder) {
+            patternPointSpeedMultiplier = builder.comment(
+                    "How fast the point showing you the stroke order on patterns moves")
+                .defineInRange("manaToHealthRate", 1.0, 0.0, Double.POSITIVE_INFINITY);
+            ctrlTogglesOffStrokeOrder = builder.comment(
+                    "Whether the ctrl key will instead turn *off* the color gradient on patterns")
+                .define("ctrlTogglesOffStrokeOrder", false);
+        }
+
     }
 }

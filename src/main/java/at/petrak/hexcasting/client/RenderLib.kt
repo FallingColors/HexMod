@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.client
 
-import at.petrak.hexcasting.HexMod
+import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.client.gui.SQRT_3
 import at.petrak.hexcasting.hexmath.HexCoord
@@ -51,7 +51,7 @@ object RenderLib {
         val g1 = FC.green(tail).toFloat()
         val b1 = FC.blue(tail).toFloat()
         val a = FC.alpha(tail)
-        val headSource = if (Screen.hasControlDown() != HexMod.CONFIG.ctrlTogglesOffStrokeOrder.get())
+        val headSource = if (Screen.hasControlDown() != HexConfig.Client.ctrlTogglesOffStrokeOrder.get())
             head
         else
             tail
@@ -99,7 +99,7 @@ object RenderLib {
 
         if (animTime != null) {
             val pointCircuit =
-                (animTime * 30f * HexMod.CONFIG.patternPointSpeedMultiplier.get().toFloat()) % (points.size + 10)
+                (animTime * 30f * HexConfig.Client.patternPointSpeedMultiplier.get().toFloat()) % (points.size + 10)
             // subtract 1 to avoid the point appearing between the end and start for 1 frame
             if (pointCircuit < points.size - 1) {
                 val pointMacro = floor(pointCircuit).toInt()

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting
 
-import at.petrak.hexcasting.HexMod
+import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.api.Operator
 import at.petrak.hexcasting.common.items.ItemDataHolder
@@ -55,7 +55,7 @@ data class CastingContext(
      */
     fun incDepth() {
         this.depth++
-        val maxAllowedDepth = HexMod.CONFIG.maxRecurseDepth.get()
+        val maxAllowedDepth = HexConfig.maxRecurseDepth.get()
         if (this.depth > maxAllowedDepth) {
             throw CastException(CastException.Reason.TOO_MANY_RECURSIVE_EVALS, maxAllowedDepth, this.depth)
         }

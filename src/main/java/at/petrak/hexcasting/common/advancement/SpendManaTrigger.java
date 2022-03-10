@@ -19,10 +19,10 @@ public class SpendManaTrigger extends SimpleCriterionTrigger<SpendManaTrigger.In
 
     @Override
     protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate,
-            DeserializationContext pContext) {
+        DeserializationContext pContext) {
         return new Instance(predicate,
-                MinMaxBounds.Ints.fromJson(json.get(TAG_MANA_SPENT)),
-                MinMaxBounds.Ints.fromJson(json.get(TAG_MANA_WASTED)));
+            MinMaxBounds.Ints.fromJson(json.get(TAG_MANA_SPENT)),
+            MinMaxBounds.Ints.fromJson(json.get(TAG_MANA_WASTED)));
     }
 
     public void trigger(ServerPlayer player, int manaSpent, int manaWasted) {
@@ -34,7 +34,7 @@ public class SpendManaTrigger extends SimpleCriterionTrigger<SpendManaTrigger.In
         protected final MinMaxBounds.Ints manaWasted;
 
         public Instance(EntityPredicate.Composite predicate, MinMaxBounds.Ints manaSpent,
-                MinMaxBounds.Ints manaWasted) {
+            MinMaxBounds.Ints manaWasted) {
             super(SpendManaTrigger.ID, predicate);
             this.manaSpent = manaSpent;
             this.manaWasted = manaWasted;
@@ -50,6 +50,9 @@ public class SpendManaTrigger extends SimpleCriterionTrigger<SpendManaTrigger.In
             JsonObject json = super.serializeToJson(ctx);
             if (!this.manaSpent.isAny()) {
                 json.add(TAG_MANA_SPENT, this.manaSpent.serializeToJson());
+            }
+            if (!this.manaWasted.isAny()) {
+                json.add(TAG_MANA_WASTED, this.manaWasted.serializeToJson());
             }
             return json;
         }

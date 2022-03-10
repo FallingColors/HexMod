@@ -18,7 +18,11 @@
   "criteria": {
     "waste_amt": {
       "trigger": "hexcasting:spend_mana",
-      "conditions": {}
+      "conditions": {
+        "mana_wasted": {
+          "min": 89000
+        }
+      }
     }
   },
   "requirements": [

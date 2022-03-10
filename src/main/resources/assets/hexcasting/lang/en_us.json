@@ -77,6 +77,8 @@
 
   "stat.hexcasting.mana_used": "Media consumed (in dusts)",
   "stat.hexcasting.mana_overcasted": "Media overcasted (in dusts)",
+  "stat.hexcasting.patterns_drawn": "Patterns Drawn",
+  "stat.hexcasting.spells_cast": "Spells Cast",
 
   "death.attack.hexcasting.overcast": "%s's mind was consumed into energy",
 

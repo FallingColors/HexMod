@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.advancement;
 
+import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.HexMod;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.*;
@@ -24,19 +25,19 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
 
     @Override
     protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate,
-            DeserializationContext pContext) {
+        DeserializationContext pContext) {
         return new Instance(predicate,
-                MinMaxBounds.Ints.fromJson(json.get(TAG_MANA_GENERATED)),
-                MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_USED)),
-                MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_LEFT)));
+            MinMaxBounds.Ints.fromJson(json.get(TAG_MANA_GENERATED)),
+            MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_USED)),
+            MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_LEFT)));
     }
 
     public void trigger(ServerPlayer player, int manaGenerated) {
         super.trigger(player, inst -> {
-            var manaToHealth = HexMod.getConfig().manaToHealthRate.get();
+            var manaToHealth = HexConfig.manaToHealthRate.get();
             var healthUsed = manaGenerated / manaToHealth;
             HexMod.getLogger().info("Overcasting! Generated {} mana, using {} health", manaGenerated,
-                    healthUsed);
+                healthUsed);
             return inst.test(manaGenerated, healthUsed, player.getHealth() - (float) healthUsed);
         });
     }
@@ -48,7 +49,7 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
         protected final MinMaxBounds.Doubles healthLeft;
 
         public Instance(EntityPredicate.Composite predicate, MinMaxBounds.Ints manaGenerated,
-                MinMaxBounds.Doubles healthUsed, MinMaxBounds.Doubles healthLeft) {
+            MinMaxBounds.Doubles healthUsed, MinMaxBounds.Doubles healthLeft) {
             super(OvercastTrigger.ID, predicate);
             this.manaGenerated = manaGenerated;
             this.healthUsed = healthUsed;
@@ -78,9 +79,9 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
 
         private boolean test(int manaGeneratedIn, double healthUsedIn, float healthLeftIn) {
             return this.manaGenerated.matches(manaGeneratedIn)
-                    && this.healthUsed.matches(healthUsedIn)
-                    // DID YOU KNOW ALL THE ENEITYT PREDICATES ARE HARD-CODED AND YOU CANT MAKE NEW ONES
-                    && this.healthLeft.matches(healthLeftIn);
+                && this.healthUsed.matches(healthUsedIn)
+                // DID YOU KNOW ALL THE ENEITYT PREDICATES ARE HARD-CODED AND YOU CANT MAKE NEW ONES
+                && this.healthLeft.matches(healthLeftIn);
         }
     }
 }

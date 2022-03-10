@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.HexMod
+import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.api.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
@@ -36,7 +36,7 @@ object OpBreakBlock : SpellOperator {
 
             val blockstate = ctx.world.getBlockState(pos)
             val tier =
-                HexMod.CONFIG.opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort
+                HexConfig.getOpBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()
 
             if (
                 !blockstate.isAir

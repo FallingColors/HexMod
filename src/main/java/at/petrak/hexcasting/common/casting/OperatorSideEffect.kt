@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.casting
 import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgCastParticleAck
 import at.petrak.hexcasting.datagen.Advancements
@@ -32,6 +33,7 @@ sealed class OperatorSideEffect {
                 true
             } else {
                 this.spell.cast(harness.ctx)
+                harness.ctx.caster.awardStat(HexStatistics.SPELLS_CAST)
                 false
             }
         }

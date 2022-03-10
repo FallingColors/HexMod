@@ -36,8 +36,9 @@ import org.apache.logging.log4j.Logger
 object HexMod {
     // hmm today I will use a popular logging framework :clueless:
     val LOGGER: Logger = LogManager.getLogger()
-    var CONFIG: HexConfig
+
     var CONFIG_SPEC: ForgeConfigSpec
+    var CLIENT_CONFIG_SPEC: ForgeConfigSpec
 
     // mumblemumble thanks shy mumble mumble
     const val MOD_ID = "hexcasting"
@@ -45,8 +46,10 @@ object HexMod {
     init {
         val (cfg, spec) = ForgeConfigSpec.Builder()
             .configure { builder: ForgeConfigSpec.Builder? -> HexConfig(builder) }
-        CONFIG = cfg
         CONFIG_SPEC = spec
+        val (client_cfg, client_spec) = ForgeConfigSpec.Builder()
+            .configure { builder: ForgeConfigSpec.Builder? -> HexConfig.Client(builder) }
+        CLIENT_CONFIG_SPEC = client_spec
 
         // mod lifecycle
         val modBus = thedarkcolour.kotlinforforge.forge.MOD_BUS
@@ -85,7 +88,9 @@ object HexMod {
         HexMessages.register()
         HexStatistics.register()
         ContributorList.loadContributors()
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG_SPEC)
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG_SPEC)
     }
 
     @SubscribeEvent
@@ -95,8 +100,4 @@ object HexMod {
 
     @JvmStatic
     fun getLogger() = this.LOGGER
-
-    @JvmStatic
-    fun getConfig() = this.CONFIG
-
 }

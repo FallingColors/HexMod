@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting
 
-import at.petrak.hexcasting.HexMod
+import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery
 import net.minecraft.util.Mth
@@ -13,11 +13,10 @@ import kotlin.math.roundToInt
 
 object ManaHelper {
     fun isManaItem(stack: ItemStack): Boolean {
-        val item = stack.item
-        return item == HexItems.AMETHYST_DUST.get()
-                || item == Items.AMETHYST_SHARD
-                || item == HexItems.CHARGED_AMETHYST
-                || item is ItemManaBattery
+        return stack.`is`(HexItems.AMETHYST_DUST.get())
+                || stack.`is`(Items.AMETHYST_SHARD)
+                || stack.`is`(HexItems.CHARGED_AMETHYST.get())
+                || stack.item is ItemManaBattery
     }
 
     /**
@@ -28,9 +27,9 @@ object ManaHelper {
      */
     fun extractMana(stack: ItemStack, cost: Int): Int? {
         val base = when (stack.item) {
-            HexItems.AMETHYST_DUST.get() -> HexMod.CONFIG.dustManaAmount.get()
-            Items.AMETHYST_SHARD -> HexMod.CONFIG.shardManaAmount.get()
-            HexItems.CHARGED_AMETHYST.get() -> HexMod.CONFIG.chargedCrystalManaAmount.get()
+            HexItems.AMETHYST_DUST.get() -> HexConfig.dustManaAmount.get()
+            Items.AMETHYST_SHARD -> HexConfig.shardManaAmount.get()
+            HexItems.CHARGED_AMETHYST.get() -> HexConfig.chargedCrystalManaAmount.get()
             HexItems.BATTERY.get() -> {
                 val battery = stack.item as ItemManaBattery
                 return battery.withdrawMana(stack.orCreateTag, cost)
@@ -51,9 +50,9 @@ object ManaHelper {
      */
     fun extractAllMana(stack: ItemStack): Int? {
         val base = when (stack.item) {
-            HexItems.AMETHYST_DUST.get() -> HexMod.CONFIG.dustManaAmount.get()
-            Items.AMETHYST_SHARD -> HexMod.CONFIG.shardManaAmount.get()
-            HexItems.CHARGED_AMETHYST.get() -> HexMod.CONFIG.chargedCrystalManaAmount.get()
+            HexItems.AMETHYST_DUST.get() -> HexConfig.dustManaAmount.get()
+            Items.AMETHYST_SHARD -> HexConfig.shardManaAmount.get()
+            HexItems.CHARGED_AMETHYST.get() -> HexConfig.chargedCrystalManaAmount.get()
 
             HexItems.BATTERY.get() -> {
                 val battery = stack.item as ItemManaBattery

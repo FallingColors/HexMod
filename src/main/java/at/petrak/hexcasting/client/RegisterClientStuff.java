@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.SpellDatum;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
@@ -70,7 +70,7 @@ public class RegisterClientStuff {
                     var item = (ItemManaBattery) stack.getItem();
                     var tag = stack.getOrCreateTag();
                     var max = item.getMaxManaAmt(tag);
-                    return (float) Math.sqrt((float) max / HexMod.getConfig().chargedCrystalManaAmount.get() / 10);
+                    return (float) Math.sqrt((float) max / HexConfig.chargedCrystalManaAmount.get() / 10);
                 });
 
             ItemProperties.register(HexItems.SCROLL.get(), ItemScroll.ANCIENT_PREDICATE,
