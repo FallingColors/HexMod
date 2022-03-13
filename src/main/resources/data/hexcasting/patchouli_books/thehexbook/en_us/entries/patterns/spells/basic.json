@@ -45,6 +45,14 @@
       "input": "entity, number",
       "output": "",
       "text": "hexcasting.page.basic_spell6"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:crossbow_bolt",
+      "anchor": "hexcasting:crossbow_bolt",
+      "input": "vector, vector",
+      "output": "",
+      "text": "hexcasting.page.basic_spell7"
     }
   ]
 }

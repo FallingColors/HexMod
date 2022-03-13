@@ -153,6 +153,7 @@
   "hexcasting.spell.hexcasting:blink": "Blink",
   "hexcasting.spell.hexcasting:break_block": "Break Block",
   "hexcasting.spell.hexcasting:place_block": "Place Block",
+  "hexcasting.spell.hexcasting:crossbow_bolt": "Ridcully's Projection",
   "hexcasting.spell.hexcasting:craft/cypher": "Craft Cypher",
   "hexcasting.spell.hexcasting:craft/trinket": "Craft Trinket",
   "hexcasting.spell.hexcasting:craft/artifact": "Craft Artifact",
@@ -384,6 +385,7 @@
   "hexcasting.page.basic_spell4": "Costs three $(item)Amethyst Shards/$, plus about one extra $(item)Amethyst Shard/$ per point of explosion power. Otherwise, the same as $(l:hexcasting:patterns/spells/basic#OpExplode)$(action)Explosion/$, except with fire.",
   "hexcasting.page.basic_spell5": "Remove an entity and direction from the stack, then give a shove to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(item)Amethyst Dust/$ proportional to the square of the length of the vector; thus a push vector of length 5 would consume five $(item)Amethyst Shards$(0) or equivalent.",
   "hexcasting.page.basic_spell6": "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about 1 $(item)Amethyst Shard/$s times the the distance teleported.",
+  "hexcasting.page.basic_spell7": "Create a spectral crossbow bolt at the location given in the first parameter, and fire it along the vector given in the second parameter.$(br)Costs about 1 $(item)Amethyst Shard/$s times the velocity of the shot (length of the second vector).",
 
   "hexcasting.entry.blockworks": "Blockworks",
   "hexcasting.page.blockworks1": "Remove a location from the stack, then pick a block item and place it at the given location.$(br)Costs about 1 $(item)Amethyst Dust/$.",

@@ -143,6 +143,8 @@ public class RegisterPatterns {
                 new OpConjure(true));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaqwawqaqw", HexDir.NORTH_EAST), prefix("bonemeal"),
                 OpTheOnlyReasonAnyoneDownloadedPsi.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddwqd", HexDir.SOUTH_WEST), prefix("crossbow_bolt"),
+                OpCrossbowBolt.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqwaeaeaeaeaea", HexDir.NORTH_WEST),
                 prefix("recharge"),
                 OpRecharge.INSTANCE);
