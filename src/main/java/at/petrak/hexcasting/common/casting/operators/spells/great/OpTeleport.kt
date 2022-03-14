@@ -35,7 +35,9 @@ object OpTeleport : SpellOperator {
 
     private data class Spell(val teleportee: Entity, val delta: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            if (delta.lengthSqr() < 32678.0 * 32678.0) {
+            val distance = delta.length()
+
+            if (distance < 32768.0) {
                 teleportee.setPos(teleportee.position().add(delta))
                 if (teleportee is ServerPlayer) {
                     HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { teleportee }, MsgBlinkAck(delta))
@@ -43,7 +45,31 @@ object OpTeleport : SpellOperator {
             }
 
             if (teleportee is ServerPlayer) {
-                teleportee.inventory.dropAll()
+                // Drop items conditionally, based on distance teleported.
+                // MOST IMPORTANT: Never drop main hand item, since if it's a trinket, it will get duplicated later.
+
+                val baseDropChance = distance / 10000.0
+
+                // Armor and hotbar items have a further reduced chance to be dropped since it's particularly annoying
+                // having to rearrange those. Also it makes sense for LORE REASONS probably, since the caster is more
+                // aware of items they use often.
+                for (armorItem in teleportee.inventory.armor) {
+                    if (Math.random() < baseDropChance * 0.25) {
+                        teleportee.drop(armorItem.copy(), true, false)
+                        armorItem.shrink(armorItem.count)
+                    }
+                }
+
+                for ((pos, invItem) in teleportee.inventory.items.withIndex()) {
+                    if (invItem == teleportee.mainHandItem) continue
+                    val dropChance = if (pos < 9) baseDropChance * 0.5 else baseDropChance // hotbar
+                    if (Math.random() < dropChance) {
+                        teleportee.drop(invItem.copy(), true, false)
+                        invItem.shrink(invItem.count)
+                    }
+                }
+
+                // we also don't drop the offhand just to be nice
             }
         }
 
