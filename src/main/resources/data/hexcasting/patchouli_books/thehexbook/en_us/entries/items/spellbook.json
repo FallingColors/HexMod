@@ -1,18 +1,18 @@
 {
-    "name": "hexcasting.entry.spellbook",
-    "category": "hexcasting:items",
-    "icon": "hexcasting:spellbook",
-    "sortnum": 3,
-    "advancement": "hexcasting:root",
-    "pages": [
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.spellbook1"
-        },
-        {
-            "type": "patchouli:crafting",
-            "recipe": "hexcasting:spellbook",
-            "text": "hexcasting.page.spellbook2"
-        }
-    ]
+  "name": "hexcasting.entry.spellbook",
+  "category": "hexcasting:items",
+  "icon": "hexcasting:spellbook",
+  "sortnum": 4,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.spellbook1"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:spellbook",
+      "text": "hexcasting.page.spellbook2"
+    }
+  ]
 }

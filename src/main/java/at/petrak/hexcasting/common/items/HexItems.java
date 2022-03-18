@@ -94,6 +94,8 @@ public class HexItems {
 
     public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register(HexItemNames.UUID_COLORIZER,
         () -> new Item(unstackable()));
+    public static final RegistryObject<ItemAbacus> ABACUS = ITEMS.register(HexItemNames.ABACUS,
+        () -> new ItemAbacus(unstackable()));
 
     // BUFF SANDVICH
     public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register(HexItemNames.SUBMARINE_SANDWICH,

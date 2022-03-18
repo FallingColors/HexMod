@@ -1,41 +1,41 @@
 {
-    "name": "hexcasting.entry.hexcasting",
-    "category": "hexcasting:items",
-    "icon": "hexcasting:artifact{patterns:[]}",
-    "sortnum": 4,
-    "advancement": "hexcasting:root",
-    "pages": [
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.hexcasting1"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.hexcasting2"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.hexcasting3"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.hexcasting4"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.hexcasting5"
-        },
-        {
-            "type": "patchouli:crafting",
-            "anchor": "cypher_trinket",
-            "recipe": "hexcasting:cypher",
-            "recipe2": "hexcasting:trinket"
-        },
-        {
-            "type": "patchouli:crafting",
-            "anchor": "artifact",
-            "recipe": "hexcasting:artifact",
-            "text": "hexcasting.page.hexcasting6"
-        }
-    ]
+  "name": "hexcasting.entry.hexcasting",
+  "category": "hexcasting:items",
+  "icon": "hexcasting:artifact{patterns:[]}",
+  "sortnum": 5,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.hexcasting1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.hexcasting2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.hexcasting3"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.hexcasting4"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.hexcasting5"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "cypher_trinket",
+      "recipe": "hexcasting:cypher",
+      "recipe2": "hexcasting:trinket"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "artifact",
+      "recipe": "hexcasting:artifact",
+      "text": "hexcasting.page.hexcasting6"
+    }
+  ]
 }

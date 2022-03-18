@@ -14,6 +14,7 @@
   "item.hexcasting.scroll": "Scroll",
   "item.hexcasting.scroll.of": "Ancient Scroll of %s",
   "item.hexcasting.scroll.empty": "Empty Scroll",
+  "item.hexcasting.abacus": "Abacus",
   "item.hexcasting.sub_sandwich": "Submarine Sandwich",
   "item.hexcasting.dye_colorizer_white": "White Pigment",
   "item.hexcasting.dye_colorizer_orange": "Orange Pigment",
@@ -49,16 +50,10 @@
   "block.hexcasting.conjured": "Conjured Block",
   "itemGroup.hexcasting": "Hexcasting",
 
-  "hexcasting.subtitles.start_pattern": "Starting pattern",
-  "hexcasting.subtitles.add_line": "Adding line",
-  "hexcasting.subtitles.add_pattern": "Adding pattern",
-  "hexcasting.subtitles.fail_pattern": "Pattern fails",
-  "hexcasting.subtitles.ambiance": "Hex grid hums",
-  "hexcasting.subtitles.cast": "Hex casts",
-
-  "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.",
-
-  "hexcasting.spellbook.tooltip.page": "§7Selected Page §a§l%d§7/§a§l%d§r",
+  "hexcasting.tooltip.spellbook.page": "§7Selected Page §a§l%d§7/§a§l%d§r",
+  "hexcasting.tooltip.abacus": "§a§l%d§r",
+  "hexcasting.tooltip.abacus.reset": "Reset to 0",
+  "hexcasting.tooltip.abacus.reset.nice": "nice",
   "hexcasting.spelldata.onitem": "§7Contains: §r%s",
   "hexcasting.spelldata.entity.whoknows": "An Entity (this should only show up if this was stored before the 0.5.0 update, use Scribe's Reflection, Scribe's Gambit to fix)",
 
@@ -202,6 +197,17 @@
   "hexcasting.spell.hexcasting:const/vec/ny": "Vector Reflection -Y",
   "hexcasting.spell.hexcasting:const/vec/nz": "Vector Reflection -Z",
 
+  "hexcasting.subtitles.start_pattern": "Starting pattern",
+  "hexcasting.subtitles.add_line": "Adding line",
+  "hexcasting.subtitles.add_pattern": "Adding pattern",
+  "hexcasting.subtitles.fail_pattern": "Pattern fails",
+  "hexcasting.subtitles.ambiance": "Hex grid hums",
+  "hexcasting.subtitles.cast": "Hex casts",
+  "hexcasting.subtitles.abacus": "Abacus clicks",
+  "hexcasting.subtitles.abacus.shake": "Abacus shakes",
+
+  "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.",
+
   "hexcasting.entry.great_spells": "Great Spells",
   "hexcasting.page.great_spells1": "The spells catalogued here are purported to be of legendary difficulty and power. They seem to have been recorded only sparsely (for good reason, the texts claim). It's probably just the hogwash of extinct traditionalists, though-- a pattern's a pattern. What could possibly go wrong?",
 
@@ -311,11 +317,19 @@
   "hexcasting.page.amethyst4": "$(italic)The old man sighed and raised a hand toward the fire. He unlocked a part of his brain that held the memories of the mountains around them. He pulled the energies from those lands, as he learned to do in Terisia City with Drafna, Hurkyl, the archimandrite, and the other mages of the Ivory Towers. He concentrated, and the flames writhed as they rose from the logs, twisting upon themselves until they finally formed a soft smile./$",
 
   "hexcasting.entry.focus": "Focus",
-  "hexcasting.page.focus1": "A $(item)Focus/$ can store a single iota.$(br2)When I craft it, it holds the Null influence by default. Using the $(action)$(l:patterns/meta#OpWrite)Scribe's Gambit/$ while holding a $(item)Focus/$ in my other hand will remove the top of the stack and save it into the $(item)Focus/$. Using the $(action)$(l:patterns/meta#OpRead)Scribe's Reflection/$ will copy whatever iota's in the $(item)Focus/$ and add it to the stack.",
+  "hexcasting.page.focus1": "A $(item)Focus/$ can store a single iota.$(br2)When I craft it, it holds the Null influence by default. Using $(l:patterns/meta#hexcasting:write)$(action)Scribe's Gambit/$ while holding a $(item)Focus/$ in my other hand will remove the top of the stack and save it into the $(item)Focus/$. Using $(l:patterns/meta#hexcasting:read)$(action)Scribe's Reflection/$ will copy whatever iota's in the $(item)Focus/$ and add it to the stack.",
   "hexcasting.page.focus2": "$(italic)Poison apples, poison worms./$",
   "hexcasting.page.focus3": "It occurs to me that I could conceivably store a whole list of patterns in a $(item)Focus/$, then recall them and evaluate them with $(l:patterns/meta#OpEval)$(action)Hermes' Gambit/$. This way I can cast complex spells, or parts of spells, without having to draw them over and over.$(br2)I could use this like a slightly less convenient $(l:items/hexcasting#artifact)$(item)Artifact/$, but I think I could get much better dividends by putting common \"phrases\" in a $(item)Focus/$, like the patterns for figuring out where I'm looking.",
-  "hexcasting.page.focus4": "Also, if I store an entity in a $(item)Focus/$ and try to recall it after the referenced entity has died or otherwise disappeared, the $(action)Scribe's Reflection/$ will add Null to the stack instead.",
-  "hexcasting.page.focus5": "Finally, it seems if I wish to protect a focus from accidentally being overwritten, I can seal it with wax by crafting it with a $(item)Honeycomb/$. Attempting to use $(action)Scribe's Gambit/$ on a sealed focus will fail.",
+  "hexcasting.page.focus4": "Also, if I store an entity in a $(item)Focus/$ and try to recall it after the referenced entity has died or otherwise disappeared, the $(action)Scribe's Reflection/$ will add Null to the stack instead.$(br2)Finally, it seems if I wish to protect a focus from accidentally being overwritten, I can seal it with wax by crafting it with a $(item)Honeycomb/$. Attempting to use $(action)Scribe's Gambit/$ on a sealed focus will fail.",
+
+  "hexcasting.entry.abacus": "Abacus",
+  "hexcasting.page.abacus1": "Although there are $(l:patterns/numbers)$(action)patterns for drawing numbers/$, I find them ... cumbersome, to say the least.$(br2)Fortunately, the old masters of my craft invented an ingenious device called an $(item)Abacus/$ to provide numbers to my casting. I simply set the number to what I want, then read the value using $(l:patterns/meta#hexcasting:read)$(action)Scribe's Reflection/$, just like I would read a $(item)Focus/$.",
+  "hexcasting.page.abacus2": "To operate one, I simply hold it, sneak, and scroll. If in my main hand, the number will increment or decrement by 1, or 10 if I am also holding Control/Command. If in my off hand, the number will increment or decrement by 0.1, or 0.001 if I am also holding Control/Command.$(br2)I can shake the abacus to reset it to zero by sneak-right-clicking.",
+  "hexcasting.page.abacus3": "$(italic)Mathematics? That's for eggheads!/$",
+
+  "hexcasting.entry.spellbook": "Spellbook",
+  "hexcasting.page.spellbook1": "A $(item)Spellbook/$ is the culmination of my art-- it acts like an entire library of $(l:items/focus)$(item)Foci/$.$(br2)Each page can hold a single iota, and I can select the active page (the page that iotas are saved to and copied from) by sneak-scrolling while holding it, or simply holding it in my off-hand and scrolling while casting a _Hex.",
+  "hexcasting.page.spellbook2": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first.",
 
   "hexcasting.entry.hexcasting": "Hexcasting Items",
   "hexcasting.page.hexcasting1": "Although the flexibility that casting _Hexes \"on the go\" with my $(l:items/staff)$(item)Staff/$ is quite helpful, it's a huge pain to have to wave it around repeatedly just to accomplish a common task. If I could save a common spell for later reuse, it would simplify things a lot-- and allow me to share my _Hexes with friends, too.",
@@ -342,9 +356,6 @@
   "hexcasting.page.pigments3": "Pigments all the colors of the rainbow.",
   "hexcasting.page.pigments4": "And finally, a pigment with a color wholly unique to me.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
 
-  "hexcasting.entry.spellbook": "Spellbook",
-  "hexcasting.page.spellbook1": "A $(item)Spellbook/$ is the culmination of my art-- it acts like an entire library of $(l:items/focus)$(item)Foci/$.$(br2)Each page can hold a single iota, and I can select the active page (the page that iotas are saved to and copied from) by sneak-scrolling while holding it, or simply holding it in my off-hand and scrolling while casting a _Hex.",
-  "hexcasting.page.spellbook2": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first.",
 
   "hexcasting.entry.staff": "Staff",
   "hexcasting.page.staff1": "A $(item)Staff/$ is my entry point into casting all _Hexes, large and small. By holding it and pressing $(thing)$(k:use)/$, I begin casting a _Hex; then I can click and drag to draw patterns.$(br2)It's little more than a chunk of _media on the end of a stick; that's all that's needed, after all.",
@@ -468,7 +479,7 @@
   "hexcasting.page.lists7": "Remove the list at the top of the stack, then push the number of elements in the list to the stack.",
   "hexcasting.page.lists8": "Reverse the list at the top of the stack.",
 
-  "hexcasting.entry.math": "Math",
+  "hexcasting.entry.math": "Mathematics",
   "hexcasting.page.math1": "Many mathematical operations function on both numbers and vectors. Such arguments are written as \"num/vec\".",
   "hexcasting.page.math2": "Perform addition.",
   "hexcasting.page.math3": "As such:$(li)With two numbers at the top of the stack, combines them into their sum.$(li)With a number and a vector, removes the number from the stack and adds it to each element of the vector.$(li)With two vectors, combines them by summing corresponding components into a new vector (i.e. [1, 2, 3] + [0, 4, -1] = [1, 6, 2]).",
@@ -518,6 +529,7 @@
   "hexcasting.page.numbers5": "This pattern pushes -32: negate 1 + 5 + 10 * 2.",
   "hexcasting.page.numbers6header": "Example 4",
   "hexcasting.page.numbers6": "This pattern pushes 4.5: 5 / 2 + 1 + 1.",
+  "hexcasting.page.numbers7": "It might be easier to just use an $(l:items/abacus)$(item)Abacus/$.",
 
   "hexcasting.entry.readers_guide": "How to Read this Section",
   "hexcasting.page.readers_guide1": "I've divided all the valid patterns I've found into sections based on what they do, more or less. I've written down the stroke order of the patterns as well, if I managed to find it in my studies, with the start of the pattern marked with a red dot.$(br2)If an action is cast by multiple patterns, as is the case with some simple actions, I'll write them all side-by-side.",

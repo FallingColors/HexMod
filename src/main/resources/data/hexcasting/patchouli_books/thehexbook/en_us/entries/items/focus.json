@@ -21,10 +21,6 @@
     {
       "type": "patchouli:text",
       "text": "hexcasting.page.focus4"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.focus5"
     }
   ]
 }

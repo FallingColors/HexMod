@@ -48,5 +48,19 @@
     "sounds": [
       "hexcasting:cast_hex"
     ]
+  },
+  "abacus": {
+    "subtitle": "hexcasting.subtitles.abacus",
+    "sounds": [
+      "hexcasting:abacus1",
+      "hexcasting:abacus2",
+      "hexcasting:abacus3"
+    ]
+  },
+  "abacus.shake": {
+    "subtitle": "hexcasting.subtitles.abacus.shake",
+    "sounds": [
+      "hexcasting:abacus_shake"
+    ]
   }
 }

@@ -97,6 +97,15 @@ public class Recipes extends RecipeProvider {
             .pattern(" G ")
             .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
 
+        ShapedRecipeBuilder.shaped(HexItems.ABACUS.get())
+            .define('S', Items.STICK)
+            .define('A', Items.AMETHYST_SHARD)
+            .define('W', ItemTags.PLANKS)
+            .pattern("WAW")
+            .pattern("SAS")
+            .pattern("WAW")
+            .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
+
         // Why am I like this
         ShapedRecipeBuilder.shaped(HexItems.SUBMARINE_SANDWICH.get())
             .define('S', Items.STICK)

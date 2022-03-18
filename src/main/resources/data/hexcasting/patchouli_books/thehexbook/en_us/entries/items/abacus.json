@@ -1,0 +1,22 @@
+{
+  "name": "hexcasting.entry.abacus",
+  "category": "hexcasting:items",
+  "icon": "hexcasting:abacus",
+  "sortnum": 3,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.abacus1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.abacus2"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:abacus",
+      "text": "hexcasting.page.abacus3"
+    }
+  ]
+}

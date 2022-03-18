@@ -10,10 +10,10 @@
       "type": "hexcasting:manual_pattern",
       "header": "hexcasting.page.numbers1header",
       "anchor": "Numbers",
-      "input": "hexcasting.page.numbers1",
+      "input": "",
       "output": "number",
       "args": "-> number",
-      "text": "",
+      "text": "hexcasting.page.numbers1",
       "patterns": [
         {
           "startdir": "SOUTH_EAST",
@@ -64,6 +64,10 @@
         "startdir": "SOUTH_EAST",
         "signature": "aqaaqdww"
       }
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.numbers7"
     }
   ]
 }

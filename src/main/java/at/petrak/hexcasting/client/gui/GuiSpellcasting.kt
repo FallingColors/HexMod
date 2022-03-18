@@ -203,7 +203,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
         val otherHand = HexUtils.OtherHand(this.handOpenedWith)
         if (Minecraft.getInstance().player!!.getItemInHand(otherHand).item is ItemSpellbook)
-            HexMessages.getNetwork().sendToServer(MsgShiftScrollSyn(otherHand, pDelta))
+            HexMessages.getNetwork().sendToServer(MsgShiftScrollSyn(otherHand, pDelta, Screen.hasControlDown()))
 
         return true
     }

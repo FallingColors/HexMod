@@ -16,4 +16,5 @@ public class HexItemNames {
     public static final String DYE_COLORIZER_STUB = "dye_colorizer_";
     public static final String PRIDE_COLORIZER_STUB = "pride_colorizer_";
     public static final String UUID_COLORIZER = "uuid_colorizer";
+    public static final String ABACUS = "abacus";
 }

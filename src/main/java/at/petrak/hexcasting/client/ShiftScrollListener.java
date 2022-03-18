@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.common.items.ItemSpellbook;
+import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.network.HexMessages;
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
@@ -26,12 +27,13 @@ public class ShiftScrollListener {
 
             if (hand != null) {
                 evt.setCanceled(true);
-                HexMessages.getNetwork().sendToServer(new MsgShiftScrollSyn(hand, evt.getScrollDelta()));
+                HexMessages.getNetwork().sendToServer(new MsgShiftScrollSyn(hand, evt.getScrollDelta(),
+                    Screen.hasControlDown()));
             }
         }
     }
 
     private static boolean IsScrollableItem(Item item) {
-        return item instanceof ItemSpellbook;
+        return item == HexItems.SPELLBOOK.get() || item == HexItems.ABACUS.get();
     }
 }

@@ -2,7 +2,7 @@
   "name": "hexcasting.entry.phials",
   "category": "hexcasting:items",
   "icon": "hexcasting:battery{mana:10000,max_mana:10000}",
-  "sortnum": 5,
+  "sortnum": 6,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [
