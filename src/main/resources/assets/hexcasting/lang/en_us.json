@@ -190,6 +190,7 @@
   "hexcasting.spell.hexcasting:eval/delay": "Secret Gambit!",
   "hexcasting.spell.hexcasting:read": "Scribe's Reflection",
   "hexcasting.spell.hexcasting:write": "Scribe's Gambit",
+  "hexcasting.spell.hexcasting:read/entity": "Scribe's Distillation",
   "hexcasting.spell.hexcasting:const/vec/px": "Vector Reflection +X",
   "hexcasting.spell.hexcasting:const/vec/py": "Vector Reflection +Y",
   "hexcasting.spell.hexcasting:const/vec/pz": "Vector Reflection +Z",
@@ -516,6 +517,7 @@
   "hexcasting.page.meta4": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$.$(br2)It also makes the bureaucracy of Nature a \"Turing-complete\" system, according to one esoteric scroll I found.$(br2)However, it seems there's a limit to how many times a _Hex can cast itself-- Nature doesn't look kindly on runaway spells!$(br2)In addition, with the energies of the patterns occuring without me to guide them, any mishap will cause the remaining actions to become too unstable and immediately unravel.",
   "hexcasting.page.meta5": "Remove a list of patterns and a list from the stack, then cast the given pattern over each element of the second list.$(br)Costs about one $(item)Charged Amethyst/$.",
   "hexcasting.page.meta6": "More specifically, for each element in the second list, it will:$(li)Create a new stack, with everything on the current stack plus that element$(li)Draw all the patterns in the first list$(li)Save all the iotas remaining on the stack to a list$(br)Then, after all is said and done, pushes the list of saved iotas onto the main stack.$(br2)No wonder all the practitioners of this art go mad.",
+  "hexcasting.page.meta7": "Like $(action)Scribe's Reflection/$, but the iota is read out of an item entity instead of my other hand.",
 
   "hexcasting.entry.numbers": "Numbers",
   "hexcasting.page.numbers1header": "Numerical Reflection",

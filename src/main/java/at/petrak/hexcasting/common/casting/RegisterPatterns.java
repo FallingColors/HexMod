@@ -247,6 +247,9 @@ public class RegisterPatterns {
                 OpRead.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deeeee", HexDir.EAST), prefix("write"),
                 OpWrite.INSTANCE);
+            // lorge boy
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wawqwqwqwqwqw", HexDir.EAST),
+                prefix("read/entity"), OpTheCoolerRead.INSTANCE);
 
             // == Consts ==
 
