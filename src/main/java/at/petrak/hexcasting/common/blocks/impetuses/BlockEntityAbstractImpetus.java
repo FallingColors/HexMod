@@ -7,7 +7,6 @@ import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -64,8 +63,8 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
 
         this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(BlockAbstractImpetus.LIT, true));
         var pos = Vec3.atCenterOf(this.getBlockPos());
-        this.level.playSound(null, pos.x, pos.y, pos.z, HexSounds.SPELL_CIRCLE_AMBIANCE.get(), SoundSource.BLOCKS, 1f,
-            1f);
+//        this.level.playSound(null, pos.x, pos.y, pos.z, HexSounds.SPELL_CIRCLE_AMBIANCE.get(), SoundSource.BLOCKS, 1f,
+//            1f);
     }
 
     protected void stepCircle() {
@@ -158,6 +157,7 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
 
         this.successEffect(Vec3.atBottomCenterOf(this.trackedBlocks.get(this.trackedBlocks.size() - 1)));
         this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), this.getTickSpeed());
+        this.setChanged();
     }
 
     protected void successEffect(Vec3 pos) {
@@ -186,10 +186,6 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
 
         this.level.setBlockAndUpdate(this.getBlockPos(),
             this.getBlockState().setValue(BlockAbstractImpetus.LIT, false));
-
-        if (this.level.isClientSide) {
-            Minecraft.getInstance().getSoundManager().stop(HexSounds.SPELL_CIRCLE_AMBIANCE.getId(), null);
-        }
     }
 
     @Nullable

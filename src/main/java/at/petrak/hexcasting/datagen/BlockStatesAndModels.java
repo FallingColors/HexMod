@@ -22,7 +22,8 @@ public class BlockStatesAndModels extends BlockStateProvider {
         simpleBlockItem(HexBlocks.SLATE_BLOCK.get(), slateBlock);
 
         getVariantBuilder(HexBlocks.IMPETUS_RIGHTCLICK.get()).forAllStates(bs -> {
-            var litness = bs.getValue(BlockAbstractImpetus.LIT) ? "lit" : "dim";
+            var isLit = bs.getValue(BlockAbstractImpetus.LIT);
+            var litness = isLit ? "lit" : "dim";
             var dir = bs.getValue(BlockAbstractImpetus.FACING);
 
             // Assuming it's facing north
@@ -33,13 +34,16 @@ public class BlockStatesAndModels extends BlockStateProvider {
             var east = modLoc("block/impetus/rightclick/right_" + litness);
             var bottom = modLoc("block/slate");
 
-            var name = "impetus_rightclick_" + litness;
-            var model = models().cube(name, bottom, top, north, south, east, west)
-                .texture("particle", bottom);
+            var name = "impetus_rightclick" + (isLit ? "_lit" : "");
+            var model = models().cube(name, bottom, top, north, south, east, west);
             if (!bs.getValue(BlockAbstractImpetus.LIT) && dir == Direction.SOUTH) {
                 simpleBlockItem(HexBlocks.IMPETUS_RIGHTCLICK.get(), model);
             }
-            return ConfiguredModel.builder().modelFile(model).rotationY((dir.get2DDataValue() + 2) % 4 * 90).build();
+            return ConfiguredModel.builder()
+                .modelFile(model)
+                .rotationY(((int) dir.toYRot() + 180) % 360)
+                .uvLock(true)
+                .build();
         });
     }
 }

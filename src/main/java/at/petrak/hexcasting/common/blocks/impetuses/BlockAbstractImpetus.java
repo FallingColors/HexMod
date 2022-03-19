@@ -1,12 +1,9 @@
 package at.petrak.hexcasting.common.blocks.impetuses;
 
-import at.petrak.hexcasting.common.lib.HexSounds;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -44,14 +41,6 @@ public abstract class BlockAbstractImpetus extends BaseEntityBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
         return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection());
-    }
-
-    @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
-        if (pLevel.isClientSide) {
-            Minecraft.getInstance().getSoundManager().stop(HexSounds.SPELL_CIRCLE_AMBIANCE.getId(), null);
-        }
     }
 
     @Override

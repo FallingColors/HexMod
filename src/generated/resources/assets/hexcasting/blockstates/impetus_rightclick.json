@@ -1,34 +1,42 @@
 {
   "variants": {
     "facing=north,lit=false": {
-      "model": "hexcasting:block/impetus_rightclick_dim"
+      "model": "hexcasting:block/impetus_rightclick",
+      "uvlock": true
     },
     "facing=south,lit=false": {
-      "model": "hexcasting:block/impetus_rightclick_dim",
-      "y": 180
+      "model": "hexcasting:block/impetus_rightclick",
+      "y": 180,
+      "uvlock": true
     },
     "facing=west,lit=false": {
-      "model": "hexcasting:block/impetus_rightclick_dim",
-      "y": 270
+      "model": "hexcasting:block/impetus_rightclick",
+      "y": 270,
+      "uvlock": true
     },
     "facing=east,lit=false": {
-      "model": "hexcasting:block/impetus_rightclick_dim",
-      "y": 90
+      "model": "hexcasting:block/impetus_rightclick",
+      "y": 90,
+      "uvlock": true
     },
     "facing=north,lit=true": {
-      "model": "hexcasting:block/impetus_rightclick_lit"
+      "model": "hexcasting:block/impetus_rightclick_lit",
+      "uvlock": true
     },
     "facing=south,lit=true": {
       "model": "hexcasting:block/impetus_rightclick_lit",
-      "y": 180
+      "y": 180,
+      "uvlock": true
     },
     "facing=west,lit=true": {
       "model": "hexcasting:block/impetus_rightclick_lit",
-      "y": 270
+      "y": 270,
+      "uvlock": true
     },
     "facing=east,lit=true": {
       "model": "hexcasting:block/impetus_rightclick_lit",
-      "y": 90
+      "y": 90,
+      "uvlock": true
     }
   }
 }
