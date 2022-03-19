@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.blocks.impetuses;
 
+import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.ParticleSpray;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
@@ -17,9 +18,11 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,6 +56,9 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
     }
 
     protected void activateSpellCircle(ServerPlayer activator) {
+        if (this.nextBlock != null) {
+            return;
+        }
         this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), this.getTickSpeed());
 
         this.activator = activator.getUUID();
@@ -62,15 +68,21 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         maybeCap.ifPresent(capPreferredColorizer -> this.colorizer = capPreferredColorizer.colorizer);
 
         this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(BlockAbstractImpetus.LIT, true));
-        var pos = Vec3.atCenterOf(this.getBlockPos());
-//        this.level.playSound(null, pos.x, pos.y, pos.z, HexSounds.SPELL_CIRCLE_AMBIANCE.get(), SoundSource.BLOCKS, 1f,
-//            1f);
     }
 
     protected void stepCircle() {
+        this.setChanged();
+
         // haha which silly idiot would have done something like this
         if (this.activator == null || this.colorizer == null || this.nextBlock == null || this.trackedBlocks == null) {
             this.level.destroyBlock(this.getBlockPos(), true);
+            return;
+        }
+
+        var possibleErrorPos = this.checkEverythingOk();
+        if (possibleErrorPos != null) {
+            this.errorEffect(possibleErrorPos);
+            this.stopCasting();
             return;
         }
 
@@ -90,28 +102,6 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
                 bob.append(']');
                 player.sendMessage(new TextComponent(bob.toString()), Util.NIL_UUID);
             }
-            this.stopCasting();
-            return;
-        }
-
-        for (var pos : this.trackedBlocks) {
-            if (!this.level.getBlockState(pos).is(HexBlocks.SLATE.get())) {
-                this.errorEffect(Vec3.atBottomCenterOf(pos));
-                this.stopCasting();
-                return;
-            }
-        }
-
-        var blockChecking = this.level.getBlockState(this.nextBlock);
-        if (!blockChecking.is(HexBlocks.SLATE.get())) {
-            BlockPos errorPos;
-            if (this.trackedBlocks.isEmpty()) {
-                // then we just activated the circle
-                errorPos = this.getBlockPos().above();
-            } else {
-                errorPos = this.trackedBlocks.get(this.trackedBlocks.size() - 1);
-            }
-            this.errorEffect(Vec3.atBottomCenterOf(errorPos));
             this.stopCasting();
             return;
         }
@@ -157,7 +147,38 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
 
         this.successEffect(Vec3.atBottomCenterOf(this.trackedBlocks.get(this.trackedBlocks.size() - 1)));
         this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), this.getTickSpeed());
-        this.setChanged();
+    }
+
+    @Nullable
+    private Vec3 checkEverythingOk() {
+        // if they logged out or changed dimensions or something
+        if (this.getPlayer() == null) {
+            return Vec3.atBottomCenterOf(this.getBlockPos().above());
+        }
+
+        for (var pos : this.trackedBlocks) {
+            if (!this.level.getBlockState(pos).is(HexBlocks.SLATE.get())) {
+                return Vec3.atBottomCenterOf(pos);
+            }
+        }
+
+        var blockChecking = this.level.getBlockState(this.nextBlock);
+        if (!blockChecking.is(HexBlocks.SLATE.get())) {
+            BlockPos errorPos;
+            if (this.trackedBlocks.isEmpty()) {
+                // then we just activated the circle
+                errorPos = this.getBlockPos().above();
+            } else {
+                errorPos = this.trackedBlocks.get(this.trackedBlocks.size() - 1);
+            }
+            return Vec3.atBottomCenterOf(errorPos);
+        }
+
+        if (this.trackedBlocks.size() > HexConfig.maxSpellCircleLength.get()) {
+            return Vec3.atBottomCenterOf(this.trackedBlocks.get(this.trackedBlocks.size() - 1));
+        }
+
+        return null;
     }
 
     protected void successEffect(Vec3 pos) {
@@ -165,12 +186,17 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
             var spray = new ParticleSpray(pos, new Vec3(0, 1, 0), 0.1, Mth.PI / 4, 30);
             spray.sprayParticles(serverLevel, this.colorizer);
         }
-        level.playSound(null, pos.x, pos.y, pos.z, HexSounds.SPELL_CIRCLE_FIND_BLOCK.get(), SoundSource.BLOCKS, 1f, 1f);
+        // This is a good use of my time
+        var note = this.trackedBlocks.size() - 1;
+        var semitone = this.semitoneFromScale(note);
+        var pitch = Math.pow(2.0, (semitone - 8) / 12d);
+        level.playSound(null, pos.x, pos.y, pos.z, HexSounds.SPELL_CIRCLE_FIND_BLOCK.get(), SoundSource.BLOCKS, 1f,
+            (float) pitch);
     }
 
     protected void errorEffect(Vec3 pos) {
         if (this.level instanceof ServerLevel serverLevel) {
-            var spray = new ParticleSpray(pos, new Vec3(0, 1, 0), 0.1, Mth.PI / 4, 30);
+            var spray = new ParticleSpray(pos, new Vec3(0, 1.5, 0), 0.1, Mth.PI / 2, 40);
             spray.sprayParticles(serverLevel, new FrozenColorizer(
                 HexItems.DYE_COLORIZERS[DyeColor.RED.ordinal()].get(),
                 this.activator));
@@ -194,7 +220,31 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
     }
 
     protected int getTickSpeed() {
-        return 10;
+        return 8;
+    }
+
+    protected int semitoneFromScale(int note) {
+        var blockBelow = this.level.getBlockState(this.getBlockPos().below());
+        var scale = MAJOR_SCALE;
+        if (blockBelow.is(Blocks.CRYING_OBSIDIAN)) {
+            scale = MINOR_SCALE;
+        } else if (blockBelow.is(BlockTags.DOORS) || blockBelow.is(BlockTags.TRAPDOORS)) {
+            scale = DORIAN_SCALE;
+        } else if (blockBelow.is(Blocks.PISTON) || blockBelow.is(Blocks.STICKY_PISTON)) {
+            scale = MIXOLYDIAN_SCALE;
+        } else if (blockBelow.is(Blocks.BLUE_WOOL)
+            || blockBelow.is(Blocks.BLUE_CONCRETE) || blockBelow.is(Blocks.BLUE_CONCRETE_POWDER)
+            || blockBelow.is(Blocks.BLUE_TERRACOTTA) || blockBelow.is(Blocks.BLUE_GLAZED_TERRACOTTA)
+            || blockBelow.is(Blocks.BLUE_STAINED_GLASS)) {
+            scale = BLUES_SCALE;
+        } else if (blockBelow.is(Blocks.BONE_BLOCK)) {
+            scale = BAD_TIME;
+        } else if (blockBelow.is(Blocks.COMPOSTER)) {
+            scale = SUSSY_BAKA;
+        }
+
+        note = Mth.clamp(note, 0, scale.length - 1);
+        return scale[note];
     }
 
 
@@ -233,4 +283,13 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
     }
 
     private static final Direction[] HORIZONTAL_DIRS = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+
+    // this is a good use of my time
+    private static final int[] MAJOR_SCALE = {0, 2, 4, 5, 7, 9, 11, 12};
+    private static final int[] MINOR_SCALE = {0, 2, 3, 5, 7, 8, 11, 12};
+    private static final int[] DORIAN_SCALE = {0, 2, 3, 5, 7, 9, 10, 12};
+    private static final int[] MIXOLYDIAN_SCALE = {0, 2, 4, 5, 7, 9, 10, 12};
+    private static final int[] BLUES_SCALE = {0, 3, 5, 6, 7, 10, 12};
+    private static final int[] BAD_TIME = {0, 0, 12, 7, 6, 5, 3, 0, 3, 5};
+    private static final int[] SUSSY_BAKA = {5, 8, 10, 11, 10, 8, 5, 3, 7, 5};
 }

@@ -16,6 +16,8 @@ public class HexConfig {
     public static ForgeConfigSpec.IntValue opBreakHarvestLevel;
     public static ForgeConfigSpec.IntValue maxRecurseDepth;
 
+    public static ForgeConfigSpec.IntValue maxSpellCircleLength;
+
 
     public HexConfig(ForgeConfigSpec.Builder builder) {
         manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
@@ -32,12 +34,16 @@ public class HexConfig {
 
         builder.push("spells");
         maxRecurseDepth = builder.comment("How many times a spell can recursively cast other spells")
-            .defineInRange("maxRecurseDepth", 15, 0, Integer.MAX_VALUE);
+            .defineInRange("maxRecurseDepth", 64, 0, Integer.MAX_VALUE);
         opBreakHarvestLevel = builder.comment(
             "The harvest level of the Break Block spell.",
             "0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite."
         ).defineInRange("opBreakHarvestLevel", 3, 0, 4);
         builder.pop();
+
+        builder.push("spell_circles");
+        maxSpellCircleLength = builder.comment("The maximum number of slates in a spell circle")
+            .defineInRange("maxSpellCircleLength", 256, 4, Integer.MAX_VALUE);
     }
 
     /**
