@@ -48,6 +48,8 @@
   "item.hexcasting.pride_colorizer_13": "Aroace Pigment",
   "item.hexcasting.uuid_colorizer": "Soulglimmer Pigment",
   "block.hexcasting.conjured": "Conjured Block",
+  "block.hexcasting.slate": "Blank Slate",
+  "block.hexcasting.slate.written": "Patterned Slate",
   "itemGroup.hexcasting": "Hexcasting",
 
   "hexcasting.tooltip.spellbook.page": "§7Selected Page §a§l%d§7/§a§l%d§r",

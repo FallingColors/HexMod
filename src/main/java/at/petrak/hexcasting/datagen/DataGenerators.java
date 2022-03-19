@@ -13,12 +13,12 @@ public class DataGenerators {
         ExistingFileHelper efh = ev.getExistingFileHelper();
         if (ev.includeClient()) {
             gen.addProvider(new ItemModels(gen, efh));
+            gen.addProvider(new BlockStatesAndModels(gen, efh));
         }
         if (ev.includeServer()) {
             gen.addProvider(new Recipes(gen));
+            gen.addProvider(new HexLootModifiers(gen));
+            gen.addProvider(new Advancements(gen, efh));
         }
-        // On both sides
-        gen.addProvider(new HexLootModifiers(gen));
-        gen.addProvider(new Advancements(gen, efh));
     }
 }

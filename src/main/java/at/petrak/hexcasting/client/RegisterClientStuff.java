@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client;
 import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.SpellDatum;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
+import at.petrak.hexcasting.common.blocks.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -92,5 +94,10 @@ public class RegisterClientStuff {
         var particleMan = Minecraft.getInstance().particleEngine;
         particleMan.register(HexParticles.LIGHT_PARTICLE.get(), ConjureParticle.Provider::new);
         particleMan.register(HexParticles.CONJURE_PARTICLE.get(), ConjureParticle.Provider::new);
+    }
+
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers evt) {
+        evt.registerBlockEntityRenderer(HexBlocks.SLATE_TILE.get(), BlockEntitySlate.Renderer::new);
     }
 }

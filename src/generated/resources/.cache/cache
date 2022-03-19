@@ -1,3 +1,6 @@
+e26f9f72db9fab9b78bad75ec4c1746b4f84fa12 assets/hexcasting/blockstates/slate.json
+043abd5bbfd1186415049d24d185d4e4395320f9 assets/hexcasting/blockstates/slate_block.json
+d51541b464840530f4e734db1f67ed20e811ad14 assets/hexcasting/models/block/slate_block.json
 60c0f39882d22c2634cf738b0fe4e956eaa2adbe assets/hexcasting/models/item/abacus.json
 eb78f6a2b68dd772a5016fc5a3db10488a65abfa assets/hexcasting/models/item/amethyst_dust.json
 df940dd798240fac6fde700c57f8ae6aa43d1c9e assets/hexcasting/models/item/artifact.json
@@ -71,6 +74,7 @@ e7b88cde507911c0ad1bf60976dcc43a319d498d assets/hexcasting/models/item/pride_col
 9ef07e2885063ed1ffe1cb8f7728f26cb7c9881e assets/hexcasting/models/item/scroll.json
 297b05008b9ab37b5881820a0f5c99f7441a9dfe assets/hexcasting/models/item/scroll_ancient.json
 91765bdc3a764f3a3f10131e452a0030b207b03d assets/hexcasting/models/item/scroll_pristine.json
+cc66962ddeef9b9c3a623eef178b352605f1c922 assets/hexcasting/models/item/slate_block.json
 9a5f23f59453dc27233decd6110fbe9feab07a9d assets/hexcasting/models/item/spellbook.json
 4a33e6984bdf63dc4b7a5da5643bb1155b62b636 assets/hexcasting/models/item/sub_sandwich.json
 3b1f2d0b315e8117f4c5fe593bd3ae028617b413 assets/hexcasting/models/item/trinket.json

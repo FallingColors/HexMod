@@ -4,13 +4,10 @@ import at.petrak.hexcasting.api.ParticleSpray
 import at.petrak.hexcasting.api.RenderedSpell
 import at.petrak.hexcasting.api.SpellDatum
 import at.petrak.hexcasting.common.lib.HexStatistics
-import at.petrak.hexcasting.common.network.HexMessages
-import at.petrak.hexcasting.common.network.MsgCastParticleAck
 import at.petrak.hexcasting.datagen.Advancements
 import net.minecraft.Util
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.network.chat.TranslatableComponent
-import net.minecraftforge.network.PacketDistributor
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -56,18 +53,7 @@ sealed class OperatorSideEffect {
     data class Particles(val spray: ParticleSpray) :
         OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
-            val colorizer = harness.getColorizer()
-            val pos = spray.pos
-
-            HexMessages.getNetwork().send(PacketDistributor.NEAR.with {
-                PacketDistributor.TargetPoint(
-                    pos.x,
-                    pos.y,
-                    pos.z,
-                    128.0 * 128.0,
-                    harness.ctx.world.dimension()
-                )
-            }, MsgCastParticleAck(spray, colorizer))
+            this.spray.sprayParticles(harness.ctx.world, harness.getColorizer())
 
             return false
         }
