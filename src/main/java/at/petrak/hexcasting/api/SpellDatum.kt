@@ -193,7 +193,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 }
                 TAG_PATTERN -> {
                     val pat = HexPattern.DeserializeFromNBT(nbt.getCompound(TAG_PATTERN))
-                    val out = TextComponent("§6HexPattern")
+                    val out = TextComponent("§6HexPattern(")
                     out.append(pat.startDir.toString())
                     out.append(" ")
                     out.append(pat.anglesSignature())

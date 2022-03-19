@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.magic.ItemArtifact;
@@ -10,10 +11,7 @@ import at.petrak.hexcasting.common.items.magic.ItemTrinket;
 import at.petrak.hexcasting.common.lib.HexItemNames;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -94,8 +92,12 @@ public class HexItems {
 
     public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register(HexItemNames.UUID_COLORIZER,
         () -> new Item(unstackable()));
+
     public static final RegistryObject<ItemAbacus> ABACUS = ITEMS.register(HexItemNames.ABACUS,
         () -> new ItemAbacus(unstackable()));
+
+    public static final RegistryObject<BlockItem> SLATE = ITEMS.register("slate",
+        () -> new BlockItem(HexBlocks.SLATE.get(), unstackable()));
 
     // BUFF SANDVICH
     public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register(HexItemNames.SUBMARINE_SANDWICH,

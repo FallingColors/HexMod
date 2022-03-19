@@ -28,6 +28,7 @@ public class ItemModels extends ItemModelProvider {
         simpleItem(HexItems.SUBMARINE_SANDWICH.get());
         simpleItem(HexItems.SCRYING_LENS.get());
         simpleItem(HexItems.ABACUS.get());
+        simpleItem(HexItems.SLATE.get());
 
         simpleItem(modLoc("scroll_pristine"));
         simpleItem(modLoc("scroll_ancient"));

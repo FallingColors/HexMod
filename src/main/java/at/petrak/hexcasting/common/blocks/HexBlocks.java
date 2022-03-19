@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.impetuses.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.impetuses.BlockEntityRightClickImpetus;
 import at.petrak.hexcasting.common.blocks.impetuses.BlockRightClickImpetus;
+import at.petrak.hexcasting.common.items.HexItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -15,9 +16,6 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import static at.petrak.hexcasting.common.items.HexItems.ITEMS;
-import static at.petrak.hexcasting.common.items.HexItems.TAB;
 
 public class HexBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, HexMod.MOD_ID);
@@ -34,8 +32,8 @@ public class HexBlocks {
                 .isSuffocating(HexBlocks::never)
                 .isViewBlocking(HexBlocks::never)));
 
-    public static final RegistryObject<Block> SLATE = registerBlock("slate",
-        new BlockSlate(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
+    public static final RegistryObject<Block> SLATE = BLOCKS.register("slate",
+        () -> new BlockSlate(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
             .strength(2f, 4f)));
     public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = registerBlock("impetus_rightclick",
@@ -62,7 +60,7 @@ public class HexBlocks {
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String label, T block) {
-        ITEMS.register(label, () -> new BlockItem(block, new Item.Properties().tab(TAB)));
+        HexItems.ITEMS.register(label, () -> new BlockItem(block, new Item.Properties().tab(HexItems.TAB)));
         return BLOCKS.register(label, () -> block);
     }
 
