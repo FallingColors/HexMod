@@ -1,16 +1,12 @@
 package at.petrak.hexcasting
 
-import at.petrak.hexcasting.client.ClientTickCounter
-import at.petrak.hexcasting.client.HexAdditionalRenderers
-import at.petrak.hexcasting.client.RegisterClientStuff
-import at.petrak.hexcasting.client.ShiftScrollListener
+import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.common.ContributorList
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.HexCommands
 import at.petrak.hexcasting.common.items.HexItems
-import at.petrak.hexcasting.common.items.ItemScroll
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.HexStatistics
@@ -73,7 +69,6 @@ object HexMod {
         evBus.register(TickScheduler)
         evBus.register(HexCapabilities::class.java)
         evBus.register(OpFlight)
-        evBus.register(ItemScroll::class.java)
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT) {
             Runnable {
@@ -81,6 +76,7 @@ object HexMod {
                 evBus.register(ClientTickCounter::class.java)
                 evBus.register(HexAdditionalRenderers::class.java)
                 evBus.register(ShiftScrollListener::class.java)
+                evBus.register(HexTooltips::class.java)
             }
         }
 

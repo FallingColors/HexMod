@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.blocks.impetuses;
+package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;

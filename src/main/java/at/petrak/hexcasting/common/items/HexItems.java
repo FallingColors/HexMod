@@ -8,7 +8,6 @@ import at.petrak.hexcasting.common.items.magic.ItemArtifact;
 import at.petrak.hexcasting.common.items.magic.ItemCypher;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
-import at.petrak.hexcasting.common.lib.HexItemNames;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -45,32 +44,32 @@ public class HexItems {
         }
     };
 
-    public static final RegistryObject<ItemWand> WAND = ITEMS.register(HexItemNames.WAND,
+    public static final RegistryObject<ItemWand> WAND = ITEMS.register("wand",
         () -> new ItemWand(unstackable()));
 
-    public static final RegistryObject<Item> AMETHYST_DUST = ITEMS.register(HexItemNames.AMETHYST_DUST,
+    public static final RegistryObject<Item> AMETHYST_DUST = ITEMS.register("amethyst_dust",
         () -> new Item(props()));
-    public static final RegistryObject<Item> CHARGED_AMETHYST = ITEMS.register(HexItemNames.CHARGED_AMETHYST,
+    public static final RegistryObject<Item> CHARGED_AMETHYST = ITEMS.register("charged_amethyst",
         () -> new Item(props()));
 
-    public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register(HexItemNames.LENS,
+    public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register("lens",
         () -> new Item(unstackable()));
-    public static final RegistryObject<Item> SCROLL = ITEMS.register(HexItemNames.SCROLL,
+    public static final RegistryObject<Item> SCROLL = ITEMS.register("scroll",
         () -> new ItemScroll(props()));
 
-    public static final RegistryObject<ItemFocus> FOCUS = ITEMS.register(HexItemNames.FOCUS,
+    public static final RegistryObject<ItemFocus> FOCUS = ITEMS.register("focus",
         () -> new ItemFocus(props()));
-    public static final RegistryObject<ItemSpellbook> SPELLBOOK = ITEMS.register(HexItemNames.SPELLBOOK,
+    public static final RegistryObject<ItemSpellbook> SPELLBOOK = ITEMS.register("spellbook",
         () -> new ItemSpellbook(unstackable()));
 
-    public static final RegistryObject<ItemCypher> CYPHER = ITEMS.register(HexItemNames.CYPHER,
+    public static final RegistryObject<ItemCypher> CYPHER = ITEMS.register("cypher",
         () -> new ItemCypher(unstackable()));
-    public static final RegistryObject<ItemTrinket> TRINKET = ITEMS.register(HexItemNames.TRINKET,
+    public static final RegistryObject<ItemTrinket> TRINKET = ITEMS.register("trinket",
         () -> new ItemTrinket(unstackable()));
-    public static final RegistryObject<ItemArtifact> ARTIFACT = ITEMS.register(HexItemNames.ARTIFACT,
+    public static final RegistryObject<ItemArtifact> ARTIFACT = ITEMS.register("artifact",
         () -> new ItemArtifact(unstackable()));
 
-    public static final RegistryObject<ItemManaBattery> BATTERY = ITEMS.register(HexItemNames.BATTERY,
+    public static final RegistryObject<ItemManaBattery> BATTERY = ITEMS.register("battery",
         () -> new ItemManaBattery(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<ItemDyeColorizer>[] DYE_COLORIZERS = new RegistryObject[16];
@@ -80,27 +79,29 @@ public class HexItems {
         for (int i = 0; i < DYE_COLORIZERS.length; i++) {
             var dye = DyeColor.values()[i];
             final var finalI = i;
-            DYE_COLORIZERS[i] = ITEMS.register(HexItemNames.DYE_COLORIZER_STUB + dye.getName(),
+            DYE_COLORIZERS[i] = ITEMS.register("dye_colorizer_" + dye.getName(),
                 () -> new ItemDyeColorizer(finalI, unstackable()));
         }
         for (int i = 0; i < PRIDE_COLORIZERS.length; i++) {
             final var finalI = i;
-            PRIDE_COLORIZERS[i] = ITEMS.register(HexItemNames.PRIDE_COLORIZER_STUB + i,
+            PRIDE_COLORIZERS[i] = ITEMS.register("pride_colorizer_" + i,
                 () -> new ItemPrideColorizer(finalI, unstackable()));
         }
     }
 
-    public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register(HexItemNames.UUID_COLORIZER,
+    public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register("uuid_colorizer",
         () -> new Item(unstackable()));
 
-    public static final RegistryObject<ItemAbacus> ABACUS = ITEMS.register(HexItemNames.ABACUS,
+    public static final RegistryObject<ItemAbacus> ABACUS = ITEMS.register("abacus",
         () -> new ItemAbacus(unstackable()));
 
-    public static final RegistryObject<BlockItem> SLATE = ITEMS.register("slate",
-        () -> new BlockItem(HexBlocks.SLATE.get(), unstackable()));
+    public static final RegistryObject<Item> BLANK_SLATE = ITEMS.register("slate_blank",
+        () -> new Item(props()));
+    public static final RegistryObject<BlockItem> WRITTEN_SLATE = ITEMS.register("slate_written",
+        () -> new BlockItem(HexBlocks.WRITTEN_SLATE.get(), new Item.Properties()));
 
     // BUFF SANDVICH
-    public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register(HexItemNames.SUBMARINE_SANDWICH,
+    public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register("sub_sandwich",
         () -> new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
 
     public static Item.Properties props() {

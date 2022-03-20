@@ -2,7 +2,7 @@ package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
-import at.petrak.hexcasting.common.blocks.impetuses.BlockAbstractImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -16,7 +16,7 @@ public class BlockStatesAndModels extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        simpleBlock(HexBlocks.SLATE.get(), models().getExistingFile(modLoc("slate")));
+        simpleBlock(HexBlocks.WRITTEN_SLATE.get(), models().getExistingFile(modLoc("slate")));
         var slateBlock = models().cubeAll("slate_block", modLoc("block/slate"));
         simpleBlock(HexBlocks.SLATE_BLOCK.get(), slateBlock);
         simpleBlockItem(HexBlocks.SLATE_BLOCK.get(), slateBlock);
@@ -35,7 +35,8 @@ public class BlockStatesAndModels extends BlockStateProvider {
             var bottom = modLoc("block/slate");
 
             var name = "impetus_rightclick" + (isLit ? "_lit" : "");
-            var model = models().cube(name, bottom, top, north, south, east, west);
+            var model = models().cube(name, bottom, top, north, south, east, west)
+                .texture("particle", bottom);
             if (!bs.getValue(BlockAbstractImpetus.LIT) && dir == Direction.SOUTH) {
                 simpleBlockItem(HexBlocks.IMPETUS_RIGHTCLICK.get(), model);
             }

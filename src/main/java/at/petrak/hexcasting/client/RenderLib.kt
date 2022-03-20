@@ -137,18 +137,6 @@ object RenderLib {
         head: Int,
         animTime: Float? = null
     ) {
-        fun dodge(n: Int): Float = n * 0.9f
-        fun screen(n: Int): Int = (n + 255) / 2
-
-        fun screenCol(n: Int): Int {
-            return FC.color(
-                FC.alpha(n),
-                screen(FC.red(n)),
-                screen(FC.green(n)),
-                screen(FC.blue(n)),
-            )
-        }
-
         val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f)
         val nodes = if (drawLast) {
             points
@@ -266,5 +254,18 @@ object RenderLib {
             HexCoord(q + (qf + 0.5f * rf).roundToInt(), r)
         else
             HexCoord(q, r + (rf + 0.5 * qf).roundToInt())
+    }
+
+    fun dodge(n: Int): Float = n * 0.9f
+    fun screen(n: Int): Int = (n + 255) / 2
+
+    @JvmStatic
+    fun screenCol(n: Int): Int {
+        return FC.color(
+            FC.alpha(n),
+            screen(FC.red(n)),
+            screen(FC.green(n)),
+            screen(FC.blue(n)),
+        )
     }
 }

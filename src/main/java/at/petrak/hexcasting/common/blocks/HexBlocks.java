@@ -1,9 +1,11 @@
 package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.common.blocks.impetuses.BlockAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.impetuses.BlockEntityRightClickImpetus;
-import at.petrak.hexcasting.common.blocks.impetuses.BlockRightClickImpetus;
+import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
+import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClickImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
 import at.petrak.hexcasting.common.items.HexItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -32,7 +34,7 @@ public class HexBlocks {
                 .isSuffocating(HexBlocks::never)
                 .isViewBlocking(HexBlocks::never)));
 
-    public static final RegistryObject<Block> SLATE = BLOCKS.register("slate",
+    public static final RegistryObject<Block> WRITTEN_SLATE = BLOCKS.register("slate_written",
         () -> new BlockSlate(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
             .strength(2f, 4f)));
@@ -52,8 +54,8 @@ public class HexBlocks {
         "conjured_tile",
         () -> BlockEntityType.Builder.of(BlockEntityConjured::new, CONJURED.get()).build(null));
     public static final RegistryObject<BlockEntityType<BlockEntitySlate>> SLATE_TILE = BLOCK_ENTITIES.register(
-        "slate_tile",
-        () -> BlockEntityType.Builder.of(BlockEntitySlate::new, SLATE.get()).build(null));
+        "slate_written_tile",
+        () -> BlockEntityType.Builder.of(BlockEntitySlate::new, WRITTEN_SLATE.get()).build(null));
     public static final RegistryObject<BlockEntityType<BlockEntityRightClickImpetus>> IMPETUS_RIGHTCLICK_TILE =
         BLOCK_ENTITIES.register("impetus_rightclick_tile",
             () -> BlockEntityType.Builder.of(BlockEntityRightClickImpetus::new, IMPETUS_RIGHTCLICK.get()).build(null));

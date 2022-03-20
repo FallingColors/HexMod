@@ -6,6 +6,7 @@
     "north": "hexcasting:block/impetus/rightclick/front_lit",
     "south": "hexcasting:block/impetus/rightclick/back_lit",
     "east": "hexcasting:block/impetus/rightclick/right_lit",
-    "west": "hexcasting:block/impetus/rightclick/left_lit"
+    "west": "hexcasting:block/impetus/rightclick/left_lit",
+    "particle": "hexcasting:block/slate"
   }
 }

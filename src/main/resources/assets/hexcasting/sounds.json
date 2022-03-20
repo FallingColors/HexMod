@@ -59,12 +59,6 @@
     ]
   },
 
-  "spellcircle.ambiance": {
-    "sounds": [
-      "hexcasting:casting_ambiance"
-    ],
-    "subtitle": "hexcasting.subtitles.spellcircle.ambiance"
-  },
   "spellcircle.find_block": {
     "sounds": [
       {
@@ -82,5 +76,11 @@
       }
     ],
     "subtitle": "hexcasting.subtitles.spellcircle.fail"
+  },
+  "spellcircle.cast": {
+    "sounds": [
+      "hexcasting:cast_hex"
+    ],
+    "subtitle": "hexcasting.subtitles.spellcircle.cast"
   }
 }

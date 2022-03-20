@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.operators.spells
+package at.petrak.hexcasting.common.casting.operators
 
 import at.petrak.hexcasting.api.ConstManaOperator
 import at.petrak.hexcasting.api.Operator.Companion.getChecked

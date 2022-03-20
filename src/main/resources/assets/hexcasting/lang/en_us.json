@@ -48,8 +48,8 @@
   "item.hexcasting.pride_colorizer_13": "Aroace Pigment",
   "item.hexcasting.uuid_colorizer": "Soulglimmer Pigment",
   "block.hexcasting.conjured": "Conjured Block",
-  "block.hexcasting.slate": "Blank Slate",
-  "block.hexcasting.slate.written": "Patterned Slate",
+  "block.hexcasting.slate_blank": "Blank Slate",
+  "block.hexcasting.slate_written": "Patterned Slate",
   "itemGroup.hexcasting": "Hexcasting",
 
   "hexcasting.tooltip.spellbook.page": "§7Selected Page §a§l%d§7/§a§l%d§r",
@@ -208,6 +208,9 @@
   "hexcasting.subtitles.cast": "Hex casts",
   "hexcasting.subtitles.abacus": "Abacus clicks",
   "hexcasting.subtitles.abacus.shake": "Abacus shakes",
+  "hexcasting.subtitles.spellcircle.add_pattern": "Spell circle crackles",
+  "hexcasting.subtitles.spellcircle.fail": "Spell circle fizzles out",
+  "hexcasting.subtitles.spellcircle.cast": "Spell circle casts",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.",
 

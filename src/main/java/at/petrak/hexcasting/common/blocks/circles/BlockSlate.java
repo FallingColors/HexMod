@@ -1,29 +1,72 @@
-package at.petrak.hexcasting.common.blocks;
+package at.petrak.hexcasting.common.blocks.circles;
 
+import at.petrak.hexcasting.api.BlockCircleComponent;
+import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
 // FACING is the direction the *bottom* of the pattern points
 // (or which way is "down")
-public class BlockSlate extends HorizontalDirectionalBlock {
+public class BlockSlate extends BlockCircleComponent implements EntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+
     protected static final double THICKNESS = 1;
     protected static final VoxelShape AABB_FLOOR = Block.box(0, 0, 0, 16, THICKNESS, 16);
 
     public BlockSlate(Properties p_53182_) {
         super(p_53182_);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(
+            this.stateDefinition.any().setValue(ENERGIZED, false).setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    public Direction[] exitDirections(BlockPos pos, BlockState bs, ServerLevel world) {
+        return new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    }
+
+    @Override
+    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, ServerLevel world) {
+        if (world.getBlockEntity(pos) instanceof BlockEntitySlate tile) {
+            return tile.pattern;
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new BlockEntitySlate(pPos, pState);
+    }
+
+    @Override
+    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer,
+        ItemStack pStack) {
+        if (pLevel.getBlockEntity(pPos) instanceof BlockEntitySlate tile) {
+            var patTag = pStack.getOrCreateTag().getCompound(BlockEntitySlate.TAG_PATTERN);
+            tile.pattern = HexPattern.DeserializeFromNBT(patTag);
+            tile.setChanged();
+        }
     }
 
     @Override
@@ -38,6 +81,7 @@ public class BlockSlate extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(FACING);
     }
 
@@ -59,4 +103,6 @@ public class BlockSlate extends HorizontalDirectionalBlock {
             pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel,
             pCurrentPos, pFacingPos);
     }
+
+
 }

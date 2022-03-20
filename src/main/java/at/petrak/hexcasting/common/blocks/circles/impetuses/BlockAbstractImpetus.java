@@ -1,5 +1,7 @@
-package at.petrak.hexcasting.common.blocks.impetuses;
+package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
+import at.petrak.hexcasting.api.BlockCircleComponent;
+import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -11,19 +13,29 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
 // Facing dir is the direction it starts searching for slates in to start
-public abstract class BlockAbstractImpetus extends Block implements EntityBlock {
-    public static final BooleanProperty LIT = BlockStateProperties.LIT;
+public abstract class BlockAbstractImpetus extends BlockCircleComponent implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockAbstractImpetus(Properties p_49795_) {
         super(p_49795_);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
+        this.registerDefaultState(
+            this.stateDefinition.any().setValue(ENERGIZED, false).setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    public Direction[] exitDirections(BlockPos pos, BlockState bs, ServerLevel world) {
+        return new Direction[]{bs.getValue(FACING)};
+    }
+
+    @Override
+    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, ServerLevel world) {
+        return null;
     }
 
     @Override
@@ -35,7 +47,8 @@ public abstract class BlockAbstractImpetus extends Block implements EntityBlock 
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, LIT);
+        super.createBlockStateDefinition(builder);
+        builder.add(FACING);
     }
 
     @Override

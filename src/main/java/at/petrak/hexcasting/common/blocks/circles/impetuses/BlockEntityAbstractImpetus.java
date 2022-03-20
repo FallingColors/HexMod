@@ -1,25 +1,28 @@
-package at.petrak.hexcasting.common.blocks.impetuses;
+package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.ParticleSpray;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
+import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.casting.CastingContext;
+import at.petrak.hexcasting.common.casting.CastingHarness;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
@@ -39,7 +42,8 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         TAG_COLORIZER = "colorizer",
         TAG_NEXT_BLOCK = "next_block",
         TAG_TRACKED_BLOCKS = "tracked_blocks",
-        TAG_FOUND_ALL = "found_all";
+        TAG_FOUND_ALL = "found_all",
+        TAG_MANA = "mana";
 
     @Nullable
     private UUID activator = null;
@@ -50,10 +54,13 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
     @Nullable
     private List<BlockPos> trackedBlocks = null;
     private boolean foundAll = false;
+    private int mana = 0;
 
     public BlockEntityAbstractImpetus(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
     }
+
+    abstract public boolean playerAlwaysInRange();
 
     protected void activateSpellCircle(ServerPlayer activator) {
         if (this.nextBlock != null) {
@@ -67,7 +74,8 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         var maybeCap = activator.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
         maybeCap.ifPresent(capPreferredColorizer -> this.colorizer = capPreferredColorizer.colorizer);
 
-        this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(BlockAbstractImpetus.LIT, true));
+        this.level.setBlockAndUpdate(this.getBlockPos(),
+            this.getBlockState().setValue(BlockAbstractImpetus.ENERGIZED, true));
     }
 
     protected void stepCircle() {
@@ -87,21 +95,7 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         }
 
         if (this.foundAll) {
-            var player = this.getPlayer();
-            if (player != null) {
-                var bob = new StringBuilder("[");
-                for (int i = 0; i < this.trackedBlocks.size(); i++) {
-                    bob.append('(');
-                    bob.append(this.trackedBlocks.get(i).toShortString());
-                    bob.append(')');
-
-                    if (i < this.trackedBlocks.size() - 1) {
-                        bob.append(", ");
-                    }
-                }
-                bob.append(']');
-                player.sendMessage(new TextComponent(bob.toString()), Util.NIL_UUID);
-            }
+            this.castSpell();
             this.stopCasting();
             return;
         }
@@ -121,7 +115,7 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
                 // so, in the smallest circle case (a 2x2), this will have a size of 3 (with this block being the 4th).
                 var closedLoop = (this.trackedBlocks.size() >= 3 && this.trackedBlocks.get(0).equals(neighborPos));
                 var mightBeOkThere = closedLoop || !this.trackedBlocks.contains(neighborPos);
-                if (mightBeOkThere && blockThere.is(HexBlocks.SLATE.get())) {
+                if (mightBeOkThere && blockThere.is(HexBlocks.WRITTEN_SLATE.get())) {
                     if (foundPos == null) {
                         foundPos = neighborPos;
                         this.foundAll |= closedLoop;
@@ -145,8 +139,32 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
             }
         }
 
-        this.successEffect(Vec3.atBottomCenterOf(this.trackedBlocks.get(this.trackedBlocks.size() - 1)));
+        var lastPos = this.trackedBlocks.get(this.trackedBlocks.size() - 1);
+        var justTrackedBlock = this.level.getBlockState(lastPos);
+        this.level.setBlockAndUpdate(lastPos, justTrackedBlock.setValue(BlockSlate.LIT, true));
+        this.successEffect(Vec3.atBottomCenterOf(lastPos));
+
         this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), this.getTickSpeed());
+    }
+
+    private void castSpell() {
+        var player = this.getPlayer();
+
+        if (player instanceof ServerPlayer splayer) {
+            var ctx = new CastingContext(splayer, InteractionHand.MAIN_HAND);
+            var harness = new CastingHarness(ctx);
+            for (var tracked : this.trackedBlocks) {
+                if (this.level.getBlockEntity(tracked) instanceof BlockEntitySlate slate) {
+                    var info = harness.executeNewPattern(slate.pattern, splayer.getLevel());
+                    if (info.getWasPrevPatternInvalid()) {
+                        this.errorEffect(Vec3.atBottomCenterOf(tracked));
+                        break;
+                    }
+                }
+            }
+        }
+
+        this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST.get(), SoundSource.BLOCKS, 2f, 1f);
     }
 
     @Nullable
@@ -157,13 +175,13 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         }
 
         for (var pos : this.trackedBlocks) {
-            if (!this.level.getBlockState(pos).is(HexBlocks.SLATE.get())) {
+            if (!this.level.getBlockState(pos).is(HexBlocks.WRITTEN_SLATE.get())) {
                 return Vec3.atBottomCenterOf(pos);
             }
         }
 
         var blockChecking = this.level.getBlockState(this.nextBlock);
-        if (!blockChecking.is(HexBlocks.SLATE.get())) {
+        if (!blockChecking.is(HexBlocks.WRITTEN_SLATE.get())) {
             BlockPos errorPos;
             if (this.trackedBlocks.isEmpty()) {
                 // then we just activated the circle
@@ -205,6 +223,11 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
     }
 
     protected void stopCasting() {
+        for (var tracked : this.trackedBlocks) {
+            var bs = this.level.getBlockState(tracked);
+            this.level.setBlockAndUpdate(tracked, bs.setValue(BlockSlate.LIT, false));
+        }
+
         this.activator = null;
         this.nextBlock = null;
         this.trackedBlocks = null;
@@ -235,7 +258,7 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         } else if (blockBelow.is(Blocks.BLUE_WOOL)
             || blockBelow.is(Blocks.BLUE_CONCRETE) || blockBelow.is(Blocks.BLUE_CONCRETE_POWDER)
             || blockBelow.is(Blocks.BLUE_TERRACOTTA) || blockBelow.is(Blocks.BLUE_GLAZED_TERRACOTTA)
-            || blockBelow.is(Blocks.BLUE_STAINED_GLASS)) {
+            || blockBelow.is(Blocks.BLUE_STAINED_GLASS) || blockBelow.is(Blocks.BLUE_STAINED_GLASS_PANE)) {
             scale = BLUES_SCALE;
         } else if (blockBelow.is(Blocks.BONE_BLOCK)) {
             scale = BAD_TIME;
@@ -262,6 +285,14 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
             }
             tag.put(TAG_TRACKED_BLOCKS, trackeds);
         }
+        tag.putInt(TAG_MANA, this.mana);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        var out = new CompoundTag();
+        this.saveAdditional(out);
+        return out;
     }
 
     @Override
@@ -280,7 +311,10 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
                 this.trackedBlocks.add(NbtUtils.readBlockPos((CompoundTag) tracked));
             }
         }
+
+        this.mana = tag.getInt(TAG_MANA);
     }
+
 
     private static final Direction[] HORIZONTAL_DIRS = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
