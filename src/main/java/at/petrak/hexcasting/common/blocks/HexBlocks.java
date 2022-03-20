@@ -34,7 +34,7 @@ public class HexBlocks {
                 .isSuffocating(HexBlocks::never)
                 .isViewBlocking(HexBlocks::never)));
 
-    public static final RegistryObject<Block> WRITTEN_SLATE = BLOCKS.register("slate_written",
+    public static final RegistryObject<Block> SLATE = BLOCKS.register("slate",
         () -> new BlockSlate(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
             .strength(2f, 4f)));
@@ -42,7 +42,7 @@ public class HexBlocks {
         new BlockRightClickImpetus(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
             .strength(2f, 4f)
-            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.LIT) ? 15 : 0)));
+            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
     // Decoration?!
     public static final RegistryObject<Block> SLATE_BLOCK = registerBlock("slate_block",
@@ -54,8 +54,8 @@ public class HexBlocks {
         "conjured_tile",
         () -> BlockEntityType.Builder.of(BlockEntityConjured::new, CONJURED.get()).build(null));
     public static final RegistryObject<BlockEntityType<BlockEntitySlate>> SLATE_TILE = BLOCK_ENTITIES.register(
-        "slate_written_tile",
-        () -> BlockEntityType.Builder.of(BlockEntitySlate::new, WRITTEN_SLATE.get()).build(null));
+        "slate_tile",
+        () -> BlockEntityType.Builder.of(BlockEntitySlate::new, SLATE.get()).build(null));
     public static final RegistryObject<BlockEntityType<BlockEntityRightClickImpetus>> IMPETUS_RIGHTCLICK_TILE =
         BLOCK_ENTITIES.register("impetus_rightclick_tile",
             () -> BlockEntityType.Builder.of(BlockEntityRightClickImpetus::new, IMPETUS_RIGHTCLICK.get()).build(null));

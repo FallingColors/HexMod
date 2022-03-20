@@ -1,10 +1,9 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.HexConfig;
+import at.petrak.hexcasting.api.BlockCircleComponent;
 import at.petrak.hexcasting.api.ParticleSpray;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
-import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
-import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.blocks.ModBlockEntity;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
@@ -12,7 +11,6 @@ import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -26,7 +24,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -36,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class BlockEntityAbstractImpetus extends BlockEntity {
+public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
     public static final String
         TAG_ACTIVATOR = "activator",
         TAG_COLORIZER = "colorizer",
@@ -69,7 +66,7 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), this.getTickSpeed());
 
         this.activator = activator.getUUID();
-        this.nextBlock = this.getBlockPos().above();
+        this.nextBlock = this.getBlockPos();
         this.trackedBlocks = new ArrayList<>();
         var maybeCap = activator.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
         maybeCap.ifPresent(capPreferredColorizer -> this.colorizer = capPreferredColorizer.colorizer);
@@ -100,48 +97,58 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
             return;
         }
 
+        // This should only fail if we remove blocks halfway through casting
+        var bsHere = this.level.getBlockState(this.nextBlock);
+        if (!this.trackedBlocks.isEmpty() && bsHere.getBlock() instanceof BlockAbstractImpetus) {
+            // no two impetuses!
+            this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
+            this.stopCasting();
+            return;
+        }
+        var blockHere = bsHere.getBlock();
+        if (!(blockHere instanceof BlockCircleComponent cc)) {
+            this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
+            this.stopCasting();
+            return;
+        }
         // Awesome we know this block is OK
-        if (this.trackedBlocks.isEmpty()) {
-            // then this is the very first activation!
-            this.trackedBlocks.add(this.nextBlock);
-            // and shunt it along by one
-            this.nextBlock = this.nextBlock.relative(this.getBlockState().getValue(BlockAbstractImpetus.FACING));
-        } else {
-            BlockPos foundPos = null;
-            for (var dir : HORIZONTAL_DIRS) {
-                var neighborPos = this.nextBlock.relative(dir);
-                var blockThere = this.level.getBlockState(neighborPos);
-                // at this point, we haven't actually added nextBlock to trackedBlocks
-                // so, in the smallest circle case (a 2x2), this will have a size of 3 (with this block being the 4th).
-                var closedLoop = (this.trackedBlocks.size() >= 3 && this.trackedBlocks.get(0).equals(neighborPos));
-                var mightBeOkThere = closedLoop || !this.trackedBlocks.contains(neighborPos);
-                if (mightBeOkThere && blockThere.is(HexBlocks.WRITTEN_SLATE.get())) {
-                    if (foundPos == null) {
-                        foundPos = neighborPos;
-                        this.foundAll |= closedLoop;
-                    } else {
-                        // uh oh, fork in the road
-                        this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
-                        this.stopCasting();
-                        return;
-                    }
+        var possibleExits = cc.exitDirections(this.nextBlock, bsHere, this.level);
+        BlockPos foundPos = null;
+        for (var exit : possibleExits) {
+            var neighborPos = this.nextBlock.relative(exit);
+            var blockThere = this.level.getBlockState(neighborPos);
+            // at this point, we haven't actually added nextBlock to trackedBlocks
+            // so, in the smallest circle case (a 2x2), this will have a size of 3 (with this block being the 4th).
+            var closedLoop = (this.trackedBlocks.size() >= 3 && this.trackedBlocks.get(0).equals(neighborPos));
+            var mightBeOkThere = closedLoop || !this.trackedBlocks.contains(neighborPos);
+            if (mightBeOkThere
+                && blockThere.getBlock() instanceof BlockCircleComponent cc2
+                && cc2.canEnterFromDirection(exit, neighborPos, blockThere, this.level)) {
+                if (foundPos == null) {
+                    foundPos = neighborPos;
+                    this.foundAll |= closedLoop;
+                } else {
+                    // uh oh, fork in the road
+                    this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
+                    this.stopCasting();
+                    return;
                 }
             }
-            if (foundPos != null) {
-                // pog
-                this.trackedBlocks.add(this.nextBlock);
-                this.nextBlock = foundPos;
-            } else {
-                // end of the line
-                this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
-                this.stopCasting();
-                return;
-            }
+        }
+        if (foundPos != null) {
+            // pog
+            this.trackedBlocks.add(this.nextBlock);
+            this.nextBlock = foundPos;
+        } else {
+            // end of the line
+            this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
+            this.stopCasting();
+            return;
         }
 
         var lastPos = this.trackedBlocks.get(this.trackedBlocks.size() - 1);
         var justTrackedBlock = this.level.getBlockState(lastPos);
-        this.level.setBlockAndUpdate(lastPos, justTrackedBlock.setValue(BlockSlate.LIT, true));
+        this.level.setBlockAndUpdate(lastPos, justTrackedBlock.setValue(BlockCircleComponent.ENERGIZED, true));
         this.successEffect(Vec3.atBottomCenterOf(lastPos));
 
         this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), this.getTickSpeed());
@@ -154,11 +161,15 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
             var ctx = new CastingContext(splayer, InteractionHand.MAIN_HAND);
             var harness = new CastingHarness(ctx);
             for (var tracked : this.trackedBlocks) {
-                if (this.level.getBlockEntity(tracked) instanceof BlockEntitySlate slate) {
-                    var info = harness.executeNewPattern(slate.pattern, splayer.getLevel());
-                    if (info.getWasPrevPatternInvalid()) {
-                        this.errorEffect(Vec3.atBottomCenterOf(tracked));
-                        break;
+                var bs = this.level.getBlockState(tracked);
+                if (bs.getBlock() instanceof BlockCircleComponent cc) {
+                    var newPattern = cc.getPattern(tracked, bs, this.level);
+                    if (newPattern != null) {
+                        var info = harness.executeNewPattern(newPattern, splayer.getLevel());
+                        if (info.getWasPrevPatternInvalid()) {
+                            this.errorEffect(Vec3.atBottomCenterOf(tracked));
+                            break;
+                        }
                     }
                 }
             }
@@ -175,21 +186,9 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         }
 
         for (var pos : this.trackedBlocks) {
-            if (!this.level.getBlockState(pos).is(HexBlocks.WRITTEN_SLATE.get())) {
+            if (!(this.level.getBlockState(pos).getBlock() instanceof BlockCircleComponent)) {
                 return Vec3.atBottomCenterOf(pos);
             }
-        }
-
-        var blockChecking = this.level.getBlockState(this.nextBlock);
-        if (!blockChecking.is(HexBlocks.WRITTEN_SLATE.get())) {
-            BlockPos errorPos;
-            if (this.trackedBlocks.isEmpty()) {
-                // then we just activated the circle
-                errorPos = this.getBlockPos().above();
-            } else {
-                errorPos = this.trackedBlocks.get(this.trackedBlocks.size() - 1);
-            }
-            return Vec3.atBottomCenterOf(errorPos);
         }
 
         if (this.trackedBlocks.size() > HexConfig.maxSpellCircleLength.get()) {
@@ -225,7 +224,7 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
     protected void stopCasting() {
         for (var tracked : this.trackedBlocks) {
             var bs = this.level.getBlockState(tracked);
-            this.level.setBlockAndUpdate(tracked, bs.setValue(BlockSlate.LIT, false));
+            this.level.setBlockAndUpdate(tracked, bs.setValue(BlockCircleComponent.ENERGIZED, false));
         }
 
         this.activator = null;
@@ -234,7 +233,7 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         this.foundAll = false;
 
         this.level.setBlockAndUpdate(this.getBlockPos(),
-            this.getBlockState().setValue(BlockAbstractImpetus.LIT, false));
+            this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, false));
     }
 
     @Nullable
@@ -270,9 +269,8 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
         return scale[note];
     }
 
-
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveModData(CompoundTag tag) {
         if (this.activator != null && this.colorizer != null && this.nextBlock != null && this.trackedBlocks != null) {
             tag.putUUID(TAG_ACTIVATOR, this.activator);
             tag.put(TAG_NEXT_BLOCK, NbtUtils.writeBlockPos(this.nextBlock));
@@ -289,16 +287,7 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        var out = new CompoundTag();
-        this.saveAdditional(out);
-        return out;
-    }
-
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-
+    protected void loadModData(CompoundTag tag) {
         if (tag.contains(TAG_ACTIVATOR) && tag.contains(TAG_COLORIZER) && tag.contains(TAG_NEXT_BLOCK)
             && tag.contains(TAG_TRACKED_BLOCKS)) {
             this.activator = tag.getUUID(TAG_ACTIVATOR);
@@ -314,9 +303,6 @@ public abstract class BlockEntityAbstractImpetus extends BlockEntity {
 
         this.mana = tag.getInt(TAG_MANA);
     }
-
-
-    private static final Direction[] HORIZONTAL_DIRS = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     // this is a good use of my time
     private static final int[] MAJOR_SCALE = {0, 2, 4, 5, 7, 9, 11, 12};

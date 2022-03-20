@@ -10,7 +10,10 @@ import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -95,10 +98,8 @@ public class HexItems {
     public static final RegistryObject<ItemAbacus> ABACUS = ITEMS.register("abacus",
         () -> new ItemAbacus(unstackable()));
 
-    public static final RegistryObject<Item> BLANK_SLATE = ITEMS.register("slate_blank",
-        () -> new Item(props()));
-    public static final RegistryObject<BlockItem> WRITTEN_SLATE = ITEMS.register("slate_written",
-        () -> new BlockItem(HexBlocks.WRITTEN_SLATE.get(), new Item.Properties()));
+    public static final RegistryObject<ItemSlate> SLATE = ITEMS.register("slate",
+        () -> new ItemSlate(HexBlocks.SLATE.get(), props()));
 
     // BUFF SANDVICH
     public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register("sub_sandwich",

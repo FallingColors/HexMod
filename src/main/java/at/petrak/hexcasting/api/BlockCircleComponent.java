@@ -3,13 +3,14 @@ package at.petrak.hexcasting.api;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.EnumSet;
 
 public abstract class BlockCircleComponent extends Block {
     public static final BooleanProperty ENERGIZED = BooleanProperty.create("energized");
@@ -18,10 +19,12 @@ public abstract class BlockCircleComponent extends Block {
         super(p_49795_);
     }
 
-    abstract public Direction[] exitDirections(BlockPos pos, BlockState bs, ServerLevel world);
+    abstract public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, Level world);
+
+    abstract public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world);
 
     @Nullable
-    abstract public HexPattern getPattern(BlockPos pos, BlockState bs, ServerLevel world);
+    abstract public HexPattern getPattern(BlockPos pos, BlockState bs, Level world);
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
 import at.petrak.hexcasting.common.particles.HexParticles;
@@ -77,6 +78,9 @@ public class RegisterClientStuff {
 
             ItemProperties.register(HexItems.SCROLL.get(), ItemScroll.ANCIENT_PREDICATE,
                 (stack, level, holder, holderID) -> stack.getOrCreateTag().contains(ItemScroll.TAG_OP_ID) ? 1f : 0f);
+
+            ItemProperties.register(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
+                (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
             HexTooltips.init();
         });

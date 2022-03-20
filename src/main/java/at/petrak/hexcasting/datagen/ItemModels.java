@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
 import com.mojang.datafixers.util.Pair;
@@ -28,9 +29,6 @@ public class ItemModels extends ItemModelProvider {
         simpleItem(HexItems.SUBMARINE_SANDWICH.get());
         simpleItem(HexItems.SCRYING_LENS.get());
         simpleItem(HexItems.ABACUS.get());
-        
-        simpleItem(HexItems.BLANK_SLATE.get());
-        simpleItem(HexItems.WRITTEN_SLATE.get());
 
         simpleItem(modLoc("scroll_pristine"));
         simpleItem(modLoc("scroll_ancient"));
@@ -116,6 +114,17 @@ public class ItemModels extends ItemModelProvider {
         }
         singleTexture(HexItems.UUID_COLORIZER.getId().getPath(), new ResourceLocation("item/generated"),
             "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/uuid"));
+
+        simpleItem(modLoc("slate_blank"));
+        simpleItem(modLoc("slate_written"));
+        getBuilder(HexItems.SLATE.getId().getPath()).override()
+            .predicate(ItemSlate.WRITTEN_PRED, 0)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_blank")))
+            .end()
+            .override()
+            .predicate(ItemSlate.WRITTEN_PRED, 1)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_written")))
+            .end();
     }
 
     public void simpleItem(Item item) {

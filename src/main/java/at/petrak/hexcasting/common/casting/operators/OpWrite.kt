@@ -10,7 +10,6 @@ import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemDataHolder
 import at.petrak.hexcasting.common.items.ItemScroll
 import at.petrak.hexcasting.hexmath.HexPattern
-import net.minecraft.world.item.ItemStack
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpWrite : SpellOperator {
@@ -35,12 +34,11 @@ object OpWrite : SpellOperator {
                 handItem.writeDatum(tag, datum)
             } else if (handItem == HexItems.SCROLL.get() && !tag.contains(ItemScroll.TAG_PATTERN) && datum.payload is HexPattern) {
                 tag.put(ItemScroll.TAG_PATTERN, datum.payload.serializeToNBT())
-            } else if (handItem == HexItems.BLANK_SLATE.get() && datum.payload is HexPattern) {
-                val newStack = ItemStack(HexItems.WRITTEN_SLATE.get(), handStack.count)
-                val newTag = tag.copy() // in case you named it or something??
-                newTag.put(BlockEntitySlate.TAG_PATTERN, datum.payload.serializeToNBT())
-                newStack.tag = newTag
-                ctx.caster.setItemInHand(ctx.otherHand, newStack)
+            } else if (handItem == HexItems.SLATE.get() && datum.payload is HexPattern) {
+                val bet = tag.getCompound("BlockEntityTag")
+                bet.put(BlockEntitySlate.TAG_PATTERN, datum.payload.serializeToNBT())
+                // Just in case it's brand new
+                tag.put("BlockEntityTag", bet)
             } else {
                 // Fuck
             }

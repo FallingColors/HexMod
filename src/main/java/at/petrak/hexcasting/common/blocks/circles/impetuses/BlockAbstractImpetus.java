@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Mirror;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.Random;
 
 // Facing dir is the direction it starts searching for slates in to start
@@ -29,12 +31,17 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     }
 
     @Override
-    public Direction[] exitDirections(BlockPos pos, BlockState bs, ServerLevel world) {
-        return new Direction[]{bs.getValue(FACING)};
+    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, Level world) {
+        return true;
     }
 
     @Override
-    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, ServerLevel world) {
+    public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world) {
+        return EnumSet.of(bs.getValue(FACING));
+    }
+
+    @Override
+    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, Level world) {
         return null;
     }
 

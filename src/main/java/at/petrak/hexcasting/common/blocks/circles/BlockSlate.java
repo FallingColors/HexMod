@@ -4,9 +4,6 @@ import at.petrak.hexcasting.api.BlockCircleComponent;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -25,6 +22,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
+
 // FACING is the direction the *bottom* of the pattern points
 // (or which way is "down")
 public class BlockSlate extends BlockCircleComponent implements EntityBlock {
@@ -40,12 +39,17 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     }
 
     @Override
-    public Direction[] exitDirections(BlockPos pos, BlockState bs, ServerLevel world) {
-        return new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, Level world) {
+        return enterDir != Direction.UP;
     }
 
     @Override
-    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, ServerLevel world) {
+    public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world) {
+        return EnumSet.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+    }
+
+    @Override
+    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, Level world) {
         if (world.getBlockEntity(pos) instanceof BlockEntitySlate tile) {
             return tile.pattern;
         } else {
@@ -57,16 +61,6 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntitySlate(pPos, pState);
-    }
-
-    @Override
-    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer,
-        ItemStack pStack) {
-        if (pLevel.getBlockEntity(pPos) instanceof BlockEntitySlate tile) {
-            var patTag = pStack.getOrCreateTag().getCompound(BlockEntitySlate.TAG_PATTERN);
-            tile.pattern = HexPattern.DeserializeFromNBT(patTag);
-            tile.setChanged();
-        }
     }
 
     @Override

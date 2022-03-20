@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -41,14 +42,15 @@ public class HexTooltips {
                         tag.contains(ItemScroll.TAG_OP_ID)
                             ? PatternTooltipGreeble.ANCIENT_BG : PatternTooltipGreeble.PRISTINE_BG)));
                 }
-            } else if (stack.is(HexItems.WRITTEN_SLATE.get())) {
-                var tag = stack.getOrCreateTag();
-                if (tag.contains(BlockEntitySlate.TAG_PATTERN)) {
-                    var pattern = HexPattern.DeserializeFromNBT(tag.getCompound(BlockEntitySlate.TAG_PATTERN));
-                    evt.getTooltipElements().add(Either.right(new PatternTooltipGreeble(
-                        pattern,
-                        PatternTooltipGreeble.SLATE_BG)));
-                }
+            } else if (stack.is(HexItems.SLATE.get()) && ItemSlate.hasPattern(stack)) {
+                var tag = stack.getOrCreateTag()
+                    .getCompound("BlockEntityTag")
+                    .getCompound(BlockEntitySlate.TAG_PATTERN);
+                var pattern = HexPattern.DeserializeFromNBT(tag);
+                evt.getTooltipElements().add(Either.right(new PatternTooltipGreeble(
+                    pattern,
+                    PatternTooltipGreeble.SLATE_BG)));
+
             }
         }
     }

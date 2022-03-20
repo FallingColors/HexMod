@@ -16,13 +16,13 @@ public class BlockStatesAndModels extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        simpleBlock(HexBlocks.WRITTEN_SLATE.get(), models().getExistingFile(modLoc("slate")));
+        simpleBlock(HexBlocks.SLATE.get(), models().getExistingFile(modLoc("slate")));
         var slateBlock = models().cubeAll("slate_block", modLoc("block/slate"));
         simpleBlock(HexBlocks.SLATE_BLOCK.get(), slateBlock);
         simpleBlockItem(HexBlocks.SLATE_BLOCK.get(), slateBlock);
 
         getVariantBuilder(HexBlocks.IMPETUS_RIGHTCLICK.get()).forAllStates(bs -> {
-            var isLit = bs.getValue(BlockAbstractImpetus.LIT);
+            var isLit = bs.getValue(BlockAbstractImpetus.ENERGIZED);
             var litness = isLit ? "lit" : "dim";
             var dir = bs.getValue(BlockAbstractImpetus.FACING);
 
@@ -37,7 +37,7 @@ public class BlockStatesAndModels extends BlockStateProvider {
             var name = "impetus_rightclick" + (isLit ? "_lit" : "");
             var model = models().cube(name, bottom, top, north, south, east, west)
                 .texture("particle", bottom);
-            if (!bs.getValue(BlockAbstractImpetus.LIT) && dir == Direction.SOUTH) {
+            if (!isLit && dir == Direction.SOUTH) {
                 simpleBlockItem(HexBlocks.IMPETUS_RIGHTCLICK.get(), model);
             }
             return ConfiguredModel.builder()

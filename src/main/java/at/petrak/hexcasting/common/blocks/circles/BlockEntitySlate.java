@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.ModBlockEntity;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,12 +16,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockEntitySlate extends BlockEntity {
+public class BlockEntitySlate extends ModBlockEntity {
     public static final String TAG_PATTERN = "pattern";
 
     @Nullable
@@ -31,26 +31,19 @@ public class BlockEntitySlate extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveModData(CompoundTag tag) {
         if (this.pattern != null) {
             tag.put(TAG_PATTERN, this.pattern.serializeToNBT());
         }
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        var out = new CompoundTag();
-        this.saveAdditional(out);
-        return out;
-    }
-
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    protected void loadModData(CompoundTag tag) {
         if (tag.contains(TAG_PATTERN)) {
             this.pattern = HexPattern.DeserializeFromNBT(tag.getCompound(TAG_PATTERN));
         }
     }
+    
 
     public static class Renderer implements BlockEntityRenderer<BlockEntitySlate> {
         private final BlockRenderDispatcher dispatcher;

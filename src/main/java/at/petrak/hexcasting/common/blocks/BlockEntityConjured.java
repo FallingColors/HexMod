@@ -4,19 +4,13 @@ import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.Random;
 
-public class BlockEntityConjured extends BlockEntity {
+public class BlockEntityConjured extends ModBlockEntity {
     private static final Random RANDOM = new Random();
     private FrozenColorizer colorizer = FrozenColorizer.DEFAULT;
 
@@ -91,14 +85,15 @@ public class BlockEntityConjured extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag pTag) {
-        pTag.put(TAG_COLORIZER, this.colorizer.serialize());
-        super.saveAdditional(pTag);
+    protected void saveModData(CompoundTag tag) {
+        tag.put(TAG_COLORIZER, this.colorizer.serialize());
     }
 
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
-        readPacketNBT(tag);
+    @Override
+    protected void loadModData(CompoundTag tag) {
+        if (tag.contains(TAG_COLORIZER)) {
+            this.setColorizer(FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER)));
+        }
     }
 
     public FrozenColorizer getColorizer() {
@@ -110,32 +105,22 @@ public class BlockEntityConjured extends BlockEntity {
         this.setChanged();
     }
 
-    @Override
-    public void setChanged() {
-        if (this.level == null) {
-            return;
-        }
-        this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(),
-            Block.UPDATE_CLIENTS);
-        super.setChanged();
-    }
-
-    public void readPacketNBT(CompoundTag tag) {
-        if (tag.contains(TAG_COLORIZER)) {
-            this.setColorizer(FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER)));
-        }
-    }
-
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        this.load(Objects.requireNonNull(pkt.getTag()));
-    }
-
-    public @NotNull CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
-    }
+//    @Override
+//    public void setChanged() {
+//        if (this.level == null) {
+//            return;
+//        }
+//        this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(),
+//            Block.UPDATE_CLIENTS);
+//        super.setChanged();
+//    }
+//
+//    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+//        return ClientboundBlockEntityDataPacket.create(this);
+//    }
+//
+//    @Override
+//    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+//        this.load(Objects.requireNonNull(pkt.getTag()));
+//    }
 }

@@ -1,39 +1,39 @@
 {
   "variants": {
-    "facing=north,lit=false": {
+    "energized=false,facing=north": {
       "model": "hexcasting:block/impetus_rightclick",
       "uvlock": true
     },
-    "facing=south,lit=false": {
+    "energized=true,facing=north": {
+      "model": "hexcasting:block/impetus_rightclick_lit",
+      "uvlock": true
+    },
+    "energized=false,facing=south": {
       "model": "hexcasting:block/impetus_rightclick",
       "y": 180,
       "uvlock": true
     },
-    "facing=west,lit=false": {
+    "energized=true,facing=south": {
+      "model": "hexcasting:block/impetus_rightclick_lit",
+      "y": 180,
+      "uvlock": true
+    },
+    "energized=false,facing=west": {
       "model": "hexcasting:block/impetus_rightclick",
       "y": 270,
       "uvlock": true
     },
-    "facing=east,lit=false": {
+    "energized=true,facing=west": {
+      "model": "hexcasting:block/impetus_rightclick_lit",
+      "y": 270,
+      "uvlock": true
+    },
+    "energized=false,facing=east": {
       "model": "hexcasting:block/impetus_rightclick",
       "y": 90,
       "uvlock": true
     },
-    "facing=north,lit=true": {
-      "model": "hexcasting:block/impetus_rightclick_lit",
-      "uvlock": true
-    },
-    "facing=south,lit=true": {
-      "model": "hexcasting:block/impetus_rightclick_lit",
-      "y": 180,
-      "uvlock": true
-    },
-    "facing=west,lit=true": {
-      "model": "hexcasting:block/impetus_rightclick_lit",
-      "y": 270,
-      "uvlock": true
-    },
-    "facing=east,lit=true": {
+    "energized=true,facing=east": {
       "model": "hexcasting:block/impetus_rightclick_lit",
       "y": 90,
       "uvlock": true
