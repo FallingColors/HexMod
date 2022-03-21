@@ -2,8 +2,8 @@ package at.petrak.hexcasting.common.casting
 
 import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexMod
-import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.PatternRegistry
+import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.items.ItemWand
@@ -33,10 +33,16 @@ class CastingHarness private constructor(
     var parenthesized: List<HexPattern>,
     var escapeNext: Boolean,
     val ctx: CastingContext,
-    val prepackagedColorizer: FrozenColorizer?
+    val spellCircleContext: SpellCircleContext?,
+    val prepackagedColorizer: FrozenColorizer? // for trinkets with colorizers
 ) {
 
-    constructor(ctx: CastingContext) : this(mutableListOf(), 0, mutableListOf(), false, ctx, null)
+    @JvmOverloads
+    constructor(
+        ctx: CastingContext,
+        spellCircleContext: SpellCircleContext? = null,
+        prepackagedColorizer: FrozenColorizer? = null
+    ) : this(mutableListOf(), 0, mutableListOf(), false, ctx, spellCircleContext, prepackagedColorizer)
 
     /**
      * Given a pattern, do all the updating/side effects/etc required.
@@ -52,8 +58,8 @@ class CastingHarness private constructor(
      * handle it functionally.
      */
     fun getUpdate(newPat: HexPattern, world: ServerLevel): CastResult {
+        this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
         try {
-            this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
             // wouldn't it be nice to be able to go paren'
             // i guess i'll call it paren2
             val paren2 = this.handleParentheses(newPat)
@@ -321,6 +327,10 @@ class CastingHarness private constructor(
             out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serialize())
         }
 
+        if (this.spellCircleContext != null) {
+            out.put(TAG_SPELL_CIRCLE, this.spellCircleContext.serializeToNBT())
+        }
+
         return out
     }
 
@@ -331,6 +341,7 @@ class CastingHarness private constructor(
         const val TAG_PARENTHESIZED = "parenthesized"
         const val TAG_ESCAPE_NEXT = "escape_next"
         const val TAG_PREPACKAGED_COLORIZER = "prepackaged_colorizer"
+        const val TAG_SPELL_CIRCLE = "spell_circle"
 
         @JvmStatic
         fun DeserializeFromNBT(nbt: Tag?, caster: ServerPlayer, wandHand: InteractionHand): CastingHarness {
@@ -360,7 +371,13 @@ class CastingHarness private constructor(
                     null
                 }
 
-                CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx, colorizer)
+                val spellCircleContext = if (nbt.contains(TAG_SPELL_CIRCLE)) {
+                    SpellCircleContext.DeserializeFromNBT(nbt.getCompound(TAG_SPELL_CIRCLE))
+                } else {
+                    null
+                }
+
+                CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx, spellCircleContext, colorizer)
             } catch (exn: Exception) {
                 HexMod.LOGGER.warn("Couldn't load harness from nbt tag, falling back to default: $nbt: $exn")
                 CastingHarness(ctx)

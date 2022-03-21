@@ -7,9 +7,11 @@ import at.petrak.hexcasting.common.blocks.ModBlockEntity;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
+import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -21,17 +23,25 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
+public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implements ICapabilityProvider {
     public static final String
         TAG_ACTIVATOR = "activator",
         TAG_COLORIZER = "colorizer",
@@ -49,10 +59,13 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
     @Nullable
     private List<BlockPos> trackedBlocks = null;
     private boolean foundAll = false;
+
     private int mana = 0;
+    private LazyOptional<IItemHandler> inventoryHandlerLazy;
 
     public BlockEntityAbstractImpetus(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
+        inventoryHandlerLazy = LazyOptional.of(() -> ITEM_HANDLER);
     }
 
     abstract public boolean playerAlwaysInRange();
@@ -278,6 +291,21 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
         return scale[note];
     }
 
+    @NotNull
+    @Override
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return inventoryHandlerLazy.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        inventoryHandlerLazy.invalidate();
+    }
+
     @Override
     protected void saveModData(CompoundTag tag) {
         if (this.activator != null && this.colorizer != null && this.nextBlock != null && this.trackedBlocks != null) {
@@ -321,4 +349,62 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
     private static final int[] BLUES_SCALE = {0, 3, 5, 6, 7, 10, 12};
     private static final int[] BAD_TIME = {0, 0, 12, 7, 6, 5, 3, 0, 3, 5};
     private static final int[] SUSSY_BAKA = {5, 8, 10, 11, 10, 8, 5, 3, 7, 5};
+
+    protected IItemHandler ITEM_HANDLER = new IItemHandler() {
+        @Override
+        public int getSlots() {
+            return 1;
+        }
+
+        @NotNull
+        @Override
+        public ItemStack getStackInSlot(int slot) {
+            return ItemStack.EMPTY;
+        }
+
+        @NotNull
+        @Override
+        public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+            var manamount = getManaAmount(stack);
+            if (manamount != null) {
+                if (!simulate) {
+                    BlockEntityAbstractImpetus.this.mana += manamount;
+                }
+                return ItemStack.EMPTY.copy();
+            }
+            return stack.copy();
+        }
+
+        @NotNull
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            return ItemStack.EMPTY.copy();
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return 64;
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return getManaAmount(stack) != null;
+        }
+
+        // a separate method from the ctx or harness or whatever cause it's different and special
+        private static @Nullable Integer getManaAmount(ItemStack stack) {
+            int baseAmt;
+            if (stack.is(HexItems.AMETHYST_DUST.get())) {
+                baseAmt = HexConfig.dustManaAmount.get();
+            } else if (stack.is(Items.AMETHYST_SHARD)) {
+                baseAmt = HexConfig.shardManaAmount.get();
+            } else if (stack.is(HexItems.CHARGED_AMETHYST.get())) {
+                baseAmt = HexConfig.chargedCrystalManaAmount.get();
+            } else {
+                return null;
+            }
+
+            return baseAmt * stack.getCount();
+        }
+    };
 }

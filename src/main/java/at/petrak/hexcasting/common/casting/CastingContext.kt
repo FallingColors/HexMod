@@ -17,7 +17,7 @@ import java.util.function.Predicate
 import kotlin.math.min
 
 /**
- * Info about the moment the spell started being cast.
+ * Transient info about the moment the spell started being cast.
  */
 data class CastingContext(
     val caster: ServerPlayer,

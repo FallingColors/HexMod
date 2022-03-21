@@ -5,13 +5,13 @@ import net.minecraft.world.item.Tiers;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class HexConfig {
-
-    public static ForgeConfigSpec.DoubleValue manaToHealthRate;
-
-
     public static ForgeConfigSpec.IntValue dustManaAmount;
     public static ForgeConfigSpec.IntValue shardManaAmount;
     public static ForgeConfigSpec.IntValue chargedCrystalManaAmount;
+    public static ForgeConfigSpec.IntValue smallBudAmount;
+    public static ForgeConfigSpec.IntValue mediumBudAmount;
+    public static ForgeConfigSpec.IntValue largeBudAmount;
+    public static ForgeConfigSpec.DoubleValue manaToHealthRate;
 
     public static ForgeConfigSpec.IntValue opBreakHarvestLevel;
     public static ForgeConfigSpec.IntValue maxRecurseDepth;
@@ -20,19 +20,18 @@ public class HexConfig {
 
 
     public HexConfig(ForgeConfigSpec.Builder builder) {
-        manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-            .defineInRange("manaToHealthRate", 200_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
-
-        builder.push("items");
+        builder.push("Mana Amounts");
         dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")
             .defineInRange("dustManaAmount", 10_000, 0, Integer.MAX_VALUE);
         shardManaAmount = builder.comment("How much mana a single Amethyst Shard item is worth")
             .defineInRange("shardManaAmount", 50_000, 0, Integer.MAX_VALUE);
         chargedCrystalManaAmount = builder.comment("How much mana a single Charged Amethyst Crystal item is worth")
             .defineInRange("chargedCrystalManaAmount", 100_000, 0, Integer.MAX_VALUE);
+        manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
+            .defineInRange("manaToHealthRate", 200_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
         builder.pop();
 
-        builder.push("spells");
+        builder.push("Spells");
         maxRecurseDepth = builder.comment("How many times a spell can recursively cast other spells")
             .defineInRange("maxRecurseDepth", 64, 0, Integer.MAX_VALUE);
         opBreakHarvestLevel = builder.comment(
@@ -41,7 +40,7 @@ public class HexConfig {
         ).defineInRange("opBreakHarvestLevel", 3, 0, 4);
         builder.pop();
 
-        builder.push("spell_circles");
+        builder.push("Spell Circles");
         maxSpellCircleLength = builder.comment("The maximum number of slates in a spell circle")
             .defineInRange("maxSpellCircleLength", 256, 4, Integer.MAX_VALUE);
     }
