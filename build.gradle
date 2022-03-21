@@ -58,7 +58,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'parchment', version: '2021.12.19-1.18.1'
+    mappings channel: 'parchment', version: '2022.03.13-1.18.2'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
@@ -178,7 +178,7 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.8'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.19'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -191,13 +191,13 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-65:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-65")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-66:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-66")
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.3.78:api")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143:api")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.3.78")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

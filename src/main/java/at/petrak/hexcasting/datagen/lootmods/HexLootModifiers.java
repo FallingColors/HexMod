@@ -18,7 +18,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class HexLootModifiers extends GlobalLootModifierProvider {
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODS = DeferredRegister.create(
-        ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, HexMod.MOD_ID);
+        ForgeRegistries.LOOT_MODIFIER_SERIALIZERS.get(), HexMod.MOD_ID);
     private static final RegistryObject<AmethystClusterModifier.Serializer> AMETHYST_CLUSTER = LOOT_MODS.register(
         "amethyst_cluster", AmethystClusterModifier.Serializer::new);
     private static final RegistryObject<PatternScrollModifier.Serializer> SCROLLS_IN_CHESTS = LOOT_MODS.register(

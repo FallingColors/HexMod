@@ -25,13 +25,13 @@ import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @Mod(HexMod.MOD_ID)
 object HexMod {
     // hmm today I will use a popular logging framework :clueless:
-    val LOGGER: Logger = LogManager.getLogger()
+    val LOGGER: Logger = LoggerFactory.getLogger(HexMod::class.java)
 
     var CONFIG_SPEC: ForgeConfigSpec
     var CLIENT_CONFIG_SPEC: ForgeConfigSpec

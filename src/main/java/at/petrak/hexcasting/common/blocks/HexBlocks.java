@@ -38,6 +38,10 @@ public class HexBlocks {
         () -> new BlockSlate(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
             .strength(4f, 4f)));
+    public static final RegistryObject<Block> EMPTY_IMPETUS = registerBlock("empty_impetus",
+        new Block(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
+            .sound(SoundType.DEEPSLATE_TILES)
+            .strength(4f, 4f)));
     public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = registerBlock("impetus_rightclick",
         new BlockRightClickImpetus(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)

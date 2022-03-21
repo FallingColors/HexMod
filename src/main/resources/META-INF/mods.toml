@@ -17,20 +17,20 @@ description = "Cast powerful Hexes on the fly by drawing patterns with a staff."
 [[dependencies.hexcasting]]
 modId = "forge"
 mandatory = true
-versionRange = "[39,)"
+versionRange = "[40,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.18.1,1.19)"
+versionRange = "[1.18.2,1.19)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
 modId = "patchouli"
 mandatory = true
-versionRange = "[1.18.1-65,)"
+versionRange = "[1.18.2-66,)"
 ordering = "NONE"
 side = "BOTH"

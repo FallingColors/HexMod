@@ -1,14 +1,21 @@
 package at.petrak.hexcasting.datagen;
 
+import at.petrak.hexcasting.common.advancement.OvercastTrigger;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
+import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
+import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
+import at.petrak.hexcasting.datagen.recipebuilders.BrainsweepRecipeBuilder;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -186,6 +193,18 @@ public class HexRecipes extends RecipeProvider {
             .pattern("SAS")
             .pattern("SSS")
             .unlockedBy("has_item", has(HexItems.SLATE.get())).save(recipes);
+
+
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
+            new VillagerIngredient(new ResourceLocation("toolsmith"), null, 1),
+            HexBlocks.IMPETUS_RIGHTCLICK.get().defaultBlockState())
+            .unlockedBy("enlightenment",
+                new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
+                    MinMaxBounds.Ints.ANY,
+                    // add a little bit of slop here
+                    MinMaxBounds.Doubles.atLeast(17.95),
+                    MinMaxBounds.Doubles.between(0.1, 2.05)))
+            .save(recipes);
     }
 
     protected void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {
