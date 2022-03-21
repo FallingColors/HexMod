@@ -107,6 +107,4 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
             pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel,
             pCurrentPos, pFacingPos);
     }
-
-
 }

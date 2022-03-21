@@ -6,6 +6,8 @@ import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.items.ItemScroll;
@@ -20,6 +22,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -104,16 +107,25 @@ public class RegisterClientStuff {
     }
 
     private static void addScryingLensStuff() {
-        ScryingLensOverlayRegistry.addDisplayer(Blocks.GRASS_BLOCK, (state, pos, observer, lensHand) -> List.of(
-            new Pair<>(new ItemStack(Blocks.GRASS_BLOCK), new TextComponent("Holy hell that's grass")),
-            new Pair<>(new ItemStack(Items.COMPASS), new TextComponent("Position: " + pos.toShortString()))
-        ));
-        ScryingLensOverlayRegistry.addDisplayer(Blocks.REDSTONE_WIRE, (state, pos, observer, lensHand) -> List.of(
-            new Pair<>(
-                new ItemStack(Items.REDSTONE),
-                new TextComponent(String.valueOf(state.getValue(BlockStateProperties.POWER)))
-                    .withStyle(ChatFormatting.RED))
-        ));
+        ScryingLensOverlayRegistry.addPredicateDisplayer(
+            (state, pos, observer, world, lensHand) -> state.getBlock() instanceof BlockAbstractImpetus,
+            (state, pos, observer, world, lensHand) -> {
+                if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
+                    var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
+                    var tc = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
+                        String.format("%.2f", dustCount));
+                    return List.of(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST.get()), tc));
+                } else {
+                    return List.of();
+                }
+            });
+        ScryingLensOverlayRegistry.addDisplayer(Blocks.REDSTONE_WIRE,
+            (state, pos, observer, world, lensHand) -> List.of(
+                new Pair<>(
+                    new ItemStack(Items.REDSTONE),
+                    new TextComponent(String.valueOf(state.getValue(BlockStateProperties.POWER)))
+                        .withStyle(ChatFormatting.RED))
+            ));
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

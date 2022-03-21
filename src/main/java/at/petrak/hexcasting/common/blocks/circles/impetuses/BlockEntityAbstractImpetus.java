@@ -25,6 +25,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -70,6 +71,10 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
 
     abstract public boolean playerAlwaysInRange();
 
+    public int getMana() {
+        return this.mana;
+    }
+
     protected void activateSpellCircle(ServerPlayer activator) {
         if (this.nextBlock != null) {
             return;
@@ -84,6 +89,7 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
 
         this.level.setBlockAndUpdate(this.getBlockPos(),
             this.getBlockState().setValue(BlockAbstractImpetus.ENERGIZED, true));
+        this.setChanged();
     }
 
     protected void stepCircle() {
@@ -369,6 +375,8 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
             if (manamount != null) {
                 if (!simulate) {
                     BlockEntityAbstractImpetus.this.mana += manamount;
+                    BlockEntityAbstractImpetus.this.setChanged();
+                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
                 }
                 return ItemStack.EMPTY.copy();
             }

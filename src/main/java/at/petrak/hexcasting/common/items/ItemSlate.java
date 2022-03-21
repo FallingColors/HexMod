@@ -18,7 +18,7 @@ public class ItemSlate extends BlockItem {
 
     @Override
     public Component getName(ItemStack pStack) {
-        var key = HexMod.MOD_ID + ".block.slate." + (hasPattern(pStack) ? "written" : "blank");
+        var key = "block." + HexMod.MOD_ID + ".slate." + (hasPattern(pStack) ? "written" : "blank");
         return new TranslatableComponent(key);
     }
 
