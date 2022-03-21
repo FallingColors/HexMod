@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.casting
 
-import at.petrak.hexcasting.api.ParticleSpray
-import at.petrak.hexcasting.api.RenderedSpell
-import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.datagen.Advancements
 import net.minecraft.Util

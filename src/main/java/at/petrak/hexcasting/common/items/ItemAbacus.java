@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.SpellDatum;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;

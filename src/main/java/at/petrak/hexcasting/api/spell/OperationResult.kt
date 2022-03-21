@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api
+package at.petrak.hexcasting.api.spell
 
 import at.petrak.hexcasting.common.casting.OperatorSideEffect
 

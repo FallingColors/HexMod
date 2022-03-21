@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.CastException
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.phys.Vec3

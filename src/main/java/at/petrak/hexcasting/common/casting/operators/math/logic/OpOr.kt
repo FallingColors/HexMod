@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math.logic
 
-import at.petrak.hexcasting.api.ConstManaOperator
-import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.api.spell.ConstManaOperator
+import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.Widget
 

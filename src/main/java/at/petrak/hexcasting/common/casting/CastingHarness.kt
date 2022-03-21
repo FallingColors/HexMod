@@ -2,9 +2,9 @@ package at.petrak.hexcasting.common.casting
 
 import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexMod
-import at.petrak.hexcasting.api.ParticleSpray
+import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.PatternRegistry
-import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell

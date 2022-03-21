@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting
 
 import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexUtils
-import at.petrak.hexcasting.api.Operator
+import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.common.items.ItemDataHolder
 import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexCapabilities

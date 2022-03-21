@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api
 
+import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.hexmath.EulerPathFinder
 import at.petrak.hexcasting.hexmath.HexDir

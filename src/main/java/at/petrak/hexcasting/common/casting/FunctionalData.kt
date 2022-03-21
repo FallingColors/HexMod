@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting
 
-import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.hexmath.HexPattern
 
 /**

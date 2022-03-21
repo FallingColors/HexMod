@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.ParticleSpray
-import at.petrak.hexcasting.api.RenderedSpell
-import at.petrak.hexcasting.api.SpellDatum
-import at.petrak.hexcasting.api.SpellOperator
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.items.HexItems

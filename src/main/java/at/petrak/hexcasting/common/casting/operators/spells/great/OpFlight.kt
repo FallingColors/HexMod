@@ -2,11 +2,11 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.HexUtils.serializeToNBT
-import at.petrak.hexcasting.api.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.ParticleSpray
-import at.petrak.hexcasting.api.RenderedSpell
-import at.petrak.hexcasting.api.SpellDatum
-import at.petrak.hexcasting.api.SpellOperator
+import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.network.HexMessages

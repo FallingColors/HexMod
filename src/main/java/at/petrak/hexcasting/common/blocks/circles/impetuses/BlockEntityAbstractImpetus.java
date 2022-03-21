@@ -2,12 +2,11 @@ package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.BlockCircleComponent;
-import at.petrak.hexcasting.api.ParticleSpray;
+import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.common.blocks.ModBlockEntity;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
-import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
@@ -22,7 +21,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -86,7 +84,7 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
 
         var possibleErrorPos = this.checkEverythingOk();
         if (possibleErrorPos != null) {
-            this.errorEffect(possibleErrorPos);
+            this.sfx(possibleErrorPos, false);
             this.stopCasting();
             return;
         }
@@ -101,13 +99,13 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
         var bsHere = this.level.getBlockState(this.nextBlock);
         if (!this.trackedBlocks.isEmpty() && bsHere.getBlock() instanceof BlockAbstractImpetus) {
             // no two impetuses!
-            this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
+            this.sfx(this.nextBlock, false);
             this.stopCasting();
             return;
         }
         var blockHere = bsHere.getBlock();
         if (!(blockHere instanceof BlockCircleComponent cc)) {
-            this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
+            this.sfx(this.nextBlock, false);
             this.stopCasting();
             return;
         }
@@ -129,7 +127,7 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
                     this.foundAll |= closedLoop;
                 } else {
                     // uh oh, fork in the road
-                    this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
+                    this.sfx(this.nextBlock, false);
                     this.stopCasting();
                     return;
                 }
@@ -141,7 +139,7 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
             this.nextBlock = foundPos;
         } else {
             // end of the line
-            this.errorEffect(Vec3.atBottomCenterOf(this.nextBlock));
+            this.sfx(this.nextBlock, false);
             this.stopCasting();
             return;
         }
@@ -149,7 +147,7 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
         var lastPos = this.trackedBlocks.get(this.trackedBlocks.size() - 1);
         var justTrackedBlock = this.level.getBlockState(lastPos);
         this.level.setBlockAndUpdate(lastPos, justTrackedBlock.setValue(BlockCircleComponent.ENERGIZED, true));
-        this.successEffect(Vec3.atBottomCenterOf(lastPos));
+        this.sfx(lastPos, true);
 
         this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), this.getTickSpeed());
     }
@@ -167,7 +165,7 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
                     if (newPattern != null) {
                         var info = harness.executeNewPattern(newPattern, splayer.getLevel());
                         if (info.getWasPrevPatternInvalid()) {
-                            this.errorEffect(Vec3.atBottomCenterOf(tracked));
+                            this.sfx(tracked, false);
                             break;
                         }
                     }
@@ -179,46 +177,57 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity {
     }
 
     @Nullable
-    private Vec3 checkEverythingOk() {
+    private BlockPos checkEverythingOk() {
         // if they logged out or changed dimensions or something
         if (this.getPlayer() == null) {
-            return Vec3.atBottomCenterOf(this.getBlockPos().above());
+            return this.getBlockPos();
         }
 
         for (var pos : this.trackedBlocks) {
             if (!(this.level.getBlockState(pos).getBlock() instanceof BlockCircleComponent)) {
-                return Vec3.atBottomCenterOf(pos);
+                return pos;
             }
         }
 
         if (this.trackedBlocks.size() > HexConfig.maxSpellCircleLength.get()) {
-            return Vec3.atBottomCenterOf(this.trackedBlocks.get(this.trackedBlocks.size() - 1));
+            return this.trackedBlocks.get(this.trackedBlocks.size() - 1);
         }
 
         return null;
     }
 
-    protected void successEffect(Vec3 pos) {
+    protected void sfx(BlockPos pos, boolean success) {
+        Vec3 vpos;
+        Vec3 vecOutDir;
+
+        var bs = this.level.getBlockState(pos);
+        if (bs.getBlock() instanceof BlockCircleComponent bcc) {
+            var outDir = bcc.particleOutDir(pos, bs, this.level);
+            var height = bcc.particleHeight(pos, bs, this.level);
+            vecOutDir = new Vec3(outDir.step());
+            vpos = Vec3.atCenterOf(pos).add(vecOutDir.scale(height));
+        } else {
+            // we probably are doing this because it's an error and we removed a block
+            vpos = Vec3.atCenterOf(pos);
+            vecOutDir = new Vec3(0, 0, 0);
+        }
+
         if (this.level instanceof ServerLevel serverLevel) {
-            var spray = new ParticleSpray(pos, new Vec3(0, 1, 0), 0.1, Mth.PI / 4, 30);
+            var spray = new ParticleSpray(vpos, vecOutDir.scale(success ? 1.0 : 1.5), 0.1,
+                Mth.PI / (success ? 4 : 2), 30);
             spray.sprayParticles(serverLevel, this.colorizer);
         }
-        // This is a good use of my time
-        var note = this.trackedBlocks.size() - 1;
-        var semitone = this.semitoneFromScale(note);
-        var pitch = Math.pow(2.0, (semitone - 8) / 12d);
-        level.playSound(null, pos.x, pos.y, pos.z, HexSounds.SPELL_CIRCLE_FIND_BLOCK.get(), SoundSource.BLOCKS, 1f,
-            (float) pitch);
-    }
 
-    protected void errorEffect(Vec3 pos) {
-        if (this.level instanceof ServerLevel serverLevel) {
-            var spray = new ParticleSpray(pos, new Vec3(0, 1.5, 0), 0.1, Mth.PI / 2, 40);
-            spray.sprayParticles(serverLevel, new FrozenColorizer(
-                HexItems.DYE_COLORIZERS[DyeColor.RED.ordinal()].get(),
-                this.activator));
+        var pitch = 1f;
+        var sound = HexSounds.SPELL_CIRCLE_FAIL.get();
+        if (success) {
+            sound = HexSounds.SPELL_CIRCLE_FIND_BLOCK.get();
+            // This is a good use of my time
+            var note = this.trackedBlocks.size() - 1;
+            var semitone = this.semitoneFromScale(note);
+            pitch = (float) Math.pow(2.0, (semitone - 8) / 12d);
         }
-        level.playSound(null, pos.x, pos.y, pos.z, HexSounds.SPELL_CIRCLE_FAIL.get(), SoundSource.BLOCKS, 1f, 1f);
+        level.playSound(null, vpos.x, vpos.y, vpos.z, sound, SoundSource.BLOCKS, 1f, pitch);
     }
 
     protected void stopCasting() {

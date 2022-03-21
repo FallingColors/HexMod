@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.HexConfig;
-import at.petrak.hexcasting.api.SpellDatum;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;

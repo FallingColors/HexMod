@@ -43,7 +43,6 @@ public class BlockEntitySlate extends ModBlockEntity {
             this.pattern = HexPattern.DeserializeFromNBT(tag.getCompound(TAG_PATTERN));
         }
     }
-    
 
     public static class Renderer implements BlockEntityRenderer<BlockEntitySlate> {
         private final BlockRenderDispatcher dispatcher;

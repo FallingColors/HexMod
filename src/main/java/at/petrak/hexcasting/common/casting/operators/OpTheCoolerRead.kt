@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.ConstManaOperator
-import at.petrak.hexcasting.api.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.api.spell.ConstManaOperator
+import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.Widget

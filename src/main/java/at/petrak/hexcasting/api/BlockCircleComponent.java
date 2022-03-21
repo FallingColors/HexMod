@@ -26,6 +26,14 @@ public abstract class BlockCircleComponent extends Block {
     @Nullable
     abstract public HexPattern getPattern(BlockPos pos, BlockState bs, Level world);
 
+    abstract public Direction particleOutDir(BlockPos pos, BlockState bs, Level world);
+
+    /**
+     * How many blocks in the {@link BlockCircleComponent#particleOutDir(BlockPos, BlockState, Level)} from the center
+     * particles should be spawned in
+     */
+    abstract public float particleHeight(BlockPos pos, BlockState bs, Level world);
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(ENERGIZED);

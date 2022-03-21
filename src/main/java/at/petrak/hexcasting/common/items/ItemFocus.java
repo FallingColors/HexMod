@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.SpellDatum;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

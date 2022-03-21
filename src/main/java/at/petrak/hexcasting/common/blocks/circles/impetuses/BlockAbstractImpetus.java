@@ -46,6 +46,23 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     }
 
     @Override
+    public Direction particleOutDir(BlockPos pos, BlockState bs, Level world) {
+        BlockPos neighborPos = pos.relative(bs.getValue(FACING));
+        var neighbor = world.getBlockState(neighborPos);
+        if (neighbor.getBlock() instanceof BlockCircleComponent bcc && !(bcc instanceof BlockAbstractImpetus)) {
+            return bcc.particleOutDir(neighborPos, neighbor, world);
+        } else {
+            // Who knows
+            return Direction.UP;
+        }
+    }
+
+    @Override
+    public float particleHeight(BlockPos pos, BlockState bs, Level world) {
+        return 0.5f;
+    }
+
+    @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus tile) {
             tile.stepCircle();

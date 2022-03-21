@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.api.ParticleSpray;
+import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import io.netty.buffer.ByteBuf;

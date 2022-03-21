@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.selectors
 
-import at.petrak.hexcasting.api.ConstManaOperator
-import at.petrak.hexcasting.api.Operator.Companion.MAX_DISTANCE
-import at.petrak.hexcasting.api.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.Operator.Companion.spellListOf
-import at.petrak.hexcasting.api.SpellDatum
+import at.petrak.hexcasting.api.spell.ConstManaOperator
+import at.petrak.hexcasting.api.spell.Operator.Companion.MAX_DISTANCE
+import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
+import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.CastingContext
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity

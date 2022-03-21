@@ -57,6 +57,16 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
         }
     }
 
+    @Override
+    public Direction particleOutDir(BlockPos pos, BlockState bs, Level world) {
+        return Direction.UP;
+    }
+
+    @Override
+    public float particleHeight(BlockPos pos, BlockState bs, Level world) {
+        return 0.5f - 15f / 16f;
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
