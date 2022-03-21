@@ -31,7 +31,7 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
         val entitiesGot = ctx.world.getEntities(
             null,
             aabb
-        ) { (checker.test(it) != negate) && it.position().distanceToSqr(ctx.position) <= MAX_DISTANCE * MAX_DISTANCE }
+        ) { (checker.test(it) != negate) && ctx.isEntityInRange(it) }
         return spellListOf(entitiesGot)
     }
 

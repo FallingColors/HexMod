@@ -4,6 +4,7 @@ import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,6 +40,13 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
     public BlockConjured(BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(LIGHT, false).setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+        super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
+        // For some reason the block doesn't play breaking noises. So we fix that!
+        pPlayer.playSound(SoundEvents.GLASS_BREAK, 1f, 1f);
     }
 
     @Nullable

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.datagen;
 
+import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
 import net.minecraft.core.Registry;
@@ -14,14 +15,15 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
 import static at.petrak.hexcasting.common.lib.RegisterHelper.prefix;
 
-public class Recipes extends RecipeProvider {
-    public Recipes(DataGenerator pGenerator) {
+public class HexRecipes extends RecipeProvider {
+    public HexRecipes(DataGenerator pGenerator) {
         super(pGenerator);
     }
 
@@ -163,6 +165,27 @@ public class Recipes extends RecipeProvider {
             .pattern(" D ")
             .pattern(" B ")
             .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
+
+        ShapedRecipeBuilder.shaped(HexItems.SLATE.get(), 6)
+            .define('S', Items.DEEPSLATE)
+            .define('A', HexItems.AMETHYST_DUST.get())
+            .pattern(" A ")
+            .pattern("SSS")
+            .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
+
+        ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK.get())
+            .define('S', HexItems.SLATE.get())
+            .pattern("S")
+            .pattern("S")
+            .unlockedBy("has_item", has(HexItems.SLATE.get())).save(recipes, "slate_block_from_slates");
+
+        ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK.get(), 8)
+            .define('S', Blocks.DEEPSLATE)
+            .define('A', HexItems.AMETHYST_DUST.get())
+            .pattern("SSS")
+            .pattern("SAS")
+            .pattern("SSS")
+            .unlockedBy("has_item", has(HexItems.SLATE.get())).save(recipes);
     }
 
     protected void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {

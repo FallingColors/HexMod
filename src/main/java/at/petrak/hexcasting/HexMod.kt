@@ -13,8 +13,8 @@ import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.particles.HexParticles
 import at.petrak.hexcasting.common.recipe.HexCustomRecipes
-import at.petrak.hexcasting.datagen.Advancements
-import at.petrak.hexcasting.datagen.DataGenerators
+import at.petrak.hexcasting.datagen.HexAdvancements
+import at.petrak.hexcasting.datagen.HexDataGenerators
 import at.petrak.hexcasting.datagen.lootmods.HexLootModifiers
 import at.petrak.hexcasting.server.TickScheduler
 import net.minecraftforge.api.distmarker.Dist
@@ -55,7 +55,7 @@ object HexMod {
         modBus.register(this)
         // gotta do it at *some* point
         modBus.register(RegisterPatterns::class.java)
-        modBus.register(DataGenerators::class.java)
+        modBus.register(HexDataGenerators::class.java)
 
         HexItems.ITEMS.register(modBus)
         HexBlocks.BLOCKS.register(modBus)
@@ -91,7 +91,7 @@ object HexMod {
 
     @SubscribeEvent
     fun commonSetup(evt: FMLCommonSetupEvent) {
-        evt.enqueueWork { Advancements.registerTriggers() }
+        evt.enqueueWork { HexAdvancements.registerTriggers() }
     }
 
     @JvmStatic

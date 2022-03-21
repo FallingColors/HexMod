@@ -21,6 +21,7 @@ class OpPotionEffect(val effect: MobEffect, val baseCost: Int, val potency: Bool
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<LivingEntity>(0)
         val duration = max(args.getChecked(1), 0.0)
+        ctx.assertEntityInRange(target)
         val potency = if (this.potency)
             max(args.getChecked(2), 1.0)
         else 1.0

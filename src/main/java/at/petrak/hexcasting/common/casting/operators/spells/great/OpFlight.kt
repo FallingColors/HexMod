@@ -34,6 +34,7 @@ object OpFlight : SpellOperator {
         val target = args.getChecked<ServerPlayer>(0)
         val timeRaw = max(args.getChecked(1), 0.0)
         val radiusRaw = max(args.getChecked(2), 0.0)
+        ctx.assertEntityInRange(target)
 
         // Convert to ticks
         val time = (timeRaw * 20.0).roundToInt()

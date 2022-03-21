@@ -24,6 +24,7 @@ object OpRecharge : SpellOperator {
         }
 
         val entity = args.getChecked<ItemEntity>(0)
+        ctx.assertEntityInRange(entity)
 
         return Triple(Spell(entity), 100_000, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }

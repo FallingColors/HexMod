@@ -22,12 +22,12 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
 
-public class Advancements extends AdvancementProvider {
+public class HexAdvancements extends AdvancementProvider {
     public static final OvercastTrigger OVERCAST_TRIGGER = new OvercastTrigger();
     public static final SpendManaTrigger SPEND_MANA_TRIGGER = new SpendManaTrigger();
     public static final FailToCastGreatSpellTrigger FAIL_GREAT_SPELL_TRIGGER = new FailToCastGreatSpellTrigger();
 
-    public Advancements(DataGenerator generatorIn, ExistingFileHelper fileHelperIn) {
+    public HexAdvancements(DataGenerator generatorIn, ExistingFileHelper fileHelperIn) {
         super(generatorIn, fileHelperIn);
     }
 

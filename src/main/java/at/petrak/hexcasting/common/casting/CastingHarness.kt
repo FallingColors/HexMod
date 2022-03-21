@@ -5,13 +5,14 @@ import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.HexDamageSources
 import at.petrak.hexcasting.common.lib.HexStatistics
-import at.petrak.hexcasting.datagen.Advancements
+import at.petrak.hexcasting.datagen.HexAdvancements
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
@@ -33,16 +34,14 @@ class CastingHarness private constructor(
     var parenthesized: List<HexPattern>,
     var escapeNext: Boolean,
     val ctx: CastingContext,
-    val spellCircleContext: SpellCircleContext?,
     val prepackagedColorizer: FrozenColorizer? // for trinkets with colorizers
 ) {
 
     @JvmOverloads
     constructor(
         ctx: CastingContext,
-        spellCircleContext: SpellCircleContext? = null,
         prepackagedColorizer: FrozenColorizer? = null
-    ) : this(mutableListOf(), 0, mutableListOf(), false, ctx, spellCircleContext, prepackagedColorizer)
+    ) : this(mutableListOf(), 0, mutableListOf(), false, ctx, prepackagedColorizer)
 
     /**
      * Given a pattern, do all the updating/side effects/etc required.
@@ -246,46 +245,59 @@ class CastingHarness private constructor(
         if (this.ctx.caster.isCreative || manaCost <= 0) return 0
         var costLeft = manaCost
 
-        val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
-        val casterItem = casterStack.item
-        val ipsCanDrawFromInv = if (casterItem is ItemPackagedSpell) {
-            val tag = casterStack.orCreateTag
-            val manaAvailable = tag.getInt(ItemPackagedSpell.TAG_MANA)
-            val manaToTake = min(costLeft, manaAvailable)
-            tag.putInt(ItemPackagedSpell.TAG_MANA, manaAvailable - manaToTake)
-            costLeft -= manaToTake
-            casterItem.canDrawManaFromInventory()
-        } else {
-            false
-        }
-        if (casterItem is ItemWand || ipsCanDrawFromInv) {
-            val manableItems = this.ctx.caster.inventory.items
-                .filter(ManaHelper::isManaItem)
-                .sortedWith(Comparator(ManaHelper::compare).reversed())
-            for (stack in manableItems) {
-                costLeft -= ManaHelper.extractMana(stack, costLeft)!!
-                if (costLeft <= 0)
-                    break
+        if (this.ctx.spellCircle != null) {
+            val tile = this.ctx.world.getBlockEntity(this.ctx.spellCircle.impetusPos)
+            if (tile is BlockEntityAbstractImpetus) {
+                val manaAvailable = tile.mana
+                val manaToTake = min(costLeft, manaAvailable)
+                costLeft -= manaToTake
+                tile.mana = manaAvailable - manaToTake
+            } else {
+                HexMod.getLogger()
+                    .warn("There was supposed to be an impetus at ${this.ctx.spellCircle.impetusPos.toShortString()}")
             }
+        } else {
+            val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
+            val casterItem = casterStack.item
+            val ipsCanDrawFromInv = if (casterItem is ItemPackagedSpell) {
+                val tag = casterStack.orCreateTag
+                val manaAvailable = tag.getInt(ItemPackagedSpell.TAG_MANA)
+                val manaToTake = min(costLeft, manaAvailable)
+                tag.putInt(ItemPackagedSpell.TAG_MANA, manaAvailable - manaToTake)
+                costLeft -= manaToTake
+                casterItem.canDrawManaFromInventory()
+            } else {
+                false
+            }
+            if (casterItem is ItemWand || ipsCanDrawFromInv) {
+                val manableItems = this.ctx.caster.inventory.items
+                    .filter(ManaHelper::isManaItem)
+                    .sortedWith(Comparator(ManaHelper::compare).reversed())
+                for (stack in manableItems) {
+                    costLeft -= ManaHelper.extractMana(stack, costLeft)!!
+                    if (costLeft <= 0)
+                        break
+                }
 
-            if (allowOvercast && costLeft > 0) {
-                // Cast from HP!
-                val manaToHealth = HexConfig.manaToHealthRate.get()
-                val healthtoRemove = costLeft.toDouble() / manaToHealth
-                val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
+                if (allowOvercast && costLeft > 0) {
+                    // Cast from HP!
+                    val manaToHealth = HexConfig.manaToHealthRate.get()
+                    val healthtoRemove = costLeft.toDouble() / manaToHealth
+                    val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
 
-                val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
-                Advancements.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
-                this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
+                    val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
+                    HexAdvancements.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
+                    this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
 
-                this.ctx.caster.hurt(HexDamageSources.OVERCAST, healthtoRemove.toFloat())
-                costLeft -= manaToActuallyPayFor
+                    this.ctx.caster.hurt(HexDamageSources.OVERCAST, healthtoRemove.toFloat())
+                    costLeft -= manaToActuallyPayFor
+                }
             }
         }
 
         // this might be more than the mana cost! for example if we waste a lot of mana from an item
         this.ctx.caster.awardStat(HexStatistics.MANA_USED, manaCost - costLeft)
-        Advancements.SPEND_MANA_TRIGGER.trigger(
+        HexAdvancements.SPEND_MANA_TRIGGER.trigger(
             this.ctx.caster,
             manaCost - costLeft,
             if (costLeft < 0) -costLeft else 0
@@ -327,8 +339,8 @@ class CastingHarness private constructor(
             out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serialize())
         }
 
-        if (this.spellCircleContext != null) {
-            out.put(TAG_SPELL_CIRCLE, this.spellCircleContext.serializeToNBT())
+        if (this.ctx.spellCircle != null) {
+            out.put(TAG_SPELL_CIRCLE, this.ctx.spellCircle.serializeToNBT())
         }
 
         return out
@@ -345,9 +357,17 @@ class CastingHarness private constructor(
 
         @JvmStatic
         fun DeserializeFromNBT(nbt: Tag?, caster: ServerPlayer, wandHand: InteractionHand): CastingHarness {
-            val ctx = CastingContext(caster, wandHand)
+
             return try {
                 val nbt = nbt as CompoundTag
+
+                val spellCircleContext = if (nbt.contains(TAG_SPELL_CIRCLE)) {
+                    SpellCircleContext.DeserializeFromNBT(nbt.getCompound(TAG_SPELL_CIRCLE))
+                } else {
+                    null
+                }
+
+                val ctx = CastingContext(caster, wandHand, spellCircleContext)
 
                 val stack = mutableListOf<SpellDatum<*>>()
                 val stackTag = nbt.getList(TAG_STACK, Tag.TAG_COMPOUND.toInt())
@@ -371,16 +391,10 @@ class CastingHarness private constructor(
                     null
                 }
 
-                val spellCircleContext = if (nbt.contains(TAG_SPELL_CIRCLE)) {
-                    SpellCircleContext.DeserializeFromNBT(nbt.getCompound(TAG_SPELL_CIRCLE))
-                } else {
-                    null
-                }
-
-                CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx, spellCircleContext, colorizer)
+                CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx, colorizer)
             } catch (exn: Exception) {
                 HexMod.LOGGER.warn("Couldn't load harness from nbt tag, falling back to default: $nbt: $exn")
-                CastingHarness(ctx)
+                CastingHarness(CastingContext(caster, wandHand))
             }
         }
     }

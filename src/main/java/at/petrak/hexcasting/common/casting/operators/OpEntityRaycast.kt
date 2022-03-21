@@ -26,8 +26,14 @@ object OpEntityRaycast : ConstManaOperator {
             { true },
             1_000_000.0
         )
+
+        val out = if (entityHitResult != null && ctx.isEntityInRange(entityHitResult.entity)) {
+            entityHitResult.entity
+        } else {
+            null
+        }
         return Operator.spellListOf(
-            entityHitResult?.entity ?: Widget.NULL
+            out ?: Widget.NULL
         )
     }
 }

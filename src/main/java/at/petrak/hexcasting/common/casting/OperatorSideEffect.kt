@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.lib.HexStatistics
-import at.petrak.hexcasting.datagen.Advancements
+import at.petrak.hexcasting.datagen.HexAdvancements
 import net.minecraft.Util
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.network.chat.TranslatableComponent
@@ -26,7 +26,7 @@ sealed class OperatorSideEffect {
                     TranslatableComponent("hexcasting.message.cant_great_spell"),
                     Util.NIL_UUID
                 )
-                Advancements.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.ctx.caster)
+                HexAdvancements.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.ctx.caster)
                 true
             } else {
                 this.spell.cast(harness.ctx)

@@ -23,6 +23,7 @@ object OpBlink : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Entity>(0)
         val delta = args.getChecked<Double>(1)
+        ctx.assertEntityInRange(target)
 
         val dvec = targetDelta(ctx, target, delta)
 

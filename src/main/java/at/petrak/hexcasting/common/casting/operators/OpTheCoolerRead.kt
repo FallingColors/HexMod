@@ -20,6 +20,7 @@ object OpTheCoolerRead : ConstManaOperator {
         if (target.item.item !is ItemDataHolder) {
             throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemDataHolder::class.java, target.item)
         }
+        ctx.assertEntityInRange(target)
 
         val stack = target.item
         val item = stack.item as ItemDataHolder

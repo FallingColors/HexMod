@@ -10,7 +10,7 @@ public class BlockEntityRightClickImpetus extends BlockEntityAbstractImpetus {
     }
 
     @Override
-    public boolean playerAlwaysInRange() {
+    public boolean activatorAlwaysInRange() {
         return false;
     }
 }

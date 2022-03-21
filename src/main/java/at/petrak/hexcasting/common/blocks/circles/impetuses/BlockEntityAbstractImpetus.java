@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.common.blocks.ModBlockEntity;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
+import at.petrak.hexcasting.common.casting.SpellCircleContext;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
@@ -29,12 +30,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,10 +72,14 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
         inventoryHandlerLazy = LazyOptional.of(() -> ITEM_HANDLER);
     }
 
-    abstract public boolean playerAlwaysInRange();
+    abstract public boolean activatorAlwaysInRange();
 
     public int getMana() {
         return this.mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
     }
 
     protected void activateSpellCircle(ServerPlayer activator) {
@@ -175,8 +182,12 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
         var player = this.getPlayer();
 
         if (player instanceof ServerPlayer splayer) {
-            var ctx = new CastingContext(splayer, InteractionHand.MAIN_HAND);
+            var bounds = getBounds(this.trackedBlocks);
+
+            var ctx = new CastingContext(splayer, InteractionHand.MAIN_HAND,
+                new SpellCircleContext(this.getBlockPos(), bounds, this.activatorAlwaysInRange()));
             var harness = new CastingHarness(ctx);
+
             for (var tracked : this.trackedBlocks) {
                 var bs = this.level.getBlockState(tracked);
                 if (bs.getBlock() instanceof BlockCircleComponent cc) {
@@ -193,6 +204,39 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
         }
 
         this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST.get(), SoundSource.BLOCKS, 2f, 1f);
+    }
+
+    @Contract(pure = true)
+    private static AABB getBounds(List<BlockPos> poses) {
+        int minX = Integer.MAX_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int minZ = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        int maxZ = Integer.MIN_VALUE;
+
+        for (var pos : poses) {
+            if (pos.getX() < minX) {
+                minX = pos.getX();
+            }
+            if (pos.getY() < minY) {
+                minY = pos.getY();
+            }
+            if (pos.getZ() < minZ) {
+                minZ = pos.getZ();
+            }
+            if (pos.getX() > maxX) {
+                maxX = pos.getX();
+            }
+            if (pos.getY() > maxY) {
+                maxY = pos.getY();
+            }
+            if (pos.getZ() > maxZ) {
+                maxZ = pos.getZ();
+            }
+        }
+
+        return new AABB(minX, minY, minZ, maxX + 1, maxY + 1, maxZ + 1);
     }
 
     @Nullable
@@ -232,9 +276,10 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
         }
 
         if (this.level instanceof ServerLevel serverLevel) {
-            var spray = new ParticleSpray(vpos, vecOutDir.scale(success ? 1.0 : 1.5), 0.1,
-                Mth.PI / (success ? 4 : 2), 30);
-            spray.sprayParticles(serverLevel, this.colorizer);
+            var spray = new ParticleSpray(vpos, vecOutDir.scale(success ? 1.0 : 1.5), success ? 0.1 : 0.5,
+                Mth.PI / (success ? 4 : 2), success ? 30 : 100);
+            spray.sprayParticles(serverLevel,
+                success ? this.colorizer : new FrozenColorizer(HexItems.DYE_COLORIZERS[14].get(), this.activator));
         }
 
         var pitch = 1f;

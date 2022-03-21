@@ -22,7 +22,7 @@ object OpTeleport : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val teleportee = args.getChecked<Entity>(0)
         val delta = args.getChecked<Vec3>(1)
-        ctx.assertVecInRange(teleportee.position())
+        ctx.assertEntityInRange(teleportee)
 
         val targetMiddlePos = teleportee.position().add(0.0, teleportee.eyeHeight / 2.0, 0.0)
 

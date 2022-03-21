@@ -37,11 +37,11 @@ public class HexBlocks {
     public static final RegistryObject<Block> SLATE = BLOCKS.register("slate",
         () -> new BlockSlate(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
-            .strength(2f, 4f)));
+            .strength(4f, 4f)));
     public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = registerBlock("impetus_rightclick",
         new BlockRightClickImpetus(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
-            .strength(2f, 4f)
+            .strength(4f, 4f)
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
     // Decoration?!

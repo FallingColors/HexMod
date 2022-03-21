@@ -12,6 +12,7 @@ object OpEntityLook : ConstManaOperator {
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val e: Entity = args.getChecked(0)
+        ctx.assertEntityInRange(e)
         return spellListOf(e.lookAngle)
     }
 }

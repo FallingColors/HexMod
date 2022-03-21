@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SAS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:deepslate"
+    },
+    "A": {
+      "item": "hexcasting:amethyst_dust"
+    }
+  },
+  "result": {
+    "item": "hexcasting:slate_block",
+    "count": 8
+  }
+}

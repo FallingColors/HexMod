@@ -9,8 +9,8 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class BlockStatesAndModels extends BlockStateProvider {
-    public BlockStatesAndModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
+public class HexBlockStatesAndModels extends BlockStateProvider {
+    public HexBlockStatesAndModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
         super(gen, HexMod.MOD_ID, exFileHelper);
     }
 

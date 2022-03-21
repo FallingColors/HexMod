@@ -16,8 +16,8 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ItemModels extends ItemModelProvider {
-    public ItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+public class HexItemModels extends ItemModelProvider {
+    public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, HexMod.MOD_ID, existingFileHelper);
     }
 

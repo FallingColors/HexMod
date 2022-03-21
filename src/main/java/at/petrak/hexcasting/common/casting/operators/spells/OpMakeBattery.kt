@@ -20,6 +20,8 @@ object OpMakeBattery : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+        val entity = args.getChecked<ItemEntity>(0)
+
         val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
         if (otherHandItem.item != Items.GLASS_BOTTLE) {
             throw CastException(CastException.Reason.BAD_OFFHAND_ITEM_ITEM, Items.GLASS_BOTTLE, otherHandItem)
@@ -27,8 +29,8 @@ object OpMakeBattery : SpellOperator {
         if (otherHandItem.count != 1) {
             throw CastException(CastException.Reason.BAD_OFFHAND_COUNT, 1, otherHandItem.count)
         }
-
-        val entity = args.getChecked<ItemEntity>(0)
+        
+        ctx.assertEntityInRange(entity)
 
         return Triple(Spell(entity), 100_000, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }

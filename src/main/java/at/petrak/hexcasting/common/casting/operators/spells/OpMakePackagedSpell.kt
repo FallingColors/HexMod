@@ -19,13 +19,15 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val type: Class<T>, val cost: I
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+        val entity = args.getChecked<ItemEntity>(0)
+        val patterns = args.getChecked<List<SpellDatum<*>>>(1).map { it.tryGet<HexPattern>() }
+
         val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
         if (!type.isAssignableFrom(otherHandItem.item.javaClass)) {
             throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, type, otherHandItem)
         }
 
-        val entity = args.getChecked<ItemEntity>(0)
-        val patterns = args.getChecked<List<SpellDatum<*>>>(1).map { it.tryGet<HexPattern>() }
+        ctx.assertEntityInRange(entity)
 
         return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }

@@ -23,6 +23,7 @@ object OpAddMotion : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Entity>(0)
         val motion = args.getChecked<Vec3>(1)
+        ctx.assertEntityInRange(target)
         return Triple(
             Spell(target, motion),
             (motion.lengthSqr() * 10_000f).toInt(),

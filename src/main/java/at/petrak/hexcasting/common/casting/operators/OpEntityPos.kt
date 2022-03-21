@@ -13,6 +13,7 @@ object OpEntityPos : ConstManaOperator {
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val e: Entity = args.getChecked(0)
+        ctx.assertEntityInRange(e)
         // If this is a player, "expected behavior" is to get the *eye* position so raycasts don't immediately
         // hit the ground.
         return spellListOf(if (e is Player) e.eyePosition else e.position())

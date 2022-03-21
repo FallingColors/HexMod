@@ -18,6 +18,7 @@ class OpGetEntityAt(val checker: Predicate<Entity>) : ConstManaOperator {
         ctx.assertVecInRange(pos)
         val aabb = AABB(pos.add(Vec3(-0.5, -0.5, -0.5)), pos.add(Vec3(0.5, 0.5, 0.5)))
         val entitiesGot = ctx.world.getEntities(null, aabb, checker)
+
         val entity = entitiesGot.getOrNull(0) ?: Widget.NULL
         return spellListOf(entity)
     }

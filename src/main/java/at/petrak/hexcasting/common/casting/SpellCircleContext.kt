@@ -7,7 +7,7 @@ import net.minecraft.world.phys.AABB
 /**
  * Optional field on a [CastingContext] for the spell circle
  */
-data class SpellCircleContext(val impetusPos: BlockPos, val aabb: AABB, val playerAlwaysInRange: Boolean) {
+data class SpellCircleContext(val impetusPos: BlockPos, val aabb: AABB, val activatorAlwaysInRange: Boolean) {
     fun serializeToNBT(): CompoundTag {
         val out = CompoundTag()
 
@@ -22,7 +22,7 @@ data class SpellCircleContext(val impetusPos: BlockPos, val aabb: AABB, val play
         out.putDouble(TAG_MAX_Y, aabb.maxY)
         out.putDouble(TAG_MAX_Z, aabb.maxZ)
 
-        out.putBoolean(TAG_PLAYER_ALWAYS_IN_RANGE, playerAlwaysInRange)
+        out.putBoolean(TAG_PLAYER_ALWAYS_IN_RANGE, activatorAlwaysInRange)
 
         return out
     }

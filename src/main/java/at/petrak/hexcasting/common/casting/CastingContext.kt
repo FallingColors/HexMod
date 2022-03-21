@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.lib.RegisterHelper.prefix
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
@@ -22,7 +23,10 @@ import kotlin.math.min
 data class CastingContext(
     val caster: ServerPlayer,
     val castingHand: InteractionHand,
+    val spellCircle: SpellCircleContext? = null
 ) {
+    constructor(caster: ServerPlayer, castingHand: InteractionHand) : this(caster, castingHand, null)
+
     private var depth: Int = 0
 
     val world: ServerLevel get() = caster.getLevel()
@@ -65,8 +69,24 @@ data class CastingContext(
      * Check to make sure a vec is in range
      */
     fun assertVecInRange(vec: Vec3) {
+        if (!isVecInRange(vec)) throw CastException(CastException.Reason.TOO_FAR, vec)
+    }
+
+    /**
+     * Check to make sure an entity is in range
+     */
+    fun assertEntityInRange(entity: Entity) {
+        if (!isEntityInRange(entity)) throw CastException(CastException.Reason.TOO_FAR, entity.position())
+        assertVecInRange(entity.position())
+    }
+
+    fun isVecInRange(vec: Vec3): Boolean {
+        if (this.spellCircle != null) {
+            return this.spellCircle.aabb.contains(vec)
+        }
+
         if (vec.distanceToSqr(this.caster.position()) < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
-            return
+            return true
 
         val maybeSentinel = this.caster.getCapability(HexCapabilities.SENTINEL).resolve()
         if (maybeSentinel.isPresent) {
@@ -75,14 +95,21 @@ data class CastingContext(
                 && sentinel.extendsRange
                 && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
             )
-                return
+                return true
         }
 
-        throw CastException(CastException.Reason.TOO_FAR, vec)
+        return false
+    }
+
+    fun isEntityInRange(entity: Entity): Boolean {
+        if (this.spellCircle != null && this.spellCircle.activatorAlwaysInRange && entity == this.caster) {
+            return true
+        }
+        return isVecInRange(entity.position())
     }
 
     /**
-     * Return the slot from which to take blocks and itemsn.
+     * Return the slot from which to take blocks and items.
      */
     // https://wiki.vg/Inventory is WRONG
     // slots 0-8 are the hotbar
