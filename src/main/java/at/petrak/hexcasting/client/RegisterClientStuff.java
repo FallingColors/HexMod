@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.HexConfig;
+import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
@@ -12,12 +13,19 @@ import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
 import at.petrak.hexcasting.common.particles.HexParticles;
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -25,6 +33,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class RegisterClientStuff {
@@ -86,10 +95,25 @@ public class RegisterClientStuff {
         });
 
         renderLayers(ItemBlockRenderTypes::setRenderLayer);
+
+        addScryingLensStuff();
     }
 
-    public static void renderLayers(BiConsumer<Block, RenderType> consumer) {
+    private static void renderLayers(BiConsumer<Block, RenderType> consumer) {
         consumer.accept(HexBlocks.CONJURED.get(), RenderType.cutout());
+    }
+
+    private static void addScryingLensStuff() {
+        ScryingLensOverlayRegistry.addDisplayer(Blocks.GRASS_BLOCK, (state, pos, observer, lensHand) -> List.of(
+            new Pair<>(new ItemStack(Blocks.GRASS_BLOCK), new TextComponent("Holy hell that's grass")),
+            new Pair<>(new ItemStack(Items.COMPASS), new TextComponent("Position: " + pos.toShortString()))
+        ));
+        ScryingLensOverlayRegistry.addDisplayer(Blocks.REDSTONE_WIRE, (state, pos, observer, lensHand) -> List.of(
+            new Pair<>(
+                new ItemStack(Items.REDSTONE),
+                new TextComponent(String.valueOf(state.getValue(BlockStateProperties.POWER)))
+                    .withStyle(ChatFormatting.RED))
+        ));
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

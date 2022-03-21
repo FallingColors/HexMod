@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel;
+import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -14,7 +16,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -22,7 +27,7 @@ import java.util.function.BiConsumer;
 
 public class HexAdditionalRenderers {
     @SubscribeEvent
-    public static void overlay(RenderLevelLastEvent evt) {
+    public static void overlayLevel(RenderLevelLastEvent evt) {
         var player = Minecraft.getInstance().player;
         var maybeSentinelCap = player.getCapability(HexCapabilities.SENTINEL).resolve();
         if (maybeSentinelCap.isPresent()) {
@@ -30,6 +35,13 @@ public class HexAdditionalRenderers {
             if (cap.hasSentinel) {
                 renderSentinel(cap, player, evt.getPoseStack(), evt.getPartialTick());
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void overlayGui(RenderGameOverlayEvent.Post evt) {
+        if (evt.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+            tryRenderScryingLensOverlay(evt.getMatrixStack(), evt.getPartialTicks());
         }
     }
 
@@ -138,6 +150,59 @@ public class HexAdditionalRenderers {
                 var z = Mth.cos(theta) * Mth.sin(phi);
                 TOP_RING[i] = new float[]{x, y, z};
                 BOTTOM_RING[i] = new float[]{-x, -y, -z};
+            }
+        }
+    }
+
+    // My internet is really shaky right now but thank god Patchi already does this exact thing
+    // cause it's a dependency so i have the .class files downloaded
+    private static void tryRenderScryingLensOverlay(PoseStack ps, float partialTicks) {
+        var mc = Minecraft.getInstance();
+
+        InteractionHand lensHand = null;
+        for (var hand : InteractionHand.values()) {
+            if (mc.player.getItemInHand(hand).is(HexItems.SCRYING_LENS.get())) {
+                lensHand = hand;
+                break;
+            }
+        }
+        if (lensHand == null) {
+            return;
+        }
+
+        var hitRes = mc.hitResult;
+        if (hitRes instanceof BlockHitResult bhr) {
+            var pos = bhr.getBlockPos();
+            var bs = mc.level.getBlockState(pos);
+
+            var displayer = ScryingLensOverlayRegistry.getDisplayer(bs.getBlock());
+            if (displayer != null) {
+                var lines = displayer.getLines(bs, pos, mc.player, lensHand);
+
+                var window = mc.getWindow();
+                var lineSpacing = 15f;
+                var totalHeight = lineSpacing * lines.size();
+                var x = window.getGuiScaledWidth() / 2f + 8f;
+                var y = window.getGuiScaledHeight() / 2f - totalHeight / 2f;
+                ps.pushPose();
+                ps.translate(x, y, 0);
+
+                for (var pair : lines) {
+                    ps.pushPose();
+
+                    var stack = pair.getFirst();
+                    if (stack != null) {
+                        // this draws centered in the Y ...
+                        RenderLib.renderItemStackInGui(ps, pair.getFirst(), 0, 0);
+                    }
+                    // but this draws where y=0 is the baseline
+                    mc.font.drawShadow(ps, pair.getSecond(), stack == null ? 0 : 18, 5, 16777215);
+
+                    ps.popPose();
+                    ps.translate(0, lineSpacing, 0);
+                }
+
+                ps.popPose();
             }
         }
     }

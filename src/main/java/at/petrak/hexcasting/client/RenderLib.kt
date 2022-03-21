@@ -4,7 +4,9 @@ import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.client.gui.SQRT_3
 import at.petrak.hexcasting.hexmath.HexCoord
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Matrix4f
@@ -12,6 +14,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource
 import net.minecraft.world.level.levelgen.synth.PerlinNoise
 import net.minecraft.world.phys.Vec2
@@ -267,5 +270,21 @@ object RenderLib {
             screen(FC.green(n)),
             screen(FC.blue(n)),
         )
+    }
+
+    @JvmStatic
+    fun renderItemStackInGui(ms: PoseStack, stack: ItemStack, x: Int, y: Int) {
+        transferMsToGl(ms) { Minecraft.getInstance().itemRenderer.renderAndDecorateItem(stack, x, y) }
+    }
+
+    @JvmStatic
+    fun transferMsToGl(ms: PoseStack, toRun: Runnable) {
+        val mvs = RenderSystem.getModelViewStack()
+        mvs.pushPose()
+        mvs.mulPoseMatrix(ms.last().pose())
+        RenderSystem.applyModelViewMatrix()
+        toRun.run()
+        mvs.popPose()
+        RenderSystem.applyModelViewMatrix()
     }
 }
