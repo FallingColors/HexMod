@@ -158,7 +158,9 @@ public class StateIngredientHelper {
 
     private static void renameTag(CompoundTag tag, String from, String to) {
         var t = tag.get(from);
-        tag.remove(from);
-        tag.put(to, t);
+        if (t != null) {
+            tag.remove(from);
+            tag.put(to, t);
+        }
     }
 }

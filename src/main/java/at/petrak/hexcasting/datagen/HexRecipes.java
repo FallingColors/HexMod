@@ -173,7 +173,7 @@ public class HexRecipes extends RecipeProvider {
             .pattern(" B ")
             .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.SLATE.get(), 6)
+        ShapedRecipeBuilder.shaped(HexItems.Blocks.SLATE.get(), 6)
             .define('S', Items.DEEPSLATE)
             .define('A', HexItems.AMETHYST_DUST.get())
             .pattern(" A ")
@@ -181,10 +181,11 @@ public class HexRecipes extends RecipeProvider {
             .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK.get())
-            .define('S', HexItems.SLATE.get())
+            .define('S', HexItems.Blocks.SLATE.get())
             .pattern("S")
             .pattern("S")
-            .unlockedBy("has_item", has(HexItems.SLATE.get())).save(recipes, "slate_block_from_slates");
+            .unlockedBy("has_item", has(HexItems.Blocks.SLATE.get()))
+            .save(recipes, "slate_block_from_slates");
 
         ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK.get(), 8)
             .define('S', Blocks.DEEPSLATE)
@@ -192,18 +193,24 @@ public class HexRecipes extends RecipeProvider {
             .pattern("SSS")
             .pattern("SAS")
             .pattern("SSS")
-            .unlockedBy("has_item", has(HexItems.SLATE.get())).save(recipes);
+            .unlockedBy("has_item", has(HexItems.Blocks.SLATE.get())).save(recipes);
 
+        var enlightenment = new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
+            MinMaxBounds.Ints.ANY,
+            // add a little bit of slop here
+            MinMaxBounds.Doubles.atLeast(17.95),
+            MinMaxBounds.Doubles.between(0.1, 2.05));
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
             new VillagerIngredient(new ResourceLocation("toolsmith"), null, 1),
             HexBlocks.IMPETUS_RIGHTCLICK.get().defaultBlockState())
-            .unlockedBy("enlightenment",
-                new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
-                    MinMaxBounds.Ints.ANY,
-                    // add a little bit of slop here
-                    MinMaxBounds.Doubles.atLeast(17.95),
-                    MinMaxBounds.Doubles.between(0.1, 2.05)))
+            .unlockedBy("enlightenment", enlightenment)
+            .save(recipes);
+
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
+            new VillagerIngredient(null, null, 5),
+            Blocks.BUDDING_AMETHYST.defaultBlockState())
+            .unlockedBy("enlightenment", enlightenment)
             .save(recipes);
     }
 

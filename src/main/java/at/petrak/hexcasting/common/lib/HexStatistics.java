@@ -6,25 +6,31 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class HexStatistics {
-    public static final ResourceLocation MANA_USED = makeCustomStat(HexMod.MOD_ID + ":mana_used",
-        manamount -> StatFormatter.DEFAULT.format(manamount / HexConfig.dustManaAmount.get())
-    );
-    public static final ResourceLocation MANA_OVERCASTED = makeCustomStat(HexMod.MOD_ID + ":mana_overcasted",
-        manamount -> StatFormatter.DEFAULT.format(manamount / HexConfig.dustManaAmount.get())
-    );
-    public static final ResourceLocation PATTERNS_DRAWN = makeCustomStat(HexMod.MOD_ID + ":patterns_drawn",
-        StatFormatter.DEFAULT);
-    public static final ResourceLocation SPELLS_CAST = makeCustomStat(HexMod.MOD_ID + ":spells_cast",
-        StatFormatter.DEFAULT);
+    public static ResourceLocation MANA_USED;
+    public static ResourceLocation MANA_OVERCASTED;
+    public static ResourceLocation PATTERNS_DRAWN;
+    public static ResourceLocation SPELLS_CAST;
 
-    public static void register() {
-        // No-op! Just to un-lazy this class.
+    // We need to listen to *something* so we don't fire too early
+    @SubscribeEvent
+    public static void register(RegistryEvent.Register<Block> evt) {
+        MANA_USED = makeCustomStat("mana_used",
+            manamount -> StatFormatter.DEFAULT.format(manamount / HexConfig.dustManaAmount.get())
+        );
+        MANA_OVERCASTED = makeCustomStat("mana_overcasted",
+            manamount -> StatFormatter.DEFAULT.format(manamount / HexConfig.dustManaAmount.get())
+        );
+        PATTERNS_DRAWN = makeCustomStat("patterns_drawn", StatFormatter.DEFAULT);
+        SPELLS_CAST = makeCustomStat("spells_cast", StatFormatter.DEFAULT);
     }
 
     private static ResourceLocation makeCustomStat(String pKey, StatFormatter pFormatter) {
-        ResourceLocation resourcelocation = new ResourceLocation(pKey);
+        ResourceLocation resourcelocation = new ResourceLocation(HexMod.MOD_ID, pKey);
         Registry.register(Registry.CUSTOM_STAT, pKey, resourcelocation);
         Stats.CUSTOM.get(resourcelocation, pFormatter);
         return resourcelocation;

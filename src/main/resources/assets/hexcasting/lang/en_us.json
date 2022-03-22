@@ -186,6 +186,7 @@
   "hexcasting.spell.hexcasting:dispel_rain": "Dispel Rain",
   "hexcasting.spell.hexcasting:create_lava": "Create Lava",
   "hexcasting.spell.hexcasting:teleport": "Greater Teleport",
+  "hexcasting.spell.hexcasting:brainsweep": "Flay Mind",
   "hexcasting.spell.hexcasting:sentinel/create/great": "Summon Greater Sentinel",
   "hexcasting.spell.hexcasting:open_paren": "Introspection",
   "hexcasting.spell.hexcasting:close_paren": "Retrospection",

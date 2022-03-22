@@ -6,9 +6,6 @@ import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClickImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
-import at.petrak.hexcasting.common.items.HexItems;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,8 +21,8 @@ public class HexBlocks {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(
         ForgeRegistries.BLOCK_ENTITIES, HexMod.MOD_ID);
 
-    public static final RegistryObject<Block> CONJURED = registerBlock("conjured",
-        new BlockConjured(
+    public static final RegistryObject<Block> CONJURED = BLOCKS.register("conjured",
+        () -> new BlockConjured(
             BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.DIAMOND)
                 .sound(SoundType.AMETHYST)
                 .noDrops()
@@ -38,19 +35,20 @@ public class HexBlocks {
         () -> new BlockSlate(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
             .strength(4f, 4f)));
-    public static final RegistryObject<Block> EMPTY_IMPETUS = registerBlock("empty_impetus",
-        new Block(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
+    public static final RegistryObject<Block> EMPTY_IMPETUS = BLOCKS.register("empty_impetus",
+        () -> new Block(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
             .strength(4f, 4f)));
-    public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = registerBlock("impetus_rightclick",
-        new BlockRightClickImpetus(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
+    public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = BLOCKS.register(
+        "impetus_rightclick",
+        () -> new BlockRightClickImpetus(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
             .strength(4f, 4f)
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
     // Decoration?!
-    public static final RegistryObject<Block> SLATE_BLOCK = registerBlock("slate_block",
-        new Block(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
+    public static final RegistryObject<Block> SLATE_BLOCK = BLOCKS.register("slate_block",
+        () -> new Block(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
             .strength(2f, 4f)));
 
@@ -64,11 +62,6 @@ public class HexBlocks {
         BLOCK_ENTITIES.register("impetus_rightclick_tile",
             () -> BlockEntityType.Builder.of(BlockEntityRightClickImpetus::new, IMPETUS_RIGHTCLICK.get()).build(null));
 
-
-    private static <T extends Block> RegistryObject<T> registerBlock(String label, T block) {
-        HexItems.ITEMS.register(label, () -> new BlockItem(block, new Item.Properties().tab(HexItems.TAB)));
-        return BLOCKS.register(label, () -> block);
-    }
 
     private static boolean never(Object... args) {
         return false;

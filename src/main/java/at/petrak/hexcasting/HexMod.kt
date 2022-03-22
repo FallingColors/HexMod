@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.common.ContributorList
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
+import at.petrak.hexcasting.common.casting.misc.Brainsweeping
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.HexCommands
 import at.petrak.hexcasting.common.items.HexItems
@@ -13,6 +14,7 @@ import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.particles.HexParticles
 import at.petrak.hexcasting.common.recipe.HexCustomRecipes
+import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import at.petrak.hexcasting.datagen.HexAdvancements
 import at.petrak.hexcasting.datagen.HexDataGenerators
 import at.petrak.hexcasting.datagen.lootmods.HexLootModifiers
@@ -64,11 +66,15 @@ object HexMod {
         HexSounds.SOUNDS.register(modBus)
         HexParticles.PARTICLES.register(modBus)
         HexCustomRecipes.RECIPES.register(modBus)
+        HexRecipeSerializers.SERIALIZERS.register(modBus)
+        modBus.register(HexStatistics::class.java)
+        modBus.register(HexRecipeSerializers::class.java)
 
         evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)
         evBus.register(HexCapabilities::class.java)
         evBus.register(OpFlight)
+        evBus.register(Brainsweeping::class.java)
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT) {
             Runnable {
@@ -82,7 +88,6 @@ object HexMod {
 
         // and then things that don't require busses
         HexMessages.register()
-        HexStatistics.register()
         ContributorList.loadContributors()
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG_SPEC)

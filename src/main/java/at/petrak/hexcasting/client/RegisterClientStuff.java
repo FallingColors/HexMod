@@ -91,7 +91,7 @@ public class RegisterClientStuff {
             ItemProperties.register(HexItems.SCROLL.get(), ItemScroll.ANCIENT_PREDICATE,
                 (stack, level, holder, holderID) -> stack.getOrCreateTag().contains(ItemScroll.TAG_OP_ID) ? 1f : 0f);
 
-            ItemProperties.register(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
+            ItemProperties.register(HexItems.Blocks.SLATE.get(), ItemSlate.WRITTEN_PRED,
                 (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
             HexTooltips.init();

@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.casting;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.spell.Operator;
 import at.petrak.hexcasting.api.PatternRegistry;
+import at.petrak.hexcasting.api.spell.Operator;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.casting.operators.*;
 import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
@@ -228,6 +228,9 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wwweeewwweewdawdwad", HexDir.WEST),
                 prefix("summon_rain"),
                 new OpWeather(true), true);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qeqwqwqwqwqeqaeqeaqeqaeqaqded", HexDir.NORTH_EAST),
+                prefix("brainsweep"),
+                OpBrainsweep.INSTANCE, true);
 
 
             // == Meta stuff ==

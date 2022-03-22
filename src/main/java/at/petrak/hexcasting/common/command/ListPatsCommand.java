@@ -5,6 +5,7 @@ import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
@@ -19,14 +20,21 @@ public class ListPatsCommand {
         dispatcher.register(Commands.literal("hexcasting:patterns")
             .requires(dp -> dp.hasPermission(Commands.LEVEL_ADMINS))
             .then(Commands.literal("list").executes(ctx -> {
-                var bob = new StringBuilder("Patterns in this world:");
+
                 var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
-                lookup.forEach((sig, opId) -> {
+                var listing = lookup.keySet()
+                    .stream()
+                    .map(key -> new Pair<>(lookup.get(key).getFirst(), key))
+                    .sorted((a, b) -> a.getFirst().compareNamespaced(b.getFirst()))
+                    .toList();
+
+                var bob = new StringBuilder("Patterns in this world:");
+                for (var pair : listing) {
                     bob.append('\n');
-                    bob.append(opId.toString());
+                    bob.append(pair.getFirst());
                     bob.append(": ");
-                    bob.append(sig);
-                });
+                    bob.append(pair.getSecond());
+                }
                 ctx.getSource().sendSuccess(new TextComponent(bob.toString()), true);
 
                 return lookup.size();

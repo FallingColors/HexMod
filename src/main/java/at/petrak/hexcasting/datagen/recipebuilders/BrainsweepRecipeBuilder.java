@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.datagen.recipebuilders;
 
-import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
+import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
@@ -14,7 +14,6 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -22,8 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public class BrainsweepRecipeBuilder implements RecipeBuilder {
-    private StateIngredient blockIn = null;
-    private VillagerIngredient villagerIn = null;
+    private StateIngredient blockIn;
+    private VillagerIngredient villagerIn;
     private final BlockState result;
 
     private final Advancement.Builder advancement;
@@ -48,7 +47,7 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 
     @Override
     public Item getResult() {
-        return Items.AIR;
+        return this.result.getBlock().asItem();
     }
 
     @Override
@@ -71,7 +70,6 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
     public record Result(ResourceLocation id, StateIngredient blockIn, VillagerIngredient villagerIn,
                          BlockState result, Advancement.Builder advancement,
                          ResourceLocation advancementId) implements FinishedRecipe {
-
         @Override
         public void serializeRecipeData(JsonObject json) {
             json.add("blockIn", this.blockIn.serialize());
@@ -86,7 +84,7 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 
         @Override
         public RecipeSerializer<?> getType() {
-            return BrainsweepRecipe.SERIALIZER;
+            return HexRecipeSerializers.BRAINSWEEP.get();
         }
 
         @Nullable

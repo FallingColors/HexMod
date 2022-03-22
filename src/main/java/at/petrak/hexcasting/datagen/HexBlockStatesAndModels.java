@@ -21,6 +21,10 @@ public class HexBlockStatesAndModels extends BlockStateProvider {
         simpleBlock(HexBlocks.SLATE_BLOCK.get(), slateBlock);
         simpleBlockItem(HexBlocks.SLATE_BLOCK.get(), slateBlock);
 
+        var emptyImpetus = models().cubeAll("empty_impetus", modLoc("block/impetus/empty"));
+        simpleBlock(HexBlocks.EMPTY_IMPETUS.get(), emptyImpetus);
+        simpleBlockItem(HexBlocks.EMPTY_IMPETUS.get(), emptyImpetus);
+
         getVariantBuilder(HexBlocks.IMPETUS_RIGHTCLICK.get()).forAllStates(bs -> {
             var isLit = bs.getValue(BlockAbstractImpetus.ENERGIZED);
             var litness = isLit ? "lit" : "dim";

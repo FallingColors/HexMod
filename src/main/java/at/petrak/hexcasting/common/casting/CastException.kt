@@ -95,7 +95,14 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
          *
          * `BlockPos pos`
          */
-        REQUIRES_INVENTORY
+        REQUIRES_INVENTORY,
+
+        /**
+         * Extracting sentience didn't work
+         *
+         * for fucks sake i need to just implement mishaps already
+         */
+        RECIPE_DIDNT_WORK
     }
 
     override val message: String
@@ -112,5 +119,6 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
             Reason.BAD_OFFHAND_ITEM_ITEM -> "operator expected ${(this.data[0] as Item).registryName} in offhand but got ${this.data[1]}"
             Reason.BAD_OFFHAND_COUNT -> "operator expected ${this.data[0]} items in the offhand but got ${this.data[1]}"
             Reason.REQUIRES_INVENTORY -> "required an inventory at ${this.data[0] as BlockPos}"
+            Reason.RECIPE_DIDNT_WORK -> "bad recipe"
         }
 }

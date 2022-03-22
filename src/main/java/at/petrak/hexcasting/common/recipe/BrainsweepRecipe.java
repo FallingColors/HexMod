@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
@@ -9,6 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -26,8 +26,11 @@ public record BrainsweepRecipe(
     VillagerIngredient villagerIn,
     BlockState result
 ) implements Recipe<Container> {
-    public static final RecipeType<BrainsweepRecipe> TYPE = RecipeType.register(HexMod.MOD_ID + ":brainsweep");
-    public static final Serializer SERIALIZER = new Serializer();
+
+
+    public boolean matches(BlockState blockIn, Villager villagerIn) {
+        return this.blockIn.test(blockIn) && this.villagerIn.test(villagerIn);
+    }
 
     @Override
     public ResourceLocation getId() {
@@ -36,12 +39,12 @@ public record BrainsweepRecipe(
 
     @Override
     public RecipeType<?> getType() {
-        return TYPE;
+        return HexRecipeSerializers.BRAINSWEEP_TYPE;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return null;
+        return HexRecipeSerializers.BRAINSWEEP.get();
     }
 
     // in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards
@@ -66,7 +69,7 @@ public record BrainsweepRecipe(
         return ItemStack.EMPTY;
     }
 
-    private static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<BrainsweepRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<BrainsweepRecipe> {
         @Override
         public BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
             var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));

@@ -42,7 +42,7 @@ public class HexTooltips {
                         tag.contains(ItemScroll.TAG_OP_ID)
                             ? PatternTooltipGreeble.ANCIENT_BG : PatternTooltipGreeble.PRISTINE_BG)));
                 }
-            } else if (stack.is(HexItems.SLATE.get()) && ItemSlate.hasPattern(stack)) {
+            } else if (stack.is(HexItems.Blocks.SLATE.get()) && ItemSlate.hasPattern(stack)) {
                 var tag = stack.getOrCreateTag()
                     .getCompound("BlockEntityTag")
                     .getCompound(BlockEntitySlate.TAG_PATTERN);
