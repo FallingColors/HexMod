@@ -41,6 +41,19 @@ public abstract class BlockCircleComponent extends Block {
 
     abstract public Direction normalDir(BlockPos pos, BlockState bs, Level world, int recursionLeft);
 
+    public static Direction normalDirOfOther(BlockPos other, Level world, int recursionLeft) {
+        if (recursionLeft <= 0) {
+            return Direction.UP;
+        }
+
+        var stateThere = world.getBlockState(other);
+        if (stateThere.getBlock() instanceof BlockCircleComponent bcc) {
+            return bcc.normalDir(other, stateThere, world, recursionLeft - 1);
+        } else {
+            return Direction.UP;
+        }
+    }
+
     /**
      * How many blocks in the {@link BlockCircleComponent#normalDir(BlockPos, BlockState, Level)} from the center
      * particles should be spawned in

@@ -17,6 +17,10 @@
       "type": "patchouli:crafting",
       "recipe": "hexcasting:slate",
       "text": "hexcasting.page.slate.3"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.slate.4"
     }
   ]
 }

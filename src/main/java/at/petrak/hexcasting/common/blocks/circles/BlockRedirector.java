@@ -1,14 +1,12 @@
-package at.petrak.hexcasting.common.blocks.circles.impetuses;
+package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.api.BlockCircleComponent;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,22 +16,20 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
-import java.util.Random;
 
-// Facing dir is the direction it starts searching for slates in to start
-public abstract class BlockAbstractImpetus extends BlockCircleComponent implements EntityBlock {
+public class BlockRedirector extends BlockCircleComponent {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    public BlockAbstractImpetus(Properties p_49795_) {
+    public BlockRedirector(Properties p_49795_) {
         super(p_49795_);
-        this.registerDefaultState(
-            this.stateDefinition.any().setValue(ENERGIZED, false).setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any()
+            .setValue(ENERGIZED, false).setValue(FACING, Direction.NORTH));
     }
 
     @Override
     public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos, BlockState bs,
         Level world) {
-        return enterDir != bs.getValue(FACING).getOpposite();
+        return enterDir != bs.getValue(FACING);
     }
 
     @Override
@@ -54,13 +50,6 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     @Override
     public float particleHeight(BlockPos pos, BlockState bs, Level world) {
         return 0.5f;
-    }
-
-    @Override
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
-        if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus tile) {
-            tile.stepCircle();
-        }
     }
 
     @Override

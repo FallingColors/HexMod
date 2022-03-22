@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
+import at.petrak.hexcasting.common.blocks.circles.BlockRedirector;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClickImpetus;
@@ -31,26 +32,29 @@ public class HexBlocks {
                 .isSuffocating(HexBlocks::never)
                 .isViewBlocking(HexBlocks::never)));
 
-    public static final RegistryObject<Block> SLATE = BLOCKS.register("slate",
-        () -> new BlockSlate(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
+    private static BlockBehaviour.Properties slateish() {
+        return BlockBehaviour.Properties
+            .of(Material.STONE, MaterialColor.DEEPSLATE)
             .sound(SoundType.DEEPSLATE_TILES)
-            .strength(4f, 4f)));
+            .strength(4f, 4f);
+    }
+
+    public static final RegistryObject<BlockSlate> SLATE = BLOCKS.register("slate",
+        () -> new BlockSlate(slateish()));
+    public static final RegistryObject<BlockRedirector> REDIRECTOR = BLOCKS.register("redirector",
+        () -> new BlockRedirector(slateish()));
+
+
     public static final RegistryObject<Block> EMPTY_IMPETUS = BLOCKS.register("empty_impetus",
-        () -> new Block(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
-            .sound(SoundType.DEEPSLATE_TILES)
-            .strength(4f, 4f)));
+        () -> new Block(slateish()));
     public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = BLOCKS.register(
         "impetus_rightclick",
-        () -> new BlockRightClickImpetus(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
-            .sound(SoundType.DEEPSLATE_TILES)
-            .strength(4f, 4f)
+        () -> new BlockRightClickImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
     // Decoration?!
     public static final RegistryObject<Block> SLATE_BLOCK = BLOCKS.register("slate_block",
-        () -> new Block(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.DEEPSLATE)
-            .sound(SoundType.DEEPSLATE_TILES)
-            .strength(2f, 4f)));
+        () -> new Block(slateish().strength(2f, 4f)));
 
     public static final RegistryObject<BlockEntityType<BlockEntityConjured>> CONJURED_TILE = BLOCK_ENTITIES.register(
         "conjured_tile",

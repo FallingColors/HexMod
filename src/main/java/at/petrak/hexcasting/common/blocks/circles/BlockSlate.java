@@ -33,13 +33,13 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<AttachFace> ATTACH_FACE = BlockStateProperties.ATTACH_FACE;
 
-    protected static final double THICKNESS = 1;
-    protected static final VoxelShape AABB_FLOOR = Block.box(0, 0, 0, 16, THICKNESS, 16);
-    protected static final VoxelShape AABB_CEILING = Block.box(0, 16 - THICKNESS, 0, 16, 16, 16);
-    protected static final VoxelShape AABB_EAST_WALL = Block.box(0, 0, 0, THICKNESS, 16, 16);
-    protected static final VoxelShape AABB_WEST_WALL = Block.box(16 - THICKNESS, 0, 0, 16, 16, 16);
-    protected static final VoxelShape AABB_SOUTH_WALL = Block.box(0, 0, 0, 16, 16, THICKNESS);
-    protected static final VoxelShape AABB_NORTH_WALL = Block.box(0, 0, 16 - THICKNESS, 16, 16, 16);
+    public static final double THICKNESS = 1;
+    public static final VoxelShape AABB_FLOOR = Block.box(0, 0, 0, 16, THICKNESS, 16);
+    public static final VoxelShape AABB_CEILING = Block.box(0, 16 - THICKNESS, 0, 16, 16, 16);
+    public static final VoxelShape AABB_EAST_WALL = Block.box(0, 0, 0, THICKNESS, 16, 16);
+    public static final VoxelShape AABB_WEST_WALL = Block.box(16 - THICKNESS, 0, 0, 16, 16, 16);
+    public static final VoxelShape AABB_SOUTH_WALL = Block.box(0, 0, 0, 16, 16, THICKNESS);
+    public static final VoxelShape AABB_NORTH_WALL = Block.box(0, 0, 16 - THICKNESS, 16, 16, 16);
 
     public BlockSlate(Properties p_53182_) {
         super(p_53182_);
@@ -73,7 +73,7 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     }
 
     @Override
-    public Direction normalDir(BlockPos pos, BlockState bs, Level world) {
+    public Direction normalDir(BlockPos pos, BlockState bs, Level world, int recursionLeft) {
         return switch (bs.getValue(ATTACH_FACE)) {
             case FLOOR -> Direction.UP;
             case CEILING -> Direction.DOWN;

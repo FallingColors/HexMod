@@ -364,6 +364,7 @@
   "hexcasting.page.slate.1": "$(item)Slate/$s are similar to $(l:items/scroll)$(item)Scroll/$s; I can copy a pattern to them and place them in the world to display the pattern.$(br2)However, I have read vague tales of grand assemblies of $(item)Slate/$s, used to cast great rituals more powerful than can be handled by a $(item)Staff/$.",
   "hexcasting.page.slate.2": "Perhaps this knowledge will be revealed to me with time. But for now, I suppose they make a quaint piece of decor.$(br2)At the least, they can be placed on any side of a block, unlike $(item)Scroll/$s.",
   "hexcasting.page.slate.3": "$(italic)This is the letter \"a.\" Learn it./$",
+  "hexcasting.page.slate.4": "I'm also aware of other types of $(item)Slate/$s, slates that do not contain patterns but seem to be inlaid with other ... strange ... oddities. It hurts my brain to think about them, as if my thoughts get bent around their designs, following their pathways, bending and wefting through their labyrinthine depths, through and through and through channeled through and processed and--$(br2)... I almost lost myself. Maybe I should postpone my studies of those.",
 
   "hexcasting.entry.hexcasting": "Hexcasting Items",
   "hexcasting.page.hexcasting.1": "Although the flexibility that casting _Hexes \"on the go\" with my $(l:items/staff)$(item)Staff/$ is quite helpful, it's a huge pain to have to wave it around repeatedly just to accomplish a common task. If I could save a common spell for later reuse, it would simplify things a lot-- and allow me to share my _Hexes with friends, too.",

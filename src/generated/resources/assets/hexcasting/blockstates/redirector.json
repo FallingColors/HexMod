@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "energized=false,facing=down": {
+      "model": "hexcasting:block/redirector_dim_down",
+      "uvlock": true
+    },
+    "energized=true,facing=down": {
+      "model": "hexcasting:block/redirector_lit_down",
+      "uvlock": true
+    },
+    "energized=false,facing=up": {
+      "model": "hexcasting:block/redirector_dim_up",
+      "uvlock": true
+    },
+    "energized=true,facing=up": {
+      "model": "hexcasting:block/redirector_lit_up",
+      "uvlock": true
+    },
+    "energized=false,facing=north": {
+      "model": "hexcasting:block/redirector_dim_north",
+      "uvlock": true
+    },
+    "energized=true,facing=north": {
+      "model": "hexcasting:block/redirector_lit_north",
+      "uvlock": true
+    },
+    "energized=false,facing=south": {
+      "model": "hexcasting:block/redirector_dim_south",
+      "uvlock": true
+    },
+    "energized=true,facing=south": {
+      "model": "hexcasting:block/redirector_lit_south",
+      "uvlock": true
+    },
+    "energized=false,facing=west": {
+      "model": "hexcasting:block/redirector_dim_west",
+      "uvlock": true
+    },
+    "energized=true,facing=west": {
+      "model": "hexcasting:block/redirector_lit_west",
+      "uvlock": true
+    },
+    "energized=false,facing=east": {
+      "model": "hexcasting:block/redirector_dim_east",
+      "uvlock": true
+    },
+    "energized=true,facing=east": {
+      "model": "hexcasting:block/redirector_lit_east",
+      "uvlock": true
+    }
+  }
+}
