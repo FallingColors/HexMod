@@ -19,17 +19,30 @@ public abstract class BlockCircleComponent extends Block {
         super(p_49795_);
     }
 
-    abstract public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, Level world);
+    /**
+     * Can this component get transferred to from a block coming in from that direction, with the given normal?
+     */
+    abstract public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos,
+        BlockState bs, Level world);
 
     abstract public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world);
 
     @Nullable
     abstract public HexPattern getPattern(BlockPos pos, BlockState bs, Level world);
 
-    abstract public Direction particleOutDir(BlockPos pos, BlockState bs, Level world);
+    /**
+     * Which direction points "up" or "out" for this block?
+     * This is used for {@link BlockCircleComponent#canEnterFromDirection(Direction, Direction, BlockPos, BlockState, Level)}
+     * as well as particles.
+     */
+    public Direction normalDir(BlockPos pos, BlockState bs, Level world) {
+        return normalDir(pos, bs, world, 16);
+    }
+
+    abstract public Direction normalDir(BlockPos pos, BlockState bs, Level world, int recursionLeft);
 
     /**
-     * How many blocks in the {@link BlockCircleComponent#particleOutDir(BlockPos, BlockState, Level)} from the center
+     * How many blocks in the {@link BlockCircleComponent#normalDir(BlockPos, BlockState, Level)} from the center
      * particles should be spawned in
      */
     abstract public float particleHeight(BlockPos pos, BlockState bs, Level world);

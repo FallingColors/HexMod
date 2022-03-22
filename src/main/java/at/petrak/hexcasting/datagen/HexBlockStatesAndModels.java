@@ -2,6 +2,7 @@ package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
@@ -16,7 +17,25 @@ public class HexBlockStatesAndModels extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        simpleBlock(HexBlocks.SLATE.get(), models().getExistingFile(modLoc("slate")));
+        var slateModel = models().getExistingFile(modLoc("slate"));
+        getVariantBuilder(HexBlocks.SLATE.get()).forAllStates(bs -> {
+            int rotationX = 0;
+            int rotationY = 0;
+            switch (bs.getValue(BlockSlate.ATTACH_FACE)) {
+                case CEILING -> rotationX = 180;
+                case WALL -> {
+                    rotationX = 90;
+                    rotationY = bs.getValue(BlockSlate.FACING).getOpposite().get2DDataValue() * 90;
+                }
+            }
+            return ConfiguredModel.builder()
+                .modelFile(slateModel)
+                .rotationX(rotationX)
+                .rotationY(rotationY)
+                .uvLock(true)
+                .build();
+        });
+
         var slateBlock = models().cubeAll("slate_block", modLoc("block/slate"));
         simpleBlock(HexBlocks.SLATE_BLOCK.get(), slateBlock);
         simpleBlockItem(HexBlocks.SLATE_BLOCK.get(), slateBlock);

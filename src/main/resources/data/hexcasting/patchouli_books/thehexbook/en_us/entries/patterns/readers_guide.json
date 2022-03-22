@@ -10,9 +10,7 @@
       "text": "hexcasting.page.readers_guide.1"
     },
     {
-      "type": "patchouli:spotlight",
-      "item": "hexcasting:scroll",
-      "link_recipe": true,
+      "type": "patchouli:text",
       "text": "hexcasting.page.readers_guide.2"
     },
     {

@@ -2,6 +2,8 @@
   "name": "item.hexcasting.book",
   "landing_text": "hexcasting.landing",
   "version": 1,
+  "show_progress": false,
+  "creative_tab": "hexcasting",
   "model": "hexcasting:patchouli_book",
   "book_texture": "patchouli:textures/gui/book_purple.png",
   "filler_texture": "hexcasting:textures/gui/patchi_filler.png",

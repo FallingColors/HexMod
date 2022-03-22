@@ -31,8 +31,9 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, Level world) {
-        return true;
+    public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos, BlockState bs,
+        Level world) {
+        return enterDir != bs.getValue(FACING).getOpposite();
     }
 
     @Override
@@ -46,11 +47,15 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     }
 
     @Override
-    public Direction particleOutDir(BlockPos pos, BlockState bs, Level world) {
+    public Direction normalDir(BlockPos pos, BlockState bs, Level world, int recursionLeft) {
+        if (recursionLeft <= 0) {
+            return Direction.UP;
+        }
+
         BlockPos neighborPos = pos.relative(bs.getValue(FACING));
         var neighbor = world.getBlockState(neighborPos);
-        if (neighbor.getBlock() instanceof BlockCircleComponent bcc && !(bcc instanceof BlockAbstractImpetus)) {
-            return bcc.particleOutDir(neighborPos, neighbor, world);
+        if (neighbor.getBlock() instanceof BlockCircleComponent bcc) {
+            return bcc.normalDir(neighborPos, neighbor, world);
         } else {
             // Who knows
             return Direction.UP;

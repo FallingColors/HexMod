@@ -58,7 +58,9 @@ public class HexItems {
         () -> new ItemScroll(props()));
 
     public static final RegistryObject<ItemFocus> FOCUS = ITEMS.register("focus",
-        () -> new ItemFocus(props()));
+        () -> new ItemFocus(unstackable()));
+    public static final RegistryObject<ItemAbacus> ABACUS = ITEMS.register("abacus",
+        () -> new ItemAbacus(unstackable()));
     public static final RegistryObject<ItemSpellbook> SPELLBOOK = ITEMS.register("spellbook",
         () -> new ItemSpellbook(unstackable()));
 
@@ -91,9 +93,6 @@ public class HexItems {
 
     public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register("uuid_colorizer",
         () -> new Item(unstackable()));
-
-    public static final RegistryObject<ItemAbacus> ABACUS = ITEMS.register("abacus",
-        () -> new ItemAbacus(unstackable()));
 
     // BUFF SANDVICH
     public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register("sub_sandwich",

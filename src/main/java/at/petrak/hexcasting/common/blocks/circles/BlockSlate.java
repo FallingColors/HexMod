@@ -15,8 +15,10 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -24,13 +26,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-// FACING is the direction the *bottom* of the pattern points
-// (or which way is "down")
+// When on the floor or ceiling FACING is the direction the *bottom* of the pattern points
+// (or which way is "down").
+// When on the wall FACING is the direction of the *front* of the block
 public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<AttachFace> ATTACH_FACE = BlockStateProperties.ATTACH_FACE;
 
     protected static final double THICKNESS = 1;
     protected static final VoxelShape AABB_FLOOR = Block.box(0, 0, 0, 16, THICKNESS, 16);
+    protected static final VoxelShape AABB_CEILING = Block.box(0, 16 - THICKNESS, 0, 16, 16, 16);
+    protected static final VoxelShape AABB_EAST_WALL = Block.box(0, 0, 0, THICKNESS, 16, 16);
+    protected static final VoxelShape AABB_WEST_WALL = Block.box(16 - THICKNESS, 0, 0, 16, 16, 16);
+    protected static final VoxelShape AABB_SOUTH_WALL = Block.box(0, 0, 0, 16, 16, THICKNESS);
+    protected static final VoxelShape AABB_NORTH_WALL = Block.box(0, 0, 16 - THICKNESS, 16, 16, 16);
 
     public BlockSlate(Properties p_53182_) {
         super(p_53182_);
@@ -39,13 +48,19 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, Level world) {
-        return enterDir != Direction.UP;
+    public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos, BlockState bs,
+        Level world) {
+        var thisNormal = this.normalDir(pos, bs, world);
+        return enterDir != thisNormal && normalDir == thisNormal;
     }
 
     @Override
     public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world) {
-        return EnumSet.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+        var allDirs = EnumSet.allOf(Direction.class);
+        var normal = this.normalDir(pos, bs, world);
+        allDirs.remove(normal);
+        allDirs.remove(normal.getOpposite());
+        return allDirs;
     }
 
     @Override
@@ -58,8 +73,12 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     }
 
     @Override
-    public Direction particleOutDir(BlockPos pos, BlockState bs, Level world) {
-        return Direction.UP;
+    public Direction normalDir(BlockPos pos, BlockState bs, Level world) {
+        return switch (bs.getValue(ATTACH_FACE)) {
+            case FLOOR -> Direction.UP;
+            case CEILING -> Direction.DOWN;
+            case WALL -> bs.getValue(FACING);
+        };
     }
 
     @Override
@@ -75,7 +94,17 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
 
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return AABB_FLOOR;
+        return switch (pState.getValue(ATTACH_FACE)) {
+            case FLOOR -> AABB_FLOOR;
+            case CEILING -> AABB_CEILING;
+            case WALL -> switch (pState.getValue(FACING)) {
+                case NORTH -> AABB_NORTH_WALL;
+                case EAST -> AABB_EAST_WALL;
+                case SOUTH -> AABB_SOUTH_WALL;
+                // NORTH; up and down don't happen (but we need branches for them)
+                default -> AABB_WEST_WALL;
+            };
+        };
     }
 
     @Override
@@ -86,25 +115,57 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING);
+        builder.add(FACING, ATTACH_FACE);
     }
 
     @Override
+    @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+        for (Direction direction : pContext.getNearestLookingDirections()) {
+            BlockState blockstate;
+            if (direction.getAxis() == Direction.Axis.Y) {
+                blockstate = this.defaultBlockState()
+                    .setValue(ATTACH_FACE, direction == Direction.UP ? AttachFace.CEILING : AttachFace.FLOOR)
+                    .setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+            } else {
+                blockstate = this.defaultBlockState()
+                    .setValue(ATTACH_FACE, AttachFace.WALL)
+                    .setValue(FACING, direction.getOpposite());
+            }
+
+            if (blockstate.canSurvive(pContext.getLevel(), pContext.getClickedPos())) {
+                return blockstate;
+            }
+        }
+
+        return null;
     }
 
-    // i do as the TorchBlock.java guides
+    // i do as the FaceAttachedHorizontalDirectionBlock.java guides
     @Override
     public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
-        return canSupportCenter(pLevel, pPos.below(), Direction.UP);
+        return canAttach(pLevel, pPos, getConnectedDirection(pState).getOpposite());
     }
 
     @Override
     public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel,
         BlockPos pCurrentPos, BlockPos pFacingPos) {
-        return pFacing == Direction.DOWN && !this.canSurvive(pState, pLevel,
-            pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel,
-            pCurrentPos, pFacingPos);
+        return getConnectedDirection(pState).getOpposite() == pFacing
+            && !pState.canSurvive(pLevel, pCurrentPos) ?
+            Blocks.AIR.defaultBlockState()
+            : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
+    }
+
+    public static boolean canAttach(LevelReader pReader, BlockPos pPos, Direction pDirection) {
+        BlockPos blockpos = pPos.relative(pDirection);
+        return pReader.getBlockState(blockpos).isFaceSturdy(pReader, blockpos, pDirection.getOpposite());
+    }
+
+    protected static Direction getConnectedDirection(BlockState pState) {
+        return switch (pState.getValue(ATTACH_FACE)) {
+            case CEILING -> Direction.DOWN;
+            case FLOOR -> Direction.UP;
+            default -> pState.getValue(FACING);
+        };
     }
 }

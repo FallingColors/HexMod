@@ -136,6 +136,7 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
             return;
         }
         // Awesome we know this block is OK
+        var thisNormal = cc.normalDir(this.nextBlock, bsHere, this.level);
         var possibleExits = cc.exitDirections(this.nextBlock, bsHere, this.level);
         BlockPos foundPos = null;
         for (var exit : possibleExits) {
@@ -147,7 +148,7 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
             var mightBeOkThere = closedLoop || !this.trackedBlocks.contains(neighborPos);
             if (mightBeOkThere
                 && blockThere.getBlock() instanceof BlockCircleComponent cc2
-                && cc2.canEnterFromDirection(exit, neighborPos, blockThere, this.level)) {
+                && cc2.canEnterFromDirection(exit, thisNormal, neighborPos, blockThere, this.level)) {
                 if (foundPos == null) {
                     foundPos = neighborPos;
                     this.foundAll |= closedLoop;
@@ -265,7 +266,7 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
 
         var bs = this.level.getBlockState(pos);
         if (bs.getBlock() instanceof BlockCircleComponent bcc) {
-            var outDir = bcc.particleOutDir(pos, bs, this.level);
+            var outDir = bcc.normalDir(pos, bs, this.level);
             var height = bcc.particleHeight(pos, bs, this.level);
             vecOutDir = new Vec3(outDir.step());
             vpos = Vec3.atCenterOf(pos).add(vecOutDir.scale(height));

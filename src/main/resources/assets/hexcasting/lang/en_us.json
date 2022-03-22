@@ -215,7 +215,7 @@
   "hexcasting.subtitles.spellcircle.fail": "Spell circle fizzles out",
   "hexcasting.subtitles.spellcircle.cast": "Spell circle casts",
 
-  "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.",
+  "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 
 
   "hexcasting.entry.basics": "Getting Started",
@@ -354,6 +354,16 @@
   "hexcasting.entry.spellbook": "Spellbook",
   "hexcasting.page.spellbook.1": "A $(item)Spellbook/$ is the culmination of my art-- it acts like an entire library of $(l:items/focus)$(item)Foci/$.$(br2)Each page can hold a single iota, and I can select the active page (the page that iotas are saved to and copied from) by sneak-scrolling while holding it, or simply holding it in my off-hand and scrolling while casting a _Hex.",
   "hexcasting.page.spellbook.2": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first.",
+
+  "hexcasting.entry.scroll": "Scrolls",
+  "hexcasting.page.scroll.1": "A $(item)Scroll/$ is a convenient method of sharing a pattern with others. I can copy a pattern onto one with $(l:patterns/meta#hexcasting:write)Scribe's Gambit/$, after which it will display in a tooltip.$(br2)I can also place them on the wall as decoration, like a Painting.",
+  "hexcasting.page.scroll.2": "In addition, I can also find so-called $(item)Ancient Scrolls/$ in the dungeons and strongholds of the world. These contain the stroke order of Great Spells, powerful magicks rumored to be too powerful for the hands and minds of mortals...$(br2)If those \"mortals\" couldn't cast them, I'm not sure they deserve to know them.",
+  "hexcasting.page.scroll.3": "$(italic)I write upon clean white parchment with a sharp quill and the blood of my students, divining their secrets./$",
+
+  "hexcasting.entry.slate": "Slates",
+  "hexcasting.page.slate.1": "$(item)Slate/$s are similar to $(l:items/scroll)$(item)Scroll/$s; I can copy a pattern to them and place them in the world to display the pattern.$(br2)However, I have read vague tales of grand assemblies of $(item)Slate/$s, used to cast great rituals more powerful than can be handled by a $(item)Staff/$.",
+  "hexcasting.page.slate.2": "Perhaps this knowledge will be revealed to me with time. But for now, I suppose they make a quaint piece of decor.$(br2)At the least, they can be placed on any side of a block, unlike $(item)Scroll/$s.",
+  "hexcasting.page.slate.3": "$(italic)This is the letter \"a.\" Learn it./$",
 
   "hexcasting.entry.hexcasting": "Hexcasting Items",
   "hexcasting.page.hexcasting.1": "Although the flexibility that casting _Hexes \"on the go\" with my $(l:items/staff)$(item)Staff/$ is quite helpful, it's a huge pain to have to wave it around repeatedly just to accomplish a common task. If I could save a common spell for later reuse, it would simplify things a lot-- and allow me to share my _Hexes with friends, too.",

@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.Nullable;
 
@@ -66,15 +67,26 @@ public class BlockEntitySlate extends ModBlockEntity {
 
             ps.pushPose();
 
-            // This puts the origin at the -X, +Y, -Z corner of the block, for some reason
-            ps.mulPose(new Quaternion(Vector3f.XN, Mth.HALF_PI, false));
-            // and now Z is up?
-            ps.translate(0.5, -0.5, 0);
-            // Now rotate it so we face the right direction
-            var quarters = (-bs.getValue(BlockSlate.FACING).get2DDataValue() + 2) % 4;
-            ps.mulPose(new Quaternion(Vector3f.ZP, Mth.HALF_PI * quarters, false));
+            ps.translate(0.5, 0.5, 0.5);
+            var attchFace = bs.getValue(BlockSlate.ATTACH_FACE);
+            if (attchFace == AttachFace.WALL) {
+                var quarters = (-bs.getValue(BlockSlate.FACING).get2DDataValue()) % 4;
+                ps.mulPose(new Quaternion(Vector3f.YP, Mth.HALF_PI * quarters, false));
+                ps.mulPose(new Quaternion(Vector3f.ZP, Mth.PI, false));
+            } else {
+                var neg = attchFace == AttachFace.FLOOR ? -1 : 1;
+                ps.mulPose(new Quaternion(
+                    Vector3f.XP,
+                    neg * Mth.HALF_PI,
+                    false));
+                var quarters = (bs.getValue(BlockSlate.FACING).get2DDataValue() + 2) % 4;
+                ps.mulPose(new Quaternion(Vector3f.ZP, neg * Mth.HALF_PI * quarters, false));
+            }
+
+            // and now Z is out?
+            ps.translate(0, 0, -0.5);
             ps.scale(1 / 16f, 1 / 16f, 1 / 16f);
-            ps.translate(0, 0, 1.1);
+            ps.translate(0, 0, 1.01);
 
             // yoink code from the pattern greeble
             // Do two passes: one with a random size to find a good COM and one with the real calculation

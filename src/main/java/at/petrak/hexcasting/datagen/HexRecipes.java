@@ -173,6 +173,14 @@ public class HexRecipes extends RecipeProvider {
             .pattern(" B ")
             .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
 
+        ShapedRecipeBuilder.shaped(HexItems.SCROLL.get())
+            .define('P', Items.PAPER)
+            .define('A', Items.AMETHYST_SHARD)
+            .pattern("  A")
+            .pattern("PP ")
+            .pattern("PP ")
+            .unlockedBy("has_item", has(Items.AMETHYST_SHARD)).save(recipes);
+
         ShapedRecipeBuilder.shaped(HexItems.Blocks.SLATE.get(), 6)
             .define('S', Items.DEEPSLATE)
             .define('A', HexItems.AMETHYST_DUST.get())

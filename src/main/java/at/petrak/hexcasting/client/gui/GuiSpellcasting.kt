@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.HexUtils.TAU
 import at.petrak.hexcasting.client.RenderLib
 import at.petrak.hexcasting.common.casting.ControllerInfo
+import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.HexMessages
@@ -309,7 +310,12 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     override fun isPauseScreen(): Boolean = false
 
     /** Distance between adjacent hex centers */
-    fun hexSize(): Float = this.width.toFloat() / 32.0f
+    fun hexSize(): Float {
+        val hasLens = Minecraft.getInstance().player!!
+            .getItemInHand(HexUtils.OtherHand(this.handOpenedWith)).`is`(HexItems.SCRYING_LENS.get())
+        return this.width.toFloat() / if (hasLens) 48.0f else 32.0f
+    }
+
     fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)
 
     fun coordToPx(coord: HexCoord) = RenderLib.coordToPx(coord, this.hexSize(), this.coordsOffset())
