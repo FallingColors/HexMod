@@ -1,68 +1,74 @@
 {
-    "name": "hexcasting.entry.consts",
-    "category": "hexcasting:patterns",
-    "icon": "minecraft:bedrock",
-    "sortnum": 3,
-    "advancement": "hexcasting:root",
-    "read_by_default": true,
-    "pages": [
+  "name": "hexcasting.entry.consts",
+  "category": "hexcasting:patterns",
+  "icon": "minecraft:bedrock",
+  "sortnum": 3,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "Axial Reflection +X/-X",
+      "input": "",
+      "output": "vector",
+      "text": "hexcasting.page.consts.1",
+      "patterns": [
         {
-            "type": "hexcasting:manual_pattern",
-            "header": "Axial Reflection +X/-X",
-            "input": "",
-            "output": "vector",
-            "text": "hexcasting.page.consts1",
-            "patterns": [{
-                "startdir": "NORTH_WEST",
-                "signature": "qqqqqea",
-                "q": -1,
-                "r": -1
-            }, {
-                "startdir": "NORTH_EAST",
-                "signature": "eeeeeqa",
-                "r": 1
-            }]
-        },
-        {
-            "type": "hexcasting:manual_pattern",
-            "header": "Axial Reflection +Y/-Y",
-            "input": "",
-            "output": "vector",
-            "text": "hexcasting.page.consts2",
-            "patterns": [{
-                "startdir": "NORTH_WEST",
-                "signature": "qqqqqew",
-                "q": -1,
-                "r": -1
-            }, {
-                "startdir": "NORTH_EAST",
-                "signature": "eeeeeqw",
-                "r": 1
-            }]
-        },
-        {
-            "type": "hexcasting:manual_pattern",
-            "header": "Axial Reflection +Z/-Z",
-            "input": "",
-            "output": "vector",
-            "text": "hexcasting.page.consts3",
-            "patterns": [{
-                "startdir": "NORTH_WEST",
-                "signature": "qqqqqed",
-                "q": -1,
-                "r": -1
-            }, {
-                "startdir": "NORTH_EAST",
-                "signature": "eeeeeqd",
-                "r": 1
-            }]
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:const/null",
-            "input": "",
-            "output": "influence",
-            "text": "hexcasting.page.consts4"
+          "startdir": "NORTH_WEST",
+          "signature": "qqqqqea",
+          "q": -1,
+          "r": -1
+        }, {
+          "startdir": "NORTH_EAST",
+          "signature": "eeeeeqa",
+          "r": 1
         }
-    ]
+      ]
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "Axial Reflection +Y/-Y",
+      "input": "",
+      "output": "vector",
+      "text": "hexcasting.page.consts.2",
+      "patterns": [
+        {
+          "startdir": "NORTH_WEST",
+          "signature": "qqqqqew",
+          "q": -1,
+          "r": -1
+        }, {
+          "startdir": "NORTH_EAST",
+          "signature": "eeeeeqw",
+          "r": 1
+        }
+      ]
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "Axial Reflection +Z/-Z",
+      "input": "",
+      "output": "vector",
+      "text": "hexcasting.page.consts.3",
+      "patterns": [
+        {
+          "startdir": "NORTH_WEST",
+          "signature": "qqqqqed",
+          "q": -1,
+          "r": -1
+        }, {
+          "startdir": "NORTH_EAST",
+          "signature": "eeeeeqd",
+          "r": 1
+        }
+      ]
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:const/null",
+      "input": "",
+      "output": "influence",
+      "text": "hexcasting.page.consts.4"
+    }
+  ]
 }

@@ -1,35 +1,35 @@
 {
-    "name": "hexcasting.entry.amethyst",
-    "icon": "minecraft:amethyst_shard",
-    "category": "hexcasting:items",
-    "priority": true,
-    "sortnum": 0,
-    "advancement": "hexcasting:root",
-    "pages": [
-        {
-            "type": "patchouli:spotlight",
-            "item": "hexcasting:amethyst_dust",
-            "anchor": "dust",
-            "link_recipe": true,
-            "text": "hexcasting.page.amethyst1"
-        },
-        {
-            "type": "patchouli:spotlight",
-            "item": "minecraft:amethyst_shard",
-            "anchor": "shard",
-            "link_recipe": true,
-            "text": "hexcasting.page.amethyst2"
-        },
-        {
-            "type": "patchouli:spotlight",
-            "item": "hexcasting:charged_amethyst",
-            "anchor": "charged",
-            "link_recipe": true,
-            "text": "hexcasting.page.amethyst3"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.amethyst4"
-        }
-    ]
+  "name": "hexcasting.entry.amethyst",
+  "icon": "minecraft:amethyst_shard",
+  "category": "hexcasting:items",
+  "priority": true,
+  "sortnum": 0,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "hexcasting:amethyst_dust",
+      "anchor": "dust",
+      "link_recipe": true,
+      "text": "hexcasting.page.amethyst.1"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "minecraft:amethyst_shard",
+      "anchor": "shard",
+      "link_recipe": true,
+      "text": "hexcasting.page.amethyst.2"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "hexcasting:charged_amethyst",
+      "anchor": "charged",
+      "link_recipe": true,
+      "text": "hexcasting.page.amethyst.3"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.amethyst.4"
+    }
+  ]
 }

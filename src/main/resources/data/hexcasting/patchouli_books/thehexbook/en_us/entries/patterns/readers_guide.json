@@ -7,21 +7,21 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.readers_guide1"
+      "text": "hexcasting.page.readers_guide.1"
     },
     {
       "type": "patchouli:spotlight",
       "item": "hexcasting:scroll",
       "link_recipe": true,
-      "text": "hexcasting.page.readers_guide2"
+      "text": "hexcasting.page.readers_guide.2"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.readers_guide3"
+      "text": "hexcasting.page.readers_guide.3"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.readers_guide4"
+      "text": "hexcasting.page.readers_guide.4"
     }
   ]
 }

@@ -1,49 +1,49 @@
 {
-    "name": "hexcasting.entry.stackmanip",
-    "category": "hexcasting:patterns",
-    "icon": "minecraft:piston",
-    "sortnum": 3,
-    "advancement": "hexcasting:root",
-    "read_by_default": true,
-    "pages": [
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:undo",
-            "anchor": "hexcasting:undo",
-            "input": "any",
-            "output": "",
-            "text": "hexcasting.page.stackmanip1"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:duplicate",
-            "anchor": "hexcasting:duplicate",
-            "input": "any",
-            "output": "any, any",
-            "text": "hexcasting.page.stackmanip2"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:swap",
-            "anchor": "hexcasting:swap",
-            "input": "any, any",
-            "output": "any, any",
-            "text": "hexcasting.page.stackmanip3"
-        },
-        {
-            "type": "patchouli:empty"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:fisherman",
-            "anchor": "hexcasting:fisherman",
-            "input": "num",
-            "output": "any",
-            "text": "hexcasting.page.stackmanip4"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.stackmanip5"
-        }
-    ]
+  "name": "hexcasting.entry.stackmanip",
+  "category": "hexcasting:patterns",
+  "icon": "minecraft:piston",
+  "sortnum": 4,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:undo",
+      "anchor": "hexcasting:undo",
+      "input": "any",
+      "output": "",
+      "text": "hexcasting.page.stackmanip1"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:duplicate",
+      "anchor": "hexcasting:duplicate",
+      "input": "any",
+      "output": "any, any",
+      "text": "hexcasting.page.stackmanip2"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:swap",
+      "anchor": "hexcasting:swap",
+      "input": "any, any",
+      "output": "any, any",
+      "text": "hexcasting.page.stackmanip3"
+    },
+    {
+      "type": "patchouli:empty"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:fisherman",
+      "anchor": "hexcasting:fisherman",
+      "input": "num",
+      "output": "any",
+      "text": "hexcasting.page.stackmanip4"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.stackmanip5"
+    }
+  ]
 }

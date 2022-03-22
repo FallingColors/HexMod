@@ -2,21 +2,21 @@
   "name": "hexcasting.entry.abacus",
   "category": "hexcasting:items",
   "icon": "hexcasting:abacus",
-  "sortnum": 3,
+  "sortnum": 2,
   "advancement": "hexcasting:root",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.abacus1"
+      "text": "hexcasting.page.abacus.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.abacus2"
+      "text": "hexcasting.page.abacus.2"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:abacus",
-      "text": "hexcasting.page.abacus3"
+      "text": "hexcasting.page.abacus.3"
     }
   ]
 }

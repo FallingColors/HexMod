@@ -1,55 +1,43 @@
 {
-    "name": "hexcasting.entry.patterns_as_iotas",
-    "category": "hexcasting:casting",
-    "icon": "minecraft:emerald",
-    "sortnum": 3,
-    "advancement": "hexcasting:root",
-    "pages": [
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.patterns_as_iotas1"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.patterns_as_iotas2"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:escape",
-            "anchor": "hexcasting:escape",
-            "text": "hexcasting.page.patterns_as_iotas3",
-            "patterns": {
-                "startdir": "WEST",
-                "signature": "qqqaw"
-            }
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.patterns_as_iotas4"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:open_paren",
-            "anchor": "hexcasting:open_paren",
-            "text": "hexcasting.page.patterns_as_iotas5",
-            "patterns": {
-                "startdir": "WEST",
-                "signature": "qqq"
-            }
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "hexcasting:close_paren",
-            "anchor": "hexcasting:close_paren",
-            "text": "hexcasting.page.patterns_as_iotas6",
-            "patterns": {
-                "startdir": "EAST",
-                "signature": "eee"
-            }
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.patterns_as_iotas7"
-        }
-    ]
+  "name": "hexcasting.entry.patterns_as_iotas",
+  "category": "hexcasting:casting",
+  "icon": "minecraft:emerald",
+  "sortnum": 3,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.2"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:escape",
+      "anchor": "hexcasting:escape",
+      "text": "hexcasting.page.patterns_as_iotas.3"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.4"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:open_paren",
+      "anchor": "hexcasting:open_paren",
+      "text": "hexcasting.page.patterns_as_iotas.5"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:close_paren",
+      "anchor": "hexcasting:close_paren",
+      "text": "hexcasting.page.patterns_as_iotas.6"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.7"
+    }
+  ]
 }

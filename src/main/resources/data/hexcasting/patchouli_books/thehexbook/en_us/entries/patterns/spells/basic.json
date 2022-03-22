@@ -12,11 +12,11 @@
       "anchor": "hexcasting:explode",
       "input": "vector, number",
       "output": "",
-      "text": "hexcasting.page.basic_spell1"
+      "text": "hexcasting.page.basic_spell.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.basic_spell2"
+      "text": "hexcasting.page.basic_spell.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -24,11 +24,11 @@
       "anchor": "hexcasting:explode/fire",
       "input": "vector, number",
       "output": "",
-      "text": "hexcasting.page.basic_spell3"
+      "text": "hexcasting.page.basic_spell.3"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.basic_spell4"
+      "text": "hexcasting.page.basic_spell.4"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:add_motion",
       "input": "entity, vector",
       "output": "",
-      "text": "hexcasting.page.basic_spell5"
+      "text": "hexcasting.page.basic_spell.5"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
       "anchor": "hexcasting:blink",
       "input": "entity, number",
       "output": "",
-      "text": "hexcasting.page.basic_spell6"
+      "text": "hexcasting.page.basic_spell.6"
     }
   ]
 }

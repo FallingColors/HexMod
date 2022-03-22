@@ -12,7 +12,7 @@
       "anchor": "hexcasting:get_caster",
       "input": "",
       "output": "entity",
-      "text": "hexcasting.page.basics_pattern1"
+      "text": "hexcasting.page.basics_pattern.1"
     },
     {
       "type": "hexcasting:pattern",
@@ -21,18 +21,7 @@
       "anchor": "OpEntityPos",
       "input": "entity",
       "output": "vector",
-      "text": "hexcasting.page.basics_pattern2",
-      "patterns": [
-        {
-          "startdir": "SOUTH_WEST",
-          "signature": "aa"
-        },
-        {
-          "startdir": "SOUTH_EAST",
-          "signature": "dd",
-          "q": 3
-        }
-      ]
+      "text": "hexcasting.page.basics_pattern.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -40,7 +29,7 @@
       "anchor": "hexcasting:get_entity_look",
       "input": "entity",
       "output": "vector",
-      "text": "hexcasting.page.basics_pattern3"
+      "text": "hexcasting.page.basics_pattern.3"
     },
     {
       "type": "hexcasting:pattern",
@@ -48,7 +37,7 @@
       "anchor": "hexcasting:print",
       "input": "any",
       "output": "any",
-      "text": "hexcasting.page.basics_pattern4"
+      "text": "hexcasting.page.basics_pattern.4"
     },
     {
       "type": "hexcasting:pattern",
@@ -56,11 +45,11 @@
       "anchor": "hexcasting:raycast",
       "input": "vector, vector",
       "output": "vector",
-      "text": "hexcasting.page.basics_pattern5"
+      "text": "hexcasting.page.basics_pattern.5"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.basics_pattern6"
+      "text": "hexcasting.page.basics_pattern.6"
     },
     {
       "type": "hexcasting:pattern",
@@ -68,11 +57,11 @@
       "anchor": "hexcasting:raycast/axis",
       "input": "vector, vector",
       "output": "vector",
-      "text": "hexcasting.page.basics_pattern7"
+      "text": "hexcasting.page.basics_pattern.7"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.basics_pattern8"
+      "text": "hexcasting.page.basics_pattern.8"
     },
     {
       "type": "hexcasting:pattern",
@@ -80,7 +69,7 @@
       "anchor": "hexcasting:raycast/entity",
       "input": "vector, vector",
       "output": "entity",
-      "text": "hexcasting.page.basics_pattern9"
+      "text": "hexcasting.page.basics_pattern.9"
     }
   ]
 }

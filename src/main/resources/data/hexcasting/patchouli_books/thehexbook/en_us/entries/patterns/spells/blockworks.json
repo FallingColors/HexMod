@@ -12,7 +12,7 @@
       "anchor": "hexcasting:place_block",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks1"
+      "text": "hexcasting.page.blockworks.1"
     },
     {
       "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
       "anchor": "hexcasting:break_block",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks2"
+      "text": "hexcasting.page.blockworks.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
       "anchor": "hexcasting:create_water",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks3"
+      "text": "hexcasting.page.blockworks.3"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:destroy_water",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks4"
+      "text": "hexcasting.page.blockworks.4"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
       "anchor": "hexcasting:conjure_block",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks5"
+      "text": "hexcasting.page.blockworks.5"
     },
     {
       "type": "hexcasting:pattern",
@@ -52,7 +52,7 @@
       "anchor": "hexcasting:conjure_light",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks6"
+      "text": "hexcasting.page.blockworks.6"
     },
     {
       "type": "hexcasting:pattern",
@@ -60,7 +60,7 @@
       "anchor": "hexcasting:bonemeal",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks7"
+      "text": "hexcasting.page.blockworks.7"
     },
     {
       "type": "hexcasting:pattern",
@@ -68,7 +68,7 @@
       "anchor": "hexcasting:ignite",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks8"
+      "text": "hexcasting.page.blockworks.8"
     },
     {
       "type": "hexcasting:pattern",
@@ -76,7 +76,7 @@
       "anchor": "hexcasting:extinguish",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks9"
+      "text": "hexcasting.page.blockworks.9"
     }
   ]
 }

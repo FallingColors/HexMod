@@ -8,12 +8,12 @@
   "pages": [
     {
       "type": "hexcasting:manual_pattern",
-      "header": "hexcasting.page.numbers1header",
+      "header": "hexcasting.page.numbers.1.header",
       "anchor": "Numbers",
       "input": "",
       "output": "number",
       "args": "-> number",
-      "text": "hexcasting.page.numbers1",
+      "text": "hexcasting.page.numbers.1",
       "patterns": [
         {
           "startdir": "SOUTH_EAST",
@@ -27,12 +27,12 @@
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.numbers2"
+      "text": "hexcasting.page.numbers.2"
     },
     {
       "type": "hexcasting:manual_pattern_nosig",
-      "header": "hexcasting.page.numbers3header",
-      "text": "hexcasting.page.numbers3",
+      "header": "hexcasting.page.numbers.3.header",
+      "text": "hexcasting.page.numbers.3",
       "patterns": {
         "startdir": "SOUTH_EAST",
         "signature": "aqaae"
@@ -40,8 +40,8 @@
     },
     {
       "type": "hexcasting:manual_pattern_nosig",
-      "header": "hexcasting.page.numbers4header",
-      "text": "hexcasting.page.numbers4",
+      "header": "hexcasting.page.numbers.4.header",
+      "text": "hexcasting.page.numbers.4",
       "patterns": {
         "startdir": "SOUTH_WEST",
         "signature": "aqaaqww"
@@ -49,8 +49,8 @@
     },
     {
       "type": "hexcasting:manual_pattern_nosig",
-      "header": "hexcasting.page.numbers5header",
-      "text": "hexcasting.page.numbers5",
+      "header": "hexcasting.page.numbers.5.header",
+      "text": "hexcasting.page.numbers.5",
       "patterns": {
         "startdir": "NORTH_EAST",
         "signature": "deddwqea"
@@ -58,8 +58,8 @@
     },
     {
       "type": "hexcasting:manual_pattern_nosig",
-      "header": "hexcasting.page.numbers6header",
-      "text": "hexcasting.page.numbers6",
+      "header": "hexcasting.page.numbers.6.header",
+      "text": "hexcasting.page.numbers.6",
       "patterns": {
         "startdir": "SOUTH_EAST",
         "signature": "aqaaqdww"
@@ -67,7 +67,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.numbers7"
+      "text": "hexcasting.page.numbers.7"
     }
   ]
 }

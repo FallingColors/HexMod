@@ -4,13 +4,13 @@ import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.common.ContributorList
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
-import at.petrak.hexcasting.common.casting.misc.Brainsweeping
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.HexCommands
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.HexStatistics
+import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.particles.HexParticles
 import at.petrak.hexcasting.common.recipe.HexCustomRecipes

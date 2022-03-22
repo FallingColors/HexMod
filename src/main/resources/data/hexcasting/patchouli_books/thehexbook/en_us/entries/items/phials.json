@@ -2,27 +2,27 @@
   "name": "hexcasting.entry.phials",
   "category": "hexcasting:items",
   "icon": "hexcasting:battery{mana:10000,max_mana:10000}",
-  "sortnum": 6,
+  "sortnum": 5,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.phials1"
+      "text": "hexcasting.page.phials.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.phials.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.phials.3"
     },
     {
       "type": "patchouli:spotlight",
-      "text": "hexcasting.page.phials2",
+      "text": "hexcasting.page.phials.4",
       "item": "hexcasting:battery{mana:10000,max_mana:10000}",
       "link_recipe": true
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.phials3"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.phials4"
     }
   ]
 }

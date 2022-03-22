@@ -7,20 +7,20 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.1011"
+      "text": "hexcasting.page.101.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.1012"
+      "text": "hexcasting.page.101.2"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.1013"
+      "text": "hexcasting.page.101.3"
     },
     {
       "type": "hexcasting:manual_pattern_nosig",
-      "header": "hexcasting.page.1014header",
-      "text": "hexcasting.page.1014",
+      "header": "hexcasting.page.101.4.header",
+      "text": "hexcasting.page.101.4",
       "patterns": [
         {
           "startdir": "NORTH_EAST",
@@ -35,49 +35,49 @@
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.1015"
+      "text": "hexcasting.page.101.5"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.1016"
+      "text": "hexcasting.page.101.6"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.1017"
+      "text": "hexcasting.page.101.7"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.1018"
+      "text": "hexcasting.page.101.8"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.1019"
+      "text": "hexcasting.page.101.9"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.10110"
+      "text": "hexcasting.page.101.10"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.10111"
+      "text": "hexcasting.page.101.11"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.10112"
+      "text": "hexcasting.page.101.12"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.10113"
+      "text": "hexcasting.page.101.13"
     },
     {
       "type": "patchouli:link",
-      "text": "hexcasting.page.10114",
-      "link_text": "hexcasting.page.10114_link_text",
+      "text": "hexcasting.page.101.14",
+      "link_text": "hexcasting.page.101.14.link_text",
       "url": "https://goblinpunch.blogspot.com/2014/05/a-digression-about-wizards.html"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.10115"
+      "text": "hexcasting.page.101.15"
     }
   ]
 }

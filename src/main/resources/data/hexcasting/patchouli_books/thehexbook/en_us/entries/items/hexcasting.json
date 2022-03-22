@@ -2,28 +2,28 @@
   "name": "hexcasting.entry.hexcasting",
   "category": "hexcasting:items",
   "icon": "hexcasting:artifact{patterns:[]}",
-  "sortnum": 5,
+  "sortnum": 4,
   "advancement": "hexcasting:root",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.hexcasting1"
+      "text": "hexcasting.page.hexcasting.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.hexcasting2"
+      "text": "hexcasting.page.hexcasting.2"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.hexcasting3"
+      "text": "hexcasting.page.hexcasting.3"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.hexcasting4"
+      "text": "hexcasting.page.hexcasting.4"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.hexcasting5"
+      "text": "hexcasting.page.hexcasting.5"
     },
     {
       "type": "patchouli:crafting",
@@ -35,7 +35,7 @@
       "type": "patchouli:crafting",
       "anchor": "artifact",
       "recipe": "hexcasting:artifact",
-      "text": "hexcasting.page.hexcasting6"
+      "text": "hexcasting.page.hexcasting.6"
     }
   ]
 }

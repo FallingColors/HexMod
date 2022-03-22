@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.great_spells",
   "icon": "minecraft:textures/mob_effect/conduit_power.png",
-  "description": "hexcasting.page.great_spells1",
+  "description": "hexcasting.entry.great_spells.desc",
   "parent": "hexcasting:patterns",
   "sortnum": 1
 }

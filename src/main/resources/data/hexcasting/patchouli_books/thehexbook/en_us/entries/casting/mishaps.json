@@ -1,18 +1,18 @@
 {
-    "name": "hexcasting.entry.mishaps",
-    "category": "hexcasting:casting",
-    "icon": "minecraft:textures/mob_effect/poison.png",
-    "priority": "true",
-    "sortnum": 2,
-    "advancement": "hexcasting:root",
-    "pages": [
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.mishaps1"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.mishaps2"
-        }
-    ]
+  "name": "hexcasting.entry.mishaps",
+  "category": "hexcasting:casting",
+  "icon": "minecraft:textures/mob_effect/poison.png",
+  "priority": "true",
+  "sortnum": 2,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.mishaps.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.mishaps.2"
+    }
+  ]
 }

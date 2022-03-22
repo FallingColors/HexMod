@@ -133,9 +133,9 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedwedade", HexDir.SOUTH_WEST),
                 prefix("destroy_water"),
                 OpDestroyWater.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddedwdwd", HexDir.EAST), prefix("ignite"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aaqawawa", HexDir.SOUTH_EAST), prefix("ignite"),
                 OpIgnite.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aaqawawa", HexDir.WEST), prefix("extinguish"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddedwdwd", HexDir.SOUTH_WEST), prefix("extinguish"),
                 OpExtinguish.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqa", HexDir.NORTH_EAST), prefix("conjure_block"),
                 new OpConjure(false));

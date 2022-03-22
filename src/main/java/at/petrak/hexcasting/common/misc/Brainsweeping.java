@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.misc;
+package at.petrak.hexcasting.common.misc;
 
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import net.minecraft.core.Direction;

@@ -12,11 +12,11 @@
       "anchor": "hexcasting:craft/battery",
       "input": "entity",
       "output": "",
-      "text": "hexcasting.page.make_battery1"
+      "text": "hexcasting.page.make_battery.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.make_battery2"
+      "text": "hexcasting.page.make_battery.2"
     }
   ]
 }

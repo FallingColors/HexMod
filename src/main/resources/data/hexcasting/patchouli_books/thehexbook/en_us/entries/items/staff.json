@@ -1,19 +1,19 @@
 {
-    "name": "hexcasting.entry.staff",
-    "icon": "hexcasting:wand",
-    "category": "hexcasting:items",
-    "priority": true,
-    "sortnum": 1,
-    "advancement": "hexcasting:root",
-    "pages": [
-        {
-            "type": "patchouli:text",
-            "text": "hexcasting.page.staff1"
-        },
-        {
-            "type": "patchouli:crafting",
-            "recipe": "hexcasting:wand",
-            "text": "hexcasting.page.staff2"
-        }
-    ]
+  "name": "hexcasting.entry.staff",
+  "icon": "hexcasting:wand",
+  "category": "hexcasting:items",
+  "priority": true,
+  "sortnum": 1,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.staff.1"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:wand",
+      "text": "hexcasting.page.staff.2"
+    }
+  ]
 }

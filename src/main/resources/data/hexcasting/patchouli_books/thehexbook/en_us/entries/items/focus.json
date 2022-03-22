@@ -2,25 +2,25 @@
   "name": "hexcasting.entry.focus",
   "icon": "hexcasting:focus",
   "category": "hexcasting:items",
-  "sortnum": 2,
+  "sortnum": 1,
   "advancement": "hexcasting:root",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.focus1"
+      "text": "hexcasting.page.focus.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.focus.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.focus.3"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:focus",
-      "text": "hexcasting.page.focus2"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.focus3"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.focus4"
+      "text": "hexcasting.page.focus.4"
     }
   ]
 }

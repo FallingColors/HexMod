@@ -1,6 +1,6 @@
 {
   "name": "hexcasting.entry.casting",
   "icon": "hexcasting:wand",
-  "description": "hexcasting.page.casting1",
+  "description": "hexcasting.entry.casting.desc",
   "sortnum": 1
 }

@@ -3,16 +3,20 @@
   "icon": "hexcasting:lens",
   "category": "hexcasting:items",
   "advancement": "hexcasting:root",
-  "sortnum": 1,
+  "sortnum": 0,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.lens1"
+      "text": "hexcasting.page.lens.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.lens.2"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:lens",
-      "text": "hexcasting.page.lens2"
+      "text": "hexcasting.page.lens.3"
     }
   ]
 }

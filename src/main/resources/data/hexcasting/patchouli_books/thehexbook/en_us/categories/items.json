@@ -1,6 +1,6 @@
 {
   "name": "hexcasting.entry.items",
   "icon": "hexcasting:focus",
-  "description": "hexcasting.page.items1",
+  "description": "hexcasting.entry.items.desc",
   "sortnum": 2
 }

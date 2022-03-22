@@ -12,7 +12,11 @@
       "anchor": "hexcasting:create_lava",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.create_lava1"
+      "text": "hexcasting.page.create_lava.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.create_lava.2"
     }
   ]
 }

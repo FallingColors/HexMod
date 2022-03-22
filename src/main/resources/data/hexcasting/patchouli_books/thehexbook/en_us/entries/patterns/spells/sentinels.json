@@ -8,11 +8,11 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.sentinels1"
+      "text": "hexcasting.page.sentinels.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.sentinels2"
+      "text": "hexcasting.page.sentinels.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
       "anchor": "hexcasting:sentinel/create",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.sentinels3"
+      "text": "hexcasting.page.sentinels.3"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
       "anchor": "hexcasting:sentinel/destroy",
       "input": "",
       "output": "",
-      "text": "hexcasting.page.sentinels4"
+      "text": "hexcasting.page.sentinels.4"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:sentinel/get_pos",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.sentinels5"
+      "text": "hexcasting.page.sentinels.5"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
       "anchor": "hexcasting:sentinel/wayfind",
       "input": "vector",
       "output": "vector",
-      "text": "hexcasting.page.sentinels6"
+      "text": "hexcasting.page.sentinels.6"
     }
   ]
 }

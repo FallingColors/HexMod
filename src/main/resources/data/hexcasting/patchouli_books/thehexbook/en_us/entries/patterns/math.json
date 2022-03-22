@@ -8,7 +8,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math1"
+      "text": "hexcasting.page.math.1"
     },
     {
       "type": "patchouli:empty"
@@ -19,11 +19,11 @@
       "anchor": "hexcasting:add",
       "input": "num/vec, num/vec",
       "output": "num/vec",
-      "text": "hexcasting.page.math2"
+      "text": "hexcasting.page.math.2"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math3"
+      "text": "hexcasting.page.math.3"
     },
     {
       "type": "hexcasting:pattern",
@@ -31,11 +31,11 @@
       "anchor": "hexcasting:sub",
       "input": "num/vec, num/vec",
       "output": "num/vec",
-      "text": "hexcasting.page.math4"
+      "text": "hexcasting.page.math.4"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math5"
+      "text": "hexcasting.page.math.5"
     },
     {
       "type": "hexcasting:pattern",
@@ -43,11 +43,11 @@
       "anchor": "hexcasting:mul_dot",
       "input": "num/vec, num/vec",
       "output": "num/vec",
-      "text": "hexcasting.page.math6"
+      "text": "hexcasting.page.math.6"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math7"
+      "text": "hexcasting.page.math.7"
     },
     {
       "type": "hexcasting:pattern",
@@ -55,11 +55,11 @@
       "anchor": "hexcasting:div_cross",
       "input": "num/vec, num/vec",
       "output": "num/vec",
-      "text": "hexcasting.page.math8"
+      "text": "hexcasting.page.math.8"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math9"
+      "text": "hexcasting.page.math.9"
     },
     {
       "type": "hexcasting:pattern",
@@ -67,11 +67,11 @@
       "anchor": "hexcasting:abs_len",
       "input": "num/vec",
       "output": "number",
-      "text": "hexcasting.page.math10"
+      "text": "hexcasting.page.math.10"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math11"
+      "text": "hexcasting.page.math.11"
     },
     {
       "type": "hexcasting:pattern",
@@ -79,11 +79,11 @@
       "anchor": "hexcasting:pow_proj",
       "input": "num/vec, num/vec",
       "output": "num/vec",
-      "text": "hexcasting.page.math12"
+      "text": "hexcasting.page.math.12"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math13"
+      "text": "hexcasting.page.math.13"
     },
     {
       "type": "hexcasting:pattern",
@@ -91,7 +91,7 @@
       "anchor": "hexcasting:construct_vec",
       "input": "num, num, num",
       "output": "vector",
-      "text": "hexcasting.page.math14"
+      "text": "hexcasting.page.math.14"
     },
     {
       "type": "hexcasting:pattern",
@@ -99,7 +99,7 @@
       "anchor": "hexcasting:deconstruct_vec",
       "input": "vector",
       "output": "num, num, num",
-      "text": "hexcasting.page.math15"
+      "text": "hexcasting.page.math.15"
     }
   ]
 }
