@@ -34,7 +34,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -104,8 +103,6 @@ public class RegisterClientStuff {
         renderLayers(ItemBlockRenderTypes::setRenderLayer);
 
         EntityRenderers.register(HexEntities.WALL_SCROLL.get(), WallScrollRenderer::new);
-        ForgeModelBakery.addSpecialModel(WallScrollRenderer.ANCIENT_MODEL);
-        ForgeModelBakery.addSpecialModel(WallScrollRenderer.PRISTINE_MODEL);
 
         addScryingLensStuff();
     }

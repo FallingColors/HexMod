@@ -13,6 +13,6 @@ public class HexEntities {
 
     public static final RegistryObject<EntityType<EntityWallScroll>> WALL_SCROLL = ENTITIES.register("wall_scroll",
         () -> EntityType.Builder.<EntityWallScroll>of(EntityWallScroll::new, MobCategory.MISC)
-            .sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE)
+            .sized(0.5f, 0.5f).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE)
             .build("wall_scroll"));
 }

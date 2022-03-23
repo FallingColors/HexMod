@@ -44,9 +44,9 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
         this.scroll = scroll;
 
         var tag = scroll.getTag();
-        if (tag != null) {
+        if (tag != null && tag.contains(ItemScroll.TAG_PATTERN)) {
             var pattern = HexPattern.DeserializeFromNBT(tag.getCompound(ItemScroll.TAG_PATTERN));
-            var pair = RenderLib.getCenteredPattern(pattern, 48, 48, 8f);
+            var pair = RenderLib.getCenteredPattern(pattern, 128, 128, 16f);
             var dots = pair.getSecond();
             this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f);
 
@@ -116,8 +116,7 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         this.direction = Direction.values()[tag.getByte("direction")];
-        var scroll = ItemStack.EMPTY.copy();
-        scroll.deserializeNBT(tag.getCompound("scroll"));
+        var scroll = ItemStack.of(tag.getCompound("scroll"));
         super.readAdditionalSaveData(tag);
         this.setDirection(this.direction);
         this.loadDataFromScrollItem(scroll);
