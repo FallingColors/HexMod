@@ -20,6 +20,7 @@ public class HexDataGenerators {
             gen.addProvider(new HexLootModifiers(gen));
             gen.addProvider(new HexAdvancements(gen, efh));
             gen.addProvider(new HexBlockTags(gen, efh));
+            gen.addProvider(new HexLootTables(gen));
         }
     }
 }

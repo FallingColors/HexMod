@@ -3,6 +3,7 @@
   "values": [
     "hexcasting:slate_block",
     "hexcasting:slate",
+    "hexcasting:empty_impetus",
     "hexcasting:impetus_rightclick"
   ]
 }

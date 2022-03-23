@@ -3,11 +3,13 @@ package at.petrak.hexcasting.client;
 import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.items.ItemScroll;
@@ -20,6 +22,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -31,6 +34,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -98,6 +102,10 @@ public class RegisterClientStuff {
         });
 
         renderLayers(ItemBlockRenderTypes::setRenderLayer);
+
+        EntityRenderers.register(HexEntities.WALL_SCROLL.get(), WallScrollRenderer::new);
+        ForgeModelBakery.addSpecialModel(WallScrollRenderer.ANCIENT_MODEL);
+        ForgeModelBakery.addSpecialModel(WallScrollRenderer.PRISTINE_MODEL);
 
         addScryingLensStuff();
     }

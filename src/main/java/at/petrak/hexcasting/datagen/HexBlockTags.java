@@ -19,6 +19,7 @@ public class HexBlockTags extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(HexBlocks.SLATE_BLOCK.get())
             .add(HexBlocks.SLATE.get())
+            .add(HexBlocks.EMPTY_IMPETUS.get())
             .add(HexBlocks.IMPETUS_RIGHTCLICK.get());
     }
 }

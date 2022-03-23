@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.client.gui.SQRT_3
 import at.petrak.hexcasting.hexmath.HexCoord
+import at.petrak.hexcasting.hexmath.HexPattern
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
@@ -20,6 +21,7 @@ import net.minecraft.world.level.levelgen.synth.PerlinNoise
 import net.minecraft.world.phys.Vec2
 import kotlin.math.absoluteValue
 import kotlin.math.floor
+import kotlin.math.min
 import kotlin.math.roundToInt
 import net.minecraft.util.FastColor.ARGB32 as FC
 
@@ -173,7 +175,7 @@ object RenderLib {
             return emptyList()
         }
         val mc = Minecraft.getInstance()
-        val zSeed = (mc.frameTime.toDouble() + mc.level!!.levelData.gameTime) * speed
+        val zSeed = (mc.frameTime.toDouble() + (mc.level?.levelData?.gameTime ?: 0)) * speed
         // Create our output list of zap points
         val zappyPts = mutableListOf(points[0])
         // For each segment in the original...
@@ -270,6 +272,33 @@ object RenderLib {
             screen(FC.green(n)),
             screen(FC.blue(n)),
         )
+    }
+
+    /**
+     * Return the scale and dots formed by the pattern when centered.
+     */
+    @JvmStatic
+    fun getCenteredPattern(pattern: HexPattern, width: Float, height: Float, minSize: Float): Pair<Float, List<Vec2>> {
+        // Do two passes: one with a random size to find a good COM and one with the real calculation
+        val com1: Vec2 = pattern.getCenter(1f)
+        val lines1: List<Vec2> = pattern.toLines(1f, Vec2.ZERO)
+        var maxDx = -1f
+        var maxDy = -1f
+        for (dot in lines1) {
+            val dx = Mth.abs(dot.x - com1.x)
+            if (dx > maxDx) {
+                maxDx = dx
+            }
+            val dy = Mth.abs(dot.y - com1.y)
+            if (dy > maxDy) {
+                maxDy = dy
+            }
+        }
+        val scale =
+            min(minSize, min(width / 3f / maxDx, height / 3f / maxDy))
+        val com2: Vec2 = pattern.getCenter(scale)
+        val lines2: List<Vec2> = pattern.toLines(scale, com2.negated())
+        return Pair(scale, lines2)
     }
 
     @JvmStatic

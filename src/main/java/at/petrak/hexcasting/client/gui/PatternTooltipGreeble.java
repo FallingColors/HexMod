@@ -12,7 +12,6 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.phys.Vec2;
 
@@ -40,28 +39,12 @@ public class PatternTooltipGreeble implements ClientTooltipComponent, TooltipCom
     public PatternTooltipGreeble(HexPattern pattern, ResourceLocation background) {
         this.pattern = pattern;
         this.background = background;
-        // Do two passes: one with a random size to find a good COM and one with the real calculation
-        var com1 = this.pattern.getCenter(1);
-        var lines1 = this.pattern.toLines(1, Vec2.ZERO);
 
-        var maxDx = -1f;
-        var maxDy = -1f;
-        for (var dot : lines1) {
-            var dx = Mth.abs(dot.x - com1.x);
-            if (dx > maxDx) {
-                maxDx = dx;
-            }
-            var dy = Mth.abs(dot.y - com1.y);
-            if (dy > maxDy) {
-                maxDy = dy;
-            }
-        }
-        this.scale = Math.min(8f, Math.min(SIZE / 3f / maxDx, SIZE / 3f / maxDy));
-
-        var com2 = this.pattern.getCenter(this.scale);
-        var lines2 = this.pattern.toLines(this.scale, com2.negated());
-        this.zappyPoints = RenderLib.makeZappy(lines2, 10f, 0.8f, 0f);
-        this.pathfinderDots = lines2.stream().distinct().collect(Collectors.toList());
+        var pair = RenderLib.getCenteredPattern(pattern, SIZE, SIZE, 8f);
+        this.scale = pair.getFirst();
+        var dots = pair.getSecond();
+        this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f);
+        this.pathfinderDots = dots.stream().distinct().collect(Collectors.toList());
     }
 
     @Override

@@ -104,6 +104,10 @@
   "hexcasting.spell.hexcasting:raycast": "Archer's Distillation",
   "hexcasting.spell.hexcasting:raycast/axis": "Architect's Distillation",
   "hexcasting.spell.hexcasting:raycast/entity": "Scout's Distillation",
+  "hexcasting.spell.hexcasting:circle/impetus_pos": "Waystone Reflection",
+  "hexcasting.spell.hexcasting:circle/impetus_dir": "Lodestone Reflection",
+  "hexcasting.spell.hexcasting:circle/bounds/min": "Lesser Fold Reflection",
+  "hexcasting.spell.hexcasting:circle/bounds/max": "Greater Fold Reflection",
   "hexcasting.spell.hexcasting:append": "Integration Distillation",
   "hexcasting.spell.hexcasting:concat": "Combination Distillation",
   "hexcasting.spell.hexcasting:index": "Selection Distillation",
@@ -523,6 +527,13 @@
   "hexcasting.page.meta.5": "Remove a list of patterns and a list from the stack, then cast the given pattern over each element of the second list.$(br)Costs about one $(item)Charged Amethyst/$.",
   "hexcasting.page.meta.6": "More specifically, for each element in the second list, it will:$(li)Create a new stack, with everything on the current stack plus that element$(li)Draw all the patterns in the first list$(li)Save all the iotas remaining on the stack to a list$(br)Then, after all is said and done, pushes the list of saved iotas onto the main stack.$(br2)No wonder all the practitioners of this art go mad.",
   "hexcasting.page.meta.7": "Like $(action)Scribe's Reflection/$, but the iota is read out of an item entity instead of my other hand.",
+
+  "hexcasting.entry.circle_patterns": "Spell Circle Patterns",
+  "hexcasting.page.circle_patterns.1": "These patterns must be cast from a $(item)Spell Circle/$; trying to cast them through a $(item)Staff/$ will fail.",
+  "hexcasting.page.circle_patterns.2": "Returns the position of the $(item)Impetus/$ of this spell circle.",
+  "hexcasting.page.circle_patterns.3": "Returns the direction the $(item)Impetus/$ of this spell circle is facing as a unit vector.",
+  "hexcasting.page.circle_patterns.4": "Returns the position of the lower-north-west corner of the bounds of this spell circle.",
+  "hexcasting.page.circle_patterns.5": "Returns the position of the upper-south-east corner of the bounds of this spell circle.",
 
   "_comment": "Normal Spells",
   

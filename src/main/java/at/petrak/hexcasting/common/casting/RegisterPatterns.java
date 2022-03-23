@@ -5,6 +5,9 @@ import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.Operator;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.casting.operators.*;
+import at.petrak.hexcasting.common.casting.operators.circles.OpCircleBounds;
+import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusDir;
+import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusPos;
 import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
 import at.petrak.hexcasting.common.casting.operators.eval.OpEvalDelay;
 import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
@@ -56,6 +59,17 @@ public class RegisterPatterns {
                 OpBlockAxisRaycast.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("weaqa", HexDir.EAST), prefix("raycast/entity"),
                 OpEntityRaycast.INSTANCE);
+
+            // == spell circle getters ==
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eaqwqae", HexDir.SOUTH_WEST),
+                prefix("circle/impetus_pos"), OpImpetusPos.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eaqwqaewede", HexDir.SOUTH_WEST),
+                prefix("circle/impetus_dir"), OpImpetusDir.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eaqwqaewdd", HexDir.SOUTH_WEST),
+                prefix("circle/bounds/min"), new OpCircleBounds(false));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqwqawaaqa", HexDir.WEST),
+                prefix("circle/bounds/max"), new OpCircleBounds(true));
 
             // == Modify Stack ==
 
