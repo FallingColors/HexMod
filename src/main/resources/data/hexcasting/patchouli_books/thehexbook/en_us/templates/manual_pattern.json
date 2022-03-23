@@ -15,9 +15,8 @@
       "type": "patchouli:custom",
       "class": "at.petrak.hexcasting.interop.patchouli.ManualPatternComponent",
       "x": 58,
-      "y": 50,
+      "y": 48,
       "patterns": "#patterns",
-      "hex_size": "#hex_size",
       "stroke_order": "#stroke_order"
     },
     {

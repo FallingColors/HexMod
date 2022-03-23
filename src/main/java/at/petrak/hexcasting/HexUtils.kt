@@ -4,6 +4,8 @@ import net.minecraft.nbt.LongArrayTag
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
+import kotlin.math.max
+import kotlin.math.min
 
 object HexUtils {
     @JvmStatic
@@ -35,6 +37,25 @@ object HexUtils {
 
     @JvmStatic
     fun FixNANs(x: Double): Double = if (x.isFinite()) x else 0.0
-    
+
+    @JvmStatic
+    fun FindCenter(points: List<Vec2>): Vec2 {
+        var minX = Float.POSITIVE_INFINITY
+        var minY = Float.POSITIVE_INFINITY
+        var maxX = Float.NEGATIVE_INFINITY
+        var maxY = Float.NEGATIVE_INFINITY
+
+        for (pos in points) {
+            minX = min(minX, pos.x)
+            minY = min(minY, pos.y)
+            maxX = max(maxX, pos.x)
+            maxY = max(maxY, pos.y)
+        }
+        return Vec2(
+            (minX + maxX) / 2f,
+            (minY + maxY) / 2f
+        )
+    }
+
     const val TAU = Math.PI * 2.0
 }

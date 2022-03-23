@@ -102,7 +102,12 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
          *
          * for fucks sake i need to just implement mishaps already
          */
-        RECIPE_DIDNT_WORK
+        RECIPE_DIDNT_WORK,
+
+        /**
+         * No spell circles??
+         */
+        NO_SPELL_CIRCLE,
     }
 
     override val message: String
@@ -120,5 +125,6 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
             Reason.BAD_OFFHAND_COUNT -> "operator expected ${this.data[0]} items in the offhand but got ${this.data[1]}"
             Reason.REQUIRES_INVENTORY -> "required an inventory at ${this.data[0] as BlockPos}"
             Reason.RECIPE_DIDNT_WORK -> "bad recipe"
+            Reason.NO_SPELL_CIRCLE -> "requires a spell circle to cast"
         }
 }

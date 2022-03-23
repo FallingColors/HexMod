@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube",
   "textures": {
-    "down": "hexcasting:block/impetus/rightclick/right_dim",
+    "down": "hexcasting:block/impetus/rightclick/left_dim",
     "up": "hexcasting:block/impetus/rightclick/left_dim",
     "north": "hexcasting:block/impetus/rightclick/right_dim",
     "south": "hexcasting:block/impetus/rightclick/left_dim",

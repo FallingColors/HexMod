@@ -1,0 +1,26 @@
+{
+  "name": "hexcasting.entry.brainsweeping",
+  "category": "hexcasting:greatwork",
+  "icon": "minecraft:wither_skeleton_skull",
+  "advancement": "hexcasting:enlightenment",
+  "entry_color": "54398a",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.brainsweeping.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.brainsweeping.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.brainsweeping.3"
+    },
+    {
+      "type": "hexcasting:brainsweep",
+      "recipe": "hexcasting:brainsweep/budding_amethyst",
+      "text": "hexcasting.page.brainsweeping.4"
+    }
+  ]
+}

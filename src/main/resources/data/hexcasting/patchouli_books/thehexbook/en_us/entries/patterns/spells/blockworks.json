@@ -78,5 +78,8 @@
       "output": "",
       "text": "hexcasting.page.blockworks.9"
     }
-  ]
+  ],
+  "extra_recipe_mappings": {
+    "hexcasting:conjured": 4
+  }
 }

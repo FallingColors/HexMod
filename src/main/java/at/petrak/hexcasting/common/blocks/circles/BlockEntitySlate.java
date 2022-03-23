@@ -93,14 +93,19 @@ public class BlockEntitySlate extends ModBlockEntity {
             var com1 = tile.pattern.getCenter(1);
             var lines1 = tile.pattern.toLines(1, Vec2.ZERO);
 
-            var maxDist = -1f;
+            var maxDx = -1f;
+            var maxDy = -1f;
             for (var dot : lines1) {
-                var dist = Mth.sqrt(dot.distanceToSqr(com1));
-                if (dist > maxDist) {
-                    maxDist = dist;
+                var dx = Mth.abs(dot.x - com1.x);
+                if (dx > maxDx) {
+                    maxDx = dx;
+                }
+                var dy = Mth.abs(dot.y - com1.y);
+                if (dy > maxDy) {
+                    maxDy = dy;
                 }
             }
-            var scale = Math.min(4, 16 / 2.5f / maxDist);
+            var scale = Math.min(3.8f, Math.min(16 / 2.5f / maxDx, 16 / 2.5f / maxDy));
 
             var com2 = tile.pattern.getCenter(scale);
             var lines2 = tile.pattern.toLines(scale, com2.negated());

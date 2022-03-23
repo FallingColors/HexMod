@@ -50,6 +50,10 @@
   "block.hexcasting.conjured": "Conjured Block",
   "block.hexcasting.slate.blank": "Blank Slate",
   "block.hexcasting.slate.written": "Patterned Slate",
+  "block.hexcasting.empty_impetus": "Empty Impetus",
+  "block.hexcasting.impetus_rightclick": "Actuator Impetus",
+  "block.hexcasting.slate_block": "Block of Slate",
+  
   "itemGroup.hexcasting": "Hexcasting",
 
   "hexcasting.tooltip.spellbook.page": "§7Selected Page §a§l%d§7/§a§l%d§r",
@@ -58,6 +62,11 @@
   "hexcasting.tooltip.abacus.reset.nice": "nice",
   "hexcasting.tooltip.lens.impetus.mana": "%s Dusts",
   "hexcasting.tooltip.lens.pattern.invalid": "Invalid Pattern",
+  "hexcasting.tooltip.brainsweep.profession": "Profession: %s",
+  "hexcasting.tooltip.brainsweep.profession.any": "Any Profession",
+  "hexcasting.tooltip.brainsweep.biome": "Biome: %s",
+  "hexcasting.tooltip.brainsweep.biome.any": "Any Biome",
+  "hexcasting.tooltip.brainsweep.min_level": "Level %d or higher",
   "hexcasting.spelldata.onitem": "§7Contains: §r%s",
   "hexcasting.spelldata.entity.whoknows": "An Entity (this should only show up if this was stored before the 0.5.0 update, use Scribe's Reflection, Scribe's Gambit to fix)",
 
@@ -391,8 +400,14 @@
   "_comment": "The Work",
 
   "hexcasting.entry.the_work": "The Work",
-  "hexcasting.page.the_work1": "I have seen so many things. Unspeakable things. Innumerable things. I could write three words and turn my mind inside-out and smear my brains across the shadowed walls of my skull to decay into fluff and nothing.",
-  "hexcasting.page.the_work2": "I have seen staccato-needle patterns and acid-etched schematics written on the inside of my eyelids. They smolder there-- they dance, they taunt, they $(italic)ache/$. I'm possessed by an intense $(italic)need/$ to draw them, create them. Form them. Liberate them from the gluey shackles of my mortal mind-- present them in their Glory to the world for all to see.$(p)All shall see.$(p)All will see.",
+  "hexcasting.page.the_work.1": "I have seen so many things. Unspeakable things. Innumerable things. I could write three words and turn my mind inside-out and smear my brains across the shadowed walls of my skull to decay into fluff and nothing.",
+  "hexcasting.page.the_work.2": "I have seen staccato-needle patterns and acid-etched schematics written on the inside of my eyelids. They smolder there-- they dance, they taunt, they $(italic)ache/$. I'm possessed by an intense $(italic)need/$ to draw them, create them. Form them. Liberate them from the gluey shackles of my mortal mind-- present them in their Glory to the world for all to see.$(p)All shall see.$(p)All will see.",
+
+  "hexcasting.entry.brainsweeping": "On the Flaying of Minds",
+  "hexcasting.page.brainsweeping.1": "A secret was revealed to me. I saw it. I cannot forget its horror. The idea skitters across my brain.$(br2)I belived-- oh, foolishly, I $(italic)believed --that _Media is the spare energy left over by thought. But now I $(italic)know/$ what it is: the energy $(italic)of/$ thought.",
+  "hexcasting.page.brainsweeping.2": "It is produced by thinking sentience and allows sentience to think. It is a knot tying that braids into its own string. The Entity I foolishly anthromorphized as Nature is simply a grand such tangle, or perhaps the set of all tangles, or ... if I think it hurts I have so many synapses and all of them can think pain at once ALL OF THEM CAN SEE$(br2)I am not holding on. My notes. Quickly.",
+  "hexcasting.page.brainsweeping.3": "The villagers of this world have enough consciousness left to be extracted. Place it into a block, warp it, change it. Intricate patterns caused by different patterns of thought, the abstract neural pathways of their jobs and lives mapped into the cold physic of solid atoms.$(br2)This is what $(l:patterns/great_spells/brainsweep)$(action)Flay Mind/$ does, the extraction. Target the villager entity and the destination block. Ten $(item)Charged Crystals/$ for this perversion of will.",
+  "hexcasting.page.brainsweeping.4": "And an application. For this flaying, any sort of villager will do, if it has developed enough. Other recipes require more specific types. NO MORE must I descend into the hellish earth for my _media.",
 
 
   "_comment": "Patterns",
@@ -590,5 +605,7 @@
   "hexcasting.page.greater_sentinel.2": "The stronger sentinel acts like the normal one I can summon without the use of a Great Spell, if a little more visually interesting. However, the range in which my spells can work is extended to a small region around my greater sentinel, about 16 blocks. In other words, no matter where in the world I am, I can interact with things around my sentinel (the mysterious forces of chunkloading notwithstanding).",
 
   "hexcasting.page.make_battery.1": "Infuse a bottle with _media to form a $(item)Phial./$",
-  "hexcasting.page.make_battery.2": "Similarly to the spells for $(l:patterns/spells/hexcasting)$(action)Crafting Hexcasting Items/$, I must hold a $(item)Glass Bottle/$ in my other hand, and provide the spell with a dropped stack of $(item)Amethyst/$. See $(l:items/phials)this page/$ for more information."
+  "hexcasting.page.make_battery.2": "Similarly to the spells for $(l:patterns/spells/hexcasting)$(action)Crafting Hexcasting Items/$, I must hold a $(item)Glass Bottle/$ in my other hand, and provide the spell with a dropped stack of $(item)Amethyst/$. See $(l:items/phials)this page/$ for more information.",
+
+  "hexcasting.page.brainsweep_spell.1": "I cannot make heads or tails of this spell... To be honest, I'm not sure I want to know what it does."
 }

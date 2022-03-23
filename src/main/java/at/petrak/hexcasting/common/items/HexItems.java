@@ -104,10 +104,11 @@ public class HexItems {
     }
 
     public static class Blocks {
+        public static final RegistryObject<BlockItem> CONJURED = ITEMS.register("conjured",
+            () -> new BlockItem(HexBlocks.CONJURED.get(), new Item.Properties()));
+
         public static final RegistryObject<ItemSlate> SLATE = ITEMS.register("slate",
             () -> new ItemSlate(HexBlocks.SLATE.get(), props()));
-        public static final RegistryObject<BlockItem> REDIRECTOR = ITEMS.register("redirector",
-            () -> new BlockItem(HexBlocks.REDIRECTOR.get(), props()));
 
         public static final RegistryObject<BlockItem> EMPTY_IMPETUS = ITEMS.register("empty_impetus",
             () -> new BlockItem(HexBlocks.EMPTY_IMPETUS.get(), props()));

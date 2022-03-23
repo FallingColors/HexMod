@@ -66,7 +66,7 @@ public record BrainsweepRecipe(
 
     @Override
     public ItemStack getResultItem() {
-        return ItemStack.EMPTY;
+        return ItemStack.EMPTY.copy();
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<BrainsweepRecipe> {

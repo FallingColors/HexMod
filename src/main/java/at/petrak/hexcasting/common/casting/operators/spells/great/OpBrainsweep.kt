@@ -23,8 +23,8 @@ object OpBrainsweep : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val pos = args.getChecked<Vec3>(0)
-        val sacrifice = args.getChecked<Villager>(1)
+        val sacrifice = args.getChecked<Villager>(0)
+        val pos = args.getChecked<Vec3>(1)
         ctx.assertVecInRange(pos)
         ctx.assertEntityInRange(sacrifice)
 

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.datagen;
 
+import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.advancement.OvercastTrigger;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
@@ -193,7 +194,7 @@ public class HexRecipes extends RecipeProvider {
             .pattern("S")
             .pattern("S")
             .unlockedBy("has_item", has(HexItems.Blocks.SLATE.get()))
-            .save(recipes, "slate_block_from_slates");
+            .save(recipes, modLoc("slate_block_from_slates"));
 
         ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK.get(), 8)
             .define('S', Blocks.DEEPSLATE)
@@ -213,13 +214,17 @@ public class HexRecipes extends RecipeProvider {
             new VillagerIngredient(new ResourceLocation("toolsmith"), null, 1),
             HexBlocks.IMPETUS_RIGHTCLICK.get().defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
-            .save(recipes);
+            .save(recipes, modLoc("brainsweep/impetus_rightclick"));
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 5),
             Blocks.BUDDING_AMETHYST.defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
-            .save(recipes);
+            .save(recipes, modLoc("brainsweep/budding_amethyst"));
+    }
+
+    private ResourceLocation modLoc(String path) {
+        return new ResourceLocation(HexMod.MOD_ID, path);
     }
 
     protected void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {

@@ -1,14 +1,15 @@
 package at.petrak.hexcasting.interop.patchouli;
 
+import at.petrak.hexcasting.HexUtils;
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.hexmath.HexCoord;
 import at.petrak.hexcasting.hexmath.HexPattern;
-import com.google.gson.annotations.SerializedName;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
@@ -24,9 +25,6 @@ import java.util.stream.Collectors;
  * Page that has a hex pattern on it
  */
 abstract public class AbstractPatternComponent implements ICustomComponent {
-    @SerializedName("hex_size")
-    public String hexSizeRaw;
-
     protected transient int x, y;
     protected transient float hexSize;
 
@@ -89,36 +87,60 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
 
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
-        this.hexSize = lookup.apply(IVariable.wrap(hexSizeRaw)).asNumber(10f).floatValue();
-
         var patterns = this.getPatterns(lookup);
         this.patterns = new ArrayList<>(patterns.size());
 
         // Center the whole thing so the center of all pieces is in the center.
-        var comAcc = new Vec2(0, 0);
-        var pointsCount = 0;
-        var seenPoints = new HashSet<HexCoord>();
+        // As per PatternTooltipGreeble, we start with a random scale, then re-scale it once we know the COM.
+        var fakeScale = 1;
+        var seenFakePoints = new ArrayList<Vec2>();
+        var seenCoords = new HashSet<HexCoord>();
         for (var pair : patterns) {
             var pattern = pair.getFirst();
             var origin = pair.getSecond();
             for (var pos : pattern.positions(origin)) {
-                comAcc = comAcc.add(RenderLib.coordToPx(pos, this.hexSize, Vec2.ZERO));
-                pointsCount++;
+                var px = RenderLib.coordToPx(pos, fakeScale, Vec2.ZERO);
+                seenFakePoints.add(px);
             }
+
+            // And while we're looping add the (COORD ONLY) things internally
             this.patterns.add(new PatternEntryInternal(pattern, origin, new ArrayList<>()));
-            seenPoints.addAll(pattern.positions(origin));
+            seenCoords.addAll(pattern.positions(origin));
         }
+        var fakeCom = HexUtils.FindCenter(seenFakePoints);
 
-        var comOffset = comAcc.scale(1f / pointsCount).negated();
+        var maxDx = -1f;
+        var maxDy = -1f;
+        for (var dot : seenFakePoints) {
+            var dx = Mth.abs(dot.x - fakeCom.x);
+            if (dx > maxDx) {
+                maxDx = dx;
+            }
+            var dy = Mth.abs(dot.y - fakeCom.y);
+            if (dy > maxDy) {
+                maxDy = dy;
+            }
+        }
+        this.hexSize = Math.min(12, Math.min(120 / 2.5f / maxDx, 70 / 2.5f / maxDy));
 
+        var seenRealPoints = new ArrayList<Vec2>();
         for (var pat : this.patterns) {
-            var localOrigin = RenderLib.coordToPx(pat.origin, this.hexSize, comOffset);
+            for (var pos : pat.pattern.positions(pat.origin)) {
+                var px = RenderLib.coordToPx(pos, this.hexSize, Vec2.ZERO);
+                seenRealPoints.add(px);
+            }
+        }
+        var realCom = HexUtils.FindCenter(seenRealPoints);
+
+        // and NOW for real!
+        for (var pat : this.patterns) {
+            var localOrigin = RenderLib.coordToPx(pat.origin, this.hexSize, realCom.negated());
             var points = pat.pattern.toLines(this.hexSize, localOrigin);
             pat.zappyPoints.addAll(RenderLib.makeZappy(points, 10f, 0.8f, 0f));
         }
 
-        this.pathfinderDots = seenPoints.stream()
-            .map(coord -> RenderLib.coordToPx(coord, this.hexSize, comOffset))
+        this.pathfinderDots = seenCoords.stream()
+            .map(coord -> RenderLib.coordToPx(coord, this.hexSize, realCom.negated()))
             .collect(Collectors.toList());
     }
 

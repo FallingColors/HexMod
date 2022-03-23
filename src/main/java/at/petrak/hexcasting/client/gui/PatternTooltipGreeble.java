@@ -44,15 +44,19 @@ public class PatternTooltipGreeble implements ClientTooltipComponent, TooltipCom
         var com1 = this.pattern.getCenter(1);
         var lines1 = this.pattern.toLines(1, Vec2.ZERO);
 
-
-        var maxDist = -1f;
+        var maxDx = -1f;
+        var maxDy = -1f;
         for (var dot : lines1) {
-            var dist = Mth.sqrt(dot.distanceToSqr(com1));
-            if (dist > maxDist) {
-                maxDist = dist;
+            var dx = Mth.abs(dot.x - com1.x);
+            if (dx > maxDx) {
+                maxDx = dx;
+            }
+            var dy = Mth.abs(dot.y - com1.y);
+            if (dy > maxDy) {
+                maxDy = dy;
             }
         }
-        this.scale = Math.min(10, this.getHeight() / 2.5f / maxDist);
+        this.scale = Math.min(8f, Math.min(SIZE / 3f / maxDx, SIZE / 3f / maxDy));
 
         var com2 = this.pattern.getCenter(this.scale);
         var lines2 = this.pattern.toLines(this.scale, com2.negated());

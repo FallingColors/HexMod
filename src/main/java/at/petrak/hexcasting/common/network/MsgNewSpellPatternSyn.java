@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.network;
 
+import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
 import at.petrak.hexcasting.common.items.ItemWand;
 import at.petrak.hexcasting.common.lib.HexSounds;
@@ -33,15 +34,15 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
         buf.writeNbt(this.pattern.serializeToNBT());
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer sender = ctx.get().getSender();
+    public void handle(Supplier<NetworkEvent.Context> networkCtx) {
+        networkCtx.get().enqueueWork(() -> {
+            ServerPlayer sender = networkCtx.get().getSender();
             if (sender != null) {
                 var held = sender.getItemInHand(this.handUsed);
                 if (held.getItem() instanceof ItemWand) {
+                    var ctx = new CastingContext(sender, this.handUsed);
                     var tag = held.getOrCreateTag();
-                    var harness = CastingHarness.DeserializeFromNBT(tag.getCompound(ItemWand.TAG_HARNESS), sender,
-                        this.handUsed);
+                    var harness = CastingHarness.DeserializeFromNBT(tag.getCompound(ItemWand.TAG_HARNESS), ctx);
 
                     var clientInfo = harness.executeNewPattern(this.pattern, sender.getLevel());
 
@@ -66,7 +67,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 }
             }
         });
-        ctx.get().setPacketHandled(true);
+        networkCtx.get().setPacketHandled(true);
     }
 
 }

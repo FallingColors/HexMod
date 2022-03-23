@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
-import at.petrak.hexcasting.common.blocks.circles.BlockRedirector;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClickImpetus;
@@ -41,12 +41,9 @@ public class HexBlocks {
 
     public static final RegistryObject<BlockSlate> SLATE = BLOCKS.register("slate",
         () -> new BlockSlate(slateish()));
-    public static final RegistryObject<BlockRedirector> REDIRECTOR = BLOCKS.register("redirector",
-        () -> new BlockRedirector(slateish()));
 
-
-    public static final RegistryObject<Block> EMPTY_IMPETUS = BLOCKS.register("empty_impetus",
-        () -> new Block(slateish()));
+    public static final RegistryObject<BlockEmptyImpetus> EMPTY_IMPETUS = BLOCKS.register("empty_impetus",
+        () -> new BlockEmptyImpetus(slateish()));
     public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = BLOCKS.register(
         "impetus_rightclick",
         () -> new BlockRightClickImpetus(slateish()

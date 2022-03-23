@@ -1,12 +1,11 @@
 package at.petrak.hexcasting.hexmath
 
+import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.client.RenderLib
 import net.minecraft.nbt.ByteArrayTag
 import net.minecraft.nbt.ByteTag
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.phys.Vec2
-import kotlin.math.max
-import kotlin.math.min
 
 /**
  * Sequence of angles to define a pattern traced.
@@ -94,24 +93,9 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
      */
     @JvmOverloads
     fun getCenter(hexRadius: Float, origin: HexCoord = HexCoord.Origin): Vec2 {
-        var minX = Float.POSITIVE_INFINITY
-        var minY = Float.POSITIVE_INFINITY
-        var maxX = Float.NEGATIVE_INFINITY
-        var maxY = Float.NEGATIVE_INFINITY
-
-        val poses = this.positions()
-        val vecOrigin = RenderLib.coordToPx(origin, hexRadius, Vec2.ZERO)
-        for (pos in poses) {
-            val px = RenderLib.coordToPx(pos, hexRadius, vecOrigin)
-            minX = min(minX, px.x)
-            minY = min(minY, px.y)
-            maxX = max(maxX, px.x)
-            maxY = max(maxY, px.y)
-        }
-        return Vec2(
-            (minX + maxX) / 2f,
-            (minY + maxY) / 2f
-        )
+        val originPx = RenderLib.coordToPx(origin, hexRadius, Vec2.ZERO)
+        val points = this.toLines(hexRadius, originPx)
+        return HexUtils.FindCenter(points)
     }
 
 

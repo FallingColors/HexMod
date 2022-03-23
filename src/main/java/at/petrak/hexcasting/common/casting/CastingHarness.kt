@@ -19,8 +19,6 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec3
 import kotlin.math.min
 
@@ -339,10 +337,6 @@ class CastingHarness private constructor(
             out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serialize())
         }
 
-        if (this.ctx.spellCircle != null) {
-            out.put(TAG_SPELL_CIRCLE, this.ctx.spellCircle.serializeToNBT())
-        }
-
         return out
     }
 
@@ -353,21 +347,11 @@ class CastingHarness private constructor(
         const val TAG_PARENTHESIZED = "parenthesized"
         const val TAG_ESCAPE_NEXT = "escape_next"
         const val TAG_PREPACKAGED_COLORIZER = "prepackaged_colorizer"
-        const val TAG_SPELL_CIRCLE = "spell_circle"
 
         @JvmStatic
-        fun DeserializeFromNBT(nbt: Tag?, caster: ServerPlayer, wandHand: InteractionHand): CastingHarness {
-
+        fun DeserializeFromNBT(nbt: Tag, ctx: CastingContext): CastingHarness {
             return try {
                 val nbt = nbt as CompoundTag
-
-                val spellCircleContext = if (nbt.contains(TAG_SPELL_CIRCLE)) {
-                    SpellCircleContext.DeserializeFromNBT(nbt.getCompound(TAG_SPELL_CIRCLE))
-                } else {
-                    null
-                }
-
-                val ctx = CastingContext(caster, wandHand, spellCircleContext)
 
                 val stack = mutableListOf<SpellDatum<*>>()
                 val stackTag = nbt.getList(TAG_STACK, Tag.TAG_COMPOUND.toInt())
@@ -394,7 +378,7 @@ class CastingHarness private constructor(
                 CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx, colorizer)
             } catch (exn: Exception) {
                 HexMod.LOGGER.warn("Couldn't load harness from nbt tag, falling back to default: $nbt: $exn")
-                CastingHarness(CastingContext(caster, wandHand))
+                CastingHarness(ctx)
             }
         }
     }
