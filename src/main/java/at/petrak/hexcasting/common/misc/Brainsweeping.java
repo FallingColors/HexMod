@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.common.misc;
 
 import at.petrak.hexcasting.common.lib.HexCapabilities;
+import at.petrak.hexcasting.mixin.AccessorLivingEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -31,13 +33,28 @@ public class Brainsweeping {
         }
     }
 
+    public static boolean isBrainswept(Villager villager) {
+        var maybeCap = villager.getCapability(HexCapabilities.BRAINSWEPT).resolve();
+        return maybeCap.map(cap -> cap.brainswept).orElse(false);
+    }
+
+    public static void brainsweep(Villager villager) {
+        var maybeCap = villager.getCapability(HexCapabilities.BRAINSWEPT).resolve();
+        maybeCap.ifPresent(cap -> {
+            cap.brainswept = true;
+
+            var brain = villager.getBrain();
+            if (villager.level instanceof ServerLevel slevel) {
+                brain.stopAll(slevel, villager);
+            }
+            ((AccessorLivingEntity) villager).hex$SetBrain(brain.copyWithoutBehaviors());
+        });
+    }
+
     @SubscribeEvent
     public static void tradeWithVillager(PlayerInteractEvent.EntityInteract evt) {
-        if (evt.getTarget() instanceof Villager v) {
-            var maybeCap = v.getCapability(HexCapabilities.BRAINSWEPT).resolve();
-            if (maybeCap.isPresent() && maybeCap.get().brainswept) {
-                evt.setCanceled(true);
-            }
+        if (evt.getTarget() instanceof Villager v && isBrainswept(v)) {
+            evt.setCanceled(true);
         }
     }
 }

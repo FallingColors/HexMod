@@ -217,7 +217,7 @@ public class HexRecipes extends RecipeProvider {
             .save(recipes, modLoc("brainsweep/impetus_rightclick"));
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
-            new VillagerIngredient(null, null, 5),
+            new VillagerIngredient(null, null, 2),
             Blocks.BUDDING_AMETHYST.defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/budding_amethyst"));

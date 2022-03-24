@@ -93,6 +93,9 @@
   "command.hexcasting.pats.all": "Gave you all %d scrolls",
   "command.hexcasting.pats.specific.success": "Gave you %s with id %s",
   "command.hexcasting.recalc": "Recalculated patterns",
+  "command.hexcasting.brainsweep": "Brainswept %s",
+  "command.hexcasting.brainsweep.fail.badtype": "%s is not a villager",
+  "command.hexcasting.brainsweep.fail.already": "%s is already empty",
   "hexcasting.pattern.unknown": "Unknown pattern resource location %s",
 
   "hexcasting.message.cant_overcast": "That Hex needed more media than I had... I should double-check my math.",

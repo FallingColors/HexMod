@@ -9,5 +9,6 @@ public class HexCommands {
         var dp = evt.getDispatcher();
         ListPatsCommand.register(dp);
         RecalcPatternsCommand.register(dp);
+        BrainsweepCommand.register(dp);
     }
 }
