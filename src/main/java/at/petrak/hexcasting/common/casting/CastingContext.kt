@@ -81,13 +81,6 @@ data class CastingContext(
     }
 
     fun isVecInRange(vec: Vec3): Boolean {
-        if (this.spellCircle != null) {
-            return this.spellCircle.aabb.contains(vec)
-        }
-
-        if (vec.distanceToSqr(this.caster.position()) < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
-            return true
-
         val maybeSentinel = this.caster.getCapability(HexCapabilities.SENTINEL).resolve()
         if (maybeSentinel.isPresent) {
             val sentinel = maybeSentinel.get()
@@ -98,6 +91,13 @@ data class CastingContext(
                 return true
         }
 
+        if (this.spellCircle != null) {
+            return this.spellCircle.aabb.contains(vec)
+        }
+
+        if (vec.distanceToSqr(this.caster.position()) < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
+            return true
+        
         return false
     }
 
