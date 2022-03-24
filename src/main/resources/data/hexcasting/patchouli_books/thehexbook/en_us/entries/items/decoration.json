@@ -1,0 +1,18 @@
+{
+  "name": "hexcasting.entry.decoration",
+  "icon": "hexcasting:slate_block",
+  "category": "hexcasting:items",
+  "sortnum": 9,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.decoration.1"
+    },
+    {
+      "type": "patchouli:recipe",
+      "recipe": "hexcasting:slate_block",
+      "recipe2": "hexcasting:slate_block_from_slates"
+    }
+  ]
+}

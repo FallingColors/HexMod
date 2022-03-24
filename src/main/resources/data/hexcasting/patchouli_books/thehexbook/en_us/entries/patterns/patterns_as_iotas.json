@@ -1,9 +1,10 @@
 {
   "name": "hexcasting.entry.patterns_as_iotas",
-  "category": "hexcasting:casting",
+  "category": "hexcasting:patterns",
   "icon": "minecraft:emerald",
-  "sortnum": 3,
+  "sortnum": 8,
   "advancement": "hexcasting:root",
+  "read_by_default": true,
   "pages": [
     {
       "type": "patchouli:text",

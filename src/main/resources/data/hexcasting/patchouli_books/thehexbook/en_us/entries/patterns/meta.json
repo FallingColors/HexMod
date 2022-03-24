@@ -2,37 +2,21 @@
   "name": "hexcasting.entry.meta",
   "category": "hexcasting:patterns",
   "icon": "minecraft:shulker_box",
-  "sortnum": 8,
+  "sortnum": 10,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:write",
-      "anchor": "hexcasting:write",
-      "input": "any",
-      "output": "",
-      "text": "hexcasting.page.meta.1"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:read",
-      "anchor": "hexcasting:read",
-      "input": "",
-      "output": "any",
-      "text": "hexcasting.page.meta.2"
-    },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:eval",
       "anchor": "hexcasting:eval",
       "input": "list of patterns",
       "output": "many",
-      "text": "hexcasting.page.meta.3"
+      "text": "hexcasting.page.meta.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.meta.4"
+      "text": "hexcasting.page.meta.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -40,19 +24,11 @@
       "anchor": "hexcasting:for_each",
       "input": "list of patterns, list",
       "output": "many",
-      "text": "hexcasting.page.meta.5"
+      "text": "hexcasting.page.meta.3"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.meta.6"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:read/entity",
-      "anchor": "hexcasting:read/entity",
-      "input": "entity",
-      "output": "any",
-      "text": "hexcasting.page.meta.7"
+      "text": "hexcasting.page.meta.4"
     }
   ]
 }
