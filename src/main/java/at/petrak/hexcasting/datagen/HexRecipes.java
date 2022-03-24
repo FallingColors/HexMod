@@ -210,6 +210,17 @@ public class HexRecipes extends RecipeProvider {
             MinMaxBounds.Doubles.atLeast(17.95),
             MinMaxBounds.Doubles.between(0.1, 2.05));
 
+        ShapedRecipeBuilder.shaped(HexBlocks.EMPTY_IMPETUS.get())
+            .define('B', Items.IRON_BARS)
+            .define('A', HexItems.CHARGED_AMETHYST.get())
+            .define('S', HexBlocks.SLATE_BLOCK.get())
+            .define('P', Items.PURPUR_BLOCK)
+            .pattern("PSS")
+            .pattern("BAB")
+            .pattern("SSP")
+            .unlockedBy("enlightenment", enlightenment).save(recipes);
+
+
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
             new VillagerIngredient(new ResourceLocation("toolsmith"), null, 1),
             HexBlocks.IMPETUS_RIGHTCLICK.get().defaultBlockState())

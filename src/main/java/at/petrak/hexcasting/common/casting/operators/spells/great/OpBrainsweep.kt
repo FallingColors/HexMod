@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import net.minecraft.core.BlockPos
@@ -28,11 +28,8 @@ object OpBrainsweep : SpellOperator {
         ctx.assertVecInRange(pos)
         ctx.assertEntityInRange(sacrifice)
 
-        val maybeCap = sacrifice.getCapability(HexCapabilities.BRAINSWEPT)
-        maybeCap.ifPresent {
-            if (it.brainswept)
-                throw CastException(CastException.Reason.RECIPE_DIDNT_WORK)
-        }
+        if (Brainsweeping.isBrainswept(sacrifice))
+            throw CastException(CastException.Reason.RECIPE_DIDNT_WORK)
 
         val bpos = BlockPos(pos)
         val state = ctx.world.getBlockState(bpos)
@@ -45,18 +42,14 @@ object OpBrainsweep : SpellOperator {
         return Triple(
             Spell(bpos, sacrifice, recipe),
             1_000_000,
-            listOf(ParticleSpray.Cloud(sacrifice.position(), 1.0), ParticleSpray.Burst(Vec3.atCenterOf(bpos), 0.5, 50))
+            listOf(ParticleSpray.Cloud(sacrifice.position(), 1.0), ParticleSpray.Burst(Vec3.atCenterOf(bpos), 0.3, 100))
         )
     }
 
     private data class Spell(val pos: BlockPos, val sacrifice: Villager, val recipe: BrainsweepRecipe) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             ctx.world.setBlockAndUpdate(pos, recipe.result)
-
-            val maybeCap = sacrifice.getCapability(HexCapabilities.BRAINSWEPT)
-            maybeCap.ifPresent {
-                it.brainswept = true
-            }
+            Brainsweeping.brainsweep(sacrifice)
 
             ctx.world.playSound(null, sacrifice, SoundEvents.VILLAGER_DEATH, SoundSource.AMBIENT, 0.8f, 1f)
             ctx.world.playSound(null, sacrifice, SoundEvents.PLAYER_LEVELUP, SoundSource.AMBIENT, 0.5f, 0.8f)

@@ -5,7 +5,7 @@
     "block": "minecraft:amethyst_block"
   },
   "villagerIn": {
-    "minLevel": 5
+    "minLevel": 2
   },
   "result": {
     "name": "minecraft:budding_amethyst"

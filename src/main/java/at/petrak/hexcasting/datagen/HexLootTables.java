@@ -85,10 +85,4 @@ public class HexLootTables extends LootTableProvider {
             }
         });
     }
-
-    @Override
-    public String getName() {
-        return "Flint LootTables";
-    }
-
 }

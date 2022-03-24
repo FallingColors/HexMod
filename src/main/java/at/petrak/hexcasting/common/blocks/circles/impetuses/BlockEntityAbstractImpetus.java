@@ -316,7 +316,11 @@ public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implemen
     }
 
     protected int getTickSpeed() {
-        return 8;
+        if (this.trackedBlocks == null) {
+            return 10;
+        } else {
+            return Math.max(4, 10 - trackedBlocks.size() / 2);
+        }
     }
 
     protected int semitoneFromScale(int note) {

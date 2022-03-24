@@ -3,6 +3,7 @@
   "category": "hexcasting:greatwork",
   "icon": "minecraft:wither_skeleton_skull",
   "advancement": "hexcasting:enlightenment",
+  "sortnum": 0,
   "entry_color": "54398a",
   "pages": [
     {

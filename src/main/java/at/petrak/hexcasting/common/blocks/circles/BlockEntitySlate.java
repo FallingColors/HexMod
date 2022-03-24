@@ -121,7 +121,7 @@ public class BlockEntitySlate extends ModBlockEntity {
             int outer = isLit ? 0xff_64c8ff : 0xff_d2c8c8;
             int inner = isLit ? RenderLib.screenCol(outer) : 0xc8_322b33;
             RenderLib.drawLineSeq(ps.last().pose(), zappy, 1f, 0f, outer, outer);
-            RenderLib.drawLineSeq(ps.last().pose(), zappy, 0.4f, 0.1f, inner, inner);
+            RenderLib.drawLineSeq(ps.last().pose(), zappy, 0.4f, 0.01f, inner, inner);
 
             ps.popPose();
             RenderSystem.setShader(() -> oldShader);

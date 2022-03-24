@@ -51,7 +51,7 @@
   "block.hexcasting.slate.blank": "Blank Slate",
   "block.hexcasting.slate.written": "Patterned Slate",
   "block.hexcasting.empty_impetus": "Empty Impetus",
-  "block.hexcasting.impetus_rightclick": "Actuator Impetus",
+  "block.hexcasting.impetus_rightclick": "Toolsmith Impetus",
   "block.hexcasting.slate_block": "Block of Slate",
   
   "itemGroup.hexcasting": "Hexcasting",
@@ -416,6 +416,23 @@
   "hexcasting.page.brainsweeping.3": "The villagers of this world have enough consciousness left to be extracted. Place it into a block, warp it, change it. Intricate patterns caused by different patterns of thought, the abstract neural pathways of their jobs and lives mapped into the cold physic of solid atoms.$(br2)This is what $(l:patterns/great_spells/brainsweep)$(action)Flay Mind/$ does, the extraction. Target the villager entity and the destination block. Ten $(item)Charged Crystals/$ for this perversion of will.",
   "hexcasting.page.brainsweeping.4": "And an application. For this flaying, any sort of villager will do, if it has developed enough. Other recipes require more specific types. NO MORE must I descend into the hellish earth for my _media.",
 
+  "hexcasting.entry.spellcircles": "Spell Circles",
+  "hexcasting.page.spellcircles.1": "I KNOW what the $(item)slates/$ are for. The grand assemblies lost to time. The patterns scribed on them can be actuated in sequence, automatically. Thought and power ricocheting through, one by one by one by one by one by through and through and THROUGH AND -- I must not I must not I should know better than to think that way.",
+  "hexcasting.page.spellcircles.2": "To start the ritual I need an $(item)Impetus/$ to create a self-sustaining wave of _media. That wave travels along a track of $(item)slate/$s or other blocks suitable for the energies, one by one, collecting any patterns it finds. Once the wave circles back around to the $(item)Impetus/$, all the patterns encountered are cast in order.$(br2)The direction the _media exits any given block MUST be unambiguous, or the casting will fail at the block with too many neighbors.",
+  "hexcasting.page.spellcircles.3": "As a result, the outline of the spell \"circle\" may be any closed shape, concave or convex, and it may face any direction. In fact, with the application of certain other blocks it is possible to make a spell circle that spans all three dimensions. I doubt such an oddity has very much use, but I must allocate myself a bit of vapid levity to encourage my crude mind to continue my work.",
+  "hexcasting.page.spellcircles.4": "Miracle of miracles, the circle will withdraw _media neither from my inventory nor my mind. Instead, crystallized shards of _media must be provided to the $(item)Impetus/$ via hopper, or other such artifice.$(br2)The application of a $(item)Scrying Lens/$ will show how much _media is inside an $(item)Impetus/$, in units of dust.",
+  "hexcasting.page.spellcircles.5": "However, a spell cast from a circle does have one major limitation: it is unable to affect anything outside of the circle's bounds. That is, it cannot interact with anything outside of the cuboid of minimum size which encloses every block composing it (so a concave spell circle can still affect things in the concavity).",
+  "hexcasting.page.spellcircles.6": "There is also a limit on the number of blocks the wave can travel through before it disintegrates, but it is large enough I doubt I will have any trouble.$(br2)Conversely, there are some actions that can only be cast from a circle. Fortunately, none of them are spells; they all seem to deal with components of the circle itself. My notes on the subject are $(l:patterns/circle)here/$.",
+  "hexcasting.page.spellcircles.7": "I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.$(br2)The patterns there would have been executed counter-clockwise, starting with $(action)Mind's Reflection/$ and ending with $(action)Greater Teleport/$.",
+"hexcasting.page.spellcircles.8.title": "Teleportation Circle",
+
+  "hexcasting.entry.impetus": "Impetuses",
+  "hexcasting.page.impetus.1": "The fluctuation of _media required to actuate a spell circle is complex. Even the mortal with sharpest eyes and steadiest hands could not serve as an $(item)Impetus/$ and weave _media into the self-sustaining ourobouros required.$(br2)The problem is that the mind is too full of other useless $(italics)garbage/$.",
+  "hexcasting.page.impetus.2": "At a ... metaphysical level-- I must be careful with these thoughts, I cannot lose myself, I have become too valuable --moving _media moves the mind, and the mind must be moved for the process to work. But, the mind is simply too $(italic)heavy/$ with other thoughts to move nimbly enough.$(br2)It is like an artisan trying to repair a watch while wearing mittens.",
+  "hexcasting.page.impetus.3": "There are several solutions to this conundrum: through meditative techniques one can learn to blank the mind, although I am not certain a mind free enough to actuate a circle can concentrate hard enough to do the motions.$(br2)Certain unsavory compounds can create a similar effect, but I know nothing of them and do not plan to learn. I must not rely on the chemicals of my brain.",
+  "hexcasting.page.impetus.4": "The solution I aim for, then, is to specialize a mind. Remove it from the tyranny of nerves, clip all outputs but delicate splays of _media-manipulating apparati, cauterize all inputs but the signal to start its work.$(br2)The process of $(action)mindflaying/$ I am now familiar with will do excellently; the mind of a villager is complex enough to do the work, but not so complex as to resist its reformation.",
+  "hexcasting.page.impetus.5": "First, the cradle. Although it does not work as an $(item)Impetus/$, the flow of _media in a circle will only exit out the side pointed to by the arrows. This allows me to change the plane in which the wave flows, for example.",
+  "hexcasting.page.impetus.6": "Then, to transpose the mind. Villagers of different professions will lend different actuation conditions to the resulting $(item)Impetus/$. A Toolsmith's activates on a simple $(k:use).",
 
   "_comment": "Patterns",
   

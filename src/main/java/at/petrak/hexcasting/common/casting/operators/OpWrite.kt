@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate
+import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemDataHolder
@@ -18,8 +19,34 @@ object OpWrite : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+        val handStack = ctx.caster.getItemInHand(ctx.otherHand)
+        val handItem = handStack.item
+        val tag = handStack.orCreateTag
+        val datum = args[0]
+
+        val canWrite = if (handItem is ItemDataHolder) {
+            true
+        } else if (datum.payload is HexPattern) {
+            if (handStack.`is`(HexItems.SCROLL.get()) && !tag.contains(ItemScroll.TAG_PATTERN)) {
+                true
+            } else if (handStack.`is`(HexItems.Blocks.SLATE.get())) {
+                val hasBET = tag.contains("BlockEntityTag")
+                if (hasBET) {
+                    tag.getCompound("BlockEntityTag").contains(BlockEntitySlate.TAG_PATTERN)
+                } else {
+                    true
+                }
+            } else {
+                false
+            }
+        } else {
+            false
+        }
+        if (!canWrite)
+            throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemDataHolder::class.java, handStack)
+
         return Triple(
-            Spell(args[0]),
+            Spell(datum),
             0,
             listOf()
         )

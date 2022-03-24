@@ -65,8 +65,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
                 }
                 // Villager.java:677
                 // jesus christ the things i do for this mod
-                var probablyTheKeyForTheName = "entity." + (!"minecraft".equals(
-                    profession.getNamespace()) ? profession.getNamespace() + '.' : "") + profession.getPath();
+                var probablyTheKeyForTheName = "entity.minecraft.villager." + profession.getPath();
                 var out = I18n.get("hexcasting.tooltip.brainsweep.profession", I18n.get(probablyTheKeyForTheName));
                 return IVariable.wrap(out);
             }
