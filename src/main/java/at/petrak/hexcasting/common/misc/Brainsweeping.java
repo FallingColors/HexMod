@@ -9,6 +9,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.entity.living.LivingConversionEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -56,5 +57,10 @@ public class Brainsweeping {
         if (evt.getTarget() instanceof Villager v && isBrainswept(v)) {
             evt.setCanceled(true);
         }
+    }
+
+    @SubscribeEvent
+    public static void copyBrainsweepToZombie(LivingConversionEvent evt) {
+        
     }
 }

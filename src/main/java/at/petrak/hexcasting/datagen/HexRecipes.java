@@ -12,16 +12,14 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.SpecialRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
@@ -203,6 +201,63 @@ public class HexRecipes extends RecipeProvider {
             .pattern("SAS")
             .pattern("SSS")
             .unlockedBy("has_item", has(HexItems.SLATE.get())).save(recipes);
+
+        ShapedRecipeBuilder.shaped(HexBlocks.AMETHYST_DUST_BLOCK.get())
+            .define('A', HexItems.AMETHYST_DUST.get())
+            .pattern("AA")
+            .pattern("AA")
+            .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
+        ShapelessRecipeBuilder.shapeless(HexItems.AMETHYST_DUST.get(), 4)
+            .requires(HexBlocks.AMETHYST_DUST_BLOCK.get())
+            .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get()))
+            .save(recipes, modLoc("amethyst_dust_unpacking"));
+
+        ShapedRecipeBuilder.shaped(HexBlocks.AMETHYST_TILES.get(), 8)
+            .define('A', Blocks.AMETHYST_BLOCK)
+            .define('D', HexItems.AMETHYST_DUST.get())
+            .pattern("AAA")
+            .pattern("ADA")
+            .pattern("AAA")
+            .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.AMETHYST_BLOCK), HexBlocks.AMETHYST_TILES.get())
+            .unlockedBy("has_item", has(Blocks.AMETHYST_BLOCK))
+            .save(recipes, modLoc("stonecutting/amethyst_tiles"));
+
+        ShapedRecipeBuilder.shaped(HexBlocks.SCROLL_PAPER.get(), 8)
+            .define('P', Items.PAPER)
+            .define('A', Items.AMETHYST_SHARD)
+            .pattern("PPP")
+            .pattern("PAP")
+            .pattern("PPP")
+            .unlockedBy("has_item", has(Items.AMETHYST_SHARD)).save(recipes);
+        ShapelessRecipeBuilder.shapeless(HexBlocks.ANCIENT_SCROLL_PAPER.get(), 8)
+            .requires(Tags.Items.DYES_BROWN)
+            .requires(HexBlocks.SCROLL_PAPER.get(), 8)
+            .unlockedBy("has_item", has(HexBlocks.SCROLL_PAPER.get())).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.SCROLL_PAPER_LANTERN.get())
+            .define('P', HexBlocks.SCROLL_PAPER.get())
+            .define('T', Items.TORCH)
+            .pattern("P")
+            .pattern("T")
+            .unlockedBy("has_item", has(HexBlocks.SCROLL_PAPER.get())).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get())
+            .define('P', HexBlocks.ANCIENT_SCROLL_PAPER.get())
+            .define('T', Items.TORCH)
+            .pattern("P")
+            .pattern("T")
+            .unlockedBy("has_item", has(HexBlocks.ANCIENT_SCROLL_PAPER.get())).save(recipes);
+        ShapelessRecipeBuilder.shapeless(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(), 8)
+            .requires(Tags.Items.DYES_BROWN)
+            .requires(HexBlocks.SCROLL_PAPER_LANTERN.get(), 8)
+            .unlockedBy("has_item", has(HexBlocks.SCROLL_PAPER_LANTERN.get()))
+            .save(recipes, modLoc("ageing_scroll_paper_lantern"));
+
+        ShapedRecipeBuilder.shaped(HexBlocks.SCONCE.get(), 4)
+            .define('A', HexItems.CHARGED_AMETHYST.get())
+            .define('C', Tags.Items.INGOTS_COPPER)
+            .pattern("A")
+            .pattern("C")
+            .unlockedBy("has_item", has(HexItems.CHARGED_AMETHYST.get())).save(recipes);
 
         var enlightenment = new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
             MinMaxBounds.Ints.ANY,

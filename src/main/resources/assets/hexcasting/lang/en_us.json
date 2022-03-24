@@ -47,12 +47,21 @@
   "item.hexcasting.pride_colorizer_12": "Intersex Pigment",
   "item.hexcasting.pride_colorizer_13": "Aroace Pigment",
   "item.hexcasting.uuid_colorizer": "Soulglimmer Pigment",
+  
   "block.hexcasting.conjured": "Conjured Block",
   "block.hexcasting.slate.blank": "Blank Slate",
   "block.hexcasting.slate.written": "Patterned Slate",
   "block.hexcasting.empty_impetus": "Empty Impetus",
   "block.hexcasting.impetus_rightclick": "Toolsmith Impetus",
+ 
   "block.hexcasting.slate_block": "Block of Slate",
+  "block.hexcasting.amethyst_dust_block": "Block of Amethyst Dust",
+  "block.hexcasting.amethyst_tiles": "Amethyst Tiles",
+  "block.hexcasting.scroll_paper": "Scroll Paper",
+  "block.hexcasting.ancient_scroll_paper": "Ancient Scroll Paper",
+  "block.hexcasting.scroll_paper_lantern": "Paper Lantern",
+  "block.hexcasting.ancient_scroll_paper_lantern": "Ancient Paper Lantern",
+  "block.hexcasting.amethyst_sconce": "Amethyst Sconce",
   
   "itemGroup.hexcasting": "Hexcasting",
 
@@ -396,7 +405,9 @@
 
   "hexcasting.entry.decoration": "Decorative Blocks",
   "hexcasting.page.decoration.1": "In the course of my studies I have discovered some building blocks and trifles that I may find aesthetically pleasing. I've compiled the methods of making them here.",
-  "hexcasting.page.decoration.3": "",
+  "hexcasting.page.decoration.2": "Brown dye works well enough to simulate the look of an ancient scroll.",
+  "hexcasting.page.decoration.3": "$(item)Amethyst Tile/$s can also be made in a Stonecutter.$(br2)$(item)Blocks of Amethyst Dust/$ (next page) will fall like sand.",
+  "hexcasting.page.decoration.4": "$(item)Amethyst Sconce/$s emit light and particles, as well as a pleasing chiming sound.",
 
 
   "_comment": "The Work",
