@@ -182,7 +182,7 @@ public class HexRecipes extends RecipeProvider {
             .pattern("PP ")
             .unlockedBy("has_item", has(Items.AMETHYST_SHARD)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.Blocks.SLATE.get(), 6)
+        ShapedRecipeBuilder.shaped(HexItems.SLATE.get(), 6)
             .define('S', Items.DEEPSLATE)
             .define('A', HexItems.AMETHYST_DUST.get())
             .pattern(" A ")
@@ -190,10 +190,10 @@ public class HexRecipes extends RecipeProvider {
             .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK.get())
-            .define('S', HexItems.Blocks.SLATE.get())
+            .define('S', HexItems.SLATE.get())
             .pattern("S")
             .pattern("S")
-            .unlockedBy("has_item", has(HexItems.Blocks.SLATE.get()))
+            .unlockedBy("has_item", has(HexItems.SLATE.get()))
             .save(recipes, modLoc("slate_block_from_slates"));
 
         ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK.get(), 8)
@@ -202,7 +202,7 @@ public class HexRecipes extends RecipeProvider {
             .pattern("SSS")
             .pattern("SAS")
             .pattern("SSS")
-            .unlockedBy("has_item", has(HexItems.Blocks.SLATE.get())).save(recipes);
+            .unlockedBy("has_item", has(HexItems.SLATE.get())).save(recipes);
 
         var enlightenment = new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
             MinMaxBounds.Ints.ANY,

@@ -10,7 +10,10 @@ import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -98,26 +101,8 @@ public class HexItems {
     public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register("sub_sandwich",
         () -> new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
 
-    static {
-        // Force it to reify all the statics inside
-        new Blocks();
-    }
-
-    public static class Blocks {
-        public static final RegistryObject<BlockItem> CONJURED = ITEMS.register("conjured",
-            () -> new BlockItem(HexBlocks.CONJURED.get(), new Item.Properties()));
-
-        public static final RegistryObject<ItemSlate> SLATE = ITEMS.register("slate",
-            () -> new ItemSlate(HexBlocks.SLATE.get(), props()));
-
-        public static final RegistryObject<BlockItem> EMPTY_IMPETUS = ITEMS.register("empty_impetus",
-            () -> new BlockItem(HexBlocks.EMPTY_IMPETUS.get(), props()));
-        public static final RegistryObject<BlockItem> IMPETUS_RIGHTCLICK = ITEMS.register("impetus_rightclick",
-            () -> new BlockItem(HexBlocks.IMPETUS_RIGHTCLICK.get(), props()));
-
-        public static final RegistryObject<BlockItem> SLATE_BLOCK = ITEMS.register("slate_block",
-            () -> new BlockItem(HexBlocks.SLATE_BLOCK.get(), props()));
-    }
+    public static final RegistryObject<ItemSlate> SLATE = ITEMS.register("slate",
+        () -> new ItemSlate(HexBlocks.SLATE.get(), props()));
 
     public static Item.Properties props() {
         return new Item.Properties().tab(TAB);

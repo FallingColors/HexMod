@@ -7,8 +7,10 @@ import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClickImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
+import at.petrak.hexcasting.common.blocks.decoration.BlockSconce;
+import at.petrak.hexcasting.common.items.HexItems;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
@@ -16,6 +18,8 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Supplier;
 
 public class HexBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, HexMod.MOD_ID);
@@ -39,19 +43,45 @@ public class HexBlocks {
             .strength(4f, 4f);
     }
 
+    private static BlockBehaviour.Properties papery() {
+        return BlockBehaviour.Properties
+            .of(Material.PLANT, MaterialColor.TERRACOTTA_WHITE)
+            .sound(SoundType.GRASS)
+            .instabreak();
+    }
+
     public static final RegistryObject<BlockSlate> SLATE = BLOCKS.register("slate",
         () -> new BlockSlate(slateish()));
 
-    public static final RegistryObject<BlockEmptyImpetus> EMPTY_IMPETUS = BLOCKS.register("empty_impetus",
+    public static final RegistryObject<BlockEmptyImpetus> EMPTY_IMPETUS = blockItem("empty_impetus",
         () -> new BlockEmptyImpetus(slateish()));
-    public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = BLOCKS.register(
+    public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = blockItem(
         "impetus_rightclick",
         () -> new BlockRightClickImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
     // Decoration?!
-    public static final RegistryObject<Block> SLATE_BLOCK = BLOCKS.register("slate_block",
+    public static final RegistryObject<Block> SLATE_BLOCK = blockItem("slate_block",
         () -> new Block(slateish().strength(2f, 4f)));
+    public static final RegistryObject<SandBlock> AMETHYST_DUST_BLOCK = blockItem("amethyst_dust_block",
+        () -> new SandBlock(0xff_b38ef3, BlockBehaviour.Properties.of(Material.SAND, MaterialColor.COLOR_PURPLE)
+            .strength(0.5f).sound(SoundType.SAND)));
+    public static final RegistryObject<AmethystBlock> AMETHYST_TILES = blockItem("amethyst_tiles",
+        () -> new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+    public static final RegistryObject<Block> SCROLL_PAPER = blockItem("scroll_paper",
+        () -> new Block(papery()));
+    public static final RegistryObject<Block> ANCIENT_SCROLL_PAPER = blockItem("ancient_scroll_paper",
+        () -> new Block(papery()));
+    public static final RegistryObject<Block> SCROLL_PAPER_LANTERN = blockItem("scroll_paper_lantern",
+        () -> new Block(papery().lightLevel($ -> 15)));
+    public static final RegistryObject<Block> ANCIENT_SCROLL_PAPER_LANTERN = blockItem(
+        "ancient_scroll_paper_lantern",
+        () -> new Block(papery().lightLevel($ -> 12)));
+    public static final RegistryObject<BlockSconce> SCONCE = blockItem("amethyst_sconce",
+        () -> new BlockSconce(BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.COLOR_PURPLE)
+            .sound(SoundType.AMETHYST)
+            .strength(1f)
+            .lightLevel($ -> 15)));
 
     public static final RegistryObject<BlockEntityType<BlockEntityConjured>> CONJURED_TILE = BLOCK_ENTITIES.register(
         "conjured_tile",
@@ -67,4 +97,11 @@ public class HexBlocks {
     private static boolean never(Object... args) {
         return false;
     }
+
+    private static <T extends Block> RegistryObject<T> blockItem(String name, Supplier<T> block) {
+        var out = BLOCKS.register(name, block);
+        HexItems.ITEMS.register(name, () -> new BlockItem(out.get(), HexItems.props()));
+        return out;
+    }
+
 }

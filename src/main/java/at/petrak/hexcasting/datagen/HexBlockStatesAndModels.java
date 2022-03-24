@@ -46,11 +46,25 @@ public class HexBlockStatesAndModels extends BlockStateProvider {
             slateTex);
 
         blockAndItem(HexBlocks.SLATE_BLOCK.get(), models().cubeAll("slate_block", modLoc("block/slate")));
+        reallySimpleBlockAndItem(HexBlocks.AMETHYST_DUST_BLOCK.get(), "amethyst_dust_block");
+        reallySimpleBlockAndItem(HexBlocks.AMETHYST_TILES.get(), "amethyst_tiles");
+        reallySimpleBlockAndItem(HexBlocks.SCROLL_PAPER.get(), "scroll_paper");
+        reallySimpleBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER.get(), "ancient_scroll_paper");
+        reallySimpleBlockAndItem(HexBlocks.SCROLL_PAPER_LANTERN.get(), "scroll_paper_lantern");
+        reallySimpleBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(), "ancient_scroll_paper_lantern");
+
+        var sconceModel = models().getExistingFile(modLoc("amethyst_sconce"));
+        simpleBlock(HexBlocks.SCONCE.get(), sconceModel);
+        simpleBlockItem(HexBlocks.SCONCE.get(), sconceModel);
     }
 
     private void blockAndItem(Block block, BlockModelBuilder model) {
         simpleBlock(block, model);
         simpleBlockItem(block, model);
+    }
+
+    private void reallySimpleBlockAndItem(Block block, String name) {
+        blockAndItem(block, models().cubeAll(name, modLoc("block/" + name)));
     }
 
     private void arrowCircleBlock(Block block, String name, String stub, ResourceLocation particle) {

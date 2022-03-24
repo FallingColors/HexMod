@@ -10,7 +10,7 @@
       "text": "hexcasting.page.decoration.1"
     },
     {
-      "type": "patchouli:recipe",
+      "type": "patchouli:crafting",
       "recipe": "hexcasting:slate_block",
       "recipe2": "hexcasting:slate_block_from_slates"
     }

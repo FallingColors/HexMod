@@ -117,7 +117,7 @@ public class HexItemModels extends ItemModelProvider {
 
         simpleItem(modLoc("slate_blank"));
         simpleItem(modLoc("slate_written"));
-        getBuilder(HexItems.Blocks.SLATE.getId().getPath()).override()
+        getBuilder(HexItems.SLATE.getId().getPath()).override()
             .predicate(ItemSlate.WRITTEN_PRED, 0)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_blank")))
             .end()

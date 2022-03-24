@@ -4,6 +4,8 @@
     "hexcasting:slate_block",
     "hexcasting:slate",
     "hexcasting:empty_impetus",
-    "hexcasting:impetus_rightclick"
+    "hexcasting:impetus_rightclick",
+    "hexcasting:amethyst_tiles",
+    "hexcasting:amethyst_sconce"
   ]
 }

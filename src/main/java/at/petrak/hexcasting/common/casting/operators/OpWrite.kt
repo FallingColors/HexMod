@@ -29,7 +29,7 @@ object OpWrite : SpellOperator {
         } else if (datum.payload is HexPattern) {
             if (handStack.`is`(HexItems.SCROLL.get()) && !tag.contains(ItemScroll.TAG_PATTERN)) {
                 true
-            } else if (handStack.`is`(HexItems.Blocks.SLATE.get())) {
+            } else if (handStack.`is`(HexItems.SLATE.get())) {
                 val hasBET = tag.contains("BlockEntityTag")
                 if (hasBET) {
                     tag.getCompound("BlockEntityTag").contains(BlockEntitySlate.TAG_PATTERN)
@@ -61,7 +61,7 @@ object OpWrite : SpellOperator {
                 handItem.writeDatum(tag, datum)
             } else if (handItem == HexItems.SCROLL.get() && !tag.contains(ItemScroll.TAG_PATTERN) && datum.payload is HexPattern) {
                 tag.put(ItemScroll.TAG_PATTERN, datum.payload.serializeToNBT())
-            } else if (handItem == HexItems.Blocks.SLATE.get() && datum.payload is HexPattern) {
+            } else if (handItem == HexItems.SLATE.get() && datum.payload is HexPattern) {
                 val bet = tag.getCompound("BlockEntityTag")
                 bet.put(BlockEntitySlate.TAG_PATTERN, datum.payload.serializeToNBT())
                 // Just in case it's brand new

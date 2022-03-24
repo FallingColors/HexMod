@@ -33,6 +33,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -94,7 +95,7 @@ public class RegisterClientStuff {
             ItemProperties.register(HexItems.SCROLL.get(), ItemScroll.ANCIENT_PREDICATE,
                 (stack, level, holder, holderID) -> stack.getOrCreateTag().contains(ItemScroll.TAG_OP_ID) ? 1f : 0f);
 
-            ItemProperties.register(HexItems.Blocks.SLATE.get(), ItemSlate.WRITTEN_PRED,
+            ItemProperties.register(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
                 (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
             HexTooltips.init();
@@ -144,5 +145,10 @@ public class RegisterClientStuff {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers evt) {
         evt.registerBlockEntityRenderer(HexBlocks.SLATE_TILE.get(), BlockEntitySlate.Renderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onModelRegister(ModelRegistryEvent evt) {
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.SCONCE.get(), RenderType.cutout());
     }
 }
