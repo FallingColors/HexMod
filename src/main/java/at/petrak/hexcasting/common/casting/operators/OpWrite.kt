@@ -11,6 +11,7 @@ import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemDataHolder
 import at.petrak.hexcasting.common.items.ItemScroll
 import at.petrak.hexcasting.hexmath.HexPattern
+import net.minecraft.world.entity.player.Player
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpWrite : SpellOperator {
@@ -44,6 +45,9 @@ object OpWrite : SpellOperator {
         }
         if (!canWrite)
             throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemDataHolder::class.java, handStack)
+
+        if (datum.payload is Player && datum.payload != ctx.caster)
+            throw CastException(CastException.Reason.NO_WRITING_OTHER_NAMES)
 
         return Triple(
             Spell(datum),

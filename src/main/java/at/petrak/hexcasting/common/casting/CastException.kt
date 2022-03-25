@@ -108,6 +108,11 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
          * No spell circles??
          */
         NO_SPELL_CIRCLE,
+
+        /**
+         * No writing someone else's name!
+         */
+        NO_WRITING_OTHER_NAMES
     }
 
     override val message: String
@@ -126,5 +131,6 @@ class CastException(val reason: Reason, vararg val data: Any) : Exception() {
             Reason.REQUIRES_INVENTORY -> "required an inventory at ${this.data[0] as BlockPos}"
             Reason.RECIPE_DIDNT_WORK -> "bad recipe"
             Reason.NO_SPELL_CIRCLE -> "requires a spell circle to cast"
+            Reason.NO_WRITING_OTHER_NAMES -> "can't write someone else's Name"
         }
 }

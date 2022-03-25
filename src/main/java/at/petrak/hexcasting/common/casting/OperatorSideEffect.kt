@@ -62,7 +62,7 @@ sealed class OperatorSideEffect {
     data class Mishap(val exn: CastException) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
             harness.ctx.caster.sendMessage(
-                TextComponent(exn.toString()),
+                TextComponent(exn.message),
                 Util.NIL_UUID
             )
 
