@@ -1,15 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "PPP",
-    "PAP",
-    "PPP"
+    "DCD",
+    "CIC",
+    "DCD"
   ],
   "key": {
-    "P": {
+    "C": {
       "item": "minecraft:paper"
     },
-    "A": {
+    "D": {
+      "item": "minecraft:paper"
+    },
+    "I": {
       "item": "minecraft:amethyst_shard"
     }
   },

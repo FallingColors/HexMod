@@ -2,8 +2,8 @@ package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
-import at.petrak.hexcasting.common.blocks.ModBlockEntity;
 import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.paucal.api.PaucalBlockEntity;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockEntitySlate extends ModBlockEntity {
+public class BlockEntitySlate extends PaucalBlockEntity {
     public static final String TAG_PATTERN = "pattern";
 
     @Nullable

@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "A",
-    "C"
+    "T",
+    "B"
   ],
   "key": {
-    "A": {
+    "T": {
       "item": "hexcasting:charged_amethyst"
     },
-    "C": {
+    "B": {
       "tag": "forge:ingots/copper"
     }
   },

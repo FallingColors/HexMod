@@ -1,15 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " F ",
-    "FAF",
-    " F "
+    "DCD",
+    "CIC",
+    "DCD"
   ],
   "key": {
-    "F": {
-      "item": "minecraft:copper_ingot"
+    "C": {
+      "tag": "forge:ingots/copper"
     },
-    "A": {
+    "D": {
+      "tag": "forge:ingots/copper"
+    },
+    "I": {
       "item": "hexcasting:amethyst_dust"
     }
   },

@@ -173,6 +173,13 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -184,17 +191,6 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.0.19'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    // Real mod deobf dependency examples - these get remapped to your current mappings
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
-
-    // Examples using mod jars from ./libs
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-66:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-66")
 
@@ -202,6 +198,9 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143")
+    
+    compileOnly fg.deobf("curse.maven:paucal-597824:3711583")
+    runtimeOnly fg.deobf("curse.maven:paucal-597824:3711583")
 }
 
 mixin {

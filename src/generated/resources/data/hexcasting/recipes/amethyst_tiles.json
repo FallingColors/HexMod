@@ -1,15 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "AAA",
-    "ADA",
-    "AAA"
+    "DCD",
+    "CIC",
+    "DCD"
   ],
   "key": {
-    "A": {
+    "C": {
       "item": "minecraft:amethyst_block"
     },
     "D": {
+      "item": "minecraft:amethyst_block"
+    },
+    "I": {
       "item": "hexcasting:amethyst_dust"
     }
   },

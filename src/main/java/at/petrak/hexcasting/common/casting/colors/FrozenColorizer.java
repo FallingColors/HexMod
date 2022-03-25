@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.common.casting.colors;
 
-import at.petrak.hexcasting.common.ContributorList;
+import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
+import at.petrak.paucal.api.contrib.Contributors;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +15,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.awt.*;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -61,16 +65,35 @@ public record FrozenColorizer(Item item, UUID owner) {
             var colors = politics.getColors();
             return morphBetweenColors(colors, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
         } else if (this.item == HexItems.UUID_COLORIZER.get()) {
-            var info = ContributorList.getContributor(this.owner);
-            if (info != null) {
-                return morphBetweenColors(info.getColorizer(), new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
-            } else {
-                // randomly scrungle the bits
-                return FastColor.ARGB32.color(255,
-                    (int) (this.owner.getLeastSignificantBits() & 0xff),
-                    (int) (this.owner.getLeastSignificantBits() >>> 32 & 0xff),
-                    (int) (this.owner.getMostSignificantBits() & 0xff));
+            var contributor = Contributors.getContributor(this.owner);
+            if (contributor != null) {
+                Object colorObj = contributor.getRaw("hexcasting:colorizer");
+                if (colorObj instanceof List<?> colorList) {
+                    var colors = new int[colorList.size()];
+                    var ok = true;
+                    for (int i = 0; i < colorList.size(); i++) {
+                        Object elt = colorList.get(i);
+                        if (elt instanceof Number n) {
+                            colors[i] = n.intValue() | 0xff_000000;
+                        } else {
+                            ok = false;
+                            HexMod.getLogger().warn("Player {} had a bad colorizer", this.owner);
+                            break;
+                        }
+                    }
+                    if (ok) {
+                        return morphBetweenColors(colors, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
+                    }
+                }
             }
+            
+            // randomly scrungle the bits
+            var rand = new Random(this.owner.getLeastSignificantBits() ^ this.owner.getMostSignificantBits());
+            var hue = rand.nextFloat();
+            var saturation = rand.nextFloat(0.4f, 1.0f);
+            var brightness = rand.nextFloat(0.5f, 1.0f);
+
+            return Color.HSBtoRGB(hue, saturation, brightness);
         }
 
         return 0xff_ff00dc; // missing color

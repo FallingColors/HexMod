@@ -1,12 +1,18 @@
 package at.petrak.hexcasting.datagen.lootmods;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.paucal.api.lootmod.PaucalAddItemModifier;
+import at.petrak.paucal.api.lootmod.PaucalLootMods;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
@@ -19,8 +25,6 @@ import net.minecraftforge.registries.RegistryObject;
 public class HexLootModifiers extends GlobalLootModifierProvider {
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODS = DeferredRegister.create(
         ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, HexMod.MOD_ID);
-    private static final RegistryObject<AmethystClusterModifier.Serializer> AMETHYST_CLUSTER = LOOT_MODS.register(
-        "amethyst_cluster", AmethystClusterModifier.Serializer::new);
     private static final RegistryObject<PatternScrollModifier.Serializer> SCROLLS_IN_CHESTS = LOOT_MODS.register(
         "scrolls", PatternScrollModifier.Serializer::new);
 
@@ -30,13 +34,26 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
 
     @Override
     protected void start() {
-        add("amethyst_cluster", AMETHYST_CLUSTER.get(), new AmethystClusterModifier(new LootItemCondition[]{
+        add("amethyst_cluster_dust", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
+            HexItems.AMETHYST_DUST.get(), new LootItemFunction[]{
+            ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE).build()
+        }, new LootItemCondition[]{
             LootTableIdCondition.builder(new ResourceLocation("minecraft:blocks/amethyst_cluster")).build(),
             MatchTool.toolMatches(
                     ItemPredicate.Builder.item().hasEnchantment(
                         new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
                 .invert().build(),
-        }, 0.9f));
+        }
+        ));
+        add("amethyst_cluster_charged", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
+            HexItems.CHARGED_AMETHYST.get(), 1, new LootItemCondition[]{
+            LootTableIdCondition.builder(new ResourceLocation("minecraft:blocks/amethyst_cluster")).build(),
+            MatchTool.toolMatches(
+                    ItemPredicate.Builder.item().hasEnchantment(
+                        new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
+                .invert().build(),
+            BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.2f, 0.4f, 0.6f, 0.8f).build()
+        }));
 
 
         add("scroll_jungle", SCROLLS_IN_CHESTS.get(), new PatternScrollModifier(new LootItemCondition[]{

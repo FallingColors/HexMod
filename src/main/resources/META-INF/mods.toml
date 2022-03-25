@@ -34,3 +34,10 @@ mandatory = true
 versionRange = "[1.18.2-66,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.hexcasting]]
+modId = "paucal"
+mandatory = true
+versionRange = "[0.1.2,)"
+ordering = "NONE"
+side = "BOTH"

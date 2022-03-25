@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "P",
-    "T"
+    "T",
+    "B"
   ],
   "key": {
-    "P": {
+    "T": {
       "item": "hexcasting:scroll_paper"
     },
-    "T": {
+    "B": {
       "item": "minecraft:torch"
     }
   },

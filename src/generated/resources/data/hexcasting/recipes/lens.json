@@ -1,15 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " G ",
-    "GAG",
-    " G "
+    "DCD",
+    "CIC",
+    "DCD"
   ],
   "key": {
-    "G": {
-      "tag": "forge:glass"
+    "C": {
+      "item": "minecraft:glass"
     },
-    "A": {
+    "D": {
+      "item": "minecraft:glass"
+    },
+    "I": {
       "item": "hexcasting:amethyst_dust"
     }
   },

@@ -7,16 +7,16 @@ import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
+import at.petrak.paucal.api.datagen.PaucalItemModelProvider;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
-public class HexItemModels extends ItemModelProvider {
+public class HexItemModels extends PaucalItemModelProvider {
     public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, HexMod.MOD_ID, existingFileHelper);
     }
@@ -125,23 +125,5 @@ public class HexItemModels extends ItemModelProvider {
             .predicate(ItemSlate.WRITTEN_PRED, 1)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_written")))
             .end();
-    }
-
-    public void simpleItem(Item item) {
-        simpleItem(item.getRegistryName());
-    }
-
-    public void simpleItem(ResourceLocation path) {
-        singleTexture(path.getPath(), new ResourceLocation("item/generated"),
-            "layer0", new ResourceLocation(HexMod.MOD_ID, "item/" + path.getPath()));
-    }
-
-    public void brandishedItem(Item item) {
-        brandishedItem(item.getRegistryName());
-    }
-
-    public void brandishedItem(ResourceLocation path) {
-        singleTexture(path.getPath(), new ResourceLocation("item/handheld"),
-            "layer0", new ResourceLocation(HexMod.MOD_ID, "item/" + path.getPath()));
     }
 }

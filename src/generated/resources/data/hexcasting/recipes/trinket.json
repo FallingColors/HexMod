@@ -1,15 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " F ",
-    "FAF",
-    " F "
+    "DCD",
+    "CIC",
+    "DCD"
   ],
   "key": {
-    "F": {
+    "C": {
       "tag": "forge:ingots/iron"
     },
-    "A": {
+    "D": {
+      "tag": "forge:ingots/iron"
+    },
+    "I": {
       "item": "minecraft:amethyst_shard"
     }
   },

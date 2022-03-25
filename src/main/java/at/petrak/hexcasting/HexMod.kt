@@ -1,7 +1,6 @@
 package at.petrak.hexcasting
 
 import at.petrak.hexcasting.client.*
-import at.petrak.hexcasting.common.ContributorList
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
@@ -90,7 +89,6 @@ object HexMod {
 
         // and then things that don't require busses
         HexMessages.register()
-        ContributorList.loadContributors()
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG_SPEC)
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG_SPEC)

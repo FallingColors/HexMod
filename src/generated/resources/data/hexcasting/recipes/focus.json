@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "LQL",
-    "QAQ",
-    "LQL"
+    "DCD",
+    "CIC",
+    "DCD"
   ],
   "key": {
-    "L": {
-      "tag": "forge:leather"
-    },
-    "Q": {
+    "C": {
       "tag": "forge:dusts/glowstone"
     },
-    "A": {
+    "D": {
+      "tag": "forge:leather"
+    },
+    "I": {
       "item": "hexcasting:charged_amethyst"
     }
   },

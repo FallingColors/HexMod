@@ -1,11 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "AA",
-    "AA"
+    "XX",
+    "XX",
+    "XX"
   ],
   "key": {
-    "A": {
+    "X": {
       "item": "hexcasting:amethyst_dust"
     }
   },

@@ -3,7 +3,6 @@ package at.petrak.hexcasting.common.blocks.circles.impetuses;
 import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.BlockCircleComponent;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
-import at.petrak.hexcasting.common.blocks.ModBlockEntity;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
 import at.petrak.hexcasting.common.casting.SpellCircleContext;
@@ -11,6 +10,7 @@ import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.paucal.api.PaucalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class BlockEntityAbstractImpetus extends ModBlockEntity implements ICapabilityProvider {
+public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity implements ICapabilityProvider {
     public static final String
         TAG_ACTIVATOR = "activator",
         TAG_COLORIZER = "colorizer",

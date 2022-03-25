@@ -1,15 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "SSS",
-    "SAS",
-    "SSS"
+    "DCD",
+    "CIC",
+    "DCD"
   ],
   "key": {
-    "S": {
+    "C": {
       "item": "minecraft:deepslate"
     },
-    "A": {
+    "D": {
+      "item": "minecraft:deepslate"
+    },
+    "I": {
       "item": "hexcasting:amethyst_dust"
     }
   },

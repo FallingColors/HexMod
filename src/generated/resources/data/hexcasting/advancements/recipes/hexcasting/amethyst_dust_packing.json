@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "hexcasting:amethyst_dust_block"
+      "hexcasting:amethyst_dust_packing"
     ]
   },
   "criteria": {
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "hexcasting:amethyst_dust_block"
+        "recipe": "hexcasting:amethyst_dust_packing"
       }
     }
   },

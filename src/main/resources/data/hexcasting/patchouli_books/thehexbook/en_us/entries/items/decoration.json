@@ -36,7 +36,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:amethyst_dust_block",
+      "recipe": "hexcasting:amethyst_dust_packing",
       "recipe2": "hexcasting:amethyst_dust_unpacking"
     },
     {
