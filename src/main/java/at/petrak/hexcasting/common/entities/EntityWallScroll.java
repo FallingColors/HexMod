@@ -1,14 +1,22 @@
 package at.petrak.hexcasting.common.entities;
 
 import at.petrak.hexcasting.client.RenderLib;
+import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
@@ -18,6 +26,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +34,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class EntityWallScroll extends HangingEntity implements IEntityAdditionalSpawnData {
+    private static final EntityDataAccessor<Boolean> SHOWS_STROKE_ORDER = SynchedEntityData.defineId(
+        EntityWallScroll.class,
+        EntityDataSerializers.BOOLEAN);
+
     public ItemStack scroll;
     public HexPattern pattern;
     public List<Vec2> zappyPoints;
@@ -59,6 +72,20 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
     }
 
     @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOWS_STROKE_ORDER, false);
+    }
+
+    public boolean getShowsStrokeOrder() {
+        return this.entityData.get(SHOWS_STROKE_ORDER);
+    }
+
+    public void setShowsStrokeOrder(boolean b) {
+        this.entityData.set(SHOWS_STROKE_ORDER, b);
+    }
+
+    @Override
     public int getWidth() {
         return 48;
     }
@@ -83,6 +110,21 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
     }
 
     @Override
+    public InteractionResult interactAt(Player pPlayer, Vec3 pVec, InteractionHand pHand) {
+        var handStack = pPlayer.getItemInHand(pHand);
+        if (handStack.is(HexItems.AMETHYST_DUST.get()) && !this.getShowsStrokeOrder()) {
+            if (!pPlayer.getAbilities().instabuild) {
+                handStack.shrink(1);
+            }
+            this.setShowsStrokeOrder(true);
+
+            pPlayer.level.playSound(pPlayer, this, HexSounds.DUST_SCROLL.get(), SoundSource.PLAYERS, 1f, 1f);
+            return InteractionResult.SUCCESS;
+        }
+        return super.interactAt(pPlayer, pVec, pHand);
+    }
+
+    @Override
     public void playPlacementSound() {
         this.playSound(SoundEvents.PAINTING_PLACE, 1.0F, 1.0F);
     }
@@ -96,12 +138,15 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
     public void writeSpawnData(FriendlyByteBuf buf) {
         buf.writeVarInt(this.direction.ordinal());
         buf.writeItem(this.scroll);
+        buf.writeBoolean(this.getShowsStrokeOrder());
     }
 
     @Override
     public void readSpawnData(FriendlyByteBuf buf) {
         this.direction = Direction.values()[buf.readVarInt()];
         var scroll = buf.readItem();
+        this.setShowsStrokeOrder(buf.readBoolean());
+
         this.loadDataFromScrollItem(scroll);
         this.setDirection(this.direction);
     }
@@ -110,6 +155,7 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putByte("direction", (byte) this.direction.ordinal());
         tag.put("scroll", this.scroll.serializeNBT());
+        tag.putBoolean("showsStrokeOrder", this.getShowsStrokeOrder());
         super.addAdditionalSaveData(tag);
     }
 
@@ -117,6 +163,8 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
     public void readAdditionalSaveData(CompoundTag tag) {
         this.direction = Direction.values()[tag.getByte("direction")];
         var scroll = ItemStack.of(tag.getCompound("scroll"));
+        this.setShowsStrokeOrder(tag.getBoolean("showsStrokeOrder"));
+
         super.readAdditionalSaveData(tag);
         this.setDirection(this.direction);
         this.loadDataFromScrollItem(scroll);

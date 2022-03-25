@@ -22,10 +22,12 @@ public class HexSounds {
 
     public static final RegistryObject<SoundEvent> ABACUS = sound("abacus");
     public static final RegistryObject<SoundEvent> ABACUS_SHAKE = sound("abacus.shake");
-    
+
     public static final RegistryObject<SoundEvent> SPELL_CIRCLE_FIND_BLOCK = sound("spellcircle.find_block");
     public static final RegistryObject<SoundEvent> SPELL_CIRCLE_FAIL = sound("spellcircle.fail");
     public static final RegistryObject<SoundEvent> SPELL_CIRCLE_CAST = sound("spellcircle.cast");
+
+    public static final RegistryObject<SoundEvent> DUST_SCROLL = sound("scroll.dust");
 
     private static RegistryObject<SoundEvent> sound(String name) {
         return SOUNDS.register(name, () -> new SoundEvent(prefix(name)));

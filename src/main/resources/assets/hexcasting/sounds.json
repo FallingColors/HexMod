@@ -82,5 +82,15 @@
       "hexcasting:cast_hex"
     ],
     "subtitle": "hexcasting.subtitles.spellcircle.cast"
+  },
+
+  "scroll.dust": {
+    "sounds": [
+      "minecraft:dig/sand1",
+      "minecraft:dig/sand2",
+      "minecraft:dig/sand3",
+      "minecraft:dig/sand4"
+    ],
+    "subtitle": "hexcasting.subtitles.scroll.dust"
   }
 }

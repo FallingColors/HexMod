@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client.entity;
 
+import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -98,6 +99,7 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
         }
 
         if (wallScroll.zappyPoints != null) {
+            var points = wallScroll.zappyPoints;
             ps.pushPose();
 
             ps.mulPose(Vector3f.YP.rotationDegrees(180f));
@@ -111,9 +113,38 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             var outer = 0xff_d2c8c8;
             var inner = 0xc8_322b33;
             var verts = bufSource.getBuffer(RenderType.entityCutout(WHITE));
-            theCoolerDrawLineSeq(mat, norm, light, verts, wallScroll.zappyPoints, 5, outer);
+            theCoolerDrawLineSeq(mat, norm, light, verts, points, 5, outer);
             ps.translate(0, 0, 0.01);
-            theCoolerDrawLineSeq(mat, norm, light, verts, wallScroll.zappyPoints, 2, inner);
+            theCoolerDrawLineSeq(mat, norm, light, verts, points, 2, inner);
+
+            if (wallScroll.getShowsStrokeOrder()) {
+                var animTime = wallScroll.tickCount;
+                var pointCircuit =
+                    (animTime * HexConfig.Client.patternPointSpeedMultiplier.get()) % (points.size() + 10);
+                if (pointCircuit < points.size() - 1) {
+                    var pointMacro = Mth.floor(pointCircuit);
+                    var pointMicro = pointCircuit - pointMacro;
+
+                    var p1 = points.get(pointMacro);
+                    var p2 = points.get((pointMacro + 1) % points.size());
+                    var drawPos = new Vec2(
+                        (float) (p1.x + (p2.x - p1.x) * pointMicro),
+                        (float) (p1.y + (p2.y - p1.y) * pointMicro)
+                    );
+                    
+                    ps.translate(0, 0, 0.01);
+                    theCoolerDrawSpot(mat, norm, light, verts, drawPos, 2.6666f, 0xff_cfa0f3);
+                    ps.translate(0, 0, 0.01);
+                    theCoolerDrawSpot(mat, norm, light, verts, drawPos, 2f, 0xff_8d6acc);
+                } else {
+                    ps.translate(0, 0, 0.02);
+                }
+
+                ps.translate(0, 0, 0.01);
+                theCoolerDrawSpot(mat, norm, light, verts, points.get(0), 3f, 0xff_4946d3);
+                ps.translate(0, 0, 0.01);
+                theCoolerDrawSpot(mat, norm, light, verts, points.get(0), 2f, 0xff_5b7bd7);
+            }
 
             ps.popPose();
         }
@@ -201,6 +232,23 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             prevYHi = yHi;
             prevXLo = xLo;
             prevYLo = yLo;
+        }
+    }
+
+    private static void theCoolerDrawSpot(Matrix4f mat, Matrix3f normal, int light, VertexConsumer verts,
+        Vec2 point, float radius, int color) {
+        var fracOfCircle = 6;
+        for (int i = 0; i < fracOfCircle; i++) {
+            // We do need rects, irritatingly
+            // so we do fake triangles
+            vertexCol(mat, normal, light, verts, color, point.x, point.y);
+            vertexCol(mat, normal, light, verts, color, point.x, point.y);
+            for (int j = 0; j <= 1; j++) {
+                var theta = (i - j) / (float) fracOfCircle * Mth.TWO_PI;
+                var rx = Mth.cos(theta) * radius + point.x;
+                var ry = Mth.sin(theta) * radius + point.y;
+                vertexCol(mat, normal, light, verts, color, rx, ry);
+            }
         }
     }
 }

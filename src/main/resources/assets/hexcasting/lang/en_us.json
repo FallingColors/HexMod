@@ -47,13 +47,13 @@
   "item.hexcasting.pride_colorizer_12": "Intersex Pigment",
   "item.hexcasting.pride_colorizer_13": "Aroace Pigment",
   "item.hexcasting.uuid_colorizer": "Soulglimmer Pigment",
-  
+
   "block.hexcasting.conjured": "Conjured Block",
   "block.hexcasting.slate.blank": "Blank Slate",
   "block.hexcasting.slate.written": "Patterned Slate",
   "block.hexcasting.empty_impetus": "Empty Impetus",
   "block.hexcasting.impetus_rightclick": "Toolsmith Impetus",
- 
+
   "block.hexcasting.slate_block": "Block of Slate",
   "block.hexcasting.amethyst_dust_block": "Block of Amethyst Dust",
   "block.hexcasting.amethyst_tiles": "Amethyst Tiles",
@@ -62,7 +62,7 @@
   "block.hexcasting.scroll_paper_lantern": "Paper Lantern",
   "block.hexcasting.ancient_scroll_paper_lantern": "Ancient Paper Lantern",
   "block.hexcasting.amethyst_sconce": "Amethyst Sconce",
-  
+
   "itemGroup.hexcasting": "Hexcasting",
 
   "hexcasting.tooltip.spellbook.page": "§7Selected Page §a§l%d§7/§a§l%d§r",
@@ -239,6 +239,7 @@
   "hexcasting.subtitles.spellcircle.add_pattern": "Spell circle crackles",
   "hexcasting.subtitles.spellcircle.fail": "Spell circle fizzles out",
   "hexcasting.subtitles.spellcircle.cast": "Spell circle casts",
+  "hexcasting.subtitles.scroll.dust": "Scroll covers with dust",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 
@@ -251,7 +252,7 @@
 
   "hexcasting.entry.items": "Items",
   "hexcasting.entry.items.desc": "I devote this section to the magical and mysterious items I might encounter in my studies.$(br2)It seems like many of these items have uses when held alongside my staff. I suppose I will have to choose what goes in my other hand carefully.",
-  
+
   "hexcasting.entry.greatwork": "The Great Work",
   "hexcasting.entry.greatwork.desc": "I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction. I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy. I have seen I have seen I have s$(k)get stick bugged lmao/$",
 
@@ -266,7 +267,7 @@
 
 
   "_comment": "Basics",
-  
+
   "hexcasting.entry.media": "Media",
   "hexcasting.page.media.1": "_Media is a form of mental energy external to a mind. All living creatures generate trace amounts of _media when thinking about anything; after the thought is finished, the media is released into the environment.$(br2)The art of casting $(thing)Hexes/$ is all about manipulating _media to do your bidding.",
   "hexcasting.page.media.2": "_Media can exert influences on other media-- the strength and type of influence can be manipulated by drawing _media out into patterns.$(p)Scholars of the art used a concentrated blob of _media on the end of a stick: by waving it in the air in precise configurations, they were able to manipulate enough _media with enough precision to influence the world itself, in the form of a Hex.",
@@ -291,7 +292,7 @@
 
 
   "_comment": "Casting",
-  
+
   "hexcasting.entry.101": "Hexing 101",
   "hexcasting.page.101.1": "Casting a _Hex is quite difficult-- no wonder this art was lost to time! I'll have to re-read my notes carefully.$(br2)I can start a _Hex by pressing $(k:use) with a $(item)Staff/$ in my hand-- this will cause a hexagonal grid of dots to appear in front of me. Then I can click and drag from dot to dot to draw patterns in the _media of the grid; finishing a pattern will run its corresponding action (more on that later).",
   "hexcasting.page.101.2": "Once I've drawn enough patterns to cast a spell, the grid will disappear as the _media I've stored up is released. I can also press Escape if I want to quit early, if I don't mind the chance of a small mishap. (It seems that the more _media I've built up, the more likely I'll meet misfortune.)$(br2)So how do patterns work? In short:$(li)$(italic)Patterns/$ will execute...$(li)$(italic)Actions/$, which manipulate...$(li)$(italic)The Stack/$, which is a list of...$(li)$(italic)Iotas/$, which are simply units of information.",
@@ -310,7 +311,7 @@
   "hexcasting.page.101.14": "I have also found an amusing tidbit on why so many practitioners of magic in general seem to go mad, which I may like as some light and flavorful reading not canonical to my world.$(br2)$(italic)Content Warning: some body horror and suggestive elements./$",
   "hexcasting.page.101.14.link_text": "Goblin Punch",
   "hexcasting.page.101.15": "Finally, it seems spells have a maximum range of influence, about 32 blocks from my position. Trying to affect anything outside of that will cause the spell to fail.",
-  
+
   "hexcasting.entry.vectors": "A Primer on Vectors",
   "hexcasting.page.vectors.1": "It seems I will need to be adroit with vectors if I am to get anywhere in my studies. I have compiled some resources here on vectors if I find I do not know how to work with them.$(br2)First off, an enlightening video on the topic.",
   "hexcasting.page.vectors.1.link_text": "3blue1brown",
@@ -340,7 +341,7 @@
 
 
   "_comment": "Items",
-  
+
   "hexcasting.entry.amethyst": "Amethyst",
   "hexcasting.page.amethyst.1": "It seems that I'll find three different forms of amethyst when breaking a crystal inside a geode. The smallest denomination seems to be a small pile of shimmering dust, worth a relatively small amount of _media.",
   "hexcasting.page.amethyst.2": "The second is a whole shard of amethyst, of the type non-Hexers might be used to. This has about as much _media inside as five $(item)Amethyst Dust/$s.",
@@ -350,12 +351,12 @@
   "hexcasting.entry.staff": "Staff",
   "hexcasting.page.staff.1": "A $(item)Staff/$ is my entry point into casting all _Hexes, large and small. By holding it and pressing $(thing)$(k:use)/$, I begin casting a _Hex; then I can click and drag to draw patterns.$(br2)It's little more than a chunk of _media on the end of a stick; that's all that's needed, after all.",
   "hexcasting.page.staff.2": "$(italic)Don't fight; flame, light; ignite; burn bright./$",
-  
+
   "hexcasting.entry.lens": "Scrying Lens",
   "hexcasting.page.lens.1": "_Media can have peculiar effects on any type of information, in specific circumstances. Coating a glass in a thin film of it can lead to ... elucidating insights.$(br2)By holding a $(item)Scrying Lens/$ in my hand, certain blocks will display additional information when I look at them.",
   "hexcasting.page.lens.2": "For example, looking at a piece of $(item)Redstone/$ will display its signal strength. I suspect I will discover other blocks with additional insight as my studies into my art progress.$(br2)In addition, holding it while casting using a $(item)Staff/$ will shrink the spacing between dots, allowing me to draw more on my grid.",
   "hexcasting.page.lens.3": "$(italic)You must learn... to see what you are looking at./$",
-  
+
   "hexcasting.entry.focus": "Focus",
   "hexcasting.page.focus.1": "A $(item)Focus/$ can store a single iota.$(br2)When I craft it, it holds the Null influence by default. Using $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ while holding a $(item)Focus/$ in my other hand will remove the top of the stack and save it into the $(item)Focus/$. Using $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$ will copy whatever iota's in the $(item)Focus/$ and add it to the stack.",
   "hexcasting.page.focus.2": "It occurs to me that I could conceivably store a whole list of patterns in a $(item)Focus/$, then recall them and evaluate them with $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$. This way I can cast complex spells, or parts of spells, without having to draw them over and over.$(br2)I could use this like a slightly less convenient $(l:items/hexcasting#artifact)$(item)Artifact/$, but I think I could get much better dividends by putting common \"phrases\" in a $(item)Focus/$, like the patterns for figuring out where I'm looking.",
@@ -372,7 +373,7 @@
   "hexcasting.page.spellbook.2": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first.",
 
   "hexcasting.entry.scroll": "Scrolls",
-  "hexcasting.page.scroll.1": "A $(item)Scroll/$ is a convenient method of sharing a pattern with others. I can copy a pattern onto one with $(l:patterns/readwrite#hexcasting:write)Scribe's Gambit/$, after which it will display in a tooltip.$(br2)I can also place them on the wall as decoration, like a Painting.",
+  "hexcasting.page.scroll.1": "A $(item)Scroll/$ is a convenient method of sharing a pattern with others. I can copy a pattern onto one with $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$, after which it will display in a tooltip.$(br2)I can also place them on the wall as decoration, like a Painting. Using $(item)Amethyst Dust/$ on such a scroll will have it display the stroke order.",
   "hexcasting.page.scroll.2": "In addition, I can also find so-called $(item)Ancient Scrolls/$ in the dungeons and strongholds of the world. These contain the stroke order of Great Spells, powerful magicks rumored to be too powerful for the hands and minds of mortals...$(br2)If those \"mortals\" couldn't cast them, I'm not sure they deserve to know them.",
   "hexcasting.page.scroll.3": "$(italic)I write upon clean white parchment with a sharp quill and the blood of my students, divining their secrets./$",
 
@@ -430,7 +431,7 @@
   "hexcasting.page.spellcircles.5": "However, a spell cast from a circle does have one major limitation: it is unable to affect anything outside of the circle's bounds. That is, it cannot interact with anything outside of the cuboid of minimum size which encloses every block composing it (so a concave spell circle can still affect things in the concavity).",
   "hexcasting.page.spellcircles.6": "There is also a limit on the number of blocks the wave can travel through before it disintegrates, but it is large enough I doubt I will have any trouble.$(br2)Conversely, there are some actions that can only be cast from a circle. Fortunately, none of them are spells; they all seem to deal with components of the circle itself. My notes on the subject are $(l:patterns/circle)here/$.",
   "hexcasting.page.spellcircles.7": "I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.$(br2)The patterns there would have been executed counter-clockwise, starting with $(action)Mind's Reflection/$ and ending with $(action)Greater Teleport/$.",
-"hexcasting.page.spellcircles.8.title": "Teleportation Circle",
+  "hexcasting.page.spellcircles.8.title": "Teleportation Circle",
 
   "hexcasting.entry.impetus": "Impetuses",
   "hexcasting.page.impetus.1": "The fluctuation of _media required to actuate a spell circle is complex. Even the mortal with sharpest eyes and steadiest hands could not serve as an $(item)Impetus/$ and weave _media into the self-sustaining ourobouros required.$(br2)The problem is that the mind is too full of other useless $(italics)garbage/$.",
@@ -441,13 +442,13 @@
   "hexcasting.page.impetus.6": "Then, to transpose the mind. Villagers of different professions will lend different actuation conditions to the resulting $(item)Impetus/$. A Toolsmith's activates on a simple $(k:use).",
 
   "_comment": "Patterns",
-  
+
   "hexcasting.entry.readers_guide": "How to Read this Section",
   "hexcasting.page.readers_guide.1": "I've divided all the valid patterns I've found into sections based on what they do, more or less. I've written down the stroke order of the patterns as well, if I managed to find it in my studies, with the start of the pattern marked with a red dot.$(br2)If an action is cast by multiple patterns, as is the case with some, I'll write them all side-by-side.",
   "hexcasting.page.readers_guide.2": "For a few patterns, however, I was $(italic)not/$ able to find the stroke order, just the shape. I suspect the order to draw them in are out there, locked away in the ancient libraries and dungeons of the world.$(br2)In such cases I just draw the pattern without any information on the order to draw it in.",
   "hexcasting.page.readers_guide.3": "I also write the types of iota that the action will consume or modify, a \"\u2192\", and the types of iota the action will create.$(p)For example, \"$(n)vector, number/$ \u2192 $(n)vector/$\" means the action will remove a vector and a number from the top of the stack, and then add a vector; or, put another way, will remove a number from the stack, and then modify the vector at the top of the stack. (The number needs to be on the top of the stack, with the vector right below it.)",
   "hexcasting.page.readers_guide.4": "\"\u2192 $(n)entity/$\" means it'll just push an entity. \"$(n)entity, vector/$ \u2192\" means it removes an entity and a vector, and doesn't push anything.$(br2)Finally, if I find the little dot marking the stroke order too slow or confusing, I can press $(thing)Control/Command/$ to display a gradient, where the start of the pattern is darkest and the end is lightest. This works on scrolls and when casting, too!",
- 
+
   "hexcasting.entry.basics_pattern": "Basic Patterns",
   "hexcasting.page.basics_pattern.1": "Adds me, the caster, to the stack.",
   "hexcasting.page.basics_pattern.2": "Transforms an entity on the stack into its position.",
@@ -458,7 +459,7 @@
   "hexcasting.page.basics_pattern.7": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation$(/l), but instead returns a vector representing the answer to the question: Which $(italic)side/$ of the block am I looking at?",
   "hexcasting.page.basics_pattern.8": "More specifically, it returns the $(italic)normal vector/$ of the face hit, or a vector with length 1 pointing perpendicular to the face.$(li)If I am looking at a floor, it will return (0, 1, 0).$(li)If I am looking at the south face of a block, it will return (0, 0, 1).$(br)",
   "hexcasting.page.basics_pattern.9": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation$(/l), but instead returns the $(italic)entity/$ I am looking at.",
-  
+
   "hexcasting.entry.numbers": "Number Literals",
   "hexcasting.page.numbers.1.header": "Numerical Reflection",
   "hexcasting.page.numbers.1": "Irritatingly, there is no easy way to draw numbers. Here is the method Nature deigned to give us.",
@@ -502,7 +503,7 @@
   "hexcasting.page.stackmanip3": "Swaps the top two iotas of the stack.",
   "hexcasting.page.stackmanip4": "Grabs the nth element in the stack and brings it to the top.",
   "hexcasting.page.stackmanip5": "The Fisherman's Gambit takes a number and reaches that far $(italic)down/$ the stack-- pulling it from its original position up to the top of the stack. For example, using the Gambit with the number 2 will pull the second item on the stack to the top, effectively acting as a more-cumbersome Jester's Gambit. Using the Gambit with a negative number, a fraction, or a length larger than the stack will dredge all sorts of unknowable patterns from the aether, and is liable to cause a mishap.",
-  
+
   "hexcasting.entry.logic": "Logical Operators",
   "hexcasting.page.logic.1": "If the first argument is greater than the second, return 1. Otherwise, return 0.",
   "hexcasting.page.logic.2": "If the first argument is less than the second, return 1. Otherwise, return 0.",
@@ -544,7 +545,7 @@
   "hexcasting.page.lists.6": "Remove num elements from the stack, then add them to a list at the top of the stack.",
   "hexcasting.page.lists.7": "Remove the list at the top of the stack, then push the number of elements in the list to the stack.",
   "hexcasting.page.lists.8": "Reverse the list at the top of the stack.",
-  
+
   "hexcasting.entry.patterns_as_iotas": "Patterns as Iotas",
   "hexcasting.page.patterns_as_iotas.1": "One of the many peculiarities of this art is that $(italic)patterns themselves/$ can act as iotas-- I can even put them onto my stack when casting.$(br2)This raises a fairly obvious question: how do I express them? If I simply drew a pattern, it would hardly tell Nature to add it to my stack-- rather, it would simply be matched to an action.",
   "hexcasting.page.patterns_as_iotas.2": "Fortunately, Nature has provided me with a set of $(l:casting/influences)influences/$ that I can use to work with patterns directly.$(br2)In short, $(action)Consideration/$ lets me add one pattern to the stack, and $(action)Introspection/$ and $(action)Retrospection/$ let me add a whole list.",
@@ -554,7 +555,7 @@
   "hexcasting.page.patterns_as_iotas.6": "If I draw another $(action)Introspection/$, it'll still be saved to the list, but I'll then have to draw $(italic)two/$ $(action)Retrospection/$s to get back to normal casting.",
   "hexcasting.page.patterns_as_iotas.7": "Also, I can escape the special behavior of $(action)Intro-/$ and $(action)Retrospection/$ by drawing a $(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of Retrospections I need to return to casting.$(br2)If I draw two $(action)Consideration/$s in a row while introspecting, it will add a single $(action)Consideration/$ to the list.",
 
-"hexcasting.entry.readwrite": "Reading and Writing",
+  "hexcasting.entry.readwrite": "Reading and Writing",
   "hexcasting.page.readwrite.1": "Copy the iota stored in the item (such as a $(l:items/focus)$(item)Focus/$, $(l:items/abacus)$(item)Abacus/$ or $(l:items/spellbook)$(item)Spellbook/$) in my other hand, and add it to the stack.",
   "hexcasting.page.readwrite.2": "Like $(action)Scribe's Reflection/$, but the iota is read out of an item entity instead of my other hand.",
   "hexcasting.page.readwrite.3": "Remove the top iota from the stack, and save it into the item in my other hand.",
@@ -574,7 +575,7 @@
   "hexcasting.page.circle_patterns.5": "Returns the position of the upper-south-east corner of the bounds of this spell circle.",
 
   "_comment": "Normal Spells",
-  
+
   "hexcasting.entry.itempicking": "Working with Items",
   "hexcasting.page.itempicking.1": "Certain spells, such as $(l:hexcasting:patterns/spells/blockworks#OpPlaceBlock)$(action)Place Block/$, will consume additional items from my inventory. When this happens, the spell will first look for the item to use, and then draw from all such items in my inventory.$(br2)This process is called \"picking an item.\"",
   "hexcasting.page.itempicking.2": "More specifically:$(li)First, the spell will search for the first valid item in my hotbar to the $(italic)right of my staff/$, wrapping around at the right-hand side, and starting at the first slot if my staff is in my off-hand.$(li)Second, the spell will draw that item from as $(italic)far back in my inventory/$ as possible, prioritizing the main inventory over the hotbar.",
@@ -607,7 +608,7 @@
   "hexcasting.page.nadirs.5": "Bestows withering. Base cost is one $(item)Amethyst Dust/$ per second.",
   "hexcasting.page.nadirs.6": "Bestows poison. Base cost is one $(item)Amethyst Dust/$ per 3 seconds.",
   "hexcasting.page.nadirs.7": "Bestows slowness. Base cost is one $(item)Amethyst Dust/$ per 5 seconds.",
-  
+
   "hexcasting.entry.hexcasting_spell": "Crafting Hexcasting Items",
   "hexcasting.page.hexcasting_spell.1": "These three spells each create an item that casts a _Hex.$(br)They all require me to hold the empty item in my off-hand, and require two things: the list of patterns to be cast, and an entity representing a dropped stack of $(item)Amethyst/$ to form the item's battery.$(br2)See $(l:items/hexcasting)this entry/$ for more information.",
   "hexcasting.page.hexcasting_spell.2": "Costs about one $(item)Charged Amethyst/$.",
@@ -630,7 +631,7 @@
 
   "hexcasting.page.create_lava.1": "Summon a block of lava or insert a bucket's worth into a block at the given position. Costs about one $(item)Charged Amethyst/$.",
   "hexcasting.page.create_lava.2": "It may be advisable to keep my knowledge of this spell secret. A certain faction of botanists get... touchy about it, or so I've heard.$(br2)Well, no one said tracing the deep secrets of the universe was going to be an easy time.",
-  
+
   "hexcasting.entry.weather_manip": "Weather Manipulation",
   "hexcasting.page.weather_manip.1": "I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it. Costs about 3 $(item)Amethyst Shard/$s.",
   "hexcasting.page.weather_manip.2": "I control the clouds! This spell will summon rain across the world I cast it upon. Costs about 2 $(item)Amethyst Shard/$s. Does nothing if it is already raining.",
@@ -638,10 +639,10 @@
 
   "hexcasting.page.flight.1": "The power of flight! I have wrestled Nature to its knees. But Nature is vengeful, and itches for me to break its contract so it may break my shins.",
   "hexcasting.page.flight.2": "The entity (which must be a player) will be endowed with flight. The first number is the number of seconds they may fly for, and the second number is the radius of the zone they may fly in. If the recipient exits that zone, or their timer runs out while midair, the gravity that they spurned will get its revenge. Painfully.$(br2)It costs approximately 1 $(item)Amethyst Dust/$ multiplied by the radius, per second of flight.",
-  
+
   "hexcasting.page.teleport.1": "Far more powerful than $(l:patterns/spells/basic#OpBlink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to.",
   "hexcasting.page.teleport.2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(item)Charged Crystal/$s.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination.",
-  
+
   "hexcasting.entry.zeniths": "Zeniths",
   "hexcasting.page.zeniths.1": "This family of spells all impart a positive potion effect upon an entity.$(br2)See the $(l:patterns/spells/nadirs)$(action)Nadirs/$ for more information.",
   "hexcasting.page.zeniths.2": "Bestows regeneration. Base cost is one $(item)Amethyst Dust/$ per second.",
