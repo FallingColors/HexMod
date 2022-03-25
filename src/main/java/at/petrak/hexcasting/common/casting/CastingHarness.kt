@@ -3,9 +3,9 @@ package at.petrak.hexcasting.common.casting
 import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.PatternRegistry
+import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
@@ -55,7 +55,8 @@ class CastingHarness private constructor(
      * handle it functionally.
      */
     fun getUpdate(newPat: HexPattern, world: ServerLevel): CastResult {
-        this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
+        if (this.ctx.spellCircle == null)
+            this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
         try {
             // wouldn't it be nice to be able to go paren'
             // i guess i'll call it paren2
@@ -72,15 +73,16 @@ class CastingHarness private constructor(
             val (stack2, sideEffectsUnmut) = operator.operate(this.stack.toMutableList(), this.ctx)
             // Stick a poofy particle effect at the caster position
             val sideEffects = sideEffectsUnmut.toMutableList()
-            sideEffects.add(
-                OperatorSideEffect.Particles(
-                    ParticleSpray(
-                        this.ctx.position,
-                        Vec3(0.0, 1.0, 0.0),
-                        0.5, 1.0
+            if (this.ctx.spellCircle == null)
+                sideEffects.add(
+                    OperatorSideEffect.Particles(
+                        ParticleSpray(
+                            this.ctx.position,
+                            Vec3(0.0, 1.0, 0.0),
+                            0.5, 1.0
+                        )
                     )
                 )
-            )
 
             val fd = this.getFunctionalData().copy(
                 stack = stack2,
@@ -105,12 +107,12 @@ class CastingHarness private constructor(
         var wasSpellCast = false
         var wasPrevPatternInvalid = false
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
-            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.Mishap)
-                wasPrevPatternInvalid = true
-
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
-            if (mustStop)
+            if (mustStop) {
+                wasPrevPatternInvalid = true
                 break
+            }
+
 
             if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell)
                 wasSpellCast = true

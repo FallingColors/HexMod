@@ -1,6 +1,5 @@
-package at.petrak.hexcasting.common.blocks.circles.impetuses;
+package at.petrak.hexcasting.api.circle;
 
-import at.petrak.hexcasting.api.BlockCircleComponent;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -61,6 +60,15 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus tile) {
             tile.stepCircle();
         }
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (!pNewState.is(pState.getBlock())
+            && pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus impetus) {
+            impetus.stopCasting();
+        }
+        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
 
     @Override

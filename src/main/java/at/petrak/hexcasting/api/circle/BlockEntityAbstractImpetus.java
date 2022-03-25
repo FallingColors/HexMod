@@ -1,7 +1,6 @@
-package at.petrak.hexcasting.common.blocks.circles.impetuses;
+package at.petrak.hexcasting.api.circle;
 
 import at.petrak.hexcasting.HexConfig;
-import at.petrak.hexcasting.api.BlockCircleComponent;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
@@ -41,9 +40,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity implements ICapabilityProvider {
     public static final String
@@ -62,6 +59,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
     private BlockPos nextBlock = null;
     @Nullable
     private List<BlockPos> trackedBlocks = null;
+    private transient Set<BlockPos> knownBlocks = null;
     private boolean foundAll = false;
 
     private int mana = 0;
@@ -82,7 +80,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.mana = mana;
     }
 
-    protected void activateSpellCircle(ServerPlayer activator) {
+    public void activateSpellCircle(ServerPlayer activator) {
         if (this.nextBlock != null) {
             return;
         }
@@ -91,6 +89,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.activator = activator.getUUID();
         this.nextBlock = this.getBlockPos();
         this.trackedBlocks = new ArrayList<>();
+        this.knownBlocks = new HashSet<>();
         var maybeCap = activator.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
         maybeCap.ifPresent(capPreferredColorizer -> this.colorizer = capPreferredColorizer.colorizer);
 
@@ -104,7 +103,6 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
         // haha which silly idiot would have done something like this
         if (this.activator == null || this.colorizer == null || this.nextBlock == null || this.trackedBlocks == null) {
-            this.level.destroyBlock(this.getBlockPos(), true);
             return;
         }
 
@@ -145,10 +143,14 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
             // at this point, we haven't actually added nextBlock to trackedBlocks
             // so, in the smallest circle case (a 2x2), this will have a size of 3 (with this block being the 4th).
             var closedLoop = (this.trackedBlocks.size() >= 3 && this.trackedBlocks.get(0).equals(neighborPos));
-            var mightBeOkThere = closedLoop || !this.trackedBlocks.contains(neighborPos);
+            var mightBeOkThere = closedLoop
+                || this.trackedBlocks.isEmpty()
+                || !this.trackedBlocks.get(this.trackedBlocks.size() - 1).equals(neighborPos);
             if (mightBeOkThere
                 && blockThere.getBlock() instanceof BlockCircleComponent cc2
-                && cc2.canEnterFromDirection(exit, thisNormal, neighborPos, blockThere, this.level)) {
+                && cc2.canEnterFromDirection(exit.getOpposite(), thisNormal, neighborPos, blockThere, this.level)
+                // another good use for the implies operator 😩
+                && (!blockThere.getValue(BlockCircleComponent.ENERGIZED) || this.knownBlocks.contains(neighborPos))) {
                 if (foundPos == null) {
                     foundPos = neighborPos;
                     this.foundAll |= closedLoop;
@@ -163,6 +165,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         if (foundPos != null) {
             // pog
             this.trackedBlocks.add(this.nextBlock);
+            this.knownBlocks.add(this.nextBlock);
             this.nextBlock = foundPos;
         } else {
             // end of the line
@@ -189,22 +192,33 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                 new SpellCircleContext(this.getBlockPos(), bounds, this.activatorAlwaysInRange()));
             var harness = new CastingHarness(ctx);
 
+            var castSpell = false;
+            BlockPos erroredPos = null;
             for (var tracked : this.trackedBlocks) {
                 var bs = this.level.getBlockState(tracked);
                 if (bs.getBlock() instanceof BlockCircleComponent cc) {
                     var newPattern = cc.getPattern(tracked, bs, this.level);
                     if (newPattern != null) {
                         var info = harness.executeNewPattern(newPattern, splayer.getLevel());
+                        if (info.getWasSpellCast()) {
+                            castSpell = true;
+                        }
                         if (info.getWasPrevPatternInvalid()) {
-                            this.sfx(tracked, false);
+                            erroredPos = tracked;
                             break;
                         }
                     }
                 }
             }
-        }
 
-        this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST.get(), SoundSource.BLOCKS, 2f, 1f);
+            if (castSpell) {
+                this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST.get(), SoundSource.BLOCKS,
+                    2f, 1f);
+            }
+            if (erroredPos != null) {
+                this.sfx(erroredPos, false);
+            }
+        }
     }
 
     @Contract(pure = true)
@@ -298,7 +312,9 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
     protected void stopCasting() {
         for (var tracked : this.trackedBlocks) {
             var bs = this.level.getBlockState(tracked);
-            this.level.setBlockAndUpdate(tracked, bs.setValue(BlockCircleComponent.ENERGIZED, false));
+            if (bs.getBlock() instanceof BlockCircleComponent) {
+                this.level.setBlockAndUpdate(tracked, bs.setValue(BlockCircleComponent.ENERGIZED, false));
+            }
         }
 
         this.activator = null;
@@ -306,8 +322,12 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.trackedBlocks = null;
         this.foundAll = false;
 
-        this.level.setBlockAndUpdate(this.getBlockPos(),
-            this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, false));
+        // without this check, breaking the block will just immediately replace it with
+        // the new unenergized state
+        if (this.level.getBlockState(this.getBlockPos()).getBlock() instanceof BlockAbstractImpetus) {
+            this.level.setBlockAndUpdate(this.getBlockPos(),
+                this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, false));
+        }
     }
 
     @Nullable
@@ -389,8 +409,11 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
             this.foundAll = tag.getBoolean(TAG_FOUND_ALL);
             var trackeds = tag.getList(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND);
             this.trackedBlocks = new ArrayList<>(trackeds.size());
+            this.knownBlocks = new HashSet<>();
             for (var tracked : trackeds) {
-                this.trackedBlocks.add(NbtUtils.readBlockPos((CompoundTag) tracked));
+                var pos = NbtUtils.readBlockPos((CompoundTag) tracked);
+                this.trackedBlocks.add(pos);
+                this.knownBlocks.add(pos);
             }
         }
 

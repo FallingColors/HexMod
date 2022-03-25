@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.BlockCircleComponent;
+import at.petrak.hexcasting.api.circle.BlockCircleComponent;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.paucal.api.datagen.PaucalBlockStateAndModelProvider;

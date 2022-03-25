@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.circles
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus
+import at.petrak.hexcasting.api.circle.BlockAbstractImpetus
 import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import net.minecraft.world.phys.Vec3

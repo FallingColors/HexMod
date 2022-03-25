@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClickImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
 import at.petrak.hexcasting.common.blocks.decoration.BlockSconce;
