@@ -198,9 +198,9 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143")
-    
-    compileOnly fg.deobf("curse.maven:paucal-597824:3711583")
-    runtimeOnly fg.deobf("curse.maven:paucal-597824:3711583")
+
+    compileOnly fg.deobf("curse.maven:paucal-597824:3711599")
+    runtimeOnly fg.deobf("curse.maven:paucal-597824:3711599")
 }
 
 mixin {
