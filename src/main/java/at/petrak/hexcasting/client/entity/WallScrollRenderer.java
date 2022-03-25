@@ -46,8 +46,7 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
         ps.mulPose(Vector3f.YP.rotationDegrees(180f - yaw));
         ps.mulPose(Vector3f.ZP.rotationDegrees(180f));
 
-        int light = LevelRenderer.getLightColor(wallScroll.level,
-            wallScroll.getPos().relative(wallScroll.getDirection()));
+        int light = LevelRenderer.getLightColor(wallScroll.level, wallScroll.getPos());
 
         {
             ps.pushPose();

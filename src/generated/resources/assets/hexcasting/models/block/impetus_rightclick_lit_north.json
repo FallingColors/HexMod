@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:block/cube",
   "textures": {
-    "down": "hexcasting:block/impetus/rightclick/down_lit",
-    "up": "hexcasting:block/impetus/rightclick/up_lit",
-    "north": "hexcasting:block/impetus/rightclick/front_lit",
-    "south": "hexcasting:block/impetus/rightclick/back_lit",
-    "east": "hexcasting:block/impetus/rightclick/right_lit",
-    "west": "hexcasting:block/impetus/rightclick/left_lit",
+    "down": "hexcasting:block/impetus/down_lit",
+    "up": "hexcasting:block/impetus/up_lit",
+    "north": "hexcasting:block/impetus/rightclick_lit",
+    "south": "hexcasting:block/impetus/back_lit",
+    "east": "hexcasting:block/impetus/right_lit",
+    "west": "hexcasting:block/impetus/left_lit",
     "particle": "hexcasting:block/slate"
   }
 }

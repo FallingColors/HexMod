@@ -39,10 +39,15 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         });
 
-        var slateTex = modLoc("block/slate");
-        arrowCircleBlock(HexBlocks.EMPTY_IMPETUS.get(), "empty_impetus", "block/impetus/empty", slateTex);
-        arrowCircleBlock(HexBlocks.IMPETUS_RIGHTCLICK.get(), "impetus_rightclick", "block/impetus/rightclick",
-            slateTex);
+        impetus(HexBlocks.IMPETUS_RIGHTCLICK.get(), "impetus_rightclick", "rightclick");
+        arrowCircleBlock(HexBlocks.EMPTY_IMPETUS.get(), "empty_impetus", modLoc("block/slate"),
+            "impetus/front_empty",
+            "impetus/back_empty",
+            "impetus/up_empty",
+            "impetus/down_empty",
+            "impetus/left_empty",
+            "impetus/right_empty"
+        );
 
         blockAndItem(HexBlocks.SLATE_BLOCK.get(), models().cubeAll("slate_block", modLoc("block/slate")));
         cubeBlockAndItem(HexBlocks.AMETHYST_DUST_BLOCK.get(), "amethyst_dust_block");
@@ -57,18 +62,30 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         simpleBlockItem(HexBlocks.SCONCE.get(), sconceModel);
     }
 
-    private void arrowCircleBlock(Block block, String name, String stub, ResourceLocation particle) {
+    private void impetus(Block block, String name, String stub) {
+        arrowCircleBlock(block, name, modLoc("block/slate"),
+            "impetus/" + stub,
+            "impetus/back",
+            "impetus/up",
+            "impetus/down",
+            "impetus/left",
+            "impetus/right"
+        );
+    }
+
+    private void arrowCircleBlock(Block block, String name, ResourceLocation particle, String frontStub,
+        String backStub, String upStub, String downStub, String leftStub, String rightStub) {
         getVariantBuilder(block).forAllStates(bs -> {
             var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
             var litness = isLit ? "lit" : "dim";
             var dir = bs.getValue(BlockStateProperties.FACING);
 
-            var up = modLoc(stub + "/up_" + litness);
-            var front = modLoc(stub + "/front_" + litness);
-            var back = modLoc(stub + "/back_" + litness);
-            var left = modLoc(stub + "/left_" + litness);
-            var right = modLoc(stub + "/right_" + litness);
-            var down = modLoc(stub + "/down_" + litness);
+            var up = modLoc("block/" + upStub + "_" + litness);
+            var front = modLoc("block/" + frontStub + "_" + litness);
+            var back = modLoc("block/" + backStub + "_" + litness);
+            var left = modLoc("block/" + leftStub + "_" + litness);
+            var right = modLoc("block/" + rightStub + "_" + litness);
+            var down = modLoc("block/" + downStub + "_" + litness);
 
             ResourceLocation bottom = null, top = null, north = null, south = null, east = null, west = null;
             switch (dir) {
@@ -119,7 +136,11 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             var modelName = name + "_" + litness + "_" + dir.getName();
             var model = models().cube(modelName, bottom, top, north, south, east, west)
                 .texture("particle", particle);
-            if (!isLit && dir == Direction.NORTH) {
+            // Ordinarily i would use north, because north is the lower-right direction in the inv
+            // and that's where other blocks face.
+            // But impetuses are only distinguished by their front faces and I don't want it covered
+            // by the number.
+            if (!isLit && dir == Direction.EAST) {
                 simpleBlockItem(block, model);
             }
             return ConfiguredModel.builder()
