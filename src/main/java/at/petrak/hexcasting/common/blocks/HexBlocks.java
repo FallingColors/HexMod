@@ -5,11 +5,14 @@ import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityLookingImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClickImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockLookingImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
 import at.petrak.hexcasting.common.blocks.decoration.BlockSconce;
 import at.petrak.hexcasting.common.items.HexItems;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -26,7 +29,7 @@ public class HexBlocks {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(
         ForgeRegistries.BLOCK_ENTITIES, HexMod.MOD_ID);
 
-    public static final RegistryObject<Block> CONJURED = BLOCKS.register("conjured",
+    public static final RegistryObject<Block> CONJURED = blockItem("conjured",
         () -> new BlockConjured(
             BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.DIAMOND)
                 .sound(SoundType.AMETHYST)
@@ -34,7 +37,8 @@ public class HexBlocks {
                 .instabreak()
                 .noOcclusion()
                 .isSuffocating(HexBlocks::never)
-                .isViewBlocking(HexBlocks::never)));
+                .isViewBlocking(HexBlocks::never)),
+        new Item.Properties());
 
     private static BlockBehaviour.Properties slateish() {
         return BlockBehaviour.Properties
@@ -55,9 +59,14 @@ public class HexBlocks {
 
     public static final RegistryObject<BlockEmptyImpetus> EMPTY_IMPETUS = blockItem("empty_impetus",
         () -> new BlockEmptyImpetus(slateish()));
+
     public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = blockItem(
         "impetus_rightclick",
         () -> new BlockRightClickImpetus(slateish()
+            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
+    public static final RegistryObject<BlockLookingImpetus> IMPETUS_LOOK = blockItem(
+        "impetus_look",
+        () -> new BlockLookingImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
     // Decoration?!
@@ -92,6 +101,9 @@ public class HexBlocks {
     public static final RegistryObject<BlockEntityType<BlockEntityRightClickImpetus>> IMPETUS_RIGHTCLICK_TILE =
         BLOCK_ENTITIES.register("impetus_rightclick_tile",
             () -> BlockEntityType.Builder.of(BlockEntityRightClickImpetus::new, IMPETUS_RIGHTCLICK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityLookingImpetus>> IMPETUS_LOOK_TILE =
+        BLOCK_ENTITIES.register("impetus_look_tile",
+            () -> BlockEntityType.Builder.of(BlockEntityLookingImpetus::new, IMPETUS_LOOK.get()).build(null));
 
 
     private static boolean never(Object... args) {
@@ -99,8 +111,13 @@ public class HexBlocks {
     }
 
     private static <T extends Block> RegistryObject<T> blockItem(String name, Supplier<T> block) {
+        return blockItem(name, block, HexItems.props());
+    }
+
+    private static <T extends Block> RegistryObject<T> blockItem(String name, Supplier<T> block,
+        Item.Properties props) {
         var out = BLOCKS.register(name, block);
-        HexItems.ITEMS.register(name, () -> new BlockItem(out.get(), HexItems.props()));
+        HexItems.ITEMS.register(name, () -> new BlockItem(out.get(), props));
         return out;
     }
 

@@ -53,6 +53,7 @@
   "block.hexcasting.slate.written": "Patterned Slate",
   "block.hexcasting.empty_impetus": "Empty Impetus",
   "block.hexcasting.impetus_rightclick": "Toolsmith Impetus",
+  "block.hexcasting.impetus_look": "Fletcher Impetus",
 
   "block.hexcasting.slate_block": "Block of Slate",
   "block.hexcasting.amethyst_dust_block": "Block of Amethyst Dust",
@@ -240,6 +241,7 @@
   "hexcasting.subtitles.spellcircle.fail": "Spell circle fizzles out",
   "hexcasting.subtitles.spellcircle.cast": "Spell circle casts",
   "hexcasting.subtitles.scroll.dust": "Scroll covers with dust",
+  "hexcasting.subtitles.impetus.fletcher.tick": "Fletcher Impetus ticks",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 
@@ -440,6 +442,7 @@
   "hexcasting.page.impetus.4": "The solution I aim for, then, is to specialize a mind. Remove it from the tyranny of nerves, clip all outputs but delicate splays of _media-manipulating apparati, cauterize all inputs but the signal to start its work.$(br2)The process of $(action)mindflaying/$ I am now familiar with will do excellently; the mind of a villager is complex enough to do the work, but not so complex as to resist its reformation.",
   "hexcasting.page.impetus.5": "First, the cradle. Although it does not work as an $(item)Impetus/$, the flow of _media in a circle will only exit out the side pointed to by the arrows. This allows me to change the plane in which the wave flows, for example.",
   "hexcasting.page.impetus.6": "Then, to transpose the mind. Villagers of different professions will lend different actuation conditions to the resulting $(item)Impetus/$. A Toolsmith's activates on a simple $(k:use).",
+  "hexcasting.page.impetus.7": "A Fletcher's activates when looked at for a short time.",
 
   "_comment": "Patterns",
 

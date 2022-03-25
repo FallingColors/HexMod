@@ -95,7 +95,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
         this.level.setBlockAndUpdate(this.getBlockPos(),
             this.getBlockState().setValue(BlockAbstractImpetus.ENERGIZED, true));
-        this.setChanged();
+        this.stepCircle();
     }
 
     protected void stepCircle() {

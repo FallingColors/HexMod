@@ -32,7 +32,7 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     @Override
     public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos, BlockState bs,
         Level world) {
-        return enterDir != bs.getValue(FACING).getOpposite();
+        return enterDir != bs.getValue(FACING);
     }
 
     @Override
@@ -57,7 +57,7 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
 
     @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
-        if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus tile) {
+        if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus tile && pState.getValue(ENERGIZED)) {
             tile.stepCircle();
         }
     }

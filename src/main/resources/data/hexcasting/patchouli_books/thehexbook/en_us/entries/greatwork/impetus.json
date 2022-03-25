@@ -31,6 +31,11 @@
       "type": "hexcasting:brainsweep",
       "recipe": "hexcasting:brainsweep/impetus_rightclick",
       "text": "hexcasting.page.impetus.6"
+    },
+    {
+      "type": "hexcasting:brainsweep",
+      "recipe": "hexcasting:brainsweep/impetus_look",
+      "text": "hexcasting.page.impetus.7"
     }
   ]
 }

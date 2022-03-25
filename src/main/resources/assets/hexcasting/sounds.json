@@ -92,5 +92,12 @@
       "minecraft:dig/sand4"
     ],
     "subtitle": "hexcasting.subtitles.scroll.dust"
+  },
+
+  "impetus.fletcher.tick": {
+    "sounds": [
+      "minecraft:note/hat"
+    ],
+    "subtitle": "hexcasting.subtitles.impetus.fletcher.tick"
   }
 }

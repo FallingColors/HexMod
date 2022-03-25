@@ -229,6 +229,12 @@ public class HexRecipes extends PaucalRecipeProvider {
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_rightclick"));
 
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
+            new VillagerIngredient(new ResourceLocation("fletcher"), null, 1),
+            HexBlocks.IMPETUS_LOOK.get().defaultBlockState())
+            .unlockedBy("enlightenment", enlightenment)
+            .save(recipes, modLoc("brainsweep/impetus_look"));
+
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 2),
             Blocks.BUDDING_AMETHYST.defaultBlockState())
