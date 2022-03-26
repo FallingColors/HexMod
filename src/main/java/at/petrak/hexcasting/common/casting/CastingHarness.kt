@@ -4,9 +4,12 @@ import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
+import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
+import at.petrak.hexcasting.common.casting.mishaps.Mishap
+import at.petrak.hexcasting.common.casting.mishaps.MishapTooManyCloseParens
 import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import at.petrak.hexcasting.common.lib.HexCapabilities
@@ -18,6 +21,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
 import kotlin.math.min
@@ -57,6 +61,8 @@ class CastingHarness private constructor(
     fun getUpdate(newPat: HexPattern, world: ServerLevel): CastResult {
         if (this.ctx.spellCircle == null)
             this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
+
+        var operatorIdPair: Pair<Operator, ResourceLocation?>? = null
         try {
             // wouldn't it be nice to be able to go paren'
             // i guess i'll call it paren2
@@ -69,8 +75,8 @@ class CastingHarness private constructor(
             }
 
             // Don't catch this one
-            val operator = PatternRegistry.matchPattern(newPat, world)
-            val (stack2, sideEffectsUnmut) = operator.operate(this.stack.toMutableList(), this.ctx)
+            operatorIdPair = PatternRegistry.matchPatternAndID(newPat, world)
+            val (stack2, sideEffectsUnmut) = operatorIdPair.first.operate(this.stack.toMutableList(), this.ctx)
             // Stick a poofy particle effect at the caster position
             val sideEffects = sideEffectsUnmut.toMutableList()
             if (this.ctx.spellCircle == null)
@@ -92,10 +98,10 @@ class CastingHarness private constructor(
                 fd,
                 sideEffects,
             )
-        } catch (exn: CastException) {
+        } catch (mishap: Mishap) {
             return CastResult(
                 this.getFunctionalData(),
-                listOf(OperatorSideEffect.Mishap(exn)),
+                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.second))),
             )
         }
     }
@@ -159,7 +165,7 @@ class CastingHarness private constructor(
     private fun handleParentheses(newPat: HexPattern): FunctionalData? {
         val operator = try {
             PatternRegistry.matchPattern(newPat, this.ctx.world)
-        } catch (e: CastException) {
+        } catch (mishap: Mishap) {
             null
         }
 
@@ -194,7 +200,7 @@ class CastingHarness private constructor(
                         parenthesized = listOf()
                     )
                 } else if (newParenCount < 0) {
-                    throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
+                    throw MishapTooManyCloseParens()
                 } else {
                     // we have this situation: "(()"
                     // we need to add the close paren
@@ -228,7 +234,7 @@ class CastingHarness private constructor(
                 parenCount = this.parenCount + 1
             )
         } else if (operator == Widget.CLOSE_PAREN) {
-            throw CastException(CastException.Reason.TOO_MANY_CLOSE_PARENS)
+            throw MishapTooManyCloseParens()
         } else {
             null
         }

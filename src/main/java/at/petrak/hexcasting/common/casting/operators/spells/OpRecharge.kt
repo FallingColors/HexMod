@@ -5,9 +5,9 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.ManaHelper
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.item.ItemEntity
@@ -20,11 +20,21 @@ object OpRecharge : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
         if (otherHandItem.item !is ItemManaHolder) {
-            throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemManaHolder::class.java, otherHandItem)
+            throw MishapBadOffhandItem.of(
+                otherHandItem,
+                "rechargable"
+            )
         }
 
         val entity = args.getChecked<ItemEntity>(0)
         ctx.assertEntityInRange(entity)
+
+        if (!ManaHelper.isManaItem(entity.item)) {
+            throw MishapBadOffhandItem.of(
+                otherHandItem,
+                "mana"
+            )
+        }
 
         return Triple(Spell(entity), 100_000, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }

@@ -5,8 +5,9 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.mishaps.MishapAlreadyBrainswept
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadBrainsweep
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
@@ -29,7 +30,7 @@ object OpBrainsweep : SpellOperator {
         ctx.assertEntityInRange(sacrifice)
 
         if (Brainsweeping.isBrainswept(sacrifice))
-            throw CastException(CastException.Reason.RECIPE_DIDNT_WORK)
+            throw MishapAlreadyBrainswept(sacrifice)
 
         val bpos = BlockPos(pos)
         val state = ctx.world.getBlockState(bpos)
@@ -37,7 +38,7 @@ object OpBrainsweep : SpellOperator {
         val recman = ctx.world.recipeManager
         val recipes = recman.getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE)
         val recipe = recipes.find { it.matches(state, sacrifice) }
-            ?: throw CastException(CastException.Reason.RECIPE_DIDNT_WORK)
+            ?: throw MishapBadBrainsweep(sacrifice, bpos)
 
         return Triple(
             Spell(bpos, sacrifice, recipe),

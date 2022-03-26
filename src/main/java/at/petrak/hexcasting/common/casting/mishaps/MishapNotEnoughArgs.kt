@@ -17,5 +17,5 @@ class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
-        error("not_enough_args", actionName(errorCtx.action!!), expected, got)
+        error("not_enough_args", actionName(errorCtx.action), expected, got)
 }

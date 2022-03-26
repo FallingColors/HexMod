@@ -30,6 +30,11 @@ public class ItemFocus extends ItemDataHolder {
     }
 
     @Override
+    public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
+        return !tag.getBoolean(TAG_SEALED);
+    }
+
+    @Override
     public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
         if (!tag.getBoolean(TAG_SEALED)) {
             tag.put(TAG_DATA, datum.serializeToNBT());

@@ -6,7 +6,6 @@ import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 
@@ -24,19 +23,13 @@ class MishapEntityTooFarAway(val entity: Entity) : Mishap() {
             ctx.caster.setItemInHand(hand, ItemStack.EMPTY.copy())
         }
 
-        val delta = entity.position().subtract(ctx.position).normalize().scale(2.0)
+        val delta = entity.position().subtract(ctx.position).normalize().scale(0.5)
 
         for (item in items) {
-            val entity = ItemEntity(
-                ctx.world,
-                ctx.position.x, ctx.position.y, ctx.position.z,
-                item,
-                delta.x, delta.y, delta.z
-            )
-            ctx.world.addWithUUID(entity)
+            yeetItem(item, ctx, delta)
         }
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
-        error("entity_too_far", SpellDatum.make(entity).display(), actionName(errorCtx.action!!))
+        error("entity_too_far", SpellDatum.make(entity).display(), actionName(errorCtx.action))
 }

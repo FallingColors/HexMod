@@ -5,7 +5,6 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
@@ -24,16 +23,10 @@ class MishapLocationTooFarAway(val location: Vec3) : Mishap() {
             ctx.caster.setItemInHand(hand, ItemStack.EMPTY.copy())
         }
 
-        val delta = location.subtract(ctx.position).normalize().scale(2.0)
+        val delta = location.subtract(ctx.position).normalize().scale(0.5)
 
         for (item in items) {
-            val entity = ItemEntity(
-                ctx.world,
-                ctx.position.x, ctx.position.y, ctx.position.z,
-                item,
-                delta.x, delta.y, delta.z
-            )
-            ctx.world.addWithUUID(entity)
+            yeetItem(item, ctx, delta)
         }
     }
 

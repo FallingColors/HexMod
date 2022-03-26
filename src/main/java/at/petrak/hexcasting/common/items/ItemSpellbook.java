@@ -82,6 +82,11 @@ public class ItemSpellbook extends ItemDataHolder {
         }
     }
 
+    @Override
+    public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
+        return true;
+    }
+
     public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
         int idx;
         if (tag.contains(TAG_SELECTED_PAGE)) {

@@ -5,8 +5,9 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.common.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemDataHolder
 import at.petrak.hexcasting.common.items.ItemScroll
@@ -26,7 +27,7 @@ object OpWrite : SpellOperator {
         val datum = args[0]
 
         val canWrite = if (handItem is ItemDataHolder) {
-            true
+            handItem.canWrite(tag, datum)
         } else if (datum.payload is HexPattern) {
             if (handStack.`is`(HexItems.SCROLL.get()) && !tag.contains(ItemScroll.TAG_PATTERN)) {
                 true
@@ -44,10 +45,10 @@ object OpWrite : SpellOperator {
             false
         }
         if (!canWrite)
-            throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemDataHolder::class.java, handStack)
+            throw MishapBadOffhandItem.of(handStack, "iota.write")
 
         if (datum.payload is Player && datum.payload != ctx.caster)
-            throw CastException(CastException.Reason.NO_WRITING_OTHER_NAMES)
+            throw MishapOthersName(datum.payload)
 
         return Triple(
             Spell(datum),

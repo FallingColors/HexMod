@@ -3,8 +3,11 @@ package at.petrak.hexcasting.common.casting
 import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.common.casting.mishaps.MishapEntityTooFarAway
+import at.petrak.hexcasting.common.casting.mishaps.MishapEvalTooDeep
+import at.petrak.hexcasting.common.casting.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.items.ItemDataHolder
-import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.RegisterHelper.prefix
 import net.minecraft.server.level.ServerLevel
@@ -34,23 +37,13 @@ data class CastingContext(
     val position: Vec3 get() = caster.position()
 
 
-    fun getSpellbook(): ItemStack {
-        val handItem =
-            caster.getItemInHand(this.otherHand)
-        return if (handItem.item is ItemSpellbook) {
-            handItem
-        } else {
-            throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemSpellbook::class.java, handItem)
-        }
-    }
-
     fun getDataHolder(): ItemStack {
         val handItem =
             caster.getItemInHand(this.otherHand)
         return if (handItem.item is ItemDataHolder) {
             handItem
         } else {
-            throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemDataHolder::class.java, handItem)
+            throw MishapBadOffhandItem.of(handItem, "iota")
         }
     }
 
@@ -61,7 +54,7 @@ data class CastingContext(
         this.depth++
         val maxAllowedDepth = HexConfig.maxRecurseDepth.get()
         if (this.depth > maxAllowedDepth) {
-            throw CastException(CastException.Reason.TOO_MANY_RECURSIVE_EVALS, maxAllowedDepth, this.depth)
+            throw MishapEvalTooDeep()
         }
     }
 
@@ -69,14 +62,14 @@ data class CastingContext(
      * Check to make sure a vec is in range
      */
     fun assertVecInRange(vec: Vec3) {
-        if (!isVecInRange(vec)) throw CastException(CastException.Reason.TOO_FAR, vec)
+        if (!isVecInRange(vec)) throw MishapLocationTooFarAway(vec)
     }
 
     /**
      * Check to make sure an entity is in range
      */
     fun assertEntityInRange(entity: Entity) {
-        if (!isEntityInRange(entity)) throw CastException(CastException.Reason.TOO_FAR, entity.position())
+        if (!isEntityInRange(entity)) throw MishapEntityTooFarAway(entity)
     }
 
     fun isVecInRange(vec: Vec3): Boolean {

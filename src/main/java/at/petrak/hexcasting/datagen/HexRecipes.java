@@ -105,12 +105,12 @@ public class HexRecipes extends PaucalRecipeProvider {
             .pattern(" B ")
             .unlockedBy("has_item", has(Items.AMETHYST_SHARD)).save(recipes);
 
-        for (var dyeColorizer : HexItems.DYE_COLORIZERS) {
-            var item = dyeColorizer.get();
+        for (var dye : DyeColor.values()) {
+            var item = HexItems.DYE_COLORIZERS.get(dye).get();
             ShapedRecipeBuilder.shaped(item)
                 .define('B', Items.BOWL)
                 .define('D', HexItems.AMETHYST_DUST.get())
-                .define('C', DyeItem.byColor(DyeColor.values()[item.getDyeIdx()]))
+                .define('C', DyeItem.byColor(dye))
                 .pattern(" C ")
                 .pattern(" D ")
                 .pattern(" B ")

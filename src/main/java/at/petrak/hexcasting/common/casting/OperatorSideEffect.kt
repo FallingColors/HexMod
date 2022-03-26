@@ -2,14 +2,14 @@ package at.petrak.hexcasting.common.casting
 
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
+import at.petrak.hexcasting.common.casting.mishaps.Mishap
+import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.datagen.HexAdvancements
 import net.minecraft.Util
-import net.minecraft.network.chat.TextComponent
 import net.minecraft.network.chat.TranslatableComponent
-import kotlin.random.Random
-import kotlin.random.nextInt
+import net.minecraft.world.item.DyeColor
 
 /**
  * Things that happen after a spell is cast.
@@ -59,20 +59,20 @@ sealed class OperatorSideEffect {
         }
     }
 
-    data class Mishap(val exn: CastException) : OperatorSideEffect() {
+    data class DoMishap(val mishap: Mishap, val errorCtx: Mishap.Context) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
-            harness.ctx.caster.sendMessage(
-                TextComponent(exn.message),
-                Util.NIL_UUID
+            // for now
+            harness.ctx.caster.sendMessage(mishap.errorMessage(harness.ctx, errorCtx), Util.NIL_UUID)
+
+            val spray = mishap.particleSpray(harness.ctx)
+            val color = mishap.accentColor(harness.ctx, errorCtx)
+            spray.sprayParticles(harness.ctx.world, color)
+            spray.sprayParticles(
+                harness.ctx.world,
+                FrozenColorizer(HexItems.DYE_COLORIZERS[DyeColor.RED]!!.get(), Util.NIL_UUID)
             )
 
-            when (exn.reason) {
-                CastException.Reason.INVALID_PATTERN -> {
-                    val idx = Random.nextInt(0..harness.stack.size)
-                    harness.stack.add(idx, SpellDatum.make(Widget.GARBAGE))
-                }
-                else -> {}
-            }
+            mishap.execute(harness.ctx, errorCtx, harness.stack)
 
             return true
         }

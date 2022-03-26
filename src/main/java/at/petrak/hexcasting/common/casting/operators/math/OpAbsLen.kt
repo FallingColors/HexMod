@@ -11,7 +11,7 @@ object OpAbsLen : ConstManaOperator {
         get() = 1
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val x = MathOpUtils.GetNumOrVec(args[0])
+        val x = MathOpUtils.GetNumOrVec(args[0], 0)
 
         return spellListOf(
             x.map({ num -> num.absoluteValue }, { vec -> vec.length() })

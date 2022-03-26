@@ -28,6 +28,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -364,7 +365,8 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
             var spray = new ParticleSpray(vpos, vecOutDir.scale(success ? 1.0 : 1.5), success ? 0.1 : 0.5,
                 Mth.PI / (success ? 4 : 2), success ? 30 : 100);
             spray.sprayParticles(serverLevel,
-                success ? this.colorizer : new FrozenColorizer(HexItems.DYE_COLORIZERS[14].get(), this.activator));
+                success ? this.colorizer : new FrozenColorizer(HexItems.DYE_COLORIZERS.get(DyeColor.RED).get(),
+                    this.activator));
         }
 
         var pitch = 1f;
