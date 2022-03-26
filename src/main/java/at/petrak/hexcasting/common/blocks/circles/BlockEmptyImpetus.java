@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -51,6 +52,11 @@ public class BlockEmptyImpetus extends BlockCircleComponent {
     @Override
     public float particleHeight(BlockPos pos, BlockState bs, Level world) {
         return 0.5f;
+    }
+
+    @Override
+    public PushReaction getPistonPushReaction(BlockState pState) {
+        return PushReaction.BLOCK;
     }
 
     @Override
