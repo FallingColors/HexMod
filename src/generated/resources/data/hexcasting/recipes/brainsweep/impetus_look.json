@@ -12,8 +12,7 @@
     "name": "hexcasting:impetus_look",
     "properties": {
       "facing": "north",
-      "energized": "false",
-      "look_amount": "0"
+      "energized": "false"
     }
   }
 }
