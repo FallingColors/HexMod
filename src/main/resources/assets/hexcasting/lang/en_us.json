@@ -246,6 +246,7 @@
   "hexcasting.spell.hexcasting:const/vec/nx": "Vector Reflection -X",
   "hexcasting.spell.hexcasting:const/vec/ny": "Vector Reflection -Y",
   "hexcasting.spell.hexcasting:const/vec/nz": "Vector Reflection -Z",
+  "hexcasting.spell.hexcasting:const/vec/0": "Vector Reflection Zero",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 
@@ -504,7 +505,8 @@
   "hexcasting.page.consts.1": "The left-hand counter-clockwise pattern adds (1, 0, 0) to the stack; the right-hand clockwise pattern adds (-1, 0, 0).",
   "hexcasting.page.consts.2": "The left-hand counter-clockwise pattern adds (0, 1, 0) to the stack; the right-hand clockwise pattern adds (0, -1, 0).",
   "hexcasting.page.consts.3": "The left-hand counter-clockwise pattern adds (0, 0, 1); the right-hand clockwise pattern adds (0, 0, -1).",
-  "hexcasting.page.consts.4": "Adds the Null influence to the top of the stack.",
+  "hexcasting.page.consts.4": "Adds (0, 0, 0) to the stack.",
+  "hexcasting.page.consts.5": "Adds the Null influence to the top of the stack.",
 
   "hexcasting.entry.stackmanip": "Stack Manipulation",
   "hexcasting.page.stackmanip1": "Removes the top of the stack and does nothing with it. This is handy when I make a mistake.",

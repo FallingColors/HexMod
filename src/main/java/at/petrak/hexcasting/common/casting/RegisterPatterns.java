@@ -282,6 +282,9 @@ public class RegisterPatterns {
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, -1.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeeeqd", HexDir.SOUTH_WEST), prefix("const/vec/nz"),
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, -1.0))));
+            // Yep, this is what I spend the "plain hexagon" pattern on.
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqq", HexDir.NORTH_WEST), prefix("const/vec/0"),
+                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 0.0))));
 
             // == Entities ==
 
