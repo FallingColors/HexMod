@@ -18,6 +18,7 @@ import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableConditio
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootTableIdCondition;
@@ -40,12 +41,20 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
         ResourceLocation amethystCluster = new ResourceLocation("minecraft:blocks/amethyst_cluster");
         // 4? that's a lot!
         add("amethyst_cluster_shard_reducer", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
-            Items.AMETHYST_SHARD, -2, amethystCluster
+            Items.AMETHYST_SHARD, new LootItemFunction[]{
+            SetItemCountFunction.setCount(ConstantValue.exactly(-2), true).build(),
+        }, new LootItemCondition[]{
+            LootTableIdCondition.builder(amethystCluster).build(),
+            MatchTool.toolMatches(
+                    ItemPredicate.Builder.item().hasEnchantment(
+                        new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
+                .invert().build(),
+        }
         ));
 
         add("amethyst_cluster_dust", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
             HexItems.AMETHYST_DUST.get(), new LootItemFunction[]{
-            SetItemCountFunction.setCount(ConstantValue.exactly(4)).build(),
+            SetItemCountFunction.setCount(UniformGenerator.between(1, 4)).build(),
             ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE).build()
         }, new LootItemCondition[]{
             LootTableIdCondition.builder(amethystCluster).build(),
@@ -62,7 +71,8 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
                     ItemPredicate.Builder.item().hasEnchantment(
                         new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
                 .invert().build(),
-            BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.5f, 0.8f, 0.9f, 1.0f).build()
+            BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
+                0.25f, 0.35f, 0.5f, 0.75f, 1.0f).build()
         }));
 
 
