@@ -51,14 +51,14 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 PatternValidity.OK
         }
 
-        val sound =
-            if (info.wasPrevPatternInvalid) HexSounds.FAIL_PATTERN.get() else HexSounds.ADD_PATTERN.get()
-        Minecraft.getInstance().soundManager.play(
-            SimpleSoundInstance.forUI(
-                sound,
-                1f + (Math.random().toFloat() - 0.5f) * 0.1f
+        if (!info.wasPrevPatternInvalid) {
+            Minecraft.getInstance().soundManager.play(
+                SimpleSoundInstance.forUI(
+                    HexSounds.ADD_PATTERN.get(),
+                    1f + (Math.random().toFloat() - 0.5f) * 0.1f
+                )
             )
-        )
+        }
     }
 
     override fun init() {

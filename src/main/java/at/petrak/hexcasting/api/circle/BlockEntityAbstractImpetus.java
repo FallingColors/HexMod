@@ -55,7 +55,8 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         TAG_NEXT_BLOCK = "next_block",
         TAG_TRACKED_BLOCKS = "tracked_blocks",
         TAG_FOUND_ALL = "found_all",
-        TAG_MANA = "mana";
+        TAG_MANA = "mana",
+        TAG_LAST_MISHAP = "last_mishap";
 
     @Nullable
     private UUID activator = null;
@@ -67,6 +68,8 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
     private List<BlockPos> trackedBlocks = null;
     private transient Set<BlockPos> knownBlocks = null;
     private boolean foundAll = false;
+    @Nullable
+    private Component lastMishap = null;
 
     private int mana = 0;
     private final LazyOptional<IItemHandler> inventoryHandlerLazy;
@@ -84,6 +87,15 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
     public void setMana(int mana) {
         this.mana = mana;
+    }
+
+    @Nullable
+    public Component getLastMishap() {
+        return lastMishap;
+    }
+
+    public void setLastMishap(@Nullable Component lastMishap) {
+        this.lastMishap = lastMishap;
     }
 
     public void activateSpellCircle(ServerPlayer activator) {
@@ -106,14 +118,18 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
     public List<Pair<ItemStack, Component>> getScryingLensOverlay(BlockState state, BlockPos pos,
         LocalPlayer observer, ClientLevel world, InteractionHand lensHand) {
+        var out = new ArrayList<Pair<ItemStack, Component>>();
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
             var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
-            var tc = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
+            var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
                 String.format("%.2f", dustCount));
-            return new ArrayList<>(List.of(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST.get()), tc)));
-        } else {
-            return new ArrayList<>();
+            out.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST.get()), dustCmp));
+
+            if (this.lastMishap != null) {
+                out.add(new Pair<>(new ItemStack(HexItems.SCRYING_LENS.get()), this.lastMishap));
+            }
         }
+        return out;
     }
 
     @NotNull
@@ -145,7 +161,11 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
             }
             tag.put(TAG_TRACKED_BLOCKS, trackeds);
         }
+
         tag.putInt(TAG_MANA, this.mana);
+        if (this.lastMishap != null) {
+            tag.putString(TAG_LAST_MISHAP, Component.Serializer.toJson(this.lastMishap));
+        }
     }
 
     @Override
@@ -167,6 +187,9 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         }
 
         this.mana = tag.getInt(TAG_MANA);
+        if (tag.contains(TAG_LAST_MISHAP)) {
+            this.lastMishap = Component.Serializer.fromJson(tag.getString(TAG_LAST_MISHAP));
+        }
     }
 
     void stepCircle() {

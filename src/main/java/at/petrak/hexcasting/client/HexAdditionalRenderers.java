@@ -15,6 +15,8 @@ import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
@@ -178,26 +180,33 @@ public class HexAdditionalRenderers {
             var lines = ScryingLensOverlayRegistry.getLines(bs, pos, mc.player, mc.level, lensHand);
             if (lines != null) {
                 var window = mc.getWindow();
-                var lineSpacing = 15f;
-                var totalHeight = lineSpacing * lines.size();
                 var x = window.getGuiScaledWidth() / 2f + 8f;
-                var y = window.getGuiScaledHeight() / 2f - totalHeight / 2f;
+                var y = window.getGuiScaledHeight() / 2f;
                 ps.pushPose();
                 ps.translate(x, y, 0);
 
+                var maxWidth = (int) (window.getGuiScaledWidth() / 2f * 0.8f);
+
                 for (var pair : lines) {
-                    ps.pushPose();
 
                     var stack = pair.getFirst();
                     if (stack != null) {
                         // this draws centered in the Y ...
                         RenderLib.renderItemStackInGui(ps, pair.getFirst(), 0, 0);
                     }
+                    float tx = stack == null ? 0 : 18;
+                    float ty = 5;
                     // but this draws where y=0 is the baseline
-                    mc.font.drawShadow(ps, pair.getSecond(), stack == null ? 0 : 18, 5, 16777215);
+                    var text = pair.getSecond();
+                    var textLines = mc.font.getSplitter().splitLines(text, maxWidth, Style.EMPTY);
 
-                    ps.popPose();
-                    ps.translate(0, lineSpacing, 0);
+                    for (var line : textLines) {
+                        var actualLine = Language.getInstance().getVisualOrder(line);
+                        mc.font.drawShadow(ps, actualLine, tx, ty, 0xffffffff);
+                        ps.translate(0, 9, 0);
+                    }
+
+                    ps.translate(0, 6, 0);
                 }
 
                 ps.popPose();

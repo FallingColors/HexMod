@@ -6,8 +6,10 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.hexmath.HexPattern
+import net.minecraft.ChatFormatting
 import net.minecraft.Util
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.item.ItemEntity
@@ -40,6 +42,7 @@ sealed class Mishap : Throwable() {
 
     protected fun actionName(action: ResourceLocation?): Component =
         TranslatableComponent("hexcasting.spell.${action ?: "unknown"}")
+            .setStyle(Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE).withUnderlined(true))
 
     protected fun yeetItem(stack: ItemStack, ctx: CastingContext, delta: Vec3) {
         val entity = ItemEntity(

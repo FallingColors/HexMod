@@ -11,7 +11,7 @@ class MishapNoSpellCircle : Mishap() {
         dyeColor(DyeColor.PURPLE)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        ctx.caster.drop(true)
+        ctx.caster.inventory.dropAll()
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =

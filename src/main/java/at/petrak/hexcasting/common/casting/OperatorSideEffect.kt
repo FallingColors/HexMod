@@ -1,14 +1,17 @@
 package at.petrak.hexcasting.common.casting
 
+import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.casting.mishaps.Mishap
 import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.datagen.HexAdvancements
 import net.minecraft.Util
 import net.minecraft.network.chat.TranslatableComponent
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.item.DyeColor
 
 /**
@@ -61,8 +64,17 @@ sealed class OperatorSideEffect {
 
     data class DoMishap(val mishap: Mishap, val errorCtx: Mishap.Context) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
-            // for now
-            harness.ctx.caster.sendMessage(mishap.errorMessage(harness.ctx, errorCtx), Util.NIL_UUID)
+            val msg = mishap.errorMessage(harness.ctx, errorCtx);
+            if (harness.ctx.spellCircle != null) {
+                val tile = harness.ctx.world.getBlockEntity(harness.ctx.spellCircle.impetusPos)
+                if (tile is BlockEntityAbstractImpetus) {
+                    tile.lastMishap = msg
+                    tile.setChanged()
+                }
+            } else {
+                // for now
+                harness.ctx.caster.sendMessage(msg, Util.NIL_UUID)
+            }
 
             val spray = mishap.particleSpray(harness.ctx)
             val color = mishap.accentColor(harness.ctx, errorCtx)
@@ -70,6 +82,11 @@ sealed class OperatorSideEffect {
             spray.sprayParticles(
                 harness.ctx.world,
                 FrozenColorizer(HexItems.DYE_COLORIZERS[DyeColor.RED]!!.get(), Util.NIL_UUID)
+            )
+
+            harness.ctx.world.playSound(
+                null, harness.ctx.position.x, harness.ctx.position.y, harness.ctx.position.z,
+                HexSounds.FAIL_PATTERN.get(), SoundSource.PLAYERS, 1f, 1f
             )
 
             mishap.execute(harness.ctx, errorCtx, harness.stack)

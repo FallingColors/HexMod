@@ -12,7 +12,7 @@ class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
         dyeColor(DyeColor.LIGHT_GRAY)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        for (i in expected until got)
+        for (i in got until expected)
             stack.add(SpellDatum.make(Widget.GARBAGE))
     }
 
