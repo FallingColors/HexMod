@@ -27,7 +27,8 @@ public record FrozenColorizer(Item item, UUID owner) {
     public static final String TAG_ITEM = "item";
     public static final String TAG_OWNER = "owner";
 
-    public static final FrozenColorizer DEFAULT = new FrozenColorizer(HexItems.DYE_COLORIZERS[0].get(), Util.NIL_UUID);
+    public static final FrozenColorizer DEFAULT =
+        new FrozenColorizer(HexItems.DYE_COLORIZERS.get(DyeColor.WHITE).get(), Util.NIL_UUID);
 
     public CompoundTag serialize() {
         var out = new CompoundTag();
@@ -60,7 +61,7 @@ public record FrozenColorizer(Item item, UUID owner) {
      */
     public int getColor(float time, Vec3 position) {
         if (this.item instanceof ItemDyeColorizer dye) {
-            return DyeColor.values()[dye.getDyeIdx()].getTextColor() | 0xff_000000;
+            return dye.getDyeColor().getTextColor() | 0xff_000000;
         } else if (this.item instanceof ItemPrideColorizer politics) {
             var colors = politics.getColors();
             return morphBetweenColors(colors, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
@@ -86,7 +87,7 @@ public record FrozenColorizer(Item item, UUID owner) {
                     }
                 }
             }
-            
+
             // randomly scrungle the bits
             var rand = new Random(this.owner.getLeastSignificantBits() ^ this.owner.getMostSignificantBits());
             var hue = rand.nextFloat();

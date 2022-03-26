@@ -248,6 +248,16 @@
   "hexcasting.spell.hexcasting:const/vec/nz": "Vector Reflection -Z",
   "hexcasting.spell.hexcasting:const/vec/0": "Vector Reflection Zero",
 
+  "hexcasting.mishap.invalid_pattern": "That pattern isn't associated with any action.",
+  "hexcasting.mishap.invalid_spell_datum_type": "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
+  "hexcasting.mishap.invalid_value": "Expected %s, but got %s",
+  "hexcasting.mishap.invalid_value.class.entity": "entity",
+  "hexcasting.mishap.invalid_value.class.number": "number",
+  "hexcasting.mishap.invalid_value.class.number": "number",
+  "hexcasting.mishap.invalid_value.class.number": "number",
+  "hexcasting.mishap.invalid_value.class.number": "number",
+  "hexcasting.mishap.invalid_value.class.number": "number",
+
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 
 
