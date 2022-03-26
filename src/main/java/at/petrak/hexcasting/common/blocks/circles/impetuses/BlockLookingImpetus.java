@@ -3,33 +3,17 @@ package at.petrak.hexcasting.common.blocks.circles.impetuses;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockLookingImpetus extends BlockAbstractImpetus {
-    public static final int MAX_LOOK_AMOUNT = 30;
-    public static final IntegerProperty LOOK_AMOUNT = IntegerProperty.create("look_amount", 0, MAX_LOOK_AMOUNT);
 
     public BlockLookingImpetus(Properties p_49795_) {
         super(p_49795_);
-        this.registerDefaultState(this.stateDefinition.any()
-            .setValue(ENERGIZED, false)
-            .setValue(FACING, Direction.NORTH)
-            .setValue(LOOK_AMOUNT, 0));
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(LOOK_AMOUNT);
     }
 
     @Nullable

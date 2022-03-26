@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -17,6 +18,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 
 public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
+    public static final int MAX_LOOK_AMOUNT = 30;
+    public static final String TAG_LOOK_AMOUNT = "look_amount";
+
+    private int lookAmount = 0;
+
     public BlockEntityLookingImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlocks.IMPETUS_LOOK_TILE.get(), pWorldPosition, pBlockState);
     }
@@ -32,7 +38,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
             return;
         }
 
-        int prevLookAmt = bs.getValue(BlockLookingImpetus.LOOK_AMOUNT);
+        int prevLookAmt = self.lookAmount;
         int range = 20;
         var players = level.getEntitiesOfClass(ServerPlayer.class,
             new AABB(pos.offset(-range, -range, -range), pos.offset(range, range, range)));
@@ -63,21 +69,34 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
         var newLook = Mth.clamp(
             prevLookAmt + (looker == null ? -1 : 1),
             0,
-            BlockLookingImpetus.MAX_LOOK_AMOUNT
+            MAX_LOOK_AMOUNT
         );
         if (newLook != prevLookAmt) {
-            if (newLook == BlockLookingImpetus.MAX_LOOK_AMOUNT) {
-                level.setBlockAndUpdate(pos, bs.setValue(BlockLookingImpetus.LOOK_AMOUNT, 0));
+            if (newLook == MAX_LOOK_AMOUNT) {
+                self.lookAmount = 0;
                 self.activateSpellCircle(looker);
             } else {
                 if (newLook % 5 == 1) {
-                    var t = (float) newLook / BlockLookingImpetus.MAX_LOOK_AMOUNT;
+                    var t = (float) newLook / MAX_LOOK_AMOUNT;
                     var pitch = Mth.lerp(t, 0.5f, 1.2f);
                     var volume = Mth.lerp(t, 0.2f, 1.2f);
                     level.playSound(null, pos, HexSounds.IMPETUS_LOOK_TICK.get(), SoundSource.BLOCKS, volume, pitch);
                 }
-                level.setBlockAndUpdate(pos, bs.setValue(BlockLookingImpetus.LOOK_AMOUNT, newLook));
+                self.lookAmount = newLook;
+                self.setChanged();
             }
         }
+    }
+
+    @Override
+    protected void saveModData(CompoundTag tag) {
+        super.saveModData(tag);
+        tag.putInt(TAG_LOOK_AMOUNT, this.lookAmount);
+    }
+
+    @Override
+    protected void loadModData(CompoundTag tag) {
+        super.loadModData(tag);
+        this.lookAmount = tag.getInt(TAG_LOOK_AMOUNT);
     }
 }
