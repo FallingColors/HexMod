@@ -10,6 +10,7 @@ import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.phys.Vec3
@@ -19,21 +20,31 @@ import net.minecraft.world.phys.Vec3
  *
  * [MishapInvalidValue.idx] is the absolute index in the stack.
  */
-class MishapInvalidValue(val perpetrator: SpellDatum<*>, val idx: Int, val expectedKey: String) : Mishap() {
-    override fun accentColor(ctx: CastingContext): FrozenColorizer =
+class MishapInvalidValue(
+    val perpetrator: SpellDatum<*>,
+    val idx: Int,
+    val expectedKey: String
+) : Mishap() {
+    override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.GRAY)
 
-    override fun execute(ctx: CastingContext, stack: MutableList<SpellDatum<*>>) {
+    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
         stack[idx] = SpellDatum.make(Widget.GARBAGE)
     }
 
-    override fun errorMessage(ctx: CastingContext): Component =
-        error("invalid_value", TranslatableComponent(expectedKey), perpetrator.display())
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
+        error(
+            "invalid_value",
+            actionName(errorCtx.action!!),
+            idx,
+            TranslatableComponent(expectedKey),
+            perpetrator.display()
+        )
 
     companion object {
         @JvmStatic
-        fun ofClass(perpetrator: SpellDatum<*>, reverseIdx: Int, cls: Class<*>): MishapInvalidValue {
-            val key = "hexcasting.mishap.invalid_value.class" + when {
+        fun ofClass(perpetrator: SpellDatum<*>, idx: Int, cls: Class<*>): MishapInvalidValue {
+            val key = "hexcasting.mishap.invalid_value.class." + when {
                 Double::class.java.isAssignableFrom(cls) -> "double"
                 Vec3::class.java.isAssignableFrom(cls) -> "vector"
                 List::class.java.isAssignableFrom(cls) -> "list"
@@ -41,13 +52,14 @@ class MishapInvalidValue(val perpetrator: SpellDatum<*>, val idx: Int, val expec
                 HexPattern::class.java.isAssignableFrom(cls) -> "pattern"
 
                 ItemEntity::class.java.isAssignableFrom(cls) -> "entity.item"
-                LivingEntity::class.java.isAssignableFrom(cls) -> "entity.living"
                 Player::class.java.isAssignableFrom(cls) -> "entity.player"
+                Villager::class.java.isAssignableFrom(cls) -> "entity.player"
+                LivingEntity::class.java.isAssignableFrom(cls) -> "entity.living"
                 Entity::class.java.isAssignableFrom(cls) -> "entity"
 
                 else -> "unknown"
             }
-            return MishapInvalidValue(perpetrator, reverseIdx, key)
+            return MishapInvalidValue(perpetrator, idx, key)
         }
     }
 }

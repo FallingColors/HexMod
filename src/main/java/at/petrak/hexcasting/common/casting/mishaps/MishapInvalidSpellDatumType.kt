@@ -8,14 +8,14 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 
 class MishapInvalidSpellDatumType(val perpetrator: Any) : Mishap() {
-    override fun accentColor(ctx: CastingContext): FrozenColorizer =
+    override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.BLACK)
 
-    override fun execute(ctx: CastingContext, stack: MutableList<SpellDatum<*>>) {
-        val msg = this.errorMessage(ctx)
+    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
+        val msg = this.errorMessage(ctx, errorCtx)
         ctx.caster.sendMessage(msg, Util.NIL_UUID)
     }
 
-    override fun errorMessage(ctx: CastingContext): Component =
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
         error("invalid_spell_datum_type", this.perpetrator.toString(), this.perpetrator.javaClass.typeName)
 }
