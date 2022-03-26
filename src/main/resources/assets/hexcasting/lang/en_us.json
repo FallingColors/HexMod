@@ -266,7 +266,15 @@
   "hexcasting.mishap.location_too_far": "%s is out of range for %s",
   "hexcasting.mishap.entity_too_far": "%s is out of range for %s",
   "hexcasting.mishap.eval_too_deep": "Recursively evaluated too deep",
-  "hexcasting.mishap.bad_offhand_item": "%s needs %s in the other hand but got %s",
+  "hexcasting.mishap.bad_item": "%s needs %s but got %s",
+  "hexcasting.mishap.bad_item.offhand": "%s needs %s in the other hand but got %s",
+  "hexcasting.mishap.bad_item.iota.read": "a place to read iotas from",
+  "hexcasting.mishap.bad_item.iota.write": "a place to write iotas to",
+  "hexcasting.mishap.bad_item.media": "a media-containing item",
+  "hexcasting.mishap.bad_item.only_one": "exactly one item",
+  "hexcasting.mishap.bad_brainsweep": "The %s rejected the villager's mind",
+  "hexcasting.mishap.no_spell_circle": "%s requires a spell circle",
+  "hexcasting.mishap.others_name": "Tried to invade %s's privacy",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 

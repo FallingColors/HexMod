@@ -3,22 +3,21 @@ package at.petrak.hexcasting.common.casting.mishaps
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
-import net.minecraft.Util
 import net.minecraft.network.chat.Component
+import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.effect.MobEffects
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 
-/**
- * this is bad
- */
-class MishapInvalidSpellDatumType(val perpetrator: Any) : Mishap() {
+class MishapOthersName(val other: Player) : Mishap() {
     override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
-        dyeColor(DyeColor.BLACK)
+        dyeColor(DyeColor.ORANGE)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        val msg = this.errorMessage(ctx, errorCtx)
-        ctx.caster.sendMessage(msg, Util.NIL_UUID)
+        val effect = MobEffectInstance(MobEffects.BLINDNESS, 20 * 60)
+        ctx.caster.addEffect(effect)
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
-        error("invalid_spell_datum_type", this.perpetrator.toString(), this.perpetrator.javaClass.typeName)
+        error("others_name", other.name)
 }

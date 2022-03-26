@@ -18,9 +18,9 @@ import net.minecraft.world.phys.Vec3
 /**
  * The value failed some kind of predicate.
  *
- * [MishapInvalidValue.idx] is the absolute index in the stack.
+ * [MishapInvalidIota.idx] is the absolute index in the stack.
  */
-class MishapInvalidValue(
+class MishapInvalidIota(
     val perpetrator: SpellDatum<*>,
     val idx: Int,
     val expectedKey: String
@@ -43,7 +43,7 @@ class MishapInvalidValue(
 
     companion object {
         @JvmStatic
-        fun ofClass(perpetrator: SpellDatum<*>, idx: Int, cls: Class<*>): MishapInvalidValue {
+        fun ofClass(perpetrator: SpellDatum<*>, idx: Int, cls: Class<*>): MishapInvalidIota {
             val key = "hexcasting.mishap.invalid_value.class." + when {
                 Double::class.java.isAssignableFrom(cls) -> "double"
                 Vec3::class.java.isAssignableFrom(cls) -> "vector"
@@ -59,7 +59,7 @@ class MishapInvalidValue(
 
                 else -> "unknown"
             }
-            return MishapInvalidValue(perpetrator, idx, key)
+            return MishapInvalidIota(perpetrator, idx, key)
         }
     }
 }
