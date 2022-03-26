@@ -34,8 +34,17 @@
     },
     {
       "type": "hexcasting:brainsweep",
-      "recipe": "hexcasting:brainsweep/impetus_look",
+      "recipe": "hexcasting:brainsweep/impetus_storedplayer",
       "text": "hexcasting.page.impetus.7"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.impetus.8"
+    },
+    {
+      "type": "hexcasting:brainsweep",
+      "recipe": "hexcasting:brainsweep/impetus_look",
+      "text": "hexcasting.page.impetus.9"
     }
   ]
 }

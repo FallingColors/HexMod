@@ -21,6 +21,11 @@
   "item": "hexcasting:amethyst_dust",
   "functions": [
     {
+      "function": "minecraft:set_count",
+      "count": 4.0,
+      "add": false
+    },
+    {
       "function": "minecraft:apply_bonus",
       "enchantment": "minecraft:fortune",
       "formula": "minecraft:ore_drops"

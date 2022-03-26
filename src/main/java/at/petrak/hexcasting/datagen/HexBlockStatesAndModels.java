@@ -41,6 +41,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
         impetus(HexBlocks.IMPETUS_RIGHTCLICK.get(), "impetus_rightclick", "rightclick");
         impetus(HexBlocks.IMPETUS_LOOK.get(), "impetus_look", "look");
+        impetus(HexBlocks.IMPETUS_STOREDPLAYER.get(), "impetus_storedplayer", "storedplayer");
         arrowCircleBlock(HexBlocks.EMPTY_IMPETUS.get(), "empty_impetus", modLoc("block/slate"),
             "impetus/front_empty",
             "impetus/back_empty",

@@ -5,10 +5,7 @@ import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityLookingImpetus;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClickImpetus;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockLookingImpetus;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.*;
 import at.petrak.hexcasting.common.blocks.decoration.BlockSconce;
 import at.petrak.hexcasting.common.items.HexItems;
 import net.minecraft.world.item.BlockItem;
@@ -68,6 +65,10 @@ public class HexBlocks {
         "impetus_look",
         () -> new BlockLookingImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
+    public static final RegistryObject<BlockStoredPlayerImpetus> IMPETUS_STOREDPLAYER = blockItem(
+        "impetus_storedplayer",
+        () -> new BlockStoredPlayerImpetus(slateish()
+            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
     // Decoration?!
     public static final RegistryObject<Block> SLATE_BLOCK = blockItem("slate_block",
@@ -104,6 +105,10 @@ public class HexBlocks {
     public static final RegistryObject<BlockEntityType<BlockEntityLookingImpetus>> IMPETUS_LOOK_TILE =
         BLOCK_ENTITIES.register("impetus_look_tile",
             () -> BlockEntityType.Builder.of(BlockEntityLookingImpetus::new, IMPETUS_LOOK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityStoredPlayerImpetus>> IMPETUS_STOREDPLAYER_TILE =
+        BLOCK_ENTITIES.register("impetus_storedplayer_tile",
+            () -> BlockEntityType.Builder.of(BlockEntityStoredPlayerImpetus::new, IMPETUS_STOREDPLAYER.get())
+                .build(null));
 
 
     private static boolean never(Object... args) {

@@ -54,6 +54,7 @@
   "block.hexcasting.empty_impetus": "Empty Impetus",
   "block.hexcasting.impetus_rightclick": "Toolsmith Impetus",
   "block.hexcasting.impetus_look": "Fletcher Impetus",
+  "block.hexcasting.impetus_storedplayer": "Cleric Impetus",
 
   "block.hexcasting.slate_block": "Block of Slate",
   "block.hexcasting.amethyst_dust_block": "Block of Amethyst Dust",
@@ -71,6 +72,8 @@
   "hexcasting.tooltip.abacus.reset": "Reset to 0",
   "hexcasting.tooltip.abacus.reset.nice": "nice",
   "hexcasting.tooltip.lens.impetus.mana": "%s Dusts",
+  "hexcasting.tooltip.lens.impetus.storedplayer": "Bound to %s",
+  "hexcasting.tooltip.lens.impetus.storedplayer.none": "Unbound",
   "hexcasting.tooltip.lens.pattern.invalid": "Invalid Pattern",
   "hexcasting.tooltip.brainsweep.profession": "Profession: %s",
   "hexcasting.tooltip.brainsweep.profession.any": "Any Profession",
@@ -110,6 +113,21 @@
 
   "hexcasting.message.cant_overcast": "That Hex needed more media than I had... I should double-check my math.",
   "hexcasting.message.cant_great_spell": "The spell failed, somehow... am I not skilled enough?",
+
+  "hexcasting.subtitles.start_pattern": "Starting pattern",
+  "hexcasting.subtitles.add_line": "Adding line",
+  "hexcasting.subtitles.add_pattern": "Adding pattern",
+  "hexcasting.subtitles.fail_pattern": "Pattern fails",
+  "hexcasting.subtitles.ambiance": "Hex grid hums",
+  "hexcasting.subtitles.cast": "Hex casts",
+  "hexcasting.subtitles.abacus": "Abacus clicks",
+  "hexcasting.subtitles.abacus.shake": "Abacus shakes",
+  "hexcasting.subtitles.spellcircle.add_pattern": "Spell circle crackles",
+  "hexcasting.subtitles.spellcircle.fail": "Spell circle fizzles out",
+  "hexcasting.subtitles.spellcircle.cast": "Spell circle casts",
+  "hexcasting.subtitles.scroll.dust": "Scroll covers with dust",
+  "hexcasting.subtitles.impetus.fletcher.tick": "Fletcher Impetus ticks",
+  "hexcasting.subtitles.impetus.cleric.register": "Cleric Impetus dings",
 
   "hexcasting.spell.hexcasting:get_caster": "Mind's Reflection",
   "hexcasting.spell.hexcasting:get_entity_pos": "Compass' Purification",
@@ -228,20 +246,6 @@
   "hexcasting.spell.hexcasting:const/vec/nx": "Vector Reflection -X",
   "hexcasting.spell.hexcasting:const/vec/ny": "Vector Reflection -Y",
   "hexcasting.spell.hexcasting:const/vec/nz": "Vector Reflection -Z",
-
-  "hexcasting.subtitles.start_pattern": "Starting pattern",
-  "hexcasting.subtitles.add_line": "Adding line",
-  "hexcasting.subtitles.add_pattern": "Adding pattern",
-  "hexcasting.subtitles.fail_pattern": "Pattern fails",
-  "hexcasting.subtitles.ambiance": "Hex grid hums",
-  "hexcasting.subtitles.cast": "Hex casts",
-  "hexcasting.subtitles.abacus": "Abacus clicks",
-  "hexcasting.subtitles.abacus.shake": "Abacus shakes",
-  "hexcasting.subtitles.spellcircle.add_pattern": "Spell circle crackles",
-  "hexcasting.subtitles.spellcircle.fail": "Spell circle fizzles out",
-  "hexcasting.subtitles.spellcircle.cast": "Spell circle casts",
-  "hexcasting.subtitles.scroll.dust": "Scroll covers with dust",
-  "hexcasting.subtitles.impetus.fletcher.tick": "Fletcher Impetus ticks",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 
@@ -420,8 +424,8 @@
   "hexcasting.page.the_work.2": "I have seen staccato-needle patterns and acid-etched schematics written on the inside of my eyelids. They smolder there-- they dance, they taunt, they $(italic)ache/$. I'm possessed by an intense $(italic)need/$ to draw them, create them. Form them. Liberate them from the gluey shackles of my mortal mind-- present them in their Glory to the world for all to see.$(p)All shall see.$(p)All will see.",
 
   "hexcasting.entry.brainsweeping": "On the Flaying of Minds",
-  "hexcasting.page.brainsweeping.1": "A secret was revealed to me. I saw it. I cannot forget its horror. The idea skitters across my brain.$(br2)I belived-- oh, foolishly, I $(italic)believed --that _Media is the spare energy left over by thought. But now I $(italic)know/$ what it is: the energy $(italic)of/$ thought.",
-  "hexcasting.page.brainsweeping.2": "It is produced by thinking sentience and allows sentience to think. It is a knot tying that braids into its own string. The Entity I foolishly anthromorphized as Nature is simply a grand such tangle, or perhaps the set of all tangles, or ... if I think it hurts I have so many synapses and all of them can think pain at once ALL OF THEM CAN SEE$(br2)I am not holding on. My notes. Quickly.",
+  "hexcasting.page.brainsweeping.1": "A secret was revealed to me. I saw it. I cannot forget its horror. The idea skitters across my brain.$(br2)I belived-- oh, foolishly, I $(italic)believed/$ --that _Media is the spare energy left over by thought. But now I $(italic)know/$ what it is: the energy $(italic)of/$ thought.",
+  "hexcasting.page.brainsweeping.2": "It is produced by thinking sentience and allows sentience to think. It is a knot tying that braids into its own string. The Entity I naively anthromorphized as Nature is simply a grand such tangle, or perhaps the set of all tangles, or ... if I think it hurts I have so many synapses and all of them can think pain at once ALL OF THEM CAN SEE$(br2)I am not holding on. My notes. Quickly.",
   "hexcasting.page.brainsweeping.3": "The villagers of this world have enough consciousness left to be extracted. Place it into a block, warp it, change it. Intricate patterns caused by different patterns of thought, the abstract neural pathways of their jobs and lives mapped into the cold physic of solid atoms.$(br2)This is what $(l:patterns/great_spells/brainsweep)$(action)Flay Mind/$ does, the extraction. Target the villager entity and the destination block. Ten $(item)Charged Crystals/$ for this perversion of will.",
   "hexcasting.page.brainsweeping.4": "And an application. For this flaying, any sort of villager will do, if it has developed enough. Other recipes require more specific types. NO MORE must I descend into the hellish earth for my _media.",
 
@@ -442,7 +446,9 @@
   "hexcasting.page.impetus.4": "The solution I aim for, then, is to specialize a mind. Remove it from the tyranny of nerves, clip all outputs but delicate splays of _media-manipulating apparati, cauterize all inputs but the signal to start its work.$(br2)The process of $(action)mindflaying/$ I am now familiar with will do excellently; the mind of a villager is complex enough to do the work, but not so complex as to resist its reformation.",
   "hexcasting.page.impetus.5": "First, the cradle. Although it does not work as an $(item)Impetus/$, the flow of _media in a circle will only exit out the side pointed to by the arrows. This allows me to change the plane in which the wave flows, for example.",
   "hexcasting.page.impetus.6": "Then, to transpose the mind. Villagers of different professions will lend different actuation conditions to the resulting $(item)Impetus/$. A Toolsmith's activates on a simple $(k:use).",
-  "hexcasting.page.impetus.7": "A Fletcher's activates when looked at for a short time.",
+  "hexcasting.page.impetus.7": "A Cleric Impetus must be bound to a player by using an item with a reference to that player, like a $(item)Focus/$, on the block. Then, it activates when receiving a redstone signal.$(br2)",
+  "hexcasting.page.impetus.8": "Peculiarly to this Impetus, the bound player, as well as a small region around them, are always accessible to the spell circle. It's as if they were standing within the bounds of the circle, no matter how far away they might stand.$(br2)The bound player is shown when looking at a Cleric Impetus through a $(item)Scrying Lens/$.",
+  "hexcasting.page.impetus.9": "A Fletcher Impetus activates when looked at for a short time.",
 
   "_comment": "Patterns",
 

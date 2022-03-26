@@ -99,5 +99,11 @@
       "minecraft:note/hat"
     ],
     "subtitle": "hexcasting.subtitles.impetus.fletcher.tick"
+  },
+  "impetus.cleric.register": {
+    "sounds": [
+      "minecraft:random/orb"
+    ],
+    "subtitle": "hexcasting.subtitles.impetus.cleric.register"
   }
 }

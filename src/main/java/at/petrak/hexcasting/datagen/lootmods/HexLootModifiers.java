@@ -9,12 +9,15 @@ import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootTableIdCondition;
@@ -34,11 +37,18 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
 
     @Override
     protected void start() {
+        ResourceLocation amethystCluster = new ResourceLocation("minecraft:blocks/amethyst_cluster");
+        // 4? that's a lot!
+        add("amethyst_cluster_shard_reducer", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
+            Items.AMETHYST_SHARD, -2, amethystCluster
+        ));
+
         add("amethyst_cluster_dust", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
             HexItems.AMETHYST_DUST.get(), new LootItemFunction[]{
+            SetItemCountFunction.setCount(ConstantValue.exactly(4)).build(),
             ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE).build()
         }, new LootItemCondition[]{
-            LootTableIdCondition.builder(new ResourceLocation("minecraft:blocks/amethyst_cluster")).build(),
+            LootTableIdCondition.builder(amethystCluster).build(),
             MatchTool.toolMatches(
                     ItemPredicate.Builder.item().hasEnchantment(
                         new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
@@ -47,12 +57,12 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
         ));
         add("amethyst_cluster_charged", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
             HexItems.CHARGED_AMETHYST.get(), 1, new LootItemCondition[]{
-            LootTableIdCondition.builder(new ResourceLocation("minecraft:blocks/amethyst_cluster")).build(),
+            LootTableIdCondition.builder(amethystCluster).build(),
             MatchTool.toolMatches(
                     ItemPredicate.Builder.item().hasEnchantment(
                         new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
                 .invert().build(),
-            BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.2f, 0.4f, 0.6f, 0.8f).build()
+            BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.5f, 0.8f, 0.9f, 1.0f).build()
         }));
 
 

@@ -30,6 +30,7 @@ public class HexSounds {
     public static final RegistryObject<SoundEvent> DUST_SCROLL = sound("scroll.dust");
 
     public static final RegistryObject<SoundEvent> IMPETUS_LOOK_TICK = sound("impetus.fletcher.tick");
+    public static final RegistryObject<SoundEvent> IMPETUS_STOREDPLAYER_DING = sound("impetus.cleric.register");
 
     private static RegistryObject<SoundEvent> sound(String name) {
         return SOUNDS.register(name, () -> new SoundEvent(prefix(name)));

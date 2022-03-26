@@ -10,12 +10,17 @@ import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.lib.HexCapabilities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.paucal.api.PaucalBlockEntity;
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -63,7 +68,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
     private boolean foundAll = false;
 
     private int mana = 0;
-    private LazyOptional<IItemHandler> inventoryHandlerLazy;
+    private final LazyOptional<IItemHandler> inventoryHandlerLazy;
 
     public BlockEntityAbstractImpetus(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
@@ -98,7 +103,72 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.stepCircle();
     }
 
-    protected void stepCircle() {
+    public List<Pair<ItemStack, Component>> getScryingLensOverlay(BlockState state, BlockPos pos,
+        LocalPlayer observer, ClientLevel world, InteractionHand lensHand) {
+        if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
+            var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
+            var tc = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
+                String.format("%.2f", dustCount));
+            return new ArrayList<>(List.of(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST.get()), tc)));
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @NotNull
+    @Override
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return inventoryHandlerLazy.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        inventoryHandlerLazy.invalidate();
+    }
+
+    @Override
+    protected void saveModData(CompoundTag tag) {
+        if (this.activator != null && this.colorizer != null && this.nextBlock != null && this.trackedBlocks != null) {
+            tag.putUUID(TAG_ACTIVATOR, this.activator);
+            tag.put(TAG_NEXT_BLOCK, NbtUtils.writeBlockPos(this.nextBlock));
+            tag.put(TAG_COLORIZER, this.colorizer.serialize());
+            tag.putBoolean(TAG_FOUND_ALL, this.foundAll);
+
+            var trackeds = new ListTag();
+            for (var tracked : this.trackedBlocks) {
+                trackeds.add(NbtUtils.writeBlockPos(tracked));
+            }
+            tag.put(TAG_TRACKED_BLOCKS, trackeds);
+        }
+        tag.putInt(TAG_MANA, this.mana);
+    }
+
+    @Override
+    protected void loadModData(CompoundTag tag) {
+        if (tag.contains(TAG_ACTIVATOR) && tag.contains(TAG_COLORIZER) && tag.contains(TAG_NEXT_BLOCK)
+            && tag.contains(TAG_TRACKED_BLOCKS)) {
+            this.activator = tag.getUUID(TAG_ACTIVATOR);
+            this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
+            this.nextBlock = NbtUtils.readBlockPos(tag.getCompound(TAG_NEXT_BLOCK));
+            this.foundAll = tag.getBoolean(TAG_FOUND_ALL);
+            var trackeds = tag.getList(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND);
+            this.trackedBlocks = new ArrayList<>(trackeds.size());
+            this.knownBlocks = new HashSet<>();
+            for (var tracked : trackeds) {
+                var pos = NbtUtils.readBlockPos((CompoundTag) tracked);
+                this.trackedBlocks.add(pos);
+                this.knownBlocks.add(pos);
+            }
+        }
+
+        this.mana = tag.getInt(TAG_MANA);
+    }
+
+    void stepCircle() {
         this.setChanged();
 
         // haha which silly idiot would have done something like this
@@ -274,7 +344,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         return null;
     }
 
-    protected void sfx(BlockPos pos, boolean success) {
+    private void sfx(BlockPos pos, boolean success) {
         Vec3 vpos;
         Vec3 vecOutDir;
 
@@ -310,10 +380,12 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
     }
 
     protected void stopCasting() {
-        for (var tracked : this.trackedBlocks) {
-            var bs = this.level.getBlockState(tracked);
-            if (bs.getBlock() instanceof BlockCircleComponent) {
-                this.level.setBlockAndUpdate(tracked, bs.setValue(BlockCircleComponent.ENERGIZED, false));
+        if (this.trackedBlocks != null) {
+            for (var tracked : this.trackedBlocks) {
+                var bs = this.level.getBlockState(tracked);
+                if (bs.getBlock() instanceof BlockCircleComponent) {
+                    this.level.setBlockAndUpdate(tracked, bs.setValue(BlockCircleComponent.ENERGIZED, false));
+                }
             }
         }
 
@@ -365,59 +437,6 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
         note = Mth.clamp(note, 0, scale.length - 1);
         return scale[note];
-    }
-
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return inventoryHandlerLazy.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        inventoryHandlerLazy.invalidate();
-    }
-
-    @Override
-    protected void saveModData(CompoundTag tag) {
-        if (this.activator != null && this.colorizer != null && this.nextBlock != null && this.trackedBlocks != null) {
-            tag.putUUID(TAG_ACTIVATOR, this.activator);
-            tag.put(TAG_NEXT_BLOCK, NbtUtils.writeBlockPos(this.nextBlock));
-            tag.put(TAG_COLORIZER, this.colorizer.serialize());
-            tag.putBoolean(TAG_FOUND_ALL, this.foundAll);
-
-            var trackeds = new ListTag();
-            for (var tracked : this.trackedBlocks) {
-                trackeds.add(NbtUtils.writeBlockPos(tracked));
-            }
-            tag.put(TAG_TRACKED_BLOCKS, trackeds);
-        }
-        tag.putInt(TAG_MANA, this.mana);
-    }
-
-    @Override
-    protected void loadModData(CompoundTag tag) {
-        if (tag.contains(TAG_ACTIVATOR) && tag.contains(TAG_COLORIZER) && tag.contains(TAG_NEXT_BLOCK)
-            && tag.contains(TAG_TRACKED_BLOCKS)) {
-            this.activator = tag.getUUID(TAG_ACTIVATOR);
-            this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
-            this.nextBlock = NbtUtils.readBlockPos(tag.getCompound(TAG_NEXT_BLOCK));
-            this.foundAll = tag.getBoolean(TAG_FOUND_ALL);
-            var trackeds = tag.getList(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND);
-            this.trackedBlocks = new ArrayList<>(trackeds.size());
-            this.knownBlocks = new HashSet<>();
-            for (var tracked : trackeds) {
-                var pos = NbtUtils.readBlockPos((CompoundTag) tracked);
-                this.trackedBlocks.add(pos);
-                this.knownBlocks.add(pos);
-            }
-        }
-
-        this.mana = tag.getInt(TAG_MANA);
     }
 
     // this is a good use of my time

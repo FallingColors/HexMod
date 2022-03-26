@@ -1,0 +1,17 @@
+{
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:blocks/amethyst_cluster"
+    }
+  ],
+  "item": "minecraft:amethyst_shard",
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": -2.0,
+      "add": false
+    }
+  ],
+  "type": "paucal:add_item"
+}

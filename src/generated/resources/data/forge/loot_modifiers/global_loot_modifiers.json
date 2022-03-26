@@ -2,6 +2,7 @@
   "replace": false,
   "entries": [
     "hexcasting:amethyst_cluster_charged",
+    "hexcasting:amethyst_cluster_shard_reducer",
     "hexcasting:scroll_bastion",
     "hexcasting:amethyst_cluster_dust",
     "hexcasting:scroll_dungeon",

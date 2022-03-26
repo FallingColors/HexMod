@@ -1,0 +1,18 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "block",
+    "block": "hexcasting:empty_impetus"
+  },
+  "villagerIn": {
+    "profession": "minecraft:cleric",
+    "minLevel": 1
+  },
+  "result": {
+    "name": "hexcasting:impetus_storedplayer",
+    "properties": {
+      "facing": "north",
+      "energized": "false"
+    }
+  }
+}

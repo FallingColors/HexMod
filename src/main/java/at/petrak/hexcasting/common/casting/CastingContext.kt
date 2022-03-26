@@ -77,7 +77,6 @@ data class CastingContext(
      */
     fun assertEntityInRange(entity: Entity) {
         if (!isEntityInRange(entity)) throw CastException(CastException.Reason.TOO_FAR, entity.position())
-        assertVecInRange(entity.position())
     }
 
     fun isVecInRange(vec: Vec3): Boolean {
@@ -92,12 +91,15 @@ data class CastingContext(
         }
 
         if (this.spellCircle != null) {
+            // we use the eye position cause thats where the caster gets their "position" from
+            if (this.spellCircle.activatorAlwaysInRange && vec.distanceToSqr(this.caster.eyePosition) < 2 * 2)
+                return true
             return this.spellCircle.aabb.contains(vec)
         }
 
         if (vec.distanceToSqr(this.caster.position()) < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
             return true
-        
+
         return false
     }
 

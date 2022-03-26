@@ -1,14 +1,14 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.HexConfig;
+import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
-import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
@@ -25,7 +25,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -117,10 +116,7 @@ public class RegisterClientStuff {
             (state, pos, observer, world, lensHand) -> state.getBlock() instanceof BlockAbstractImpetus,
             (state, pos, observer, world, lensHand) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-                    var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
-                    var tc = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
-                        String.format("%.2f", dustCount));
-                    return List.of(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST.get()), tc));
+                    return beai.getScryingLensOverlay(state, pos, observer, world, lensHand);
                 } else {
                     return List.of();
                 }
