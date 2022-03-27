@@ -345,7 +345,7 @@ public class RegisterPatterns {
                 OpAppend.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaeaq", HexDir.NORTH_WEST), prefix("concat"),
                 OpConcat.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deeed", HexDir.NORTH_EAST), prefix("index"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deeed", HexDir.NORTH_WEST), prefix("index"),
                 OpIndex.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dadad", HexDir.NORTH_EAST), prefix("for_each"),
                 OpForEach.INSTANCE);
