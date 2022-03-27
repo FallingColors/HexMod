@@ -6,7 +6,7 @@
   },
   "villagerIn": {
     "profession": "minecraft:toolsmith",
-    "minLevel": 1
+    "minLevel": 2
   },
   "result": {
     "name": "hexcasting:impetus_rightclick",

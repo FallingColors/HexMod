@@ -59,11 +59,6 @@ public class HexBlocks {
     public static final RegistryObject<BlockEmptyImpetus> EMPTY_IMPETUS = blockItem("empty_impetus",
         () -> new BlockEmptyImpetus(slateish()));
 
-    public static final RegistryObject<BlockEmptyDirectrix> EMPTY_DIRECTRIX = blockItem("empty_directrix",
-        () -> new BlockEmptyDirectrix(slateish()));
-    public static final RegistryObject<BlockRedstoneDirectrix> DIRECTRIX_REDSTONE = blockItem("redstone_directrix",
-        () -> new BlockRedstoneDirectrix(slateish()));
-
     public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = blockItem(
         "impetus_rightclick",
         () -> new BlockRightClickImpetus(slateish()
@@ -76,6 +71,12 @@ public class HexBlocks {
         "impetus_storedplayer",
         () -> new BlockStoredPlayerImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
+
+
+    public static final RegistryObject<BlockEmptyDirectrix> EMPTY_DIRECTRIX = blockItem("empty_directrix",
+        () -> new BlockEmptyDirectrix(slateish()));
+    public static final RegistryObject<BlockRedstoneDirectrix> DIRECTRIX_REDSTONE = blockItem("directrix_redstone",
+        () -> new BlockRedstoneDirectrix(slateish()));
 
     // Decoration?!
     public static final RegistryObject<Block> SLATE_BLOCK = blockItem("slate_block",

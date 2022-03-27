@@ -2,13 +2,13 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "redstone_directrix",
+      "name": "directrix_redstone",
       "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "hexcasting:redstone_directrix"
+          "name": "hexcasting:directrix_redstone"
         }
       ]
     }

@@ -2,15 +2,16 @@
   "type": "hexcasting:brainsweep",
   "blockIn": {
     "type": "block",
-    "block": "hexcasting:empty_impetus"
+    "block": "hexcasting:empty_directrix"
   },
   "villagerIn": {
-    "profession": "minecraft:cleric",
-    "minLevel": 2
+    "profession": "minecraft:mason",
+    "minLevel": 1
   },
   "result": {
-    "name": "hexcasting:impetus_storedplayer",
+    "name": "hexcasting:directrix_redstone",
     "properties": {
+      "powered": "false",
       "facing": "north",
       "energized": "false"
     }

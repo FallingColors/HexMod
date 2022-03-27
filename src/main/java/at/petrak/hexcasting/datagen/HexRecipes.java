@@ -222,25 +222,41 @@ public class HexRecipes extends PaucalRecipeProvider {
             .pattern("SSP")
             .unlockedBy("enlightenment", enlightenment).save(recipes);
 
+        ShapedRecipeBuilder.shaped(HexBlocks.EMPTY_DIRECTRIX.get())
+            .define('C', Items.COMPARATOR)
+            .define('O', Items.OBSERVER)
+            .define('A', HexItems.CHARGED_AMETHYST.get())
+            .define('S', HexBlocks.SLATE_BLOCK.get())
+            .pattern("CSS")
+            .pattern("OAO")
+            .pattern("SSC")
+            .unlockedBy("enlightenment", enlightenment).save(recipes);
+
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
-            new VillagerIngredient(new ResourceLocation("toolsmith"), null, 1),
+            new VillagerIngredient(new ResourceLocation("toolsmith"), null, 2),
             HexBlocks.IMPETUS_RIGHTCLICK.get().defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_rightclick"));
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
-            new VillagerIngredient(new ResourceLocation("fletcher"), null, 1),
+            new VillagerIngredient(new ResourceLocation("fletcher"), null, 2),
             HexBlocks.IMPETUS_LOOK.get().defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_look"));
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
-            new VillagerIngredient(new ResourceLocation("cleric"), null, 1),
+            new VillagerIngredient(new ResourceLocation("cleric"), null, 2),
             HexBlocks.IMPETUS_STOREDPLAYER.get().defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_storedplayer"));
 
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_DIRECTRIX.get()),
+            new VillagerIngredient(new ResourceLocation("mason"), null, 1),
+            HexBlocks.DIRECTRIX_REDSTONE.get().defaultBlockState())
+            .unlockedBy("enlightenment", enlightenment)
+            .save(recipes, modLoc("brainsweep/directrix_redstone"));
+        
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 3),
             Blocks.BUDDING_AMETHYST.defaultBlockState())
