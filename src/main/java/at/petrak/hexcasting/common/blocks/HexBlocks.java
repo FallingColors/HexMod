@@ -5,6 +5,8 @@ import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.blocks.circles.directrix.BlockEmptyDirectrix;
+import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.*;
 import at.petrak.hexcasting.common.blocks.decoration.BlockSconce;
 import at.petrak.hexcasting.common.items.HexItems;
@@ -56,6 +58,11 @@ public class HexBlocks {
 
     public static final RegistryObject<BlockEmptyImpetus> EMPTY_IMPETUS = blockItem("empty_impetus",
         () -> new BlockEmptyImpetus(slateish()));
+
+    public static final RegistryObject<BlockEmptyDirectrix> EMPTY_DIRECTRIX = blockItem("empty_directrix",
+        () -> new BlockEmptyDirectrix(slateish()));
+    public static final RegistryObject<BlockRedstoneDirectrix> DIRECTRIX_REDSTONE = blockItem("redstone_directrix",
+        () -> new BlockRedstoneDirectrix(slateish()));
 
     public static final RegistryObject<BlockRightClickImpetus> IMPETUS_RIGHTCLICK = blockItem(
         "impetus_rightclick",

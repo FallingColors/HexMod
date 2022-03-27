@@ -35,9 +35,9 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 // Adds the Kotlin Gradle plugin
 buildscript {
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
         // OPTIONAL Kotlin Serialization plugin
-        classpath 'org.jetbrains.kotlin:kotlin-serialization:1.6.0'
+        classpath 'org.jetbrains.kotlin:kotlin-serialization:1.6.10'
     }
 }
 apply plugin: 'kotlin'

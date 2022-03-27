@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.circle.BlockCircleComponent;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
 import at.petrak.paucal.api.datagen.PaucalBlockStateAndModelProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
@@ -51,6 +52,72 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             "impetus/right_empty"
         );
 
+        // auugh
+        getVariantBuilder(HexBlocks.DIRECTRIX_REDSTONE.get()).forAllStates(bs -> {
+            var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
+            var litness = isLit ? "lit" : "dim";
+            var isPowered = bs.getValue(BlockRedstoneDirectrix.REDSTONE_POWERED);
+            var poweredness = isPowered ? "powered" : "unpowered";
+            var dir = bs.getValue(BlockStateProperties.FACING);
+
+            var up = modLoc("block/directrix/redstone/up_" + poweredness + "_" + litness);
+            var left = modLoc("block/directrix/redstone/left_" + poweredness + "_" + litness);
+            var right = modLoc("block/directrix/redstone/right_" + poweredness + "_" + litness);
+            var down = modLoc("block/directrix/redstone/down_" + poweredness + "_" + litness);
+            var front = modLoc("block/directrix/redstone/front_" + litness);
+            var back = modLoc("block/directrix/redstone/back_" + poweredness);
+
+            var routing = routeReslocsForArrowBlock(dir, front, back, up, down, left, right);
+
+            var modelName = "redstone_directrix_" + poweredness + "_" + litness + "_" + dir.getName();
+            var model = models().cube(modelName, routing[0], routing[1], routing[2], routing[3], routing[4], routing[5])
+                .texture("particle", modLoc("block/slate"));
+            if (!isLit && !isPowered && dir == Direction.NORTH) {
+                simpleBlockItem(HexBlocks.DIRECTRIX_REDSTONE.get(), model);
+            }
+            return ConfiguredModel.builder()
+                .modelFile(model)
+                .build();
+        });
+        getVariantBuilder(HexBlocks.EMPTY_DIRECTRIX.get()).forAllStates(bs -> {
+            var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
+            var litness = isLit ? "lit" : "dim";
+            var axis = bs.getValue(BlockStateProperties.AXIS);
+
+            var horiz = modLoc("block/directrix/empty/horiz_" + litness);
+            var vert = modLoc("block/directrix/empty/vert_" + litness);
+            var end = modLoc("block/directrix/empty/end_" + litness);
+
+            ResourceLocation x = null, y = null, z = null;
+            switch (axis) {
+                case X -> {
+                    x = end;
+                    y = horiz;
+                    z = horiz;
+                }
+                case Y -> {
+                    x = vert;
+                    y = end;
+                    z = vert;
+                }
+                case Z -> {
+                    x = horiz;
+                    y = vert;
+                    z = end;
+                }
+            }
+
+            var modelName = "empty_directrix_" + litness + "_" + axis.getName();
+            var model = models().cube(modelName, y, y, z, z, x, x)
+                .texture("particle", modLoc("block/slate"));
+            if (!isLit && axis == Direction.Axis.Z) {
+                simpleBlockItem(HexBlocks.EMPTY_DIRECTRIX.get(), model);
+            }
+            return ConfiguredModel.builder()
+                .modelFile(model)
+                .build();
+        });
+
         blockAndItem(HexBlocks.SLATE_BLOCK.get(), models().cubeAll("slate_block", modLoc("block/slate")));
         cubeBlockAndItem(HexBlocks.AMETHYST_DUST_BLOCK.get(), "amethyst_dust_block");
         cubeBlockAndItem(HexBlocks.AMETHYST_TILES.get(), "amethyst_tiles");
@@ -89,54 +156,10 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             var right = modLoc("block/" + rightStub + "_" + litness);
             var down = modLoc("block/" + downStub + "_" + litness);
 
-            ResourceLocation bottom = null, top = null, north = null, south = null, east = null, west = null;
-            switch (dir) {
-                case UP -> {
-                    top = front;
-                    bottom = back;
-                    north = east = south = west = up;
-                }
-                case DOWN -> {
-                    bottom = front;
-                    top = back;
-                    north = east = south = west = down;
-                }
-                case NORTH -> {
-                    north = front;
-                    south = back;
-                    west = left;
-                    east = right;
-                    top = up;
-                    bottom = down;
-                }
-                case SOUTH -> {
-                    south = front;
-                    north = back;
-                    west = right;
-                    east = left;
-                    top = down;
-                    bottom = up;
-                }
-                case WEST -> {
-                    west = front;
-                    east = back;
-                    north = right;
-                    south = left;
-                    top = left;
-                    bottom = left;
-                }
-                case EAST -> {
-                    east = front;
-                    west = back;
-                    north = left;
-                    south = right;
-                    top = right;
-                    bottom = right;
-                }
-            }
+            var routing = routeReslocsForArrowBlock(dir, front, back, up, down, left, right);
 
             var modelName = name + "_" + litness + "_" + dir.getName();
-            var model = models().cube(modelName, bottom, top, north, south, east, west)
+            var model = models().cube(modelName, routing[0], routing[1], routing[2], routing[3], routing[4], routing[5])
                 .texture("particle", particle);
             // Ordinarily i would use north, because north is the lower-right direction in the inv
             // and that's where other blocks face.
@@ -149,5 +172,57 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .modelFile(model)
                 .build();
         });
+    }
+
+    private static ResourceLocation[] routeReslocsForArrowBlock(Direction dir, ResourceLocation front,
+        ResourceLocation back,
+        ResourceLocation up, ResourceLocation down,
+        ResourceLocation left, ResourceLocation right) {
+        ResourceLocation bottom = null, top = null, north = null, south = null, east = null, west = null;
+        switch (dir) {
+            case UP -> {
+                top = front;
+                bottom = back;
+                north = east = south = west = up;
+            }
+            case DOWN -> {
+                bottom = front;
+                top = back;
+                north = east = south = west = down;
+            }
+            case NORTH -> {
+                north = front;
+                south = back;
+                west = left;
+                east = right;
+                top = up;
+                bottom = down;
+            }
+            case SOUTH -> {
+                south = front;
+                north = back;
+                west = right;
+                east = left;
+                top = down;
+                bottom = up;
+            }
+            case WEST -> {
+                west = front;
+                east = back;
+                north = right;
+                south = left;
+                top = left;
+                bottom = left;
+            }
+            case EAST -> {
+                east = front;
+                west = back;
+                north = left;
+                south = right;
+                top = right;
+                bottom = right;
+            }
+        }
+        return new ResourceLocation[]{bottom, top, north, south, east, west};
     }
 }

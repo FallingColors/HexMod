@@ -52,6 +52,8 @@
   "block.hexcasting.slate.blank": "Blank Slate",
   "block.hexcasting.slate.written": "Patterned Slate",
   "block.hexcasting.empty_impetus": "Empty Impetus",
+  "block.hexcasting.redstone_directrix": "Redstone Directrix",
+  "block.hexcasting.empty_directrix": "Empty Directrix",
   "block.hexcasting.impetus_rightclick": "Toolsmith Impetus",
   "block.hexcasting.impetus_look": "Fletcher Impetus",
   "block.hexcasting.impetus_storedplayer": "Cleric Impetus",
