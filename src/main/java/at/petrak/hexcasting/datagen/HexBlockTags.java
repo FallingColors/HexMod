@@ -17,8 +17,10 @@ public class HexBlockTags extends BlockTagsProvider {
     @Override
     protected void addTags() {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .add(HexBlocks.SLATE_BLOCK.get(), HexBlocks.SLATE.get(), HexBlocks.EMPTY_IMPETUS.get(),
-                HexBlocks.IMPETUS_RIGHTCLICK.get(),
+            .add(HexBlocks.SLATE_BLOCK.get(), HexBlocks.SLATE.get(),
+                HexBlocks.EMPTY_DIRECTRIX.get(), HexBlocks.DIRECTRIX_REDSTONE.get(),
+                HexBlocks.EMPTY_IMPETUS.get(),
+                HexBlocks.IMPETUS_RIGHTCLICK.get(), HexBlocks.IMPETUS_LOOK.get(), HexBlocks.IMPETUS_STOREDPLAYER.get(),
                 HexBlocks.AMETHYST_TILES.get(), HexBlocks.SCONCE.get());
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)

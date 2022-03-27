@@ -3,6 +3,19 @@
     {
       "condition": "forge:loot_table_id",
       "loot_table_id": "minecraft:blocks/amethyst_cluster"
+    },
+    {
+      "condition": "minecraft:inverted",
+      "term": {
+        "condition": "minecraft:match_tool",
+        "predicate": {
+          "enchantments": [
+            {
+              "enchantment": "minecraft:silk_touch"
+            }
+          ]
+        }
+      }
     }
   ],
   "item": "minecraft:amethyst_shard",
@@ -10,7 +23,7 @@
     {
       "function": "minecraft:set_count",
       "count": -2.0,
-      "add": false
+      "add": true
     }
   ],
   "type": "paucal:add_item"

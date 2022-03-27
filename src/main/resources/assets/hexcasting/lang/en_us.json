@@ -52,6 +52,8 @@
   "block.hexcasting.slate.blank": "Blank Slate",
   "block.hexcasting.slate.written": "Patterned Slate",
   "block.hexcasting.empty_impetus": "Empty Impetus",
+  "block.hexcasting.redstone_directrix": "Redstone Directrix",
+  "block.hexcasting.empty_directrix": "Empty Directrix",
   "block.hexcasting.impetus_rightclick": "Toolsmith Impetus",
   "block.hexcasting.impetus_look": "Fletcher Impetus",
   "block.hexcasting.impetus_storedplayer": "Cleric Impetus",
@@ -650,7 +652,7 @@
   "hexcasting.page.blockworks.9": "Extinguish blocks in a large area. Costs about two $(item)Amethyst Crystal/$s.",
 
   "hexcasting.entry.nadirs": "Nadirs",
-  "hexcasting.page.nadirs.1": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, multiplied by the potency.",
+  "hexcasting.page.nadirs.1": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, multiplied by the potency squared.",
   "hexcasting.page.nadirs.2": "According to certain legends, these spells and their sisters, the $(l:patterns/great_spells/zeniths)$(action)Zeniths/$, were \"[...] inspired by a world near to this one, where powerful wizards would gather magic from the land and hold duels to the death. Unfortunately, much was lost in translation...\"$(br2)Perhaps that is the reason for their peculiar names.",
   "hexcasting.page.nadirs.3": "Bestows weakness. Base cost is one $(item)Amethyst Dust/$ per 10 seconds.",
   "hexcasting.page.nadirs.4": "Bestows levitation. Base cost is one $(item)Amethyst Dust/$ per 5 seconds.",
@@ -665,8 +667,8 @@
   "hexcasting.page.hexcasting_spell.4": "Costs about ten $(item)Charged Amethyst/$s.",
   "hexcasting.page.hexcasting_spell.5": "Recharge a _media-containing item in my other hand. Costs about one $(item)Charged Amethyst/$.",
   "hexcasting.page.hexcasting_spell.6": "This spell is cast in a similar method to the crafting spells; an entity representing a dropped stack of $(item)Amethyst/$ is provided, and recharges the _media battery of the item in my other hand.$(br2)This spell $(italic)cannot/$ recharge the item farther than its original battery size.",
-  "hexcasting.page.hexcasting_spell.7": "Erase a _Hex-containing item in my other hand. Costs about one $(item)Amethyst Dust/$.",
-  "hexcasting.page.hexcasting_spell.8": "The spell will also void all the _media stored inside the item, releasing it back to Nature and returning the item to a perfectly clean slate.",
+  "hexcasting.page.hexcasting_spell.7": "Clear a _Hex-containing item in my other hand. Costs about one $(item)Amethyst Dust/$.",
+  "hexcasting.page.hexcasting_spell.8": "The spell will also void all the _media stored inside the item, releasing it back to Nature and returning the item to a perfectly clean slate. This way, I can re-use $(item)Trinket/$s I have put an erroneous spell into, for example.",
 
   "hexcasting.entry.sentinels": "Sentinels",
   "hexcasting.page.sentinels.1": "$(italic)Hence, away! Now all is well,$(br)One aloof stand sentinel./$$(br2)A $(thing)Sentinel/$ is a mysterious force I can summon to assist in the casting of _Hexes, like a familiar or guardian spirit. It appears as a spinning geometric shape to my eyes, but is invisible to everyone else.",
@@ -693,7 +695,7 @@
   "hexcasting.page.teleport.2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(item)Charged Crystal/$s.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination.",
 
   "hexcasting.entry.zeniths": "Zeniths",
-  "hexcasting.page.zeniths.1": "This family of spells all impart a positive potion effect upon an entity.$(br2)See the $(l:patterns/spells/nadirs)$(action)Nadirs/$ for more information.",
+  "hexcasting.page.zeniths.1": "This family of spells all impart a positive potion effect upon an entity, similar to the $(l:patterns/spells/nadirs)$(action)Nadirs/$. However, these have their _media costs increase with the $(italic)cube/$ of the potency.",
   "hexcasting.page.zeniths.2": "Bestows regeneration. Base cost is one $(item)Amethyst Dust/$ per second.",
   "hexcasting.page.zeniths.3": "Bestows night vision. Base cost is one $(item)Amethyst Dust/$ per 5 seconds.",
   "hexcasting.page.zeniths.4": "Bestows absorption. Base cost is one $(item)Amethyst Dust/$ per second.",

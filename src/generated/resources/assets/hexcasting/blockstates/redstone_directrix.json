@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "energized=false,facing=down,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_dim_down"
+    },
+    "energized=true,facing=down,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_lit_down"
+    },
+    "energized=false,facing=up,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_dim_up"
+    },
+    "energized=true,facing=up,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_lit_up"
+    },
+    "energized=false,facing=north,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_dim_north"
+    },
+    "energized=true,facing=north,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_lit_north"
+    },
+    "energized=false,facing=south,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_dim_south"
+    },
+    "energized=true,facing=south,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_lit_south"
+    },
+    "energized=false,facing=west,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_dim_west"
+    },
+    "energized=true,facing=west,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_lit_west"
+    },
+    "energized=false,facing=east,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_dim_east"
+    },
+    "energized=true,facing=east,powered=false": {
+      "model": "hexcasting:block/redstone_directrix_unpowered_lit_east"
+    },
+    "energized=false,facing=down,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_dim_down"
+    },
+    "energized=true,facing=down,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_lit_down"
+    },
+    "energized=false,facing=up,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_dim_up"
+    },
+    "energized=true,facing=up,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_lit_up"
+    },
+    "energized=false,facing=north,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_dim_north"
+    },
+    "energized=true,facing=north,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_lit_north"
+    },
+    "energized=false,facing=south,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_dim_south"
+    },
+    "energized=true,facing=south,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_lit_south"
+    },
+    "energized=false,facing=west,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_dim_west"
+    },
+    "energized=true,facing=west,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_lit_west"
+    },
+    "energized=false,facing=east,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_dim_east"
+    },
+    "energized=true,facing=east,powered=true": {
+      "model": "hexcasting:block/redstone_directrix_powered_lit_east"
+    }
+  }
+}
