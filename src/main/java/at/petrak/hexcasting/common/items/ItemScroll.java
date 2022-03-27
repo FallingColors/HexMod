@@ -42,30 +42,29 @@ public class ItemScroll extends Item {
         ItemStack itemstack = ctx.getItemInHand();
         if (player != null && !this.mayPlace(player, direction, itemstack, posInFront)) {
             return InteractionResult.FAIL;
+        }
+        var level = ctx.getLevel();
+        var scrollStack = itemstack.copy();
+        scrollStack.setCount(1);
+        var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack);
+
+        // i guess
+        var compoundtag = itemstack.getTag();
+        if (compoundtag != null) {
+            EntityType.updateCustomEntityTag(level, player, scrollEntity, compoundtag);
+        }
+
+        if (scrollEntity.survives()) {
+            if (!level.isClientSide) {
+                scrollEntity.playPlacementSound();
+                level.gameEvent(player, GameEvent.ENTITY_PLACE, posClicked);
+                level.addFreshEntity(scrollEntity);
+            }
+
+            itemstack.shrink(1);
+            return InteractionResult.sidedSuccess(level.isClientSide);
         } else {
-            var level = ctx.getLevel();
-            var scrollStack = itemstack.copy();
-            scrollStack.setCount(1);
-            var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack);
-
-            // i guess
-            var compoundtag = itemstack.getTag();
-            if (compoundtag != null) {
-                EntityType.updateCustomEntityTag(level, player, scrollEntity, compoundtag);
-            }
-
-            if (scrollEntity.survives()) {
-                if (!level.isClientSide) {
-                    scrollEntity.playPlacementSound();
-                    level.gameEvent(player, GameEvent.ENTITY_PLACE, posClicked);
-                    level.addFreshEntity(scrollEntity);
-                }
-
-                itemstack.shrink(1);
-                return InteractionResult.sidedSuccess(level.isClientSide);
-            } else {
-                return InteractionResult.CONSUME;
-            }
+            return InteractionResult.CONSUME;
         }
     }
 

@@ -40,8 +40,9 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
 
     public ItemStack scroll;
     public HexPattern pattern;
-    public List<Vec2> zappyPoints;
     public boolean isAncient;
+    // Client-side only!
+    public List<Vec2> zappyPoints;
 
     public EntityWallScroll(EntityType<? extends EntityWallScroll> type, Level world) {
         super(type, world);
@@ -58,10 +59,12 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
 
         var tag = scroll.getTag();
         if (tag != null && tag.contains(ItemScroll.TAG_PATTERN)) {
-            var pattern = HexPattern.DeserializeFromNBT(tag.getCompound(ItemScroll.TAG_PATTERN));
-            var pair = RenderLib.getCenteredPattern(pattern, 128, 128, 16f);
-            var dots = pair.getSecond();
-            this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f);
+            this.pattern = HexPattern.DeserializeFromNBT(tag.getCompound(ItemScroll.TAG_PATTERN));
+            if (this.level.isClientSide) {
+                var pair = RenderLib.getCenteredPattern(pattern, 128, 128, 16f);
+                var dots = pair.getSecond();
+                this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f);
+            }
 
             this.isAncient = tag.contains(ItemScroll.TAG_OP_ID);
         } else {
