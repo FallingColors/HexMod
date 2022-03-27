@@ -180,35 +180,35 @@ public class RegisterPatterns {
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaqwawaw", HexDir.NORTH_WEST),
                 prefix("potion/weakness"),
-                new OpPotionEffect(MobEffects.WEAKNESS, 10_000 / 10, true));
+                new OpPotionEffect(MobEffects.WEAKNESS, 10_000 / 10, true, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqawwawawd", HexDir.WEST),
                 prefix("potion/levitation"),
-                new OpPotionEffect(MobEffects.LEVITATION, 10_000 / 5, false));
+                new OpPotionEffect(MobEffects.LEVITATION, 10_000 / 5, false, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaewawawe", HexDir.SOUTH_WEST),
                 prefix("potion/wither"),
-                new OpPotionEffect(MobEffects.WITHER, 10_000, true));
+                new OpPotionEffect(MobEffects.WITHER, 10_000, true, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqadwawaww", HexDir.SOUTH_EAST),
                 prefix("potion/poison"),
-                new OpPotionEffect(MobEffects.POISON, 10_000 / 3, true));
+                new OpPotionEffect(MobEffects.POISON, 10_000 / 3, true, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqadwawaw", HexDir.SOUTH_EAST),
                 prefix("potion/slowness"),
-                new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, 10_000 / 3, true));
+                new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, 10_000 / 3, true, false));
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqaawawaedd", HexDir.NORTH_WEST),
                 prefix("potion/regeneration"),
-                new OpPotionEffect(MobEffects.REGENERATION, 10_000, true), true);
+                new OpPotionEffect(MobEffects.REGENERATION, 10_000, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqaawawaeqdd", HexDir.WEST),
                 prefix("potion/night_vision"),
-                new OpPotionEffect(MobEffects.NIGHT_VISION, 10_000 / 5, false), true);
+                new OpPotionEffect(MobEffects.NIGHT_VISION, 10_000 / 5, false, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqaawawaeqqdd", HexDir.SOUTH_WEST),
                 prefix("potion/absorption"),
-                new OpPotionEffect(MobEffects.ABSORPTION, 10_000, true), true);
+                new OpPotionEffect(MobEffects.ABSORPTION, 10_000, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaawawaeqqqdd", HexDir.SOUTH_EAST),
                 prefix("potion/haste"),
-                new OpPotionEffect(MobEffects.DIG_SPEED, 10_000 / 3, true), true);
+                new OpPotionEffect(MobEffects.DIG_SPEED, 10_000 / 3, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawawaeqqqqdd", HexDir.EAST),
                 prefix("potion/strength"),
-                new OpPotionEffect(MobEffects.DAMAGE_BOOST, 10_000 / 3, true), true);
+                new OpPotionEffect(MobEffects.DAMAGE_BOOST, 10_000 / 3, true, true), true);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawae", HexDir.EAST),
                 prefix("sentinel/create"),

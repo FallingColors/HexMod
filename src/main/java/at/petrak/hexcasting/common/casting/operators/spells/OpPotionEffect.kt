@@ -11,9 +11,14 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import kotlin.math.max
 
-class OpPotionEffect(val effect: MobEffect, val baseCost: Int, val potency: Boolean) : SpellOperator {
+class OpPotionEffect(
+    val effect: MobEffect,
+    val baseCost: Int,
+    val allowPotency: Boolean,
+    val potencyCubic: Boolean
+) : SpellOperator {
     override val argc: Int
-        get() = if (this.potency) 3 else 2
+        get() = if (this.allowPotency) 3 else 2
 
     override fun execute(
         args: List<SpellDatum<*>>,
@@ -22,11 +27,15 @@ class OpPotionEffect(val effect: MobEffect, val baseCost: Int, val potency: Bool
         val target = args.getChecked<LivingEntity>(0)
         val duration = max(args.getChecked(1), 0.0)
         ctx.assertEntityInRange(target)
-        val potency = if (this.potency)
+        val potency = if (this.allowPotency)
             max(args.getChecked(2), 1.0)
         else 1.0
 
-        val cost = this.baseCost * duration * potency
+        val cost = this.baseCost * duration * if (potencyCubic) {
+            potency * potency * potency
+        } else {
+            potency * potency
+        }
         return Triple(
             Spell(effect, target, duration, potency),
             cost.toInt(),

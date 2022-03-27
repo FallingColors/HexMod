@@ -650,7 +650,7 @@
   "hexcasting.page.blockworks.9": "Extinguish blocks in a large area. Costs about two $(item)Amethyst Crystal/$s.",
 
   "hexcasting.entry.nadirs": "Nadirs",
-  "hexcasting.page.nadirs.1": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, multiplied by the potency.",
+  "hexcasting.page.nadirs.1": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, multiplied by the potency squared.",
   "hexcasting.page.nadirs.2": "According to certain legends, these spells and their sisters, the $(l:patterns/great_spells/zeniths)$(action)Zeniths/$, were \"[...] inspired by a world near to this one, where powerful wizards would gather magic from the land and hold duels to the death. Unfortunately, much was lost in translation...\"$(br2)Perhaps that is the reason for their peculiar names.",
   "hexcasting.page.nadirs.3": "Bestows weakness. Base cost is one $(item)Amethyst Dust/$ per 10 seconds.",
   "hexcasting.page.nadirs.4": "Bestows levitation. Base cost is one $(item)Amethyst Dust/$ per 5 seconds.",
@@ -693,7 +693,7 @@
   "hexcasting.page.teleport.2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(item)Charged Crystal/$s.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination.",
 
   "hexcasting.entry.zeniths": "Zeniths",
-  "hexcasting.page.zeniths.1": "This family of spells all impart a positive potion effect upon an entity.$(br2)See the $(l:patterns/spells/nadirs)$(action)Nadirs/$ for more information.",
+  "hexcasting.page.zeniths.1": "This family of spells all impart a positive potion effect upon an entity, similar to the $(l:patterns/spells/nadirs)$(action)Nadirs/$. However, these have their _media costs increase with the $(italic)cube/$ of the potency.",
   "hexcasting.page.zeniths.2": "Bestows regeneration. Base cost is one $(item)Amethyst Dust/$ per second.",
   "hexcasting.page.zeniths.3": "Bestows night vision. Base cost is one $(item)Amethyst Dust/$ per 5 seconds.",
   "hexcasting.page.zeniths.4": "Bestows absorption. Base cost is one $(item)Amethyst Dust/$ per second.",
