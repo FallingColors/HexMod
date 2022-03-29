@@ -9,7 +9,6 @@ import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -17,7 +16,6 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -31,6 +29,8 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
         ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, HexMod.MOD_ID);
     private static final RegistryObject<PatternScrollModifier.Serializer> SCROLLS_IN_CHESTS = LOOT_MODS.register(
         "scrolls", PatternScrollModifier.Serializer::new);
+    private static final RegistryObject<AmethystShardReducerModifier.Serializer> AMETHYST_SHARD_REDUCER = LOOT_MODS.register(
+        "amethyst_shard_reducer", AmethystShardReducerModifier.Serializer::new);
 
     public HexLootModifiers(DataGenerator gen) {
         super(gen, HexMod.MOD_ID);
@@ -40,17 +40,14 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
     protected void start() {
         ResourceLocation amethystCluster = new ResourceLocation("minecraft:blocks/amethyst_cluster");
         // 4? that's a lot!
-        add("amethyst_cluster_shard_reducer", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
-            Items.AMETHYST_SHARD, new LootItemFunction[]{
-            SetItemCountFunction.setCount(ConstantValue.exactly(-2), true).build(),
-        }, new LootItemCondition[]{
+        add("amethyst_cluster_shard_reducer", AMETHYST_SHARD_REDUCER.get(), new AmethystShardReducerModifier(
+            -2, new LootItemCondition[]{
             LootTableIdCondition.builder(amethystCluster).build(),
             MatchTool.toolMatches(
                     ItemPredicate.Builder.item().hasEnchantment(
                         new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
-                .invert().build(),
-        }
-        ));
+                .invert().build()
+        }));
 
         add("amethyst_cluster_dust", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
             HexItems.AMETHYST_DUST.get(), new LootItemFunction[]{

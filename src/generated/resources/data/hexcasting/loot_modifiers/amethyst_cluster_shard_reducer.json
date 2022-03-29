@@ -18,13 +18,6 @@
       }
     }
   ],
-  "item": "minecraft:amethyst_shard",
-  "functions": [
-    {
-      "function": "minecraft:set_count",
-      "count": -2.0,
-      "add": true
-    }
-  ],
-  "type": "paucal:add_item"
+  "delta": -2,
+  "type": "hexcasting:amethyst_shard_reducer"
 }
