@@ -62,9 +62,6 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     }
 
     override fun init() {
-        val soundman = Minecraft.getInstance().soundManager
-        soundman.stop(HexSounds.CASTING_AMBIANCE.get().location, null)
-
         this.ambianceSoundInstance = SimpleSoundInstance(
             HexSounds.CASTING_AMBIANCE.get().location,
             SoundSource.PLAYERS,
