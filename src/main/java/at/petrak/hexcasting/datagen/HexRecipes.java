@@ -65,11 +65,14 @@ public class HexRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_focus", has(HexItems.FOCUS.get()))
             .unlockedBy("has_chorus", has(Items.CHORUS_FRUIT)).save(recipes);
 
-        ring(HexItems.CYPHER.get(), 1, Ingredient.of(Tags.Items.INGOTS_COPPER),
+        ringCornerless(HexItems.CYPHER.get(), 1,
+            Ingredient.of(Tags.Items.INGOTS_COPPER),
             Ingredient.of(HexItems.AMETHYST_DUST.get()))
             .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
 
-        ring(HexItems.TRINKET.get(), 1, Ingredient.of(Tags.Items.INGOTS_IRON), Ingredient.of(Items.AMETHYST_SHARD))
+        ringCornerless(HexItems.TRINKET.get(), 1,
+            Ingredient.of(Tags.Items.INGOTS_IRON),
+            Ingredient.of(Items.AMETHYST_SHARD))
             .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.ARTIFACT.get())
@@ -256,7 +259,7 @@ public class HexRecipes extends PaucalRecipeProvider {
             HexBlocks.DIRECTRIX_REDSTONE.get().defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/directrix_redstone"));
-        
+
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 3),
             Blocks.BUDDING_AMETHYST.defaultBlockState())

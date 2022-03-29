@@ -1,15 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "DCD",
+    " C ",
     "CIC",
-    "DCD"
+    " C "
   ],
   "key": {
     "C": {
-      "tag": "forge:ingots/iron"
-    },
-    "D": {
       "tag": "forge:ingots/iron"
     },
     "I": {
