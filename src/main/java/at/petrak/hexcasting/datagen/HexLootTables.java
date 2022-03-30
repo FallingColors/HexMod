@@ -23,7 +23,7 @@ public class HexLootTables extends PaucalLootTableProvider {
 
     @Override
     protected void makeLootTables(Map<Block, LootTable.Builder> lootTables) {
-        dropSelfTable(lootTables, HexBlocks.EMPTY_IMPETUS,
+        dropSelf(lootTables, HexBlocks.EMPTY_IMPETUS,
             HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_STOREDPLAYER,
             HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.EMPTY_DIRECTRIX,
             HexBlocks.SLATE_BLOCK, HexBlocks.AMETHYST_DUST_BLOCK, HexBlocks.AMETHYST_TILES, HexBlocks.SCROLL_PAPER,

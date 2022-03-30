@@ -712,7 +712,7 @@
   "hexcasting.page.greater_sentinel.2": "The stronger sentinel acts like the normal one I can summon without the use of a Great Spell, if a little more visually interesting. However, the range in which my spells can work is extended to a small region around my greater sentinel, about 16 blocks. In other words, no matter where in the world I am, I can interact with things around my sentinel (the mysterious forces of chunkloading notwithstanding).",
 
   "hexcasting.page.make_battery.1": "Infuse a bottle with _media to form a $(item)Phial./$",
-  "hexcasting.page.make_battery.2": "Similarly to the spells for $(l:patterns/spells/hexcasting)$(action)Crafting Hexcasting Items/$, I must hold a $(item)Glass Bottle/$ in my other hand, and provide the spell with a dropped stack of $(item)Amethyst/$. See $(l:items/phials)this page/$ for more information.",
+  "hexcasting.page.make_battery.2": "Similarly to the spells for $(l:patterns/spells/hexcasting)$(action)Crafting Hexcasting Items/$, I must hold a $(item)Glass Bottle/$ in my other hand, and provide the spell with a dropped stack of $(item)Amethyst/$. See $(l:items/phials)this page/$ for more information.$(br2)Costs about 1 $(item)Charged Amethyst Crystal/$.",
 
   "hexcasting.page.brainsweep_spell.1": "I cannot make heads or tails of this spell... To be honest, I'm not sure I want to know what it does."
 }
