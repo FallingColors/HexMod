@@ -14,6 +14,8 @@ import net.minecraftforge.network.PacketDistributor
 
 class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
     override val argc = 1
+    override val isGreat = this.extendsRange
+
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
