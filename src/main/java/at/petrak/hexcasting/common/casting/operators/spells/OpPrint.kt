@@ -4,15 +4,15 @@ import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.OperatorSideEffect
+import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
 import net.minecraft.Util
 
 object OpPrint : Operator {
     override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty()) {
-            throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, 1, stack.size)
+            throw MishapNotEnoughArgs(1, 0)
         }
         val datum = stack[stack.lastIndex]
         return OperationResult(

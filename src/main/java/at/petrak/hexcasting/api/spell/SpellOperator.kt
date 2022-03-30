@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.spell
 
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.OperatorSideEffect
+import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
 
 interface SpellOperator : Operator {
     val argc: Int
@@ -14,7 +14,7 @@ interface SpellOperator : Operator {
 
     override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         if (this.argc > stack.size)
-            throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, this.argc, stack.size)
+            throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
         val (spell, mana, particles) = this.execute(args, ctx)

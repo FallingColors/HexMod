@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api
 
 import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.common.casting.CastException
+import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidPattern
 import at.petrak.hexcasting.hexmath.EulerPathFinder
 import at.petrak.hexcasting.hexmath.HexDir
 import at.petrak.hexcasting.hexmath.HexPattern
@@ -68,28 +68,39 @@ object PatternRegistry {
      * Internal use only.
      */
     @JvmStatic
-    fun matchPattern(pat: HexPattern, overworld: ServerLevel): Operator {
+    fun matchPattern(pat: HexPattern, overworld: ServerLevel): Operator =
+        matchPatternAndID(pat, overworld).first
+
+    /**
+     * Internal use only.
+     */
+    @JvmStatic
+    fun matchPatternAndID(pat: HexPattern, overworld: ServerLevel): Pair<Operator, ResourceLocation?> {
         // Pipeline:
         // patterns are registered here every time the game boots
         // when we try to look
         for (handler in specialHandlers) {
             val op = handler.handlePattern(pat)
-            if (op != null) return op
+            if (op != null) return Pair(op, null)
         }
 
         // Is it global?
         val sig = pat.anglesSignature()
         this.regularPatternLookup[sig]?.let {
-            return this.operatorLookup[it.opId] ?: throw CastException(CastException.Reason.INVALID_PATTERN, pat)
+            val op = this.operatorLookup[it.opId] ?: throw MishapInvalidPattern()
+            return Pair(op, it.opId)
         }
 
         // Look it up in the world?
         val ds = overworld.dataStorage
         val perWorldPatterns: Save =
             ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
-        perWorldPatterns.lookup[sig]?.let { return this.operatorLookup[it.first]!! }
+        perWorldPatterns.lookup[sig]?.let {
+            val op = this.operatorLookup[it.first]!!
+            return Pair(op, it.first)
+        }
 
-        throw CastException(CastException.Reason.INVALID_PATTERN, pat)
+        throw MishapInvalidPattern()
     }
 
     /**

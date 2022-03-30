@@ -2,9 +2,9 @@ package at.petrak.hexcasting.api.spell
 
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.HexUtils.serializeToNBT
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.Widget
+import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidSpellDatumType
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.*
@@ -31,13 +31,6 @@ import net.minecraft.world.phys.Vec3
  */
 class SpellDatum<T : Any> private constructor(val payload: T) {
     val clazz: Class<T> = payload.javaClass
-
-    inline fun <reified U> tryGet(): U =
-        if (payload is U) {
-            payload
-        } else {
-            throw CastException(CastException.Reason.OP_WRONG_TYPE, U::class.java, this.payload)
-        }
 
     fun serializeToNBT(): CompoundTag {
         val out = CompoundTag()
@@ -113,7 +106,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 val num = payload.toDouble()
                 SpellDatum(HexUtils.FixNANs(num))
             } else {
-                throw CastException(CastException.Reason.INVALID_TYPE, payload)
+                throw MishapInvalidSpellDatumType(payload)
             }
 
 

@@ -3,9 +3,8 @@ package at.petrak.hexcasting.common.casting.operators
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.Widget
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.ItemDataHolder
 import net.minecraft.world.entity.item.ItemEntity
 
@@ -17,14 +16,15 @@ object OpTheCoolerRead : ConstManaOperator {
         ctx: CastingContext
     ): List<SpellDatum<*>> {
         val target = args.getChecked<ItemEntity>(0)
-        if (target.item.item !is ItemDataHolder) {
-            throw CastException(CastException.Reason.BAD_OFFHAND_ITEM, ItemDataHolder::class.java, target.item)
+        val stack = target.item
+        val item = stack.item
+        if (item !is ItemDataHolder) {
+            throw MishapBadOffhandItem.of(stack, "iota.read")
         }
         ctx.assertEntityInRange(target)
 
-        val stack = target.item
-        val item = stack.item as ItemDataHolder
-        val datum = item.readDatum(stack, ctx) ?: SpellDatum.make(Widget.NULL)
+
+        val datum = item.readDatum(stack, ctx) ?: throw MishapBadOffhandItem.of(stack, "iota.read")
         return listOf(datum)
     }
 }

@@ -1,16 +1,17 @@
 package at.petrak.hexcasting.common.items.colorizer;
 
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 
 public class ItemDyeColorizer extends Item {
-    private final int dyeIdx;
+    private final DyeColor dyeColor;
 
-    public ItemDyeColorizer(int dyeIdx, Properties pProperties) {
+    public ItemDyeColorizer(DyeColor dyeColor, Properties pProperties) {
         super(pProperties);
-        this.dyeIdx = dyeIdx;
+        this.dyeColor = dyeColor;
     }
 
-    public int getDyeIdx() {
-        return dyeIdx;
+    public DyeColor getDyeColor() {
+        return dyeColor;
     }
 }

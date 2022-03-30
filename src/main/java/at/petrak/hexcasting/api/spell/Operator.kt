@@ -1,7 +1,8 @@
 package at.petrak.hexcasting.api.spell
 
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -43,16 +44,11 @@ interface Operator {
          */
         @JvmStatic
         inline fun <reified T : Any> List<SpellDatum<*>>.getChecked(idx: Int): T {
-            val x = this.getOrElse(idx) { throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, idx, this.size) }
-            return x.tryGet()
-        }
-
-        /**
-         * Check if the value at the given index is OK. Will throw an error otherwise.
-         */
-        @JvmStatic
-        inline fun <reified T : Any> List<SpellDatum<*>>.assertChecked(idx: Int) {
-            this.getChecked<T>(idx)
+            val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+            if (x.payload is T)
+                return x.payload
+            else
+                throw MishapInvalidIota.ofClass(x, idx, T::class.java)
         }
 
         @JvmStatic

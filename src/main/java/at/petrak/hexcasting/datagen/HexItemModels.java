@@ -11,6 +11,7 @@ import at.petrak.paucal.api.datagen.PaucalItemModelProvider;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -104,8 +105,9 @@ public class HexItemModels extends PaucalItemModelProvider {
             }
         }
 
-        for (int i = 0; i < 16; i++) {
-            singleTexture(HexItems.DYE_COLORIZERS[i].getId().getPath(), new ResourceLocation("item/generated"),
+        for (int i = 0; i < DyeColor.values().length; i++) {
+            singleTexture(HexItems.DYE_COLORIZERS.get(DyeColor.values()[i]).getId().getPath(),
+                new ResourceLocation("item/generated"),
                 "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/dye" + i));
         }
         for (int i = 0; i < 14; i++) {

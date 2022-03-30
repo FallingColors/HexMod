@@ -5,9 +5,11 @@ import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.OperatorSideEffect
+import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
+import net.minecraft.network.chat.TranslatableComponent
 
 object OpLastNToList : Operator {
     val manaCost: Int
@@ -15,13 +17,18 @@ object OpLastNToList : Operator {
 
     override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty())
-            throw CastException(CastException.Reason.NOT_ENOUGH_ARGS, 1, stack.size)
+            throw MishapNotEnoughArgs(1, 0)
         val arg = stack.takeLast(1).getChecked<Double>(0)
+        val datum = stack[stack.lastIndex]
         stack.removeLast()
-        if (arg < 0) {
-            throw CastException(CastException.Reason.INVALID_VALUE, "integer greater than 0", arg)
+        if (arg < 0 || arg >= stack.size) {
+            throw MishapInvalidIota(
+                datum,
+                0,
+                TranslatableComponent("hexcasting.mishap.invalid_value.fisherman", stack.size)
+            )
         }
-        val output = emptyList<SpellDatum<*>>().toMutableList()
+        val output = mutableListOf<SpellDatum<*>>()
         output.addAll(stack.takeLast(arg.toInt()))
         val endSize = stack.size - output.toList().size
         while (stack.size != endSize) {

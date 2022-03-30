@@ -36,7 +36,11 @@ abstract public class ItemDataHolder extends Item {
         }
     }
 
+
+    public abstract boolean canWrite(CompoundTag tag, SpellDatum<?> datum);
+
     public abstract void writeDatum(CompoundTag tag, SpellDatum<?> datum);
+
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,

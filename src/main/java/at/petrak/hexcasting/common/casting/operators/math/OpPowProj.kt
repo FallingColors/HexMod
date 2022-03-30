@@ -12,8 +12,8 @@ object OpPowProj : ConstManaOperator {
         get() = 2
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val lhs = MathOpUtils.GetNumOrVec(args[0])
-        val rhs = MathOpUtils.GetNumOrVec(args[1])
+        val lhs = MathOpUtils.GetNumOrVec(args[0], 1)
+        val rhs = MathOpUtils.GetNumOrVec(args[1], 0)
 
         return spellListOf(
             lhs.map({ lnum ->

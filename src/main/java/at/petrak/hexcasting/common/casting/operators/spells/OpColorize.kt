@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgColorizerUpdateAck
@@ -18,6 +19,13 @@ object OpColorize : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+        val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
+        if (!FrozenColorizer.isColorizer(otherHandItem.item)) {
+            throw MishapBadOffhandItem.of(
+                otherHandItem,
+                "colorizer"
+            )
+        }
         return Triple(
             Spell,
             10_000,

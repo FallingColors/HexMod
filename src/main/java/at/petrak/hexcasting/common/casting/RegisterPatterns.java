@@ -23,9 +23,7 @@ import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSen
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
-import at.petrak.hexcasting.common.items.magic.ItemArtifact;
-import at.petrak.hexcasting.common.items.magic.ItemCypher;
-import at.petrak.hexcasting.common.items.magic.ItemTrinket;
+import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.hexmath.HexDir;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.world.effect.MobEffects;
@@ -164,14 +162,14 @@ public class RegisterPatterns {
                 new OpErase());
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
-                new OpMakePackagedSpell<>(ItemCypher.class, 100_000));
+                new OpMakePackagedSpell<>(HexItems.CYPHER.get(), 100_000));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
                 prefix("craft/trinket"),
-                new OpMakePackagedSpell<>(ItemTrinket.class, 500_000));
+                new OpMakePackagedSpell<>(HexItems.TRINKET.get(), 500_000));
             PatternRegistry.mapPattern(
                 HexPattern.FromAnglesSig("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
                 prefix("craft/artifact"),
-                new OpMakePackagedSpell<>(ItemArtifact.class, 1_000_000));
+                new OpMakePackagedSpell<>(HexItems.ARTIFACT.get(), 1_000_000));
             PatternRegistry.mapPattern(
                 HexPattern.FromAnglesSig("aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", HexDir.SOUTH_WEST),
                 prefix("craft/battery"),

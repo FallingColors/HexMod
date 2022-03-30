@@ -18,6 +18,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.EnumMap;
+
 public class HexItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, HexMod.MOD_ID);
     public static final CreativeModeTab TAB = new CreativeModeTab(HexMod.MOD_ID) {
@@ -77,15 +79,14 @@ public class HexItems {
     public static final RegistryObject<ItemManaBattery> BATTERY = ITEMS.register("battery",
         () -> new ItemManaBattery(new Item.Properties().stacksTo(1)));
 
-    public static final RegistryObject<ItemDyeColorizer>[] DYE_COLORIZERS = new RegistryObject[16];
+    public static final EnumMap<DyeColor, RegistryObject<ItemDyeColorizer>> DYE_COLORIZERS = new EnumMap<>(
+        DyeColor.class);
     public static final RegistryObject<ItemPrideColorizer>[] PRIDE_COLORIZERS = new RegistryObject[14];
 
     static {
-        for (int i = 0; i < DYE_COLORIZERS.length; i++) {
-            var dye = DyeColor.values()[i];
-            final var finalI = i;
-            DYE_COLORIZERS[i] = ITEMS.register("dye_colorizer_" + dye.getName(),
-                () -> new ItemDyeColorizer(finalI, unstackable()));
+        for (var dye : DyeColor.values()) {
+            DYE_COLORIZERS.put(dye, ITEMS.register("dye_colorizer_" + dye.getName(),
+                () -> new ItemDyeColorizer(dye, unstackable())));
         }
         for (int i = 0; i < PRIDE_COLORIZERS.length; i++) {
             final var finalI = i;

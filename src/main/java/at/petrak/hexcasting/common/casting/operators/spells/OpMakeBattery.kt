@@ -5,9 +5,9 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastException
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.ManaHelper
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import net.minecraft.world.entity.item.ItemEntity
@@ -24,13 +24,26 @@ object OpMakeBattery : SpellOperator {
 
         val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
         if (otherHandItem.item != Items.GLASS_BOTTLE) {
-            throw CastException(CastException.Reason.BAD_OFFHAND_ITEM_ITEM, Items.GLASS_BOTTLE, otherHandItem)
+            throw MishapBadOffhandItem.of(
+                otherHandItem,
+                "bottle"
+            )
         }
         if (otherHandItem.count != 1) {
-            throw CastException(CastException.Reason.BAD_OFFHAND_COUNT, 1, otherHandItem.count)
+            throw MishapBadOffhandItem.of(
+                otherHandItem,
+                "only_one"
+            )
         }
-        
+
         ctx.assertEntityInRange(entity)
+
+        if (!ManaHelper.isManaItem(entity.item)) {
+            throw MishapBadOffhandItem.of(
+                otherHandItem,
+                "mana"
+            )
+        }
 
         return Triple(Spell(entity), 100_000, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }
