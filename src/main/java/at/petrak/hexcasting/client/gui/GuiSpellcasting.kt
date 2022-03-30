@@ -80,13 +80,15 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         Minecraft.getInstance().soundManager.play(this.ambianceSoundInstance!!)
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        if (super.mouseClicked(pMouseX, pMouseY, pButton)) {
+    override fun mouseClicked(mxOut: Double, myOut: Double, pButton: Int): Boolean {
+        if (super.mouseClicked(mxOut, myOut, pButton)) {
             return true
         }
 
+        val mx = Mth.clamp(mxOut, 0.0, this.width.toDouble())
+        val my = Mth.clamp(myOut, 0.0, this.height.toDouble())
         if (this.drawState is PatternDrawState.BetweenPatterns) {
-            val coord = this.pxToCoord(Vec2(pMouseX.toFloat(), pMouseY.toFloat()))
+            val coord = this.pxToCoord(Vec2(mx.toFloat(), my.toFloat()))
             if (!this.usedSpots.contains(coord)) {
                 this.drawState = PatternDrawState.JustStarted(coord)
                 Minecraft.getInstance().soundManager.play(
@@ -101,10 +103,13 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         return false
     }
 
-    override fun mouseDragged(pMouseX: Double, pMouseY: Double, pButton: Int, pDragX: Double, pDragY: Double): Boolean {
-        if (super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY)) {
+    override fun mouseDragged(mxOut: Double, myOut: Double, pButton: Int, pDragX: Double, pDragY: Double): Boolean {
+        if (super.mouseDragged(mxOut, myOut, pButton, pDragX, pDragY)) {
             return true
         }
+
+        val mx = Mth.clamp(mxOut, 0.0, this.width.toDouble())
+        val my = Mth.clamp(myOut, 0.0, this.height.toDouble())
 
         val anchorCoord = when (this.drawState) {
             PatternDrawState.BetweenPatterns -> null
@@ -113,7 +118,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         }
         if (anchorCoord != null) {
             val anchor = this.coordToPx(anchorCoord)
-            val mouse = Vec2(pMouseX.toFloat(), pMouseY.toFloat())
+            val mouse = Vec2(mx.toFloat(), my.toFloat())
             if (anchor.distanceToSqr(mouse) >= this.hexSize() * this.hexSize()) {
                 val delta = mouse.add(anchor.negated())
                 val angle = atan2(delta.y, delta.x)
@@ -167,8 +172,8 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         return false
     }
 
-    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        if (super.mouseReleased(pMouseX, pMouseY, pButton)) {
+    override fun mouseReleased(mx: Double, my: Double, pButton: Int): Boolean {
+        if (super.mouseReleased(mx, my, pButton)) {
             return true
         }
 
