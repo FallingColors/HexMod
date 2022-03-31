@@ -24,8 +24,8 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
     public static final String TAG_RECORD_POS = "record_pos";
     public static final String TAG_PATTERN = "pattern";
 
-    // This is only not null if this stores any data.
     public BlockPos recordPos = null;
+    // This is only not null if this stores any data.
     public HexPattern pattern = null;
 
     public BlockEntityAkashicBookshelf(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -34,16 +34,21 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
 
     @Override
     protected void saveModData(CompoundTag compoundTag) {
-        if (this.recordPos != null && this.pattern != null) {
+        if (this.recordPos != null) {
             compoundTag.put(TAG_RECORD_POS, NbtUtils.writeBlockPos(this.recordPos));
+
+        }
+        if (this.pattern != null) {
             compoundTag.put(TAG_PATTERN, this.pattern.serializeToNBT());
         }
     }
 
     @Override
     protected void loadModData(CompoundTag compoundTag) {
-        if (compoundTag.contains(TAG_RECORD_POS) && compoundTag.contains(TAG_PATTERN)) {
+        if (compoundTag.contains(TAG_RECORD_POS)) {
             this.recordPos = NbtUtils.readBlockPos(compoundTag.getCompound(TAG_RECORD_POS));
+        }
+        if (compoundTag.contains(TAG_PATTERN)) {
             this.pattern = HexPattern.DeserializeFromNBT(compoundTag.getCompound(TAG_PATTERN));
         }
     }

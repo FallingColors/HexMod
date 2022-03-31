@@ -25,7 +25,7 @@ object OpAkashicRead : ConstManaOperator {
             throw MishapNoAkashicRecord(bpos)
         }
 
-        val datum = tile.lookupPattern(key)
+        val datum = tile.lookupPattern(key, ctx.world)
         return listOf(datum ?: SpellDatum.make(Widget.NULL))
     }
 }

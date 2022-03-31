@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.blocks.HexBlockTags;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
@@ -8,13 +7,11 @@ import at.petrak.hexcasting.hexmath.HexDir;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import at.petrak.paucal.api.PaucalBlockEntity;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -36,13 +33,7 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
     // Hex pattern signatures to pos and iota.
     // Note this is NOT a record of the entire floodfill! Just bookshelves.
 
-    // We need the world to deserialize, but sometimes we don't have that.
-    // So we lazy-store the *tag itself*.
-    private CompoundTag lazyEntriesTag;
-    // When deserializing on the server we have the actual iotae...
-    private Map<String, ServerEntry> serverEntries;
-    // on the client we just have their displays
-    private Map<String, ClientEntry> clientEntries;
+    private final Map<String, Entry> entries = new HashMap<>();
 
     public BlockEntityAkashicRecord(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlocks.AKASHIC_RECORD_TILE.get(), pWorldPosition, pBlockState);
@@ -59,26 +50,21 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
      * Will never clobber anything.
      */
     public @Nullable BlockPos addNewDatum(HexPattern key, SpellDatum<?> datum) {
-        var serverEntries = this.getServerEntries();
-        if (serverEntries == null) {
-            HexMod.getLogger().warn("should only call addNewDatum on the server");
-            return null;
-        }
-        if (serverEntries.containsKey(key.anglesSignature())) {
+        if (this.entries.containsKey(key.anglesSignature())) {
             return null; // would clobber
         }
 
         var openPos = floodFillFor(this.worldPosition, this.level,
             (pos, bs) -> bs.is(HexBlockTags.AKASHIC_FLOODFILLER),
             (pos, bs) -> this.level.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
-                && tile.recordPos == null);
+                && tile.pattern == null);
         if (openPos != null) {
             var tile = (BlockEntityAkashicBookshelf) this.level.getBlockEntity(openPos);
             tile.recordPos = this.worldPosition;
             tile.pattern = key;
             tile.setChanged();
 
-            serverEntries.put(key.anglesSignature(), new ServerEntry(openPos, key.startDir(), datum));
+            this.entries.put(key.anglesSignature(), new Entry(openPos, key.startDir(), datum.serializeToNBT()));
             this.setChanged();
             return openPos;
         } else {
@@ -86,39 +72,26 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
         }
     }
 
-    public @Nullable SpellDatum<?> lookupPattern(HexPattern key) {
-        var serverEntries = this.getServerEntries();
-        if (serverEntries == null) {
-            HexMod.getLogger().warn("should only call lookupPattern on the server");
-            return null;
-        }
-
-        var entry = serverEntries.get(key.anglesSignature());
+    public @Nullable SpellDatum<?> lookupPattern(HexPattern key, ServerLevel slevel) {
+        var entry = this.entries.get(key.anglesSignature());
         if (entry == null) {
             return null;
         } else {
-            return entry.datum;
+            return SpellDatum.DeserializeFromNBT(entry.datum, slevel);
         }
     }
 
     public Component getDisplayAt(HexPattern key) {
-        var clientEntries = this.getClientEntries();
-        if (clientEntries == null) {
-            HexMod.getLogger().warn("should only call getDisplayAt on the client");
-            return new TextComponent("");
-        }
-
-        var entry = clientEntries.get(key.anglesSignature());
+        var entry = this.entries.get(key.anglesSignature());
         if (entry != null) {
-            return entry.display;
+            return SpellDatum.DisplayFromTag(entry.datum);
         } else {
             return new TranslatableComponent("hexcasting.spelldata.akashic.nopos").withStyle(ChatFormatting.RED);
         }
     }
 
     public int getCount() {
-        var lookup = this.getLookup();
-        return lookup.size();
+        return this.entries.size();
     }
 
     private void revalidateAllBookshelves() {
@@ -142,158 +115,47 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
             }
         }
 
-        var lookup = this.getLookup();
-        var sigs = lookup.keySet();
+        var sigs = this.entries.keySet();
         for (var sig : sigs) {
-            var entry = lookup.get(sig);
-            if (!validPoses.contains(entry.getPos())) {
+            var entry = entries.get(sig);
+            if (!validPoses.contains(entry.pos)) {
                 // oh no!
-                lookup.remove(sig);
+                entries.remove(sig);
             }
         }
 
         this.setChanged();
     }
 
-    private Map<String, ClientEntry> getClientEntries() {
-        if (!(this.level instanceof ClientLevel)) {
-            return null;
-        }
-        if (this.clientEntries != null) {
-            return this.clientEntries;
-        }
-
-        if (this.lazyEntriesTag != null) {
-            this.clientEntries = calcClientEntries(this.lazyEntriesTag);
-        } else {
-            this.clientEntries = new HashMap<>();
-        }
-        this.setChanged();
-        return this.clientEntries;
-    }
-
-    private Map<String, ServerEntry> getServerEntries() {
-        if (!(this.level instanceof ServerLevel sworld)) {
-            return null;
-        }
-        if (this.serverEntries != null) {
-            return this.serverEntries;
-        }
-
-        if (this.lazyEntriesTag != null) {
-            this.serverEntries = calcServerEntries(this.lazyEntriesTag, sworld);
-        } else {
-            this.serverEntries = new HashMap<>();
-        }
-        this.setChanged();
-        return this.serverEntries;
-    }
-
-    private static Map<String, ClientEntry> calcClientEntries(CompoundTag lookupTag) {
-        var clientEntries = new HashMap<String, ClientEntry>();
-        var sigs = lookupTag.getAllKeys();
-        for (var sig : sigs) {
-            var entryTag = lookupTag.getCompound(sig);
-            var pos = NbtUtils.readBlockPos(entryTag.getCompound(TAG_POS));
-            var dir = HexDir.values()[entryTag.getByte(TAG_DIR)];
-            var display = SpellDatum.DisplayFromTag(entryTag.getCompound(TAG_DATUM));
-            clientEntries.put(sig, new ClientEntry(pos, dir, display, entryTag));
-        }
-        return clientEntries;
-    }
-
-    private static Map<String, ServerEntry> calcServerEntries(CompoundTag lookupTag, ServerLevel sworld) {
-        var serverEntries = new HashMap<String, ServerEntry>();
-        var sigs = lookupTag.getAllKeys();
-        for (var sig : sigs) {
-            var entryTag = lookupTag.getCompound(sig);
-            var pos = NbtUtils.readBlockPos(entryTag.getCompound(TAG_POS));
-            var dir = HexDir.values()[entryTag.getByte(TAG_DIR)];
-            var datum = SpellDatum.DeserializeFromNBT(entryTag.getCompound(TAG_DATUM), sworld);
-            serverEntries.put(sig, new ServerEntry(pos, dir, datum));
-        }
-        return serverEntries;
-    }
-
-    private Map<String, ? extends PosAndDirHaver> getLookup() {
-        var serverEntries = this.getServerEntries();
-        if (serverEntries != null) {
-            return serverEntries;
-        }
-        var clientEntries = this.getClientEntries();
-        if (clientEntries != null) {
-            return clientEntries;
-        }
-        throw new IllegalStateException("both server and client entries were null");
-    }
 
     @Override
     protected void saveModData(CompoundTag compoundTag) {
         var lookupTag = new CompoundTag();
-        var clientEntries = this.getClientEntries();
-        if (clientEntries != null) {
-            clientEntries.forEach((sig, entry) -> {
-                var t = new CompoundTag();
-                t.put(TAG_POS, NbtUtils.writeBlockPos(entry.pos));
-                t.put(TAG_DATUM, entry.original);
-                t.putByte(TAG_DIR, (byte) entry.startDir.ordinal());
-                lookupTag.put(sig, t);
-            });
-        } else {
-            var serverEntries = this.getServerEntries();
-            if (serverEntries != null) {
-                serverEntries.forEach((sig, entry) -> {
-                    var t = new CompoundTag();
-                    t.put(TAG_POS, NbtUtils.writeBlockPos(entry.pos));
-                    t.put(TAG_DATUM, entry.datum.serializeToNBT());
-                    t.putByte(TAG_DIR, (byte) entry.startDir.ordinal());
-                    lookupTag.put(sig, t);
-                });
-            }
-        }
+        this.entries.forEach((sig, entry) -> {
+            var t = new CompoundTag();
+            t.put(TAG_POS, NbtUtils.writeBlockPos(entry.pos));
+            t.put(TAG_DATUM, entry.datum);
+            t.putByte(TAG_DIR, (byte) entry.startDir.ordinal());
+            lookupTag.put(sig, t);
+        });
         compoundTag.put(TAG_LOOKUP, lookupTag);
     }
 
     @Override
     protected void loadModData(CompoundTag compoundTag) {
-        this.lazyEntriesTag = compoundTag.getCompound(TAG_LOOKUP);
+        var lookupTag = compoundTag.getCompound(TAG_LOOKUP);
 
-        if (this.level instanceof ClientLevel) {
-            this.clientEntries = calcClientEntries(this.lazyEntriesTag);
-        } else if (this.level instanceof ServerLevel slevel) {
-            this.serverEntries = calcServerEntries(this.lazyEntriesTag, slevel);
+        var sigs = lookupTag.getAllKeys();
+        for (var sig : sigs) {
+            var entryTag = lookupTag.getCompound(sig);
+            var pos = NbtUtils.readBlockPos(entryTag.getCompound(TAG_POS));
+            var dir = HexDir.values()[entryTag.getByte(TAG_DIR)];
+            var datum = entryTag.getCompound(TAG_DATUM);
+            this.entries.put(sig, new Entry(pos, dir, datum));
         }
     }
 
-    private interface PosAndDirHaver {
-        BlockPos getPos();
-
-        HexDir getDir();
-    }
-
-    private record ServerEntry(BlockPos pos, HexDir startDir, SpellDatum<?> datum) implements PosAndDirHaver {
-        @Override
-        public BlockPos getPos() {
-            return this.pos;
-        }
-
-        @Override
-        public HexDir getDir() {
-            return this.startDir;
-        }
-    }
-
-    private record ClientEntry(BlockPos pos, HexDir startDir, Component display,
-                               CompoundTag original) implements PosAndDirHaver {
-        @Override
-        public BlockPos getPos() {
-            return this.pos;
-        }
-
-        @Override
-        public HexDir getDir() {
-            return this.startDir;
-        }
+    private record Entry(BlockPos pos, HexDir startDir, CompoundTag datum) {
     }
 
     public static @Nullable BlockPos floodFillFor(BlockPos start, Level world,
