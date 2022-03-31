@@ -62,10 +62,10 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
             var tile = (BlockEntityAkashicBookshelf) this.level.getBlockEntity(openPos);
             tile.recordPos = this.worldPosition;
             tile.pattern = key;
-            tile.setChanged();
+            tile.sync();
 
             this.entries.put(key.anglesSignature(), new Entry(openPos, key.startDir(), datum.serializeToNBT()));
-            this.setChanged();
+            this.sync();
             return openPos;
         } else {
             return null;
@@ -124,7 +124,7 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
             }
         }
 
-        this.setChanged();
+        this.sync();
     }
 
 
