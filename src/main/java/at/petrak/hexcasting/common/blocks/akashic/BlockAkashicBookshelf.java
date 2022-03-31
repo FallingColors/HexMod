@@ -35,9 +35,18 @@ public class BlockAkashicBookshelf extends HorizontalDirectionalBlock implements
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        BlockEntityAkashicRecord owner;
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAkashicBookshelf tile &&
             tile.recordPos != null && pLevel.getBlockEntity(tile.recordPos) instanceof BlockEntityAkashicRecord rec) {
-            rec.removeFloodfillerAt(pPos);
+            owner = rec;
+        } else {
+            var ownerPos = BlockEntityAkashicRecord.floodFillFor(pPos, pLevel,
+                (pos, bs) -> bs.is(HexBlockTags.AKASHIC_FLOODFILLER),
+                (pos, bs) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
+            owner = (BlockEntityAkashicRecord) pLevel.getBlockEntity(ownerPos);
+        }
+        if (owner != null) {
+            owner.removeFloodfillerAt(pPos);
         }
 
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);

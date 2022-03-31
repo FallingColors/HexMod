@@ -163,14 +163,10 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
             return this.clientEntries;
         }
 
-        this.clientEntries = new HashMap<>();
-        var sigs = this.lazyEntriesTag.getAllKeys();
-        for (var sig : sigs) {
-            var entryTag = this.lazyEntriesTag.getCompound(sig);
-            var pos = NbtUtils.readBlockPos(entryTag.getCompound(TAG_POS));
-            var dir = HexDir.values()[entryTag.getByte(TAG_DIR)];
-            var display = SpellDatum.DisplayFromTag(entryTag.getCompound(TAG_DATUM));
-            this.clientEntries.put(sig, new ClientEntry(pos, dir, display, entryTag));
+        if (this.lazyEntriesTag != null) {
+            this.clientEntries = calcClientEntries(this.lazyEntriesTag);
+        } else {
+            this.clientEntries = new HashMap<>();
         }
         this.setChanged();
         return this.clientEntries;
@@ -184,17 +180,39 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
             return this.serverEntries;
         }
 
-        this.serverEntries = new HashMap<>();
-        var sigs = this.lazyEntriesTag.getAllKeys();
-        for (var sig : sigs) {
-            var entryTag = this.lazyEntriesTag.getCompound(sig);
-            var pos = NbtUtils.readBlockPos(entryTag.getCompound(TAG_POS));
-            var dir = HexDir.values()[entryTag.getByte(TAG_DIR)];
-            var datum = SpellDatum.DeserializeFromNBT(entryTag.getCompound(TAG_DATUM), sworld);
-            this.serverEntries.put(sig, new ServerEntry(pos, dir, datum));
+        if (this.lazyEntriesTag != null) {
+            this.serverEntries = calcServerEntries(this.lazyEntriesTag, sworld);
+        } else {
+            this.serverEntries = new HashMap<>();
         }
         this.setChanged();
         return this.serverEntries;
+    }
+
+    private static Map<String, ClientEntry> calcClientEntries(CompoundTag lookupTag) {
+        var clientEntries = new HashMap<String, ClientEntry>();
+        var sigs = lookupTag.getAllKeys();
+        for (var sig : sigs) {
+            var entryTag = lookupTag.getCompound(sig);
+            var pos = NbtUtils.readBlockPos(entryTag.getCompound(TAG_POS));
+            var dir = HexDir.values()[entryTag.getByte(TAG_DIR)];
+            var display = SpellDatum.DisplayFromTag(entryTag.getCompound(TAG_DATUM));
+            clientEntries.put(sig, new ClientEntry(pos, dir, display, entryTag));
+        }
+        return clientEntries;
+    }
+
+    private static Map<String, ServerEntry> calcServerEntries(CompoundTag lookupTag, ServerLevel sworld) {
+        var serverEntries = new HashMap<String, ServerEntry>();
+        var sigs = lookupTag.getAllKeys();
+        for (var sig : sigs) {
+            var entryTag = lookupTag.getCompound(sig);
+            var pos = NbtUtils.readBlockPos(entryTag.getCompound(TAG_POS));
+            var dir = HexDir.values()[entryTag.getByte(TAG_DIR)];
+            var datum = SpellDatum.DeserializeFromNBT(entryTag.getCompound(TAG_DATUM), sworld);
+            serverEntries.put(sig, new ServerEntry(pos, dir, datum));
+        }
+        return serverEntries;
     }
 
     private Map<String, ? extends PosAndDirHaver> getLookup() {
@@ -239,6 +257,12 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
     @Override
     protected void loadModData(CompoundTag compoundTag) {
         this.lazyEntriesTag = compoundTag.getCompound(TAG_LOOKUP);
+
+        if (this.level instanceof ClientLevel) {
+            this.clientEntries = calcClientEntries(this.lazyEntriesTag);
+        } else if (this.level instanceof ServerLevel slevel) {
+            this.serverEntries = calcServerEntries(this.lazyEntriesTag, slevel);
+        }
     }
 
     private interface PosAndDirHaver {

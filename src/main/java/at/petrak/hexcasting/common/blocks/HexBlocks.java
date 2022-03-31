@@ -58,7 +58,9 @@ public class HexBlocks {
     }
 
     private static BlockBehaviour.Properties woody() {
-        return BlockBehaviour.Properties.of(Material.WOOD).strength(3f, 4f);
+        return BlockBehaviour.Properties.of(Material.WOOD)
+            .sound(SoundType.WOOD)
+            .strength(3f, 4f);
     }
 
     public static final RegistryObject<BlockSlate> SLATE = BLOCKS.register("slate",
