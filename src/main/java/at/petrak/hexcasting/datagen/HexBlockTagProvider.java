@@ -27,7 +27,7 @@ public class HexBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(HexBlocks.AMETHYST_DUST_BLOCK.get());
 
-        tag(BlockTags.MINEABLE_WITH_HOE)
+        tag(BlockTags.MINEABLE_WITH_AXE)
             .add(HexBlocks.AKASHIC_RECORD.get(), HexBlocks.AKASHIC_BOOKSHELF.get());
 
         tag(BlockTags.CRYSTAL_SOUND_BLOCKS)
