@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.network.chat.TranslatableComponent
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
@@ -109,9 +110,8 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 throw MishapInvalidSpellDatumType(payload)
             }
 
-
         @JvmStatic
-        fun DeserializeFromNBT(nbt: CompoundTag, ctx: CastingContext): SpellDatum<*> {
+        fun DeserializeFromNBT(nbt: CompoundTag, world: ServerLevel): SpellDatum<*> {
             val keys = nbt.allKeys
             if (keys.size != 1)
                 throw IllegalArgumentException("Expected exactly one kv pair: $nbt")
@@ -120,7 +120,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 TAG_ENTITY -> {
                     val subtag = nbt.getCompound(key)
                     val uuid = subtag.getUUID(TAG_ENTITY_UUID) // and throw away name
-                    val entity = ctx.world.getEntity(uuid)
+                    val entity = world.getEntity(uuid)
                     // If the entity died or something return Unit
                     SpellDatum(if (entity == null || !entity.isAlive) Widget.NULL else entity)
                 }
@@ -131,7 +131,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     val out = ArrayList<SpellDatum<*>>(arr.size)
                     for (subtag in arr) {
                         // this is safe because otherwise we wouldn't have been able to get the list before
-                        out.add(DeserializeFromNBT(subtag as CompoundTag, ctx))
+                        out.add(DeserializeFromNBT(subtag as CompoundTag, world))
                     }
                     SpellDatum(out)
                 }
@@ -144,6 +144,16 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 else -> throw IllegalArgumentException("Unknown key $key: $nbt")
             }
         }
+
+        @Deprecated(
+            "use the [Level] overload", ReplaceWith(
+                "DeserializeFromNBT(nbt, ctx.world)",
+                "at.petrak.hexcasting.api.spell.SpellDatum.Companion.DeserializeFromNBT"
+            )
+        )
+        @JvmStatic
+        fun DeserializeFromNBT(nbt: CompoundTag, ctx: CastingContext): SpellDatum<*> =
+            DeserializeFromNBT(nbt, ctx.world)
 
         @JvmStatic
         fun DisplayFromTag(nbt: CompoundTag): Component {

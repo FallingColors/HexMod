@@ -2,6 +2,10 @@ package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
+import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
+import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
@@ -53,6 +57,10 @@ public class HexBlocks {
             .instabreak();
     }
 
+    private static BlockBehaviour.Properties woody() {
+        return BlockBehaviour.Properties.of(Material.WOOD).strength(3f, 4f);
+    }
+
     public static final RegistryObject<BlockSlate> SLATE = BLOCKS.register("slate",
         () -> new BlockSlate(slateish()));
 
@@ -77,6 +85,11 @@ public class HexBlocks {
         () -> new BlockEmptyDirectrix(slateish()));
     public static final RegistryObject<BlockRedstoneDirectrix> DIRECTRIX_REDSTONE = blockItem("directrix_redstone",
         () -> new BlockRedstoneDirectrix(slateish()));
+
+    public static final RegistryObject<BlockAkashicRecord> AKASHIC_RECORD = blockItem("akashic_record",
+        () -> new BlockAkashicRecord(woody()));
+    public static final RegistryObject<BlockAkashicBookshelf> AKASHIC_BOOKSHELF = blockItem("akashic_bookshelf",
+        () -> new BlockAkashicBookshelf(woody()));
 
     // Decoration?!
     public static final RegistryObject<Block> SLATE_BLOCK = blockItem("slate_block",
@@ -117,6 +130,13 @@ public class HexBlocks {
         BLOCK_ENTITIES.register("impetus_storedplayer_tile",
             () -> BlockEntityType.Builder.of(BlockEntityStoredPlayerImpetus::new, IMPETUS_STOREDPLAYER.get())
                 .build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityAkashicRecord>> AKASHIC_RECORD_TILE = BLOCK_ENTITIES.register(
+        "akashic_record_tile",
+        () -> BlockEntityType.Builder.of(BlockEntityAkashicRecord::new, AKASHIC_RECORD.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityAkashicBookshelf>> AKASHIC_BOOKSHELF_TILE = BLOCK_ENTITIES.register(
+        "akashic_bookshelf_tile",
+        () -> BlockEntityType.Builder.of(BlockEntityAkashicBookshelf::new, AKASHIC_BOOKSHELF.get()).build(null));
 
 
     private static boolean never(Object... args) {

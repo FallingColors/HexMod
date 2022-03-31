@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.HexItems;
@@ -141,6 +142,8 @@ public class RegisterClientStuff {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers evt) {
         evt.registerBlockEntityRenderer(HexBlocks.SLATE_TILE.get(), BlockEntitySlate.Renderer::new);
+        evt.registerBlockEntityRenderer(HexBlocks.AKASHIC_BOOKSHELF_TILE.get(),
+            BlockEntityAkashicBookshelf.Renderer::new);
     }
 
     @SubscribeEvent
