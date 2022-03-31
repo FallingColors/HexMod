@@ -129,6 +129,15 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         var sconceModel = models().getExistingFile(modLoc("amethyst_sconce"));
         simpleBlock(HexBlocks.SCONCE.get(), sconceModel);
         simpleBlockItem(HexBlocks.SCONCE.get(), sconceModel);
+
+        // temp
+        var cartoModel = models().getExistingFile(new ResourceLocation("cartography_table"));
+        simpleBlock(HexBlocks.AKASHIC_RECORD.get(), cartoModel);
+        simpleBlockItem(HexBlocks.AKASHIC_RECORD.get(), cartoModel);
+
+        blockAndItem(HexBlocks.AKASHIC_BOOKSHELF.get(), models().orientable("akashic_bookshelf",
+            new ResourceLocation("block/oak_planks"), new ResourceLocation("block/bookshelf"),
+            new ResourceLocation("block/oak_planks")));
     }
 
     private void impetus(Block block, String name, String stub) {

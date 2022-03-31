@@ -9,6 +9,7 @@ import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
+import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.HexItems;
@@ -25,7 +26,9 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -40,6 +43,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -122,6 +126,41 @@ public class RegisterClientStuff {
                     return List.of();
                 }
             });
+
+        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF.get(),
+            (state, pos, observer, world, lensHand) -> {
+                if (!(world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile)) {
+                    return List.of();
+                }
+
+                var out = new ArrayList<Pair<ItemStack, Component>>();
+
+                if (tile.recordPos != null) {
+                    out.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_RECORD.get()), new TranslatableComponent(
+                        "hexcasting.tooltip.lens.akashic.bookshelf.location",
+                        tile.recordPos.toShortString()
+                    )));
+                    if (tile.pattern != null) {
+                        if (world.getBlockEntity(tile.recordPos) instanceof BlockEntityAkashicRecord record) {
+                            out.add(new Pair<>(new ItemStack(Items.BOOK), record.getDisplayAt(tile.pattern)));
+                        }
+                    }
+                }
+
+                return out;
+            });
+        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_RECORD.get(),
+            ((state, pos, observer, world, lensHand) -> {
+                if (!(world.getBlockEntity(pos) instanceof BlockEntityAkashicRecord tile)) {
+                    return List.of();
+                }
+
+                return List.of(new Pair<>(new ItemStack(HexBlocks.AKASHIC_BOOKSHELF.get()), new TranslatableComponent(
+                    "hexcasting.tooltip.lens.akashic.record.count",
+                    tile.getCount()
+                )));
+            }));
+
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REDSTONE_WIRE,
             (state, pos, observer, world, lensHand) -> List.of(
                 new Pair<>(

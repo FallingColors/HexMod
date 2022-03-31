@@ -1,17 +1,21 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
+import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.blocks.HexBlockTags;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.hexmath.HexDir;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import at.petrak.paucal.api.PaucalBlockEntity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,7 +57,8 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
      */
     public @Nullable BlockPos addNewDatum(HexPattern key, SpellDatum<?> datum) {
         if (this.serverEntries == null) {
-            throw new IllegalCallerException("should only have SpellDatums on the server");
+            HexMod.getLogger().warn("should only call addNewDatum on the server");
+            return null;
         }
         if (this.serverEntries.containsKey(key.anglesSignature())) {
             return null; // would clobber
@@ -79,7 +84,8 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
 
     public @Nullable SpellDatum<?> lookupPattern(HexPattern key) {
         if (this.serverEntries == null) {
-            throw new IllegalCallerException("should only have SpellDatums on the server");
+            HexMod.getLogger().warn("should only call lookupPattern on the server");
+            return null;
         }
 
         var entry = this.serverEntries.get(key.anglesSignature());
@@ -90,14 +96,38 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
         }
     }
 
-    /**
-     * Returns whether the entry was actually removed.
-     */
-    public boolean clearKey(HexPattern key) {
-        if (this.serverEntries == null) {
-            throw new IllegalCallerException("should only have SpellDatums on the server");
+    public Component getDisplayAt(HexPattern key) {
+        if (this.clientEntries == null) {
+            HexMod.getLogger().warn("should only call getDisplayAt on the client");
+            return new TextComponent("");
         }
-        return this.serverEntries.remove(key.anglesSignature()) != null;
+
+        var entry = this.clientEntries.get(key.anglesSignature());
+        if (entry != null) {
+            return entry.display;
+        } else {
+            return new TranslatableComponent("hexcasting.spelldata.akashic.nopos").withStyle(ChatFormatting.RED);
+        }
+    }
+
+    public int getCount() {
+        var lookup = this.getLookup();
+        return lookup.size();
+    }
+
+    public void reifyLookupsPerSide() {
+        if (this.level.isClientSide) {
+            if (this.clientEntries == null) {
+                this.clientEntries = new HashMap<>();
+                this.setChanged();
+            }
+        } else {
+            if (this.serverEntries == null) {
+                this.serverEntries = new HashMap<>();
+                this.setChanged();
+            }
+        }
+
     }
 
     private void revalidateAllBookshelves() {
@@ -130,6 +160,8 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
                 lookup.remove(sig);
             }
         }
+
+        this.setChanged();
     }
 
     private Map<String, ? extends PosAndDirHaver> getLookup() {

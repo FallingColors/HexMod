@@ -5,6 +5,8 @@ import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.Operator;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.casting.operators.*;
+import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicRead;
+import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicWrite;
 import at.petrak.hexcasting.common.casting.operators.circles.OpCircleBounds;
 import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusDir;
 import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusPos;
@@ -120,6 +122,11 @@ public class RegisterPatterns {
                 OpNot.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aw", HexDir.NORTH_EAST), prefix("identity"),
                 OpIdentityKindOf.INSTANCE);
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqwqqqqqaq", HexDir.WEST), prefix("akashic/read"),
+                OpAkashicRead.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeweeeeede", HexDir.EAST), prefix("akashic/write"),
+                OpAkashicWrite.INSTANCE);
 
             // == Spells ==
 

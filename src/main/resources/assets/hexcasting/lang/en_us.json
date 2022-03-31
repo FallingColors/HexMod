@@ -77,6 +77,8 @@
   "hexcasting.tooltip.lens.impetus.storedplayer": "Bound to %s",
   "hexcasting.tooltip.lens.impetus.storedplayer.none": "Unbound",
   "hexcasting.tooltip.lens.pattern.invalid": "Invalid Pattern",
+  "hexcasting.tooltip.lens.akashic.bookshelf.location": "Owning record at %s",
+  "hexcasting.tooltip.lens.akashic.record.count": "%s iotas stored",
   "hexcasting.tooltip.brainsweep.profession": "Profession: %s",
   "hexcasting.tooltip.brainsweep.profession.any": "Any Profession",
   "hexcasting.tooltip.brainsweep.biome": "Biome: %s",
@@ -84,6 +86,7 @@
   "hexcasting.tooltip.brainsweep.min_level": "Level %d or higher",
   "hexcasting.spelldata.onitem": "§7Contains: §r%s",
   "hexcasting.spelldata.entity.whoknows": "An Entity (this should only show up if this was stored before the 0.5.0 update, use Scribe's Reflection, Scribe's Gambit to fix)",
+  "hexcasting.spelldata.akashic.nopos": "The owning record does not know of any iota here (this is a bug)",
 
   "advancement.hexcasting:root": "Hexcasting Research",
   "advancement.hexcasting:root.desc": "Enter an amethyst geode deep underground, a concentrated source of media.",
@@ -287,6 +290,7 @@
   "hexcasting.mishap.already_brainswept": "The villager has already been used",
   "hexcasting.mishap.no_spell_circle": "%s requires a spell circle",
   "hexcasting.mishap.others_name": "Tried to invade %s's privacy",
+  "hexcasting.mishap.no_akashic_record": "No akashic record at %s",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 
