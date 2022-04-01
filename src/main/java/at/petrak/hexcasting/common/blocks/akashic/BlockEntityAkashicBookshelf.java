@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
+import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.hexmath.HexPattern;
@@ -30,6 +32,20 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
 
     public BlockEntityAkashicBookshelf(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlocks.AKASHIC_BOOKSHELF_TILE.get(), pWorldPosition, pBlockState);
+    }
+
+    public void setNewDatum(BlockPos recordPos, HexPattern pattern, DatumType type) {
+        if (!recordPos.equals(this.recordPos)) {
+            HexMod.getLogger().warn("The bookshelf at {} thought its record was at {} but now it's told it's at {}",
+                this.getBlockPos().toShortString(), this.recordPos.toShortString(), recordPos.toShortString());
+        }
+        this.recordPos = recordPos;
+        this.pattern = pattern;
+
+        this.setChanged();
+        this.level.setBlockAndUpdate(this.getBlockPos(),
+            this.getBlockState().setValue(BlockAkashicBookshelf.DATUM_TYPE, type));
+        // and the setBlock does the sync
     }
 
     @Override

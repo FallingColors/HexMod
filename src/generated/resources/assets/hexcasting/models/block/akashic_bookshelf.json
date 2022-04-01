@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "side": "minecraft:block/oak_planks",
-    "front": "minecraft:block/bookshelf",
-    "top": "minecraft:block/oak_planks"
-  }
-}

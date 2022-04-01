@@ -80,6 +80,16 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         return DisplayFromTag(nbt)
     }
 
+    fun getType(): DatumType =
+        when (this.payload) {
+            is Entity -> DatumType.ENTITY
+            is Widget -> DatumType.WIDGET
+            is List<*> -> DatumType.LIST
+            is HexPattern -> DatumType.PATTERN
+            is Double -> DatumType.DOUBLE
+            is Vec3 -> DatumType.VEC
+            else -> DatumType.OTHER
+        }
 
     companion object {
         @JvmStatic

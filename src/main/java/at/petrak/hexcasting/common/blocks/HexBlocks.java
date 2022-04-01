@@ -2,10 +2,7 @@ package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
-import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
-import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
-import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
+import at.petrak.hexcasting.common.blocks.akashic.*;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
@@ -57,10 +54,16 @@ public class HexBlocks {
             .instabreak();
     }
 
-    private static BlockBehaviour.Properties woody() {
+    private static BlockBehaviour.Properties woodyHard() {
         return BlockBehaviour.Properties.of(Material.WOOD)
             .sound(SoundType.WOOD)
             .strength(3f, 4f);
+    }
+
+    private static BlockBehaviour.Properties woody() {
+        return BlockBehaviour.Properties.of(Material.WOOD)
+            .sound(SoundType.WOOD)
+            .strength(2f);
     }
 
     public static final RegistryObject<BlockSlate> SLATE = BLOCKS.register("slate",
@@ -89,9 +92,11 @@ public class HexBlocks {
         () -> new BlockRedstoneDirectrix(slateish()));
 
     public static final RegistryObject<BlockAkashicRecord> AKASHIC_RECORD = blockItem("akashic_record",
-        () -> new BlockAkashicRecord(woody()));
+        () -> new BlockAkashicRecord(woodyHard()));
     public static final RegistryObject<BlockAkashicBookshelf> AKASHIC_BOOKSHELF = blockItem("akashic_bookshelf",
-        () -> new BlockAkashicBookshelf(woody()));
+        () -> new BlockAkashicBookshelf(woodyHard()));
+    public static final RegistryObject<BlockAkashicFloodfiller> AKASHIC_CONNECTOR = blockItem("akashic_connector",
+        () -> new BlockAkashicFloodfiller(woodyHard()));
 
     // Decoration?!
     public static final RegistryObject<Block> SLATE_BLOCK = blockItem("slate_block",

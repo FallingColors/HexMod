@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3
  * Manipulates the stack in some way, usually by popping some number of values off the stack
  * and pushing one new value.
  * For a more "traditional" pop arguments, push return experience, see
- * [SimpleOperator][at.petrak.hexcasting.common.casting.operators.SimpleOperator]
+ * [SimpleOperator][at.petrak.hexcasting.api.spell.ConstManaOperator]
  *
  * Implementors MUST NOT mutate the context.
  */

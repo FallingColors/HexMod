@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.blocks.HexBlockTags;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.hexmath.HexDir;
 import at.petrak.hexcasting.hexmath.HexPattern;
@@ -14,15 +13,10 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.function.BiPredicate;
+import java.util.*;
 
 public class BlockEntityAkashicRecord extends PaucalBlockEntity {
     public static final String TAG_LOOKUP = "lookup",
@@ -54,18 +48,16 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
             return null; // would clobber
         }
 
-        var openPos = floodFillFor(this.worldPosition, this.level,
-            (pos, bs) -> bs.is(HexBlockTags.AKASHIC_FLOODFILLER),
-            (pos, bs) -> this.level.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
+        var openPos = BlockAkashicFloodfiller.floodFillFor(this.worldPosition, this.level,
+            (pos, bs, world) -> world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
                 && tile.pattern == null);
         if (openPos != null) {
             var tile = (BlockEntityAkashicBookshelf) this.level.getBlockEntity(openPos);
-            tile.recordPos = this.worldPosition;
-            tile.pattern = key;
-            tile.sync();
+            tile.setNewDatum(this.getBlockPos(), key, datum.getType());
 
             this.entries.put(key.anglesSignature(), new Entry(openPos, key.startDir(), datum.serializeToNBT()));
             this.sync();
+
             return openPos;
         } else {
             return null;
@@ -107,7 +99,7 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
                     var neighbor = here.relative(dir);
                     if (validPoses.add(neighbor)) {
                         var bs = this.level.getBlockState(neighbor);
-                        if (bs.is(HexBlockTags.AKASHIC_FLOODFILLER)) {
+                        if (bs.getBlock() instanceof BlockAkashicFloodfiller) {
                             todo.add(neighbor);
                         }
                     }
@@ -115,12 +107,12 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
             }
         }
 
-        var sigs = this.entries.keySet();
+        var sigs = new ArrayList<>(this.entries.keySet());
         for (var sig : sigs) {
-            var entry = entries.get(sig);
+            var entry = this.entries.get(sig);
             if (!validPoses.contains(entry.pos)) {
                 // oh no!
-                entries.remove(sig);
+                this.entries.remove(sig);
             }
         }
 
@@ -158,28 +150,4 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
     private record Entry(BlockPos pos, HexDir startDir, CompoundTag datum) {
     }
 
-    public static @Nullable BlockPos floodFillFor(BlockPos start, Level world,
-        BiPredicate<BlockPos, BlockState> isValid, BiPredicate<BlockPos, BlockState> isTarget) {
-        var seenBlocks = new HashSet<BlockPos>();
-        var todo = new ArrayDeque<BlockPos>();
-        todo.add(start);
-
-        while (!todo.isEmpty()) {
-            var here = todo.remove();
-
-            for (var dir : Direction.values()) {
-                var neighbor = here.relative(dir);
-                if (seenBlocks.add(neighbor)) {
-                    var bs = world.getBlockState(neighbor);
-                    if (isTarget.test(neighbor, bs)) {
-                        return neighbor;
-                    } else if (isValid.test(neighbor, bs)) {
-                        todo.add(neighbor);
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
 }

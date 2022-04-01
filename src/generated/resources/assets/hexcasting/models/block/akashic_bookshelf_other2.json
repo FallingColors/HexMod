@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "side": "hexcasting:block/akashic/planks1",
+    "front": "hexcasting:block/akashic/bookshelf/other3",
+    "top": "hexcasting:block/akashic/tile"
+  }
+}

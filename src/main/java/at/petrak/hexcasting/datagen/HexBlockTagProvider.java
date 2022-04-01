@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.common.blocks.HexBlockTags;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -33,7 +32,5 @@ public class HexBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.CRYSTAL_SOUND_BLOCKS)
             .add(HexBlocks.CONJURED.get(), HexBlocks.AMETHYST_TILES.get(), HexBlocks.SCONCE.get());
 
-        tag(HexBlockTags.AKASHIC_FLOODFILLER)
-            .add(HexBlocks.AKASHIC_BOOKSHELF.get());
     }
 }
