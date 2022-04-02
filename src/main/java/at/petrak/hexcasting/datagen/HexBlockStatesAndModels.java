@@ -126,8 +126,8 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         getVariantBuilder(HexBlocks.AKASHIC_BOOKSHELF.get()).forAllStates(bs -> {
             var type = bs.getValue(BlockAkashicBookshelf.DATUM_TYPE);
 
-            var planks1 = modLoc("block/akashic/planks1");
-            var tile = modLoc("block/akashic/tile");
+            var side = modLoc("block/akashic/bookshelf/side");
+            var end = modLoc("block/akashic/bookshelf/end");
 
             String[] fronts;
             if (type == DatumType.EMPTY) {
@@ -144,7 +144,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             for (int i = 0; i < fronts.length; i++) {
                 var front = fronts[i];
                 var model = models().orientable("akashic_bookshelf_" + type.getSerializedName() + i,
-                    planks1, modLoc("block/akashic/bookshelf/" + front), tile);
+                    side, modLoc("block/akashic/bookshelf/" + front), end);
 
                 Direction dir = bs.getValue(BlockAkashicBookshelf.FACING);
                 if (dir == Direction.NORTH && type == DatumType.EMPTY) {
