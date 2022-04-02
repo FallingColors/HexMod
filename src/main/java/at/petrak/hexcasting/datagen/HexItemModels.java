@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.items.ItemScroll;
@@ -129,5 +130,11 @@ public class HexItemModels extends PaucalItemModelProvider {
             .end();
 
         simpleItem(modLoc("akashic_door"));
+        getBuilder(HexBlocks.AKASHIC_TRAPDOOR.getId().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/akashic_trapdoor_bottom")));
+        getBuilder(HexBlocks.AKASHIC_LOG.getId().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/akashic_log")));
+        getBuilder(HexBlocks.AKASHIC_LOG_STRIPPED.getId().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/akashic_log_stripped")));
     }
 }

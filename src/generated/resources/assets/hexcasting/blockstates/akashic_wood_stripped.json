@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "hexcasting:akashic/log_stripped"
+      "model": "hexcasting:block/akashic_log_stripped"
     }
   }
 }

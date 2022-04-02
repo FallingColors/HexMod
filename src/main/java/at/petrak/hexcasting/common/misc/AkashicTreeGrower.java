@@ -36,10 +36,10 @@ public class AkashicTreeGrower extends AbstractTreeGrower {
                 new TreeConfiguration.TreeConfigurationBuilder(
                     BlockStateProvider.simple(HexBlocks.AKASHIC_LOG.get()),
                     // baseHeight, heightRandA, heightRandB
-                    new FancyTrunkPlacer(8, 9, 11),
+                    new FancyTrunkPlacer(3, 5, 2),
                     BlockStateProvider.simple(leaves[i]),
                     // radius, offset, height
-                    new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(5), 7),
+                    new FancyFoliagePlacer(ConstantInt.of(1), ConstantInt.of(5), 5),
                     // limit, lower size, upper size, minclippedheight
                     new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(6))
                 ).build());
