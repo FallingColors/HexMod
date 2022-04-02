@@ -27,10 +27,26 @@ public class HexBlockTagProvider extends BlockTagsProvider {
             .add(HexBlocks.AMETHYST_DUST_BLOCK.get());
 
         tag(BlockTags.MINEABLE_WITH_AXE)
-            .add(HexBlocks.AKASHIC_RECORD.get(), HexBlocks.AKASHIC_BOOKSHELF.get());
+            .add(HexBlocks.AKASHIC_RECORD.get(), HexBlocks.AKASHIC_BOOKSHELF.get(),
+                HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),
+                HexBlocks.AKASHIC_WOOD.get(), HexBlocks.AKASHIC_WOOD_STRIPPED.get(),
+                HexBlocks.AKASHIC_PLANKS.get(), HexBlocks.AKASHIC_PANEL.get(), HexBlocks.AKASHIC_TILE.get(),
+                HexBlocks.AKASHIC_DOOR.get(), HexBlocks.AKASHIC_TRAPDOOR.get());
+
+        tag(BlockTags.MINEABLE_WITH_HOE)
+            .add(HexBlocks.AKASHIC_LEAVES1.get(), HexBlocks.AKASHIC_LEAVES2.get(), HexBlocks.AKASHIC_LEAVES3.get());
 
         tag(BlockTags.CRYSTAL_SOUND_BLOCKS)
             .add(HexBlocks.CONJURED.get(), HexBlocks.AMETHYST_TILES.get(), HexBlocks.SCONCE.get());
+
+        tag(BlockTags.LOGS)
+            .add(HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),
+                HexBlocks.AKASHIC_WOOD.get(), HexBlocks.AKASHIC_WOOD_STRIPPED.get());
+        tag(BlockTags.LOGS_THAT_BURN)
+            .add(HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),
+                HexBlocks.AKASHIC_WOOD.get(), HexBlocks.AKASHIC_WOOD_STRIPPED.get());
+        tag(BlockTags.LEAVES)
+            .add(HexBlocks.AKASHIC_LEAVES1.get(), HexBlocks.AKASHIC_LEAVES2.get(), HexBlocks.AKASHIC_LEAVES3.get());
 
     }
 }

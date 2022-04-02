@@ -431,6 +431,10 @@ d14cf2f8f0895a5b6dc09b7582c0abf1c2514adf data/hexcasting/recipes/sub_sandwich.js
 14d6be5d47b54676a349564ea32c045c76c39b45 data/hexcasting/recipes/uuid_colorizer.json
 0521d57838cb3e9795fc02ce47aa58db3b0188f9 data/hexcasting/recipes/wand.json
 f930dbc5b41d42150d388e39b29b940229658809 data/minecraft/tags/blocks/crystal_sound_blocks.json
-f7c3d1e53b74b696a13abcd51acd8032e803195c data/minecraft/tags/blocks/mineable/axe.json
+c25784941d6416744fb2ca2d43a3203e5c3e7c8a data/minecraft/tags/blocks/leaves.json
+f3c6b6917e504e1c3d5d8875f7cce6f311e791d2 data/minecraft/tags/blocks/logs.json
+f3c6b6917e504e1c3d5d8875f7cce6f311e791d2 data/minecraft/tags/blocks/logs_that_burn.json
+b82b77e12cb853aae355a5fabcad7c57b7becc3e data/minecraft/tags/blocks/mineable/axe.json
+c25784941d6416744fb2ca2d43a3203e5c3e7c8a data/minecraft/tags/blocks/mineable/hoe.json
 eb4bfbd7fc7632a5c16aa1d50d6090a1f466069b data/minecraft/tags/blocks/mineable/pickaxe.json
 f55afc2c05d93b5a44bc9fd73c5e81e71b183965 data/minecraft/tags/blocks/mineable/shovel.json

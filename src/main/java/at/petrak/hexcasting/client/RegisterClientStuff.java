@@ -37,7 +37,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -46,9 +45,9 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 public class RegisterClientStuff {
+
     @SubscribeEvent
     public static void init(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
@@ -106,15 +105,26 @@ public class RegisterClientStuff {
             HexTooltips.init();
         });
 
-        renderLayers(ItemBlockRenderTypes::setRenderLayer);
+        for (var cutout : new Block[]{
+            HexBlocks.CONJURED.get(),
+            HexBlocks.AKASHIC_DOOR.get(),
+            HexBlocks.AKASHIC_TRAPDOOR.get(),
+            HexBlocks.SCONCE.get(),
+        }) {
+            ItemBlockRenderTypes.setRenderLayer(cutout, RenderType.cutout());
+        }
+
+        for (var mipped : new Block[]{
+            HexBlocks.AKASHIC_LEAVES1.get(),
+            HexBlocks.AKASHIC_LEAVES2.get(),
+            HexBlocks.AKASHIC_LEAVES3.get(),
+        }) {
+            ItemBlockRenderTypes.setRenderLayer(mipped, RenderType.cutoutMipped());
+        }
 
         EntityRenderers.register(HexEntities.WALL_SCROLL.get(), WallScrollRenderer::new);
 
         addScryingLensStuff();
-    }
-
-    private static void renderLayers(BiConsumer<Block, RenderType> consumer) {
-        consumer.accept(HexBlocks.CONJURED.get(), RenderType.cutout());
     }
 
     private static void addScryingLensStuff() {
@@ -184,24 +194,5 @@ public class RegisterClientStuff {
         evt.registerBlockEntityRenderer(HexBlockEntities.SLATE_TILE.get(), BlockEntitySlate.Renderer::new);
         evt.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(),
             BlockEntityAkashicBookshelf.Renderer::new);
-    }
-
-    @SubscribeEvent
-    public static void onModelRegister(ModelRegistryEvent evt) {
-        for (var cutout : new Block[]{
-            HexBlocks.AKASHIC_DOOR.get(),
-            HexBlocks.AKASHIC_TRAPDOOR.get(),
-            HexBlocks.SCONCE.get(),
-        }) {
-            ItemBlockRenderTypes.setRenderLayer(cutout, RenderType.cutout());
-        }
-
-        for (var mipped : new Block[]{
-            HexBlocks.AKASHIC_LEAVES1.get(),
-            HexBlocks.AKASHIC_LEAVES2.get(),
-            HexBlocks.AKASHIC_LEAVES3.get(),
-        }) {
-            ItemBlockRenderTypes.setRenderLayer(mipped, RenderType.cutoutMipped());
-        }
     }
 }

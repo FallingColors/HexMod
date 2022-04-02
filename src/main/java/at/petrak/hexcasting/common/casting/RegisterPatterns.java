@@ -167,6 +167,8 @@ public class RegisterPatterns {
                 OpRecharge.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qdqawwaww", HexDir.EAST), prefix("erase"),
                 new OpErase());
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaqwd", HexDir.NORTH_EAST), prefix("edify"),
+                OpEdifySapling.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
                 new OpMakePackagedSpell<>(HexItems.CYPHER.get(), 100_000));

@@ -20,7 +20,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 public class AkashicTreeGrower extends AbstractTreeGrower {
-    public static Holder<ConfiguredFeature<TreeConfiguration, ?>>[] GROWERS;
+    public static final AkashicTreeGrower INSTANCE = new AkashicTreeGrower();
+
+    public static final Holder<ConfiguredFeature<TreeConfiguration, ?>>[] GROWERS;
 
     static {
         var leaves = new Block[]{
@@ -34,10 +36,10 @@ public class AkashicTreeGrower extends AbstractTreeGrower {
                 new TreeConfiguration.TreeConfigurationBuilder(
                     BlockStateProvider.simple(HexBlocks.AKASHIC_LOG.get()),
                     // baseHeight, heightRandA, heightRandB
-                    new FancyTrunkPlacer(6, 2, 3),
+                    new FancyTrunkPlacer(8, 4, 5),
                     BlockStateProvider.simple(leaves[i]),
                     // radius, offset, height
-                    new PineFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), UniformInt.of(5, 6)),
+                    new PineFoliagePlacer(ConstantInt.of(2), ConstantInt.of(5), UniformInt.of(6, 8)),
                     new TwoLayersFeatureSize(1, 1, 1)
                 ).build());
         }
