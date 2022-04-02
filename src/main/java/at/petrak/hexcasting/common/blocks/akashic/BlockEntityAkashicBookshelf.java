@@ -1,9 +1,8 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.client.RenderLib;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import at.petrak.paucal.api.PaucalBlockEntity;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -26,26 +25,24 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
     public static final String TAG_RECORD_POS = "record_pos";
     public static final String TAG_PATTERN = "pattern";
 
+    // This might actually be innacurate! It's a best-guess
     public BlockPos recordPos = null;
     // This is only not null if this stores any data.
     public HexPattern pattern = null;
 
     public BlockEntityAkashicBookshelf(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlocks.AKASHIC_BOOKSHELF_TILE.get(), pWorldPosition, pBlockState);
+        super(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(), pWorldPosition, pBlockState);
     }
 
     public void setNewDatum(BlockPos recordPos, HexPattern pattern, DatumType type) {
-        if (!recordPos.equals(this.recordPos)) {
-            HexMod.getLogger().warn("The bookshelf at {} thought its record was at {} but now it's told it's at {}",
-                this.getBlockPos().toShortString(), this.recordPos.toShortString(), recordPos.toShortString());
-        }
         this.recordPos = recordPos;
         this.pattern = pattern;
 
         this.setChanged();
-        this.level.setBlockAndUpdate(this.getBlockPos(),
-            this.getBlockState().setValue(BlockAkashicBookshelf.DATUM_TYPE, type));
-        // and the setBlock does the sync
+        var oldBs = this.getBlockState();
+        var newBs = oldBs.setValue(BlockAkashicBookshelf.DATUM_TYPE, type);
+        this.level.setBlockAndUpdate(this.getBlockPos(), newBs);
+        this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
     }
 
     @Override

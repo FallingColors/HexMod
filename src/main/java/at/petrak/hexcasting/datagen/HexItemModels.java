@@ -127,5 +127,7 @@ public class HexItemModels extends PaucalItemModelProvider {
             .predicate(ItemSlate.WRITTEN_PRED, 1)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_written")))
             .end();
+
+        simpleItem(modLoc("akashic_door"));
     }
 }

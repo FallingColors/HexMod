@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -27,7 +27,8 @@ public class BlockLookingImpetus extends BlockAbstractImpetus {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
         BlockEntityType<T> type) {
         if (!pLevel.isClientSide) {
-            return createTickerHelper(type, HexBlocks.IMPETUS_LOOK_TILE.get(), BlockEntityLookingImpetus::serverTick);
+            return createTickerHelper(type, HexBlockEntities.IMPETUS_LOOK_TILE.get(),
+                BlockEntityLookingImpetus::serverTick);
         } else {
             return null;
         }

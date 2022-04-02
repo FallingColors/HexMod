@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -25,7 +25,7 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     private UUID storedPlayer = null;
 
     public BlockEntityStoredPlayerImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlocks.IMPETUS_STOREDPLAYER_TILE.get(), pWorldPosition, pBlockState);
+        super(HexBlockEntities.IMPETUS_STOREDPLAYER_TILE.get(), pWorldPosition, pBlockState);
     }
 
     @Override

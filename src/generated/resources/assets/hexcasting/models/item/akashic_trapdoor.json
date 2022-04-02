@@ -1,0 +1,6 @@
+{
+  "parent": "hexcasting:item/akashic_trapdoor",
+  "textures": {
+    "texture": "hexcasting:block/akashic/trapdoor"
+  }
+}

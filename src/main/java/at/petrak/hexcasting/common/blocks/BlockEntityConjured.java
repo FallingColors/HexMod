@@ -18,7 +18,7 @@ public class BlockEntityConjured extends PaucalBlockEntity {
     public static final String TAG_COLORIZER = "tag_colorizer";
 
     public BlockEntityConjured(BlockPos pos, BlockState state) {
-        super(HexBlocks.CONJURED_TILE.get(), pos, state);
+        super(HexBlockEntities.CONJURED_TILE.get(), pos, state);
     }
 
     public void walkParticle(Entity pEntity) {

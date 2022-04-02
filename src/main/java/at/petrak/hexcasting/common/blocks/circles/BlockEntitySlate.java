@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.client.RenderLib;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import at.petrak.paucal.api.PaucalBlockEntity;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -28,7 +28,7 @@ public class BlockEntitySlate extends PaucalBlockEntity {
     public HexPattern pattern;
 
     public BlockEntitySlate(BlockPos pos, BlockState state) {
-        super(HexBlocks.SLATE_TILE.get(), pos, state);
+        super(HexBlockEntities.SLATE_TILE.get(), pos, state);
     }
 
     @Override

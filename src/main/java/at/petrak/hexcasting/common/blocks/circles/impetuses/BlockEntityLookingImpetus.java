@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +24,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
     private int lookAmount = 0;
 
     public BlockEntityLookingImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlocks.IMPETUS_LOOK_TILE.get(), pWorldPosition, pBlockState);
+        super(HexBlockEntities.IMPETUS_LOOK_TILE.get(), pWorldPosition, pBlockState);
     }
 
     @Override

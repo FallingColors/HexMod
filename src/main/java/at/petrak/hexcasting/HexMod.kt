@@ -1,6 +1,7 @@
 package at.petrak.hexcasting
 
 import at.petrak.hexcasting.client.*
+import at.petrak.hexcasting.common.blocks.HexBlockEntities
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
@@ -61,7 +62,7 @@ object HexMod {
 
         HexItems.ITEMS.register(modBus)
         HexBlocks.BLOCKS.register(modBus)
-        HexBlocks.BLOCK_ENTITIES.register(modBus)
+        HexBlockEntities.BLOCK_ENTITIES.register(modBus)
         HexEntities.ENTITIES.register(modBus)
         HexLootModifiers.LOOT_MODS.register(modBus)
         HexSounds.SOUNDS.register(modBus)

@@ -1,0 +1,7 @@
+{
+  "parent": "hexcasting:item/akashic_log_stripped",
+  "textures": {
+    "side": "hexcasting:block/akashic/log_stripped",
+    "end": "hexcasting:block/akashic/log_end_stripped"
+  }
+}

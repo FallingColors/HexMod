@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
+import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
@@ -180,13 +181,27 @@ public class RegisterClientStuff {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers evt) {
-        evt.registerBlockEntityRenderer(HexBlocks.SLATE_TILE.get(), BlockEntitySlate.Renderer::new);
-        evt.registerBlockEntityRenderer(HexBlocks.AKASHIC_BOOKSHELF_TILE.get(),
+        evt.registerBlockEntityRenderer(HexBlockEntities.SLATE_TILE.get(), BlockEntitySlate.Renderer::new);
+        evt.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(),
             BlockEntityAkashicBookshelf.Renderer::new);
     }
 
     @SubscribeEvent
     public static void onModelRegister(ModelRegistryEvent evt) {
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.SCONCE.get(), RenderType.cutout());
+        for (var cutout : new Block[]{
+            HexBlocks.AKASHIC_DOOR.get(),
+            HexBlocks.AKASHIC_TRAPDOOR.get(),
+            HexBlocks.SCONCE.get(),
+        }) {
+            ItemBlockRenderTypes.setRenderLayer(cutout, RenderType.cutout());
+        }
+
+        for (var mipped : new Block[]{
+            HexBlocks.AKASHIC_LEAVES1.get(),
+            HexBlocks.AKASHIC_LEAVES2.get(),
+            HexBlocks.AKASHIC_LEAVES3.get(),
+        }) {
+            ItemBlockRenderTypes.setRenderLayer(mipped, RenderType.cutoutMipped());
+        }
     }
 }

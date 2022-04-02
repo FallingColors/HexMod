@@ -1,7 +1,8 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
+import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import at.petrak.hexcasting.hexmath.HexDir;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import at.petrak.paucal.api.PaucalBlockEntity;
@@ -30,7 +31,7 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
     private final Map<String, Entry> entries = new HashMap<>();
 
     public BlockEntityAkashicRecord(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlocks.AKASHIC_RECORD_TILE.get(), pWorldPosition, pBlockState);
+        super(HexBlockEntities.AKASHIC_RECORD_TILE.get(), pWorldPosition, pBlockState);
     }
 
     public void removeFloodfillerAt(BlockPos pos) {
@@ -90,17 +91,21 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
         // floodfill for all known positions
         var validPoses = new HashSet<BlockPos>();
         {
+            var seen = new HashSet<BlockPos>();
             var todo = new ArrayDeque<BlockPos>();
             todo.add(this.worldPosition);
+            // we do NOT add this position to the valid positions, because the record
+            // isn't flood-fillable through.
             while (!todo.isEmpty()) {
                 var here = todo.remove();
 
                 for (var dir : Direction.values()) {
                     var neighbor = here.relative(dir);
-                    if (validPoses.add(neighbor)) {
+                    if (seen.add(neighbor)) {
                         var bs = this.level.getBlockState(neighbor);
-                        if (bs.getBlock() instanceof BlockAkashicFloodfiller) {
+                        if (BlockAkashicFloodfiller.canItBeFloodedThrough(neighbor, bs, this.level)) {
                             todo.add(neighbor);
+                            validPoses.add(neighbor);
                         }
                     }
                 }
@@ -113,6 +118,10 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
             if (!validPoses.contains(entry.pos)) {
                 // oh no!
                 this.entries.remove(sig);
+
+                if (this.level.getBlockEntity(entry.pos) instanceof BlockEntityAkashicBookshelf shelf) {
+                    shelf.setNewDatum(null, null, DatumType.EMPTY);
+                }
             }
         }
 

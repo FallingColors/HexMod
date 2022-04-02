@@ -2,19 +2,24 @@ package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.akashic.*;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicFloodfiller;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
-import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockEmptyDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.*;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockLookingImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockStoredPlayerImpetus;
+import at.petrak.hexcasting.common.blocks.decoration.BlockAxis;
 import at.petrak.hexcasting.common.blocks.decoration.BlockSconce;
+import at.petrak.hexcasting.common.blocks.decoration.BlockStrippable;
 import at.petrak.hexcasting.common.items.HexItems;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
@@ -26,8 +31,6 @@ import java.util.function.Supplier;
 
 public class HexBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, HexMod.MOD_ID);
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(
-        ForgeRegistries.BLOCK_ENTITIES, HexMod.MOD_ID);
 
     public static final RegistryObject<Block> CONJURED = blockItem("conjured",
         () -> new BlockConjured(
@@ -64,6 +67,17 @@ public class HexBlocks {
         return BlockBehaviour.Properties.of(Material.WOOD)
             .sound(SoundType.WOOD)
             .strength(2f);
+    }
+
+    private static BlockBehaviour.Properties leaves() {
+        return BlockBehaviour.Properties.of(Material.LEAVES)
+            .strength(0.2F)
+            .randomTicks()
+            .sound(SoundType.GRASS)
+            .noOcclusion()
+            .isValidSpawn((bs, level, pos, type) -> type == EntityType.OCELOT || type == EntityType.PARROT)
+            .isSuffocating(HexBlocks::never)
+            .isViewBlocking(HexBlocks::never);
     }
 
     public static final RegistryObject<BlockSlate> SLATE = BLOCKS.register("slate",
@@ -120,31 +134,30 @@ public class HexBlocks {
             .sound(SoundType.AMETHYST)
             .strength(1f)
             .lightLevel($ -> 15)));
-
-    public static final RegistryObject<BlockEntityType<BlockEntityConjured>> CONJURED_TILE = BLOCK_ENTITIES.register(
-        "conjured_tile",
-        () -> BlockEntityType.Builder.of(BlockEntityConjured::new, CONJURED.get()).build(null));
-    public static final RegistryObject<BlockEntityType<BlockEntitySlate>> SLATE_TILE = BLOCK_ENTITIES.register(
-        "slate_tile",
-        () -> BlockEntityType.Builder.of(BlockEntitySlate::new, SLATE.get()).build(null));
-    public static final RegistryObject<BlockEntityType<BlockEntityRightClickImpetus>> IMPETUS_RIGHTCLICK_TILE =
-        BLOCK_ENTITIES.register("impetus_rightclick_tile",
-            () -> BlockEntityType.Builder.of(BlockEntityRightClickImpetus::new, IMPETUS_RIGHTCLICK.get()).build(null));
-    public static final RegistryObject<BlockEntityType<BlockEntityLookingImpetus>> IMPETUS_LOOK_TILE =
-        BLOCK_ENTITIES.register("impetus_look_tile",
-            () -> BlockEntityType.Builder.of(BlockEntityLookingImpetus::new, IMPETUS_LOOK.get()).build(null));
-    public static final RegistryObject<BlockEntityType<BlockEntityStoredPlayerImpetus>> IMPETUS_STOREDPLAYER_TILE =
-        BLOCK_ENTITIES.register("impetus_storedplayer_tile",
-            () -> BlockEntityType.Builder.of(BlockEntityStoredPlayerImpetus::new, IMPETUS_STOREDPLAYER.get())
-                .build(null));
-
-    public static final RegistryObject<BlockEntityType<BlockEntityAkashicRecord>> AKASHIC_RECORD_TILE = BLOCK_ENTITIES.register(
-        "akashic_record_tile",
-        () -> BlockEntityType.Builder.of(BlockEntityAkashicRecord::new, AKASHIC_RECORD.get()).build(null));
-    public static final RegistryObject<BlockEntityType<BlockEntityAkashicBookshelf>> AKASHIC_BOOKSHELF_TILE = BLOCK_ENTITIES.register(
-        "akashic_bookshelf_tile",
-        () -> BlockEntityType.Builder.of(BlockEntityAkashicBookshelf::new, AKASHIC_BOOKSHELF.get()).build(null));
-
+    public static final RegistryObject<BlockAxis> AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
+        () -> new BlockAxis(woody()));
+    public static final RegistryObject<BlockStrippable> AKASHIC_LOG = blockItem("akashic_log",
+        () -> new BlockStrippable(woody(), AKASHIC_LOG_STRIPPED));
+    public static final RegistryObject<Block> AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
+        () -> new Block(woody()));
+    public static final RegistryObject<BlockStrippable> AKASHIC_WOOD = blockItem("akashic_wood",
+        () -> new BlockStrippable(woody(), AKASHIC_WOOD_STRIPPED));
+    public static final RegistryObject<Block> AKASHIC_PLANKS = blockItem("akashic_planks",
+        () -> new Block(woody()));
+    public static final RegistryObject<Block> AKASHIC_PANEL = blockItem("akashic_panel",
+        () -> new Block(woody()));
+    public static final RegistryObject<Block> AKASHIC_TILE = blockItem("akashic_tile",
+        () -> new Block(woody()));
+    public static final RegistryObject<DoorBlock> AKASHIC_DOOR = blockItem("akashic_door",
+        () -> new DoorBlock(woody().noOcclusion()));
+    public static final RegistryObject<TrapDoorBlock> AKASHIC_TRAPDOOR = blockItem("akashic_trapdoor",
+        () -> new TrapDoorBlock(woody().noOcclusion()));
+    public static final RegistryObject<LeavesBlock> AKASHIC_LEAVES1 = blockItem("akashic_leaves1",
+        () -> new LeavesBlock(leaves()));
+    public static final RegistryObject<LeavesBlock> AKASHIC_LEAVES2 = blockItem("akashic_leaves2",
+        () -> new LeavesBlock(leaves()));
+    public static final RegistryObject<LeavesBlock> AKASHIC_LEAVES3 = blockItem("akashic_leaves3",
+        () -> new LeavesBlock(leaves()));
 
     private static boolean never(Object... args) {
         return false;

@@ -120,6 +120,49 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         });
 
+        cubeBlockAndItem(HexBlocks.AKASHIC_RECORD.get(), "akashic/record");
+        cubeBlockAndItem(HexBlocks.AKASHIC_CONNECTOR.get(), "akashic/connector");
+
+        getVariantBuilder(HexBlocks.AKASHIC_BOOKSHELF.get()).forAllStates(bs -> {
+            var type = bs.getValue(BlockAkashicBookshelf.DATUM_TYPE);
+
+            var planks1 = modLoc("block/akashic/planks1");
+            var tile = modLoc("block/akashic/tile");
+
+            String[] fronts;
+            if (type == DatumType.EMPTY) {
+                fronts = new String[]{"empty"};
+            } else {
+                fronts = new String[4];
+                for (int i = 0; i < 4; i++) {
+                    fronts[i] = type.getSerializedName() + (i + 1);
+                }
+            }
+
+            var builder = ConfiguredModel.builder();
+
+            for (int i = 0; i < fronts.length; i++) {
+                var front = fronts[i];
+                var model = models().orientable("akashic_bookshelf_" + type.getSerializedName() + i,
+                    planks1, modLoc("block/akashic/bookshelf/" + front), tile);
+
+                Direction dir = bs.getValue(BlockAkashicBookshelf.FACING);
+                if (dir == Direction.NORTH && type == DatumType.EMPTY) {
+                    simpleBlockItem(HexBlocks.AKASHIC_BOOKSHELF.get(), model);
+                }
+
+                builder.modelFile(model)
+                    .rotationY(dir.getOpposite().get2DDataValue() * 90)
+                    .uvLock(true);
+                if (i < fronts.length - 1) {
+                    builder.nextModel();
+                }
+            }
+
+            return builder.build();
+        });
+
+
         blockAndItem(HexBlocks.SLATE_BLOCK.get(), models().cubeAll("slate_block", modLoc("block/slate")));
         cubeBlockAndItem(HexBlocks.AMETHYST_DUST_BLOCK.get(), "amethyst_dust_block");
         cubeBlockAndItem(HexBlocks.AMETHYST_TILES.get(), "amethyst_tiles");
@@ -128,52 +171,54 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         cubeBlockAndItem(HexBlocks.SCROLL_PAPER_LANTERN.get(), "scroll_paper_lantern");
         cubeBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(), "ancient_scroll_paper_lantern");
 
+        ResourceLocation logSide = modLoc("block/akashic/log");
+        ResourceLocation logEnd = modLoc("block/akashic/log_end");
+        axisBlock(HexBlocks.AKASHIC_LOG.get(), logSide, logEnd);
+        simpleBlockItem(HexBlocks.AKASHIC_LOG.get(),
+            itemModels().cubeColumn("akashic_log", logSide, logEnd));
+
+        ResourceLocation logStrippedSide = modLoc("block/akashic/log_stripped");
+        ResourceLocation logStrippedEnd = modLoc("block/akashic/log_end_stripped");
+        axisBlock(HexBlocks.AKASHIC_LOG_STRIPPED.get(), logStrippedSide, logStrippedEnd);
+        simpleBlockItem(HexBlocks.AKASHIC_LOG_STRIPPED.get(),
+            itemModels().cubeColumn("akashic_log_stripped", logStrippedSide, logStrippedEnd));
+
+        cubeBlockAndItem(HexBlocks.AKASHIC_WOOD.get(), "akashic/log");
+        cubeBlockAndItem(HexBlocks.AKASHIC_WOOD_STRIPPED.get(), "akashic/log_stripped");
+        cubeBlockAndItem(HexBlocks.AKASHIC_PANEL.get(), "akashic/panel");
+        cubeBlockAndItem(HexBlocks.AKASHIC_TILE.get(), "akashic/tile");
+
+
+        ResourceLocation leavesParent = new ResourceLocation("block/leaves");
+        blockAndItem(HexBlocks.AKASHIC_LEAVES1.get(),
+            models().withExistingParent("akashic_leaves1", leavesParent)
+                .texture("all", modLoc("block/akashic/leaves1")));
+        blockAndItem(HexBlocks.AKASHIC_LEAVES2.get(),
+            models().withExistingParent("akashic_leaves2", leavesParent)
+                .texture("all", modLoc("block/akashic/leaves2")));
+        blockAndItem(HexBlocks.AKASHIC_LEAVES3.get(),
+            models().withExistingParent("akashic_leaves3", leavesParent)
+                .texture("all", modLoc("block/akashic/leaves3")));
+
+        doorBlock(HexBlocks.AKASHIC_DOOR.get(), modLoc("block/akashic/door_lower"), modLoc("block/akashic/door_upper"));
+        // door model via the given texture
+        trapdoorBlock(HexBlocks.AKASHIC_TRAPDOOR.get(), modLoc("block/akashic/trapdoor"), true);
+        simpleBlockItem(HexBlocks.AKASHIC_TRAPDOOR.get(),
+            itemModels().trapdoorOrientableTop("akashic_trapdoor", modLoc("block/akashic/trapdoor")));
+
+        var planksBuilder = ConfiguredModel.builder();
+        for (int i = 1; i <= 3; i++) {
+            var model = models().cubeAll("akashic_planks" + i, modLoc("block/akashic/planks" + i));
+            if (i == 1) {
+                simpleBlockItem(HexBlocks.AKASHIC_PLANKS.get(), model);
+            }
+            planksBuilder.modelFile(model);
+        }
+        simpleBlock(HexBlocks.AKASHIC_PLANKS.get(), planksBuilder.build());
+
         var sconceModel = models().getExistingFile(modLoc("amethyst_sconce"));
         simpleBlock(HexBlocks.SCONCE.get(), sconceModel);
         simpleBlockItem(HexBlocks.SCONCE.get(), sconceModel);
-
-        {
-            var planks1 = modLoc("block/akashic/planks1");
-            var tile = modLoc("block/akashic/tile");
-            cubeBlockAndItem(HexBlocks.AKASHIC_RECORD.get(), "akashic/record");
-            cubeBlockAndItem(HexBlocks.AKASHIC_CONNECTOR.get(), "akashic/connector");
-
-            getVariantBuilder(HexBlocks.AKASHIC_BOOKSHELF.get()).forAllStates(bs -> {
-                var type = bs.getValue(BlockAkashicBookshelf.DATUM_TYPE);
-
-                String[] fronts;
-                if (type == DatumType.EMPTY) {
-                    fronts = new String[]{"empty"};
-                } else {
-                    fronts = new String[4];
-                    for (int i = 0; i < 4; i++) {
-                        fronts[i] = type.getSerializedName() + (i + 1);
-                    }
-                }
-
-                var builder = ConfiguredModel.builder();
-
-                for (int i = 0; i < fronts.length; i++) {
-                    var front = fronts[i];
-                    var model = models().orientable("akashic_bookshelf_" + type.getSerializedName() + i,
-                        planks1, modLoc("block/akashic/bookshelf/" + front), tile);
-
-                    Direction dir = bs.getValue(BlockAkashicBookshelf.FACING);
-                    if (dir == Direction.NORTH && type == DatumType.EMPTY) {
-                        simpleBlockItem(HexBlocks.AKASHIC_BOOKSHELF.get(), model);
-                    }
-
-                    builder.modelFile(model)
-                        .rotationY(dir.getOpposite().get2DDataValue() * 90)
-                        .uvLock(true);
-                    if (i < fronts.length - 1) {
-                        builder.nextModel();
-                    }
-                }
-
-                return builder.build();
-            });
-        }
     }
 
     private void impetus(Block block, String name, String stub) {
@@ -270,4 +315,5 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         }
         return new ResourceLocation[]{bottom, top, north, south, east, west};
     }
+
 }
