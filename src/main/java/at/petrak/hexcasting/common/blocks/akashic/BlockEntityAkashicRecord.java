@@ -145,8 +145,8 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
     @Override
     protected void loadModData(CompoundTag compoundTag) {
         var lookupTag = compoundTag.getCompound(TAG_LOOKUP);
+
         var sigs = lookupTag.getAllKeys();
-        this.entries.clear();
         for (var sig : sigs) {
             var entryTag = lookupTag.getCompound(sig);
             var pos = NbtUtils.readBlockPos(entryTag.getCompound(TAG_POS));
