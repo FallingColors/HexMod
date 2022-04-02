@@ -38,11 +38,10 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
         this.recordPos = recordPos;
         this.pattern = pattern;
 
-        this.setChanged();
         var oldBs = this.getBlockState();
         var newBs = oldBs.setValue(BlockAkashicBookshelf.DATUM_TYPE, type);
-        this.level.setBlockAndUpdate(this.getBlockPos(), newBs);
-        this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
+        this.level.setBlock(this.getBlockPos(), newBs, 3);
+        this.sync();
     }
 
     @Override
@@ -60,9 +59,13 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
     protected void loadModData(CompoundTag compoundTag) {
         if (compoundTag.contains(TAG_RECORD_POS)) {
             this.recordPos = NbtUtils.readBlockPos(compoundTag.getCompound(TAG_RECORD_POS));
+        } else {
+            this.recordPos = null;
         }
         if (compoundTag.contains(TAG_PATTERN)) {
             this.pattern = HexPattern.DeserializeFromNBT(compoundTag.getCompound(TAG_PATTERN));
+        } else {
+            this.pattern = null;
         }
     }
 
