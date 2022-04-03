@@ -168,8 +168,16 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         cubeBlockAndItem(HexBlocks.AMETHYST_TILES.get(), "amethyst_tiles");
         cubeBlockAndItem(HexBlocks.SCROLL_PAPER.get(), "scroll_paper");
         cubeBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER.get(), "ancient_scroll_paper");
-        cubeBlockAndItem(HexBlocks.SCROLL_PAPER_LANTERN.get(), "scroll_paper_lantern");
-        cubeBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(), "ancient_scroll_paper_lantern");
+        
+        blockAndItem(HexBlocks.SCROLL_PAPER_LANTERN.get(), models().cubeBottomTop("scroll_paper_lantern",
+                modLoc("block/scroll_paper_lantern_side"),
+                modLoc("block/scroll_paper_lantern_bottom"),
+                modLoc("block/scroll_paper_lantern_top")));
+        
+        blockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(), models().cubeBottomTop("ancient_scroll_paper_lantern",
+                modLoc("block/ancient_scroll_paper_lantern_side"),
+                modLoc("block/ancient_scroll_paper_lantern_bottom"),
+                modLoc("block/ancient_scroll_paper_lantern_top")));
 
         ResourceLocation logSide = modLoc("block/akashic/log");
         ResourceLocation logEnd = modLoc("block/akashic/log_end");
