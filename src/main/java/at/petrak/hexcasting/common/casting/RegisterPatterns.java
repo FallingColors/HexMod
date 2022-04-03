@@ -75,6 +75,8 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("d", HexDir.EAST), prefix("const/null"), Widget.NULL);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aadaa", HexDir.EAST), prefix("duplicate"),
                 OpDuplicate.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aadaadaa", HexDir.EAST), prefix("duplicate_n"),
+                OpDuplicateN.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawdd", HexDir.EAST), prefix("swap"), OpSwap.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddad", HexDir.WEST), prefix("fisherman"),
                 OpFisherman.INSTANCE);
