@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "hexcasting:akashic/tile"
+      "model": "hexcasting:block/akashic_tile"
     }
   }
 }

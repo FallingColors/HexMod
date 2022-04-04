@@ -120,8 +120,10 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         });
 
-        cubeBlockAndItem(HexBlocks.AKASHIC_RECORD.get(), "akashic/record");
-        cubeBlockAndItem(HexBlocks.AKASHIC_CONNECTOR.get(), "akashic/connector");
+        blockAndItem(HexBlocks.AKASHIC_RECORD.get(),
+            models().cubeAll("akashic_record", modLoc("block/akashic/record")));
+        blockAndItem(HexBlocks.AKASHIC_CONNECTOR.get(),
+            models().cubeAll("akashic_connector", modLoc("block/akashic/connector")));
 
         getVariantBuilder(HexBlocks.AKASHIC_BOOKSHELF.get()).forAllStates(bs -> {
             var type = bs.getValue(BlockAkashicBookshelf.DATUM_TYPE);
@@ -179,23 +181,15 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 modLoc("block/ancient_scroll_paper_lantern_bottom"),
                 modLoc("block/ancient_scroll_paper_lantern_top")));
 
-        ResourceLocation logSide = modLoc("block/akashic/log");
-        ResourceLocation logEnd = modLoc("block/akashic/log_end");
-        axisBlock(HexBlocks.AKASHIC_LOG.get(), logSide, logEnd);
-        simpleBlockItem(HexBlocks.AKASHIC_LOG.get(),
-            itemModels().cubeColumn("akashic_log", logSide, logEnd));
+        axisBlock(HexBlocks.AKASHIC_LOG.get(), modLoc("block/akashic/log"), modLoc("block/akashic/log_end"));
+        axisBlock(HexBlocks.AKASHIC_LOG_STRIPPED.get(), modLoc("block/akashic/log_stripped"),
+            modLoc("block/akashic/log_end_stripped"));
 
-        ResourceLocation logStrippedSide = modLoc("block/akashic/log_stripped");
-        ResourceLocation logStrippedEnd = modLoc("block/akashic/log_end_stripped");
-        axisBlock(HexBlocks.AKASHIC_LOG_STRIPPED.get(), logStrippedSide, logStrippedEnd);
-        simpleBlockItem(HexBlocks.AKASHIC_LOG_STRIPPED.get(),
-            itemModels().cubeColumn("akashic_log_stripped", logStrippedSide, logStrippedEnd));
-
-        cubeBlockAndItem(HexBlocks.AKASHIC_WOOD.get(), "akashic/log");
-        cubeBlockAndItem(HexBlocks.AKASHIC_WOOD_STRIPPED.get(), "akashic/log_stripped");
-        cubeBlockAndItem(HexBlocks.AKASHIC_PANEL.get(), "akashic/panel");
-        cubeBlockAndItem(HexBlocks.AKASHIC_TILE.get(), "akashic/tile");
-
+        blockAndItem(HexBlocks.AKASHIC_WOOD.get(), models().cubeAll("akashic_log", modLoc("block/akashic/log")));
+        blockAndItem(HexBlocks.AKASHIC_WOOD_STRIPPED.get(),
+            models().cubeAll("akashic_log_stripped", modLoc("block/akashic/log_stripped")));
+        blockAndItem(HexBlocks.AKASHIC_PANEL.get(), models().cubeAll("akashic_panel", modLoc("block/akashic/panel")));
+        blockAndItem(HexBlocks.AKASHIC_TILE.get(), models().cubeAll("akashic_tile", modLoc("block/akashic/tile")));
 
         ResourceLocation leavesParent = new ResourceLocation("block/leaves");
         blockAndItem(HexBlocks.AKASHIC_LEAVES1.get(),
@@ -211,18 +205,19 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         doorBlock(HexBlocks.AKASHIC_DOOR.get(), modLoc("block/akashic/door_lower"), modLoc("block/akashic/door_upper"));
         // door model via the given texture
         trapdoorBlock(HexBlocks.AKASHIC_TRAPDOOR.get(), modLoc("block/akashic/trapdoor"), true);
-        simpleBlockItem(HexBlocks.AKASHIC_TRAPDOOR.get(),
-            itemModels().trapdoorOrientableTop("akashic_trapdoor", modLoc("block/akashic/trapdoor")));
 
-        var planksBuilder = ConfiguredModel.builder();
-        for (int i = 1; i <= 3; i++) {
-            var model = models().cubeAll("akashic_planks" + i, modLoc("block/akashic/planks" + i));
-            if (i == 1) {
-                simpleBlockItem(HexBlocks.AKASHIC_PLANKS.get(), model);
-            }
-            planksBuilder.modelFile(model);
-        }
-        simpleBlock(HexBlocks.AKASHIC_PLANKS.get(), planksBuilder.build());
+
+        simpleBlock(HexBlocks.AKASHIC_PLANKS.get(), ConfiguredModel.builder()
+            .modelFile(models().cubeAll("akashic_planks1", modLoc("block/akashic/planks1")))
+            .weight(3)
+            .nextModel()
+            .modelFile(models().cubeAll("akashic_planks2", modLoc("block/akashic/planks2")))
+            .weight(3)
+            .nextModel()
+            .modelFile(models().cubeAll("akashic_planks3", modLoc("block/akashic/planks3")))
+            .build());
+        simpleBlockItem(HexBlocks.AKASHIC_PLANKS.get(),
+            models().cubeAll("akashic_planks1", modLoc("block/akashic/planks1")));
 
         var sconceModel = models().getExistingFile(modLoc("amethyst_sconce"));
         simpleBlock(HexBlocks.SCONCE.get(), sconceModel);
