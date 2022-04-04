@@ -312,16 +312,22 @@ def getGitChangelog = { ->
 
 task sendWebhook {
 
-    if (System.getenv('discordWebhook') == null || System.getenv("BUILD_URL") == null) {
-        println "Cannot send the webhook without the webhook url or the build url"
-        return
+    doLast {
+        try {
+            if (System.getenv('discordWebhook') == null || System.getenv("BUILD_URL") == null) {
+                println "Cannot send the webhook without the webhook url or the build url"
+                return
+            }
+            def webhook = new Webhook(System.getenv('discordWebhook'), 'HexMod Patreon Gradle')
+
+            def message = new Message()
+            message.setUsername("Patreon early access")
+            message.setContent("New HexMod release! Download it here: ${System.getenv("BUILD_URL")}\nChangelog:\n${getGitChangelog()}")
+
+            webhook.sendMessage(message)
+        } catch (ignored) {
+            project.logger.error("Failed to push Discord webhook.")
+        }
     }
-    def webhook = new Webhook(System.getenv('discordWebhook'), 'HexMod Patreon Gradle')
-
-    def message = new Message()
-    message.setUsername("Patreon early access")
-    message.setContent("New HexMod release! Download it here: ${System.getenv("BUILD_URL")}\nChangelog:\n${getGitChangelog()}")
-
-    webhook.sendMessage(message)
 }
 
