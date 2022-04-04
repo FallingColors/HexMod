@@ -4,14 +4,20 @@ buildscript {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
         maven { url = 'https://repo.spongepowered.org/maven' }
+        maven { url = 'https://maven.blamejared.com' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.1.0'
     }
 }
+
+import com.diluv.schoomp.Webhook
+import com.diluv.schoomp.message.Message
+
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
@@ -22,9 +28,11 @@ apply plugin: 'org.spongepowered.mixin'
 
 version = '0.7.1'
 group = 'at.petra-k.hexcasting' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'hexcasting'
+archivesBaseName = 'hexcasting-1.18.2'
 
-if (System.getenv('TAG_NAME') != null) {
+if (System.getenv('BUILD_NUMBER') != null) {
+    version += "-prerelease-" + System.getenv('BUILD_NUMBER')
+} else if (System.getenv('TAG_NAME') != null) {
     version = System.getenv('TAG_NAME').substring(1)
     println 'Version overridden to tag version ' + version
 }
@@ -209,6 +217,11 @@ mixin {
     dumpTargetOnFailure true
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
@@ -230,15 +243,35 @@ jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 // publish.dependsOn('reobfJar')
 
+
+// Disables Gradle's custom module metadata from being published to maven. The
+// metadata includes mapped dependencies which are not reasonably consumable by
+// other mod developers.
+tasks.withType(GenerateModuleMetadata) {
+
+    enabled = false
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact jar
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            from components.java
+
+            pom.withXml {
+
+                asNode().dependencies.dependency.each { dep ->
+
+                    assert dep.parent().remove(dep)
+                }
+            }
         }
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            url "file://" + System.getenv("local_maven")
         }
     }
 }
@@ -250,3 +283,45 @@ compileTestKotlin {
     kotlinOptions {
     }
 }
+
+def getGitChangelog = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        def gitHash = System.getenv('GIT_COMMIT')
+        def gitPrevHash = System.getenv('GIT_PREVIOUS_COMMIT')
+        def travisRange = System.getenv('TRAVIS_COMMIT_RANGE')
+        if (gitHash && gitPrevHash) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + gitPrevHash + '...' + gitHash
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        } else if (travisRange) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + travisRange
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        } else {
+            return "";
+        }
+    } catch (ignored) {
+        return "";
+    }
+}
+
+task sendWebhook {
+
+    if (System.getenv('discordWebhook') == null || System.getenv("BUILD_URL") == null) {
+        println "Cannot send the webhook without the webhook url or the build url"
+        return
+    }
+    def webhook = new Webhook(System.getenv('discordWebhook'), 'HexMod Patreon Gradle')
+
+    def message = new Message()
+    message.setUsername("Patreon early access")
+    message.setContent("New HexMod release! Download it here: ${System.getenv("BUILD_URL")}\nChangelog:\n${getGitChangelog()}")
+
+    webhook.sendMessage(message)
+}
+
