@@ -5,9 +5,8 @@ pipeline {
     tools {
         jdk "jdk-17.0.1"
     }
-
     environment {
-        discordWebhook = credentials('discord_webhook')
+        discordWebhook = credentials('discordWebhook')
     }
     stages {
         stage('Clean') {
@@ -32,7 +31,7 @@ pipeline {
     }
     post {
         always {
-            archive 'build/libs/**.jar'
+            archiveArtifacts 'build/libs/**.jar'
         }
     }
 }
