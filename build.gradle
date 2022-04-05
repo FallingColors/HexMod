@@ -30,7 +30,33 @@ version = '0.8.0'
 group = 'at.petra-k.hexcasting' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'hexcasting-1.18.2'
 
-if (System.getenv('BUILD_NUMBER') != null) {
+def isRelease = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        def gitHash = System.getenv('GIT_COMMIT')
+        def gitPrevHash = System.getenv('GIT_PREVIOUS_COMMIT')
+        def travisRange = System.getenv('TRAVIS_COMMIT_RANGE')
+        if (gitHash && gitPrevHash) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + gitPrevHash + '...' + gitHash
+                standardOutput = stdout
+            }
+            return stdout.toString().toLowerCase().contains("[release")
+        } else if (travisRange) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + travisRange
+                standardOutput = stdout
+            }
+            return stdout.toString().toLowerCase().contains("[release")
+        } else {
+            return false
+        }
+    } catch (ignored) {
+        return false
+    }
+}
+
+if (!isRelease && System.getenv('BUILD_NUMBER') != null) {
     version += "-prerelease-" + System.getenv('BUILD_NUMBER')
 } else if (System.getenv('TAG_NAME') != null) {
     version = System.getenv('TAG_NAME').substring(1)
@@ -207,8 +233,8 @@ dependencies {
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143")
 
-    compileOnly fg.deobf("curse.maven:paucal-597824:3724029")
-    runtimeOnly fg.deobf("curse.maven:paucal-597824:3724029")
+    compileOnly fg.deobf("at.petra-k.paucal:paucal-1.18.2:0.3.2")
+    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-1.18.2:0.3.2")
 }
 
 mixin {
@@ -311,7 +337,6 @@ def getGitChangelog = { ->
 }
 
 task sendWebhook {
-
     doLast {
         try {
             if (System.getenv('discordWebhook') == null || System.getenv("BUILD_URL") == null) {
