@@ -2,12 +2,12 @@ package at.petrak.hexcasting.common.casting
 
 import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexUtils
+import at.petrak.hexcasting.api.item.DataHolder
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.common.casting.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.common.casting.mishaps.MishapLocationTooFarAway
-import at.petrak.hexcasting.common.items.ItemDataHolder
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.RegisterHelper.prefix
 import net.minecraft.server.level.ServerLevel
@@ -40,7 +40,7 @@ data class CastingContext(
     fun getDataHolder(): ItemStack {
         val handItem =
             caster.getItemInHand(this.otherHand)
-        return if (handItem.item is ItemDataHolder) {
+        return if (handItem.item is DataHolder) {
             handItem
         } else {
             throw MishapBadOffhandItem.of(handItem, "iota")

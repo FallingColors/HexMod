@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.items.ItemDataHolder;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,7 +33,7 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
         BlockHitResult pHit) {
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
             var usedStack = pPlayer.getItemInHand(pHand);
-            if (usedStack.getItem() instanceof ItemDataHolder dataer) {
+            if (usedStack.getItem() instanceof DataHolder dataer) {
                 var stored = dataer.readDatumTag(usedStack);
                 if (stored != null && stored.contains(SpellDatum.TAG_ENTITY)) {
                     var uuid = stored.getCompound(SpellDatum.TAG_ENTITY).getUUID(SpellDatum.TAG_ENTITY_UUID);

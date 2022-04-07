@@ -146,6 +146,7 @@
   "hexcasting.subtitles.spellcircle.fail": "Spell circle fizzles out",
   "hexcasting.subtitles.spellcircle.cast": "Spell circle casts",
   "hexcasting.subtitles.scroll.dust": "Scroll covers with dust",
+  "hexcasting.subtitles.scroll.dust": "Scribble on Scroll",
   "hexcasting.subtitles.impetus.fletcher.tick": "Fletcher Impetus ticks",
   "hexcasting.subtitles.impetus.cleric.register": "Cleric Impetus dings",
 

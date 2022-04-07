@@ -1,9 +1,16 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.api.spell.DatumType;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -16,6 +23,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements EntityBlock {
@@ -31,11 +39,44 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
 
     @Override
     public @Nullable BlockPos getRecordPosition(BlockPos herePos, BlockState state, Level world) {
+        // time saving measure?
         if (world.getBlockEntity(herePos) instanceof BlockEntityAkashicBookshelf tile &&
-            tile.recordPos != null && world.getBlockEntity(tile.recordPos) instanceof BlockEntityAkashicRecord) {
-            return tile.recordPos;
+            tile.getRecordPos() != null && world.getBlockEntity(
+            tile.getRecordPos()) instanceof BlockEntityAkashicRecord) {
+            return tile.getRecordPos();
         }
         return super.getRecordPosition(herePos, state, world);
+    }
+
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
+        BlockHitResult pHit) {
+        if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAkashicBookshelf shelf) {
+            var stack = pPlayer.getItemInHand(pHand);
+            if (stack.getItem() instanceof ItemScroll scroll) {
+                if (!pLevel.isClientSide()) {
+                    scroll.writeDatum(stack.getOrCreateTag(), SpellDatum.make(shelf.getPattern()));
+                }
+                pLevel.playSound(pPlayer, pPos, HexSounds.SCROLL_SCRIBBLE.get(), SoundSource.BLOCKS, 1f, 1f);
+                return InteractionResult.sidedSuccess(pLevel.isClientSide);
+            } else if (pPlayer.isDiscrete() && pHand == InteractionHand.MAIN_HAND && stack.isEmpty()) {
+                if (!pLevel.isClientSide()) {
+                    shelf.setNewData(null, null, DatumType.EMPTY);
+
+                    var recordPos = HexBlocks.AKASHIC_BOOKSHELF.get().getRecordPosition(pPos, pState, pLevel);
+                    if (recordPos != null &&
+                        pLevel.getBlockEntity(recordPos) instanceof BlockEntityAkashicRecord record) {
+                        record.revalidateAllBookshelves();
+                    }
+                }
+
+                pLevel.playSound(pPlayer, pPos, HexSounds.SCROLL_SCRIBBLE.get(), SoundSource.BLOCKS,
+                    1f, 0.8f);
+                return InteractionResult.sidedSuccess(pLevel.isClientSide);
+            }
+        }
+
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -44,8 +85,7 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
             var recordPos = BlockAkashicFloodfiller.floodFillFor(pos, world,
                 (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
             if (recordPos != null) {
-                tile.recordPos = recordPos;
-                tile.setChanged();
+                tile.setNewData(recordPos, tile.getPattern(), DatumType.EMPTY);
             }
         }
     }

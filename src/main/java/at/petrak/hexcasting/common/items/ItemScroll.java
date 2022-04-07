@@ -1,9 +1,14 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.item.DataHolder;
+import at.petrak.hexcasting.api.spell.DatumType;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.gameevent.GameEvent;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * TAG_OP_ID and TAG_PATTERN: "Ancient Scroll of %s" (Great Spells)
@@ -24,13 +30,38 @@ import net.minecraft.world.level.gameevent.GameEvent;
  * <br>
  * TAG_OP_ID: invalid
  */
-public class ItemScroll extends Item {
+public class ItemScroll extends Item implements DataHolder {
     public static final String TAG_OP_ID = "op_id";
     public static final String TAG_PATTERN = "pattern";
     public static final ResourceLocation ANCIENT_PREDICATE = new ResourceLocation(HexMod.MOD_ID, "ancient");
 
     public ItemScroll(Properties pProperties) {
         super(pProperties);
+    }
+
+    @Override
+    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
+        var stackTag = stack.getTag();
+        if (stackTag == null || !stackTag.contains(TAG_PATTERN)) {
+            return null;
+        }
+
+        var patTag = stackTag.getCompound(TAG_PATTERN);
+        var out = new CompoundTag();
+        out.put(SpellDatum.TAG_PATTERN, patTag);
+        return out;
+    }
+
+    @Override
+    public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
+        return datum.getType() == DatumType.PATTERN && !tag.contains(TAG_PATTERN);
+    }
+
+    @Override
+    public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
+        if (this.canWrite(tag, datum) && datum.getPayload() instanceof HexPattern pat) {
+            tag.put(TAG_PATTERN, pat.serializeToNBT());
+        }
     }
 
     @Override
@@ -85,4 +116,5 @@ public class ItemScroll extends Item {
         }
     }
 
+    // purposely no hover text
 }

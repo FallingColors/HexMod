@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.common.items;
 
+import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -13,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ItemSpellbook extends ItemDataHolder {
+public class ItemSpellbook extends Item implements DataHolder {
     public static String TAG_SELECTED_PAGE = "page_idx";
     // this is a CompoundTag of string numerical keys to SpellData
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
