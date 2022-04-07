@@ -1,13 +1,20 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemFocus extends ItemDataHolder {
+import java.util.List;
+
+public class ItemFocus extends Item implements DataHolder {
     public static final ResourceLocation DATATYPE_PRED = new ResourceLocation(HexMod.MOD_ID, "datatype");
     public static final String TAG_DATA = "data";
     public static final String TAG_SEALED = "sealed";
@@ -39,5 +46,11 @@ public class ItemFocus extends ItemDataHolder {
         if (!tag.getBoolean(TAG_SEALED)) {
             tag.put(TAG_DATA, datum.serializeToNBT());
         }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
+        TooltipFlag pIsAdvanced) {
+        DataHolder.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }
 }

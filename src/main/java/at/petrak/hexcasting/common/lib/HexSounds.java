@@ -27,7 +27,8 @@ public class HexSounds {
     public static final RegistryObject<SoundEvent> SPELL_CIRCLE_FAIL = sound("spellcircle.fail");
     public static final RegistryObject<SoundEvent> SPELL_CIRCLE_CAST = sound("spellcircle.cast");
 
-    public static final RegistryObject<SoundEvent> DUST_SCROLL = sound("scroll.dust");
+    public static final RegistryObject<SoundEvent> SCROLL_DUST = sound("scroll.dust");
+    public static final RegistryObject<SoundEvent> SCROLL_SCRIBBLE = sound("scroll.scribble");
 
     public static final RegistryObject<SoundEvent> IMPETUS_LOOK_TICK = sound("impetus.fletcher.tick");
     public static final RegistryObject<SoundEvent> IMPETUS_STOREDPLAYER_DING = sound("impetus.cleric.register");

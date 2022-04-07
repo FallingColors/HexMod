@@ -51,10 +51,10 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
 
         var openPos = BlockAkashicFloodfiller.floodFillFor(this.worldPosition, this.level,
             (pos, bs, world) -> world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
-                && tile.pattern == null);
+                && tile.getPattern() == null);
         if (openPos != null) {
             var tile = (BlockEntityAkashicBookshelf) this.level.getBlockEntity(openPos);
-            tile.setNewDatum(this.getBlockPos(), key, datum.getType());
+            tile.setNewData(this.getBlockPos(), key, datum.getType());
 
             this.entries.put(key.anglesSignature(), new Entry(openPos, key.startDir(), datum.serializeToNBT()));
             this.sync();
@@ -87,7 +87,7 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
         return this.entries.size();
     }
 
-    private void revalidateAllBookshelves() {
+    public void revalidateAllBookshelves() {
         // floodfill for all known positions
         var validPoses = new HashSet<BlockPos>();
         {
@@ -120,7 +120,7 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
                 this.entries.remove(sig);
 
                 if (this.level.getBlockEntity(entry.pos) instanceof BlockEntityAkashicBookshelf shelf) {
-                    shelf.setNewDatum(null, null, DatumType.EMPTY);
+                    shelf.setNewData(null, null, DatumType.EMPTY);
                 }
             }
         }
@@ -146,6 +146,7 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
     protected void loadModData(CompoundTag compoundTag) {
         var lookupTag = compoundTag.getCompound(TAG_LOOKUP);
 
+        this.entries.clear();
         var sigs = lookupTag.getAllKeys();
         for (var sig : sigs) {
             var entryTag = lookupTag.getCompound(sig);

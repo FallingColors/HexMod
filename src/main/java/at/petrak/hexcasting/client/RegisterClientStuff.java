@@ -146,15 +146,15 @@ public class RegisterClientStuff {
 
                 var out = new ArrayList<Pair<ItemStack, Component>>();
 
-                if (tile.recordPos != null) {
+                var recordPos = tile.getRecordPos();
+                var pattern = tile.getPattern();
+                if (recordPos != null && pattern != null) {
                     out.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_RECORD.get()), new TranslatableComponent(
                         "hexcasting.tooltip.lens.akashic.bookshelf.location",
-                        tile.recordPos.toShortString()
+                        recordPos.toShortString()
                     )));
-                    if (tile.pattern != null) {
-                        if (world.getBlockEntity(tile.recordPos) instanceof BlockEntityAkashicRecord record) {
-                            out.add(new Pair<>(new ItemStack(Items.BOOK), record.getDisplayAt(tile.pattern)));
-                        }
+                    if (world.getBlockEntity(recordPos) instanceof BlockEntityAkashicRecord record) {
+                        out.add(new Pair<>(new ItemStack(Items.BOOK), record.getDisplayAt(pattern)));
                     }
                 }
 

@@ -1,18 +1,24 @@
 package at.petrak.hexcasting.common.items;
 
+import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemAbacus extends ItemDataHolder {
+import java.util.List;
+
+public class ItemAbacus extends Item implements DataHolder {
     public static final String TAG_VALUE = "value";
 
     public ItemAbacus(Properties pProperties) {
@@ -66,5 +72,11 @@ public class ItemAbacus extends ItemDataHolder {
         } else {
             return InteractionResultHolder.pass(stack);
         }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
+        TooltipFlag pIsAdvanced) {
+        DataHolder.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }
 }

@@ -20,28 +20,40 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
+import org.jetbrains.annotations.Nullable;
 
 public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
     public static final String TAG_RECORD_POS = "record_pos";
     public static final String TAG_PATTERN = "pattern";
 
-    // This might actually be innacurate! It's a best-guess
-    public BlockPos recordPos = null;
+    // This might actually be inaccurate! It's a best-guess
+    private BlockPos recordPos = null;
     // This is only not null if this stores any data.
-    public HexPattern pattern = null;
+    private HexPattern pattern = null;
 
     public BlockEntityAkashicBookshelf(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(), pWorldPosition, pBlockState);
     }
 
-    public void setNewDatum(BlockPos recordPos, HexPattern pattern, DatumType type) {
+    @Nullable
+    public BlockPos getRecordPos() {
+        return recordPos;
+    }
+
+    @Nullable
+    public HexPattern getPattern() {
+        return pattern;
+    }
+
+
+    public void setNewData(BlockPos recordPos, HexPattern pattern, DatumType type) {
         this.recordPos = recordPos;
         this.pattern = pattern;
 
         this.setChanged();
         var oldBs = this.getBlockState();
         var newBs = oldBs.setValue(BlockAkashicBookshelf.DATUM_TYPE, type);
-        this.level.setBlockAndUpdate(this.getBlockPos(), newBs);
+        this.level.setBlock(this.getBlockPos(), newBs, 3);
         this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
     }
 
@@ -49,7 +61,6 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
     protected void saveModData(CompoundTag compoundTag) {
         if (this.recordPos != null) {
             compoundTag.put(TAG_RECORD_POS, NbtUtils.writeBlockPos(this.recordPos));
-
         }
         if (this.pattern != null) {
             compoundTag.put(TAG_PATTERN, this.pattern.serializeToNBT());
@@ -60,9 +71,13 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
     protected void loadModData(CompoundTag compoundTag) {
         if (compoundTag.contains(TAG_RECORD_POS)) {
             this.recordPos = NbtUtils.readBlockPos(compoundTag.getCompound(TAG_RECORD_POS));
+        } else {
+            this.recordPos = null;
         }
         if (compoundTag.contains(TAG_PATTERN)) {
             this.pattern = HexPattern.DeserializeFromNBT(compoundTag.getCompound(TAG_PATTERN));
+        } else {
+            this.pattern = null;
         }
     }
 

@@ -121,7 +121,7 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
             }
             this.setShowsStrokeOrder(true);
 
-            pPlayer.level.playSound(pPlayer, this, HexSounds.DUST_SCROLL.get(), SoundSource.PLAYERS, 1f, 1f);
+            pPlayer.level.playSound(pPlayer, this, HexSounds.SCROLL_DUST.get(), SoundSource.PLAYERS, 1f, 1f);
             return InteractionResult.SUCCESS;
         }
         return super.interactAt(pPlayer, pVec, pHand);

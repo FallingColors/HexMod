@@ -1,22 +1,27 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord
 import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.Widget
 import at.petrak.hexcasting.common.casting.mishaps.MishapNoAkashicRecord
+import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.core.BlockPos
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.phys.Vec3
 
-object OpAkashicWrite : ConstManaOperator {
+object OpAkashicWrite : SpellOperator {
     override val argc = 3
-    override val manaCost = 10_000
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
+    override fun execute(
+        args: List<SpellDatum<*>>,
+        ctx: CastingContext
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getChecked<Vec3>(0)
         val key = args.getChecked<HexPattern>(1)
         val datum = args[2]
@@ -27,12 +32,30 @@ object OpAkashicWrite : ConstManaOperator {
             throw MishapNoAkashicRecord(bpos)
         }
 
-        val newPos = tile.addNewDatum(key, datum)
-        return spellListOf(
-            if (newPos == null)
-                Widget.NULL
-            else
-                Vec3.atCenterOf(newPos)
+        return Triple(
+            Spell(tile, key, datum),
+            10_000,
+            listOf()
         )
+    }
+
+    private data class Spell(val record: BlockEntityAkashicRecord, val key: HexPattern, val datum: SpellDatum<*>) :
+        RenderedSpell {
+        override fun cast(ctx: CastingContext) {
+            record.addNewDatum(key, datum)
+
+            ctx.world.playSound(
+                null, record.blockPos, HexSounds.SCROLL_SCRIBBLE.get(), SoundSource.BLOCKS,
+                1f, 0.8f
+            )
+
+            ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).ifPresent {
+                // val normal = record.blockState.getValue(BlockAkashicBookshelf.FACING).normal
+                // ParticleSpray(
+                //     Vec3.atCenterOf(record.blockPos), Vec3.atBottomCenterOf(normal),
+                //     0.5, Math.PI / 4, 10
+                // ).sprayParticles(ctx.world, it.colorizer)
+            }
+        }
     }
 }

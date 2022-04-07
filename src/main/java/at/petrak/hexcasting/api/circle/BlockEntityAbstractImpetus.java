@@ -436,7 +436,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         if (this.trackedBlocks == null) {
             return 10;
         } else {
-            return Math.max(4, 10 - trackedBlocks.size() / 2);
+            return Math.max(2, 10 - trackedBlocks.size() / 3);
         }
     }
 
