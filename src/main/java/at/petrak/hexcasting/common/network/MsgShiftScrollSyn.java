@@ -6,6 +6,7 @@ import at.petrak.hexcasting.common.items.ItemAbacus;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -87,7 +88,10 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
             HexSounds.ABACUS.get(), SoundSource.PLAYERS, 0.5f, pitch);
 
-        var popup = SpellDatum.DisplayFromTag(HexItems.ABACUS.get().readDatumTag(stack));
-        sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.abacus", popup), true);
+        var datumTag = HexItems.ABACUS.get().readDatumTag(stack);
+        if (datumTag != null) {
+            var popup = SpellDatum.DisplayFromTag(datumTag);
+            sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD), true);
+        }
     }
 }

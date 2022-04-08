@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +32,17 @@ public class ItemSpellbook extends ItemDataHolder {
         if (tag.contains(TAG_SELECTED_PAGE)) {
             var pageIdx = tag.getInt(TAG_SELECTED_PAGE);
             var pages = tag.getCompound(ItemSpellbook.TAG_PAGES);
-            tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page", pageIdx, HighestPage(pages)));
+            int highest = HighestPage(pages);
+            if (highest != 0) {
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page",
+                        new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
+                        new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
+                        .withStyle(ChatFormatting.GRAY));
+            } else {
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
+            }
+        } else {
+            tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
         }
 
         super.appendHoverText(stack, level, tooltip, isAdvanced);
