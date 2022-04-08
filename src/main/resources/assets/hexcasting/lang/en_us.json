@@ -70,6 +70,7 @@
   "itemGroup.hexcasting": "Hexcasting",
 
   "hexcasting.tooltip.spellbook.page": "Selected Page %d/%d",
+  "hexcasting.tooltip.spellbook.page_with_name": "Selected Page %d/%d (\"%s\")",
   "hexcasting.tooltip.spellbook.empty": "Empty",
   "hexcasting.tooltip.abacus": "%d",
   "hexcasting.tooltip.abacus.reset": "Reset to 0",

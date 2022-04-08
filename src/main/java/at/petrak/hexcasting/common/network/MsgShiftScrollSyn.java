@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -59,7 +60,15 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
         var newIdx = tag.getInt(ItemSpellbook.TAG_SELECTED_PAGE);
         var len = ItemSpellbook.HighestPage(tag.getCompound(ItemSpellbook.TAG_PAGES));
-        sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.spellbook.page", newIdx, len), true);
+
+        MutableComponent component;
+        if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
+            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name", newIdx, len, stack.getHoverName());
+        } else {
+            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page", newIdx, len);
+        }
+
+        sender.displayClientMessage(component.withStyle(ChatFormatting.GRAY), true);
     }
 
     private void abacus(ServerPlayer sender, ItemStack stack) {
