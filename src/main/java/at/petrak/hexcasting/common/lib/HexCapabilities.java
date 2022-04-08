@@ -5,10 +5,12 @@ import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel;
+import at.petrak.hexcasting.common.items.ItemWand;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.network.HexMessages;
 import at.petrak.hexcasting.common.network.MsgColorizerUpdateAck;
 import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -69,7 +71,15 @@ public class HexCapabilities {
             return;
         }
 
+
         var proto = evt.getOriginal();
+
+        // Copy harness data from this to new player
+        player.getPersistentData().put(ItemWand.TAG_PATTERNS,
+                proto.getPersistentData().getList(ItemWand.TAG_PATTERNS, Tag.TAG_COMPOUND));
+        player.getPersistentData().put(ItemWand.TAG_HARNESS,
+                proto.getPersistentData().getCompound(ItemWand.TAG_HARNESS));
+
         // Copy caps from this to new player
         proto.reviveCaps();
         var protoCapSentinel = proto.getCapability(SENTINEL).resolve();
