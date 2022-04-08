@@ -51,10 +51,15 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
         this.pattern = pattern;
 
         this.setChanged();
+
+        BlockState worldBs = this.level.getBlockState(this.getBlockPos());
         var oldBs = this.getBlockState();
-        var newBs = oldBs.setValue(BlockAkashicBookshelf.DATUM_TYPE, type);
-        this.level.setBlock(this.getBlockPos(), newBs, 3);
-        this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
+
+        if (worldBs.getBlock() == oldBs.getBlock()) {
+            var newBs = oldBs.setValue(BlockAkashicBookshelf.DATUM_TYPE, type);
+            this.level.setBlock(this.getBlockPos(), newBs, 3);
+            this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
+        }
     }
 
     @Override
