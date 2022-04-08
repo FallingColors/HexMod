@@ -124,17 +124,20 @@ class CastingHarness private constructor(
                 wasSpellCast = true
         }
 
-        val descs: ArrayList<Component> = ArrayList(this.stack.size)
-        for (datum in this.stack) {
-            descs.add(datum.display())
-        }
-
         return ControllerInfo(
             wasSpellCast,
             this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
             wasPrevPatternInvalid,
-            descs
+            generateDescs()
         )
+    }
+
+    fun generateDescs(): List<Component> {
+        val descs = ArrayList<Component>(this.stack.size)
+        for (datum in this.stack) {
+            descs.add(datum.display())
+        }
+        return descs
     }
 
     /**

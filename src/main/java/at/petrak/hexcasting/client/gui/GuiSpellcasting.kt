@@ -8,8 +8,9 @@ import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.HexMessages
-import at.petrak.hexcasting.common.network.MsgQuitSpellcasting
+import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn
+import at.petrak.hexcasting.common.network.MsgStackRequestSyn
 import at.petrak.hexcasting.hexmath.HexAngle
 import at.petrak.hexcasting.hexmath.HexCoord
 import at.petrak.hexcasting.hexmath.HexDir
@@ -61,6 +62,10 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         }
     }
 
+    fun recvStackUpdate(components: List<Component>) {
+        this.stackDescs = components
+    }
+
     override fun init() {
         val soundman = Minecraft.getInstance().soundManager
         soundman.stop(HexSounds.CASTING_AMBIANCE.id, null)
@@ -78,6 +83,10 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             true // this means is it relative to the *player's ears*, not to a given point, thanks mojank
         )
         Minecraft.getInstance().soundManager.play(this.ambianceSoundInstance!!)
+
+        HexMessages.getNetwork().sendToServer(
+            MsgStackRequestSyn(this.handOpenedWith)
+        )
     }
 
     override fun mouseClicked(mxOut: Double, myOut: Double, pButton: Int): Boolean {
@@ -195,7 +204,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
                 this.usedSpots.addAll(pat.positions(start))
 
                 HexMessages.getNetwork().sendToServer(
-                    at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn(
+                    MsgNewSpellPatternSyn(
                         this.handOpenedWith,
                         pat
                     )
@@ -217,8 +226,6 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     }
 
     override fun onClose() {
-        HexMessages.getNetwork().sendToServer(MsgQuitSpellcasting())
-
         Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.id, null)
 
         super.onClose()

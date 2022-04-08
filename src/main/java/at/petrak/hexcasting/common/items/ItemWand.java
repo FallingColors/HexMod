@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +27,13 @@ public class ItemWand extends Item {
         player.awardStat(Stats.ITEM_USED.get(this));
 
         return InteractionResultHolder.success(player.getItemInHand(hand));
+    }
+
+    @Override
+    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        if (pEntity instanceof Player player && player.getMainHandItem() != pStack && player.getOffhandItem() != pStack) {
+            pStack.removeTagKey(TAG_HARNESS);
+        }
     }
 
     private static class ClientAccess {
