@@ -84,8 +84,8 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
         if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
             var recordPos = BlockAkashicFloodfiller.floodFillFor(pos, world,
                 (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
-            if (recordPos != null) {
-                tile.setNewData(recordPos, tile.getPattern(), DatumType.EMPTY);
+            if (pOldState.getBlock() != pState.getBlock()) {
+                tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(), DatumType.EMPTY);
             }
         }
     }

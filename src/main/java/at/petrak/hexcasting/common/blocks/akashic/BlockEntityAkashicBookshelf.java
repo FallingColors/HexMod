@@ -52,22 +52,21 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
 
     @Override
     protected void saveModData(CompoundTag compoundTag) {
-        if (this.recordPos != null) {
-            compoundTag.put(TAG_RECORD_POS, NbtUtils.writeBlockPos(this.recordPos));
-        }
-        if (this.pattern != null) {
-            compoundTag.put(TAG_PATTERN, this.pattern.serializeToNBT());
-        }
+        compoundTag.put(TAG_RECORD_POS, this.recordPos == null ? new CompoundTag() : NbtUtils.writeBlockPos(this.recordPos));
+        compoundTag.put(TAG_PATTERN, this.pattern == null ? new CompoundTag() : this.pattern.serializeToNBT());
     }
 
     @Override
     protected void loadModData(CompoundTag compoundTag) {
-        if (compoundTag.contains(TAG_RECORD_POS)) {
-            this.recordPos = NbtUtils.readBlockPos(compoundTag.getCompound(TAG_RECORD_POS));
+        CompoundTag recordPos = compoundTag.getCompound(TAG_RECORD_POS);
+        CompoundTag pattern = compoundTag.getCompound(TAG_PATTERN);
+
+        if (!recordPos.isEmpty()) {
+            this.recordPos = NbtUtils.readBlockPos(recordPos);
         } else {
             this.recordPos = null;
         }
-        if (compoundTag.contains(TAG_PATTERN)) {
+        if (!pattern.isEmpty()) {
             this.pattern = HexPattern.DeserializeFromNBT(compoundTag.getCompound(TAG_PATTERN));
         } else {
             this.pattern = null;
