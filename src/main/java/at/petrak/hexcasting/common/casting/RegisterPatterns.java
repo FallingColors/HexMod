@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.Operator;
 import at.petrak.hexcasting.api.spell.SpellDatum;
@@ -37,7 +36,6 @@ public class RegisterPatterns {
     // I guess this means the client will have a big empty map for patterns
     @SubscribeEvent
     public static void registerSpellPatterns(FMLCommonSetupEvent evt) {
-        int count = 0;
         try {
             // In general:
             // - CCW is the normal or construction version
@@ -365,7 +363,7 @@ public class RegisterPatterns {
         }
 
         // Add zilde->number
-        PatternRegistry.addSpecialHandler(pat -> {
+        PatternRegistry.addSpecialHandler(new PatternRegistry.SpecialHandlerEntry(prefix("number"), pat -> {
             var sig = pat.anglesSignature();
             if (sig.startsWith("aqaa") || sig.startsWith("dedd")) {
                 var negate = sig.startsWith("dedd");
@@ -390,8 +388,6 @@ public class RegisterPatterns {
             } else {
                 return null;
             }
-        });
-
-        HexMod.getLogger().info("Registered {} patterns", count);
+        }));
     }
 }

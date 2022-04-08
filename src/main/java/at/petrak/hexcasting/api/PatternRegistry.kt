@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentMap
  */
 object PatternRegistry {
     private val operatorLookup = ConcurrentHashMap<ResourceLocation, Operator>()
-    private val specialHandlers: ConcurrentLinkedDeque<SpecialHandler> = ConcurrentLinkedDeque()
+    private val specialHandlers: ConcurrentLinkedDeque<SpecialHandlerEntry> = ConcurrentLinkedDeque()
 
     // Map signatures to the "preferred" direction they start in and their operator ID.
     private val regularPatternLookup: ConcurrentMap<String, RegularEntry> =
@@ -60,7 +60,7 @@ object PatternRegistry {
      * Add a special handler, to take an arbitrary pattern and return whatever kind of operator you like.
      */
     @JvmStatic
-    fun addSpecialHandler(handler: SpecialHandler) {
+    fun addSpecialHandler(handler: SpecialHandlerEntry) {
         this.specialHandlers.add(handler)
     }
 
@@ -75,13 +75,13 @@ object PatternRegistry {
      * Internal use only.
      */
     @JvmStatic
-    fun matchPatternAndID(pat: HexPattern, overworld: ServerLevel): Pair<Operator, ResourceLocation?> {
+    fun matchPatternAndID(pat: HexPattern, overworld: ServerLevel): Pair<Operator, ResourceLocation> {
         // Pipeline:
         // patterns are registered here every time the game boots
         // when we try to look
         for (handler in specialHandlers) {
-            val op = handler.handlePattern(pat)
-            if (op != null) return Pair(op, null)
+            val op = handler.handler.handlePattern(pat)
+            if (op != null) return Pair(op, handler.id)
         }
 
         // Is it global?
@@ -142,6 +142,8 @@ object PatternRegistry {
     fun interface SpecialHandler {
         fun handlePattern(pattern: HexPattern): Operator?
     }
+
+    data class SpecialHandlerEntry(val id: ResourceLocation, val handler: SpecialHandler)
 
     class RegisterPatternException(msg: String) : java.lang.Exception(msg)
 
