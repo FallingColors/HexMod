@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 
 public class ItemWand extends Item {
     public static final String TAG_HARNESS = "harness";
+    public static final String TAG_PATTERNS = "patterns";
 
     public ItemWand(Properties pProperties) {
         super(pProperties);
@@ -33,6 +34,7 @@ public class ItemWand extends Item {
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         if (pEntity instanceof Player player && player.getMainHandItem() != pStack && player.getOffhandItem() != pStack) {
             pStack.removeTagKey(TAG_HARNESS);
+            pStack.removeTagKey(TAG_PATTERNS);
         }
     }
 
