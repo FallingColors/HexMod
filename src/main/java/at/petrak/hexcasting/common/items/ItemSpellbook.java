@@ -30,7 +30,7 @@ public class ItemSpellbook extends ItemDataHolder {
         if (tag.contains(TAG_SELECTED_PAGE)) {
             var pageIdx = tag.getInt(TAG_SELECTED_PAGE);
             var pages = tag.getCompound(ItemSpellbook.TAG_PAGES);
-            tooltip.add(new TranslatableComponent("hexcasting.spellbook.tooltip.page", pageIdx, HighestPage(pages)));
+            tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page", pageIdx, HighestPage(pages)));
         }
 
         super.appendHoverText(stack, level, tooltip, isAdvanced);
