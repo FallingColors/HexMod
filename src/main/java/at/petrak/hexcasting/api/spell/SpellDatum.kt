@@ -180,8 +180,10 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 }
                 TAG_PATTERN -> {
                     val pat = HexPattern.DeserializeFromNBT(nbt.getCompound(TAG_PATTERN))
+                    var angleDesc = pat.anglesSignature()
+                    if (angleDesc.isNotBlank()) angleDesc = " $angleDesc";
                     val out = TextComponent("HexPattern(").withStyle(ChatFormatting.GOLD)
-                    out.append(TextComponent("${pat.startDir} ${pat.anglesSignature()}").withStyle(ChatFormatting.WHITE))
+                    out.append(TextComponent("${pat.startDir}$angleDesc").withStyle(ChatFormatting.WHITE))
                     out.append(")")
                 }
                 TAG_ENTITY -> {
