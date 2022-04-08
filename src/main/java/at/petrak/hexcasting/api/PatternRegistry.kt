@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api
 
+import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidPattern
 import at.petrak.hexcasting.hexmath.EulerPathFinder
@@ -9,6 +10,8 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.saveddata.SavedData
+import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.ConcurrentMap
@@ -62,6 +65,11 @@ object PatternRegistry {
     @JvmStatic
     fun addSpecialHandler(handler: SpecialHandlerEntry) {
         this.specialHandlers.add(handler)
+    }
+
+    @JvmStatic
+    fun addSpecialHandler(id: ResourceLocation, handler: SpecialHandler) {
+        this.addSpecialHandler(SpecialHandlerEntry(id, handler))
     }
 
     /**
@@ -198,4 +206,13 @@ object PatternRegistry {
     const val TAG_SAVED_DATA = "hex.per-world-patterns"
     private const val TAG_OP_ID = "op_id"
     private const val TAG_START_DIR = "start_dir"
+
+    @SubscribeEvent
+    fun printPatternCount(evt: FMLLoadCompleteEvent) {
+        HexMod.getLogger().info(
+            "Loaded ${this.regularPatternLookup.size} regular patterns, " +
+                    "${this.perWorldPatternLookup.size} per-world patterns, and " +
+                    "${this.specialHandlers.size} special handlers."
+        )
+    }
 }

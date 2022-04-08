@@ -57,6 +57,18 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         return out
     }
 
+    fun directions(): List<HexDir> {
+        val out = ArrayList<HexDir>(this.angles.size + 1)
+        out.add(this.startDir)
+
+        var compass: HexDir = this.startDir
+        for (a in this.angles) {
+            compass *= a
+            out.add(compass)
+        }
+        return out
+    }
+
     fun finalDir(): HexDir =
         this.angles.fold(this.startDir) { acc, angle -> acc * angle }
 

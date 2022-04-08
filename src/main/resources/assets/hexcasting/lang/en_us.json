@@ -252,6 +252,7 @@
   "hexcasting.spell.hexcasting:const/vec/nz": "Vector Reflection -Z",
   "hexcasting.spell.hexcasting:const/vec/0": "Vector Reflection Zero",
   "hexcasting.spell.hexcasting:number": "Numerical Reflection",
+  "hexcasting.spell.hexcasting:swizzle": "Swindler's Gambit",
   "hexcasting.spell.unknown": "Special Handler",
 
   "hexcasting.mishap.invalid_pattern": "That pattern isn't associated with any action",

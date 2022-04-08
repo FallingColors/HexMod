@@ -1,5 +1,6 @@
 package at.petrak.hexcasting
 
+import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
@@ -58,6 +59,7 @@ object HexMod {
         // gotta do it at *some* point
         modBus.register(RegisterPatterns::class.java)
         modBus.register(HexDataGenerators::class.java)
+        modBus.register(PatternRegistry)
 
         HexItems.ITEMS.register(modBus)
         HexBlocks.BLOCKS.register(modBus)
