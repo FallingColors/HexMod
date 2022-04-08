@@ -1,11 +1,9 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.common.casting.CastingContext;
-import at.petrak.hexcasting.common.casting.CastingHarness;
-import at.petrak.hexcasting.common.casting.ResolvedPattern;
-import at.petrak.hexcasting.common.casting.ResolvedPatternValidity;
+import at.petrak.hexcasting.common.casting.*;
 import at.petrak.hexcasting.common.items.ItemWand;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.hexcasting.hexmath.HexCoord;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
@@ -55,16 +53,35 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
             if (sender != null) {
                 var held = sender.getItemInHand(this.handUsed);
                 if (held.getItem() instanceof ItemWand) {
+                    boolean autoFail = false;
+
+                    if (!resolvedPatterns.isEmpty()) {
+                        var allPoints = new ArrayList<HexCoord>();
+                        for (int i = 0; i < resolvedPatterns.size() - 1; i++) {
+                            ResolvedPattern pat = resolvedPatterns.get(i);
+                            allPoints.addAll(pat.getPattern().positions(pat.getOrigin()));
+                        }
+                        var currentResolvedPattern = resolvedPatterns.get(resolvedPatterns.size() - 1);
+                        var currentSpellPoints = currentResolvedPattern.getPattern().positions(currentResolvedPattern.getOrigin());
+                        if (currentSpellPoints.stream().anyMatch(allPoints::contains))
+                            autoFail = true;
+                    }
+
                     var ctx = new CastingContext(sender, this.handUsed);
                     var tag = sender.getPersistentData();
                     var harness = CastingHarness.DeserializeFromNBT(tag.getCompound(ItemWand.TAG_HARNESS), ctx);
 
-                    var clientInfo = harness.executeNewPattern(this.pattern, sender.getLevel());
+                    ControllerInfo clientInfo;
+                    if (autoFail) {
+                        clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), true, harness.generateDescs());
+                    } else {
+                        clientInfo = harness.executeNewPattern(this.pattern, sender.getLevel());
 
-                    if (clientInfo.getWasSpellCast()) {
-                        sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
-                            HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
-                            1f + ((float) Math.random() - 0.5f) * 0.2f);
+                        if (clientInfo.getWasSpellCast()) {
+                            sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
+                                    HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
+                                    1f + ((float) Math.random() - 0.5f) * 0.2f);
+                        }
                     }
 
                     ListTag patterns = new ListTag();
@@ -90,7 +107,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     tag.put(ItemWand.TAG_PATTERNS, patterns);
 
                     HexMessages.getNetwork()
-                        .send(PacketDistributor.PLAYER.with(() -> sender), new MsgNewSpellPatternAck(clientInfo));
+                            .send(PacketDistributor.PLAYER.with(() -> sender), new MsgNewSpellPatternAck(clientInfo));
                 }
             }
         });
