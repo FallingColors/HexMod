@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -63,9 +64,14 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
         MutableComponent component;
         if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
-            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name", newIdx, len, stack.getHoverName());
+            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name",
+                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                    stack.getHoverName());
         } else {
-            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page", newIdx, len);
+            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page",
+                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE));
         }
 
         sender.displayClientMessage(component.withStyle(ChatFormatting.GRAY), true);
