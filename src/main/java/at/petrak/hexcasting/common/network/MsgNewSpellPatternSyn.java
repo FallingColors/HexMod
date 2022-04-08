@@ -56,7 +56,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 var held = sender.getItemInHand(this.handUsed);
                 if (held.getItem() instanceof ItemWand) {
                     var ctx = new CastingContext(sender, this.handUsed);
-                    var tag = held.getOrCreateTag();
+                    var tag = sender.getPersistentData();
                     var harness = CastingHarness.DeserializeFromNBT(tag.getCompound(ItemWand.TAG_HARNESS), ctx);
 
                     var clientInfo = harness.executeNewPattern(this.pattern, sender.getLevel());
