@@ -69,28 +69,26 @@ public class HexCapabilities {
             return;
         }
 
-        if (evt.isWasDeath()) {
-            var proto = evt.getOriginal();
-            // Copy caps from this to new player
-            proto.reviveCaps();
-            var protoCapSentinel = proto.getCapability(SENTINEL).resolve();
-            protoCapSentinel.ifPresent(protoSentinel -> {
-                var capSentinel = player.getCapability(SENTINEL);
-                capSentinel.ifPresent(sentinel -> {
-                    sentinel.hasSentinel = protoSentinel.hasSentinel;
-                    sentinel.position = protoSentinel.position;
-                    sentinel.extendsRange = protoSentinel.extendsRange;
-                });
+        var proto = evt.getOriginal();
+        // Copy caps from this to new player
+        proto.reviveCaps();
+        var protoCapSentinel = proto.getCapability(SENTINEL).resolve();
+        protoCapSentinel.ifPresent(protoSentinel -> {
+            var capSentinel = player.getCapability(SENTINEL);
+            capSentinel.ifPresent(sentinel -> {
+                sentinel.hasSentinel = protoSentinel.hasSentinel;
+                sentinel.position = protoSentinel.position;
+                sentinel.extendsRange = protoSentinel.extendsRange;
             });
-            var protoCapColor = proto.getCapability(PREFERRED_COLORIZER).resolve();
-            protoCapColor.ifPresent(protoColorizer -> {
-                var capColorizer = player.getCapability(PREFERRED_COLORIZER);
-                capColorizer.ifPresent(colorizer -> {
-                    colorizer.colorizer = protoColorizer.colorizer;
-                });
+        });
+        var protoCapColor = proto.getCapability(PREFERRED_COLORIZER).resolve();
+        protoCapColor.ifPresent(protoColorizer -> {
+            var capColorizer = player.getCapability(PREFERRED_COLORIZER);
+            capColorizer.ifPresent(colorizer -> {
+                colorizer.colorizer = protoColorizer.colorizer;
             });
-            proto.invalidateCaps();
-        }
+        });
+        proto.invalidateCaps();
     }
 
     @SubscribeEvent
