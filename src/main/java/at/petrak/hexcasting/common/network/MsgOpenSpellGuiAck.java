@@ -1,9 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import at.petrak.hexcasting.common.casting.ResolvedPattern;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -57,12 +55,10 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() ->
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                var mc = Minecraft.getInstance();
-                mc.setScreen(new GuiSpellcasting(hand, patterns, components));
-            })
-        );
+        ctx.get().enqueueWork(() -> {
+            GuiOpener opener = new GuiOpener(this);
+            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> opener::open);
+        });
         ctx.get().setPacketHandled(true);
     }
 
