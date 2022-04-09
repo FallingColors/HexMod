@@ -22,7 +22,7 @@ object OpGetSentinelWayfind : ConstManaOperator {
 
         val cap = maybeCap.get()
         if (cap.dimension != ctx.world.dimension())
-            throw MishapLocationInWrongDimension(cap.dimension.registryName)
+            throw MishapLocationInWrongDimension(cap.dimension.location())
 
         val sentinelPos = if (!cap.hasSentinel)
             return spellListOf(Widget.NULL)
