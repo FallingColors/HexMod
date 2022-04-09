@@ -318,6 +318,8 @@
   "hexcasting.mishap.already_brainswept": "The villager has already been used",
   "hexcasting.mishap.no_spell_circle": "%s requires a spell circle",
   "hexcasting.mishap.others_name": "Tried to invade %s's privacy",
+  "hexcasting.mishap.divide_by_zero": "Attempted to divide %s by zero",
+  "hexcasting.mishap.divide_by_zero_vec": "Attempted to divide %s by a zero vector",
   "hexcasting.mishap.no_akashic_record": "No akashic record at %s",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",

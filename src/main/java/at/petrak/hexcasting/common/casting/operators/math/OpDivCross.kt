@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.mishaps.MishapDivideByZero
 import net.minecraft.world.phys.Vec3
 
 object OpDivCross : ConstManaOperator {
@@ -17,12 +18,29 @@ object OpDivCross : ConstManaOperator {
         return spellListOf(
             lhs.map({ lnum ->
                 rhs.map(
-                    { rnum -> lnum / rnum }, { rvec -> Vec3(lnum / rvec.x, lnum / rvec.y, lnum / rvec.z) }
+                    { rnum ->
+                        if (rnum == 0.0)
+                            throw MishapDivideByZero(lnum)
+                        lnum / rnum
+                    },
+                    { rvec ->
+                        if (rvec.x == 0.0 && rvec.y == 0.0 && rvec.z == 0.0)
+                            throw MishapDivideByZero(lnum)
+                        Vec3(lnum / rvec.x, lnum / rvec.y, lnum / rvec.z)
+                    }
                 )
             }, { lvec ->
                 rhs.map(
-                    { rnum -> lvec.scale(1.0 / rnum) },
-                    { rvec -> lvec.cross(rvec) }
+                    { rnum ->
+                        if (rnum == 0.0)
+                            throw MishapDivideByZero(lvec)
+                        lvec.scale(1.0 / rnum)
+                    },
+                    { rvec ->
+                        if (rvec.x == 0.0 && rvec.y == 0.0 && rvec.z == 0.0)
+                            throw MishapDivideByZero(lvec)
+                        lvec.cross(rvec)
+                    }
                 )
             })
         )
