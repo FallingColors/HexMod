@@ -25,7 +25,7 @@ object OpLastNToList : Operator {
             throw MishapInvalidIota(
                 datum,
                 0,
-                TranslatableComponent("hexcasting.mishap.invalid_value.fisherman", stack.size)
+                TranslatableComponent("hexcasting.mishap.invalid_value.int.between", 0, stack.size)
             )
         }
         val output = mutableListOf<SpellDatum<*>>()

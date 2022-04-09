@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.operators
+package at.petrak.hexcasting.common.casting.operators.stack
 
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
 import net.minecraft.network.chat.TranslatableComponent
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 object OpFisherman : Operator {
     val manaCost: Int
@@ -22,19 +23,19 @@ object OpFisherman : Operator {
         val datum = stack[stack.lastIndex]
         val distance = stack.size - (arg + 1) // because getChecked<Int> just gives me a double for some reason
         stack.removeLast()
-        if (distance < stack.size && abs(distance.toInt() - distance) < 0.05f) {
-            val fish = stack[distance.toInt()]
-            stack.removeAt(distance.toInt())
+        if (distance < stack.size && abs(distance.roundToInt() - distance) < 0.05f) {
+            val fish = stack[distance.roundToInt()]
+            stack.removeAt(distance.roundToInt())
             stack.add(stack.size, fish)
         } else {
             throw MishapInvalidIota(
                 datum,
                 0,
-                TranslatableComponent("hexcasting.mishap.invalid_value.fisherman", stack.size)
+                TranslatableComponent("hexcasting.mishap.invalid_value.int.between", 0, stack.size)
             )
         }
 
-        val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMana(this.manaCost))
+        val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMana(manaCost))
 
         return OperationResult(stack, sideEffects)
     }

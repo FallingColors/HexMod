@@ -22,6 +22,7 @@ import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSen
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
+import at.petrak.hexcasting.common.casting.operators.stack.*;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.hexmath.HexAngle;
 import at.petrak.hexcasting.hexmath.HexDir;
@@ -79,6 +80,8 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawdd", HexDir.EAST), prefix("swap"), OpSwap.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddad", HexDir.WEST), prefix("fisherman"),
                 OpFisherman.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaawdde", HexDir.SOUTH_EAST), prefix("swizzle"),
+                OpAlwinfyHasAscendedToABeingOfPureMath.INSTANCE);
 
             // == Math ==
 
@@ -390,7 +393,7 @@ public class RegisterPatterns {
                 return null;
             }
         });
-        
+
         PatternRegistry.addSpecialHandler(prefix("mask"), pat -> {
             var directions = pat.directions();
 

@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.operators
+package at.petrak.hexcasting.common.casting.operators.stack
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.SpellDatum
