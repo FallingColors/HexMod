@@ -32,7 +32,7 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
             null,
             aabb
         ) { (checker.test(it) != negate) && ctx.isEntityInRange(it) && it.distanceToSqr(pos) <= radius * radius }
-            .sortBy { it.distanceToSqr(pos) }
+            .sortedBy { it.distanceToSqr(pos) }
         return spellListOf(entitiesGot)
     }
 
