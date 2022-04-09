@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -53,7 +54,7 @@ public class HexCapabilities {
                 // generate a new instance of the capability
                 new OpFlight.CapFlight(false, 0, Vec3.ZERO, 0.0));
             evt.addCapability(new ResourceLocation(HexMod.MOD_ID, CapSentinel.CAP_NAME),
-                new CapSentinel(false, false, Vec3.ZERO));
+                new CapSentinel(false, false, Vec3.ZERO, Level.OVERWORLD));
             evt.addCapability(new ResourceLocation(HexMod.MOD_ID, CapPreferredColorizer.CAP_NAME),
                 new CapPreferredColorizer(FrozenColorizer.DEFAULT));
         } else if (evt.getObject() instanceof Villager) {
@@ -89,6 +90,7 @@ public class HexCapabilities {
                 sentinel.hasSentinel = protoSentinel.hasSentinel;
                 sentinel.position = protoSentinel.position;
                 sentinel.extendsRange = protoSentinel.extendsRange;
+                sentinel.dimension = protoSentinel.dimension;
             });
         });
         var protoCapColor = proto.getCapability(PREFERRED_COLORIZER).resolve();
