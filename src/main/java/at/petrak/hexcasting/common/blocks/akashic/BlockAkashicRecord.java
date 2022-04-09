@@ -41,7 +41,7 @@ public class BlockAkashicRecord extends Block implements EntityBlock {
                     if (BlockAkashicFloodfiller.canItBeFloodedThrough(neighbor, bs, pLevel)) {
                         todo.add(neighbor);
                     }
-                    if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAkashicBookshelf shelf) {
+                    if (pLevel.getBlockEntity(neighbor) instanceof BlockEntityAkashicBookshelf shelf) {
                         shelf.setNewData(null, null, DatumType.EMPTY);
                     }
                 }
