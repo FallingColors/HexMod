@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.blocks.BlockConjured
 import at.petrak.hexcasting.common.blocks.BlockConjuredLight
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -52,8 +53,10 @@ class OpConjure(val light: Boolean) : SpellOperator {
                     if (ctx.world.getBlockState(pos).block is BlockConjuredLight) {
                         BlockConjured.setColor(ctx.world, pos, cap.colorizer)
                     }
-                }
-            }
+                } else
+                    throw MishapBadBlock.of(pos, "replaceable")
+            } else
+                throw MishapBadBlock.of(pos, "replaceable")
         }
     }
 }
