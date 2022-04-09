@@ -105,7 +105,8 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
                         var bs = this.level.getBlockState(neighbor);
                         if (BlockAkashicFloodfiller.canItBeFloodedThrough(neighbor, bs, this.level)) {
                             todo.add(neighbor);
-                            validPoses.add(neighbor);
+                            if (this.level.getBlockEntity(neighbor) instanceof BlockEntityAkashicBookshelf)
+                                validPoses.add(neighbor);
                         }
                     }
                 }

@@ -85,8 +85,17 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
             var recordPos = BlockAkashicFloodfiller.floodFillFor(pos, world,
                 (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
             if (pOldState.getBlock() != pState.getBlock()) {
-                tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(), DatumType.EMPTY);
+                tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(), recordPos == null ? DatumType.EMPTY : pState.getValue(DATUM_TYPE));
             }
+        }
+    }
+
+    @Override
+    public void neighborChanged(BlockState pState, Level world, BlockPos pos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
+        if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
+            var recordPos = BlockAkashicFloodfiller.floodFillFor(pos, world,
+                    (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
+            tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(), recordPos == null ? DatumType.EMPTY : pState.getValue(DATUM_TYPE));
         }
     }
 
