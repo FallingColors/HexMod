@@ -48,7 +48,7 @@ public class HexBlocks {
         () -> new BlockConjured(
             BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.DIAMOND)
                 .sound(SoundType.AMETHYST)
-                .lightLevel((state) -> 15)
+                .lightLevel((state) -> 2)
                 .noDrops()
                 .isValidSpawn((state, world, pos, entityType) -> false)
                 .instabreak()
