@@ -20,8 +20,12 @@ class MishapBadOffhandItem(val item: ItemStack, val wanted: Component) : Mishap(
         yeetItem(item, ctx, delta)
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
-        error("bad_item.offhand", actionName(errorCtx.action), wanted, item.count, item.displayName)
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component {
+        if (item.isEmpty)
+            return error("no_item.offhand", actionName(errorCtx.action), wanted)
+
+        return error("bad_item.offhand", actionName(errorCtx.action), wanted, item.count, item.displayName)
+    }
 
     companion object {
         @JvmStatic

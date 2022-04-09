@@ -148,7 +148,7 @@
   "hexcasting.subtitles.spellcircle.fail": "Spell circle fizzles out",
   "hexcasting.subtitles.spellcircle.cast": "Spell circle casts",
   "hexcasting.subtitles.scroll.dust": "Scroll covers with dust",
-  "hexcasting.subtitles.scroll.dust": "Scribble on Scroll",
+  "hexcasting.subtitles.scroll.scribble": "Scroll is scribbled",
   "hexcasting.subtitles.impetus.fletcher.tick": "Fletcher Impetus ticks",
   "hexcasting.subtitles.impetus.cleric.register": "Cleric Impetus dings",
 
@@ -300,6 +300,8 @@
   "hexcasting.mishap.wrong_dimension": "%s cannot see %s from %s",
   "hexcasting.mishap.entity_too_far": "%s is out of range for %s",
   "hexcasting.mishap.eval_too_deep": "Recursively evaluated too deep",
+  "hexcasting.mishap.no_item": "%s needs %s but got nothing",
+  "hexcasting.mishap.no_item.offhand": "%s needs %s in the other hand but got nothing",
   "hexcasting.mishap.bad_item": "%s needs %s but got %s",
   "hexcasting.mishap.bad_item.offhand": "%s needs %s in the other hand but got %dx %s",
   "hexcasting.mishap.bad_item.iota": "a place to store iotas",

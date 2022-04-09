@@ -16,8 +16,11 @@ class MishapBadItem(val item: ItemStack, val wanted: Component) : Mishap() {
         // not really sure what to do here?
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
-        error("bad_item", actionName(errorCtx.action), wanted, item)
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component {
+        if (item.isEmpty)
+            error("no_item", actionName(errorCtx.action), wanted)
+        return error("bad_item", actionName(errorCtx.action), wanted, item)
+    }
 
     companion object {
         @JvmStatic
