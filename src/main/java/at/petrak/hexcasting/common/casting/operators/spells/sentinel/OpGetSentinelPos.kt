@@ -18,7 +18,7 @@ object OpGetSentinelPos : ConstManaOperator {
 
         val cap = maybeCap.get()
         if (cap.dimension != ctx.world.dimension())
-            throw MishapLocationInWrongDimension(cap.dimension.registryName)
+            throw MishapLocationInWrongDimension(cap.dimension.location())
         return spellListOf(
             if (cap.hasSentinel)
                 cap.position

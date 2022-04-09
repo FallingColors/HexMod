@@ -21,7 +21,7 @@ object OpDestroySentinel : SpellOperator {
         val maybeCap = ctx.caster.getCapability(HexCapabilities.SENTINEL).resolve()
         maybeCap.ifPresent {
             if (it.dimension != ctx.world.dimension())
-                throw MishapLocationInWrongDimension(it.dimension.registryName)
+                throw MishapLocationInWrongDimension(it.dimension.location())
             particles.add(ParticleSpray.Cloud(it.position, 2.0))
         }
 
