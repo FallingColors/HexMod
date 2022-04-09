@@ -56,7 +56,7 @@ public class ItemSlate extends BlockItem implements DataHolder {
 
     @Override
     public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
-        if (datum.getType() != DatumType.PATTERN) {
+        if (datum == null || datum.getType() != DatumType.PATTERN) {
             return false;
         }
 

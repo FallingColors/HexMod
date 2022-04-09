@@ -129,8 +129,11 @@ public class ItemSpellbook extends Item implements DataHolder {
         }
         var key = String.valueOf(idx);
         if (tag.contains(TAG_PAGES)) {
-            tag.getCompound(TAG_PAGES).put(key, datum.serializeToNBT());
-        } else {
+            if (datum == null)
+                tag.getCompound(TAG_PAGES).remove(key);
+            else
+                tag.getCompound(TAG_PAGES).put(key, datum.serializeToNBT());
+        } else if (datum != null) {
             var pagesTag = new CompoundTag();
             pagesTag.put(key, datum.serializeToNBT());
             tag.put(TAG_PAGES, pagesTag);

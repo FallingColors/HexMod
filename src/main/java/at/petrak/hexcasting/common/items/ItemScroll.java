@@ -54,7 +54,7 @@ public class ItemScroll extends Item implements DataHolder {
 
     @Override
     public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
-        return datum.getType() == DatumType.PATTERN && !tag.contains(TAG_PATTERN);
+        return datum != null && datum.getType() == DatumType.PATTERN && !tag.contains(TAG_PATTERN);
     }
 
     @Override

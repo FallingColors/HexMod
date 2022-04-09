@@ -30,9 +30,9 @@ public interface DataHolder {
         }
     }
 
-    boolean canWrite(CompoundTag tag, SpellDatum<?> datum);
+    boolean canWrite(CompoundTag tag, @Nullable SpellDatum<?> datum);
 
-    void writeDatum(CompoundTag tag, SpellDatum<?> datum);
+    void writeDatum(CompoundTag tag, @Nullable SpellDatum<?> datum);
 
     static void appendHoverText(DataHolder self, ItemStack pStack, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {

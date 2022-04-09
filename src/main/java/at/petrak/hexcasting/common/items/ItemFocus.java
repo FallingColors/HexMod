@@ -44,7 +44,10 @@ public class ItemFocus extends Item implements DataHolder {
     @Override
     public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
         if (!tag.getBoolean(TAG_SEALED)) {
-            tag.put(TAG_DATA, datum.serializeToNBT());
+            if (datum == null)
+                tag.remove(TAG_DATA);
+            else
+                tag.put(TAG_DATA, datum.serializeToNBT());
         }
     }
 
