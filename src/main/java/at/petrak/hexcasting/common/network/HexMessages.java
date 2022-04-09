@@ -25,8 +25,6 @@ public class HexMessages {
             MsgNewSpellPatternSyn::deserialize, MsgNewSpellPatternSyn::handle);
         NETWORK.registerMessage(messageIdx++, MsgNewSpellPatternAck.class, MsgNewSpellPatternAck::serialize,
             MsgNewSpellPatternAck::deserialize, MsgNewSpellPatternAck::handle);
-        NETWORK.registerMessage(messageIdx++, MsgQuitSpellcasting.class, MsgQuitSpellcasting::serialize,
-            MsgQuitSpellcasting::deserialize, MsgQuitSpellcasting::handle);
         NETWORK.registerMessage(messageIdx++, MsgShiftScrollSyn.class, MsgShiftScrollSyn::serialize,
             MsgShiftScrollSyn::deserialize, MsgShiftScrollSyn::handle);
         NETWORK.registerMessage(messageIdx++, MsgAddMotionAck.class, MsgAddMotionAck::serialize,
@@ -39,5 +37,7 @@ public class HexMessages {
             MsgColorizerUpdateAck::deserialize, MsgColorizerUpdateAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgCastParticleAck.class, MsgCastParticleAck::serialize,
             MsgCastParticleAck::deserialize, MsgCastParticleAck::handle);
+        NETWORK.registerMessage(messageIdx++, MsgOpenSpellGuiAck.class, MsgOpenSpellGuiAck::serialize,
+                MsgOpenSpellGuiAck::deserialize, MsgOpenSpellGuiAck::handle);
     }
 }

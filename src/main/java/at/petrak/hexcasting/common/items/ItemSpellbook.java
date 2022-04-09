@@ -2,8 +2,11 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -21,6 +24,10 @@ public class ItemSpellbook extends Item implements DataHolder {
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
     public static String TAG_PAGES = "pages";
 
+    // this stores the names of pages, to be restored when you scroll
+    // it is 1-indexed, and the 0-case for TAG_PAGES will be treated as 1
+    public static String TAG_PAGE_NAMES = "page_names";
+
     public ItemSpellbook(Properties properties) {
         super(properties);
     }
@@ -32,7 +39,17 @@ public class ItemSpellbook extends Item implements DataHolder {
         if (tag.contains(TAG_SELECTED_PAGE)) {
             var pageIdx = tag.getInt(TAG_SELECTED_PAGE);
             var pages = tag.getCompound(ItemSpellbook.TAG_PAGES);
-            tooltip.add(new TranslatableComponent("hexcasting.spellbook.tooltip.page", pageIdx, HighestPage(pages)));
+            int highest = HighestPage(pages);
+            if (highest != 0) {
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page",
+                        new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
+                        new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
+                        .withStyle(ChatFormatting.GRAY));
+            } else {
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
+            }
+        } else {
+            tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
         }
 
         super.appendHoverText(stack, level, tooltip, isAdvanced);
@@ -41,16 +58,26 @@ public class ItemSpellbook extends Item implements DataHolder {
     @Override
     public void inventoryTick(ItemStack stack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         var tag = stack.getOrCreateTag();
+        int index;
         if (ArePagesEmpty(tag)) {
-            tag.putInt(TAG_SELECTED_PAGE, 0);
+            index = 0;
         } else if (!tag.contains(TAG_SELECTED_PAGE)) {
-            tag.putInt(TAG_SELECTED_PAGE, 1);
+            index = 1;
         } else {
-            var pageIdx = tag.getInt(TAG_SELECTED_PAGE);
-            if (pageIdx == 0) {
-                tag.putInt(TAG_SELECTED_PAGE, 1);
-            }
+            index = tag.getInt(TAG_SELECTED_PAGE);
+            if (index == 0) index = 1;
         }
+        tag.putInt(TAG_SELECTED_PAGE, index);
+
+        int shiftedIdx = Math.max(1, index);
+        String nameKey = String.valueOf(shiftedIdx);
+        CompoundTag names = tag.getCompound(TAG_PAGE_NAMES);
+        if (stack.hasCustomHoverName()) {
+            names.putString(nameKey, Component.Serializer.toJson(stack.getHoverName()));
+        } else {
+            names.remove(nameKey);
+        }
+        tag.put(TAG_PAGE_NAMES, names);
     }
 
     public static boolean ArePagesEmpty(CompoundTag tag) {
@@ -121,7 +148,7 @@ public class ItemSpellbook extends Item implements DataHolder {
         return highestKey.orElse(0);
     }
 
-    public static void RotatePageIdx(CompoundTag tag, boolean increase) {
+    public static void RotatePageIdx(ItemStack stack, CompoundTag tag, boolean increase) {
         int newIdx;
         if (ArePagesEmpty(tag)) {
             newIdx = 0;
@@ -132,5 +159,14 @@ public class ItemSpellbook extends Item implements DataHolder {
             newIdx = 1;
         }
         tag.putInt(TAG_SELECTED_PAGE, newIdx);
+
+        CompoundTag names = tag.getCompound(TAG_PAGE_NAMES);
+        int shiftedIdx = Math.max(1, newIdx);
+        String nameKey = String.valueOf(shiftedIdx);
+        if (names.contains(nameKey, Tag.TAG_STRING)) {
+            stack.setHoverName(Component.Serializer.fromJson(names.getString(nameKey)));
+        } else {
+            stack.resetHoverName();
+        }
     }
 }

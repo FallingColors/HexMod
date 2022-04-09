@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck
@@ -18,7 +19,11 @@ object OpDestroySentinel : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val particles = mutableListOf<ParticleSpray>()
         val maybeCap = ctx.caster.getCapability(HexCapabilities.SENTINEL).resolve()
-        maybeCap.ifPresent { particles.add(ParticleSpray.Cloud(it.position, 2.0)) }
+        maybeCap.ifPresent {
+            if (it.dimension != ctx.world.dimension())
+                throw MishapLocationInWrongDimension(it.dimension.registryName)
+            particles.add(ParticleSpray.Cloud(it.position, 2.0))
+        }
 
         return Triple(
             Spell,

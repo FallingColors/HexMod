@@ -14,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class AmethystShardReducerModifier extends LootModifier {
-    private final int delta;
+    private final double modifier;
 
-    public AmethystShardReducerModifier(int delta, LootItemCondition[] conditions) {
+    public AmethystShardReducerModifier(double modifier, LootItemCondition[] conditions) {
         super(conditions);
-        this.delta = delta;
+        this.modifier = modifier;
     }
 
     @NotNull
@@ -26,7 +26,7 @@ public class AmethystShardReducerModifier extends LootModifier {
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
         for (var stack : generatedLoot) {
             if (stack.is(Items.AMETHYST_SHARD)) {
-                stack.grow(this.delta);
+                stack.shrink((int) (stack.getCount() * modifier));
             }
         }
         return generatedLoot;
@@ -36,14 +36,14 @@ public class AmethystShardReducerModifier extends LootModifier {
         @Override
         public AmethystShardReducerModifier read(ResourceLocation location, JsonObject json,
             LootItemCondition[] conditions) {
-            var delta = GsonHelper.getAsInt(json, "delta");
-            return new AmethystShardReducerModifier(delta, conditions);
+            var modifier = GsonHelper.getAsDouble(json, "modifier");
+            return new AmethystShardReducerModifier(modifier, conditions);
         }
 
         @Override
         public JsonObject write(AmethystShardReducerModifier instance) {
             var obj = this.makeConditions(instance.conditions);
-            obj.addProperty("delta", instance.delta);
+            obj.addProperty("modifier", instance.modifier);
             return obj;
         }
     }

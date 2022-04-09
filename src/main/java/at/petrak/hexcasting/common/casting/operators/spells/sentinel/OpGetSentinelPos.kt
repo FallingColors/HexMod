@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.Widget
+import at.petrak.hexcasting.common.casting.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.common.lib.HexCapabilities
 
 object OpGetSentinelPos : ConstManaOperator {
@@ -16,6 +17,8 @@ object OpGetSentinelPos : ConstManaOperator {
             return spellListOf(Widget.NULL)
 
         val cap = maybeCap.get()
+        if (cap.dimension != ctx.world.dimension())
+            throw MishapLocationInWrongDimension(cap.dimension.registryName)
         return spellListOf(
             if (cap.hasSentinel)
                 cap.position

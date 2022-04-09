@@ -21,11 +21,11 @@ object OpLastNToList : Operator {
         val arg = stack.takeLast(1).getChecked<Double>(0)
         val datum = stack[stack.lastIndex]
         stack.removeLast()
-        if (arg < 0 || arg >= stack.size) {
+        if (arg < 0 || arg > stack.size) {
             throw MishapInvalidIota(
                 datum,
                 0,
-                TranslatableComponent("hexcasting.mishap.invalid_value.fisherman", stack.size)
+                TranslatableComponent("hexcasting.mishap.invalid_value.int.between", 0, stack.size)
             )
         }
         val output = mutableListOf<SpellDatum<*>>()

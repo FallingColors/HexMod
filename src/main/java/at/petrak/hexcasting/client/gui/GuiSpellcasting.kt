@@ -4,11 +4,14 @@ import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.HexUtils.TAU
 import at.petrak.hexcasting.client.RenderLib
 import at.petrak.hexcasting.common.casting.ControllerInfo
+import at.petrak.hexcasting.common.casting.ResolvedPattern
+import at.petrak.hexcasting.common.casting.ResolvedPatternValidity
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemSpellbook
+import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.HexMessages
-import at.petrak.hexcasting.common.network.MsgQuitSpellcasting
+import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn
 import at.petrak.hexcasting.hexmath.HexAngle
 import at.petrak.hexcasting.hexmath.HexCoord
@@ -22,6 +25,8 @@ import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.AbstractSoundInstance
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.sounds.SoundSource
@@ -33,22 +38,27 @@ import kotlin.math.roundToInt
 
 const val SQRT_3 = 1.7320508f
 
-class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(TextComponent("")) {
-    private var patterns: MutableList<PatternEntry> = mutableListOf()
+class GuiSpellcasting(private val handOpenedWith: InteractionHand,
+                      private var patterns: MutableList<ResolvedPattern>,
+                      private var stackDescs: List<Component>) : Screen(TextComponent("")) {
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
     private var ambianceSoundInstance: AbstractSoundInstance? = null
 
-    private var stackDescs: List<Component> = emptyList()
+    init {
+        for ((pattern, origin) in patterns) {
+            this.usedSpots.addAll(pattern.positions(origin))
+        }
+    }
 
     fun recvServerUpdate(info: ControllerInfo) {
         this.stackDescs = info.stackDesc
         this.patterns.lastOrNull()?.let {
             it.valid = if (info.wasPrevPatternInvalid)
-                PatternValidity.ERROR
+                ResolvedPatternValidity.ERROR
             else
-                PatternValidity.OK
+                ResolvedPatternValidity.OK
         }
 
         if (!info.wasPrevPatternInvalid) {
@@ -62,8 +72,9 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     }
 
     override fun init() {
-        val soundman = Minecraft.getInstance().soundManager
-        soundman.stop(HexSounds.CASTING_AMBIANCE.id, null)
+        val minecraft = Minecraft.getInstance()
+        val soundManager = minecraft.soundManager
+        soundManager.stop(HexSounds.CASTING_AMBIANCE.id, null)
         this.ambianceSoundInstance = SimpleSoundInstance(
             HexSounds.CASTING_AMBIANCE.get().location,
             SoundSource.PLAYERS,
@@ -77,7 +88,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             0.0,
             true // this means is it relative to the *player's ears*, not to a given point, thanks mojank
         )
-        Minecraft.getInstance().soundManager.play(this.ambianceSoundInstance!!)
+        soundManager.play(this.ambianceSoundInstance!!)
     }
 
     override fun mouseClicked(mxOut: Double, myOut: Double, pButton: Int): Boolean {
@@ -190,14 +201,15 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             is PatternDrawState.Drawing -> {
                 val (start, _, pat) = this.drawState as PatternDrawState.Drawing
                 this.drawState = PatternDrawState.BetweenPatterns
-                this.patterns.add(PatternEntry(pat, start, PatternValidity.UNKNOWN))
+                this.patterns.add(ResolvedPattern(pat, start, ResolvedPatternValidity.UNKNOWN))
 
                 this.usedSpots.addAll(pat.positions(start))
 
                 HexMessages.getNetwork().sendToServer(
-                    at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn(
+                    MsgNewSpellPatternSyn(
                         this.handOpenedWith,
-                        pat
+                        pat,
+                        this.patterns
                     )
                 )
             }
@@ -217,8 +229,6 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
     }
 
     override fun onClose() {
-        HexMessages.getNetwork().sendToServer(MsgQuitSpellcasting())
-
         Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.id, null)
 
         super.onClose()
@@ -265,9 +275,9 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
         val alreadyPats = this.patterns.map { (pat, origin, valid) ->
             val colors: Pair<Int, Int> = when (valid) {
-                PatternValidity.UNKNOWN -> Pair(0xc8_7f7f7f_u.toInt(), 0xc8_7f7f7f_u.toInt())
-                PatternValidity.OK -> Pair(0xc8_7385de_u.toInt(), 0xc8_fecbe6_u.toInt())
-                PatternValidity.ERROR -> Pair(0xc8_de6262_u.toInt(), 0xc8_e6755c_u.toInt())
+                ResolvedPatternValidity.UNKNOWN -> Pair(0xc8_7f7f7f_u.toInt(), 0xc8_7f7f7f_u.toInt())
+                ResolvedPatternValidity.OK -> Pair(0xc8_7385de_u.toInt(), 0xc8_fecbe6_u.toInt())
+                ResolvedPatternValidity.ERROR -> Pair(0xc8_de6262_u.toInt(), 0xc8_e6755c_u.toInt())
             }
             Pair(
                 pat.toLines(
@@ -338,13 +348,5 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
 
         /** We've started drawing a pattern for real. */
         data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) : PatternDrawState()
-    }
-
-    private data class PatternEntry(val pattern: HexPattern, val origin: HexCoord, var valid: PatternValidity)
-
-    private enum class PatternValidity {
-        UNKNOWN,
-        OK,
-        ERROR
     }
 }

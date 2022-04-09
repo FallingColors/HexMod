@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.Operator;
 import at.petrak.hexcasting.api.spell.SpellDatum;
@@ -25,9 +24,12 @@ import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSen
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
+import at.petrak.hexcasting.common.casting.operators.stack.*;
 import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.hexmath.HexAngle;
 import at.petrak.hexcasting.hexmath.HexDir;
 import at.petrak.hexcasting.hexmath.HexPattern;
+import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,7 +41,6 @@ public class RegisterPatterns {
     // I guess this means the client will have a big empty map for patterns
     @SubscribeEvent
     public static void registerSpellPatterns(FMLCommonSetupEvent evt) {
-        int count = 0;
         try {
             // In general:
             // - CCW is the normal or construction version
@@ -73,7 +74,6 @@ public class RegisterPatterns {
 
             // == Modify Stack ==
 
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("a", HexDir.EAST), prefix("undo"), OpUndo.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("d", HexDir.EAST), prefix("const/null"), Widget.NULL);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aadaa", HexDir.EAST), prefix("duplicate"),
                 OpDuplicate.INSTANCE);
@@ -82,6 +82,8 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawdd", HexDir.EAST), prefix("swap"), OpSwap.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddad", HexDir.WEST), prefix("fisherman"),
                 OpFisherman.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaawdde", HexDir.SOUTH_EAST), prefix("swizzle"),
+                OpAlwinfyHasAscendedToABeingOfPureMath.INSTANCE);
 
             // == Math ==
 
@@ -112,9 +114,9 @@ public class RegisterPatterns {
                 new OpCompare((a, b) -> a > b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("q", HexDir.SOUTH_WEST), prefix("less"),
                 new OpCompare((a, b) -> a < b));
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ea", HexDir.SOUTH_EAST), prefix("greater_eq"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ee", HexDir.SOUTH_EAST), prefix("greater_eq"),
                 new OpCompare((a, b) -> a >= b));
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qd", HexDir.SOUTH_WEST), prefix("less_eq"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qq", HexDir.SOUTH_WEST), prefix("less_eq"),
                 new OpCompare((a, b) -> a <= b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ad", HexDir.EAST), prefix("equals"),
                 new OpCompare((a, b) -> Math.abs(a - b) < 0.0001));
@@ -374,7 +376,7 @@ public class RegisterPatterns {
         }
 
         // Add zilde->number
-        PatternRegistry.addSpecialHandler(pat -> {
+        PatternRegistry.addSpecialHandler(prefix("number"), pat -> {
             var sig = pat.anglesSignature();
             if (sig.startsWith("aqaa") || sig.startsWith("dedd")) {
                 var negate = sig.startsWith("dedd");
@@ -401,6 +403,41 @@ public class RegisterPatterns {
             }
         });
 
-        HexMod.getLogger().info("Registered {} patterns", count);
+        PatternRegistry.addSpecialHandler(prefix("mask"), pat -> {
+            var directions = pat.directions();
+
+            HexDir flatDir;
+            if (pat.angles().isEmpty()) {
+                return null;
+            } else if (pat.angles().get(0) == HexAngle.LEFT_BACK) {
+                flatDir = directions.get(0).rotatedBy(HexAngle.LEFT);
+            } else {
+                flatDir = pat.startDir();
+            }
+
+            var mask = new BooleanArrayList();
+            for (int i = 0; i < directions.size(); i++) {
+                // Angle with respect to the *start direction*
+                var angle = directions.get(i).angleFrom(flatDir);
+                if (angle == HexAngle.FORWARD) {
+                    mask.add(true);
+                    continue;
+                }
+                if (i >= directions.size() - 1) {
+                    // then we're out of angles!
+                    return null;
+                }
+                var angle2 = directions.get(i + 1).angleFrom(flatDir);
+                if (angle == HexAngle.RIGHT && angle2 == HexAngle.LEFT) {
+                    mask.add(false);
+                    i++;
+                    continue;
+                }
+
+                return null;
+            }
+
+            return new OpMask(mask);
+        });
     }
 }

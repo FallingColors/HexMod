@@ -34,7 +34,7 @@ public class HexAdditionalRenderers {
         var maybeSentinelCap = player.getCapability(HexCapabilities.SENTINEL).resolve();
         if (maybeSentinelCap.isPresent()) {
             var cap = maybeSentinelCap.get();
-            if (cap.hasSentinel) {
+            if (cap.hasSentinel && player.getLevel().dimension().equals(cap.dimension)) {
                 renderSentinel(cap, player, evt.getPoseStack(), evt.getPartialTick());
             }
         }

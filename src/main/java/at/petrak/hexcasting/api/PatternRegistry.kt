@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api
 
+import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidPattern
 import at.petrak.hexcasting.hexmath.EulerPathFinder
@@ -9,6 +10,8 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.saveddata.SavedData
+import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.ConcurrentMap
@@ -26,7 +29,7 @@ import java.util.concurrent.ConcurrentMap
  */
 object PatternRegistry {
     private val operatorLookup = ConcurrentHashMap<ResourceLocation, Operator>()
-    private val specialHandlers: ConcurrentLinkedDeque<SpecialHandler> = ConcurrentLinkedDeque()
+    private val specialHandlers: ConcurrentLinkedDeque<SpecialHandlerEntry> = ConcurrentLinkedDeque()
 
     // Map signatures to the "preferred" direction they start in and their operator ID.
     private val regularPatternLookup: ConcurrentMap<String, RegularEntry> =
@@ -60,8 +63,13 @@ object PatternRegistry {
      * Add a special handler, to take an arbitrary pattern and return whatever kind of operator you like.
      */
     @JvmStatic
-    fun addSpecialHandler(handler: SpecialHandler) {
+    fun addSpecialHandler(handler: SpecialHandlerEntry) {
         this.specialHandlers.add(handler)
+    }
+
+    @JvmStatic
+    fun addSpecialHandler(id: ResourceLocation, handler: SpecialHandler) {
+        this.addSpecialHandler(SpecialHandlerEntry(id, handler))
     }
 
     /**
@@ -75,13 +83,13 @@ object PatternRegistry {
      * Internal use only.
      */
     @JvmStatic
-    fun matchPatternAndID(pat: HexPattern, overworld: ServerLevel): Pair<Operator, ResourceLocation?> {
+    fun matchPatternAndID(pat: HexPattern, overworld: ServerLevel): Pair<Operator, ResourceLocation> {
         // Pipeline:
         // patterns are registered here every time the game boots
         // when we try to look
         for (handler in specialHandlers) {
-            val op = handler.handlePattern(pat)
-            if (op != null) return Pair(op, null)
+            val op = handler.handler.handlePattern(pat)
+            if (op != null) return Pair(op, handler.id)
         }
 
         // Is it global?
@@ -133,6 +141,14 @@ object PatternRegistry {
     }
 
     /**
+     * Internal use only.
+     */
+    @JvmStatic
+    fun getAllPerWorldPatternNames(): Set<ResourceLocation> {
+        return this.perWorldPatternLookup.keys.toSet()
+    }
+
+    /**
      * Special handling of a pattern. Before checking any of the normal angle-signature based patterns,
      * a given pattern is run by all of these special handlers patterns. If none of them return non-null,
      * then its signature is checked.
@@ -142,6 +158,8 @@ object PatternRegistry {
     fun interface SpecialHandler {
         fun handlePattern(pattern: HexPattern): Operator?
     }
+
+    data class SpecialHandlerEntry(val id: ResourceLocation, val handler: SpecialHandler)
 
     class RegisterPatternException(msg: String) : java.lang.Exception(msg)
 
@@ -196,4 +214,13 @@ object PatternRegistry {
     const val TAG_SAVED_DATA = "hex.per-world-patterns"
     private const val TAG_OP_ID = "op_id"
     private const val TAG_START_DIR = "start_dir"
+
+    @SubscribeEvent
+    fun printPatternCount(evt: FMLLoadCompleteEvent) {
+        HexMod.getLogger().info(
+            "Loaded ${this.regularPatternLookup.size} regular patterns, " +
+                    "${this.perWorldPatternLookup.size} per-world patterns, and " +
+                    "${this.specialHandlers.size} special handlers."
+        )
+    }
 }

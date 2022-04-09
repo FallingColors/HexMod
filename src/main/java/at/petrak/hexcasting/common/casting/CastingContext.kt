@@ -36,6 +36,7 @@ data class CastingContext(
     val otherHand: InteractionHand get() = HexUtils.OtherHand(this.castingHand)
     val position: Vec3 get() = caster.position()
 
+    private val entitiesGivenMotion = mutableSetOf<Entity>()
 
     fun getDataHolder(): ItemStack {
         val handItem =
@@ -72,12 +73,17 @@ data class CastingContext(
         if (!isEntityInRange(entity)) throw MishapEntityTooFarAway(entity)
     }
 
+    fun hasBeenGivenMotion(target: Entity): Boolean {
+        return entitiesGivenMotion.contains(target)
+    }
+
     fun isVecInRange(vec: Vec3): Boolean {
         val maybeSentinel = this.caster.getCapability(HexCapabilities.SENTINEL).resolve()
         if (maybeSentinel.isPresent) {
             val sentinel = maybeSentinel.get()
             if (sentinel.hasSentinel
                 && sentinel.extendsRange
+                && world.dimension() == sentinel.dimension
                 && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
             )
                 return true
@@ -172,6 +178,10 @@ data class CastingContext(
             }
         }
         throw RuntimeException("unreachable")
+    }
+
+    fun markEntityAsMotionAdded(entity: Entity) {
+        this.entitiesGivenMotion.add(entity)
     }
 
     val canOvercast: Boolean

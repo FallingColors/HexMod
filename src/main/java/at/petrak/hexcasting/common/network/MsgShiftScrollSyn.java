@@ -6,7 +6,10 @@ import at.petrak.hexcasting.common.items.ItemAbacus;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -54,11 +57,24 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
     private void spellbook(ServerPlayer sender, ItemStack stack) {
         var tag = stack.getOrCreateTag();
-        ItemSpellbook.RotatePageIdx(tag, this.scrollDelta < 0.0);
+        ItemSpellbook.RotatePageIdx(stack, tag, this.scrollDelta < 0.0);
 
         var newIdx = tag.getInt(ItemSpellbook.TAG_SELECTED_PAGE);
         var len = ItemSpellbook.HighestPage(tag.getCompound(ItemSpellbook.TAG_PAGES));
-        sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.spellbook.page", newIdx, len), true);
+
+        MutableComponent component;
+        if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
+            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name",
+                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                    stack.getHoverName());
+        } else {
+            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page",
+                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE));
+        }
+
+        sender.displayClientMessage(component.withStyle(ChatFormatting.GRAY), true);
     }
 
     private void abacus(ServerPlayer sender, ItemStack stack) {
@@ -87,7 +103,10 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
             HexSounds.ABACUS.get(), SoundSource.PLAYERS, 0.5f, pitch);
 
-        var popup = SpellDatum.DisplayFromTag(HexItems.ABACUS.get().readDatumTag(stack));
-        sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.abacus", popup), true);
+        var datumTag = HexItems.ABACUS.get().readDatumTag(stack);
+        if (datumTag != null) {
+            var popup = SpellDatum.DisplayFromTag(datumTag);
+            sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD), true);
+        }
     }
 }

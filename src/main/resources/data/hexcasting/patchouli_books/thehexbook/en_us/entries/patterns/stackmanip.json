@@ -8,30 +8,11 @@
   "pages": [
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:undo",
-      "anchor": "hexcasting:undo",
-      "input": "any",
-      "output": "",
-      "text": "hexcasting.page.stackmanip1"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:duplicate",
-      "anchor": "hexcasting:duplicate",
-      "input": "any",
-      "output": "any, any",
-      "text": "hexcasting.page.stackmanip2"
-    },
-    {
-      "type": "hexcasting:pattern",
       "op_id": "hexcasting:swap",
       "anchor": "hexcasting:swap",
       "input": "any, any",
       "output": "any, any",
-      "text": "hexcasting.page.stackmanip3"
-    },
-    {
-      "type": "patchouli:empty"
+      "text": "hexcasting.page.stackmanip.1"
     },
     {
       "type": "hexcasting:pattern",
@@ -39,11 +20,65 @@
       "anchor": "hexcasting:fisherman",
       "input": "num",
       "output": "any",
-      "text": "hexcasting.page.stackmanip4"
+      "text": "hexcasting.page.stackmanip.2"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:duplicate",
+      "anchor": "hexcasting:duplicate",
+      "input": "any",
+      "output": "any, any",
+      "text": "hexcasting.page.stackmanip.3"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:duplicate_n",
+      "anchor": "hexcasting:duplicate_n",
+      "input": "number, any",
+      "output": "many",
+      "text": "hexcasting.page.stackmanip.4"
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "hexcasting.page.stackmanip.5.header",
+      "anchor": "Numbers",
+      "input": "many",
+      "output": "many",
+      "text": "hexcasting.page.stackmanip.5",
+      "patterns": [
+        {
+          "startdir": "SOUTH_EAST",
+          "signature": "aeea"
+        }, {
+          "startdir": "EAST",
+          "signature": "eada",
+          "q": 1,
+          "r": 2
+        }, {
+          "startdir": "SOUTH_EAST",
+          "signature": "ae",
+          "q": 2,
+          "r": 4
+        }
+      ]
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.stackmanip5"
+      "text": "hexcasting.page.stackmanip.6"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:swizzle",
+      "anchor": "hexcasting:swizzle",
+      "input": "number, any",
+      "output": "many",
+      "text": "hexcasting.page.stackmanip.7"
+    },
+    {
+      "type": "patchouli:link",
+      "text": "hexcasting.page.stackmanip.8",
+      "link_text": "hexcasting.page.stackmanip.8.link",
+      "url": "https://github.com/gamma-delta/HexMod/wiki/Table-of-Lehmer-Codes-for-Swindler's-Gambit"
     }
   ]
 }

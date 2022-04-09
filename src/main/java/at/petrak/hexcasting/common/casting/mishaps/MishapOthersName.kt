@@ -20,4 +20,29 @@ class MishapOthersName(val other: Player) : Mishap() {
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
         error("others_name", other.name)
+
+    companion object {
+        @JvmStatic
+        fun getTrueNameFromDatum(datum: SpellDatum<*>, caster: Player): Player? {
+            if (datum.payload is Player && datum.payload != caster)
+                return datum.payload
+            else if (datum.payload !is List<*>)
+                return null
+
+            val poolToSearch: MutableList<SpellDatum<*>> =
+                datum.payload.filterIsInstance<SpellDatum<*>>().toMutableList()
+
+            while (poolToSearch.isNotEmpty()) {
+                val datumToCheck = poolToSearch[0]
+                poolToSearch.removeAt(0)
+
+                if (datumToCheck.payload is Player && datumToCheck.payload != caster)
+                    return datumToCheck.payload
+                else if (datumToCheck.payload is List<*>)
+                    poolToSearch.addAll(datumToCheck.payload.filterIsInstance<SpellDatum<*>>())
+            }
+
+            return null
+        }
+    }
 }

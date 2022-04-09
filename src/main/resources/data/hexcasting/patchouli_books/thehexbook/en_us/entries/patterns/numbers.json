@@ -12,7 +12,6 @@
       "anchor": "Numbers",
       "input": "",
       "output": "number",
-      "args": "-> number",
       "text": "hexcasting.page.numbers.1",
       "patterns": [
         {

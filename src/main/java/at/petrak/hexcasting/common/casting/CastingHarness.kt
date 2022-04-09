@@ -62,7 +62,7 @@ class CastingHarness private constructor(
         if (this.ctx.spellCircle == null)
             this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
 
-        var operatorIdPair: Pair<Operator, ResourceLocation?>? = null
+        var operatorIdPair: Pair<Operator, ResourceLocation>? = null
         try {
             // wouldn't it be nice to be able to go paren'
             // i guess i'll call it paren2
@@ -124,17 +124,20 @@ class CastingHarness private constructor(
                 wasSpellCast = true
         }
 
-        val descs: ArrayList<Component> = ArrayList(this.stack.size)
-        for (datum in this.stack) {
-            descs.add(datum.display())
-        }
-
         return ControllerInfo(
             wasSpellCast,
             this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
             wasPrevPatternInvalid,
-            descs
+            generateDescs()
         )
+    }
+
+    fun generateDescs(): List<Component> {
+        val descs = ArrayList<Component>(this.stack.size)
+        for (datum in this.stack) {
+            descs.add(datum.display())
+        }
+        return descs
     }
 
     /**

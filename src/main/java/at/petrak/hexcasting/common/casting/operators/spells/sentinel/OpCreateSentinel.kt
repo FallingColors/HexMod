@@ -40,6 +40,7 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
             cap.hasSentinel = true
             cap.extendsRange = extendsRange
             cap.position = target
+            cap.dimension = ctx.world.dimension()
 
             HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { ctx.caster }, MsgSentinelStatusUpdateAck(cap))
         }

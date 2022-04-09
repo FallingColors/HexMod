@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.common.casting.ManaHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -85,7 +86,7 @@ public abstract class ItemManaHolder extends Item {
                     new TranslatableComponent("item.hexcasting.manaholder.amount",
                         String.format("%,d", imh.getManaAmt(tag)),
                         String.format("%,d", imh.getMaxManaAmt(tag)),
-                        100f * imh.getManaFullness(tag)));
+                        100f * imh.getManaFullness(tag)).withStyle(ChatFormatting.GRAY));
             }
         }
 

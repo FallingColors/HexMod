@@ -24,9 +24,12 @@ object OpAddMotion : SpellOperator {
         val target = args.getChecked<Entity>(0)
         val motion = args.getChecked<Vec3>(1)
         ctx.assertEntityInRange(target)
+        var motionForCost = motion.lengthSqr()
+        if (ctx.hasBeenGivenMotion(target))
+            motionForCost++
         return Triple(
             Spell(target, motion),
-            (motion.lengthSqr() * 10_000f).toInt(),
+            (motionForCost * 10_000f).toInt(),
             listOf(
                 ParticleSpray(
                     target.position().add(0.0, target.eyeHeight / 2.0, 0.0),
@@ -44,9 +47,9 @@ object OpAddMotion : SpellOperator {
                 // Player movement is apparently handled on the client; who knew
                 // There's apparently some magic flag I can set to auto-sync it but I can't find it
                 HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { target }, MsgAddMotionAck(motion))
-            } else {
-                target.deltaMovement = target.deltaMovement.add(motion)
             }
+            target.deltaMovement = target.deltaMovement.add(motion)
+            ctx.markEntityAsMotionAdded(target)
         }
     }
 }
