@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.CastingContext
 import it.unimi.dsi.fastutil.booleans.BooleanList
 
-class OpSwizzle(val mask: BooleanList) : ConstManaOperator {
+class OpMask(val mask: BooleanList) : ConstManaOperator {
     override val argc: Int
         get() = mask.size
 

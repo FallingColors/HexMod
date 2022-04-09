@@ -71,7 +71,6 @@ public class RegisterPatterns {
 
             // == Modify Stack ==
 
-            // PatternRegistry.mapPattern(HexPattern.FromAnglesSig("a", HexDir.EAST), prefix("undo"), OpUndo.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("d", HexDir.EAST), prefix("const/null"), Widget.NULL);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aadaa", HexDir.EAST), prefix("duplicate"),
                 OpDuplicate.INSTANCE);
@@ -110,9 +109,9 @@ public class RegisterPatterns {
                 new OpCompare((a, b) -> a > b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("q", HexDir.SOUTH_WEST), prefix("less"),
                 new OpCompare((a, b) -> a < b));
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ea", HexDir.SOUTH_EAST), prefix("greater_eq"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ee", HexDir.SOUTH_EAST), prefix("greater_eq"),
                 new OpCompare((a, b) -> a >= b));
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qd", HexDir.SOUTH_WEST), prefix("less_eq"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qq", HexDir.SOUTH_WEST), prefix("less_eq"),
                 new OpCompare((a, b) -> a <= b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ad", HexDir.EAST), prefix("equals"),
                 new OpCompare((a, b) -> Math.abs(a - b) < 0.0001));
@@ -391,9 +390,8 @@ public class RegisterPatterns {
                 return null;
             }
         });
-
-        // and swizzles
-        PatternRegistry.addSpecialHandler(prefix("swizzle"), pat -> {
+        
+        PatternRegistry.addSpecialHandler(prefix("mask"), pat -> {
             var directions = pat.directions();
 
             HexDir flatDir;
@@ -427,7 +425,7 @@ public class RegisterPatterns {
                 return null;
             }
 
-            return new OpSwizzle(mask);
+            return new OpMask(mask);
         });
     }
 }
