@@ -46,7 +46,7 @@ public class CapSentinel implements ICapabilitySerializable<CompoundTag> {
         tag.putBoolean(TAG_EXISTS, this.hasSentinel);
         tag.putBoolean(TAG_EXTENDS_RANGE, this.extendsRange);
         tag.put(TAG_POSITION, HexUtils.serializeToNBT(this.position));
-        tag.putString(TAG_DIMENSION, dimension.getRegistryName().toString());
+        tag.putString(TAG_DIMENSION, dimension.location().toString());
 
         return tag;
     }
