@@ -38,7 +38,7 @@ public class HexBlockTagProvider extends BlockTagsProvider {
             .add(HexBlocks.AKASHIC_LEAVES1.get(), HexBlocks.AKASHIC_LEAVES2.get(), HexBlocks.AKASHIC_LEAVES3.get());
 
         tag(BlockTags.CRYSTAL_SOUND_BLOCKS)
-            .add(HexBlocks.CONJURED.get(), HexBlocks.AMETHYST_TILES.get(), HexBlocks.SCONCE.get());
+            .add(HexBlocks.CONJURED_LIGHT.get(), HexBlocks.CONJURED_BLOCK.get(), HexBlocks.AMETHYST_TILES.get(), HexBlocks.SCONCE.get());
 
         tag(HexBlockTags.AKASHIC_LOGS)
             .add(HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),

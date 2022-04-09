@@ -124,7 +124,8 @@ public class RegisterClientStuff {
         });
 
         for (var cutout : new Block[]{
-            HexBlocks.CONJURED.get(),
+            HexBlocks.CONJURED_LIGHT.get(),
+            HexBlocks.CONJURED_BLOCK.get(),
             HexBlocks.AKASHIC_DOOR.get(),
             HexBlocks.AKASHIC_TRAPDOOR.get(),
             HexBlocks.SCONCE.get(),

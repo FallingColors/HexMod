@@ -2,13 +2,10 @@ package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -16,37 +13,27 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockConjured extends Block implements SimpleWaterloggedBlock, EntityBlock {
-    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static final BooleanProperty LIGHT = BooleanProperty.create("light");
-    private static final VoxelShape LIGHT_SHAPE = Block.box(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
+public class BlockConjured extends Block implements EntityBlock {
 
-    public BlockConjured(BlockBehaviour.Properties properties) {
+    public BlockConjured(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(LIGHT, false).setValue(WATERLOGGED, false));
     }
 
     @Override
     public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
         super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
         // For some reason the block doesn't play breaking noises. So we fix that!
-        pPlayer.playSound(SoundEvents.GLASS_BREAK, 1f, 1f);
+        pPlayer.playSound(SoundEvents.AMETHYST_BLOCK_BREAK, 1f, 1f);
     }
 
     @Nullable
@@ -69,16 +56,9 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
     @Override
     public void stepOn(Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull Entity pEntity) {
         BlockEntity tile = pLevel.getBlockEntity(pPos);
-        if (tile instanceof BlockEntityConjured bec && !bec.getBlockState().getValue(LIGHT)) {
+        if (tile instanceof BlockEntityConjured bec) {
             bec.walkParticle(pEntity);
         }
-        super.stepOn(pLevel, pPos, pState, pEntity);
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(LIGHT, WATERLOGGED);
     }
 
     @Nullable
@@ -102,42 +82,13 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
-        @NotNull CollisionContext context) {
-        return state.getValue(LIGHT) ? LIGHT_SHAPE : super.getShape(state, level, pos, context);
-    }
-
-    @Override
-    public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {
-        return state.getValue(LIGHT) ? PushReaction.DESTROY : super.getPistonPushReaction(state);
-    }
-
-    @Override
     public boolean propagatesSkylightDown(@NotNull BlockState pState, @NotNull BlockGetter pLevel,
         @NotNull BlockPos pPos) {
         return true;
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
-        return state.getValue(LIGHT) ? 15 : 2;
-    }
-
-    @Override
-    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos,
-        @Nullable Direction direction) {
-        return false;
-    }
-
-    @Override
-    public boolean isValidSpawn(BlockState state, BlockGetter world, BlockPos pos, SpawnPlacements.Type type,
-        EntityType<?> entityType) {
-        return false;
-    }
-
-    @Override
-    public @NotNull VoxelShape getVisualShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel,
-        @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
+    public @NotNull VoxelShape getVisualShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return Shapes.empty();
     }
 
@@ -152,13 +103,8 @@ public class BlockConjured extends Block implements SimpleWaterloggedBlock, Enti
     }
 
     @Override
-    public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter pLevel,
-        @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return state.getValue(LIGHT) ? Shapes.empty() : super.getCollisionShape(state, pLevel, pPos, pContext);
-    }
-
-    @Override
     protected void spawnDestroyParticles(Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState) {
+        // NO-OP
     }
 
     @Override
