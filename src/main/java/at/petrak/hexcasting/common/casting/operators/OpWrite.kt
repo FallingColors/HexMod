@@ -47,8 +47,9 @@ object OpWrite : SpellOperator {
         if (!canWrite)
             throw MishapBadOffhandItem.of(handStack, "iota.write")
 
-        if (datum.payload is Player && datum.payload != ctx.caster)
-            throw MishapOthersName(datum.payload)
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
+        if (trueName != null)
+            throw MishapOthersName(trueName)
 
         return Triple(
             Spell(datum),
