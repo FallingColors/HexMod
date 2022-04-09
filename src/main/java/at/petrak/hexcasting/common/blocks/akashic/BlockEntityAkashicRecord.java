@@ -45,7 +45,8 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
      * Will never clobber anything.
      */
     public @Nullable BlockPos addNewDatum(HexPattern key, SpellDatum<?> datum) {
-        if (this.entries.containsKey(key.anglesSignature())) {
+        String entryKey = getKey(key);
+        if (this.entries.containsKey(entryKey)) {
             return null; // would clobber
         }
 
@@ -56,7 +57,7 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
             var tile = (BlockEntityAkashicBookshelf) this.level.getBlockEntity(openPos);
             tile.setNewData(this.getBlockPos(), key, datum.getType());
 
-            this.entries.put(key.anglesSignature(), new Entry(openPos, key.startDir(), datum.serializeToNBT()));
+            this.entries.put(entryKey, new Entry(openPos, key.startDir(), datum.serializeToNBT()));
             this.sync();
 
             return openPos;
@@ -65,8 +66,15 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
         }
     }
 
+    private String getKey(HexPattern key) {
+        String angles = key.anglesSignature();
+        if (angles.isEmpty())
+            return "empty"; // contains non-angle characters, so can't occur any way other than this
+        return angles;
+    }
+
     public @Nullable SpellDatum<?> lookupPattern(HexPattern key, ServerLevel slevel) {
-        var entry = this.entries.get(key.anglesSignature());
+        var entry = this.entries.get(getKey(key));
         if (entry == null) {
             return null;
         } else {
@@ -75,7 +83,7 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
     }
 
     public Component getDisplayAt(HexPattern key) {
-        var entry = this.entries.get(key.anglesSignature());
+        var entry = this.entries.get(getKey(key));
         if (entry != null) {
             return SpellDatum.DisplayFromTag(entry.datum);
         } else {
