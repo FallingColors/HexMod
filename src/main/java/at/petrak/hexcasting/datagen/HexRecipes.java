@@ -3,6 +3,7 @@ package at.petrak.hexcasting.datagen;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.advancement.OvercastTrigger;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.items.HexItemTags;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
@@ -10,12 +11,15 @@ import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
 import at.petrak.hexcasting.datagen.recipebuilders.BrainsweepRecipeBuilder;
 import at.petrak.paucal.api.datagen.PaucalRecipeProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
@@ -209,6 +213,28 @@ public class HexRecipes extends PaucalRecipeProvider {
             Ingredient.of(Tags.Items.INGOTS_COPPER))
             .unlockedBy("has_item", has(HexItems.CHARGED_AMETHYST.get())).save(recipes);
 
+        ShapelessRecipeBuilder.shapeless(HexBlocks.AKASHIC_PLANKS.get(), 4)
+            .requires(HexItemTags.AKASHIC_LOGS)
+            .unlockedBy("has_item", has(HexItemTags.AKASHIC_LOGS)).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_WOOD.get(), 3)
+            .define('W', HexBlocks.AKASHIC_LOG.get())
+            .pattern("WW")
+            .pattern("WW")
+            .unlockedBy("has_item", has(HexBlocks.AKASHIC_LOG.get())).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_WOOD_STRIPPED.get(), 3)
+            .define('W', HexBlocks.AKASHIC_LOG_STRIPPED.get())
+            .pattern("WW")
+            .pattern("WW")
+            .unlockedBy("has_item", has(HexBlocks.AKASHIC_LOG_STRIPPED.get())).save(recipes);
+        ring(HexBlocks.AKASHIC_PANEL.get(), 8, HexItemTags.AKASHIC_PLANKS, null)
+            .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_TILE.get(), 6)
+            .define('W', HexItemTags.AKASHIC_PLANKS)
+            .pattern("WW ")
+            .pattern("W W")
+            .pattern(" WW")
+            .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
+
         var enlightenment = new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
             MinMaxBounds.Ints.ANY,
             // add a little bit of slop here
@@ -235,19 +261,39 @@ public class HexRecipes extends PaucalRecipeProvider {
             .pattern("SSC")
             .unlockedBy("enlightenment", enlightenment).save(recipes);
 
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_BOOKSHELF.get())
+            .define('L', HexItemTags.AKASHIC_LOGS)
+            .define('P', HexItemTags.AKASHIC_PLANKS)
+            .define('C', Items.BOOK)
+            /*this is the*/.pattern("LPL") // and what i have for you today is
+            .pattern("CCC")
+            .pattern("LPL")
+            .unlockedBy("enlightenment", enlightenment).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_CONNECTOR.get())
+            .define('L', HexItemTags.AKASHIC_LOGS)
+            .define('P', HexItemTags.AKASHIC_PLANKS)
+            .define('C', HexItems.CHARGED_AMETHYST.get())
+            .pattern("LPL")
+            .pattern("CCC")
+            .pattern("LPL")
+            .unlockedBy("enlightenment", enlightenment).save(recipes);
+
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
+            new VillagerIngredient(null, null, 3),
+            Blocks.BUDDING_AMETHYST.defaultBlockState())
+            .unlockedBy("enlightenment", enlightenment)
+            .save(recipes, modLoc("brainsweep/budding_amethyst"));
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
             new VillagerIngredient(new ResourceLocation("toolsmith"), null, 2),
             HexBlocks.IMPETUS_RIGHTCLICK.get().defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_rightclick"));
-
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
             new VillagerIngredient(new ResourceLocation("fletcher"), null, 2),
             HexBlocks.IMPETUS_LOOK.get().defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_look"));
-
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS.get()),
             new VillagerIngredient(new ResourceLocation("cleric"), null, 2),
             HexBlocks.IMPETUS_STOREDPLAYER.get().defaultBlockState())
@@ -260,15 +306,20 @@ public class HexRecipes extends PaucalRecipeProvider {
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/directrix_redstone"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
-            new VillagerIngredient(null, null, 3),
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.AKASHIC_CONNECTOR.get()),
+            new VillagerIngredient(new ResourceLocation("librarian"), null, 5),
             Blocks.BUDDING_AMETHYST.defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/budding_amethyst"));
+            .save(recipes, modLoc("brainsweep/akashic_connector"));
     }
 
     protected void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {
         var name = Registry.RECIPE_SERIALIZER.getKey(serializer);
         SpecialRecipeBuilder.special(serializer).save(consumer, prefix("dynamic/" + name.getPath()).toString());
+    }
+
+    // why is this private waa
+    protected static InventoryChangeTrigger.TriggerInstance has(TagKey<Item> pTag) {
+        return inventoryTrigger(ItemPredicate.Builder.item().of(pTag).build());
     }
 }

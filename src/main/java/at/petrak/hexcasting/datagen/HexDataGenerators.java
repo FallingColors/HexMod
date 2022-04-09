@@ -16,10 +16,12 @@ public class HexDataGenerators {
             gen.addProvider(new HexBlockStatesAndModels(gen, efh));
         }
         if (ev.includeServer()) {
+            HexBlockTagProvider blockTagProvider = new HexBlockTagProvider(gen, efh);
             gen.addProvider(new HexRecipes(gen));
             gen.addProvider(new HexLootModifiers(gen));
             gen.addProvider(new HexAdvancements(gen, efh));
-            gen.addProvider(new HexBlockTagProvider(gen, efh));
+            gen.addProvider(new HexItemTagProvider(gen, blockTagProvider, efh));
+            gen.addProvider(blockTagProvider);
             gen.addProvider(new HexLootTables(gen));
         }
     }

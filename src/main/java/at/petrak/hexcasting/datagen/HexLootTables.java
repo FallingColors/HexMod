@@ -28,7 +28,11 @@ public class HexLootTables extends PaucalLootTableProvider {
             HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.EMPTY_DIRECTRIX,
             HexBlocks.SLATE_BLOCK, HexBlocks.AMETHYST_DUST_BLOCK, HexBlocks.AMETHYST_TILES, HexBlocks.SCROLL_PAPER,
             HexBlocks.ANCIENT_SCROLL_PAPER, HexBlocks.SCROLL_PAPER_LANTERN, HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN,
-            HexBlocks.SCONCE);
+            HexBlocks.SCONCE,
+            HexBlocks.AKASHIC_LOG, HexBlocks.AKASHIC_LOG_STRIPPED, HexBlocks.AKASHIC_WOOD,
+            HexBlocks.AKASHIC_WOOD_STRIPPED,
+            HexBlocks.AKASHIC_TILE, HexBlocks.AKASHIC_PANEL,
+            HexBlocks.AKASHIC_DOOR, HexBlocks.AKASHIC_TRAPDOOR);
 
         var slatePool = LootPool.lootPool().name("slate").
             setRolls(ConstantValue.exactly(1))

@@ -170,13 +170,14 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         cubeBlockAndItem(HexBlocks.AMETHYST_TILES.get(), "amethyst_tiles");
         cubeBlockAndItem(HexBlocks.SCROLL_PAPER.get(), "scroll_paper");
         cubeBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER.get(), "ancient_scroll_paper");
-        
+
         blockAndItem(HexBlocks.SCROLL_PAPER_LANTERN.get(), models().cubeBottomTop("scroll_paper_lantern",
-                modLoc("block/scroll_paper_lantern_side"),
-                modLoc("block/scroll_paper_lantern_bottom"),
-                modLoc("block/scroll_paper_lantern_top")));
-        
-        blockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(), models().cubeBottomTop("ancient_scroll_paper_lantern",
+            modLoc("block/scroll_paper_lantern_side"),
+            modLoc("block/scroll_paper_lantern_bottom"),
+            modLoc("block/scroll_paper_lantern_top")));
+
+        blockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(),
+            models().cubeBottomTop("ancient_scroll_paper_lantern",
                 modLoc("block/ancient_scroll_paper_lantern_side"),
                 modLoc("block/ancient_scroll_paper_lantern_bottom"),
                 modLoc("block/ancient_scroll_paper_lantern_top")));
@@ -185,9 +186,9 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         axisBlock(HexBlocks.AKASHIC_LOG_STRIPPED.get(), modLoc("block/akashic/log_stripped"),
             modLoc("block/akashic/log_end_stripped"));
 
-        blockAndItem(HexBlocks.AKASHIC_WOOD.get(), models().cubeAll("akashic_log", modLoc("block/akashic/log")));
+        blockAndItem(HexBlocks.AKASHIC_WOOD.get(), models().cubeAll("akashic_wood", modLoc("block/akashic/log")));
         blockAndItem(HexBlocks.AKASHIC_WOOD_STRIPPED.get(),
-            models().cubeAll("akashic_log_stripped", modLoc("block/akashic/log_stripped")));
+            models().cubeAll("akashic_wood_stripped", modLoc("block/akashic/log_stripped")));
         blockAndItem(HexBlocks.AKASHIC_PANEL.get(), models().cubeAll("akashic_panel", modLoc("block/akashic/panel")));
         blockAndItem(HexBlocks.AKASHIC_TILE.get(), models().cubeAll("akashic_tile", modLoc("block/akashic/tile")));
 
