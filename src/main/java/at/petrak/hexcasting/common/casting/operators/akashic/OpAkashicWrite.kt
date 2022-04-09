@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.mishaps.MishapNoAkashicRecord
+import at.petrak.hexcasting.common.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.hexmath.HexPattern
@@ -31,6 +32,10 @@ object OpAkashicWrite : SpellOperator {
         if (tile !is BlockEntityAkashicRecord) {
             throw MishapNoAkashicRecord(bpos)
         }
+
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
+        if (trueName != null)
+            throw MishapOthersName(trueName)
 
         return Triple(
             Spell(tile, key, datum),
