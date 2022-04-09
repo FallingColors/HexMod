@@ -23,7 +23,7 @@ class OpExplode(val fire: Boolean) : SpellOperator {
         ctx.assertVecInRange(pos)
         return Triple(
             Spell(pos, strength, this.fire),
-            ((1 + strength + if (this.fire) 2 else 0) * 50_000.0).toInt(),
+            ((1 + Mth.clamp(strength.toFloat(), 0f, 10f) + if (this.fire) 2 else 0) * 50_000.0).toInt(),
             listOf(ParticleSpray.Burst(pos, strength, 50))
         )
     }
