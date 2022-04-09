@@ -21,7 +21,7 @@ object OpLastNToList : Operator {
         val arg = stack.takeLast(1).getChecked<Double>(0)
         val datum = stack[stack.lastIndex]
         stack.removeLast()
-        if (arg < 0 || arg >= stack.size) {
+        if (arg < 0 || arg > stack.size) {
             throw MishapInvalidIota(
                 datum,
                 0,

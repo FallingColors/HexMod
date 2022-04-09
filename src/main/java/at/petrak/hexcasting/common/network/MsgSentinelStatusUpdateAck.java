@@ -5,6 +5,7 @@ import at.petrak.hexcasting.common.lib.HexCapabilities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -20,7 +21,7 @@ public record MsgSentinelStatusUpdateAck(CapSentinel update) {
         var buf = new FriendlyByteBuf(buffer);
 
         var tag = buf.readAnySizeNbt();
-        var sentinel = new CapSentinel(false, false, Vec3.ZERO);
+        var sentinel = new CapSentinel(false, false, Vec3.ZERO, Level.OVERWORLD);
         sentinel.deserializeNBT(tag);
         return new MsgSentinelStatusUpdateAck(sentinel);
     }
@@ -43,6 +44,7 @@ public record MsgSentinelStatusUpdateAck(CapSentinel update) {
                 cap.hasSentinel = update().hasSentinel;
                 cap.extendsRange = update().extendsRange;
                 cap.position = update().position;
+                cap.dimension = update().dimension;
             })
         );
         ctx.get().setPacketHandled(true);

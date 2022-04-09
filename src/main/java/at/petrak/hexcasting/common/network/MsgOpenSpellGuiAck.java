@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
+import at.petrak.hexcasting.common.casting.ResolvedPattern;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
@@ -16,10 +18,18 @@ import java.util.function.Supplier;
 /**
  * Sent server->client when the player opens the spell gui to request the server provide the current stack.
  */
-public record MsgStackRequestAck(List<Component> components) {
+public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> patterns, List<Component> components) {
 
-    public static MsgStackRequestAck deserialize(ByteBuf buffer) {
+    public static MsgOpenSpellGuiAck deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
+
+        var hand = InteractionHand.values()[buf.readInt()];
+
+        var patternsLen = buf.readInt();
+        var patterns = new ArrayList<ResolvedPattern>(patternsLen);
+        for (int i = 0; i < patternsLen; i++) {
+            patterns.add(ResolvedPattern.DeserializeFromNBT(buf.readAnySizeNbt()));
+        }
 
         var descsLen = buf.readInt();
         var desc = new ArrayList<Component>(descsLen);
@@ -27,11 +37,18 @@ public record MsgStackRequestAck(List<Component> components) {
             desc.add(buf.readComponent());
         }
 
-        return new MsgStackRequestAck(desc);
+        return new MsgOpenSpellGuiAck(hand, patterns, desc);
     }
 
     public void serialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
+
+        buf.writeInt(this.hand.ordinal());
+
+        buf.writeInt(this.patterns.size());
+        for (var pattern : this.patterns) {
+            buf.writeNbt(pattern.serializeToNBT());
+        }
 
         buf.writeInt(this.components.size());
         for (var desc : this.components) {
@@ -43,10 +60,7 @@ public record MsgStackRequestAck(List<Component> components) {
         ctx.get().enqueueWork(() ->
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 var mc = Minecraft.getInstance();
-                var screen = Minecraft.getInstance().screen;
-                if (screen instanceof GuiSpellcasting spellGui) {
-                    spellGui.recvStackUpdate(this.components);
-                }
+                mc.setScreen(new GuiSpellcasting(hand, patterns, components));
             })
         );
         ctx.get().setPacketHandled(true);

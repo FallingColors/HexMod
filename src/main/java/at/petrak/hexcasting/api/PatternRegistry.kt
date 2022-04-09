@@ -141,6 +141,14 @@ object PatternRegistry {
     }
 
     /**
+     * Internal use only.
+     */
+    @JvmStatic
+    fun getAllPerWorldPatternNames(): Set<ResourceLocation> {
+        return this.perWorldPatternLookup.keys.toSet()
+    }
+
+    /**
      * Special handling of a pattern. Before checking any of the normal angle-signature based patterns,
      * a given pattern is run by all of these special handlers patterns. If none of them return non-null,
      * then its signature is checked.

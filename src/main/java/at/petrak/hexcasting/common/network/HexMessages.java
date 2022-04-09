@@ -37,9 +37,7 @@ public class HexMessages {
             MsgColorizerUpdateAck::deserialize, MsgColorizerUpdateAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgCastParticleAck.class, MsgCastParticleAck::serialize,
             MsgCastParticleAck::deserialize, MsgCastParticleAck::handle);
-        NETWORK.registerMessage(messageIdx++, MsgStackRequestSyn.class, MsgStackRequestSyn::serialize,
-                MsgStackRequestSyn::deserialize, MsgStackRequestSyn::handle);
-        NETWORK.registerMessage(messageIdx++, MsgStackRequestAck.class, MsgStackRequestAck::serialize,
-                MsgStackRequestAck::deserialize, MsgStackRequestAck::handle);
+        NETWORK.registerMessage(messageIdx++, MsgOpenSpellGuiAck.class, MsgOpenSpellGuiAck::serialize,
+                MsgOpenSpellGuiAck::deserialize, MsgOpenSpellGuiAck::handle);
     }
 }

@@ -13,7 +13,6 @@ import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn
-import at.petrak.hexcasting.common.network.MsgStackRequestSyn
 import at.petrak.hexcasting.hexmath.HexAngle
 import at.petrak.hexcasting.hexmath.HexCoord
 import at.petrak.hexcasting.hexmath.HexDir
@@ -39,14 +38,19 @@ import kotlin.math.roundToInt
 
 const val SQRT_3 = 1.7320508f
 
-class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(TextComponent("")) {
-    private var patterns: MutableList<ResolvedPattern> = mutableListOf()
+class GuiSpellcasting(private val handOpenedWith: InteractionHand,
+                      private var patterns: MutableList<ResolvedPattern>,
+                      private var stackDescs: List<Component>) : Screen(TextComponent("")) {
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
     private var ambianceSoundInstance: AbstractSoundInstance? = null
 
-    private var stackDescs: List<Component> = emptyList()
+    init {
+        for ((pattern, origin) in patterns) {
+            this.usedSpots.addAll(pattern.positions(origin))
+        }
+    }
 
     fun recvServerUpdate(info: ControllerInfo) {
         this.stackDescs = info.stackDesc
@@ -67,10 +71,6 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
         }
     }
 
-    fun recvStackUpdate(components: List<Component>) {
-        this.stackDescs = components
-    }
-
     override fun init() {
         val minecraft = Minecraft.getInstance()
         val soundManager = minecraft.soundManager
@@ -89,18 +89,6 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand) : Screen(Text
             true // this means is it relative to the *player's ears*, not to a given point, thanks mojank
         )
         soundManager.play(this.ambianceSoundInstance!!)
-
-        val stack = minecraft.player!!.getItemInHand(this.handOpenedWith)
-        val stackPatterns = stack.tag?.getList(ItemWand.TAG_PATTERNS, Tag.TAG_COMPOUND.toInt())
-        if (stackPatterns != null) for (pat in stackPatterns) {
-            val pattern = ResolvedPattern.DeserializeFromNBT(pat as CompoundTag)
-            this.patterns.add(pattern)
-            this.usedSpots.addAll(pattern.pattern.positions(pattern.origin))
-        }
-
-        HexMessages.getNetwork().sendToServer(
-            MsgStackRequestSyn(this.handOpenedWith)
-        )
     }
 
     override fun mouseClicked(mxOut: Double, myOut: Double, pButton: Int): Boolean {

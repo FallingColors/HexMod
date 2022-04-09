@@ -83,6 +83,7 @@ data class CastingContext(
             val sentinel = maybeSentinel.get()
             if (sentinel.hasSentinel
                 && sentinel.extendsRange
+                && world.dimension() == sentinel.dimension
                 && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
             )
                 return true

@@ -278,6 +278,7 @@
   "hexcasting.mishap.not_enough_args": "%s expected %s or more arguments but the stack was only %s tall",
   "hexcasting.mishap.too_many_close_parens": "Used Retrospection without first using Introspection",
   "hexcasting.mishap.location_too_far": "%s is out of range for %s",
+  "hexcasting.mishap.wrong_dimension": "%s cannot see %s from %s",
   "hexcasting.mishap.entity_too_far": "%s is out of range for %s",
   "hexcasting.mishap.eval_too_deep": "Recursively evaluated too deep",
   "hexcasting.mishap.bad_item": "%s needs %s but got %s",
