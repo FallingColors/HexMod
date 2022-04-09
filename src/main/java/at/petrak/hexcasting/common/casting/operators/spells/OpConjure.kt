@@ -53,10 +53,8 @@ class OpConjure(val light: Boolean) : SpellOperator {
                     if (ctx.world.getBlockState(pos).block is BlockConjuredLight) {
                         BlockConjured.setColor(ctx.world, pos, cap.colorizer)
                     }
-                } else
-                    throw MishapBadBlock.of(pos, "replaceable")
-            } else
-                throw MishapBadBlock.of(pos, "replaceable")
+                }
+            }
         }
     }
 }
