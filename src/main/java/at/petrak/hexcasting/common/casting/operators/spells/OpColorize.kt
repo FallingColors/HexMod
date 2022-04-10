@@ -19,10 +19,10 @@ object OpColorize : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
-        if (!FrozenColorizer.isColorizer(otherHandItem.item)) {
+        val handStack = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
+        if (!FrozenColorizer.isColorizer(handStack.item)) {
             throw MishapBadOffhandItem.of(
-                otherHandItem,
+                handStack,
                 "colorizer"
             )
         }
@@ -40,10 +40,10 @@ object OpColorize : SpellOperator {
                 return
             val cap = maybeCap.get()
 
-            val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
-            if (FrozenColorizer.isColorizer(otherHandItem.item)) {
-                val item = otherHandItem.item
-                if (ctx.withdrawItem(otherHandItem.item, 1, true)) {
+            val handStack = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
+            if (FrozenColorizer.isColorizer(handStack.item)) {
+                val item = handStack.item
+                if (ctx.withdrawItem(handStack.item, 1, true)) {
                     cap.colorizer = FrozenColorizer(item, ctx.caster.uuid)
                     HexMessages.getNetwork()
                         .send(PacketDistributor.PLAYER.with { ctx.caster }, MsgColorizerUpdateAck(cap))

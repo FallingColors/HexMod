@@ -10,13 +10,14 @@ object OpRead : ConstManaOperator {
     override val argc = 0
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val handStack =
-            ctx.caster.getItemInHand(ctx.otherHand)
-        val handItem = handStack.item
-        if (handItem !is DataHolder) {
-            throw MishapBadOffhandItem.of(handStack, "iota.read")
+        val handStack = ctx.getHeldItemToOperateOn {
+            val item = it.item
+            item is DataHolder && item.readDatum(it, ctx.world) != null
         }
-        val datum = handItem.readDatum(handStack, ctx.world) ?: throw MishapBadOffhandItem.of(handStack, "iota.read")
+
+        val handItem = handStack.item
+        val datum = (handItem as? DataHolder)?.readDatum(handStack, ctx.world) ?: throw MishapBadOffhandItem.of(handStack, "iota.read")
+
         return listOf(datum)
     }
 }

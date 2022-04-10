@@ -38,14 +38,15 @@ data class CastingContext(
 
     private val entitiesGivenMotion = mutableSetOf<Entity>()
 
-    fun getDataHolder(): ItemStack {
-        val handItem =
-            caster.getItemInHand(this.otherHand)
-        return if (handItem.item is DataHolder) {
-            handItem
-        } else {
-            throw MishapBadOffhandItem.of(handItem, "iota")
+    inline fun getHeldItemToOperateOn(acceptItemIf: (ItemStack) -> Boolean): ItemStack {
+        if (this.spellCircle == null) {
+            return caster.getItemInHand(otherHand)
         }
+
+        val handItem = caster.getItemInHand(castingHand)
+        if (!acceptItemIf(handItem))
+            return caster.getItemInHand(otherHand)
+        return handItem
     }
 
     /**

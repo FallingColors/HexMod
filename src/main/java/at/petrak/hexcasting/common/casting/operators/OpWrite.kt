@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapOthersName
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Items
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpWrite : SpellOperator {
@@ -17,14 +18,20 @@ object OpWrite : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val handStack = ctx.caster.getItemInHand(ctx.otherHand)
-        val handItem = handStack.item
-        val tag = handStack.orCreateTag
         val datum = args[0]
 
-        if (handItem !is DataHolder)
-            throw MishapBadOffhandItem.of(handStack, "iota.write")
-        else if (!handItem.canWrite(tag, datum))
+        val handStack = ctx.getHeldItemToOperateOn {
+            val item = it.item
+            if (item is DataHolder) {
+                val tag = it.orCreateTag
+                item.canWrite(tag, datum)
+            } else false
+        }
+
+        val handItem = handStack.item as? DataHolder ?: throw MishapBadOffhandItem.of(handStack, "iota.write")
+        val tag = handStack.orCreateTag
+
+        if (!handItem.canWrite(tag, datum))
             throw MishapBadOffhandItem.of(handStack, "iota.readonly", datum.display())
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
@@ -40,12 +47,19 @@ object OpWrite : SpellOperator {
 
     private data class Spell(val datum: SpellDatum<*>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val handStack = ctx.caster.getItemInHand(ctx.otherHand)
+            val handStack = ctx.getHeldItemToOperateOn {
+                val item = it.item
+                if (item is DataHolder) {
+                    val tag = it.orCreateTag
+                    item.canWrite(tag, datum)
+                } else false
+            }
             val handItem = handStack.item
-            val tag = handStack.orCreateTag
+
             if (handItem is DataHolder) {
+                val tag = handStack.orCreateTag
                 handItem.writeDatum(tag, datum)
-            } // else fuck
+            }
         }
 
     }
