@@ -7,6 +7,7 @@ import at.petrak.paucal.api.PaucalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,13 +62,15 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
         CompoundTag recordPos = compoundTag.getCompound(TAG_RECORD_POS);
         CompoundTag pattern = compoundTag.getCompound(TAG_PATTERN);
 
-        if (!recordPos.isEmpty()) {
+        if (recordPos.contains("X", Tag.TAG_ANY_NUMERIC) &&
+                recordPos.contains("Y", Tag.TAG_ANY_NUMERIC) &&
+                recordPos.contains("Z", Tag.TAG_ANY_NUMERIC)) {
             this.recordPos = NbtUtils.readBlockPos(recordPos);
         } else {
             this.recordPos = null;
         }
-        if (!pattern.isEmpty()) {
-            this.pattern = HexPattern.DeserializeFromNBT(compoundTag.getCompound(TAG_PATTERN));
+        if (HexPattern.IsHexPattern(pattern)) {
+            this.pattern = HexPattern.DeserializeFromNBT(pattern);
         } else {
             this.pattern = null;
         }

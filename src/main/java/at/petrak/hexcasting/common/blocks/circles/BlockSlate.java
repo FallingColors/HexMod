@@ -4,6 +4,10 @@ import at.petrak.hexcasting.api.circle.BlockCircleComponent;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -20,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -70,6 +75,22 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof BlockEntitySlate slate) {
+            ItemStack stack = new ItemStack(this);
+            if (slate.pattern != null) {
+                CompoundTag compoundtag = new CompoundTag();
+                compoundtag.put(BlockEntitySlate.TAG_PATTERN, slate.pattern.serializeToNBT());
+                BlockItem.setBlockEntityData(stack, slate.getType(), compoundtag);
+            }
+            return stack;
+        }
+
+        return super.getCloneItemStack(state, target, level, pos, player);
     }
 
     @Override

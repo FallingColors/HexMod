@@ -22,13 +22,20 @@ public class BlockEntitySlate extends PaucalBlockEntity {
     protected void saveModData(CompoundTag tag) {
         if (this.pattern != null) {
             tag.put(TAG_PATTERN, this.pattern.serializeToNBT());
+        } else {
+            tag.put(TAG_PATTERN, new CompoundTag());
         }
     }
 
     @Override
     protected void loadModData(CompoundTag tag) {
         if (tag.contains(TAG_PATTERN)) {
-            this.pattern = HexPattern.DeserializeFromNBT(tag.getCompound(TAG_PATTERN));
+            CompoundTag patternTag = tag.getCompound(TAG_PATTERN);
+            if (HexPattern.IsHexPattern(patternTag))
+                this.pattern = HexPattern.DeserializeFromNBT(patternTag);
+            else
+                this.pattern = null;
+
         }
     }
 
