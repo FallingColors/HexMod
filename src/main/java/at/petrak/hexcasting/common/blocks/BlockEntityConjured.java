@@ -22,7 +22,7 @@ public class BlockEntityConjured extends PaucalBlockEntity {
     }
 
     public void walkParticle(Entity pEntity) {
-        if (getBlockState().getBlock() instanceof BlockConjuredLight) {
+        if (getBlockState().getBlock() instanceof BlockConjured) {
             for (int i = 0; i < 3; ++i) {
                 int color = this.colorizer.getColor(pEntity.tickCount, pEntity.position()
                     .add(new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
