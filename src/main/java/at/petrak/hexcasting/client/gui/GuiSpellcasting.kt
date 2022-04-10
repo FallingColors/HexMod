@@ -65,7 +65,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
             Minecraft.getInstance().soundManager.play(
                 SimpleSoundInstance.forUI(
                     HexSounds.ADD_PATTERN.get(),
-                    1f + (Math.random().toFloat() - 0.5f) * 0.1f
+                    1f + (Math.random().toFloat() - 0.5f) * 0.1f, 1f // why does this get quieter in mono?
                 )
             )
         }
