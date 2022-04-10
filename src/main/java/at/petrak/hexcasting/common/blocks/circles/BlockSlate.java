@@ -165,7 +165,7 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
                     .setValue(ATTACH_FACE, AttachFace.WALL)
                     .setValue(FACING, direction.getOpposite());
             }
-            blockstate.setValue(WATERLOGGED, fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8);
+            blockstate = blockstate.setValue(WATERLOGGED, fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8);
 
             if (blockstate.canSurvive(pContext.getLevel(), pContext.getClickedPos())) {
                 return blockstate;
