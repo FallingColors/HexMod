@@ -60,9 +60,6 @@ public class ItemSlate extends BlockItem implements DataHolder {
             return false;
         }
 
-        if (!tag.contains("BlockEntityTag")) {
-            return false;
-        }
         var beTag = tag.getCompound("BlockEntityTag");
         return !beTag.contains(BlockEntitySlate.TAG_PATTERN);
     }
@@ -72,6 +69,7 @@ public class ItemSlate extends BlockItem implements DataHolder {
         if (this.canWrite(tag, datum) && datum.getPayload() instanceof HexPattern pat) {
             var beTag = tag.getCompound("BlockEntityTag");
             beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
+            tag.put("BlockEntityTag", beTag);
         }
     }
 }
