@@ -370,6 +370,12 @@ public class RegisterPatterns {
                 OpReverski.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ewdqdwe", HexDir.SOUTH_WEST), prefix("last_n_list"),
                 OpLastNToList.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qwaeawq", HexDir.NORTH_WEST), prefix("splat"),
+                OpSplat.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dedqde", HexDir.EAST), prefix("index_of"),
+                OpIndexOf.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("edqdewaqa", HexDir.SOUTH_WEST), prefix("list_remove"),
+                OpRemove.INSTANCE);
 
         } catch (PatternRegistry.RegisterPatternException exn) {
             exn.printStackTrace();
