@@ -6,6 +6,7 @@ import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -16,25 +17,27 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 // When on the floor or ceiling FACING is the direction the *bottom* of the pattern points
 // (or which way is "down").
 // When on the wall FACING is the direction of the *front* of the block
-public class BlockSlate extends BlockCircleComponent implements EntityBlock {
+public class BlockSlate extends BlockCircleComponent implements EntityBlock, SimpleWaterloggedBlock {
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<AttachFace> ATTACH_FACE = BlockStateProperties.ATTACH_FACE;
 
@@ -49,7 +52,18 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     public BlockSlate(Properties p_53182_) {
         super(p_53182_);
         this.registerDefaultState(
-            this.stateDefinition.any().setValue(ENERGIZED, false).setValue(FACING, Direction.NORTH));
+            this.stateDefinition.any().setValue(ENERGIZED, false).setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, @Nonnull BlockGetter reader, @Nonnull BlockPos pos) {
+        return !state.getValue(WATERLOGGED);
+    }
+
+    @Nonnull
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
@@ -133,12 +147,14 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING, ATTACH_FACE);
+        builder.add(FACING, ATTACH_FACE, WATERLOGGED);
     }
 
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        FluidState fluidState = pContext.getLevel().getFluidState(pContext.getClickedPos());
+
         for (Direction direction : pContext.getNearestLookingDirections()) {
             BlockState blockstate;
             if (direction.getAxis() == Direction.Axis.Y) {
@@ -150,6 +166,7 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
                     .setValue(ATTACH_FACE, AttachFace.WALL)
                     .setValue(FACING, direction.getOpposite());
             }
+            blockstate.setValue(WATERLOGGED, fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8);
 
             if (blockstate.canSurvive(pContext.getLevel(), pContext.getClickedPos())) {
                 return blockstate;
@@ -168,6 +185,10 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     @Override
     public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel,
         BlockPos pCurrentPos, BlockPos pFacingPos) {
+        if (pState.getValue(WATERLOGGED)) {
+            pLevel.scheduleTick(pCurrentPos, Fluids.WATER, Fluids.WATER.getTickDelay(pLevel));
+        }
+
         return getConnectedDirection(pState).getOpposite() == pFacing
             && !pState.canSurvive(pLevel, pCurrentPos) ?
             Blocks.AIR.defaultBlockState()
