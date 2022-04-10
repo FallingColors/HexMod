@@ -2,10 +2,7 @@ package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
-import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.common.items.ItemFocus;
-import at.petrak.hexcasting.common.items.ItemScroll;
-import at.petrak.hexcasting.common.items.ItemSlate;
+import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
 import at.petrak.paucal.api.datagen.PaucalItemModelProvider;
@@ -25,7 +22,6 @@ public class HexItemModels extends PaucalItemModelProvider {
 
     @Override
     protected void registerModels() {
-        simpleItem(HexItems.SPELLBOOK.get());
         simpleItem(HexItems.AMETHYST_DUST.get());
         simpleItem(HexItems.CHARGED_AMETHYST.get());
         simpleItem(HexItems.SUBMARINE_SANDWICH.get());
@@ -47,24 +43,36 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         simpleItem(modLoc("patchouli_book"));
 
-        String[] focusTypes = new String[]{
+        String[] datumStoredTypes = new String[]{
             "empty", "entity", "double", "vec3", "widget", "list", "pattern"
         };
         // For stupid bad reasons we need to do this in ascending order.
         for (int sealedIdx = 0; sealedIdx <= 1; sealedIdx++) {
             var sealed = sealedIdx == 1;
-            for (int i = 0, stringsLength = focusTypes.length; i < stringsLength; i++) {
-                var type = focusTypes[i];
-                var name = "focus_" + type + (sealed ? "_sealed" : "");
-                simpleItem(modLoc(name));
+            for (int i = 0, stringsLength = datumStoredTypes.length; i < stringsLength; i++) {
+                var type = datumStoredTypes[i];
+
+                var focusName = "focus_" + type + (sealed ? "_sealed" : "");
+                simpleItem(modLoc(focusName));
                 getBuilder(HexItems.FOCUS.get().getRegistryName().getPath())
                     .override()
                     .predicate(ItemFocus.DATATYPE_PRED, -0.01f + i + (sealed ? 100 : 0))
-                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
+                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + focusName)))
                     .end();
             }
         }
 
+        for (int i = 0, stringsLength = datumStoredTypes.length; i < stringsLength; i++) {
+            var type = datumStoredTypes[i];
+
+            var spellbookName = "spellbook_" + type;
+            simpleItem(modLoc(spellbookName));
+            getBuilder(HexItems.SPELLBOOK.get().getRegistryName().getPath())
+                    .override()
+                    .predicate(ItemSpellbook.DATATYPE_PRED, -0.01f + i)
+                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + spellbookName)))
+                    .end();
+        }
 
         Pair<RegistryObject<Item>, String>[] packagers = new Pair[]{
             new Pair(HexItems.CYPHER, "cypher"),

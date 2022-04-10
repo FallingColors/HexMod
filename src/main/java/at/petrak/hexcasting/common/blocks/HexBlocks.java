@@ -32,16 +32,29 @@ import java.util.function.Supplier;
 public class HexBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, HexMod.MOD_ID);
 
-    public static final RegistryObject<Block> CONJURED = blockItem("conjured",
-        () -> new BlockConjured(
-            BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.DIAMOND)
+    public static final RegistryObject<Block> CONJURED_LIGHT = blockNoItem("conjured",
+        () -> new BlockConjuredLight(
+            BlockBehaviour.Properties.of(Material.GLASS, MaterialColor.DIAMOND)
                 .sound(SoundType.AMETHYST)
+                .lightLevel((state) -> 15)
                 .noDrops()
+                .isValidSpawn(HexBlocks::never)
+                .instabreak()
+                .noCollission()
+                .isSuffocating(HexBlocks::never)
+                .isViewBlocking(HexBlocks::never)));
+
+    public static final RegistryObject<Block> CONJURED_BLOCK = blockNoItem("conjured_block",
+        () -> new BlockConjured(
+            BlockBehaviour.Properties.of(Material.GLASS, MaterialColor.DIAMOND)
+                .sound(SoundType.AMETHYST)
+                .lightLevel((state) -> 2)
+                .noDrops()
+                .isValidSpawn(HexBlocks::never)
                 .instabreak()
                 .noOcclusion()
                 .isSuffocating(HexBlocks::never)
-                .isViewBlocking(HexBlocks::never)),
-        new Item.Properties());
+                .isViewBlocking(HexBlocks::never)));
 
     private static BlockBehaviour.Properties slateish() {
         return BlockBehaviour.Properties
@@ -163,6 +176,10 @@ public class HexBlocks {
         return false;
     }
 
+    private static <T extends Block> RegistryObject<T> blockNoItem(String name, Supplier<T> block) {
+        return BLOCKS.register(name, block);
+    }
+
     private static <T extends Block> RegistryObject<T> blockItem(String name, Supplier<T> block) {
         return blockItem(name, block, HexItems.props());
     }
@@ -173,5 +190,6 @@ public class HexBlocks {
         HexItems.ITEMS.register(name, () -> new BlockItem(out.get(), props));
         return out;
     }
-
 }
+
+

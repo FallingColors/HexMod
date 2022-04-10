@@ -6,10 +6,15 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.blocks.BlockConjured
+import at.petrak.hexcasting.common.blocks.BlockConjuredLight
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.phys.Vec3
 
 class OpConjure(val light: Boolean) : SpellOperator {
@@ -30,20 +35,24 @@ class OpConjure(val light: Boolean) : SpellOperator {
 
     private data class Spell(val target: Vec3, val light: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            if (ctx.world.getBlockState(BlockPos(target)).isAir) {
-                var state = HexBlocks.CONJURED.get().defaultBlockState()
-                if (this.light) {
-                    state = state.setValue(BlockConjured.LIGHT, true)
-                }
-                ctx.world.setBlock(BlockPos(target), state, 2)
+            val pos = BlockPos(target)
+            val placeContext = DirectionalPlaceContext(ctx.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
 
-                val maybeCap = ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
-                if (!maybeCap.isPresent)
-                    return
-                val cap = maybeCap.get()
+            val worldState = ctx.world.getBlockState(pos)
+            if (worldState.canBeReplaced(placeContext)) {
+                val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
+                val state = block.get().getStateForPlacement(placeContext)
+                if (state != null) {
+                    ctx.world.setBlock(pos, state, 2)
 
-                if (ctx.world.getBlockState(BlockPos(target)).block is BlockConjured) {
-                    BlockConjured.setColor(ctx.world, BlockPos(target), cap.colorizer)
+                    val maybeCap = ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
+                    if (!maybeCap.isPresent)
+                        return
+                    val cap = maybeCap.get()
+
+                    if (ctx.world.getBlockState(pos).block is BlockConjured) {
+                        BlockConjured.setColor(ctx.world, pos, cap.colorizer)
+                    }
                 }
             }
         }

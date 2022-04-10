@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
+import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import net.minecraft.ChatFormatting;
@@ -8,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +21,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class ItemSpellbook extends Item implements DataHolder {
+    public static final ResourceLocation DATATYPE_PRED = new ResourceLocation(HexMod.MOD_ID, "datatype");
+
     public static String TAG_SELECTED_PAGE = "page_idx";
     // this is a CompoundTag of string numerical keys to SpellData
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
@@ -51,6 +55,8 @@ public class ItemSpellbook extends Item implements DataHolder {
         } else {
             tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
         }
+
+        DataHolder.appendHoverText(this, stack, tooltip, isAdvanced);
 
         super.appendHoverText(stack, level, tooltip, isAdvanced);
     }

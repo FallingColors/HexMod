@@ -22,7 +22,7 @@ public class BlockEntityConjured extends PaucalBlockEntity {
     }
 
     public void walkParticle(Entity pEntity) {
-        if (getBlockState().getBlock() instanceof BlockConjured) {
+        if (getBlockState().getBlock() instanceof BlockConjured conjured && !(conjured instanceof BlockConjuredLight)) {
             for (int i = 0; i < 3; ++i) {
                 int color = this.colorizer.getColor(pEntity.tickCount, pEntity.position()
                     .add(new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
@@ -45,7 +45,7 @@ public class BlockEntityConjured extends PaucalBlockEntity {
                 new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
                     RANDOM.nextFloat() * 3));
             assert level != null;
-            if (getBlockState().getValue(BlockConjured.LIGHT)) {
+            if (getBlockState().getBlock() instanceof BlockConjuredLight) {
                 if (RANDOM.nextFloat() < 0.5) {
                     level.addParticle(new ConjureParticleOptions(color, true),
                         (double) getBlockPos().getX() + 0.45D + (RANDOM.nextFloat() * 0.1D),
@@ -70,7 +70,7 @@ public class BlockEntityConjured extends PaucalBlockEntity {
     }
 
     public void landParticle(Entity entity, int number) {
-        if (getBlockState().getBlock() instanceof BlockConjured) {
+        if (getBlockState().getBlock() instanceof BlockConjuredLight) {
             for (int i = 0; i < number * 2; i++) {
                 int color = this.colorizer.getColor(entity.tickCount, entity.position()
                     .add(new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(

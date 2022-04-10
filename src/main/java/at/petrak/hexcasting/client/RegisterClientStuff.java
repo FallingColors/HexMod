@@ -14,10 +14,7 @@ import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
 import at.petrak.hexcasting.common.entities.HexEntities;
-import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.common.items.ItemFocus;
-import at.petrak.hexcasting.common.items.ItemScroll;
-import at.petrak.hexcasting.common.items.ItemSlate;
+import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
 import at.petrak.hexcasting.common.particles.HexParticles;
@@ -57,8 +54,9 @@ public class RegisterClientStuff {
                     var tag = stack.getOrCreateTag();
                     var isSealed = tag.getBoolean(ItemFocus.TAG_SEALED);
                     var baseNum = isSealed ? 100f : 0f;
-                    if (stack.hasTag()) {
-                        var typename = tag.getCompound(ItemFocus.TAG_DATA).getAllKeys().iterator().next();
+                    var datum = HexItems.FOCUS.get().readDatumTag(stack);
+                    if (datum != null) {
+                        var typename = datum.getAllKeys().iterator().next();
                         return baseNum + switch (typename) {
                             case SpellDatum.TAG_ENTITY -> 1f;
                             case SpellDatum.TAG_DOUBLE -> 2f;
@@ -72,6 +70,25 @@ public class RegisterClientStuff {
                         return baseNum;
                     }
                 });
+            ItemProperties.register(HexItems.SPELLBOOK.get(), ItemSpellbook.DATATYPE_PRED,
+                    (stack, level, holder, holderID) -> {
+                        var tag = stack.getOrCreateTag();
+                        var datum = HexItems.SPELLBOOK.get().readDatumTag(stack);
+                        if (datum != null) {
+                            var typename = datum.getAllKeys().iterator().next();
+                            return switch (typename) {
+                                case SpellDatum.TAG_ENTITY -> 1f;
+                                case SpellDatum.TAG_DOUBLE -> 2f;
+                                case SpellDatum.TAG_VEC3 -> 3f;
+                                case SpellDatum.TAG_WIDGET -> 4f;
+                                case SpellDatum.TAG_LIST -> 5f;
+                                case SpellDatum.TAG_PATTERN -> 6f;
+                                default -> 0f; // uh oh
+                            };
+                        } else {
+                            return 0f;
+                        }
+                    });
             for (RegistryObject<Item> packager : new RegistryObject[]{
                 HexItems.CYPHER,
                 HexItems.TRINKET,
@@ -107,7 +124,8 @@ public class RegisterClientStuff {
         });
 
         for (var cutout : new Block[]{
-            HexBlocks.CONJURED.get(),
+            HexBlocks.CONJURED_LIGHT.get(),
+            HexBlocks.CONJURED_BLOCK.get(),
             HexBlocks.AKASHIC_DOOR.get(),
             HexBlocks.AKASHIC_TRAPDOOR.get(),
             HexBlocks.SCONCE.get(),

@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client.gui
 import at.petrak.hexcasting.HexUtils
 import at.petrak.hexcasting.HexUtils.TAU
 import at.petrak.hexcasting.client.RenderLib
+import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.casting.ControllerInfo
 import at.petrak.hexcasting.common.casting.ResolvedPattern
 import at.petrak.hexcasting.common.casting.ResolvedPatternValidity
@@ -44,7 +45,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
-    private var ambianceSoundInstance: AbstractSoundInstance? = null
+    private var ambianceSoundInstance: GridSoundInstance? = null
 
     init {
         for ((pattern, origin) in patterns) {
@@ -63,9 +64,14 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
 
         if (!info.wasPrevPatternInvalid) {
             Minecraft.getInstance().soundManager.play(
-                SimpleSoundInstance.forUI(
+                SimpleSoundInstance(
                     HexSounds.ADD_PATTERN.get(),
-                    1f + (Math.random().toFloat() - 0.5f) * 0.1f
+                    SoundSource.PLAYERS,
+                    1f,
+                    1f + (Math.random().toFloat() - 0.5f) * 0.1f,
+                    this.ambianceSoundInstance!!.x,
+                    this.ambianceSoundInstance!!.y,
+                    this.ambianceSoundInstance!!.z,
                 )
             )
         }
@@ -75,20 +81,21 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
         val minecraft = Minecraft.getInstance()
         val soundManager = minecraft.soundManager
         soundManager.stop(HexSounds.CASTING_AMBIANCE.id, null)
-        this.ambianceSoundInstance = SimpleSoundInstance(
-            HexSounds.CASTING_AMBIANCE.get().location,
-            SoundSource.PLAYERS,
-            1f,
-            1f,
-            true,
-            0,
-            SoundInstance.Attenuation.NONE,
-            0.0,
-            0.0,
-            0.0,
-            true // this means is it relative to the *player's ears*, not to a given point, thanks mojank
-        )
-        soundManager.play(this.ambianceSoundInstance!!)
+        val player = minecraft.player
+        if (player != null) {
+            this.ambianceSoundInstance = GridSoundInstance(player)
+            soundManager.play(this.ambianceSoundInstance!!)
+        }
+    }
+
+    override fun tick() {
+        val minecraft = Minecraft.getInstance()
+        val player = minecraft.player
+        if (player != null) {
+            val heldItem = player.getItemInHand(handOpenedWith)
+            if (heldItem.isEmpty || heldItem.item !is ItemWand)
+                onClose()
+        }
     }
 
     override fun mouseClicked(mxOut: Double, myOut: Double, pButton: Int): Boolean {
@@ -103,9 +110,14 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
             if (!this.usedSpots.contains(coord)) {
                 this.drawState = PatternDrawState.JustStarted(coord)
                 Minecraft.getInstance().soundManager.play(
-                    SimpleSoundInstance.forUI(
+                    SimpleSoundInstance(
                         HexSounds.START_PATTERN.get(),
-                        1f
+                        SoundSource.PLAYERS,
+                        1f,
+                        1f,
+                        this.ambianceSoundInstance!!.x,
+                        this.ambianceSoundInstance!!.y,
+                        this.ambianceSoundInstance!!.z,
                     )
                 )
             }
@@ -171,9 +183,14 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
 
                 if (playSound) {
                     Minecraft.getInstance().soundManager.play(
-                        SimpleSoundInstance.forUI(
-                            HexSounds.ADD_LINE.get(),
-                            1f + (Math.random().toFloat() - 0.5f) * 0.1f
+                        SimpleSoundInstance(
+                            HexSounds.START_PATTERN.get(),
+                            SoundSource.PLAYERS,
+                            1f,
+                            1f + (Math.random().toFloat() - 0.5f) * 0.1f,
+                            this.ambianceSoundInstance!!.x,
+                            this.ambianceSoundInstance!!.y,
+                            this.ambianceSoundInstance!!.z,
                         )
                     )
                 }
@@ -236,6 +253,9 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
 
     override fun render(poseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(poseStack, pMouseX, pMouseY, pPartialTick)
+
+        this.ambianceSoundInstance?.mousePosX = pMouseX / this.width.toDouble()
+        this.ambianceSoundInstance?.mousePosY = pMouseX / this.width.toDouble()
 
         val mat = poseStack.last().pose()
         val prevShader = RenderSystem.getShader()

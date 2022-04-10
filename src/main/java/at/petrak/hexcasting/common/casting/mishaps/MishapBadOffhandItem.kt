@@ -29,8 +29,8 @@ class MishapBadOffhandItem(val item: ItemStack, val wanted: Component) : Mishap(
 
     companion object {
         @JvmStatic
-        fun of(item: ItemStack, stub: String): MishapBadOffhandItem {
-            return MishapBadOffhandItem(item, TranslatableComponent("hexcasting.mishap.bad_item.$stub"))
+        fun of(item: ItemStack, stub: String, vararg args: Any): MishapBadOffhandItem {
+            return MishapBadOffhandItem(item, TranslatableComponent("hexcasting.mishap.bad_item.$stub", *args))
         }
     }
 }

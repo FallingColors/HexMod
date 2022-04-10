@@ -18,7 +18,7 @@ public class HexBlockEntities {
 
     public static final RegistryObject<BlockEntityType<BlockEntityConjured>> CONJURED_TILE = BLOCK_ENTITIES.register(
         "conjured_tile",
-        () -> BlockEntityType.Builder.of(BlockEntityConjured::new, HexBlocks.CONJURED.get()).build(null));
+        () -> BlockEntityType.Builder.of(BlockEntityConjured::new, HexBlocks.CONJURED_LIGHT.get(), HexBlocks.CONJURED_BLOCK.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityAkashicBookshelf>> AKASHIC_BOOKSHELF_TILE = BLOCK_ENTITIES.register(
         "akashic_bookshelf_tile",
