@@ -50,7 +50,7 @@ class OpConjure(val light: Boolean) : SpellOperator {
                         return
                     val cap = maybeCap.get()
 
-                    if (ctx.world.getBlockState(pos).block is BlockConjuredLight) {
+                    if (ctx.world.getBlockState(pos).block is BlockConjured) {
                         BlockConjured.setColor(ctx.world, pos, cap.colorizer)
                     }
                 }
