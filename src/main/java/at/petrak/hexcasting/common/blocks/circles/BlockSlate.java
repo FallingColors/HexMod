@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.api.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -81,12 +81,9 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock {
     public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof BlockEntitySlate slate) {
-            ItemStack stack = new ItemStack(this);
-            if (slate.pattern != null) {
-                CompoundTag compoundtag = new CompoundTag();
-                compoundtag.put(BlockEntitySlate.TAG_PATTERN, slate.pattern.serializeToNBT());
-                BlockItem.setBlockEntityData(stack, slate.getType(), compoundtag);
-            }
+            ItemStack stack = new ItemStack(HexItems.SLATE.get());
+            if (slate.pattern != null)
+                HexItems.SLATE.get().writeDatum(stack.getOrCreateTag(), SpellDatum.make(slate.pattern));
             return stack;
         }
 
