@@ -125,8 +125,9 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                 String.format("%.2f", dustCount));
             out.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST.get()), dustCmp));
 
-            if (this.lastMishap != null) {
-                out.add(new Pair<>(new ItemStack(HexItems.SCRYING_LENS.get()), this.lastMishap));
+            var mishap = this.getLastMishap();
+            if (mishap != null) {
+                out.add(new Pair<>(new ItemStack(Items.MUSIC_DISC_11), mishap));
             }
         }
         return out;
@@ -208,6 +209,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         }
 
         if (this.foundAll) {
+            this.setLastMishap(null);
             this.castSpell();
             this.stopCasting();
             return;
