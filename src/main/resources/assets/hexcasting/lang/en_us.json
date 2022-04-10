@@ -96,6 +96,7 @@
   "hexcasting.tooltip.lens.pattern.invalid": "Invalid Pattern",
   "hexcasting.tooltip.lens.akashic.bookshelf.location": "Record at %s",
   "hexcasting.tooltip.lens.akashic.record.count": "%s iotas stored",
+  "hexcasting.tooltip.lens.akashic.record.count.single": "%s iota stored",
   "hexcasting.tooltip.brainsweep.profession": "Profession: %s",
   "hexcasting.tooltip.brainsweep.profession.any": "Any Profession",
   "hexcasting.tooltip.brainsweep.biome": "Biome: %s",
