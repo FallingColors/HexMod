@@ -9,12 +9,12 @@ import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
+import java.util.*
 
 /**
  * Data allowed into a spell.
@@ -74,6 +74,14 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             append(this@SpellDatum.payload.toString())
             append(']')
         }
+
+    override fun equals(other: Any?): Boolean {
+        return other is SpellDatum<*> && other.payload == payload
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(clazz, this.payload)
+    }
 
     fun display(): Component {
         val nbt = this.serializeToNBT()
