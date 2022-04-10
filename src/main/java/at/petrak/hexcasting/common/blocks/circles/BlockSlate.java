@@ -15,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -191,7 +190,7 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
 
         return getConnectedDirection(pState).getOpposite() == pFacing
             && !pState.canSurvive(pLevel, pCurrentPos) ?
-            Blocks.AIR.defaultBlockState()
+            pState.getFluidState().createLegacyBlock()
             : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
     }
 
