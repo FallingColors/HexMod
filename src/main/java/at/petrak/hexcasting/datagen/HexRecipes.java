@@ -234,6 +234,17 @@ public class HexRecipes extends PaucalRecipeProvider {
             .pattern("W W")
             .pattern(" WW")
             .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_DOOR.get(), 3)
+            .define('W', HexItemTags.AKASHIC_PLANKS)
+            .pattern("WW")
+            .pattern("WW")
+            .pattern("WW")
+            .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_TRAPDOOR.get(), 2)
+            .define('W', HexItemTags.AKASHIC_PLANKS)
+            .pattern("WWW")
+            .pattern("WWW")
+            .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
 
         var enlightenment = new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
             MinMaxBounds.Ints.ANY,

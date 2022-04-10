@@ -31,6 +31,8 @@ public class HexItemTagProvider extends ItemTagsProvider {
         this.copy(BlockTags.PLANKS, ItemTags.PLANKS);
         this.copy(BlockTags.DOORS, ItemTags.DOORS);
         this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
+        this.copy(BlockTags.TRAPDOORS, ItemTags.TRAPDOORS);
+        this.copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
         this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
     }
 }

@@ -28,7 +28,11 @@ public class BlockStrippable extends RotatedPillarBlock {
     public BlockState getToolModifiedState(BlockState state, Level world, BlockPos pos, Player player, ItemStack stack,
         ToolAction toolAction) {
         if (toolAction == ToolActions.AXE_STRIP) {
-            return stripped.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS));
+            var out = stripped.get().defaultBlockState();
+            if (state.hasProperty(AXIS)) {
+                out = out.setValue(AXIS, state.getValue(AXIS));
+            }
+            return out;
         } else {
             return null;
         }

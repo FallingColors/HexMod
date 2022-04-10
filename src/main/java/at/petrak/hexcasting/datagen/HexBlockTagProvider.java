@@ -28,7 +28,7 @@ public class HexBlockTagProvider extends BlockTagsProvider {
             .add(HexBlocks.AMETHYST_DUST_BLOCK.get());
 
         tag(BlockTags.MINEABLE_WITH_AXE)
-            .add(HexBlocks.AKASHIC_RECORD.get(), HexBlocks.AKASHIC_BOOKSHELF.get(),
+            .add(HexBlocks.AKASHIC_RECORD.get(), HexBlocks.AKASHIC_BOOKSHELF.get(), HexBlocks.AKASHIC_CONNECTOR.get(),
                 HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),
                 HexBlocks.AKASHIC_WOOD.get(), HexBlocks.AKASHIC_WOOD_STRIPPED.get(),
                 HexBlocks.AKASHIC_PLANKS.get(), HexBlocks.AKASHIC_PANEL.get(), HexBlocks.AKASHIC_TILE.get(),

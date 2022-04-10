@@ -3,6 +3,7 @@
   "values": [
     "hexcasting:akashic_record",
     "hexcasting:akashic_bookshelf",
+    "hexcasting:akashic_connector",
     "hexcasting:akashic_log",
     "hexcasting:akashic_log_stripped",
     "hexcasting:akashic_wood",
