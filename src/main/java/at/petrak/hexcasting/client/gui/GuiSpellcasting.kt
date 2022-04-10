@@ -91,6 +91,16 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
         soundManager.play(this.ambianceSoundInstance!!)
     }
 
+    override fun tick() {
+        val minecraft = Minecraft.getInstance()
+        val player = minecraft.player
+        if (player != null) {
+            val heldItem = player.getItemInHand(handOpenedWith)
+            if (heldItem.isEmpty || heldItem.item !is ItemWand)
+                onClose()
+        }
+    }
+
     override fun mouseClicked(mxOut: Double, myOut: Double, pButton: Int): Boolean {
         if (super.mouseClicked(mxOut, myOut, pButton)) {
             return true
