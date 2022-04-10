@@ -22,13 +22,10 @@ object OpWrite : SpellOperator {
         val tag = handStack.orCreateTag
         val datum = args[0]
 
-        val canWrite = if (handItem is DataHolder) {
-            handItem.canWrite(tag, datum)
-        } else {
-            false
-        }
-        if (!canWrite)
+        if (handItem !is DataHolder)
             throw MishapBadOffhandItem.of(handStack, "iota.write")
+        else if (!handItem.canWrite(tag, datum))
+            throw MishapBadOffhandItem.of(handStack, "iota.readonly", datum.display())
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
         if (trueName != null)
