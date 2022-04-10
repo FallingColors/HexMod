@@ -20,27 +20,23 @@ object OpDivCross : ConstManaOperator {
                 rhs.map(
                     { rnum ->
                         if (rnum == 0.0)
-                            throw MishapDivideByZero(lnum)
+                            throw MishapDivideByZero.of(lnum, rnum)
                         lnum / rnum
                     },
                     { rvec ->
-                        if (rvec.x == 0.0 && rvec.y == 0.0 && rvec.z == 0.0)
-                            throw MishapDivideByZero(lnum)
+                        if (rvec.x == 0.0 || rvec.y == 0.0 || rvec.z == 0.0)
+                            throw MishapDivideByZero.of(lnum, rvec)
                         Vec3(lnum / rvec.x, lnum / rvec.y, lnum / rvec.z)
                     }
                 )
             }, { lvec ->
                 rhs.map(
                     { rnum ->
-                        if (rnum == 0.0)
-                            throw MishapDivideByZero(lvec)
+                        if (lvec == Vec3.ZERO)
+                            throw MishapDivideByZero.of(lvec, rnum)
                         lvec.scale(1.0 / rnum)
                     },
-                    { rvec ->
-                        if (rvec.x == 0.0 && rvec.y == 0.0 && rvec.z == 0.0)
-                            throw MishapDivideByZero(lvec)
-                        lvec.cross(rvec)
-                    }
+                    { rvec -> lvec.cross(rvec) }
                 )
             })
         )

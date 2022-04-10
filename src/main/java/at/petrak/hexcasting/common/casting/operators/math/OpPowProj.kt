@@ -4,6 +4,8 @@ import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.mishaps.MishapDivideByZero
+import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.phys.Vec3
 import kotlin.math.pow
 
@@ -18,12 +20,28 @@ object OpPowProj : ConstManaOperator {
         return spellListOf(
             lhs.map({ lnum ->
                 rhs.map(
-                    { rnum -> lnum.pow(rnum) }, { rvec -> Vec3(lnum.pow(rvec.x), lnum.pow(rvec.y), lnum.pow(rvec.z)) }
+                    { rnum ->
+                        if (rnum == 0.0 && lnum == 0.0)
+                            throw MishapDivideByZero.of(lnum, rnum, "exponent")
+                        lnum.pow(rnum)
+                    }, { rvec ->
+                        if (lnum == 0.0 && (rvec.x == 0.0 || rvec.y == 0.0 || rvec.z == 0.0))
+                            throw MishapDivideByZero.of(lnum, rvec, "exponent")
+                        Vec3(lnum.pow(rvec.x), lnum.pow(rvec.y), lnum.pow(rvec.z))
+                    }
                 )
             }, { lvec ->
                 rhs.map(
-                    { rnum -> Vec3(lvec.x.pow(rnum), lvec.y.pow(rnum), lvec.z.pow(rnum)) },
-                    { rvec -> rvec.scale(lvec.dot(rvec) / rvec.dot(rvec)) }
+                    { rnum ->
+                        if (rnum == 0.0 && (lvec.x == 0.0 || lvec.y == 0.0 || lvec.z == 0.0))
+                            throw MishapDivideByZero.of(lvec, rnum, "exponent")
+                        Vec3(lvec.x.pow(rnum), lvec.y.pow(rnum), lvec.z.pow(rnum))
+                    },
+                    { rvec ->
+                        if (rvec == Vec3.ZERO)
+                            throw MishapDivideByZero.of(lvec, rvec, "project")
+                        rvec.scale(lvec.dot(rvec) / rvec.dot(rvec))
+                    }
                 )
             })
         )
