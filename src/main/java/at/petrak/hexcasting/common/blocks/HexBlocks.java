@@ -34,7 +34,7 @@ public class HexBlocks {
 
     public static final RegistryObject<Block> CONJURED_LIGHT = blockNoItem("conjured",
         () -> new BlockConjuredLight(
-            BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.DIAMOND)
+            BlockBehaviour.Properties.of(Material.GLASS, MaterialColor.DIAMOND)
                 .sound(SoundType.AMETHYST)
                 .lightLevel((state) -> 15)
                 .noDrops()
@@ -46,7 +46,7 @@ public class HexBlocks {
 
     public static final RegistryObject<Block> CONJURED_BLOCK = blockNoItem("conjured_block",
         () -> new BlockConjured(
-            BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.DIAMOND)
+            BlockBehaviour.Properties.of(Material.GLASS, MaterialColor.DIAMOND)
                 .sound(SoundType.AMETHYST)
                 .lightLevel((state) -> 2)
                 .noDrops()
