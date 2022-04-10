@@ -209,7 +209,6 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         }
 
         if (this.foundAll) {
-            this.setLastMishap(null);
             this.castSpell();
             this.stopCasting();
             return;
@@ -312,6 +311,8 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                     2f, 1f);
             }
             if (erroredPos != null) {
+                this.setLastMishap(null);
+                this.setChanged();
                 this.sfx(erroredPos, false);
             }
         }
