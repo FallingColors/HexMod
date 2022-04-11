@@ -38,15 +38,15 @@ data class CastingContext(
 
     private val entitiesGivenMotion = mutableSetOf<Entity>()
 
-    inline fun getHeldItemToOperateOn(acceptItemIf: (ItemStack) -> Boolean): ItemStack {
+    inline fun getHeldItemToOperateOn(acceptItemIf: (ItemStack) -> Boolean): Pair<ItemStack, InteractionHand> {
         if (this.spellCircle == null) {
-            return caster.getItemInHand(otherHand)
+            return caster.getItemInHand(otherHand) to otherHand
         }
 
         val handItem = caster.getItemInHand(castingHand)
         if (!acceptItemIf(handItem))
-            return caster.getItemInHand(otherHand)
-        return handItem
+            return caster.getItemInHand(otherHand) to otherHand
+        return handItem to castingHand
     }
 
     /**
@@ -152,8 +152,9 @@ data class CastingContext(
 
         val inv = this.caster.inventory
         // TODO: withdraw from ender chest given a specific ender charm?
-        val stacksToExamine = inv.items.asReversed().toMutableList()
+        val stacksToExamine = inv.items.toMutableList().apply { removeAt(inv.selected) }.asReversed().toMutableList()
         stacksToExamine.addAll(inv.offhand)
+        stacksToExamine.add(inv.getSelected())
 
         fun matches(stack: ItemStack): Boolean =
             !stack.isEmpty && stack.`is`(item)

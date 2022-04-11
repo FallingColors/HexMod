@@ -16,7 +16,7 @@ class OpErase : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val handStack = ctx.getHeldItemToOperateOn {
+        val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val item = it.item
             item is ItemPackagedSpell || (item is DataHolder && it.hasTag() && item.canWrite(it.orCreateTag, null))
         }
@@ -25,7 +25,7 @@ class OpErase : SpellOperator {
             (handItem !is DataHolder ||
                     !handStack.hasTag() ||
                     !handItem.canWrite(handStack.orCreateTag, null))) {
-            throw MishapBadOffhandItem.of(handStack, "eraseable")
+            throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
         }
 
         return Triple(Spell, 10_000, listOf())
@@ -33,7 +33,7 @@ class OpErase : SpellOperator {
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val handStack = ctx.getHeldItemToOperateOn {
+            val (handStack) = ctx.getHeldItemToOperateOn {
                 val item = it.item
                 item is ItemPackagedSpell || (item is DataHolder && it.hasTag() && item.canWrite(it.orCreateTag, null))
             }

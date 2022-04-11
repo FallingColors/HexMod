@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.ManaHelper
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
@@ -23,17 +24,19 @@ object OpMakeBattery : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getChecked<ItemEntity>(0)
 
-        val otherHandItem = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
+        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
 
-        if (otherHandItem.item != Items.GLASS_BOTTLE) {
+        if (handStack.item != Items.GLASS_BOTTLE) {
             throw MishapBadOffhandItem.of(
-                otherHandItem,
+                handStack,
+                hand,
                 "bottle"
             )
         }
-        if (otherHandItem.count != 1) {
+        if (handStack.count != 1) {
             throw MishapBadOffhandItem.of(
-                otherHandItem,
+                handStack,
+                hand,
                 "only_one"
             )
         }
@@ -41,8 +44,8 @@ object OpMakeBattery : SpellOperator {
         ctx.assertEntityInRange(entity)
 
         if (!ManaHelper.isManaItem(entity.item)) {
-            throw MishapBadOffhandItem.of(
-                otherHandItem,
+            throw MishapBadItem.of(
+                entity.item,
                 "mana"
             )
         }
@@ -52,7 +55,7 @@ object OpMakeBattery : SpellOperator {
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val handStack = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
+            val (handStack, hand) = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
             if (handStack.item == Items.GLASS_BOTTLE && itemEntity.isAlive) {
                 val manaAmt = ManaHelper.extractAllMana(itemEntity.item)
                 if (manaAmt != null) {
@@ -61,7 +64,7 @@ object OpMakeBattery : SpellOperator {
                     tag.putInt(ItemManaHolder.TAG_MANA, manaAmt)
                     tag.putInt(ItemManaHolder.TAG_MAX_MANA, manaAmt)
 
-                    ctx.caster.setItemInHand(ctx.otherHand, replaceItem)
+                    ctx.caster.setItemInHand(hand, replaceItem)
                 }
             }
         }

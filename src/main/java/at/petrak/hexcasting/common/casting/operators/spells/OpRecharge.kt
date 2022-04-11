@@ -19,11 +19,12 @@ object OpRecharge : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val handStack = ctx.getHeldItemToOperateOn { it.item is ItemManaHolder }
+        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.item is ItemManaHolder }
 
         if (handStack.item !is ItemManaHolder)
             throw MishapBadOffhandItem.of(
                 handStack,
+                hand,
                 "rechargable"
             )
 
@@ -42,7 +43,7 @@ object OpRecharge : SpellOperator {
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val handStack = ctx.getHeldItemToOperateOn { it.item is ItemManaHolder }
+            val (handStack) = ctx.getHeldItemToOperateOn { it.item is ItemManaHolder }
 
             if (handStack.item is ItemManaHolder && itemEntity.isAlive) {
                 val manaAmt = ManaHelper.extractAllMana(itemEntity.item)

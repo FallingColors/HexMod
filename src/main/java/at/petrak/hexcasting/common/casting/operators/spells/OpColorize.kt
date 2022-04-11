@@ -19,10 +19,11 @@ object OpColorize : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val handStack = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
+        val (handStack, hand) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
         if (!FrozenColorizer.isColorizer(handStack.item)) {
             throw MishapBadOffhandItem.of(
                 handStack,
+                hand,
                 "colorizer"
             )
         }
@@ -40,7 +41,7 @@ object OpColorize : SpellOperator {
                 return
             val cap = maybeCap.get()
 
-            val handStack = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
+            val (handStack) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
             if (FrozenColorizer.isColorizer(handStack.item)) {
                 val item = handStack.item
                 if (ctx.withdrawItem(handStack.item, 1, true)) {
