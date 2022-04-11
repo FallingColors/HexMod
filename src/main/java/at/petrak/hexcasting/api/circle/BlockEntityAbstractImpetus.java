@@ -190,7 +190,8 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.mana = tag.getInt(TAG_MANA);
         if (tag.contains(TAG_LAST_MISHAP)) {
             this.lastMishap = Component.Serializer.fromJson(tag.getString(TAG_LAST_MISHAP));
-        }
+        } else
+            this.lastMishap = null;
     }
 
     void stepCircle() {

@@ -288,7 +288,7 @@ class CastingHarness private constructor(
                     .filter(ManaHelper::isManaItem)
                     .sortedWith(Comparator(ManaHelper::compare).reversed())
                 for (stack in manableItems) {
-                    costLeft -= ManaHelper.extractMana(stack, costLeft)!!
+                    costLeft -= ManaHelper.extractMana(stack, costLeft)
                     if (costLeft <= 0)
                         break
                 }
