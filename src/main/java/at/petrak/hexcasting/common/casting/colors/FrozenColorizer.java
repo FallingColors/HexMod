@@ -24,6 +24,10 @@ import java.util.UUID;
  * A colorizer item and the player who owned it at the time of making the color.
  */
 public record FrozenColorizer(Item item, UUID owner) {
+    private static final int[] MINIMUM_LUMINANCE_COLOR_WHEEL = {
+            0xFF200000, 0xFF202000, 0xFF002000, 0xFF002020, 0xFF000020, 0xFF200020
+    };
+
     public static final String TAG_ITEM = "item";
     public static final String TAG_OWNER = "owner";
 
@@ -55,11 +59,36 @@ public record FrozenColorizer(Item item, UUID owner) {
     }
 
     /**
+     * Gets a color with a minimum luminance applied.
      * @param time     absolute world time in ticks
      * @param position a position for the icosahedron, a randomish number for particles.
      * @return an AARRGGBB color.
      */
     public int getColor(float time, Vec3 position) {
+        int raw = getRawColor(time, position);
+
+        int r = (raw & 0xFF0000) >> 16;
+        int g = (raw & 0xFF00) >> 8;
+        int b = (raw & 0xFF);
+        double luminance = 0.2126 * r / 0xFF + 0.7152 * g / 0xFF + 0.0722 * b / 0xFF; // Standard relative luminance calculation
+
+        if (luminance < 0.1) {
+            int rawMod = morphBetweenColors(MINIMUM_LUMINANCE_COLOR_WHEEL, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
+
+            r += (rawMod & 0xFF0000) >> 16;
+            g += (rawMod & 0xFF00) >> 8;
+            b += (rawMod & 0xFF);
+        }
+
+        return 0xff_000000 | (r << 16) | (g << 8) | b;
+    }
+
+    /**
+     * @param time     absolute world time in ticks
+     * @param position a position for the icosahedron, a randomish number for particles.
+     * @return an AARRGGBB color.
+     */
+    public int getRawColor(float time, Vec3 position) {
         if (this.item instanceof ItemDyeColorizer dye) {
             return dye.getDyeColor().getTextColor() | 0xff_000000;
         } else if (this.item instanceof ItemPrideColorizer politics) {
