@@ -19,10 +19,16 @@ object OpRecharge : SpellOperator {
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.item is ItemManaHolder }
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+        val (handStack, hand) = ctx.getHeldItemToOperateOn {
+            val item = it.item
+            val tag = it.tag
+            item is ItemManaHolder && tag != null && item.getManaAmt(tag) < item.getMaxManaAmt(tag)
+        }
 
-        if (handStack.item !is ItemManaHolder)
+        val handItem = handStack.item
+
+        if (handItem !is ItemManaHolder)
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,
@@ -38,6 +44,10 @@ object OpRecharge : SpellOperator {
                 "mana"
             )
         }
+
+        val tag = handStack.orCreateTag
+        if (handItem.getManaAmt(tag) >= handItem.getMaxManaAmt(tag))
+            return null
 
         return Triple(Spell(entity), 100_000, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }
