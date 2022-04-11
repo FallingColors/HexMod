@@ -25,26 +25,26 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:empty_impetus",
-      "text": "hexcasting.page.impetus.5"
+      "text": "hexcasting.page.impetus.empty_impetus"
     },
     {
       "type": "hexcasting:brainsweep",
       "recipe": "hexcasting:brainsweep/impetus_rightclick",
-      "text": "hexcasting.page.impetus.6"
+      "text": "hexcasting.page.impetus.impetus_rightclick"
     },
     {
       "type": "hexcasting:brainsweep",
       "recipe": "hexcasting:brainsweep/impetus_storedplayer",
-      "text": "hexcasting.page.impetus.7"
+      "text": "hexcasting.page.impetus.impetus_storedplayer.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.impetus.8"
+      "text": "hexcasting.page.impetus.impetus_storedplayer.2"
     },
     {
       "type": "hexcasting:brainsweep",
       "recipe": "hexcasting:brainsweep/impetus_look",
-      "text": "hexcasting.page.impetus.9"
+      "text": "hexcasting.page.impetus.impetus_look"
     }
   ]
 }

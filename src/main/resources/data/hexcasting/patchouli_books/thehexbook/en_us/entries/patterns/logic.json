@@ -12,7 +12,7 @@
       "anchor": "hexcasting:greater",
       "input": "number, number",
       "output": "number",
-      "text": "hexcasting.page.logic.1"
+      "text": "hexcasting.page.logic.greater"
     },
     {
       "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
       "anchor": "hexcasting:less",
       "input": "number, number",
       "output": "number",
-      "text": "hexcasting.page.logic.2"
+      "text": "hexcasting.page.logic.less"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
       "anchor": "hexcasting:greater_eq",
       "input": "number, number",
       "output": "number",
-      "text": "hexcasting.page.logic.3"
+      "text": "hexcasting.page.logic.greater_eq"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:less_eq",
       "input": "number, number",
       "output": "number",
-      "text": "hexcasting.page.logic.4"
+      "text": "hexcasting.page.logic.less_eq"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
       "anchor": "hexcasting:equals",
       "input": "number, number",
       "output": "number",
-      "text": "hexcasting.page.logic.5"
+      "text": "hexcasting.page.logic.equals"
     },
     {
       "type": "hexcasting:pattern",
@@ -52,7 +52,7 @@
       "anchor": "hexcasting:not_equals",
       "input": "number, number",
       "output": "number",
-      "text": "hexcasting.page.logic.6"
+      "text": "hexcasting.page.logic.not_equals"
     },
     {
       "type": "hexcasting:pattern",
@@ -60,7 +60,7 @@
       "anchor": "hexcasting:not",
       "input": "any",
       "output": "number",
-      "text": "hexcasting.page.logic.7"
+      "text": "hexcasting.page.logic.not"
     },
     {
       "type": "hexcasting:pattern",
@@ -68,7 +68,7 @@
       "anchor": "hexcasting:identity",
       "input": "any",
       "output": "any",
-      "text": "hexcasting.page.logic.8"
+      "text": "hexcasting.page.logic.identity"
     },
     {
       "type": "hexcasting:pattern",
@@ -76,7 +76,7 @@
       "anchor": "hexcasting:or",
       "input": "any, any",
       "output": "any",
-      "text": "hexcasting.page.logic.9"
+      "text": "hexcasting.page.logic.or"
     },
     {
       "type": "hexcasting:pattern",
@@ -84,7 +84,7 @@
       "anchor": "hexcasting:and",
       "input": "any, any",
       "output": "any",
-      "text": "hexcasting.page.logic.10"
+      "text": "hexcasting.page.logic.and"
     },
     {
       "type": "hexcasting:pattern",
@@ -92,7 +92,7 @@
       "anchor": "hexcasting:xor",
       "input": "any, any",
       "output": "any",
-      "text": "hexcasting.page.logic.11"
+      "text": "hexcasting.page.logic.xor"
     }
   ]
 }

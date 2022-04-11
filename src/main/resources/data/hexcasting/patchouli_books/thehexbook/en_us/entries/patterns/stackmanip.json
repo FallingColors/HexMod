@@ -40,11 +40,11 @@
     },
     {
       "type": "hexcasting:manual_pattern",
-      "header": "hexcasting.page.stackmanip.5.header",
+      "header": "hexcasting.page.stackmanip.mask.header",
       "anchor": "Numbers",
       "input": "many",
       "output": "many",
-      "text": "hexcasting.page.stackmanip.5",
+      "text": "hexcasting.page.stackmanip.mask.1",
       "patterns": [
         {
           "startdir": "SOUTH_EAST",
@@ -64,7 +64,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.stackmanip.6"
+      "text": "hexcasting.page.stackmanip.mask.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -72,12 +72,12 @@
       "anchor": "hexcasting:swizzle",
       "input": "number, any",
       "output": "many",
-      "text": "hexcasting.page.stackmanip.7"
+      "text": "hexcasting.page.stackmanip.swizzle.1"
     },
     {
       "type": "patchouli:link",
-      "text": "hexcasting.page.stackmanip.8",
-      "link_text": "hexcasting.page.stackmanip.8.link",
+      "text": "hexcasting.page.stackmanip.swizzle.2",
+      "link_text": "hexcasting.page.stackmanip.swizzle.link",
       "url": "https://github.com/gamma-delta/HexMod/wiki/Table-of-Lehmer-Codes-for-Swindler's-Gambit"
     }
   ]

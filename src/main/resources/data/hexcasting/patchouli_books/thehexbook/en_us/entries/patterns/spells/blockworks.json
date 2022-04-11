@@ -12,7 +12,7 @@
       "anchor": "hexcasting:place_block",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.1"
+      "text": "hexcasting.page.blockworks.place_block"
     },
     {
       "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
       "anchor": "hexcasting:break_block",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.2"
+      "text": "hexcasting.page.blockworks.break_block"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
       "anchor": "hexcasting:create_water",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.3"
+      "text": "hexcasting.page.blockworks.create_water"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:destroy_water",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.4"
+      "text": "hexcasting.page.blockworks.destroy_water"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
       "anchor": "hexcasting:conjure_block",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.5"
+      "text": "hexcasting.page.blockworks.conjure_block"
     },
     {
       "type": "hexcasting:pattern",
@@ -52,7 +52,7 @@
       "anchor": "hexcasting:conjure_light",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.6"
+      "text": "hexcasting.page.blockworks.conjure_light"
     },
     {
       "type": "hexcasting:pattern",
@@ -60,7 +60,7 @@
       "anchor": "hexcasting:bonemeal",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.7"
+      "text": "hexcasting.page.blockworks.bonemeal"
     },
     {
       "type": "hexcasting:pattern",
@@ -68,7 +68,7 @@
       "anchor": "hexcasting:edify",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.8"
+      "text": "hexcasting.page.blockworks.edify"
     },
     {
       "type": "hexcasting:pattern",
@@ -76,7 +76,7 @@
       "anchor": "hexcasting:ignite",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.9"
+      "text": "hexcasting.page.blockworks.ignite"
     },
     {
       "type": "hexcasting:pattern",
@@ -84,10 +84,11 @@
       "anchor": "hexcasting:extinguish",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.10"
+      "text": "hexcasting.page.blockworks.extinguish"
     }
   ],
   "extra_recipe_mappings": {
-    "hexcasting:conjured": 4
+    "hexcasting:conjured": 5,
+    "hexcasting:conjured_block": 4
   }
 }

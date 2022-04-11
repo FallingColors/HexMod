@@ -8,7 +8,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.circle_patterns.1"
+      "text": "hexcasting.page.circle_patterns.disclaimer"
     },
     {
       "type": "hexcasting:pattern",
@@ -16,7 +16,7 @@
       "anchor": "hexcasting:circle/impetus_pos",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.circle_patterns.2"
+      "text": "hexcasting.page.circle_patterns.circle/impetus_pos"
     },
     {
       "type": "hexcasting:pattern",
@@ -24,7 +24,7 @@
       "anchor": "hexcasting:circle/impetus_dir",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.circle_patterns.3"
+      "text": "hexcasting.page.circle_patterns.circle/impetus_dir"
     },
     {
       "type": "hexcasting:pattern",
@@ -32,7 +32,7 @@
       "anchor": "hexcasting:circle/bounds/min",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.circle_patterns.4"
+      "text": "hexcasting.page.circle_patterns.circle/bounds/min"
     },
     {
       "type": "hexcasting:pattern",
@@ -40,7 +40,7 @@
       "anchor": "hexcasting:circle/bounds/max",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.circle_patterns.5"
+      "text": "hexcasting.page.circle_patterns.circle/bounds/max"
     }
   ]
 }

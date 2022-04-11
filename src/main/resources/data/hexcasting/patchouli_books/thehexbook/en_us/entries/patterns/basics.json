@@ -12,16 +12,15 @@
       "anchor": "hexcasting:get_caster",
       "input": "",
       "output": "entity",
-      "text": "hexcasting.page.basics_pattern.1"
+      "text": "hexcasting.page.basics_pattern.get_caster"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:get_entity_pos",
-      "header": "hexcasting:get_entity_pos",
-      "anchor": "OpEntityPos",
+      "anchor": "hexcasting:get_entity_pos",
       "input": "entity",
       "output": "vector",
-      "text": "hexcasting.page.basics_pattern.2"
+      "text": "hexcasting.page.basics_pattern.get_entity_pos"
     },
     {
       "type": "hexcasting:pattern",
@@ -29,15 +28,15 @@
       "anchor": "hexcasting:get_entity_look",
       "input": "entity",
       "output": "vector",
-      "text": "hexcasting.page.basics_pattern.3"
+      "text": "hexcasting.page.basics_pattern.get_entity_look"
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:print",
-      "anchor": "hexcasting:print",
-      "input": "any",
-      "output": "any",
-      "text": "hexcasting.page.basics_pattern.4"
+      "op_id": "hexcasting:get_entity_height",
+      "anchor": "hexcasting:get_entity_height",
+      "input": "entity",
+      "output": "num",
+      "text": "hexcasting.page.basics_pattern.get_entity_height"
     },
     {
       "type": "hexcasting:pattern",
@@ -45,11 +44,11 @@
       "anchor": "hexcasting:raycast",
       "input": "vector, vector",
       "output": "vector",
-      "text": "hexcasting.page.basics_pattern.5"
+      "text": "hexcasting.page.basics_pattern.raycast.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.basics_pattern.6"
+      "text": "hexcasting.page.basics_pattern.raycast.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -57,11 +56,11 @@
       "anchor": "hexcasting:raycast/axis",
       "input": "vector, vector",
       "output": "vector",
-      "text": "hexcasting.page.basics_pattern.7"
+      "text": "hexcasting.page.basics_pattern.raycast/axis.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.basics_pattern.8"
+      "text": "hexcasting.page.basics_pattern.raycast/axis.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -69,7 +68,15 @@
       "anchor": "hexcasting:raycast/entity",
       "input": "vector, vector",
       "output": "entity",
-      "text": "hexcasting.page.basics_pattern.9"
+      "text": "hexcasting.page.basics_pattern.raycast/entity"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:print",
+      "anchor": "hexcasting:print",
+      "input": "any",
+      "output": "any",
+      "text": "hexcasting.page.basics_pattern.print"
     }
   ]
 }

@@ -16,7 +16,7 @@
       "anchor": "hexcasting:potion/regeneration",
       "input": "entity, number, number",
       "output": "",
-      "text": "hexcasting.page.zeniths.2"
+      "text": "hexcasting.page.zeniths.potion/regeneration"
     },
     {
       "type": "hexcasting:pattern",
@@ -24,7 +24,7 @@
       "anchor": "hexcasting:potion/night_vision",
       "input": "entity, number",
       "output": "",
-      "text": "hexcasting.page.zeniths.3"
+      "text": "hexcasting.page.zeniths.potion/night_vision"
     },
     {
       "type": "hexcasting:pattern",
@@ -32,7 +32,7 @@
       "anchor": "hexcasting:potion/absorption",
       "input": "entity, number, number",
       "output": "",
-      "text": "hexcasting.page.zeniths.4"
+      "text": "hexcasting.page.zeniths.potion/absorption"
     },
     {
       "type": "hexcasting:pattern",
@@ -40,7 +40,7 @@
       "anchor": "hexcasting:potion/haste",
       "input": "entity, number, number",
       "output": "",
-      "text": "hexcasting.page.zeniths.5"
+      "text": "hexcasting.page.zeniths.potion/haste"
     },
     {
       "type": "hexcasting:pattern",
@@ -48,7 +48,7 @@
       "anchor": "hexcasting:potion/strength",
       "input": "entity, number, number",
       "output": "",
-      "text": "hexcasting.page.zeniths.6"
+      "text": "hexcasting.page.zeniths.potion/strength"
     }
   ]
 }

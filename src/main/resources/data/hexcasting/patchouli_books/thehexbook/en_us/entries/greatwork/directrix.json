@@ -17,12 +17,12 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:empty_directrix",
-      "text": "hexcasting.page.directrix.3"
+      "text": "hexcasting.page.directrix.empty_directrix"
     },
     {
       "type": "hexcasting:brainsweep",
       "recipe": "hexcasting:brainsweep/directrix_redstone",
-      "text": "hexcasting.page.directrix.4"
+      "text": "hexcasting.page.directrix.directrix_redstone"
     }
   ]
 }

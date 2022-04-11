@@ -8,7 +8,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.hexcasting_spell.1"
+      "text": "hexcasting.page.hexcasting_spell.basics"
     },
     {
       "type": "hexcasting:pattern",
@@ -16,7 +16,7 @@
       "anchor": "hexcasting:craft/cypher",
       "input": "entity, list of patterns",
       "output": "",
-      "text": "hexcasting.page.hexcasting_spell.2"
+      "text": "hexcasting.page.hexcasting_spell.craft/cypher"
     },
     {
       "type": "hexcasting:pattern",
@@ -24,7 +24,7 @@
       "anchor": "hexcasting:craft/trinket",
       "input": "entity, list of patterns",
       "output": "",
-      "text": "hexcasting.page.hexcasting_spell.3",
+      "text": "hexcasting.page.hexcasting_spell.craft/trinket",
       "hex_size": 8
     },
     {
@@ -33,7 +33,7 @@
       "anchor": "hexcasting:craft/artifact",
       "input": "entity, list of patterns",
       "output": "",
-      "text": "hexcasting.page.hexcasting_spell.4",
+      "text": "hexcasting.page.hexcasting_spell.craft/artifact",
       "hex_size": 5
     },
     {
@@ -42,11 +42,11 @@
       "anchor": "hexcasting:recharge",
       "input": "entity",
       "output": "",
-      "text": "hexcasting.page.hexcasting_spell.5"
+      "text": "hexcasting.page.hexcasting_spell.recharge.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.hexcasting_spell.6"
+      "text": "hexcasting.page.hexcasting_spell.recharge.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -54,11 +54,11 @@
       "anchor": "hexcasting:erase",
       "input": "",
       "output": "",
-      "text": "hexcasting.page.hexcasting_spell.7"
+      "text": "hexcasting.page.hexcasting_spell.erase.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.hexcasting_spell.8"
+      "text": "hexcasting.page.hexcasting_spell.erase.2"
     }
   ]
 }

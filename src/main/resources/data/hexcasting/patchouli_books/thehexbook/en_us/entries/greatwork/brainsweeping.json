@@ -21,7 +21,7 @@
     {
       "type": "hexcasting:brainsweep",
       "recipe": "hexcasting:brainsweep/budding_amethyst",
-      "text": "hexcasting.page.brainsweeping.4"
+      "text": "hexcasting.page.brainsweeping.budding_amethyst"
     }
   ]
 }

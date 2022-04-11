@@ -13,7 +13,7 @@
       "input": "vector",
       "output": "",
       "hex_size": 6,
-      "text": "hexcasting.page.weather_manip.1"
+      "text": "hexcasting.page.weather_manip.lightning"
     },
     {
       "type": "hexcasting:pattern",
@@ -22,7 +22,7 @@
       "input": "",
       "output": "",
       "hex_size": 6,
-      "text": "hexcasting.page.weather_manip.2"
+      "text": "hexcasting.page.weather_manip.summon_rain"
     },
     {
       "type": "hexcasting:pattern",
@@ -31,7 +31,7 @@
       "input": "",
       "output": "",
       "hex_size": 6,
-      "text": "hexcasting.page.weather_manip.3"
+      "text": "hexcasting.page.weather_manip.dispel_rain"
     }
   ]
 }

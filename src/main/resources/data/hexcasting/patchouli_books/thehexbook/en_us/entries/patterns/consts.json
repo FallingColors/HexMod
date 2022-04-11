@@ -8,10 +8,10 @@
   "pages": [
     {
       "type": "hexcasting:manual_pattern",
-      "header": "Axial Reflection +X/-X",
+      "header": "hexcasting.spell.hexcasting:const/vec/x",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.consts.1",
+      "text": "hexcasting.page.consts.const/vec/x",
       "patterns": [
         {
           "startdir": "NORTH_WEST",
@@ -27,10 +27,10 @@
     },
     {
       "type": "hexcasting:manual_pattern",
-      "header": "Axial Reflection +Y/-Y",
+      "header": "hexcasting.spell.hexcasting:const/vec/y",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.consts.2",
+      "text": "hexcasting.page.consts.const/vec/y",
       "patterns": [
         {
           "startdir": "NORTH_WEST",
@@ -46,10 +46,10 @@
     },
     {
       "type": "hexcasting:manual_pattern",
-      "header": "Axial Reflection +Z/-Z",
+      "header": "hexcasting.spell.hexcasting:const/vec/z",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.consts.3",
+      "text": "hexcasting.page.consts.const/vec/z",
       "patterns": [
         {
           "startdir": "NORTH_WEST",
@@ -68,28 +68,28 @@
       "op_id": "hexcasting:const/vec/0",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.consts.4"
+      "text": "hexcasting.page.consts.const/vec/0"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:const/double/tau",
       "input": "",
       "output": "num",
-      "text": "hexcasting.page.consts.5"
+      "text": "hexcasting.page.consts.const/double/tau"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:const/double/pi",
       "input": "",
       "output": "num",
-      "text": "hexcasting.page.consts.6"
+      "text": "hexcasting.page.consts.const/double/pi"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:const/null",
       "input": "",
       "output": "influence",
-      "text": "hexcasting.page.consts.7"
+      "text": "hexcasting.page.consts.const/null"
     }
   ]
 }

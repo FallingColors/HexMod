@@ -54,6 +54,8 @@ public class RegisterPatterns {
                 OpEntityPos.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wa", HexDir.EAST), prefix("get_entity_look"),
                 OpEntityLook.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("awq", HexDir.NORTH_EAST), prefix("get_entity_look"),
+                OpEntityHeight.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaawdd", HexDir.EAST), prefix("raycast"),
                 OpBlockRaycast.INSTANCE);

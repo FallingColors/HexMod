@@ -30,8 +30,8 @@
     },
     {
       "type": "hexcasting:manual_pattern_nosig",
-      "header": "hexcasting.page.numbers.3.header",
-      "text": "hexcasting.page.numbers.3",
+      "header": "hexcasting.page.numbers.example.10.header",
+      "text": "hexcasting.page.numbers.example.10",
       "patterns": {
         "startdir": "SOUTH_EAST",
         "signature": "aqaae"
@@ -39,8 +39,8 @@
     },
     {
       "type": "hexcasting:manual_pattern_nosig",
-      "header": "hexcasting.page.numbers.4.header",
-      "text": "hexcasting.page.numbers.4",
+      "header": "hexcasting.page.numbers.example.7.header",
+      "text": "hexcasting.page.numbers.example.7",
       "patterns": {
         "startdir": "SOUTH_WEST",
         "signature": "aqaaqww"
@@ -48,8 +48,8 @@
     },
     {
       "type": "hexcasting:manual_pattern_nosig",
-      "header": "hexcasting.page.numbers.5.header",
-      "text": "hexcasting.page.numbers.5",
+      "header": "hexcasting.page.numbers.example.-32.header",
+      "text": "hexcasting.page.numbers.example.-32",
       "patterns": {
         "startdir": "NORTH_EAST",
         "signature": "deddwqea"
@@ -57,8 +57,8 @@
     },
     {
       "type": "hexcasting:manual_pattern_nosig",
-      "header": "hexcasting.page.numbers.6.header",
-      "text": "hexcasting.page.numbers.6",
+      "header": "hexcasting.page.numbers.example.4.5.header",
+      "text": "hexcasting.page.numbers.example.4.5",
       "patterns": {
         "startdir": "SOUTH_EAST",
         "signature": "aqaaqdww"
@@ -66,7 +66,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.numbers.7"
+      "text": "hexcasting.page.numbers.3"
     }
   ]
 }

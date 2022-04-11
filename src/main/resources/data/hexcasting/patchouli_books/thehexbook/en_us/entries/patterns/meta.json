@@ -12,11 +12,11 @@
       "anchor": "hexcasting:eval",
       "input": "list of patterns",
       "output": "many",
-      "text": "hexcasting.page.meta.1"
+      "text": "hexcasting.page.meta.eval.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.meta.2"
+      "text": "hexcasting.page.meta.eval.2"
     },
     {
       "type": "hexcasting:pattern",
@@ -24,11 +24,11 @@
       "anchor": "hexcasting:for_each",
       "input": "list of patterns, list",
       "output": "many",
-      "text": "hexcasting.page.meta.3"
+      "text": "hexcasting.page.meta.for_each.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.meta.4"
+      "text": "hexcasting.page.meta.for_each.2"
     }
   ]
 }

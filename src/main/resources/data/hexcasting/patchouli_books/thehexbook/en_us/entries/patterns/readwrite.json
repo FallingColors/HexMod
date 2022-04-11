@@ -12,7 +12,7 @@
       "anchor": "hexcasting:read",
       "input": "",
       "output": "any",
-      "text": "hexcasting.page.readwrite.1"
+      "text": "hexcasting.page.readwrite.read"
     },
     {
       "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
       "anchor": "hexcasting:read/entity",
       "input": "entity",
       "output": "any",
-      "text": "hexcasting.page.readwrite.2"
+      "text": "hexcasting.page.readwrite.read/entity"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,11 +28,11 @@
       "anchor": "hexcasting:write",
       "input": "any",
       "output": "",
-      "text": "hexcasting.page.readwrite.3"
+      "text": "hexcasting.page.readwrite.write.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.readwrite.4"
+      "text": "hexcasting.page.readwrite.write.2"
     }
   ]
 }

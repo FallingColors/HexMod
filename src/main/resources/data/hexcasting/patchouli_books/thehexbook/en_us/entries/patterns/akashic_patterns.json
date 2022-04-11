@@ -12,7 +12,7 @@
       "anchor": "hexcasting:read/akashic",
       "input": "vector, pattern",
       "output": "any",
-      "text": "hexcasting.page.akashic_patterns.1"
+      "text": "hexcasting.page.akashic_patterns.read/akashic"
     },
     {
       "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
       "anchor": "hexcasting:write/akashic",
       "input": "vector, pattern, any",
       "output": "",
-      "text": "hexcasting.page.akashic_patterns.2"
+      "text": "hexcasting.page.akashic_patterns.write/akashic"
     }
   ]
 }

@@ -20,7 +20,7 @@
       "anchor": "hexcasting:potion/weakness",
       "input": "entity, number, number",
       "output": "",
-      "text": "hexcasting.page.nadirs.3"
+      "text": "hexcasting.page.nadirs.potion/weakness"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
       "anchor": "hexcasting:potion/levitation",
       "input": "entity, number",
       "output": "",
-      "text": "hexcasting.page.nadirs.4"
+      "text": "hexcasting.page.nadirs.potion/levitation"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:potion/wither",
       "input": "entity, number, number",
       "output": "",
-      "text": "hexcasting.page.nadirs.5"
+      "text": "hexcasting.page.nadirs.potion/wither"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
       "anchor": "hexcasting:potion/poison",
       "input": "entity, number, number",
       "output": "",
-      "text": "hexcasting.page.nadirs.6"
+      "text": "hexcasting.page.nadirs.potion/poison"
     },
     {
       "type": "hexcasting:pattern",
@@ -52,7 +52,7 @@
       "anchor": "hexcasting:potion/slowness",
       "input": "entity, number, number",
       "output": "",
-      "text": "hexcasting.page.nadirs.7"
+      "text": "hexcasting.page.nadirs.potion/slowness"
     }
   ]
 }

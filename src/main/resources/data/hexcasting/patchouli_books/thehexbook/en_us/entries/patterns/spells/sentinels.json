@@ -20,7 +20,7 @@
       "anchor": "hexcasting:sentinel/create",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.sentinels.3"
+      "text": "hexcasting.page.sentinels.sentinel/create"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
       "anchor": "hexcasting:sentinel/destroy",
       "input": "",
       "output": "",
-      "text": "hexcasting.page.sentinels.4"
+      "text": "hexcasting.page.sentinels.sentinel/destroy"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:sentinel/get_pos",
       "input": "",
       "output": "vector",
-      "text": "hexcasting.page.sentinels.5"
+      "text": "hexcasting.page.sentinels.sentinel/get_pos"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,7 +44,7 @@
       "anchor": "hexcasting:sentinel/wayfind",
       "input": "vector",
       "output": "vector",
-      "text": "hexcasting.page.sentinels.6"
+      "text": "hexcasting.page.sentinels.sentinel/wayfind"
     }
   ]
 }
