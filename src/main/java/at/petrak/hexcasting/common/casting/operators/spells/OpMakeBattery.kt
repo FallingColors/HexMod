@@ -66,6 +66,9 @@ object OpMakeBattery : SpellOperator {
 
                     ctx.caster.setItemInHand(hand, replaceItem)
                 }
+
+                if (itemEntity.item.isEmpty)
+                    itemEntity.kill()
             }
         }
     }

@@ -59,6 +59,9 @@ object OpRecharge : SpellOperator {
                         0
                     tag.putInt(ItemManaHolder.TAG_MANA, Mth.clamp(existingMana + manaAmt, 0, maxMana))
                 }
+
+                if (itemEntity.item.isEmpty)
+                    itemEntity.kill()
             }
         }
     }
