@@ -39,5 +39,7 @@ public class HexMessages {
             MsgCastParticleAck::deserialize, MsgCastParticleAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgOpenSpellGuiAck.class, MsgOpenSpellGuiAck::serialize,
                 MsgOpenSpellGuiAck::deserialize, MsgOpenSpellGuiAck::handle);
+        NETWORK.registerMessage(messageIdx++, MsgBeepAck.class, MsgBeepAck::serialize,
+                MsgBeepAck::deserialize, MsgBeepAck::handle);
     }
 }

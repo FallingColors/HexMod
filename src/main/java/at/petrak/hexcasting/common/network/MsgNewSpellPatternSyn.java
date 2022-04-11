@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern, List<ResolvedPattern> resolvedPatterns) {
     public static MsgNewSpellPatternSyn deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        var hand = InteractionHand.values()[buf.readInt()];
+        var hand = buf.readEnum(InteractionHand.class);
         var pattern = HexPattern.DeserializeFromNBT(buf.readAnySizeNbt());
 
         var resolvedPatternsLen = buf.readInt();
@@ -39,7 +39,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
 
     public void serialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        buf.writeInt(this.handUsed.ordinal());
+        buf.writeEnum(handUsed);
         buf.writeNbt(this.pattern.serializeToNBT());
         buf.writeInt(this.resolvedPatterns.size());
         for (var pat : this.resolvedPatterns) {

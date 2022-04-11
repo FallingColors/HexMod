@@ -21,7 +21,7 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
     public static MsgOpenSpellGuiAck deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
-        var hand = InteractionHand.values()[buf.readInt()];
+        var hand = buf.readEnum(InteractionHand.class);
 
         var patternsLen = buf.readInt();
         var patterns = new ArrayList<ResolvedPattern>(patternsLen);
@@ -41,7 +41,7 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
     public void serialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
-        buf.writeInt(this.hand.ordinal());
+        buf.writeEnum(this.hand);
 
         buf.writeInt(this.patterns.size());
         for (var pattern : this.patterns) {

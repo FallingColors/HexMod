@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolean isCtrl) {
     public static MsgShiftScrollSyn deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        var hand = InteractionHand.values()[buf.readInt()];
+        var hand = buf.readEnum(InteractionHand.class);
         var scrollDelta = buf.readDouble();
         var isCtrl = buf.readBoolean();
         return new MsgShiftScrollSyn(hand, scrollDelta, isCtrl);
@@ -34,7 +34,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
     public void serialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        buf.writeInt(this.hand.ordinal());
+        buf.writeEnum(this.hand);
         buf.writeDouble(this.scrollDelta);
         buf.writeBoolean(this.isCtrl);
     }
