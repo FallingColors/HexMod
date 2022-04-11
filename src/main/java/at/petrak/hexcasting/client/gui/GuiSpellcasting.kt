@@ -67,7 +67,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
                 SimpleSoundInstance(
                     HexSounds.ADD_PATTERN.get(),
                     SoundSource.PLAYERS,
-                    0.25f,
+                    0.5f,
                     1f + (Math.random().toFloat() - 0.5f) * 0.1f,
                     this.ambianceSoundInstance!!.x,
                     this.ambianceSoundInstance!!.y,
