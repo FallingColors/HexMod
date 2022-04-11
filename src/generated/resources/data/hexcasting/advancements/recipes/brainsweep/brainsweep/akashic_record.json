@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "hexcasting:brainsweep/akashic_connector"
+      "hexcasting:brainsweep/akashic_record"
     ]
   },
   "criteria": {
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "hexcasting:brainsweep/akashic_connector"
+        "recipe": "hexcasting:brainsweep/akashic_record"
       }
     }
   },

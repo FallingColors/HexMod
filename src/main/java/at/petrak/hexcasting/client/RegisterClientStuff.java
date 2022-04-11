@@ -71,24 +71,24 @@ public class RegisterClientStuff {
                     }
                 });
             ItemProperties.register(HexItems.SPELLBOOK.get(), ItemSpellbook.DATATYPE_PRED,
-                    (stack, level, holder, holderID) -> {
-                        var tag = stack.getOrCreateTag();
-                        var datum = HexItems.SPELLBOOK.get().readDatumTag(stack);
-                        if (datum != null) {
-                            var typename = datum.getAllKeys().iterator().next();
-                            return switch (typename) {
-                                case SpellDatum.TAG_ENTITY -> 1f;
-                                case SpellDatum.TAG_DOUBLE -> 2f;
-                                case SpellDatum.TAG_VEC3 -> 3f;
-                                case SpellDatum.TAG_WIDGET -> 4f;
-                                case SpellDatum.TAG_LIST -> 5f;
-                                case SpellDatum.TAG_PATTERN -> 6f;
-                                default -> 0f; // uh oh
-                            };
-                        } else {
-                            return 0f;
-                        }
-                    });
+                (stack, level, holder, holderID) -> {
+                    var tag = stack.getOrCreateTag();
+                    var datum = HexItems.SPELLBOOK.get().readDatumTag(stack);
+                    if (datum != null) {
+                        var typename = datum.getAllKeys().iterator().next();
+                        return switch (typename) {
+                            case SpellDatum.TAG_ENTITY -> 1f;
+                            case SpellDatum.TAG_DOUBLE -> 2f;
+                            case SpellDatum.TAG_VEC3 -> 3f;
+                            case SpellDatum.TAG_WIDGET -> 4f;
+                            case SpellDatum.TAG_LIST -> 5f;
+                            case SpellDatum.TAG_PATTERN -> 6f;
+                            default -> 0f; // uh oh
+                        };
+                    } else {
+                        return 0f;
+                    }
+                });
             for (RegistryObject<Item> packager : new RegistryObject[]{
                 HexItems.CYPHER,
                 HexItems.TRINKET,
@@ -140,6 +140,8 @@ public class RegisterClientStuff {
         }) {
             ItemBlockRenderTypes.setRenderLayer(mipped, RenderType.cutoutMipped());
         }
+
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_RECORD.get(), RenderType.translucent());
 
         EntityRenderers.register(HexEntities.WALL_SCROLL.get(), WallScrollRenderer::new);
 
@@ -211,6 +213,7 @@ public class RegisterClientStuff {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers evt) {
         evt.registerBlockEntityRenderer(HexBlockEntities.SLATE_TILE.get(), BlockEntitySlateRenderer::new);
-        evt.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(), BlockEntityAkashicRecordRenderer::new);
+        evt.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(),
+            BlockEntityAkashicRecordRenderer::new);
     }
 }

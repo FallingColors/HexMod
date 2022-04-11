@@ -68,10 +68,10 @@ public class HexItemModels extends PaucalItemModelProvider {
             var spellbookName = "spellbook_" + type;
             simpleItem(modLoc(spellbookName));
             getBuilder(HexItems.SPELLBOOK.get().getRegistryName().getPath())
-                    .override()
-                    .predicate(ItemSpellbook.DATATYPE_PRED, -0.01f + i)
-                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + spellbookName)))
-                    .end();
+                .override()
+                .predicate(ItemSpellbook.DATATYPE_PRED, -0.01f + i)
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/" + spellbookName)))
+                .end();
         }
 
         Pair<RegistryObject<Item>, String>[] packagers = new Pair[]{
@@ -137,6 +137,8 @@ public class HexItemModels extends PaucalItemModelProvider {
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_written")))
             .end();
 
+        getBuilder(HexBlocks.AKASHIC_RECORD.getId().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/akashic_record")));
         simpleItem(modLoc("akashic_door"));
         getBuilder(HexBlocks.AKASHIC_TRAPDOOR.getId().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_trapdoor_bottom")));
@@ -144,5 +146,14 @@ public class HexItemModels extends PaucalItemModelProvider {
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_log")));
         getBuilder(HexBlocks.AKASHIC_LOG_STRIPPED.getId().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_log_stripped")));
+        getBuilder(HexBlocks.AKASHIC_STAIRS.getId().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/akashic_stairs")));
+        getBuilder(HexBlocks.AKASHIC_SLAB.getId().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/akashic_slab")));
+        getBuilder(HexBlocks.AKASHIC_BUTTON.getId().getPath()).parent(
+                new ModelFile.UncheckedModelFile(new ResourceLocation("block/button_inventory")))
+            .texture("texture", modLoc("block/akashic/planks1"));
+        getBuilder(HexBlocks.AKASHIC_PRESSURE_PLATE.getId().getPath())
+            .parent(new ModelFile.UncheckedModelFile(modLoc("block/akashic_pressure_plate")));
     }
 }

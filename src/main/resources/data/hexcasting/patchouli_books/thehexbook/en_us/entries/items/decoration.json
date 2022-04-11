@@ -2,7 +2,7 @@
   "name": "hexcasting.entry.decoration",
   "icon": "hexcasting:ancient_scroll_paper",
   "category": "hexcasting:items",
-  "sortnum": 9,
+  "sortnum": 10,
   "advancement": "hexcasting:root",
   "pages": [
     {

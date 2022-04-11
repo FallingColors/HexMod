@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicFloodfiller;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
@@ -119,11 +120,12 @@ public class HexBlocks {
         () -> new BlockRedstoneDirectrix(slateish()));
 
     public static final RegistryObject<BlockAkashicRecord> AKASHIC_RECORD = blockItem("akashic_record",
-        () -> new BlockAkashicRecord(woodyHard()));
+        () -> new BlockAkashicRecord(woodyHard().lightLevel(bs -> 15)));
     public static final RegistryObject<BlockAkashicBookshelf> AKASHIC_BOOKSHELF = blockItem("akashic_bookshelf",
-        () -> new BlockAkashicBookshelf(woodyHard()));
+        () -> new BlockAkashicBookshelf(woodyHard()
+            .lightLevel(bs -> (bs.getValue(BlockAkashicBookshelf.DATUM_TYPE) == DatumType.EMPTY) ? 0 : 4)));
     public static final RegistryObject<BlockAkashicFloodfiller> AKASHIC_CONNECTOR = blockItem("akashic_connector",
-        () -> new BlockAkashicFloodfiller(woodyHard()));
+        () -> new BlockAkashicFloodfiller(woodyHard().lightLevel(bs -> 10)));
 
     // Decoration?!
     public static final RegistryObject<Block> SLATE_BLOCK = blockItem("slate_block",
@@ -165,6 +167,14 @@ public class HexBlocks {
         () -> new DoorBlock(woody().noOcclusion()));
     public static final RegistryObject<TrapDoorBlock> AKASHIC_TRAPDOOR = blockItem("akashic_trapdoor",
         () -> new TrapDoorBlock(woody().noOcclusion()));
+    public static final RegistryObject<StairBlock> AKASHIC_STAIRS = blockItem("akashic_stairs",
+        () -> new StairBlock(() -> AKASHIC_PLANKS.get().defaultBlockState(), woody().noOcclusion()));
+    public static final RegistryObject<SlabBlock> AKASHIC_SLAB = blockItem("akashic_slab",
+        () -> new SlabBlock(woody().noOcclusion()));
+    public static final RegistryObject<WoodButtonBlock> AKASHIC_BUTTON = blockItem("akashic_button",
+        () -> new WoodButtonBlock(woody().noOcclusion()));
+    public static final RegistryObject<PressurePlateBlock> AKASHIC_PRESSURE_PLATE = blockItem("akashic_pressure_plate",
+        () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, woody().noOcclusion()));
     public static final RegistryObject<LeavesBlock> AKASHIC_LEAVES1 = blockItem("akashic_leaves1",
         () -> new LeavesBlock(leaves()));
     public static final RegistryObject<LeavesBlock> AKASHIC_LEAVES2 = blockItem("akashic_leaves2",

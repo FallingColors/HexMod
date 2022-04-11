@@ -78,6 +78,10 @@
   "block.hexcasting.akashic_tile": "Edified Tile",
   "block.hexcasting.akashic_door": "Edified Door",
   "block.hexcasting.akashic_trapdoor": "Edified Trapdoor",
+  "block.hexcasting.akashic_stairs": "Edified Stairs",
+  "block.hexcasting.akashic_slab": "Edified Slab",
+  "block.hexcasting.akashic_button": "Edified Button",
+  "block.hexcasting.akashic_pressure_plate": "Edified Pressure Plate",
   "block.hexcasting.akashic_leaves1": "Amethyst Edified Leaves",
   "block.hexcasting.akashic_leaves2": "Aventurine Edified Leaves",
   "block.hexcasting.akashic_leaves3": "Citrine Edified Leaves",
@@ -234,6 +238,7 @@
   "hexcasting.spell.hexcasting:conjure_block": "Conjure Block",
   "hexcasting.spell.hexcasting:conjure_light": "Conjure Light",
   "hexcasting.spell.hexcasting:bonemeal": "Overgrow",
+  "hexcasting.spell.hexcasting:edify": "Edify Sapling",
   "hexcasting.spell.hexcasting:colorize": "Internalize Pigment",
   "hexcasting.spell.hexcasting:sentinel/create": "Summon Sentinel",
   "hexcasting.spell.hexcasting:sentinel/destroy": "Banish Sentinel",
@@ -264,6 +269,8 @@
   "hexcasting.spell.hexcasting:eval/delay": "Secret Gambit!",
   "hexcasting.spell.hexcasting:read": "Scribe's Reflection",
   "hexcasting.spell.hexcasting:write": "Scribe's Gambit",
+  "hexcasting.spell.hexcasting:read/akashic": "Akasha's Distillation",
+  "hexcasting.spell.hexcasting:write/akashic": "Akasha's Gambit",
   "hexcasting.spell.hexcasting:read/entity": "Scribe's Distillation",
   "hexcasting.spell.hexcasting:const/vec/px": "Vector Reflection +X",
   "hexcasting.spell.hexcasting:const/vec/py": "Vector Reflection +Y",
@@ -491,6 +498,11 @@
   "hexcasting.page.pigments.3": "Pigments all the colors of the rainbow.",
   "hexcasting.page.pigments.4": "And finally, a pigment with a color wholly unique to me.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
 
+  "hexcasting.entry.edified": "Edified Trees",
+  "hexcasting.page.edified.1": "By infusing _media into a sapling via the use of $(l:patterns/spells/blockworks#hexcasting:edify)$(action)Edify Sapling/$, I can create what is called an $(thing)Edified Tree/$. They tend to be tall and pointy, with ridged bark and wood that grows in a strange spiral pattern. Their leaves come in three pretty colors.",
+  "hexcasting.page.edified.2": "I would assume the wood would have some properties relevant to _Hexcasting. But, if it does, I cannot seem to find them. For all intents and purposes it appears to be just wood, albeit of a very strange color.$(br2)I suppose for now I will use it for decoration; the full suite of standard wood blocks can be crafted from them.$(br2)Of course, I can strip them with an axe as well.",
+  "hexcasting.page.edified.3": "$(italic)Their smooth trunks, with white bark, gave the effect of enormous columns sustaining the weight of an immense foliage, full of shade and silence./$",
+
   "hexcasting.entry.decoration": "Decorative Blocks",
   "hexcasting.page.decoration.1": "In the course of my studies I have discovered some building blocks and trifles that I may find aesthetically pleasing. I've compiled the methods of making them here.",
   "hexcasting.page.decoration.2": "Brown dye works well enough to simulate the look of an ancient scroll.",
@@ -536,6 +548,12 @@
   "hexcasting.page.directrix.2": "A Directrix accepts a wave of _media and determines to which of the arrows it will exit from, depending on the villager mind inside.$(br2)I am not certain if this idea was bestowed upon me, or if my mind is bent around the barrier enough to splint off its own ideas now... but if the idea came from my own mind, if I thought it, can it be said it was bestowed? The brain is a vessel for the mind and the mind is a vessel for ideas and the ideas vessel thought and thought sees all and knows all-- I MUST N O T",
   "hexcasting.page.directrix.3": "Firstly, a design for the cradle ... although, perhaps \"substrate\" would be more accurate a word. Without a mind guiding it, the output direction is determined by microscopic fluctuations in the _media wave and surroundings, making it effectively random.",
   "hexcasting.page.directrix.4": "A Mason Directrix switches output side based on a redstone signal. Without a signal, the exit is the _media-color side; with a signal, the exit is the redstone-color side.",
+
+  "hexcasting.entry.akashiclib": "Akashic Libraries",
+  "hexcasting.page.akashiclib.1": "I KNOW SO MUCH it is ONLY RIGHT to have a place to store it all. Information can be stored in books but it is oh so so so so $(italic)slow/$ to write by hand and read by eye. I demand BETTER. And so I shall MAKE better.$(br2)... I am getting worse ... do not know if I have time to write everything bursting through my head before expiring.",
+  "hexcasting.page.akashiclib.2": "The library. Here. My plans.$(br2)Like how patterns are associated with actions, I can associate my own patterns with iotas in any way I choose. An $(item)Akashic Record/$ controls the library, and each $(item)Akashic Bookshelf/$ stores one pattern mapped to one iota. These must all be directly connected together, touching. An $(item)Akashic Ligature/$ doesn't do anything but count as a connecting block, to extend the size of my library.",
+  "hexcasting.page.akashiclib.3": "Allocating and assigning patterns is simple but oh so boring. I have better things to do. I will need a mind well-used to its work for the extraction to stay sound.",
+  "hexcasting.page.akashiclib.4": "Then to operate the library is simple, the patterns are routed through the librarian and it looks them up and returns the iota to you. Two actions do the work. $(l:patterns/akashic_patterns)Notes here/$.$(br2)Using an empty scroll on a bookshelf copies the pattern there onto the scroll. Sneaking and using an empty hand clears the datum in the shelf.",
 
   "_comment": "Patterns",
 
@@ -675,11 +693,15 @@
   "hexcasting.page.circle_patterns.3": "Returns the direction the $(item)Impetus/$ of this spell circle is facing as a unit vector.",
   "hexcasting.page.circle_patterns.4": "Returns the position of the lower-north-west corner of the bounds of this spell circle.",
   "hexcasting.page.circle_patterns.5": "Returns the position of the upper-south-east corner of the bounds of this spell circle.",
+  
+  "hexcasting.entry.akashic_patterns": "Akashic Patterns",
+  "hexcasting.page.akashic_patterns.1": "Read the iota associated with the given pattern out of the akashic library with its record at the given position. This has no range limit. Costs about one $(item)Amethyst Dust/$.",
+  "hexcasting.page.akashic_patterns.2": "Associate the iota with the given pattern in the akashic library with its record at the given position. Costs about one $(item)Amethyst Dust/$.",
 
   "_comment": "Normal Spells",
 
   "hexcasting.entry.itempicking": "Working with Items",
-  "hexcasting.page.itempicking.1": "Certain spells, such as $(l:hexcasting:patterns/spells/blockworks#OpPlaceBlock)$(action)Place Block/$, will consume additional items from my inventory. When this happens, the spell will first look for the item to use, and then draw from all such items in my inventory.$(br2)This process is called \"picking an item.\"",
+  "hexcasting.page.itempicking.1": "Certain spells, such as $(l:hexcasting:patterns/spells/blockworks#hexcasting:place_block)$(action)Place Block/$, will consume additional items from my inventory. When this happens, the spell will first look for the item to use, and then draw from all such items in my inventory.$(br2)This process is called \"picking an item.\"",
   "hexcasting.page.itempicking.2": "More specifically:$(li)First, the spell will search for the first valid item in my hotbar to the $(italic)right of my staff/$, wrapping around at the right-hand side, and starting at the first slot if my staff is in my off-hand.$(li)Second, the spell will draw that item from as $(italic)far back in my inventory/$ as possible, prioritizing the main inventory over the hotbar.",
   "hexcasting.page.itempicking.3": "This way, I can keep a \"chooser\" item on my hotbar to tell the spell what to use, and fill the rest of my inventory with that item to keep the spell well-stocked.",
 
@@ -687,7 +709,7 @@
   "hexcasting.page.basic_spell.1": "Remove a number and vector from the stack, then create an explosion at the given location with the given power.",
   "hexcasting.page.basic_spell.2": "A power of 3 is about as much as a Creeper's blast; 4 is about as much as a TNT blast. Nature refuses to give me a blast of more than 10 power, though.$(br2)Costs about one $(item)Amethyst Shard/$, plus an extra $(item)Amethyst Shard/$ per point of explosion power.",
   "hexcasting.page.basic_spell.3": "Remove a number and vector from the stack, then create a fiery explosion at the given location with the given power.",
-  "hexcasting.page.basic_spell.4": "Costs three $(item)Amethyst Shards/$, plus about one extra $(item)Amethyst Shard/$ per point of explosion power. Otherwise, the same as $(l:hexcasting:patterns/spells/basic#OpExplode)$(action)Explosion/$, except with fire.",
+  "hexcasting.page.basic_spell.4": "Costs three $(item)Amethyst Shards/$, plus about one extra $(item)Amethyst Shard/$ per point of explosion power. Otherwise, the same as $(l:patterns/spells/basic_spell#hexcasting:explosion)$(action)Explosion/$, except with fire.",
   "hexcasting.page.basic_spell.5": "Remove an entity and direction from the stack, then give a shove to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(item)Amethyst Dust/$ equal to the square of the length of the vector.",
   "hexcasting.page.basic_spell.6": "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about 1 $(item)Amethyst Shard/$ per block travelled.",
 
@@ -699,8 +721,9 @@
   "hexcasting.page.blockworks.5": "Conjure an ethereal, but solid, block that sparkles with my pigment at the given position. Costs about one $(item)Amethyst Dust/$.",
   "hexcasting.page.blockworks.6": "Conjure a magical light that softly glows with my pigment at the given position. Costs about one $(item)Amethyst Dust/$.",
   "hexcasting.page.blockworks.7": "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs about one $(item)Amethyst Dust/$.",
-  "hexcasting.page.blockworks.8": "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied. Costs about one $(item)Amethyst Dust/$.",
-  "hexcasting.page.blockworks.9": "Extinguish blocks in a large area. Costs about two $(item)Amethyst Crystal/$s.",
+  "hexcasting.page.blockworks.8": "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(thing)Edified Tree/$. Costs about one $(item)Charged Crystal/$.",
+  "hexcasting.page.blockworks.9": "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied. Costs about one $(item)Amethyst Dust/$.",
+  "hexcasting.page.blockworks.10": "Extinguish blocks in a large area. Costs about two $(item)Charged Crystal/$s.",
 
   "hexcasting.entry.nadirs": "Nadirs",
   "hexcasting.page.nadirs.1": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, multiplied by the potency squared.",

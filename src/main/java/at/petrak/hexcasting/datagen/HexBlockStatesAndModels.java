@@ -13,6 +13,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -120,8 +121,9 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         });
 
-        blockAndItem(HexBlocks.AKASHIC_RECORD.get(),
-            models().cubeAll("akashic_record", modLoc("block/akashic/record")));
+        var akashicRecordModel = models().getExistingFile(modLoc("block/akashic_record"));
+        simpleBlock(HexBlocks.AKASHIC_RECORD.get(), akashicRecordModel);
+        simpleBlockItem(HexBlocks.AKASHIC_RECORD.get(), akashicRecordModel);
         blockAndItem(HexBlocks.AKASHIC_CONNECTOR.get(),
             models().cubeAll("akashic_connector", modLoc("block/akashic/connector")));
 
@@ -207,9 +209,10 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         // door model via the given texture
         trapdoorBlock(HexBlocks.AKASHIC_TRAPDOOR.get(), modLoc("block/akashic/trapdoor"), true);
 
-
+        ResourceLocation planks1 = modLoc("block/akashic/planks1");
+        BlockModelBuilder planks_model = models().cubeAll("akashic_planks1", planks1);
         simpleBlock(HexBlocks.AKASHIC_PLANKS.get(), ConfiguredModel.builder()
-            .modelFile(models().cubeAll("akashic_planks1", modLoc("block/akashic/planks1")))
+            .modelFile(planks_model)
             .weight(3)
             .nextModel()
             .modelFile(models().cubeAll("akashic_planks2", modLoc("block/akashic/planks2")))
@@ -218,7 +221,12 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             .modelFile(models().cubeAll("akashic_planks3", modLoc("block/akashic/planks3")))
             .build());
         simpleBlockItem(HexBlocks.AKASHIC_PLANKS.get(),
-            models().cubeAll("akashic_planks1", modLoc("block/akashic/planks1")));
+            planks_model);
+
+        stairsBlock(HexBlocks.AKASHIC_STAIRS.get(), planks1);
+        slabBlock(HexBlocks.AKASHIC_SLAB.get(), modLoc("block/akashic_planks1"), planks1);
+        buttonBlock(HexBlocks.AKASHIC_BUTTON.get(), planks1);
+        pressurePlateBlock(HexBlocks.AKASHIC_PRESSURE_PLATE.get(), planks1);
 
         var sconceModel = models().getExistingFile(modLoc("amethyst_sconce"));
         simpleBlock(HexBlocks.SCONCE.get(), sconceModel);

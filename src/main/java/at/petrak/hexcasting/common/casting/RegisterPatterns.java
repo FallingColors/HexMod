@@ -127,9 +127,9 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aw", HexDir.NORTH_EAST), prefix("identity"),
                 OpIdentityKindOf.INSTANCE);
 
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqwqqqqqaq", HexDir.WEST), prefix("akashic/read"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqwqqqqqaq", HexDir.WEST), prefix("read/akashic"),
                 OpAkashicRead.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeweeeeede", HexDir.EAST), prefix("akashic/write"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeweeeeede", HexDir.EAST), prefix("write/akashic"),
                 OpAkashicWrite.INSTANCE);
 
             // == Spells ==

@@ -245,6 +245,23 @@ public class HexRecipes extends PaucalRecipeProvider {
             .pattern("WWW")
             .pattern("WWW")
             .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_STAIRS.get(), 4)
+            .define('W', HexItemTags.AKASHIC_PLANKS)
+            .pattern("W  ")
+            .pattern("WW ")
+            .pattern("WWW")
+            .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_SLAB.get(), 6)
+            .define('W', HexItemTags.AKASHIC_PLANKS)
+            .pattern("WWW")
+            .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_PRESSURE_PLATE.get(), 1)
+            .define('W', HexItemTags.AKASHIC_PLANKS)
+            .pattern("WW")
+            .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
+        ShapelessRecipeBuilder.shapeless(HexBlocks.AKASHIC_BUTTON.get())
+            .requires(HexItemTags.AKASHIC_PLANKS)
+            .unlockedBy("has_item", has(HexItemTags.AKASHIC_PLANKS)).save(recipes);
 
         var enlightenment = new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
             MinMaxBounds.Ints.ANY,
@@ -319,9 +336,9 @@ public class HexRecipes extends PaucalRecipeProvider {
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.AKASHIC_CONNECTOR.get()),
             new VillagerIngredient(new ResourceLocation("librarian"), null, 5),
-            Blocks.BUDDING_AMETHYST.defaultBlockState())
+            HexBlocks.AKASHIC_RECORD.get().defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/akashic_connector"));
+            .save(recipes, modLoc("brainsweep/akashic_record"));
     }
 
     protected void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {

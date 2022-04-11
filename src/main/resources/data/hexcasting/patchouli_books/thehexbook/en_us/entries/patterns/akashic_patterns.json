@@ -1,0 +1,26 @@
+{
+  "name": "hexcasting.entry.akashic_patterns",
+  "category": "hexcasting:patterns",
+  "icon": "hexcasting:akashic_bookshelf",
+  "sortnum": 12,
+  "advancement": "hexcasting:enlightenment",
+  "entry_color": "54398a",
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:read/akashic",
+      "anchor": "hexcasting:read/akashic",
+      "input": "vector, pattern",
+      "output": "any",
+      "text": "hexcasting.page.akashic_patterns.1"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:write/akashic",
+      "anchor": "hexcasting:write/akashic",
+      "input": "vector, pattern, any",
+      "output": "",
+      "text": "hexcasting.page.akashic_patterns.2"
+    }
+  ]
+}

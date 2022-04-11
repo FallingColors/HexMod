@@ -27,6 +27,8 @@ object OpAkashicWrite : SpellOperator {
         val key = args.getChecked<HexPattern>(1)
         val datum = args[2]
 
+        ctx.assertVecInRange(pos)
+
         val bpos = BlockPos(pos)
         val tile = ctx.world.getBlockEntity(bpos)
         if (tile !is BlockEntityAkashicRecord) {
