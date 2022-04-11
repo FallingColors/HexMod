@@ -56,21 +56,24 @@ public class ItemSlate extends BlockItem implements DataHolder {
     }
 
     @Override
-    public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
         if (datum == null || datum.getType() != DatumType.PATTERN) {
             return false;
         }
 
-        var beTag = tag.getCompound("BlockEntityTag");
-        return !beTag.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND);
+        if (!stack.hasTag())
+            return true;
+
+        var beTag = stack.getTagElement("BlockEntityTag");
+        return beTag == null || !beTag.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND);
     }
 
     @Override
-    public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
-        if (this.canWrite(tag, datum) && datum.getPayload() instanceof HexPattern pat) {
-            var beTag = tag.getCompound("BlockEntityTag");
+    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+        if (this.canWrite(stack, datum) && datum.getPayload() instanceof HexPattern pat) {
+            CompoundTag tag = stack.getOrCreateTag();
+            var beTag = stack.getOrCreateTagElement("BlockEntityTag");
             beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
-            tag.put("BlockEntityTag", beTag);
         }
     }
 }

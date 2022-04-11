@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.item.ManaHolder
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -10,8 +11,6 @@ import at.petrak.hexcasting.common.casting.ManaHelper
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
-import net.minecraft.nbt.Tag
-import net.minecraft.util.Mth
 import net.minecraft.world.entity.item.ItemEntity
 
 object OpRecharge : SpellOperator {
@@ -22,13 +21,12 @@ object OpRecharge : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val item = it.item
-            val tag = it.tag
-            item is ItemManaHolder && tag != null && item.getManaAmt(tag) < item.getMaxManaAmt(tag)
+            item is ManaHolder && item.getMana(it) < item.getMaxMana(it)
         }
 
         val handItem = handStack.item
 
-        if (handItem !is ItemManaHolder)
+        if (handItem !is ManaHolder)
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,
@@ -45,8 +43,7 @@ object OpRecharge : SpellOperator {
             )
         }
 
-        val tag = handStack.orCreateTag
-        if (handItem.getManaAmt(tag) >= handItem.getMaxManaAmt(tag))
+        if (handItem.getMana(handStack) >= handItem.getMana(handStack))
             return null
 
         return Triple(Spell(entity), 100_000, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
@@ -54,19 +51,21 @@ object OpRecharge : SpellOperator {
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val (handStack) = ctx.getHeldItemToOperateOn { it.item is ItemManaHolder }
+            val (handStack) = ctx.getHeldItemToOperateOn {
+                val item = it.item
+                item is ManaHolder && item.getMana(it) < item.getMaxMana(it)
+            }
             val handItem = handStack.item
 
-            if (handItem is ItemManaHolder && itemEntity.isAlive) {
+            if (handItem is ManaHolder && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
 
-                val tag = handStack.orCreateTag
-                val maxMana = handItem.getMaxManaAmt(tag)
-                val existingMana = handItem.getManaAmt(tag)
+                val maxMana = handItem.getMaxMana(handStack)
+                val existingMana = handItem.getMana(handStack)
 
                 val manaAmt = ManaHelper.extractMana(entityStack, maxMana - existingMana)
 
-                handItem.setMana(tag, manaAmt + existingMana)
+                handItem.setMana(handStack, manaAmt + existingMana)
 
                 itemEntity.item = entityStack
                 if (entityStack.isEmpty)

@@ -54,14 +54,14 @@ public class ItemScroll extends Item implements DataHolder {
     }
 
     @Override
-    public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
-        return datum != null && datum.getType() == DatumType.PATTERN && !tag.contains(TAG_PATTERN, Tag.TAG_COMPOUND);
+    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
+        return datum != null && datum.getType() == DatumType.PATTERN && (!stack.hasTag() || !stack.getTag().contains(TAG_PATTERN, Tag.TAG_COMPOUND));
     }
 
     @Override
-    public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
-        if (this.canWrite(tag, datum) && datum.getPayload() instanceof HexPattern pat) {
-            tag.put(TAG_PATTERN, pat.serializeToNBT());
+    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+        if (this.canWrite(stack, datum) && datum.getPayload() instanceof HexPattern pat) {
+            stack.getOrCreateTag().put(TAG_PATTERN, pat.serializeToNBT());
         }
     }
 

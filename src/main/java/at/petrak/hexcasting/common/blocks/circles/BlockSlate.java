@@ -96,7 +96,7 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
         if (be instanceof BlockEntitySlate slate) {
             ItemStack stack = new ItemStack(HexItems.SLATE.get());
             if (slate.pattern != null)
-                HexItems.SLATE.get().writeDatum(stack.getOrCreateTag(), SpellDatum.make(slate.pattern));
+                HexItems.SLATE.get().writeDatum(stack, SpellDatum.make(slate.pattern));
             return stack;
         }
 

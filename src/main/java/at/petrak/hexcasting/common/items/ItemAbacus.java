@@ -39,12 +39,12 @@ public class ItemAbacus extends Item implements DataHolder {
     }
 
     @Override
-    public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
         return false;
     }
 
     @Override
-    public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
         // nope
     }
 

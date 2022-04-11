@@ -7,7 +7,6 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.ManaHelper
-import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.HexItems
@@ -43,7 +42,7 @@ object OpMakeBattery : SpellOperator {
 
         ctx.assertEntityInRange(entity)
 
-        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(entity.item, drainFromBatteries = false, simulate = true) <= 0) {
+        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(entity.item, drainForBatteries = false, simulate = true) <= 0) {
             throw MishapBadItem.of(
                 entity.item,
                 "mana"
@@ -58,14 +57,9 @@ object OpMakeBattery : SpellOperator {
             val (handStack, hand) = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
             if (handStack.item == Items.GLASS_BOTTLE && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = ManaHelper.extractMana(entityStack, drainFromBatteries = false)
+                val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = false)
                 if (manaAmt > 0) {
-                    val replaceItem = ItemStack(HexItems.BATTERY.get())
-                    val tag = replaceItem.orCreateTag
-                    tag.putInt(ItemManaHolder.TAG_MANA, manaAmt)
-                    tag.putInt(ItemManaHolder.TAG_MAX_MANA, manaAmt)
-
-                    ctx.caster.setItemInHand(hand, replaceItem)
+                    ctx.caster.setItemInHand(hand, ItemManaHolder.withMana(ItemStack(HexItems.BATTERY.get()), manaAmt, manaAmt))
                 }
 
                 itemEntity.item = entityStack

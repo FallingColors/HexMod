@@ -57,10 +57,10 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
     private void spellbook(ServerPlayer sender, ItemStack stack) {
         var tag = stack.getOrCreateTag();
-        ItemSpellbook.RotatePageIdx(stack, tag, this.scrollDelta < 0.0);
+        ItemSpellbook.RotatePageIdx(stack, this.scrollDelta < 0.0);
 
         var newIdx = tag.getInt(ItemSpellbook.TAG_SELECTED_PAGE);
-        var len = ItemSpellbook.HighestPage(tag.getCompound(ItemSpellbook.TAG_PAGES));
+        var len = ItemSpellbook.HighestPage(stack);
 
         MutableComponent component;
         if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {

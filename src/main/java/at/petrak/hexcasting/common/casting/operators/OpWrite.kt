@@ -24,14 +24,14 @@ object OpWrite : SpellOperator {
             val item = it.item
             if (item is DataHolder) {
                 val tag = it.orCreateTag
-                item.canWrite(tag, datum)
+                item.canWrite(it, datum)
             } else false
         }
 
         val handItem = handStack.item as? DataHolder ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
         val tag = handStack.orCreateTag
 
-        if (!handItem.canWrite(tag, datum))
+        if (!handItem.canWrite(handStack, datum))
             throw MishapBadOffhandItem.of(handStack, hand, "iota.readonly", datum.display())
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
@@ -51,14 +51,14 @@ object OpWrite : SpellOperator {
                 val item = it.item
                 if (item is DataHolder) {
                     val tag = it.orCreateTag
-                    item.canWrite(tag, datum)
+                    item.canWrite(it, datum)
                 } else false
             }
             val handItem = handStack.item
 
             if (handItem is DataHolder) {
                 val tag = handStack.orCreateTag
-                handItem.writeDatum(tag, datum)
+                handItem.writeDatum(handStack, datum)
             }
         }
 

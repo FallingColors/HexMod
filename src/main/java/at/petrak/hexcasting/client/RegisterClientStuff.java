@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
+import at.petrak.hexcasting.api.item.ManaHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
@@ -25,11 +26,9 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -40,7 +39,6 @@ import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,28 +88,26 @@ public class RegisterClientStuff {
                         return 0f;
                     }
                 });
-            for (RegistryObject<Item> packager : new RegistryObject[]{
-                HexItems.CYPHER,
-                HexItems.TRINKET,
-                HexItems.ARTIFACT,
+            for (ItemPackagedSpell packager : new ItemPackagedSpell[]{
+                HexItems.CYPHER.get(),
+                HexItems.TRINKET.get(),
+                HexItems.ARTIFACT.get(),
             }) {
-                ItemProperties.register(packager.get(), ItemPackagedSpell.HAS_PATTERNS_PRED,
+                ItemProperties.register(packager, ItemPackagedSpell.HAS_PATTERNS_PRED,
                     (stack, level, holder, holderID) ->
-                        stack.getOrCreateTag().contains(ItemPackagedSpell.TAG_PATTERNS, Tag.TAG_LIST) ? 1f : 0f
+                        packager.getPatterns(stack) != null ? 1f : 0f
                 );
             }
 
             ItemProperties.register(HexItems.BATTERY.get(), ItemManaBattery.MANA_PREDICATE,
                 (stack, level, holder, holderID) -> {
-                    var item = (ItemManaBattery) stack.getItem();
-                    var tag = stack.getOrCreateTag();
-                    return item.getManaFullness(tag);
+                    var item = (ManaHolder) stack.getItem();
+                    return item.getManaFullness(stack);
                 });
             ItemProperties.register(HexItems.BATTERY.get(), ItemManaBattery.MAX_MANA_PREDICATE,
                 (stack, level, holder, holderID) -> {
                     var item = (ItemManaBattery) stack.getItem();
-                    var tag = stack.getOrCreateTag();
-                    var max = item.getMaxManaAmt(tag);
+                    var max = item.getMaxMana(stack);
                     return (float) Math.sqrt((float) max / HexConfig.chargedCrystalManaAmount.get() / 10);
                 });
 

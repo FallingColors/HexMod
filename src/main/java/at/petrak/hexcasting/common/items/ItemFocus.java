@@ -39,12 +39,14 @@ public class ItemFocus extends Item implements DataHolder {
     }
 
     @Override
-    public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
-        return !tag.getBoolean(TAG_SEALED);
+    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
+        return !stack.hasTag() || !stack.getTag().getBoolean(TAG_SEALED);
     }
 
     @Override
-    public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+        CompoundTag tag = stack.getOrCreateTag();
+
         if (!tag.getBoolean(TAG_SEALED)) {
             if (datum == null)
                 tag.remove(TAG_DATA);

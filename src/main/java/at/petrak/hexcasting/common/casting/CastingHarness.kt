@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
+import at.petrak.hexcasting.api.item.SpellHolder
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -273,13 +274,12 @@ class CastingHarness private constructor(
         } else {
             val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
             val casterItem = casterStack.item
-            val ipsCanDrawFromInv = if (casterItem is ItemPackagedSpell) {
-                val tag = casterStack.orCreateTag
-                val manaAvailable = tag.getInt(ItemPackagedSpell.TAG_MANA)
+            val ipsCanDrawFromInv = if (casterItem is SpellHolder) {
+                val manaAvailable = casterItem.getMana(casterStack)
                 val manaToTake = min(costLeft, manaAvailable)
-                tag.putInt(ItemPackagedSpell.TAG_MANA, manaAvailable - manaToTake)
+                casterItem.setMana(casterStack, manaAvailable - manaToTake)
                 costLeft -= manaToTake
-                casterItem.canDrawManaFromInventory()
+                casterItem.canDrawManaFromInventory(casterStack)
             } else {
                 false
             }

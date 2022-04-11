@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.item.SpellHolder
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -37,7 +38,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
         }
 
         ctx.assertEntityInRange(entity)
-        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(entity.item, drainFromBatteries = false, simulate = true) <= 0) {
+        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(entity.item, drainForBatteries = false, simulate = true) <= 0) {
             throw MishapBadItem.of(
                 entity.item,
                 "mana"
@@ -50,24 +51,15 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
-            val tag = handStack.orCreateTag
-            if (handStack.item is ItemPackagedSpell
-                && !tag.contains(ItemPackagedSpell.TAG_MANA, Tag.TAG_ANY_NUMERIC.toInt())
-                && !tag.contains(ItemPackagedSpell.TAG_MAX_MANA, Tag.TAG_ANY_NUMERIC.toInt())
-                && !tag.contains(ItemPackagedSpell.TAG_PATTERNS, Tag.TAG_LIST.toInt())
+            val handItem = handStack.item
+            if (handItem is SpellHolder
+                && handItem.getPatterns(handStack) != null
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = ManaHelper.extractMana(entityStack, drainFromBatteries = false)
+                val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = false)
                 if (manaAmt > 0) {
-                    tag.putInt(ItemPackagedSpell.TAG_MANA, manaAmt)
-                    tag.putInt(ItemPackagedSpell.TAG_MAX_MANA, manaAmt)
-
-                    val patsTag = ListTag()
-                    for (pat in patterns) {
-                        patsTag.add(pat.serializeToNBT())
-                    }
-                    tag.put(ItemPackagedSpell.TAG_PATTERNS, patsTag)
+                    handItem.writePattern(handStack, patterns, manaAmt)
                 }
 
                 itemEntity.item = entityStack
