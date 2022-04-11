@@ -14,7 +14,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -57,7 +57,7 @@ public class HexCapabilities {
                 new CapSentinel(false, false, Vec3.ZERO, Level.OVERWORLD));
             evt.addCapability(new ResourceLocation(HexMod.MOD_ID, CapPreferredColorizer.CAP_NAME),
                 new CapPreferredColorizer(FrozenColorizer.DEFAULT));
-        } else if (evt.getObject() instanceof Villager) {
+        } else if (evt.getObject() instanceof VillagerDataHolder) {
             evt.addCapability(new ResourceLocation(HexMod.MOD_ID, Brainsweeping.CAP_NAME),
                 new Brainsweeping.Cap());
         }

@@ -5,7 +5,10 @@ import at.petrak.hexcasting.mixin.AccessorLivingEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -34,21 +37,23 @@ public class Brainsweeping {
         }
     }
 
-    public static boolean isBrainswept(Villager villager) {
-        var maybeCap = villager.getCapability(HexCapabilities.BRAINSWEPT).resolve();
+    public static boolean isBrainswept(LivingEntity entity) {
+        var maybeCap = entity.getCapability(HexCapabilities.BRAINSWEPT).resolve();
         return maybeCap.map(cap -> cap.brainswept).orElse(false);
     }
 
-    public static void brainsweep(Villager villager) {
-        var maybeCap = villager.getCapability(HexCapabilities.BRAINSWEPT).resolve();
+    public static void brainsweep(LivingEntity entity) {
+        var maybeCap = entity.getCapability(HexCapabilities.BRAINSWEPT).resolve();
         maybeCap.ifPresent(cap -> {
             cap.brainswept = true;
 
-            var brain = villager.getBrain();
-            if (villager.level instanceof ServerLevel slevel) {
-                brain.stopAll(slevel, villager);
+            if (entity instanceof Villager villager) {
+                Brain<Villager> brain = villager.getBrain();
+                if (entity.level instanceof ServerLevel slevel) {
+                    brain.stopAll(slevel, villager);
+                }
+                ((AccessorLivingEntity) entity).hex$SetBrain(brain.copyWithoutBehaviors());
             }
-            ((AccessorLivingEntity) villager).hex$SetBrain(brain.copyWithoutBehaviors());
         });
     }
 
@@ -60,7 +65,13 @@ public class Brainsweeping {
     }
 
     @SubscribeEvent
-    public static void copyBrainsweepToZombie(LivingConversionEvent evt) {
-        
+    public static void copyBrainsweepBetweenZombieAndVillager(LivingConversionEvent.Post evt) {
+        var outcome = evt.getOutcome();
+        var original = evt.getEntityLiving();
+        if (outcome instanceof VillagerDataHolder && original instanceof VillagerDataHolder) {
+            original.reviveCaps();
+            if (isBrainswept(original)) brainsweep(outcome);
+            original.invalidateCaps();
+        }
     }
 }
