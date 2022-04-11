@@ -100,6 +100,54 @@
       "input": "vector",
       "output": "num, num, num",
       "text": "hexcasting.page.math.15"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:sin",
+      "anchor": "hexcasting:sin",
+      "input": "num",
+      "output": "num",
+      "text": "hexcasting.page.math.16"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:cos",
+      "anchor": "hexcasting:cos",
+      "input": "num",
+      "output": "num",
+      "text": "hexcasting.page.math.17"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:tan",
+      "anchor": "hexcasting:tan",
+      "input": "num",
+      "output": "num",
+      "text": "hexcasting.page.math.18"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:arcsin",
+      "anchor": "hexcasting:arcsin",
+      "input": "num",
+      "output": "num",
+      "text": "hexcasting.page.math.19"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:arccos",
+      "anchor": "hexcasting:arccos",
+      "input": "num",
+      "output": "num",
+      "text": "hexcasting.page.math.20"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:arctan",
+      "anchor": "hexcasting:arctan",
+      "input": "num",
+      "output": "num",
+      "text": "hexcasting.page.math.21"
     }
   ]
 }

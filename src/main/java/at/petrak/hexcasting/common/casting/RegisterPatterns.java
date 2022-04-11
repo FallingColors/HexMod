@@ -15,6 +15,7 @@ import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
 import at.petrak.hexcasting.common.casting.operators.lists.*;
 import at.petrak.hexcasting.common.casting.operators.math.*;
 import at.petrak.hexcasting.common.casting.operators.math.logic.*;
+import at.petrak.hexcasting.common.casting.operators.math.trig.*;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
@@ -127,10 +128,18 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aw", HexDir.NORTH_EAST), prefix("identity"),
                 OpIdentityKindOf.INSTANCE);
 
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqwqqqqqaq", HexDir.WEST), prefix("akashic/read"),
-                OpAkashicRead.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeweeeeede", HexDir.EAST), prefix("akashic/write"),
-                OpAkashicWrite.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaa", HexDir.SOUTH_EAST), prefix("sin"),
+                OpSin.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqad", HexDir.SOUTH_EAST), prefix("cos"),
+                OpCos.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqqqqqadq", HexDir.SOUTH_WEST), prefix("tan"),
+                OpTan.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddeeeee", HexDir.SOUTH_EAST), prefix("arcsin"),
+                OpArcSin.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("adeeeee", HexDir.NORTH_EAST), prefix("arccos"),
+                OpArcCos.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eadeeeeew", HexDir.NORTH_EAST), prefix("arctan"),
+                OpArcTan.INSTANCE);
 
             // == Spells ==
 
@@ -257,6 +266,10 @@ public class RegisterPatterns {
                 prefix("brainsweep"),
                 OpBrainsweep.INSTANCE, true);
 
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqwqqqqqaq", HexDir.WEST), prefix("akashic/read"),
+                    OpAkashicRead.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eeeweeeeede", HexDir.EAST), prefix("akashic/write"),
+                    OpAkashicWrite.INSTANCE);
 
             // == Meta stuff ==
 
@@ -296,6 +309,11 @@ public class RegisterPatterns {
             // Yep, this is what I spend the "plain hexagon" pattern on.
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqq", HexDir.NORTH_WEST), prefix("const/vec/0"),
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 0.0))));
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qdwdq", HexDir.NORTH_EAST), prefix("const/double/pi"),
+                Operator.makeConstantOp(SpellDatum.make(Math.PI)));
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eawae", HexDir.NORTH_WEST), prefix("const/double/tau"),
+                    Operator.makeConstantOp(SpellDatum.make(Math.PI * 2)));
 
             // == Entities ==
 
