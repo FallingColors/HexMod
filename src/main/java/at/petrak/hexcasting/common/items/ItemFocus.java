@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.items;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.common.casting.Widget;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -27,11 +28,11 @@ public class ItemFocus extends Item implements DataHolder {
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
         if (!stack.hasTag()) {
-            return null;
+            return SpellDatum.make(Widget.NULL).serializeToNBT();
         }
         var tag = stack.getTag();
         if (!tag.contains(TAG_DATA, Tag.TAG_COMPOUND)) {
-            return null;
+            return SpellDatum.make(Widget.NULL).serializeToNBT();
         }
 
         return tag.getCompound(TAG_DATA);

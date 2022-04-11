@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.items;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.common.casting.Widget;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -94,7 +95,7 @@ public class ItemSpellbook extends Item implements DataHolder {
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
         if (!stack.hasTag()) {
-            return null;
+            return SpellDatum.make(Widget.NULL).serializeToNBT();
         }
         var tag = stack.getTag();
 
@@ -110,10 +111,10 @@ public class ItemSpellbook extends Item implements DataHolder {
             if (pagesTag.contains(key)) {
                 return pagesTag.getCompound(key);
             } else {
-                return null;
+                return SpellDatum.make(Widget.NULL).serializeToNBT();
             }
         } else {
-            return null;
+            return SpellDatum.make(Widget.NULL).serializeToNBT();
         }
     }
 
