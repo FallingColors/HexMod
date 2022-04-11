@@ -87,6 +87,22 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:logarithm",
+      "anchor": "hexcasting:logarithm",
+      "input": "num, num",
+      "output": "num",
+      "text": "hexcasting.page.math.logarithm"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:random",
+      "anchor": "hexcasting:random",
+      "input": "vec",
+      "output": "vec",
+      "text": "hexcasting.page.math.random"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:floor",
       "anchor": "hexcasting:floor",
       "input": "num",
@@ -116,22 +132,6 @@
       "input": "vector",
       "output": "num, num, num",
       "text": "hexcasting.page.math.deconstruct_vec"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:coerce_axial",
-      "anchor": "hexcasting:coerce_axial",
-      "input": "vec",
-      "output": "vec",
-      "text": "hexcasting.page.math.coerce_axial"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:random",
-      "anchor": "hexcasting:random",
-      "input": "vec",
-      "output": "vec",
-      "text": "hexcasting.page.math.random"
     },
     {
       "type": "hexcasting:pattern",
@@ -180,6 +180,14 @@
       "input": "num",
       "output": "num",
       "text": "hexcasting.page.math.arctan"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:coerce_axial",
+      "anchor": "hexcasting:coerce_axial",
+      "input": "vec",
+      "output": "vec",
+      "text": "hexcasting.page.math.coerce_axial"
     }
   ]
 }
