@@ -24,7 +24,7 @@ class OpErase : SpellOperator {
         if (handItem !is ItemPackagedSpell &&
             (handItem !is DataHolder ||
                     !handStack.hasTag() ||
-                    handItem.canWrite(handStack.orCreateTag, null))) {
+                    !handItem.canWrite(handStack.orCreateTag, null))) {
             throw MishapBadOffhandItem.of(handStack, "eraseable")
         }
 
