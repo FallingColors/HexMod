@@ -57,8 +57,9 @@ object OpMakeBattery : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val (handStack, hand) = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
             if (handStack.item == Items.GLASS_BOTTLE && itemEntity.isAlive) {
-                val manaAmt = ManaHelper.extractAllMana(itemEntity.item)
-                if (manaAmt != null) {
+                val entityStack = itemEntity.item.copy()
+                val manaAmt = ManaHelper.extractAllMana(entityStack)
+                if (manaAmt > 0) {
                     val replaceItem = ItemStack(HexItems.BATTERY.get())
                     val tag = replaceItem.orCreateTag
                     tag.putInt(ItemManaHolder.TAG_MANA, manaAmt)
@@ -67,7 +68,8 @@ object OpMakeBattery : SpellOperator {
                     ctx.caster.setItemInHand(hand, replaceItem)
                 }
 
-                if (itemEntity.item.isEmpty)
+                itemEntity.item = entityStack
+                if (entityStack.isEmpty)
                     itemEntity.kill()
             }
         }

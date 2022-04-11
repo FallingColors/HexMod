@@ -46,9 +46,9 @@ object ManaHelper {
      * Extract the entirety of the mana out of this.
      * This may mutate the itemstack (and will probably consume it).
      *
-     * Return the amount of mana extracted, or null if this cannot have mana extracted.
+     * Return the amount of mana extracted.
      */
-    fun extractAllMana(stack: ItemStack): Int? {
+    fun extractAllMana(stack: ItemStack): Int {
         val base = when (stack.item) {
             HexItems.AMETHYST_DUST.get() -> HexConfig.dustManaAmount.get()
             Items.AMETHYST_SHARD -> HexConfig.shardManaAmount.get()
@@ -60,7 +60,7 @@ object ManaHelper {
                 val manaThere = battery.getManaAmt(tag)
                 return battery.withdrawMana(tag, manaThere)
             }
-            else -> return null
+            else -> return 0
         }
         val count = stack.count
         stack.shrink(count)

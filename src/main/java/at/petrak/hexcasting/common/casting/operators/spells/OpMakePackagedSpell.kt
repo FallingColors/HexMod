@@ -56,8 +56,9 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
                 && !tag.contains(ItemPackagedSpell.TAG_PATTERNS)
                 && itemEntity.isAlive
             ) {
-                val manaAmt = ManaHelper.extractAllMana(itemEntity.item)
-                if (manaAmt != null) {
+                val entityStack = itemEntity.item.copy()
+                val manaAmt = ManaHelper.extractAllMana(entityStack)
+                if (manaAmt > 0) {
                     tag.putInt(ItemPackagedSpell.TAG_MANA, manaAmt)
                     tag.putInt(ItemPackagedSpell.TAG_MAX_MANA, manaAmt)
 
@@ -66,10 +67,11 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
                         patsTag.add(pat.serializeToNBT())
                     }
                     tag.put(ItemPackagedSpell.TAG_PATTERNS, patsTag)
-
-                    if (itemEntity.item.isEmpty)
-                        itemEntity.kill()
                 }
+
+                itemEntity.item = entityStack
+                if (entityStack.isEmpty)
+                    itemEntity.kill()
             }
         }
     }
