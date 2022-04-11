@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.ManaHelper
+import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
@@ -22,7 +23,8 @@ object OpMakeBattery : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getChecked<ItemEntity>(0)
 
-        val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
+        val otherHandItem = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
+
         if (otherHandItem.item != Items.GLASS_BOTTLE) {
             throw MishapBadOffhandItem.of(
                 otherHandItem,
@@ -50,8 +52,8 @@ object OpMakeBattery : SpellOperator {
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
-            if (otherHandItem.item == Items.GLASS_BOTTLE && itemEntity.isAlive) {
+            val handStack = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
+            if (handStack.item == Items.GLASS_BOTTLE && itemEntity.isAlive) {
                 val manaAmt = ManaHelper.extractAllMana(itemEntity.item)
                 if (manaAmt != null) {
                     val replaceItem = ItemStack(HexItems.BATTERY.get())

@@ -187,9 +187,11 @@ public class RegisterClientStuff {
                     return List.of();
                 }
 
+                int count = tile.getCount();
+
                 return List.of(new Pair<>(new ItemStack(HexBlocks.AKASHIC_BOOKSHELF.get()), new TranslatableComponent(
-                    "hexcasting.tooltip.lens.akashic.record.count",
-                    tile.getCount()
+                    "hexcasting.tooltip.lens.akashic.record.count" + (count == 1 ? ".single" : ""),
+                    count
                 )));
             }));
 

@@ -16,13 +16,16 @@ class OpErase : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val otherHandStack = ctx.caster.getItemInHand(ctx.otherHand)
-        val otherHandItem = otherHandStack.item
-        if (otherHandItem !is ItemPackagedSpell &&
-            (otherHandItem !is DataHolder ||
-                    !otherHandStack.hasTag() ||
-                    otherHandItem.canWrite(otherHandStack.orCreateTag, null))) {
-            throw MishapBadOffhandItem.of(otherHandStack, "eraseable")
+        val handStack = ctx.getHeldItemToOperateOn {
+            val item = it.item
+            item is ItemPackagedSpell || (item is DataHolder && it.hasTag() && item.canWrite(it.orCreateTag, null))
+        }
+        val handItem = handStack.item
+        if (handItem !is ItemPackagedSpell &&
+            (handItem !is DataHolder ||
+                    !handStack.hasTag() ||
+                    handItem.canWrite(handStack.orCreateTag, null))) {
+            throw MishapBadOffhandItem.of(handStack, "eraseable")
         }
 
         return Triple(Spell, 10_000, listOf())
@@ -30,16 +33,19 @@ class OpErase : SpellOperator {
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val otherHandStack = ctx.caster.getItemInHand(ctx.otherHand)
-            val otherHandItem = otherHandStack.item
-            if (otherHandStack.hasTag()) {
-                val tag = otherHandStack.orCreateTag
-                if (otherHandItem is ItemPackagedSpell) {
+            val handStack = ctx.getHeldItemToOperateOn {
+                val item = it.item
+                item is ItemPackagedSpell || (item is DataHolder && it.hasTag() && item.canWrite(it.orCreateTag, null))
+            }
+            val handItem = handStack.item
+            if (handStack.hasTag()) {
+                val tag = handStack.orCreateTag
+                if (handItem is ItemPackagedSpell) {
                     tag.remove(ItemPackagedSpell.TAG_MANA)
                     tag.remove(ItemPackagedSpell.TAG_MAX_MANA)
                     tag.remove(ItemPackagedSpell.TAG_PATTERNS)
-                } else if (otherHandItem is DataHolder && otherHandItem.canWrite(tag, null)) {
-                    otherHandItem.writeDatum(tag, null)
+                } else if (handItem is DataHolder && handItem.canWrite(tag, null)) {
+                    handItem.writeDatum(tag, null)
                 }
             }
         }

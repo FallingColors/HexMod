@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.ManaHelper
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import net.minecraft.util.Mth
@@ -18,20 +19,20 @@ object OpRecharge : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
-        if (otherHandItem.item !is ItemManaHolder) {
+        val handStack = ctx.getHeldItemToOperateOn { it.item is ItemManaHolder }
+
+        if (handStack.item !is ItemManaHolder)
             throw MishapBadOffhandItem.of(
-                otherHandItem,
+                handStack,
                 "rechargable"
             )
-        }
 
         val entity = args.getChecked<ItemEntity>(0)
         ctx.assertEntityInRange(entity)
 
         if (!ManaHelper.isManaItem(entity.item)) {
-            throw MishapBadOffhandItem.of(
-                otherHandItem,
+            throw MishapBadItem.of(
+                entity.item,
                 "mana"
             )
         }
@@ -41,11 +42,12 @@ object OpRecharge : SpellOperator {
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
-            if (otherHandItem.item is ItemManaHolder && itemEntity.isAlive) {
+            val handStack = ctx.getHeldItemToOperateOn { it.item is ItemManaHolder }
+
+            if (handStack.item is ItemManaHolder && itemEntity.isAlive) {
                 val manaAmt = ManaHelper.extractAllMana(itemEntity.item)
                 if (manaAmt != null) {
-                    val tag = otherHandItem.orCreateTag
+                    val tag = handStack.orCreateTag
                     val maxMana = if (tag.contains(ItemManaHolder.TAG_MAX_MANA))
                         tag.getInt(ItemManaHolder.TAG_MAX_MANA)
                     else

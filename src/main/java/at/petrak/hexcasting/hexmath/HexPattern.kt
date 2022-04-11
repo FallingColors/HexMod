@@ -5,6 +5,7 @@ import at.petrak.hexcasting.client.RenderLib
 import net.minecraft.nbt.ByteArrayTag
 import net.minecraft.nbt.ByteTag
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.Tag
 import net.minecraft.world.phys.Vec2
 
 /**
@@ -128,6 +129,11 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     companion object {
         const val TAG_START_DIR = "start_dir"
         const val TAG_ANGLES = "angles"
+
+        @JvmStatic
+        fun IsHexPattern(tag: CompoundTag): Boolean {
+            return tag.contains(TAG_START_DIR, Tag.TAG_BYTE.toInt()) && tag.contains(TAG_ANGLES, Tag.TAG_BYTE_ARRAY.toInt())
+        }
 
         @JvmStatic
         fun DeserializeFromNBT(tag: CompoundTag): HexPattern {

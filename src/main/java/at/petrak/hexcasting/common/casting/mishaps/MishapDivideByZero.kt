@@ -35,6 +35,12 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         }
 
         @JvmStatic
+        fun tan(angle: Double): MishapDivideByZero {
+            val translatedAngle = translate(angle)
+            return MishapDivideByZero(TranslatableComponent("$PREFIX.sin", translatedAngle), TranslatableComponent("$PREFIX.cos", translatedAngle))
+        }
+
+        @JvmStatic
         val zero get() = TranslatableComponent("$PREFIX.zero")
         @JvmStatic
         val zerothPower get() = TranslatableComponent("$PREFIX.zero.power")
