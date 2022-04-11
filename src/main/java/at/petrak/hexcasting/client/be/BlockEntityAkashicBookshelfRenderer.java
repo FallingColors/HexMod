@@ -18,9 +18,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class BlockEntityAkashicRecordRenderer implements BlockEntityRenderer<BlockEntityAkashicBookshelf> {
+public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<BlockEntityAkashicBookshelf> {
 
-	public BlockEntityAkashicRecordRenderer(BlockEntityRendererProvider.Context ctx) {
+	public BlockEntityAkashicBookshelfRenderer(BlockEntityRendererProvider.Context ctx) {
 		// NO-OP
 	}
 

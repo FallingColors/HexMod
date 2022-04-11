@@ -12,7 +12,7 @@
       "anchor": "hexcasting:swap",
       "input": "any, any",
       "output": "any, any",
-      "text": "hexcasting.page.stackmanip.1"
+      "text": "hexcasting.page.stackmanip.swap"
     },
     {
       "type": "hexcasting:pattern",
@@ -20,7 +20,7 @@
       "anchor": "hexcasting:fisherman",
       "input": "num",
       "output": "any",
-      "text": "hexcasting.page.stackmanip.2"
+      "text": "hexcasting.page.stackmanip.fisherman"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,7 +28,7 @@
       "anchor": "hexcasting:duplicate",
       "input": "any",
       "output": "any, any",
-      "text": "hexcasting.page.stackmanip.3"
+      "text": "hexcasting.page.stackmanip.duplicate"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +36,7 @@
       "anchor": "hexcasting:duplicate_n",
       "input": "number, any",
       "output": "many",
-      "text": "hexcasting.page.stackmanip.4"
+      "text": "hexcasting.page.stackmanip.duplicate_n"
     },
     {
       "type": "hexcasting:manual_pattern",

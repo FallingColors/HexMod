@@ -54,7 +54,7 @@ public class RegisterPatterns {
                 OpEntityPos.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wa", HexDir.EAST), prefix("get_entity_look"),
                 OpEntityLook.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("awq", HexDir.NORTH_EAST), prefix("get_entity_look"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("awq", HexDir.NORTH_EAST), prefix("get_entity_height"),
                 OpEntityHeight.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wq", HexDir.EAST), prefix("get_entity_velocity"),
                 OpEntityVelocity.INSTANCE);
@@ -151,6 +151,9 @@ public class RegisterPatterns {
                 OpArcCos.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eadeeeeew", HexDir.NORTH_EAST), prefix("arctan"),
                 OpArcTan.INSTANCE);
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqqq", HexDir.NORTH_WEST), prefix("random"),
+                    OpRandom.INSTANCE);
 
             // == Spells ==
 

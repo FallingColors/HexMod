@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.client.be.BlockEntityAkashicRecordRenderer;
+import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
@@ -216,6 +216,6 @@ public class RegisterClientStuff {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers evt) {
         evt.registerBlockEntityRenderer(HexBlockEntities.SLATE_TILE.get(), BlockEntitySlateRenderer::new);
         evt.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(),
-            BlockEntityAkashicRecordRenderer::new);
+            BlockEntityAkashicBookshelfRenderer::new);
     }
 }
