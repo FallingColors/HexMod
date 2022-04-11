@@ -81,6 +81,7 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         super.loadModData(tag);
         if (tag.contains(TAG_STORED_PLAYER)) {
             this.storedPlayer = tag.getUUID(TAG_STORED_PLAYER);
-        }
+        } else
+            this.storedPlayer = null;
     }
 }

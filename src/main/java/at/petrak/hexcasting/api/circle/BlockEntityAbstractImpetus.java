@@ -185,6 +185,13 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                 this.trackedBlocks.add(pos);
                 this.knownBlocks.add(pos);
             }
+        } else {
+            this.activator = null;
+            this.colorizer = null;
+            this.nextBlock = null;
+            this.foundAll = false;
+            this.trackedBlocks = new ArrayList<>();
+            this.knownBlocks = new HashSet<>();
         }
 
         this.mana = tag.getInt(TAG_MANA);

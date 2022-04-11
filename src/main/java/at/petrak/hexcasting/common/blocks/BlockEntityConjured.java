@@ -92,9 +92,7 @@ public class BlockEntityConjured extends PaucalBlockEntity {
 
     @Override
     protected void loadModData(CompoundTag tag) {
-        if (tag.contains(TAG_COLORIZER)) {
-            this.setColorizer(FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER)));
-        }
+        this.setColorizer(FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER)));
     }
 
     public FrozenColorizer getColorizer() {

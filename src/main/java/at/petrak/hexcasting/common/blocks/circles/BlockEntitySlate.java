@@ -35,8 +35,8 @@ public class BlockEntitySlate extends PaucalBlockEntity {
                 this.pattern = HexPattern.DeserializeFromNBT(patternTag);
             else
                 this.pattern = null;
-
-        }
+        } else
+            this.pattern = null;
     }
 
 }
