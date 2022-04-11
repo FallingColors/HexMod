@@ -314,10 +314,10 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                     2f, 1f);
             }
             if (erroredPos != null) {
-                this.setLastMishap(null);
                 this.setChanged();
                 this.sfx(erroredPos, false);
-            }
+            } else
+                this.setLastMishap(null);
         }
     }
 
