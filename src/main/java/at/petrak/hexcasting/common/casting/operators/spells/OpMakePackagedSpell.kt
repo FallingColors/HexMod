@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.ManaHelper
+import at.petrak.hexcasting.common.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
@@ -29,15 +30,15 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
                 throw MishapInvalidIota(it, 0, TranslatableComponent("hexcasting.mishap.invalid_value.list.pattern"))
         }
 
-        val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
-        if (!otherHandItem.`is`(itemType)) {
-            throw MishapBadOffhandItem(otherHandItem, itemType.description)
+        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
+        if (!handStack.`is`(itemType)) {
+            throw MishapBadOffhandItem(handStack, hand, itemType.description)
         }
 
         ctx.assertEntityInRange(entity)
         if (!ManaHelper.isManaItem(entity.item)) {
-            throw MishapBadOffhandItem.of(
-                otherHandItem,
+            throw MishapBadItem.of(
+                entity.item,
                 "mana"
             )
         }
@@ -45,11 +46,11 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
         return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }
 
-    private data class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {
+    private inner class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val otherHandItem = ctx.caster.getItemInHand(ctx.otherHand)
-            val tag = otherHandItem.orCreateTag
-            if (otherHandItem.item is ItemPackagedSpell
+            val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
+            val tag = handStack.orCreateTag
+            if (handStack.item is ItemPackagedSpell
                 && !tag.contains(ItemPackagedSpell.TAG_MANA)
                 && !tag.contains(ItemPackagedSpell.TAG_MAX_MANA)
                 && !tag.contains(ItemPackagedSpell.TAG_PATTERNS)
@@ -57,7 +58,6 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
             ) {
                 val manaAmt = ManaHelper.extractAllMana(itemEntity.item)
                 if (manaAmt != null) {
-                    val tag = otherHandItem.orCreateTag
                     tag.putInt(ItemPackagedSpell.TAG_MANA, manaAmt)
                     tag.putInt(ItemPackagedSpell.TAG_MAX_MANA, manaAmt)
 

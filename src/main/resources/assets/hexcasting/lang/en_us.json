@@ -130,6 +130,7 @@
 
   "death.attack.hexcasting.overcast": "%s's mind was consumed into energy",
 
+  "command.hexcasting.pats.listing": "Patterns in this world:",
   "command.hexcasting.pats.all": "Gave you all %d scrolls",
   "command.hexcasting.pats.specific.success": "Gave you %s with id %s",
   "command.hexcasting.recalc": "Recalculated patterns",

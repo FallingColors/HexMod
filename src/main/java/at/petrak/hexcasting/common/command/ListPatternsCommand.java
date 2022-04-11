@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.command;
 
 import at.petrak.hexcasting.api.PatternRegistry;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
@@ -15,27 +15,25 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
-public class ListPatsCommand {
+public class ListPatternsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("hexcasting:patterns")
             .requires(dp -> dp.hasPermission(Commands.LEVEL_ADMINS))
             .then(Commands.literal("list").executes(ctx -> {
 
                 var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
-                var listing = lookup.keySet()
+                var listing = lookup.entrySet()
                     .stream()
-                    .map(key -> new Pair<>(lookup.get(key).getFirst(), key))
-                    .sorted((a, b) -> a.getFirst().compareNamespaced(b.getFirst()))
+                    .sorted((a, b) -> a.getValue().getFirst().compareNamespaced(b.getValue().getFirst()))
                     .toList();
 
-                var bob = new StringBuilder("Patterns in this world:");
+                ctx.getSource().sendSuccess(new TranslatableComponent("command.hexcasting.pats.listing"), false);
                 for (var pair : listing) {
-                    bob.append('\n');
-                    bob.append(pair.getFirst());
-                    bob.append(": ");
-                    bob.append(pair.getSecond());
+                    ctx.getSource().sendSuccess(new TextComponent(pair.getValue().getFirst().toString())
+                        .append(": ")
+                        .append(SpellDatum.make(HexPattern.FromAnglesSig(pair.getKey(), pair.getValue().getSecond())).display()), false);
                 }
-                ctx.getSource().sendSuccess(new TextComponent(bob.toString()), true);
+
 
                 return lookup.size();
             }))
