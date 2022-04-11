@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
+import at.petrak.hexcasting.common.casting.ManaHelper;
 import at.petrak.hexcasting.common.casting.SpellCircleContext;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.items.HexItems;
@@ -506,8 +507,8 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         @NotNull
         @Override
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            var manamount = getManaAmount(stack);
-            if (manamount != null) {
+            var manamount = ManaHelper.extractMana(stack, -1, false, simulate);
+            if (manamount > 0) {
                 if (!simulate) {
                     BlockEntityAbstractImpetus.this.mana += manamount;
                     BlockEntityAbstractImpetus.this.setChanged();
@@ -531,23 +532,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return getManaAmount(stack) != null;
-        }
-
-        // a separate method from the ctx or harness or whatever cause it's different and special
-        private static @Nullable Integer getManaAmount(ItemStack stack) {
-            int baseAmt;
-            if (stack.is(HexItems.AMETHYST_DUST.get())) {
-                baseAmt = HexConfig.dustManaAmount.get();
-            } else if (stack.is(Items.AMETHYST_SHARD)) {
-                baseAmt = HexConfig.shardManaAmount.get();
-            } else if (stack.is(HexItems.CHARGED_AMETHYST.get())) {
-                baseAmt = HexConfig.chargedCrystalManaAmount.get();
-            } else {
-                return null;
-            }
-
-            return baseAmt * stack.getCount();
+            return ManaHelper.extractMana(stack, -1, false, true) > 0;
         }
     };
 }
