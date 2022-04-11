@@ -86,6 +86,13 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:const/double/e",
+      "input": "",
+      "output": "num",
+      "text": "hexcasting.page.consts.const/double/e"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:const/null",
       "input": "",
       "output": "influence",

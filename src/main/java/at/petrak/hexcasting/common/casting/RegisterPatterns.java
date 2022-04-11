@@ -134,6 +134,11 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aw", HexDir.NORTH_EAST), prefix("identity"),
                 OpIdentityKindOf.INSTANCE);
 
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ewq", HexDir.EAST), prefix("floor"),
+                    OpFloor.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qwe", HexDir.EAST), prefix("ceil"),
+                    OpCeil.INSTANCE);
+
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaa", HexDir.SOUTH_EAST), prefix("sin"),
                 OpSin.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqad", HexDir.SOUTH_EAST), prefix("cos"),
@@ -320,6 +325,10 @@ public class RegisterPatterns {
                 Operator.makeConstantOp(SpellDatum.make(Math.PI)));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eawae", HexDir.NORTH_WEST), prefix("const/double/tau"),
                 Operator.makeConstantOp(SpellDatum.make(Math.PI * 2)));
+
+            // e
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aaq", HexDir.EAST), prefix("const/double/e"),
+                    Operator.makeConstantOp(SpellDatum.make(Math.E)));
 
             // == Entities ==
 

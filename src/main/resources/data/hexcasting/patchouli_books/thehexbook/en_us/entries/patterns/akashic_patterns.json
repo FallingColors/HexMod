@@ -8,19 +8,19 @@
   "pages": [
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:read/akashic",
-      "anchor": "hexcasting:read/akashic",
+      "op_id": "hexcasting:akashic/read",
+      "anchor": "hexcasting:akashic/read",
       "input": "vector, pattern",
       "output": "any",
-      "text": "hexcasting.page.akashic_patterns.read/akashic"
+      "text": "hexcasting.page.akashic_patterns.akashic/read"
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:write/akashic",
-      "anchor": "hexcasting:write/akashic",
+      "op_id": "hexcasting:akashic/write",
+      "anchor": "hexcasting:akashic/write",
       "input": "vector, pattern, any",
       "output": "",
-      "text": "hexcasting.page.akashic_patterns.write/akashic"
+      "text": "hexcasting.page.akashic_patterns.akashic/write"
     }
   ]
 }
