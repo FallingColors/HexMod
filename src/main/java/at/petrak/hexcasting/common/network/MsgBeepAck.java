@@ -39,10 +39,11 @@ public record MsgBeepAck(Vec3 target, int note, NoteBlockInstrument instrument) 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() ->
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    var world = Minecraft.getInstance().level;
+                    var minecraft = Minecraft.getInstance();
+                    var world = minecraft.level;
                     if (world != null){
                         float pitch = (float) Math.pow(2, (note - 12) / 12.0);
-                        world.playSound(null, target.x, target.y, target.z, instrument.getSoundEvent(), SoundSource.PLAYERS, 3, pitch);
+                        world.playLocalSound(target.x, target.y, target.z, instrument.getSoundEvent(), SoundSource.PLAYERS, 3, pitch, false);
                         world.addParticle(ParticleTypes.NOTE, target.x, target.y + 0.2, target.z, note / 24.0, 0, 0);
                     }
                 })

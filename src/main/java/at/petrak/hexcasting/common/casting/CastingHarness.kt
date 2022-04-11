@@ -112,6 +112,7 @@ class CastingHarness private constructor(
     fun performSideEffects(sideEffects: List<OperatorSideEffect>): ControllerInfo {
         var wasSpellCast = false
         var wasPrevPatternInvalid = false
+        var hasCastingSound = false
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
             if (mustStop) {
@@ -120,12 +121,16 @@ class CastingHarness private constructor(
             }
 
 
-            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell)
+            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell) {
                 wasSpellCast = true
+                if (haskellProgrammersShakingandCryingRN.hasCastingSound)
+                    hasCastingSound = true
+            }
         }
 
         return ControllerInfo(
             wasSpellCast,
+            hasCastingSound,
             this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
             wasPrevPatternInvalid,
             generateDescs()

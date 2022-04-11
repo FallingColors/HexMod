@@ -22,7 +22,7 @@ sealed class OperatorSideEffect {
     abstract fun performEffect(harness: CastingHarness): Boolean
 
     /** Try to cast a spell  */
-    data class AttemptSpell(val spell: RenderedSpell, val isGreat: Boolean) : OperatorSideEffect() {
+    data class AttemptSpell(val spell: RenderedSpell, val isGreat: Boolean, val hasCastingSound: Boolean = true) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
             return if (this.isGreat && !harness.ctx.isCasterEnlightened) {
                 harness.ctx.caster.sendMessage(

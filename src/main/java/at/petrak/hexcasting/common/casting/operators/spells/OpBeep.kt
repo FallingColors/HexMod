@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.OperatorSideEffect
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgBeepAck
 import net.minecraft.core.BlockPos
@@ -29,9 +30,12 @@ object OpBeep : SpellOperator {
         return Triple(
             Spell(target, note, NoteBlockInstrument.values()[instrument]),
             1_000,
-            listOf(ParticleSpray.Cloud(Vec3.atCenterOf(BlockPos(target)), 1.0))
+            listOf(ParticleSpray.Cloud(target, 1.0))
         )
     }
+
+    override val hasCastingSound: Boolean
+        get() = false
 
     private data class Spell(val target: Vec3, val note: Int, val instrument: NoteBlockInstrument) : RenderedSpell {
         override fun cast(ctx: CastingContext) {

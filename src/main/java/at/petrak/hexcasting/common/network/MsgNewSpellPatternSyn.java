@@ -73,11 +73,11 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
 
                     ControllerInfo clientInfo;
                     if (autoFail) {
-                        clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), true, harness.generateDescs());
+                        clientInfo = new ControllerInfo(false, false, harness.getStack().isEmpty(), true, harness.generateDescs());
                     } else {
                         clientInfo = harness.executeNewPattern(this.pattern, sender.getLevel());
 
-                        if (clientInfo.getWasSpellCast()) {
+                        if (clientInfo.getWasSpellCast() && clientInfo.getHasCastingSound()) {
                             sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
                                     HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
                                     1f + ((float) Math.random() - 0.5f) * 0.2f);

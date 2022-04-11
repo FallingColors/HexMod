@@ -23,6 +23,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info) {
         var buf = new FriendlyByteBuf(buffer);
 
         var wasSpellCast = buf.readBoolean();
+        var hasCastingSound = buf.readBoolean();
         var isStackEmpty = buf.readBoolean();
         var wasPrevPatternInvalid = buf.readBoolean();
         var descsLen = buf.readInt();
@@ -32,7 +33,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info) {
         }
 
         return new MsgNewSpellPatternAck(
-            new ControllerInfo(wasSpellCast, isStackEmpty, wasPrevPatternInvalid, desc)
+            new ControllerInfo(wasSpellCast, hasCastingSound, isStackEmpty, wasPrevPatternInvalid, desc)
         );
     }
 
@@ -40,6 +41,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info) {
         var buf = new FriendlyByteBuf(buffer);
 
         buf.writeBoolean(this.info.getWasSpellCast());
+        buf.writeBoolean(this.info.getHasCastingSound());
         buf.writeBoolean(this.info.isStackClear());
         buf.writeBoolean(this.info.getWasPrevPatternInvalid());
         buf.writeInt(this.info.getStackDesc().size());

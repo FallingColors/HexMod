@@ -184,7 +184,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
                 if (playSound) {
                     Minecraft.getInstance().soundManager.play(
                         SimpleSoundInstance(
-                            HexSounds.START_PATTERN.get(),
+                            HexSounds.ADD_LINE.get(),
                             SoundSource.PLAYERS,
                             0.25f,
                             1f + (Math.random().toFloat() - 0.5f) * 0.1f,

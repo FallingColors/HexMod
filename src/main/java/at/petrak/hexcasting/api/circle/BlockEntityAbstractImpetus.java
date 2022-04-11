@@ -288,6 +288,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
             var harness = new CastingHarness(ctx);
 
             var castSpell = false;
+            var makeSound = false;
             BlockPos erroredPos = null;
             for (var tracked : this.trackedBlocks) {
                 var bs = this.level.getBlockState(tracked);
@@ -297,6 +298,8 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                         var info = harness.executeNewPattern(newPattern, splayer.getLevel());
                         if (info.getWasSpellCast()) {
                             castSpell = true;
+                            if (info.getHasCastingSound())
+                                makeSound = true;
                         }
                         if (info.getWasPrevPatternInvalid()) {
                             erroredPos = tracked;
@@ -306,7 +309,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                 }
             }
 
-            if (castSpell) {
+            if (castSpell && makeSound) {
                 this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST.get(), SoundSource.BLOCKS,
                     2f, 1f);
             }
