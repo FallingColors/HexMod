@@ -9,6 +9,7 @@ import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +43,7 @@ public class ItemScroll extends Item implements DataHolder {
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
         var stackTag = stack.getTag();
-        if (stackTag == null || !stackTag.contains(TAG_PATTERN)) {
+        if (stackTag == null || !stackTag.contains(TAG_PATTERN, Tag.TAG_COMPOUND)) {
             return null;
         }
 
@@ -54,7 +55,7 @@ public class ItemScroll extends Item implements DataHolder {
 
     @Override
     public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
-        return datum != null && datum.getType() == DatumType.PATTERN && !tag.contains(TAG_PATTERN);
+        return datum != null && datum.getType() == DatumType.PATTERN && !tag.contains(TAG_PATTERN, Tag.TAG_COMPOUND);
     }
 
     @Override
@@ -106,10 +107,10 @@ public class ItemScroll extends Item implements DataHolder {
     @Override
     public Component getName(ItemStack pStack) {
         var tag = pStack.getOrCreateTag();
-        if (tag.contains(TAG_OP_ID)) {
+        if (tag.contains(TAG_OP_ID, Tag.TAG_STRING)) {
             return new TranslatableComponent("item.hexcasting.scroll.of",
                 new TranslatableComponent("hexcasting.spell." + ResourceLocation.tryParse(tag.getString(TAG_OP_ID))));
-        } else if (tag.contains(TAG_PATTERN)) {
+        } else if (tag.contains(TAG_PATTERN, Tag.TAG_COMPOUND)) {
             return new TranslatableComponent("item.hexcasting.scroll");
         } else {
             return new TranslatableComponent("item.hexcasting.scroll.empty");

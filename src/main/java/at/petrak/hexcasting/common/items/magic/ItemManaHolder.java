@@ -3,8 +3,10 @@ package at.petrak.hexcasting.common.items.magic;
 import at.petrak.hexcasting.common.casting.ManaHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -39,14 +41,18 @@ public abstract class ItemManaHolder extends Item {
     public int withdrawMana(CompoundTag tag, int cost) {
         var manaHere = getManaAmt(tag);
         var manaLeft = manaHere - cost;
-        tag.putInt(TAG_MANA, Math.max(0, manaLeft));
+        setMana(tag, manaLeft);
         return Math.min(cost, manaHere);
+    }
+
+    public void setMana(CompoundTag tag, int mana) {
+        tag.putInt(TAG_MANA, Mth.clamp(mana, 0, tag.getInt(TAG_MAX_MANA)));
     }
 
     @Override
     public boolean isBarVisible(ItemStack pStack) {
         var tag = pStack.getOrCreateTag();
-        return tag.contains(TAG_MANA);
+        return tag.contains(TAG_MANA, Tag.TAG_ANY_NUMERIC);
     }
 
     @Override
@@ -81,7 +87,7 @@ public abstract class ItemManaHolder extends Item {
         if (pIsAdvanced.isAdvanced()) {
             var imh = (ItemManaHolder) pStack.getItem();
             var tag = pStack.getOrCreateTag();
-            if (tag.contains(TAG_MANA) && tag.contains(TAG_MAX_MANA)) {
+            if (tag.contains(TAG_MANA, Tag.TAG_ANY_NUMERIC) && tag.contains(TAG_MAX_MANA, Tag.TAG_ANY_NUMERIC)) {
                 pTooltipComponents.add(
                     new TranslatableComponent("item.hexcasting.manaholder.amount",
                         String.format("%,d", imh.getManaAmt(tag)),

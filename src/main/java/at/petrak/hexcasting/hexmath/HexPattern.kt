@@ -132,7 +132,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
 
         @JvmStatic
         fun IsHexPattern(tag: CompoundTag): Boolean {
-            return tag.contains(TAG_START_DIR, Tag.TAG_BYTE.toInt()) && tag.contains(TAG_ANGLES, Tag.TAG_BYTE_ARRAY.toInt())
+            return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt()) && tag.contains(TAG_ANGLES, Tag.TAG_BYTE_ARRAY.toInt())
         }
 
         @JvmStatic

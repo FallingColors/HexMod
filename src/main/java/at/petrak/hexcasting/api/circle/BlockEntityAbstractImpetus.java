@@ -171,8 +171,10 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
     @Override
     protected void loadModData(CompoundTag tag) {
-        if (tag.contains(TAG_ACTIVATOR) && tag.contains(TAG_COLORIZER) && tag.contains(TAG_NEXT_BLOCK)
-            && tag.contains(TAG_TRACKED_BLOCKS)) {
+        if (tag.contains(TAG_ACTIVATOR, Tag.TAG_INT_ARRAY) &&
+                tag.contains(TAG_COLORIZER, Tag.TAG_COMPOUND) &&
+                tag.contains(TAG_NEXT_BLOCK, Tag.TAG_COMPOUND) &&
+                tag.contains(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND)) {
             this.activator = tag.getUUID(TAG_ACTIVATOR);
             this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
             this.nextBlock = NbtUtils.readBlockPos(tag.getCompound(TAG_NEXT_BLOCK));
@@ -195,7 +197,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         }
 
         this.mana = tag.getInt(TAG_MANA);
-        if (tag.contains(TAG_LAST_MISHAP)) {
+        if (tag.contains(TAG_LAST_MISHAP, Tag.TAG_STRING)) {
             this.lastMishap = Component.Serializer.fromJson(tag.getString(TAG_LAST_MISHAP));
         } else
             this.lastMishap = null;

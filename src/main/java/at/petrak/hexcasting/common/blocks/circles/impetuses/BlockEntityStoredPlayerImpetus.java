@@ -7,6 +7,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
@@ -79,7 +80,7 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     @Override
     protected void loadModData(CompoundTag tag) {
         super.loadModData(tag);
-        if (tag.contains(TAG_STORED_PLAYER)) {
+        if (tag.contains(TAG_STORED_PLAYER, Tag.TAG_INT_ARRAY)) {
             this.storedPlayer = tag.getUUID(TAG_STORED_PLAYER);
         } else
             this.storedPlayer = null;

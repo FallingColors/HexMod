@@ -41,7 +41,7 @@ public abstract class ItemPackagedSpell extends ItemManaHolder {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand usedHand) {
         var stack = player.getItemInHand(usedHand);
         var tag = stack.getOrCreateTag();
-        if (!tag.contains(TAG_PATTERNS)) {
+        if (!tag.contains(TAG_PATTERNS, Tag.TAG_LIST)) {
             return InteractionResultHolder.fail(stack);
         }
 
@@ -89,7 +89,7 @@ public abstract class ItemPackagedSpell extends ItemManaHolder {
     public UseAnim getUseAnimation(ItemStack pStack) {
         return UseAnim.BLOCK;
     }
-    
+
     private static List<HexPattern> getPatterns(CompoundTag tag) {
         var out = new ArrayList<HexPattern>();
         var patsTag = tag.getList(TAG_PATTERNS, Tag.TAG_COMPOUND);

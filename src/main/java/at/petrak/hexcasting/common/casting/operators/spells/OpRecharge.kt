@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.casting.ManaHelper
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
+import net.minecraft.nbt.Tag
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.item.ItemEntity
 
@@ -44,23 +45,18 @@ object OpRecharge : SpellOperator {
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn { it.item is ItemManaHolder }
+            val handItem = handStack.item
 
-            if (handStack.item is ItemManaHolder && itemEntity.isAlive) {
+            if (handItem is ItemManaHolder && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
 
                 val tag = handStack.orCreateTag
-                val maxMana = if (tag.contains(ItemManaHolder.TAG_MAX_MANA))
-                    tag.getInt(ItemManaHolder.TAG_MAX_MANA)
-                else
-                    Int.MAX_VALUE
-                val existingMana = if (tag.contains(ItemManaHolder.TAG_MANA))
-                    tag.getInt(ItemManaHolder.TAG_MANA)
-                else
-                    0
+                val maxMana = handItem.getMaxManaAmt(tag)
+                val existingMana = handItem.getManaAmt(tag)
 
                 val manaAmt = ManaHelper.extractMana(entityStack, maxMana - existingMana)
 
-                tag.putInt(ItemManaHolder.TAG_MANA, Mth.clamp(existingMana + manaAmt, 0, maxMana))
+                handItem.setMana(tag, manaAmt + existingMana)
 
                 itemEntity.item = entityStack
                 if (entityStack.isEmpty)

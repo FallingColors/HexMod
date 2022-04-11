@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -29,7 +30,7 @@ public class ItemFocus extends Item implements DataHolder {
             return null;
         }
         var tag = stack.getTag();
-        if (!tag.contains(TAG_DATA)) {
+        if (!tag.contains(TAG_DATA, Tag.TAG_COMPOUND)) {
             return null;
         }
 

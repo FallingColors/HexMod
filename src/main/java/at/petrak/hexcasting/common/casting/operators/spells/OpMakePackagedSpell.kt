@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.entity.item.ItemEntity
 
@@ -51,9 +52,9 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
             val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
             val tag = handStack.orCreateTag
             if (handStack.item is ItemPackagedSpell
-                && !tag.contains(ItemPackagedSpell.TAG_MANA)
-                && !tag.contains(ItemPackagedSpell.TAG_MAX_MANA)
-                && !tag.contains(ItemPackagedSpell.TAG_PATTERNS)
+                && !tag.contains(ItemPackagedSpell.TAG_MANA, Tag.TAG_ANY_NUMERIC.toInt())
+                && !tag.contains(ItemPackagedSpell.TAG_MAX_MANA, Tag.TAG_ANY_NUMERIC.toInt())
+                && !tag.contains(ItemPackagedSpell.TAG_PATTERNS, Tag.TAG_LIST.toInt())
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()

@@ -40,7 +40,7 @@ public class ItemSpellbook extends Item implements DataHolder {
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
         TooltipFlag isAdvanced) {
         var tag = stack.getOrCreateTag();
-        if (tag.contains(TAG_SELECTED_PAGE)) {
+        if (tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
             var pageIdx = tag.getInt(TAG_SELECTED_PAGE);
             var pages = tag.getCompound(ItemSpellbook.TAG_PAGES);
             int highest = HighestPage(pages);
@@ -67,7 +67,7 @@ public class ItemSpellbook extends Item implements DataHolder {
         int index;
         if (ArePagesEmpty(tag)) {
             index = 0;
-        } else if (!tag.contains(TAG_SELECTED_PAGE)) {
+        } else if (!tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
             index = 1;
         } else {
             index = tag.getInt(TAG_SELECTED_PAGE);
@@ -87,7 +87,7 @@ public class ItemSpellbook extends Item implements DataHolder {
     }
 
     public static boolean ArePagesEmpty(CompoundTag tag) {
-        return !tag.contains(ItemSpellbook.TAG_PAGES) ||
+        return !tag.contains(ItemSpellbook.TAG_PAGES, Tag.TAG_COMPOUND) ||
             tag.getCompound(ItemSpellbook.TAG_PAGES).isEmpty();
     }
 
@@ -99,13 +99,13 @@ public class ItemSpellbook extends Item implements DataHolder {
         var tag = stack.getTag();
 
         int idx;
-        if (tag.contains(TAG_SELECTED_PAGE)) {
+        if (tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
             idx = tag.getInt(TAG_SELECTED_PAGE);
         } else {
             idx = 0;
         }
         var key = String.valueOf(idx);
-        if (tag.contains(TAG_PAGES)) {
+        if (tag.contains(TAG_PAGES, Tag.TAG_COMPOUND)) {
             var pagesTag = tag.getCompound(TAG_PAGES);
             if (pagesTag.contains(key)) {
                 return pagesTag.getCompound(key);
@@ -124,7 +124,7 @@ public class ItemSpellbook extends Item implements DataHolder {
 
     public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
         int idx;
-        if (tag.contains(TAG_SELECTED_PAGE)) {
+        if (tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
             idx = tag.getInt(TAG_SELECTED_PAGE);
             // But we want to write to page *1* to start if this is our first page
             if (idx == 0 && ArePagesEmpty(tag)) {
@@ -134,7 +134,7 @@ public class ItemSpellbook extends Item implements DataHolder {
             idx = 1;
         }
         var key = String.valueOf(idx);
-        if (tag.contains(TAG_PAGES)) {
+        if (tag.contains(TAG_PAGES, Tag.TAG_COMPOUND)) {
             if (datum == null)
                 tag.getCompound(TAG_PAGES).remove(key);
             else
@@ -161,7 +161,7 @@ public class ItemSpellbook extends Item implements DataHolder {
         int newIdx;
         if (ArePagesEmpty(tag)) {
             newIdx = 0;
-        } else if (tag.contains(TAG_SELECTED_PAGE)) {
+        } else if (tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
             var delta = increase ? 1 : -1;
             newIdx = Math.max(1, tag.getInt(TAG_SELECTED_PAGE) + delta);
         } else {

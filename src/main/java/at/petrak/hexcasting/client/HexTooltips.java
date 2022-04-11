@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,11 +36,11 @@ public class HexTooltips {
         if (!stack.isEmpty()) {
             if (stack.is(HexItems.SCROLL.get())) {
                 var tag = stack.getOrCreateTag();
-                if (tag.contains(ItemScroll.TAG_PATTERN)) {
+                if (tag.contains(ItemScroll.TAG_PATTERN, Tag.TAG_COMPOUND)) {
                     var pattern = HexPattern.DeserializeFromNBT(tag.getCompound(ItemScroll.TAG_PATTERN));
                     evt.getTooltipElements().add(Either.right(new PatternTooltipGreeble(
                         pattern,
-                        tag.contains(ItemScroll.TAG_OP_ID)
+                        tag.contains(ItemScroll.TAG_OP_ID, Tag.TAG_STRING)
                             ? PatternTooltipGreeble.ANCIENT_BG : PatternTooltipGreeble.PRISTINE_BG)));
                 }
             } else if (stack.is(HexItems.SLATE.get()) && ItemSlate.hasPattern(stack)) {

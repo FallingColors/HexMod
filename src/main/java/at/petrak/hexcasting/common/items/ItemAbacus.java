@@ -55,7 +55,7 @@ public class ItemAbacus extends Item implements DataHolder {
 
             var tag = stack.getOrCreateTag();
             double oldNum = 0d;
-            if (tag.contains(TAG_VALUE, Tag.TAG_DOUBLE)) {
+            if (tag.contains(TAG_VALUE, Tag.TAG_ANY_NUMERIC)) {
                 oldNum = tag.getDouble(TAG_VALUE);
             }
             tag.putDouble(TAG_VALUE, 0d);

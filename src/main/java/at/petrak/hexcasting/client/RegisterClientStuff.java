@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -96,7 +97,7 @@ public class RegisterClientStuff {
             }) {
                 ItemProperties.register(packager.get(), ItemPackagedSpell.HAS_PATTERNS_PRED,
                     (stack, level, holder, holderID) ->
-                        stack.getOrCreateTag().contains(ItemPackagedSpell.TAG_PATTERNS) ? 1f : 0f
+                        stack.getOrCreateTag().contains(ItemPackagedSpell.TAG_PATTERNS, Tag.TAG_LIST) ? 1f : 0f
                 );
             }
 
