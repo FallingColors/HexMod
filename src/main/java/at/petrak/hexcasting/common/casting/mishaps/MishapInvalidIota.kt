@@ -46,7 +46,7 @@ class MishapInvalidIota(
         @JvmStatic
         fun ofClass(perpetrator: SpellDatum<*>, reverseIdx: Int, cls: Class<*>): MishapInvalidIota {
             val key = "hexcasting.mishap.invalid_value.class." + when {
-                Double::class.java.isAssignableFrom(cls) -> "double"
+                Double::class.java.isAssignableFrom(cls) || Double::class.javaObjectType.isAssignableFrom(cls) -> "double"
                 Vec3::class.java.isAssignableFrom(cls) -> "vector"
                 List::class.java.isAssignableFrom(cls) -> "list"
                 Widget::class.java.isAssignableFrom(cls) -> "widget"
