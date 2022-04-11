@@ -199,7 +199,7 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaqwd", HexDir.NORTH_EAST), prefix("edify"),
                 OpEdifySapling.INSTANCE);
 
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ada", HexDir.WEST), prefix("beep"),
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("adaa", HexDir.WEST), prefix("beep"),
                 OpBeep.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
