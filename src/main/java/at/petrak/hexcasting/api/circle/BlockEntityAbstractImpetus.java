@@ -313,11 +313,13 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                 this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST.get(), SoundSource.BLOCKS,
                     2f, 1f);
             }
+
             if (erroredPos != null) {
-                this.setChanged();
                 this.sfx(erroredPos, false);
             } else
                 this.setLastMishap(null);
+
+            this.setChanged();
         }
     }
 
