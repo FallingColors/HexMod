@@ -160,6 +160,8 @@
   "hexcasting.spell.hexcasting:get_caster": "Mind's Reflection",
   "hexcasting.spell.hexcasting:get_entity_pos": "Compass' Purification",
   "hexcasting.spell.hexcasting:get_entity_look": "Alidade's Purification",
+  "hexcasting.spell.hexcasting:get_entity_height": "Stadiometer's Purification",
+  "hexcasting.spell.hexcasting:get_entity_velocity": "Pace Purification",
   "hexcasting.spell.hexcasting:raycast": "Archer's Distillation",
   "hexcasting.spell.hexcasting:raycast/axis": "Architect's Distillation",
   "hexcasting.spell.hexcasting:raycast/entity": "Scout's Distillation",
@@ -342,7 +344,7 @@
   "hexcasting.mishap.bad_brainsweep": "The %s rejected the villager's mind",
   "hexcasting.mishap.already_brainswept": "The villager has already been used",
   "hexcasting.mishap.no_spell_circle": "%s requires a spell circle",
-  "hexcasting.mishap.others_name": "Tried to invade %s's privacy",
+  "hexcasting.mishap.others_name": "Tried to invade the privacy of %s's soul",
   "hexcasting.mishap.divide_by_zero.divide": "Attempted to divide %s by %s",
   "hexcasting.mishap.divide_by_zero.project": "Attempted to project %s onto %s",
   "hexcasting.mishap.divide_by_zero.exponent": "Attempted to raise %s to the %s",
@@ -449,7 +451,7 @@
 
   "hexcasting.entry.influences": "Influences",
   "hexcasting.page.influences.1": "Influences are ... strange, to say the least. Whereas most iotas seem to represent something about the world, influences represent something more... abstract, or formless.$(br2)For example, one influence I've named Null seems to represent nothing at all. It's created when there isn't a suitable answer to a question asked, such as an $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$ facing the sky.",
-  "hexcasting.page.influences.2": "In addition, I've discovered a curious triplet of influences I've named Consideration, Introspection, and Retrospection. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:patterns/patterns_as_iotas)My notes on the subject are here/$.",
+  "hexcasting.page.influences.2": "In addition, I've discovered a curious triplet of influences I've named Consideration, Introspection, and Retrospection. They seem to have properties of both patterns and other influences, yet act very differently. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:patterns/patterns_as_iotas)My notes on the subject are here/$.",
   "hexcasting.page.influences.3": "Finally, there seems to be an infinite family of influences that just seem to be a tangled mess of _media. I've named them $(action)Garbage/$, as they are completely useless. They seem to appear in my stack at random, like pests, when I drawn an invalid pattern. Turning my (admittedly very poor) ethereal senses towards them, I see only a nonsense jumble.",
 
 
@@ -587,6 +589,7 @@
   "hexcasting.page.basics_pattern.get_entity_pos": "Transforms an entity on the stack into its position.",
   "hexcasting.page.basics_pattern.get_entity_look": "Transforms an entity on the stack into the direction it's looking in, as a unit vector.",
   "hexcasting.page.basics_pattern.get_entity_height": "Transforms an entity on the stack into its height.",
+  "hexcasting.page.basics_pattern.get_entity_velocity": "Transforms an entity on the stack into the direction in which it's moving, with the speed of that movement as that direction's magnitude.",
   "hexcasting.page.basics_pattern.print": "Displays the top iota of the stack to me.",
   "hexcasting.page.basics_pattern.raycast.1": "Combines two vectors (a position and a direction) into the answer to the question: If I stood at the position and looked in the direction, what block would I be looking at?",
   "hexcasting.page.basics_pattern.raycast.2": "For example, casting this with my own position and look vectors will return the coordinates of the block I am looking at.$(br2)If it doesn't hit anything, the vectors will combine into Null.",
