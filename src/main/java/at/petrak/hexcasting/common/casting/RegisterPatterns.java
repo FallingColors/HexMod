@@ -104,6 +104,8 @@ public class RegisterPatterns {
                 OpConstructVec.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qeeeee", HexDir.EAST), prefix("deconstruct_vec"),
                 OpDeconstructVec.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaww", HexDir.NORTH_WEST), prefix("coerce_axial"),
+                OpCoerceToAxial.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wdw", HexDir.NORTH_EAST), prefix("and"),
                 OpAnd.INSTANCE);

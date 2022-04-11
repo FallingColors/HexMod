@@ -103,11 +103,19 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:coerce_axial",
+      "anchor": "hexcasting:coerce_axial",
+      "input": "vec",
+      "output": "vec",
+      "text": "hexcasting.page.math.16"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:sin",
       "anchor": "hexcasting:sin",
       "input": "num",
       "output": "num",
-      "text": "hexcasting.page.math.16"
+      "text": "hexcasting.page.math.17"
     },
     {
       "type": "hexcasting:pattern",
@@ -115,7 +123,7 @@
       "anchor": "hexcasting:cos",
       "input": "num",
       "output": "num",
-      "text": "hexcasting.page.math.17"
+      "text": "hexcasting.page.math.18"
     },
     {
       "type": "hexcasting:pattern",
@@ -123,7 +131,7 @@
       "anchor": "hexcasting:tan",
       "input": "num",
       "output": "num",
-      "text": "hexcasting.page.math.18"
+      "text": "hexcasting.page.math.19"
     },
     {
       "type": "hexcasting:pattern",
@@ -131,7 +139,7 @@
       "anchor": "hexcasting:arcsin",
       "input": "num",
       "output": "num",
-      "text": "hexcasting.page.math.19"
+      "text": "hexcasting.page.math.20"
     },
     {
       "type": "hexcasting:pattern",
@@ -139,7 +147,7 @@
       "anchor": "hexcasting:arccos",
       "input": "num",
       "output": "num",
-      "text": "hexcasting.page.math.20"
+      "text": "hexcasting.page.math.21"
     },
     {
       "type": "hexcasting:pattern",
@@ -147,7 +155,7 @@
       "anchor": "hexcasting:arctan",
       "input": "num",
       "output": "num",
-      "text": "hexcasting.page.math.21"
+      "text": "hexcasting.page.math.22"
     }
   ]
 }
