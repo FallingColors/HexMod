@@ -43,7 +43,7 @@ object OpMakeBattery : SpellOperator {
 
         ctx.assertEntityInRange(entity)
 
-        if (!ManaHelper.isManaItem(entity.item)) {
+        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(entity.item, simulate = true) <= 0) {
             throw MishapBadItem.of(
                 entity.item,
                 "mana"
@@ -58,7 +58,7 @@ object OpMakeBattery : SpellOperator {
             val (handStack, hand) = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
             if (handStack.item == Items.GLASS_BOTTLE && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = ManaHelper.extractAllMana(entityStack)
+                val manaAmt = ManaHelper.extractMana(entityStack)
                 if (manaAmt > 0) {
                     val replaceItem = ItemStack(HexItems.BATTERY.get())
                     val tag = replaceItem.orCreateTag

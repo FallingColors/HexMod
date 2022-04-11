@@ -47,19 +47,20 @@ object OpRecharge : SpellOperator {
 
             if (handStack.item is ItemManaHolder && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = ManaHelper.extractAllMana(entityStack)
-                if (manaAmt > 0) {
-                    val tag = handStack.orCreateTag
-                    val maxMana = if (tag.contains(ItemManaHolder.TAG_MAX_MANA))
-                        tag.getInt(ItemManaHolder.TAG_MAX_MANA)
-                    else
-                        Int.MAX_VALUE
-                    val existingMana = if (tag.contains(ItemManaHolder.TAG_MANA))
-                        tag.getInt(ItemManaHolder.TAG_MANA)
-                    else
-                        0
-                    tag.putInt(ItemManaHolder.TAG_MANA, Mth.clamp(existingMana + manaAmt, 0, maxMana))
-                }
+
+                val tag = handStack.orCreateTag
+                val maxMana = if (tag.contains(ItemManaHolder.TAG_MAX_MANA))
+                    tag.getInt(ItemManaHolder.TAG_MAX_MANA)
+                else
+                    Int.MAX_VALUE
+                val existingMana = if (tag.contains(ItemManaHolder.TAG_MANA))
+                    tag.getInt(ItemManaHolder.TAG_MANA)
+                else
+                    0
+
+                val manaAmt = ManaHelper.extractMana(entityStack, maxMana - existingMana)
+
+                tag.putInt(ItemManaHolder.TAG_MANA, Mth.clamp(existingMana + manaAmt, 0, maxMana))
 
                 itemEntity.item = entityStack
                 if (entityStack.isEmpty)

@@ -20,35 +20,12 @@ object ManaHelper {
     }
 
     /**
-     * Try to extract the given amount of mana from this item.
-     * This may mutate the itemstack.
+     * Extract [cost] mana from [stack]. If [cost] is less than zero, extract all mana instead.
+     * This may mutate [stack] (and may consume it) unless [simulate] is set.
      *
-     * Return the actual amount of mana extracted, or null if this cannot have mana extracted.
+     * Return the amount of mana extracted. This may be over [cost] if mana is wasted.
      */
-    fun extractMana(stack: ItemStack, cost: Int): Int? {
-        val base = when (stack.item) {
-            HexItems.AMETHYST_DUST.get() -> HexConfig.dustManaAmount.get()
-            Items.AMETHYST_SHARD -> HexConfig.shardManaAmount.get()
-            HexItems.CHARGED_AMETHYST.get() -> HexConfig.chargedCrystalManaAmount.get()
-            HexItems.BATTERY.get() -> {
-                val battery = stack.item as ItemManaBattery
-                return battery.withdrawMana(stack.orCreateTag, cost)
-            }
-            else -> return null
-        }
-        val itemsReqd = ceil(cost.toFloat() / base.toFloat()).toInt()
-        val actualItemsConsumed = min(stack.count, itemsReqd)
-        stack.shrink(actualItemsConsumed)
-        return base * actualItemsConsumed
-    }
-
-    /**
-     * Extract the entirety of the mana out of this.
-     * This may mutate the itemstack (and will probably consume it).
-     *
-     * Return the amount of mana extracted.
-     */
-    fun extractAllMana(stack: ItemStack): Int {
+    fun extractMana(stack: ItemStack, cost: Int = -1, simulate: Boolean = false): Int {
         val base = when (stack.item) {
             HexItems.AMETHYST_DUST.get() -> HexConfig.dustManaAmount.get()
             Items.AMETHYST_SHARD -> HexConfig.shardManaAmount.get()
@@ -58,13 +35,18 @@ object ManaHelper {
                 val battery = stack.item as ItemManaBattery
                 val tag = stack.orCreateTag
                 val manaThere = battery.getManaAmt(tag)
-                return battery.withdrawMana(tag, manaThere)
+                val manaToExtract = if (cost < 0) manaThere else min(cost, manaThere)
+                if (simulate)
+                    return manaToExtract
+                return battery.withdrawMana(tag, manaToExtract)
             }
             else -> return 0
         }
         val count = stack.count
-        stack.shrink(count)
-        return base * count
+        val countToExtract = if (cost < 0) count else min(count, ceil(cost.toDouble() / base).toInt())
+        if (!simulate)
+            stack.shrink(countToExtract)
+        return base * countToExtract
     }
 
     /**
