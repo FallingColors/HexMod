@@ -661,7 +661,7 @@
   "hexcasting.page.stackmanip.swap": "Swaps the top two iotas of the stack.",
   "hexcasting.page.stackmanip.fisherman": "Grabs the element in the stack indexed by the number and brings it to the top.",
   "hexcasting.page.stackmanip.duplicate": "Duplicates the top iota of the stack.",
-  "hexcasting.page.stackmanip.duplicate_n": "Copies the top iota of the stack the given number of times. (A count of 2 results in two of the iota on the stack, not three.)",
+  "hexcasting.page.stackmanip.duplicate_n": "Removes the number at the top of the stack, then copies the top iota of the stack that number of times. (A count of 2 results in two of the iota on the stack, not three.)",
   "hexcasting.page.stackmanip.mask.header": "Bookkeeper's Gambits",
   "hexcasting.page.stackmanip.mask.1": "An infinite family of actions that keep or remove elements at the top of the stack based on the sequence of dips and lines.",
   "hexcasting.page.stackmanip.mask.2": "Assuming that I draw a Bookkeeper's Gambit pattern left-to-right, the number of iotas the action will require is determined by the horizontal distance covered by the pattern. From deepest in the stack to shallowest, a flat line will keep the iota, whereas a triangle dipping down will remove it.$(br2)If my stack contains $(italic)0, 1, 2/$ from deepest to shallowest, drawing the first pattern opposite will give me $(italic)1/$, the second will give me $(italic)0/$, and the third will give me $(italic)0, 2/$ (the 0 at the bottom is left untouched).",

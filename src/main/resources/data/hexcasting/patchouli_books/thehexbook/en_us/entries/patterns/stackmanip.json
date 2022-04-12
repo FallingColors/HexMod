@@ -34,7 +34,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:duplicate_n",
       "anchor": "hexcasting:duplicate_n",
-      "input": "number, any",
+      "input": "any, number",
       "output": "many",
       "text": "hexcasting.page.stackmanip.duplicate_n"
     },
