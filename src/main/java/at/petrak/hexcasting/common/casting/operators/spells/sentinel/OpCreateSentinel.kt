@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck
 import net.minecraft.world.phys.Vec3
@@ -32,17 +33,7 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
 
     private data class Spell(val target: Vec3, val extendsRange: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val maybeCap = ctx.caster.getCapability(HexCapabilities.SENTINEL).resolve()
-            if (!maybeCap.isPresent)
-                return
-
-            val cap = maybeCap.get()
-            cap.hasSentinel = true
-            cap.extendsRange = extendsRange
-            cap.position = target
-            cap.dimension = ctx.world.dimension()
-
-            HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { ctx.caster }, MsgSentinelStatusUpdateAck(cap))
+            HexPlayerDataHelper.setSentinel(ctx.caster, Sentinel(true, extendsRange, target, ctx.world.dimension()))
         }
     }
 }

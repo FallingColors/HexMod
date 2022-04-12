@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.casting.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.common.casting.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.common.casting.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.lib.RegisterHelper.prefix
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -79,16 +80,14 @@ data class CastingContext(
     }
 
     fun isVecInRange(vec: Vec3): Boolean {
-        val maybeSentinel = this.caster.getCapability(HexCapabilities.SENTINEL).resolve()
-        if (maybeSentinel.isPresent) {
-            val sentinel = maybeSentinel.get()
-            if (sentinel.hasSentinel
-                && sentinel.extendsRange
-                && world.dimension() == sentinel.dimension
-                && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
-            )
-                return true
-        }
+        val sentinel = HexPlayerDataHelper.getSentinel(caster)
+        if (sentinel.hasSentinel
+            && sentinel.extendsRange
+            && world.dimension() == sentinel.dimension
+            && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
+        )
+            return true
+
 
         if (this.spellCircle != null) {
             // we use the eye position cause thats where the caster gets their "position" from

@@ -38,7 +38,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
         }
 
         ctx.assertEntityInRange(entity)
-        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(entity.item, drainForBatteries = false, simulate = true) <= 0) {
+        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(entity.item, drainForBatteries = true, simulate = true) <= 0) {
             throw MishapBadItem.of(
                 entity.item,
                 "mana"
@@ -57,7 +57,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = false)
+                val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
                     handItem.writePattern(handStack, patterns, manaAmt)
                 }

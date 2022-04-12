@@ -11,6 +11,7 @@ import at.petrak.hexcasting.common.casting.ManaHelper
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import net.minecraft.world.entity.item.ItemEntity
 
 object OpRecharge : SpellOperator {
@@ -20,13 +21,13 @@ object OpRecharge : SpellOperator {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val item = it.item
-            item is ManaHolder && item.getMana(it) < item.getMaxMana(it)
+            val mana = it.getCapability(HexCapabilities.MANA).resolve()
+            mana.isPresent && mana.get().canRecharge() && mana.get().mana < mana.get().maxMana
         }
 
-        val handItem = handStack.item
+        val mana = handStack.getCapability(HexCapabilities.MANA).resolve()
 
-        if (handItem !is ManaHolder)
+        if (!mana.isPresent || !mana.get().canRecharge())
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,
@@ -43,7 +44,7 @@ object OpRecharge : SpellOperator {
             )
         }
 
-        if (handItem.getMana(handStack) >= handItem.getMana(handStack))
+        if (mana.get().mana >= mana.get().maxMana)
             return null
 
         return Triple(Spell(entity), 100_000, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
@@ -52,20 +53,20 @@ object OpRecharge : SpellOperator {
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn {
-                val item = it.item
-                item is ManaHolder && item.getMana(it) < item.getMaxMana(it)
+                val mana = it.getCapability(HexCapabilities.MANA).resolve()
+                mana.isPresent && mana.get().canRecharge() && mana.get().mana < mana.get().maxMana
             }
-            val handItem = handStack.item
+            val mana = handStack.getCapability(HexCapabilities.MANA).resolve()
 
-            if (handItem is ManaHolder && itemEntity.isAlive) {
+            if (mana.isPresent && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
 
-                val maxMana = handItem.getMaxMana(handStack)
-                val existingMana = handItem.getMana(handStack)
+                val maxMana = mana.get().maxMana
+                val existingMana = mana.get().mana
 
                 val manaAmt = ManaHelper.extractMana(entityStack, maxMana - existingMana)
 
-                handItem.setMana(handStack, manaAmt + existingMana)
+                mana.get().mana = manaAmt + existingMana
 
                 itemEntity.item = entityStack
                 if (entityStack.isEmpty)

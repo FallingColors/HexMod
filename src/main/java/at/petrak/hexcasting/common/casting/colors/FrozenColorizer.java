@@ -42,6 +42,8 @@ public record FrozenColorizer(Item item, UUID owner) {
     }
 
     public static FrozenColorizer deserialize(CompoundTag tag) {
+        if (tag.isEmpty())
+            return FrozenColorizer.DEFAULT;
         try {
             var itemID = new ResourceLocation(tag.getString(TAG_ITEM));
             var item = ForgeRegistries.ITEMS.getValue(itemID);

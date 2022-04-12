@@ -54,16 +54,6 @@ public abstract class ItemManaHolder extends Item implements ManaHolder {
     }
 
     @Override
-    public int getConsumptionPriority(ItemStack stack) {
-        return 4;
-    }
-
-    @Override
-    public boolean canConstructBattery(ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public boolean isBarVisible(ItemStack pStack) {
         return getMaxMana(pStack) > 0;
     }

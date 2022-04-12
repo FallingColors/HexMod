@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.HexMod;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemManaBattery extends ItemManaHolder {
     public static final ResourceLocation MANA_PREDICATE = new ResourceLocation(HexMod.MOD_ID, "mana");
@@ -9,5 +10,10 @@ public class ItemManaBattery extends ItemManaHolder {
 
     public ItemManaBattery(Properties pProperties) {
         super(pProperties);
+    }
+
+    @Override
+    public boolean manaProvider(ItemStack stack) {
+        return true;
     }
 }

@@ -1,20 +1,14 @@
 package at.petrak.hexcasting.common.casting
 
-import at.petrak.hexcasting.HexConfig
-import at.petrak.hexcasting.api.item.ManaHolder
-import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import net.minecraft.util.Mth
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import kotlin.math.ceil
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 object ManaHelper {
     @JvmStatic
     fun isManaItem(stack: ItemStack): Boolean {
-        return extractMana(stack, simulate = true) > 0
+        return stack.getCapability(HexCapabilities.MANA).map { it.canProvide() }.orElse(false) && extractMana(stack, simulate = true) > 0
     }
 
     /**
@@ -27,50 +21,31 @@ object ManaHelper {
      */
     @JvmStatic
     @JvmOverloads
-    fun extractMana(stack: ItemStack, cost: Int = -1, drainForBatteries: Boolean = true, simulate: Boolean = false): Int {
-        val base = when (val item = stack.item) {
-            HexItems.AMETHYST_DUST.get() -> HexConfig.dustManaAmount.get()
-            Items.AMETHYST_SHARD -> HexConfig.shardManaAmount.get()
-            HexItems.CHARGED_AMETHYST.get() -> HexConfig.chargedCrystalManaAmount.get()
+    fun extractMana(stack: ItemStack, cost: Int = -1, drainForBatteries: Boolean = false, simulate: Boolean = false): Int {
+        val manaCapability = stack.getCapability(HexCapabilities.MANA).resolve()
 
-            is ManaHolder -> {
-                if (drainForBatteries || item.canConstructBattery(stack)) {
-                    val manaThere = item.getMana(stack)
-                    val manaToExtract = if (cost < 0) manaThere else min(cost, manaThere)
-                    if (simulate)
-                        return manaToExtract
-                    return item.withdrawMana(stack, manaToExtract)
-                } else
-                    return 0
-            }
-            else -> return 0
-        }
-        val count = stack.count
-        val countToExtract = if (cost < 0) count else min(count, ceil(cost.toDouble() / base).toInt())
-        if (!simulate)
-            stack.shrink(countToExtract)
-        return base * countToExtract
+        if (!manaCapability.isPresent)
+            return 0
+
+        val manaReservoir = manaCapability.get()
+
+        if (drainForBatteries && !manaReservoir.canConstructBattery())
+            return 0
+
+        return manaReservoir.withdrawMana(cost, simulate)
     }
 
     /**
      * Sorted from least important to most important
      */
     fun compare(astack: ItemStack, bstack: ItemStack): Int {
-        val aitem = astack.item
-        val bitem = bstack.item
+        val aMana = astack.getCapability(HexCapabilities.MANA).resolve()
+        val bMana = bstack.getCapability(HexCapabilities.MANA).resolve()
 
-        return if (aitem != bitem) {
-            fun intcode(stack: ItemStack, item: Item): Int =
-                when (item) {
-                    HexItems.CHARGED_AMETHYST.get() -> 1
-                    Items.AMETHYST_SHARD -> 2
-                    HexItems.AMETHYST_DUST.get() -> 3
-                    is ManaHolder -> item.getConsumptionPriority(stack)
-                    else -> 0
-                }
-            intcode(astack, aitem) - intcode(bstack, bitem)
-        } else if (aitem is ManaHolder && bitem is ManaHolder) {
-            aitem.getMana(astack) - bitem.getMana(bstack)
+        return if (astack.item != bstack.item) {
+            aMana.map { it.consumptionPriority }.orElse(0) - bMana.map { it.consumptionPriority }.orElse(0)
+        } else if (aMana.isPresent && bMana.isPresent) {
+            aMana.get().mana - bMana.get().mana
         } else {
             astack.count - bstack.count
         }

@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.mishaps.MishapNoAkashicRecord
 import at.petrak.hexcasting.common.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.hexmath.HexPattern
 import net.minecraft.core.BlockPos
@@ -56,13 +57,12 @@ object OpAkashicWrite : SpellOperator {
                 1f, 0.8f
             )
 
-            ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).ifPresent {
-                // val normal = record.blockState.getValue(BlockAkashicBookshelf.FACING).normal
-                // ParticleSpray(
-                //     Vec3.atCenterOf(record.blockPos), Vec3.atBottomCenterOf(normal),
-                //     0.5, Math.PI / 4, 10
-                // ).sprayParticles(ctx.world, it.colorizer)
-            }
+            // val colorizer = HexPlayerDataHelper.getColorizer(ctx.caster)
+            // val normal = record.blockState.getValue(BlockAkashicBookshelf.FACING).normal
+            // ParticleSpray(
+            //     Vec3.atCenterOf(record.blockPos), Vec3.atBottomCenterOf(normal),
+            //     0.5, Math.PI / 4, 10
+            // ).sprayParticles(ctx.world, colorizer)
         }
     }
 }

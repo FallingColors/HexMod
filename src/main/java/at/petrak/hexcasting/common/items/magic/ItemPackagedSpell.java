@@ -38,6 +38,10 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
 
     public abstract boolean singleUse();
 
+    @Override
+    public boolean manaProvider(ItemStack stack) {
+        return false;
+    }
 
     @Override
     public @Nullable List<HexPattern> getPatterns(ItemStack stack) {

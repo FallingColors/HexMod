@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.Widget
 import at.petrak.hexcasting.common.casting.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import net.minecraft.world.phys.Vec3
 
 object OpGetSentinelWayfind : ConstManaOperator {
@@ -16,18 +17,15 @@ object OpGetSentinelWayfind : ConstManaOperator {
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val from = args.getChecked<Vec3>(0)
 
-        val maybeCap = ctx.caster.getCapability(HexCapabilities.SENTINEL).resolve()
-        if (!maybeCap.isPresent)
-            return spellListOf(Widget.NULL)
+        val sentinel = HexPlayerDataHelper.getSentinel(ctx.caster)
 
-        val cap = maybeCap.get()
-        if (cap.dimension != ctx.world.dimension())
-            throw MishapLocationInWrongDimension(cap.dimension.location())
+        if (sentinel.dimension != ctx.world.dimension())
+            throw MishapLocationInWrongDimension(sentinel.dimension.location())
 
-        val sentinelPos = if (!cap.hasSentinel)
+        val sentinelPos = if (!sentinel.hasSentinel)
             return spellListOf(Widget.NULL)
         else
-            cap.position
+            sentinel.position
 
         return spellListOf(sentinelPos.subtract(from).normalize())
     }

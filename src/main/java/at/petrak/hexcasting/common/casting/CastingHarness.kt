@@ -15,6 +15,7 @@ import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.HexDamageSources
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.datagen.HexAdvancements
 import at.petrak.hexcasting.hexmath.HexPattern
@@ -275,9 +276,10 @@ class CastingHarness private constructor(
             val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
             val casterItem = casterStack.item
             val ipsCanDrawFromInv = if (casterItem is SpellHolder) {
-                val manaAvailable = casterItem.getMana(casterStack)
+                val mana = casterStack.getCapability(HexCapabilities.MANA).resolve().get()
+                val manaAvailable = mana.mana
                 val manaToTake = min(costLeft, manaAvailable)
-                casterItem.setMana(casterStack, manaAvailable - manaToTake)
+                mana.mana = manaAvailable - manaToTake
                 costLeft -= manaToTake
                 casterItem.canDrawManaFromInventory(casterStack)
             } else {
@@ -324,12 +326,7 @@ class CastingHarness private constructor(
         if (this.prepackagedColorizer != null)
             return this.prepackagedColorizer
 
-        val maybeCap = this.ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
-        if (maybeCap.isEmpty) {
-            // uh oh
-            return FrozenColorizer.DEFAULT
-        }
-        return maybeCap.get().colorizer
+        return HexPlayerDataHelper.getColorizer(ctx.caster)
     }
 
 

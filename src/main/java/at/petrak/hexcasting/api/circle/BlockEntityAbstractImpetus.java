@@ -8,7 +8,7 @@ import at.petrak.hexcasting.common.casting.ManaHelper;
 import at.petrak.hexcasting.common.casting.SpellCircleContext;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.common.lib.HexCapabilities;
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.paucal.api.PaucalBlockEntity;
 import com.mojang.datafixers.util.Pair;
@@ -109,8 +109,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.nextBlock = this.getBlockPos();
         this.trackedBlocks = new ArrayList<>();
         this.knownBlocks = new HashSet<>();
-        var maybeCap = activator.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
-        maybeCap.ifPresent(capPreferredColorizer -> this.colorizer = capPreferredColorizer.colorizer);
+        this.colorizer = HexPlayerDataHelper.getColorizer(activator);
 
         this.level.setBlockAndUpdate(this.getBlockPos(),
             this.getBlockState().setValue(BlockAbstractImpetus.ENERGIZED, true));

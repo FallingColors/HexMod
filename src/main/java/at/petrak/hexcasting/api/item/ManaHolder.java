@@ -2,14 +2,15 @@ package at.petrak.hexcasting.api.item;
 
 import net.minecraft.world.item.ItemStack;
 
+/**
+ * Don't use this interface's methods directly. Instead, use an IManaReservoir capability.
+ */
 public interface ManaHolder {
 	int getMana(ItemStack stack);
 	int getMaxMana(ItemStack stack);
 	void setMana(ItemStack stack, int mana);
 
-	int getConsumptionPriority(ItemStack stack);
-
-	boolean canConstructBattery(ItemStack stack);
+	boolean manaProvider(ItemStack stack);
 
 	default float getManaFullness(ItemStack stack) {
 		int max = getMaxMana(stack);
@@ -18,10 +19,14 @@ public interface ManaHolder {
 		return (float) getMana(stack) / (float) max;
 	}
 
-	default int withdrawMana(ItemStack stack, int cost) {
+	default int withdrawMana(ItemStack stack, int cost, boolean simulate) {
 		var manaHere = getMana(stack);
-		var manaLeft = manaHere - cost;
-		setMana(stack, manaLeft);
+		if (cost < 0)
+			cost = manaHere;
+		if (!simulate) {
+			var manaLeft = manaHere - cost;
+			setMana(stack, manaLeft);
+		}
 		return Math.min(cost, manaHere);
 	}
 }
