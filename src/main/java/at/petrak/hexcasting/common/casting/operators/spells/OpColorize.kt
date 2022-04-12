@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgColorizerUpdateAck
 import net.minecraftforge.network.PacketDistributor
@@ -19,10 +20,11 @@ object OpColorize : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val handStack = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
+        val (handStack, hand) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
         if (!FrozenColorizer.isColorizer(handStack.item)) {
             throw MishapBadOffhandItem.of(
                 handStack,
+                hand,
                 "colorizer"
             )
         }
@@ -35,18 +37,11 @@ object OpColorize : SpellOperator {
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val maybeCap = ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
-            if (!maybeCap.isPresent)
-                return
-            val cap = maybeCap.get()
-
-            val handStack = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
+            val (handStack) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
             if (FrozenColorizer.isColorizer(handStack.item)) {
                 val item = handStack.item
                 if (ctx.withdrawItem(handStack.item, 1, true)) {
-                    cap.colorizer = FrozenColorizer(item, ctx.caster.uuid)
-                    HexMessages.getNetwork()
-                        .send(PacketDistributor.PLAYER.with { ctx.caster }, MsgColorizerUpdateAck(cap))
+                    HexPlayerDataHelper.setColorizer(ctx.caster, FrozenColorizer(item, ctx.caster.uuid))
                 }
             }
         }

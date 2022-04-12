@@ -20,19 +20,17 @@ object OpWrite : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val datum = args[0]
 
-        val handStack = ctx.getHeldItemToOperateOn {
+        val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val item = it.item
             if (item is DataHolder) {
-                val tag = it.orCreateTag
-                item.canWrite(tag, datum)
+                item.canWrite(it, datum)
             } else false
         }
 
-        val handItem = handStack.item as? DataHolder ?: throw MishapBadOffhandItem.of(handStack, "iota.write")
-        val tag = handStack.orCreateTag
+        val handItem = handStack.item as? DataHolder ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
 
-        if (!handItem.canWrite(tag, datum))
-            throw MishapBadOffhandItem.of(handStack, "iota.readonly", datum.display())
+        if (!handItem.canWrite(handStack, datum))
+            throw MishapBadOffhandItem.of(handStack, hand, "iota.readonly", datum.display())
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
         if (trueName != null)
@@ -47,18 +45,16 @@ object OpWrite : SpellOperator {
 
     private data class Spell(val datum: SpellDatum<*>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val handStack = ctx.getHeldItemToOperateOn {
+            val (handStack) = ctx.getHeldItemToOperateOn {
                 val item = it.item
                 if (item is DataHolder) {
-                    val tag = it.orCreateTag
-                    item.canWrite(tag, datum)
+                    item.canWrite(it, datum)
                 } else false
             }
             val handItem = handStack.item
 
             if (handItem is DataHolder) {
-                val tag = handStack.orCreateTag
-                handItem.writeDatum(tag, datum)
+                handItem.writeDatum(handStack, datum)
             }
         }
 

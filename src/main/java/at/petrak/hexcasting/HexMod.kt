@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.command.HexCommands
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.common.misc.Brainsweeping
@@ -77,6 +78,7 @@ object HexMod {
         evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)
         evBus.register(HexCapabilities::class.java)
+        evBus.register(HexPlayerDataHelper::class.java)
         evBus.register(OpFlight)
         evBus.register(Brainsweeping::class.java)
 

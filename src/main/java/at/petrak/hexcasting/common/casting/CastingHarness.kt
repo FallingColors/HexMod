@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexConfig
 import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
+import at.petrak.hexcasting.api.item.SpellHolder
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -14,6 +15,7 @@ import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import at.petrak.hexcasting.common.lib.HexCapabilities
 import at.petrak.hexcasting.common.lib.HexDamageSources
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.lib.HexStatistics
 import at.petrak.hexcasting.datagen.HexAdvancements
 import at.petrak.hexcasting.hexmath.HexPattern
@@ -112,6 +114,7 @@ class CastingHarness private constructor(
     fun performSideEffects(sideEffects: List<OperatorSideEffect>): ControllerInfo {
         var wasSpellCast = false
         var wasPrevPatternInvalid = false
+        var hasCastingSound = false
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
             if (mustStop) {
@@ -120,12 +123,16 @@ class CastingHarness private constructor(
             }
 
 
-            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell)
+            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell) {
                 wasSpellCast = true
+                if (haskellProgrammersShakingandCryingRN.hasCastingSound)
+                    hasCastingSound = true
+            }
         }
 
         return ControllerInfo(
             wasSpellCast,
+            hasCastingSound,
             this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
             wasPrevPatternInvalid,
             generateDescs()
@@ -268,13 +275,13 @@ class CastingHarness private constructor(
         } else {
             val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
             val casterItem = casterStack.item
-            val ipsCanDrawFromInv = if (casterItem is ItemPackagedSpell) {
-                val tag = casterStack.orCreateTag
-                val manaAvailable = tag.getInt(ItemPackagedSpell.TAG_MANA)
+            val ipsCanDrawFromInv = if (casterItem is SpellHolder) {
+                val mana = casterStack.getCapability(HexCapabilities.MANA).resolve().get()
+                val manaAvailable = mana.mana
                 val manaToTake = min(costLeft, manaAvailable)
-                tag.putInt(ItemPackagedSpell.TAG_MANA, manaAvailable - manaToTake)
+                mana.mana = manaAvailable - manaToTake
                 costLeft -= manaToTake
-                casterItem.canDrawManaFromInventory()
+                casterItem.canDrawManaFromInventory(casterStack)
             } else {
                 false
             }
@@ -283,7 +290,7 @@ class CastingHarness private constructor(
                     .filter(ManaHelper::isManaItem)
                     .sortedWith(Comparator(ManaHelper::compare).reversed())
                 for (stack in manableItems) {
-                    costLeft -= ManaHelper.extractMana(stack, costLeft)!!
+                    costLeft -= ManaHelper.extractMana(stack, costLeft)
                     if (costLeft <= 0)
                         break
                 }
@@ -319,12 +326,7 @@ class CastingHarness private constructor(
         if (this.prepackagedColorizer != null)
             return this.prepackagedColorizer
 
-        val maybeCap = this.ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
-        if (maybeCap.isEmpty) {
-            // uh oh
-            return FrozenColorizer.DEFAULT
-        }
-        return maybeCap.get().colorizer
+        return HexPlayerDataHelper.getColorizer(ctx.caster)
     }
 
 

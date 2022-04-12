@@ -4,10 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
-import at.petrak.hexcasting.common.items.magic.ItemArtifact;
-import at.petrak.hexcasting.common.items.magic.ItemCypher;
-import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
-import at.petrak.hexcasting.common.items.magic.ItemTrinket;
+import at.petrak.hexcasting.common.items.magic.*;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.CreativeModeTab;
@@ -40,11 +37,8 @@ public class HexItems {
                 1_000_000_000,
             };
             for (int manamount : manamounts) {
-                var stack = new ItemStack(BATTERY.get(), 1);
-                var tag = stack.getOrCreateTag();
-                tag.putInt(ItemManaBattery.TAG_MANA, manamount);
-                tag.putInt(ItemManaBattery.TAG_MAX_MANA, manamount);
-                items.add(stack);
+                var stack = new ItemStack(BATTERY.get());
+                items.add(ItemManaHolder.withMana(stack, manamount, manamount));
             }
         }
     };

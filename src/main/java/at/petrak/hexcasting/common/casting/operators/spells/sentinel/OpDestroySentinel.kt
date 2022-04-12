@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck
 import net.minecraftforge.network.PacketDistributor
@@ -18,12 +19,10 @@ object OpDestroySentinel : SpellOperator {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val particles = mutableListOf<ParticleSpray>()
-        val maybeCap = ctx.caster.getCapability(HexCapabilities.SENTINEL).resolve()
-        maybeCap.ifPresent {
-            if (it.dimension != ctx.world.dimension())
-                throw MishapLocationInWrongDimension(it.dimension.location())
-            particles.add(ParticleSpray.Cloud(it.position, 2.0))
-        }
+        val sentinel = HexPlayerDataHelper.getSentinel(ctx.caster)
+        if (sentinel.dimension != ctx.world.dimension())
+            throw MishapLocationInWrongDimension(sentinel.dimension.location())
+        particles.add(ParticleSpray.Cloud(sentinel.position, 2.0))
 
         return Triple(
             Spell,
@@ -34,14 +33,7 @@ object OpDestroySentinel : SpellOperator {
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val maybeCap = ctx.caster.getCapability(HexCapabilities.SENTINEL).resolve()
-            if (!maybeCap.isPresent)
-                return
-
-            val cap = maybeCap.get()
-            cap.hasSentinel = false
-
-            HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { ctx.caster }, MsgSentinelStatusUpdateAck(cap))
+            HexPlayerDataHelper.setSentinel(ctx.caster, Sentinel.none())
         }
     }
 }

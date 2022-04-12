@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgAddMotionAck
 import net.minecraft.core.Direction
@@ -51,16 +52,8 @@ object OpFlight : SpellOperator {
                 // Don't accidentally clobber someone else's flight
                 return
             }
-            val maybeCap = target.getCapability(HexCapabilities.FLIGHT).resolve()
-            if (!maybeCap.isPresent) {
-                // uh oh
-                return
-            }
-            val cap = maybeCap.get()
-            cap.allowed = true
-            cap.flightTime = time
-            cap.radius = radius
-            cap.origin = origin
+
+            HexPlayerDataHelper.setFlight(target, FlightAbility(true, time, target.level.dimension(), origin, radius))
 
             target.abilities.mayfly = true
             target.abilities.flying = true
@@ -71,65 +64,20 @@ object OpFlight : SpellOperator {
         }
     }
 
-    const val CAP_NAME = "flight"
-    const val TAG_ALLOWED = "can_fly"
-    const val TAG_FLIGHT_TIME = "flight_time"
-    const val TAG_ORIGIN = "origin"
-    const val TAG_RADIUS = "radius"
-
-    class CapFlight(var allowed: Boolean, var flightTime: Int, var origin: Vec3, var radius: Double) :
-        ICapabilitySerializable<CompoundTag> {
-        override fun <T : Any?> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> =
-            HexCapabilities.FLIGHT.orEmpty(cap, LazyOptional.of { this })
-
-        override fun serializeNBT(): CompoundTag {
-            val out = CompoundTag()
-
-            if (this.allowed) {
-                out.putBoolean(TAG_ALLOWED, this.allowed)
-                out.putInt(TAG_FLIGHT_TIME, flightTime)
-                out.put(TAG_ORIGIN, this.origin.serializeToNBT())
-                out.putDouble(TAG_RADIUS, this.radius)
-            }
-            return out
-        }
-
-        override fun deserializeNBT(nbt: CompoundTag) {
-            this.allowed = nbt.getBoolean(TAG_ALLOWED)
-            if (this.allowed) {
-                this.flightTime = nbt.getInt(TAG_FLIGHT_TIME)
-                this.origin = HexUtils.DeserializeVec3FromNBT(nbt.getLongArray(TAG_ORIGIN))
-                this.radius = nbt.getDouble(TAG_RADIUS)
-            }
-        }
-    }
-
     @SubscribeEvent
     fun tickDownFlight(evt: LivingEvent.LivingUpdateEvent) {
         val entity = evt.entityLiving
         if (entity !is ServerPlayer) return
-        val maybeCap = entity.getCapability(HexCapabilities.FLIGHT).resolve()
-        if (!maybeCap.isPresent) {
-            // nah we were just capping
-            return
-        }
-        val cap = maybeCap.get()
 
-        if (cap.allowed) {
-            cap.flightTime--
-            if (cap.flightTime < 0 || cap.origin.distanceToSqr(entity.position()) > cap.radius * cap.radius) {
+        val flight = HexPlayerDataHelper.getFlight(entity)
+
+        if (flight.allowed) {
+            val flightTime = flight.timeLeft - 1
+            if (flightTime < 0 || flight.origin.distanceToSqr(entity.position()) > flight.radius * flight.radius || flight.dimension != entity.level.dimension()) {
                 if (!entity.isOnGround) {
                     entity.fallDistance = 1_000_000f
-                    /*
-                    val move = entity.deltaMovement
-                    HexMessages.getNetwork()
-                        .send(
-                            PacketDistributor.PLAYER.with { entity },
-                            MsgAddMotionAck(Vec3(0.0, -move.y - 100.0, 0.0))
-                        )
-                    */
                 }
-                cap.allowed = false
+                HexPlayerDataHelper.setFlight(entity, FlightAbility.deny())
 
                 if (!entity.isCreative && !entity.isSpectator) {
                     val abilities = entity.abilities
@@ -137,7 +85,8 @@ object OpFlight : SpellOperator {
                     abilities.mayfly = false
                     entity.onUpdateAbilities()
                 }
-            }
+            } else
+                HexPlayerDataHelper.setFlight(entity, FlightAbility(true, flightTime, flight.dimension, flight.origin, flight.radius))
         }
 
     }

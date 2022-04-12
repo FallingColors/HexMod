@@ -55,7 +55,7 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
             var stack = pPlayer.getItemInHand(pHand);
             if (stack.getItem() instanceof ItemScroll scroll) {
                 if (!pLevel.isClientSide()) {
-                    scroll.writeDatum(stack.getOrCreateTag(), SpellDatum.make(shelf.getPattern()));
+                    scroll.writeDatum(stack, SpellDatum.make(shelf.getPattern()));
                 }
                 pLevel.playSound(pPlayer, pPos, HexSounds.SCROLL_SCRIBBLE.get(), SoundSource.BLOCKS, 1f, 1f);
                 return InteractionResult.sidedSuccess(pLevel.isClientSide);

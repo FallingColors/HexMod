@@ -135,9 +135,11 @@ public class RegisterPatterns {
                 OpIdentityKindOf.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ewq", HexDir.EAST), prefix("floor"),
-                    OpFloor.INSTANCE);
+                OpFloor.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qwe", HexDir.EAST), prefix("ceil"),
-                    OpCeil.INSTANCE);
+                OpCeil.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqaqe", HexDir.NORTH_WEST), prefix("logarithm"),
+                OpLog.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaa", HexDir.SOUTH_EAST), prefix("sin"),
                 OpSin.INSTANCE);
@@ -153,7 +155,7 @@ public class RegisterPatterns {
                 OpArcTan.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqqq", HexDir.NORTH_WEST), prefix("random"),
-                    OpRandom.INSTANCE);
+                OpRandom.INSTANCE);
 
             // == Spells ==
 
@@ -196,6 +198,9 @@ public class RegisterPatterns {
                 new OpErase());
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaqwd", HexDir.NORTH_EAST), prefix("edify"),
                 OpEdifySapling.INSTANCE);
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("adaa", HexDir.WEST), prefix("beep"),
+                OpBeep.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
                 new OpMakePackagedSpell<>(HexItems.CYPHER.get(), 100_000));

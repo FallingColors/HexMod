@@ -11,6 +11,7 @@ import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.CastingContext
 import at.petrak.hexcasting.common.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack
@@ -45,13 +46,10 @@ class OpConjure(val light: Boolean) : SpellOperator {
                 if (state != null) {
                     ctx.world.setBlock(pos, state, 2)
 
-                    val maybeCap = ctx.caster.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve()
-                    if (!maybeCap.isPresent)
-                        return
-                    val cap = maybeCap.get()
+                    val colorizer = HexPlayerDataHelper.getColorizer(ctx.caster)
 
                     if (ctx.world.getBlockState(pos).block is BlockConjured) {
-                        BlockConjured.setColor(ctx.world, pos, cap.colorizer)
+                        BlockConjured.setColor(ctx.world, pos, colorizer)
                     }
                 }
             }

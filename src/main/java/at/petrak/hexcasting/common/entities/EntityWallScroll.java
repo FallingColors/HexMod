@@ -8,6 +8,7 @@ import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -58,7 +59,7 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
         this.scroll = scroll;
 
         var tag = scroll.getTag();
-        if (tag != null && tag.contains(ItemScroll.TAG_PATTERN)) {
+        if (tag != null && tag.contains(ItemScroll.TAG_PATTERN, Tag.TAG_COMPOUND)) {
             this.pattern = HexPattern.DeserializeFromNBT(tag.getCompound(ItemScroll.TAG_PATTERN));
             if (this.level.isClientSide) {
                 var pair = RenderLib.getCenteredPattern(pattern, 128, 128, 16f);
@@ -66,7 +67,7 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
                 this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f);
             }
 
-            this.isAncient = tag.contains(ItemScroll.TAG_OP_ID);
+            this.isAncient = tag.contains(ItemScroll.TAG_OP_ID, Tag.TAG_STRING);
         } else {
             this.pattern = null;
             this.zappyPoints = null;

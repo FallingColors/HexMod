@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
+import at.petrak.hexcasting.api.item.ManaHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
@@ -28,18 +29,21 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComparatorBlock;
+import net.minecraft.world.level.block.RepeaterBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ComparatorBlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.ComparatorMode;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,28 +93,26 @@ public class RegisterClientStuff {
                         return 0f;
                     }
                 });
-            for (RegistryObject<Item> packager : new RegistryObject[]{
-                HexItems.CYPHER,
-                HexItems.TRINKET,
-                HexItems.ARTIFACT,
+            for (ItemPackagedSpell packager : new ItemPackagedSpell[]{
+                HexItems.CYPHER.get(),
+                HexItems.TRINKET.get(),
+                HexItems.ARTIFACT.get(),
             }) {
-                ItemProperties.register(packager.get(), ItemPackagedSpell.HAS_PATTERNS_PRED,
+                ItemProperties.register(packager, ItemPackagedSpell.HAS_PATTERNS_PRED,
                     (stack, level, holder, holderID) ->
-                        stack.getOrCreateTag().contains(ItemPackagedSpell.TAG_PATTERNS) ? 1f : 0f
+                        packager.getPatterns(stack) != null ? 1f : 0f
                 );
             }
 
             ItemProperties.register(HexItems.BATTERY.get(), ItemManaBattery.MANA_PREDICATE,
                 (stack, level, holder, holderID) -> {
-                    var item = (ItemManaBattery) stack.getItem();
-                    var tag = stack.getOrCreateTag();
-                    return item.getManaFullness(tag);
+                    var item = (ManaHolder) stack.getItem();
+                    return item.getManaFullness(stack);
                 });
             ItemProperties.register(HexItems.BATTERY.get(), ItemManaBattery.MAX_MANA_PREDICATE,
                 (stack, level, holder, holderID) -> {
                     var item = (ItemManaBattery) stack.getItem();
-                    var tag = stack.getOrCreateTag();
-                    var max = item.getMaxManaAmt(tag);
+                    var max = item.getMaxMana(stack);
                     return (float) Math.sqrt((float) max / HexConfig.chargedCrystalManaAmount.get() / 10);
                 });
 
@@ -202,6 +204,34 @@ public class RegisterClientStuff {
                     new TextComponent(String.valueOf(state.getValue(BlockStateProperties.POWER)))
                         .withStyle(ChatFormatting.RED))
             ));
+
+        ScryingLensOverlayRegistry.addDisplayer(Blocks.COMPARATOR,
+                (state, pos, observer, world, lensHand) -> {
+                    BlockEntity be = world.getBlockEntity(pos);
+                    if (be instanceof ComparatorBlockEntity comparator) {
+                        return List.of(
+                                new Pair<>(
+                                        new ItemStack(Items.REDSTONE),
+                                        new TextComponent(String.valueOf(comparator.getOutputSignal()))
+                                                .withStyle(ChatFormatting.RED)),
+                                new Pair<>(
+                                        new ItemStack(Items.REDSTONE_TORCH),
+                                        new TextComponent(state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE ? ">" : "-")
+                                                .withStyle(ChatFormatting.RED)));
+                    } else
+                        return List.of();
+                });
+
+        ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
+                (state, pos, observer, world, lensHand) -> List.of(
+                        new Pair<>(
+                                new ItemStack(Items.REDSTONE),
+                                new TextComponent(String.valueOf(state.getValue(RepeaterBlock.POWERED) ? 15 : 0))
+                                        .withStyle(ChatFormatting.RED)),
+                        new Pair<>(
+                                new ItemStack(Items.CLOCK),
+                                new TextComponent(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
+                                        .withStyle(ChatFormatting.YELLOW))));
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

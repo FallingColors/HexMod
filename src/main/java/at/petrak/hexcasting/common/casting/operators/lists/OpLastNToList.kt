@@ -10,6 +10,8 @@ import at.petrak.hexcasting.common.casting.OperatorSideEffect
 import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
 import net.minecraft.network.chat.TranslatableComponent
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 object OpLastNToList : Operator {
     val manaCost: Int
@@ -21,7 +23,7 @@ object OpLastNToList : Operator {
         val arg = stack.takeLast(1).getChecked<Double>(0)
         val datum = stack[stack.lastIndex]
         stack.removeLast()
-        if (arg < 0 || arg > stack.size) {
+        if (arg < 0 || arg > stack.size || abs(arg.roundToInt() - arg) >= 0.05f) {
             throw MishapInvalidIota(
                 datum,
                 0,

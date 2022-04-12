@@ -1,13 +1,14 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.common.casting.*;
+import at.petrak.hexcasting.common.casting.ControllerInfo;
+import at.petrak.hexcasting.common.casting.ResolvedPattern;
+import at.petrak.hexcasting.common.casting.ResolvedPatternValidity;
 import at.petrak.hexcasting.common.items.ItemWand;
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.hexmath.HexCoord;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -26,7 +27,7 @@ import java.util.function.Supplier;
 public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern, List<ResolvedPattern> resolvedPatterns) {
     public static MsgNewSpellPatternSyn deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        var hand = InteractionHand.values()[buf.readInt()];
+        var hand = buf.readEnum(InteractionHand.class);
         var pattern = HexPattern.DeserializeFromNBT(buf.readAnySizeNbt());
 
         var resolvedPatternsLen = buf.readInt();
@@ -39,7 +40,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
 
     public void serialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        buf.writeInt(this.handUsed.ordinal());
+        buf.writeEnum(handUsed);
         buf.writeNbt(this.pattern.serializeToNBT());
         buf.writeInt(this.resolvedPatterns.size());
         for (var pat : this.resolvedPatterns) {
@@ -67,44 +68,31 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                             autoFail = true;
                     }
 
-                    var ctx = new CastingContext(sender, this.handUsed);
-                    var tag = sender.getPersistentData();
-                    var harness = CastingHarness.DeserializeFromNBT(tag.getCompound(ItemWand.TAG_HARNESS), ctx);
+                    var harness = HexPlayerDataHelper.getHarness(sender, this.handUsed);
 
                     ControllerInfo clientInfo;
                     if (autoFail) {
-                        clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), true, harness.generateDescs());
+                        clientInfo = new ControllerInfo(false, false, harness.getStack().isEmpty(), true, harness.generateDescs());
                     } else {
                         clientInfo = harness.executeNewPattern(this.pattern, sender.getLevel());
 
-                        if (clientInfo.getWasSpellCast()) {
+                        if (clientInfo.getWasSpellCast() && clientInfo.getHasCastingSound()) {
                             sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
                                     HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
                                     1f + ((float) Math.random() - 0.5f) * 0.2f);
                         }
                     }
 
-                    ListTag patterns = new ListTag();
-
-                    CompoundTag nextHarnessTag;
                     if (clientInfo.isStackClear()) {
-                        // discard the changes
-                        nextHarnessTag = new CompoundTag();
+                        HexPlayerDataHelper.setHarness(sender, null);
+                        HexPlayerDataHelper.setPatterns(sender, List.of());
                     } else {
-                        // save the changes
-                        nextHarnessTag = harness.serializeToNBT();
-                        if (!resolvedPatterns.isEmpty()) {
-                            resolvedPatterns.get(resolvedPatterns.size() - 1)
-                                    .setValid(clientInfo.getWasPrevPatternInvalid() ?
-                                            ResolvedPatternValidity.ERROR : ResolvedPatternValidity.OK);
-                        }
-                        for (var pat : resolvedPatterns) {
-                            patterns.add(pat.serializeToNBT());
-                        }
+                        HexPlayerDataHelper.setHarness(sender, harness);
+                        if (!resolvedPatterns.isEmpty())
+                            resolvedPatterns.get(resolvedPatterns.size() - 1).setValid(clientInfo.getWasPrevPatternInvalid() ?
+                                    ResolvedPatternValidity.ERROR : ResolvedPatternValidity.OK);
+                        HexPlayerDataHelper.setPatterns(sender, resolvedPatterns);
                     }
-
-                    tag.put(ItemWand.TAG_HARNESS, nextHarnessTag);
-                    tag.put(ItemWand.TAG_PATTERNS, patterns);
 
                     HexMessages.getNetwork()
                             .send(PacketDistributor.PLAYER.with(() -> sender), new MsgNewSpellPatternAck(clientInfo));

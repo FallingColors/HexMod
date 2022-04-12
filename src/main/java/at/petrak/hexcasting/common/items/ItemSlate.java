@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.hexmath.HexPattern;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -30,9 +31,9 @@ public class ItemSlate extends BlockItem implements DataHolder {
 
     public static boolean hasPattern(ItemStack stack) {
         var tag = stack.getTag();
-        if (tag != null && tag.contains("BlockEntityTag")) {
+        if (tag != null && tag.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
             var bet = tag.getCompound("BlockEntityTag");
-            return bet.contains(BlockEntitySlate.TAG_PATTERN);
+            return bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND);
         }
         return false;
     }
@@ -44,7 +45,7 @@ public class ItemSlate extends BlockItem implements DataHolder {
             return null;
         }
         var beTag = stackTag.getCompound("BlockEntityTag");
-        if (!beTag.contains(BlockEntitySlate.TAG_PATTERN)) {
+        if (!beTag.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND)) {
             return null;
         }
 
@@ -55,21 +56,24 @@ public class ItemSlate extends BlockItem implements DataHolder {
     }
 
     @Override
-    public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
         if (datum == null || datum.getType() != DatumType.PATTERN) {
             return false;
         }
 
-        var beTag = tag.getCompound("BlockEntityTag");
-        return !beTag.contains(BlockEntitySlate.TAG_PATTERN);
+        if (!stack.hasTag())
+            return true;
+
+        var beTag = stack.getTagElement("BlockEntityTag");
+        return beTag == null || !beTag.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND);
     }
 
     @Override
-    public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
-        if (this.canWrite(tag, datum) && datum.getPayload() instanceof HexPattern pat) {
-            var beTag = tag.getCompound("BlockEntityTag");
+    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+        if (this.canWrite(stack, datum) && datum.getPayload() instanceof HexPattern pat) {
+            CompoundTag tag = stack.getOrCreateTag();
+            var beTag = stack.getOrCreateTagElement("BlockEntityTag");
             beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
-            tag.put("BlockEntityTag", beTag);
         }
     }
 }

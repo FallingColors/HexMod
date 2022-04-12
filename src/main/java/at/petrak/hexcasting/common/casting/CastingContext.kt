@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.casting.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.common.casting.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.common.casting.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.lib.HexCapabilities
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
 import at.petrak.hexcasting.common.lib.RegisterHelper.prefix
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -38,15 +39,15 @@ data class CastingContext(
 
     private val entitiesGivenMotion = mutableSetOf<Entity>()
 
-    inline fun getHeldItemToOperateOn(acceptItemIf: (ItemStack) -> Boolean): ItemStack {
+    inline fun getHeldItemToOperateOn(acceptItemIf: (ItemStack) -> Boolean): Pair<ItemStack, InteractionHand> {
         if (this.spellCircle == null) {
-            return caster.getItemInHand(otherHand)
+            return caster.getItemInHand(otherHand) to otherHand
         }
 
         val handItem = caster.getItemInHand(castingHand)
         if (!acceptItemIf(handItem))
-            return caster.getItemInHand(otherHand)
-        return handItem
+            return caster.getItemInHand(otherHand) to otherHand
+        return handItem to castingHand
     }
 
     /**
@@ -79,16 +80,14 @@ data class CastingContext(
     }
 
     fun isVecInRange(vec: Vec3): Boolean {
-        val maybeSentinel = this.caster.getCapability(HexCapabilities.SENTINEL).resolve()
-        if (maybeSentinel.isPresent) {
-            val sentinel = maybeSentinel.get()
-            if (sentinel.hasSentinel
-                && sentinel.extendsRange
-                && world.dimension() == sentinel.dimension
-                && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
-            )
-                return true
-        }
+        val sentinel = HexPlayerDataHelper.getSentinel(caster)
+        if (sentinel.hasSentinel
+            && sentinel.extendsRange
+            && world.dimension() == sentinel.dimension
+            && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
+        )
+            return true
+
 
         if (this.spellCircle != null) {
             // we use the eye position cause thats where the caster gets their "position" from
@@ -152,8 +151,9 @@ data class CastingContext(
 
         val inv = this.caster.inventory
         // TODO: withdraw from ender chest given a specific ender charm?
-        val stacksToExamine = inv.items.asReversed().toMutableList()
+        val stacksToExamine = inv.items.toMutableList().apply { removeAt(inv.selected) }.asReversed().toMutableList()
         stacksToExamine.addAll(inv.offhand)
+        stacksToExamine.add(inv.getSelected())
 
         fun matches(stack: ItemStack): Boolean =
             !stack.isEmpty && stack.`is`(item)

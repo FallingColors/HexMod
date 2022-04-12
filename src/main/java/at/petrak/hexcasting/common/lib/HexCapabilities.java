@@ -1,133 +1,148 @@
 package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer;
-import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel;
-import at.petrak.hexcasting.common.items.ItemWand;
-import at.petrak.hexcasting.common.misc.Brainsweeping;
-import at.petrak.hexcasting.common.network.HexMessages;
-import at.petrak.hexcasting.common.network.MsgColorizerUpdateAck;
-import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck;
-import net.minecraft.nbt.Tag;
+import at.petrak.hexcasting.HexConfig;
+import at.petrak.hexcasting.api.item.IManaReservoir;
+import at.petrak.hexcasting.api.item.ManaHolder;
+import at.petrak.hexcasting.common.items.HexItems;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class HexCapabilities {
-    public static final Capability<OpFlight.CapFlight> FLIGHT = CapabilityManager.get(new CapabilityToken<>() {
+
+    private static final ResourceLocation MANA_HOLDER_CAPABILITY = new ResourceLocation("hexcasting", "mana_holder");
+    private static final ResourceLocation MANA_ITEM_CAPABILITY = new ResourceLocation("hexcasting", "mana_item");
+
+    public static final Capability<IManaReservoir> MANA = CapabilityManager.get(new CapabilityToken<>() {
     });
-    public static final Capability<CapSentinel> SENTINEL = CapabilityManager.get(new CapabilityToken<>() {
-    });
-    public static final Capability<CapPreferredColorizer> PREFERRED_COLORIZER =
-        CapabilityManager.get(new CapabilityToken<>() {
-        });
-    public static final Capability<Brainsweeping.Cap> BRAINSWEPT = CapabilityManager.get(
-        new CapabilityToken<>() {
-        });
 
     @SubscribeEvent
     public static void registerCaps(RegisterCapabilitiesEvent evt) {
-        evt.register(OpFlight.CapFlight.class);
-        evt.register(CapSentinel.class);
-        evt.register(CapPreferredColorizer.class);
-        evt.register(Brainsweeping.Cap.class);
+        evt.register(IManaReservoir.class);
     }
 
     @SubscribeEvent
-    public static void attachCaps(AttachCapabilitiesEvent<Entity> evt) {
-        if (evt.getObject() instanceof Player) {
-            evt.addCapability(new ResourceLocation(HexMod.MOD_ID, OpFlight.CAP_NAME),
-                // generate a new instance of the capability
-                new OpFlight.CapFlight(false, 0, Vec3.ZERO, 0.0));
-            evt.addCapability(new ResourceLocation(HexMod.MOD_ID, CapSentinel.CAP_NAME),
-                new CapSentinel(false, false, Vec3.ZERO, Level.OVERWORLD));
-            evt.addCapability(new ResourceLocation(HexMod.MOD_ID, CapPreferredColorizer.CAP_NAME),
-                new CapPreferredColorizer(FrozenColorizer.DEFAULT));
-        } else if (evt.getObject() instanceof Villager) {
-            evt.addCapability(new ResourceLocation(HexMod.MOD_ID, Brainsweeping.CAP_NAME),
-                new Brainsweeping.Cap());
+    public static void attachCaps(AttachCapabilitiesEvent<ItemStack> evt) {
+        ItemStack stack = evt.getObject();
+        if (stack.getItem() instanceof ManaHolder holder)
+            evt.addCapability(MANA_HOLDER_CAPABILITY, new SimpleProvider<>(MANA, LazyOptional.of(() -> new ManaHolderReservoir(holder, stack))));
+        else if (stack.is(HexItems.AMETHYST_DUST.get()))
+            evt.addCapability(MANA_ITEM_CAPABILITY, new SimpleProvider<>(MANA, LazyOptional.of(() -> new ItemReservoir(HexConfig.dustManaAmount, 3, stack))));
+        else if (stack.is(Items.AMETHYST_SHARD))
+            evt.addCapability(MANA_ITEM_CAPABILITY, new SimpleProvider<>(MANA, LazyOptional.of(() -> new ItemReservoir(HexConfig.shardManaAmount, 2, stack))));
+        else if (stack.is(HexItems.CHARGED_AMETHYST.get()))
+            evt.addCapability(MANA_ITEM_CAPABILITY, new SimpleProvider<>(MANA, LazyOptional.of(() -> new ItemReservoir(HexConfig.chargedCrystalManaAmount, 1, stack))));
+    }
+
+    private record SimpleProvider<CAP>(Capability<CAP> capability, LazyOptional<CAP> instance) implements ICapabilityProvider {
+
+        @NotNull
+        @Override
+        public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+            return cap == capability ? instance.cast() : LazyOptional.empty();
         }
     }
 
-    // if I were forge i sould simply design an actually useful and useable cap system
-    @SubscribeEvent
-    public static void copyCapsOnDeath(PlayerEvent.Clone evt) {
-        var eitherSidePlayer = evt.getPlayer();
-        // this apparently defines it in outside scope. the more you know.
-        if (!(eitherSidePlayer instanceof ServerPlayer player)) {
-            return;
+    private record ItemReservoir(ForgeConfigSpec.IntValue baseWorth,
+                                 int consumptionPriority,
+                                 ItemStack stack) implements IManaReservoir {
+        @Override
+        public int getMana() {
+            return baseWorth.get() * stack.getCount();
         }
 
-
-        var proto = evt.getOriginal();
-
-        // Copy harness data from this to new player
-        player.getPersistentData().put(ItemWand.TAG_PATTERNS,
-                proto.getPersistentData().getList(ItemWand.TAG_PATTERNS, Tag.TAG_COMPOUND));
-        player.getPersistentData().put(ItemWand.TAG_HARNESS,
-                proto.getPersistentData().getCompound(ItemWand.TAG_HARNESS));
-
-        // Copy caps from this to new player
-        proto.reviveCaps();
-        var protoCapSentinel = proto.getCapability(SENTINEL).resolve();
-        protoCapSentinel.ifPresent(protoSentinel -> {
-            var capSentinel = player.getCapability(SENTINEL);
-            capSentinel.ifPresent(sentinel -> {
-                sentinel.hasSentinel = protoSentinel.hasSentinel;
-                sentinel.position = protoSentinel.position;
-                sentinel.extendsRange = protoSentinel.extendsRange;
-                sentinel.dimension = protoSentinel.dimension;
-            });
-        });
-        var protoCapColor = proto.getCapability(PREFERRED_COLORIZER).resolve();
-        protoCapColor.ifPresent(protoColorizer -> {
-            var capColorizer = player.getCapability(PREFERRED_COLORIZER);
-            capColorizer.ifPresent(colorizer -> {
-                colorizer.colorizer = protoColorizer.colorizer;
-            });
-        });
-        proto.invalidateCaps();
-    }
-
-    @SubscribeEvent
-    public static void syncCapsOnLogin(PlayerEvent.PlayerLoggedInEvent evt) {
-        if (!(evt.getPlayer() instanceof ServerPlayer player)) {
-            return;
+        @Override
+        public int getMaxMana() {
+            return getMana();
         }
 
-        syncCaps(player);
-    }
-
-    @SubscribeEvent
-    public static void syncCapsOnRejoin(PlayerEvent.PlayerRespawnEvent evt) {
-        if (!(evt.getPlayer() instanceof ServerPlayer player)) {
-            return;
+        @Override
+        public void setMana(int mana) {
+            // NO-OP
         }
 
-        syncCaps(player);
+        @Override
+        public boolean canRecharge() {
+            return false;
+        }
+
+        @Override
+        public boolean canProvide() {
+            return true;
+        }
+
+        @Override
+        public int getConsumptionPriority() {
+            return consumptionPriority;
+        }
+
+        @Override
+        public boolean canConstructBattery() {
+            return true;
+        }
+
+        @Override
+        public int withdrawMana(int cost, boolean simulate) {
+            int worth = baseWorth.get();
+            if (cost < 0)
+                cost = worth * stack.getCount();
+            double itemsRequired = cost / (double) worth;
+            int itemsUsed = Math.min((int) Math.ceil(itemsRequired), stack.getCount());
+            if (!simulate)
+                stack.shrink(itemsUsed);
+            return itemsUsed * worth;
+        }
     }
 
-    private static void syncCaps(ServerPlayer player) {
-        var capSentinel = player.getCapability(HexCapabilities.SENTINEL).resolve();
-        capSentinel.ifPresent(sentinel -> HexMessages.getNetwork()
-            .send(PacketDistributor.PLAYER.with(() -> player), new MsgSentinelStatusUpdateAck(sentinel)));
+    private record ManaHolderReservoir(ManaHolder holder,
+                                       ItemStack stack) implements IManaReservoir {
 
-        var capColorizer = player.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
-        capColorizer.ifPresent(colorizer -> HexMessages.getNetwork()
-            .send(PacketDistributor.PLAYER.with(() -> player), new MsgColorizerUpdateAck(colorizer)));
+        @Override
+        public int getMana() {
+            return holder.getMana(stack);
+        }
+
+        @Override
+        public int getMaxMana() {
+            return holder.getMaxMana(stack);
+        }
+
+        @Override
+        public void setMana(int mana) {
+            holder.setMana(stack, mana);
+        }
+
+        @Override
+        public boolean canRecharge() {
+            return true;
+        }
+
+        @Override
+        public boolean canProvide() {
+            return holder.manaProvider(stack);
+        }
+
+        @Override
+        public int getConsumptionPriority() {
+            return 4;
+        }
+
+        @Override
+        public boolean canConstructBattery() {
+            return false;
+        }
+
+        @Override
+        public int withdrawMana(int cost, boolean simulate) {
+            return holder.withdrawMana(stack, cost, simulate);
+        }
     }
 }

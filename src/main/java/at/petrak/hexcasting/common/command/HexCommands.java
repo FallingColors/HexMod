@@ -7,7 +7,7 @@ public class HexCommands {
     @SubscribeEvent
     public static void register(RegisterCommandsEvent evt) {
         var dp = evt.getDispatcher();
-        ListPatsCommand.register(dp);
+        ListPatternsCommand.register(dp);
         RecalcPatternsCommand.register(dp);
         BrainsweepCommand.register(dp);
     }

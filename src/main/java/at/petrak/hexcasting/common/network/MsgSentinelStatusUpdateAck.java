@@ -1,11 +1,12 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel;
-import at.petrak.hexcasting.common.lib.HexCapabilities;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.Sentinel;
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -16,35 +17,36 @@ import java.util.function.Supplier;
 /**
  * Sent server->client to synchronize the status of the sentinel.
  */
-public record MsgSentinelStatusUpdateAck(CapSentinel update) {
+public record MsgSentinelStatusUpdateAck(Sentinel update) {
     public static MsgSentinelStatusUpdateAck deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
-        var tag = buf.readAnySizeNbt();
-        var sentinel = new CapSentinel(false, false, Vec3.ZERO, Level.OVERWORLD);
-        sentinel.deserializeNBT(tag);
+        var exists = buf.readBoolean();
+        var greater = buf.readBoolean();
+        var origin = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, buf.readResourceLocation());
+
+        var sentinel = new Sentinel(exists, greater, origin, dimension);
         return new MsgSentinelStatusUpdateAck(sentinel);
     }
 
     public void serialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        buf.writeNbt(this.update.serializeNBT());
+        buf.writeBoolean(update.hasSentinel());
+        buf.writeBoolean(update.extendsRange());
+        buf.writeDouble(update.position().x);
+        buf.writeDouble(update.position().y);
+        buf.writeDouble(update.position().z);
+        buf.writeResourceLocation(update.dimension().location());
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() ->
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 var player = Minecraft.getInstance().player;
-                var maybeCap = player.getCapability(HexCapabilities.SENTINEL).resolve();
-                if (!maybeCap.isPresent()) {
-                    return;
+                if (player != null) {
+                    HexPlayerDataHelper.setSentinel(player, update);
                 }
-
-                var cap = maybeCap.get();
-                cap.hasSentinel = update().hasSentinel;
-                cap.extendsRange = update().extendsRange;
-                cap.position = update().position;
-                cap.dimension = update().dimension;
             })
         );
         ctx.get().setPacketHandled(true);

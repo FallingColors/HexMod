@@ -4,10 +4,11 @@ import at.petrak.hexcasting.HexConfig;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.common.casting.CastingContext;
 import at.petrak.hexcasting.common.casting.CastingHarness;
+import at.petrak.hexcasting.common.casting.ManaHelper;
 import at.petrak.hexcasting.common.casting.SpellCircleContext;
 import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
 import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.common.lib.HexCapabilities;
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.paucal.api.PaucalBlockEntity;
 import com.mojang.datafixers.util.Pair;
@@ -108,8 +109,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.nextBlock = this.getBlockPos();
         this.trackedBlocks = new ArrayList<>();
         this.knownBlocks = new HashSet<>();
-        var maybeCap = activator.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
-        maybeCap.ifPresent(capPreferredColorizer -> this.colorizer = capPreferredColorizer.colorizer);
+        this.colorizer = HexPlayerDataHelper.getColorizer(activator);
 
         this.level.setBlockAndUpdate(this.getBlockPos(),
             this.getBlockState().setValue(BlockAbstractImpetus.ENERGIZED, true));
@@ -171,8 +171,10 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
     @Override
     protected void loadModData(CompoundTag tag) {
-        if (tag.contains(TAG_ACTIVATOR) && tag.contains(TAG_COLORIZER) && tag.contains(TAG_NEXT_BLOCK)
-            && tag.contains(TAG_TRACKED_BLOCKS)) {
+        if (tag.contains(TAG_ACTIVATOR, Tag.TAG_INT_ARRAY) &&
+                tag.contains(TAG_COLORIZER, Tag.TAG_COMPOUND) &&
+                tag.contains(TAG_NEXT_BLOCK, Tag.TAG_COMPOUND) &&
+                tag.contains(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND)) {
             this.activator = tag.getUUID(TAG_ACTIVATOR);
             this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
             this.nextBlock = NbtUtils.readBlockPos(tag.getCompound(TAG_NEXT_BLOCK));
@@ -185,12 +187,20 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                 this.trackedBlocks.add(pos);
                 this.knownBlocks.add(pos);
             }
+        } else {
+            this.activator = null;
+            this.colorizer = null;
+            this.nextBlock = null;
+            this.foundAll = false;
+            this.trackedBlocks = new ArrayList<>();
+            this.knownBlocks = new HashSet<>();
         }
 
         this.mana = tag.getInt(TAG_MANA);
-        if (tag.contains(TAG_LAST_MISHAP)) {
+        if (tag.contains(TAG_LAST_MISHAP, Tag.TAG_STRING)) {
             this.lastMishap = Component.Serializer.fromJson(tag.getString(TAG_LAST_MISHAP));
-        }
+        } else
+            this.lastMishap = null;
     }
 
     void stepCircle() {
@@ -288,6 +298,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
             var harness = new CastingHarness(ctx);
 
             var castSpell = false;
+            var makeSound = false;
             BlockPos erroredPos = null;
             for (var tracked : this.trackedBlocks) {
                 var bs = this.level.getBlockState(tracked);
@@ -297,6 +308,8 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                         var info = harness.executeNewPattern(newPattern, splayer.getLevel());
                         if (info.getWasSpellCast()) {
                             castSpell = true;
+                            if (info.getHasCastingSound())
+                                makeSound = true;
                         }
                         if (info.getWasPrevPatternInvalid()) {
                             erroredPos = tracked;
@@ -306,15 +319,17 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                 }
             }
 
-            if (castSpell) {
+            if (castSpell && makeSound) {
                 this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST.get(), SoundSource.BLOCKS,
                     2f, 1f);
             }
+
             if (erroredPos != null) {
-                this.setLastMishap(null);
-                this.setChanged();
                 this.sfx(erroredPos, false);
-            }
+            } else
+                this.setLastMishap(null);
+
+            this.setChanged();
         }
     }
 
@@ -491,8 +506,8 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         @NotNull
         @Override
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            var manamount = getManaAmount(stack);
-            if (manamount != null) {
+            var manamount = ManaHelper.extractMana(stack, -1, true, simulate);
+            if (manamount > 0) {
                 if (!simulate) {
                     BlockEntityAbstractImpetus.this.mana += manamount;
                     BlockEntityAbstractImpetus.this.setChanged();
@@ -516,23 +531,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return getManaAmount(stack) != null;
-        }
-
-        // a separate method from the ctx or harness or whatever cause it's different and special
-        private static @Nullable Integer getManaAmount(ItemStack stack) {
-            int baseAmt;
-            if (stack.is(HexItems.AMETHYST_DUST.get())) {
-                baseAmt = HexConfig.dustManaAmount.get();
-            } else if (stack.is(Items.AMETHYST_SHARD)) {
-                baseAmt = HexConfig.shardManaAmount.get();
-            } else if (stack.is(HexItems.CHARGED_AMETHYST.get())) {
-                baseAmt = HexConfig.chargedCrystalManaAmount.get();
-            } else {
-                return null;
-            }
-
-            return baseAmt * stack.getCount();
+            return ManaHelper.extractMana(stack, -1, false, true) > 0;
         }
     };
 }

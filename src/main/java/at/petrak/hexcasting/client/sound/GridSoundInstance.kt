@@ -40,8 +40,8 @@ class GridSoundInstance(val player: Player) : AbstractTickableSoundInstance(HexS
             val normalVector = calculateVectorFromPitchAndYaw(player.xRot, player.yRot)
             val newPos = player.eyePosition
                 .add(normalVector)
-                .add(horizontalPlanarVector.scale(2 * (mousePosX - 0.5)))
-                .add(verticalPlanarVector.scale(2 * (mousePosY - 0.5)))
+                .add(horizontalPlanarVector.scale(PAN_SCALE * 2 * (mousePosX - 0.5)))
+                .add(verticalPlanarVector.scale(PAN_SCALE * 2 * (mousePosY - 0.5)))
             this.x = newPos.x
             this.y = newPos.y
             this.z = newPos.z
@@ -56,5 +56,9 @@ class GridSoundInstance(val player: Player) : AbstractTickableSoundInstance(HexS
         val azimuthHorizontal = Mth.cos(radiansPitch).toDouble()
         val azimuthVertical = Mth.sin(radiansPitch).toDouble()
         return Vec3(zComponent * azimuthHorizontal, -azimuthVertical, xComponent * azimuthHorizontal)
+    }
+
+    companion object {
+        const val PAN_SCALE = 0.5
     }
 }

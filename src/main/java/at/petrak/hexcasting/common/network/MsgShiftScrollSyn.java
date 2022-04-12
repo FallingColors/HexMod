@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolean isCtrl) {
     public static MsgShiftScrollSyn deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        var hand = InteractionHand.values()[buf.readInt()];
+        var hand = buf.readEnum(InteractionHand.class);
         var scrollDelta = buf.readDouble();
         var isCtrl = buf.readBoolean();
         return new MsgShiftScrollSyn(hand, scrollDelta, isCtrl);
@@ -34,7 +34,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
     public void serialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        buf.writeInt(this.hand.ordinal());
+        buf.writeEnum(this.hand);
         buf.writeDouble(this.scrollDelta);
         buf.writeBoolean(this.isCtrl);
     }
@@ -57,10 +57,10 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
     private void spellbook(ServerPlayer sender, ItemStack stack) {
         var tag = stack.getOrCreateTag();
-        ItemSpellbook.RotatePageIdx(stack, tag, this.scrollDelta < 0.0);
+        ItemSpellbook.RotatePageIdx(stack, this.scrollDelta < 0.0);
 
         var newIdx = tag.getInt(ItemSpellbook.TAG_SELECTED_PAGE);
-        var len = ItemSpellbook.HighestPage(tag.getCompound(ItemSpellbook.TAG_PAGES));
+        var len = ItemSpellbook.HighestPage(stack);
 
         MutableComponent component;
         if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
@@ -106,7 +106,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         var datumTag = HexItems.ABACUS.get().readDatumTag(stack);
         if (datumTag != null) {
             var popup = SpellDatum.DisplayFromTag(datumTag);
-            sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD), true);
+            sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
         }
     }
 }

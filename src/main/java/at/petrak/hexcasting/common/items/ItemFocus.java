@@ -3,7 +3,9 @@ package at.petrak.hexcasting.common.items;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolder;
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.common.casting.Widget;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -29,7 +31,7 @@ public class ItemFocus extends Item implements DataHolder {
             return null;
         }
         var tag = stack.getTag();
-        if (!tag.contains(TAG_DATA)) {
+        if (!tag.contains(TAG_DATA, Tag.TAG_COMPOUND)) {
             return null;
         }
 
@@ -37,12 +39,19 @@ public class ItemFocus extends Item implements DataHolder {
     }
 
     @Override
-    public boolean canWrite(CompoundTag tag, SpellDatum<?> datum) {
-        return !tag.getBoolean(TAG_SEALED);
+    public @Nullable SpellDatum<?> emptyDatum(ItemStack stack) {
+        return SpellDatum.make(Widget.NULL);
     }
 
     @Override
-    public void writeDatum(CompoundTag tag, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
+        return !stack.hasTag() || !stack.getTag().getBoolean(TAG_SEALED);
+    }
+
+    @Override
+    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+        CompoundTag tag = stack.getOrCreateTag();
+
         if (!tag.getBoolean(TAG_SEALED)) {
             if (datum == null)
                 tag.remove(TAG_DATA);

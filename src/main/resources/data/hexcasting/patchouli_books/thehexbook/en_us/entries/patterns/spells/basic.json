@@ -45,6 +45,18 @@
       "input": "entity, number",
       "output": "",
       "text": "hexcasting.page.basic_spell.blink"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:beep",
+      "anchor": "hexcasting:beep",
+      "input": "vector, number, number",
+      "output": "",
+      "text": "hexcasting.page.basic_spell.beep.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.basic_spell.beep.2"
     }
   ]
 }

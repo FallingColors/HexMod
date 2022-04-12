@@ -1,99 +1,57 @@
 package at.petrak.hexcasting.common.casting
 
-import at.petrak.hexcasting.HexConfig
-import at.petrak.hexcasting.common.items.HexItems
-import at.petrak.hexcasting.common.items.magic.ItemManaBattery
+import at.petrak.hexcasting.common.lib.HexCapabilities
 import net.minecraft.util.Mth
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import kotlin.math.ceil
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 object ManaHelper {
+    @JvmStatic
     fun isManaItem(stack: ItemStack): Boolean {
-        return stack.`is`(HexItems.AMETHYST_DUST.get())
-                || stack.`is`(Items.AMETHYST_SHARD)
-                || stack.`is`(HexItems.CHARGED_AMETHYST.get())
-                || stack.item is ItemManaBattery
+        return stack.getCapability(HexCapabilities.MANA).map { it.canProvide() }.orElse(false) && extractMana(stack, simulate = true) > 0
     }
 
     /**
-     * Try to extract the given amount of mana from this item.
-     * This may mutate the itemstack.
+     * Extract [cost] mana from [stack]. If [cost] is less than zero, extract all mana instead.
+     * This may mutate [stack] (and may consume it) unless [simulate] is set.
      *
-     * Return the actual amount of mana extracted, or null if this cannot have mana extracted.
-     */
-    fun extractMana(stack: ItemStack, cost: Int): Int? {
-        val base = when (stack.item) {
-            HexItems.AMETHYST_DUST.get() -> HexConfig.dustManaAmount.get()
-            Items.AMETHYST_SHARD -> HexConfig.shardManaAmount.get()
-            HexItems.CHARGED_AMETHYST.get() -> HexConfig.chargedCrystalManaAmount.get()
-            HexItems.BATTERY.get() -> {
-                val battery = stack.item as ItemManaBattery
-                return battery.withdrawMana(stack.orCreateTag, cost)
-            }
-            else -> return null
-        }
-        val itemsReqd = ceil(cost.toFloat() / base.toFloat()).toInt()
-        val actualItemsConsumed = min(stack.count, itemsReqd)
-        stack.shrink(actualItemsConsumed)
-        return base * actualItemsConsumed
-    }
-
-    /**
-     * Extract the entirety of the mana out of this.
-     * This may mutate the itemstack (and will probably consume it).
+     * If [drainForBatteries] is false, this will only consider forms of mana that can be used to make new batteries.
      *
-     * Return the amount of mana extracted, or null if this cannot have mana extracted.
+     * Return the amount of mana extracted. This may be over [cost] if mana is wasted.
      */
-    fun extractAllMana(stack: ItemStack): Int? {
-        val base = when (stack.item) {
-            HexItems.AMETHYST_DUST.get() -> HexConfig.dustManaAmount.get()
-            Items.AMETHYST_SHARD -> HexConfig.shardManaAmount.get()
-            HexItems.CHARGED_AMETHYST.get() -> HexConfig.chargedCrystalManaAmount.get()
+    @JvmStatic
+    @JvmOverloads
+    fun extractMana(stack: ItemStack, cost: Int = -1, drainForBatteries: Boolean = false, simulate: Boolean = false): Int {
+        val manaCapability = stack.getCapability(HexCapabilities.MANA).resolve()
 
-            HexItems.BATTERY.get() -> {
-                val battery = stack.item as ItemManaBattery
-                val tag = stack.orCreateTag
-                val manaThere = battery.getManaAmt(tag)
-                return battery.withdrawMana(tag, manaThere)
-            }
-            else -> return null
-        }
-        val count = stack.count
-        stack.shrink(count)
-        return base * count
+        if (!manaCapability.isPresent)
+            return 0
+
+        val manaReservoir = manaCapability.get()
+
+        if (drainForBatteries && !manaReservoir.canConstructBattery())
+            return 0
+
+        return manaReservoir.withdrawMana(cost, simulate)
     }
 
     /**
      * Sorted from least important to most important
      */
     fun compare(astack: ItemStack, bstack: ItemStack): Int {
-        val aitem = astack.item
-        val bitem = bstack.item
+        val aMana = astack.getCapability(HexCapabilities.MANA).resolve()
+        val bMana = bstack.getCapability(HexCapabilities.MANA).resolve()
 
-        return if (aitem != bitem) {
-            fun intcode(item: Item): Int =
-                when (item) {
-                    HexItems.CHARGED_AMETHYST.get() -> 1
-                    Items.AMETHYST_SHARD -> 2
-                    HexItems.AMETHYST_DUST.get() -> 3
-                    HexItems.BATTERY.get() -> 4
-                    else -> 0
-                }
-            intcode(aitem) - intcode(bitem)
-        } else if (aitem == HexItems.BATTERY.get()) {
-            val atag = astack.orCreateTag
-            val btag = bstack.orCreateTag
-            val battery = aitem as ItemManaBattery
-            battery.getManaAmt(atag) - battery.getManaAmt(btag)
+        return if (astack.item != bstack.item) {
+            aMana.map { it.consumptionPriority }.orElse(0) - bMana.map { it.consumptionPriority }.orElse(0)
+        } else if (aMana.isPresent && bMana.isPresent) {
+            aMana.get().mana - bMana.get().mana
         } else {
             astack.count - bstack.count
         }
     }
 
+    @JvmStatic
     fun barColor(mana: Int, maxMana: Int): Int {
         val amt = if (maxMana == 0) {
             0f
@@ -107,6 +65,7 @@ object ManaHelper {
         return Mth.color(r / 255f, g / 255f, b / 255f)
     }
 
+    @JvmStatic
     fun barWidth(mana: Int, maxMana: Int): Int {
         val amt = if (maxMana == 0) {
             0f

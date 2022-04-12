@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.common.items.magic;
 
+import at.petrak.hexcasting.api.item.ManaHolder;
 import at.petrak.hexcasting.common.casting.ManaHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -13,56 +15,61 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class ItemManaHolder extends Item {
-    public static final String TAG_MANA = "hexcasting:mana";
-    public static final String TAG_MAX_MANA = "hexcasting:start_mana";
+public abstract class ItemManaHolder extends Item implements ManaHolder {
+    private static final String TAG_MANA = "hexcasting:mana";
+    private static final String TAG_MAX_MANA = "hexcasting:start_mana";
 
     public ItemManaHolder(Properties pProperties) {
         super(pProperties);
     }
 
-    public int getManaAmt(CompoundTag tag) {
-        return tag.getInt(TAG_MANA);
+    public static ItemStack withMana(ItemStack stack, int mana, int maxMana) {
+        Item item = stack.getItem();
+        if (item instanceof ItemManaHolder) {
+            CompoundTag tag = stack.getOrCreateTag();
+            tag.putInt(TAG_MANA, mana);
+            tag.putInt(TAG_MAX_MANA, maxMana);
+        }
+
+        return stack;
     }
 
-    public int getMaxManaAmt(CompoundTag tag) {
-        return tag.getInt(TAG_MAX_MANA);
+    @Override
+    public int getMana(ItemStack stack) {
+        if (!stack.hasTag())
+            return 0;
+        return stack.getTag().getInt(TAG_MANA);
     }
 
-    public float getManaFullness(CompoundTag tag) {
-        return (float) getManaAmt(tag) / (float) getMaxManaAmt(tag);
+    @Override
+    public int getMaxMana(ItemStack stack) {
+        if (!stack.hasTag())
+            return 0;
+        return stack.getTag().getInt(TAG_MAX_MANA);
     }
 
-    /**
-     * Return the actual amount of mana extracted.
-     */
-    public int withdrawMana(CompoundTag tag, int cost) {
-        var manaHere = getManaAmt(tag);
-        var manaLeft = manaHere - cost;
-        tag.putInt(TAG_MANA, Math.max(0, manaLeft));
-        return Math.min(cost, manaHere);
+    @Override
+    public void setMana(ItemStack stack, int mana) {
+        stack.getOrCreateTag().putInt(TAG_MANA, Mth.clamp(mana, 0, getMaxMana(stack)));
     }
 
     @Override
     public boolean isBarVisible(ItemStack pStack) {
-        var tag = pStack.getOrCreateTag();
-        return tag.contains(TAG_MANA);
+        return getMaxMana(pStack) > 0;
     }
 
     @Override
     public int getBarColor(ItemStack pStack) {
-        var tag = pStack.getOrCreateTag();
-        var mana = getManaAmt(tag);
-        var maxMana = getMaxManaAmt(tag);
-        return ManaHelper.INSTANCE.barColor(mana, maxMana);
+        var mana = getMana(pStack);
+        var maxMana = getMaxMana(pStack);
+        return ManaHelper.barColor(mana, maxMana);
     }
 
     @Override
     public int getBarWidth(ItemStack pStack) {
-        var tag = pStack.getOrCreateTag();
-        var mana = tag.getInt(TAG_MANA);
-        var maxMana = tag.getInt(TAG_MAX_MANA);
-        return ManaHelper.INSTANCE.barWidth(mana, maxMana);
+        var mana = getMana(pStack);
+        var maxMana = getMaxMana(pStack);
+        return ManaHelper.barWidth(mana, maxMana);
     }
 
     @Override
@@ -78,16 +85,12 @@ public abstract class ItemManaHolder extends Item {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
-        if (pIsAdvanced.isAdvanced()) {
-            var imh = (ItemManaHolder) pStack.getItem();
-            var tag = pStack.getOrCreateTag();
-            if (tag.contains(TAG_MANA) && tag.contains(TAG_MAX_MANA)) {
-                pTooltipComponents.add(
-                    new TranslatableComponent("item.hexcasting.manaholder.amount",
-                        String.format("%,d", imh.getManaAmt(tag)),
-                        String.format("%,d", imh.getMaxManaAmt(tag)),
-                        100f * imh.getManaFullness(tag)).withStyle(ChatFormatting.GRAY));
-            }
+        if (pIsAdvanced.isAdvanced() && getMaxMana(pStack) > 0) {
+            pTooltipComponents.add(
+                new TranslatableComponent("item.hexcasting.manaholder.amount",
+                    String.format("%,d", getMana(pStack)),
+                    String.format("%,d", getMaxMana(pStack)),
+                    100f * getManaFullness(pStack)).withStyle(ChatFormatting.GRAY));
         }
 
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);

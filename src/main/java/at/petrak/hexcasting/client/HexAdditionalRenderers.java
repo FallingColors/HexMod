@@ -1,10 +1,9 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
-import at.petrak.hexcasting.common.casting.colors.CapPreferredColorizer;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.CapSentinel;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.Sentinel;
 import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.common.lib.HexCapabilities;
+import at.petrak.hexcasting.common.lib.HexPlayerDataHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -31,11 +30,10 @@ public class HexAdditionalRenderers {
     @SubscribeEvent
     public static void overlayLevel(RenderLevelLastEvent evt) {
         var player = Minecraft.getInstance().player;
-        var maybeSentinelCap = player.getCapability(HexCapabilities.SENTINEL).resolve();
-        if (maybeSentinelCap.isPresent()) {
-            var cap = maybeSentinelCap.get();
-            if (cap.hasSentinel && player.getLevel().dimension().equals(cap.dimension)) {
-                renderSentinel(cap, player, evt.getPoseStack(), evt.getPartialTick());
+        if (player != null) {
+            var sentinel = HexPlayerDataHelper.getSentinel(player);
+            if (sentinel.hasSentinel() && player.getLevel().dimension().equals(sentinel.dimension())) {
+                renderSentinel(sentinel, player, evt.getPoseStack(), evt.getPartialTick());
             }
         }
     }
@@ -47,8 +45,8 @@ public class HexAdditionalRenderers {
         }
     }
 
-    private static void renderSentinel(CapSentinel sentinel, LocalPlayer owner,
-        PoseStack ps, float partialTicks) {
+    private static void renderSentinel(Sentinel sentinel, LocalPlayer owner,
+                                       PoseStack ps, float partialTicks) {
         ps.pushPose();
 
         // zero vector is the player
@@ -56,9 +54,9 @@ public class HexAdditionalRenderers {
         var camera = mc.gameRenderer.getMainCamera();
         var playerPos = camera.getPosition();
         ps.translate(
-            sentinel.position.x - playerPos.x,
-            sentinel.position.y - playerPos.y,
-            sentinel.position.z - playerPos.z);
+            sentinel.position().x - playerPos.x,
+            sentinel.position().y - playerPos.y,
+            sentinel.position().z - playerPos.z);
 
         var time = mc.level.getLevelData().getGameTime() + partialTicks;
         var bobSpeed = 1f / 20;
@@ -66,7 +64,7 @@ public class HexAdditionalRenderers {
         ps.translate(0, Mth.sin(bobSpeed * time) * magnitude, 0);
         var spinSpeed = 1f / 30;
         ps.mulPose(Quaternion.fromXYZ(new Vector3f(0, spinSpeed * time, 0)));
-        if (sentinel.extendsRange) {
+        if (sentinel.extendsRange()) {
             ps.mulPose(Quaternion.fromXYZ(new Vector3f(spinSpeed * time / 8f, 0, 0)));
         }
 
@@ -83,21 +81,12 @@ public class HexAdditionalRenderers {
         RenderSystem.disableCull();
         RenderSystem.lineWidth(5f);
 
-        var maybeColorizerCap = owner.getCapability(HexCapabilities.PREFERRED_COLORIZER).resolve();
-        CapPreferredColorizer cap = null;
-        if (maybeColorizerCap.isPresent()) {
-            cap = maybeColorizerCap.get();
-        }
-
-        CapPreferredColorizer finalCap = cap;
+        var colorizer = HexPlayerDataHelper.getColorizer(mc.player);
         BiConsumer<float[], float[]> v = (l, r) -> {
-            int lcolor = -1, rcolor = -1;
+            int lcolor = colorizer.getColor(time, new Vec3(l[0], l[1], l[2])),
+                    rcolor = colorizer.getColor(time, new Vec3(r[0], r[1], r[2]));
             var normal = new Vector3f(r[0] - l[0], r[1] - l[1], r[2] - l[2]);
             normal.normalize();
-            if (finalCap != null) {
-                lcolor = finalCap.colorizer.getColor(time, new Vec3(l[0], l[1], l[2]));
-                rcolor = finalCap.colorizer.getColor(time, new Vec3(r[0], r[1], r[2]));
-            }
             buf.vertex(neo, l[0], l[1], l[2])
                 .color(lcolor)
                 .normal(ps.last().normal(), normal.x(), normal.y(), normal.z())
