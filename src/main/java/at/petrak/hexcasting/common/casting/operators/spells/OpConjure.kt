@@ -6,12 +6,9 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.blocks.BlockConjured
-import at.petrak.hexcasting.common.blocks.BlockConjuredLight
 import at.petrak.hexcasting.common.blocks.HexBlocks
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.mishaps.MishapBadBlock
-import at.petrak.hexcasting.common.lib.HexCapabilities
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack

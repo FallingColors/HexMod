@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.interop.patchouli;
 
-import at.petrak.hexcasting.HexUtils;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.client.RenderLib;
-import at.petrak.hexcasting.hexmath.HexCoord;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexCoord;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -99,7 +99,7 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
             var pattern = pair.getFirst();
             var origin = pair.getSecond();
             for (var pos : pattern.positions(origin)) {
-                var px = RenderLib.coordToPx(pos, fakeScale, Vec2.ZERO);
+                var px = HexUtils.coordToPx(pos, fakeScale, Vec2.ZERO);
                 seenFakePoints.add(px);
             }
 
@@ -126,7 +126,7 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
         var seenRealPoints = new ArrayList<Vec2>();
         for (var pat : this.patterns) {
             for (var pos : pat.pattern.positions(pat.origin)) {
-                var px = RenderLib.coordToPx(pos, this.hexSize, Vec2.ZERO);
+                var px = HexUtils.coordToPx(pos, this.hexSize, Vec2.ZERO);
                 seenRealPoints.add(px);
             }
         }
@@ -134,13 +134,13 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
 
         // and NOW for real!
         for (var pat : this.patterns) {
-            var localOrigin = RenderLib.coordToPx(pat.origin, this.hexSize, realCom.negated());
+            var localOrigin = HexUtils.coordToPx(pat.origin, this.hexSize, realCom.negated());
             var points = pat.pattern.toLines(this.hexSize, localOrigin);
             pat.zappyPoints.addAll(RenderLib.makeZappy(points, 10f, 0.8f, 0f));
         }
 
         this.pathfinderDots = seenCoords.stream()
-            .map(coord -> RenderLib.coordToPx(coord, this.hexSize, realCom.negated()))
+            .map(coord -> HexUtils.coordToPx(coord, this.hexSize, realCom.negated()))
             .collect(Collectors.toList());
     }
 

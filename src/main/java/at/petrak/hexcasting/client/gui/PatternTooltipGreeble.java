@@ -2,7 +2,7 @@ package at.petrak.hexcasting.client.gui;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RenderLib;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;

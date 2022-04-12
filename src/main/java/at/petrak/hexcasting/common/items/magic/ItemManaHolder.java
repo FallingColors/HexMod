@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.api.item.ManaHolder;
-import at.petrak.hexcasting.common.casting.ManaHelper;
+import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.utils.ManaHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class ItemManaHolder extends Item implements ManaHolder {
+public abstract class ItemManaHolder extends Item implements ManaHolderItem {
     private static final String TAG_MANA = "hexcasting:mana";
     private static final String TAG_MAX_MANA = "hexcasting:start_mana";
 

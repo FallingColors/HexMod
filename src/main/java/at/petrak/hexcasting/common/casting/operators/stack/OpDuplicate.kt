@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.CastingContext
 
 object OpDuplicate : ConstManaOperator {
     override val argc: Int

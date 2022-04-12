@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import com.mojang.datafixers.util.Either
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.phys.Vec3

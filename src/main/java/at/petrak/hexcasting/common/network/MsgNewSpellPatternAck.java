@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
-import at.petrak.hexcasting.common.casting.ControllerInfo;
+import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

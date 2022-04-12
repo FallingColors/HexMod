@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.item.DataHolder;
+import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemSlate extends BlockItem implements DataHolder {
+public class ItemSlate extends BlockItem implements DataHolderItem {
     public static final ResourceLocation WRITTEN_PRED = new ResourceLocation(HexMod.MOD_ID, "written");
 
     public ItemSlate(Block pBlock, Properties pProperties) {

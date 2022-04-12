@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.client.entity;
 
-import at.petrak.hexcasting.HexConfig;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -131,7 +131,7 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
                         (float) (p1.x + (p2.x - p1.x) * pointMicro),
                         (float) (p1.y + (p2.y - p1.y) * pointMicro)
                     );
-                    
+
                     ps.translate(0, 0, 0.01);
                     theCoolerDrawSpot(mat, norm, light, verts, drawPos, 2.6666f, 0xff_cfa0f3);
                     ps.translate(0, 0, 0.01);

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks;
 
-import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;

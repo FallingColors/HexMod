@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.common.blocks.HexBlockEntities;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.paucal.api.PaucalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

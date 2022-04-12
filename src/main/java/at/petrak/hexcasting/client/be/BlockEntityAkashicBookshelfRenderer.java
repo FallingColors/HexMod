@@ -3,7 +3,7 @@ package at.petrak.hexcasting.client.be;
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;

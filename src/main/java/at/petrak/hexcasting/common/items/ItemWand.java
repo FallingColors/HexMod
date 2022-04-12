@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper;
+import at.petrak.hexcasting.api.item.CasterItem;
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.network.HexMessages;
 import at.petrak.hexcasting.common.network.MsgOpenSpellGuiAck;
@@ -14,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
-public class ItemWand extends Item {
+public class ItemWand extends Item implements CasterItem {
 
     public ItemWand(Properties pProperties) {
         super(pProperties);

@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.common.casting.ControllerInfo;
-import at.petrak.hexcasting.common.casting.ResolvedPattern;
-import at.petrak.hexcasting.common.casting.ResolvedPatternValidity;
+import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
+import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity;
+import at.petrak.hexcasting.api.spell.math.HexCoord;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.items.ItemWand;
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper;
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import at.petrak.hexcasting.hexmath.HexCoord;
-import at.petrak.hexcasting.hexmath.HexPattern;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

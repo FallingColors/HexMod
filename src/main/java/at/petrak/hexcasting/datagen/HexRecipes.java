@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.common.advancement.OvercastTrigger;
+import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItemTags;
 import at.petrak.hexcasting.common.items.HexItems;

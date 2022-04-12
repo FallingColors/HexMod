@@ -3,6 +3,8 @@ package at.petrak.hexcasting.common.casting;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.Operator;
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.casting.operators.*;
 import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicRead;
 import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicWrite;
@@ -27,9 +29,9 @@ import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentin
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
 import at.petrak.hexcasting.common.casting.operators.stack.*;
 import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.hexmath.HexAngle;
-import at.petrak.hexcasting.hexmath.HexDir;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexAngle;
+import at.petrak.hexcasting.api.spell.math.HexDir;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.phys.Vec3;
@@ -332,7 +334,7 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qdwdq", HexDir.NORTH_EAST), prefix("const/double/pi"),
                 Operator.makeConstantOp(SpellDatum.make(Math.PI)));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eawae", HexDir.NORTH_WEST), prefix("const/double/tau"),
-                Operator.makeConstantOp(SpellDatum.make(Math.PI * 2)));
+                Operator.makeConstantOp(SpellDatum.make(HexUtils.TAU)));
 
             // e
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aaq", HexDir.EAST), prefix("const/double/e"),

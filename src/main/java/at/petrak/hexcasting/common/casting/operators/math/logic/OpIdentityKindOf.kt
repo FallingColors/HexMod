@@ -3,8 +3,8 @@ package at.petrak.hexcasting.common.casting.operators.math.logic
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.Widget
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.Widget
 
 object OpIdentityKindOf : ConstManaOperator {
     override val argc = 1

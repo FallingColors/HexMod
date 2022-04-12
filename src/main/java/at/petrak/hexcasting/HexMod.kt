@@ -1,6 +1,8 @@
 package at.petrak.hexcasting
 
 import at.petrak.hexcasting.api.PatternRegistry
+import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
+import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.common.blocks.HexBlockEntities
 import at.petrak.hexcasting.common.blocks.HexBlocks
@@ -9,16 +11,15 @@ import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.HexCommands
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.HexItems
-import at.petrak.hexcasting.common.lib.HexCapabilities
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
+import at.petrak.hexcasting.common.lib.HexCapabilityHandler
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import at.petrak.hexcasting.common.lib.HexSounds
-import at.petrak.hexcasting.common.lib.HexStatistics
+import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.particles.HexParticles
 import at.petrak.hexcasting.common.recipe.HexCustomRecipes
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
-import at.petrak.hexcasting.datagen.HexAdvancements
 import at.petrak.hexcasting.datagen.HexDataGenerators
 import at.petrak.hexcasting.datagen.lootmods.HexLootModifiers
 import at.petrak.hexcasting.server.TickScheduler
@@ -30,6 +31,7 @@ import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -46,7 +48,11 @@ object HexMod {
 
     init {
         val (cfg, spec) = ForgeConfigSpec.Builder()
-            .configure { builder: ForgeConfigSpec.Builder? -> HexConfig(builder) }
+            .configure { builder: ForgeConfigSpec.Builder? ->
+                HexConfig(
+                    builder
+                )
+            }
         CONFIG_SPEC = spec
         val (client_cfg, client_spec) = ForgeConfigSpec.Builder()
             .configure { builder: ForgeConfigSpec.Builder? -> HexConfig.Client(builder) }
@@ -61,7 +67,6 @@ object HexMod {
         // gotta do it at *some* point
         modBus.register(RegisterPatterns::class.java)
         modBus.register(HexDataGenerators::class.java)
-        modBus.register(PatternRegistry)
 
         HexItems.ITEMS.register(modBus)
         HexBlocks.BLOCKS.register(modBus)
@@ -77,7 +82,7 @@ object HexMod {
 
         evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)
-        evBus.register(HexCapabilities::class.java)
+        evBus.register(HexCapabilityHandler::class.java)
         evBus.register(HexPlayerDataHelper::class.java)
         evBus.register(OpFlight)
         evBus.register(Brainsweeping::class.java)
@@ -101,9 +106,16 @@ object HexMod {
 
     @SubscribeEvent
     fun commonSetup(evt: FMLCommonSetupEvent) {
-        evt.enqueueWork { HexAdvancements.registerTriggers() }
+        evt.enqueueWork { HexAdvancementTriggers.registerTriggers() }
     }
 
     @JvmStatic
     fun getLogger() = this.LOGGER
+
+    @SubscribeEvent
+    fun printPatternCount(evt: FMLLoadCompleteEvent) {
+        HexMod.getLogger().info(
+            PatternRegistry.getPatternCountInfo()
+        )
+    }
 }

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks;
 
-import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.paucal.api.PaucalBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class BlockEntityConjured extends PaucalBlockEntity {
     private static final Random RANDOM = new Random();
-    private FrozenColorizer colorizer = FrozenColorizer.DEFAULT;
+    private FrozenColorizer colorizer = FrozenColorizer.DEFAULT.get();
 
     public static final String TAG_COLORIZER = "tag_colorizer";
 

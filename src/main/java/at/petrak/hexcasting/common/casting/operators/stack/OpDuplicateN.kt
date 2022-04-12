@@ -3,8 +3,8 @@ package at.petrak.hexcasting.common.casting.operators.stack
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import net.minecraft.network.chat.TranslatableComponent
 import kotlin.math.abs
 import kotlin.math.roundToInt

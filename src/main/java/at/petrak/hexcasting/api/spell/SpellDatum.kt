@@ -1,11 +1,10 @@
 package at.petrak.hexcasting.api.spell
 
-import at.petrak.hexcasting.HexUtils
-import at.petrak.hexcasting.HexUtils.serializeToNBT
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.Widget
-import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidSpellDatumType
-import at.petrak.hexcasting.hexmath.HexPattern
+import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.utils.HexUtils
+import at.petrak.hexcasting.api.utils.HexUtils.serializeToNBT
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidSpellDatumType
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component

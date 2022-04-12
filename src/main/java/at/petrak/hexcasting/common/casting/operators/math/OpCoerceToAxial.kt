@@ -4,12 +4,9 @@ import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.core.Direction
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.phys.Vec3
-import kotlin.math.acos
 
 object OpCoerceToAxial : ConstManaOperator {
     override val argc: Int

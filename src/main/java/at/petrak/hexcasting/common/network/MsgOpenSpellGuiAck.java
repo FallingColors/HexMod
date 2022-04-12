@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.common.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

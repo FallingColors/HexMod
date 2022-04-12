@@ -1,24 +1,17 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.HexUtils
-import at.petrak.hexcasting.HexUtils.serializeToNBT
+import at.petrak.hexcasting.api.player.FlightAbility
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.lib.HexCapabilities
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgAddMotionAck
-import net.minecraft.core.Direction
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.common.capabilities.ICapabilitySerializable
-import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.event.entity.living.LivingEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.network.PacketDistributor
@@ -53,7 +46,15 @@ object OpFlight : SpellOperator {
                 return
             }
 
-            HexPlayerDataHelper.setFlight(target, FlightAbility(true, time, target.level.dimension(), origin, radius))
+            HexPlayerDataHelper.setFlight(target,
+                FlightAbility(
+                    true,
+                    time,
+                    target.level.dimension(),
+                    origin,
+                    radius
+                )
+            )
 
             target.abilities.mayfly = true
             target.abilities.flying = true
@@ -86,7 +87,15 @@ object OpFlight : SpellOperator {
                     entity.onUpdateAbilities()
                 }
             } else
-                HexPlayerDataHelper.setFlight(entity, FlightAbility(true, flightTime, flight.dimension, flight.origin, flight.radius))
+                HexPlayerDataHelper.setFlight(entity,
+                    FlightAbility(
+                        true,
+                        flightTime,
+                        flight.dimension,
+                        flight.origin,
+                        flight.radius
+                    )
+                )
         }
 
     }

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
+import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
 import at.petrak.hexcasting.common.items.magic.*;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.food.FoodProperties;
@@ -90,7 +91,7 @@ public class HexItems {
     }
 
     public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register("uuid_colorizer",
-        () -> new Item(unstackable()));
+        () -> new ItemUUIDColorizer(unstackable()));
 
     // BUFF SANDVICH
     public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register("sub_sandwich",

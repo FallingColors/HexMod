@@ -1,13 +1,24 @@
 package at.petrak.hexcasting.common.items.colorizer;
 
+import at.petrak.hexcasting.api.cap.Colorizer;
+import at.petrak.hexcasting.api.item.ColorizerItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
-public class ItemPrideColorizer extends Item {
+import java.util.UUID;
+
+public class ItemPrideColorizer extends Item implements ColorizerItem {
     private final int idx;
 
     public ItemPrideColorizer(int idx, Properties pProperties) {
         super(pProperties);
         this.idx = idx;
+    }
+
+    @Override
+    public int color(ItemStack stack, UUID owner, float time, Vec3 position) {
+        return Colorizer.morphBetweenColors(getColors(), new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
     }
 
     public int[] getColors() {

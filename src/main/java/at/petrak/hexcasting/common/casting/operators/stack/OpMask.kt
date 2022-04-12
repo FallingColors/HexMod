@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.stack
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.CastingContext
 import it.unimi.dsi.fastutil.booleans.BooleanList
 
 class OpMask(val mask: BooleanList) : ConstManaOperator {

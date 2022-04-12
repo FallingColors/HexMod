@@ -10,6 +10,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -22,7 +24,8 @@ import java.util.concurrent.ConcurrentMap;
  * <p>
  * Client-side only.
  */
-public class ScryingLensOverlayRegistry {
+@OnlyIn(Dist.CLIENT)
+public final class ScryingLensOverlayRegistry {
     private static final ConcurrentMap<ResourceLocation, Displayer> ID_LOOKUP = new ConcurrentHashMap<>();
     // vectors are thread-safe!
     private static final List<Pair<Predicate, Displayer>> PREDICATE_LOOKUP = new Vector<>();

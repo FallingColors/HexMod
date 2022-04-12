@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.spell
 
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
-import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import net.minecraft.world.phys.Vec3
 
 /**

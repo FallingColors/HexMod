@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.item.DataHolder;
+import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.casting.Widget;
+import at.petrak.hexcasting.api.spell.Widget;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ItemFocus extends Item implements DataHolder {
+public class ItemFocus extends Item implements DataHolderItem {
     public static final ResourceLocation DATATYPE_PRED = new ResourceLocation(HexMod.MOD_ID, "datatype");
     public static final String TAG_DATA = "data";
     public static final String TAG_SEALED = "sealed";
@@ -63,6 +63,6 @@ public class ItemFocus extends Item implements DataHolder {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
-        DataHolder.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
+        DataHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }
 }

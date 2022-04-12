@@ -2,8 +2,8 @@ package at.petrak.hexcasting.common.casting.operators.math.logic
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.Widget
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.Widget
 
 object OpOr : ConstManaOperator {
     override val argc = 2

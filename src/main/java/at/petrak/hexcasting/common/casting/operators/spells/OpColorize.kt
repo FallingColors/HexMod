@@ -4,14 +4,10 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.colors.FrozenColorizer
-import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
-import at.petrak.hexcasting.common.lib.HexCapabilities
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
-import at.petrak.hexcasting.common.network.HexMessages
-import at.petrak.hexcasting.common.network.MsgColorizerUpdateAck
-import net.minecraftforge.network.PacketDistributor
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 
 object OpColorize : SpellOperator {
     override val argc = 0
@@ -20,8 +16,8 @@ object OpColorize : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val (handStack, hand) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
-        if (!FrozenColorizer.isColorizer(handStack.item)) {
+        val (handStack, hand) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it) }
+        if (!FrozenColorizer.isColorizer(handStack)) {
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,
@@ -37,11 +33,12 @@ object OpColorize : SpellOperator {
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val (handStack) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it.item) }
-            if (FrozenColorizer.isColorizer(handStack.item)) {
-                val item = handStack.item
+            val (handStack) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it) }
+            if (FrozenColorizer.isColorizer(handStack)) {
                 if (ctx.withdrawItem(handStack.item, 1, true)) {
-                    HexPlayerDataHelper.setColorizer(ctx.caster, FrozenColorizer(item, ctx.caster.uuid))
+                    HexPlayerDataHelper.setColorizer(ctx.caster,
+                        FrozenColorizer(handStack, ctx.caster.uuid)
+                    )
                 }
             }
         }

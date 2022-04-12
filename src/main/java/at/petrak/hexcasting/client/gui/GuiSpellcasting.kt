@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.client.gui
 
-import at.petrak.hexcasting.HexUtils
-import at.petrak.hexcasting.HexUtils.TAU
+import at.petrak.hexcasting.api.utils.HexUtils
+import at.petrak.hexcasting.api.utils.HexUtils.TAU
 import at.petrak.hexcasting.client.RenderLib
 import at.petrak.hexcasting.client.sound.GridSoundInstance
-import at.petrak.hexcasting.common.casting.ControllerInfo
-import at.petrak.hexcasting.common.casting.ResolvedPattern
-import at.petrak.hexcasting.common.casting.ResolvedPatternValidity
+import at.petrak.hexcasting.api.spell.casting.ControllerInfo
+import at.petrak.hexcasting.api.spell.casting.ResolvedPattern
+import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.items.ItemWand
@@ -14,20 +14,16 @@ import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn
-import at.petrak.hexcasting.hexmath.HexAngle
-import at.petrak.hexcasting.hexmath.HexCoord
-import at.petrak.hexcasting.hexmath.HexDir
-import at.petrak.hexcasting.hexmath.HexPattern
+import at.petrak.hexcasting.api.spell.math.HexAngle
+import at.petrak.hexcasting.api.spell.math.HexCoord
+import at.petrak.hexcasting.api.spell.math.HexDir
+import at.petrak.hexcasting.api.spell.math.HexPattern
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
-import net.minecraft.client.resources.sounds.AbstractSoundInstance
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
-import net.minecraft.client.resources.sounds.SoundInstance
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.sounds.SoundSource
@@ -36,8 +32,6 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
 import kotlin.math.atan2
 import kotlin.math.roundToInt
-
-const val SQRT_3 = 1.7320508f
 
 class GuiSpellcasting(private val handOpenedWith: InteractionHand,
                       private var patterns: MutableList<ResolvedPattern>,
@@ -355,8 +349,8 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
 
     fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)
 
-    fun coordToPx(coord: HexCoord) = RenderLib.coordToPx(coord, this.hexSize(), this.coordsOffset())
-    fun pxToCoord(px: Vec2) = RenderLib.pxToCoord(px, this.hexSize(), this.coordsOffset())
+    fun coordToPx(coord: HexCoord) = HexUtils.coordToPx(coord, this.hexSize(), this.coordsOffset())
+    fun pxToCoord(px: Vec2) = HexUtils.pxToCoord(px, this.hexSize(), this.coordsOffset())
 
 
     private sealed class PatternDrawState {

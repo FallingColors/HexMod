@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.interop.patchouli;
 
-import at.petrak.hexcasting.hexmath.HexCoord;
-import at.petrak.hexcasting.hexmath.HexDir;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexCoord;
+import at.petrak.hexcasting.api.spell.math.HexDir;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;

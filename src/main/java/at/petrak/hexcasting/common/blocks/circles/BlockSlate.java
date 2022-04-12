@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.blocks.circles;
 import at.petrak.hexcasting.api.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;

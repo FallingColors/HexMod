@@ -1,17 +1,14 @@
 package at.petrak.hexcasting.api
 
-import at.petrak.hexcasting.HexMod
 import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidPattern
-import at.petrak.hexcasting.hexmath.EulerPathFinder
-import at.petrak.hexcasting.hexmath.HexDir
-import at.petrak.hexcasting.hexmath.HexPattern
+import at.petrak.hexcasting.api.spell.math.EulerPathFinder
+import at.petrak.hexcasting.api.spell.math.HexDir
+import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidPattern
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.saveddata.SavedData
-import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.ConcurrentMap
@@ -215,12 +212,7 @@ object PatternRegistry {
     private const val TAG_OP_ID = "op_id"
     private const val TAG_START_DIR = "start_dir"
 
-    @SubscribeEvent
-    fun printPatternCount(evt: FMLLoadCompleteEvent) {
-        HexMod.getLogger().info(
-            "Loaded ${this.regularPatternLookup.size} regular patterns, " +
-                    "${this.perWorldPatternLookup.size} per-world patterns, and " +
-                    "${this.specialHandlers.size} special handlers."
-        )
-    }
+    fun getPatternCountInfo(): String = "Loaded ${regularPatternLookup.size} regular patterns, " +
+            "${perWorldPatternLookup.size} per-world patterns, and " +
+            "${specialHandlers.size} special handlers."
 }

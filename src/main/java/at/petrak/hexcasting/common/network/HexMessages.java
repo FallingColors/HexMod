@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.mod.HexApiMessages;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -41,5 +42,7 @@ public class HexMessages {
                 MsgOpenSpellGuiAck::deserialize, MsgOpenSpellGuiAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgBeepAck.class, MsgBeepAck::serialize,
                 MsgBeepAck::deserialize, MsgBeepAck::handle);
+
+        HexApiMessages.setSyncChannel(NETWORK, MsgSentinelStatusUpdateAck::new, MsgColorizerUpdateAck::new, MsgCastParticleAck::new);
     }
 }

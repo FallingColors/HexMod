@@ -1,15 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.item.DataHolder
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
-import at.petrak.hexcasting.common.casting.mishaps.MishapOthersName
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.Items
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.cap.HexCapabilities
+import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpWrite : SpellOperator {
@@ -21,15 +19,16 @@ object OpWrite : SpellOperator {
         val datum = args[0]
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val item = it.item
-            if (item is DataHolder) {
-                item.canWrite(it, datum)
-            } else false
+            val datumHolder = it.getCapability(HexCapabilities.DATUM).resolve()
+
+            datumHolder.isPresent && datumHolder.get().writeDatum(datum, true)
         }
 
-        val handItem = handStack.item as? DataHolder ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
+        val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
+        if (!datumHolder.isPresent)
+            throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
 
-        if (!handItem.canWrite(handStack, datum))
+        if (!datumHolder.get().writeDatum(datum, true))
             throw MishapBadOffhandItem.of(handStack, hand, "iota.readonly", datum.display())
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
@@ -46,15 +45,15 @@ object OpWrite : SpellOperator {
     private data class Spell(val datum: SpellDatum<*>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn {
-                val item = it.item
-                if (item is DataHolder) {
-                    item.canWrite(it, datum)
-                } else false
-            }
-            val handItem = handStack.item
+                val datumHolder = it.getCapability(HexCapabilities.DATUM).resolve()
 
-            if (handItem is DataHolder) {
-                handItem.writeDatum(handStack, datum)
+                datumHolder.isPresent && datumHolder.get().writeDatum(datum, true)
+            }
+
+            val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
+
+            if (datumHolder.isPresent) {
+                datumHolder.get().writeDatum(datum, false)
             }
         }
 

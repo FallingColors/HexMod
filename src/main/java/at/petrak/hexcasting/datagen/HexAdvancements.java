@@ -1,12 +1,11 @@
 package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.common.advancement.FailToCastGreatSpellTrigger;
-import at.petrak.hexcasting.common.advancement.OvercastTrigger;
-import at.petrak.hexcasting.common.advancement.SpendManaTrigger;
+import at.petrak.hexcasting.api.advancements.FailToCastGreatSpellTrigger;
+import at.petrak.hexcasting.api.advancements.OvercastTrigger;
+import at.petrak.hexcasting.api.advancements.SpendManaTrigger;
 import at.petrak.hexcasting.common.items.HexItems;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.*;
@@ -23,10 +22,6 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import java.util.function.Consumer;
 
 public class HexAdvancements extends AdvancementProvider {
-    public static final OvercastTrigger OVERCAST_TRIGGER = new OvercastTrigger();
-    public static final SpendManaTrigger SPEND_MANA_TRIGGER = new SpendManaTrigger();
-    public static final FailToCastGreatSpellTrigger FAIL_GREAT_SPELL_TRIGGER = new FailToCastGreatSpellTrigger();
-
     public HexAdvancements(DataGenerator generatorIn, ExistingFileHelper fileHelperIn) {
         super(generatorIn, fileHelperIn);
     }
@@ -102,12 +97,6 @@ public class HexAdvancements extends AdvancementProvider {
             .save(consumer, prefix("enlightenment"));
 
 //        super.registerAdvancements(consumer, fileHelper);
-    }
-
-    public static void registerTriggers() {
-        CriteriaTriggers.register(OVERCAST_TRIGGER);
-        CriteriaTriggers.register(SPEND_MANA_TRIGGER);
-        CriteriaTriggers.register(FAIL_GREAT_SPELL_TRIGGER);
     }
 
     protected static DisplayInfo simple(ItemLike icon, String name, FrameType frameType) {

@@ -5,10 +5,10 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.ManaHelper
-import at.petrak.hexcasting.common.casting.mishaps.MishapBadItem
-import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.utils.ManaHelper
+import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
+import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import net.minecraft.world.entity.item.ItemEntity

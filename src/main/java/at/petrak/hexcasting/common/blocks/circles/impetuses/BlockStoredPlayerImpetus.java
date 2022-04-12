@@ -1,14 +1,16 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.api.item.DataHolder;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.DatumType;
+import at.petrak.hexcasting.api.cap.HexCapabilities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -33,19 +35,22 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
         BlockHitResult pHit) {
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
             var usedStack = pPlayer.getItemInHand(pHand);
-            if (usedStack.getItem() instanceof DataHolder dataer) {
-                var stored = dataer.readDatumTag(usedStack);
-                if (stored != null && stored.contains(SpellDatum.TAG_ENTITY)) {
-                    var uuid = stored.getCompound(SpellDatum.TAG_ENTITY).getUUID(SpellDatum.TAG_ENTITY_UUID);
-                    if (pLevel.getPlayerByUUID(uuid) != null) {
-                        // phew, we got something
-                        tile.setPlayer(uuid);
+            var datumContainer = usedStack.getCapability(HexCapabilities.DATUM).resolve();
+            if (datumContainer.isPresent()) {
+                if (pLevel instanceof ServerLevel level) {
+                    var stored = datumContainer.get().readDatum(level);
+                    if (stored != null && stored.getType() == DatumType.ENTITY) {
+                        var entity = (Entity) stored.getPayload();
+                        if (entity instanceof Player) {
+                            // phew, we got something
+                            tile.setPlayer(entity.getUUID());
 
-                        pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING.get(), SoundSource.BLOCKS,
-                            1f, 1f);
-                        return InteractionResult.SUCCESS;
+                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING.get(), SoundSource.BLOCKS,
+                                    1f, 1f);
+                        }
                     }
                 }
+                return InteractionResult.SUCCESS;
             }
         }
 

@@ -4,13 +4,10 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.mishaps.MishapLocationInWrongDimension
-import at.petrak.hexcasting.common.lib.HexCapabilities
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
-import at.petrak.hexcasting.common.network.HexMessages
-import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck
-import net.minecraftforge.network.PacketDistributor
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.mishaps.MishapLocationInWrongDimension
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper
+import at.petrak.hexcasting.api.player.Sentinel
 
 object OpDestroySentinel : SpellOperator {
     override val argc = 0

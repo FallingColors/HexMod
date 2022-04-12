@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.interop.patchouli;
 
 import at.petrak.hexcasting.api.PatternRegistry;
-import at.petrak.hexcasting.hexmath.HexCoord;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexCoord;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import com.google.gson.annotations.SerializedName;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;

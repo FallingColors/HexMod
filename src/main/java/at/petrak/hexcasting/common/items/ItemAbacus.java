@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.DataHolder;
+import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ItemAbacus extends Item implements DataHolder {
+public class ItemAbacus extends Item implements DataHolderItem {
     public static final String TAG_VALUE = "value";
 
     public ItemAbacus(Properties pProperties) {
@@ -77,6 +77,6 @@ public class ItemAbacus extends Item implements DataHolder {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
-        DataHolder.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
+        DataHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }
 }

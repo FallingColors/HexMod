@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.command;
 
 import at.petrak.hexcasting.api.PatternRegistry;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;

@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.Sentinel;
+import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper;
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;

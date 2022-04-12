@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.item.DataHolder;
+import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.casting.Widget;
+import at.petrak.hexcasting.api.spell.Widget;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ItemSpellbook extends Item implements DataHolder {
+public class ItemSpellbook extends Item implements DataHolderItem {
     public static final ResourceLocation DATATYPE_PRED = new ResourceLocation(HexMod.MOD_ID, "datatype");
 
     public static String TAG_SELECTED_PAGE = "page_idx";
@@ -56,7 +56,7 @@ public class ItemSpellbook extends Item implements DataHolder {
             tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
         }
 
-        DataHolder.appendHoverText(this, stack, tooltip, isAdvanced);
+        DataHolderItem.appendHoverText(this, stack, tooltip, isAdvanced);
 
         super.appendHoverText(stack, level, tooltip, isAdvanced);
     }

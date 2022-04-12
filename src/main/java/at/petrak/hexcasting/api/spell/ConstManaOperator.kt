@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.spell
 
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.OperatorSideEffect
-import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
+import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 
 /**
  * A SimpleOperator that always costs the same amount of mana.

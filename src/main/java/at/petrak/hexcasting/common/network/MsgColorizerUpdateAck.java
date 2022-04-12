@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.common.casting.colors.FrozenColorizer;
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;

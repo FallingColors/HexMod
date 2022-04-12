@@ -4,12 +4,12 @@ import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.CastingHarness
-import at.petrak.hexcasting.common.casting.OperatorSideEffect
-import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
-import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
-import at.petrak.hexcasting.hexmath.HexPattern
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.CastingHarness
+import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
+import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.spell.math.HexPattern
 import net.minecraft.network.chat.TranslatableComponent
 
 object OpForEach : Operator {

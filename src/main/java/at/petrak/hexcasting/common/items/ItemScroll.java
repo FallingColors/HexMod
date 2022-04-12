@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.item.DataHolder;
+import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
  * <br>
  * TAG_OP_ID: invalid
  */
-public class ItemScroll extends Item implements DataHolder {
+public class ItemScroll extends Item implements DataHolderItem {
     public static final String TAG_OP_ID = "op_id";
     public static final String TAG_PATTERN = "pattern";
     public static final ResourceLocation ANCIENT_PREDICATE = new ResourceLocation(HexMod.MOD_ID, "ancient");

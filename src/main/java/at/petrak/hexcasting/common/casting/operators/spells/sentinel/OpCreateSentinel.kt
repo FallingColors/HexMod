@@ -5,13 +5,10 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.lib.HexCapabilities
-import at.petrak.hexcasting.common.lib.HexPlayerDataHelper
-import at.petrak.hexcasting.common.network.HexMessages
-import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper
+import at.petrak.hexcasting.api.player.Sentinel
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.network.PacketDistributor
 
 class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
     override val argc = 1
@@ -33,7 +30,14 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
 
     private data class Spell(val target: Vec3, val extendsRange: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            HexPlayerDataHelper.setSentinel(ctx.caster, Sentinel(true, extendsRange, target, ctx.world.dimension()))
+            HexPlayerDataHelper.setSentinel(ctx.caster,
+                Sentinel(
+                    true,
+                    extendsRange,
+                    target,
+                    ctx.world.dimension()
+                )
+            )
         }
     }
 }

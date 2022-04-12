@@ -1,20 +1,18 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.item.SpellHolder
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastingContext
-import at.petrak.hexcasting.common.casting.ManaHelper
-import at.petrak.hexcasting.common.casting.mishaps.MishapBadItem
-import at.petrak.hexcasting.common.casting.mishaps.MishapBadOffhandItem
-import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.cap.HexCapabilities
+import at.petrak.hexcasting.api.utils.ManaHelper
+import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
+import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
-import at.petrak.hexcasting.hexmath.HexPattern
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.entity.item.ItemEntity
 
@@ -51,15 +49,15 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
-            val handItem = handStack.item
-            if (handItem is SpellHolder
-                && handItem.getPatterns(handStack) == null
+            val spellHolder = handStack.getCapability(HexCapabilities.SPELL).resolve()
+            if (spellHolder.isPresent
+                && spellHolder.get().patterns != null
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
                 val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
-                    handItem.writePattern(handStack, patterns, manaAmt)
+                    spellHolder.get().writePatterns(patterns, manaAmt)
                 }
 
                 itemEntity.item = entityStack

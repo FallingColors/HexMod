@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.item.SpellHolder;
-import at.petrak.hexcasting.common.casting.CastingContext;
-import at.petrak.hexcasting.common.casting.CastingHarness;
+import at.petrak.hexcasting.api.item.SpellHolderItem;
+import at.petrak.hexcasting.api.spell.casting.CastingContext;
+import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import at.petrak.hexcasting.hexmath.HexPattern;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Item that holds a list of patterns in it ready to be cast
  */
-public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellHolder {
+public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellHolderItem {
     public static final String TAG_PATTERNS = "patterns";
     public static final ResourceLocation HAS_PATTERNS_PRED = new ResourceLocation(HexMod.MOD_ID, "has_patterns");
 
@@ -60,7 +60,7 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
     }
 
     @Override
-    public void writePattern(ItemStack stack, List<HexPattern> patterns, int mana) {
+    public void writePatterns(ItemStack stack, List<HexPattern> patterns, int mana) {
         ListTag patsTag = new ListTag();
         for (HexPattern pat : patterns)
             patsTag.add(pat.serializeToNBT());

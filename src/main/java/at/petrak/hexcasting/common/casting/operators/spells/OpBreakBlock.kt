@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.HexConfig
+import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.common.TierSortingRegistry
