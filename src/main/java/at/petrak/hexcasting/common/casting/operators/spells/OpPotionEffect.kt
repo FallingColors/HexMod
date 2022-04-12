@@ -6,9 +6,11 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.casting.CastingContext
+import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.decoration.ArmorStand
 import kotlin.math.max
 
 class OpPotionEffect(
@@ -27,6 +29,8 @@ class OpPotionEffect(
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<LivingEntity>(0)
+        if (target is ArmorStand)
+            throw MishapInvalidIota.ofClass(SpellDatum.make(target), 0, LivingEntity::class.java)
         val duration = max(args.getChecked(1), 0.0)
         ctx.assertEntityInRange(target)
         val potency = if (this.allowPotency)
