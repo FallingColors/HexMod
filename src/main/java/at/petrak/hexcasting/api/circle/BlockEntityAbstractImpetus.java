@@ -506,7 +506,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         @NotNull
         @Override
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            var manamount = ManaHelper.extractMana(stack, -1, false, simulate);
+            var manamount = ManaHelper.extractMana(stack, -1, true, simulate);
             if (manamount > 0) {
                 if (!simulate) {
                     BlockEntityAbstractImpetus.this.mana += manamount;
