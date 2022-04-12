@@ -106,7 +106,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         var datumTag = HexItems.ABACUS.get().readDatumTag(stack);
         if (datumTag != null) {
             var popup = SpellDatum.DisplayFromTag(datumTag);
-            sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD), true);
+            sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
         }
     }
 }

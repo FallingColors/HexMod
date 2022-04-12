@@ -94,7 +94,7 @@
   "hexcasting.tooltip.abacus": "%d",
   "hexcasting.tooltip.abacus.reset": "Reset to 0",
   "hexcasting.tooltip.abacus.reset.nice": "nice",
-  "hexcasting.tooltip.lens.impetus.mana": "%s Dusts",
+  "hexcasting.tooltip.lens.impetus.mana": "%s dust",
   "hexcasting.tooltip.lens.impetus.storedplayer": "Bound to %s",
   "hexcasting.tooltip.lens.impetus.storedplayer.none": "Unbound",
   "hexcasting.tooltip.lens.pattern.invalid": "Invalid Pattern",
