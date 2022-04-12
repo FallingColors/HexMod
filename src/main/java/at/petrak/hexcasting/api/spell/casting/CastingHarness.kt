@@ -362,12 +362,10 @@ class CastingHarness private constructor(
         @JvmStatic
         fun DeserializeFromNBT(nbt: Tag, ctx: CastingContext): CastingHarness {
             return try {
-                val nbt = nbt as CompoundTag
-
                 val stack = mutableListOf<SpellDatum<*>>()
-                val stackTag = nbt.getList(TAG_STACK, Tag.TAG_COMPOUND.toInt())
+                val stackTag = (nbt as CompoundTag).getList(TAG_STACK, Tag.TAG_COMPOUND.toInt())
                 for (subtag in stackTag) {
-                    val datum = SpellDatum.DeserializeFromNBT(subtag as CompoundTag, ctx)
+                    val datum = SpellDatum.DeserializeFromNBT(subtag as CompoundTag, ctx.world)
                     stack.add(datum)
                 }
 
