@@ -477,7 +477,7 @@
 
   "hexcasting.entry.lens": "Scrying Lens",
   "hexcasting.page.lens.1": "_Media can have peculiar effects on any type of information, in specific circumstances. Coating a glass in a thin film of it can lead to ... elucidating insights.$(br2)By holding a $(item)Scrying Lens/$ in my hand, certain blocks will display additional information when I look at them.",
-  "hexcasting.page.lens.2": "For example, looking at a piece of $(item)Redstone/$ will display its signal strength. I suspect I will discover other blocks with additional insight as my studies into my art progress.$(br2)In addition, holding it while casting using a $(item)Staff/$ will shrink the spacing between dots, allowing me to draw more on my grid.",
+  "hexcasting.page.lens.2": "For example, looking at a piece of $(item)Redstone/$ will display its signal strength. I suspect I will discover other blocks with additional insight as my studies into my art progress.$(br2)In addition, holding it while casting using a $(item)Staff/$ will shrink the spacing between dots, allowing me to draw more on my grid.$(br2)I can also wear it as a strange sort of monocle. This reveals the additional information, but won't shrink my grid. No matter. There must be a way to have both...",
   "hexcasting.page.lens.3": "$(italic)You must learn... to see what you are looking at./$",
 
   "hexcasting.entry.focus": "Focus",

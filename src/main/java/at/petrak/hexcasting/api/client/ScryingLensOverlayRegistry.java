@@ -63,7 +63,7 @@ public class ScryingLensOverlayRegistry {
      */
     public static @Nullable List<Pair<ItemStack, Component>> getLines(BlockState state, BlockPos pos,
         LocalPlayer observer, ClientLevel world,
-        InteractionHand lensHand) {
+        @Nullable InteractionHand lensHand) {
         var idLookedup = ID_LOOKUP.get(state.getBlock().getRegistryName());
         if (idLookedup != null) {
             return idLookedup.getLines(state, pos, observer, world, lensHand);
@@ -87,7 +87,7 @@ public class ScryingLensOverlayRegistry {
     public interface Displayer {
         List<Pair<ItemStack, Component>> getLines(BlockState state, BlockPos pos, LocalPlayer observer,
             ClientLevel world,
-            InteractionHand lensHand);
+            @Nullable InteractionHand lensHand);
     }
 
     /**
@@ -95,6 +95,6 @@ public class ScryingLensOverlayRegistry {
      */
     @FunctionalInterface
     public interface Predicate {
-        boolean test(BlockState state, BlockPos pos, LocalPlayer observer, ClientLevel world, InteractionHand lensHand);
+        boolean test(BlockState state, BlockPos pos, LocalPlayer observer, ClientLevel world, @Nullable InteractionHand lensHand);
     }
 }

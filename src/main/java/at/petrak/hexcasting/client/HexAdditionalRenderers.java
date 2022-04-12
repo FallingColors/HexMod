@@ -18,6 +18,7 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -150,14 +151,20 @@ public class HexAdditionalRenderers {
     private static void tryRenderScryingLensOverlay(PoseStack ps, float partialTicks) {
         var mc = Minecraft.getInstance();
 
+        boolean foundLens = false;
         InteractionHand lensHand = null;
         for (var hand : InteractionHand.values()) {
             if (mc.player.getItemInHand(hand).is(HexItems.SCRYING_LENS.get())) {
                 lensHand = hand;
+                foundLens = true;
                 break;
             }
         }
-        if (lensHand == null) {
+        if (!foundLens && mc.player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS.get())) {
+            foundLens = true;
+        }
+
+        if (!foundLens) {
             return;
         }
 

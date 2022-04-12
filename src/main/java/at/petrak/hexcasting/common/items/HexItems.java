@@ -52,7 +52,7 @@ public class HexItems {
         () -> new Item(props()));
 
     public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register("lens",
-        () -> new Item(unstackable()));
+        () -> new ItemLens(unstackable()));
     public static final RegistryObject<Item> SCROLL = ITEMS.register("scroll",
         () -> new ItemScroll(props()));
 

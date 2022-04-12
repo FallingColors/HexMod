@@ -43,7 +43,7 @@ public class HexItemModels extends PaucalItemModelProvider {
                 .transforms()
                 .transform(ModelBuilder.Perspective.HEAD)
                 .rotation(0f, 0f, 0f)
-                .translation(-2.5f, 0.5f, -8f)
+                .translation(-2.5f, 0.25f, -8f)
                 .scale(0.4f);
 
         singleTexture(HexItems.WAND.getId().getPath(), new ResourceLocation("item/handheld_rod"),
