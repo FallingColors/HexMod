@@ -25,7 +25,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
     @Override
     protected void registerStatesAndModels() {
         var slateModel = models().getExistingFile(modLoc("slate"));
-        getVariantBuilder(HexBlocks.SLATE.get()).forAllStates(bs -> {
+        getVariantBuilder(HexBlocks.SLATE.get()).forAllStatesExcept(bs -> {
             int rotationX = 0;
             int rotationY = 0;
             switch (bs.getValue(BlockSlate.ATTACH_FACE)) {
@@ -41,7 +41,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .rotationY(rotationY)
                 .uvLock(true)
                 .build();
-        });
+        }, BlockSlate.WATERLOGGED);
 
         impetus(HexBlocks.IMPETUS_RIGHTCLICK.get(), "impetus_rightclick", "rightclick");
         impetus(HexBlocks.IMPETUS_LOOK.get(), "impetus_look", "look");
