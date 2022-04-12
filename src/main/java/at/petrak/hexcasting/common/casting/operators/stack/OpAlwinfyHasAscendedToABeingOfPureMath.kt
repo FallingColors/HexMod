@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import net.minecraft.network.chat.TranslatableComponent
+import net.minecraft.util.Mth
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -50,9 +51,11 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
             editTarget = editTarget.subList(1, editTarget.size)
         }
 
+        val cost = Mth.sqrt((strides.lastOrNull() ?: 0).toFloat()).toInt()
+
         return OperationResult(
             stack,
-            listOf(OperatorSideEffect.ConsumeMana(code / 10))
+            listOf(OperatorSideEffect.ConsumeMana(cost))
         )
     }
 
