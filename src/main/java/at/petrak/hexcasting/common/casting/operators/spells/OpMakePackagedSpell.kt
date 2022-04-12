@@ -53,7 +53,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
             val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
             val handItem = handStack.item
             if (handItem is SpellHolder
-                && handItem.getPatterns(handStack) != null
+                && handItem.getPatterns(handStack) == null
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
