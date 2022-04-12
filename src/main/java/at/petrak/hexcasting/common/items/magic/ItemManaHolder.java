@@ -85,7 +85,7 @@ public abstract class ItemManaHolder extends Item implements ManaHolder {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
-        if (pIsAdvanced.isAdvanced()) {
+        if (pIsAdvanced.isAdvanced() && getMaxMana(pStack) > 0) {
             pTooltipComponents.add(
                 new TranslatableComponent("item.hexcasting.manaholder.amount",
                     String.format("%,d", getMana(pStack)),

@@ -28,14 +28,19 @@ public class ItemFocus extends Item implements DataHolder {
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
         if (!stack.hasTag()) {
-            return SpellDatum.make(Widget.NULL).serializeToNBT();
+            return null;
         }
         var tag = stack.getTag();
         if (!tag.contains(TAG_DATA, Tag.TAG_COMPOUND)) {
-            return SpellDatum.make(Widget.NULL).serializeToNBT();
+            return null;
         }
 
         return tag.getCompound(TAG_DATA);
+    }
+
+    @Override
+    public @Nullable SpellDatum<?> emptyDatum(ItemStack stack) {
+        return SpellDatum.make(Widget.NULL);
     }
 
     @Override

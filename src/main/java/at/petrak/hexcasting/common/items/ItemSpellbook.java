@@ -43,7 +43,6 @@ public class ItemSpellbook extends Item implements DataHolder {
         var tag = stack.getOrCreateTag();
         if (tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
             var pageIdx = tag.getInt(TAG_SELECTED_PAGE);
-            var pages = tag.getCompound(ItemSpellbook.TAG_PAGES);
             int highest = HighestPage(stack);
             if (highest != 0) {
                 tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page",
@@ -98,7 +97,7 @@ public class ItemSpellbook extends Item implements DataHolder {
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
         if (!stack.hasTag()) {
-            return SpellDatum.make(Widget.NULL).serializeToNBT();
+            return null;
         }
         var tag = stack.getTag();
 
@@ -114,11 +113,16 @@ public class ItemSpellbook extends Item implements DataHolder {
             if (pagesTag.contains(key)) {
                 return pagesTag.getCompound(key);
             } else {
-                return SpellDatum.make(Widget.NULL).serializeToNBT();
+                return null;
             }
         } else {
-            return SpellDatum.make(Widget.NULL).serializeToNBT();
+            return null;
         }
+    }
+
+    @Override
+    public @Nullable SpellDatum<?> emptyDatum(ItemStack stack) {
+        return SpellDatum.make(Widget.NULL);
     }
 
     @Override

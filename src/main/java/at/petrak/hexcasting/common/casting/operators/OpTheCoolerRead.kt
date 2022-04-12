@@ -25,7 +25,9 @@ object OpTheCoolerRead : ConstManaOperator {
         ctx.assertEntityInRange(target)
 
 
-        val datum = item.readDatum(stack, ctx.world) ?: throw MishapBadItem.of(stack, "iota.read")
+        val datum = item.readDatum(stack, ctx.world)
+            ?: item.emptyDatum(stack)
+            ?: throw MishapBadItem.of(stack, "iota.read")
         return listOf(datum)
     }
 }

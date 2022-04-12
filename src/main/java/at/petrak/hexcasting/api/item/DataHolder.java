@@ -30,6 +30,11 @@ public interface DataHolder {
         }
     }
 
+    @Nullable
+    default SpellDatum<?> emptyDatum(ItemStack stack) {
+        return null;
+    }
+
     boolean canWrite(ItemStack stack, @Nullable SpellDatum<?> datum);
 
     void writeDatum(ItemStack stack, @Nullable SpellDatum<?> datum);
