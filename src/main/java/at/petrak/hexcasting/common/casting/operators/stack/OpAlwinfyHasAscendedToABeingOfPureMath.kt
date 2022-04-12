@@ -10,8 +10,8 @@ import at.petrak.hexcasting.common.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.common.casting.mishaps.MishapNotEnoughArgs
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import net.minecraft.network.chat.TranslatableComponent
-import net.minecraft.util.Mth
 import kotlin.math.abs
+import kotlin.math.ln
 import kotlin.math.roundToInt
 
 // "lehmer code"
@@ -51,7 +51,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
             editTarget = editTarget.subList(1, editTarget.size)
         }
 
-        val cost = Mth.sqrt((strides.lastOrNull() ?: 0).toFloat()).toInt()
+        val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * 10000).toInt()
 
         return OperationResult(
             stack,
