@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
+import at.petrak.hexcasting.api.item.CasterItem
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.misc.FrozenColorizer
@@ -15,12 +16,12 @@ class MishapLocationTooFarAway(val location: Vec3) : Mishap() {
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
         // Knock the player's items out of their hands
-        val items = listOf(
-            ctx.caster.mainHandItem.copy(),
-            ctx.caster.offhandItem.copy()
-        )
+        val items = mutableListOf<ItemStack>()
         for (hand in InteractionHand.values()) {
-            ctx.caster.setItemInHand(hand, ItemStack.EMPTY.copy())
+            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).item !is CasterItem) {
+                items.add(ctx.caster.getItemInHand(hand).copy())
+                ctx.caster.setItemInHand(hand, ItemStack.EMPTY)
+            }
         }
 
         val delta = location.subtract(ctx.position).normalize().scale(0.5)
