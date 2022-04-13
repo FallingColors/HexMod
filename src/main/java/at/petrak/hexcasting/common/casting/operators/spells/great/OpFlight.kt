@@ -8,13 +8,10 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.player.HexPlayerDataHelper
-import at.petrak.hexcasting.common.network.HexMessages
-import at.petrak.hexcasting.common.network.MsgAddMotionAck
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.event.entity.living.LivingEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.network.PacketDistributor
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -60,8 +57,7 @@ object OpFlight : SpellOperator {
             target.abilities.flying = true
             target.onUpdateAbilities()
             // Launch the player into the air to really emphasize the flight
-            HexMessages.getNetwork()
-                .send(PacketDistributor.PLAYER.with { target }, MsgAddMotionAck(Vec3(0.0, 1.0, 0.0)))
+            target.push(0.0, 1.0, 0.0)
         }
     }
 
