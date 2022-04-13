@@ -27,6 +27,7 @@ object OpAddMotion : SpellOperator {
         var motionForCost = motion.lengthSqr()
         if (ctx.hasBeenGivenMotion(target))
             motionForCost++
+        ctx.markEntityAsMotionAdded(target)
         return Triple(
             Spell(target, motion),
             (motionForCost * 10_000f).toInt(),
@@ -49,7 +50,6 @@ object OpAddMotion : SpellOperator {
                 HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { target }, MsgAddMotionAck(motion))
             }
             target.deltaMovement = target.deltaMovement.add(motion)
-            ctx.markEntityAsMotionAdded(target)
         }
     }
 }
