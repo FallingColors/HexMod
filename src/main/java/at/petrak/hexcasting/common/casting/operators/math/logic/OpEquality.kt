@@ -14,12 +14,22 @@ class OpEquality(val invert: Boolean) : ConstManaOperator {
         val lhs = args[0]
         val rhs = args[1]
 
-        return spellListOf(if (when {
-            lhs.payload is Double && rhs.payload is Double ->
-                abs(lhs.payload - rhs.payload) < 0.0001
-            lhs.payload is Vec3 && rhs.payload is Vec3 ->
-                abs(lhs.payload.x - rhs.payload.x) < 0.0001 && abs(lhs.payload.y - rhs.payload.y) < 0.0001 && abs(lhs.payload.z - rhs.payload.z) < 0.0001
-            else -> lhs == rhs
-        } != invert) 1.0 else 0.0)
+        return spellListOf(if (checkEquals(lhs.payload, rhs.payload) != invert) 1.0 else 0.0)
+    }
+
+    private fun checkEquals(a: Any, b: Any, recursionsLeft: Int = 64): Boolean {
+        return when {
+            a is Double && b is Double -> abs(a - b) < 0.0001
+            a is Vec3 && b is Vec3 -> a.subtract(b).lengthSqr() < 0.0000001
+            a is List<*> && b is List<*> -> {
+                if (a.size != b.size || recursionsLeft == 0)
+                    return false
+                for (i in a.indices)
+                    if (!checkEquals((a[i] as SpellDatum<*>).payload, (b[i] as SpellDatum<*>).payload, recursionsLeft - 1))
+                        return false
+                true
+            }
+            else -> a == b
+        }
     }
 }
