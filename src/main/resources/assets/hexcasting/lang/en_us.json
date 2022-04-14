@@ -202,7 +202,7 @@
   "hexcasting.spell.hexcasting:undo": "Novice's Gambit",
   "hexcasting.spell.hexcasting:const/null": "Nullary Reflection",
   "hexcasting.spell.hexcasting:duplicate": "Gemini Decomposition",
-  "hexcasting.spell.hexcasting:duplicate_n": "Gemini Gambit",
+  "hexcasting.spell.hexcasting:duplicate_n": "Gemini's Gambit",
   "hexcasting.spell.hexcasting:swap": "Jester's Gambit",
   "hexcasting.spell.hexcasting:fisherman": "Fisherman's Gambit",
   "hexcasting.spell.hexcasting:swizzle": "Swindler's Gambit",
@@ -418,7 +418,7 @@
 
   "hexcasting.entry.101": "Hexing 101",
   "hexcasting.page.101.1": "Casting a _Hex is quite difficult-- no wonder this art was lost to time! I'll have to re-read my notes carefully.$(br2)I can start a _Hex by pressing $(k:use) with a $(item)Staff/$ in my hand-- this will cause a hexagonal grid of dots to appear in front of me. Then I can click and drag from dot to dot to draw patterns in the _media of the grid; finishing a pattern will run its corresponding action (more on that later).",
-  "hexcasting.page.101.2": "Once I've drawn enough patterns to cast a spell, the grid will disappear as the _media I've stored up is released. I can also press Escape if I want to quit early, if I don't mind the chance of a small mishap. (It seems that the more _media I've built up, the more likely I'll meet misfortune.)$(br2)So how do patterns work? In short:$(li)$(italic)Patterns/$ will execute...$(li)$(italic)Actions/$, which manipulate...$(li)$(italic)The Stack/$, which is a list of...$(li)$(italic)Iotas/$, which are simply units of information.",
+  "hexcasting.page.101.2": "Once I've drawn enough patterns to cast a spell, the grid will disappear as the _media I've stored up is released. Holding $(k:sneak) while using my staff will also clear the grid, if I don't mind the chance of mishap. (It seems that the more _media I've built up, the more likely I'll meet misfortune.)$(br2)So how do patterns work? In short:$(li)$(italic)Patterns/$ will execute...$(li)$(italic)Actions/$, which manipulate...$(li)$(italic)The Stack/$, which is a list of...$(li)$(italic)Iotas/$, which are simply units of information.",
   "hexcasting.page.101.3": "First, $(thing)patterns/$. These are essential-- they're what I use to manipulate the _media around me. Certain patterns, when drawn, will cause $(thing)actions/$ to happen. Actions are what actually $(italic)do/$ the magic; all patterns influence _media in particular ways, and when those influences end up doing something useful, we call it an action.$(br2)_Media can be fickle: if I draw an invalid pattern, I'll get some garbage result somewhere on my stack (read on...)",
   "hexcasting.page.101.4.header": "An Example",
   "hexcasting.page.101.4": "It's interesting to note that the $(italic)rotation/$ of a pattern doesn't seem to matter at all. These two patterns both perform an action called $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, for example.",
@@ -430,7 +430,7 @@
   "hexcasting.page.101.10": "That aside, it doesn't seem like anyone has done much research on exactly how $(italic)much/$ any particular piece of amethyst is valued. The best I can tell, an $(item)Amethyst Shard/$ is worth about five pieces of $(item)Amethyst Dust/$, and a $(item)Charged Amethyst Crystal/$ is worth about ten.$(br2)Strangely enough, it seems like no other form of amethyst is suitable to be used in the casting of a _Hex. I suspect that whole blocks or crystals are too solid to be easily unraveled into _media.",
   "hexcasting.page.101.11": "It's also worth noting that each action will consume the _media it needs immediately, rather than all at once when the Hex finishes. Also, an action will always consume entire items-- an action that only requires one $(item)Amethyst Dust/$'s worth of _media will consume an entire $(item)Charged Amethyst Crystal/$, if that's all that's present in my inventory.$(br2)Thus, it might be a good idea to bring dust for spellcasting too-- waste not, want not...",
   "hexcasting.page.101.12": "I should also be careful to make sure I actually have enough Amethyst in my inventory-- some old texts say that Nature is happy to use one's own mind as payment instead. They describe the feeling as awful but strangely euphoric, \"[...] an effervescent dissolution into light and energy...\"$(br)Perhaps that's why all the old practitioners of the art went mad. I can't imagine burning pieces of my mind for power is $(italic)healthy/$.",
-  "hexcasting.page.101.13": "Maybe something's changed, though. In my experiments, I've never managed to do it; if I run out of _media, the spell will simply fail to cast, as if some barrier is blocking it from harming me. $(br2)It would be interesting to get to the bottom of the mystery, but for now I suppose it'll keep me safe.",
+  "hexcasting.page.101.13": "Maybe something's changed, though. In my experiments, I've never managed to do it; if I run out of _media, the spell will simply fail to cast, as if some barrier is blocking it from harming me. $(br2)It would be interesting to get to the bottom of that mystery, but for now I suppose it'll keep me safe.",
   "hexcasting.page.101.14": "I have also found an amusing tidbit on why so many practitioners of magic in general seem to go mad, which I may like as some light and flavorful reading not canonical to my world.$(br2)$(italic)Content Warning: some body horror and suggestive elements./$",
   "hexcasting.page.101.14.link_text": "Goblin Punch",
   "hexcasting.page.101.15": "Finally, it seems spells have a maximum range of influence, about 32 blocks from my position. Trying to affect anything outside of that will cause the spell to fail.",
@@ -744,7 +744,7 @@
 
   "hexcasting.entry.akashic_patterns": "Akashic Patterns",
   "hexcasting.page.akashic_patterns.akashic/read": "Read the iota associated with the given pattern out of the akashic library with its record at the given position. This has no range limit. Costs about one $(item)Amethyst Dust/$.",
-  "hexcasting.page.akashic_patterns.akashic/write": "Associate the iota with the given pattern in the akashic library with its record at the given position. Costs about one $(item)Amethyst Dust/$.",
+  "hexcasting.page.akashic_patterns.akashic/write": "Associate the iota with the given pattern in the akashic library with its record at the given position. This $(italic)does/$ have a range limit. Costs about one $(item)Amethyst Dust/$.",
 
   "_comment": "Normal Spells",
 
@@ -792,7 +792,7 @@
   "hexcasting.page.hexcasting_spell.recharge.1": "Recharge a _media-containing item in my other hand. Costs about one $(item)Charged Amethyst/$.",
   "hexcasting.page.hexcasting_spell.recharge.2": "This spell is cast in a similar method to the crafting spells; an entity representing a dropped stack of $(item)Amethyst/$ is provided, and recharges the _media battery of the item in my other hand.$(br2)This spell $(italic)cannot/$ recharge the item farther than its original battery size.",
   "hexcasting.page.hexcasting_spell.erase.1": "Clear a _Hex-containing item in my other hand. Costs about one $(item)Amethyst Dust/$.",
-  "hexcasting.page.hexcasting_spell.erase.2": "The spell will also void all the _media stored inside the item, releasing it back to Nature and returning the item to a perfectly clean slate. This way, I can re-use $(item)Trinket/$s I have put an erroneous spell into, for example.",
+  "hexcasting.page.hexcasting_spell.erase.2": "The spell will also void all the _media stored inside the item, releasing it back to Nature and returning the item to a perfectly clean slate. This way, I can re-use $(item)Trinket/$s I have put an erroneous spell into, for example.$(br2)This also works to clear a $(item)Focus/$ or $(item)Spellbook/$.",
 
   "hexcasting.entry.sentinels": "Sentinels",
   "hexcasting.page.sentinels.1": "$(italic)Hence, away! Now all is well,$(br)One aloof stand sentinel./$$(br2)A $(thing)Sentinel/$ is a mysterious force I can summon to assist in the casting of _Hexes, like a familiar or guardian spirit. It appears as a spinning geometric shape to my eyes, but is invisible to everyone else.",
