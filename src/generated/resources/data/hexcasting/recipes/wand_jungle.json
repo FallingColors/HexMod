@@ -1,22 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " LA",
-    "LSL",
-    "SL "
+    " SA",
+    " WS",
+    "S  "
   ],
   "key": {
-    "L": {
-      "tag": "forge:leather"
+    "W": {
+      "item": "minecraft:jungle_planks"
     },
     "S": {
       "item": "minecraft:stick"
     },
     "A": {
-      "item": "minecraft:amethyst_shard"
+      "item": "hexcasting:charged_amethyst"
     }
   },
   "result": {
-    "item": "hexcasting:wand"
+    "item": "hexcasting:wand_jungle"
   }
 }

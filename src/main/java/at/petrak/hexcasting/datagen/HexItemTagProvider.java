@@ -23,6 +23,9 @@ public class HexItemTagProvider extends ItemTagsProvider {
     protected void addTags() {
         tag(Tags.Items.GEMS).add(HexItems.CHARGED_AMETHYST.get());
         tag(HexItemTags.AMETHYST_DUST).add(HexItems.AMETHYST_DUST.get());
+        tag(HexItemTags.WANDS).add(HexItems.WAND_OAK.get(), HexItems.WAND_SPRUCE.get(), HexItems.WAND_BIRCH.get(),
+            HexItems.WAND_JUNGLE.get(), HexItems.WAND_ACACIA.get(), HexItems.WAND_DARK_OAK.get(),
+            HexItems.WAND_AKASHIC.get());
 
         this.copy(HexBlockTags.AKASHIC_LOGS, HexItemTags.AKASHIC_LOGS);
         this.copy(HexBlockTags.AKASHIC_PLANKS, HexItemTags.AKASHIC_PLANKS);

@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "hexcasting:focus"
+      "hexcasting:wand_birch"
     ]
   },
   "criteria": {
@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "hexcasting:wands"
+            "items": [
+              "hexcasting:charged_amethyst"
+            ]
           }
         ]
       }
@@ -19,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "hexcasting:focus"
+        "recipe": "hexcasting:wand_birch"
       }
     }
   },

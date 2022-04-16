@@ -42,19 +42,39 @@ public class HexRecipes extends PaucalRecipeProvider {
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> recipes) {
         specialRecipe(recipes, SealFocusRecipe.SERIALIZER);
 
-        ShapedRecipeBuilder.shaped(HexItems.WAND.get())
-            .define('L', Tags.Items.LEATHER)
-            .define('S', Items.STICK)
-            .define('A', Items.AMETHYST_SHARD)
-            .pattern(" LA")
-            .pattern("LSL")
-            .pattern("SL ")
-            .unlockedBy("has_item", has(Items.AMETHYST_SHARD))
-            .save(recipes);
+        var wands = new Item[]{
+            HexItems.WAND_OAK.get(),
+            HexItems.WAND_BIRCH.get(),
+            HexItems.WAND_SPRUCE.get(),
+            HexItems.WAND_JUNGLE.get(),
+            HexItems.WAND_DARK_OAK.get(),
+            HexItems.WAND_ACACIA.get(),
+            HexItems.WAND_AKASHIC.get(),
+        };
+        var woods = new Item[]{
+            Items.OAK_PLANKS,
+            Items.BIRCH_PLANKS,
+            Items.SPRUCE_PLANKS,
+            Items.JUNGLE_PLANKS,
+            Items.DARK_OAK_PLANKS,
+            Items.ACACIA_PLANKS,
+            HexBlocks.AKASHIC_PLANKS.get().asItem(),
+        };
+        for (int i = 0; i < wands.length; i++) {
+            ShapedRecipeBuilder.shaped(wands[i])
+                .define('W', woods[i])
+                .define('S', Items.STICK)
+                .define('A', HexItems.CHARGED_AMETHYST.get())
+                .pattern(" SA")
+                .pattern(" WS")
+                .pattern("S  ")
+                .unlockedBy("has_item", has(HexItems.CHARGED_AMETHYST.get()))
+                .save(recipes);
+        }
 
         ringCornered(HexItems.FOCUS.get(), 1, Ingredient.of(Tags.Items.DUSTS_GLOWSTONE),
             Ingredient.of(Tags.Items.LEATHER), Ingredient.of(HexItems.CHARGED_AMETHYST.get()))
-            .unlockedBy("has_item", has(HexItems.WAND.get()))
+            .unlockedBy("has_item", has(HexItemTags.WANDS))
             .save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.SPELLBOOK.get())
@@ -72,12 +92,12 @@ public class HexRecipes extends PaucalRecipeProvider {
         ringCornerless(HexItems.CYPHER.get(), 1,
             Ingredient.of(Tags.Items.INGOTS_COPPER),
             Ingredient.of(HexItems.AMETHYST_DUST.get()))
-            .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
+            .unlockedBy("has_item", has(HexItemTags.WANDS)).save(recipes);
 
         ringCornerless(HexItems.TRINKET.get(), 1,
             Ingredient.of(Tags.Items.INGOTS_IRON),
             Ingredient.of(Items.AMETHYST_SHARD))
-            .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
+            .unlockedBy("has_item", has(HexItemTags.WANDS)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.ARTIFACT.get())
             .define('F', Tags.Items.INGOTS_GOLD)
@@ -87,10 +107,10 @@ public class HexRecipes extends PaucalRecipeProvider {
             .pattern(" F ")
             .pattern("FAF")
             .pattern(" D ")
-            .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
+            .unlockedBy("has_item", has(HexItemTags.WANDS)).save(recipes);
 
-        ring(HexItems.SCRYING_LENS.get(), 1, Items.GLASS, HexItems.AMETHYST_DUST.get())
-            .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
+        ringCornerless(HexItems.SCRYING_LENS.get(), 1, Items.GLASS, HexItems.AMETHYST_DUST.get())
+            .unlockedBy("has_item", has(HexItemTags.WANDS)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.ABACUS.get())
             .define('S', Items.STICK)
@@ -99,7 +119,7 @@ public class HexRecipes extends PaucalRecipeProvider {
             .pattern("WAW")
             .pattern("SAS")
             .pattern("WAW")
-            .unlockedBy("has_item", has(HexItems.WAND.get())).save(recipes);
+            .unlockedBy("has_item", has(HexItemTags.WANDS)).save(recipes);
 
         // Why am I like this
         ShapedRecipeBuilder.shaped(HexItems.SUBMARINE_SANDWICH.get())

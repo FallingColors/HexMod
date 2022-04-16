@@ -40,14 +40,45 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         simpleItem(HexItems.SCRYING_LENS.get());
         getBuilder(HexItems.SCRYING_LENS.get().getRegistryName().getPath())
-                .transforms()
-                .transform(ModelBuilder.Perspective.HEAD)
-                .rotation(0f, 0f, 0f)
-                .translation(-2.5f, 0f, -8f)
-                .scale(0.4f);
+            .transforms()
+            .transform(ModelBuilder.Perspective.HEAD)
+            .rotation(0f, 0f, 0f)
+            .translation(-2.5f, 0f, -8f)
+            .scale(0.4f);
 
-        singleTexture(HexItems.WAND.getId().getPath(), new ResourceLocation("item/handheld_rod"),
-            "layer0", new ResourceLocation(HexMod.MOD_ID, "item/" + HexItems.WAND.getId().getPath()));
+        singleTexture("wand_old", new ResourceLocation("item/handheld_rod"),
+            "layer0", modLoc("item/wands/old"));
+        singleTexture("wand_bosnia", new ResourceLocation("item/handheld_rod"),
+            "layer0", modLoc("item/wands/bosnia"));
+        var wands = new Item[]{
+            HexItems.WAND_OAK.get(),
+            HexItems.WAND_BIRCH.get(),
+            HexItems.WAND_SPRUCE.get(),
+            HexItems.WAND_JUNGLE.get(),
+            HexItems.WAND_DARK_OAK.get(),
+            HexItems.WAND_ACACIA.get(),
+            HexItems.WAND_AKASHIC.get(),
+        };
+        var wandKeys = new String[]{
+            "oak", "birch", "spruce", "jungle", "dark_oak", "acacia", "akashic"
+        };
+        for (int i = 0; i < wands.length; i++) {
+            Item wand = wands[i];
+            String wandKey = wandKeys[i];
+            singleTexture(wand.getRegistryName().getPath(), new ResourceLocation("item/handheld_rod"),
+                "layer0", modLoc("item/wands/" + wandKey));
+            getBuilder(wand.getRegistryName().getPath())
+                .override()
+                .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 0)
+                .model(new ModelFile.UncheckedModelFile(modLoc("wand_" + wandKey)))
+                .end().override()
+                .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 1)
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_old")))
+                .end().override()
+                .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 2)
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_bosnia")))
+                .end();
+        }
 
         simpleItem(modLoc("patchouli_book"));
 

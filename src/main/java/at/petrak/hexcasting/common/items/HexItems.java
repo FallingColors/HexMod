@@ -44,7 +44,19 @@ public class HexItems {
         }
     };
 
-    public static final RegistryObject<ItemWand> WAND = ITEMS.register("wand",
+    public static final RegistryObject<ItemWand> WAND_OAK = ITEMS.register("wand_oak",
+        () -> new ItemWand(unstackable()));
+    public static final RegistryObject<ItemWand> WAND_SPRUCE = ITEMS.register("wand_spruce",
+        () -> new ItemWand(unstackable()));
+    public static final RegistryObject<ItemWand> WAND_BIRCH = ITEMS.register("wand_birch",
+        () -> new ItemWand(unstackable()));
+    public static final RegistryObject<ItemWand> WAND_JUNGLE = ITEMS.register("wand_jungle",
+        () -> new ItemWand(unstackable()));
+    public static final RegistryObject<ItemWand> WAND_ACACIA = ITEMS.register("wand_acacia",
+        () -> new ItemWand(unstackable()));
+    public static final RegistryObject<ItemWand> WAND_DARK_OAK = ITEMS.register("wand_dark_oak",
+        () -> new ItemWand(unstackable()));
+    public static final RegistryObject<ItemWand> WAND_AKASHIC = ITEMS.register("wand_akashic",
         () -> new ItemWand(unstackable()));
 
     public static final RegistryObject<Item> AMETHYST_DUST = ITEMS.register("amethyst_dust",

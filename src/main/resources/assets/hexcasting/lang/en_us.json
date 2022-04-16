@@ -1,6 +1,12 @@
 {
   "item.hexcasting.book": "Hex Notebook",
-  "item.hexcasting.wand": "Staff",
+  "item.hexcasting.wand_oak": "Oak Staff",
+  "item.hexcasting.wand_spruce": "Spruce Staff",
+  "item.hexcasting.wand_birch": "Birch Staff",
+  "item.hexcasting.wand_jungle": "Jungle Staff",
+  "item.hexcasting.wand_acacia": "Acacia Staff",
+  "item.hexcasting.wand_dark_oak": "Dark Oak Staff",
+  "item.hexcasting.wand_akashic": "Edified Staff",
   "item.hexcasting.focus": "Focus",
   "item.hexcasting.spellbook": "Spellbook",
   "item.hexcasting.cypher": "Cypher",
@@ -507,6 +513,7 @@
 
   "hexcasting.entry.staff": "Staff",
   "hexcasting.page.staff.1": "A $(item)Staff/$ is my entry point into casting all _Hexes, large and small. By holding it and pressing $(thing)$(k:use)/$, I begin casting a _Hex; then I can click and drag to draw patterns.$(br2)It's little more than a chunk of _media on the end of a stick; that's all that's needed, after all.",
+  "hexcasting.page.staff.2.header": "Staves",
   "hexcasting.page.staff.2": "$(italic)Don't fight; flame, light; ignite; burn bright./$",
 
   "hexcasting.entry.lens": "Scrying Lens",

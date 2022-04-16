@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "hexcasting:wand"
-            ]
+            "tag": "hexcasting:wands"
           }
         ]
       }

@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -122,7 +123,18 @@ public class RegisterClientStuff {
             ItemProperties.register(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
                 (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
-            HexTooltips.init();
+            Registry.ITEM.getTagOrEmpty(HexItemTags.WANDS)
+                .forEach(wand -> ItemProperties.register(wand.value(), ItemWand.FUNNY_LEVEL_PREDICATE,
+                    (stack, level, holder, holderID) -> {
+                        var name = stack.getHoverName().getString();
+                        if (name.contains("old")) {
+                            return 1f;
+                        } else if (name.contains("wand of the forest")) {
+                            return 2f;
+                        } else {
+                            return 0f;
+                        }
+                    }));
         });
 
         for (var cutout : new Block[]{
@@ -206,32 +218,34 @@ public class RegisterClientStuff {
             ));
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.COMPARATOR,
-                (state, pos, observer, world, lensHand) -> {
-                    BlockEntity be = world.getBlockEntity(pos);
-                    if (be instanceof ComparatorBlockEntity comparator) {
-                        return List.of(
-                                new Pair<>(
-                                        new ItemStack(Items.REDSTONE),
-                                        new TextComponent(String.valueOf(comparator.getOutputSignal()))
-                                                .withStyle(ChatFormatting.RED)),
-                                new Pair<>(
-                                        new ItemStack(Items.REDSTONE_TORCH),
-                                        new TextComponent(state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE ? ">" : "-")
-                                                .withStyle(ChatFormatting.RED)));
-                    } else
-                        return List.of();
-                });
+            (state, pos, observer, world, lensHand) -> {
+                BlockEntity be = world.getBlockEntity(pos);
+                if (be instanceof ComparatorBlockEntity comparator) {
+                    return List.of(
+                        new Pair<>(
+                            new ItemStack(Items.REDSTONE),
+                            new TextComponent(String.valueOf(comparator.getOutputSignal()))
+                                .withStyle(ChatFormatting.RED)),
+                        new Pair<>(
+                            new ItemStack(Items.REDSTONE_TORCH),
+                            new TextComponent(
+                                state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE ? ">" : "-")
+                                .withStyle(ChatFormatting.RED)));
+                } else {
+                    return List.of();
+                }
+            });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
-                (state, pos, observer, world, lensHand) -> List.of(
-                        new Pair<>(
-                                new ItemStack(Items.REDSTONE),
-                                new TextComponent(String.valueOf(state.getValue(RepeaterBlock.POWERED) ? 15 : 0))
-                                        .withStyle(ChatFormatting.RED)),
-                        new Pair<>(
-                                new ItemStack(Items.CLOCK),
-                                new TextComponent(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
-                                        .withStyle(ChatFormatting.YELLOW))));
+            (state, pos, observer, world, lensHand) -> List.of(
+                new Pair<>(
+                    new ItemStack(Items.REDSTONE),
+                    new TextComponent(String.valueOf(state.getValue(RepeaterBlock.POWERED) ? 15 : 0))
+                        .withStyle(ChatFormatting.RED)),
+                new Pair<>(
+                    new ItemStack(Items.CLOCK),
+                    new TextComponent(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
+                        .withStyle(ChatFormatting.YELLOW))));
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

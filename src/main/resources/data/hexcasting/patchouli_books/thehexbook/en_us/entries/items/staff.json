@@ -1,6 +1,6 @@
 {
   "name": "hexcasting.entry.staff",
-  "icon": "hexcasting:wand",
+  "icon": "hexcasting:wand_oak",
   "category": "hexcasting:items",
   "priority": true,
   "sortnum": 1,
@@ -11,9 +11,18 @@
       "text": "hexcasting.page.staff.1"
     },
     {
-      "type": "patchouli:crafting",
-      "recipe": "hexcasting:wand",
-      "text": "hexcasting.page.staff.2"
+      "type": "hexcasting:crafting_multi",
+      "heading": "hexcasting.page.staff.2.header",
+      "text": "hexcasting.page.staff.2",
+      "recipes": [
+        "hexcasting:wand_oak",
+        "hexcasting:wand_spruce",
+        "hexcasting:wand_birch",
+        "hexcasting:wand_jungle",
+        "hexcasting:wand_acacia",
+        "hexcasting:wand_dark_oak",
+        "hexcasting:wand_akashic"
+      ]
     }
   ]
 }

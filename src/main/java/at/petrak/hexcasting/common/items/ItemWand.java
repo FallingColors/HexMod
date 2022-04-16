@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.common.items;
 
+import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.CasterItem;
 import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.network.HexMessages;
 import at.petrak.hexcasting.common.network.MsgOpenSpellGuiAck;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -16,6 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
 public class ItemWand extends Item implements CasterItem {
+    // 0 = normal. 1 = old. 2 = bosnia
+    public static final ResourceLocation FUNNY_LEVEL_PREDICATE = new ResourceLocation(HexMod.MOD_ID, "funny_level");
 
     public ItemWand(Properties pProperties) {
         super(pProperties);
@@ -36,7 +40,7 @@ public class ItemWand extends Item implements CasterItem {
             var patterns = HexPlayerDataHelper.getPatterns(serverPlayer);
 
             HexMessages.getNetwork().send(PacketDistributor.PLAYER.with(() -> serverPlayer),
-                    new MsgOpenSpellGuiAck(hand, patterns, harness.generateDescs()));
+                new MsgOpenSpellGuiAck(hand, patterns, harness.generateDescs()));
         }
 
         player.awardStat(Stats.ITEM_USED.get(this));
