@@ -1,23 +1,24 @@
 package at.petrak.hexcasting.api.spell.casting
 
-import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.PatternRegistry
+import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
+import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
+import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.api.mod.HexItemTags
+import at.petrak.hexcasting.api.mod.HexStatistics
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.spell.Widget
+import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
+import at.petrak.hexcasting.api.spell.mishaps.MishapDisallowedSpell
 import at.petrak.hexcasting.api.spell.mishaps.MishapTooManyCloseParens
 import at.petrak.hexcasting.api.utils.HexDamageSources
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
-import at.petrak.hexcasting.api.mod.HexStatistics
-import at.petrak.hexcasting.api.spell.math.HexPattern
-import at.petrak.hexcasting.api.cap.HexCapabilities
-import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.utils.ManaHelper
-import at.petrak.hexcasting.api.spell.Widget
-import at.petrak.hexcasting.api.mod.HexItemTags
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
@@ -77,6 +78,9 @@ class CastingHarness private constructor(
 
             // Don't catch this one
             operatorIdPair = PatternRegistry.matchPatternAndID(newPat, world)
+            if (HexConfig.Server.actionDenyList.get().contains(operatorIdPair.second.toString())) {
+                throw MishapDisallowedSpell()
+            }
             val (stack2, sideEffectsUnmut) = operatorIdPair.first.operate(this.stack.toMutableList(), this.ctx)
             // Stick a poofy particle effect at the caster position
             val sideEffects = sideEffectsUnmut.toMutableList()

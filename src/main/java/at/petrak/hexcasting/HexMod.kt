@@ -3,6 +3,8 @@ package at.petrak.hexcasting
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.api.mod.HexStatistics
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.common.blocks.HexBlockEntities
 import at.petrak.hexcasting.common.blocks.HexBlocks
@@ -12,9 +14,7 @@ import at.petrak.hexcasting.common.command.HexCommands
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.lib.HexCapabilityHandler
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import at.petrak.hexcasting.common.lib.HexSounds
-import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.particles.HexParticles
@@ -40,23 +40,20 @@ object HexMod {
     // hmm today I will use a popular logging framework :clueless:
     val LOGGER: Logger = LoggerFactory.getLogger(HexMod::class.java)
 
-    var CONFIG_SPEC: ForgeConfigSpec
-    var CLIENT_CONFIG_SPEC: ForgeConfigSpec
+    val CONFIG_SPEC: ForgeConfigSpec
+    val SERVER_CONFIG_SPEC: ForgeConfigSpec
+    val CLIENT_CONFIG_SPEC: ForgeConfigSpec
 
     // mumblemumble thanks shy mumble mumble
     const val MOD_ID = "hexcasting"
 
     init {
-        val (cfg, spec) = ForgeConfigSpec.Builder()
-            .configure { builder: ForgeConfigSpec.Builder? ->
-                HexConfig(
-                    builder
-                )
-            }
-        CONFIG_SPEC = spec
-        val (client_cfg, client_spec) = ForgeConfigSpec.Builder()
-            .configure { builder: ForgeConfigSpec.Builder? -> HexConfig.Client(builder) }
-        CLIENT_CONFIG_SPEC = client_spec
+        CONFIG_SPEC = ForgeConfigSpec.Builder()
+            .configure { builder: ForgeConfigSpec.Builder? -> HexConfig(builder) }.right
+        SERVER_CONFIG_SPEC = ForgeConfigSpec.Builder()
+            .configure { builder: ForgeConfigSpec.Builder? -> HexConfig.Server(builder) }.right
+        CLIENT_CONFIG_SPEC = ForgeConfigSpec.Builder()
+            .configure { builder: ForgeConfigSpec.Builder? -> HexConfig.Client(builder) }.right
 
         // mod lifecycle
         val modBus = thedarkcolour.kotlinforforge.forge.MOD_BUS
@@ -101,6 +98,7 @@ object HexMod {
         HexMessages.register()
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG_SPEC)
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG_SPEC)
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG_SPEC)
     }
 

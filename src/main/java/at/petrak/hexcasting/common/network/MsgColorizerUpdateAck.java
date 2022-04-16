@@ -31,12 +31,18 @@ public record MsgColorizerUpdateAck(FrozenColorizer update) {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() ->
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                var player = Minecraft.getInstance().player;
-                if (player != null) {
-                    HexPlayerDataHelper.setColorizer(player, update);
-                }
+                IHateJava.handle(this.update);
             })
         );
         ctx.get().setPacketHandled(true);
+    }
+
+    private static class IHateJava {
+        public static void handle(FrozenColorizer update) {
+            var player = Minecraft.getInstance().player;
+            if (player != null) {
+                HexPlayerDataHelper.setColorizer(player, update);
+            }
+        }
     }
 }

@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.api.circle;
 
-import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexApiItems;
 import at.petrak.hexcasting.api.mod.HexApiSounds;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
@@ -171,9 +171,9 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
     @Override
     protected void loadModData(CompoundTag tag) {
         if (tag.contains(TAG_ACTIVATOR, Tag.TAG_INT_ARRAY) &&
-                tag.contains(TAG_COLORIZER, Tag.TAG_COMPOUND) &&
-                tag.contains(TAG_NEXT_BLOCK, Tag.TAG_COMPOUND) &&
-                tag.contains(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND)) {
+            tag.contains(TAG_COLORIZER, Tag.TAG_COMPOUND) &&
+            tag.contains(TAG_NEXT_BLOCK, Tag.TAG_COMPOUND) &&
+            tag.contains(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND)) {
             this.activator = tag.getUUID(TAG_ACTIVATOR);
             this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
             this.nextBlock = NbtUtils.readBlockPos(tag.getCompound(TAG_NEXT_BLOCK));
@@ -198,8 +198,9 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.mana = tag.getInt(TAG_MANA);
         if (tag.contains(TAG_LAST_MISHAP, Tag.TAG_STRING)) {
             this.lastMishap = Component.Serializer.fromJson(tag.getString(TAG_LAST_MISHAP));
-        } else
+        } else {
             this.lastMishap = null;
+        }
     }
 
     void stepCircle() {
@@ -307,8 +308,9 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                         var info = harness.executeNewPattern(newPattern, splayer.getLevel());
                         if (info.getWasSpellCast()) {
                             castSpell = true;
-                            if (info.getHasCastingSound())
+                            if (info.getHasCastingSound()) {
                                 makeSound = true;
+                            }
                         }
                         if (info.getWasPrevPatternInvalid()) {
                             erroredPos = tracked;
@@ -325,8 +327,9 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
             if (erroredPos != null) {
                 this.sfx(erroredPos, false);
-            } else
+            } else {
                 this.setLastMishap(null);
+            }
 
             this.setChanged();
         }
@@ -378,7 +381,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
             }
         }
 
-        if (this.trackedBlocks.size() > HexConfig.maxSpellCircleLength.get()) {
+        if (this.trackedBlocks.size() > HexConfig.Server.maxSpellCircleLength.get()) {
             return this.trackedBlocks.get(this.trackedBlocks.size() - 1);
         }
 

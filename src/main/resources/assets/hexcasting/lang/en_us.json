@@ -369,6 +369,7 @@
   "hexcasting.mishap.divide_by_zero.sin": "the sine of %s",
   "hexcasting.mishap.divide_by_zero.cos": "the cosine of %s",
   "hexcasting.mishap.no_akashic_record": "No akashic record at %s",
+  "hexcasting.mishap.disallowed": "%s has been disallowed by the server admins",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 
@@ -474,8 +475,10 @@
   "hexcasting.page.mishaps.13": "Evaluated too many patterns from one action.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
   "hexcasting.page.mishaps.14.title": "Transgress Other",
   "hexcasting.page.mishaps.14": "I attempted to save a reference to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
-  "hexcasting.page.mishaps.15.title": "Invalid Iota Type",
-  "hexcasting.page.mishaps.15": "A bug in the mod caused an iota of an invalid type. $(l:https://https://github.com/gamma-delta/HexMod/issues)Please open a bug report!/$$(br2)Causes black sparks.",
+  "hexcasting.page.mishaps.15.title": "Disallowed Action",
+  "hexcasting.page.mishaps.15": "I tried to cast an action that has been disallowed by a server administrator.$(br2)Causes black sparks.",
+  "hexcasting.page.mishaps.16.title": "Invalid Iota Type",
+  "hexcasting.page.mishaps.16": "A bug in the mod caused an iota of an invalid type. $(l:https://https://github.com/gamma-delta/HexMod/issues)Please open a bug report!/$$(br2)Causes black sparks.",
 
   "hexcasting.entry.stack": "Stacks",
   "hexcasting.page.stack.1": "A $(thing)Stack/$, also known as a \"LIFO\", is a concept borrowed from computer science. In short, it's a collection of things designed so that you can only interact with the most recently used thing.$(br2)Think of a stack of plates, where new plates are added to the top: if you want to interact with a plate halfway down the stack, you have to remove the plates above it in order to get ahold of it.",
@@ -493,14 +496,14 @@
   "hexcasting.page.influences.2": "In addition, I've discovered a curious triplet of influences I've named Consideration, Introspection, and Retrospection. They seem to have properties of both patterns and other influences, yet act very differently. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:patterns/patterns_as_iotas)My notes on the subject are here/$.",
   "hexcasting.page.influences.3": "Finally, there seems to be an infinite family of influences that just seem to be a tangled mess of _media. I've named them $(action)Garbage/$, as they are completely useless. They seem to appear in my stack at various places in response to $(l:casting/mishaps)mishaps/$. They appear to my senses as a nonsense jumble.",
 
-"hexcasting.entry.mishaps2": "Enlightened Mishaps",
-"hexcasting.page.mishaps2.1": "I have discovered new and horrifying modes of failure. I must not succumb to them.",
-"hexcasting.page.mishaps2.2.title": "Inert Mindflay",
-"hexcasting.page.mishaps2.2": "Attempted to flay the mind of a villager that I have either already used, or of a character not suitable for the target block.$(br2)Causes dark green sparks, and kills the subject.",
-"hexcasting.page.mishaps2.3.title": "Lack Spell Circle",
-"hexcasting.page.mishaps2.3": "Tried to cast an action requiring a spell circle without a spell circle.$(br2)Causes light blue sparks, and upends my inventory onto the ground.",
-"hexcasting.page.mishaps2.4.title": "Lack Akashic Record",
-"hexcasting.page.mishaps2.4": "Tried to access an akashic record at a location where there isn't one.$(br2)Causes purple sparks, and steals away some of my experience.",
+  "hexcasting.entry.mishaps2": "Enlightened Mishaps",
+  "hexcasting.page.mishaps2.1": "I have discovered new and horrifying modes of failure. I must not succumb to them.",
+  "hexcasting.page.mishaps2.2.title": "Inert Mindflay",
+  "hexcasting.page.mishaps2.2": "Attempted to flay the mind of a villager that I have either already used, or of a character not suitable for the target block.$(br2)Causes dark green sparks, and kills the subject.",
+  "hexcasting.page.mishaps2.3.title": "Lack Spell Circle",
+  "hexcasting.page.mishaps2.3": "Tried to cast an action requiring a spell circle without a spell circle.$(br2)Causes light blue sparks, and upends my inventory onto the ground.",
+  "hexcasting.page.mishaps2.4.title": "Lack Akashic Record",
+  "hexcasting.page.mishaps2.4": "Tried to access an akashic record at a location where there isn't one.$(br2)Causes purple sparks, and steals away some of my experience.",
 
 
   "_comment": "Items",

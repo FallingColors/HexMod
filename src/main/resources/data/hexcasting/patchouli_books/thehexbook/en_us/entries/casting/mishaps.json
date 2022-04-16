@@ -77,6 +77,11 @@
       "type": "patchouli:text",
       "title": "hexcasting.page.mishaps.15.title",
       "text": "hexcasting.page.mishaps.15"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.16.title",
+      "text": "hexcasting.page.mishaps.16"
     }
   ]
 }

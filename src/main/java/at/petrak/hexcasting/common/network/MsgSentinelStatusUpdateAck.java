@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
+import at.petrak.hexcasting.api.player.Sentinel;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
@@ -43,12 +43,18 @@ public record MsgSentinelStatusUpdateAck(Sentinel update) {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() ->
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                var player = Minecraft.getInstance().player;
-                if (player != null) {
-                    HexPlayerDataHelper.setSentinel(player, update);
-                }
+                IHateJava.handle(this.update);
             })
         );
         ctx.get().setPacketHandled(true);
+    }
+
+    private static class IHateJava {
+        public static void handle(Sentinel update) {
+            var player = Minecraft.getInstance().player;
+            if (player != null) {
+                HexPlayerDataHelper.setSentinel(player, update);
+            }
+        }
     }
 }

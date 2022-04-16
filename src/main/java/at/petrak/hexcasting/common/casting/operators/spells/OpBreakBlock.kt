@@ -36,7 +36,7 @@ object OpBreakBlock : SpellOperator {
 
             val blockstate = ctx.world.getBlockState(pos)
             val tier =
-                HexConfig.getOpBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()
+                HexConfig.Server.getOpBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()
 
             if (
                 !blockstate.isAir
