@@ -56,7 +56,7 @@ def isRelease = { ->
     }
 }
 
-if (!isRelease && System.getenv('BUILD_NUMBER') != null) {
+if (!isRelease() && System.getenv('BUILD_NUMBER') != null) {
     version += "-prerelease-" + System.getenv('BUILD_NUMBER')
 } else if (System.getenv('TAG_NAME') != null) {
     version = System.getenv('TAG_NAME').substring(1)
