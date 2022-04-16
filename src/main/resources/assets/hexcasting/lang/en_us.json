@@ -796,7 +796,7 @@
 
   "hexcasting.entry.basic_spell": "Basic Spells",
   "hexcasting.page.basic_spell.explode.1": "Remove a number and vector from the stack, then create an explosion at the given location with the given power.",
-  "hexcasting.page.basic_spell.explode.2": "A power of 3 is about as much as a Creeper's blast; 4 is about as much as a TNT blast. Nature refuses to give me a blast of more than 10 power, though.$(br2)Costs about one $(item)Amethyst Shard/$, plus an extra $(item)Amethyst Shard/$ per point of explosion power.",
+  "hexcasting.page.basic_spell.explode.2": "A power of 3 is about as much as a Creeper's blast; 4 is about as much as a TNT blast. Nature refuses to give me a blast of more than 10 power, though.$(br2)Strangely, this explosion doesn't seem to harm me. Perhaps it's because $(italic)I/$ am the one exploding?$(br2)Costs about one $(item)Amethyst Shard/$, plus an extra $(item)Amethyst Shard/$ per point of explosion power.",
   "hexcasting.page.basic_spell.explode.fire.1": "Remove a number and vector from the stack, then create a fiery explosion at the given location with the given power.",
   "hexcasting.page.basic_spell.explode.fire.2": "Costs three $(item)Amethyst Shards/$, plus about one extra $(item)Amethyst Shard/$ per point of explosion power. Otherwise, the same as $(l:patterns/spells/basic_spell#hexcasting:explosion)$(action)Explosion/$, except with fire.",
   "hexcasting.page.basic_spell.add_motion": "Remove an entity and direction from the stack, then give a shove to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(item)Amethyst Dust/$ equal to the square of the length of the vector.",
