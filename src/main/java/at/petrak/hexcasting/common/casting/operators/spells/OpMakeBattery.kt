@@ -6,9 +6,9 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.utils.ManaHelper
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.utils.ManaHelper
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import net.minecraft.world.entity.item.ItemEntity
@@ -42,9 +42,14 @@ object OpMakeBattery : SpellOperator {
 
         ctx.assertEntityInRange(entity)
 
-        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(entity.item, drainForBatteries = true, simulate = true) <= 0) {
-            throw MishapBadItem.of(
+        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(
                 entity.item,
+                drainForBatteries = true,
+                simulate = true
+            ) <= 0
+        ) {
+            throw MishapBadItem.of(
+                entity,
                 "mana"
             )
         }
@@ -59,7 +64,10 @@ object OpMakeBattery : SpellOperator {
                 val entityStack = itemEntity.item.copy()
                 val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
-                    ctx.caster.setItemInHand(hand, ItemManaHolder.withMana(ItemStack(HexItems.BATTERY.get()), manaAmt, manaAmt))
+                    ctx.caster.setItemInHand(
+                        hand,
+                        ItemManaHolder.withMana(ItemStack(HexItems.BATTERY.get()), manaAmt, manaAmt)
+                    )
                 }
 
                 itemEntity.item = entityStack

@@ -114,7 +114,7 @@ object HexMod {
 
     @SubscribeEvent
     fun printPatternCount(evt: FMLLoadCompleteEvent) {
-        HexMod.getLogger().info(
+        getLogger().info(
             PatternRegistry.getPatternCountInfo()
         )
     }

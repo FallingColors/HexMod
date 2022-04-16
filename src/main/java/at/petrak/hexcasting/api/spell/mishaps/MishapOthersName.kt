@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
+import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.misc.FrozenColorizer
 import net.minecraft.network.chat.Component
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
@@ -11,7 +11,7 @@ import net.minecraft.world.item.DyeColor
 
 class MishapOthersName(val other: Player) : Mishap() {
     override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
-        dyeColor(DyeColor.ORANGE)
+        dyeColor(DyeColor.BLACK)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
         val effect = MobEffectInstance(MobEffects.BLINDNESS, 20 * 60)

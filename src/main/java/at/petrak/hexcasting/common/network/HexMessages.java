@@ -28,8 +28,6 @@ public class HexMessages {
             MsgNewSpellPatternAck::deserialize, MsgNewSpellPatternAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgShiftScrollSyn.class, MsgShiftScrollSyn::serialize,
             MsgShiftScrollSyn::deserialize, MsgShiftScrollSyn::handle);
-        NETWORK.registerMessage(messageIdx++, MsgAddMotionAck.class, MsgAddMotionAck::serialize,
-            MsgAddMotionAck::deserialize, MsgAddMotionAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgBlinkAck.class, MsgBlinkAck::serialize,
             MsgBlinkAck::deserialize, MsgBlinkAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgSentinelStatusUpdateAck.class, MsgSentinelStatusUpdateAck::serialize,

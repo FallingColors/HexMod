@@ -1,15 +1,15 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.cap.HexCapabilities
-import at.petrak.hexcasting.api.utils.ManaHelper
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.utils.ManaHelper
 import net.minecraft.world.entity.item.ItemEntity
 
 object OpRecharge : SpellOperator {
@@ -37,7 +37,7 @@ object OpRecharge : SpellOperator {
 
         if (!ManaHelper.isManaItem(entity.item)) {
             throw MishapBadItem.of(
-                entity.item,
+                entity,
                 "mana"
             )
         }

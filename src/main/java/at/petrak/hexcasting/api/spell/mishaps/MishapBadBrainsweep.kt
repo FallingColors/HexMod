@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3
 
 class MishapBadBrainsweep(val villager: Villager, val pos: BlockPos) : Mishap() {
     override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
-        dyeColor(DyeColor.LIME)
+        dyeColor(DyeColor.GREEN)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
         villager.hurt(HexDamageSources.OVERCAST, villager.health)

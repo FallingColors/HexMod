@@ -71,7 +71,6 @@ object RenderLib {
 
         val n = points.size
         for ((i, pair) in points.zipWithNext().withIndex()) {
-            val i = i.toFloat()
             val (p1, p2) = pair
             // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
             // GuiComponent::innerFill line 52
@@ -89,8 +88,8 @@ object RenderLib {
             fun color(time: Float): BlockPos =
                 BlockPos(Mth.lerp(time, r1, r2).toInt(), Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
 
-            val color1 = color(i / n)
-            val color2 = color((i + 1) / n)
+            val color1 = color(i.toFloat() / n)
+            val color2 = color((i + 1f) / n)
             buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(color1.x, color1.y, color1.z, a).endVertex()
             buf.vertex(mat, p1.x - tx, p1.y - ty, z).color(color1.x, color1.y, color1.z, a).endVertex()
             buf.vertex(mat, p2.x + tx, p2.y + ty, z).color(color2.x, color2.y, color2.z, a).endVertex()

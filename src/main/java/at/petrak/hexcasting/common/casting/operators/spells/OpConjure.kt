@@ -41,7 +41,7 @@ class OpConjure(val light: Boolean) : SpellOperator {
                 val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
                 val state = block.get().getStateForPlacement(placeContext)
                 if (state != null) {
-                    ctx.world.setBlock(pos, state, 2)
+                    ctx.world.setBlock(pos, state, 5)
 
                     val colorizer = HexPlayerDataHelper.getColorizer(ctx.caster)
 

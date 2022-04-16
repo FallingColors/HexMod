@@ -10,7 +10,7 @@ version = "${file.jarVersion}"
 displayName = "Hexcasting"
 displayURL = "https://github.com/gamma-delta/HexMod"
 logoFile = "logo.png"
-credits = "Alwinfy for visual effects, proofreading, and code help; Kra3tor for sound effects; Falkory for textures; and all of Vazcord for alpha-testing and supporting me!"
+credits = "Falkory for textures; Wiresegal for lots of polish; Alwinfy for visual effects, proofreading, and code help; Kra3tor for sound effects; naj77 for the nice logo; and all of my wonderful patrons for supporting me!"
 authors = "petrak@ (aka gamma-delta)"
 description = "Cast powerful Hexes on the fly by drawing patterns with a staff."
 

@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators
 
+import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import net.minecraft.world.entity.item.ItemEntity
 
@@ -19,14 +19,14 @@ object OpTheCoolerRead : ConstManaOperator {
         val stack = target.item
         val datumHolder = stack.getCapability(HexCapabilities.DATUM).resolve()
         if (!datumHolder.isPresent)
-            throw MishapBadItem.of(stack, "iota.read")
+            throw MishapBadItem.of(target, "iota.read")
 
         ctx.assertEntityInRange(target)
 
 
         val datum = datumHolder.get().readDatum(ctx.world)
             ?: datumHolder.get().emptyDatum()
-            ?: throw MishapBadItem.of(stack, "iota.read")
+            ?: throw MishapBadItem.of(target, "iota.read")
         return listOf(datum)
     }
 }

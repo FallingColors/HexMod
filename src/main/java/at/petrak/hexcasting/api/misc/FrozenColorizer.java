@@ -1,13 +1,16 @@
 package at.petrak.hexcasting.api.misc;
 
 import at.petrak.hexcasting.api.cap.Colorizer;
-import at.petrak.hexcasting.api.mod.HexApiItems;
 import at.petrak.hexcasting.api.cap.HexCapabilities;
+import at.petrak.hexcasting.api.mod.HexApiItems;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -38,7 +41,12 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
         if (tag.isEmpty())
             return FrozenColorizer.DEFAULT.get();
         try {
-            var item = ItemStack.of(tag.getCompound(TAG_STACK));
+            ItemStack item;
+            if (tag.contains("item", Tag.TAG_STRING) && !tag.contains(TAG_STACK, Tag.TAG_COMPOUND)) {
+                item = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString("item"))));
+            } else {
+                item = ItemStack.of(tag.getCompound(TAG_STACK));
+            }
             var uuid = tag.getUUID(TAG_OWNER);
             return new FrozenColorizer(item, uuid);
         } catch (NullPointerException exn) {

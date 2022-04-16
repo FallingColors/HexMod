@@ -33,7 +33,7 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
         var tag = stack.getTag();
         if (tag != null && tag.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
             var bet = tag.getCompound("BlockEntityTag");
-            return bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND);
+            return bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND) && !bet.getCompound(BlockEntitySlate.TAG_PATTERN).isEmpty();
         }
         return false;
     }
@@ -50,6 +50,8 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
         }
 
         var patTag = beTag.getCompound(BlockEntitySlate.TAG_PATTERN);
+        if (patTag.isEmpty())
+            return null;
         var out = new CompoundTag();
         out.put(SpellDatum.TAG_PATTERN, patTag);
         return out;
@@ -61,17 +63,12 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
             return false;
         }
 
-        if (!stack.hasTag())
-            return true;
-
-        var beTag = stack.getTagElement("BlockEntityTag");
-        return beTag == null || !beTag.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND);
+        return readDatumTag(stack) == null;
     }
 
     @Override
     public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
         if (this.canWrite(stack, datum) && datum.getPayload() instanceof HexPattern pat) {
-            CompoundTag tag = stack.getOrCreateTag();
             var beTag = stack.getOrCreateTagElement("BlockEntityTag");
             beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
         }

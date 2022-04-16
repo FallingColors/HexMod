@@ -13,6 +13,70 @@
     {
       "type": "patchouli:text",
       "text": "hexcasting.page.mishaps.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.mishaps.3"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.4.title",
+      "text": "hexcasting.page.mishaps.4"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.5.title",
+      "text": "hexcasting.page.mishaps.5"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.6.title",
+      "text": "hexcasting.page.mishaps.6"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.7.title",
+      "text": "hexcasting.page.mishaps.7"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.8.title",
+      "text": "hexcasting.page.mishaps.8"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.9.title",
+      "text": "hexcasting.page.mishaps.9"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.10.title",
+      "text": "hexcasting.page.mishaps.10"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.11.title",
+      "text": "hexcasting.page.mishaps.11"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.12.title",
+      "text": "hexcasting.page.mishaps.12"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.13.title",
+      "text": "hexcasting.page.mishaps.13"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.14.title",
+      "text": "hexcasting.page.mishaps.14"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.15.title",
+      "text": "hexcasting.page.mishaps.15"
     }
   ]
 }

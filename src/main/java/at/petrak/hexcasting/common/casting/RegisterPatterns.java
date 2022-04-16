@@ -128,9 +128,9 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qq", HexDir.SOUTH_WEST), prefix("less_eq"),
                 new OpCompare((a, b) -> a <= b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ad", HexDir.EAST), prefix("equals"),
-                new OpCompare((a, b) -> Math.abs(a - b) < 0.0001));
+                new OpEquality(false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("da", HexDir.EAST), prefix("not_equals"),
-                new OpCompare((a, b) -> Math.abs(a - b) >= 0.0001));
+                new OpEquality(true));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dw", HexDir.NORTH_WEST), prefix("not"),
                 OpNot.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aw", HexDir.NORTH_EAST), prefix("identity"),
