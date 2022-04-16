@@ -2,7 +2,7 @@ package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.HexBlockTags;
-import at.petrak.hexcasting.common.items.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.items.HexItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;

@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
-import at.petrak.hexcasting.api.item.CasterItem
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.mod.HexItemTags
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.DyeColor
@@ -18,7 +18,7 @@ class MishapLocationTooFarAway(val location: Vec3) : Mishap() {
         // Knock the player's items out of their hands
         val items = mutableListOf<ItemStack>()
         for (hand in InteractionHand.values()) {
-            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).item !is CasterItem) {
+            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).`is`(HexItemTags.WANDS)) {
                 items.add(ctx.caster.getItemInHand(hand).copy())
                 ctx.caster.setItemInHand(hand, ItemStack.EMPTY)
             }

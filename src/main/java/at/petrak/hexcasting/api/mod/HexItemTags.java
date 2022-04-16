@@ -1,6 +1,5 @@
-package at.petrak.hexcasting.common.items;
+package at.petrak.hexcasting.api.mod;
 
-import at.petrak.hexcasting.HexMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -14,6 +13,6 @@ public class HexItemTags {
     public static final TagKey<Item> AMETHYST_DUST = ItemTags.create(new ResourceLocation("forge", "dusts/amethyst"));
 
     private static TagKey<Item> create(String name) {
-        return ItemTags.create(new ResourceLocation(HexMod.MOD_ID, name));
+        return ItemTags.create(new ResourceLocation("hexcasting", name));
     }
 }

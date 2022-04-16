@@ -3,7 +3,6 @@ package at.petrak.hexcasting.api.spell.casting
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
-import at.petrak.hexcasting.api.item.CasterItem
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -18,6 +17,7 @@ import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.utils.ManaHelper
 import at.petrak.hexcasting.api.spell.Widget
+import at.petrak.hexcasting.api.mod.HexItemTags
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
@@ -283,7 +283,7 @@ class CastingHarness private constructor(
             } else {
                 false
             }
-            if (casterStack.item is CasterItem || ipsCanDrawFromInv) {
+            if (casterStack.`is`(HexItemTags.WANDS) || ipsCanDrawFromInv) {
                 val manableItems = this.ctx.caster.inventory.items
                     .filter(ManaHelper::isManaItem)
                     .sortedWith(Comparator(ManaHelper::compare).reversed())

@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.network;
 
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity;
 import at.petrak.hexcasting.api.spell.math.HexCoord;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.common.items.ItemWand;
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
+import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
@@ -53,7 +53,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
             ServerPlayer sender = networkCtx.get().getSender();
             if (sender != null) {
                 var held = sender.getItemInHand(this.handUsed);
-                if (held.getItem() instanceof ItemWand) {
+                if (held.is(HexItemTags.WANDS)) {
                     boolean autoFail = false;
 
                     if (!resolvedPatterns.isEmpty()) {
