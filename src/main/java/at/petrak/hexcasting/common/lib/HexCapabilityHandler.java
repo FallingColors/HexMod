@@ -164,7 +164,7 @@ public class HexCapabilityHandler {
 
         @Override
         public boolean canRecharge() {
-            return true;
+            return holder.canRecharge(stack);
         }
 
         @Override

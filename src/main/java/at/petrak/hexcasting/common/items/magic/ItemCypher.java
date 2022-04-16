@@ -13,7 +13,7 @@ public class ItemCypher extends ItemPackagedSpell {
     }
 
     @Override
-    public boolean singleUse() {
+    public boolean breakAfterDepletion() {
         return true;
     }
 }

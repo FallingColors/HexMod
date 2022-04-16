@@ -16,4 +16,9 @@ public class ItemManaBattery extends ItemManaHolder {
     public boolean manaProvider(ItemStack stack) {
         return true;
     }
+
+    @Override
+    public boolean canRecharge(ItemStack stack) {
+        return true;
+    }
 }

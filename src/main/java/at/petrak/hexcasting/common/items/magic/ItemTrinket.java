@@ -13,7 +13,7 @@ public class ItemTrinket extends ItemPackagedSpell {
     }
 
     @Override
-    public boolean singleUse() {
+    public boolean breakAfterDepletion() {
         return false;
     }
 }

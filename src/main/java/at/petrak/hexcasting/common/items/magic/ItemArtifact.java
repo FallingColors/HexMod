@@ -13,7 +13,7 @@ public class ItemArtifact extends ItemPackagedSpell {
     }
 
     @Override
-    public boolean singleUse() {
+    public boolean breakAfterDepletion() {
         return false;
     }
 }

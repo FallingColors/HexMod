@@ -11,6 +11,7 @@ public interface ManaHolderItem {
 	void setMana(ItemStack stack, int mana);
 
 	boolean manaProvider(ItemStack stack);
+	boolean canRecharge(ItemStack stack);
 
 	default float getManaFullness(ItemStack stack) {
 		int max = getMaxMana(stack);

@@ -36,7 +36,12 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
         super(pProperties);
     }
 
-    public abstract boolean singleUse();
+    public abstract boolean breakAfterDepletion();
+
+    @Override
+    public boolean canRecharge(ItemStack stack) {
+        return !breakAfterDepletion();
+    }
 
     @Override
     public boolean manaProvider(ItemStack stack) {
@@ -79,7 +84,6 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand usedHand) {
         var stack = player.getItemInHand(usedHand);
-        var tag = stack.getOrCreateTag();
         List<HexPattern> patterns = getPatterns(stack);
         if (patterns == null) {
             return InteractionResultHolder.fail(stack);
@@ -98,8 +102,10 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
             }
         }
 
+        boolean broken = breakAfterDepletion() && getMana(stack) == 0;
+
         Stat<?> stat;
-        if (singleUse()) {
+        if (broken) {
             stat = Stats.ITEM_BROKEN.get(this);
         } else {
             stat = Stats.ITEM_USED.get(this);
@@ -111,7 +117,7 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
             HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
             1f + ((float) Math.random() - 0.5f) * 0.2f);
 
-        if (singleUse()) {
+        if (broken) {
             stack.shrink(1);
             return InteractionResultHolder.consume(stack);
         } else {
