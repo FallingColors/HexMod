@@ -8,7 +8,7 @@
       "predicate": {
         "hexcasting:funny_level": 0.0
       },
-      "model": "hexcasting:wand_dark_oak"
+      "model": "hexcasting:item/wand_dark_oak"
     },
     {
       "predicate": {

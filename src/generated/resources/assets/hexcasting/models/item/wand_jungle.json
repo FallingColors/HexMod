@@ -8,7 +8,7 @@
       "predicate": {
         "hexcasting:funny_level": 0.0
       },
-      "model": "hexcasting:wand_jungle"
+      "model": "hexcasting:item/wand_jungle"
     },
     {
       "predicate": {

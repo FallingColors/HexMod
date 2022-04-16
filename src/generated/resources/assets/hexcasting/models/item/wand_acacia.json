@@ -8,7 +8,7 @@
       "predicate": {
         "hexcasting:funny_level": 0.0
       },
-      "model": "hexcasting:wand_acacia"
+      "model": "hexcasting:item/wand_acacia"
     },
     {
       "predicate": {

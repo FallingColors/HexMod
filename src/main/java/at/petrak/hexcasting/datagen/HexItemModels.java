@@ -70,7 +70,7 @@ public class HexItemModels extends PaucalItemModelProvider {
             getBuilder(wand.getRegistryName().getPath())
                 .override()
                 .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 0)
-                .model(new ModelFile.UncheckedModelFile(modLoc("wand_" + wandKey)))
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_" + wandKey)))
                 .end().override()
                 .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 1)
                 .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_old")))

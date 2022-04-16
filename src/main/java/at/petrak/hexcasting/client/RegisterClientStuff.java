@@ -26,10 +26,10 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -123,8 +123,17 @@ public class RegisterClientStuff {
             ItemProperties.register(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
                 (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
-            Registry.ITEM.getTagOrEmpty(HexItemTags.WANDS)
-                .forEach(wand -> ItemProperties.register(wand.value(), ItemWand.FUNNY_LEVEL_PREDICATE,
+            var wands = new Item[]{
+                HexItems.WAND_OAK.get(),
+                HexItems.WAND_BIRCH.get(),
+                HexItems.WAND_SPRUCE.get(),
+                HexItems.WAND_JUNGLE.get(),
+                HexItems.WAND_DARK_OAK.get(),
+                HexItems.WAND_ACACIA.get(),
+                HexItems.WAND_AKASHIC.get(),
+            };
+            for (var wand : wands) {
+                ItemProperties.register(wand, ItemWand.FUNNY_LEVEL_PREDICATE,
                     (stack, level, holder, holderID) -> {
                         var name = stack.getHoverName().getString();
                         if (name.contains("old")) {
@@ -134,7 +143,8 @@ public class RegisterClientStuff {
                         } else {
                             return 0f;
                         }
-                    }));
+                    });
+            }
         });
 
         for (var cutout : new Block[]{
