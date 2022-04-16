@@ -9,7 +9,6 @@ import at.petrak.hexcasting.api.spell.casting.ResolvedPattern
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemSpellbook
-import at.petrak.hexcasting.common.items.ItemWand
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
@@ -18,6 +17,7 @@ import at.petrak.hexcasting.api.spell.math.HexAngle
 import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.mod.HexItemTags
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
@@ -87,7 +87,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
         val player = minecraft.player
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
-            if (heldItem.isEmpty || heldItem.item !is ItemWand)
+            if (heldItem.isEmpty || !heldItem.`is`(HexItemTags.WANDS))
                 onClose()
         }
     }

@@ -3,7 +3,7 @@ package at.petrak.hexcasting.datagen;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
-import at.petrak.hexcasting.common.items.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;

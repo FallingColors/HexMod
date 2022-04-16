@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.item.CasterItem;
 import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.network.HexMessages;
@@ -17,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
-public class ItemWand extends Item implements CasterItem {
+public class ItemWand extends Item {
     // 0 = normal. 1 = old. 2 = bosnia
     public static final ResourceLocation FUNNY_LEVEL_PREDICATE = new ResourceLocation(HexMod.MOD_ID, "funny_level");
 
