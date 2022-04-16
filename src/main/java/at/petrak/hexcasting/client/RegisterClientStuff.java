@@ -48,6 +48,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class RegisterClientStuff {
 
@@ -135,7 +136,7 @@ public class RegisterClientStuff {
             for (var wand : wands) {
                 ItemProperties.register(wand, ItemWand.FUNNY_LEVEL_PREDICATE,
                     (stack, level, holder, holderID) -> {
-                        var name = stack.getHoverName().getString();
+                        var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
                         if (name.contains("old")) {
                             return 1f;
                         } else if (name.contains("wand of the forest")) {
@@ -145,6 +146,8 @@ public class RegisterClientStuff {
                         }
                     });
             }
+
+            HexTooltips.init();
         });
 
         for (var cutout : new Block[]{
