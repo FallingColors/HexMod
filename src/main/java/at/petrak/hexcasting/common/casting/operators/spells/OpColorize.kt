@@ -37,7 +37,7 @@ object OpColorize : SpellOperator {
             if (FrozenColorizer.isColorizer(handStack)) {
                 if (ctx.withdrawItem(handStack.item, 1, true)) {
                     HexPlayerDataHelper.setColorizer(ctx.caster,
-                        FrozenColorizer(handStack, ctx.caster.uuid)
+                        FrozenColorizer(handStack.copy(), ctx.caster.uuid)
                     )
                 }
             }
