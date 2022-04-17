@@ -15,8 +15,8 @@
     },
     {
       "type": "hexcasting:crafting_multi",
-      "heading": "hexcasting.page.pigments.3.header",
-      "text": "hexcasting.page.pigments.3",
+      "heading": "hexcasting.page.pigments.colored.crafting.header",
+      "text": "hexcasting.page.pigments.colored.crafting.desc",
       "recipes": [
         "hexcasting:dye_colorizer_white",
         "hexcasting:dye_colorizer_orange",
@@ -73,7 +73,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:uuid_colorizer",
-      "text": "hexcasting.page.pigments.4"
+      "text": "hexcasting.page.pigments.uuid.crafting.desc"
     }
   ]
 }

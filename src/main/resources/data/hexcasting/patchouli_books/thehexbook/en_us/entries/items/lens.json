@@ -16,7 +16,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:lens",
-      "text": "hexcasting.page.lens.3"
+      "text": "hexcasting.page.lens.crafting.desc"
     }
   ]
 }

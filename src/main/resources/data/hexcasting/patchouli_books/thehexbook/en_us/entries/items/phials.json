@@ -20,7 +20,7 @@
     },
     {
       "type": "patchouli:spotlight",
-      "text": "hexcasting.page.phials.4",
+      "text": "hexcasting.page.phials.desc",
       "item": "hexcasting:battery{mana:10000,max_mana:10000}",
       "link_recipe": true
     }

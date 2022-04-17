@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.101",
   "category": "hexcasting:casting",
-  "icon": "hexcasting:wand",
+  "icon": "hexcasting:edified_wand",
   "advancement": "hexcasting:root",
   "priority": true,
   "pages": [

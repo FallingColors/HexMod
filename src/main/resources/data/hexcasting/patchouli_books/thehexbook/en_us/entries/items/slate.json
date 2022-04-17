@@ -16,11 +16,11 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:slate",
-      "text": "hexcasting.page.slate.3"
+      "text": "hexcasting.page.slate.crafting.desc"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.slate.4"
+      "text": "hexcasting.page.slate.3"
     }
   ]
 }

@@ -35,7 +35,7 @@
       "type": "patchouli:crafting",
       "anchor": "artifact",
       "recipe": "hexcasting:artifact",
-      "text": "hexcasting.page.hexcasting.6"
+      "text": "hexcasting.page.hexcasting.crafting.desc"
     }
   ]
 }

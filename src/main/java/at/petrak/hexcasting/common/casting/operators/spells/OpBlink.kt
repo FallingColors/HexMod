@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import net.minecraft.server.level.ServerPlayer
@@ -24,6 +25,9 @@ object OpBlink : SpellOperator {
         val target = args.getChecked<Entity>(0)
         val delta = args.getChecked<Double>(1)
         ctx.assertEntityInRange(target)
+
+        if (!target.canChangeDimensions())
+            throw MishapImmuneEntity(target)
 
         val dvec = targetDelta(ctx, target, delta)
 

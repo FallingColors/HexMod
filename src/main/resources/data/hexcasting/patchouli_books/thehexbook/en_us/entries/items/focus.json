@@ -20,7 +20,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:focus",
-      "text": "hexcasting.page.focus.4"
+      "text": "hexcasting.page.focus.crafting.desc"
     }
   ]
 }
