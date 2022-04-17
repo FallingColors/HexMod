@@ -16,7 +16,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:abacus",
-      "text": "hexcasting.page.abacus.3"
+      "text": "hexcasting.page.abacus.crafting.desc"
     }
   ]
 }

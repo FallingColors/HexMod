@@ -20,68 +20,73 @@
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.4.title",
-      "text": "hexcasting.page.mishaps.4"
+      "title": "hexcasting.page.mishaps.invalid_pattern.title",
+      "text": "hexcasting.page.mishaps.invalid_pattern"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.5.title",
-      "text": "hexcasting.page.mishaps.5"
+      "title": "hexcasting.page.mishaps.not_enough_iotas.title",
+      "text": "hexcasting.page.mishaps.not_enough_iotas"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.6.title",
-      "text": "hexcasting.page.mishaps.6"
+      "title": "hexcasting.page.mishaps.incorrect_iota.title",
+      "text": "hexcasting.page.mishaps.incorrect_iota"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.7.title",
-      "text": "hexcasting.page.mishaps.7"
+      "title": "hexcasting.page.mishaps.vector_out_of_range.title",
+      "text": "hexcasting.page.mishaps.vector_out_of_range"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.8.title",
-      "text": "hexcasting.page.mishaps.8"
+      "title": "hexcasting.page.mishaps.entity_out_of_range.title",
+      "text": "hexcasting.page.mishaps.entity_out_of_range"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.9.title",
-      "text": "hexcasting.page.mishaps.9"
+      "title": "hexcasting.page.mishaps.entity_immune.title",
+      "text": "hexcasting.page.mishaps.entity_immune"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.10.title",
-      "text": "hexcasting.page.mishaps.10"
+      "title": "hexcasting.page.mishaps.math_error.title",
+      "text": "hexcasting.page.mishaps.math_error"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.11.title",
-      "text": "hexcasting.page.mishaps.11"
+      "title": "hexcasting.page.mishaps.incorrect_item.title",
+      "text": "hexcasting.page.mishaps.incorrect_item"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.12.title",
-      "text": "hexcasting.page.mishaps.12"
+      "title": "hexcasting.page.mishaps.incorrect_block.title",
+      "text": "hexcasting.page.mishaps.incorrect_block"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.13.title",
-      "text": "hexcasting.page.mishaps.13"
+      "title": "hexcasting.page.mishaps.retrospection.title",
+      "text": "hexcasting.page.mishaps.retrospection"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.14.title",
-      "text": "hexcasting.page.mishaps.14"
+      "title": "hexcasting.page.mishaps.too_deep.title",
+      "text": "hexcasting.page.mishaps.too_deep"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.15.title",
-      "text": "hexcasting.page.mishaps.15"
+      "title": "hexcasting.page.mishaps.disabled.title",
+      "text": "hexcasting.page.mishaps.disabled"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.16.title",
-      "text": "hexcasting.page.mishaps.16"
+      "title": "hexcasting.page.mishaps.true_name.title",
+      "text": "hexcasting.page.mishaps.true_name"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.invalid_iota.title",
+      "text": "hexcasting.page.mishaps.invalid_iota"
     }
   ]
 }

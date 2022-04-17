@@ -40,7 +40,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.edified.3"
+      "text": "hexcasting.page.edified.crafting.desc"
     }
   ],
   "extra_recipe_mappings": {

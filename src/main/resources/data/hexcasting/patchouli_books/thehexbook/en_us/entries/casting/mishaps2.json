@@ -12,18 +12,18 @@
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps2.2.title",
-      "text": "hexcasting.page.mishaps2.2"
+      "title": "hexcasting.page.mishaps2.bad_mindflay.title",
+      "text": "hexcasting.page.mishaps2.bad_mindflay"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps2.3.title",
-      "text": "hexcasting.page.mishaps2.3"
+      "title": "hexcasting.page.mishaps2.no_circle.title",
+      "text": "hexcasting.page.mishaps2.no_circle"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps2.4.title",
-      "text": "hexcasting.page.mishaps2.4"
+      "title": "hexcasting.page.mishaps2.no_record.title",
+      "text": "hexcasting.page.mishaps2.no_record"
     }
   ]
 }

@@ -16,7 +16,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:scroll",
-      "text": "hexcasting.page.scroll.3"
+      "text": "hexcasting.page.scroll.crafting.desc"
     }
   ]
 }

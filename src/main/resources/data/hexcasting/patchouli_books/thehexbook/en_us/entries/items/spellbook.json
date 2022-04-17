@@ -12,7 +12,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:spellbook",
-      "text": "hexcasting.page.spellbook.2"
+      "text": "hexcasting.page.spellbook.crafting.desc"
     }
   ]
 }

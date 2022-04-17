@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import net.minecraft.server.level.ServerPlayer
@@ -24,7 +25,11 @@ object OpTeleport : SpellOperator {
         val delta = args.getChecked<Vec3>(1)
         ctx.assertEntityInRange(teleportee)
 
+        if (!teleportee.canChangeDimensions())
+            throw MishapImmuneEntity(teleportee)
+
         val targetMiddlePos = teleportee.position().add(0.0, teleportee.eyeHeight / 2.0, 0.0)
+
 
         return Triple(
             Spell(teleportee, delta),

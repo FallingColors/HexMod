@@ -27,12 +27,12 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:ageing_scroll_paper_lantern",
-      "text": "hexcasting.page.decoration.2"
+      "text": "hexcasting.page.decoration.ancient_scroll.crafting.des"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:amethyst_tiles",
-      "text": "hexcasting.page.decoration.3"
+      "text": "hexcasting.page.decoration.tiles.crafting.des"
     },
     {
       "type": "patchouli:crafting",
@@ -42,7 +42,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:amethyst_sconce",
-      "text": "hexcasting.page.decoration.4"
+      "text": "hexcasting.page.decoration.sconce.crafting.des"
     }
   ]
 }
