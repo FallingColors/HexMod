@@ -53,7 +53,7 @@ class OpErase : SpellOperator {
 
             if (datumHolder.isPresent && datumHolder.get().readDatum(ctx.world) != null &&
                 datumHolder.get().writeDatum(null, true))
-                datumHolder.get().writeDatum(null, true)
+                datumHolder.get().writeDatum(null, false)
         }
     }
 }
