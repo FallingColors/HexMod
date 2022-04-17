@@ -4,8 +4,8 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -33,7 +33,8 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
         var tag = stack.getTag();
         if (tag != null && tag.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
             var bet = tag.getCompound("BlockEntityTag");
-            return bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND) && !bet.getCompound(BlockEntitySlate.TAG_PATTERN).isEmpty();
+            return bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND) && !bet.getCompound(
+                BlockEntitySlate.TAG_PATTERN).isEmpty();
         }
         return false;
     }
@@ -50,8 +51,9 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
         }
 
         var patTag = beTag.getCompound(BlockEntitySlate.TAG_PATTERN);
-        if (patTag.isEmpty())
+        if (patTag.isEmpty()) {
             return null;
+        }
         var out = new CompoundTag();
         out.put(SpellDatum.TAG_PATTERN, patTag);
         return out;
@@ -59,11 +61,7 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
 
     @Override
     public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
-        if (datum == null || datum.getType() != DatumType.PATTERN) {
-            return false;
-        }
-
-        return readDatumTag(stack) == null;
+        return !(datum == null || datum.getType() != DatumType.PATTERN);
     }
 
     @Override
