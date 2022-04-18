@@ -33,11 +33,11 @@ object OpColorize : SpellOperator {
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val (handStack) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it) }
+            val (handStack) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it) }.copy()
             if (FrozenColorizer.isColorizer(handStack)) {
                 if (ctx.withdrawItem(handStack.item, 1, true)) {
                     HexPlayerDataHelper.setColorizer(ctx.caster,
-                        FrozenColorizer(handStack.copy(), ctx.caster.uuid)
+                        FrozenColorizer(handStack, ctx.caster.uuid)
                     )
                 }
             }

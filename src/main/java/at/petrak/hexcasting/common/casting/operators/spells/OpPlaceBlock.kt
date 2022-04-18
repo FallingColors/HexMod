@@ -43,7 +43,7 @@ object OpPlaceBlock : SpellOperator {
             if (bstate.isAir || bstate.material.isReplaceable) {
                 val placeeSlot = ctx.getOperativeSlot { it.item is BlockItem }
                 if (placeeSlot != null) {
-                    val placeeStack = ctx.caster.inventory.getItem(placeeSlot)
+                    val placeeStack = ctx.caster.inventory.getItem(placeeSlot).copy()
                     val placee = placeeStack.item as BlockItem
                     if (ctx.withdrawItem(placee, 1, false)) {
                         // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143
