@@ -43,7 +43,7 @@ object OpForEach : Operator {
                 val res = harness.getUpdate(pattern, ctx.world)
                 sideEffects.addAll(res.sideEffects)
                 if (res.sideEffects.any { it is OperatorSideEffect.DoMishap }) {
-                    break
+                    return OperationResult(harness.stack, sideEffects)
                 }
                 harness.applyFunctionalData(res.newData)
             }
