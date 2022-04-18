@@ -318,7 +318,6 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                             break;
                         }
                     }
-                    this.level.setBlock(tracked, bs.setValue(BlockCircleComponent.ENERGIZED, false), 3);
                 }
             }
 
