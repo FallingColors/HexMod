@@ -40,6 +40,8 @@ public class HexMessages {
                 MsgOpenSpellGuiAck::deserialize, MsgOpenSpellGuiAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgBeepAck.class, MsgBeepAck::serialize,
                 MsgBeepAck::deserialize, MsgBeepAck::handle);
+        NETWORK.registerMessage(messageIdx++, MsgBrainsweepAck.class, MsgBrainsweepAck::serialize,
+                MsgBrainsweepAck::deserialize, MsgBrainsweepAck::handle);
 
         HexApiMessages.setSyncChannel(NETWORK, MsgSentinelStatusUpdateAck::new, MsgColorizerUpdateAck::new, MsgCastParticleAck::new);
     }
