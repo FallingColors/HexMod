@@ -219,6 +219,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         }
 
         if (this.foundAll) {
+            this.clearEnergized();
             this.castSpell();
             this.stopCasting();
             return;
@@ -317,6 +318,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                             break;
                         }
                     }
+                    this.level.setBlock(tracked, bs.setValue(BlockCircleComponent.ENERGIZED, false), 3);
                 }
             }
 
@@ -424,7 +426,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         level.playSound(null, vpos.x, vpos.y, vpos.z, sound, SoundSource.BLOCKS, 1f, pitch);
     }
 
-    protected void stopCasting() {
+    protected void clearEnergized() {
         if (this.trackedBlocks != null) {
             for (var tracked : this.trackedBlocks) {
                 var bs = this.level.getBlockState(tracked);
@@ -433,6 +435,10 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                 }
             }
         }
+    }
+
+    protected void stopCasting() {
+        clearEnergized();
 
         this.activator = null;
         this.nextBlock = null;
