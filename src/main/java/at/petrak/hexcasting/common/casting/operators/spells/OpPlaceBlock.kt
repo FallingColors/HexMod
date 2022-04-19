@@ -39,6 +39,10 @@ object OpPlaceBlock : SpellOperator {
     private data class Spell(val vec: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(vec)
+
+            if (!ctx.world.mayInteract(ctx.caster, pos))
+                return
+
             val bstate = ctx.world.getBlockState(pos)
             if (bstate.isAir || bstate.material.isReplaceable) {
                 val placeeSlot = ctx.getOperativeSlot { it.item is BlockItem }

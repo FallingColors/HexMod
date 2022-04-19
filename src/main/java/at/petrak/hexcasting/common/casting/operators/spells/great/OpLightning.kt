@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.phys.Vec3
@@ -29,6 +30,9 @@ object OpLightning : SpellOperator {
 
     private data class Spell(val target: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
+            if (!ctx.world.mayInteract(ctx.caster, BlockPos(target)))
+                return
+
             val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, ctx.world)
             lightning.setPosRaw(target.x, target.y, target.z)
             ctx.world.addWithUUID(lightning) // why the hell is it called this it doesnt even involve a uuid

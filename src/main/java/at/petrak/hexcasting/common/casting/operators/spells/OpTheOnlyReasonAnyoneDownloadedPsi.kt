@@ -36,6 +36,10 @@ object OpTheOnlyReasonAnyoneDownloadedPsi : SpellOperator {
         override fun cast(ctx: CastingContext) {
             // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/PieceTrickOvergrow.java
             val pos = BlockPos(target)
+
+            if (!ctx.world.mayInteract(ctx.caster, pos))
+                return
+
             val hit = BlockHitResult(Vec3.ZERO, Direction.UP, pos, false)
             val save: ItemStack = ctx.caster.getItemInHand(InteractionHand.MAIN_HAND)
             ctx.caster.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(Items.BONE_MEAL))
