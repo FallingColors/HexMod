@@ -55,7 +55,7 @@ object OpExtinguish : SpellOperator {
                             here.z.toDouble()
                         )
                     ) // max distance to prevent runaway shenanigans
-                if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && distFromTarget < 10) {
+                if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && distFromTarget < 10 && ctx.world.mayInteract(ctx.caster, here)) {
                     // never seen this pos in my life
                     val blockstate = ctx.world.getBlockState(here)
                     val success =

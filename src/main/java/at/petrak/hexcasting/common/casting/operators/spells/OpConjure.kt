@@ -34,6 +34,10 @@ class OpConjure(val light: Boolean) : SpellOperator {
     private data class Spell(val target: Vec3, val light: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(target)
+
+            if (!ctx.world.mayInteract(ctx.caster, pos))
+                return
+
             val placeContext = DirectionalPlaceContext(ctx.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
 
             val worldState = ctx.world.getBlockState(pos)

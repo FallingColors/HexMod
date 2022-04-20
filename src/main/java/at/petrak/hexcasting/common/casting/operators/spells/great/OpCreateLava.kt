@@ -31,11 +31,16 @@ object OpCreateLava : SpellOperator {
 
     private data class Spell(val target: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
+            val pos = BlockPos(target)
+
+            if (!ctx.world.mayInteract(ctx.caster, pos))
+                return
+
             // Just steal bucket code lmao
             val charlie = Items.LAVA_BUCKET
             if (charlie is BucketItem) {
                 // make the player null so we don't give them a usage statistic for example
-                charlie.emptyContents(null, ctx.world, BlockPos(target), null)
+                charlie.emptyContents(null, ctx.world, pos, null)
             } else {
                 HexMod.getLogger().warn("Items.LAVA_BUCKET wasn't a BucketItem?")
             }

@@ -36,6 +36,9 @@ object OpEdifySapling : SpellOperator {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
+            if (!ctx.world.mayInteract(ctx.caster, pos))
+                return
+
             val bs = ctx.world.getBlockState(pos)
             for (i in 0 until 8) {
                 val success = AkashicTreeGrower.INSTANCE.growTree(

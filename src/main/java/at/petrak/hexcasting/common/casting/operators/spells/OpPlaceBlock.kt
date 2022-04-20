@@ -39,11 +39,15 @@ object OpPlaceBlock : SpellOperator {
     private data class Spell(val vec: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(vec)
+
+            if (!ctx.world.mayInteract(ctx.caster, pos))
+                return
+
             val bstate = ctx.world.getBlockState(pos)
             if (bstate.isAir || bstate.material.isReplaceable) {
                 val placeeSlot = ctx.getOperativeSlot { it.item is BlockItem }
                 if (placeeSlot != null) {
-                    val placeeStack = ctx.caster.inventory.getItem(placeeSlot)
+                    val placeeStack = ctx.caster.inventory.getItem(placeeSlot).copy()
                     val placee = placeeStack.item as BlockItem
                     if (ctx.withdrawItem(placee, 1, false)) {
                         // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143

@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.level.Explosion
 import net.minecraft.world.phys.Vec3
@@ -30,6 +31,9 @@ class OpExplode(val fire: Boolean) : SpellOperator {
 
     private data class Spell(val pos: Vec3, val strength: Double, val fire: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
+            if (!ctx.world.mayInteract(ctx.caster, BlockPos(pos)))
+                return
+
             ctx.world.explode(
                 ctx.caster,
                 pos.x,

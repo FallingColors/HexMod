@@ -35,6 +35,10 @@ object OpIgnite : SpellOperator {
 
     private data class Spell(val target: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
+            val pos = BlockPos(target)
+            if (!ctx.world.mayInteract(ctx.caster, pos))
+                return
+
             // steal petra code that steals bucket code
             val maxwell = Items.FIRE_CHARGE
             if (maxwell is FireChargeItem) {
@@ -45,7 +49,7 @@ object OpIgnite : SpellOperator {
                         null,
                         InteractionHand.MAIN_HAND,
                         ItemStack(maxwell.asItem()),
-                        BlockHitResult(target, Direction.UP, BlockPos(target), false)
+                        BlockHitResult(target, Direction.UP, pos, false)
                     )
                 )
             } else {

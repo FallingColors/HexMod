@@ -26,7 +26,7 @@ object OpEval : Operator {
             val pattern = if (pat.payload is HexPattern) {
                 pat.payload
             } else {
-                throw MishapInvalidIota(pat, 0, TranslatableComponent("hexcasting.mishap.invalid_value.list.pattern"))
+                throw MishapInvalidIota(SpellDatum.make(instrs), 0, TranslatableComponent("hexcasting.mishap.invalid_value.list.pattern"))
             }
             val res = harness.getUpdate(pattern, ctx.world)
             sideEffects.addAll(res.sideEffects)

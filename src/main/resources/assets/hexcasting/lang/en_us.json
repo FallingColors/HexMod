@@ -690,7 +690,7 @@
   "hexcasting.page.math.cos": "Take the cosine of an angle in radians, yielding the horizontal component of that angle drawn on a unit circle.",
   "hexcasting.page.math.tan": "Take the tangent of an angle in radians, yielding the slope of that angle drawn on a circle.",
   "hexcasting.page.math.arcsin": "Take the inverse sine of a value with absolute value 1 or less, yielding the angle whose sine is that value.",
-  "hexcasting.page.math.arccos": "Take the inverse cosine of a value with absolute value 1 or less, yielding the angle whose sine is that value.",
+  "hexcasting.page.math.arccos": "Take the inverse cosine of a value with absolute value 1 or less, yielding the angle whose cosine is that value.",
   "hexcasting.page.math.arctan": "Take the inverse tangent of a value, yielding the angle whose tangent is that value.",
   "hexcasting.page.math.random": "Creates a random number between 0 and 1.",
 

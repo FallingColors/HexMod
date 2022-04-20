@@ -34,6 +34,9 @@ object OpBreakBlock : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(v)
 
+            if (!ctx.world.mayInteract(ctx.caster, pos))
+                return
+
             val blockstate = ctx.world.getBlockState(pos)
             val tier =
                 HexConfig.Server.getOpBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()

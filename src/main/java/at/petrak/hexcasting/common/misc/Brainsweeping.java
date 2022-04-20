@@ -1,14 +1,20 @@
 package at.petrak.hexcasting.common.misc;
 
+import at.petrak.hexcasting.common.network.HexMessages;
+import at.petrak.hexcasting.common.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.mixin.AccessorLivingEntity;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraftforge.event.entity.living.LivingConversionEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 public class Brainsweeping {
 
@@ -29,6 +35,19 @@ public class Brainsweeping {
                 }
                 ((AccessorLivingEntity) entity).hex$SetBrain(brain.copyWithoutBehaviors());
             }
+
+            if (entity.level instanceof ServerLevel) {
+                HexMessages.getNetwork().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), MsgBrainsweepAck.of(entity));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void startTracking(PlayerEvent.StartTracking evt) {
+        Entity target = evt.getTarget();
+        if (evt.getPlayer() instanceof ServerPlayer serverPlayer &&
+                target instanceof VillagerDataHolder && target instanceof LivingEntity living && isBrainswept(living)) {
+            HexMessages.getNetwork().send(PacketDistributor.PLAYER.with(() -> serverPlayer), MsgBrainsweepAck.of(living));
         }
     }
 

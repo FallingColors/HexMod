@@ -11,8 +11,11 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,6 +43,21 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
     }
 
     @Override
+    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+        var tag = stack.getTagElement("BlockEntityTag");
+        if (tag != null && tag.isEmpty())
+            stack.removeTagKey("BlockEntityTag");
+        return super.onEntityItemUpdate(stack, entity);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        var tag = pStack.getTagElement("BlockEntityTag");
+        if (tag != null && tag.isEmpty())
+            pStack.removeTagKey("BlockEntityTag");
+    }
+
+    @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
         var stackTag = stack.getTag();
         if (stackTag == null || !stackTag.contains("BlockEntityTag")) {
@@ -61,14 +79,20 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
 
     @Override
     public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
-        return !(datum == null || datum.getType() != DatumType.PATTERN);
+        return datum == null || datum.getType() == DatumType.PATTERN;
     }
 
     @Override
     public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
-        if (this.canWrite(stack, datum) && datum.getPayload() instanceof HexPattern pat) {
-            var beTag = stack.getOrCreateTagElement("BlockEntityTag");
-            beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
-        }
+        if (this.canWrite(stack, datum))
+            if (datum == null) {
+                var beTag = stack.getOrCreateTagElement("BlockEntityTag");
+                beTag.remove(BlockEntitySlate.TAG_PATTERN);
+                if (beTag.isEmpty())
+                    stack.removeTagKey("BlockEntityTag");
+            } else if (datum.getPayload() instanceof HexPattern pat) {
+                var beTag = stack.getOrCreateTagElement("BlockEntityTag");
+                beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
+            }
     }
 }
