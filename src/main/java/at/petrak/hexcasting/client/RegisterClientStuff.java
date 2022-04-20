@@ -36,8 +36,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComparatorBlock;
 import net.minecraft.world.level.block.RepeaterBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ComparatorBlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ComparatorMode;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -231,23 +229,16 @@ public class RegisterClientStuff {
             ));
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.COMPARATOR,
-            (state, pos, observer, world, lensHand) -> {
-                BlockEntity be = world.getBlockEntity(pos);
-                if (be instanceof ComparatorBlockEntity comparator) {
-                    return List.of(
-                        new Pair<>(
-                            new ItemStack(Items.REDSTONE),
-                            new TextComponent(String.valueOf(comparator.getOutputSignal()))
-                                .withStyle(ChatFormatting.RED)),
-                        new Pair<>(
-                            new ItemStack(Items.REDSTONE_TORCH),
-                            new TextComponent(
-                                state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE ? ">" : "-")
-                                .withStyle(ChatFormatting.RED)));
-                } else {
-                    return List.of();
-                }
-            });
+            (state, pos, observer, world, lensHand) -> List.of(
+                new Pair<>(
+                    new ItemStack(Items.REDSTONE),
+                    new TextComponent(String.valueOf(state.getDirectSignal(world, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING))))
+                        .withStyle(ChatFormatting.RED)),
+                new Pair<>(
+                    new ItemStack(Items.REDSTONE_TORCH),
+                    new TextComponent(
+                        state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE ? ">" : "-")
+                        .withStyle(ChatFormatting.RED))));
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
             (state, pos, observer, world, lensHand) -> List.of(
