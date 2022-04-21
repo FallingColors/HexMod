@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "hexcasting:item/spellbook_empty"
+    "layer0": "hexcasting:item/spellbook/empty"
   }
 }

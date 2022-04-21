@@ -18,6 +18,8 @@ import java.util.List;
 
 public class ItemFocus extends Item implements DataHolderItem {
     public static final ResourceLocation DATATYPE_PRED = new ResourceLocation(HexMod.MOD_ID, "datatype");
+    public static final ResourceLocation SEALED_PRED = new ResourceLocation(HexMod.MOD_ID, "sealed");
+
     public static final String TAG_DATA = "data";
     public static final String TAG_SEALED = "sealed";
 
@@ -45,19 +47,18 @@ public class ItemFocus extends Item implements DataHolderItem {
 
     @Override
     public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
-        return !stack.hasTag() || !stack.getTag().getBoolean(TAG_SEALED);
+        return datum == null || !stack.hasTag() || !stack.getTag().getBoolean(TAG_SEALED);
     }
 
     @Override
     public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
         CompoundTag tag = stack.getOrCreateTag();
 
-        if (!tag.getBoolean(TAG_SEALED)) {
-            if (datum == null)
-                tag.remove(TAG_DATA);
-            else
-                tag.put(TAG_DATA, datum.serializeToNBT());
-        }
+        if (datum == null) {
+            tag.remove(TAG_DATA);
+            tag.remove(TAG_SEALED);
+        } else if (!tag.getBoolean(TAG_SEALED))
+            tag.put(TAG_DATA, datum.serializeToNBT());
     }
 
     @Override

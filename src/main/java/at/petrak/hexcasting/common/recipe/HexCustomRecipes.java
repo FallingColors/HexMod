@@ -12,4 +12,6 @@ public class HexCustomRecipes {
 
     public static final RegistryObject<RecipeSerializer<SealFocusRecipe>> SEAL_FOCUS = RECIPES.register("seal_focus",
         () -> SealFocusRecipe.SERIALIZER);
+    public static final RegistryObject<RecipeSerializer<SealSpellbookRecipe>> SEAL_SPELLBOOK = RECIPES.register("seal_spellbook",
+        () -> SealSpellbookRecipe.SERIALIZER);
 }

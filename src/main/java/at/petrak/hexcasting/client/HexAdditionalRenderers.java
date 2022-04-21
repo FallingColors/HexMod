@@ -82,7 +82,7 @@ public class HexAdditionalRenderers {
         RenderSystem.disableCull();
         RenderSystem.lineWidth(5f);
 
-        var colorizer = HexPlayerDataHelper.getColorizer(mc.player);
+        var colorizer = HexPlayerDataHelper.getColorizer(owner);
         BiConsumer<float[], float[]> v = (l, r) -> {
             int lcolor = colorizer.getColor(time, new Vec3(l[0], l[1], l[2])),
                     rcolor = colorizer.getColor(time, new Vec3(r[0], r[1], r[2]));

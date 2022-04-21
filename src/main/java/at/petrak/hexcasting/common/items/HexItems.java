@@ -56,6 +56,10 @@ public class HexItems {
         () -> new ItemWand(unstackable()));
     public static final RegistryObject<ItemWand> WAND_DARK_OAK = ITEMS.register("wand_dark_oak",
         () -> new ItemWand(unstackable()));
+    public static final RegistryObject<ItemWand> WAND_CRIMSON = ITEMS.register("wand_crimson",
+        () -> new ItemWand(unstackable()));
+    public static final RegistryObject<ItemWand> WAND_WARPED = ITEMS.register("wand_warped",
+        () -> new ItemWand(unstackable()));
     public static final RegistryObject<ItemWand> WAND_AKASHIC = ITEMS.register("wand_akashic",
         () -> new ItemWand(unstackable()));
 

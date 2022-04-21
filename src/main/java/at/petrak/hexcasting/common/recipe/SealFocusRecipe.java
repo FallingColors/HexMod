@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe;
 
+import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -26,8 +27,7 @@ public class SealFocusRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             var stack = inv.getItem(i);
             if (!stack.isEmpty()) {
-                var item = stack.getItem();
-                if (item instanceof ItemFocus) {
+                if (stack.is(HexItems.FOCUS.get())) {
                     if (foundOkFocus) {
                         return false;
                     }
@@ -40,7 +40,7 @@ public class SealFocusRecipe extends CustomRecipe {
                     } else {
                         return false;
                     }
-                } else if (item == Items.HONEYCOMB) {
+                } else if (stack.is(Items.HONEYCOMB)) {
                     if (foundWax) {
                         return false;
                     }
@@ -56,17 +56,21 @@ public class SealFocusRecipe extends CustomRecipe {
 
     @Override
     public ItemStack assemble(CraftingContainer inv) {
-        ItemStack out = null;
+        ItemStack out = ItemStack.EMPTY;
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
             var stack = inv.getItem(i);
-            if (!stack.isEmpty() && stack.getItem() != Items.HONEYCOMB) {
+            if (stack.is(HexItems.FOCUS.get())) {
                 out = stack.copy();
                 break;
             }
         }
-        out.getTag().putBoolean(ItemFocus.TAG_SEALED, true);
-        out.setCount(1);
+
+        if (!out.isEmpty()) {
+            out.getOrCreateTag().putBoolean(ItemFocus.TAG_SEALED, true);
+            out.setCount(1);
+        }
+
         return out;
     }
 
