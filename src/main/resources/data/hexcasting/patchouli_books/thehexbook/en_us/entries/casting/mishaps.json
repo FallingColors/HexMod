@@ -75,13 +75,13 @@
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.disabled.title",
-      "text": "hexcasting.page.mishaps.disabled"
+      "title": "hexcasting.page.mishaps.true_name.title",
+      "text": "hexcasting.page.mishaps.true_name"
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.true_name.title",
-      "text": "hexcasting.page.mishaps.true_name"
+      "title": "hexcasting.page.mishaps.disabled.title",
+      "text": "hexcasting.page.mishaps.disabled"
     },
     {
       "type": "patchouli:text",

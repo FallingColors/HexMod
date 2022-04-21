@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
@@ -10,7 +9,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +20,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class ItemSpellbook extends Item implements DataHolderItem {
-    public static final ResourceLocation DATATYPE_PRED = new ResourceLocation(HexMod.MOD_ID, "datatype");
-
     public static String TAG_SELECTED_PAGE = "page_idx";
     // this is a CompoundTag of string numerical keys to SpellData
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
@@ -32,6 +28,10 @@ public class ItemSpellbook extends Item implements DataHolderItem {
     // this stores the names of pages, to be restored when you scroll
     // it is 1-indexed, and the 0-case for TAG_PAGES will be treated as 1
     public static String TAG_PAGE_NAMES = "page_names";
+
+    // this stores the sealed status of each page, to be restored when you scroll
+    // it is 1-indexed, and the 0-case for TAG_PAGES will be treated as 1
+    public static String TAG_SEALED = "sealed_pages";
 
     public ItemSpellbook(Properties properties) {
         super(properties);
@@ -46,9 +46,9 @@ public class ItemSpellbook extends Item implements DataHolderItem {
             int highest = HighestPage(stack);
             if (highest != 0) {
                 tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page",
-                        new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
-                        new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
-                        .withStyle(ChatFormatting.GRAY));
+                    new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
+                    new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
+                    .withStyle(ChatFormatting.GRAY));
             } else {
                 tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
             }
@@ -127,11 +127,14 @@ public class ItemSpellbook extends Item implements DataHolderItem {
 
     @Override
     public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
-        return true;
+        return datum == null || !IsSealed(stack);
     }
 
     @Override
     public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+        if (datum != null && IsSealed(stack))
+            return;
+
         CompoundTag tag = stack.getOrCreateTag();
 
         int idx;
@@ -146,15 +149,58 @@ public class ItemSpellbook extends Item implements DataHolderItem {
         }
         var key = String.valueOf(idx);
         if (tag.contains(TAG_PAGES, Tag.TAG_COMPOUND)) {
-            if (datum == null)
+            if (datum == null) {
                 tag.getCompound(TAG_PAGES).remove(key);
-            else
+                tag.getCompound(TAG_SEALED).remove(key);
+            } else
                 tag.getCompound(TAG_PAGES).put(key, datum.serializeToNBT());
         } else if (datum != null) {
             var pagesTag = new CompoundTag();
             pagesTag.put(key, datum.serializeToNBT());
             tag.put(TAG_PAGES, pagesTag);
+        } else {
+            tag.getCompound(TAG_SEALED).remove(key);
         }
+    }
+
+    public static void SetSealed(ItemStack stack, boolean sealed) {
+        CompoundTag tag = stack.getOrCreateTag();
+
+        int index = 1;
+        if (!ArePagesEmpty(stack) && tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
+            index = tag.getInt(TAG_SELECTED_PAGE);
+            if (index == 0) index = 1;
+        }
+
+        String nameKey = String.valueOf(index);
+        CompoundTag names = tag.getCompound(TAG_SEALED);
+
+        if (!sealed)
+            names.remove(nameKey);
+        else
+            names.putBoolean(nameKey, true);
+
+        if (names.isEmpty())
+            tag.remove(TAG_SEALED);
+        else
+            tag.put(TAG_SEALED, names);
+
+    }
+
+    public static boolean IsSealed(ItemStack stack) {
+        if (!stack.hasTag())
+            return false;
+        CompoundTag tag = stack.getOrCreateTag();
+
+        int index = 1;
+        if (!ArePagesEmpty(stack) && tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
+            index = tag.getInt(TAG_SELECTED_PAGE);
+            if (index == 0) index = 1;
+        }
+
+        String nameKey = String.valueOf(index);
+        CompoundTag names = tag.getCompound(TAG_SEALED);
+        return names.getBoolean(nameKey);
     }
 
     public static int HighestPage(ItemStack stack) {

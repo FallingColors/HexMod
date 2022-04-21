@@ -2,10 +2,11 @@ package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
+import at.petrak.hexcasting.common.recipe.SealSpellbookRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
 import at.petrak.hexcasting.datagen.recipebuilders.BrainsweepRecipeBuilder;
@@ -41,6 +42,7 @@ public class HexRecipes extends PaucalRecipeProvider {
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> recipes) {
         specialRecipe(recipes, SealFocusRecipe.SERIALIZER);
+        specialRecipe(recipes, SealSpellbookRecipe.SERIALIZER);
 
         var wands = new Item[]{
             HexItems.WAND_OAK.get(),
@@ -49,6 +51,8 @@ public class HexRecipes extends PaucalRecipeProvider {
             HexItems.WAND_JUNGLE.get(),
             HexItems.WAND_DARK_OAK.get(),
             HexItems.WAND_ACACIA.get(),
+            HexItems.WAND_CRIMSON.get(),
+            HexItems.WAND_WARPED.get(),
             HexItems.WAND_AKASHIC.get(),
         };
         var woods = new Item[]{
@@ -58,6 +62,8 @@ public class HexRecipes extends PaucalRecipeProvider {
             Items.JUNGLE_PLANKS,
             Items.DARK_OAK_PLANKS,
             Items.ACACIA_PLANKS,
+            Items.CRIMSON_PLANKS,
+            Items.WARPED_PLANKS,
             HexBlocks.AKASHIC_PLANKS.get().asItem(),
         };
         for (int i = 0; i < wands.length; i++) {

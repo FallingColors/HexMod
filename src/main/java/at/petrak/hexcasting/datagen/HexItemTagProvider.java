@@ -26,7 +26,7 @@ public class HexItemTagProvider extends ItemTagsProvider {
         tag(HexItemTags.AMETHYST_DUST).add(HexItems.AMETHYST_DUST.get());
         tag(HexItemTags.WANDS).add(HexItems.WAND_OAK.get(), HexItems.WAND_SPRUCE.get(), HexItems.WAND_BIRCH.get(),
             HexItems.WAND_JUNGLE.get(), HexItems.WAND_ACACIA.get(), HexItems.WAND_DARK_OAK.get(),
-            HexItems.WAND_AKASHIC.get());
+            HexItems.WAND_CRIMSON.get(), HexItems.WAND_WARPED.get(), HexItems.WAND_AKASHIC.get());
         tag(HexItemTags.PHIAL_BASE).add(Items.GLASS_BOTTLE);
 
         this.copy(HexBlockTags.AKASHIC_LOGS, HexItemTags.AKASHIC_LOGS);

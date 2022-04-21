@@ -3,9 +3,11 @@ package at.petrak.hexcasting.client;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
+import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.Widget;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
@@ -53,46 +55,27 @@ public class RegisterClientStuff {
     @SubscribeEvent
     public static void init(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
-            ItemProperties.register(HexItems.FOCUS.get(), ItemFocus.DATATYPE_PRED,
-                (stack, level, holder, holderID) -> {
-                    var tag = stack.getOrCreateTag();
-                    var isSealed = tag.getBoolean(ItemFocus.TAG_SEALED);
-                    var baseNum = isSealed ? 100f : 0f;
-                    var datum = HexItems.FOCUS.get().readDatumTag(stack);
-                    if (datum != null) {
-                        var typename = datum.getAllKeys().iterator().next();
-                        return baseNum + switch (typename) {
-                            case SpellDatum.TAG_ENTITY -> 1f;
-                            case SpellDatum.TAG_DOUBLE -> 2f;
-                            case SpellDatum.TAG_VEC3 -> 3f;
-                            case SpellDatum.TAG_WIDGET -> 4f;
-                            case SpellDatum.TAG_LIST -> 5f;
-                            case SpellDatum.TAG_PATTERN -> 6f;
-                            default -> 0f; // uh oh
-                        };
-                    } else {
-                        return baseNum;
-                    }
-                });
-            ItemProperties.register(HexItems.SPELLBOOK.get(), ItemSpellbook.DATATYPE_PRED,
-                (stack, level, holder, holderID) -> {
-                    var tag = stack.getOrCreateTag();
-                    var datum = HexItems.SPELLBOOK.get().readDatumTag(stack);
-                    if (datum != null) {
-                        var typename = datum.getAllKeys().iterator().next();
-                        return switch (typename) {
-                            case SpellDatum.TAG_ENTITY -> 1f;
-                            case SpellDatum.TAG_DOUBLE -> 2f;
-                            case SpellDatum.TAG_VEC3 -> 3f;
-                            case SpellDatum.TAG_WIDGET -> 4f;
-                            case SpellDatum.TAG_LIST -> 5f;
-                            case SpellDatum.TAG_PATTERN -> 6f;
-                            default -> 0f; // uh oh
-                        };
-                    } else {
+            for (DataHolderItem dataHolder : new DataHolderItem[]{ HexItems.FOCUS.get(), HexItems.SPELLBOOK.get() }) {
+                ItemProperties.register((Item) dataHolder, ItemFocus.DATATYPE_PRED,
+                    (stack, level, holder, holderID) -> {
+                        var datum = dataHolder.readDatumTag(stack);
+                        if (datum != null) {
+                            var typename = datum.getAllKeys().iterator().next();
+                            return switch (typename) {
+                                case SpellDatum.TAG_ENTITY -> 1f;
+                                case SpellDatum.TAG_DOUBLE -> 2f;
+                                case SpellDatum.TAG_VEC3 -> 3f;
+                                case SpellDatum.TAG_WIDGET -> 4f;
+                                case SpellDatum.TAG_LIST -> 5f;
+                                case SpellDatum.TAG_PATTERN -> 6f;
+                                default -> 0f; // uh oh
+                            };
+                        }
                         return 0f;
-                    }
-                });
+                    });
+                ItemProperties.register((Item) dataHolder, ItemFocus.SEALED_PRED,
+                    (stack, level, holder, holderID) -> dataHolder.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);
+            }
             for (ItemPackagedSpell packager : new ItemPackagedSpell[]{
                 HexItems.CYPHER.get(),
                 HexItems.TRINKET.get(),

@@ -20,8 +20,7 @@ class OpErase : SpellOperator {
             val datumHolder = it.getCapability(HexCapabilities.DATUM).resolve()
 
             (spellHolder.isPresent && spellHolder.get().patterns != null) ||
-                    (datumHolder.isPresent && datumHolder.get().readDatum(ctx.world) != null &&
-                            datumHolder.get().writeDatum(null, true))
+                    (datumHolder.isPresent && datumHolder.get().writeDatum(null, true))
         }
         val spellHolder = handStack.getCapability(HexCapabilities.SPELL).resolve()
         val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
@@ -42,8 +41,7 @@ class OpErase : SpellOperator {
                 val datumHolder = it.getCapability(HexCapabilities.DATUM).resolve()
 
                 (spellHolder.isPresent && spellHolder.get().patterns != null) ||
-                        (datumHolder.isPresent && datumHolder.get().readDatum(ctx.world) != null &&
-                                datumHolder.get().writeDatum(null, true))
+                        (datumHolder.isPresent && datumHolder.get().writeDatum(null, true))
             }
             val spellHolder = handStack.getCapability(HexCapabilities.SPELL).resolve()
             val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
@@ -51,8 +49,7 @@ class OpErase : SpellOperator {
             if (spellHolder.isPresent && spellHolder.get().patterns != null)
                 spellHolder.get().clearPatterns()
 
-            if (datumHolder.isPresent && datumHolder.get().readDatum(ctx.world) != null &&
-                datumHolder.get().writeDatum(null, true))
+            if (datumHolder.isPresent && datumHolder.get().writeDatum(null, true))
                 datumHolder.get().writeDatum(null, false)
         }
     }

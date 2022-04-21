@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "hexcasting:item/focus_entity_sealed"
+    "layer0": "hexcasting:item/focus/entity_sealed"
   }
 }

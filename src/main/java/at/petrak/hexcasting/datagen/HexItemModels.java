@@ -57,10 +57,12 @@ public class HexItemModels extends PaucalItemModelProvider {
             HexItems.WAND_JUNGLE.get(),
             HexItems.WAND_DARK_OAK.get(),
             HexItems.WAND_ACACIA.get(),
+            HexItems.WAND_CRIMSON.get(),
+            HexItems.WAND_WARPED.get(),
             HexItems.WAND_AKASHIC.get(),
         };
         var wandKeys = new String[]{
-            "oak", "birch", "spruce", "jungle", "dark_oak", "acacia", "akashic"
+            "oak", "birch", "spruce", "jungle", "dark_oak", "acacia", "crimson", "warped", "akashic"
         };
         for (int i = 0; i < wands.length; i++) {
             Item wand = wands[i];
@@ -91,26 +93,28 @@ public class HexItemModels extends PaucalItemModelProvider {
             for (int i = 0, stringsLength = datumStoredTypes.length; i < stringsLength; i++) {
                 var type = datumStoredTypes[i];
 
-                var focusName = "focus_" + type + (sealed ? "_sealed" : "");
-                simpleItem(modLoc(focusName));
+                var suffix = type + (sealed ? "_sealed" : "");
+
+                var focusName = "focus_" + suffix;
+                singleTexture(focusName, new ResourceLocation("item/generated"),
+                    "layer0", modLoc("item/focus/" + suffix));
                 getBuilder(HexItems.FOCUS.get().getRegistryName().getPath())
                     .override()
-                    .predicate(ItemFocus.DATATYPE_PRED, -0.01f + i + (sealed ? 100 : 0))
+                    .predicate(ItemFocus.DATATYPE_PRED, i)
+                    .predicate(ItemFocus.SEALED_PRED, sealed ? 1f : 0f)
                     .model(new ModelFile.UncheckedModelFile(modLoc("item/" + focusName)))
                     .end();
+
+                var spellbookName = "spellbook_" + type + (sealed ? "_sealed" : "");
+                singleTexture(spellbookName, new ResourceLocation("item/generated"),
+                    "layer0", modLoc("item/spellbook/" + suffix));
+                getBuilder(HexItems.SPELLBOOK.get().getRegistryName().getPath())
+                    .override()
+                    .predicate(ItemFocus.DATATYPE_PRED, i)
+                    .predicate(ItemFocus.SEALED_PRED, sealed ? 1f : 0f)
+                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + spellbookName)))
+                    .end();
             }
-        }
-
-        for (int i = 0, stringsLength = datumStoredTypes.length; i < stringsLength; i++) {
-            var type = datumStoredTypes[i];
-
-            var spellbookName = "spellbook_" + type;
-            simpleItem(modLoc(spellbookName));
-            getBuilder(HexItems.SPELLBOOK.get().getRegistryName().getPath())
-                .override()
-                .predicate(ItemSpellbook.DATATYPE_PRED, -0.01f + i)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/" + spellbookName)))
-                .end();
         }
 
         Pair<RegistryObject<Item>, String>[] packagers = new Pair[]{

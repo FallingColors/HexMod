@@ -70,9 +70,9 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
         var r = FastColor.ARGB32.red(raw);
         var g = FastColor.ARGB32.green(raw);
         var b = FastColor.ARGB32.blue(raw);
-        double luminance = 0.2126 * r / 0xFF + 0.7152 * g / 0xFF + 0.0722 * b / 0xFF; // Standard relative luminance calculation
+        double luminance = (0.2126 * r  + 0.7152 * g + 0.0722 * b) / 0xFF; // Standard relative luminance calculation
 
-        if (luminance < 0.1) {
+        if (luminance < 0.05) {
             int rawMod = Colorizer.morphBetweenColors(MINIMUM_LUMINANCE_COLOR_WHEEL, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
 
             r += FastColor.ARGB32.red(rawMod);

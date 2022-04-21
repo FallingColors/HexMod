@@ -10,6 +10,10 @@
       "text": "hexcasting.page.spellbook.1"
     },
     {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.spellbook.2"
+    },
+    {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:spellbook",
       "text": "hexcasting.page.spellbook.crafting.desc"
