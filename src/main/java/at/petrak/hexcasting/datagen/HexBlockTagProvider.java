@@ -32,7 +32,8 @@ public class HexBlockTagProvider extends BlockTagsProvider {
                 HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),
                 HexBlocks.AKASHIC_WOOD.get(), HexBlocks.AKASHIC_WOOD_STRIPPED.get(),
                 HexBlocks.AKASHIC_PLANKS.get(), HexBlocks.AKASHIC_PANEL.get(), HexBlocks.AKASHIC_TILE.get(),
-                HexBlocks.AKASHIC_DOOR.get(), HexBlocks.AKASHIC_TRAPDOOR.get());
+                HexBlocks.AKASHIC_DOOR.get(), HexBlocks.AKASHIC_TRAPDOOR.get(), HexBlocks.AKASHIC_SLAB.get(),
+                HexBlocks.AKASHIC_BUTTON.get());
 
         tag(BlockTags.MINEABLE_WITH_HOE)
             .add(HexBlocks.AKASHIC_LEAVES1.get(), HexBlocks.AKASHIC_LEAVES2.get(), HexBlocks.AKASHIC_LEAVES3.get());
@@ -56,6 +57,10 @@ public class HexBlockTagProvider extends BlockTagsProvider {
             .add(HexBlocks.AKASHIC_PLANKS.get(), HexBlocks.AKASHIC_PANEL.get(), HexBlocks.AKASHIC_TILE.get());
         tag(HexBlockTags.AKASHIC_PLANKS)
             .add(HexBlocks.AKASHIC_PLANKS.get(), HexBlocks.AKASHIC_PANEL.get(), HexBlocks.AKASHIC_TILE.get());
+        tag(BlockTags.SLABS)
+            .add(HexBlocks.AKASHIC_SLAB.get());
+        tag(BlockTags.WOODEN_SLABS)
+            .add(HexBlocks.AKASHIC_SLAB.get());
         tag(BlockTags.DOORS)
             .add(HexBlocks.AKASHIC_DOOR.get());
         tag(BlockTags.WOODEN_DOORS)
@@ -64,5 +69,13 @@ public class HexBlockTagProvider extends BlockTagsProvider {
             .add(HexBlocks.AKASHIC_TRAPDOOR.get());
         tag(BlockTags.WOODEN_TRAPDOORS)
             .add(HexBlocks.AKASHIC_TRAPDOOR.get());
+        tag(BlockTags.PRESSURE_PLATES)
+            .add(HexBlocks.AKASHIC_PRESSURE_PLATE.get());
+        tag(BlockTags.WOODEN_PRESSURE_PLATES)
+            .add(HexBlocks.AKASHIC_PRESSURE_PLATE.get());
+        tag(BlockTags.BUTTONS)
+            .add(HexBlocks.AKASHIC_BUTTON.get());
+        tag(BlockTags.WOODEN_BUTTONS)
+            .add(HexBlocks.AKASHIC_BUTTON.get());
     }
 }

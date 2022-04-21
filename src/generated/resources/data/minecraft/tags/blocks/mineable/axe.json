@@ -12,6 +12,8 @@
     "hexcasting:akashic_panel",
     "hexcasting:akashic_tile",
     "hexcasting:akashic_door",
-    "hexcasting:akashic_trapdoor"
+    "hexcasting:akashic_trapdoor",
+    "hexcasting:akashic_slab",
+    "hexcasting:akashic_button"
   ]
 }

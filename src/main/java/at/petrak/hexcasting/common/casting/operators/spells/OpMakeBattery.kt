@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -23,9 +24,9 @@ object OpMakeBattery : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getChecked<ItemEntity>(0)
 
-        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
+        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexItemTags.PHIAL_BASE) }
 
-        if (handStack.item != Items.GLASS_BOTTLE) {
+        if (handStack.`is`(HexItemTags.PHIAL_BASE)) {
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,
@@ -59,8 +60,8 @@ object OpMakeBattery : SpellOperator {
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val (handStack, hand) = ctx.getHeldItemToOperateOn { it.item == Items.GLASS_BOTTLE }
-            if (handStack.item == Items.GLASS_BOTTLE && itemEntity.isAlive) {
+            val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexItemTags.PHIAL_BASE) }
+            if (handStack.`is`(HexItemTags.PHIAL_BASE) && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
                 val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
