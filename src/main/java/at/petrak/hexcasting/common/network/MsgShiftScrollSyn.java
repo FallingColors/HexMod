@@ -67,7 +67,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
             component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name",
                     new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    stack.getHoverName());
+                    new TextComponent("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC).append(stack.getHoverName()));
         } else {
             component = new TranslatableComponent("hexcasting.tooltip.spellbook.page",
                     new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
