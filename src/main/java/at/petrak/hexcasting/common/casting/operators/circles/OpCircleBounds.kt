@@ -18,9 +18,9 @@ class OpCircleBounds(val max: Boolean) : ConstManaOperator {
 
         return Operator.spellListOf(
             if (max)
-                Vec3(aabb.minX, aabb.minY, aabb.minZ)
-            else
                 Vec3(aabb.maxX, aabb.maxY, aabb.maxZ)
+            else
+                Vec3(aabb.minX, aabb.minY, aabb.minZ)
         )
     }
 }
