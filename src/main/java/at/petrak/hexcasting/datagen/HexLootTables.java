@@ -47,15 +47,9 @@ public class HexLootTables extends PaucalLootTableProvider {
             HexBlocks.AKASHIC_PLANKS, HexBlocks.AKASHIC_TILE, HexBlocks.AKASHIC_PANEL,
             HexBlocks.AKASHIC_TRAPDOOR);
 
-        for (Block block : new Block[] { HexBlocks.AKASHIC_LEAVES1.get(), HexBlocks.AKASHIC_LEAVES2.get(), HexBlocks.AKASHIC_LEAVES3.get()}) {
-            var leafPool = dropThisPool(block, 1)
-                    .when(new AlternativeLootItemCondition.Builder(
-                            CanToolPerformAction.canToolPerformAction(ToolActions.SHEARS_DIG),
-                            MatchTool.toolMatches(ItemPredicate.Builder.item()
-                                    .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))))
-                    ));
-            lootTables.put(block, LootTable.lootTable().withPool(leafPool));
-        }
+        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES1.get());
+        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES2.get());
+        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES3.get());
 
         var slatePool = LootPool.lootPool().name("slate").
             setRolls(ConstantValue.exactly(1))
@@ -69,5 +63,15 @@ public class HexLootTables extends PaucalLootTableProvider {
                 StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER)
             ));
         lootTables.put(HexBlocks.AKASHIC_DOOR.get(), LootTable.lootTable().withPool(doorPool));
+    }
+
+    private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {
+        var leafPool = dropThisPool(block, 1)
+            .when(new AlternativeLootItemCondition.Builder(
+                CanToolPerformAction.canToolPerformAction(ToolActions.SHEARS_DIG),
+                MatchTool.toolMatches(ItemPredicate.Builder.item()
+                    .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))))
+            ));
+        lootTables.put(block, LootTable.lootTable().withPool(leafPool));
     }
 }

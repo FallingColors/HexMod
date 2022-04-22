@@ -34,7 +34,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComparatorBlock;
 import net.minecraft.world.level.block.RepeaterBlock;
@@ -55,37 +54,12 @@ public class RegisterClientStuff {
     @SubscribeEvent
     public static void init(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
-            for (DataHolderItem dataHolder : new DataHolderItem[]{ HexItems.FOCUS.get(), HexItems.SPELLBOOK.get() }) {
-                ItemProperties.register((Item) dataHolder, ItemFocus.DATATYPE_PRED,
-                    (stack, level, holder, holderID) -> {
-                        var datum = dataHolder.readDatumTag(stack);
-                        if (datum != null) {
-                            var typename = datum.getAllKeys().iterator().next();
-                            return switch (typename) {
-                                case SpellDatum.TAG_ENTITY -> 1f;
-                                case SpellDatum.TAG_DOUBLE -> 2f;
-                                case SpellDatum.TAG_VEC3 -> 3f;
-                                case SpellDatum.TAG_WIDGET -> 4f;
-                                case SpellDatum.TAG_LIST -> 5f;
-                                case SpellDatum.TAG_PATTERN -> 6f;
-                                default -> 0f; // uh oh
-                            };
-                        }
-                        return 0f;
-                    });
-                ItemProperties.register((Item) dataHolder, ItemFocus.SEALED_PRED,
-                    (stack, level, holder, holderID) -> dataHolder.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);
-            }
-            for (ItemPackagedSpell packager : new ItemPackagedSpell[]{
-                HexItems.CYPHER.get(),
-                HexItems.TRINKET.get(),
-                HexItems.ARTIFACT.get(),
-            }) {
-                ItemProperties.register(packager, ItemPackagedSpell.HAS_PATTERNS_PRED,
-                    (stack, level, holder, holderID) ->
-                        packager.getPatterns(stack) != null ? 1f : 0f
-                );
-            }
+            registerDataHolderOverrides(HexItems.FOCUS.get());
+            registerDataHolderOverrides(HexItems.SPELLBOOK.get());
+
+            registerPackagedSpellOverrides(HexItems.CYPHER.get());
+            registerPackagedSpellOverrides(HexItems.TRINKET.get());
+            registerPackagedSpellOverrides(HexItems.ARTIFACT.get());
 
             ItemProperties.register(HexItems.BATTERY.get(), ItemManaBattery.MANA_PREDICATE,
                 (stack, level, holder, holderID) -> {
@@ -105,49 +79,26 @@ public class RegisterClientStuff {
             ItemProperties.register(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
                 (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
-            var wands = new Item[]{
-                HexItems.WAND_OAK.get(),
-                HexItems.WAND_BIRCH.get(),
-                HexItems.WAND_SPRUCE.get(),
-                HexItems.WAND_JUNGLE.get(),
-                HexItems.WAND_DARK_OAK.get(),
-                HexItems.WAND_ACACIA.get(),
-                HexItems.WAND_AKASHIC.get(),
-            };
-            for (var wand : wands) {
-                ItemProperties.register(wand, ItemWand.FUNNY_LEVEL_PREDICATE,
-                    (stack, level, holder, holderID) -> {
-                        var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
-                        if (name.contains("old")) {
-                            return 1f;
-                        } else if (name.contains("wand of the forest")) {
-                            return 2f;
-                        } else {
-                            return 0f;
-                        }
-                    });
-            }
+            registerWandOverrides(HexItems.WAND_OAK.get());
+            registerWandOverrides(HexItems.WAND_BIRCH.get());
+            registerWandOverrides(HexItems.WAND_SPRUCE.get());
+            registerWandOverrides(HexItems.WAND_JUNGLE.get());
+            registerWandOverrides(HexItems.WAND_DARK_OAK.get());
+            registerWandOverrides(HexItems.WAND_ACACIA.get());
+            registerWandOverrides(HexItems.WAND_AKASHIC.get());
 
             HexTooltips.init();
         });
 
-        for (var cutout : new Block[]{
-            HexBlocks.CONJURED_LIGHT.get(),
-            HexBlocks.CONJURED_BLOCK.get(),
-            HexBlocks.AKASHIC_DOOR.get(),
-            HexBlocks.AKASHIC_TRAPDOOR.get(),
-            HexBlocks.SCONCE.get(),
-        }) {
-            ItemBlockRenderTypes.setRenderLayer(cutout, RenderType.cutout());
-        }
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.CONJURED_LIGHT.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.CONJURED_BLOCK.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_DOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_TRAPDOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.SCONCE.get(), RenderType.cutout());
 
-        for (var mipped : new Block[]{
-            HexBlocks.AKASHIC_LEAVES1.get(),
-            HexBlocks.AKASHIC_LEAVES2.get(),
-            HexBlocks.AKASHIC_LEAVES3.get(),
-        }) {
-            ItemBlockRenderTypes.setRenderLayer(mipped, RenderType.cutoutMipped());
-        }
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_LEAVES1.get(), RenderType.cutoutMipped());
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_LEAVES2.get(), RenderType.cutoutMipped());
+        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_LEAVES3.get(), RenderType.cutoutMipped());
 
         ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_RECORD.get(), RenderType.translucent());
 
@@ -233,6 +184,49 @@ public class RegisterClientStuff {
                     new ItemStack(Items.CLOCK),
                     new TextComponent(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
                         .withStyle(ChatFormatting.YELLOW))));
+    }
+
+    private static void registerDataHolderOverrides(DataHolderItem item) {
+        ItemProperties.register((Item) item, ItemFocus.DATATYPE_PRED,
+            (stack, level, holder, holderID) -> {
+                var datum = item.readDatumTag(stack);
+                if (datum != null) {
+                    var typename = datum.getAllKeys().iterator().next();
+                    return switch (typename) {
+                        case SpellDatum.TAG_ENTITY -> 1f;
+                        case SpellDatum.TAG_DOUBLE -> 2f;
+                        case SpellDatum.TAG_VEC3 -> 3f;
+                        case SpellDatum.TAG_WIDGET -> 4f;
+                        case SpellDatum.TAG_LIST -> 5f;
+                        case SpellDatum.TAG_PATTERN -> 6f;
+                        default -> 0f; // uh oh
+                    };
+                }
+                return 0f;
+            });
+        ItemProperties.register((Item) item, ItemFocus.SEALED_PRED,
+            (stack, level, holder, holderID) -> item.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);
+    }
+
+    private static void registerPackagedSpellOverrides(ItemPackagedSpell item) {
+        ItemProperties.register(item, ItemPackagedSpell.HAS_PATTERNS_PRED,
+            (stack, level, holder, holderID) ->
+                item.getPatterns(stack) != null ? 1f : 0f
+        );
+    }
+
+    private static void registerWandOverrides(ItemWand item) {
+        ItemProperties.register(item, ItemWand.FUNNY_LEVEL_PREDICATE,
+            (stack, level, holder, holderID) -> {
+                var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
+                if (name.contains("old")) {
+                    return 1f;
+                } else if (name.contains("wand of the forest")) {
+                    return 2f;
+                } else {
+                    return 0f;
+                }
+            });
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
