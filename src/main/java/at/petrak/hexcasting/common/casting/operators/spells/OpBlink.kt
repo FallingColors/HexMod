@@ -51,6 +51,7 @@ object OpBlink : SpellOperator {
             val dvec = targetDelta(ctx, target, delta)
             target.setPos(target.position().add(dvec))
             if (target is ServerPlayer) {
+                target.connection.resetPosition()
                 HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { target }, MsgBlinkAck(dvec))
             }
         }
