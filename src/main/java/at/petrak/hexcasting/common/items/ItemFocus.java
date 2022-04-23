@@ -41,6 +41,11 @@ public class ItemFocus extends Item implements DataHolderItem {
     }
 
     @Override
+    public String getDescriptionId(ItemStack stack) {
+        return super.getDescriptionId(stack) + (stack.hasTag() && stack.getTag().getBoolean(TAG_SEALED) ? ".sealed" : "");
+    }
+
+    @Override
     public @Nullable SpellDatum<?> emptyDatum(ItemStack stack) {
         return SpellDatum.make(Widget.NULL);
     }

@@ -62,14 +62,30 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         var newIdx = tag.getInt(ItemSpellbook.TAG_SELECTED_PAGE);
         var len = ItemSpellbook.HighestPage(stack);
 
+        var sealed = ItemSpellbook.IsSealed(stack);
+
         MutableComponent component;
         if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
-            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name",
+            if (sealed)
+                component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name.sealed",
+                        new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                        new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                        new TextComponent("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC).append(stack.getHoverName()),
+                    new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
+            else
+                component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name",
                     new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
                     new TextComponent("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC).append(stack.getHoverName()));
+
         } else {
-            component = new TranslatableComponent("hexcasting.tooltip.spellbook.page",
+            if (sealed)
+                component = new TranslatableComponent("hexcasting.tooltip.spellbook.page.sealed",
+                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                    new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
+            else
+                component = new TranslatableComponent("hexcasting.tooltip.spellbook.page",
                     new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE));
         }

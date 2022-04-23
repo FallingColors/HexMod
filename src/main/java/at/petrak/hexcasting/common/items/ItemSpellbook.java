@@ -40,20 +40,38 @@ public class ItemSpellbook extends Item implements DataHolderItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
         TooltipFlag isAdvanced) {
+        boolean sealed = IsSealed(stack);
         var tag = stack.getOrCreateTag();
         if (tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
             var pageIdx = tag.getInt(TAG_SELECTED_PAGE);
             int highest = HighestPage(stack);
             if (highest != 0) {
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page",
-                    new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
-                    new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
-                    .withStyle(ChatFormatting.GRAY));
+                if (sealed)
+                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page.sealed",
+                        new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
+                        new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE),
+                        new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
+                        .withStyle(ChatFormatting.GRAY));
+                else
+                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page",
+                        new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
+                        new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
+                        .withStyle(ChatFormatting.GRAY));
             } else {
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
+                if (sealed)
+                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty.sealed",
+                        new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
+                        .withStyle(ChatFormatting.GRAY));
+                else
+                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
             }
         } else {
-            tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
+            if (sealed)
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty.sealed",
+                    new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
+                    .withStyle(ChatFormatting.GRAY));
+            else
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
         }
 
         DataHolderItem.appendHoverText(this, stack, tooltip, isAdvanced);
