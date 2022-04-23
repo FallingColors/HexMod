@@ -3,9 +3,7 @@ package at.petrak.hexcasting.common.blocks;
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
-import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicFloodfiller;
-import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
+import at.petrak.hexcasting.common.blocks.akashic.*;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockEmptyDirectrix;
@@ -144,33 +142,33 @@ public class HexBlocks {
     public static final RegistryObject<AmethystBlock> AMETHYST_TILES = blockItem("amethyst_tiles",
         () -> new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
     public static final RegistryObject<Block> SCROLL_PAPER = blockItem("scroll_paper",
-        () -> new Block(papery(MaterialColor.TERRACOTTA_WHITE)));
+        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_WHITE), 60, 100));
     public static final RegistryObject<Block> ANCIENT_SCROLL_PAPER = blockItem("ancient_scroll_paper",
-        () -> new Block(papery(MaterialColor.TERRACOTTA_ORANGE)));
+        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_ORANGE), 60, 100));
     public static final RegistryObject<Block> SCROLL_PAPER_LANTERN = blockItem("scroll_paper_lantern",
-        () -> new Block(papery(MaterialColor.TERRACOTTA_WHITE).lightLevel($ -> 15)));
+        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_WHITE).lightLevel($ -> 15), 60, 100));
     public static final RegistryObject<Block> ANCIENT_SCROLL_PAPER_LANTERN = blockItem(
         "ancient_scroll_paper_lantern",
-        () -> new Block(papery(MaterialColor.TERRACOTTA_ORANGE).lightLevel($ -> 12)));
+        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_ORANGE).lightLevel($ -> 12), 60, 100));
     public static final RegistryObject<BlockSconce> SCONCE = blockItem("amethyst_sconce",
         () -> new BlockSconce(BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.COLOR_PURPLE)
             .sound(SoundType.AMETHYST)
             .strength(1f)
             .lightLevel($ -> 15)));
     public static final RegistryObject<BlockAxis> AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
-        () -> new BlockAxis(akashicWoody()));
+        () -> new BlockAkashicLog(akashicWoody()));
     public static final RegistryObject<BlockStrippable> AKASHIC_LOG = blockItem("akashic_log",
-        () -> new BlockStrippable(akashicWoody(), AKASHIC_LOG_STRIPPED));
+        () -> new BlockAkashicWood(akashicWoody(), AKASHIC_LOG_STRIPPED));
     public static final RegistryObject<Block> AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
-        () -> new Block(akashicWoody()));
+        () -> new BlockBurns(akashicWoody(), 5, 5));
     public static final RegistryObject<BlockStrippable> AKASHIC_WOOD = blockItem("akashic_wood",
         () -> new BlockStrippable(akashicWoody(), AKASHIC_WOOD_STRIPPED));
     public static final RegistryObject<Block> AKASHIC_PLANKS = blockItem("akashic_planks",
-        () -> new Block(akashicWoody()));
+        () -> new BlockBurns(akashicWoody(), 5, 20));
     public static final RegistryObject<Block> AKASHIC_PANEL = blockItem("akashic_panel",
-        () -> new Block(akashicWoody()));
+        () -> new BlockBurns(akashicWoody(), 5, 20));
     public static final RegistryObject<Block> AKASHIC_TILE = blockItem("akashic_tile",
-        () -> new Block(akashicWoody()));
+        () -> new BlockBurns(akashicWoody(), 5, 20));
     public static final RegistryObject<DoorBlock> AKASHIC_DOOR = blockItem("akashic_door",
         () -> new DoorBlock(akashicWoody().noOcclusion()));
     public static final RegistryObject<TrapDoorBlock> AKASHIC_TRAPDOOR = blockItem("akashic_trapdoor",
@@ -183,12 +181,12 @@ public class HexBlocks {
         () -> new WoodButtonBlock(akashicWoody().noOcclusion()));
     public static final RegistryObject<PressurePlateBlock> AKASHIC_PRESSURE_PLATE = blockItem("akashic_pressure_plate",
         () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, akashicWoody().noOcclusion()));
-    public static final RegistryObject<LeavesBlock> AKASHIC_LEAVES1 = blockItem("akashic_leaves1",
-        () -> new LeavesBlock(leaves(MaterialColor.COLOR_PURPLE)));
-    public static final RegistryObject<LeavesBlock> AKASHIC_LEAVES2 = blockItem("akashic_leaves2",
-        () -> new LeavesBlock(leaves(MaterialColor.COLOR_BLUE)));
-    public static final RegistryObject<LeavesBlock> AKASHIC_LEAVES3 = blockItem("akashic_leaves3",
-        () -> new LeavesBlock(leaves(MaterialColor.COLOR_YELLOW)));
+    public static final RegistryObject<BlockAkashicLeaves> AKASHIC_LEAVES1 = blockItem("akashic_leaves1",
+        () -> new BlockAkashicLeaves(leaves(MaterialColor.COLOR_PURPLE)));
+    public static final RegistryObject<BlockAkashicLeaves> AKASHIC_LEAVES2 = blockItem("akashic_leaves2",
+        () -> new BlockAkashicLeaves(leaves(MaterialColor.COLOR_BLUE)));
+    public static final RegistryObject<BlockAkashicLeaves> AKASHIC_LEAVES3 = blockItem("akashic_leaves3",
+        () -> new BlockAkashicLeaves(leaves(MaterialColor.COLOR_YELLOW)));
 
     private static boolean never(Object... args) {
         return false;

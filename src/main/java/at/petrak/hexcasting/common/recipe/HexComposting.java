@@ -13,12 +13,19 @@ public final class HexComposting {
 
 	@SubscribeEvent
 	public static void setup(FMLCommonSetupEvent evt) {
-		compost(HexBlocks.AKASHIC_LEAVES1, 0.3F);
-		compost(HexBlocks.AKASHIC_LEAVES2, 0.3F);
-		compost(HexBlocks.AKASHIC_LEAVES3, 0.3F);
+		compostBlock(HexBlocks.AKASHIC_LEAVES1, 0.3F);
+		compostBlock(HexBlocks.AKASHIC_LEAVES2, 0.3F);
+		compostBlock(HexBlocks.AKASHIC_LEAVES3, 0.3F);
 	}
 
-	private static <T extends Block> void compost(RegistryObject<T> blockHolder, float chance) {
+	private static <T extends Item> void compostItem(RegistryObject<T> itemHolder, float chance) {
+		T item = itemHolder.get();
+
+		if (item != Items.AIR)
+			ComposterBlock.COMPOSTABLES.put(item, chance);
+	}
+
+	private static <T extends Block> void compostBlock(RegistryObject<T> blockHolder, float chance) {
 		T block = blockHolder.get();
 		Item item = block.asItem();
 
