@@ -371,7 +371,7 @@
   "hexcasting.mishap.divide_by_zero.power": "power of %s",
   "hexcasting.mishap.divide_by_zero.sin": "the sine of %s",
   "hexcasting.mishap.divide_by_zero.cos": "the cosine of %s",
-  "hexcasting.mishap.no_akashic_record": "No akashic record at %s",
+  "hexcasting.mishap.no_akashic_record": "No Akashic Record at %s",
   "hexcasting.mishap.disallowed": "%s has been disallowed by the server admins",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
@@ -477,7 +477,7 @@
   "hexcasting.page.mishaps.retrospection.title": "Hasty Retrospection",
   "hexcasting.page.mishaps.retrospection": "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern for $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ to the stack as a pattern iota.",
   "hexcasting.page.mishaps.too_deep.title": "Delve Too Deep",
-  "hexcasting.page.mishaps.too_deep": "Evaluated too many patterns from one action.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
+  "hexcasting.page.mishaps.too_deep": "Evaluated too many spells with meta-evaluation from one spell.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
   "hexcasting.page.mishaps.true_name.title": "Transgress Other",
   "hexcasting.page.mishaps.true_name": "I attempted to $(l:patterns/readwrite#hexcasting:read)$(action)save a reference/$ to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
   "hexcasting.page.mishaps.disabled.title": "Disallowed Action",
