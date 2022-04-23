@@ -155,7 +155,7 @@ public class RegisterClientStuff {
                 int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(true);
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE),
-                    new TextComponent(comparatorValue == -1 ? "?" : String.valueOf(comparatorValue))
+                    new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
                         .withStyle(ChatFormatting.RED)));
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE_TORCH),
@@ -183,7 +183,7 @@ public class RegisterClientStuff {
                 lines.add(
                     new Pair<>(
                         new ItemStack(Items.COMPARATOR),
-                        new TextComponent(comparatorValue == -1 ? "?" : String.valueOf(comparatorValue))
+                        new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
                             .withStyle(ChatFormatting.RED)));
             });
     }
