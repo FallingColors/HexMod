@@ -18,11 +18,11 @@ public class BlockAkashicSlab extends SlabBlock {
 
     @Override
     public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 5;
+        return 20;
     }
 
     @Override
     public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 20;
+        return 5;
     }
 }

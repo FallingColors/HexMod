@@ -142,14 +142,14 @@ public class HexBlocks {
     public static final RegistryObject<AmethystBlock> AMETHYST_TILES = blockItem("amethyst_tiles",
         () -> new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
     public static final RegistryObject<Block> SCROLL_PAPER = blockItem("scroll_paper",
-        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_WHITE), 60, 100));
+        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_WHITE), 100, 60));
     public static final RegistryObject<Block> ANCIENT_SCROLL_PAPER = blockItem("ancient_scroll_paper",
-        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_ORANGE), 60, 100));
+        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_ORANGE), 100, 60));
     public static final RegistryObject<Block> SCROLL_PAPER_LANTERN = blockItem("scroll_paper_lantern",
-        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_WHITE).lightLevel($ -> 15), 60, 100));
+        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_WHITE).lightLevel($ -> 15), 100, 60));
     public static final RegistryObject<Block> ANCIENT_SCROLL_PAPER_LANTERN = blockItem(
         "ancient_scroll_paper_lantern",
-        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_ORANGE).lightLevel($ -> 12), 60, 100));
+        () -> new BlockBurns(papery(MaterialColor.TERRACOTTA_ORANGE).lightLevel($ -> 12), 100, 60));
     public static final RegistryObject<BlockSconce> SCONCE = blockItem("amethyst_sconce",
         () -> new BlockSconce(BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.COLOR_PURPLE)
             .sound(SoundType.AMETHYST)
@@ -164,11 +164,11 @@ public class HexBlocks {
     public static final RegistryObject<BlockStrippable> AKASHIC_WOOD = blockItem("akashic_wood",
         () -> new BlockStrippable(akashicWoody(), AKASHIC_WOOD_STRIPPED));
     public static final RegistryObject<Block> AKASHIC_PLANKS = blockItem("akashic_planks",
-        () -> new BlockBurns(akashicWoody(), 5, 20));
+        () -> new BlockBurns(akashicWoody(), 20, 5));
     public static final RegistryObject<Block> AKASHIC_PANEL = blockItem("akashic_panel",
-        () -> new BlockBurns(akashicWoody(), 5, 20));
+        () -> new BlockBurns(akashicWoody(), 20, 5));
     public static final RegistryObject<Block> AKASHIC_TILE = blockItem("akashic_tile",
-        () -> new BlockBurns(akashicWoody(), 5, 20));
+        () -> new BlockBurns(akashicWoody(), 20, 5));
     public static final RegistryObject<DoorBlock> AKASHIC_DOOR = blockItem("akashic_door",
         () -> new DoorBlock(akashicWoody().noOcclusion()));
     public static final RegistryObject<TrapDoorBlock> AKASHIC_TRAPDOOR = blockItem("akashic_trapdoor",
