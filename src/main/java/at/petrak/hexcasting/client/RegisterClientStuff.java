@@ -28,7 +28,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
@@ -45,8 +44,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class RegisterClientStuff {
@@ -110,52 +107,43 @@ public class RegisterClientStuff {
     private static void addScryingLensStuff() {
         ScryingLensOverlayRegistry.addPredicateDisplayer(
             (state, pos, observer, world, lensHand) -> state.getBlock() instanceof BlockAbstractImpetus,
-            (state, pos, observer, world, lensHand) -> {
+            (lines, state, pos, observer, world, lensHand) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-                    return beai.getScryingLensOverlay(state, pos, observer, world, lensHand);
-                } else {
-                    return List.of();
+                    beai.applyScryingLensOverlay(lines, state, pos, observer, world, lensHand);
                 }
             });
 
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF.get(),
-            (state, pos, observer, world, lensHand) -> {
-                if (!(world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile)) {
-                    return List.of();
-                }
-
-                var out = new ArrayList<Pair<ItemStack, Component>>();
-
-                var recordPos = tile.getRecordPos();
-                var pattern = tile.getPattern();
-                if (recordPos != null && pattern != null) {
-                    out.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_RECORD.get()), new TranslatableComponent(
-                        "hexcasting.tooltip.lens.akashic.bookshelf.location",
-                        recordPos.toShortString()
-                    )));
-                    if (world.getBlockEntity(recordPos) instanceof BlockEntityAkashicRecord record) {
-                        out.add(new Pair<>(new ItemStack(Items.BOOK), record.getDisplayAt(pattern)));
+            (lines, state, pos, observer, world, lensHand) -> {
+                if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
+                    var recordPos = tile.getRecordPos();
+                    var pattern = tile.getPattern();
+                    if (recordPos != null && pattern != null) {
+                        lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_RECORD.get()), new TranslatableComponent(
+                            "hexcasting.tooltip.lens.akashic.bookshelf.location",
+                            recordPos.toShortString()
+                        )));
+                        if (world.getBlockEntity(recordPos) instanceof BlockEntityAkashicRecord record) {
+                            lines.add(new Pair<>(new ItemStack(Items.BOOK), record.getDisplayAt(pattern)));
+                        }
                     }
                 }
-
-                return out;
             });
+
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_RECORD.get(),
-            ((state, pos, observer, world, lensHand) -> {
-                if (!(world.getBlockEntity(pos) instanceof BlockEntityAkashicRecord tile)) {
-                    return List.of();
+            (lines, state, pos, observer, world, lensHand) -> {
+                if (world.getBlockEntity(pos) instanceof BlockEntityAkashicRecord tile) {
+                    int count = tile.getCount();
+
+                    lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_BOOKSHELF.get()), new TranslatableComponent(
+                        "hexcasting.tooltip.lens.akashic.record.count" + (count == 1 ? ".single" : ""),
+                        count
+                    )));
                 }
-
-                int count = tile.getCount();
-
-                return List.of(new Pair<>(new ItemStack(HexBlocks.AKASHIC_BOOKSHELF.get()), new TranslatableComponent(
-                    "hexcasting.tooltip.lens.akashic.record.count" + (count == 1 ? ".single" : ""),
-                    count
-                )));
-            }));
+            });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REDSTONE_WIRE,
-            (state, pos, observer, world, lensHand) -> List.of(
+            (lines, state, pos, observer, world, lensHand) -> lines.add(
                 new Pair<>(
                     new ItemStack(Items.REDSTONE),
                     new TextComponent(String.valueOf(state.getValue(BlockStateProperties.POWER)))
@@ -163,27 +151,41 @@ public class RegisterClientStuff {
             ));
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.COMPARATOR,
-            (state, pos, observer, world, lensHand) -> List.of(
-                new Pair<>(
+            (lines, state, pos, observer, world, lensHand) -> {
+                int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(true);
+                lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE),
-                    new TextComponent(String.valueOf(state.getDirectSignal(world, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING))))
-                        .withStyle(ChatFormatting.RED)),
-                new Pair<>(
+                    new TextComponent(comparatorValue == -1 ? "?" : String.valueOf(comparatorValue))
+                        .withStyle(ChatFormatting.RED)));
+                lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE_TORCH),
                     new TextComponent(
                         state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE ? ">" : "-")
-                        .withStyle(ChatFormatting.RED))));
+                        .withStyle(ChatFormatting.RED)));
+            });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
-            (state, pos, observer, world, lensHand) -> List.of(
-                new Pair<>(
+            (lines, state, pos, observer, world, lensHand) -> {
+                lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE),
                     new TextComponent(String.valueOf(state.getValue(RepeaterBlock.POWERED) ? 15 : 0))
-                        .withStyle(ChatFormatting.RED)),
-                new Pair<>(
+                        .withStyle(ChatFormatting.RED)));
+                lines.add(new Pair<>(
                     new ItemStack(Items.CLOCK),
                     new TextComponent(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
-                        .withStyle(ChatFormatting.YELLOW))));
+                        .withStyle(ChatFormatting.YELLOW)));
+            });
+
+        ScryingLensOverlayRegistry.addPredicateDisplayer(
+            (state, pos, observer, world, lensHand) -> state.hasAnalogOutputSignal(),
+            (lines, state, pos, observer, world, lensHand) -> {
+                int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(false);
+                lines.add(
+                    new Pair<>(
+                        new ItemStack(Items.COMPARATOR),
+                        new TextComponent(comparatorValue == -1 ? "?" : String.valueOf(comparatorValue))
+                            .withStyle(ChatFormatting.RED)));
+            });
     }
 
     private static void registerDataHolderOverrides(DataHolderItem item) {

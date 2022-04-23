@@ -50,9 +50,10 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     @Override
-    public List<Pair<ItemStack, Component>> getScryingLensOverlay(BlockState state, BlockPos pos, LocalPlayer observer,
-        ClientLevel world, InteractionHand lensHand) {
-        var list = super.getScryingLensOverlay(state, pos, observer, world, lensHand);
+    public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
+                                        BlockState state, BlockPos pos, LocalPlayer observer,
+                                        ClientLevel world, InteractionHand lensHand) {
+        super.applyScryingLensOverlay(lines, state, pos, observer, world, lensHand);
 
         var bound = this.getPlayer();
         if (bound != null) {
@@ -60,13 +61,11 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
             String name = bound.getScoreboardName();
             tag.putString("SkullOwner", name);
             var head = new ItemStack(Items.PLAYER_HEAD, 1, tag);
-            list.add(new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
+            lines.add(new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
         } else {
-            list.add(new Pair<>(new ItemStack(Items.BARRIER),
+            lines.add(new Pair<>(new ItemStack(Items.BARRIER),
                 new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer.none")));
         }
-
-        return list;
     }
 
     @Override

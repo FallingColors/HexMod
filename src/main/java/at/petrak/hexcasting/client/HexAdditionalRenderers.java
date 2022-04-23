@@ -174,7 +174,7 @@ public class HexAdditionalRenderers {
             var bs = mc.level.getBlockState(pos);
 
             var lines = ScryingLensOverlayRegistry.getLines(bs, pos, mc.player, mc.level, lensHand);
-            if (lines != null) {
+            if (!lines.isEmpty()) {
                 var window = mc.getWindow();
                 var x = window.getGuiScaledWidth() / 2f + 8f;
                 var y = window.getGuiScaledHeight() / 2f;
@@ -184,13 +184,12 @@ public class HexAdditionalRenderers {
                 var maxWidth = (int) (window.getGuiScaledWidth() / 2f * 0.8f);
 
                 for (var pair : lines) {
-
                     var stack = pair.getFirst();
-                    if (stack != null) {
+                    if (!stack.isEmpty()) {
                         // this draws centered in the Y ...
                         RenderLib.renderItemStackInGui(ps, pair.getFirst(), 0, 0);
                     }
-                    float tx = stack == null ? 0 : 18;
+                    float tx = stack.isEmpty() ? 0 : 18;
                     float ty = 5;
                     // but this draws where y=0 is the baseline
                     var text = pair.getSecond();

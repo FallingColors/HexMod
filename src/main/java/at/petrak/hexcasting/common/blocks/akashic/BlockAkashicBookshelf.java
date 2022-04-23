@@ -109,6 +109,16 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
         return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState pState) {
+        return true;
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
+        return pState.getValue(DATUM_TYPE).ordinal();
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {

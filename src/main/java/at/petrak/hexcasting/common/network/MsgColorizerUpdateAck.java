@@ -1,9 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -29,20 +27,10 @@ public record MsgColorizerUpdateAck(FrozenColorizer update) {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() ->
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                IHateJava.handle(this.update);
-            })
-        );
+        ctx.get().enqueueWork(() -> {
+            ClientPacketHandler handler = new ClientPacketHandler(this);
+            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> handler::updateColorizer);
+        });
         ctx.get().setPacketHandled(true);
-    }
-
-    private static class IHateJava {
-        public static void handle(FrozenColorizer update) {
-            var player = Minecraft.getInstance().player;
-            if (player != null) {
-                HexPlayerDataHelper.setColorizer(player, update);
-            }
-        }
     }
 }

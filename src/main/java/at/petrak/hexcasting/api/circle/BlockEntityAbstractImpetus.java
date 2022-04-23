@@ -115,21 +115,20 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.stepCircle();
     }
 
-    public List<Pair<ItemStack, Component>> getScryingLensOverlay(BlockState state, BlockPos pos,
-        LocalPlayer observer, ClientLevel world, InteractionHand lensHand) {
-        var out = new ArrayList<Pair<ItemStack, Component>>();
+    public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
+                                        BlockState state, BlockPos pos,
+                                        LocalPlayer observer, ClientLevel world, InteractionHand lensHand) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
             var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
             var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
                 String.format("%.2f", dustCount));
-            out.add(new Pair<>(new ItemStack(HexApiItems.AMETHYST_DUST), dustCmp));
+            lines.add(new Pair<>(new ItemStack(HexApiItems.AMETHYST_DUST), dustCmp));
 
             var mishap = this.getLastMishap();
             if (mishap != null) {
-                out.add(new Pair<>(new ItemStack(Items.MUSIC_DISC_11), mishap));
+                lines.add(new Pair<>(new ItemStack(Items.MUSIC_DISC_11), mishap));
             }
         }
-        return out;
     }
 
     @NotNull
