@@ -200,6 +200,8 @@ public class HexAdditionalRenderers {
                         mc.font.drawShadow(ps, actualLine, tx, ty, 0xffffffff);
                         ps.translate(0, 9, 0);
                     }
+                    if (textLines.isEmpty())
+                        ps.translate(0, 9, 0);
 
                     ps.translate(0, 6, 0);
                 }
