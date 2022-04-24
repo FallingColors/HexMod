@@ -172,6 +172,9 @@ public class ItemSpellbook extends Item implements DataHolderItem {
                 tag.getCompound(TAG_SEALED).remove(key);
             } else
                 tag.getCompound(TAG_PAGES).put(key, datum.serializeToNBT());
+
+            if (tag.getCompound(TAG_PAGES).isEmpty())
+                tag.remove(TAG_SELECTED_PAGE);
         } else if (datum != null) {
             var pagesTag = new CompoundTag();
             pagesTag.put(key, datum.serializeToNBT());
