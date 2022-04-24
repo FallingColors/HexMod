@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -15,6 +16,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -50,10 +53,12 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
                                         BlockState state, BlockPos pos, LocalPlayer observer,
-                                        ClientLevel world, InteractionHand lensHand) {
-        super.applyScryingLensOverlay(lines, state, pos, observer, world, lensHand);
+                                        ClientLevel world,
+                                        Direction hitFace, InteractionHand lensHand) {
+        super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace, lensHand);
 
         var bound = this.getPlayer();
         if (bound != null) {

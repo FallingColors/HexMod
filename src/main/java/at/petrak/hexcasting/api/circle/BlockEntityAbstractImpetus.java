@@ -37,6 +37,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -115,9 +117,11 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.stepCircle();
     }
 
+    @OnlyIn(Dist.CLIENT)
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
                                         BlockState state, BlockPos pos,
-                                        LocalPlayer observer, ClientLevel world, InteractionHand lensHand) {
+                                        LocalPlayer observer, ClientLevel world,
+                                        Direction hitFace, InteractionHand lensHand) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
             var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
             var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",

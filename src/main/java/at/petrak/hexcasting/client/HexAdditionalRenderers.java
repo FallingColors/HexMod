@@ -173,7 +173,7 @@ public class HexAdditionalRenderers {
             var pos = bhr.getBlockPos();
             var bs = mc.level.getBlockState(pos);
 
-            var lines = ScryingLensOverlayRegistry.getLines(bs, pos, mc.player, mc.level, lensHand);
+            var lines = ScryingLensOverlayRegistry.getLines(bs, pos, mc.player, mc.level, bhr.getDirection(), lensHand);
             if (!lines.isEmpty()) {
                 var window = mc.getWindow();
                 var x = window.getGuiScaledWidth() / 2f + 8f;

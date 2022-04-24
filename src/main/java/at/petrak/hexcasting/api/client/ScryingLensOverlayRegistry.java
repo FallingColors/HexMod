@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -111,16 +112,16 @@ public final class ScryingLensOverlayRegistry {
      */
     public static @NotNull List<Pair<ItemStack, Component>> getLines(BlockState state, BlockPos pos,
                                                                      LocalPlayer observer, ClientLevel world,
-                                                                     @Nullable InteractionHand lensHand) {
+                                                                     Direction hitFace, @Nullable InteractionHand lensHand) {
         List<Pair<ItemStack, Component>> lines = Lists.newArrayList();
         var idLookedup = ID_LOOKUP.get(state.getBlock().getRegistryName());
         if (idLookedup != null) {
-            idLookedup.addLines(lines, state, pos, observer, world, lensHand);
+            idLookedup.addLines(lines, state, pos, observer, world, hitFace, lensHand);
         }
 
         for (var pair : PREDICATE_LOOKUP) {
-            if (pair.getFirst().test(state, pos, observer, world, lensHand)) {
-                pair.getSecond().addLines(lines, state, pos, observer, world, lensHand);
+            if (pair.getFirst().test(state, pos, observer, world, hitFace, lensHand)) {
+                pair.getSecond().addLines(lines, state, pos, observer, world, hitFace, lensHand);
             }
         }
 
@@ -137,7 +138,7 @@ public final class ScryingLensOverlayRegistry {
         void addLines(List<Pair<ItemStack, Component>> lines,
                       BlockState state, BlockPos pos, LocalPlayer observer,
                       ClientLevel world,
-                      @Nullable InteractionHand lensHand);
+                      Direction hitFace, @Nullable InteractionHand lensHand);
     }
 
     /**
@@ -145,6 +146,8 @@ public final class ScryingLensOverlayRegistry {
      */
     @FunctionalInterface
     public interface OverlayPredicate {
-        boolean test(BlockState state, BlockPos pos, LocalPlayer observer, ClientLevel world, @Nullable InteractionHand lensHand);
+        boolean test(BlockState state, BlockPos pos, LocalPlayer observer,
+                     ClientLevel world,
+                     Direction hitFace, @Nullable InteractionHand lensHand);
     }
 }
