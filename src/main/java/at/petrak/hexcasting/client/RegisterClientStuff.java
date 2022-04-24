@@ -28,6 +28,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
@@ -162,13 +163,13 @@ public class RegisterClientStuff {
         ScryingLensOverlayRegistry.addPredicateDisplayer(
             (state, pos, observer, world, direction, lensHand) -> state.isSignalSource() && !state.is(Blocks.COMPARATOR),
             (lines, state, pos, observer, world, direction, lensHand) -> {
-                int signalStrength;
-                if (state.getBlock() instanceof DiodeBlock)
-                    signalStrength = state.getSignal(world, pos, state.getValue(DiodeBlock.FACING));
-                else if (state.getBlock() instanceof RedStoneWireBlock)
+                int signalStrength = 0;
+                if (state.getBlock() instanceof RedStoneWireBlock)
                     signalStrength = state.getValue(RedStoneWireBlock.POWER);
-                else
-                    signalStrength = state.getSignal(world, pos, direction);
+                else {
+                    for (Direction dir : Direction.values())
+                        signalStrength = Math.max(signalStrength, state.getSignal(world, pos, dir));
+                }
 
                 lines.add(0, new Pair<>(
                     new ItemStack(Items.REDSTONE),
