@@ -72,15 +72,11 @@ public class ItemLens extends Item implements Wearable {
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        if (!pLevel.isClientSide() && pEntity instanceof ServerPlayer player && pIsSelected) {
-            sendComparatorDataToClient(player);
-        }
-    }
-
-    @Override
-    public void onArmorTick(ItemStack stack, Level level, Player player) {
-        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
-            sendComparatorDataToClient(serverPlayer);
+        if (!pLevel.isClientSide() && pEntity instanceof ServerPlayer player) {
+            if (pStack == player.getItemBySlot(EquipmentSlot.HEAD) ||
+                pStack == player.getItemBySlot(EquipmentSlot.MAINHAND) ||
+                pStack == player.getItemBySlot(EquipmentSlot.OFFHAND))
+                    sendComparatorDataToClient(player);
         }
     }
 
