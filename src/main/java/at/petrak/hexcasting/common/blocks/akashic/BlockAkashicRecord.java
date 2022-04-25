@@ -25,6 +25,20 @@ public class BlockAkashicRecord extends Block implements EntityBlock {
     }
 
     @Override
+    public boolean hasAnalogOutputSignal(BlockState pState) {
+        return true;
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
+        BlockEntity be = pLevel.getBlockEntity(pPos);
+        if (be instanceof BlockEntityAkashicRecord record) {
+            return Math.min(15, record.getCount());
+        }
+        return 0;
+    }
+
+    @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         var seen = new HashSet<BlockPos>();
         var todo = new ArrayDeque<BlockPos>();
