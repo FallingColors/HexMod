@@ -1,0 +1,80 @@
+plugins {
+    id 'fabric-loom' version '0.11-SNAPSHOT'
+    id 'maven-publish'
+    id 'idea'
+}
+
+archivesBaseName = "${modName}-fabric-${minecraftVersion}"
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraftVersion}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabricLoaderVersion}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricVersion}"
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    implementation project(":Common")
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    // compileOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion")
+    modImplementation("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion:api")
+
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
+}
+
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+
+processResources {
+    from project(":Common").sourceSets.main.resources
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile) {
+    source(project(":Common").sourceSets.main.allSource)
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${modID}" }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
+        }
+    }
+}
+repositories {
+    mavenCentral()
+}

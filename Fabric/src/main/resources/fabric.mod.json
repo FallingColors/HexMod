@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "hexcasting",
+  "version": "${version}",
+
+  "name": "Hex Casting",
+  "description": "Cast powerful Hexes on the fly by drawing patterns with a staff.",
+  "authors": [
+    "petrak@ (aka gamma-delta)"
+  ],
+  "contact": {
+    "homepage": "https://github.com/gamma-delta/HexMod",
+    "sources": "https://github.com/gamma-delta/HexMod"
+  },
+
+  "license": "MIT",
+  "icon": "assets/logo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {"adapter": "kotlin", "value": "at.petrak.hexcasting.HexMod"}
+    ]
+  },
+  "mixins": [
+    "hexcasting.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17",
+    "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
+    "patchouli": ">=1.18.2-66",
+    "paucal": ">=0.3.4"
+  }
+}
