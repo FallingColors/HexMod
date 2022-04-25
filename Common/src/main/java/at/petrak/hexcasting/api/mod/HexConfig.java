@@ -1,87 +1,105 @@
 package at.petrak.hexcasting.api.mod;
 
+import at.petrak.hexcasting.api.HexAPI;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
-import net.minecraftforge.common.ForgeConfigSpec;
-
-import java.util.List;
 
 public class HexConfig {
-    public static ForgeConfigSpec.IntValue dustManaAmount;
-    public static ForgeConfigSpec.IntValue shardManaAmount;
-    public static ForgeConfigSpec.IntValue chargedCrystalManaAmount;
-    public static ForgeConfigSpec.DoubleValue manaToHealthRate;
+    public interface CommonConfigAccess {
+        int dustManaAmount();
 
-    public HexConfig(ForgeConfigSpec.Builder builder) {
-        builder.push("Mana Amounts");
-        dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")
-            .defineInRange("dustManaAmount", 10_000, 0, Integer.MAX_VALUE);
-        shardManaAmount = builder.comment("How much mana a single Amethyst Shard item is worth")
-            .defineInRange("shardManaAmount", 50_000, 0, Integer.MAX_VALUE);
-        chargedCrystalManaAmount = builder.comment("How much mana a single Charged Amethyst Crystal item is worth")
-            .defineInRange("chargedCrystalManaAmount", 100_000, 0, Integer.MAX_VALUE);
-        manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-            .defineInRange("manaToHealthRate", 200_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
-        builder.pop();
+
+        int shardManaAmount();
+
+
+        int chargedCrystalManaAmount();
+
+
+        double manaToHealthRate();
+
+
+        int DEFAULT_DUST_MANA_AMOUNT = 10_000;
+        int DEFAULT_SHARD_MANA_AMOUNT = 50_000;
+        int DEFAULT_CHARGED_MANA_AMOUNT = 100_000;
+        double DEFAULT_MANA_TO_HEALTH_RATE = 200_000.0 / 20.0;
+
     }
 
-    public static class Client {
-        public static ForgeConfigSpec.DoubleValue patternPointSpeedMultiplier;
-        public static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
+    public interface ClientConfigAccess {
+        double patternPointSpeedMultiplier();
 
-        public Client(ForgeConfigSpec.Builder builder) {
-            patternPointSpeedMultiplier = builder.comment(
-                    "How fast the point showing you the stroke order on patterns moves")
-                .defineInRange("manaToHealthRate", 1.0, 0.0, Double.POSITIVE_INFINITY);
-            ctrlTogglesOffStrokeOrder = builder.comment(
-                    "Whether the ctrl key will instead turn *off* the color gradient on patterns")
-                .define("ctrlTogglesOffStrokeOrder", false);
-        }
+
+        boolean ctrlTogglesOffStrokeOrder();
+
+        double DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER = 1;
+        boolean DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER = false;
     }
 
-    public static class Server {
-        public static ForgeConfigSpec.IntValue opBreakHarvestLevel;
-        public static ForgeConfigSpec.IntValue maxRecurseDepth;
+    public interface ServerConfigAccess {
+        int opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort();
 
-        public static ForgeConfigSpec.IntValue maxSpellCircleLength;
+        int maxRecurseDepth();
 
-        public static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
+        int maxSpellCircleLength();
 
-        public Server(ForgeConfigSpec.Builder builder) {
-            builder.push("Spells");
-            maxRecurseDepth = builder.comment("How many times a spell can recursively cast other spells")
-                .defineInRange("maxRecurseDepth", 64, 0, Integer.MAX_VALUE);
-            opBreakHarvestLevel = builder.comment(
-                "The harvest level of the Break Block spell.",
-                "0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite."
-            ).defineInRange("opBreakHarvestLevel", 3, 0, 4);
-            builder.pop();
+        boolean isActionAllowed(ResourceLocation actionID);
 
-            builder.push("Spell Circles");
-            maxSpellCircleLength = builder.comment("The maximum number of slates in a spell circle")
-                .defineInRange("maxSpellCircleLength", 256, 4, Integer.MAX_VALUE);
-            builder.pop();
+        int DEFAULT_MAX_RECURSE_DEPTH = 64;
+        int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
+        int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
+        // We can't have default values for the break harvest level or if
 
-            actionDenyList = builder.comment(
-                    "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
-                .defineList("actionDenyList", List.of(),
-                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
-        }
-
-
-        /**
-         * i'm not kidding look upon net.minecraftforge.common.TierSortingRegistry and weep
-         */
-        public static Tier getOpBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort() {
-            return switch (opBreakHarvestLevel.get()) {
+        default Tier opBreakHarvestLevel() {
+            return switch (this.opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()) {
                 case 0 -> Tiers.WOOD;
                 case 1 -> Tiers.STONE;
                 case 2 -> Tiers.IRON;
                 case 3 -> Tiers.DIAMOND;
                 case 4 -> Tiers.NETHERITE;
-                default -> throw new RuntimeException("unreachable");
+                default -> throw new RuntimeException("please only return a value in 0<=x<=4");
             };
         }
+    }
+
+    // oh man this is aesthetically pleasing
+    private static CommonConfigAccess common = null;
+    private static ClientConfigAccess client = null;
+    private static ServerConfigAccess server = null;
+
+    public static CommonConfigAccess common() {
+        return common;
+    }
+
+    public static ClientConfigAccess client() {
+        return client;
+    }
+
+    public static ServerConfigAccess server() {
+        return server;
+    }
+
+    public static void setCommon(CommonConfigAccess access) {
+        if (common != null) {
+            HexAPI.LOGGER.warn("CommonConfigAccess was replaced! Old {} New {}",
+                common.getClass().getName(), access.getClass().getName());
+        }
+        common = access;
+    }
+
+    public static void setClient(ClientConfigAccess access) {
+        if (client != null) {
+            HexAPI.LOGGER.warn("ClientConfigAccess was replaced! Old {} New {}",
+                client.getClass().getName(), access.getClass().getName());
+        }
+        client = access;
+    }
+
+    public static void setServer(ServerConfigAccess access) {
+        if (server != null) {
+            HexAPI.LOGGER.warn("ServerConfigAccess was replaced! Old {} New {}",
+                server.getClass().getName(), access.getClass().getName());
+        }
+        server = access;
     }
 }

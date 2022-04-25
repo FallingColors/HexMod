@@ -6,6 +6,11 @@ plugins {
 
 archivesBaseName = "${modName}-fabric-${minecraftVersion}"
 
+repositories {
+    mavenCentral()
+    maven { url "https://maven.shedaniel.me/" }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${minecraftVersion}"
     mappings loom.officialMojangMappings()
@@ -20,6 +25,7 @@ dependencies {
     modImplementation("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion:api")
 
     modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
+    implementation "me.zeroeightsix:fiber:$fiberVersion"
 }
 
 loom {
@@ -74,7 +80,4 @@ publishing {
             url "file://" + System.getenv("local_maven")
         }
     }
-}
-repositories {
-    mavenCentral()
 }

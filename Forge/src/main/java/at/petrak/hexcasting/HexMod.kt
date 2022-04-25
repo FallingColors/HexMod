@@ -1,5 +1,6 @@
 package at.petrak.hexcasting
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexConfig
@@ -11,7 +12,6 @@ import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.HexCommands
-import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.lib.HexCapabilityHandler
@@ -24,9 +24,9 @@ import at.petrak.hexcasting.common.recipe.HexCustomRecipes
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import at.petrak.hexcasting.datagen.HexDataGenerators
 import at.petrak.hexcasting.datagen.lootmods.HexLootModifiers
+import at.petrak.hexcasting.forge.ForgeHexConfig
 import at.petrak.hexcasting.server.TickScheduler
-import net.minecraft.commands.synchronization.ArgumentTypes
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.eventbus.api.SubscribeEvent
@@ -36,29 +36,26 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
+import org.apache.logging.log4j.Logger
 
 @Mod(HexMod.MOD_ID)
 object HexMod {
-    val CONFIG_SPEC: ForgeConfigSpec
-    val SERVER_CONFIG_SPEC: ForgeConfigSpec
-    val CLIENT_CONFIG_SPEC: ForgeConfigSpec
 
     // mumblemumble thanks shy mumble mumble
     const val MOD_ID = "hexcasting"
 
     init {
-        CONFIG_SPEC = ForgeConfigSpec.Builder()
-            .configure { builder: ForgeConfigSpec.Builder? -> HexConfig(builder) }.right
-        SERVER_CONFIG_SPEC = ForgeConfigSpec.Builder()
-            .configure { builder: ForgeConfigSpec.Builder? -> HexConfig.Server(builder) }.right
-        CLIENT_CONFIG_SPEC = ForgeConfigSpec.Builder()
-            .configure { builder: ForgeConfigSpec.Builder? -> HexConfig.Client(builder) }.right
+        IXplatAbstractions.INSTANCE.init()
 
-        ArgumentTypes.register(
-            "hexcasting:pattern",
-            PatternResLocArgument::class.java,
-            EmptyArgumentSerializer(PatternResLocArgument::id)
-        )
+        val config = ForgeConfigSpec.Builder()
+            .configure { builder: ForgeConfigSpec.Builder? -> ForgeHexConfig(builder) }
+        val serverConfig = ForgeConfigSpec.Builder()
+            .configure { builder: ForgeConfigSpec.Builder? -> ForgeHexConfig.Server(builder) }
+        val clientConfig = ForgeConfigSpec.Builder()
+            .configure { builder: ForgeConfigSpec.Builder? -> ForgeHexConfig.Client(builder) }
+        HexConfig.setCommon(config.left)
+        HexConfig.setClient(clientConfig.left)
+        HexConfig.setServer(serverConfig.left)
 
         // mod lifecycle
         val modBus = thedarkcolour.kotlinforforge.forge.MOD_BUS
@@ -104,9 +101,9 @@ object HexMod {
         // and then things that don't require busses
         HexMessages.register()
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG_SPEC)
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG_SPEC)
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG_SPEC)
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, config.right)
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, serverConfig.right)
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientConfig.right)
     }
 
     @SubscribeEvent
@@ -115,7 +112,7 @@ object HexMod {
     }
 
     @JvmStatic
-    fun getLogger() = this.LOGGER
+    fun getLogger(): Logger = HexAPI.LOGGER
 
     @SubscribeEvent
     fun printPatternCount(evt: FMLLoadCompleteEvent) {

@@ -1,18 +1,28 @@
 package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.common.command.PatternResLocArgument;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public interface IXplatAbstractions {
-    default Platform platform() {
-        return Platform.UNKNOWN;
-    }
+    Platform platform();
+
+    boolean isPhysicalClient();
 
     default void init() {
         HexAPI.LOGGER.info("Hello Hexcasting! This is {}!", this.platform());
+
+        ArgumentTypes.register(
+            "hexcasting:pattern",
+            PatternResLocArgument.class,
+            new EmptyArgumentSerializer<>(PatternResLocArgument::id)
+        );
     }
+
 
     IXplatAbstractions INSTANCE = find();
 

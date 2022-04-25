@@ -1,12 +1,13 @@
 buildscript {
-    ext.kotlin_version = '1.6.21'
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        // OPTIONAL Kotlin Serialization plugin
+        classpath 'org.jetbrains.kotlin:kotlin-serialization:1.6.10'
     }
 }
 apply plugin: 'java'
@@ -24,6 +25,7 @@ buildscript {
         classpath 'org.jetbrains.kotlin:kotlin-serialization:1.6.10'
     }
 }
+
 apply plugin: 'kotlin'
 // OPTIONAL Kotlin Serialization plugin
 apply plugin: 'kotlinx-serialization'
@@ -120,6 +122,7 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
+    compileOnly project(":Common")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
