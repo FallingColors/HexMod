@@ -20,6 +20,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
@@ -169,7 +170,8 @@ public class HexAdditionalRenderers {
         }
 
         var hitRes = mc.hitResult;
-        if (hitRes instanceof BlockHitResult bhr) {
+        if (hitRes.getType() == HitResult.Type.BLOCK) {
+            var bhr = (BlockHitResult) hitRes;
             var pos = bhr.getBlockPos();
             var bs = mc.level.getBlockState(pos);
 
