@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
@@ -27,6 +28,9 @@ public class Brainsweeping {
     public static void brainsweep(LivingEntity entity) {
         if (entity instanceof VillagerDataHolder) {
             entity.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
+
+            if (entity instanceof Mob mob)
+                mob.removeFreeWill();
 
             if (entity instanceof Villager villager) {
                 Brain<Villager> brain = villager.getBrain();
