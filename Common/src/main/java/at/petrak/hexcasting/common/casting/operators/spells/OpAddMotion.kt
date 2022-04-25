@@ -41,6 +41,7 @@ object OpAddMotion : SpellOperator {
     private data class Spell(val target: Entity, val motion: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             target.push(motion.x, motion.y, motion.z)
+            target.hurtMarked = true // Whyyyyy
         }
     }
 }

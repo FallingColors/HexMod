@@ -45,11 +45,10 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
                         if (entity instanceof Player) {
                             // phew, we got something
                             tile.setPlayer(entity.getUUID());
-                            tile.setChanged();
+                            level.sendBlockUpdated(pPos, pState, pState, Block.UPDATE_CLIENTS);
 
-                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING,
-                                SoundSource.BLOCKS,
-                                1f, 1f);
+                            pLevel.playSound(null, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING, SoundSource.BLOCKS,
+                                    1f, 1f);
                         }
                     }
                 }
