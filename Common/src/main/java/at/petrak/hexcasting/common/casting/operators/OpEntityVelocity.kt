@@ -5,9 +5,9 @@ import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.phys.Vec3
 
 object OpEntityVelocity : ConstManaOperator {
     override val argc = 1
@@ -17,8 +17,8 @@ object OpEntityVelocity : ConstManaOperator {
         ctx.assertEntityInRange(e)
 
         // Player velocity is jank. Really jank. This is the best we can do.
-        if (e is Player) {
-            val prevPosition = Vec3(e.xOld, e.yOld, e.zOld)
+        if (e is ServerPlayer) {
+            val prevPosition = PlayerPositionRecorder.getLastPosition(e)
             return spellListOf(e.position().subtract(prevPosition))
         }
 

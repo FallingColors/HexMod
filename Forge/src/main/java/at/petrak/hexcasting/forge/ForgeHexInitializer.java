@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.command.PatternResLocArgument;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
+import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
@@ -144,8 +145,10 @@ public class ForgeHexInitializer {
         evBus.addListener((LivingConversionEvent.Post evt) ->
             Brainsweeping.copyBrainsweepFromVillager(evt.getEntityLiving(), evt.getOutcome()));
 
-        evBus.addListener((LivingEvent.LivingUpdateEvent evt) ->
-            OpFlight.INSTANCE.tickDownFlight(evt.getEntityLiving()));
+        evBus.addListener((LivingEvent.LivingUpdateEvent evt) -> {
+            OpFlight.INSTANCE.tickDownFlight(evt.getEntityLiving());
+            PlayerPositionRecorder.updatePosition(evt.getEntityLiving());
+        });
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
 
