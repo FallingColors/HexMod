@@ -51,7 +51,7 @@ object OpMakeBattery : SpellOperator {
         ) {
             throw MishapBadItem.of(
                 entity,
-                "mana"
+                "mana_for_battery"
             )
         }
 

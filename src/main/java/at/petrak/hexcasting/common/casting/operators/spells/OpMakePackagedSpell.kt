@@ -44,7 +44,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
         ) {
             throw MishapBadItem.of(
                 entity,
-                "mana"
+                "mana_for_battery"
             )
         }
 
