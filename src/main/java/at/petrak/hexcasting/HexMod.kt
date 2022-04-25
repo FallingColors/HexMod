@@ -17,6 +17,7 @@ import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.lib.HexCapabilityHandler
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.misc.Brainsweeping
+import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.particles.HexParticles
 import at.petrak.hexcasting.common.recipe.HexComposting
@@ -85,6 +86,7 @@ object HexMod {
 
         modBus.register(HexComposting::class.java)
 
+        evBus.register(PlayerPositionRecorder::class.java)
         evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)
         evBus.register(HexCapabilityHandler::class.java)
