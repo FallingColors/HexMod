@@ -9,11 +9,13 @@ import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.misc.Brainsweeping
+import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.ArgumentTypes
@@ -45,6 +47,8 @@ object FabricHexInitializer : ModInitializer {
     fun initListeners() {
         UseEntityCallback.EVENT.register(Brainsweeping::tradeWithVillager)
         VillagerConversionCallback.EVENT.register(Brainsweeping::copyBrainsweepFromVillager)
+
+        ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
 
         CommandRegistrationCallback.EVENT.register { dp, _ -> HexCommands.register(dp) }
     }

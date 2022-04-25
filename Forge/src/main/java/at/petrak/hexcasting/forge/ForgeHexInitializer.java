@@ -25,6 +25,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -36,6 +37,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingConversionEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -147,7 +149,11 @@ public class ForgeHexInitializer {
 
         evBus.addListener((LivingEvent.LivingUpdateEvent evt) -> {
             OpFlight.INSTANCE.tickDownFlight(evt.getEntityLiving());
-            PlayerPositionRecorder.updatePosition(evt.getEntityLiving());
+        });
+
+        evBus.addListener((TickEvent.WorldTickEvent evt) -> {
+            if (evt.phase == TickEvent.Phase.END && evt.world instanceof ServerLevel world)
+                PlayerPositionRecorder.updateAllPlayers(world);
         });
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
