@@ -12,7 +12,7 @@ public interface HexAPI {
 
     Supplier<HexAPI> INSTANCE = Suppliers.memoize(() -> {
         try {
-            return (HexAPI) Class.forName("at.petrak.hexcasting.common.impl.BotaniaAPIImpl")
+            return (HexAPI) Class.forName("at.petrak.hexcasting.common.impl.HexAPIImpl")
                 .getDeclaredConstructor().newInstance();
         } catch (ReflectiveOperationException e) {
             LogManager.getLogger().warn("Unable to find HexAPIImpl, using a dummy");
