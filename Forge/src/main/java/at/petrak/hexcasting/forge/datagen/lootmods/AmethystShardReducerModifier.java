@@ -26,7 +26,7 @@ public class AmethystShardReducerModifier extends LootModifier {
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
         for (var stack : generatedLoot) {
             if (stack.is(Items.AMETHYST_SHARD)) {
-                stack.shrink((int) (stack.getCount() * modifier));
+                stack.setCount((int) (stack.getCount() * (1 + modifier)));
             }
         }
         return generatedLoot;
