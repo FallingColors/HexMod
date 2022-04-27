@@ -41,9 +41,11 @@ object OpDestroyWater : SpellOperator {
             // SpongeBlock.java
             val todo = ArrayDeque<BlockPos>()
             val seen = HashSet<BlockPos>()
-            todo.add(BlockPos(target))
-            for (dir in Direction.values()) { // a little extra range on the initial cast to make it feel more intuitive
-                todo.add(BlockPos(target).relative(dir))
+            val basePos = BlockPos(target)
+
+            // a little extra range on the initial cast to make it feel more intuitive
+            for (xShift in -2..2) for (yShift in -2..2) for (zShift in -2..2) {
+                todo.add(basePos.offset(xShift, yShift, zShift))
             }
 
             var successes = 0
