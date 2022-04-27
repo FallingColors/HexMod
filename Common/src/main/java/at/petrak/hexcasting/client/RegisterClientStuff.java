@@ -31,18 +31,19 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ComparatorBlock;
-import net.minecraft.world.level.block.RedStoneWireBlock;
-import net.minecraft.world.level.block.RepeaterBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.ComparatorMode;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MaterialColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -109,6 +110,28 @@ public class RegisterClientStuff {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
                     beai.applyScryingLensOverlay(lines, state, pos, observer, world, direction, lensHand);
                 }
+            });
+
+        ScryingLensOverlayRegistry.addDisplayer(Blocks.NOTE_BLOCK,
+            (lines, state, pos, observer, world, direction, lensHand) -> {
+                int note = state.getValue(NoteBlock.NOTE);
+
+                float rCol = Math.max(0.0F, Mth.sin((note / 24F + 0.0F) * Mth.TWO_PI) * 0.65F + 0.35F);
+                float gCol = Math.max(0.0F, Mth.sin((note / 24F + 0.33333334F) * Mth.TWO_PI) * 0.65F + 0.35F);
+                float bCol = Math.max(0.0F, Mth.sin((note / 24F + 0.6666667F) * Mth.TWO_PI) * 0.65F + 0.35F);
+
+                int noteColor = 0xFF000000 | ((int) (rCol * 0xFF) << 16) | ((int) (gCol * 0xFF) << 8) | ((int) (bCol * 0xFF));
+
+                var instrument = state.getValue(NoteBlock.INSTRUMENT);
+
+                lines.add(new Pair<>(
+                    new ItemStack(Items.MUSIC_DISC_CHIRP),
+                    new TextComponent(String.valueOf(instrument.ordinal()))
+                        .withStyle((style) -> style.withColor(TextColor.fromRgb(instrumentColor(instrument))))));
+                lines.add(new Pair<>(
+                    new ItemStack(Items.NOTE_BLOCK),
+                    new TextComponent(String.valueOf(note))
+                        .withStyle((style) -> style.withColor(TextColor.fromRgb(noteColor)))));
             });
 
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF,
@@ -189,6 +212,25 @@ public class RegisterClientStuff {
                         new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
                             .withStyle(ChatFormatting.RED)));
             });
+    }
+
+    private static int instrumentColor(NoteBlockInstrument instrument) {
+        return switch(instrument) {
+            case BASEDRUM -> MaterialColor.STONE.col;
+            case SNARE, XYLOPHONE, PLING -> MaterialColor.SAND.col;
+            case HAT -> MaterialColor.QUARTZ.col;
+            case BASS -> MaterialColor.WOOD.col;
+            case FLUTE -> MaterialColor.CLAY.col;
+            case BELL -> MaterialColor.GOLD.col;
+            case GUITAR -> MaterialColor.WOOL.col;
+            case CHIME -> MaterialColor.ICE.col;
+            case IRON_XYLOPHONE -> MaterialColor.METAL.col;
+            case COW_BELL -> MaterialColor.COLOR_BROWN.col;
+            case DIDGERIDOO -> MaterialColor.COLOR_ORANGE.col;
+            case BIT -> MaterialColor.EMERALD.col;
+            case BANJO -> MaterialColor.COLOR_YELLOW.col;
+            default -> -1;
+        };
     }
 
     private static void registerDataHolderOverrides(DataHolderItem item) {

@@ -47,8 +47,8 @@ class GridSoundInstance(val player: Player) :
     }
 
     private fun calculateVectorFromPitchAndYaw(pitch: Float, yaw: Float): Vec3 {
-        val radiansPitch = pitch * (Math.PI.toFloat() / 180f)
-        val radiansYaw = -yaw * (Math.PI.toFloat() / 180f)
+        val radiansPitch = pitch * Mth.DEG_TO_RAD
+        val radiansYaw = -yaw * Mth.DEG_TO_RAD
         val xComponent = Mth.cos(radiansYaw).toDouble()
         val zComponent = Mth.sin(radiansYaw).toDouble()
         val azimuthHorizontal = Mth.cos(radiansPitch).toDouble()
