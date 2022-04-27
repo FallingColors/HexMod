@@ -32,7 +32,7 @@ object HexUtils {
         LongArrayTag(longArrayOf(this.x.toDouble().toRawBits(), this.y.toDouble().toRawBits()))
 
     @JvmStatic
-    fun DeserializeVec2FromNBT(tag: LongArray): Vec2 =
+    fun DeserializeVec2FromNBT(tag: LongArray): Vec2 = if (tag.size != 2) Vec2.ZERO else
         Vec2(
             Double.fromBits(tag[0]).toFloat(),
             Double.fromBits(tag[1]).toFloat(),
