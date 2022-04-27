@@ -17,12 +17,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import org.apache.logging.log4j.Logger
 
-@Mod(HexMod.MOD_ID)
-object HexMod {
-
-    // mumblemumble thanks shy mumble mumble
-    const val MOD_ID = "hexcasting"
-
+@Mod(HexAPI.MOD_ID)
+object ForgeHexInitializer {
     init {
         IXplatAbstractions.INSTANCE.init()
 
@@ -42,7 +38,7 @@ object HexMod {
 
         ForgeListenersSetup.init()
         ForgePacketHandler.init()
-        
+
         /*
 
         // mod lifecycle

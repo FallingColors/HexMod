@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.forge.network;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.ForgeHexInitializer;
 import at.petrak.hexcasting.common.network.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class ForgePacketHandler {
     private static final String PROTOCOL_VERSION = "1";
     private static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(
-        new ResourceLocation(HexMod.MOD_ID, "main"),
+        new ResourceLocation(ForgeHexInitializer.MOD_ID, "main"),
         () -> PROTOCOL_VERSION,
         PROTOCOL_VERSION::equals,
         PROTOCOL_VERSION::equals
