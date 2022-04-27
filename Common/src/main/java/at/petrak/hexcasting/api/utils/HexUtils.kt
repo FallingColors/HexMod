@@ -20,7 +20,7 @@ object HexUtils {
         LongArrayTag(longArrayOf(this.x.toRawBits(), this.y.toRawBits(), this.z.toRawBits()))
 
     @JvmStatic
-    fun DeserializeVec3FromNBT(tag: LongArray): Vec3 =
+    fun DeserializeVec3FromNBT(tag: LongArray): Vec3 = if (tag.size != 3) Vec3.ZERO else
         Vec3(
             Double.fromBits(tag[0]),
             Double.fromBits(tag[1]),
