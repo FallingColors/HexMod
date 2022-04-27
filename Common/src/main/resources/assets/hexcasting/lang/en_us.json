@@ -350,7 +350,7 @@
   "hexcasting.mishap.eval_too_deep": "Recursively evaluated too deep",
   "hexcasting.mishap.no_item": "%s needs %s but got nothing",
   "hexcasting.mishap.no_item.offhand": "%s needs %s in the other hand but got nothing",
-  "hexcasting.mishap.bad_item": "%s needs %s but got %s",
+  "hexcasting.mishap.bad_item": "%s needs %s but got %dx %s",
   "hexcasting.mishap.bad_item.offhand": "%s needs %s in the other hand but got %dx %s",
   "hexcasting.mishap.bad_item.iota": "a place to store iotas",
   "hexcasting.mishap.bad_item.iota.read": "a place to read iotas from",
