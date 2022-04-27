@@ -162,7 +162,7 @@ public class HexBlocks {
     public static final RegistryObject<Block> AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
         () -> new BlockBurns(akashicWoody(), 5, 5));
     public static final RegistryObject<BlockStrippable> AKASHIC_WOOD = blockItem("akashic_wood",
-        () -> new BlockStrippable(akashicWoody(), AKASHIC_WOOD_STRIPPED));
+        () -> new BlockAkashicWood(akashicWoody(), AKASHIC_WOOD_STRIPPED));
     public static final RegistryObject<Block> AKASHIC_PLANKS = blockItem("akashic_planks",
         () -> new BlockBurns(akashicWoody(), 20, 5));
     public static final RegistryObject<Block> AKASHIC_PANEL = blockItem("akashic_panel",
@@ -174,13 +174,13 @@ public class HexBlocks {
     public static final RegistryObject<TrapDoorBlock> AKASHIC_TRAPDOOR = blockItem("akashic_trapdoor",
         () -> new TrapDoorBlock(akashicWoody().noOcclusion()));
     public static final RegistryObject<StairBlock> AKASHIC_STAIRS = blockItem("akashic_stairs",
-        () -> new StairBlock(() -> AKASHIC_PLANKS.get().defaultBlockState(), akashicWoody().noOcclusion()));
+        () -> new BlockAkashicStairs(() -> AKASHIC_PLANKS.get().defaultBlockState(), akashicWoody().noOcclusion()));
     public static final RegistryObject<SlabBlock> AKASHIC_SLAB = blockItem("akashic_slab",
-        () -> new SlabBlock(akashicWoody().noOcclusion()));
+        () -> new BlockAkashicSlab(akashicWoody().noOcclusion()));
     public static final RegistryObject<WoodButtonBlock> AKASHIC_BUTTON = blockItem("akashic_button",
-        () -> new WoodButtonBlock(akashicWoody().noOcclusion()));
+        () -> new WoodButtonBlock(akashicWoody().noCollission()));
     public static final RegistryObject<PressurePlateBlock> AKASHIC_PRESSURE_PLATE = blockItem("akashic_pressure_plate",
-        () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, akashicWoody().noOcclusion()));
+        () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, akashicWoody().noCollission()));
     public static final RegistryObject<BlockAkashicLeaves> AKASHIC_LEAVES1 = blockItem("akashic_leaves1",
         () -> new BlockAkashicLeaves(leaves(MaterialColor.COLOR_PURPLE)));
     public static final RegistryObject<BlockAkashicLeaves> AKASHIC_LEAVES2 = blockItem("akashic_leaves2",
