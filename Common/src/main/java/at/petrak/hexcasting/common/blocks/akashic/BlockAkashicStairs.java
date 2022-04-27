@@ -1,19 +1,16 @@
-package at.petrak.hexcasting.forge.block;
+package at.petrak.hexcasting.common.blocks.akashic;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BlockBurns extends Block {
-    private final int flammability;
-    private final int spreadSpeed;
+import java.util.function.Supplier;
 
-    public BlockBurns(Properties props, int flammability, int spreadSpeed) {
-        super(props);
-        this.flammability = flammability;
-        this.spreadSpeed = spreadSpeed;
+public class BlockAkashicStairs extends StairBlock {
+    public BlockAkashicStairs(Supplier<BlockState> state, Properties properties) {
+        super(state, properties);
     }
 
     @Override
@@ -23,11 +20,11 @@ public class BlockBurns extends Block {
 
     @Override
     public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return flammability;
+        return 20;
     }
 
     @Override
     public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return spreadSpeed;
+        return 5;
     }
 }
