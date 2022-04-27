@@ -25,7 +25,7 @@ object OpMakeBattery : SpellOperator {
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexItemTags.PHIAL_BASE) }
 
-        if (handStack.`is`(HexItemTags.PHIAL_BASE)) {
+        if (!handStack.`is`(HexItemTags.PHIAL_BASE)) {
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,
