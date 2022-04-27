@@ -33,7 +33,7 @@ public class HexPlayerDataHelper {
 	public static final String TAG_FLIGHT_ALLOWED = "hexcasting:flight_allowed";
 	public static final String TAG_FLIGHT_TIME = "hexcasting:flight_time";
 	public static final String TAG_FLIGHT_ORIGIN = "hexcasting:flight_origin";
-	public static final String TAG_FLIGHT_DIMENSION = "hexcasting:flight_origin";
+	public static final String TAG_FLIGHT_DIMENSION = "hexcasting:flight_dimension";
 	public static final String TAG_FLIGHT_RADIUS = "hexcasting:flight_radius";
 
 	public static final String TAG_HARNESS = "hexcasting:spell_harness";
