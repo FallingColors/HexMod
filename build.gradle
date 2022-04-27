@@ -25,6 +25,9 @@ subprojects {
     }
 
     repositories {
+
+        maven { url "https://libraries.minecraft.net/" }
+
         mavenCentral()
 
         maven {
