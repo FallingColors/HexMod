@@ -102,8 +102,8 @@ public class ConjureParticle extends TextureSheetParticle {
         @Override
         public void begin(BufferBuilder buf, TextureManager texMan) {
             Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
-            RenderSystem.depthMask(false);
             RenderSystem.enableDepthTest();
+            RenderSystem.depthMask(false);
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
