@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api;
 
 import com.google.common.base.Suppliers;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,5 +24,9 @@ public interface HexAPI {
 
     static HexAPI instance() {
         return INSTANCE.get();
+    }
+
+    static ResourceLocation modLoc(String s) {
+        return new ResourceLocation(MOD_ID, s);
     }
 }

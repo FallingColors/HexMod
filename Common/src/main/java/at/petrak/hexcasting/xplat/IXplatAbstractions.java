@@ -2,8 +2,11 @@ package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.command.PatternResLocArgument;
+import at.petrak.hexcasting.common.network.IMessage;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
@@ -12,6 +15,14 @@ public interface IXplatAbstractions {
     Platform platform();
 
     boolean isPhysicalClient();
+
+    void brainsweep(LivingEntity e);
+
+    boolean isBrainswept(LivingEntity e);
+
+    void sendPacketToPlayer(ServerPlayer target, IMessage packet);
+
+    void sendPacketToServer(IMessage packet);
 
     default void init() {
         HexAPI.LOGGER.info("Hello Hexcasting! This is {}!", this.platform());

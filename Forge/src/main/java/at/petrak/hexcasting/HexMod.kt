@@ -4,33 +4,12 @@ import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.mod.HexStatistics
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
-import at.petrak.hexcasting.client.*
-import at.petrak.hexcasting.common.blocks.HexBlockEntities
-import at.petrak.hexcasting.common.blocks.HexBlocks
-import at.petrak.hexcasting.common.casting.RegisterPatterns
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
-import at.petrak.hexcasting.common.command.HexCommands
-import at.petrak.hexcasting.common.entities.HexEntities
-import at.petrak.hexcasting.common.items.HexItems
-import at.petrak.hexcasting.common.lib.HexCapabilityHandler
-import at.petrak.hexcasting.common.lib.HexSounds
-import at.petrak.hexcasting.common.misc.Brainsweeping
-import at.petrak.hexcasting.common.network.HexMessages
-import at.petrak.hexcasting.common.particles.HexParticles
-import at.petrak.hexcasting.common.recipe.HexComposting
-import at.petrak.hexcasting.common.recipe.HexCustomRecipes
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
-import at.petrak.hexcasting.datagen.HexDataGenerators
-import at.petrak.hexcasting.datagen.lootmods.HexLootModifiers
 import at.petrak.hexcasting.forge.ForgeHexConfig
-import at.petrak.hexcasting.server.TickScheduler
+import at.petrak.hexcasting.forge.network.ForgePacketHandler
+import at.petrak.hexcasting.forge.xplat.ForgeListenersSetup
 import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
@@ -56,6 +35,15 @@ object HexMod {
         HexConfig.setCommon(config.left)
         HexConfig.setClient(clientConfig.left)
         HexConfig.setServer(serverConfig.left)
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, config.right)
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, serverConfig.right)
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientConfig.right)
+
+
+        ForgeListenersSetup.init()
+        ForgePacketHandler.init()
+        
+        /*
 
         // mod lifecycle
         val modBus = thedarkcolour.kotlinforforge.forge.MOD_BUS
@@ -98,12 +86,7 @@ object HexMod {
             }
         }
 
-        // and then things that don't require busses
-        HexMessages.register()
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, config.right)
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, serverConfig.right)
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientConfig.right)
+         */
     }
 
     @SubscribeEvent

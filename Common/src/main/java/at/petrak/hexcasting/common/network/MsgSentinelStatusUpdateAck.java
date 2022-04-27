@@ -1,21 +1,28 @@
 package at.petrak.hexcasting.common.network;
 
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.api.player.Sentinel;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
 
-import java.util.function.Supplier;
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * Sent server->client to synchronize the status of the sentinel.
  */
-public record MsgSentinelStatusUpdateAck(Sentinel update) {
+public record MsgSentinelStatusUpdateAck(Sentinel update) implements IMessage {
+    public static final ResourceLocation ID = modLoc("sntnl");
+
+    @Override
+    public ResourceLocation getFabricId() {
+        return ID;
+    }
+
     public static MsgSentinelStatusUpdateAck deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
@@ -28,8 +35,7 @@ public record MsgSentinelStatusUpdateAck(Sentinel update) {
         return new MsgSentinelStatusUpdateAck(sentinel);
     }
 
-    public void serialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
+    public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(update.hasSentinel());
         buf.writeBoolean(update.extendsRange());
         buf.writeDouble(update.position().x);
@@ -38,11 +44,15 @@ public record MsgSentinelStatusUpdateAck(Sentinel update) {
         buf.writeResourceLocation(update.dimension().location());
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ClientPacketHandler handler = new ClientPacketHandler(this);
-            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> handler::updateSentinel);
+    public static void handle(MsgSentinelStatusUpdateAck self) {
+        Minecraft.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                var player = Minecraft.getInstance().player;
+                if (player != null) {
+                    HexPlayerDataHelper.setSentinel(player, self.update());
+                }
+            }
         });
-        ctx.get().setPacketHandled(true);
     }
 }

@@ -11,19 +11,27 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
 
-import java.util.function.Supplier;
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * Sent client->server when the client shift+scrolls with a shift-scrollable item
  * or scrolls in the spellcasting UI.
  */
-public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolean isCtrl) {
+public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolean isCtrl) implements IMessage {
+    public static final ResourceLocation ID = modLoc("scroll");
+
+    @Override
+    public ResourceLocation getFabricId() {
+        return ID;
+    }
+
     public static MsgShiftScrollSyn deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var hand = buf.readEnum(InteractionHand.class);
@@ -32,27 +40,20 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         return new MsgShiftScrollSyn(hand, scrollDelta, isCtrl);
     }
 
-    public void serialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
+    public void serialize(FriendlyByteBuf buf) {
         buf.writeEnum(this.hand);
         buf.writeDouble(this.scrollDelta);
         buf.writeBoolean(this.isCtrl);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer sender = ctx.get().getSender();
-            if (sender != null) {
-                var stack = sender.getItemInHand(hand);
+    public void handle(MinecraftServer server, ServerPlayer sender) {
+        var stack = sender.getItemInHand(hand);
 
-                if (stack.getItem() == HexItems.SPELLBOOK.get()) {
-                    spellbook(sender, stack);
-                } else if (stack.getItem() == HexItems.ABACUS.get()) {
-                    abacus(sender, stack);
-                }
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        if (stack.getItem() == HexItems.SPELLBOOK.get()) {
+            spellbook(sender, stack);
+        } else if (stack.getItem() == HexItems.ABACUS.get()) {
+            abacus(sender, stack);
+        }
     }
 
     private void spellbook(ServerPlayer sender, ItemStack stack) {
@@ -66,28 +67,32 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
         MutableComponent component;
         if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
-            if (sealed)
+            if (sealed) {
                 component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name.sealed",
-                        new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
-                        new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                        new TextComponent("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC).append(stack.getHoverName()),
+                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                    new TextComponent("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                        .append(stack.getHoverName()),
                     new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
-            else
+            } else {
                 component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name",
                     new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    new TextComponent("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC).append(stack.getHoverName()));
+                    new TextComponent("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                        .append(stack.getHoverName()));
+            }
 
         } else {
-            if (sealed)
+            if (sealed) {
                 component = new TranslatableComponent("hexcasting.tooltip.spellbook.page.sealed",
                     new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
                     new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
-            else
+            } else {
                 component = new TranslatableComponent("hexcasting.tooltip.spellbook.page",
                     new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE));
+            }
         }
 
         sender.displayClientMessage(component.withStyle(ChatFormatting.GRAY), true);
@@ -122,7 +127,8 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         var datumTag = HexItems.ABACUS.get().readDatumTag(stack);
         if (datumTag != null) {
             var popup = SpellDatum.DisplayFromTag(datumTag);
-            sender.displayClientMessage(new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
+            sender.displayClientMessage(
+                new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
         }
     }
 }

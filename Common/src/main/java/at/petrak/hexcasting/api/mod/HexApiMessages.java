@@ -1,5 +1,8 @@
 package at.petrak.hexcasting.api.mod;
 
+// Don't understand what this does so i commented it all out :gigachad:
+/*
+
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
@@ -44,3 +47,5 @@ public final class HexApiMessages {
 		return particleSprayMessage.apply(spray, colorizer);
 	}
 }
+
+ */

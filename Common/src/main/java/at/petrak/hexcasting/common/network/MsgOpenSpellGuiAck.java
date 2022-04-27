@@ -1,22 +1,30 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * Sent server->client when the player opens the spell gui to request the server provide the current stack.
  */
-public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> patterns, List<Component> components) {
+public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> patterns, List<Component> components)
+    implements IMessage {
+    public static final ResourceLocation ID = modLoc("cGui");
+
+    @Override
+    public ResourceLocation getFabricId() {
+        return ID;
+    }
 
     public static MsgOpenSpellGuiAck deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
@@ -38,9 +46,7 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
         return new MsgOpenSpellGuiAck(hand, patterns, desc);
     }
 
-    public void serialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
-
+    public void serialize(FriendlyByteBuf buf) {
         buf.writeEnum(this.hand);
 
         buf.writeInt(this.patterns.size());
@@ -54,12 +60,13 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
         }
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ClientPacketHandler handler = new ClientPacketHandler(this);
-            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> handler::openSpellGui);
+    public static void handle(MsgOpenSpellGuiAck msg) {
+        Minecraft.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                var mc = Minecraft.getInstance();
+                mc.setScreen(new GuiSpellcasting(msg.hand(), msg.patterns(), msg.components()));
+            }
         });
-        ctx.get().setPacketHandled(true);
     }
-
 }
