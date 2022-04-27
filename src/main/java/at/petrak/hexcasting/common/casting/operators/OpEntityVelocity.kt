@@ -18,8 +18,7 @@ object OpEntityVelocity : ConstManaOperator {
 
         // Player velocity is jank. Really jank. This is the best we can do.
         if (e is ServerPlayer) {
-            val prevPosition = PlayerPositionRecorder.getLastPosition(e)
-            return spellListOf(e.position().subtract(prevPosition))
+            return spellListOf(PlayerPositionRecorder.getMotion(e))
         }
 
         return spellListOf(e.deltaMovement)
