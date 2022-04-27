@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -47,6 +48,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.Locale;
+import java.util.function.UnaryOperator;
 
 public class RegisterClientStuff {
 
@@ -123,18 +125,18 @@ public class RegisterClientStuff {
                 float gCol = Math.max(0.0F, Mth.sin((note / 24F + 0.33333334F) * Mth.TWO_PI) * 0.65F + 0.35F);
                 float bCol = Math.max(0.0F, Mth.sin((note / 24F + 0.6666667F) * Mth.TWO_PI) * 0.65F + 0.35F);
 
-                int noteColor = 0xFF000000 | ((int) (rCol * 0xFF) << 16) | ((int) (gCol * 0xFF) << 8) | ((int) (bCol * 0xFF));
+                int noteColor = 0xFF_000000 | Mth.color(rCol, gCol, bCol);
 
                 var instrument = state.getValue(NoteBlock.INSTRUMENT);
 
                 lines.add(new Pair<>(
                     new ItemStack(Items.MUSIC_DISC_CHIRP),
                     new TextComponent(String.valueOf(instrument.ordinal()))
-                        .withStyle((style) -> style.withColor(TextColor.fromRgb(instrumentColor(instrument))))));
+                        .withStyle(color(instrumentColor(instrument)))));
                 lines.add(new Pair<>(
                     new ItemStack(Items.NOTE_BLOCK),
                     new TextComponent(String.valueOf(note))
-                        .withStyle((style) -> style.withColor(TextColor.fromRgb(noteColor)))));
+                        .withStyle(color(noteColor))));
             });
 
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF.get(),
@@ -172,12 +174,15 @@ public class RegisterClientStuff {
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE),
                     new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
-                        .withStyle(ChatFormatting.RED)));
+                        .withStyle(redstoneColor(comparatorValue))));
+
+                boolean compare = state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE;
+
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE_TORCH),
                     new TextComponent(
-                        state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE ? ">" : "-")
-                        .withStyle(ChatFormatting.RED)));
+                        compare ? ">=" : "-")
+                        .withStyle(redstoneColor(compare ? 0 : 15))));
             });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
@@ -200,7 +205,7 @@ public class RegisterClientStuff {
                 lines.add(0, new Pair<>(
                     new ItemStack(Items.REDSTONE),
                     new TextComponent(String.valueOf(signalStrength))
-                        .withStyle(ChatFormatting.RED)));
+                        .withStyle(redstoneColor(signalStrength))));
             });
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
@@ -211,8 +216,16 @@ public class RegisterClientStuff {
                     new Pair<>(
                         new ItemStack(Items.COMPARATOR),
                         new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
-                            .withStyle(ChatFormatting.RED)));
+                            .withStyle(redstoneColor(comparatorValue))));
             });
+    }
+
+    private static UnaryOperator<Style> color(int color) {
+        return (style) -> style.withColor(TextColor.fromRgb(color));
+    }
+
+    private static UnaryOperator<Style> redstoneColor(int power) {
+        return color(RedStoneWireBlock.getColorForPower(Mth.clamp(power, 0, 15)));
     }
 
     private static int instrumentColor(NoteBlockInstrument instrument) {
