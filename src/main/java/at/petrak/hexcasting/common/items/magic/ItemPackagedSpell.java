@@ -119,6 +119,7 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
 
         if (broken) {
             stack.shrink(1);
+            player.broadcastBreakEvent(usedHand);
             return InteractionResultHolder.consume(stack);
         } else {
             return InteractionResultHolder.success(stack);
