@@ -816,9 +816,9 @@
   "hexcasting.page.readwrite.writable": "If I could save the given iota into the item in my other hand, returns 1. Otherwise, returns 0.",
 
   "hexcasting.entry.meta": "Meta-evaluation",
-  "hexcasting.page.meta.eval.1": "Remove a list of patterns from the stack, then cast them sequentially, as if I had drawn them myself with my $(l:items/staff)$(item)Staff/$.$(br)Costs about one $(l:items/amethyst)$(item)Amethyst Shard/$.",
+  "hexcasting.page.meta.eval.1": "Remove a list of patterns from the stack, then cast them sequentially, as if I had drawn them myself with my $(l:items/staff)$(item)Staff/$.",
   "hexcasting.page.meta.eval.2": "This can be $(italic)very/$ powerful in tandem with $(l:items/focus)$(item)Foci/$.$(br2)It also makes the bureaucracy of Nature a \"Turing-complete\" system, according to one esoteric scroll I found.$(br2)However, it seems there's a limit to how many times a _Hex can cast itself-- Nature doesn't look kindly on runaway spells!$(br2)In addition, with the energies of the patterns occurring without me to guide them, any mishap will cause the remaining actions to become too unstable and immediately unravel.",
-  "hexcasting.page.meta.for_each.1": "Remove a list of patterns and a list from the stack, then cast the given pattern over each element of the second list.$(br)Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
+  "hexcasting.page.meta.for_each.1": "Remove a list of patterns and a list from the stack, then cast the given pattern over each element of the second list.",
   "hexcasting.page.meta.for_each.2": "More specifically, for each element in the second list, it will:$(li)Create a new stack, with everything on the current stack plus that element$(li)Draw all the patterns in the first list$(li)Save all the iotas remaining on the stack to a list$(br)Then, after all is said and done, pushes the list of saved iotas onto the main stack.$(br2)No wonder all the practitioners of this art go mad.",
 
   "hexcasting.entry.circle_patterns": "Spell Circle Patterns",
