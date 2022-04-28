@@ -16,6 +16,14 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:slice",
+      "anchor": "hexcasting:slice",
+      "input": "list, num, num",
+      "output": "list",
+      "text": "hexcasting.page.lists.slice"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:append",
       "anchor": "hexcasting:append",
       "input": "list, any",
@@ -76,7 +84,7 @@
       "anchor": "hexcasting:list_remove",
       "input": "list, num",
       "output": "list",
-      "text": "hexcasting.page.lists.remove"
+      "text": "hexcasting.page.lists.list_remove"
     }
   ]
 }
