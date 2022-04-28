@@ -347,6 +347,7 @@
   "hexcasting.mishap.invalid_value.class.entity": "an entity",
   "hexcasting.mishap.invalid_value.class.unknown": "(unknown, uh-oh, this is a bug)",
   "hexcasting.mishap.invalid_value.numvec": "a number or vector",
+  "hexcasting.mishap.invalid_value.numlist": "a number or list",
   "hexcasting.mishap.invalid_value.list.pattern": "a list of patterns",
   "hexcasting.mishap.invalid_value.int": "an integer",
   "hexcasting.mishap.invalid_value.double.between": "a number between %d and %d",

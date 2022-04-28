@@ -17,4 +17,15 @@ object MathOpUtils {
                 TranslatableComponent("hexcasting.mishap.invalid_value.numvec")
             )
         }
+
+    fun GetNumOrList(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, List<SpellDatum<*>>> =
+        when (datum.payload) {
+            is Double -> Either.left(datum.payload)
+            is List<*> -> Either.right(datum.payload.filterIsInstance<SpellDatum<*>>())
+            else -> throw MishapInvalidIota(
+                datum,
+                reverseIdx,
+                TranslatableComponent("hexcasting.mishap.invalid_value.numlist")
+            )
+        }
 }
