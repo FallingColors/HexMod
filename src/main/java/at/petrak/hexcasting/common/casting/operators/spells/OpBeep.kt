@@ -33,7 +33,7 @@ object OpBeep : SpellOperator {
         )
     }
 
-    override fun getHasCastingSound(): Boolean = false
+    override fun hasCastingSound(ctx: CastingContext) = false
 
     private data class Spell(val target: Vec3, val note: Int, val instrument: NoteBlockInstrument) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
