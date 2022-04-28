@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.casting.CastingContext
@@ -28,7 +29,7 @@ object OpDestroyWater : SpellOperator {
 
         return Triple(
             Spell(target),
-            200_000,
+            2 * ManaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray.Burst(target, 3.0))
         )
     }

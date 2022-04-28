@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -40,7 +41,7 @@ object OpAkashicWrite : SpellOperator {
 
         return Triple(
             Spell(tile, key, datum),
-            10_000,
+            ManaConstants.DUST_UNIT,
             listOf()
         )
     }

@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
+import at.petrak.hexcasting.api.misc.ManaConstants
+
 import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -24,7 +26,7 @@ object OpDestroySentinel : SpellOperator {
 
         return Triple(
             Spell,
-            1_000,
+            ManaConstants.DUST_UNIT / 10,
             particles
         )
     }

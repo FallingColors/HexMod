@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
@@ -12,7 +13,7 @@ import net.minecraft.world.phys.Vec3
 
 object OpGetSentinelWayfind : ConstManaOperator {
     override val argc = 1
-    override val manaCost = 1_000
+    override val manaCost = ManaConstants.DUST_UNIT / 10
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val from = args.getChecked<Vec3>(0)
 

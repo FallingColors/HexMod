@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -26,14 +27,12 @@ class OpErase : SpellOperator {
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
 
         if ((hexHolder?.patterns == null) &&
-            (datumHolder == null
-                    || datumHolder.readDatum(ctx.world) == null
-                    || !datumHolder.writeDatum(null, true))
-        ) {
+            (datumHolder?.writeDatum(null, true) == true)) {
             throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
         }
 
-        return Triple(Spell, 10_000, listOf())
+        return Triple(Spell,
+            ManaConstants.DUST_UNIT, listOf())
     }
 
     private object Spell : RenderedSpell {
@@ -47,6 +46,7 @@ class OpErase : SpellOperator {
             }
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
+
             if (hexHolder?.patterns != null)
                 hexHolder.clearPatterns()
 

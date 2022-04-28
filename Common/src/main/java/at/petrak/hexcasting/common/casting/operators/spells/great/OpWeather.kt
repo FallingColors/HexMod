@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -13,10 +14,13 @@ class OpWeather(val rain: Boolean) : SpellOperator {
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+        if (ctx.world.isRaining == rain)
+            return null
+
         return Triple(
             Spell(rain),
-            ((if (this.rain) 2 else 1) * 50_000),
+            if (this.rain) ManaConstants.CRYSTAL_UNIT else ManaConstants.SHARD_UNIT,
             listOf()
         )
     }

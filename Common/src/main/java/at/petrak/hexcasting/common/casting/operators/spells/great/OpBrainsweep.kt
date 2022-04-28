@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -44,7 +45,7 @@ object OpBrainsweep : SpellOperator {
 
         return Triple(
             Spell(bpos, sacrifice, recipe),
-            1_000_000,
+            10 * ManaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray.Cloud(sacrifice.position(), 1.0), ParticleSpray.Burst(Vec3.atCenterOf(bpos), 0.3, 100))
         )
     }

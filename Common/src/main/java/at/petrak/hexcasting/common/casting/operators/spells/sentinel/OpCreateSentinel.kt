@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.player.Sentinel
+
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -23,7 +25,7 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
 
         return Triple(
             Spell(target, this.extendsRange),
-            10_000,
+            ManaConstants.DUST_UNIT,
             listOf(ParticleSpray.Burst(target, 2.0))
         )
     }

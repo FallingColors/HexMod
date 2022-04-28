@@ -13,9 +13,6 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object OpFisherman : Operator {
-    val manaCost: Int
-        get() = 0
-
     override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
@@ -35,8 +32,6 @@ object OpFisherman : Operator {
             )
         }
 
-        val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMana(manaCost))
-
-        return OperationResult(stack, sideEffects)
+        return OperationResult(stack, listOf())
     }
 }

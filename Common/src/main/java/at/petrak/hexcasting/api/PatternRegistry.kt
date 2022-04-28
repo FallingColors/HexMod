@@ -158,7 +158,7 @@ object PatternRegistry {
 
     data class SpecialHandlerEntry(val id: ResourceLocation, val handler: SpecialHandler)
 
-    class RegisterPatternException(msg: String) : java.lang.Exception(msg)
+    class RegisterPatternException(msg: String) : Exception(msg)
 
     private data class RegularEntry(val preferredStart: HexDir, val opId: ResourceLocation)
     private data class PerWorldEntry(val prototype: HexPattern, val opId: ResourceLocation)

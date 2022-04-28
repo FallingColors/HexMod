@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -13,7 +14,7 @@ import net.minecraft.world.phys.Vec3
 
 object OpAkashicRead : ConstManaOperator {
     override val argc = 2
-    override val manaCost = 10_000
+    override val manaCost = ManaConstants.DUST_UNIT
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val pos = args.getChecked<Vec3>(0)

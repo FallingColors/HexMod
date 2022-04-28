@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.misc.ManaConstants
+
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
@@ -29,7 +31,7 @@ object OpCreateWater : SpellOperator {
 
         return Triple(
             Spell(target),
-            10_000,
+            ManaConstants.DUST_UNIT,
             listOf(ParticleSpray.Burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
         )
     }

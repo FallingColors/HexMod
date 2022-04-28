@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -26,7 +27,7 @@ object OpColorize : SpellOperator {
         }
         return Triple(
             Spell,
-            10_000,
+            ManaConstants.DUST_UNIT,
             listOf()
         )
     }

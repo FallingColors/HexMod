@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -24,7 +25,7 @@ class OpExplode(val fire: Boolean) : SpellOperator {
         ctx.assertVecInRange(pos)
         return Triple(
             Spell(pos, strength, this.fire),
-            ((1 + Mth.clamp(strength.toFloat(), 0f, 10f) + if (this.fire) 2 else 0) * 50_000.0).toInt(),
+            ((1 + Mth.clamp(strength.toFloat(), 0f, 10f) + if (this.fire) 2 else 0) * ManaConstants.SHARD_UNIT).toInt(),
             listOf(ParticleSpray.Burst(pos, strength, 50))
         )
     }

@@ -1,12 +1,14 @@
 package at.petrak.hexcasting.api.mod;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 
 public class HexConfig {
     public interface CommonConfigAccess {
+
         int dustManaAmount();
 
         int shardManaAmount();
@@ -15,16 +17,16 @@ public class HexConfig {
 
         double manaToHealthRate();
 
-        int DEFAULT_DUST_MANA_AMOUNT = 10_000;
-        int DEFAULT_SHARD_MANA_AMOUNT = 50_000;
-        int DEFAULT_CHARGED_MANA_AMOUNT = 100_000;
-        double DEFAULT_MANA_TO_HEALTH_RATE = 200_000.0 / 20.0;
+        int DEFAULT_DUST_MANA_AMOUNT = ManaConstants.DUST_UNIT;
+        int DEFAULT_SHARD_MANA_AMOUNT = ManaConstants.SHARD_UNIT;
+        int DEFAULT_CHARGED_MANA_AMOUNT = ManaConstants.CRYSTAL_UNIT;
+        double DEFAULT_MANA_TO_HEALTH_RATE = 2 * ManaConstants.CRYSTAL_UNIT / 20.0;
 
     }
 
     public interface ClientConfigAccess {
         double patternPointSpeedMultiplier();
-        
+
         boolean ctrlTogglesOffStrokeOrder();
 
         double DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER = 1;

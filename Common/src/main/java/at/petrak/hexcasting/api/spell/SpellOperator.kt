@@ -7,7 +7,9 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 interface SpellOperator : Operator {
     val argc: Int
 
-    val hasCastingSound: Boolean get() = true
+    fun hasCastingSound(ctx: CastingContext): Boolean = true
+
+    fun awardsCastingStat(ctx: CastingContext): Boolean = true
 
     fun execute(
         args: List<SpellDatum<*>>,
@@ -24,7 +26,7 @@ interface SpellOperator : Operator {
 
         val sideEffects = mutableListOf(
             OperatorSideEffect.ConsumeMana(mana),
-            OperatorSideEffect.AttemptSpell(spell, this.isGreat, this.hasCastingSound)
+            OperatorSideEffect.AttemptSpell(spell, this.isGreat, this.hasCastingSound(ctx), this.awardsCastingStat(ctx))
         )
         for (spray in particles) {
             sideEffects.add(OperatorSideEffect.Particles(spray))

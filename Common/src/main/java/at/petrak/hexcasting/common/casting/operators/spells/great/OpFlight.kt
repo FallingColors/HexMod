@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.player.FlightAbility
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
@@ -30,7 +31,7 @@ object OpFlight : SpellOperator {
         val time = (timeRaw * 20.0).roundToInt()
         return Triple(
             Spell(target, time, radiusRaw, ctx.position),
-            10_000 * (timeRaw * radiusRaw + 1.0).roundToInt(),
+            ManaConstants.DUST_UNIT * (timeRaw * radiusRaw + 1.0).roundToInt(),
             listOf(ParticleSpray(target.position(), Vec3(0.0, 2.0, 0.0), 0.0, 0.1))
         )
     }
