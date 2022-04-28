@@ -786,6 +786,7 @@
 
   "hexcasting.entry.lists": "List Manipulation",
   "hexcasting.page.lists.index": "Remove the number at the top of the stack, then replace the list at the top with the nth element of that list (where n is the number you removed). Replaces the list with $(l:casting/influences)$(thing)Null/$ if the number is out of bounds.",
+  "hexcasting.page.lists.slice": "Remove the two numbers at the top of the stack, then take a sublist of the list at the top of the stack between those indices, lower bound inclusive, upper bound exclusive. For example, the 0, 2 sublist of [0, 1, 2, 3, 4] would be [0, 1].",
   "hexcasting.page.lists.append": "Remove the top of the stack, then add it to the end of the list at the top of the stack.",
   "hexcasting.page.lists.concat": "Remove the list at the top of the stack, then add all its elements to the end of the list at the top of the stack.",
   "hexcasting.page.lists.empty_list": "Push an empty list to the top of the stack.",
