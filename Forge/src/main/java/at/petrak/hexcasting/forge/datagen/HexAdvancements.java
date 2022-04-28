@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.FailToCastGreatSpellTrigger;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.advancements.SpendManaTrigger;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.forge.datagen.PaucalAdvancementProvider;
 import net.minecraft.advancements.Advancement;
@@ -55,13 +56,13 @@ public class HexAdvancements extends PaucalAdvancementProvider {
             .parent(root)
             .addCriterion("waste_amt", new SpendManaTrigger.Instance(EntityPredicate.Composite.ANY,
                 MinMaxBounds.Ints.ANY,
-                MinMaxBounds.Ints.atLeast(89_000)))
+                MinMaxBounds.Ints.atLeast(89 * ManaConstants.DUST_UNIT)))
             .save(consumer, prefix("aaa_wasteful_cast"));
         Advancement.Builder.advancement()
             .display(simpleDisplay(HexItems.CHARGED_AMETHYST, "big_cast", FrameType.TASK))
             .parent(root)
             .addCriterion("cast_amt", new SpendManaTrigger.Instance(EntityPredicate.Composite.ANY,
-                MinMaxBounds.Ints.atLeast(6_400_000),
+                MinMaxBounds.Ints.atLeast(64 * ManaConstants.CRYSTAL_UNIT),
                 MinMaxBounds.Ints.ANY))
             .save(consumer, prefix("aab_big_cast"));
 
