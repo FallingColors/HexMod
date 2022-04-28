@@ -7,6 +7,10 @@
   "read_by_default": true,
   "pages": [
     {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.stackmanip.stack"
+    },
+    {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:swap",
       "anchor": "hexcasting:swap",
@@ -21,6 +25,30 @@
       "input": "num",
       "output": "any",
       "text": "hexcasting.page.stackmanip.fisherman"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:stack_len",
+      "anchor": "hexcasting:stack_len",
+      "input": "",
+      "output": "num",
+      "text": "hexcasting.page.stackmanip.stack_len"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:last_n_list",
+      "anchor": "hexcasting:last_n_list",
+      "input": "many, num",
+      "output": "list",
+      "text": "hexcasting.page.stackmanip.last_n_list"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:splat",
+      "anchor": "hexcasting:splat",
+      "input": "list",
+      "output": "many",
+      "text": "hexcasting.page.stackmanip.splat"
     },
     {
       "type": "hexcasting:pattern",
