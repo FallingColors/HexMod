@@ -2,7 +2,7 @@
   "name": "hexcasting.entry.akashic_patterns",
   "category": "hexcasting:patterns",
   "icon": "hexcasting:akashic_bookshelf",
-  "sortnum": 12,
+  "sortnum": 14,
   "advancement": "hexcasting:enlightenment",
   "entry_color": "54398a",
   "pages": [
