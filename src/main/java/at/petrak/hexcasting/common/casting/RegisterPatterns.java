@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting;
 
 import at.petrak.hexcasting.api.PatternRegistry;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.Operator;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
@@ -205,14 +206,14 @@ public class RegisterPatterns {
                 OpBeep.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
-                new OpMakePackagedSpell<>(HexItems.CYPHER.get(), 100_000));
+                new OpMakePackagedSpell<>(HexItems.CYPHER.get(), ManaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
                 prefix("craft/trinket"),
-                new OpMakePackagedSpell<>(HexItems.TRINKET.get(), 500_000));
+                new OpMakePackagedSpell<>(HexItems.TRINKET.get(), 5 * ManaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(
                 HexPattern.FromAnglesSig("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
                 prefix("craft/artifact"),
-                new OpMakePackagedSpell<>(HexItems.ARTIFACT.get(), 1_000_000));
+                new OpMakePackagedSpell<>(HexItems.ARTIFACT.get(), 10 * ManaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(
                 HexPattern.FromAnglesSig("aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", HexDir.SOUTH_WEST),
                 prefix("craft/battery"),
@@ -221,35 +222,35 @@ public class RegisterPatterns {
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaqwawaw", HexDir.NORTH_WEST),
                 prefix("potion/weakness"),
-                new OpPotionEffect(MobEffects.WEAKNESS, 10_000 / 10, true, false, false));
+                new OpPotionEffect(MobEffects.WEAKNESS, ManaConstants.DUST_UNIT / 10, true, false, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqawwawawd", HexDir.WEST),
                 prefix("potion/levitation"),
-                new OpPotionEffect(MobEffects.LEVITATION, 10_000 / 5, false, false, false));
+                new OpPotionEffect(MobEffects.LEVITATION, ManaConstants.DUST_UNIT / 5, false, false, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaewawawe", HexDir.SOUTH_WEST),
                 prefix("potion/wither"),
-                new OpPotionEffect(MobEffects.WITHER, 10_000, true, false, false));
+                new OpPotionEffect(MobEffects.WITHER, ManaConstants.DUST_UNIT, true, false, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqadwawaww", HexDir.SOUTH_EAST),
                 prefix("potion/poison"),
-                new OpPotionEffect(MobEffects.POISON, 10_000 / 3, true, false, false));
+                new OpPotionEffect(MobEffects.POISON, ManaConstants.DUST_UNIT / 3, true, false, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqadwawaw", HexDir.SOUTH_EAST),
                 prefix("potion/slowness"),
-                new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, 10_000 / 3, true, false, false));
+                new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, ManaConstants.DUST_UNIT / 3, true, false, false));
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqaawawaedd", HexDir.NORTH_WEST),
                 prefix("potion/regeneration"),
-                new OpPotionEffect(MobEffects.REGENERATION, 10_000, true, true, true), true);
+                new OpPotionEffect(MobEffects.REGENERATION, ManaConstants.DUST_UNIT, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqaawawaeqdd", HexDir.WEST),
                 prefix("potion/night_vision"),
-                new OpPotionEffect(MobEffects.NIGHT_VISION, 10_000 / 5, false, true, true), true);
+                new OpPotionEffect(MobEffects.NIGHT_VISION, ManaConstants.DUST_UNIT / 5, false, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqaawawaeqqdd", HexDir.SOUTH_WEST),
                 prefix("potion/absorption"),
-                new OpPotionEffect(MobEffects.ABSORPTION, 10_000, true, true, true), true);
+                new OpPotionEffect(MobEffects.ABSORPTION, ManaConstants.DUST_UNIT, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaawawaeqqqdd", HexDir.SOUTH_EAST),
                 prefix("potion/haste"),
-                new OpPotionEffect(MobEffects.DIG_SPEED, 10_000 / 3, true, true, true), true);
+                new OpPotionEffect(MobEffects.DIG_SPEED, ManaConstants.DUST_UNIT / 3, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawawaeqqqqdd", HexDir.EAST),
                 prefix("potion/strength"),
-                new OpPotionEffect(MobEffects.DAMAGE_BOOST, 10_000 / 3, true, true, true), true);
+                new OpPotionEffect(MobEffects.DAMAGE_BOOST, ManaConstants.DUST_UNIT / 3, true, true, true), true);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawae", HexDir.EAST),
                 prefix("sentinel/create"),

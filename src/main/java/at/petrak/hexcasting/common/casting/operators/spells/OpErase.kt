@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.cap.HexCapabilities
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 
 class OpErase : SpellOperator {
@@ -31,7 +32,7 @@ class OpErase : SpellOperator {
             throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
         }
 
-        return Triple(Spell, 10_000, listOf())
+        return Triple(Spell, ManaConstants.DUST_UNIT, listOf())
     }
 
     private object Spell : RenderedSpell {

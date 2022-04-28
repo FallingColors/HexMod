@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.HexMod
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -31,7 +32,7 @@ object OpCreateLava : SpellOperator {
 
         return Triple(
             Spell(target),
-            100_000,
+            ManaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray.Burst(Vec3.atCenterOf(BlockPos(target)), 1.0)),
         )
     }

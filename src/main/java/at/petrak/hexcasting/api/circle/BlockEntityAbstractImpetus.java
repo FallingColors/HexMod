@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.circle;
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.mod.HexApiItems;
 import at.petrak.hexcasting.api.mod.HexApiSounds;
 import at.petrak.hexcasting.api.mod.HexConfig;
@@ -123,7 +124,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                                         LocalPlayer observer, ClientLevel world,
                                         Direction hitFace, InteractionHand lensHand) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-            var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
+            var dustCount = (float) beai.getMana() / (float) ManaConstants.DUST_UNIT;
             var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
                 String.format("%.2f", dustCount));
             lines.add(new Pair<>(new ItemStack(HexApiItems.AMETHYST_DUST), dustCmp));

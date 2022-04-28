@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -23,7 +24,7 @@ object OpLightning : SpellOperator {
         ctx.assertVecInRange(target)
         return Triple(
             Spell(target),
-            150_000,
+            3 * ManaConstants.SHARD_UNIT,
             listOf(ParticleSpray(target.add(0.0, 2.0, 0.0), Vec3(0.0, -1.0, 0.0), 0.5, 0.1))
         )
     }

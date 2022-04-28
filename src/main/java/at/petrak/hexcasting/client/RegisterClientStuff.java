@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
-import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
@@ -71,7 +71,7 @@ public class RegisterClientStuff {
                 (stack, level, holder, holderID) -> {
                     var item = (ItemManaBattery) stack.getItem();
                     var max = item.getMaxMana(stack);
-                    return (float) Math.sqrt((float) max / HexConfig.chargedCrystalManaAmount.get() / 10);
+                    return (float) Math.sqrt((float) max / ManaConstants.CRYSTAL_UNIT / 10);
                 });
 
             ItemProperties.register(HexItems.SCROLL.get(), ItemScroll.ANCIENT_PREDICATE,

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
@@ -25,7 +26,7 @@ object OpBreakBlock : SpellOperator {
         val centered = Vec3.atCenterOf(BlockPos(pos))
         return Triple(
             Spell(pos),
-            20_000,
+            ManaConstants.DUST_UNIT * 2,
             listOf(ParticleSpray.Burst(centered, 1.0))
         )
     }
