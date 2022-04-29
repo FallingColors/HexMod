@@ -7,9 +7,9 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
+import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
-import at.petrak.hexcasting.api.spell.math.HexPattern
 import net.minecraft.network.chat.TranslatableComponent
 
 object OpForEach : Operator {
@@ -35,7 +35,7 @@ object OpForEach : Operator {
                     pat.payload
                 } else {
                     throw MishapInvalidIota(
-                        pat,
+                        SpellDatum.make(instrs),
                         1,
                         TranslatableComponent("hexcasting.mishap.invalid_value.list.pattern")
                     )
