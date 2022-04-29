@@ -23,11 +23,13 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getChecked<ItemEntity>(0)
-        val patterns = args.getChecked<List<SpellDatum<*>>>(1).map {
+        val patternsRaw = args.getChecked<List<SpellDatum<*>>>(1)
+
+        val patterns = patternsRaw.map {
             if (it.payload is HexPattern)
                 it.payload
             else
-                throw MishapInvalidIota(it, 0, TranslatableComponent("hexcasting.mishap.invalid_value.list.pattern"))
+                throw MishapInvalidIota(SpellDatum.make(patternsRaw), 0, TranslatableComponent("hexcasting.mishap.invalid_value.list.pattern"))
         }
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
