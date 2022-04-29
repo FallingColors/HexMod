@@ -3,7 +3,9 @@ package at.petrak.hexcasting.fabric.cc;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 
 public class CCBrainswept implements Component, AutoSyncedComponent {
     public static final String TAG_BRAINSWEPT = "brainswept";
@@ -23,6 +25,13 @@ public class CCBrainswept implements Component, AutoSyncedComponent {
     public void setBrainswept(boolean brainswept) {
         this.brainswept = brainswept;
         HexCardinalComponents.BRAINSWEPT.sync(this.owner);
+    }
+
+    @Override
+    public void applySyncPacket(FriendlyByteBuf buf) {
+        AutoSyncedComponent.super.applySyncPacket(buf);
+        if (owner instanceof Mob mob && brainswept)
+            mob.removeFreeWill();
     }
 
     @Override

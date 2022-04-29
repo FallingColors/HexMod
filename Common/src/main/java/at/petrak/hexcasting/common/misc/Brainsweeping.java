@@ -17,11 +17,13 @@ import org.jetbrains.annotations.Nullable;
 public class Brainsweeping {
     // Keeping these functions in Brainsweeping just so we have to change less code
     public static void brainsweep(Mob entity) {
-        IXplatAbstractions.INSTANCE.brainsweep(entity);
+        if (isValidTarget(entity)) {
+            IXplatAbstractions.INSTANCE.brainsweep(entity);
+        }
     }
 
     public static boolean isBrainswept(Mob entity) {
-        return IXplatAbstractions.INSTANCE.isBrainswept(entity);
+        return isValidTarget(entity) && IXplatAbstractions.INSTANCE.isBrainswept(entity);
     }
 
     // TODO: make this a tag

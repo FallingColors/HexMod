@@ -13,7 +13,6 @@ import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
@@ -81,15 +80,13 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public void brainsweep(Mob mob) {
-        if (Brainsweeping.isValidTarget(mob)) {
-            mob.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
+        mob.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
 
-            mob.removeFreeWill();
+        mob.removeFreeWill();
 
-            if (mob.level instanceof ServerLevel) {
-                ForgePacketHandler.getNetwork()
-                    .send(PacketDistributor.TRACKING_ENTITY.with(() -> mob), MsgBrainsweepAck.of(mob));
-            }
+        if (mob.level instanceof ServerLevel) {
+            ForgePacketHandler.getNetwork()
+                .send(PacketDistributor.TRACKING_ENTITY.with(() -> mob), MsgBrainsweepAck.of(mob));
         }
     }
 

@@ -84,6 +84,8 @@ public class FabricXplatImpl implements IXplatAbstractions {
         var cc = HexCardinalComponents.BRAINSWEPT.get(mob);
         cc.setBrainswept(true);
         // CC API does the syncing for us
+        
+        mob.removeFreeWill();
     }
 
     @Override
