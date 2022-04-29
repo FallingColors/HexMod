@@ -44,16 +44,14 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        var tag = stack.getTagElement("BlockEntityTag");
-        if (tag != null && tag.isEmpty())
+        if (!hasPattern(stack))
             stack.removeTagKey("BlockEntityTag");
         return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        var tag = pStack.getTagElement("BlockEntityTag");
-        if (tag != null && tag.isEmpty())
+        if (!hasPattern(pStack))
             pStack.removeTagKey("BlockEntityTag");
     }
 
