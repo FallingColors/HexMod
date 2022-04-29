@@ -59,7 +59,7 @@
       "op_id": "hexcasting:zone_entity/animal",
       "anchor": "hexcasting:zone_entity/animal",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/animal"
     },
     {
@@ -67,7 +67,7 @@
       "op_id": "hexcasting:zone_entity/not_animal",
       "anchor": "hexcasting:zone_entity/not_animal",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/not_animal"
     },
     {
@@ -75,7 +75,7 @@
       "op_id": "hexcasting:zone_entity/monster",
       "anchor": "hexcasting:zone_entity/monster",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/monster"
     },
     {
@@ -83,7 +83,7 @@
       "op_id": "hexcasting:zone_entity/not_monster",
       "anchor": "hexcasting:zone_entity/not_monster",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/not_monster"
     },
     {
@@ -91,7 +91,7 @@
       "op_id": "hexcasting:zone_entity/item",
       "anchor": "hexcasting:zone_entity/item",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/item"
     },
     {
@@ -99,7 +99,7 @@
       "op_id": "hexcasting:zone_entity/not_item",
       "anchor": "hexcasting:zone_entity/not_item",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/not_item"
     },
     {
@@ -107,7 +107,7 @@
       "op_id": "hexcasting:zone_entity/player",
       "anchor": "hexcasting:zone_entity/player",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/player"
     },
     {
@@ -115,7 +115,7 @@
       "op_id": "hexcasting:zone_entity/not_player",
       "anchor": "hexcasting:zone_entity/not_player",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/not_player"
     },
     {
@@ -123,7 +123,7 @@
       "op_id": "hexcasting:zone_entity/living",
       "anchor": "hexcasting:zone_entity/living",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/living"
     },
     {
@@ -131,7 +131,7 @@
       "op_id": "hexcasting:zone_entity/not_living",
       "anchor": "hexcasting:zone_entity/not_living",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity/not_living"
     },
     {
@@ -139,7 +139,7 @@
       "op_id": "hexcasting:zone_entity",
       "anchor": "hexcasting:zone_entity",
       "input": "vector, number",
-      "output": "list of entities",
+      "output": "list",
       "text": "hexcasting.page.entities.zone_entity"
     }
   ]
