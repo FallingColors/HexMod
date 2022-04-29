@@ -497,7 +497,7 @@
   "hexcasting.page.mishaps.too_deep.title": "Delve Too Deep",
   "hexcasting.page.mishaps.too_deep": "Evaluated too many spells with meta-evaluation from one spell.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
   "hexcasting.page.mishaps.true_name.title": "Transgress Other",
-  "hexcasting.page.mishaps.true_name": "I attempted to $(l:patterns/readwrite#hexcasting:read)$(action)save a reference/$ to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
+  "hexcasting.page.mishaps.true_name": "I attempted to $(l:patterns/readwrite#hexcasting:write)$(action)save a reference/$ to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
   "hexcasting.page.mishaps.disabled.title": "Disallowed Action",
   "hexcasting.page.mishaps.disabled": "I tried to cast an action that has been disallowed by a server administrator.$(br2)Causes black sparks.",
   "hexcasting.page.mishaps.invalid_iota.title": "Invalid Iota Type",
