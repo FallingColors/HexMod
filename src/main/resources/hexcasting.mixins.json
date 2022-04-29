@@ -5,7 +5,6 @@
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
-    "AccessorLivingEntity",
     "MixinMob",
     "MixinVillager"
   ]

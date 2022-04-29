@@ -2,13 +2,11 @@ package at.petrak.hexcasting.common.misc;
 
 import at.petrak.hexcasting.common.network.HexMessages;
 import at.petrak.hexcasting.common.network.MsgBrainsweepAck;
-import at.petrak.hexcasting.mixin.AccessorLivingEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.raid.Raider;
@@ -31,23 +29,13 @@ public class Brainsweeping {
     }
 
     public static void brainsweep(LivingEntity entity) {
-        if (isValidTarget(entity)) {
+        if (entity instanceof Mob mob && isValidTarget(entity)) {
             entity.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
 
-            if (entity instanceof Mob mob)
-                mob.removeFreeWill();
+            mob.removeFreeWill();
 
-            if (entity instanceof Villager villager) {
-                Brain<Villager> brain = villager.getBrain();
-                if (entity.level instanceof ServerLevel slevel) {
-                    brain.stopAll(slevel, villager);
-                }
-                ((AccessorLivingEntity) entity).hex$SetBrain(brain.copyWithoutBehaviors());
-            }
-
-            if (entity.level instanceof ServerLevel) {
+            if (entity.level instanceof ServerLevel)
                 HexMessages.getNetwork().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), MsgBrainsweepAck.of(entity));
-            }
         }
     }
 
