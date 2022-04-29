@@ -15,10 +15,12 @@ import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 
 object OpMakeBattery : SpellOperator {
     override val argc = 1
+
+    override val isGreat = true
+
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
