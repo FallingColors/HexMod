@@ -16,7 +16,7 @@ class MishapBadBlock(val pos: BlockPos, val expected: Component) : Mishap() {
         dyeColor(DyeColor.LIME)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        ctx.world.explode(null, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 0.1f, Explosion.BlockInteraction.NONE)
+        ctx.world.explode(null, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 0.25f, Explosion.BlockInteraction.NONE)
     }
 
     override fun particleSpray(ctx: CastingContext): ParticleSpray {
