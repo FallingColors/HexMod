@@ -52,19 +52,15 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
     // TODO: what the hell does this do and how to do it on forge
     @SoftImplement("forge")
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        var tag = stack.getTagElement("BlockEntityTag");
-        if (tag != null && tag.isEmpty()) {
+        if (!hasPattern(stack))
             stack.removeTagKey("BlockEntityTag");
-        }
         return false;
     }
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        var tag = pStack.getTagElement("BlockEntityTag");
-        if (tag != null && tag.isEmpty()) {
+        if (!hasPattern(pStack))
             pStack.removeTagKey("BlockEntityTag");
-        }
     }
 
     @Override
