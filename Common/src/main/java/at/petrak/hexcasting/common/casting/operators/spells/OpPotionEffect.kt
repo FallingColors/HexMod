@@ -18,11 +18,10 @@ class OpPotionEffect(
     val baseCost: Int,
     val allowPotency: Boolean,
     val potencyCubic: Boolean,
-    val _isGreat: Boolean,
+    override val isGreat: Boolean,
 ) : SpellOperator {
     override val argc: Int
         get() = if (this.allowPotency) 3 else 2
-    override val isGreat = this._isGreat
 
     override fun execute(
         args: List<SpellDatum<*>>,

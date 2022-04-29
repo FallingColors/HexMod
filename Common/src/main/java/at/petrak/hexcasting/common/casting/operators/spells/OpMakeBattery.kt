@@ -18,6 +18,9 @@ import net.minecraft.world.item.ItemStack
 
 object OpMakeBattery : SpellOperator {
     override val argc = 1
+
+    override val isGreat = true
+
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
