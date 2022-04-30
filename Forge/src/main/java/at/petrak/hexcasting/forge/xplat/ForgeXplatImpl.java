@@ -298,7 +298,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
                 @Override
                 public void fillItemList(NonNullList<ItemStack> p_40778_) {
                     super.fillItemList(p_40778_);
-                    HexItems.fillTab(p_40778_);
                 }
             };
         }

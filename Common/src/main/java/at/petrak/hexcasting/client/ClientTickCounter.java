@@ -1,14 +1,28 @@
 package at.petrak.hexcasting.client;
 
-// I can't find a better way to do this :(
 public class ClientTickCounter {
-    private static long tickCount = 0;
+    public static long ticksInGame = 0L;
+    public static float partialTicks = 0.0F;
+    public static float delta = 0.0F;
+    public static float total = 0.0F;
 
-    public static void onTick() {
-        tickCount++;
+    public static void renderTickStart(float renderTickTime) {
+        partialTicks = renderTickTime;
     }
 
-    public static long getTickCount() {
-        return tickCount;
+    public static void renderTickEnd() {
+        calcDelta();
+    }
+
+    public static void clientTickEnd() {
+        ++ticksInGame;
+        partialTicks = 0.0F;
+        calcDelta();
+    }
+
+    private static void calcDelta() {
+        float oldTotal = total;
+        total = (float)ticksInGame + partialTicks;
+        delta = total - oldTotal;
     }
 }

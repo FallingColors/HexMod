@@ -169,8 +169,7 @@ object RenderLib {
         if (points.isEmpty()) {
             return emptyList()
         }
-        val mc = Minecraft.getInstance()
-        val zSeed = (mc.frameTime.toDouble() + ClientTickCounter.getTickCount()) * speed
+        val zSeed = (ClientTickCounter.total.toDouble()) * speed
         // Create our output list of zap points
         val zappyPts = mutableListOf(points[0])
         // For each segment in the original...

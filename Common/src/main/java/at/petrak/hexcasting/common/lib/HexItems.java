@@ -4,9 +4,11 @@ import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
-import at.petrak.hexcasting.common.items.magic.*;
+import at.petrak.hexcasting.common.items.magic.ItemArtifact;
+import at.petrak.hexcasting.common.items.magic.ItemCypher;
+import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
+import at.petrak.hexcasting.common.items.magic.ItemTrinket;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
@@ -16,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -109,30 +110,5 @@ public class HexItems {
 
     public static ItemStack tabIcon() {
         return new ItemStack(SPELLBOOK);
-    }
-
-    public static void fillTab(List<ItemStack> items) {
-        var hexTab = IXplatAbstractions.INSTANCE.getTab();
-        for (Item i : Registry.ITEM) {
-            // allowdedIn is how it's spelled in the source lmaooo
-            var allowdedIn = i.getItemCategory() == hexTab;
-            if (allowdedIn) {
-                items.add(new ItemStack(i));
-                if (i == SLATE) {
-                    // Put the phials after the slate
-                    var manamounts = new int[]{
-                        100_000,
-                        1_000_000,
-                        10_000_000,
-                        100_000_000,
-                        1_000_000_000,
-                    };
-                    for (int manamount : manamounts) {
-                        var stack = new ItemStack(BATTERY);
-                        items.add(ItemManaHolder.withMana(stack, manamount, manamount));
-                    }
-                }
-            }
-        }
     }
 }

@@ -23,7 +23,9 @@ object FabricHexClientInitializer : ClientModInitializer {
             HexAdditionalRenderers.overlayLevel(ctx.matrixStack(), ctx.tickDelta())
         }
         HudRenderCallback.EVENT.register(HexAdditionalRenderers::overlayGui)
-        ClientTickEvents.START_CLIENT_TICK.register { ClientTickCounter.onTick() }
+        WorldRenderEvents.START.register { ClientTickCounter.renderTickStart(it.tickDelta()) }
+        WorldRenderEvents.END.register { ClientTickCounter.renderTickEnd() }
+        ClientTickEvents.END_CLIENT_TICK.register { ClientTickCounter.clientTickEnd() }
 
         MouseScrollCallback.EVENT.register(ShiftScrollListener::onScroll)
 

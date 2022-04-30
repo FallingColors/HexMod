@@ -25,7 +25,20 @@ public class ForgeHexClientInitializer {
         evBus.addListener((RenderGameOverlayEvent.PreLayer e) ->
             HexAdditionalRenderers.overlayGui(e.getMatrixStack(), e.getPartialTicks()));
 
-        evBus.addListener((TickEvent.ClientTickEvent e) -> ClientTickCounter.onTick());
+
+        evBus.addListener((TickEvent.RenderTickEvent e) -> {
+            if (e.phase == TickEvent.Phase.START) {
+                ClientTickCounter.renderTickStart(e.renderTickTime);
+            } else {
+                ClientTickCounter.renderTickEnd();
+            }
+        });
+
+        evBus.addListener((TickEvent.ClientTickEvent e) -> {
+            if (e.phase == TickEvent.Phase.END) {
+                ClientTickCounter.clientTickEnd();
+            }
+        });
 
         evBus.addListener((InputEvent.MouseScrollEvent e) -> {
             var cancel = ShiftScrollListener.onScroll(e.getScrollDelta());

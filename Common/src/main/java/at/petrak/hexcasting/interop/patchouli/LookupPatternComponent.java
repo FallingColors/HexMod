@@ -8,7 +8,6 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import vazkii.patchouli.api.IVariable;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -23,14 +22,14 @@ public class LookupPatternComponent extends AbstractPatternComponent {
     protected boolean strokeOrder;
 
     @Override
-    List<Pair<HexPattern, HexCoord>> getPatterns(UnaryOperator<IVariable> lookup) {
+    public List<Pair<HexPattern, HexCoord>> getPatterns(UnaryOperator<IVariable> lookup) {
         var entry = PatternRegistry.lookupPattern(this.opName);
         this.strokeOrder = !entry.isPerWorld();
-        return Collections.singletonList(new Pair<>(entry.getPrototype(), HexCoord.getOrigin()));
+        return List.of(new Pair<>(entry.getPrototype(), HexCoord.getOrigin()));
     }
 
     @Override
-    boolean showStrokeOrder() {
+    public boolean showStrokeOrder() {
         return this.strokeOrder;
     }
 

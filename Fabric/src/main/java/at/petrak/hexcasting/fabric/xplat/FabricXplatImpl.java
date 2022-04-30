@@ -84,7 +84,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
         var cc = HexCardinalComponents.BRAINSWEPT.get(mob);
         cc.setBrainswept(true);
         // CC API does the syncing for us
-        
+
         mob.removeFreeWill();
     }
 
@@ -220,7 +220,6 @@ public class FabricXplatImpl implements IXplatAbstractions {
         if (TAB == null) {
             TAB = FabricItemGroupBuilder.create(modLoc("creative_tab"))
                 .icon(HexItems::tabIcon)
-                .appendItems(HexItems::fillTab)
                 .build();
         }
 
