@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.Widget
+import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TranslatableComponent
@@ -53,7 +53,7 @@ class MishapInvalidIota(
 
                 ItemEntity::class.java.isAssignableFrom(cls) -> "entity.item"
                 Player::class.java.isAssignableFrom(cls) -> "entity.player"
-                Villager::class.java.isAssignableFrom(cls) -> "entity.player"
+                Villager::class.java.isAssignableFrom(cls) -> "entity.villager"
                 LivingEntity::class.java.isAssignableFrom(cls) -> "entity.living"
                 Entity::class.java.isAssignableFrom(cls) -> "entity"
 
