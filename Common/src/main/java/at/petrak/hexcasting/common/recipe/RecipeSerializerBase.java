@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import javax.annotation.Nullable;
 
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/common/crafting/RecipeSerializerBase.java
-// TL;DR Forge bad so we have to ursed self-mixin
+// TL;DR Forge bad, so we have to cursed self-mixin
 public abstract class RecipeSerializerBase<T extends Recipe<?>> implements RecipeSerializer<T> {
     @Nullable
     private ResourceLocation registryName;

@@ -16,7 +16,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.state.properties.Property;
+import org.jetbrains.annotations.NotNull;
 
 // God I am a horrible person
 public record BrainsweepRecipe(
@@ -66,9 +67,22 @@ public record BrainsweepRecipe(
         return ItemStack.EMPTY.copy();
     }
 
+    // Because kotlin doesn't like doing raw, unchecked types
+    // Can't blame it, but that's what we need to do
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static BlockState copyProperties(BlockState original, BlockState copyTo) {
+        for (Property prop : original.getProperties()) {
+            if (copyTo.hasProperty(prop)) {
+                copyTo = copyTo.setValue(prop, original.getValue(prop));
+            }
+        }
+
+        return copyTo;
+    }
+
     public static class Serializer extends RecipeSerializerBase<BrainsweepRecipe> {
         @Override
-        public BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
+        public @NotNull BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
             var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));
             var villagerIn = VillagerIngredient.deserialize(GsonHelper.getAsJsonObject(json, "villagerIn"));
             var result = StateIngredientHelper.readBlockState(GsonHelper.getAsJsonObject(json, "result"));
@@ -82,9 +96,8 @@ public record BrainsweepRecipe(
             buf.writeVarInt(Block.getId(recipe.result));
         }
 
-        @Nullable
         @Override
-        public BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
+        public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
             var blockIn = StateIngredientHelper.read(buf);
             var villagerIn = VillagerIngredient.read(buf);
             var result = Block.stateById(buf.readVarInt());
