@@ -9,6 +9,8 @@ object ManaHelper {
     @JvmStatic
     fun isManaItem(stack: ItemStack): Boolean {
         val manaHolder = IXplatAbstractions.INSTANCE.findManaHolder(stack) ?: return false
+        if (!manaHolder.canProvide())
+            return false
         return manaHolder.withdrawMana(-1, true) > 0
     }
 

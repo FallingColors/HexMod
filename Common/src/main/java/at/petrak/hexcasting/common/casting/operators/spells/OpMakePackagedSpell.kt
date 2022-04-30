@@ -56,9 +56,15 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
+<<<<<<< HEAD:Common/src/main/java/at/petrak/hexcasting/common/casting/operators/spells/OpMakePackagedSpell.kt
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
             if (hexHolder != null
                 && hexHolder.patterns == null
+=======
+            val spellHolder = HexCapabilities.getCapability(handStack, HexCapabilities.SPELL)
+            if (spellHolder.isPresent
+                && spellHolder.get().patterns == null
+>>>>>>> 0d81ef8 (fix a dumb stupid crash, thanks forge, i hate it):src/main/java/at/petrak/hexcasting/common/casting/operators/spells/OpMakePackagedSpell.kt
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
