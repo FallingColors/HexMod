@@ -1,39 +1,50 @@
 package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.HexMod;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
-import static at.petrak.hexcasting.common.lib.RegisterHelper.prefix;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexSounds {
-    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(
-        ForgeRegistries.SOUND_EVENTS,
-        HexMod.MOD_ID);
+    public static void registerSounds(BiConsumer<SoundEvent, ResourceLocation> r) {
+        for (var e : SOUNDS.entrySet()) {
+            r.accept(e.getValue(), e.getKey());
+        }
+    }
 
-    public static final RegistryObject<SoundEvent> ADD_LINE = sound("casting.add_line");
-    public static final RegistryObject<SoundEvent> START_PATTERN = sound("casting.start_pattern");
-    public static final RegistryObject<SoundEvent> ADD_PATTERN = sound("casting.add_pattern");
-    public static final RegistryObject<SoundEvent> FAIL_PATTERN = sound("casting.fail_pattern");
-    public static final RegistryObject<SoundEvent> CASTING_AMBIANCE = sound("casting.ambiance");
-    public static final RegistryObject<SoundEvent> ACTUALLY_CAST = sound("casting.cast");
+    private static final Map<ResourceLocation, SoundEvent> SOUNDS = new LinkedHashMap<>();
 
-    public static final RegistryObject<SoundEvent> ABACUS = sound("abacus");
-    public static final RegistryObject<SoundEvent> ABACUS_SHAKE = sound("abacus.shake");
+    public static final SoundEvent ADD_LINE = sound("casting.add_line");
+    public static final SoundEvent START_PATTERN = sound("casting.start_pattern");
+    public static final SoundEvent ADD_PATTERN = sound("casting.add_pattern");
+    public static final SoundEvent FAIL_PATTERN = sound("casting.fail_pattern");
+    public static final SoundEvent CASTING_AMBIANCE = sound("casting.ambiance");
+    public static final SoundEvent ACTUALLY_CAST = sound("casting.cast");
 
-    public static final RegistryObject<SoundEvent> SPELL_CIRCLE_FIND_BLOCK = sound("spellcircle.find_block");
-    public static final RegistryObject<SoundEvent> SPELL_CIRCLE_FAIL = sound("spellcircle.fail");
-    public static final RegistryObject<SoundEvent> SPELL_CIRCLE_CAST = sound("spellcircle.cast");
+    public static final SoundEvent ABACUS = sound("abacus");
+    public static final SoundEvent ABACUS_SHAKE = sound("abacus.shake");
 
-    public static final RegistryObject<SoundEvent> SCROLL_DUST = sound("scroll.dust");
-    public static final RegistryObject<SoundEvent> SCROLL_SCRIBBLE = sound("scroll.scribble");
+    public static final SoundEvent SPELL_CIRCLE_FIND_BLOCK = sound("spellcircle.find_block");
+    public static final SoundEvent SPELL_CIRCLE_FAIL = sound("spellcircle.fail");
+    public static final SoundEvent SPELL_CIRCLE_CAST = sound("spellcircle.cast");
 
-    public static final RegistryObject<SoundEvent> IMPETUS_LOOK_TICK = sound("impetus.fletcher.tick");
-    public static final RegistryObject<SoundEvent> IMPETUS_STOREDPLAYER_DING = sound("impetus.cleric.register");
+    public static final SoundEvent SCROLL_DUST = sound("scroll.dust");
+    public static final SoundEvent SCROLL_SCRIBBLE = sound("scroll.scribble");
 
-    private static RegistryObject<SoundEvent> sound(String name) {
-        return SOUNDS.register(name, () -> new SoundEvent(prefix(name)));
+    public static final SoundEvent IMPETUS_LOOK_TICK = sound("impetus.fletcher.tick");
+    public static final SoundEvent IMPETUS_STOREDPLAYER_DING = sound("impetus.cleric.register");
+
+    private static SoundEvent sound(String name) {
+        var id = modLoc(name);
+        var sound = new SoundEvent(id);
+        var old = SOUNDS.put(id, sound);
+        if (old != null) {
+            throw new IllegalArgumentException("Typo? Duplicate id " + name);
+        }
+        return sound;
     }
 }

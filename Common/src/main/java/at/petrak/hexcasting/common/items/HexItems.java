@@ -1,21 +1,20 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
 import at.petrak.hexcasting.common.items.magic.*;
-import net.minecraft.core.NonNullList;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -30,31 +29,6 @@ public class HexItems {
     }
 
     private static final Map<ResourceLocation, Item> ITEMS = new LinkedHashMap<>(); // preserve insertion order
-
-    public static final CreativeModeTab TAB = new CreativeModeTab(HexAPI.MOD_ID) {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(SPELLBOOK);
-        }
-
-        @Override
-        public void fillItemList(NonNullList<ItemStack> items) {
-            super.fillItemList(items);
-
-            var manamounts = new int[]{
-                100_000,
-                1_000_000,
-                10_000_000,
-                100_000_000,
-                1_000_000_000,
-            };
-            for (int manamount : manamounts) {
-                var stack = new ItemStack(BATTERY);
-                items.add(ItemManaHolder.withMana(stack, manamount, manamount));
-            }
-        }
-    };
-
 
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
     public static final Item CHARGED_AMETHYST = make("charged_amethyst", new Item(props()));
@@ -109,7 +83,7 @@ public class HexItems {
     //
 
     public static Item.Properties props() {
-        return new Item.Properties().tab(TAB);
+        return new Item.Properties().tab(IXplatAbstractions.INSTANCE.getTab());
     }
 
     public static Item.Properties unstackable() {
@@ -126,5 +100,23 @@ public class HexItems {
 
     private static <T extends Item> T make(String id, T item) {
         return make(modLoc(id), item);
+    }
+
+    public static ItemStack tabIcon() {
+        return new ItemStack(SPELLBOOK);
+    }
+
+    public static void fillTab(List<ItemStack> items) {
+        var manamounts = new int[]{
+            100_000,
+            1_000_000,
+            10_000_000,
+            100_000_000,
+            1_000_000_000,
+        };
+        for (int manamount : manamounts) {
+            var stack = new ItemStack(BATTERY);
+            items.add(ItemManaHolder.withMana(stack, manamount, manamount));
+        }
     }
 }

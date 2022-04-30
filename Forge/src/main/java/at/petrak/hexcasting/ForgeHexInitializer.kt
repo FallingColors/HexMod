@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.forge.ForgeHexConfig
 import at.petrak.hexcasting.forge.cap.CapSyncers
@@ -53,6 +54,7 @@ object ForgeHexInitializer {
     }
 
     fun initRegistry() {
+        bind(ForgeRegistries.SOUND_EVENTS, HexSounds::registerSounds)
         bind(ForgeRegistries.BLOCKS, HexBlocks::registerBlocks)
         bind(ForgeRegistries.ITEMS, HexBlocks::registerBlockItems)
         bind(ForgeRegistries.ITEMS, HexItems::registerItems)

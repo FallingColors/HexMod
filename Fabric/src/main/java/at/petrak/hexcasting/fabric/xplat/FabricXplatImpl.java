@@ -5,22 +5,30 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class FabricXplatImpl implements IXplatAbstractions {
     @Override
@@ -131,5 +139,27 @@ public class FabricXplatImpl implements IXplatAbstractions {
     public int getRawColor(FrozenColorizer colorizer, float time, Vec3 position) {
         var cc = HexCardinalComponents.COLORIZER.maybeGet(colorizer.item());
         return cc.map(col -> col.color(colorizer.owner(), time, position)).orElse(0xff_ff00dc);
+    }
+
+    @Override
+    public Block makeFlammable(BlockBehaviour.Properties properties, int flammability, int spreadSpeed) {
+        var out = new Block(properties);
+        FlammableBlockRegistry.getDefaultInstance().add(out, flammability, spreadSpeed);
+        return out;
+    }
+
+
+    private static CreativeModeTab TAB = null;
+
+    @Override
+    public CreativeModeTab getTab() {
+        if (TAB == null) {
+            TAB = FabricItemGroupBuilder.create(modLoc("creative_tab"))
+                .icon(HexItems::tabIcon)
+                .appendItems(HexItems::fillTab)
+                .build();
+        }
+
+        return TAB;
     }
 }

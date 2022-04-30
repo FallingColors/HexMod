@@ -29,18 +29,12 @@ public class FabricPacketHandler {
             makeClientBoundHandler(MsgNewSpellPatternAck::deserialize, MsgNewSpellPatternAck::handle));
         ClientPlayNetworking.registerGlobalReceiver(
             MsgBlinkAck.ID, makeClientBoundHandler(MsgBlinkAck::deserialize, MsgBlinkAck::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgSentinelStatusUpdateAck.ID,
-            makeClientBoundHandler(MsgSentinelStatusUpdateAck::deserialize, MsgSentinelStatusUpdateAck::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgColorizerUpdateAck.ID,
-            makeClientBoundHandler(MsgColorizerUpdateAck::deserialize, MsgColorizerUpdateAck::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgCastParticleAck.ID,
             makeClientBoundHandler(MsgCastParticleAck::deserialize, MsgCastParticleAck::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgOpenSpellGuiAck.ID,
             makeClientBoundHandler(MsgOpenSpellGuiAck::deserialize, MsgOpenSpellGuiAck::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgBeepAck.ID,
             makeClientBoundHandler(MsgBeepAck::deserialize, MsgBeepAck::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgBrainsweepAck.ID,
-            makeClientBoundHandler(MsgBrainsweepAck::deserialize, MsgBrainsweepAck::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgUpdateComparatorVisualsAck.ID,
             makeClientBoundHandler(MsgUpdateComparatorVisualsAck::deserialize, MsgUpdateComparatorVisualsAck::handle));
     }

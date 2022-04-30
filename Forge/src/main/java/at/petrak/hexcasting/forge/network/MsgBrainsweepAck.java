@@ -1,12 +1,13 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.forge.network;
 
 import at.petrak.hexcasting.common.misc.Brainsweeping;
+import at.petrak.hexcasting.common.network.IMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -44,7 +45,7 @@ public record MsgBrainsweepAck(int target) implements IMessage {
                 var level = Minecraft.getInstance().level;
                 if (level != null) {
                     Entity entity = level.getEntity(msg.target());
-                    if (entity instanceof LivingEntity living) {
+                    if (entity instanceof Mob living) {
                         Brainsweeping.brainsweep(living);
                     }
                 }

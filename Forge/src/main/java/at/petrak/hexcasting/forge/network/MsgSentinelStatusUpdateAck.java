@@ -1,7 +1,8 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.forge.network;
 
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
@@ -50,7 +51,7 @@ public record MsgSentinelStatusUpdateAck(Sentinel update) implements IMessage {
             public void run() {
                 var player = Minecraft.getInstance().player;
                 if (player != null) {
-                    HexPlayerDataHelper.setSentinel(player, self.update());
+                    IXplatAbstractions.INSTANCE.setSentinel(player, self.update());
                 }
             }
         });

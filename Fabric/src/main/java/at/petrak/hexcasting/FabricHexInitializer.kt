@@ -1,5 +1,6 @@
 import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.fabric.FabricHexConfig
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
@@ -26,6 +27,7 @@ object FabricHexInitializer : ModInitializer {
     }
 
     fun initRegistries() {
+        HexSounds.registerSounds(bind(Registry.SOUND_EVENT))
         HexBlocks.registerBlocks(bind(Registry.BLOCK))
         HexBlocks.registerBlockItems(bind(Registry.ITEM))
         HexItems.registerItems(bind(Registry.ITEM))

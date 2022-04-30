@@ -96,6 +96,7 @@
   "block.hexcasting.akashic_leaves3": "Citrine Edified Leaves",
 
   "itemGroup.hexcasting": "Hexcasting",
+  "itemGroup.hexcasting.creative_tab": "Hexcasting",
 
   "hexcasting.tooltip.spellbook.page": "Selected Page %d/%d",
   "hexcasting.tooltip.spellbook.page.sealed": "Selected Page %d/%d (%s)",

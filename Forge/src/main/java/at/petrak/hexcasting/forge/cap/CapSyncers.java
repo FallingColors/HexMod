@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.forge.cap;
 
+import at.petrak.hexcasting.forge.network.MsgColorizerUpdateAck;
+import at.petrak.hexcasting.forge.network.MsgSentinelStatusUpdateAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -35,8 +37,8 @@ public class CapSyncers {
             return;
         }
 
-        IXplatAbstractions.INSTANCE.syncSentinel(player);
-        IXplatAbstractions.INSTANCE.syncColorizer(player);
+        syncSentinel(player);
+        syncColorizer(player);
     }
 
     @SubscribeEvent
@@ -45,7 +47,17 @@ public class CapSyncers {
             return;
         }
 
-        IXplatAbstractions.INSTANCE.syncSentinel(player);
-        IXplatAbstractions.INSTANCE.syncColorizer(player);
+        syncSentinel(player);
+        syncColorizer(player);
+    }
+
+    public static void syncSentinel(ServerPlayer player) {
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
+            new MsgSentinelStatusUpdateAck(IXplatAbstractions.INSTANCE.getSentinel(player)));
+    }
+
+    public static void syncColorizer(ServerPlayer player) {
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
+            new MsgColorizerUpdateAck(IXplatAbstractions.INSTANCE.getColorizer(player)));
     }
 }

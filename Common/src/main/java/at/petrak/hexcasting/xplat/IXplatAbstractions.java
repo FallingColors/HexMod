@@ -8,15 +8,16 @@ import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.common.command.PatternResLocArgument;
 import at.petrak.hexcasting.common.network.IMessage;
-import at.petrak.hexcasting.common.network.MsgColorizerUpdateAck;
-import at.petrak.hexcasting.common.network.MsgSentinelStatusUpdateAck;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,13 +72,13 @@ public interface IXplatAbstractions {
 
     int getRawColor(FrozenColorizer colorizer, float time, Vec3 position);
 
-    default void syncSentinel(ServerPlayer player) {
-        this.sendPacketToPlayer(player, new MsgSentinelStatusUpdateAck(this.getSentinel(player)));
-    }
+    // Blocks
 
-    default void syncColorizer(ServerPlayer player) {
-        this.sendPacketToPlayer(player, new MsgColorizerUpdateAck(this.getColorizer(player)));
-    }
+    Block makeFlammable(BlockBehaviour.Properties properties, int flammability, int spreadSpeed);
+
+    // misc
+
+    CreativeModeTab getTab();
 
     default void init() {
         HexAPI.LOGGER.info("Hello Hexcasting! This is {}!", this.platform());

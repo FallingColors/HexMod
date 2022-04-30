@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.forge.xplat;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.Colorizer;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
@@ -8,13 +9,17 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.network.IMessage;
-import at.petrak.hexcasting.common.network.MsgBrainsweepAck;
+import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
+import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
+import at.petrak.hexcasting.forge.xplat.block.BlockBurns;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -26,7 +31,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -82,7 +90,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         tag.put(TAG_COLOR, colorizer.serialize());
 
         if (player instanceof ServerPlayer serverPlayer) {
-            this.syncColorizer(serverPlayer);
+            CapSyncers.syncColorizer(serverPlayer);
         }
     }
 
@@ -101,7 +109,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
-            this.syncSentinel(serverPlayer);
+            CapSyncers.syncSentinel(serverPlayer);
         }
     }
 
@@ -209,6 +217,32 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         ForgePacketHandler.getNetwork().sendToServer(packet);
     }
 
+    @Override
+    public Block makeFlammable(BlockBehaviour.Properties properties, int flammability, int spreadSpeed) {
+        return new BlockBurns(properties, flammability, spreadSpeed);
+    }
+
+    private static CreativeModeTab TAB = null;
+
+    @Override
+    public CreativeModeTab getTab() {
+        if (TAB == null) {
+            TAB = new CreativeModeTab(HexAPI.MOD_ID) {
+                @Override
+                public ItemStack makeIcon() {
+                    return HexItems.tabIcon();
+                }
+
+                @Override
+                public void fillItemList(NonNullList<ItemStack> p_40778_) {
+                    super.fillItemList(p_40778_);
+                    HexItems.fillTab(p_40778_);
+                }
+            };
+        }
+
+        return TAB;
+    }
 
     public static final String TAG_BRAINSWEPT = "hexcasting:brainswept";
     public static final String TAG_SENTINEL_EXISTS = "hexcasting:sentinel_exists";

@@ -10,10 +10,9 @@ import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectr
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockLookingImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockStoredPlayerImpetus;
-import at.petrak.hexcasting.common.blocks.decoration.BlockAxis;
-import at.petrak.hexcasting.common.blocks.decoration.BlockSconce;
-import at.petrak.hexcasting.common.blocks.decoration.BlockStrippable;
+import at.petrak.hexcasting.common.blocks.decoration.*;
 import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -153,14 +152,15 @@ public class HexBlocks {
     public static final AmethystBlock AMETHYST_TILES = blockItem("amethyst_tiles",
         new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
     public static final Block SCROLL_PAPER = blockItem("scroll_paper",
-        new BlockBurns(papery(MaterialColor.TERRACOTTA_WHITE), 100, 60));
+        IXplatAbstractions.INSTANCE.makeFlammable(papery(MaterialColor.TERRACOTTA_WHITE), 100, 60));
     public static final Block ANCIENT_SCROLL_PAPER = blockItem("ancient_scroll_paper",
-        new BlockBurns(papery(MaterialColor.TERRACOTTA_ORANGE), 100, 60));
+        IXplatAbstractions.INSTANCE.makeFlammable(papery(MaterialColor.TERRACOTTA_ORANGE), 100, 60));
     public static final Block SCROLL_PAPER_LANTERN = blockItem("scroll_paper_lantern",
-        new BlockBurns(papery(MaterialColor.TERRACOTTA_WHITE).lightLevel($ -> 15), 100, 60));
+        IXplatAbstractions.INSTANCE.makeFlammable(papery(MaterialColor.TERRACOTTA_WHITE).lightLevel($ -> 15), 100, 60));
     public static final Block ANCIENT_SCROLL_PAPER_LANTERN = blockItem(
         "ancient_scroll_paper_lantern",
-        new BlockBurns(papery(MaterialColor.TERRACOTTA_ORANGE).lightLevel($ -> 12), 100, 60));
+        IXplatAbstractions.INSTANCE.makeFlammable(papery(MaterialColor.TERRACOTTA_ORANGE).lightLevel($ -> 12), 100,
+            60));
     public static final BlockSconce SCONCE = blockItem("amethyst_sconce",
         new BlockSconce(BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.COLOR_PURPLE)
             .sound(SoundType.AMETHYST)
@@ -172,28 +172,27 @@ public class HexBlocks {
     public static final BlockStrippable AKASHIC_LOG = blockItem("akashic_log",
         new BlockAkashicWood(akashicWoody(), () -> AKASHIC_LOG_STRIPPED));
     public static final Block AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
-        new BlockBurns(akashicWoody(), 5, 5));
+        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 5, 5));
     public static final BlockStrippable AKASHIC_WOOD = blockItem("akashic_wood",
         new BlockStrippable(akashicWoody(), () -> AKASHIC_WOOD_STRIPPED));
     public static final Block AKASHIC_PLANKS = blockItem("akashic_planks",
-        new BlockBurns(akashicWoody(), 20, 5));
+        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 20, 5));
     public static final Block AKASHIC_PANEL = blockItem("akashic_panel",
-        new BlockBurns(akashicWoody(), 20, 5));
+        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 20, 5));
     public static final Block AKASHIC_TILE = blockItem("akashic_tile",
-        new BlockBurns(akashicWoody(), 20, 5));
-    // todo: mixin? AT?
+        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 20, 5));
     public static final DoorBlock AKASHIC_DOOR = blockItem("akashic_door",
-        new DoorBlock(akashicWoody().noOcclusion()));
+        new BlockHexDoor(akashicWoody().noOcclusion()));
     public static final TrapDoorBlock AKASHIC_TRAPDOOR = blockItem("akashic_trapdoor",
-        new TrapDoorBlock(akashicWoody().noOcclusion()));
+        new BlockHexTrapdoor(akashicWoody().noOcclusion()));
     public static final StairBlock AKASHIC_STAIRS = blockItem("akashic_stairs",
-        new StairBlock(AKASHIC_PLANKS.defaultBlockState(), akashicWoody().noOcclusion()));
+        new BlockHexStairs(AKASHIC_PLANKS.defaultBlockState(), akashicWoody().noOcclusion()));
     public static final SlabBlock AKASHIC_SLAB = blockItem("akashic_slab",
         new SlabBlock(akashicWoody().noOcclusion()));
     public static final WoodButtonBlock AKASHIC_BUTTON = blockItem("akashic_button",
-        new WoodButtonBlock(akashicWoody().noOcclusion()));
+        new BlockHexWoodButton(akashicWoody().noOcclusion()));
     public static final PressurePlateBlock AKASHIC_PRESSURE_PLATE = blockItem("akashic_pressure_plate",
-        new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, akashicWoody().noOcclusion()));
+        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, akashicWoody().noOcclusion()));
     public static final BlockAkashicLeaves AKASHIC_LEAVES1 = blockItem("akashic_leaves1",
         new BlockAkashicLeaves(leaves(MaterialColor.COLOR_PURPLE)));
     public static final BlockAkashicLeaves AKASHIC_LEAVES2 = blockItem("akashic_leaves2",
