@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface SpellHolderItem extends ManaHolderItem {
+public interface HexHolderItem extends ManaHolderItem {
 
 	boolean canDrawManaFromInventory(ItemStack stack);
 

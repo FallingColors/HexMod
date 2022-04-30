@@ -4,7 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
-import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
+import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
 import at.petrak.paucal.api.datagen.PaucalItemModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -180,11 +180,11 @@ public class HexItemModels extends PaucalItemModelProvider {
         simpleItem(modLoc(name + "_filled"));
         getBuilder(item.getRegistryName().getPath())
             .override()
-            .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, -0.01f)
+            .predicate(ItemPackagedHex.HAS_PATTERNS_PRED, -0.01f)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
             .end()
             .override()
-            .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, 1f - 0.01f)
+            .predicate(ItemPackagedHex.HAS_PATTERNS_PRED, 1f - 0.01f)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name + "_filled")))
             .end();
     }

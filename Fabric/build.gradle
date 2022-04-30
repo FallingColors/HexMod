@@ -9,6 +9,9 @@ archivesBaseName = "${modName}-fabric-${minecraftVersion}"
 repositories {
     mavenCentral()
     maven { url "https://maven.shedaniel.me/" }
+    maven {
+        url 'https://ladysnake.jfrog.io/artifactory/mods'
+    }
 }
 
 dependencies {
@@ -21,11 +24,12 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    // compileOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion")
     modImplementation("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion:api")
 
     modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
     implementation "me.zeroeightsix:fiber:$fiberVersion"
+
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:$cardinalComponentsVersion"
 }
 
 loom {

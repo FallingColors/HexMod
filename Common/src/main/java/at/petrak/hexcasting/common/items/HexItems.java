@@ -1,29 +1,40 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
 import at.petrak.hexcasting.common.items.magic.*;
 import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.EnumMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
+// https://github.com/VazkiiMods/Botania/blob/2c4f7fdf9ebf0c0afa1406dfe1322841133d75fa/Common/src/main/java/vazkii/botania/common/item/ModItems.java
 public class HexItems {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, HexMod.MOD_ID);
-    public static final CreativeModeTab TAB = new CreativeModeTab(HexMod.MOD_ID) {
+    public static void registerItems(BiConsumer<Item, ResourceLocation> r) {
+        for (var e : ITEMS.entrySet()) {
+            r.accept(e.getValue(), e.getKey());
+        }
+    }
+
+    private static final Map<ResourceLocation, Item> ITEMS = new LinkedHashMap<>(); // preserve insertion order
+
+    public static final CreativeModeTab TAB = new CreativeModeTab(HexAPI.MOD_ID) {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(SPELLBOOK::get);
+            return new ItemStack(SPELLBOOK);
         }
 
         @Override
@@ -38,83 +49,64 @@ public class HexItems {
                 1_000_000_000,
             };
             for (int manamount : manamounts) {
-                var stack = new ItemStack(BATTERY.get());
+                var stack = new ItemStack(BATTERY);
                 items.add(ItemManaHolder.withMana(stack, manamount, manamount));
             }
         }
     };
 
-    public static final RegistryObject<ItemWand> WAND_OAK = ITEMS.register("wand_oak",
-        () -> new ItemWand(unstackable()));
-    public static final RegistryObject<ItemWand> WAND_SPRUCE = ITEMS.register("wand_spruce",
-        () -> new ItemWand(unstackable()));
-    public static final RegistryObject<ItemWand> WAND_BIRCH = ITEMS.register("wand_birch",
-        () -> new ItemWand(unstackable()));
-    public static final RegistryObject<ItemWand> WAND_JUNGLE = ITEMS.register("wand_jungle",
-        () -> new ItemWand(unstackable()));
-    public static final RegistryObject<ItemWand> WAND_ACACIA = ITEMS.register("wand_acacia",
-        () -> new ItemWand(unstackable()));
-    public static final RegistryObject<ItemWand> WAND_DARK_OAK = ITEMS.register("wand_dark_oak",
-        () -> new ItemWand(unstackable()));
-    public static final RegistryObject<ItemWand> WAND_CRIMSON = ITEMS.register("wand_crimson",
-        () -> new ItemWand(unstackable()));
-    public static final RegistryObject<ItemWand> WAND_WARPED = ITEMS.register("wand_warped",
-        () -> new ItemWand(unstackable()));
-    public static final RegistryObject<ItemWand> WAND_AKASHIC = ITEMS.register("wand_akashic",
-        () -> new ItemWand(unstackable()));
 
-    public static final RegistryObject<Item> AMETHYST_DUST = ITEMS.register("amethyst_dust",
-        () -> new Item(props()));
-    public static final RegistryObject<Item> CHARGED_AMETHYST = ITEMS.register("charged_amethyst",
-        () -> new Item(props()));
+    public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
+    public static final Item CHARGED_AMETHYST = make("charged_amethyst", new Item(props()));
 
-    public static final RegistryObject<Item> SCRYING_LENS = ITEMS.register("lens",
-        () -> new ItemLens(unstackable()));
-    public static final RegistryObject<Item> SCROLL = ITEMS.register("scroll",
-        () -> new ItemScroll(props()));
+    public static final ItemWand WAND_OAK = make("wand_oak", new ItemWand(unstackable()));
+    public static final ItemWand WAND_SPRUCE = make("wand_spruce", new ItemWand(unstackable()));
+    public static final ItemWand WAND_BIRCH = make("wand_birch", new ItemWand(unstackable()));
+    public static final ItemWand WAND_JUNGLE = make("wand_jungle", new ItemWand(unstackable()));
+    public static final ItemWand WAND_ACACIA = make("wand_acacia", new ItemWand(unstackable()));
+    public static final ItemWand WAND_DARK_OAK = make("wand_dark_oak", new ItemWand(unstackable()));
+    public static final ItemWand WAND_CRIMSON = make("wand_crimson", new ItemWand(unstackable()));
+    public static final ItemWand WAND_WARPED = make("wand_warped", new ItemWand(unstackable()));
+    public static final ItemWand WAND_AKASHIC = make("wand_akashic", new ItemWand(unstackable()));
 
-    public static final RegistryObject<ItemFocus> FOCUS = ITEMS.register("focus",
-        () -> new ItemFocus(unstackable()));
-    public static final RegistryObject<ItemAbacus> ABACUS = ITEMS.register("abacus",
-        () -> new ItemAbacus(unstackable()));
-    public static final RegistryObject<ItemSpellbook> SPELLBOOK = ITEMS.register("spellbook",
-        () -> new ItemSpellbook(unstackable()));
+    public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(unstackable()));
 
-    public static final RegistryObject<ItemCypher> CYPHER = ITEMS.register("cypher",
-        () -> new ItemCypher(unstackable()));
-    public static final RegistryObject<ItemTrinket> TRINKET = ITEMS.register("trinket",
-        () -> new ItemTrinket(unstackable()));
-    public static final RegistryObject<ItemArtifact> ARTIFACT = ITEMS.register("artifact",
-        () -> new ItemArtifact(unstackable()));
+    public static final ItemAbacus ABACUS = make("abacus", new ItemAbacus(unstackable()));
+    public static final ItemFocus FOCUS = make("focus", new ItemFocus(unstackable()));
+    public static final ItemSpellbook SPELLBOOK = make("spellbook", new ItemSpellbook(unstackable()));
 
-    public static final RegistryObject<ItemManaBattery> BATTERY = ITEMS.register("battery",
-        () -> new ItemManaBattery(new Item.Properties().stacksTo(1)));
+    public static final ItemCypher CYPHER = make("cypher", new ItemCypher(unstackable()));
+    public static final ItemTrinket TRINKET = make("trinket", new ItemTrinket(unstackable()));
+    public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable()));
 
-    public static final EnumMap<DyeColor, RegistryObject<ItemDyeColorizer>> DYE_COLORIZERS = new EnumMap<>(
+
+    public static final ItemScroll SCROLL = make("scroll", new ItemScroll(props()));
+
+    public static final ItemSlate SLATE = make("slate", new ItemSlate(HexBlocks.SLATE, props()));
+
+    public static final ItemManaBattery BATTERY = make("battery",
+        new ItemManaBattery(new Item.Properties().stacksTo(1)));
+
+    public static final EnumMap<DyeColor, ItemDyeColorizer> DYE_COLORIZERS = new EnumMap<>(
         DyeColor.class);
-    public static final RegistryObject<ItemPrideColorizer>[] PRIDE_COLORIZERS = new RegistryObject[14];
+    public static final ItemPrideColorizer[] PRIDE_COLORIZERS = new ItemPrideColorizer[14];
 
     static {
         for (var dye : DyeColor.values()) {
-            DYE_COLORIZERS.put(dye, ITEMS.register("dye_colorizer_" + dye.getName(),
-                () -> new ItemDyeColorizer(dye, unstackable())));
+            DYE_COLORIZERS.put(dye, make("dye_colorizer_" + dye.getName(), new ItemDyeColorizer(dye, unstackable())));
         }
         for (int i = 0; i < PRIDE_COLORIZERS.length; i++) {
-            final var finalI = i;
-            PRIDE_COLORIZERS[i] = ITEMS.register("pride_colorizer_" + i,
-                () -> new ItemPrideColorizer(finalI, unstackable()));
+            PRIDE_COLORIZERS[i] = make("pride_colorizer_" + i, new ItemPrideColorizer(i, unstackable()));
         }
     }
 
-    public static final RegistryObject<Item> UUID_COLORIZER = ITEMS.register("uuid_colorizer",
-        () -> new ItemUUIDColorizer(unstackable()));
+    public static final Item UUID_COLORIZER = make("uuid_colorizer", new ItemUUIDColorizer(unstackable()));
 
     // BUFF SANDVICH
-    public static final RegistryObject<Item> SUBMARINE_SANDWICH = ITEMS.register("sub_sandwich",
-        () -> new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
+    public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
+        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
 
-    public static final RegistryObject<ItemSlate> SLATE = ITEMS.register("slate",
-        () -> new ItemSlate(HexBlocks.SLATE.get(), props()));
+    //
 
     public static Item.Properties props() {
         return new Item.Properties().tab(TAB);
@@ -122,5 +114,17 @@ public class HexItems {
 
     public static Item.Properties unstackable() {
         return props().stacksTo(1);
+    }
+
+    private static <T extends Item> T make(ResourceLocation id, T item) {
+        var old = ITEMS.put(id, item);
+        if (old != null) {
+            throw new IllegalArgumentException("Typo? Duplicate id " + id);
+        }
+        return item;
+    }
+
+    private static <T extends Item> T make(String id, T item) {
+        return make(modLoc(id), item);
     }
 }

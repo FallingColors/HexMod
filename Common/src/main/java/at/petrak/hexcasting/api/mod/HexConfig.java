@@ -9,15 +9,11 @@ public class HexConfig {
     public interface CommonConfigAccess {
         int dustManaAmount();
 
-
         int shardManaAmount();
-
 
         int chargedCrystalManaAmount();
 
-
         double manaToHealthRate();
-
 
         int DEFAULT_DUST_MANA_AMOUNT = 10_000;
         int DEFAULT_SHARD_MANA_AMOUNT = 50_000;
@@ -28,8 +24,7 @@ public class HexConfig {
 
     public interface ClientConfigAccess {
         double patternPointSpeedMultiplier();
-
-
+        
         boolean ctrlTogglesOffStrokeOrder();
 
         double DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER = 1;

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items.colorizer;
 
-import at.petrak.hexcasting.api.cap.Colorizer;
+import at.petrak.hexcasting.api.addldata.Colorizer;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

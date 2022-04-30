@@ -23,6 +23,9 @@
     ],
     "client": [
       {"adapter": "kotlin", "value": "at.petrak.hexcasting.FabricHexInitializer"}
+    ],
+    "cardinal-components": [
+      "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"
     ]
   },
   "mixins": [
@@ -37,5 +40,19 @@
     "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
     "patchouli": ">=1.18.2-66",
     "paucal": ">=0.3.4"
+  },
+
+  "custom": {
+    "cardinal-components": [
+      "hexcasting:brainswept",
+      "hexcasting:favored_colorizer",
+      "hexcasting:sentinel",
+      "hexcasting:flight",
+
+      "hexcasting:colorizer",
+      "hexcasting:data_holder",
+      "hexcasting:mana_holder",
+      "hexcasting:hex_holder"
+    ]
   }
 }

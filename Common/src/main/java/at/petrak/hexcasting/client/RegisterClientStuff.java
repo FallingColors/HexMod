@@ -19,7 +19,7 @@ import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
-import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
+import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
 import at.petrak.hexcasting.common.particles.HexParticles;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
@@ -211,8 +211,8 @@ public class RegisterClientStuff {
             (stack, level, holder, holderID) -> item.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);
     }
 
-    private static void registerPackagedSpellOverrides(ItemPackagedSpell item) {
-        ItemProperties.register(item, ItemPackagedSpell.HAS_PATTERNS_PRED,
+    private static void registerPackagedSpellOverrides(ItemPackagedHex item) {
+        ItemProperties.register(item, ItemPackagedHex.HAS_PATTERNS_PRED,
             (stack, level, holder, holderID) ->
                 item.getPatterns(stack) != null ? 1f : 0f
         );

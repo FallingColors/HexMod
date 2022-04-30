@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.items.magic;
 
 import net.minecraft.world.item.ItemStack;
 
-public class ItemCypher extends ItemPackagedSpell {
+public class ItemCypher extends ItemPackagedHex {
     public ItemCypher(Properties pProperties) {
         super(pProperties);
     }

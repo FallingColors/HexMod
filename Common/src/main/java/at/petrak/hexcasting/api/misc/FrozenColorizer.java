@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.misc;
 
-import at.petrak.hexcasting.api.cap.Colorizer;
+import at.petrak.hexcasting.api.addldata.Colorizer;
 import at.petrak.hexcasting.api.cap.HexCapabilities;
 import at.petrak.hexcasting.api.mod.HexApiItems;
 import net.minecraft.Util;
@@ -21,14 +21,14 @@ import java.util.function.Supplier;
 public record FrozenColorizer(ItemStack item, UUID owner) {
 
     private static final int[] MINIMUM_LUMINANCE_COLOR_WHEEL = {
-            0xFF200000, 0xFF202000, 0xFF002000, 0xFF002020, 0xFF000020, 0xFF200020
+        0xFF200000, 0xFF202000, 0xFF002000, 0xFF002020, 0xFF000020, 0xFF200020
     };
 
     public static final String TAG_STACK = "stack";
     public static final String TAG_OWNER = "owner";
 
     public static final Supplier<FrozenColorizer> DEFAULT =
-            () -> new FrozenColorizer(new ItemStack(HexApiItems.COLORIZER_WHITE), Util.NIL_UUID);
+        () -> new FrozenColorizer(new ItemStack(HexApiItems.COLORIZER_WHITE), Util.NIL_UUID);
 
     public CompoundTag serialize() {
         var out = new CompoundTag();
@@ -38,8 +38,9 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
     }
 
     public static FrozenColorizer deserialize(CompoundTag tag) {
-        if (tag.isEmpty())
+        if (tag.isEmpty()) {
             return FrozenColorizer.DEFAULT.get();
+        }
         try {
             ItemStack item;
             if (tag.contains("item", Tag.TAG_STRING) && !tag.contains(TAG_STACK, Tag.TAG_COMPOUND)) {
@@ -60,6 +61,7 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
 
     /**
      * Gets a color with a minimum luminance applied.
+     *
      * @param time     absolute world time in ticks
      * @param position a position for the icosahedron, a randomish number for particles.
      * @return an AARRGGBB color.
@@ -70,10 +72,11 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
         var r = FastColor.ARGB32.red(raw);
         var g = FastColor.ARGB32.green(raw);
         var b = FastColor.ARGB32.blue(raw);
-        double luminance = (0.2126 * r  + 0.7152 * g + 0.0722 * b) / 0xFF; // Standard relative luminance calculation
+        double luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 0xFF; // Standard relative luminance calculation
 
         if (luminance < 0.05) {
-            int rawMod = Colorizer.morphBetweenColors(MINIMUM_LUMINANCE_COLOR_WHEEL, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
+            int rawMod = Colorizer.morphBetweenColors(MINIMUM_LUMINANCE_COLOR_WHEEL, new Vec3(0.1, 0.1, 0.1),
+                time / 20 / 20, position);
 
             r += FastColor.ARGB32.red(rawMod);
             g += FastColor.ARGB32.green(rawMod);

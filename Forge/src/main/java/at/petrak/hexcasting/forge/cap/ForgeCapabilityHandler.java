@@ -1,15 +1,18 @@
-package at.petrak.hexcasting.common.lib;
+package at.petrak.hexcasting.forge.cap;
 
-import at.petrak.hexcasting.api.cap.Colorizer;
-import at.petrak.hexcasting.api.cap.DataHolder;
-import at.petrak.hexcasting.api.cap.ManaHolder;
-import at.petrak.hexcasting.api.cap.SpellHolder;
-import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.item.*;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.addldata.Colorizer;
+import at.petrak.hexcasting.api.addldata.DataHolder;
+import at.petrak.hexcasting.api.addldata.ManaHolder;
 import at.petrak.hexcasting.api.cap.HexCapabilities;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.api.cap.HexHolder;
+import at.petrak.hexcasting.api.item.ColorizerItem;
+import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.item.HexHolderItem;
+import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.items.HexItems;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -17,8 +20,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -29,8 +33,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class HexCapabilityHandler {
+public class ForgeCapabilityHandler {
 
     private static final ResourceLocation DATA_HOLDER_CAPABILITY = new ResourceLocation("hexcasting", "data_holder");
     private static final ResourceLocation DATA_ITEM_CAPABILITY = new ResourceLocation("hexcasting", "data_item");
@@ -43,40 +48,45 @@ public class HexCapabilityHandler {
     public static void registerCaps(RegisterCapabilitiesEvent evt) {
         evt.register(ManaHolder.class);
         evt.register(DataHolder.class);
-        evt.register(SpellHolder.class);
+        evt.register(HexHolder.class);
         evt.register(Colorizer.class);
     }
 
     @SubscribeEvent
     public static void attachCaps(AttachCapabilitiesEvent<ItemStack> evt) {
         ItemStack stack = evt.getObject();
-        if (stack.getItem() instanceof ManaHolderItem holder)
+        if (stack.getItem() instanceof ManaHolderItem holder) {
             evt.addCapability(MANA_HOLDER_CAPABILITY, provide(HexCapabilities.MANA,
-                    () -> new ItemBasedManaHolder(holder, stack)));
-        else if (stack.is(HexItems.AMETHYST_DUST.get()))
+                () -> new ItemBasedManaHolder(holder, stack)));
+        } else if (stack.is(HexItems.AMETHYST_DUST)) {
             evt.addCapability(MANA_ITEM_CAPABILITY, provide(HexCapabilities.MANA,
-                    () -> new StaticManaHolder(HexConfig.dustManaAmount, 3, stack)));
-        else if (stack.is(Items.AMETHYST_SHARD))
+                () -> new StaticManaHolder(() -> HexConfig.common().dustManaAmount(), 30, stack)));
+        } else if (stack.is(Items.AMETHYST_SHARD)) {
             evt.addCapability(MANA_ITEM_CAPABILITY, provide(HexCapabilities.MANA,
-                    () -> new StaticManaHolder(HexConfig.shardManaAmount, 2, stack)));
-        else if (stack.is(HexItems.CHARGED_AMETHYST.get()))
+                () -> new StaticManaHolder(() -> HexConfig.common().shardManaAmount(), 20, stack)));
+        } else if (stack.is(HexItems.CHARGED_AMETHYST)) {
             evt.addCapability(MANA_ITEM_CAPABILITY, provide(HexCapabilities.MANA,
-                    () -> new StaticManaHolder(HexConfig.chargedCrystalManaAmount, 1, stack)));
+                () -> new StaticManaHolder(() -> HexConfig.common().chargedCrystalManaAmount(), 10, stack)));
+        }
 
-        if (stack.getItem() instanceof DataHolderItem holder)
+        if (stack.getItem() instanceof DataHolderItem holder) {
             evt.addCapability(DATA_HOLDER_CAPABILITY, provide(HexCapabilities.DATUM,
-                    () -> new ItemBasedDataHolder(holder, stack)));
-        else if (stack.is(Items.PUMPKIN_PIE)) // haha yes
+                () -> new ItemBasedDataHolder(holder, stack)));
+        } else if (stack.is(Items.PUMPKIN_PIE)) // haha yes
+        {
             evt.addCapability(DATA_ITEM_CAPABILITY, provide(HexCapabilities.DATUM,
-                    () -> new StaticDatumHolder((s) -> SpellDatum.make(Math.PI * s.getCount()), stack)));
+                () -> new StaticDatumHolder((s) -> SpellDatum.make(Math.PI * s.getCount()), stack)));
+        }
 
-        if (stack.getItem() instanceof SpellHolderItem holder)
+        if (stack.getItem() instanceof HexHolderItem holder) {
             evt.addCapability(SPELL_HOLDER_CAPABILITY, provide(HexCapabilities.SPELL,
-                    () -> new ItemBasedSpellHolder(holder, stack)));
+                () -> new ItemBasedHexHolder(holder, stack)));
+        }
 
-        if (stack.getItem() instanceof ColorizerItem colorizer)
+        if (stack.getItem() instanceof ColorizerItem colorizer) {
             evt.addCapability(COLORIZER_CAPABILITY, provide(HexCapabilities.COLOR,
-                    () -> new ItemBasedColorizer(colorizer, stack)));
+                () -> new ItemBasedColorizer(colorizer, stack)));
+        }
     }
 
     private static <CAP> SimpleProvider<CAP> provide(Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
@@ -93,7 +103,7 @@ public class HexCapabilityHandler {
         }
     }
 
-    private record StaticManaHolder(ForgeConfigSpec.IntValue baseWorth,
+    private record StaticManaHolder(Supplier<Integer> baseWorth,
                                     int consumptionPriority,
                                     ItemStack stack) implements ManaHolder {
         @Override
@@ -134,12 +144,14 @@ public class HexCapabilityHandler {
         @Override
         public int withdrawMana(int cost, boolean simulate) {
             int worth = baseWorth.get();
-            if (cost < 0)
+            if (cost < 0) {
                 cost = worth * stack.getCount();
+            }
             double itemsRequired = cost / (double) worth;
             int itemsUsed = Math.min((int) Math.ceil(itemsRequired), stack.getCount());
-            if (!simulate)
+            if (!simulate) {
                 stack.shrink(itemsUsed);
+            }
             return itemsUsed * worth;
         }
     }
@@ -174,7 +186,7 @@ public class HexCapabilityHandler {
 
         @Override
         public int getConsumptionPriority() {
-            return 4;
+            return 40;
         }
 
         @Override
@@ -189,7 +201,7 @@ public class HexCapabilityHandler {
     }
 
     private record StaticDatumHolder(Function<ItemStack, SpellDatum<?>> provider,
-                                        ItemStack stack) implements DataHolder {
+                                     ItemStack stack) implements DataHolder {
 
         @Override
         public @Nullable CompoundTag readRawDatum() {
@@ -228,16 +240,18 @@ public class HexCapabilityHandler {
 
         @Override
         public boolean writeDatum(@Nullable SpellDatum<?> datum, boolean simulate) {
-            if (!holder.canWrite(stack, datum))
+            if (!holder.canWrite(stack, datum)) {
                 return false;
-            if (!simulate)
+            }
+            if (!simulate) {
                 holder.writeDatum(stack, datum);
+            }
             return true;
         }
     }
 
-    private record ItemBasedSpellHolder(SpellHolderItem holder,
-                                        ItemStack stack) implements SpellHolder {
+    private record ItemBasedHexHolder(HexHolderItem holder,
+                                      ItemStack stack) implements HexHolder {
 
         @Override
         public boolean canDrawManaFromInventory() {
@@ -260,9 +274,8 @@ public class HexCapabilityHandler {
         }
     }
 
-    private record ItemBasedColorizer(ColorizerItem holder,
-                                      ItemStack stack) implements Colorizer {
-
+    public record ItemBasedColorizer(ColorizerItem holder,
+                                     ItemStack stack) implements Colorizer {
         @Override
         public int color(UUID owner, float time, Vec3 position) {
             return holder.color(stack, owner, time, position);

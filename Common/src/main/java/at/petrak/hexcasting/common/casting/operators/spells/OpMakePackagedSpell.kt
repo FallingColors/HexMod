@@ -12,11 +12,11 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.utils.ManaHelper
-import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
+import at.petrak.hexcasting.common.items.magic.ItemPackagedHex
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.entity.item.ItemEntity
 
-class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int) : SpellOperator {
+class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) : SpellOperator {
     override val argc = 2
     override fun execute(
         args: List<SpellDatum<*>>,
