@@ -16,6 +16,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,6 +68,19 @@ public record BrainsweepRecipe(
     @Override
     public ItemStack getResultItem() {
         return ItemStack.EMPTY.copy();
+    }
+
+    // Because kotlin doesn't like doing raw, unchecked types
+    // Can't blame it, but that's what we need to do
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static BlockState copyProperties(BlockState original, BlockState copyTo) {
+        for (Property prop : original.getProperties()) {
+            if (copyTo.hasProperty(prop)) {
+                copyTo = copyTo.setValue(prop, original.getValue(prop));
+            }
+        }
+
+        return copyTo;
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<BrainsweepRecipe> {
