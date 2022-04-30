@@ -56,7 +56,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
-            val spellHolder = handStack.getCapability(HexCapabilities.SPELL).resolve()
+            val spellHolder = HexCapabilities.getCapability(handStack, HexCapabilities.SPELL)
             if (spellHolder.isPresent
                 && spellHolder.get().patterns == null
                 && itemEntity.isAlive

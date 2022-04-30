@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators
 
+import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 
 object OpRead : ConstManaOperator {
@@ -11,11 +11,11 @@ object OpRead : ConstManaOperator {
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val datum = it.getCapability(HexCapabilities.DATUM).resolve()
-            datum.isPresent && (datum.get().readDatum(ctx.world) != null || datum.get().emptyDatum() != null)
+            val datum = HexCapabilities.getCapability(it, HexCapabilities.DATUM)
+            !it.isEmpty && datum.isPresent && (datum.get().readDatum(ctx.world) != null || datum.get().emptyDatum() != null)
         }
 
-        val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
+        val datumHolder = HexCapabilities.getCapability(handStack, HexCapabilities.DATUM)
         if (!datumHolder.isPresent)
             throw MishapBadOffhandItem.of(handStack, hand, "iota.read")
 

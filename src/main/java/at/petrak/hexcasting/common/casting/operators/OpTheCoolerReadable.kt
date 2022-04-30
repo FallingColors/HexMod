@@ -17,9 +17,9 @@ object OpTheCoolerReadable : ConstManaOperator {
     ): List<SpellDatum<*>> {
         val target = args.getChecked<ItemEntity>(0)
         ctx.assertEntityInRange(target)
-        
+
         val stack = target.item
-        val datumHolder = stack.getCapability(HexCapabilities.DATUM).resolve()
+        val datumHolder = HexCapabilities.getCapability(stack, HexCapabilities.DATUM)
 
         if (!datumHolder.isPresent)
             return spellListOf(0.0)

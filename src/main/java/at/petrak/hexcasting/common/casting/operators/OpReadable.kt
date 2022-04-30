@@ -11,10 +11,10 @@ object OpReadable : ConstManaOperator {
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val (handStack) = ctx.getHeldItemToOperateOn {
-            it.getCapability(HexCapabilities.DATUM).resolve().isPresent
+            HexCapabilities.getCapability(it, HexCapabilities.DATUM).isPresent
         }
 
-        val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
+        val datumHolder = HexCapabilities.getCapability(handStack, HexCapabilities.DATUM)
         if (!datumHolder.isPresent)
             return spellListOf(0.0)
 

@@ -20,11 +20,11 @@ object OpRecharge : SpellOperator {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val mana = it.getCapability(HexCapabilities.MANA).resolve()
+            val mana = HexCapabilities.getCapability(it, HexCapabilities.MANA)
             mana.isPresent && mana.get().canRecharge() && mana.get().mana < mana.get().maxMana
         }
 
-        val mana = handStack.getCapability(HexCapabilities.MANA).resolve()
+        val mana = HexCapabilities.getCapability(handStack, HexCapabilities.MANA)
 
         if (!mana.isPresent || !mana.get().canRecharge())
             throw MishapBadOffhandItem.of(
@@ -52,10 +52,10 @@ object OpRecharge : SpellOperator {
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn {
-                val mana = it.getCapability(HexCapabilities.MANA).resolve()
+                val mana = HexCapabilities.getCapability(it, HexCapabilities.MANA)
                 mana.isPresent && mana.get().canRecharge() && mana.get().mana < mana.get().maxMana
             }
-            val mana = handStack.getCapability(HexCapabilities.MANA).resolve()
+            val mana = HexCapabilities.getCapability(handStack, HexCapabilities.MANA)
 
             if (mana.isPresent && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()

@@ -20,7 +20,7 @@ object OpTheCoolerRead : ConstManaOperator {
         ctx.assertEntityInRange(target)
 
         val stack = target.item
-        val datumHolder = stack.getCapability(HexCapabilities.DATUM).resolve()
+        val datumHolder = HexCapabilities.getCapability(stack, HexCapabilities.DATUM)
         if (!datumHolder.isPresent)
             throw MishapBadItem.of(target, "iota.read")
 
