@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.api.cap.HexCapabilities
+import at.petrak.hexcasting.forge.cap.HexCapabilities
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 import kotlin.math.roundToInt
@@ -8,7 +8,8 @@ import kotlin.math.roundToInt
 object ManaHelper {
     @JvmStatic
     fun isManaItem(stack: ItemStack): Boolean {
-        return stack.getCapability(HexCapabilities.MANA).map { it.canProvide() }.orElse(false) && extractMana(stack, simulate = true) > 0
+        return stack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).map { it.canProvide() }
+            .orElse(false) && extractMana(stack, simulate = true) > 0
     }
 
     /**
@@ -21,8 +22,13 @@ object ManaHelper {
      */
     @JvmStatic
     @JvmOverloads
-    fun extractMana(stack: ItemStack, cost: Int = -1, drainForBatteries: Boolean = false, simulate: Boolean = false): Int {
-        val manaCapability = stack.getCapability(HexCapabilities.MANA).resolve()
+    fun extractMana(
+        stack: ItemStack,
+        cost: Int = -1,
+        drainForBatteries: Boolean = false,
+        simulate: Boolean = false
+    ): Int {
+        val manaCapability = stack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
 
         if (!manaCapability.isPresent)
             return 0
@@ -39,8 +45,8 @@ object ManaHelper {
      * Sorted from least important to most important
      */
     fun compare(astack: ItemStack, bstack: ItemStack): Int {
-        val aMana = astack.getCapability(HexCapabilities.MANA).resolve()
-        val bMana = bstack.getCapability(HexCapabilities.MANA).resolve()
+        val aMana = astack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
+        val bMana = bstack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
 
         return if (astack.item != bstack.item) {
             aMana.map { it.consumptionPriority }.orElse(0) - bMana.map { it.consumptionPriority }.orElse(0)

@@ -2,13 +2,12 @@ package at.petrak.hexcasting.forge.cap;
 
 import at.petrak.hexcasting.api.addldata.Colorizer;
 import at.petrak.hexcasting.api.addldata.DataHolder;
+import at.petrak.hexcasting.api.addldata.HexHolder;
 import at.petrak.hexcasting.api.addldata.ManaHolder;
-import at.petrak.hexcasting.api.cap.HexCapabilities;
-import at.petrak.hexcasting.api.cap.HexHolder;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
+import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;

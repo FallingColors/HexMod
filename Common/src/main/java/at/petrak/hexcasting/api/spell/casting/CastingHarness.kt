@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.spell.casting
 
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
-import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexConfig
@@ -19,6 +18,7 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapDisallowedSpell
 import at.petrak.hexcasting.api.spell.mishaps.MishapTooManyCloseParens
 import at.petrak.hexcasting.api.utils.HexDamageSources
 import at.petrak.hexcasting.api.utils.ManaHelper
+import at.petrak.hexcasting.forge.cap.HexCapabilities
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
@@ -274,8 +274,10 @@ class CastingHarness private constructor(
             }
         } else {
             val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
-            val casterManaHolder = casterStack.getCapability(HexCapabilities.MANA).resolve()
-            val casterSpellHolder = casterStack.getCapability(HexCapabilities.SPELL).resolve()
+            val casterManaHolder =
+                casterStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
+            val casterSpellHolder =
+                casterStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.SPELL).resolve()
             val ipsCanDrawFromInv = if (casterSpellHolder.isPresent) {
                 if (casterManaHolder.isPresent) {
                     val manaAvailable = casterManaHolder.get().mana

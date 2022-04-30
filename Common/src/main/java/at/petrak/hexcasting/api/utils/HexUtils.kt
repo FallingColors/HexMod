@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.api.utils
 
 import at.petrak.hexcasting.api.spell.math.HexCoord
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.LongArrayTag
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import kotlin.math.absoluteValue
@@ -86,4 +88,12 @@ object HexUtils {
     }
 
     const val TAU = Math.PI * 2.0
+
+    // Copy the impl from forge
+    @JvmStatic
+    fun ItemStack.serialize(): CompoundTag {
+        val out = CompoundTag()
+        this.save(out)
+        return out
+    }
 }

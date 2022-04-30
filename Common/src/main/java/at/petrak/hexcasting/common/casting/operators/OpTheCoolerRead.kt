@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
+import at.petrak.hexcasting.forge.cap.HexCapabilities
 import net.minecraft.world.entity.item.ItemEntity
 
 object OpTheCoolerRead : ConstManaOperator {
@@ -17,7 +17,7 @@ object OpTheCoolerRead : ConstManaOperator {
     ): List<SpellDatum<*>> {
         val target = args.getChecked<ItemEntity>(0)
         val stack = target.item
-        val datumHolder = stack.getCapability(HexCapabilities.DATUM).resolve()
+        val datumHolder = stack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
         if (!datumHolder.isPresent)
             throw MishapBadItem.of(target, "iota.read")
 

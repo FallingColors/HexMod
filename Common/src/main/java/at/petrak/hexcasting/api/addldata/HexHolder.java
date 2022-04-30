@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.cap;
+package at.petrak.hexcasting.api.addldata;
 
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import org.jetbrains.annotations.Nullable;

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.cc;
 
-import at.petrak.hexcasting.api.cap.HexHolder;
+import at.petrak.hexcasting.api.addldata.HexHolder;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;

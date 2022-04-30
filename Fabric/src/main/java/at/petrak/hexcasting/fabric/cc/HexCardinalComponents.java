@@ -11,10 +11,11 @@ import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
+import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentInitializer;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Items;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -29,6 +30,10 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         CCSentinel.class);
     public static final ComponentKey<CCFlight> FLIGHT = ComponentRegistry.getOrCreate(modLoc("flight"),
         CCFlight.class);
+    public static final ComponentKey<CCHarness> HARNESS = ComponentRegistry.getOrCreate(modLoc("harness"),
+        CCHarness.class);
+    public static final ComponentKey<CCPatterns> PATTERNS = ComponentRegistry.getOrCreate(modLoc("patterns"),
+        CCPatterns.class);
 
     public static final ComponentKey<CCColorizer> COLORIZER = ComponentRegistry.getOrCreate(modLoc("colorizer"),
         CCColorizer.class);
@@ -41,10 +46,13 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-        registry.registerFor(LivingEntity.class, BRAINSWEPT, CCBrainswept::new);
-        registry.registerFor(Player.class, FAVORED_COLORIZER, CCFavoredColorizer::new);
-        registry.registerFor(Player.class, SENTINEL, CCSentinel::new);
-        registry.registerFor(Player.class, FLIGHT, CCFlight::new);
+        registry.registerFor(Mob.class, BRAINSWEPT, CCBrainswept::new);
+        registry.registerForPlayers(FAVORED_COLORIZER, CCFavoredColorizer::new, RespawnCopyStrategy.ALWAYS_COPY);
+        registry.registerForPlayers(SENTINEL, CCSentinel::new, RespawnCopyStrategy.ALWAYS_COPY);
+        // Fortunately these are all both only needed on the server and don't want to be copied across death
+        registry.registerFor(ServerPlayer.class, FLIGHT, CCFlight::new);
+        registry.registerFor(ServerPlayer.class, HARNESS, CCHarness::new);
+        registry.registerFor(ServerPlayer.class, PATTERNS, CCPatterns::new);
     }
 
     @Override

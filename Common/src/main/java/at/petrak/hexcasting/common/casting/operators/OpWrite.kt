@@ -5,9 +5,9 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
+import at.petrak.hexcasting.forge.cap.HexCapabilities
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpWrite : SpellOperator {
@@ -19,12 +19,12 @@ object OpWrite : SpellOperator {
         val datum = args[0]
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val datumHolder = it.getCapability(HexCapabilities.DATUM).resolve()
+            val datumHolder = it.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
 
             datumHolder.isPresent && datumHolder.get().writeDatum(datum, true)
         }
 
-        val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
+        val datumHolder = handStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
         if (!datumHolder.isPresent)
             throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
 
@@ -45,12 +45,12 @@ object OpWrite : SpellOperator {
     private data class Spell(val datum: SpellDatum<*>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn {
-                val datumHolder = it.getCapability(HexCapabilities.DATUM).resolve()
+                val datumHolder = it.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
 
                 datumHolder.isPresent && datumHolder.get().writeDatum(datum, true)
             }
 
-            val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
+            val datumHolder = handStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
 
             if (datumHolder.isPresent) {
                 datumHolder.get().writeDatum(datum, false)

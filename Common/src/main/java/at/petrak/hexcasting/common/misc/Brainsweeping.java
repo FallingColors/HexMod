@@ -8,9 +8,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.event.entity.living.LivingConversionEvent;
@@ -21,12 +23,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class Brainsweeping {
     // Keeping these functions in Brainsweeping just so we have to change less code
-    public static void brainsweep(LivingEntity entity) {
+    public static void brainsweep(Mob entity) {
         IXplatAbstractions.INSTANCE.brainsweep(entity);
     }
 
-    public static boolean isBrainswept(LivingEntity entity) {
+    public static boolean isBrainswept(Mob entity) {
         return IXplatAbstractions.INSTANCE.isBrainswept(entity);
+    }
+
+    // TODO: make this a tag
+    public static boolean isValidTarget(Mob mob) {
+        return mob instanceof VillagerDataHolder || mob instanceof Raider;
     }
 
     @SubscribeEvent

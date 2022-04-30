@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.forge.xplat;
 
+import at.petrak.hexcasting.api.addldata.Colorizer;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
@@ -7,10 +8,11 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.common.network.MsgBrainsweepAck;
+import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
-import at.petrak.hexcasting.mixin.AccessorLivingEntity;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
 import net.minecraft.core.Registry;
@@ -22,12 +24,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.PacketDistributor;
@@ -47,25 +47,15 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void brainsweep(LivingEntity entity) {
-        if (entity instanceof VillagerDataHolder) {
-            entity.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
+    public void brainsweep(Mob mob) {
+        if (Brainsweeping.isValidTarget(mob)) {
+            mob.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
 
-            if (entity instanceof Mob mob) {
-                mob.removeFreeWill();
-            }
+            mob.removeFreeWill();
 
-            if (entity instanceof Villager villager) {
-                Brain<Villager> brain = villager.getBrain();
-                if (entity.level instanceof ServerLevel slevel) {
-                    brain.stopAll(slevel, villager);
-                }
-                ((AccessorLivingEntity) entity).hex$SetBrain(brain.copyWithoutBehaviors());
-            }
-
-            if (entity.level instanceof ServerLevel) {
+            if (mob.level instanceof ServerLevel) {
                 ForgePacketHandler.getNetwork()
-                    .send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), MsgBrainsweepAck.of(entity));
+                    .send(PacketDistributor.TRACKING_ENTITY.with(() -> mob), MsgBrainsweepAck.of(mob));
             }
         }
     }
@@ -129,10 +119,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         player.getPersistentData().put(TAG_PATTERNS, listTag);
     }
 
-
     @Override
-    public boolean isBrainswept(LivingEntity e) {
-        return e instanceof VillagerDataHolder && e.getPersistentData().getBoolean(TAG_BRAINSWEPT);
+    public boolean isBrainswept(Mob e) {
+        return e.getPersistentData().getBoolean(TAG_BRAINSWEPT);
     }
 
     @Override
@@ -192,6 +181,22 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public void clearCastingData(ServerPlayer player) {
         player.getPersistentData().remove(TAG_HARNESS);
         player.getPersistentData().remove(TAG_PATTERNS);
+    }
+
+    @Override
+    public boolean isColorizer(ItemStack stack) {
+        return stack.getCapability(HexCapabilities.COLOR).isPresent();
+    }
+
+    @Override
+    public int getRawColor(FrozenColorizer colorizer, float time, Vec3 position) {
+        var maybeColorizer = colorizer.item().getCapability(HexCapabilities.COLOR).resolve();
+        if (maybeColorizer.isPresent()) {
+            Colorizer col = maybeColorizer.get();
+            return col.color(colorizer.owner(), time, position);
+        }
+
+        return 0xff_ff00dc; // missing color
     }
 
     @Override

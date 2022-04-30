@@ -14,8 +14,11 @@ import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.ServiceLoader;
@@ -33,7 +36,10 @@ public interface IXplatAbstractions {
 
     // Things that used to be caps
 
-    void brainsweep(LivingEntity e);
+    /**
+     * Irregardless of whether it can actually be brainswept (you need to do the checking yourself)
+     */
+    void brainsweep(Mob mob);
 
     void setColorizer(Player target, FrozenColorizer colorizer);
 
@@ -41,11 +47,11 @@ public interface IXplatAbstractions {
 
     void setFlight(ServerPlayer target, FlightAbility flight);
 
-    void setHarness(ServerPlayer target, CastingHarness harness);
+    void setHarness(ServerPlayer target, @Nullable CastingHarness harness);
 
     void setPatterns(ServerPlayer target, List<ResolvedPattern> patterns);
 
-    boolean isBrainswept(LivingEntity e);
+    boolean isBrainswept(Mob mob);
 
     FlightAbility getFlight(ServerPlayer player);
 
@@ -58,6 +64,12 @@ public interface IXplatAbstractions {
     List<ResolvedPattern> getPatterns(ServerPlayer player);
 
     void clearCastingData(ServerPlayer player);
+
+    // coooollooorrrs
+
+    boolean isColorizer(ItemStack stack);
+
+    int getRawColor(FrozenColorizer colorizer, float time, Vec3 position);
 
     default void syncSentinel(ServerPlayer player) {
         this.sendPacketToPlayer(player, new MsgSentinelStatusUpdateAck(this.getSentinel(player)));

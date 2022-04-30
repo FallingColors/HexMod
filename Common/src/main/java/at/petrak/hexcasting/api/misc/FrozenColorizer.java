@@ -1,16 +1,14 @@
 package at.petrak.hexcasting.api.misc;
 
 import at.petrak.hexcasting.api.addldata.Colorizer;
-import at.petrak.hexcasting.api.cap.HexCapabilities;
 import at.petrak.hexcasting.api.mod.HexApiItems;
+import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -32,7 +30,7 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
 
     public CompoundTag serialize() {
         var out = new CompoundTag();
-        out.put(TAG_STACK, this.item.serializeNBT());
+        out.put(TAG_STACK, HexUtils.serialize(this.item));
         out.putUUID(TAG_OWNER, this.owner);
         return out;
     }
@@ -42,21 +40,17 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
             return FrozenColorizer.DEFAULT.get();
         }
         try {
-            ItemStack item;
-            if (tag.contains("item", Tag.TAG_STRING) && !tag.contains(TAG_STACK, Tag.TAG_COMPOUND)) {
-                item = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString("item"))));
-            } else {
-                item = ItemStack.of(tag.getCompound(TAG_STACK));
-            }
+            var stack = ItemStack.of(tag.getCompound(TAG_STACK));
             var uuid = tag.getUUID(TAG_OWNER);
-            return new FrozenColorizer(item, uuid);
+            return new FrozenColorizer(stack, uuid);
         } catch (NullPointerException exn) {
             return FrozenColorizer.DEFAULT.get();
         }
     }
 
+    @Deprecated
     public static boolean isColorizer(ItemStack stack) {
-        return stack.getCapability(HexCapabilities.COLOR).isPresent();
+        return IXplatAbstractions.INSTANCE.isColorizer(stack);
     }
 
     /**
@@ -67,7 +61,7 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
      * @return an AARRGGBB color.
      */
     public int getColor(float time, Vec3 position) {
-        int raw = getRawColor(time, position);
+        int raw = IXplatAbstractions.INSTANCE.getRawColor(this, time, position);
 
         var r = FastColor.ARGB32.red(raw);
         var g = FastColor.ARGB32.green(raw);
@@ -84,20 +78,5 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
         }
 
         return 0xff_000000 | (r << 16) | (g << 8) | b;
-    }
-
-    /**
-     * @param time     absolute world time in ticks
-     * @param position a position for the icosahedron, a randomish number for particles.
-     * @return an AARRGGBB color.
-     */
-    public int getRawColor(float time, Vec3 position) {
-        var maybeColorizer = item.getCapability(HexCapabilities.COLOR).resolve();
-        if (maybeColorizer.isPresent()) {
-            Colorizer colorizer = maybeColorizer.get();
-            return colorizer.color(owner, time, position);
-        }
-
-        return 0xff_ff00dc; // missing color
     }
 }

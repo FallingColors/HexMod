@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -10,6 +9,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.utils.ManaHelper
+import at.petrak.hexcasting.forge.cap.HexCapabilities
 import net.minecraft.world.entity.item.ItemEntity
 
 object OpRecharge : SpellOperator {
@@ -19,11 +19,11 @@ object OpRecharge : SpellOperator {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val mana = it.getCapability(HexCapabilities.MANA).resolve()
+            val mana = it.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
             mana.isPresent && mana.get().canRecharge() && mana.get().mana < mana.get().maxMana
         }
 
-        val mana = handStack.getCapability(HexCapabilities.MANA).resolve()
+        val mana = handStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
 
         if (!mana.isPresent || !mana.get().canRecharge())
             throw MishapBadOffhandItem.of(
@@ -51,10 +51,10 @@ object OpRecharge : SpellOperator {
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn {
-                val mana = it.getCapability(HexCapabilities.MANA).resolve()
+                val mana = it.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
                 mana.isPresent && mana.get().canRecharge() && mana.get().mana < mana.get().maxMana
             }
-            val mana = handStack.getCapability(HexCapabilities.MANA).resolve()
+            val mana = handStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
 
             if (mana.isPresent && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()

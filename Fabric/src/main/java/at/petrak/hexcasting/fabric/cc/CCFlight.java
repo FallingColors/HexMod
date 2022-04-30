@@ -3,14 +3,13 @@ package at.petrak.hexcasting.fabric.cc;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import dev.onyxstudios.cca.api.v3.component.Component;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 
-public class CCFlight implements Component, AutoSyncedComponent {
+public class CCFlight implements Component {
     public static final String
         TAG_ALLOWED = "allowed",
         TAG_TIME_LEFT = "time_left",
@@ -18,10 +17,10 @@ public class CCFlight implements Component, AutoSyncedComponent {
         TAG_ORIGIN = "origin",
         TAG_RADIUS = "radius";
 
-    private final Player owner;
+    private final ServerPlayer owner;
     private FlightAbility flight = FlightAbility.deny();
 
-    public CCFlight(Player owner) {
+    public CCFlight(ServerPlayer owner) {
         this.owner = owner;
     }
 
@@ -32,7 +31,6 @@ public class CCFlight implements Component, AutoSyncedComponent {
 
     public void setFlight(FlightAbility flight) {
         this.flight = flight;
-        HexCardinalComponents.FLIGHT.sync(this.owner);
     }
 
     @Override
