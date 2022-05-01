@@ -36,15 +36,17 @@ public abstract class ItemManaHolder extends Item implements ManaHolderItem {
 
     @Override
     public int getMana(ItemStack stack) {
-        if (!stack.hasTag())
+        if (!stack.hasTag()) {
             return 0;
+        }
         return stack.getTag().getInt(TAG_MANA);
     }
 
     @Override
     public int getMaxMana(ItemStack stack) {
-        if (!stack.hasTag())
+        if (!stack.hasTag()) {
             return 0;
+        }
         return stack.getTag().getInt(TAG_MAX_MANA);
     }
 
@@ -70,11 +72,6 @@ public abstract class ItemManaHolder extends Item implements ManaHolderItem {
         var mana = getMana(pStack);
         var maxMana = getMaxMana(pStack);
         return ManaHelper.barWidth(mana, maxMana);
-    }
-
-    @Override
-    public boolean isDamageable(ItemStack stack) {
-        return false;
     }
 
     @Override

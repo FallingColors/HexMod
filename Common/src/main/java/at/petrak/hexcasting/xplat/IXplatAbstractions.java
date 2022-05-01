@@ -1,6 +1,9 @@
 package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.addldata.DataHolder;
+import at.petrak.hexcasting.api.addldata.HexHolder;
+import at.petrak.hexcasting.api.addldata.ManaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
@@ -25,6 +28,9 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
+/**
+ * more like IHexplatAbstracts lmaooooooo
+ */
 public interface IXplatAbstractions {
     Platform platform();
 
@@ -65,6 +71,12 @@ public interface IXplatAbstractions {
     List<ResolvedPattern> getPatterns(ServerPlayer player);
 
     void clearCastingData(ServerPlayer player);
+
+    @Nullable ManaHolder findManaHolder(ItemStack stack);
+
+    @Nullable DataHolder findDataHolder(ItemStack stack);
+
+    @Nullable HexHolder findHexHolder(ItemStack stack);
 
     // coooollooorrrs
 

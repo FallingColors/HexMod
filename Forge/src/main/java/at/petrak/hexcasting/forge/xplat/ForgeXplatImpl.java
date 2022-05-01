@@ -2,6 +2,9 @@ package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.Colorizer;
+import at.petrak.hexcasting.api.addldata.DataHolder;
+import at.petrak.hexcasting.api.addldata.HexHolder;
+import at.petrak.hexcasting.api.addldata.ManaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
@@ -12,11 +15,11 @@ import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.forge.block.BlockBurns;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
-import at.petrak.hexcasting.forge.xplat.block.BlockBurns;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
 import net.minecraft.core.NonNullList;
@@ -39,6 +42,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,6 +193,24 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public void clearCastingData(ServerPlayer player) {
         player.getPersistentData().remove(TAG_HARNESS);
         player.getPersistentData().remove(TAG_PATTERNS);
+    }
+
+    @Override
+    public @Nullable ManaHolder findManaHolder(ItemStack stack) {
+        var maybeCap = stack.getCapability(HexCapabilities.MANA).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
+    public @Nullable DataHolder findDataHolder(ItemStack stack) {
+        var maybeCap = stack.getCapability(HexCapabilities.DATUM).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
+    public @Nullable HexHolder findHexHolder(ItemStack stack) {
+        var maybeCap = stack.getCapability(HexCapabilities.STORED_HEX).resolve();
+        return maybeCap.orElse(null);
     }
 
     @Override

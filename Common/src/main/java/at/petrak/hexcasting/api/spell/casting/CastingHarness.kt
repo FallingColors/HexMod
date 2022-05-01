@@ -7,7 +7,6 @@ import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -18,7 +17,7 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapDisallowedSpell
 import at.petrak.hexcasting.api.spell.mishaps.MishapTooManyCloseParens
 import at.petrak.hexcasting.api.utils.HexDamageSources
 import at.petrak.hexcasting.api.utils.ManaHelper
-import at.petrak.hexcasting.forge.cap.HexCapabilities
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
@@ -78,7 +77,7 @@ class CastingHarness private constructor(
 
             // Don't catch this one
             operatorIdPair = PatternRegistry.matchPatternAndID(newPat, world)
-            if (HexConfig.Server.actionDenyList.get().contains(operatorIdPair.second.toString())) {
+            if (!HexConfig.server().isActionAllowed(operatorIdPair.second)) {
                 throw MishapDisallowedSpell()
             }
             val (stack2, sideEffectsUnmut) = operatorIdPair.first.operate(this.stack.toMutableList(), this.ctx)
@@ -274,18 +273,16 @@ class CastingHarness private constructor(
             }
         } else {
             val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
-            val casterManaHolder =
-                casterStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
-            val casterSpellHolder =
-                casterStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.SPELL).resolve()
-            val ipsCanDrawFromInv = if (casterSpellHolder.isPresent) {
-                if (casterManaHolder.isPresent) {
-                    val manaAvailable = casterManaHolder.get().mana
+            val casterManaHolder = IXplatAbstractions.INSTANCE.findManaHolder(casterStack)
+            val casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack)
+            val ipsCanDrawFromInv = if (casterHexHolder != null) {
+                if (casterManaHolder != null) {
+                    val manaAvailable = casterManaHolder.mana
                     val manaToTake = min(costLeft, manaAvailable)
-                    casterManaHolder.get().mana = manaAvailable - manaToTake
+                    casterManaHolder.mana = manaAvailable - manaToTake
                     costLeft -= manaToTake
                 }
-                casterSpellHolder.get().canDrawManaFromInventory()
+                casterHexHolder.canDrawManaFromInventory()
             } else {
                 false
             }
@@ -301,7 +298,7 @@ class CastingHarness private constructor(
 
                 if (allowOvercast && costLeft > 0) {
                     // Cast from HP!
-                    val manaToHealth = HexConfig.manaToHealthRate.get()
+                    val manaToHealth = HexConfig.common().manaToHealthRate()
                     val healthtoRemove = costLeft.toDouble() / manaToHealth
                     val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
 
@@ -330,7 +327,7 @@ class CastingHarness private constructor(
         if (this.prepackagedColorizer != null)
             return this.prepackagedColorizer
 
-        return HexPlayerDataHelper.getColorizer(ctx.caster)
+        return IXplatAbstractions.INSTANCE.getColorizer(this.ctx.caster)
     }
 
 

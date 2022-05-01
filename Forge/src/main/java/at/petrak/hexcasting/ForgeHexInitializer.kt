@@ -9,12 +9,14 @@ import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.forge.ForgeHexConfig
+import at.petrak.hexcasting.forge.ForgeOnlyEvents
 import at.petrak.hexcasting.forge.cap.CapSyncers
 import at.petrak.hexcasting.forge.network.ForgePacketHandler
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.event.RegistryEvent
+import net.minecraftforge.event.entity.living.LivingConversionEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModLoadingContext
@@ -78,7 +80,14 @@ object ForgeHexInitializer {
                 evt.cancellationResult = res
             }
         }
+        evBus.addListener { evt: LivingConversionEvent.Post ->
+            Brainsweeping.copyBrainsweepFromVillager(
+                evt.entityLiving, evt.outcome
+            )
+        }
+
         evBus.register(CapSyncers::class.java)
+        evBus.register(ForgeOnlyEvents::class.java)
 
         /*
                 modBus.register(this)

@@ -29,7 +29,7 @@
     ]
   },
   "mixins": [
-    "hexcasting.mixins.json"
+    "fabricasting.mixins.json"
   ],
 
   "depends": {

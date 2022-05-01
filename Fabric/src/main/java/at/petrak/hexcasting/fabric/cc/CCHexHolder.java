@@ -9,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/**
- * The colorizer itself
- */
 public abstract class CCHexHolder extends ItemComponent implements HexHolder {
     public CCHexHolder(ItemStack stack) {
         super(stack, HexCardinalComponents.HEX_HOLDER);

@@ -14,7 +14,7 @@ public final class HexCapabilities {
     });
     public static final Capability<DataHolder> DATUM = CapabilityManager.get(new CapabilityToken<>() {
     });
-    public static final Capability<HexHolder> SPELL = CapabilityManager.get(new CapabilityToken<>() {
+    public static final Capability<HexHolder> STORED_HEX = CapabilityManager.get(new CapabilityToken<>() {
     });
     public static final Capability<Colorizer> COLOR = CapabilityManager.get(new CapabilityToken<>() {
     });

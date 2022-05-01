@@ -1,5 +1,8 @@
 package at.petrak.hexcasting.fabric.xplat;
 
+import at.petrak.hexcasting.api.addldata.DataHolder;
+import at.petrak.hexcasting.api.addldata.HexHolder;
+import at.petrak.hexcasting.api.addldata.ManaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
@@ -25,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -128,6 +132,24 @@ public class FabricXplatImpl implements IXplatAbstractions {
     public void clearCastingData(ServerPlayer player) {
         this.setHarness(player, null);
         this.setPatterns(player, List.of());
+    }
+
+    @Override
+    public @Nullable ManaHolder findManaHolder(ItemStack stack) {
+        var cc = HexCardinalComponents.MANA_HOLDER.maybeGet(stack);
+        return cc.orElse(null);
+    }
+
+    @Override
+    public @Nullable DataHolder findDataHolder(ItemStack stack) {
+        var cc = HexCardinalComponents.DATA_HOLDER.maybeGet(stack);
+        return cc.orElse(null);
+    }
+
+    @Override
+    public @Nullable HexHolder findHexHolder(ItemStack stack) {
+        var cc = HexCardinalComponents.HEX_HOLDER.maybeGet(stack);
+        return cc.orElse(null);
     }
 
     @Override

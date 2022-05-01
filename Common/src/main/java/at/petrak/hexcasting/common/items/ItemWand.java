@@ -1,10 +1,9 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import at.petrak.hexcasting.common.network.HexMessages;
 import at.petrak.hexcasting.common.network.MsgOpenSpellGuiAck;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -14,11 +13,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.PacketDistributor;
 
 public class ItemWand extends Item {
     // 0 = normal. 1 = old. 2 = bosnia
-    public static final ResourceLocation FUNNY_LEVEL_PREDICATE = new ResourceLocation(HexMod.MOD_ID, "funny_level");
+    public static final ResourceLocation FUNNY_LEVEL_PREDICATE = new ResourceLocation(HexAPI.MOD_ID, "funny_level");
 
     public ItemWand(Properties pProperties) {
         super(pProperties);
@@ -28,17 +26,17 @@ public class ItemWand extends Item {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if (player.isShiftKeyDown()) {
             if (world.isClientSide()) {
-                player.playSound(HexSounds.FAIL_PATTERN.get(), 1f, 1f);
+                player.playSound(HexSounds.FAIL_PATTERN, 1f, 1f);
             } else if (player instanceof ServerPlayer serverPlayer) {
-                HexPlayerDataHelper.clearCastingData(serverPlayer);
+                IXplatAbstractions.INSTANCE.clearCastingData(serverPlayer);
             }
         }
 
         if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
-            var harness = HexPlayerDataHelper.getHarness(serverPlayer, hand);
-            var patterns = HexPlayerDataHelper.getPatterns(serverPlayer);
+            var harness = IXplatAbstractions.INSTANCE.getHarness(serverPlayer, hand);
+            var patterns = IXplatAbstractions.INSTANCE.getPatterns(serverPlayer);
 
-            HexMessages.getNetwork().send(PacketDistributor.PLAYER.with(() -> serverPlayer),
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
                 new MsgOpenSpellGuiAck(hand, patterns, harness.generateDescs()));
         }
 

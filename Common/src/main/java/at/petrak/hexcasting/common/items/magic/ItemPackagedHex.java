@@ -1,11 +1,10 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -25,12 +24,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 /**
  * Item that holds a list of patterns in it ready to be cast
  */
 public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolderItem {
     public static final String TAG_PATTERNS = "patterns";
-    public static final ResourceLocation HAS_PATTERNS_PRED = new ResourceLocation(HexMod.MOD_ID, "has_patterns");
+    public static final ResourceLocation HAS_PATTERNS_PRED = modLoc("has_patterns");
 
     public ItemPackagedHex(Properties pProperties) {
         super(pProperties);
@@ -50,11 +51,13 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
 
     @Override
     public @Nullable List<HexPattern> getPatterns(ItemStack stack) {
-        if (!stack.hasTag())
+        if (!stack.hasTag()) {
             return null;
+        }
         CompoundTag tag = stack.getTag();
-        if (!tag.contains(TAG_PATTERNS, Tag.TAG_LIST))
+        if (!tag.contains(TAG_PATTERNS, Tag.TAG_LIST)) {
             return null;
+        }
 
         var out = new ArrayList<HexPattern>();
         var patsTag = tag.getList(TAG_PATTERNS, Tag.TAG_COMPOUND);
@@ -67,8 +70,9 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     @Override
     public void writePatterns(ItemStack stack, List<HexPattern> patterns, int mana) {
         ListTag patsTag = new ListTag();
-        for (HexPattern pat : patterns)
+        for (HexPattern pat : patterns) {
             patsTag.add(pat.serializeToNBT());
+        }
 
         stack.getOrCreateTag().put(ItemPackagedHex.TAG_PATTERNS, patsTag);
 
@@ -114,7 +118,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
 
         sPlayer.getCooldowns().addCooldown(this, 5);
         sPlayer.level.playSound(null, sPlayer.getX(), sPlayer.getY(), sPlayer.getZ(),
-            HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
+            HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
             1f + ((float) Math.random() - 0.5f) * 0.2f);
 
         if (broken) {

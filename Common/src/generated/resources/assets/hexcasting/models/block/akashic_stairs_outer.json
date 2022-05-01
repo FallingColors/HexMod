@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "side": "hexcasting:block/akashic/planks1",
-    "bottom": "hexcasting:block/akashic/planks1",
-    "top": "hexcasting:block/akashic/planks1"
-  }
-}

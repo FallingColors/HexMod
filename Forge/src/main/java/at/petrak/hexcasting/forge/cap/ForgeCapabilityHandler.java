@@ -78,7 +78,7 @@ public class ForgeCapabilityHandler {
         }
 
         if (stack.getItem() instanceof HexHolderItem holder) {
-            evt.addCapability(SPELL_HOLDER_CAPABILITY, provide(HexCapabilities.SPELL,
+            evt.addCapability(SPELL_HOLDER_CAPABILITY, provide(HexCapabilities.STORED_HEX,
                 () -> new ItemBasedHexHolder(holder, stack)));
         }
 
@@ -273,8 +273,8 @@ public class ForgeCapabilityHandler {
         }
     }
 
-    public record ItemBasedColorizer(ColorizerItem holder,
-                                     ItemStack stack) implements Colorizer {
+    private record ItemBasedColorizer(ColorizerItem holder,
+                                      ItemStack stack) implements Colorizer {
         @Override
         public int color(UUID owner, float time, Vec3 position) {
             return holder.color(stack, owner, time, position);

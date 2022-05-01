@@ -3,6 +3,7 @@ import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.fabric.FabricHexConfig
+import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.fabricmc.api.ModInitializer
@@ -24,6 +25,7 @@ object FabricHexInitializer : ModInitializer {
 
     fun initListeners() {
         UseEntityCallback.EVENT.register(Brainsweeping::tradeWithVillager)
+        VillagerConversionCallback.EVENT.register(Brainsweeping::copyBrainsweepFromVillager)
     }
 
     fun initRegistries() {
