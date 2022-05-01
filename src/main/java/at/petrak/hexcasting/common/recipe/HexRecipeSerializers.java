@@ -1,9 +1,12 @@
 package at.petrak.hexcasting.common.recipe;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.common.recipe.ingredient.UnsealedIngredient;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.DeferredRegister;
@@ -22,5 +25,7 @@ public class HexRecipeSerializers {
     @SubscribeEvent
     public static void registerTypes(RegistryEvent.Register<Item> evt) {
         BRAINSWEEP_TYPE = RecipeType.register(HexMod.MOD_ID + ":brainsweep");
+
+        CraftingHelper.register(new ResourceLocation(HexMod.MOD_ID, "unsealed"), UnsealedIngredient.Serializer.INSTANCE);
     }
 }
