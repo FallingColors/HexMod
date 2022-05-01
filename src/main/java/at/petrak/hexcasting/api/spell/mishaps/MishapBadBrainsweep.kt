@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
+import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.utils.HexDamageSources
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
@@ -16,7 +16,7 @@ class MishapBadBrainsweep(val villager: Villager, val pos: BlockPos) : Mishap() 
         dyeColor(DyeColor.GREEN)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        villager.hurt(HexDamageSources.OVERCAST, villager.health)
+        villager.hurt(HexDamageSources.overcastDamageFrom(ctx.caster), villager.health)
     }
 
     override fun particleSpray(ctx: CastingContext): ParticleSpray {
