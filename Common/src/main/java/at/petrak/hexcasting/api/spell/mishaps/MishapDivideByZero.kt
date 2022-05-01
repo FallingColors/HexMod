@@ -17,7 +17,7 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
         stack.add(SpellDatum.make(Widget.GARBAGE))
-        ctx.caster.hurt(HexDamageSources.OVERCAST, ctx.caster.health / 2)
+        trulyHurt(ctx.caster, HexDamageSources.OVERCAST, ctx.caster.health / 2)
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component {

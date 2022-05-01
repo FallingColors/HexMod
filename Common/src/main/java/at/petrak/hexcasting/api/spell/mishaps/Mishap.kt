@@ -6,12 +6,15 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.common.lib.HexItems
+import at.petrak.hexcasting.mixin.accessor.AccessorLivingEntity
 import net.minecraft.ChatFormatting
 import net.minecraft.Util
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
@@ -61,4 +64,17 @@ sealed class Mishap : Throwable() {
     }
 
     data class Context(val pattern: HexPattern, val action: ResourceLocation?)
+
+    companion object {
+        fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
+            if (entity.invulnerableTime > 10) {
+                val lastHurt = (entity as AccessorLivingEntity).`hex$getLastHurt`()
+                if (lastHurt < amount)
+                    entity.invulnerableTime = 0
+                else
+                    entity.`hex$setLastHurt`(lastHurt - amount)
+            }
+            entity.hurt(source, amount)
+        }
+    }
 }

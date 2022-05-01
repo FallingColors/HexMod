@@ -5,7 +5,10 @@
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
-    "MixinMob", "MixinVillager", "accessor.AccessorUseOnContext",
+    "MixinMob",
+    "MixinVillager",
+    "accessor.AccessorLivingEntity",
+    "accessor.AccessorUseOnContext",
     "accessor.CriteriaTriggersAccessor"
   ]
 }

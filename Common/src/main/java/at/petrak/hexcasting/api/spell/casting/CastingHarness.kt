@@ -306,7 +306,7 @@ class CastingHarness private constructor(
                     HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
                     this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
 
-                    this.ctx.caster.hurt(HexDamageSources.OVERCAST, healthtoRemove.toFloat())
+                    Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthtoRemove.toFloat())
                     costLeft -= manaToActuallyPayFor
                 }
             }

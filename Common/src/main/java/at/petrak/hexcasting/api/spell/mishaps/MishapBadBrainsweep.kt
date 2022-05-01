@@ -16,7 +16,7 @@ class MishapBadBrainsweep(val villager: Villager, val pos: BlockPos) : Mishap() 
         dyeColor(DyeColor.GREEN)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        villager.hurt(HexDamageSources.OVERCAST, villager.health)
+        trulyHurt(villager, HexDamageSources.overcastDamageFrom(ctx.caster), villager.health)
     }
 
     override fun particleSpray(ctx: CastingContext): ParticleSpray {
