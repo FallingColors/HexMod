@@ -24,6 +24,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -120,6 +121,7 @@ public interface IXplatAbstractions {
 
     ResourceLocation getID(VillagerProfession profession);
 
+    Ingredient getUnsealedIngredient(ItemStack stack);
 
     IXplatAbstractions INSTANCE = find();
 

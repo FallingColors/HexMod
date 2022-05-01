@@ -58,11 +58,16 @@ public class ItemSpellbook extends Item implements DataHolderItem {
                         new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
                         .withStyle(ChatFormatting.GRAY));
             } else {
-                if (sealed)
-                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty.sealed",
-                        new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
-                        .withStyle(ChatFormatting.GRAY));
-                else
+                boolean overridden = tag.contains(DataHolderItem.TAG_OVERRIDE_VISUALLY, Tag.TAG_STRING);
+                if (sealed) {
+                    if (overridden) {
+                        tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
+                    } else {
+                        tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty.sealed",
+                            new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
+                            .withStyle(ChatFormatting.GRAY));
+                    }
+                } else if (!overridden)
                     tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
             }
         } else {
@@ -206,6 +211,27 @@ public class ItemSpellbook extends Item implements DataHolderItem {
         else
             tag.put(TAG_SEALED, names);
 
+    }
+
+    public static boolean HasDatum(ItemStack stack) {
+        if (!stack.hasTag()) {
+            return false;
+        }
+        var tag = stack.getTag();
+
+        int idx;
+        if (tag.contains(TAG_SELECTED_PAGE, Tag.TAG_ANY_NUMERIC)) {
+            idx = tag.getInt(TAG_SELECTED_PAGE);
+        } else {
+            idx = 0;
+        }
+        var key = String.valueOf(idx);
+        if (tag.contains(TAG_PAGES, Tag.TAG_COMPOUND)) {
+            var pagesTag = tag.getCompound(TAG_PAGES);
+            return pagesTag.contains(key);
+        } else {
+            return false;
+        }
     }
 
     public static boolean IsSealed(ItemStack stack) {

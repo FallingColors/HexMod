@@ -21,6 +21,7 @@ import at.petrak.hexcasting.forge.datagen.HexDataGenerators;
 import at.petrak.hexcasting.forge.datagen.lootmods.HexLootModifiers;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
+import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
@@ -35,6 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
@@ -57,6 +59,8 @@ import thedarkcolour.kotlinforforge.KotlinModLoadingContext;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 @Mod(HexAPI.MOD_ID)
 public class ForgeHexInitializer {
@@ -130,6 +134,7 @@ public class ForgeHexInitializer {
         // We have to do these at some point when the registries are still open
         modBus.addGenericListener(Item.class, (RegistryEvent<Item> evt) -> {
             HexRecipeSerializers.registerTypes();
+            CraftingHelper.register(modLoc("unsealed"), ForgeUnsealedIngredient.Serializer.INSTANCE);
             HexStatistics.register();
         });
 

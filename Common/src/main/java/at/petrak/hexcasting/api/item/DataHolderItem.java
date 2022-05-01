@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.api.item;
 
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -13,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface DataHolderItem {
+    String TAG_OVERRIDE_VISUALLY = "VisualOverride";
+
     @Nullable CompoundTag readDatumTag(ItemStack stack);
 
     @Nullable
@@ -48,6 +52,12 @@ public interface DataHolderItem {
 
             if (pIsAdvanced.isAdvanced()) {
                 pTooltipComponents.add(NbtUtils.toPrettyComponent(datumTag));
+            }
+        } else if (pStack.hasTag()) {
+            var tag = pStack.getTag();
+            if (tag != null && tag.contains(DataHolderItem.TAG_OVERRIDE_VISUALLY, Tag.TAG_STRING)) {
+               pTooltipComponents.add(new TranslatableComponent("hexcasting.spelldata.onitem",
+                   new TranslatableComponent("hexcasting.spelldata.anything").withStyle(ChatFormatting.LIGHT_PURPLE)));
             }
         }
     }

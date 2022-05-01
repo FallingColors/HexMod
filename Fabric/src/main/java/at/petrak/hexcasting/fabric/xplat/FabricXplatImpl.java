@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
+import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
@@ -34,6 +35,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -211,6 +213,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public ResourceLocation getID(VillagerProfession profession) {
         return Registry.VILLAGER_PROFESSION.getKey(profession);
+    }
+
+    @Override
+    public Ingredient getUnsealedIngredient(ItemStack stack) {
+        return FabricUnsealedIngredient.of(stack);
     }
 
     private static CreativeModeTab TAB = null;

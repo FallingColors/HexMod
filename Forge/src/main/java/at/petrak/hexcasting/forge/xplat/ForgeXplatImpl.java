@@ -18,6 +18,7 @@ import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
+import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
 import net.minecraft.core.BlockPos;
@@ -40,6 +41,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -282,6 +284,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public ResourceLocation getID(VillagerProfession profession) {
         return profession.getRegistryName();
+    }
+
+    @Override
+    public Ingredient getUnsealedIngredient(ItemStack stack) {
+        return ForgeUnsealedIngredient.of(stack);
     }
 
     private static CreativeModeTab TAB = null;

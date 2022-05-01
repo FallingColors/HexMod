@@ -4,6 +4,12 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.fabric.mixin",
-  "mixins": ["FabricAxeItemMixin", "FabricVillagerTurnIntoWitchMixin"],
-  "client": ["client.FabricMouseHandlerMixin"]
+  "mixins": [
+    "FabricAxeItemMixin",
+    "FabricIngredientMixin",
+    "FabricVillagerTurnIntoWitchMixin"
+  ],
+  "client": [
+    "client.FabricMouseHandlerMixin"
+  ]
 }

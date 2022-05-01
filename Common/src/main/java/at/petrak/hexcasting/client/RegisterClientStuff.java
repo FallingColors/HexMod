@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.misc.ManaConstants;
-import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
@@ -32,6 +31,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
@@ -251,19 +252,26 @@ public class RegisterClientStuff {
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.DATATYPE_PRED,
             (stack, level, holder, holderID) -> {
                 var datum = item.readDatumTag(stack);
+                String typename = null;
                 if (datum != null) {
-                    var typename = datum.getAllKeys().iterator().next();
-                    return switch (typename) {
-                        case SpellDatum.TAG_ENTITY -> 1f;
-                        case SpellDatum.TAG_DOUBLE -> 2f;
-                        case SpellDatum.TAG_VEC3 -> 3f;
-                        case SpellDatum.TAG_WIDGET -> 4f;
-                        case SpellDatum.TAG_LIST -> 5f;
-                        case SpellDatum.TAG_PATTERN -> 6f;
-                        default -> 0f; // uh oh
-                    };
+                    typename = datum.getAllKeys().iterator().next();
+
+                } else if (stack.hasTag()) {
+                    CompoundTag tag = stack.getTag();
+                    if (tag != null && tag.contains(DataHolderItem.TAG_OVERRIDE_VISUALLY, Tag.TAG_STRING)) {
+                        typename = tag.getString(DataHolderItem.TAG_OVERRIDE_VISUALLY);
+                    }
                 }
-                return 0f;
+
+                return typename == null ? 0f : switch (typename) {
+                    case SpellDatum.TAG_ENTITY -> 1f;
+                    case SpellDatum.TAG_DOUBLE -> 2f;
+                    case SpellDatum.TAG_VEC3 -> 3f;
+                    case SpellDatum.TAG_WIDGET -> 4f;
+                    case SpellDatum.TAG_LIST -> 5f;
+                    case SpellDatum.TAG_PATTERN -> 6f;
+                    default -> 0f; // uh oh
+                };
             });
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.SEALED_PRED,
             (stack, level, holder, holderID) -> item.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);
