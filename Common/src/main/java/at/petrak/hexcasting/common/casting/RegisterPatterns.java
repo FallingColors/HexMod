@@ -484,13 +484,9 @@ public class RegisterPatterns {
         PatternRegistry.addSpecialHandler(modLoc("mask"), pat -> {
             var directions = pat.directions();
 
-            HexDir flatDir;
-            if (pat.getAngles().isEmpty()) {
-                return null;
-            } else if (pat.getAngles().get(0) == HexAngle.LEFT_BACK) {
+            HexDir flatDir = pat.getStartDir();
+            if (!pat.getAngles().isEmpty() && pat.getAngles().get(0) == HexAngle.LEFT_BACK) {
                 flatDir = directions.get(0).rotatedBy(HexAngle.LEFT);
-            } else {
-                flatDir = pat.getStartDir();
             }
 
             var mask = new BooleanArrayList();

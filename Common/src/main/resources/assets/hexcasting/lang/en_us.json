@@ -215,7 +215,6 @@
   "hexcasting.spell.hexcasting:zone_entity/not_item": "Zone Dstl.: Non-Item",
   "hexcasting.spell.hexcasting:zone_entity/not_player": "Zone Dstl.: Non-Player",
   "hexcasting.spell.hexcasting:zone_entity/not_living": "Zone Dstl.: Non-Living",
-  "hexcasting.spell.hexcasting:undo": "Novice's Gambit",
   "hexcasting.spell.hexcasting:const/null": "Nullary Reflection",
   "hexcasting.spell.hexcasting:duplicate": "Gemini Decomposition",
   "hexcasting.spell.hexcasting:duplicate_n": "Gemini's Gambit",
