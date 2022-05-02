@@ -6,6 +6,8 @@
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
     "MixinMob",
-    "MixinVillager"
+    "MixinRaider",
+    "MixinVillager",
+    "MixinWitch"
   ]
 }
