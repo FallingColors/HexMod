@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
@@ -29,8 +30,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
@@ -77,7 +76,7 @@ public class RegisterClientStuff {
                 });
 
             ItemProperties.register(HexItems.SCROLL.get(), ItemScroll.ANCIENT_PREDICATE,
-                (stack, level, holder, holderID) -> stack.getOrCreateTag().contains(ItemScroll.TAG_OP_ID) ? 1f : 0f);
+                (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
 
             ItemProperties.register(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
                 (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
@@ -253,15 +252,12 @@ public class RegisterClientStuff {
         ItemProperties.register((Item) item, ItemFocus.DATATYPE_PRED,
             (stack, level, holder, holderID) -> {
                 var datum = item.readDatumTag(stack);
+                String override = NBTHelper.getString(stack, DataHolderItem.TAG_OVERRIDE_VISUALLY);
                 String typename = null;
-                if (datum != null) {
+                if (override != null) {
+                    typename = override;
+                } else if (datum != null) {
                     typename = datum.getAllKeys().iterator().next();
-
-                } else if (stack.hasTag()) {
-                    CompoundTag tag = stack.getTag();
-                    if (tag != null && tag.contains(DataHolderItem.TAG_OVERRIDE_VISUALLY, Tag.TAG_STRING)) {
-                        typename = tag.getString(DataHolderItem.TAG_OVERRIDE_VISUALLY);
-                    }
                 }
 
                 return typename == null ? 0f : switch (typename) {

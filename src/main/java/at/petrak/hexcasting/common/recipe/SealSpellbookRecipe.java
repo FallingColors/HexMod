@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.recipe;
 
 import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
 import at.petrak.hexcasting.common.recipe.ingredient.UnsealedIngredient;
@@ -22,7 +23,7 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
     private static ItemStack getSealedStack() {
         ItemStack output = new ItemStack(HexItems.SPELLBOOK::get);
         ItemSpellbook.SetSealed(output, true);
-        output.getOrCreateTag().putString(DataHolderItem.TAG_OVERRIDE_VISUALLY, "any");
+        NBTHelper.putString(output, DataHolderItem.TAG_OVERRIDE_VISUALLY, "any");
         return output;
     }
 

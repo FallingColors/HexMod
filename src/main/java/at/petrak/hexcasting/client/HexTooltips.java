@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.items.HexItems;
@@ -8,6 +9,7 @@ import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
@@ -35,23 +37,22 @@ public class HexTooltips {
         ItemStack stack = evt.getItemStack();
         if (!stack.isEmpty()) {
             if (stack.is(HexItems.SCROLL.get())) {
-                var tag = stack.getOrCreateTag();
-                if (tag.contains(ItemScroll.TAG_PATTERN, Tag.TAG_COMPOUND)) {
-                    var pattern = HexPattern.DeserializeFromNBT(tag.getCompound(ItemScroll.TAG_PATTERN));
+                CompoundTag patternTag = NBTHelper.getCompound(stack, ItemScroll.TAG_PATTERN);
+                if (patternTag != null) {
+                    var pattern = HexPattern.DeserializeFromNBT(patternTag);
                     evt.getTooltipElements().add(Either.right(new PatternTooltipGreeble(
                         pattern,
-                        tag.contains(ItemScroll.TAG_OP_ID, Tag.TAG_STRING)
+                        NBTHelper.contains(stack, ItemScroll.TAG_OP_ID, Tag.TAG_STRING)
                             ? PatternTooltipGreeble.ANCIENT_BG : PatternTooltipGreeble.PRISTINE_BG)));
                 }
             } else if (stack.is(HexItems.SLATE.get()) && ItemSlate.hasPattern(stack)) {
-                var tag = stack.getOrCreateTag()
-                    .getCompound("BlockEntityTag")
-                    .getCompound(BlockEntitySlate.TAG_PATTERN);
-                var pattern = HexPattern.DeserializeFromNBT(tag);
-                evt.getTooltipElements().add(Either.right(new PatternTooltipGreeble(
-                    pattern,
-                    PatternTooltipGreeble.SLATE_BG)));
-
+                var tag = NBTHelper.getCompound(NBTHelper.getOrCreateCompound(stack, "BlockEntityTag"), BlockEntitySlate.TAG_PATTERN);
+                if (tag != null) {
+                    var pattern = HexPattern.DeserializeFromNBT(tag);
+                    evt.getTooltipElements().add(Either.right(new PatternTooltipGreeble(
+                        pattern,
+                        PatternTooltipGreeble.SLATE_BG)));
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -33,11 +34,10 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
     }
 
     public static boolean hasPattern(ItemStack stack) {
-        var tag = stack.getTag();
-        if (tag != null && tag.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
-            var bet = tag.getCompound("BlockEntityTag");
-            return bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND) && !bet.getCompound(
-                BlockEntitySlate.TAG_PATTERN).isEmpty();
+        var bet = NBTHelper.getCompound(stack, "BlockEntityTag");
+        if (bet != null) {
+            return bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND) &&
+                !bet.getCompound(BlockEntitySlate.TAG_PATTERN).isEmpty();
         }
         return false;
     }
@@ -45,28 +45,25 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         if (!hasPattern(stack))
-            stack.removeTagKey("BlockEntityTag");
+            NBTHelper.remove(stack, "BlockEntityTag");
         return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         if (!hasPattern(pStack))
-            pStack.removeTagKey("BlockEntityTag");
+            NBTHelper.remove(pStack, "BlockEntityTag");
     }
 
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
-        var stackTag = stack.getTag();
-        if (stackTag == null || !stackTag.contains("BlockEntityTag")) {
-            return null;
-        }
-        var beTag = stackTag.getCompound("BlockEntityTag");
-        if (!beTag.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND)) {
+        var bet = NBTHelper.getCompound(stack, "BlockEntityTag");
+
+        if (bet == null || !bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND)) {
             return null;
         }
 
-        var patTag = beTag.getCompound(BlockEntitySlate.TAG_PATTERN);
+        var patTag = bet.getCompound(BlockEntitySlate.TAG_PATTERN);
         if (patTag.isEmpty()) {
             return null;
         }
@@ -84,12 +81,12 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
     public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
         if (this.canWrite(stack, datum))
             if (datum == null) {
-                var beTag = stack.getOrCreateTagElement("BlockEntityTag");
+                var beTag = NBTHelper.getOrCreateCompound(stack, "BlockEntityTag");
                 beTag.remove(BlockEntitySlate.TAG_PATTERN);
                 if (beTag.isEmpty())
-                    stack.removeTagKey("BlockEntityTag");
+                    NBTHelper.remove(stack, "BlockEntityTag");
             } else if (datum.getPayload() instanceof HexPattern pat) {
-                var beTag = stack.getOrCreateTagElement("BlockEntityTag");
+                var beTag = NBTHelper.getOrCreateCompound(stack, "BlockEntityTag");
                 beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
             }
     }
