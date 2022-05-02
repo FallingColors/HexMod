@@ -2,8 +2,8 @@ package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.utils.ManaHelper;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
@@ -26,9 +26,8 @@ public abstract class ItemManaHolder extends Item implements ManaHolderItem {
     public static ItemStack withMana(ItemStack stack, int mana, int maxMana) {
         Item item = stack.getItem();
         if (item instanceof ItemManaHolder) {
-            CompoundTag tag = stack.getOrCreateTag();
-            tag.putInt(TAG_MANA, mana);
-            tag.putInt(TAG_MAX_MANA, maxMana);
+            NBTHelper.putInt(stack, TAG_MANA, mana);
+            NBTHelper.putInt(stack, TAG_MAX_MANA, maxMana);
         }
 
         return stack;
@@ -36,23 +35,17 @@ public abstract class ItemManaHolder extends Item implements ManaHolderItem {
 
     @Override
     public int getMana(ItemStack stack) {
-        if (!stack.hasTag()) {
-            return 0;
-        }
-        return stack.getTag().getInt(TAG_MANA);
+        return NBTHelper.getInt(stack, TAG_MANA);
     }
 
     @Override
     public int getMaxMana(ItemStack stack) {
-        if (!stack.hasTag()) {
-            return 0;
-        }
-        return stack.getTag().getInt(TAG_MAX_MANA);
+        return NBTHelper.getInt(stack, TAG_MAX_MANA);
     }
 
     @Override
     public void setMana(ItemStack stack, int mana) {
-        stack.getOrCreateTag().putInt(TAG_MANA, Mth.clamp(mana, 0, getMaxMana(stack)));
+        NBTHelper.putInt(stack, TAG_MANA, Mth.clamp(mana, 0, getMaxMana(stack)));
     }
 
     @Override

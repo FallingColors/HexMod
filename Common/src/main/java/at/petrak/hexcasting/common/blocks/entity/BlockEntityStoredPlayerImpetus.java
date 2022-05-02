@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.blocks.entity;
 
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -62,7 +63,7 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         if (bound != null) {
             String name = bound.getScoreboardName();
             var head = new ItemStack(Items.PLAYER_HEAD);
-            head.getOrCreateTag().putString("SkullOwner", name);
+            NBTHelper.putString(head, "SkullOwner", name);
             lines.add(
                 new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
         } else {

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,7 +30,7 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
 			.filter((it) -> it != DatumType.EMPTY && it != DatumType.OTHER)
 			.map((type) -> {
 				ItemStack newStack = stack.copy();
-				newStack.getOrCreateTag().putString(DataHolderItem.TAG_OVERRIDE_VISUALLY, SpellDatum.GetTagName(type));
+				NBTHelper.putString(newStack, DataHolderItem.TAG_OVERRIDE_VISUALLY, SpellDatum.GetTagName(type));
 				return new Ingredient.ItemValue(newStack);
 			}));
 		this.stack = stack;

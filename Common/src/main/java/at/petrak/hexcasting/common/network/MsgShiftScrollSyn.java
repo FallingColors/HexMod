@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemAbacus;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -57,10 +58,8 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
     }
 
     private void spellbook(ServerPlayer sender, ItemStack stack) {
-        var tag = stack.getOrCreateTag();
-        ItemSpellbook.RotatePageIdx(stack, this.scrollDelta < 0.0);
+        var newIdx = ItemSpellbook.RotatePageIdx(stack, this.scrollDelta < 0.0);
 
-        var newIdx = tag.getInt(ItemSpellbook.TAG_SELECTED_PAGE);
         var len = ItemSpellbook.HighestPage(stack);
 
         var sealed = ItemSpellbook.IsSealed(stack);
@@ -100,11 +99,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
     private void abacus(ServerPlayer sender, ItemStack stack) {
         var increase = this.scrollDelta < 0;
-        var tag = stack.getTag();
-        double num = 0d;
-        if (tag != null) {
-            num = tag.getDouble(ItemAbacus.TAG_VALUE);
-        }
+        double num = NBTHelper.getDouble(stack, ItemAbacus.TAG_VALUE);
 
         double delta;
         float pitch;
@@ -117,7 +112,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         }
 
         num += delta * (increase ? 1 : -1);
-        stack.getOrCreateTag().putDouble(ItemAbacus.TAG_VALUE, num);
+        NBTHelper.putDouble(stack, ItemAbacus.TAG_VALUE, num);
 
         pitch *= (increase ? 1.05f : 0.95f);
         pitch += (Math.random() - 0.5) * 0.1;

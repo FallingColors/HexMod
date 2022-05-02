@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -51,16 +52,12 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
 
     @Override
     public @Nullable List<HexPattern> getPatterns(ItemStack stack) {
-        if (!stack.hasTag()) {
+        var patsTag = NBTHelper.getList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
+
+        if (patsTag == null)
             return null;
-        }
-        CompoundTag tag = stack.getTag();
-        if (!tag.contains(TAG_PATTERNS, Tag.TAG_LIST)) {
-            return null;
-        }
 
         var out = new ArrayList<HexPattern>();
-        var patsTag = tag.getList(TAG_PATTERNS, Tag.TAG_COMPOUND);
         for (var patTag : patsTag) {
             out.add(HexPattern.DeserializeFromNBT((CompoundTag) patTag));
         }
@@ -74,14 +71,14 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
             patsTag.add(pat.serializeToNBT());
         }
 
-        stack.getOrCreateTag().put(ItemPackagedHex.TAG_PATTERNS, patsTag);
+        NBTHelper.putList(stack, TAG_PATTERNS, patsTag);
 
         withMana(stack, mana, mana);
     }
 
     @Override
     public void clearPatterns(ItemStack stack) {
-        stack.removeTagKey(ItemPackagedHex.TAG_PATTERNS);
+        NBTHelper.remove(stack, ItemPackagedHex.TAG_PATTERNS);
         withMana(stack, 0, 0);
     }
 
