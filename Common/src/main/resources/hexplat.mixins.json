@@ -6,7 +6,9 @@
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
     "MixinMob",
+    "MixinRaider",
     "MixinVillager",
+    "MixinWitch",
     "accessor.AccessorLivingEntity",
     "accessor.AccessorUseOnContext",
     "accessor.CriteriaTriggersAccessor"
