@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe;
 
+import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.recipe.ingredient.UnsealedIngredient;
@@ -21,6 +22,7 @@ public class SealFocusRecipe extends ShapelessRecipe {
     private static ItemStack getSealedStack() {
         ItemStack output = new ItemStack(HexItems.FOCUS::get);
         output.getOrCreateTag().putBoolean(ItemFocus.TAG_SEALED, true);
+        output.getOrCreateTag().putString(DataHolderItem.TAG_OVERRIDE_VISUALLY, "any");
         return output;
     }
 
