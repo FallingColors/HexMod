@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
-import at.petrak.hexcasting.api.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

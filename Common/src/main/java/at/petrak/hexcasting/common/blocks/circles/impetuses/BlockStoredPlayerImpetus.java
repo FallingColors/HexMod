@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
-import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.api.spell.DatumType;
+import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.cap.HexCapabilities;
+import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -46,8 +46,9 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
                             tile.setPlayer(entity.getUUID());
                             tile.setChanged();
 
-                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING.get(), SoundSource.BLOCKS,
-                                    1f, 1f);
+                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING.get(),
+                                SoundSource.BLOCKS,
+                                1f, 1f);
                         }
                     }
                 }

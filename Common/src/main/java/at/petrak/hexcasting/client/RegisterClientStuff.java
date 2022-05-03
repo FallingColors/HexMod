@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
@@ -34,7 +34,10 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComparatorBlock;
+import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RepeaterBlock;
 import net.minecraft.world.level.block.state.properties.ComparatorMode;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -161,14 +164,16 @@ public class RegisterClientStuff {
                     .withStyle(ChatFormatting.YELLOW))));
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction, lensHand) -> state.isSignalSource() && !state.is(Blocks.COMPARATOR),
+            (state, pos, observer, world, direction, lensHand) -> state.isSignalSource() && !state.is(
+                Blocks.COMPARATOR),
             (lines, state, pos, observer, world, direction, lensHand) -> {
                 int signalStrength = 0;
-                if (state.getBlock() instanceof RedStoneWireBlock)
+                if (state.getBlock() instanceof RedStoneWireBlock) {
                     signalStrength = state.getValue(RedStoneWireBlock.POWER);
-                else {
-                    for (Direction dir : Direction.values())
+                } else {
+                    for (Direction dir : Direction.values()) {
                         signalStrength = Math.max(signalStrength, state.getSignal(world, pos, dir));
+                    }
                 }
 
                 lines.add(0, new Pair<>(

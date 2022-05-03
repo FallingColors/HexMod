@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.circle;
+package at.petrak.hexcasting.api.block.circle;
 
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.core.BlockPos;

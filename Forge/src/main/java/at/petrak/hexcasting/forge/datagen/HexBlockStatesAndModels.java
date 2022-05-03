@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.api.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.circles
 
-import at.petrak.hexcasting.api.circle.BlockAbstractImpetus
+import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.SpellDatum

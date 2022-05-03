@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.spell.casting
 
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
-import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
+import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags

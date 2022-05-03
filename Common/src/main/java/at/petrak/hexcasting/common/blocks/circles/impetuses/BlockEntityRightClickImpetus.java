@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
-import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;

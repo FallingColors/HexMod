@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.spell.casting
 
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
-import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus
+import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexApiItems
 import at.petrak.hexcasting.api.mod.HexApiSounds
@@ -22,7 +22,8 @@ sealed class OperatorSideEffect {
     abstract fun performEffect(harness: CastingHarness): Boolean
 
     /** Try to cast a spell  */
-    data class AttemptSpell(val spell: RenderedSpell, val isGreat: Boolean, val hasCastingSound: Boolean = true) : OperatorSideEffect() {
+    data class AttemptSpell(val spell: RenderedSpell, val isGreat: Boolean, val hasCastingSound: Boolean = true) :
+        OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
             return if (this.isGreat && !harness.ctx.isCasterEnlightened) {
                 harness.ctx.caster.sendMessage(

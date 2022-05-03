@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
-import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -55,9 +55,9 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-                                        BlockState state, BlockPos pos, LocalPlayer observer,
-                                        ClientLevel world,
-                                        Direction hitFace, InteractionHand lensHand) {
+        BlockState state, BlockPos pos, LocalPlayer observer,
+        ClientLevel world,
+        Direction hitFace, InteractionHand lensHand) {
         super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace, lensHand);
 
         var bound = this.getPlayer();
@@ -66,7 +66,8 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
             String name = bound.getScoreboardName();
             tag.putString("SkullOwner", name);
             var head = new ItemStack(Items.PLAYER_HEAD, 1, tag);
-            lines.add(new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
+            lines.add(
+                new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
         } else {
             lines.add(new Pair<>(new ItemStack(Items.BARRIER),
                 new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer.none")));
@@ -86,7 +87,8 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         super.loadModData(tag);
         if (tag.contains(TAG_STORED_PLAYER, Tag.TAG_INT_ARRAY)) {
             this.storedPlayer = tag.getUUID(TAG_STORED_PLAYER);
-        } else
+        } else {
             this.storedPlayer = null;
+        }
     }
 }

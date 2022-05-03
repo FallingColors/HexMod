@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
-import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

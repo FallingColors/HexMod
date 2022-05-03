@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
-import at.petrak.hexcasting.api.circle.BlockCircleComponent;
-import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;

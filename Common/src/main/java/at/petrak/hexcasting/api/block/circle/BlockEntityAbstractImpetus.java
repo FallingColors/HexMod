@@ -1,5 +1,6 @@
-package at.petrak.hexcasting.api.circle;
+package at.petrak.hexcasting.api.block.circle;
 
+import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexApiItems;
 import at.petrak.hexcasting.api.mod.HexApiSounds;
@@ -10,7 +11,6 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.SpellCircleContext;
 import at.petrak.hexcasting.api.utils.ManaHelper;
-import at.petrak.paucal.api.PaucalBlockEntity;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -50,7 +50,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity implements ICapabilityProvider {
+public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implements ICapabilityProvider {
     public static final String
         TAG_ACTIVATOR = "activator",
         TAG_COLORIZER = "colorizer",
@@ -119,9 +119,9 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
 
     @OnlyIn(Dist.CLIENT)
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-                                        BlockState state, BlockPos pos,
-                                        LocalPlayer observer, ClientLevel world,
-                                        Direction hitFace, InteractionHand lensHand) {
+        BlockState state, BlockPos pos,
+        LocalPlayer observer, ClientLevel world,
+        Direction hitFace, InteractionHand lensHand) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
             var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
             var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",

@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
-import at.petrak.hexcasting.api.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.items.HexItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
@@ -51,7 +51,10 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     public BlockSlate(Properties p_53182_) {
         super(p_53182_);
         this.registerDefaultState(
-            this.stateDefinition.any().setValue(ENERGIZED, false).setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+            this.stateDefinition.any()
+                .setValue(ENERGIZED, false)
+                .setValue(FACING, Direction.NORTH)
+                .setValue(WATERLOGGED, false));
     }
 
     @Override
@@ -91,12 +94,14 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos,
+        Player player) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof BlockEntitySlate slate) {
             ItemStack stack = new ItemStack(HexItems.SLATE.get());
-            if (slate.pattern != null)
+            if (slate.pattern != null) {
                 HexItems.SLATE.get().writeDatum(stack, SpellDatum.make(slate.pattern));
+            }
             return stack;
         }
 
@@ -165,7 +170,8 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
                     .setValue(ATTACH_FACE, AttachFace.WALL)
                     .setValue(FACING, direction.getOpposite());
             }
-            blockstate = blockstate.setValue(WATERLOGGED, fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8);
+            blockstate = blockstate.setValue(WATERLOGGED,
+                fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8);
 
             if (blockstate.canSurvive(pContext.getLevel(), pContext.getClickedPos())) {
                 return blockstate;

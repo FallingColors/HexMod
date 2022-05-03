@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks;
 
-import at.petrak.hexcasting.api.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.common.blocks.akashic.*;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
