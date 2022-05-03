@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.mod;
 
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
@@ -16,13 +17,13 @@ public class HexConfig {
     public HexConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Mana Amounts");
         dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")
-            .defineInRange("dustManaAmount", 10_000, 0, Integer.MAX_VALUE);
+            .defineInRange("dustManaAmount", ManaConstants.DUST_UNIT, 0, Integer.MAX_VALUE);
         shardManaAmount = builder.comment("How much mana a single Amethyst Shard item is worth")
-            .defineInRange("shardManaAmount", 50_000, 0, Integer.MAX_VALUE);
+            .defineInRange("shardManaAmount", ManaConstants.SHARD_UNIT, 0, Integer.MAX_VALUE);
         chargedCrystalManaAmount = builder.comment("How much mana a single Charged Amethyst Crystal item is worth")
-            .defineInRange("chargedCrystalManaAmount", 100_000, 0, Integer.MAX_VALUE);
+            .defineInRange("chargedCrystalManaAmount", ManaConstants.CRYSTAL_UNIT, 0, Integer.MAX_VALUE);
         manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-            .defineInRange("manaToHealthRate", 200_000.0 / 20.0, 0.0, Double.POSITIVE_INFINITY);
+            .defineInRange("manaToHealthRate", 2 * ManaConstants.CRYSTAL_UNIT / 20.0, 0.0, Double.POSITIVE_INFINITY);
         builder.pop();
     }
 
@@ -33,7 +34,7 @@ public class HexConfig {
         public Client(ForgeConfigSpec.Builder builder) {
             patternPointSpeedMultiplier = builder.comment(
                     "How fast the point showing you the stroke order on patterns moves")
-                .defineInRange("manaToHealthRate", 1.0, 0.0, Double.POSITIVE_INFINITY);
+                .defineInRange("patternPointSpeed", 1.0, 0.0, Double.POSITIVE_INFINITY);
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
                 .define("ctrlTogglesOffStrokeOrder", false);

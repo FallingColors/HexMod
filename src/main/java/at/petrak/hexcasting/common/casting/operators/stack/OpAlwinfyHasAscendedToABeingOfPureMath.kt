@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
@@ -51,7 +52,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
             editTarget = editTarget.subList(1, editTarget.size)
         }
 
-        val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * 10000).toInt()
+        val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * ManaConstants.DUST_UNIT).toInt()
 
         return OperationResult(
             stack,

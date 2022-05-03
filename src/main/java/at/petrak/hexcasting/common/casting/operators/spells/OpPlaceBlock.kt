@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -31,7 +32,7 @@ object OpPlaceBlock : SpellOperator {
         ctx.assertVecInRange(pos)
         return Triple(
             Spell(pos),
-            10_000,
+            ManaConstants.DUST_UNIT,
             listOf(ParticleSpray.Cloud(Vec3.atCenterOf(BlockPos(pos)), 1.0))
         )
     }

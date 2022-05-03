@@ -2,7 +2,7 @@
   "name": "hexcasting.entry.meta",
   "category": "hexcasting:patterns",
   "icon": "minecraft:shulker_box",
-  "sortnum": 10,
+  "sortnum": 12,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [

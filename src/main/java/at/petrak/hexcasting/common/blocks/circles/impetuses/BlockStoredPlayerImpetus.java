@@ -35,7 +35,7 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
         BlockHitResult pHit) {
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
             var usedStack = pPlayer.getItemInHand(pHand);
-            var datumContainer = usedStack.getCapability(HexCapabilities.DATUM).resolve();
+            var datumContainer = HexCapabilities.getCapability(usedStack, HexCapabilities.DATUM);
             if (datumContainer.isPresent()) {
                 if (pLevel instanceof ServerLevel level) {
                     var stored = datumContainer.get().readDatum(level);

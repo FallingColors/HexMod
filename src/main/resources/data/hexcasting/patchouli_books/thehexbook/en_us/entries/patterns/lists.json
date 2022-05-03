@@ -12,7 +12,15 @@
       "anchor": "hexcasting:index",
       "input": "list, number",
       "output": "any",
-      "text": "hexcasting.page.lists.1"
+      "text": "hexcasting.page.lists.index"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:slice",
+      "anchor": "hexcasting:slice",
+      "input": "list, num, num",
+      "output": "list",
+      "text": "hexcasting.page.lists.slice"
     },
     {
       "type": "hexcasting:pattern",
@@ -20,7 +28,7 @@
       "anchor": "hexcasting:append",
       "input": "list, any",
       "output": "any",
-      "text": "hexcasting.page.lists.2"
+      "text": "hexcasting.page.lists.append"
     },
     {
       "type": "hexcasting:pattern",
@@ -28,7 +36,7 @@
       "anchor": "hexcasting:concat",
       "input": "list, list",
       "output": "list",
-      "text": "hexcasting.page.lists.3"
+      "text": "hexcasting.page.lists.concat"
     },
     {
       "type": "hexcasting:pattern",
@@ -36,7 +44,7 @@
       "anchor": "hexcasting:empty_list",
       "input": "",
       "output": "list",
-      "text": "hexcasting.page.lists.4"
+      "text": "hexcasting.page.lists.empty_list"
     },
     {
       "type": "hexcasting:pattern",
@@ -44,23 +52,7 @@
       "anchor": "hexcasting:singleton",
       "input": "any",
       "output": "list",
-      "text": "hexcasting.page.lists.5"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:last_n_list",
-      "anchor": "hexcasting:last_n_list",
-      "input": "num",
-      "output": "list",
-      "text": "hexcasting.page.lists.6"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:splat",
-      "anchor": "hexcasting:splat",
-      "input": "list",
-      "output": "many",
-      "text": "hexcasting.page.lists.7"
+      "text": "hexcasting.page.lists.singleton"
     },
     {
       "type": "hexcasting:pattern",
@@ -68,7 +60,7 @@
       "anchor": "hexcasting:list_size",
       "input": "list",
       "output": "num",
-      "text": "hexcasting.page.lists.8"
+      "text": "hexcasting.page.lists.list_size"
     },
     {
       "type": "hexcasting:pattern",
@@ -76,7 +68,7 @@
       "anchor": "hexcasting:reverse_list",
       "input": "list",
       "output": "list",
-      "text": "hexcasting.page.lists.9"
+      "text": "hexcasting.page.lists.reverse_list"
     },
     {
       "type": "hexcasting:pattern",
@@ -84,7 +76,7 @@
       "anchor": "hexcasting:index_of",
       "input": "list, any",
       "output": "num",
-      "text": "hexcasting.page.lists.10"
+      "text": "hexcasting.page.lists.index_of"
     },
     {
       "type": "hexcasting:pattern",
@@ -92,7 +84,7 @@
       "anchor": "hexcasting:list_remove",
       "input": "list, num",
       "output": "list",
-      "text": "hexcasting.page.lists.11"
+      "text": "hexcasting.page.lists.list_remove"
     }
   ]
 }

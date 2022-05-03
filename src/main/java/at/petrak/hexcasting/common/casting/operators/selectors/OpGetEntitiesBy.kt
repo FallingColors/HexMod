@@ -31,7 +31,7 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
         val entitiesGot = ctx.world.getEntities(
             null,
             aabb
-        ) { (checker.test(it) != negate) && ctx.isEntityInRange(it) && it.distanceToSqr(pos) <= radius * radius }
+        ) { (checker.test(it) != negate) && ctx.isEntityInRange(it) && it.isAlive && !it.isSpectator && it.distanceToSqr(pos) <= radius * radius }
             .sortedBy { it.distanceToSqr(pos) }
         return spellListOf(entitiesGot)
     }

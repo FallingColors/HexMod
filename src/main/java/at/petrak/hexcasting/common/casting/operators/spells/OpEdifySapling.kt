@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -29,7 +30,7 @@ object OpEdifySapling : SpellOperator {
 
         return Triple(
             Spell(bpos),
-            100_000,
+            ManaConstants.DUST_UNIT,
             listOf(ParticleSpray(Vec3.atCenterOf(bpos), Vec3(0.0, 2.0, 0.0), 0.1, Math.PI / 4, 100))
         )
     }

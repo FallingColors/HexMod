@@ -13,6 +13,9 @@
     "$(action)": "$(#fc77be)",
     "_Media": "$(#74b3f2)Media/$",
     "_media": "$(#74b3f2)media/$",
+    "_Hexcasters": "$(#b38ef3)Hexcasters/$",
+    "_Hexcaster": "$(#b38ef3)Hexcaster/$",
+    "_Hexcasting": "$(#b38ef3)Hexcasting/$",
     "_Hexes": "$(#b38ef3)Hexes/$",
     "_Hex": "$(#b38ef3)Hex/$"
   }

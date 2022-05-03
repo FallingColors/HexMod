@@ -77,7 +77,7 @@ public class PatternTooltipGreeble implements ClientTooltipComponent, TooltipCom
             outer, outer, null);
         RenderLib.drawLineSeq(mat, this.zappyPoints, 2f, 0,
             innerDark, innerLight,
-            ClientTickCounter.getTickCount() / 40f);
+            ClientTickCounter.total / 40f);
         RenderLib.drawSpot(mat, this.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
 
         for (var dot : this.pathfinderDots) {

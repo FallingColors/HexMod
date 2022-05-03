@@ -55,7 +55,7 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
     }
 
     public static boolean isColorizer(ItemStack stack) {
-        return stack.getCapability(HexCapabilities.COLOR).isPresent();
+        return HexCapabilities.getCapability(stack, HexCapabilities.COLOR).isPresent();
     }
 
     /**
@@ -89,7 +89,7 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
      * @return an AARRGGBB color.
      */
     public int getRawColor(float time, Vec3 position) {
-        var maybeColorizer = item.getCapability(HexCapabilities.COLOR).resolve();
+        var maybeColorizer = HexCapabilities.getCapability(this.item, HexCapabilities.COLOR);
         if (maybeColorizer.isPresent()) {
             Colorizer colorizer = maybeColorizer.get();
             return colorizer.color(owner, time, position);

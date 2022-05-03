@@ -1,61 +1,45 @@
 package at.petrak.hexcasting.common.recipe;
 
+import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemFocus;
+import at.petrak.hexcasting.common.recipe.ingredient.UnsealedIngredient;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
-import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-public class SealFocusRecipe extends CustomRecipe {
+public class SealFocusRecipe extends ShapelessRecipe {
     public static final SimpleRecipeSerializer<SealFocusRecipe> SERIALIZER =
         new SimpleRecipeSerializer<>(SealFocusRecipe::new);
 
+    private static ItemStack getSealedStack() {
+        ItemStack output = new ItemStack(HexItems.FOCUS::get);
+        NBTHelper.putBoolean(output, ItemFocus.TAG_SEALED, true);
+        NBTHelper.putString(output, DataHolderItem.TAG_OVERRIDE_VISUALLY, "any");
+        return output;
+    }
+
+    private static NonNullList<Ingredient> createIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.createWithCapacity(2);
+        ingredients.add(UnsealedIngredient.of(new ItemStack(HexItems.FOCUS::get)));
+        ingredients.add(Ingredient.of(Items.HONEYCOMB));
+        return ingredients;
+    }
+
     public SealFocusRecipe(ResourceLocation id) {
-        super(id);
+        super(id, "", getSealedStack(), createIngredients());
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level world) {
-        var foundWax = false;
-        var foundOkFocus = false;
-
-        for (int i = 0; i < inv.getContainerSize(); i++) {
-            var stack = inv.getItem(i);
-            if (!stack.isEmpty()) {
-                if (stack.is(HexItems.FOCUS.get())) {
-                    if (foundOkFocus) {
-                        return false;
-                    }
-
-                    if (stack.hasTag()
-                        && stack.getTag().contains(ItemFocus.TAG_DATA)
-                        && (!stack.getTag().contains(ItemFocus.TAG_SEALED)
-                        || !stack.getTag().getBoolean(ItemFocus.TAG_SEALED))) {
-                        foundOkFocus = true;
-                    } else {
-                        return false;
-                    }
-                } else if (stack.is(Items.HONEYCOMB)) {
-                    if (foundWax) {
-                        return false;
-                    }
-                    foundWax = true;
-                } else {
-                    return false;
-                }
-            }
-        }
-
-        return foundWax && foundOkFocus;
-    }
-
-    @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public @NotNull ItemStack assemble(CraftingContainer inv) {
         ItemStack out = ItemStack.EMPTY;
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -67,7 +51,7 @@ public class SealFocusRecipe extends CustomRecipe {
         }
 
         if (!out.isEmpty()) {
-            out.getOrCreateTag().putBoolean(ItemFocus.TAG_SEALED, true);
+            NBTHelper.putBoolean(out, ItemFocus.TAG_SEALED, true);
             out.setCount(1);
         }
 
@@ -75,12 +59,7 @@ public class SealFocusRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
 }

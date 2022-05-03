@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -10,7 +11,7 @@ import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 
 object OpGetSentinelPos : ConstManaOperator {
     override val argc = 0
-    override val manaCost = 1_000
+    override val manaCost = ManaConstants.DUST_UNIT / 10
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val sentinel = HexPlayerDataHelper.getSentinel(ctx.caster)
         if (sentinel.dimension != ctx.world.dimension())

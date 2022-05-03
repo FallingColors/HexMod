@@ -22,7 +22,7 @@ sealed class OperatorSideEffect {
     abstract fun performEffect(harness: CastingHarness): Boolean
 
     /** Try to cast a spell  */
-    data class AttemptSpell(val spell: RenderedSpell, val isGreat: Boolean, val hasCastingSound: Boolean = true) : OperatorSideEffect() {
+    data class AttemptSpell(val spell: RenderedSpell, val isGreat: Boolean, val hasCastingSound: Boolean = true, val awardStat: Boolean = true) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
             return if (this.isGreat && !harness.ctx.isCasterEnlightened) {
                 harness.ctx.caster.sendMessage(
@@ -33,7 +33,8 @@ sealed class OperatorSideEffect {
                 true
             } else {
                 this.spell.cast(harness.ctx)
-                harness.ctx.caster.awardStat(HexStatistics.SPELLS_CAST)
+                if (awardStat)
+                    harness.ctx.caster.awardStat(HexStatistics.SPELLS_CAST)
                 false
             }
         }
@@ -53,8 +54,7 @@ sealed class OperatorSideEffect {
         }
     }
 
-    data class Particles(val spray: ParticleSpray) :
-        OperatorSideEffect() {
+    data class Particles(val spray: ParticleSpray) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
             this.spray.sprayParticles(harness.ctx.world, harness.getColorizer())
 

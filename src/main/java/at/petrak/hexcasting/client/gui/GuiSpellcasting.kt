@@ -140,7 +140,7 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
                 val delta = mouse.add(anchor.negated())
                 val angle = atan2(delta.y, delta.x)
                 // 0 is right, increases clockwise(?)
-                val snappedAngle = angle.div(TAU.toFloat()).mod(6.0f)
+                val snappedAngle = angle.div(Mth.TWO_PI).mod(6.0f)
                 val newdir = HexDir.values()[(snappedAngle.times(6).roundToInt() + 1).mod(6)]
                 // The player might have a lousy aim, so set the new anchor point to the "ideal"
                 // location as if they had hit it exactly on the nose.

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -27,13 +28,12 @@ object OpBeep : SpellOperator {
 
         return Triple(
             Spell(target, note, NoteBlockInstrument.values()[instrument]),
-            1_000,
+            ManaConstants.DUST_UNIT / 10,
             listOf(ParticleSpray.Cloud(target, 1.0))
         )
     }
 
-    override val hasCastingSound: Boolean
-        get() = false
+    override fun hasCastingSound(ctx: CastingContext) = false
 
     private data class Spell(val target: Vec3, val note: Int, val instrument: NoteBlockInstrument) : RenderedSpell {
         override fun cast(ctx: CastingContext) {

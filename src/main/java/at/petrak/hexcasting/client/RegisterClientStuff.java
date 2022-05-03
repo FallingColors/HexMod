@@ -5,9 +5,10 @@ import at.petrak.hexcasting.api.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
-import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
@@ -29,6 +30,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -47,6 +49,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.Locale;
+import java.util.function.UnaryOperator;
 
 public class RegisterClientStuff {
 
@@ -69,11 +72,11 @@ public class RegisterClientStuff {
                 (stack, level, holder, holderID) -> {
                     var item = (ItemManaBattery) stack.getItem();
                     var max = item.getMaxMana(stack);
-                    return (float) Math.sqrt((float) max / HexConfig.chargedCrystalManaAmount.get() / 10);
+                    return (float) Math.sqrt((float) max / ManaConstants.CRYSTAL_UNIT / 10);
                 });
 
             ItemProperties.register(HexItems.SCROLL.get(), ItemScroll.ANCIENT_PREDICATE,
-                (stack, level, holder, holderID) -> stack.getOrCreateTag().contains(ItemScroll.TAG_OP_ID) ? 1f : 0f);
+                (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
 
             ItemProperties.register(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
                 (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
@@ -123,18 +126,18 @@ public class RegisterClientStuff {
                 float gCol = Math.max(0.0F, Mth.sin((note / 24F + 0.33333334F) * Mth.TWO_PI) * 0.65F + 0.35F);
                 float bCol = Math.max(0.0F, Mth.sin((note / 24F + 0.6666667F) * Mth.TWO_PI) * 0.65F + 0.35F);
 
-                int noteColor = 0xFF000000 | ((int) (rCol * 0xFF) << 16) | ((int) (gCol * 0xFF) << 8) | ((int) (bCol * 0xFF));
+                int noteColor = 0xFF_000000 | Mth.color(rCol, gCol, bCol);
 
                 var instrument = state.getValue(NoteBlock.INSTRUMENT);
 
                 lines.add(new Pair<>(
                     new ItemStack(Items.MUSIC_DISC_CHIRP),
                     new TextComponent(String.valueOf(instrument.ordinal()))
-                        .withStyle((style) -> style.withColor(TextColor.fromRgb(instrumentColor(instrument))))));
+                        .withStyle(color(instrumentColor(instrument)))));
                 lines.add(new Pair<>(
                     new ItemStack(Items.NOTE_BLOCK),
                     new TextComponent(String.valueOf(note))
-                        .withStyle((style) -> style.withColor(TextColor.fromRgb(noteColor)))));
+                        .withStyle(color(noteColor))));
             });
 
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF.get(),
@@ -172,12 +175,15 @@ public class RegisterClientStuff {
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE),
                     new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
-                        .withStyle(ChatFormatting.RED)));
+                        .withStyle(redstoneColor(comparatorValue))));
+
+                boolean compare = state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE;
+
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE_TORCH),
                     new TextComponent(
-                        state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE ? ">" : "-")
-                        .withStyle(ChatFormatting.RED)));
+                        compare ? ">=" : "-")
+                        .withStyle(redstoneColor(compare ? 0 : 15))));
             });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
@@ -200,7 +206,7 @@ public class RegisterClientStuff {
                 lines.add(0, new Pair<>(
                     new ItemStack(Items.REDSTONE),
                     new TextComponent(String.valueOf(signalStrength))
-                        .withStyle(ChatFormatting.RED)));
+                        .withStyle(redstoneColor(signalStrength))));
             });
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
@@ -211,8 +217,16 @@ public class RegisterClientStuff {
                     new Pair<>(
                         new ItemStack(Items.COMPARATOR),
                         new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
-                            .withStyle(ChatFormatting.RED)));
+                            .withStyle(redstoneColor(comparatorValue))));
             });
+    }
+
+    private static UnaryOperator<Style> color(int color) {
+        return (style) -> style.withColor(TextColor.fromRgb(color));
+    }
+
+    private static UnaryOperator<Style> redstoneColor(int power) {
+        return color(RedStoneWireBlock.getColorForPower(Mth.clamp(power, 0, 15)));
     }
 
     private static int instrumentColor(NoteBlockInstrument instrument) {
@@ -238,19 +252,23 @@ public class RegisterClientStuff {
         ItemProperties.register((Item) item, ItemFocus.DATATYPE_PRED,
             (stack, level, holder, holderID) -> {
                 var datum = item.readDatumTag(stack);
-                if (datum != null) {
-                    var typename = datum.getAllKeys().iterator().next();
-                    return switch (typename) {
-                        case SpellDatum.TAG_ENTITY -> 1f;
-                        case SpellDatum.TAG_DOUBLE -> 2f;
-                        case SpellDatum.TAG_VEC3 -> 3f;
-                        case SpellDatum.TAG_WIDGET -> 4f;
-                        case SpellDatum.TAG_LIST -> 5f;
-                        case SpellDatum.TAG_PATTERN -> 6f;
-                        default -> 0f; // uh oh
-                    };
+                String override = NBTHelper.getString(stack, DataHolderItem.TAG_OVERRIDE_VISUALLY);
+                String typename = null;
+                if (override != null) {
+                    typename = override;
+                } else if (datum != null) {
+                    typename = datum.getAllKeys().iterator().next();
                 }
-                return 0f;
+
+                return typename == null ? 0f : switch (typename) {
+                    case SpellDatum.TAG_ENTITY -> 1f;
+                    case SpellDatum.TAG_DOUBLE -> 2f;
+                    case SpellDatum.TAG_VEC3 -> 3f;
+                    case SpellDatum.TAG_WIDGET -> 4f;
+                    case SpellDatum.TAG_LIST -> 5f;
+                    case SpellDatum.TAG_PATTERN -> 6f;
+                    default -> 0f; // uh oh
+                };
             });
         ItemProperties.register((Item) item, ItemFocus.SEALED_PRED,
             (stack, level, holder, holderID) -> item.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);

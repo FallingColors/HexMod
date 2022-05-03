@@ -274,8 +274,8 @@ class CastingHarness private constructor(
             }
         } else {
             val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
-            val casterManaHolder = casterStack.getCapability(HexCapabilities.MANA).resolve()
-            val casterSpellHolder = casterStack.getCapability(HexCapabilities.SPELL).resolve()
+            val casterManaHolder = HexCapabilities.getCapability(casterStack, HexCapabilities.MANA)
+            val casterSpellHolder = HexCapabilities.getCapability(casterStack, HexCapabilities.SPELL)
             val ipsCanDrawFromInv = if (casterSpellHolder.isPresent) {
                 if (casterManaHolder.isPresent) {
                     val manaAvailable = casterManaHolder.get().mana

@@ -14,9 +14,6 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object OpLastNToList : Operator {
-    val manaCost: Int
-        get() = 0
-
     override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
@@ -38,8 +35,6 @@ object OpLastNToList : Operator {
         }
         stack.addAll(spellListOf(output))
 
-        val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMana(this.manaCost))
-
-        return OperationResult(stack, sideEffects)
+        return OperationResult(stack, listOf())
     }
 }

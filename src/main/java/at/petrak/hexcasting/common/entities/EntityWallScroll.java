@@ -1,14 +1,14 @@
 package at.petrak.hexcasting.common.entities;
 
+import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -58,16 +58,16 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
     private void loadDataFromScrollItem(ItemStack scroll) {
         this.scroll = scroll;
 
-        var tag = scroll.getTag();
-        if (tag != null && tag.contains(ItemScroll.TAG_PATTERN, Tag.TAG_COMPOUND)) {
-            this.pattern = HexPattern.DeserializeFromNBT(tag.getCompound(ItemScroll.TAG_PATTERN));
+        CompoundTag patternTag = NBTHelper.getCompound(scroll, ItemScroll.TAG_PATTERN);
+        if (patternTag != null) {
+            this.pattern = HexPattern.DeserializeFromNBT(patternTag);
             if (this.level.isClientSide) {
                 var pair = RenderLib.getCenteredPattern(pattern, 128, 128, 16f);
                 var dots = pair.getSecond();
                 this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f);
             }
 
-            this.isAncient = tag.contains(ItemScroll.TAG_OP_ID, Tag.TAG_STRING);
+            this.isAncient = NBTHelper.hasString(scroll, ItemScroll.TAG_OP_ID);
         } else {
             this.pattern = null;
             this.zappyPoints = null;

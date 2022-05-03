@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.SpellHolderItem;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.nbt.CompoundTag;
@@ -50,14 +51,12 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
 
     @Override
     public @Nullable List<HexPattern> getPatterns(ItemStack stack) {
-        if (!stack.hasTag())
-            return null;
-        CompoundTag tag = stack.getTag();
-        if (!tag.contains(TAG_PATTERNS, Tag.TAG_LIST))
+        var patsTag = NBTHelper.getList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
+
+        if (patsTag == null)
             return null;
 
         var out = new ArrayList<HexPattern>();
-        var patsTag = tag.getList(TAG_PATTERNS, Tag.TAG_COMPOUND);
         for (var patTag : patsTag) {
             out.add(HexPattern.DeserializeFromNBT((CompoundTag) patTag));
         }
@@ -70,14 +69,14 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
         for (HexPattern pat : patterns)
             patsTag.add(pat.serializeToNBT());
 
-        stack.getOrCreateTag().put(ItemPackagedSpell.TAG_PATTERNS, patsTag);
+        NBTHelper.putList(stack, TAG_PATTERNS, patsTag);
 
         withMana(stack, mana, mana);
     }
 
     @Override
     public void clearPatterns(ItemStack stack) {
-        stack.removeTagKey(ItemPackagedSpell.TAG_PATTERNS);
+        NBTHelper.remove(stack, ItemPackagedSpell.TAG_PATTERNS);
         withMana(stack, 0, 0);
     }
 
@@ -119,6 +118,7 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
 
         if (broken) {
             stack.shrink(1);
+            player.broadcastBreakEvent(usedHand);
             return InteractionResultHolder.consume(stack);
         } else {
             return InteractionResultHolder.success(stack);
