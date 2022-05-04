@@ -5,7 +5,6 @@ import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import net.minecraft.network.chat.TranslatableComponent
@@ -20,7 +19,7 @@ object OpFisherman : Operator {
         val datum = stack[stack.lastIndex]
         val distance = stack.size - (arg + 1) // because getChecked<Int> just gives me a double for some reason
         stack.removeLast()
-        if (distance < stack.size && abs(distance.roundToInt() - distance) < 0.05f) {
+        if (distance >= 0 && distance < stack.size && abs(distance.roundToInt() - distance) < 0.05f) {
             val fish = stack[distance.roundToInt()]
             stack.removeAt(distance.roundToInt())
             stack.add(stack.size, fish)
@@ -28,7 +27,7 @@ object OpFisherman : Operator {
             throw MishapInvalidIota(
                 datum,
                 0,
-                TranslatableComponent("hexcasting.mishap.invalid_value.int.between", 0, stack.size)
+                TranslatableComponent("hexcasting.mishap.invalid_value.int.between", 1, stack.size)
             )
         }
 
