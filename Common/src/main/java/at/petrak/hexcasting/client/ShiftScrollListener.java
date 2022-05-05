@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.common.network.HexMessages;
+import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.HexMessages;
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;

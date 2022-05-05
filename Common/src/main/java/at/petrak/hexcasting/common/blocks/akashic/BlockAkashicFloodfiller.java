@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -17,7 +17,8 @@ public class BlockAkashicFloodfiller extends Block {
         super(p_49795_);
     }
 
-    public @Nullable BlockPos getRecordPosition(BlockPos here, BlockState state, Level world) {
+    public @Nullable
+    BlockPos getRecordPosition(BlockPos here, BlockState state, Level world) {
         return floodFillFor(here, world,
             (pos, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
     }
@@ -37,7 +38,8 @@ public class BlockAkashicFloodfiller extends Block {
     }
 
 
-    public static @Nullable BlockPos floodFillFor(BlockPos start, Level world,
+    public static @Nullable
+    BlockPos floodFillFor(BlockPos start, Level world,
         TriPredicate<BlockPos, BlockState, Level> isValid, TriPredicate<BlockPos, BlockState, Level> isTarget) {
         var seenBlocks = new HashSet<BlockPos>();
         var todo = new ArrayDeque<BlockPos>();
@@ -62,7 +64,8 @@ public class BlockAkashicFloodfiller extends Block {
         return null;
     }
 
-    public static @Nullable BlockPos floodFillFor(BlockPos start, Level world,
+    public static @Nullable
+    BlockPos floodFillFor(BlockPos start, Level world,
         TriPredicate<BlockPos, BlockState, Level> isTarget) {
         return floodFillFor(start, world, BlockAkashicFloodfiller::canItBeFloodedThrough, isTarget);
     }

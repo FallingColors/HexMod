@@ -1,7 +1,7 @@
-package at.petrak.hexcasting.common.blocks.circles.impetuses;
+package at.petrak.hexcasting.common.blocks.entity;
 
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.HexBlockEntities;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -29,7 +29,7 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     private UUID storedPlayer = null;
 
     public BlockEntityStoredPlayerImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlockEntities.IMPETUS_STOREDPLAYER_TILE.get(), pWorldPosition, pBlockState);
+        super(HexBlockEntities.IMPETUS_STOREDPLAYER_TILE, pWorldPosition, pBlockState);
     }
 
     @Override
@@ -38,7 +38,8 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     @Override
-    protected @Nullable Player getPlayer() {
+    protected @Nullable
+    Player getPlayer() {
         return this.storedPlayer == null ? null : this.level.getPlayerByUUID(this.storedPlayer);
     }
 
@@ -48,7 +49,8 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     // just feels wrong to use the protected method
-    public @Nullable Player getStoredPlayer() {
+    public @Nullable
+    Player getStoredPlayer() {
         return this.getPlayer();
     }
 
@@ -62,10 +64,9 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
 
         var bound = this.getPlayer();
         if (bound != null) {
-            var tag = new CompoundTag();
             String name = bound.getScoreboardName();
-            tag.putString("SkullOwner", name);
-            var head = new ItemStack(Items.PLAYER_HEAD, 1, tag);
+            var head = new ItemStack(Items.PLAYER_HEAD);
+            head.getOrCreateTag().putString("SkullOwner", name);
             lines.add(
                 new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
         } else {

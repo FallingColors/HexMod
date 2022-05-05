@@ -9,6 +9,7 @@ archivesBaseName = "${modID}-common-${minecraftVersion}"
 
 minecraft {
     version(minecraftVersion)
+    
     runs {
         if (project.hasProperty('common_runs_enabled') ? project.findProperty('common_runs_enabled').toBoolean() : true) {
             server(project.hasProperty('common_server_run_name') ? project.findProperty('common_server_run_name') : 'vanilla_server') {

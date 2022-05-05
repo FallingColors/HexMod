@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -56,7 +57,8 @@ public class BlockConjured extends Block implements EntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos,
+        Player player) {
         return ItemStack.EMPTY;
     }
 
@@ -95,7 +97,8 @@ public class BlockConjured extends Block implements EntityBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getVisualShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public @NotNull VoxelShape getVisualShape(BlockState pState, BlockGetter pLevel, BlockPos pPos,
+        CollisionContext pContext) {
         return Shapes.empty();
     }
 

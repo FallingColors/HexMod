@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.particles;
 
+import at.petrak.hexcasting.common.lib.HexParticles;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;

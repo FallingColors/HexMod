@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.FailToCastGreatSpellTrigger;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.advancements.SpendManaTrigger;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.datagen.PaucalAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;

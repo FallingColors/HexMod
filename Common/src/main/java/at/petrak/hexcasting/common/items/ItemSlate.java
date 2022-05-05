@@ -45,16 +45,18 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         var tag = stack.getTagElement("BlockEntityTag");
-        if (tag != null && tag.isEmpty())
+        if (tag != null && tag.isEmpty()) {
             stack.removeTagKey("BlockEntityTag");
+        }
         return super.onEntityItemUpdate(stack, entity);
     }
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         var tag = pStack.getTagElement("BlockEntityTag");
-        if (tag != null && tag.isEmpty())
+        if (tag != null && tag.isEmpty()) {
             pStack.removeTagKey("BlockEntityTag");
+        }
     }
 
     @Override
@@ -84,15 +86,17 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
 
     @Override
     public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
-        if (this.canWrite(stack, datum))
+        if (this.canWrite(stack, datum)) {
             if (datum == null) {
                 var beTag = stack.getOrCreateTagElement("BlockEntityTag");
                 beTag.remove(BlockEntitySlate.TAG_PATTERN);
-                if (beTag.isEmpty())
+                if (beTag.isEmpty()) {
                     stack.removeTagKey("BlockEntityTag");
+                }
             } else if (datum.getPayload() instanceof HexPattern pat) {
                 var beTag = stack.getOrCreateTagElement("BlockEntityTag");
                 beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
             }
+        }
     }
 }

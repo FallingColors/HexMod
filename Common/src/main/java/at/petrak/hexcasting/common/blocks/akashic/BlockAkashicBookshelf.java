@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
@@ -39,7 +39,8 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
     }
 
     @Override
-    public @Nullable BlockPos getRecordPosition(BlockPos herePos, BlockState state, Level world) {
+    public @Nullable
+    BlockPos getRecordPosition(BlockPos herePos, BlockState state, Level world) {
         // time saving measure?
         if (world.getBlockEntity(herePos) instanceof BlockEntityAkashicBookshelf tile &&
             tile.getRecordPos() != null && world.getBlockEntity(
@@ -86,17 +87,20 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
             var recordPos = BlockAkashicFloodfiller.floodFillFor(pos, world,
                 (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
             if (pOldState.getBlock() != pState.getBlock()) {
-                tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(), recordPos == null ? DatumType.EMPTY : pState.getValue(DATUM_TYPE));
+                tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(),
+                    recordPos == null ? DatumType.EMPTY : pState.getValue(DATUM_TYPE));
             }
         }
     }
 
     @Override
-    public void neighborChanged(BlockState pState, Level world, BlockPos pos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
+    public void neighborChanged(BlockState pState, Level world, BlockPos pos, Block pBlock, BlockPos pFromPos,
+        boolean pIsMoving) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
             var recordPos = BlockAkashicFloodfiller.floodFillFor(pos, world,
-                    (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
-            tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(), recordPos == null ? DatumType.EMPTY : pState.getValue(DATUM_TYPE));
+                (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
+            tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(),
+                recordPos == null ? DatumType.EMPTY : pState.getValue(DATUM_TYPE));
         }
     }
 

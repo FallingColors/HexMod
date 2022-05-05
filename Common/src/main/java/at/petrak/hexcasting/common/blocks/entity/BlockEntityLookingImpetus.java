@@ -1,8 +1,8 @@
-package at.petrak.hexcasting.common.blocks.circles.impetuses;
+package at.petrak.hexcasting.common.blocks.entity;
 
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.HexBlockEntities;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +24,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
     private int lookAmount = 0;
 
     public BlockEntityLookingImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlockEntities.IMPETUS_LOOK_TILE.get(), pWorldPosition, pBlockState);
+        super(HexBlockEntities.IMPETUS_LOOK_TILE, pWorldPosition, pBlockState);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
                     var t = (float) newLook / MAX_LOOK_AMOUNT;
                     var pitch = Mth.lerp(t, 0.5f, 1.2f);
                     var volume = Mth.lerp(t, 0.2f, 1.2f);
-                    level.playSound(null, pos, HexSounds.IMPETUS_LOOK_TICK.get(), SoundSource.BLOCKS, volume, pitch);
+                    level.playSound(null, pos, HexSounds.IMPETUS_LOOK_TICK, SoundSource.BLOCKS, volume, pitch);
                 }
                 self.lookAmount = newLook;
                 self.setChanged();

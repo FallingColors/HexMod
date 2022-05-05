@@ -12,7 +12,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.block.BlockBurns;
@@ -22,6 +22,7 @@ import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +38,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -46,6 +50,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
@@ -196,19 +201,22 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public @Nullable ManaHolder findManaHolder(ItemStack stack) {
+    public @Nullable
+    ManaHolder findManaHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.MANA).resolve();
         return maybeCap.orElse(null);
     }
 
     @Override
-    public @Nullable DataHolder findDataHolder(ItemStack stack) {
+    public @Nullable
+    DataHolder findDataHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.DATUM).resolve();
         return maybeCap.orElse(null);
     }
 
     @Override
-    public @Nullable HexHolder findHexHolder(ItemStack stack) {
+    public @Nullable
+    HexHolder findHexHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.STORED_HEX).resolve();
         return maybeCap.orElse(null);
     }
@@ -237,6 +245,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public void sendPacketToServer(IMessage packet) {
         ForgePacketHandler.getNetwork().sendToServer(packet);
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
+        Block... blocks) {
+        return BlockEntityType.Builder.of(func::apply, blocks).build(null);
     }
 
     @Override

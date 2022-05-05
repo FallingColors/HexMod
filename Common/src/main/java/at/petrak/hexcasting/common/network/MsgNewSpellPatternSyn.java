@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity;
 import at.petrak.hexcasting.api.spell.math.HexCoord;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.lib.HexMessages;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;

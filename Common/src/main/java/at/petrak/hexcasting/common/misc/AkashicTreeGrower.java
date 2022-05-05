@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.misc;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.features.FeatureUtils;

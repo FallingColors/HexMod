@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.datagen.lootmods;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.lootmod.PaucalAddItemModifier;
 import at.petrak.paucal.api.lootmod.PaucalLootMods;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;

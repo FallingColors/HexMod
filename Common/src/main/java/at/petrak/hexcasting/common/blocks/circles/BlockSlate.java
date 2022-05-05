@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.blocks.circles;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
@@ -85,7 +85,8 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     }
 
     @Override
-    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, Level world) {
+    public @Nullable
+    HexPattern getPattern(BlockPos pos, BlockState bs, Level world) {
         if (world.getBlockEntity(pos) instanceof BlockEntitySlate tile) {
             return tile.pattern;
         } else {

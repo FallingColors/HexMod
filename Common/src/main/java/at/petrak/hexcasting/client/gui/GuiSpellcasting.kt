@@ -7,10 +7,10 @@ import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity
-import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexSounds
-import at.petrak.hexcasting.common.network.HexMessages
+import at.petrak.hexcasting.common.lib.HexMessages
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn
 import at.petrak.hexcasting.api.spell.math.HexAngle
@@ -33,9 +33,11 @@ import net.minecraft.world.phys.Vec2
 import kotlin.math.atan2
 import kotlin.math.roundToInt
 
-class GuiSpellcasting(private val handOpenedWith: InteractionHand,
-                      private var patterns: MutableList<ResolvedPattern>,
-                      private var stackDescs: List<Component>) : Screen(TextComponent("")) {
+class GuiSpellcasting(
+    private val handOpenedWith: InteractionHand,
+    private var patterns: MutableList<ResolvedPattern>,
+    private var stackDescs: List<Component>
+) : Screen(TextComponent("")) {
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 

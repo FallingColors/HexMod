@@ -10,11 +10,10 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.utils.ManaHelper
-import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 
 object OpMakeBattery : SpellOperator {
     override val argc = 1

@@ -28,7 +28,7 @@ import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySe
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
 import at.petrak.hexcasting.common.casting.operators.stack.*;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.api.spell.math.HexAngle;
 import at.petrak.hexcasting.api.spell.math.HexDir;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
@@ -338,7 +338,7 @@ public class RegisterPatterns {
 
             // e
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aaq", HexDir.EAST), prefix("const/double/e"),
-                    Operator.makeConstantOp(SpellDatum.make(Math.E)));
+                Operator.makeConstantOp(SpellDatum.make(Math.E)));
 
             // == Entities ==
 

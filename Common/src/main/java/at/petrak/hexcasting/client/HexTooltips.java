@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
-import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.items.ItemSlate;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.nbt.Tag;

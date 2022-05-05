@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.blocks;
+package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.HexMod;
 import net.minecraft.resources.ResourceLocation;

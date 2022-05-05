@@ -1,22 +1,22 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
-import at.petrak.hexcasting.common.blocks.HexBlockEntities;
+import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.paucal.api.PaucalBlockEntity;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockEntitySlate extends PaucalBlockEntity {
+public class BlockEntitySlate extends HexBlockEntity {
     public static final String TAG_PATTERN = "pattern";
 
     @Nullable
     public HexPattern pattern;
 
     public BlockEntitySlate(BlockPos pos, BlockState state) {
-        super(HexBlockEntities.SLATE_TILE.get(), pos, state);
+        super(HexBlockEntities.SLATE_TILE, pos, state);
     }
 
     @Override
@@ -32,12 +32,14 @@ public class BlockEntitySlate extends PaucalBlockEntity {
     protected void loadModData(CompoundTag tag) {
         if (tag.contains(TAG_PATTERN, Tag.TAG_COMPOUND)) {
             CompoundTag patternTag = tag.getCompound(TAG_PATTERN);
-            if (HexPattern.IsHexPattern(patternTag))
+            if (HexPattern.IsHexPattern(patternTag)) {
                 this.pattern = HexPattern.DeserializeFromNBT(patternTag);
-            else
+            } else {
                 this.pattern = null;
-        } else
+            }
+        } else {
             this.pattern = null;
+        }
     }
 
 }

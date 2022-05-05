@@ -1,5 +1,8 @@
-package at.petrak.hexcasting.common.command;
+package at.petrak.hexcasting.common.lib;
 
+import at.petrak.hexcasting.common.command.BrainsweepCommand;
+import at.petrak.hexcasting.common.command.ListPatternsCommand;
+import at.petrak.hexcasting.common.command.RecalcPatternsCommand;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 

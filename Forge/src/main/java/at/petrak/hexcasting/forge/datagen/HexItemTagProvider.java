@@ -2,8 +2,8 @@ package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.mod.HexItemTags;
-import at.petrak.hexcasting.common.blocks.HexBlockTags;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexBlockTags;
+import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;

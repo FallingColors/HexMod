@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.blocks.circles.impetuses;
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.cap.HexCapabilities;
 import at.petrak.hexcasting.api.spell.DatumType;
+import at.petrak.hexcasting.common.blocks.entity.BlockEntityStoredPlayerImpetus;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

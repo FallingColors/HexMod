@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.common.blocks.BlockConjured
-import at.petrak.hexcasting.common.blocks.HexBlocks
+import at.petrak.hexcasting.common.lib.HexBlocks
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import net.minecraft.core.BlockPos

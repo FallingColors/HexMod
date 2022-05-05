@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.common.network.HexMessages;
+import at.petrak.hexcasting.common.lib.HexMessages;
 import at.petrak.hexcasting.common.network.MsgUpdateComparatorVisualsAck;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -39,7 +39,8 @@ public class ItemLens extends Item implements Wearable {
     public ItemLens(Properties pProperties) {
         super(pProperties);
         DispenserBlock.registerBehavior(this, new OptionalDispenseItemBehavior() {
-            protected @NotNull ItemStack execute(@NotNull BlockSource world, @NotNull ItemStack stack) {
+            protected @NotNull
+            ItemStack execute(@NotNull BlockSource world, @NotNull ItemStack stack) {
                 this.setSuccess(ArmorItem.dispenseArmor(world, stack));
                 return stack;
             }
@@ -75,8 +76,9 @@ public class ItemLens extends Item implements Wearable {
         if (!pLevel.isClientSide() && pEntity instanceof ServerPlayer player) {
             if (pStack == player.getItemBySlot(EquipmentSlot.HEAD) ||
                 pStack == player.getItemBySlot(EquipmentSlot.MAINHAND) ||
-                pStack == player.getItemBySlot(EquipmentSlot.OFFHAND))
-                    sendComparatorDataToClient(player);
+                pStack == player.getItemBySlot(EquipmentSlot.OFFHAND)) {
+                sendComparatorDataToClient(player);
+            }
         }
     }
 
@@ -87,17 +89,19 @@ public class ItemLens extends Item implements Wearable {
         double distance = player.isCreative() ? reachAttribute : reachAttribute - 0.5;
         var hitResult = player.pick(distance, 0, false);
         if (hitResult.getType() == HitResult.Type.BLOCK) {
-            var pos = ((BlockHitResult)hitResult).getBlockPos();
+            var pos = ((BlockHitResult) hitResult).getBlockPos();
             var state = player.level.getBlockState(pos);
             if (state.is(Blocks.COMPARATOR)) {
-                syncComparatorValue(player, pos, state.getDirectSignal(player.level, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING)));
+                syncComparatorValue(player, pos,
+                    state.getDirectSignal(player.level, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING)));
             } else if (state.hasAnalogOutputSignal()) {
                 syncComparatorValue(player, pos, state.getAnalogOutputSignal(player.level, pos));
             } else {
                 syncComparatorValue(player, null, -1);
             }
-        } else
+        } else {
             syncComparatorValue(player, null, -1);
+        }
     }
 
     private void syncComparatorValue(ServerPlayer player, BlockPos pos, int value) {
@@ -105,11 +109,13 @@ public class ItemLens extends Item implements Wearable {
         if (value == -1) {
             if (previous != null) {
                 comparatorDataMap.remove(player);
-                HexMessages.getNetwork().send(PacketDistributor.PLAYER.with(() -> player), new MsgUpdateComparatorVisualsAck(null, -1));
+                HexMessages.getNetwork()
+                    .send(PacketDistributor.PLAYER.with(() -> player), new MsgUpdateComparatorVisualsAck(null, -1));
             }
         } else if (previous == null || (!pos.equals(previous.getFirst()) || value != previous.getSecond())) {
             comparatorDataMap.put(player, new Pair<>(pos, value));
-            HexMessages.getNetwork().send(PacketDistributor.PLAYER.with(() -> player), new MsgUpdateComparatorVisualsAck(pos, value));
+            HexMessages.getNetwork()
+                .send(PacketDistributor.PLAYER.with(() -> player), new MsgUpdateComparatorVisualsAck(pos, value));
         }
     }
 

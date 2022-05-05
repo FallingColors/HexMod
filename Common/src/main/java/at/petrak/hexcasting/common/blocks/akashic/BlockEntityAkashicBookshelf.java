@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
+import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.paucal.api.PaucalBlockEntity;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -11,7 +11,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
+public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public static final String TAG_RECORD_POS = "record_pos";
     public static final String TAG_PATTERN = "pattern";
 
@@ -21,7 +21,7 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
     private HexPattern pattern = null;
 
     public BlockEntityAkashicBookshelf(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(), pWorldPosition, pBlockState);
+        super(HexBlockEntities.AKASHIC_BOOKSHELF_TILE, pWorldPosition, pBlockState);
     }
 
     @Nullable
@@ -53,7 +53,8 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
 
     @Override
     protected void saveModData(CompoundTag compoundTag) {
-        compoundTag.put(TAG_RECORD_POS, this.recordPos == null ? new CompoundTag() : NbtUtils.writeBlockPos(this.recordPos));
+        compoundTag.put(TAG_RECORD_POS,
+            this.recordPos == null ? new CompoundTag() : NbtUtils.writeBlockPos(this.recordPos));
         compoundTag.put(TAG_PATTERN, this.pattern == null ? new CompoundTag() : this.pattern.serializeToNBT());
     }
 
@@ -63,8 +64,8 @@ public class BlockEntityAkashicBookshelf extends PaucalBlockEntity {
         CompoundTag pattern = compoundTag.getCompound(TAG_PATTERN);
 
         if (recordPos.contains("X", Tag.TAG_ANY_NUMERIC) &&
-                recordPos.contains("Y", Tag.TAG_ANY_NUMERIC) &&
-                recordPos.contains("Z", Tag.TAG_ANY_NUMERIC)) {
+            recordPos.contains("Y", Tag.TAG_ANY_NUMERIC) &&
+            recordPos.contains("Z", Tag.TAG_ANY_NUMERIC)) {
             this.recordPos = NbtUtils.readBlockPos(recordPos);
         } else {
             this.recordPos = null;

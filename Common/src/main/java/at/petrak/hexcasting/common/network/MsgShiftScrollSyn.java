@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.items.ItemAbacus;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexSounds;

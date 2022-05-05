@@ -1,6 +1,7 @@
-package at.petrak.hexcasting.common.particles;
+package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

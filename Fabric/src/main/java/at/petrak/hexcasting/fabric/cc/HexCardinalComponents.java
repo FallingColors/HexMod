@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;

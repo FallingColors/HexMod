@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.entities;
 
 import at.petrak.hexcasting.client.RenderLib;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.api.spell.math.HexPattern;

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;

@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
+import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.blocks.HexBlockEntities;
 import at.petrak.hexcasting.api.spell.math.HexDir;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.paucal.api.PaucalBlockEntity;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class BlockEntityAkashicRecord extends PaucalBlockEntity {
+public class BlockEntityAkashicRecord extends HexBlockEntity {
     public static final String TAG_LOOKUP = "lookup",
         TAG_POS = "pos",
         TAG_DATUM = "datum",
@@ -44,7 +44,8 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
      * <p>
      * Will never clobber anything.
      */
-    public @Nullable BlockPos addNewDatum(HexPattern key, SpellDatum<?> datum) {
+    public @Nullable
+    BlockPos addNewDatum(HexPattern key, SpellDatum<?> datum) {
         String entryKey = getKey(key);
         if (this.entries.containsKey(entryKey)) {
             return null; // would clobber
@@ -68,12 +69,14 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
 
     private String getKey(HexPattern key) {
         String angles = key.anglesSignature();
-        if (angles.isEmpty())
+        if (angles.isEmpty()) {
             return "empty"; // contains non-angle characters, so can't occur any way other than this
+        }
         return angles;
     }
 
-    public @Nullable SpellDatum<?> lookupPattern(HexPattern key, ServerLevel slevel) {
+    public @Nullable
+    SpellDatum<?> lookupPattern(HexPattern key, ServerLevel slevel) {
         var entry = this.entries.get(getKey(key));
         if (entry == null) {
             return null;
@@ -114,9 +117,10 @@ public class BlockEntityAkashicRecord extends PaucalBlockEntity {
                         if (BlockAkashicFloodfiller.canItBeFloodedThrough(neighbor, bs, this.level)) {
                             todo.add(neighbor);
                             if (this.level.getBlockEntity(neighbor) instanceof BlockEntityAkashicBookshelf &&
-                                    bs.hasProperty(BlockAkashicBookshelf.DATUM_TYPE) &&
-                                    bs.getValue(BlockAkashicBookshelf.DATUM_TYPE) != DatumType.EMPTY)
+                                bs.hasProperty(BlockAkashicBookshelf.DATUM_TYPE) &&
+                                bs.getValue(BlockAkashicBookshelf.DATUM_TYPE) != DatumType.EMPTY) {
                                 validPoses.add(neighbor);
+                            }
                         }
                     }
                 }

@@ -1,6 +1,7 @@
-package at.petrak.hexcasting.common.items;
+package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.items.*;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;

@@ -1,5 +1,6 @@
-import at.petrak.hexcasting.common.blocks.HexBlocks
-import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.lib.HexBlockEntities
+import at.petrak.hexcasting.common.lib.HexBlocks
+import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.fabric.FabricHexConfig
@@ -33,6 +34,7 @@ object FabricHexInitializer : ModInitializer {
         HexBlocks.registerBlocks(bind(Registry.BLOCK))
         HexBlocks.registerBlockItems(bind(Registry.ITEM))
         HexItems.registerItems(bind(Registry.ITEM))
+        HexBlockEntities.registerTiles(bind(Registry.BLOCK_ENTITY_TYPE))
     }
 
     private fun <T> bind(registry: Registry<in T>): BiConsumer<T, ResourceLocation> =

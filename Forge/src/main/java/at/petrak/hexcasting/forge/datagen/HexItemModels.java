@@ -1,10 +1,11 @@
 package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.common.blocks.HexBlocks;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.datagen.PaucalItemModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;

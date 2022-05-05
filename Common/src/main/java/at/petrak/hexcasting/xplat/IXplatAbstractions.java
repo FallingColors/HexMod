@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.command.PatternResLocArgument;
 import at.petrak.hexcasting.common.network.IMessage;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
@@ -20,12 +21,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -86,6 +91,9 @@ public interface IXplatAbstractions {
 
     // Blocks
 
+    <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
+        Block... blocks);
+
     Block makeFlammable(BlockBehaviour.Properties properties, int flammability, int spreadSpeed);
 
     // misc
@@ -117,4 +125,5 @@ public interface IXplatAbstractions {
             return provider.get();
         }
     }
+
 }

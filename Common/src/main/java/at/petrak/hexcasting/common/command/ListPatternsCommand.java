@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.command;
 
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import com.mojang.brigadier.CommandDispatcher;
@@ -31,7 +31,8 @@ public class ListPatternsCommand {
                 for (var pair : listing) {
                     ctx.getSource().sendSuccess(new TextComponent(pair.getValue().getFirst().toString())
                         .append(": ")
-                        .append(SpellDatum.make(HexPattern.FromAnglesSig(pair.getKey(), pair.getValue().getSecond())).display()), false);
+                        .append(SpellDatum.make(HexPattern.FromAnglesSig(pair.getKey(), pair.getValue().getSecond()))
+                            .display()), false);
                 }
 
 

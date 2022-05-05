@@ -11,7 +11,7 @@ import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -203,13 +203,15 @@ public class ForgeCapabilityHandler {
                                      ItemStack stack) implements DataHolder {
 
         @Override
-        public @Nullable CompoundTag readRawDatum() {
+        public @Nullable
+        CompoundTag readRawDatum() {
             SpellDatum<?> datum = provider.apply(stack);
             return datum == null ? null : datum.serializeToNBT();
         }
 
         @Override
-        public @Nullable SpellDatum<?> readDatum(ServerLevel world) {
+        public @Nullable
+        SpellDatum<?> readDatum(ServerLevel world) {
             return provider.apply(stack);
         }
 
@@ -223,17 +225,20 @@ public class ForgeCapabilityHandler {
                                        ItemStack stack) implements DataHolder {
 
         @Override
-        public @Nullable CompoundTag readRawDatum() {
+        public @Nullable
+        CompoundTag readRawDatum() {
             return holder.readDatumTag(stack);
         }
 
         @Override
-        public @Nullable SpellDatum<?> readDatum(ServerLevel world) {
+        public @Nullable
+        SpellDatum<?> readDatum(ServerLevel world) {
             return holder.readDatum(stack, world);
         }
 
         @Override
-        public @Nullable SpellDatum<?> emptyDatum() {
+        public @Nullable
+        SpellDatum<?> emptyDatum() {
             return holder.emptyDatum(stack);
         }
 
@@ -258,7 +263,8 @@ public class ForgeCapabilityHandler {
         }
 
         @Override
-        public @Nullable List<HexPattern> getPatterns() {
+        public @Nullable
+        List<HexPattern> getPatterns() {
             return holder.getPatterns(stack);
         }
 

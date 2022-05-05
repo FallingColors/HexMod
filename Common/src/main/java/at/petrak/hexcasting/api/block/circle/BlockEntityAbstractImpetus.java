@@ -5,12 +5,12 @@ import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexApiItems;
 import at.petrak.hexcasting.api.mod.HexApiSounds;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.SpellCircleContext;
 import at.petrak.hexcasting.api.utils.ManaHelper;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -28,10 +28,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,18 +39,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implements ICapabilityProvider {
+public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implements WorldlyContainer {
     public static final String
         TAG_ACTIVATOR = "activator",
         TAG_COLORIZER = "colorizer",
@@ -74,11 +68,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     private Component lastMishap = null;
 
     private int mana = 0;
-    private final LazyOptional<IItemHandler> inventoryHandlerLazy;
 
     public BlockEntityAbstractImpetus(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
-        inventoryHandlerLazy = LazyOptional.of(() -> ITEM_HANDLER);
     }
 
     abstract public boolean activatorAlwaysInRange();
@@ -110,7 +102,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         this.nextBlock = this.getBlockPos();
         this.trackedBlocks = new ArrayList<>();
         this.knownBlocks = new HashSet<>();
-        this.colorizer = HexPlayerDataHelper.getColorizer(activator);
+        this.colorizer = IXplatAbstractions.INSTANCE.getColorizer(activator);
 
         this.level.setBlockAndUpdate(this.getBlockPos(),
             this.getBlockState().setValue(BlockAbstractImpetus.ENERGIZED, true));
@@ -123,7 +115,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         LocalPlayer observer, ClientLevel world,
         Direction hitFace, InteractionHand lensHand) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-            var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
+            var dustCount = (float) beai.getMana() / (float) HexConfig.common().dustManaAmount();
             var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
                 String.format("%.2f", dustCount));
             lines.add(new Pair<>(new ItemStack(HexApiItems.AMETHYST_DUST), dustCmp));
@@ -133,21 +125,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 lines.add(new Pair<>(new ItemStack(Items.MUSIC_DISC_11), mishap));
             }
         }
-    }
-
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return inventoryHandlerLazy.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        inventoryHandlerLazy.invalidate();
     }
 
     @Override
@@ -385,7 +362,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             }
         }
 
-        if (this.trackedBlocks.size() > HexConfig.Server.maxSpellCircleLength.get()) {
+        if (this.trackedBlocks.size() > HexConfig.server().maxSpellCircleLength()) {
             return this.trackedBlocks.get(this.trackedBlocks.size() - 1);
         }
 
@@ -501,47 +478,78 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     private static final int[] BAD_TIME = {0, 0, 12, 7, 6, 5, 3, 0, 3, 5};
     private static final int[] SUSSY_BAKA = {5, 8, 10, 11, 10, 8, 5, 3, 7, 5};
 
-    protected IItemHandler ITEM_HANDLER = new IItemHandler() {
-        @Override
-        public int getSlots() {
-            return 1;
-        }
+    private static final int[] SLOTS = {0};
 
-        @NotNull
-        @Override
-        public ItemStack getStackInSlot(int slot) {
-            return ItemStack.EMPTY;
-        }
+    @Override
+    public int[] getSlotsForFace(Direction var1) {
+        return SLOTS;
+    }
 
-        @NotNull
-        @Override
-        public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            var manamount = ManaHelper.extractMana(stack, -1, true, simulate);
-            if (manamount > 0) {
-                if (!simulate) {
-                    BlockEntityAbstractImpetus.this.mana += manamount;
-                    BlockEntityAbstractImpetus.this.setChanged();
-                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-                }
-                return ItemStack.EMPTY.copy();
-            }
-            return stack.copy();
-        }
+    @Override
+    public boolean canPlaceItemThroughFace(int index, ItemStack stack, @Nullable Direction dir) {
+        return this.canPlaceItem(index, stack);
+    }
 
-        @NotNull
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY.copy();
-        }
+    @Override
+    public boolean canTakeItemThroughFace(int var1, ItemStack var2, Direction var3) {
+        return false;
+    }
 
-        @Override
-        public int getSlotLimit(int slot) {
-            return 64;
-        }
+    @Override
+    public int getContainerSize() {
+        return 1;
+    }
 
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return ManaHelper.extractMana(stack, -1, false, true) > 0;
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int index) {
+        return ItemStack.EMPTY.copy();
+    }
+
+    @Override
+    public ItemStack removeItem(int index, int count) {
+        return ItemStack.EMPTY.copy();
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int index) {
+        return ItemStack.EMPTY.copy();
+
+    }
+
+    @Override
+    public void setItem(int index, ItemStack stack) {
+        var manamount = ManaHelper.extractMana(stack, -1, true, false);
+        if (manamount > 0) {
+            this.mana += manamount;
+            this.sync();
         }
-    };
+    }
+
+    @Override
+    public void setChanged() {
+        this.sync();
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceItem(int index, ItemStack stack) {
+        var manamount = ManaHelper.extractMana(stack, -1, true, true);
+        return manamount > 0;
+    }
+
+    @Override
+    public void clearContent() {
+        this.mana = 0;
+        this.stopCasting();
+        this.sync();
+    }
 }

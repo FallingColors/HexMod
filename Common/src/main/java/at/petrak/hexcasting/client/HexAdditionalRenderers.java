@@ -2,7 +2,7 @@ package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -47,7 +47,7 @@ public class HexAdditionalRenderers {
     }
 
     private static void renderSentinel(Sentinel sentinel, LocalPlayer owner,
-                                       PoseStack ps, float partialTicks) {
+        PoseStack ps, float partialTicks) {
         ps.pushPose();
 
         // zero vector is the player
@@ -85,7 +85,7 @@ public class HexAdditionalRenderers {
         var colorizer = HexPlayerDataHelper.getColorizer(owner);
         BiConsumer<float[], float[]> v = (l, r) -> {
             int lcolor = colorizer.getColor(time, new Vec3(l[0], l[1], l[2])),
-                    rcolor = colorizer.getColor(time, new Vec3(r[0], r[1], r[2]));
+                rcolor = colorizer.getColor(time, new Vec3(r[0], r[1], r[2]));
             var normal = new Vector3f(r[0] - l[0], r[1] - l[1], r[2] - l[2]);
             normal.normalize();
             buf.vertex(neo, l[0], l[1], l[2])
@@ -200,8 +200,9 @@ public class HexAdditionalRenderers {
                         mc.font.drawShadow(ps, actualLine, tx, ty, 0xffffffff);
                         ps.translate(0, 9, 0);
                     }
-                    if (textLines.isEmpty())
+                    if (textLines.isEmpty()) {
                         ps.translate(0, 9, 0);
+                    }
 
                     ps.translate(0, 6, 0);
                 }

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.datagen;
 
-import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.paucal.api.datagen.PaucalLootTableProvider;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;

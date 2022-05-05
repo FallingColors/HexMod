@@ -1,8 +1,11 @@
-package at.petrak.hexcasting.common.blocks;
+package at.petrak.hexcasting.common.blocks.entity;
 
+import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.common.blocks.BlockConjured;
+import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
-import at.petrak.paucal.api.PaucalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -11,14 +14,14 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
-public class BlockEntityConjured extends PaucalBlockEntity {
+public class BlockEntityConjured extends HexBlockEntity {
     private static final Random RANDOM = new Random();
     private FrozenColorizer colorizer = FrozenColorizer.DEFAULT.get();
 
     public static final String TAG_COLORIZER = "tag_colorizer";
 
     public BlockEntityConjured(BlockPos pos, BlockState state) {
-        super(HexBlockEntities.CONJURED_TILE.get(), pos, state);
+        super(HexBlockEntities.CONJURED_TILE, pos, state);
     }
 
     public void walkParticle(Entity pEntity) {
@@ -101,25 +104,6 @@ public class BlockEntityConjured extends PaucalBlockEntity {
 
     public void setColorizer(FrozenColorizer colorizer) {
         this.colorizer = colorizer;
-        this.setChanged();
+        this.sync();
     }
-
-//    @Override
-//    public void setChanged() {
-//        if (this.level == null) {
-//            return;
-//        }
-//        this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(),
-//            Block.UPDATE_CLIENTS);
-//        super.setChanged();
-//    }
-//
-//    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-//        return ClientboundBlockEntityDataPacket.create(this);
-//    }
-//
-//    @Override
-//    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-//        this.load(Objects.requireNonNull(pkt.getTag()));
-//    }
 }
