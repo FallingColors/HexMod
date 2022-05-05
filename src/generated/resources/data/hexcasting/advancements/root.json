@@ -16,29 +16,14 @@
     "background": "minecraft:textures/block/calcite.png"
   },
   "criteria": {
-    "on_thingy": {
-      "trigger": "minecraft:tick",
+    "has_charged_amethyst": {
+      "trigger": "minecraft:inventory_changed",
       "conditions": {
-        "player": [
+        "items": [
           {
-            "condition": "minecraft:entity_properties",
-            "predicate": {
-              "stepping_on": {
-                "position": {
-                  "y": {
-                    "min": -64.0,
-                    "max": 30.0
-                  }
-                },
-                "block": {
-                  "blocks": [
-                    "minecraft:amethyst_block",
-                    "minecraft:calcite"
-                  ]
-                }
-              }
-            },
-            "entity": "this"
+            "items": [
+              "hexcasting:charged_amethyst"
+            ]
           }
         ]
       }
@@ -46,7 +31,7 @@
   },
   "requirements": [
     [
-      "on_thingy"
+      "has_charged_amethyst"
     ]
   ]
 }
