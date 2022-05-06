@@ -12,23 +12,23 @@ import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
-import at.petrak.hexcasting.common.lib.HexBlockEntities;
-import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
 import at.petrak.hexcasting.common.entities.HexEntities;
-import at.petrak.hexcasting.common.items.*;
+import at.petrak.hexcasting.common.items.ItemFocus;
+import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.items.ItemSlate;
+import at.petrak.hexcasting.common.items.ItemWand;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexParticles;
+import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -41,67 +41,61 @@ import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.RepeaterBlock;
 import net.minecraft.world.level.block.state.properties.ComparatorMode;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.Locale;
 
 public class RegisterClientStuff {
+    public static void init() {
+        registerDataHolderOverrides(HexItems.FOCUS);
+        registerDataHolderOverrides(HexItems.SPELLBOOK);
 
-    @SubscribeEvent
-    public static void init(FMLClientSetupEvent evt) {
-        evt.enqueueWork(() -> {
-            registerDataHolderOverrides(HexItems.FOCUS.get());
-            registerDataHolderOverrides(HexItems.SPELLBOOK.get());
+        registerPackagedSpellOverrides(HexItems.CYPHER);
+        registerPackagedSpellOverrides(HexItems.TRINKET);
+        registerPackagedSpellOverrides(HexItems.ARTIFACT);
 
-            registerPackagedSpellOverrides(HexItems.CYPHER.get());
-            registerPackagedSpellOverrides(HexItems.TRINKET.get());
-            registerPackagedSpellOverrides(HexItems.ARTIFACT.get());
+        IClientXplatAbstractions x = IClientXplatAbstractions.INSTANCE;
+        x.registerItemProperty(HexItems.BATTERY, ItemManaBattery.MANA_PREDICATE,
+            (stack, level, holder, holderID) -> {
+                var item = (ManaHolderItem) stack.getItem();
+                return item.getManaFullness(stack);
+            });
+        x.registerItemProperty(HexItems.BATTERY, ItemManaBattery.MAX_MANA_PREDICATE,
+            (stack, level, holder, holderID) -> {
+                var item = (ItemManaBattery) stack.getItem();
+                var max = item.getMaxMana(stack);
+                return (float) Math.sqrt((float) max / HexConfig.common().chargedCrystalManaAmount() / 10);
+            });
 
-            ItemProperties.register(HexItems.BATTERY.get(), ItemManaBattery.MANA_PREDICATE,
-                (stack, level, holder, holderID) -> {
-                    var item = (ManaHolderItem) stack.getItem();
-                    return item.getManaFullness(stack);
-                });
-            ItemProperties.register(HexItems.BATTERY.get(), ItemManaBattery.MAX_MANA_PREDICATE,
-                (stack, level, holder, holderID) -> {
-                    var item = (ItemManaBattery) stack.getItem();
-                    var max = item.getMaxMana(stack);
-                    return (float) Math.sqrt((float) max / HexConfig.chargedCrystalManaAmount.get() / 10);
-                });
+        x.registerItemProperty(HexItems.SCROLL, ItemScroll.ANCIENT_PREDICATE,
+            (stack, level, holder, holderID) -> stack.getOrCreateTag().contains(ItemScroll.TAG_OP_ID) ? 1f : 0f);
 
-            ItemProperties.register(HexItems.SCROLL.get(), ItemScroll.ANCIENT_PREDICATE,
-                (stack, level, holder, holderID) -> stack.getOrCreateTag().contains(ItemScroll.TAG_OP_ID) ? 1f : 0f);
+        x.registerItemProperty(HexItems.SLATE, ItemSlate.WRITTEN_PRED,
+            (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
-            ItemProperties.register(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
-                (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
+        registerWandOverrides(HexItems.WAND_OAK);
+        registerWandOverrides(HexItems.WAND_BIRCH);
+        registerWandOverrides(HexItems.WAND_SPRUCE);
+        registerWandOverrides(HexItems.WAND_JUNGLE);
+        registerWandOverrides(HexItems.WAND_DARK_OAK);
+        registerWandOverrides(HexItems.WAND_ACACIA);
+        registerWandOverrides(HexItems.WAND_AKASHIC);
 
-            registerWandOverrides(HexItems.WAND_OAK.get());
-            registerWandOverrides(HexItems.WAND_BIRCH.get());
-            registerWandOverrides(HexItems.WAND_SPRUCE.get());
-            registerWandOverrides(HexItems.WAND_JUNGLE.get());
-            registerWandOverrides(HexItems.WAND_DARK_OAK.get());
-            registerWandOverrides(HexItems.WAND_ACACIA.get());
-            registerWandOverrides(HexItems.WAND_AKASHIC.get());
+        HexTooltips.init();
 
-            HexTooltips.init();
-        });
+        x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.AKASHIC_DOOR, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.AKASHIC_TRAPDOOR, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.SCONCE, RenderType.cutout());
 
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.CONJURED_LIGHT.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.CONJURED_BLOCK.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_DOOR.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_TRAPDOOR.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.SCONCE.get(), RenderType.cutout());
+        x.setRenderLayer(HexBlocks.AKASHIC_LEAVES1, RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.AKASHIC_LEAVES2, RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.AKASHIC_LEAVES3, RenderType.cutoutMipped());
 
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_LEAVES1.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_LEAVES2.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_LEAVES3.get(), RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.AKASHIC_RECORD, RenderType.translucent());
 
-        ItemBlockRenderTypes.setRenderLayer(HexBlocks.AKASHIC_RECORD.get(), RenderType.translucent());
-
-        EntityRenderers.register(HexEntities.WALL_SCROLL.get(), WallScrollRenderer::new);
+        x.registerEntityRenderer(HexEntities.WALL_SCROLL, WallScrollRenderer::new);
 
         addScryingLensStuff();
     }
@@ -115,13 +109,13 @@ public class RegisterClientStuff {
                 }
             });
 
-        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF.get(),
+        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF,
             (lines, state, pos, observer, world, direction, lensHand) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
                     var recordPos = tile.getRecordPos();
                     var pattern = tile.getPattern();
                     if (recordPos != null && pattern != null) {
-                        lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_RECORD.get()), new TranslatableComponent(
+                        lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_RECORD), new TranslatableComponent(
                             "hexcasting.tooltip.lens.akashic.bookshelf.location",
                             recordPos.toShortString()
                         )));
@@ -132,12 +126,12 @@ public class RegisterClientStuff {
                 }
             });
 
-        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_RECORD.get(),
+        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_RECORD,
             (lines, state, pos, observer, world, direction, lensHand) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAkashicRecord tile) {
                     int count = tile.getCount();
 
-                    lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_BOOKSHELF.get()), new TranslatableComponent(
+                    lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_BOOKSHELF), new TranslatableComponent(
                         "hexcasting.tooltip.lens.akashic.record.count" + (count == 1 ? ".single" : ""),
                         count
                     )));
@@ -196,7 +190,7 @@ public class RegisterClientStuff {
     }
 
     private static void registerDataHolderOverrides(DataHolderItem item) {
-        ItemProperties.register((Item) item, ItemFocus.DATATYPE_PRED,
+        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.DATATYPE_PRED,
             (stack, level, holder, holderID) -> {
                 var datum = item.readDatumTag(stack);
                 if (datum != null) {
@@ -213,19 +207,19 @@ public class RegisterClientStuff {
                 }
                 return 0f;
             });
-        ItemProperties.register((Item) item, ItemFocus.SEALED_PRED,
+        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.SEALED_PRED,
             (stack, level, holder, holderID) -> item.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);
     }
 
     private static void registerPackagedSpellOverrides(ItemPackagedHex item) {
-        ItemProperties.register(item, ItemPackagedHex.HAS_PATTERNS_PRED,
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemPackagedHex.HAS_PATTERNS_PRED,
             (stack, level, holder, holderID) ->
                 item.getPatterns(stack) != null ? 1f : 0f
         );
     }
 
     private static void registerWandOverrides(ItemWand item) {
-        ItemProperties.register(item, ItemWand.FUNNY_LEVEL_PREDICATE,
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemWand.FUNNY_LEVEL_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
                 if (name.contains("old")) {
@@ -238,12 +232,12 @@ public class RegisterClientStuff {
             });
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void registerParticles(ParticleFactoryRegisterEvent event) {
-        // does whatever a particle can
-        var particleMan = Minecraft.getInstance().particleEngine;
-        particleMan.register(HexParticles.LIGHT_PARTICLE.get(), ConjureParticle.Provider::new);
-        particleMan.register(HexParticles.CONJURE_PARTICLE.get(), ConjureParticle.Provider::new);
+    public static void registerParticles() {
+        // rip particle man
+        IClientXplatAbstractions.INSTANCE.registerParticleType(HexParticles.LIGHT_PARTICLE.get(),
+            ConjureParticle.Provider::new);
+        IClientXplatAbstractions.INSTANCE.registerParticleType(HexParticles.CONJURE_PARTICLE.get(),
+            ConjureParticle.Provider::new);
     }
 
     @SubscribeEvent

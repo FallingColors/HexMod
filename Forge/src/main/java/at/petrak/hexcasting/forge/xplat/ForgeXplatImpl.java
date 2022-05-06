@@ -243,11 +243,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void sendPacketToServer(IMessage packet) {
-        ForgePacketHandler.getNetwork().sendToServer(packet);
-    }
-
-    @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
         Block... blocks) {
         return BlockEntityType.Builder.of(func::apply, blocks).build(null);

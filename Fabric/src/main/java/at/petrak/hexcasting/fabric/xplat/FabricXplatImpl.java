@@ -15,7 +15,6 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
@@ -54,11 +53,6 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public void sendPacketToPlayer(ServerPlayer target, IMessage packet) {
         ServerPlayNetworking.send(target, packet.getFabricId(), packet.toBuf());
-    }
-
-    @Override
-    public void sendPacketToServer(IMessage packet) {
-        ClientPlayNetworking.send(packet.getFabricId(), packet.toBuf());
     }
 
     @Override

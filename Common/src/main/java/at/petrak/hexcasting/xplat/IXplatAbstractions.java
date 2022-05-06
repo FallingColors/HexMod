@@ -4,11 +4,13 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.DataHolder;
 import at.petrak.hexcasting.api.addldata.HexHolder;
 import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.common.casting.RegisterPatterns;
 import at.petrak.hexcasting.common.command.PatternResLocArgument;
 import at.petrak.hexcasting.common.network.IMessage;
 import net.minecraft.commands.synchronization.ArgumentTypes;
@@ -41,10 +43,7 @@ public interface IXplatAbstractions {
 
     boolean isPhysicalClient();
 
-
     void sendPacketToPlayer(ServerPlayer target, IMessage packet);
-
-    void sendPacketToServer(IMessage packet);
 
     // Things that used to be caps
 
@@ -108,6 +107,8 @@ public interface IXplatAbstractions {
             PatternResLocArgument.class,
             new EmptyArgumentSerializer<>(PatternResLocArgument::id)
         );
+        RegisterPatterns.registerPatterns();
+        HexAdvancementTriggers.registerTriggers();
     }
 
 

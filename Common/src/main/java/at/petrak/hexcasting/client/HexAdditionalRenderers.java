@@ -3,7 +3,7 @@ package at.petrak.hexcasting.client;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -21,29 +21,22 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.function.BiConsumer;
 
 public class HexAdditionalRenderers {
-    @SubscribeEvent
-    public static void overlayLevel(RenderLevelLastEvent evt) {
+    public static void overlayLevel(PoseStack ps, float partialTick) {
         var player = Minecraft.getInstance().player;
         if (player != null) {
-            var sentinel = HexPlayerDataHelper.getSentinel(player);
+            var sentinel = IXplatAbstractions.INSTANCE.getSentinel(player);
             if (sentinel.hasSentinel() && player.getLevel().dimension().equals(sentinel.dimension())) {
-                renderSentinel(sentinel, player, evt.getPoseStack(), evt.getPartialTick());
+                renderSentinel(sentinel, player, ps, partialTick);
             }
         }
     }
 
-    @SubscribeEvent
-    public static void overlayGui(RenderGameOverlayEvent.Post evt) {
-        if (evt.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-            tryRenderScryingLensOverlay(evt.getMatrixStack(), evt.getPartialTicks());
-        }
+    public static void overlayGui(PoseStack ps, float partialTicks) {
+        tryRenderScryingLensOverlay(ps, partialTicks);
     }
 
     private static void renderSentinel(Sentinel sentinel, LocalPlayer owner,
@@ -82,7 +75,7 @@ public class HexAdditionalRenderers {
         RenderSystem.disableCull();
         RenderSystem.lineWidth(5f);
 
-        var colorizer = HexPlayerDataHelper.getColorizer(owner);
+        var colorizer = IXplatAbstractions.INSTANCE.getColorizer(owner);
         BiConsumer<float[], float[]> v = (l, r) -> {
             int lcolor = colorizer.getColor(time, new Vec3(l[0], l[1], l[2])),
                 rcolor = colorizer.getColor(time, new Vec3(r[0], r[1], r[2]));
@@ -154,13 +147,13 @@ public class HexAdditionalRenderers {
         boolean foundLens = false;
         InteractionHand lensHand = null;
         for (var hand : InteractionHand.values()) {
-            if (mc.player.getItemInHand(hand).is(HexItems.SCRYING_LENS.get())) {
+            if (mc.player.getItemInHand(hand).is(HexItems.SCRYING_LENS)) {
                 lensHand = hand;
                 foundLens = true;
                 break;
             }
         }
-        if (!foundLens && mc.player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS.get())) {
+        if (!foundLens && mc.player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS)) {
             foundLens = true;
         }
 
@@ -172,6 +165,8 @@ public class HexAdditionalRenderers {
         if (hitRes instanceof BlockHitResult bhr) {
             var pos = bhr.getBlockPos();
             var bs = mc.level.getBlockState(pos);
+
+            var lineSpace = 9.0 * (mc.options.chatLineSpacing + 1.0);
 
             var lines = ScryingLensOverlayRegistry.getLines(bs, pos, mc.player, mc.level, bhr.getDirection(), lensHand);
             if (!lines.isEmpty()) {
@@ -198,13 +193,13 @@ public class HexAdditionalRenderers {
                     for (var line : textLines) {
                         var actualLine = Language.getInstance().getVisualOrder(line);
                         mc.font.drawShadow(ps, actualLine, tx, ty, 0xffffffff);
-                        ps.translate(0, 9, 0);
+                        ps.translate(0, lineSpace, 0);
                     }
                     if (textLines.isEmpty()) {
-                        ps.translate(0, 9, 0);
+                        ps.translate(0, lineSpace, 0);
                     }
 
-                    ps.translate(0, 6, 0);
+                    ps.translate(0, lineSpace * 0.66666, 0);
                 }
 
                 ps.popPose();

@@ -2,8 +2,9 @@ package at.petrak.hexcasting
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.PatternRegistry
-import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.client.HexAdditionalRenderers
+import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.common.lib.HexBlockEntities
 import at.petrak.hexcasting.common.lib.HexBlocks
 import at.petrak.hexcasting.common.lib.HexItems
@@ -15,14 +16,20 @@ import at.petrak.hexcasting.forge.cap.CapSyncers
 import at.petrak.hexcasting.forge.network.ForgePacketHandler
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.resources.ResourceLocation
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent
+import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.client.event.RenderLevelLastEvent
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingConversionEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
-import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.eventbus.api.EventPriority
+import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
@@ -39,6 +46,13 @@ object ForgeHexInitializer {
     init {
         IXplatAbstractions.INSTANCE.init()
 
+        initConfig()
+
+        initRegistry()
+        initListeners()
+    }
+
+    fun initConfig() {
         val config = ForgeConfigSpec.Builder()
             .configure { builder: ForgeConfigSpec.Builder? -> ForgeHexConfig(builder) }
         val serverConfig = ForgeConfigSpec.Builder()
@@ -51,9 +65,6 @@ object ForgeHexInitializer {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, config.right)
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, serverConfig.right)
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientConfig.right)
-
-        initRegistry()
-        initListeners()
     }
 
     fun initRegistry() {
@@ -70,7 +81,23 @@ object ForgeHexInitializer {
         // game events
         val evBus = thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
-        modBus.addListener(this::commonSetup)
+        modBus.addListener { evt: FMLCommonSetupEvent ->
+            evt.enqueueWork {
+                ForgePacketHandler.init()
+            }
+        }
+
+        modBus.addListener { evt: FMLClientSetupEvent ->
+            evt.enqueueWork {
+                RegisterClientStuff.init()
+            }
+        }
+
+        modBus.addListener { _: FMLLoadCompleteEvent ->
+            getLogger().info(
+                PatternRegistry.getPatternCountInfo()
+            )
+        }
 
         evBus.addListener { evt: EntityInteract ->
             val res = Brainsweeping.tradeWithVillager(
@@ -91,43 +118,19 @@ object ForgeHexInitializer {
         evBus.register(CapSyncers::class.java)
         evBus.register(ForgeOnlyEvents::class.java)
 
-        /*
-                modBus.register(this)
-        // gotta do it at *some* point
-        modBus.register(RegisterPatterns::class.java)
-        modBus.register(HexDataGenerators::class.java)
-
-        HexItems.ITEMS.register(modBus)
-        HexBlocks.BLOCKS.register(modBus)
-        HexBlockEntities.BLOCK_ENTITIES.register(modBus)
-        HexEntities.ENTITIES.register(modBus)
-        HexLootModifiers.LOOT_MODS.register(modBus)
-        HexSounds.SOUNDS.register(modBus)
-        HexParticles.PARTICLES.register(modBus)
-        HexCustomRecipes.RECIPES.register(modBus)
-        HexRecipeSerializers.SERIALIZERS.register(modBus)
-        modBus.register(HexStatistics::class.java)
-        modBus.register(HexRecipeSerializers::class.java)
-
-        modBus.register(HexComposting::class.java)
-
-        evBus.register(HexCommands::class.java)
-        evBus.register(TickScheduler)
-        evBus.register(HexCapabilityHandler::class.java)
-        evBus.register(HexPlayerDataHelper::class.java)
-        evBus.register(OpFlight)
-        evBus.register(Brainsweeping::class.java)
-
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT) {
             Runnable {
-                modBus.register(RegisterClientStuff::class.java)
-                evBus.register(ClientTickCounter::class.java)
-                evBus.register(HexAdditionalRenderers::class.java)
-                evBus.register(ShiftScrollListener::class.java)
-                evBus.register(HexTooltips::class.java)
+                evBus.addListener { evt: RenderLevelLastEvent ->
+                    HexAdditionalRenderers.overlayLevel(evt.poseStack, evt.partialTick)
+                }
+                evBus.addListener { evt: RenderGameOverlayEvent.PreLayer ->
+                    HexAdditionalRenderers.overlayGui(evt.matrixStack, evt.partialTicks)
+                }
+                evBus.addListener(EventPriority.LOWEST) { _: ParticleFactoryRegisterEvent ->
+                    RegisterClientStuff.registerParticles()
+                }
             }
         }
-         */
     }
 
     private fun <T : IForgeRegistryEntry<T>> bind(
@@ -145,21 +148,6 @@ object ForgeHexInitializer {
         }
     }
 
-    @SubscribeEvent
-    fun commonSetup(evt: FMLCommonSetupEvent) {
-        evt.enqueueWork {
-            HexAdvancementTriggers.registerTriggers()
-            ForgePacketHandler.init()
-        }
-    }
-
     @JvmStatic
     fun getLogger(): Logger = HexAPI.LOGGER
-
-    @SubscribeEvent
-    fun printPatternCount(evt: FMLLoadCompleteEvent) {
-        getLogger().info(
-            PatternRegistry.getPatternCountInfo()
-        )
-    }
 }
