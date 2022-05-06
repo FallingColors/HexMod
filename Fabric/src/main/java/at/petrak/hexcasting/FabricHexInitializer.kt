@@ -1,9 +1,10 @@
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
+import at.petrak.hexcasting.common.blocks.behavior.HexComposting
+import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.misc.Brainsweeping
-import at.petrak.hexcasting.common.recipe.HexComposting
 import at.petrak.hexcasting.fabric.FabricHexConfig
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
@@ -32,6 +33,7 @@ object FabricHexInitializer : ModInitializer {
         RegisterPatterns.registerPatterns()
         HexAdvancementTriggers.registerTriggers()
         HexComposting.setup()
+        HexStrippables.init()
     }
 
     fun initListeners() {

@@ -6,13 +6,10 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 import java.util.ServiceLoader;
@@ -21,11 +18,6 @@ import java.util.stream.Collectors;
 
 public interface IClientXplatAbstractions {
     void sendPacketToServer(IMessage packet);
-
-    // The funny thing is both forge and fabric separately access widen the SAME FUNCTION
-    // but i can't use it without xplat cause it's not widened in common
-    // waa
-    void registerItemProperty(Item item, ResourceLocation id, ClampedItemPropertyFunction func);
 
     void setRenderLayer(Block block, RenderType type);
 

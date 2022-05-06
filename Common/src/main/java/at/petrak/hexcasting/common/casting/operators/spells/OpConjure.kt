@@ -5,10 +5,10 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.common.blocks.BlockConjured
 import at.petrak.hexcasting.common.lib.HexBlocks
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack
@@ -43,11 +43,11 @@ class OpConjure(val light: Boolean) : SpellOperator {
             val worldState = ctx.world.getBlockState(pos)
             if (worldState.canBeReplaced(placeContext)) {
                 val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
-                val state = block.get().getStateForPlacement(placeContext)
+                val state = block.getStateForPlacement(placeContext)
                 if (state != null) {
                     ctx.world.setBlock(pos, state, 5)
 
-                    val colorizer = HexPlayerDataHelper.getColorizer(ctx.caster)
+                    val colorizer = IXplatAbstractions.INSTANCE.getColorizer(ctx.caster)
 
                     if (ctx.world.getBlockState(pos).block is BlockConjured) {
                         BlockConjured.setColor(ctx.world, pos, colorizer)

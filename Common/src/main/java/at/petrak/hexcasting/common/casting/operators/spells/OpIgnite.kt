@@ -1,19 +1,19 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.HexMod
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.mixin.accessor.AccessorUseOnContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.FireChargeItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
@@ -44,7 +44,7 @@ object OpIgnite : SpellOperator {
             if (maxwell is FireChargeItem) {
                 // help
                 maxwell.useOn(
-                    UseOnContext(
+                    AccessorUseOnContext.`hex$new`(
                         ctx.world,
                         null,
                         InteractionHand.MAIN_HAND,
@@ -53,7 +53,7 @@ object OpIgnite : SpellOperator {
                     )
                 )
             } else {
-                HexMod.getLogger().warn("Items.FIRE_CHARGE wasn't a FireChargeItem?")
+                HexAPI.LOGGER.warn("Items.FIRE_CHARGE wasn't a FireChargeItem?")
             }
         }
     }

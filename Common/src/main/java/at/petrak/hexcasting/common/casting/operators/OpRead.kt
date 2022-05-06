@@ -4,23 +4,22 @@ import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
-import at.petrak.hexcasting.forge.cap.HexCapabilities
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 object OpRead : ConstManaOperator {
     override val argc = 0
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val datum = it.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
-            datum.isPresent && (datum.get().readDatum(ctx.world) != null || datum.get().emptyDatum() != null)
+            val dataHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
+            dataHolder != null && (dataHolder.readDatum(ctx.world) != null || dataHolder.emptyDatum() != null)
         }
 
-        val datumHolder = handStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
-        if (!datumHolder.isPresent)
-            throw MishapBadOffhandItem.of(handStack, hand, "iota.read")
+        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
+            ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.read")
 
-        val datum = datumHolder.get().readDatum(ctx.world)
-            ?: datumHolder.get().emptyDatum()
+        val datum = datumHolder.readDatum(ctx.world)
+            ?: datumHolder.emptyDatum()
             ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.read")
 
         return listOf(datum)

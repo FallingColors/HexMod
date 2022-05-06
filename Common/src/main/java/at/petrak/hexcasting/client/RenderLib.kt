@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.client
 
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.utils.HexUtils
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.utils.HexUtils
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
@@ -52,7 +52,7 @@ object RenderLib {
         val g1 = FC.green(tail).toFloat()
         val b1 = FC.blue(tail).toFloat()
         val a = FC.alpha(tail)
-        val headSource = if (Screen.hasControlDown() != HexConfig.Client.ctrlTogglesOffStrokeOrder.get())
+        val headSource = if (Screen.hasControlDown() != HexConfig.client().ctrlTogglesOffStrokeOrder())
             head
         else
             tail
@@ -99,7 +99,7 @@ object RenderLib {
 
         if (animTime != null) {
             val pointCircuit =
-                (animTime * 30f * HexConfig.Client.patternPointSpeedMultiplier.get().toFloat()) % (points.size + 10)
+                (animTime * 30f * HexConfig.client().patternPointSpeedMultiplier().toFloat()) % (points.size + 10)
             // subtract 1 to avoid the point appearing between the end and start for 1 frame
             if (pointCircuit < points.size - 1) {
                 val pointMacro = floor(pointCircuit).toInt()

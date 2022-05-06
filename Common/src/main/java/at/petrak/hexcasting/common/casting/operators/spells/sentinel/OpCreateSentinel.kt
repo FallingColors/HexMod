@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
+import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
-import at.petrak.hexcasting.api.player.Sentinel
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.phys.Vec3
 
 class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
@@ -30,7 +30,8 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
 
     private data class Spell(val target: Vec3, val extendsRange: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            HexPlayerDataHelper.setSentinel(ctx.caster,
+            IXplatAbstractions.INSTANCE.setSentinel(
+                ctx.caster,
                 Sentinel(
                     true,
                     extendsRange,

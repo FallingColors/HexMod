@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
-import at.petrak.hexcasting.forge.cap.HexCapabilities
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpWrite : SpellOperator {
@@ -19,16 +19,15 @@ object OpWrite : SpellOperator {
         val datum = args[0]
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val datumHolder = it.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
+            val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-            datumHolder.isPresent && datumHolder.get().writeDatum(datum, true)
+            datumHolder != null && datumHolder.writeDatum(datum, true)
         }
 
-        val datumHolder = handStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
-        if (!datumHolder.isPresent)
-            throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
+        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
+            ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
 
-        if (!datumHolder.get().writeDatum(datum, true))
+        if (!datumHolder.writeDatum(datum, true))
             throw MishapBadOffhandItem.of(handStack, hand, "iota.readonly", datum.display())
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
@@ -45,16 +44,13 @@ object OpWrite : SpellOperator {
     private data class Spell(val datum: SpellDatum<*>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn {
-                val datumHolder = it.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
+                val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-                datumHolder.isPresent && datumHolder.get().writeDatum(datum, true)
+                datumHolder != null && datumHolder.writeDatum(datum, true)
             }
 
-            val datumHolder = handStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.DATUM).resolve()
-
-            if (datumHolder.isPresent) {
-                datumHolder.get().writeDatum(datum, false)
-            }
+            val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
+            datumHolder?.writeDatum(datum, false)
         }
 
     }

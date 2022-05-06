@@ -10,7 +10,6 @@ import net.minecraft.world.phys.Vec2
 /**
  * Sequence of angles to define a pattern traced.
  */
-@JvmRecord
 data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = arrayListOf()) {
     /**
      * @return True if it successfully appended, false if not.
@@ -131,7 +130,10 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
 
         @JvmStatic
         fun IsHexPattern(tag: CompoundTag): Boolean {
-            return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt()) && tag.contains(TAG_ANGLES, Tag.TAG_BYTE_ARRAY.toInt())
+            return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt()) && tag.contains(
+                TAG_ANGLES,
+                Tag.TAG_BYTE_ARRAY.toInt()
+            )
         }
 
         @JvmStatic

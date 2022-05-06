@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.misc;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Holder;
@@ -27,15 +27,15 @@ public class AkashicTreeGrower extends AbstractTreeGrower {
     public static final List<Holder<ConfiguredFeature<TreeConfiguration, ?>>> GROWERS = Lists.newArrayList();
 
     static {
-        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES1.get(), "1"));
-        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES2.get(), "2"));
-        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES3.get(), "3"));
+        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES1, "1"));
+        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES2, "2"));
+        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES3, "3"));
     }
 
     private static Holder<ConfiguredFeature<TreeConfiguration, ?>> buildTreeFeature(Block leaves, String name) {
-        return FeatureUtils.register(HexMod.MOD_ID + ":akashic_tree" + name, Feature.TREE,
+        return FeatureUtils.register(HexAPI.MOD_ID + ":akashic_tree" + name, Feature.TREE,
             new TreeConfiguration.TreeConfigurationBuilder(
-                BlockStateProvider.simple(HexBlocks.AKASHIC_LOG.get()),
+                BlockStateProvider.simple(HexBlocks.AKASHIC_LOG),
                 // baseHeight, heightRandA, heightRandB
                 new FancyTrunkPlacer(5, 5, 3),
                 BlockStateProvider.simple(leaves),

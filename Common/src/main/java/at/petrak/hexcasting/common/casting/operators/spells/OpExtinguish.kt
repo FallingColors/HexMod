@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.mixin.accessor.AccessorUseOnContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
@@ -11,7 +12,6 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.block.*
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
@@ -55,7 +55,11 @@ object OpExtinguish : SpellOperator {
                             here.z.toDouble()
                         )
                     ) // max distance to prevent runaway shenanigans
-                if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && distFromTarget < 10 && ctx.world.mayInteract(ctx.caster, here)) {
+                if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && distFromTarget < 10 && ctx.world.mayInteract(
+                        ctx.caster,
+                        here
+                    )
+                ) {
                     // never seen this pos in my life
                     val blockstate = ctx.world.getBlockState(here)
                     val success =
@@ -68,7 +72,7 @@ object OpExtinguish : SpellOperator {
                                     val wilson = Items.WOODEN_SHOVEL // summon shovel from the ether to do our bidding
                                     val hereVec = (Vec3(here.x.toDouble(), here.y.toDouble(), here.z.toDouble()))
                                     wilson.useOn(
-                                        UseOnContext(
+                                        AccessorUseOnContext.`hex$new`(
                                             ctx.world,
                                             null,
                                             InteractionHand.MAIN_HAND,

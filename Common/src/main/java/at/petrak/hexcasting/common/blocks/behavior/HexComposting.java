@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.recipe;
+package at.petrak.hexcasting.common.blocks.behavior;
 
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import net.minecraft.world.item.Item;

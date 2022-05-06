@@ -12,7 +12,7 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.utils.ManaHelper
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex
-import at.petrak.hexcasting.forge.cap.HexCapabilities
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.entity.item.ItemEntity
 
@@ -54,15 +54,15 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
-            val spellHolder = handStack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.SPELL).resolve()
-            if (spellHolder.isPresent
-                && spellHolder.get().patterns == null
+            val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
+            if (hexHolder != null
+                && hexHolder.patterns == null
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
                 val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
-                    spellHolder.get().writePatterns(patterns, manaAmt)
+                    hexHolder.writePatterns(patterns, manaAmt)
                 }
 
                 itemEntity.item = entityStack

@@ -10,8 +10,8 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.utils.ManaHelper
-import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
+import at.petrak.hexcasting.common.lib.HexItems
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
@@ -66,7 +66,7 @@ object OpMakeBattery : SpellOperator {
                 if (manaAmt > 0) {
                     ctx.caster.setItemInHand(
                         hand,
-                        ItemManaHolder.withMana(ItemStack(HexItems.BATTERY.get()), manaAmt, manaAmt)
+                        ItemManaHolder.withMana(ItemStack(HexItems.BATTERY), manaAmt, manaAmt)
                     )
                 }
 

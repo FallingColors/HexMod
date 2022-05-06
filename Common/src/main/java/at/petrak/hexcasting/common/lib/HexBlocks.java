@@ -170,12 +170,12 @@ public class HexBlocks {
 
     public static final BlockAxis AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
         new BlockAkashicLog(akashicWoody()));
-    public static final BlockStrippable AKASHIC_LOG = blockItem("akashic_log",
-        new BlockAkashicWood(akashicWoody(), () -> AKASHIC_LOG_STRIPPED));
+    public static final Block AKASHIC_LOG = blockItem("akashic_log",
+        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 5, 5));
     public static final Block AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
         IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 5, 5));
-    public static final BlockStrippable AKASHIC_WOOD = blockItem("akashic_wood",
-        new BlockStrippable(akashicWoody(), () -> AKASHIC_WOOD_STRIPPED));
+    public static final Block AKASHIC_WOOD = blockItem("akashic_log",
+        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 5, 5));
     public static final Block AKASHIC_PLANKS = blockItem("akashic_planks",
         IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 20, 5));
     public static final Block AKASHIC_PANEL = blockItem("akashic_panel",

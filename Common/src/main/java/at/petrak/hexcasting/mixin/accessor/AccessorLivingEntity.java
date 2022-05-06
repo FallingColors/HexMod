@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.mixin;
+package at.petrak.hexcasting.mixin.accessor;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;

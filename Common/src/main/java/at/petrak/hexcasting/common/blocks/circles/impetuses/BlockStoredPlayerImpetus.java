@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.api.cap.HexCapabilities;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityStoredPlayerImpetus;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,10 +36,10 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
         BlockHitResult pHit) {
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
             var usedStack = pPlayer.getItemInHand(pHand);
-            var datumContainer = usedStack.getCapability(HexCapabilities.DATUM).resolve();
-            if (datumContainer.isPresent()) {
+            var datumContainer = IXplatAbstractions.INSTANCE.findDataHolder(usedStack);
+            if (datumContainer != null) {
                 if (pLevel instanceof ServerLevel level) {
-                    var stored = datumContainer.get().readDatum(level);
+                    var stored = datumContainer.readDatum(level);
                     if (stored != null && stored.getType() == DatumType.ENTITY) {
                         var entity = (Entity) stored.getPayload();
                         if (entity instanceof Player) {
@@ -47,7 +47,7 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
                             tile.setPlayer(entity.getUUID());
                             tile.setChanged();
 
-                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING.get(),
+                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING,
                                 SoundSource.BLOCKS,
                                 1f, 1f);
                         }

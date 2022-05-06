@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.HexMod
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -42,7 +42,7 @@ object OpCreateLava : SpellOperator {
                 // make the player null so we don't give them a usage statistic for example
                 charlie.emptyContents(null, ctx.world, pos, null)
             } else {
-                HexMod.getLogger().warn("Items.LAVA_BUCKET wasn't a BucketItem?")
+                HexAPI.LOGGER.warn("Items.LAVA_BUCKET wasn't a BucketItem?")
             }
         }
     }

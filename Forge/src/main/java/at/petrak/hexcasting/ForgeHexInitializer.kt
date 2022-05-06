@@ -4,11 +4,13 @@ import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.common.blocks.behavior.HexComposting
+import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.RegisterPatterns
+import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.misc.Brainsweeping
-import at.petrak.hexcasting.common.recipe.HexComposting
 import at.petrak.hexcasting.forge.ForgeHexConfig
 import at.petrak.hexcasting.forge.ForgeOnlyEvents
 import at.petrak.hexcasting.forge.cap.CapSyncers
@@ -19,6 +21,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingConversionEvent
+import net.minecraftforge.event.entity.living.LivingEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
@@ -88,6 +91,7 @@ object ForgeHexInitializer {
             evt.enqueueWork {
                 ForgePacketHandler.init()
                 HexComposting.setup()
+                HexStrippables.init()
             }
         }
 
@@ -111,6 +115,10 @@ object ForgeHexInitializer {
             Brainsweeping.copyBrainsweepFromVillager(
                 evt.entityLiving, evt.outcome
             )
+        }
+
+        evBus.addListener { evt: LivingEvent.LivingUpdateEvent ->
+            OpFlight.tickDownFlight(evt.entityLiving)
         }
 
         evBus.register(CapSyncers::class.java)

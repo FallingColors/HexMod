@@ -7,12 +7,11 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
-import at.petrak.hexcasting.common.lib.HexMessages
 import at.petrak.hexcasting.common.network.MsgBlinkAck
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.network.PacketDistributor
 
 object OpTeleport : SpellOperator {
     override val argc = 2
@@ -45,7 +44,7 @@ object OpTeleport : SpellOperator {
             if (distance < 32768.0) {
                 teleportee.setPos(teleportee.position().add(delta))
                 if (teleportee is ServerPlayer) {
-                    HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { teleportee }, MsgBlinkAck(delta))
+                    IXplatAbstractions.INSTANCE.sendPacketToPlayer(teleportee, MsgBlinkAck(delta))
                 }
             }
 

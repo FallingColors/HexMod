@@ -7,11 +7,10 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.event.entity.living.LivingEvent
-import net.minecraftforge.eventbus.api.SubscribeEvent
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -43,7 +42,8 @@ object OpFlight : SpellOperator {
                 return
             }
 
-            HexPlayerDataHelper.setFlight(target,
+            IXplatAbstractions.INSTANCE.setFlight(
+                target,
                 FlightAbility(
                     true,
                     time,
@@ -61,12 +61,10 @@ object OpFlight : SpellOperator {
         }
     }
 
-    @SubscribeEvent
-    fun tickDownFlight(evt: LivingEvent.LivingUpdateEvent) {
-        val entity = evt.entityLiving
+    fun tickDownFlight(entity: LivingEntity) {
         if (entity !is ServerPlayer) return
 
-        val flight = HexPlayerDataHelper.getFlight(entity)
+        val flight = IXplatAbstractions.INSTANCE.getFlight(entity)
 
         if (flight.allowed) {
             val flightTime = flight.timeLeft - 1
@@ -74,7 +72,7 @@ object OpFlight : SpellOperator {
                 if (!entity.isOnGround) {
                     entity.fallDistance = 1_000_000f
                 }
-                HexPlayerDataHelper.setFlight(entity, FlightAbility.deny())
+                IXplatAbstractions.INSTANCE.setFlight(entity, FlightAbility.deny())
 
                 if (!entity.isCreative && !entity.isSpectator) {
                     val abilities = entity.abilities
@@ -83,7 +81,8 @@ object OpFlight : SpellOperator {
                     entity.onUpdateAbilities()
                 }
             } else
-                HexPlayerDataHelper.setFlight(entity,
+                IXplatAbstractions.INSTANCE.setFlight(
+                    entity,
                     FlightAbility(
                         true,
                         flightTime,

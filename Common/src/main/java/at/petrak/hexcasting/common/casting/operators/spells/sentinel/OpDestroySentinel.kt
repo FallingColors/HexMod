@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
+import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationInWrongDimension
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
-import at.petrak.hexcasting.api.player.Sentinel
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 object OpDestroySentinel : SpellOperator {
     override val argc = 0
@@ -16,7 +16,8 @@ object OpDestroySentinel : SpellOperator {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val particles = mutableListOf<ParticleSpray>()
-        val sentinel = HexPlayerDataHelper.getSentinel(ctx.caster)
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster)
+        // TODO why can't you remove things from other dimensions?
         if (sentinel.dimension != ctx.world.dimension())
             throw MishapLocationInWrongDimension(sentinel.dimension.location())
         particles.add(ParticleSpray.Cloud(sentinel.position, 2.0))
@@ -30,7 +31,7 @@ object OpDestroySentinel : SpellOperator {
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            HexPlayerDataHelper.setSentinel(ctx.caster, Sentinel.none())
+            IXplatAbstractions.INSTANCE.setSentinel(ctx.caster, Sentinel.none())
         }
     }
 }

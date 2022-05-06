@@ -15,9 +15,6 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.common.util.BlockSnapshot
-import net.minecraftforge.event.world.BlockEvent
 
 object OpPlaceBlock : SpellOperator {
     override val argc: Int
@@ -52,12 +49,13 @@ object OpPlaceBlock : SpellOperator {
                         val placee = placeeStack.item as BlockItem
                         if (ctx.withdrawItem(placee, 1, false)) {
                             // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143
-                            val evt = BlockEvent.EntityPlaceEvent(
-                                BlockSnapshot.create(ctx.world.dimension(), ctx.world, pos),
-                                ctx.world.getBlockState(pos.above()),
-                                ctx.caster
-                            )
-                            MinecraftForge.EVENT_BUS.post(evt)
+                            // TODO do we need to add this back somehow
+                            // val evt = BlockEvent.EntityPlaceEvent(
+                            //     BlockSnapshot.create(ctx.world.dimension(), ctx.world, pos),
+                            //     ctx.world.getBlockState(pos.above()),
+                            //     ctx.caster
+                            // )
+                            // MinecraftForge.EVENT_BUS.post(evt)
 
                             // we temporarily give the player the stack, place it using mc code, then give them the old stack back.
                             val oldStack = ctx.caster.getItemInHand(ctx.castingHand)

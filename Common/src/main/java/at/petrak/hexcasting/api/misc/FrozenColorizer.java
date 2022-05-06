@@ -48,11 +48,6 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
         }
     }
 
-    @Deprecated
-    public static boolean isColorizer(ItemStack stack) {
-        return IXplatAbstractions.INSTANCE.isColorizer(stack);
-    }
-
     /**
      * Gets a color with a minimum luminance applied.
      *
