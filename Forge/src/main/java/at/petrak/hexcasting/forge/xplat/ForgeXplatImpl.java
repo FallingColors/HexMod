@@ -37,6 +37,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -44,6 +45,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
@@ -243,6 +245,13 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet) {
+        ForgePacketHandler.getNetwork().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(
+            pos.x, pos.y, pos.z, radius * radius, dimension.dimension()
+        )), packet);
+    }
+
+    @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
         Block... blocks) {
         return BlockEntityType.Builder.of(func::apply, blocks).build(null);
@@ -273,6 +282,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
 
         return TAB;
+    }
+
+    @Override
+    public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
+        return !bs.requiresCorrectToolForDrops() || TierSortingRegistry.isCorrectTierForDrops(tier, bs);
     }
 
     public static final String TAG_BRAINSWEPT = "hexcasting:brainswept";

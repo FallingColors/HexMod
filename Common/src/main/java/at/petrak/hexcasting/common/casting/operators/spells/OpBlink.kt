@@ -7,12 +7,11 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
-import at.petrak.hexcasting.common.lib.HexMessages
 import at.petrak.hexcasting.common.network.MsgBlinkAck
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.network.PacketDistributor
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -52,7 +51,7 @@ object OpBlink : SpellOperator {
             target.setPos(target.position().add(dvec))
             if (target is ServerPlayer) {
                 target.connection.resetPosition()
-                HexMessages.getNetwork().send(PacketDistributor.PLAYER.with { target }, MsgBlinkAck(dvec))
+                IXplatAbstractions.INSTANCE.sendPacketToPlayer(target, MsgBlinkAck(dvec))
             }
         }
     }

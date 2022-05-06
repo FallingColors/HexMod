@@ -9,7 +9,7 @@ archivesBaseName = "${modID}-common-${minecraftVersion}"
 
 minecraft {
     version(minecraftVersion)
-    
+
     runs {
         if (project.hasProperty('common_runs_enabled') ? project.findProperty('common_runs_enabled').toBoolean() : true) {
             server(project.hasProperty('common_server_run_name') ? project.findProperty('common_server_run_name') : 'vanilla_server') {
@@ -26,6 +26,8 @@ dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    compileOnly "vazkii.patchouli:Patchouli-xplat:$minecraftVersion-$patchouliVersion"
 }
 
 processResources {

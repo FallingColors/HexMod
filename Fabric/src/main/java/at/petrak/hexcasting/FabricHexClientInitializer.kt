@@ -1,4 +1,5 @@
 import at.petrak.hexcasting.client.HexAdditionalRenderers
+import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
@@ -12,5 +13,8 @@ object FabricHexClientInitializer : ClientModInitializer {
             HexAdditionalRenderers.overlayLevel(ctx.matrixStack(), ctx.tickDelta())
         }
         HudRenderCallback.EVENT.register(HexAdditionalRenderers::overlayGui)
+
+        RegisterClientStuff.init()
+        RegisterClientStuff.registerParticles()
     }
 }

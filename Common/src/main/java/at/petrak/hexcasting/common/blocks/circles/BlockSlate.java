@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
+import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
@@ -94,19 +95,19 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
         }
     }
 
-    @Override
+    @SoftImplement("forge")
     public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos,
         Player player) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof BlockEntitySlate slate) {
-            ItemStack stack = new ItemStack(HexItems.SLATE.get());
+            ItemStack stack = new ItemStack(HexItems.SLATE);
             if (slate.pattern != null) {
-                HexItems.SLATE.get().writeDatum(stack, SpellDatum.make(slate.pattern));
+                HexItems.SLATE.writeDatum(stack, SpellDatum.make(slate.pattern));
             }
             return stack;
         }
 
-        return super.getCloneItemStack(state, target, level, pos, player);
+        return new ItemStack(this);
     }
 
     @Override

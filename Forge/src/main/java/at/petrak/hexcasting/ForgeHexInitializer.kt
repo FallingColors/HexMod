@@ -2,34 +2,27 @@ package at.petrak.hexcasting
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.PatternRegistry
+import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.client.HexAdditionalRenderers
-import at.petrak.hexcasting.client.RegisterClientStuff
-import at.petrak.hexcasting.common.lib.HexBlockEntities
-import at.petrak.hexcasting.common.lib.HexBlocks
-import at.petrak.hexcasting.common.lib.HexItems
-import at.petrak.hexcasting.common.lib.HexSounds
+import at.petrak.hexcasting.common.casting.RegisterPatterns
+import at.petrak.hexcasting.common.command.PatternResLocArgument
+import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.misc.Brainsweeping
+import at.petrak.hexcasting.common.recipe.HexComposting
 import at.petrak.hexcasting.forge.ForgeHexConfig
 import at.petrak.hexcasting.forge.ForgeOnlyEvents
 import at.petrak.hexcasting.forge.cap.CapSyncers
 import at.petrak.hexcasting.forge.network.ForgePacketHandler
-import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.commands.synchronization.ArgumentTypes
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer
 import net.minecraft.resources.ResourceLocation
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.client.event.RenderLevelLastEvent
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingConversionEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
-import net.minecraftforge.eventbus.api.EventPriority
-import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
@@ -44,12 +37,18 @@ import java.util.function.Consumer
 @Mod(HexAPI.MOD_ID)
 object ForgeHexInitializer {
     init {
-        IXplatAbstractions.INSTANCE.init()
-
         initConfig()
 
         initRegistry()
         initListeners()
+
+        ArgumentTypes.register(
+            "hexcasting:pattern",
+            PatternResLocArgument::class.java,
+            EmptyArgumentSerializer { PatternResLocArgument.id() }
+        )
+        RegisterPatterns.registerPatterns()
+        HexAdvancementTriggers.registerTriggers()
     }
 
     fun initConfig() {
@@ -73,6 +72,8 @@ object ForgeHexInitializer {
         bind(ForgeRegistries.ITEMS, HexBlocks::registerBlockItems)
         bind(ForgeRegistries.BLOCK_ENTITIES, HexBlockEntities::registerTiles)
         bind(ForgeRegistries.ITEMS, HexItems::registerItems)
+
+        bind(ForgeRegistries.PARTICLE_TYPES, HexParticles::registerParticles)
     }
 
     fun initListeners() {
@@ -81,15 +82,12 @@ object ForgeHexInitializer {
         // game events
         val evBus = thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
+        modBus.register(ForgeHexClientInitializer::class.java)
+
         modBus.addListener { evt: FMLCommonSetupEvent ->
             evt.enqueueWork {
                 ForgePacketHandler.init()
-            }
-        }
-
-        modBus.addListener { evt: FMLClientSetupEvent ->
-            evt.enqueueWork {
-                RegisterClientStuff.init()
+                HexComposting.setup()
             }
         }
 
@@ -117,20 +115,6 @@ object ForgeHexInitializer {
 
         evBus.register(CapSyncers::class.java)
         evBus.register(ForgeOnlyEvents::class.java)
-
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT) {
-            Runnable {
-                evBus.addListener { evt: RenderLevelLastEvent ->
-                    HexAdditionalRenderers.overlayLevel(evt.poseStack, evt.partialTick)
-                }
-                evBus.addListener { evt: RenderGameOverlayEvent.PreLayer ->
-                    HexAdditionalRenderers.overlayGui(evt.matrixStack, evt.partialTicks)
-                }
-                evBus.addListener(EventPriority.LOWEST) { _: ParticleFactoryRegisterEvent ->
-                    RegisterClientStuff.registerParticles()
-                }
-            }
-        }
     }
 
     private fun <T : IForgeRegistryEntry<T>> bind(

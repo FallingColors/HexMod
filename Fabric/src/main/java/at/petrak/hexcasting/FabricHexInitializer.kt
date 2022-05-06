@@ -1,27 +1,37 @@
-import at.petrak.hexcasting.common.lib.HexBlockEntities
-import at.petrak.hexcasting.common.lib.HexBlocks
-import at.petrak.hexcasting.common.lib.HexItems
-import at.petrak.hexcasting.common.lib.HexSounds
+import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
+import at.petrak.hexcasting.common.casting.RegisterPatterns
+import at.petrak.hexcasting.common.command.PatternResLocArgument
+import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.misc.Brainsweeping
+import at.petrak.hexcasting.common.recipe.HexComposting
 import at.petrak.hexcasting.fabric.FabricHexConfig
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
-import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
+import net.minecraft.commands.synchronization.ArgumentTypes
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
     override fun onInitialize() {
-        IXplatAbstractions.INSTANCE.init()
-        FabricPacketHandler.init()
         FabricHexConfig.setup()
+        FabricPacketHandler.init()
 
         initListeners()
 
         initRegistries()
+
+        ArgumentTypes.register(
+            "hexcasting:pattern",
+            PatternResLocArgument::class.java,
+            EmptyArgumentSerializer { PatternResLocArgument.id() }
+        )
+        RegisterPatterns.registerPatterns()
+        HexAdvancementTriggers.registerTriggers()
+        HexComposting.setup()
     }
 
     fun initListeners() {
@@ -35,6 +45,8 @@ object FabricHexInitializer : ModInitializer {
         HexBlocks.registerBlockItems(bind(Registry.ITEM))
         HexItems.registerItems(bind(Registry.ITEM))
         HexBlockEntities.registerTiles(bind(Registry.BLOCK_ENTITY_TYPE))
+
+        HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
     }
 
     private fun <T> bind(registry: Registry<in T>): BiConsumer<T, ResourceLocation> =

@@ -14,7 +14,7 @@ import java.util.Locale;
 public record ConjureParticleOptions(int color, boolean isLight) implements ParticleOptions {
     @Override
     public ParticleType<?> getType() {
-        return (this.isLight ? HexParticles.LIGHT_PARTICLE : HexParticles.CONJURE_PARTICLE).get();
+        return (this.isLight ? HexParticles.LIGHT_PARTICLE : HexParticles.CONJURE_PARTICLE);
     }
 
     @Override

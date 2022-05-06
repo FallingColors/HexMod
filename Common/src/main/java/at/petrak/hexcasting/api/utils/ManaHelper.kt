@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.forge.cap.HexCapabilities
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 import kotlin.math.roundToInt
@@ -8,8 +8,8 @@ import kotlin.math.roundToInt
 object ManaHelper {
     @JvmStatic
     fun isManaItem(stack: ItemStack): Boolean {
-        return stack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).map { it.canProvide() }
-            .orElse(false) && extractMana(stack, simulate = true) > 0
+        val manaHolder = IXplatAbstractions.INSTANCE.findManaHolder(stack) ?: return false
+        return manaHolder.withdrawMana(-1, true) > 0
     }
 
     /**
@@ -28,30 +28,25 @@ object ManaHelper {
         drainForBatteries: Boolean = false,
         simulate: Boolean = false
     ): Int {
-        val manaCapability = stack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
+        val manaHolder = IXplatAbstractions.INSTANCE.findManaHolder(stack) ?: return 0
 
-        if (!manaCapability.isPresent)
+        if (drainForBatteries && !manaHolder.canConstructBattery())
             return 0
 
-        val manaReservoir = manaCapability.get()
-
-        if (drainForBatteries && !manaReservoir.canConstructBattery())
-            return 0
-
-        return manaReservoir.withdrawMana(cost, simulate)
+        return manaHolder.withdrawMana(cost, simulate)
     }
 
     /**
      * Sorted from least important to most important
      */
     fun compare(astack: ItemStack, bstack: ItemStack): Int {
-        val aMana = astack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
-        val bMana = bstack.getCapability(at.petrak.hexcasting.forge.cap.HexCapabilities.MANA).resolve()
+        val aMana = IXplatAbstractions.INSTANCE.findManaHolder(astack)
+        val bMana = IXplatAbstractions.INSTANCE.findManaHolder(bstack)
 
         return if (astack.item != bstack.item) {
-            aMana.map { it.consumptionPriority }.orElse(0) - bMana.map { it.consumptionPriority }.orElse(0)
-        } else if (aMana.isPresent && bMana.isPresent) {
-            aMana.get().mana - bMana.get().mana
+            (aMana?.consumptionPriority ?: 0) - (bMana?.consumptionPriority ?: 0)
+        } else if (aMana != null && bMana != null) {
+            aMana.mana - bMana.mana
         } else {
             astack.count - bstack.count
         }

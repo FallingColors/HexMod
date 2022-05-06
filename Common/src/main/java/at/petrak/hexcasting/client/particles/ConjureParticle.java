@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.client.particles;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -99,6 +99,9 @@ public class ConjureParticle extends TextureSheetParticle {
     // pretty sure this prevents the gross culling
     // https://github.com/VazkiiMods/Psi/blob/1.18/src/main/java/vazkii/psi/client/fx/FXWisp.java
     private record ConjureRenderType(boolean light) implements ParticleRenderType {
+        private static boolean prevBlur;
+        private static boolean prevMipmap;
+
         @Override
         public void begin(BufferBuilder buf, TextureManager texMan) {
             Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
@@ -116,17 +119,17 @@ public class ConjureParticle extends TextureSheetParticle {
         @Override
         public void end(Tesselator tess) {
             tess.end();
-            Minecraft.getInstance()
-                .getTextureManager()
-                .getTexture(TextureAtlas.LOCATION_PARTICLES)
-                .restoreLastBlurMipmap();
+            // Minecraft.getInstance()
+            //     .getTextureManager()
+            //     .getTexture(TextureAtlas.LOCATION_PARTICLES)
+            //     .restoreLastBlurMipmap();
             RenderSystem.disableBlend();
             RenderSystem.depthMask(true);
         }
 
         @Override
         public String toString() {
-            return HexMod.MOD_ID + (light ? ":light" : ":conjure");
+            return HexAPI.MOD_ID + (light ? ":light" : ":conjure");
         }
     }
 

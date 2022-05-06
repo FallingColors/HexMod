@@ -1,23 +1,23 @@
 package at.petrak.hexcasting.client.gui
 
-import at.petrak.hexcasting.api.utils.HexUtils
-import at.petrak.hexcasting.api.utils.HexUtils.TAU
-import at.petrak.hexcasting.client.RenderLib
-import at.petrak.hexcasting.client.sound.GridSoundInstance
+import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity
-import at.petrak.hexcasting.common.lib.HexItems
-import at.petrak.hexcasting.common.items.ItemSpellbook
-import at.petrak.hexcasting.common.lib.HexSounds
-import at.petrak.hexcasting.common.lib.HexMessages
-import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
-import at.petrak.hexcasting.common.network.MsgShiftScrollSyn
 import at.petrak.hexcasting.api.spell.math.HexAngle
 import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
-import at.petrak.hexcasting.api.mod.HexItemTags
+import at.petrak.hexcasting.api.utils.HexUtils
+import at.petrak.hexcasting.api.utils.HexUtils.TAU
+import at.petrak.hexcasting.client.RenderLib
+import at.petrak.hexcasting.client.sound.GridSoundInstance
+import at.petrak.hexcasting.common.items.ItemSpellbook
+import at.petrak.hexcasting.common.lib.HexItems
+import at.petrak.hexcasting.common.lib.HexSounds
+import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
+import at.petrak.hexcasting.common.network.MsgShiftScrollSyn
+import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
@@ -61,7 +61,7 @@ class GuiSpellcasting(
         if (!info.wasPrevPatternInvalid) {
             Minecraft.getInstance().soundManager.play(
                 SimpleSoundInstance(
-                    HexSounds.ADD_PATTERN.get(),
+                    HexSounds.ADD_PATTERN,
                     SoundSource.PLAYERS,
                     0.5f,
                     1f + (Math.random().toFloat() - 0.5f) * 0.1f,
@@ -76,7 +76,7 @@ class GuiSpellcasting(
     override fun init() {
         val minecraft = Minecraft.getInstance()
         val soundManager = minecraft.soundManager
-        soundManager.stop(HexSounds.CASTING_AMBIANCE.id, null)
+        soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
         val player = minecraft.player
         if (player != null) {
             this.ambianceSoundInstance = GridSoundInstance(player)
@@ -107,7 +107,7 @@ class GuiSpellcasting(
                 this.drawState = PatternDrawState.JustStarted(coord)
                 Minecraft.getInstance().soundManager.play(
                     SimpleSoundInstance(
-                        HexSounds.START_PATTERN.get(),
+                        HexSounds.START_PATTERN,
                         SoundSource.PLAYERS,
                         0.25f,
                         1f,
@@ -180,7 +180,7 @@ class GuiSpellcasting(
                 if (playSound) {
                     Minecraft.getInstance().soundManager.play(
                         SimpleSoundInstance(
-                            HexSounds.ADD_LINE.get(),
+                            HexSounds.ADD_LINE,
                             SoundSource.PLAYERS,
                             0.25f,
                             1f + (Math.random().toFloat() - 0.5f) * 0.1f,
@@ -208,7 +208,7 @@ class GuiSpellcasting(
                 this.drawState = PatternDrawState.BetweenPatterns
                 if (this.patterns.isEmpty()) {
                     Minecraft.getInstance().setScreen(null)
-                    Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.id, null)
+                    Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
                 }
             }
             is PatternDrawState.Drawing -> {
@@ -218,7 +218,7 @@ class GuiSpellcasting(
 
                 this.usedSpots.addAll(pat.positions(start))
 
-                HexMessages.getNetwork().sendToServer(
+                IClientXplatAbstractions.INSTANCE.sendPacketToServer(
                     MsgNewSpellPatternSyn(
                         this.handOpenedWith,
                         pat,
@@ -236,13 +236,19 @@ class GuiSpellcasting(
 
         val otherHand = HexUtils.OtherHand(this.handOpenedWith)
         if (Minecraft.getInstance().player!!.getItemInHand(otherHand).item is ItemSpellbook)
-            HexMessages.getNetwork().sendToServer(MsgShiftScrollSyn(otherHand, pDelta, Screen.hasControlDown()))
+            IClientXplatAbstractions.INSTANCE.sendPacketToServer(
+                MsgShiftScrollSyn(
+                    otherHand,
+                    pDelta,
+                    Screen.hasControlDown()
+                )
+            )
 
         return true
     }
 
     override fun onClose() {
-        Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.id, null)
+        Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
 
         super.onClose()
     }
@@ -345,7 +351,7 @@ class GuiSpellcasting(
     /** Distance between adjacent hex centers */
     fun hexSize(): Float {
         val hasLens = Minecraft.getInstance().player!!
-            .getItemInHand(HexUtils.OtherHand(this.handOpenedWith)).`is`(HexItems.SCRYING_LENS.get())
+            .getItemInHand(HexUtils.OtherHand(this.handOpenedWith)).`is`(HexItems.SCRYING_LENS)
         return this.width.toFloat() / if (hasLens) 48.0f else 32.0f
     }
 

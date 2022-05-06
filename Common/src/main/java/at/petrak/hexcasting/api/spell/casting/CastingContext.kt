@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.api.spell.casting
 
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.api.spell.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.api.utils.HexUtils
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -52,7 +52,7 @@ data class CastingContext(
      */
     fun incDepth() {
         this.depth++
-        val maxAllowedDepth = HexConfig.Server.maxRecurseDepth.get()
+        val maxAllowedDepth = HexConfig.server().maxRecurseDepth()
         if (this.depth > maxAllowedDepth) {
             throw MishapEvalTooDeep()
         }
@@ -77,7 +77,7 @@ data class CastingContext(
     }
 
     fun isVecInRange(vec: Vec3): Boolean {
-        val sentinel = HexPlayerDataHelper.getSentinel(caster)
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(caster)
         if (sentinel.hasSentinel
             && sentinel.extendsRange
             && world.dimension() == sentinel.dimension

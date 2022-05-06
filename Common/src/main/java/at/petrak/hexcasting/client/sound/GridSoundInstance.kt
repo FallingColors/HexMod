@@ -13,7 +13,8 @@ import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
 
 @OnlyIn(Dist.CLIENT)
-class GridSoundInstance(val player: Player) : AbstractTickableSoundInstance(HexSounds.CASTING_AMBIANCE.get(), SoundSource.PLAYERS) {
+class GridSoundInstance(val player: Player) :
+    AbstractTickableSoundInstance(HexSounds.CASTING_AMBIANCE, SoundSource.PLAYERS) {
     var mousePosX: Double = 0.5
     var mousePosY: Double = 0.5
 

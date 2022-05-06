@@ -7,9 +7,9 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.common.TierSortingRegistry
 
 object OpBreakBlock : SpellOperator {
     override val argc: Int
@@ -39,13 +39,12 @@ object OpBreakBlock : SpellOperator {
 
             val blockstate = ctx.world.getBlockState(pos)
             val tier =
-                HexConfig.Server.getOpBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()
+                HexConfig.server().opBreakHarvestLevel()
 
             if (
                 !blockstate.isAir
                 && blockstate.getDestroySpeed(ctx.world, pos) >= 0f // fix being able to break bedrock &c
-                && (!blockstate.requiresCorrectToolForDrops()
-                        || TierSortingRegistry.isCorrectTierForDrops(tier, blockstate))
+                && IXplatAbstractions.INSTANCE.isCorrectTierForDrops(tier, blockstate)
             ) {
                 ctx.world.destroyBlock(pos, true, ctx.caster)
             }

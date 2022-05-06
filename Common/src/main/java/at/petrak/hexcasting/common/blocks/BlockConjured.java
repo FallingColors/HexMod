@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.blocks;
 
+import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
 import net.minecraft.core.BlockPos;
@@ -57,12 +58,6 @@ public class BlockConjured extends Block implements EntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos,
-        Player player) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
     public void stepOn(Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull Entity pEntity) {
         BlockEntity tile = pLevel.getBlockEntity(pPos);
         if (tile instanceof BlockEntityConjured bec) {
@@ -117,14 +112,22 @@ public class BlockConjured extends Block implements EntityBlock {
         // NO-OP
     }
 
-    @Override
+    // TODO figure out how to impl these in fabric
+
+    @SoftImplement("forge")
     public boolean addLandingEffects(BlockState state1, ServerLevel worldserver, BlockPos pos, BlockState state2,
         LivingEntity entity, int numberOfParticles) {
         BlockEntity tile = worldserver.getBlockEntity(pos);
-        if (tile instanceof BlockEntityConjured) {
-            ((BlockEntityConjured) tile).landParticle(entity, numberOfParticles);
+        if (tile instanceof BlockEntityConjured bec) {
+            bec.landParticle(entity, numberOfParticles);
         }
         return true;
+    }
+
+    @SoftImplement("forge")
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos,
+        Player player) {
+        return ItemStack.EMPTY;
     }
 }
 

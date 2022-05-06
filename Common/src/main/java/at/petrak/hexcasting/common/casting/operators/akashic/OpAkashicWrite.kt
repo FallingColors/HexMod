@@ -5,12 +5,12 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
-import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapNoAkashicRecord
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
+import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord
 import at.petrak.hexcasting.common.lib.HexSounds
-import at.petrak.hexcasting.api.spell.math.HexPattern
 import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.phys.Vec3
@@ -51,7 +51,7 @@ object OpAkashicWrite : SpellOperator {
             record.addNewDatum(key, datum)
 
             ctx.world.playSound(
-                null, record.blockPos, HexSounds.SCROLL_SCRIBBLE.get(), SoundSource.BLOCKS,
+                null, record.blockPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
                 1f, 0.8f
             )
 

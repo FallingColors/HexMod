@@ -4,24 +4,21 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.DataHolder;
 import at.petrak.hexcasting.api.addldata.HexHolder;
 import at.petrak.hexcasting.api.addldata.ManaHolder;
-import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.common.casting.RegisterPatterns;
-import at.petrak.hexcasting.common.command.PatternResLocArgument;
 import at.petrak.hexcasting.common.network.IMessage;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -44,6 +41,8 @@ public interface IXplatAbstractions {
     boolean isPhysicalClient();
 
     void sendPacketToPlayer(ServerPlayer target, IMessage packet);
+
+    void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet);
 
     // Things that used to be caps
 
@@ -99,17 +98,7 @@ public interface IXplatAbstractions {
 
     CreativeModeTab getTab();
 
-    default void init() {
-        HexAPI.LOGGER.info("Hello Hexcasting! This is {}!", this.platform());
-
-        ArgumentTypes.register(
-            "hexcasting:pattern",
-            PatternResLocArgument.class,
-            new EmptyArgumentSerializer<>(PatternResLocArgument::id)
-        );
-        RegisterPatterns.registerPatterns();
-        HexAdvancementTriggers.registerTriggers();
-    }
+    boolean isCorrectTierForDrops(Tier tier, BlockState bs);
 
 
     IXplatAbstractions INSTANCE = find();

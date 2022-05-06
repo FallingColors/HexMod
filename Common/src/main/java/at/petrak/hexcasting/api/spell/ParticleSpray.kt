@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.api.spell
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.mod.HexApiMessages
+import at.petrak.hexcasting.common.network.MsgCastParticleAck
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.network.PacketDistributor
 
 data class ParticleSpray(val pos: Vec3, val vel: Vec3, val fuzziness: Double, val spread: Double, val count: Int = 20) {
     companion object {
@@ -20,14 +20,6 @@ data class ParticleSpray(val pos: Vec3, val vel: Vec3, val fuzziness: Double, va
     }
 
     fun sprayParticles(world: ServerLevel, color: FrozenColorizer) {
-        HexApiMessages.getChannel().send(PacketDistributor.NEAR.with {
-            PacketDistributor.TargetPoint(
-                this.pos.x,
-                this.pos.y,
-                this.pos.z,
-                128.0 * 128.0,
-                world.dimension()
-            )
-        }, HexApiMessages.getParticleSprayMessage(this, color))
+        IXplatAbstractions.INSTANCE.sendPacketNear(this.pos, 128.0, world, MsgCastParticleAck(this, color))
     }
 }
