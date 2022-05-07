@@ -17,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
@@ -38,14 +37,7 @@ public class HexAdvancements extends AdvancementProvider {
                 new ResourceLocation("minecraft", "textures/block/calcite.png"),
                 FrameType.TASK, true, true, true))
             // the only thing making this vaguely tolerable is the knowledge the json files are worse somehow
-            .addCriterion("on_thingy", new TickTrigger.TriggerInstance(EntityPredicate.Composite.wrap(
-                EntityPredicate.Builder.entity()
-                    .steppingOn(LocationPredicate.Builder.location()
-                        .setBlock(BlockPredicate.Builder.block()
-                            .of(Blocks.AMETHYST_BLOCK, Blocks.CALCITE)
-                            .build())
-                        .setY(MinMaxBounds.Doubles.between(-64.0, 30.0)).build())
-                    .build())))
+            .addCriterion("has_charged_amethyst", InventoryChangeTrigger.TriggerInstance.hasItems(HexItems.CHARGED_AMETHYST::get))
             .save(consumer, prefix("root")); // how the hell does one even read this
 
         // weird names so we have alphabetical parity
@@ -54,7 +46,7 @@ public class HexAdvancements extends AdvancementProvider {
             .parent(root)
             .addCriterion("waste_amt", new SpendManaTrigger.Instance(EntityPredicate.Composite.ANY,
                 MinMaxBounds.Ints.ANY,
-                MinMaxBounds.Ints.atLeast(89 * ManaConstants.DUST_UNIT)))
+                MinMaxBounds.Ints.atLeast(89 * ManaConstants.DUST_UNIT / 10)))
             .save(consumer, prefix("aaa_wasteful_cast"));
         Advancement.Builder.advancement()
             .display(simple(HexItems.CHARGED_AMETHYST.get(), "big_cast", FrameType.TASK))
@@ -93,7 +85,7 @@ public class HexAdvancements extends AdvancementProvider {
                 new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
                     MinMaxBounds.Ints.ANY,
                     // add a little bit of slop here
-                    MinMaxBounds.Doubles.atLeast(17.95),
+                    MinMaxBounds.Doubles.atLeast(0.8),
                     MinMaxBounds.Doubles.between(0.1, 2.05)))
             .save(consumer, prefix("enlightenment"));
 

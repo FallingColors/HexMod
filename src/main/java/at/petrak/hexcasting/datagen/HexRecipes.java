@@ -258,7 +258,7 @@ public class HexRecipes extends PaucalRecipeProvider {
         var enlightenment = new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
             MinMaxBounds.Ints.ANY,
             // add a little bit of slop here
-            MinMaxBounds.Doubles.atLeast(17.95),
+            MinMaxBounds.Doubles.atLeast(0.8),
             MinMaxBounds.Doubles.between(0.1, 2.05));
 
         ShapedRecipeBuilder.shaped(HexBlocks.EMPTY_IMPETUS.get())

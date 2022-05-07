@@ -35,7 +35,7 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
         super.trigger(player, inst -> {
             var manaToHealth = HexConfig.manaToHealthRate.get();
             var healthUsed = manaGenerated / manaToHealth;
-            return inst.test(manaGenerated, healthUsed, player.getHealth() - (float) healthUsed);
+            return inst.test(manaGenerated, healthUsed / player.getMaxHealth(), player.getHealth() - (float) healthUsed);
         });
     }
 
