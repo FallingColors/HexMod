@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.mod.HexApiItems
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.common.lib.HexItems
 import net.minecraft.ChatFormatting
 import net.minecraft.Util
 import net.minecraft.network.chat.Component
@@ -36,7 +36,7 @@ sealed class Mishap : Throwable() {
 
     protected fun dyeColor(color: DyeColor): FrozenColorizer =
         FrozenColorizer(
-            ItemStack(HexApiItems.getColorizer(color)),
+            ItemStack(HexItems.DYE_COLORIZERS[color]!!),
             Util.NIL_UUID
         )
 

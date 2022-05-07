@@ -3,15 +3,16 @@ package at.petrak.hexcasting.api.spell.casting
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.mod.HexApiItems
 import at.petrak.hexcasting.api.mod.HexApiSounds
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
+import at.petrak.hexcasting.common.lib.HexItems
 import net.minecraft.Util
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 
 /**
@@ -83,7 +84,7 @@ sealed class OperatorSideEffect {
             spray.sprayParticles(
                 harness.ctx.world,
                 FrozenColorizer(
-                    ItemStack(HexApiItems.COLORIZER_RED),
+                    ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!),
                     Util.NIL_UUID
                 )
             )
