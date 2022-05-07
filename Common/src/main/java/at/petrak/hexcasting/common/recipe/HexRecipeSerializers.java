@@ -1,26 +1,39 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.HexMod;
-import net.minecraft.world.item.Item;
+import at.petrak.hexcasting.api.HexAPI;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexRecipeSerializers {
-    public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(
-        ForgeRegistries.RECIPE_SERIALIZERS, HexMod.MOD_ID);
+    public void register(BiConsumer<ResourceLocation, RecipeSerializer<?>> r) {
+        for (var e : SERIALIZERS.entrySet()) {
+            r.accept(e.getKey(), e.getValue());
+        }
+    }
 
-    public static final RegistryObject<RecipeSerializer<?>> BRAINSWEEP = SERIALIZERS.register("brainsweep",
-        BrainsweepRecipe.Serializer::new);
+    private static final Map<ResourceLocation, RecipeSerializer<?>> SERIALIZERS = new LinkedHashMap<>();
+    public static final RecipeSerializer<?> BRAINSWEEP = register("brainsweep",
+        new BrainsweepRecipe.Serializer());
     public static RecipeType<BrainsweepRecipe> BRAINSWEEP_TYPE;
 
+    private static <T extends Recipe<?>> RecipeSerializer<T> register(String name, RecipeSerializer<T> rs) {
+        var old = SERIALIZERS.put(modLoc(name), rs);
+        if (old != null) {
+            throw new IllegalArgumentException("Typo? Duplicate id " + name);
+        }
+        return rs;
+    }
+
     // Like in the statistics, gotta register it at some point
-    @SubscribeEvent
-    public static void registerTypes(RegistryEvent.Register<Item> evt) {
-        BRAINSWEEP_TYPE = RecipeType.register(HexMod.MOD_ID + ":brainsweep");
+    public static void registerTypes() {
+        BRAINSWEEP_TYPE = RecipeType.register(HexAPI.MOD_ID + ":brainsweep");
     }
 }

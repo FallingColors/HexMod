@@ -16,7 +16,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.Nullable;
 
 // God I am a horrible person
@@ -26,8 +25,6 @@ public record BrainsweepRecipe(
     VillagerIngredient villagerIn,
     BlockState result
 ) implements Recipe<Container> {
-
-
     public boolean matches(BlockState blockIn, Villager villagerIn) {
         return this.blockIn.test(blockIn) && this.villagerIn.test(villagerIn);
     }
@@ -44,7 +41,7 @@ public record BrainsweepRecipe(
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return HexRecipeSerializers.BRAINSWEEP.get();
+        return HexRecipeSerializers.BRAINSWEEP;
     }
 
     // in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards
@@ -69,7 +66,7 @@ public record BrainsweepRecipe(
         return ItemStack.EMPTY.copy();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<BrainsweepRecipe> {
+    public static class Serializer implements RecipeSerializer<BrainsweepRecipe> {
         @Override
         public BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
             var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));

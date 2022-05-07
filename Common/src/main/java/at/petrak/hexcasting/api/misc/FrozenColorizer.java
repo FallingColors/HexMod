@@ -1,12 +1,13 @@
 package at.petrak.hexcasting.api.misc;
 
 import at.petrak.hexcasting.api.addldata.Colorizer;
-import at.petrak.hexcasting.api.mod.HexApiItems;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.FastColor;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -26,7 +27,7 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
     public static final String TAG_OWNER = "owner";
 
     public static final Supplier<FrozenColorizer> DEFAULT =
-        () -> new FrozenColorizer(new ItemStack(HexApiItems.COLORIZER_WHITE), Util.NIL_UUID);
+        () -> new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.WHITE)), Util.NIL_UUID);
 
     public CompoundTag serialize() {
         var out = new CompoundTag();

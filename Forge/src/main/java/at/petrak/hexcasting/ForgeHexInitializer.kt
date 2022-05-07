@@ -9,8 +9,10 @@ import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.PatternResLocArgument
+import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.misc.Brainsweeping
+import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import at.petrak.hexcasting.forge.ForgeHexConfig
 import at.petrak.hexcasting.forge.ForgeOnlyEvents
 import at.petrak.hexcasting.forge.cap.CapSyncers
@@ -18,6 +20,7 @@ import at.petrak.hexcasting.forge.network.ForgePacketHandler
 import net.minecraft.commands.synchronization.ArgumentTypes
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingConversionEvent
@@ -76,6 +79,8 @@ object ForgeHexInitializer {
         bind(ForgeRegistries.BLOCK_ENTITIES, HexBlockEntities::registerTiles)
         bind(ForgeRegistries.ITEMS, HexItems::registerItems)
 
+        bind(ForgeRegistries.ENTITIES, HexEntities::registerEntities)
+
         bind(ForgeRegistries.PARTICLE_TYPES, HexParticles::registerParticles)
     }
 
@@ -93,6 +98,12 @@ object ForgeHexInitializer {
                 HexComposting.setup()
                 HexStrippables.init()
             }
+        }
+
+        // We have to do these at some point when the registries are still open
+        modBus.addListener { _: RegistryEvent<Item> ->
+            HexRecipeSerializers.registerTypes()
+            // TODO statistics
         }
 
         modBus.addListener { _: FMLLoadCompleteEvent ->

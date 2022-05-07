@@ -1,16 +1,18 @@
 package at.petrak.hexcasting.common.entities;
 
-import at.petrak.hexcasting.client.RenderLib;
-import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.items.ItemScroll;
-import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.client.RenderLib;
+import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -28,13 +30,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EntityWallScroll extends HangingEntity implements IEntityAdditionalSpawnData {
+public class EntityWallScroll extends HangingEntity {
     private static final EntityDataAccessor<Boolean> SHOWS_STROKE_ORDER = SynchedEntityData.defineId(
         EntityWallScroll.class,
         EntityDataSerializers.BOOLEAN);
@@ -50,7 +50,7 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
     }
 
     public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll) {
-        super(HexEntities.WALL_SCROLL.get(), world, pos);
+        super(HexEntities.WALL_SCROLL, world, pos);
         this.loadDataFromScrollItem(scroll);
         this.setDirection(dir);
     }
@@ -116,13 +116,13 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
     @Override
     public InteractionResult interactAt(Player pPlayer, Vec3 pVec, InteractionHand pHand) {
         var handStack = pPlayer.getItemInHand(pHand);
-        if (handStack.is(HexItems.AMETHYST_DUST.get()) && !this.getShowsStrokeOrder()) {
+        if (handStack.is(HexItems.AMETHYST_DUST) && !this.getShowsStrokeOrder()) {
             if (!pPlayer.getAbilities().instabuild) {
                 handStack.shrink(1);
             }
             this.setShowsStrokeOrder(true);
 
-            pPlayer.level.playSound(pPlayer, this, HexSounds.SCROLL_DUST.get(), SoundSource.PLAYERS, 1f, 1f);
+            pPlayer.level.playSound(pPlayer, this, HexSounds.SCROLL_DUST, SoundSource.PLAYERS, 1f, 1f);
             return InteractionResult.SUCCESS;
         }
         return super.interactAt(pPlayer, pVec, pHand);
@@ -135,9 +135,10 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
 
     @Override
     public Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return new ClientboundAddEntityPacket(this);
     }
 
+    /*
     @Override
     public void writeSpawnData(FriendlyByteBuf buf) {
         buf.writeVarInt(this.direction.ordinal());
@@ -154,11 +155,12 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
         this.loadDataFromScrollItem(scroll);
         this.setDirection(this.direction);
     }
+     */
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putByte("direction", (byte) this.direction.ordinal());
-        tag.put("scroll", this.scroll.serializeNBT());
+        tag.put("scroll", HexUtils.serialize(this.scroll));
         tag.putBoolean("showsStrokeOrder", this.getShowsStrokeOrder());
         super.addAdditionalSaveData(tag);
     }
@@ -186,7 +188,8 @@ public class EntityWallScroll extends HangingEntity implements IEntityAdditional
         this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
     }
 
-    @Override
+    // todo: fabric
+    @SoftImplement("forge")
     public ItemStack getPickedResult(HitResult target) {
         return this.scroll.copy();
     }

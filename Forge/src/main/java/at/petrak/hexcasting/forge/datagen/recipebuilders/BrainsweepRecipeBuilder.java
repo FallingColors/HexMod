@@ -84,7 +84,7 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 
         @Override
         public RecipeSerializer<?> getType() {
-            return HexRecipeSerializers.BRAINSWEEP.get();
+            return HexRecipeSerializers.BRAINSWEEP;
         }
 
         @Nullable
