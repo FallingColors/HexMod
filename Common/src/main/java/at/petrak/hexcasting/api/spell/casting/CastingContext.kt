@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.spell.casting
 
+import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.mishaps.MishapEntityTooFarAway
@@ -182,20 +183,16 @@ data class CastingContext(
         this.entitiesGivenMotion.add(entity)
     }
 
-    private fun prefix(path: String): ResourceLocation {
-        return ResourceLocation("hexcasting", path)
-    }
-
     val canOvercast: Boolean
         get() {
-            val adv = this.world.server.advancements.getAdvancement(prefix("y_u_no_cast_angy"))
+            val adv = this.world.server.advancements.getAdvancement(modLoc("y_u_no_cast_angy"))
             val advs = this.caster.advancements
             return advs.getOrStartProgress(adv!!).isDone
         }
 
     val isCasterEnlightened: Boolean
         get() {
-            val adv = this.world.server.advancements.getAdvancement(prefix("enlightenment"))
+            val adv = this.world.server.advancements.getAdvancement(modLoc("enlightenment"))
             val advs = this.caster.advancements
             return advs.getOrStartProgress(adv!!).isDone
         }

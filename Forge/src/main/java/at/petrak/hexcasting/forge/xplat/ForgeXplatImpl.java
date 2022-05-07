@@ -166,7 +166,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             var origin = HexUtils.DeserializeVec3FromNBT(tag.getLongArray(TAG_FLIGHT_ORIGIN));
             var radius = tag.getDouble(TAG_FLIGHT_RADIUS);
             var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
-                new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
+                new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
             return new FlightAbility(true, timeLeft, dimension, origin, radius);
         }
         return FlightAbility.deny();
