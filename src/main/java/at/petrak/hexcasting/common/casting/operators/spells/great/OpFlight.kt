@@ -2,13 +2,13 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.player.FlightAbility
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.event.entity.living.LivingEvent
@@ -59,6 +59,7 @@ object OpFlight : SpellOperator {
             target.onUpdateAbilities()
             // Launch the player into the air to really emphasize the flight
             target.push(0.0, 1.0, 0.0)
+            target.hurtMarked = true // Whyyyyy
         }
     }
 

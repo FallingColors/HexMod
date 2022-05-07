@@ -100,6 +100,7 @@ public class HexPlayerDataHelper {
 		} else {
 			tag.remove(TAG_FLIGHT_TIME);
 			tag.remove(TAG_FLIGHT_ORIGIN);
+			tag.remove(TAG_FLIGHT_DIMENSION);
 			tag.remove(TAG_FLIGHT_RADIUS);
 		}
 	}
