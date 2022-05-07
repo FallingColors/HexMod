@@ -1,9 +1,7 @@
 @file:JvmName("NBTHelper")
 package at.petrak.hexcasting.api.utils
 
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.Tag
+import net.minecraft.nbt.*
 import net.minecraft.world.item.ItemStack
 import java.util.*
 
@@ -85,13 +83,75 @@ fun CompoundTag?.getIntArray(key: String) = getIf(key, CompoundTag?::hasIntArray
 fun CompoundTag?.getByteArray(key: String) = getIf(key, CompoundTag?::hasByteArray, CompoundTag::getByteArray)
 fun CompoundTag?.getCompound(key: String): CompoundTag? = getIf(key, CompoundTag?::hasCompound, CompoundTag::getCompound)
 fun CompoundTag?.getString(key: String) = getIf(key, CompoundTag?::hasString, CompoundTag::getString)
+fun CompoundTag?.getList(key: String, objType: Byte) = getList(key, objType.toInt())
 fun CompoundTag?.getList(key: String, objType: Int) = getIf(key, { hasList(key, objType) }) { getList(it, objType) }
 fun CompoundTag?.getUUID(key: String) = getIf(key, CompoundTag?::hasUUID, CompoundTag::getUUID)
 fun CompoundTag?.get(key: String) = getIf(key, CompoundTag?::contains, CompoundTag::get)
 
+@JvmSynthetic
+@JvmName("getListByByte")
+fun CompoundTag.getList(key: String, objType: Byte): ListTag = getList(key, objType.toInt())
+
 // Get-or-create
 
 fun CompoundTag.getOrCreateCompound(key: String) = getCompound(key) ?: CompoundTag().also { putCompound(key, this) }
+
+// ================================================================================================================ Tag
+
+val Tag.asBoolean get() = asByte == 0.toByte()
+val Tag.asByte get() = (this as? NumericTag)?.asByte ?: 0.toByte()
+val Tag.asShort get() = (this as? NumericTag)?.asShort ?: 0.toShort()
+val Tag.asInt get() = (this as? NumericTag)?.asInt ?: 0
+val Tag.asLong get() = (this as? NumericTag)?.asLong ?: 0L
+val Tag.asFloat get() = (this as? NumericTag)?.asFloat ?: 0F
+val Tag.asDouble get() = (this as? NumericTag)?.asDouble ?: 0.0
+
+val Tag.asLongArray: LongArray
+    get() = when (this) {
+        is LongArrayTag -> this.asLongArray
+        is IntArrayTag -> {
+            val array = this.asIntArray
+            LongArray(array.size) { array[it].toLong() }
+        }
+        is ByteArrayTag -> {
+            val array = this.asByteArray
+            LongArray(array.size) { array[it].toLong() }
+        }
+        else -> LongArray(0)
+    }
+
+val Tag.asIntArray: IntArray
+    get() = when (this) {
+        is IntArrayTag -> this.asIntArray
+        is LongArrayTag -> {
+            val array = this.asLongArray
+            IntArray(array.size) { array[it].toInt() }
+        }
+        is ByteArrayTag -> {
+            val array = this.asByteArray
+            IntArray(array.size) { array[it].toInt() }
+        }
+        else -> IntArray(0)
+    }
+
+val Tag.asByteArray: ByteArray
+    get() = when (this) {
+        is ByteArrayTag -> this.asByteArray
+        is LongArrayTag -> {
+            val array = this.asLongArray
+            ByteArray(array.size) { array[it].toByte() }
+        }
+        is IntArrayTag -> {
+            val array = this.asIntArray
+            ByteArray(array.size) { array[it].toByte() }
+        }
+        else -> ByteArray(0)
+    }
+
+val Tag.asCompound get() = this as? CompoundTag ?: CompoundTag()
+// asString is defined in Tag
+val Tag.asList get() = this as? ListTag ?: ListTag()
+val Tag.asUUID: UUID get() = if (this is IntArrayTag && this.size == 4) NbtUtils.loadUUID(this) else UUID(0, 0)
 
 // ========================================================================================================== ItemStack
 

@@ -12,7 +12,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object OpFisherman : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
         val arg = stack.getChecked<Double>(stack.lastIndex)
@@ -31,6 +31,6 @@ object OpFisherman : Operator {
             )
         }
 
-        return OperationResult(stack, listOf())
+        return OperationResult(stack, local, listOf())
     }
 }

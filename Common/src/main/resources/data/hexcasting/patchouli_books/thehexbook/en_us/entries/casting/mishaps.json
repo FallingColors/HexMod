@@ -85,8 +85,8 @@
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.invalid_iota.title",
-      "text": "hexcasting.page.mishaps.invalid_iota"
+      "title": "hexcasting.page.mishaps.other.title",
+      "text": "hexcasting.page.mishaps.other"
     }
   ]
 }

@@ -82,7 +82,11 @@ object OpFlight : SpellOperator {
                     abilities.mayfly = false
                     entity.onUpdateAbilities()
                 }
-            } else
+            } else {
+                if (!entity.abilities.mayfly) {
+                    entity.abilities.mayfly = true
+                    entity.onUpdateAbilities()
+                }
                 IXplatAbstractions.INSTANCE.setFlight(
                     entity,
                     FlightAbility(
@@ -93,6 +97,7 @@ object OpFlight : SpellOperator {
                         flight.radius
                     )
                 )
+            }
         }
 
     }

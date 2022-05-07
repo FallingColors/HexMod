@@ -16,12 +16,12 @@ interface SpellOperator : Operator {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>?
 
-    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
-        val executeResult = this.execute(args, ctx) ?: return OperationResult(stack, listOf())
+        val executeResult = this.execute(args, ctx) ?: return OperationResult(stack, local, listOf())
         val (spell, mana, particles) = executeResult
 
         val sideEffects = mutableListOf(
@@ -32,7 +32,7 @@ interface SpellOperator : Operator {
             sideEffects.add(OperatorSideEffect.Particles(spray))
         }
 
-        return OperationResult(stack, sideEffects)
+        return OperationResult(stack, local, sideEffects)
     }
 
 }

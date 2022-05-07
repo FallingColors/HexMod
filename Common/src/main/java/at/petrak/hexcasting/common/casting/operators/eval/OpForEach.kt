@@ -13,7 +13,7 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import net.minecraft.network.chat.TranslatableComponent
 
 object OpForEach : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)
 
@@ -25,11 +25,14 @@ object OpForEach : Operator {
         val out = mutableListOf<SpellDatum<*>>()
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
+        var localIota = local
+
         for (subdatum in datums) {
             ctx.incDepth()
             val harness = CastingHarness(ctx)
             harness.stack.addAll(stack)
             harness.stack.add(subdatum)
+            harness.localIota = localIota
             for (pat in instrs) {
                 val pattern = if (pat.payload is HexPattern) {
                     pat.payload
@@ -43,14 +46,15 @@ object OpForEach : Operator {
                 val res = harness.getUpdate(pattern, ctx.world)
                 sideEffects.addAll(res.sideEffects)
                 if (res.sideEffects.any { it is OperatorSideEffect.DoMishap }) {
-                    return OperationResult(harness.stack, sideEffects)
+                    return OperationResult(harness.stack, harness.localIota, sideEffects)
                 }
                 harness.applyFunctionalData(res.newData)
             }
             out.addAll(harness.stack)
+            localIota = harness.localIota
         }
         stack.add(SpellDatum.make(out))
 
-        return OperationResult(stack, sideEffects)
+        return OperationResult(stack, localIota, sideEffects)
     }
 }

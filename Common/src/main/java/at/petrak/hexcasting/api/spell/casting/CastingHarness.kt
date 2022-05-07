@@ -15,9 +15,12 @@ import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
 import at.petrak.hexcasting.api.spell.mishaps.MishapDisallowedSpell
+import at.petrak.hexcasting.api.spell.mishaps.MishapError
 import at.petrak.hexcasting.api.spell.mishaps.MishapTooManyCloseParens
 import at.petrak.hexcasting.api.utils.ManaHelper
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import at.petrak.hexcasting.api.utils.asCompound
+import at.petrak.hexcasting.api.utils.getList
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
@@ -33,6 +36,7 @@ import kotlin.math.min
  */
 class CastingHarness private constructor(
     var stack: MutableList<SpellDatum<*>>,
+    var localIota: SpellDatum<*>,
     var parenCount: Int,
     var parenthesized: List<HexPattern>,
     var escapeNext: Boolean,
@@ -44,7 +48,7 @@ class CastingHarness private constructor(
     constructor(
         ctx: CastingContext,
         prepackagedColorizer: FrozenColorizer? = null
-    ) : this(mutableListOf(), 0, mutableListOf(), false, ctx, prepackagedColorizer)
+    ) : this(mutableListOf(), SpellDatum.make(Widget.NULL), 0, mutableListOf(), false, ctx, prepackagedColorizer)
 
     /**
      * Given a pattern, do all the updating/side effects/etc required.
@@ -80,7 +84,8 @@ class CastingHarness private constructor(
             if (!HexConfig.server().isActionAllowed(operatorIdPair.second)) {
                 throw MishapDisallowedSpell()
             }
-            val (stack2, sideEffectsUnmut) = operatorIdPair.first.operate(this.stack.toMutableList(), this.ctx)
+            val (stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(this.stack.toMutableList(), this.localIota, this.ctx)
+            this.localIota = local2
             // Stick a poofy particle effect at the caster position
             val sideEffects = sideEffectsUnmut.toMutableList()
             if (this.ctx.spellCircle == null)
@@ -106,6 +111,12 @@ class CastingHarness private constructor(
             return CastResult(
                 this.getFunctionalData(),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.second))),
+            )
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            return CastResult(
+                this.getFunctionalData(),
+                listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(newPat, operatorIdPair?.second)))
             )
         }
     }
@@ -339,6 +350,8 @@ class CastingHarness private constructor(
             stackTag.add(datum.serializeToNBT())
         out.put(TAG_STACK, stackTag)
 
+        out.put(TAG_LOCAL, localIota.serializeToNBT())
+
         out.putInt(TAG_PAREN_COUNT, this.parenCount)
         out.putBoolean(TAG_ESCAPE_NEXT, this.escapeNext)
 
@@ -357,25 +370,29 @@ class CastingHarness private constructor(
 
     companion object {
         const val TAG_STACK = "stack"
+        const val TAG_LOCAL = "local"
         const val TAG_PAREN_COUNT = "open_parens"
         const val TAG_PARENTHESIZED = "parenthesized"
         const val TAG_ESCAPE_NEXT = "escape_next"
         const val TAG_PREPACKAGED_COLORIZER = "prepackaged_colorizer"
 
         @JvmStatic
-        fun DeserializeFromNBT(nbt: Tag, ctx: CastingContext): CastingHarness {
+        fun DeserializeFromNBT(nbt: CompoundTag, ctx: CastingContext): CastingHarness {
             return try {
                 val stack = mutableListOf<SpellDatum<*>>()
-                val stackTag = (nbt as CompoundTag).getList(TAG_STACK, Tag.TAG_COMPOUND.toInt())
+                val stackTag = nbt.getList(TAG_STACK, Tag.TAG_COMPOUND)
                 for (subtag in stackTag) {
-                    val datum = SpellDatum.DeserializeFromNBT(subtag as CompoundTag, ctx.world)
+                    val datum = SpellDatum.DeserializeFromNBT(subtag.asCompound, ctx.world)
                     stack.add(datum)
                 }
 
+                val localTag = nbt.getCompound(TAG_LOCAL)
+                val localIota = SpellDatum.DeserializeFromNBT(localTag, ctx.world)
+
                 val parenthesized = mutableListOf<HexPattern>()
-                val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND.toInt())
+                val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND)
                 for (subtag in parenTag) {
-                    parenthesized.add(HexPattern.DeserializeFromNBT(subtag as CompoundTag))
+                    parenthesized.add(HexPattern.DeserializeFromNBT(subtag.asCompound))
                 }
 
                 val parenCount = nbt.getInt(TAG_PAREN_COUNT)
@@ -387,7 +404,7 @@ class CastingHarness private constructor(
                     null
                 }
 
-                CastingHarness(stack, parenCount, parenthesized, escapeNext, ctx, colorizer)
+                CastingHarness(stack, localIota, parenCount, parenthesized, escapeNext, ctx, colorizer)
             } catch (exn: Exception) {
                 CastingHarness(ctx)
             }

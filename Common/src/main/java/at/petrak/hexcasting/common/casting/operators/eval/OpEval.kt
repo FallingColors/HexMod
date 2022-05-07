@@ -7,18 +7,19 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
-import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import net.minecraft.network.chat.TranslatableComponent
 
 object OpEval : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         val instrs: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
 
         ctx.incDepth()
         val harness = CastingHarness(ctx)
         harness.stack.addAll(stack)
+        harness.localIota = local
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
@@ -35,8 +36,7 @@ object OpEval : Operator {
             }
             harness.applyFunctionalData(res.newData)
         }
-        stack.addAll(harness.stack)
 
-        return OperationResult(harness.stack, sideEffects)
+        return OperationResult(harness.stack, harness.localIota, sideEffects)
     }
 }

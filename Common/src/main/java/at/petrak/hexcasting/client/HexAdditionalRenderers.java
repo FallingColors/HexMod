@@ -4,25 +4,31 @@ import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.locale.Language;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class HexAdditionalRenderers {
@@ -140,21 +146,24 @@ public class HexAdditionalRenderers {
         }
     }
 
-    // My internet is really shaky right now but thank god Patchi already does this exact thing
-    // cause it's a dependency so i have the .class files downloaded
     private static void tryRenderScryingLensOverlay(PoseStack ps, float partialTicks) {
         var mc = Minecraft.getInstance();
+
+        LocalPlayer player = mc.player;
+        ClientLevel level = mc.level;
+        if (player == null || level == null)
+            return;
 
         boolean foundLens = false;
         InteractionHand lensHand = null;
         for (var hand : InteractionHand.values()) {
-            if (mc.player.getItemInHand(hand).is(HexItems.SCRYING_LENS)) {
+            if (player.getItemInHand(hand).is(HexItems.SCRYING_LENS)) {
                 lensHand = hand;
                 foundLens = true;
                 break;
             }
         }
-        if (!foundLens && mc.player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS)) {
+        if (!foundLens && player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS)) {
             foundLens = true;
         }
 
@@ -163,24 +172,38 @@ public class HexAdditionalRenderers {
         }
 
         var hitRes = mc.hitResult;
-        if (hitRes.getType() == HitResult.Type.BLOCK) {
+        if (hitRes != null && hitRes.getType() == HitResult.Type.BLOCK) {
             var bhr = (BlockHitResult) hitRes;
             var pos = bhr.getBlockPos();
-            var bs = mc.level.getBlockState(pos);
+            var bs = level.getBlockState(pos);
 
-            var lineSpace = 9.0 * (mc.options.chatLineSpacing + 1.0);
+            var lines = ScryingLensOverlayRegistry.getLines(bs, pos, player, level, bhr.getDirection(), lensHand);
 
-            var lines = ScryingLensOverlayRegistry.getLines(bs, pos, mc.player, mc.level, bhr.getDirection(), lensHand);
+            int totalHeight = 8;
+            List<Pair<ItemStack, List<FormattedText>>> actualLines = Lists.newArrayList();
+
+            var window = mc.getWindow();
+            var maxWidth = (int) (window.getGuiScaledWidth() / 2f * 0.8f);
+
+            for (var pair : lines) {
+                totalHeight += mc.font.lineHeight + 6;
+                var text = pair.getSecond();
+                var textLines = mc.font.getSplitter().splitLines(text, maxWidth, Style.EMPTY);
+
+                actualLines.add(Pair.of(pair.getFirst(), textLines));
+
+                if (textLines.size() > 1) {
+                    totalHeight += mc.font.lineHeight * (textLines.size() - 1);
+                }
+            }
+
             if (!lines.isEmpty()) {
-                var window = mc.getWindow();
                 var x = window.getGuiScaledWidth() / 2f + 8f;
-                var y = window.getGuiScaledHeight() / 2f;
+                var y = window.getGuiScaledHeight() / 2f - totalHeight;
                 ps.pushPose();
                 ps.translate(x, y, 0);
 
-                var maxWidth = (int) (window.getGuiScaledWidth() / 2f * 0.8f);
-
-                for (var pair : lines) {
+                for (var pair : actualLines) {
                     var stack = pair.getFirst();
                     if (!stack.isEmpty()) {
                         // this draws centered in the Y ...
@@ -190,18 +213,14 @@ public class HexAdditionalRenderers {
                     float ty = 5;
                     // but this draws where y=0 is the baseline
                     var text = pair.getSecond();
-                    var textLines = mc.font.getSplitter().splitLines(text, maxWidth, Style.EMPTY);
 
-                    for (var line : textLines) {
+                    for (var line : text) {
                         var actualLine = Language.getInstance().getVisualOrder(line);
                         mc.font.drawShadow(ps, actualLine, tx, ty, 0xffffffff);
-                        ps.translate(0, lineSpace, 0);
+                        ps.translate(0, mc.font.lineHeight, 0);
                     }
-                    if (textLines.isEmpty()) {
-                        ps.translate(0, lineSpace, 0);
-                    }
-
-                    ps.translate(0, lineSpace * 0.66666, 0);
+                    if (text.isEmpty())
+                        ps.translate(0, mc.font.lineHeight, 0);
                 }
 
                 ps.popPose();
