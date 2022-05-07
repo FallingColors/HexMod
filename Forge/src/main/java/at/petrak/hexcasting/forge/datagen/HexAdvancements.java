@@ -36,18 +36,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
                 new ResourceLocation("minecraft", "textures/block/calcite.png"),
                 FrameType.TASK, true, true, true))
             // the only thing making this vaguely tolerable is the knowledge the json files are worse somehow
-            .addCriterion("on_thingy", new InventoryChangeTrigger.TriggerInstance(
-                EntityPredicate.Composite.wrap(
-                    EntityPredicate.Builder.entity()
-                        .steppingOn(LocationPredicate.Builder.location()
-                            .setY(MinMaxBounds.Doubles.between(-64.0, 30.0)).build())
-                        .build()),
-                MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY,
-                new ItemPredicate[]{
-                    ItemPredicate.Builder.item()
-                        .of(HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD, HexItems.CHARGED_AMETHYST)
-                        .build()
-                }))
+            .addCriterion("has_charged_amethyst", InventoryChangeTrigger.TriggerInstance.hasItems(HexItems.CHARGED_AMETHYST))
             .save(consumer, prefix("root")); // how the hell does one even read this
 
         // weird names so we have alphabetical parity
@@ -56,7 +45,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
             .parent(root)
             .addCriterion("waste_amt", new SpendManaTrigger.Instance(EntityPredicate.Composite.ANY,
                 MinMaxBounds.Ints.ANY,
-                MinMaxBounds.Ints.atLeast(89 * ManaConstants.DUST_UNIT)))
+                MinMaxBounds.Ints.atLeast(89 * ManaConstants.DUST_UNIT / 10)))
             .save(consumer, prefix("aaa_wasteful_cast"));
         Advancement.Builder.advancement()
             .display(simpleDisplay(HexItems.CHARGED_AMETHYST, "big_cast", FrameType.TASK))
@@ -95,7 +84,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
                 new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
                     MinMaxBounds.Ints.ANY,
                     // add a little bit of slop here
-                    MinMaxBounds.Doubles.atLeast(17.95),
+                    MinMaxBounds.Doubles.atLeast(0.8),
                     MinMaxBounds.Doubles.between(0.1, 2.05)))
             .save(consumer, prefix("enlightenment"));
 
