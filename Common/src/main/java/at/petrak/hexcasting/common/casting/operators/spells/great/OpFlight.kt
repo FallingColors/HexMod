@@ -59,6 +59,7 @@ object OpFlight : SpellOperator {
             target.onUpdateAbilities()
             // Launch the player into the air to really emphasize the flight
             target.push(0.0, 1.0, 0.0)
+            target.hurtMarked = true // Whyyyyy
         }
     }
 
