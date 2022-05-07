@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 
 object OpEvalDelay : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
-        return OperationResult(stack, listOf())
+    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+        return OperationResult(stack, local, listOf())
     }
 }

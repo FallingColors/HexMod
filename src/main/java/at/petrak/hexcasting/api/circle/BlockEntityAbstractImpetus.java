@@ -177,7 +177,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         if (tag.contains(TAG_ACTIVATOR, Tag.TAG_INT_ARRAY) &&
             tag.contains(TAG_COLORIZER, Tag.TAG_COMPOUND) &&
             tag.contains(TAG_NEXT_BLOCK, Tag.TAG_COMPOUND) &&
-            tag.contains(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND)) {
+            tag.contains(TAG_TRACKED_BLOCKS, Tag.TAG_LIST)) {
             this.activator = tag.getUUID(TAG_ACTIVATOR);
             this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
             this.nextBlock = NbtUtils.readBlockPos(tag.getCompound(TAG_NEXT_BLOCK));

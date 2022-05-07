@@ -197,6 +197,7 @@
   "hexcasting.spell.hexcasting:index_of": "Locator's Distillation",
   "hexcasting.spell.hexcasting:list_remove": "Excisor's Distillation",
   "hexcasting.spell.hexcasting:slice": "Selection Exaltation",
+  "hexcasting.spell.hexcasting:modify_in_place": "Surgeon's Exaltation",
   "hexcasting.spell.hexcasting:get_entity": "Entity Purification",
   "hexcasting.spell.hexcasting:get_entity/animal": "Entity Prfn.: Animal",
   "hexcasting.spell.hexcasting:get_entity/monster": "Entity Prfn.: Monster",
@@ -306,6 +307,8 @@
   "hexcasting.spell.hexcasting:escape": "Consideration",
   "hexcasting.spell.hexcasting:eval": "Hermes' Gambit",
   "hexcasting.spell.hexcasting:eval/delay": "Secret Gambit!",
+  "hexcasting.spell.hexcasting:read_local": "Muginn's Reflection",
+  "hexcasting.spell.hexcasting:write_local": "Huginn's Gambit",
   "hexcasting.spell.hexcasting:read": "Scribe's Reflection",
   "hexcasting.spell.hexcasting:write": "Scribe's Gambit",
   "hexcasting.spell.hexcasting:readable": "Auditor's Reflection",
@@ -332,7 +335,6 @@
   "hexcasting.spell.unknown": "Special Handler",
 
   "hexcasting.mishap.invalid_pattern": "That pattern isn't associated with any action",
-  "hexcasting.mishap.invalid_spell_datum_type": "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
   "hexcasting.mishap.invalid_value": "%s expected %s at index %s of the stack, but got %s",
   "hexcasting.mishap.invalid_value.class.double": "a number",
   "hexcasting.mishap.invalid_value.class.vector": "a vector",
@@ -390,6 +392,8 @@
   "hexcasting.mishap.divide_by_zero.cos": "the cosine of %s",
   "hexcasting.mishap.no_akashic_record": "No Akashic Record at %s",
   "hexcasting.mishap.disallowed": "%s has been disallowed by the server admins",
+  "hexcasting.mishap.invalid_spell_datum_type": "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
+  "hexcasting.mishap.unknown": "%s threw an exception (%s). This is a bug in the mod.",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
 
@@ -499,8 +503,8 @@
   "hexcasting.page.mishaps.true_name": "I attempted to $(l:patterns/readwrite#hexcasting:write)$(action)save a reference/$ to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
   "hexcasting.page.mishaps.disabled.title": "Disallowed Action",
   "hexcasting.page.mishaps.disabled": "I tried to cast an action that has been disallowed by a server administrator.$(br2)Causes black sparks.",
-  "hexcasting.page.mishaps.invalid_iota.title": "Invalid Iota Type",
-  "hexcasting.page.mishaps.invalid_iota": "A bug in the mod caused an iota of an invalid type. $(l:https://https://github.com/gamma-delta/HexMod/issues)Please open a bug report!/$$(br2)Causes black sparks.",
+  "hexcasting.page.mishaps.other.title": "Catastrophic Failure",
+  "hexcasting.page.mishaps.other": "A bug in the mod caused an iota of an invalid type or otherwise caused the spell to crash. $(l:https://https://github.com/gamma-delta/HexMod/issues)Please open a bug report!/$$(br2)Causes black sparks.",
 
   "hexcasting.entry.stack": "Stacks",
   "hexcasting.page.stack.1": "A $(thing)Stack/$, also known as a \"LIFO\", is a concept borrowed from computer science. In short, it's a collection of things designed so that you can only interact with the most recently used thing.$(br2)Think of a stack of plates, where new plates are added to the top: if you want to interact with a plate halfway down the stack, you have to remove the plates above it in order to get ahold of it.",
@@ -796,6 +800,7 @@
   "hexcasting.page.lists.reverse_list": "Reverse the list at the top of the stack.",
   "hexcasting.page.lists.index_of": "Remove the iota at the top of the stack, then replace the list at the top with the first index of that iota within the list (starting from 0). Replaces the list with -1 if the iota doesn't exist in the list.",
   "hexcasting.page.lists.list_remove": "Remove the number at the top of the stack, then remove the nth element of the list at the top of the stack (where n is the number you removed).",
+  "hexcasting.page.lists.modify_in_place": "Remove the top iota of the stack and the number at the top, then set the nth element of the list at the top of the stack to that iota (where n is the number you removed). Does nothing if the number is out of bounds.",
 
   "hexcasting.entry.patterns_as_iotas": "Patterns as Iotas",
   "hexcasting.page.patterns_as_iotas.1": "One of the many peculiarities of this art is that $(italic)patterns themselves/$ can act as iotas-- I can even put them onto my stack when casting.$(br2)This raises a fairly obvious question: how do I express them? If I simply drew a pattern, it would hardly tell Nature to add it to my stack-- rather, it would simply be matched to an action.",

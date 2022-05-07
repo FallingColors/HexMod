@@ -17,7 +17,7 @@ import kotlin.math.roundToInt
 
 // "lehmer code"
 object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0) // todo: better message?
 
@@ -56,6 +56,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
 
         return OperationResult(
             stack,
+            local,
             listOf(OperatorSideEffect.ConsumeMana(cost))
         )
     }

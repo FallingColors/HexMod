@@ -452,6 +452,8 @@ public class RegisterPatterns {
                 OpRemove.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaeaqwded", HexDir.NORTH_WEST), prefix("slice"),
                 OpSlice.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaeaqw", HexDir.NORTH_WEST), prefix("modify_in_place"),
+                OpModifyInPlace.INSTANCE);
 
         } catch (PatternRegistry.RegisterPatternException exn) {
             exn.printStackTrace();

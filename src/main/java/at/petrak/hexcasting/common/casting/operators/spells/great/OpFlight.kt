@@ -84,8 +84,13 @@ object OpFlight : SpellOperator {
                     abilities.mayfly = false
                     entity.onUpdateAbilities()
                 }
-            } else
-                HexPlayerDataHelper.setFlight(entity,
+            } else {
+                if (!entity.abilities.mayfly) {
+                    entity.abilities.mayfly = true
+                    entity.onUpdateAbilities()
+                }
+                HexPlayerDataHelper.setFlight(
+                    entity,
                     FlightAbility(
                         true,
                         flightTime,
@@ -94,6 +99,7 @@ object OpFlight : SpellOperator {
                         flight.radius
                     )
                 )
+            }
         }
 
     }
