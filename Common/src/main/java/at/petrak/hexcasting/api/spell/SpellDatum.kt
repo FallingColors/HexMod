@@ -102,7 +102,16 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
     companion object {
         @JvmStatic
         fun make(payload: Any): SpellDatum<*> =
-            if (payload is Vec3) {
+            if (payload is SpellDatum<*>) {
+                payload
+            } else if (payload is List<*>) {
+                SpellDatum(SpellList.LList(0, payload.map {
+                    when (it) {
+                        null -> make(Widget.NULL)
+                        else -> make(it)
+                    }
+                }))
+            } else if (payload is Vec3) {
                 SpellDatum(
                     Vec3(
                         HexUtils.FixNANs(payload.x),
@@ -244,13 +253,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         const val TAG_ENTITY_NAME_CHEATY = "name"
 
         fun <T : Any> IsValidType(checkee: T): Boolean =
-            if (checkee is SpellList) {
-                // note it should be impossible to pass a spelllist that doesn't contain a valid type,
-                // but we best make sure.
-                checkee.all { IsValidType(it.payload) }
-            } else {
-                ValidTypes.any { clazz -> clazz.isAssignableFrom(checkee.javaClass) }
-            }
+            ValidTypes.any { clazz -> clazz.isAssignableFrom(checkee.javaClass) }
 
         @JvmStatic
         fun GetTagName(datumType: DatumType): String {

@@ -61,6 +61,7 @@ sealed class SpellList: Iterable<SpellDatum<*>> {
         return ptr.car
     }
 
+    override fun toString() = toList().toString()
 
     override fun iterator() = Iterator(this)
 
