@@ -48,7 +48,7 @@ sealed class SpellList: Iterable<SpellDatum<*>> {
             return this
         }
         while (idx > 0) {
-            if (ptr.hasNext()) {
+            if (!ptr.hasNext()) {
                 return this
             }
             idx--

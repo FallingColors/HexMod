@@ -4,13 +4,14 @@ import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 
 object OpEval : Operator {
     override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
-        val instrs: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex)
+        val instrs: SpellList = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
 
         ctx.incDepth()
