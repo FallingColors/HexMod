@@ -200,6 +200,8 @@
   "hexcasting.spell.hexcasting:list_remove": "Excisor's Distillation",
   "hexcasting.spell.hexcasting:slice": "Selection Exaltation",
   "hexcasting.spell.hexcasting:modify_in_place": "Surgeon's Exaltation",
+  "hexcasting.spell.hexcasting:construct": "Speaker's Distillation",
+  "hexcasting.spell.hexcasting:deconstruct": "Speaker's Decomposition",
   "hexcasting.spell.hexcasting:get_entity": "Entity Purification",
   "hexcasting.spell.hexcasting:get_entity/animal": "Entity Prfn.: Animal",
   "hexcasting.spell.hexcasting:get_entity/monster": "Entity Prfn.: Monster",
@@ -808,6 +810,8 @@
   "hexcasting.page.lists.index_of": "Remove the iota at the top of the stack, then replace the list at the top with the first index of that iota within the list (starting from 0). Replaces the list with -1 if the iota doesn't exist in the list.",
   "hexcasting.page.lists.list_remove": "Remove the number at the top of the stack, then remove the nth element of the list at the top of the stack (where n is the number you removed).",
   "hexcasting.page.lists.modify_in_place": "Remove the top iota of the stack and the number at the top, then set the nth element of the list at the top of the stack to that iota (where n is the number you removed). Does nothing if the number is out of bounds.",
+  "hexcasting.page.lists.construct": "Remove the top iota, then add it as the first element to the list at the top of the stack.",
+  "hexcasting.page.lists.deconstruct": "Remove the first iota from the list at the top of the stack, then push that iota to the stack.",
 
   "hexcasting.entry.patterns_as_iotas": "Patterns as Iotas",
   "hexcasting.page.patterns_as_iotas.1": "One of the many peculiarities of this art is that $(italic)patterns themselves/$ can act as iotas-- I can even put them onto my stack when casting.$(br2)This raises a fairly obvious question: how do I express them? If I simply drew a pattern, it would hardly tell Nature to add it to my stack-- rather, it would simply be matched to an action.",
