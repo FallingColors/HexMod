@@ -9,7 +9,6 @@ import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.HexUtils
-import at.petrak.hexcasting.api.utils.HexUtils.TAU
 import at.petrak.hexcasting.client.RenderLib
 import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.items.ItemSpellbook
@@ -32,6 +31,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
 import kotlin.math.atan2
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 class GuiSpellcasting(
     private val handOpenedWith: InteractionHand,
@@ -240,7 +240,7 @@ class GuiSpellcasting(
                 MsgShiftScrollSyn(
                     otherHand,
                     pDelta,
-                    Screen.hasControlDown()
+                    hasControlDown()
                 )
             )
 
@@ -352,7 +352,11 @@ class GuiSpellcasting(
     fun hexSize(): Float {
         val hasLens = Minecraft.getInstance().player!!
             .getItemInHand(HexUtils.OtherHand(this.handOpenedWith)).`is`(HexItems.SCRYING_LENS)
-        return this.width.toFloat() / if (hasLens) 48.0f else 32.0f
+
+        // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like 500-odd area.
+        // Let's be generous and give them 512.
+        val baseScale = sqrt(this.width.toDouble() * this.height / 512.0)
+        return baseScale.toFloat() * if (hasLens) 0.75f else 1f
     }
 
     fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)
