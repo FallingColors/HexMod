@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
@@ -14,8 +15,8 @@ object OpForEach : Operator {
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)
 
-        val instrs: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex - 1)
-        val datums: List<SpellDatum<*>> = stack.getChecked(stack.lastIndex)
+        val instrs: SpellList = stack.getChecked(stack.lastIndex - 1)
+        val datums: SpellList = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
         stack.removeLastOrNull()
 
