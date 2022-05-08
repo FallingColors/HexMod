@@ -104,7 +104,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         fun make(payload: Any): SpellDatum<*> =
             if (payload is SpellDatum<*>) {
                 payload
-            } else if (payload is ArrayList<*>) {
+            } else if (payload is List<*>) {
                 SpellDatum(SpellList.LList(0, payload.map {
                     when (it) {
                         null -> make(Widget.NULL)
