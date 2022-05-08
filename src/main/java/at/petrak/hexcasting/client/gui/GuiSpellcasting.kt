@@ -1,23 +1,22 @@
 package at.petrak.hexcasting.client.gui
 
-import at.petrak.hexcasting.api.utils.HexUtils
-import at.petrak.hexcasting.api.utils.HexUtils.TAU
-import at.petrak.hexcasting.client.RenderLib
-import at.petrak.hexcasting.client.sound.GridSoundInstance
+import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity
+import at.petrak.hexcasting.api.spell.math.HexAngle
+import at.petrak.hexcasting.api.spell.math.HexCoord
+import at.petrak.hexcasting.api.spell.math.HexDir
+import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.utils.HexUtils
+import at.petrak.hexcasting.client.RenderLib
+import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn
-import at.petrak.hexcasting.api.spell.math.HexAngle
-import at.petrak.hexcasting.api.spell.math.HexCoord
-import at.petrak.hexcasting.api.spell.math.HexDir
-import at.petrak.hexcasting.api.spell.math.HexPattern
-import at.petrak.hexcasting.api.mod.HexItemTags
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
@@ -32,10 +31,13 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
 import kotlin.math.atan2
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
-class GuiSpellcasting(private val handOpenedWith: InteractionHand,
-                      private var patterns: MutableList<ResolvedPattern>,
-                      private var stackDescs: List<Component>) : Screen(TextComponent("")) {
+class GuiSpellcasting(
+    private val handOpenedWith: InteractionHand,
+    private var patterns: MutableList<ResolvedPattern>,
+    private var stackDescs: List<Component>
+) : Screen(TextComponent("")) {
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
@@ -344,7 +346,10 @@ class GuiSpellcasting(private val handOpenedWith: InteractionHand,
     fun hexSize(): Float {
         val hasLens = Minecraft.getInstance().player!!
             .getItemInHand(HexUtils.OtherHand(this.handOpenedWith)).`is`(HexItems.SCRYING_LENS.get())
-        return this.width.toFloat() / if (hasLens) 48.0f else 32.0f
+        // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like 500-odd area.
+        // Let's be generous and give them 512.
+        val baseScale = sqrt(this.width.toDouble() * this.height / 512.0)
+        return baseScale.toFloat() * if (hasLens) 0.75f else 1f
     }
 
     fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)
