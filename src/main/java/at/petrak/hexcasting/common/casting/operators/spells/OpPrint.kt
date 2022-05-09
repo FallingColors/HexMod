@@ -10,13 +10,13 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import net.minecraft.Util
 
 object OpPrint : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty()) {
             throw MishapNotEnoughArgs(1, 0)
         }
         val datum = stack[stack.lastIndex]
         return OperationResult(
-            stack, listOf(
+            stack, local, listOf(
                 OperatorSideEffect.AttemptSpell(Spell(datum), false)
             )
         )

@@ -14,7 +14,7 @@ interface ConstManaOperator : Operator {
 
     fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>>
 
-    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
@@ -24,6 +24,6 @@ interface ConstManaOperator : Operator {
 
         val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMana(this.manaCost))
 
-        return OperationResult(stack, sideEffects)
+        return OperationResult(stack, local, sideEffects)
     }
 }

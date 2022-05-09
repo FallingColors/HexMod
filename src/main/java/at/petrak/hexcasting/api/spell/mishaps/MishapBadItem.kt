@@ -13,14 +13,14 @@ class MishapBadItem(val item: ItemEntity, val wanted: Component) : Mishap() {
         dyeColor(DyeColor.BROWN)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        item.deltaMovement = item.deltaMovement.add((Math.random() - 0.5) * 0.05, 1.0, (Math.random() - 0.5) * 0.05)
+        item.deltaMovement = item.deltaMovement.add((Math.random() - 0.5) * 0.05, 0.75, (Math.random() - 0.5) * 0.05)
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component {
         return if (item.item.isEmpty)
             error("no_item", actionName(errorCtx.action), wanted)
         else
-            error("bad_item", actionName(errorCtx.action), wanted, item.item)
+            error("bad_item", actionName(errorCtx.action), wanted, item.item.count, item.item.displayName)
     }
 
     companion object {

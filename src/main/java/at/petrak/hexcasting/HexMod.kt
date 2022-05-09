@@ -11,18 +11,23 @@ import at.petrak.hexcasting.common.blocks.HexBlocks
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.HexCommands
+import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.lib.HexCapabilityHandler
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.misc.Brainsweeping
+import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.network.HexMessages
 import at.petrak.hexcasting.common.particles.HexParticles
+import at.petrak.hexcasting.common.recipe.HexComposting
 import at.petrak.hexcasting.common.recipe.HexCustomRecipes
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import at.petrak.hexcasting.datagen.HexDataGenerators
 import at.petrak.hexcasting.datagen.lootmods.HexLootModifiers
 import at.petrak.hexcasting.server.TickScheduler
+import net.minecraft.commands.synchronization.ArgumentTypes
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.eventbus.api.SubscribeEvent
@@ -55,6 +60,8 @@ object HexMod {
         CLIENT_CONFIG_SPEC = ForgeConfigSpec.Builder()
             .configure { builder: ForgeConfigSpec.Builder? -> HexConfig.Client(builder) }.right
 
+        ArgumentTypes.register("hexcasting:pattern", PatternResLocArgument::class.java, EmptyArgumentSerializer(PatternResLocArgument::id))
+
         // mod lifecycle
         val modBus = thedarkcolour.kotlinforforge.forge.MOD_BUS
         // game events
@@ -77,6 +84,9 @@ object HexMod {
         modBus.register(HexStatistics::class.java)
         modBus.register(HexRecipeSerializers::class.java)
 
+        modBus.register(HexComposting::class.java)
+
+        evBus.register(PlayerPositionRecorder::class.java)
         evBus.register(HexCommands::class.java)
         evBus.register(TickScheduler)
         evBus.register(HexCapabilityHandler::class.java)

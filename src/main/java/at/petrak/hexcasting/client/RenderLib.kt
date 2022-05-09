@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.client
 
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.utils.HexUtils
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.utils.HexUtils
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
@@ -169,8 +169,7 @@ object RenderLib {
         if (points.isEmpty()) {
             return emptyList()
         }
-        val mc = Minecraft.getInstance()
-        val zSeed = (mc.frameTime.toDouble() + (mc.level?.levelData?.gameTime ?: 0)) * speed
+        val zSeed = (ClientTickCounter.total.toDouble()) * speed
         // Create our output list of zap points
         val zappyPts = mutableListOf(points[0])
         // For each segment in the original...

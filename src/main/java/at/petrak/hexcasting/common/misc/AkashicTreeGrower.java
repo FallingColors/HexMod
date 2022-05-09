@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.misc;
 
 import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
+import com.google.common.collect.Lists;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -16,39 +17,38 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.OptionalInt;
 import java.util.Random;
 
 public class AkashicTreeGrower extends AbstractTreeGrower {
     public static final AkashicTreeGrower INSTANCE = new AkashicTreeGrower();
 
-    public static final Holder<ConfiguredFeature<TreeConfiguration, ?>>[] GROWERS;
+    public static final List<Holder<ConfiguredFeature<TreeConfiguration, ?>>> GROWERS = Lists.newArrayList();
 
     static {
-        var leaves = new Block[]{
-            HexBlocks.AKASHIC_LEAVES1.get(),
-            HexBlocks.AKASHIC_LEAVES2.get(),
-            HexBlocks.AKASHIC_LEAVES3.get()
-        };
-        GROWERS = new Holder[leaves.length];
-        for (int i = 0; i < leaves.length; i++) {
-            GROWERS[i] = FeatureUtils.register(HexMod.MOD_ID + ":akashic_tree" + (i + 1), Feature.TREE,
-                new TreeConfiguration.TreeConfigurationBuilder(
-                    BlockStateProvider.simple(HexBlocks.AKASHIC_LOG.get()),
-                    // baseHeight, heightRandA, heightRandB
-                    new FancyTrunkPlacer(5, 5, 3),
-                    BlockStateProvider.simple(leaves[i]),
-                    // radius, offset, height
-                    new FancyFoliagePlacer(ConstantInt.of(1), ConstantInt.of(5), 5),
-                    // limit, lower size, upper size, minclippedheight
-                    new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(6))
-                ).build());
-        }
+        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES1.get(), "1"));
+        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES2.get(), "2"));
+        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES3.get(), "3"));
+    }
+
+    private static Holder<ConfiguredFeature<TreeConfiguration, ?>> buildTreeFeature(Block leaves, String name) {
+        return FeatureUtils.register(HexMod.MOD_ID + ":akashic_tree" + name, Feature.TREE,
+            new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(HexBlocks.AKASHIC_LOG.get()),
+                // baseHeight, heightRandA, heightRandB
+                new FancyTrunkPlacer(5, 5, 3),
+                BlockStateProvider.simple(leaves),
+                // radius, offset, height
+                new FancyFoliagePlacer(ConstantInt.of(1), ConstantInt.of(5), 5),
+                // limit, lower size, upper size, minclippedheight
+                new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(6))
+            ).build());
     }
 
     @Nullable
     @Override
     protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random pRandom, boolean pLargeHive) {
-        return GROWERS[pRandom.nextInt(GROWERS.length)];
+        return GROWERS.get(pRandom.nextInt(GROWERS.size()));
     }
 }

@@ -35,7 +35,7 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
         BlockHitResult pHit) {
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
             var usedStack = pPlayer.getItemInHand(pHand);
-            var datumContainer = usedStack.getCapability(HexCapabilities.DATUM).resolve();
+            var datumContainer = HexCapabilities.getCapability(usedStack, HexCapabilities.DATUM);
             if (datumContainer.isPresent()) {
                 if (pLevel instanceof ServerLevel level) {
                     var stored = datumContainer.get().readDatum(level);
@@ -44,9 +44,9 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
                         if (entity instanceof Player) {
                             // phew, we got something
                             tile.setPlayer(entity.getUUID());
-                            tile.setChanged();
+                            level.sendBlockUpdated(pPos, pState, pState, Block.UPDATE_CLIENTS);
 
-                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING.get(), SoundSource.BLOCKS,
+                            pLevel.playSound(null, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING.get(), SoundSource.BLOCKS,
                                     1f, 1f);
                         }
                     }

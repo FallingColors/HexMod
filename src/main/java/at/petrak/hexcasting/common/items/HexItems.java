@@ -5,8 +5,10 @@ import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
-import at.petrak.hexcasting.common.items.magic.*;
-import net.minecraft.core.NonNullList;
+import at.petrak.hexcasting.common.items.magic.ItemArtifact;
+import at.petrak.hexcasting.common.items.magic.ItemCypher;
+import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
+import at.petrak.hexcasting.common.items.magic.ItemTrinket;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
@@ -15,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 
@@ -22,25 +25,8 @@ public class HexItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, HexMod.MOD_ID);
     public static final CreativeModeTab TAB = new CreativeModeTab(HexMod.MOD_ID) {
         @Override
-        public ItemStack makeIcon() {
+        public @NotNull ItemStack makeIcon() {
             return new ItemStack(SPELLBOOK::get);
-        }
-
-        @Override
-        public void fillItemList(NonNullList<ItemStack> items) {
-            super.fillItemList(items);
-
-            var manamounts = new int[]{
-                100_000,
-                1_000_000,
-                10_000_000,
-                100_000_000,
-                1_000_000_000,
-            };
-            for (int manamount : manamounts) {
-                var stack = new ItemStack(BATTERY.get());
-                items.add(ItemManaHolder.withMana(stack, manamount, manamount));
-            }
         }
     };
 
@@ -88,7 +74,7 @@ public class HexItems {
         () -> new ItemArtifact(unstackable()));
 
     public static final RegistryObject<ItemManaBattery> BATTERY = ITEMS.register("battery",
-        () -> new ItemManaBattery(new Item.Properties().stacksTo(1)));
+        () -> new ItemManaBattery(props().stacksTo(1)));
 
     public static final EnumMap<DyeColor, RegistryObject<ItemDyeColorizer>> DYE_COLORIZERS = new EnumMap<>(
         DyeColor.class);

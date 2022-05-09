@@ -6,7 +6,6 @@ import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell;
 import at.petrak.paucal.api.datagen.PaucalItemModelProvider;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -14,12 +13,14 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
 
 public class HexItemModels extends PaucalItemModelProvider {
     public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, HexMod.MOD_ID, existingFileHelper);
     }
+
+    private static final String[] DATUM_TYPES = {"empty", "entity", "double", "vec3", "widget", "list", "pattern"};
+    private static final String[] PHIAL_SIZES = {"small", "medium", "large"};
 
     @Override
     protected void registerModels() {
@@ -50,48 +51,24 @@ public class HexItemModels extends PaucalItemModelProvider {
             "layer0", modLoc("item/wands/old"));
         singleTexture("wand_bosnia", new ResourceLocation("item/handheld_rod"),
             "layer0", modLoc("item/wands/bosnia"));
-        var wands = new Item[]{
-            HexItems.WAND_OAK.get(),
-            HexItems.WAND_BIRCH.get(),
-            HexItems.WAND_SPRUCE.get(),
-            HexItems.WAND_JUNGLE.get(),
-            HexItems.WAND_DARK_OAK.get(),
-            HexItems.WAND_ACACIA.get(),
-            HexItems.WAND_CRIMSON.get(),
-            HexItems.WAND_WARPED.get(),
-            HexItems.WAND_AKASHIC.get(),
-        };
-        var wandKeys = new String[]{
-            "oak", "birch", "spruce", "jungle", "dark_oak", "acacia", "crimson", "warped", "akashic"
-        };
-        for (int i = 0; i < wands.length; i++) {
-            Item wand = wands[i];
-            String wandKey = wandKeys[i];
-            singleTexture(wand.getRegistryName().getPath(), new ResourceLocation("item/handheld_rod"),
-                "layer0", modLoc("item/wands/" + wandKey));
-            getBuilder(wand.getRegistryName().getPath())
-                .override()
-                .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 0)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_" + wandKey)))
-                .end().override()
-                .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 1)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_old")))
-                .end().override()
-                .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 2)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_bosnia")))
-                .end();
-        }
+
+        buildWand(HexItems.WAND_OAK.get(), "oak");
+        buildWand(HexItems.WAND_BIRCH.get(), "birch");
+        buildWand(HexItems.WAND_SPRUCE.get(), "spruce");
+        buildWand(HexItems.WAND_JUNGLE.get(), "jungle");
+        buildWand(HexItems.WAND_DARK_OAK.get(), "dark_oak");
+        buildWand(HexItems.WAND_ACACIA.get(), "acacia");
+        buildWand(HexItems.WAND_CRIMSON.get(), "crimson");
+        buildWand(HexItems.WAND_WARPED.get(), "warped");
+        buildWand(HexItems.WAND_AKASHIC.get(), "akashic");
 
         simpleItem(modLoc("patchouli_book"));
 
-        String[] datumStoredTypes = new String[]{
-            "empty", "entity", "double", "vec3", "widget", "list", "pattern"
-        };
         // For stupid bad reasons we need to do this in ascending order.
         for (int sealedIdx = 0; sealedIdx <= 1; sealedIdx++) {
             var sealed = sealedIdx == 1;
-            for (int i = 0, stringsLength = datumStoredTypes.length; i < stringsLength; i++) {
-                var type = datumStoredTypes[i];
+            for (int i = 0, stringsLength = DATUM_TYPES.length; i < stringsLength; i++) {
+                var type = DATUM_TYPES[i];
 
                 var suffix = type + (sealed ? "_sealed" : "");
 
@@ -117,32 +94,14 @@ public class HexItemModels extends PaucalItemModelProvider {
             }
         }
 
-        Pair<RegistryObject<Item>, String>[] packagers = new Pair[]{
-            new Pair(HexItems.CYPHER, "cypher"),
-            new Pair(HexItems.TRINKET, "trinket"),
-            new Pair(HexItems.ARTIFACT, "artifact"),
-        };
-        for (Pair<RegistryObject<Item>, String> p : packagers) {
-            simpleItem(modLoc(p.getSecond()));
-            simpleItem(modLoc(p.getSecond() + "_filled"));
-            getBuilder(p.getFirst().get().getRegistryName().getPath())
-                .override()
-                .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, -0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/" + p.getSecond())))
-                .end()
-                .override()
-                .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, 1f - 0.01f)
-                .model(new ModelFile.UncheckedModelFile(modLoc("item/" + p.getSecond() + "_filled")))
-                .end();
-        }
+        buildPackagedSpell(HexItems.CYPHER.get(), "cypher");
+        buildPackagedSpell(HexItems.TRINKET.get(), "trinket");
+        buildPackagedSpell(HexItems.ARTIFACT.get(), "artifact");
 
-        String[] sizeNames = new String[]{
-            "small", "medium", "large",
-        };
         int maxFill = 4;
-        for (int size = 0; size < sizeNames.length; size++) {
+        for (int size = 0; size < PHIAL_SIZES.length; size++) {
             for (int fill = 0; fill <= maxFill; fill++) {
-                String name = "phial_" + sizeNames[size] + "_" + fill;
+                String name = "phial_" + PHIAL_SIZES[size] + "_" + fill;
                 singleTexture(
                     name,
                     new ResourceLocation("item/generated"),
@@ -198,5 +157,35 @@ public class HexItemModels extends PaucalItemModelProvider {
             .texture("texture", modLoc("block/akashic/planks1"));
         getBuilder(HexBlocks.AKASHIC_PRESSURE_PLATE.getId().getPath())
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/akashic_pressure_plate")));
+    }
+
+    private void buildWand(Item item, String name) {
+        singleTexture(item.getRegistryName().getPath(), new ResourceLocation("item/handheld_rod"),
+            "layer0", modLoc("item/wands/" + name));
+        getBuilder(item.getRegistryName().getPath())
+            .override()
+            .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 0)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_" + name)))
+            .end().override()
+            .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 1)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_old")))
+            .end().override()
+            .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 2)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_bosnia")))
+            .end();
+    }
+
+    private void buildPackagedSpell(Item item, String name) {
+        simpleItem(modLoc(name));
+        simpleItem(modLoc(name + "_filled"));
+        getBuilder(item.getRegistryName().getPath())
+            .override()
+            .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, -0.01f)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
+            .end()
+            .override()
+            .predicate(ItemPackagedSpell.HAS_PATTERNS_PRED, 1f - 0.01f)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name + "_filled")))
+            .end();
     }
 }

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
@@ -16,7 +17,7 @@ import kotlin.math.roundToInt
 
 // "lehmer code"
 object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult {
+    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0) // todo: better message?
 
@@ -51,10 +52,11 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
             editTarget = editTarget.subList(1, editTarget.size)
         }
 
-        val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * 10000).toInt()
+        val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * ManaConstants.DUST_UNIT).toInt()
 
         return OperationResult(
             stack,
+            local,
             listOf(OperatorSideEffect.ConsumeMana(cost))
         )
     }

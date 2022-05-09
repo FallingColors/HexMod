@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators
 
+import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 
@@ -19,12 +19,12 @@ object OpWrite : SpellOperator {
         val datum = args[0]
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val datumHolder = it.getCapability(HexCapabilities.DATUM).resolve()
+            val datumHolder = HexCapabilities.getCapability(it, HexCapabilities.DATUM)
 
             datumHolder.isPresent && datumHolder.get().writeDatum(datum, true)
         }
 
-        val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
+        val datumHolder = HexCapabilities.getCapability(handStack, HexCapabilities.DATUM)
         if (!datumHolder.isPresent)
             throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
 
@@ -45,12 +45,12 @@ object OpWrite : SpellOperator {
     private data class Spell(val datum: SpellDatum<*>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn {
-                val datumHolder = it.getCapability(HexCapabilities.DATUM).resolve()
+                val datumHolder = HexCapabilities.getCapability(it, HexCapabilities.DATUM)
 
                 datumHolder.isPresent && datumHolder.get().writeDatum(datum, true)
             }
 
-            val datumHolder = handStack.getCapability(HexCapabilities.DATUM).resolve()
+            val datumHolder = HexCapabilities.getCapability(handStack, HexCapabilities.DATUM)
 
             if (datumHolder.isPresent) {
                 datumHolder.get().writeDatum(datum, false)

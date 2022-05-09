@@ -37,9 +37,9 @@ object OpPowProj : ConstManaOperator {
                         Vec3(lvec.x.pow(rnum), lvec.y.pow(rnum), lvec.z.pow(rnum))
                     },
                     { rvec ->
-                        if (rvec == Vec3.ZERO)
+                        if (lvec == Vec3.ZERO)
                             throw MishapDivideByZero.of(lvec, rvec, "project")
-                        rvec.scale(lvec.dot(rvec) / rvec.dot(rvec))
+                        rvec.scale(rvec.dot(lvec) / lvec.dot(lvec))
                     }
                 )
             })

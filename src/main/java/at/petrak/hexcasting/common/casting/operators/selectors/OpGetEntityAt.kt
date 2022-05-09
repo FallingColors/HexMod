@@ -4,8 +4,8 @@ import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.Widget
+import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -17,7 +17,8 @@ class OpGetEntityAt(val checker: Predicate<Entity>) : ConstManaOperator {
         val pos = args.getChecked<Vec3>(0)
         ctx.assertVecInRange(pos)
         val aabb = AABB(pos.add(Vec3(-0.5, -0.5, -0.5)), pos.add(Vec3(0.5, 0.5, 0.5)))
-        val entitiesGot = ctx.world.getEntities(null, aabb, checker)
+        val entitiesGot = ctx.world.getEntities(null, aabb)
+            { checker.test(it) && ctx.isEntityInRange(it) && it.isAlive && !it.isSpectator }
 
         val entity = entitiesGot.getOrNull(0) ?: Widget.NULL
         return spellListOf(entity)

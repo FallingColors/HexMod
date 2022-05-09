@@ -1,30 +1,37 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
+import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.locale.Language;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class HexAdditionalRenderers {
@@ -42,7 +49,7 @@ public class HexAdditionalRenderers {
     @SubscribeEvent
     public static void overlayGui(RenderGameOverlayEvent.Post evt) {
         if (evt.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-            tryRenderScryingLensOverlay(evt.getMatrixStack(), evt.getPartialTicks());
+            tryRenderScryingLensOverlay(evt.getMatrixStack());
         }
     }
 
@@ -59,7 +66,7 @@ public class HexAdditionalRenderers {
             sentinel.position().y - playerPos.y,
             sentinel.position().z - playerPos.z);
 
-        var time = mc.level.getLevelData().getGameTime() + partialTicks;
+        var time = ClientTickCounter.total / 2;
         var bobSpeed = 1f / 20;
         var magnitude = 0.1f;
         ps.translate(0, Mth.sin(bobSpeed * time) * magnitude, 0);
@@ -148,19 +155,24 @@ public class HexAdditionalRenderers {
 
     // My internet is really shaky right now but thank god Patchi already does this exact thing
     // cause it's a dependency so i have the .class files downloaded
-    private static void tryRenderScryingLensOverlay(PoseStack ps, float partialTicks) {
+    private static void tryRenderScryingLensOverlay(PoseStack ps) {
         var mc = Minecraft.getInstance();
+
+        LocalPlayer player = mc.player;
+        ClientLevel level = mc.level;
+        if (player == null || level == null)
+            return;
 
         boolean foundLens = false;
         InteractionHand lensHand = null;
         for (var hand : InteractionHand.values()) {
-            if (mc.player.getItemInHand(hand).is(HexItems.SCRYING_LENS.get())) {
+            if (player.getItemInHand(hand).is(HexItems.SCRYING_LENS.get())) {
                 lensHand = hand;
                 foundLens = true;
                 break;
             }
         }
-        if (!foundLens && mc.player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS.get())) {
+        if (!foundLens && player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS.get())) {
             foundLens = true;
         }
 
@@ -169,38 +181,55 @@ public class HexAdditionalRenderers {
         }
 
         var hitRes = mc.hitResult;
-        if (hitRes instanceof BlockHitResult bhr) {
+        if (hitRes != null && hitRes.getType() == HitResult.Type.BLOCK) {
+            var bhr = (BlockHitResult) hitRes;
             var pos = bhr.getBlockPos();
-            var bs = mc.level.getBlockState(pos);
+            var bs = level.getBlockState(pos);
 
-            var lines = ScryingLensOverlayRegistry.getLines(bs, pos, mc.player, mc.level, lensHand);
-            if (lines != null) {
-                var window = mc.getWindow();
+            var lines = ScryingLensOverlayRegistry.getLines(bs, pos, player, level, bhr.getDirection(), lensHand);
+
+            int totalHeight = 8;
+            List<Pair<ItemStack, List<FormattedText>>> actualLines = Lists.newArrayList();
+
+            var window = mc.getWindow();
+            var maxWidth = (int) (window.getGuiScaledWidth() / 2f * 0.8f);
+
+            for (var pair : lines) {
+                totalHeight += mc.font.lineHeight + 6;
+                var text = pair.getSecond();
+                var textLines = mc.font.getSplitter().splitLines(text, maxWidth, Style.EMPTY);
+
+                actualLines.add(Pair.of(pair.getFirst(), textLines));
+
+                if (textLines.size() > 1) {
+                    totalHeight += mc.font.lineHeight * (textLines.size() - 1);
+                }
+            }
+
+            if (!lines.isEmpty()) {
                 var x = window.getGuiScaledWidth() / 2f + 8f;
-                var y = window.getGuiScaledHeight() / 2f;
+                var y = window.getGuiScaledHeight() / 2f - totalHeight;
                 ps.pushPose();
                 ps.translate(x, y, 0);
 
-                var maxWidth = (int) (window.getGuiScaledWidth() / 2f * 0.8f);
-
-                for (var pair : lines) {
-
+                for (var pair : actualLines) {
                     var stack = pair.getFirst();
-                    if (stack != null) {
+                    if (!stack.isEmpty()) {
                         // this draws centered in the Y ...
                         RenderLib.renderItemStackInGui(ps, pair.getFirst(), 0, 0);
                     }
-                    float tx = stack == null ? 0 : 18;
+                    float tx = stack.isEmpty() ? 0 : 18;
                     float ty = 5;
                     // but this draws where y=0 is the baseline
                     var text = pair.getSecond();
-                    var textLines = mc.font.getSplitter().splitLines(text, maxWidth, Style.EMPTY);
 
-                    for (var line : textLines) {
+                    for (var line : text) {
                         var actualLine = Language.getInstance().getVisualOrder(line);
                         mc.font.drawShadow(ps, actualLine, tx, ty, 0xffffffff);
-                        ps.translate(0, 9, 0);
+                        ps.translate(0, mc.font.lineHeight, 0);
                     }
+                    if (text.isEmpty())
+                        ps.translate(0, mc.font.lineHeight, 0);
 
                     ps.translate(0, 6, 0);
                 }

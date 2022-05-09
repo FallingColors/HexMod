@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
@@ -14,10 +15,12 @@ import at.petrak.hexcasting.common.items.HexItems
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 
 object OpMakeBattery : SpellOperator {
     override val argc = 1
+
+    override val isGreat = true
+
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
@@ -26,7 +29,7 @@ object OpMakeBattery : SpellOperator {
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexItemTags.PHIAL_BASE) }
 
-        if (handStack.`is`(HexItemTags.PHIAL_BASE)) {
+        if (!handStack.`is`(HexItemTags.PHIAL_BASE)) {
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,
@@ -51,11 +54,11 @@ object OpMakeBattery : SpellOperator {
         ) {
             throw MishapBadItem.of(
                 entity,
-                "mana"
+                "mana_for_battery"
             )
         }
 
-        return Triple(Spell(entity), 100_000, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
+        return Triple(Spell(entity), ManaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {

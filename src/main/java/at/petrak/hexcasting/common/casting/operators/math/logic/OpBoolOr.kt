@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.Widget
 
-object OpOr : ConstManaOperator {
+object OpBoolOr : ConstManaOperator {
     override val argc = 2
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {

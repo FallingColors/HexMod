@@ -2,9 +2,9 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
@@ -27,14 +27,7 @@ public class ItemAbacus extends Item implements DataHolderItem {
 
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
-        double num;
-        var tag = stack.getTag();
-        if (tag == null) {
-            num = 0d;
-        } else {
-            num = tag.getDouble(TAG_VALUE);
-        }
-        var datum = SpellDatum.make(num);
+        var datum = SpellDatum.make(NBTHelper.getDouble(stack, TAG_VALUE));
         return datum.serializeToNBT();
     }
 
@@ -52,13 +45,8 @@ public class ItemAbacus extends Item implements DataHolderItem {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
         if (player.isShiftKeyDown()) {
-
-            var tag = stack.getOrCreateTag();
-            double oldNum = 0d;
-            if (tag.contains(TAG_VALUE, Tag.TAG_ANY_NUMERIC)) {
-                oldNum = tag.getDouble(TAG_VALUE);
-            }
-            tag.putDouble(TAG_VALUE, 0d);
+            double oldNum = NBTHelper.getDouble(stack, TAG_VALUE);
+            stack.removeTagKey(TAG_VALUE);
 
             player.playSound(HexSounds.ABACUS_SHAKE.get(), 1f, 1f);
 

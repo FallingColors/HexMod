@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -15,6 +16,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.npc.Villager
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 
 object OpBrainsweep : SpellOperator {
@@ -43,15 +45,15 @@ object OpBrainsweep : SpellOperator {
             ?: throw MishapBadBrainsweep(sacrifice, bpos)
 
         return Triple(
-            Spell(bpos, sacrifice, recipe),
-            1_000_000,
+            Spell(bpos, state, sacrifice, recipe),
+            10 * ManaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray.Cloud(sacrifice.position(), 1.0), ParticleSpray.Burst(Vec3.atCenterOf(bpos), 0.3, 100))
         )
     }
 
-    private data class Spell(val pos: BlockPos, val sacrifice: Villager, val recipe: BrainsweepRecipe) : RenderedSpell {
+    private data class Spell(val pos: BlockPos, val state: BlockState, val sacrifice: Villager, val recipe: BrainsweepRecipe) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            ctx.world.setBlockAndUpdate(pos, recipe.result)
+            ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
             Brainsweeping.brainsweep(sacrifice)
 
             ctx.world.playSound(null, sacrifice, SoundEvents.VILLAGER_DEATH, SoundSource.AMBIENT, 0.8f, 1f)

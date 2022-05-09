@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -15,6 +16,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -50,9 +53,12 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     @Override
-    public List<Pair<ItemStack, Component>> getScryingLensOverlay(BlockState state, BlockPos pos, LocalPlayer observer,
-        ClientLevel world, InteractionHand lensHand) {
-        var list = super.getScryingLensOverlay(state, pos, observer, world, lensHand);
+    @OnlyIn(Dist.CLIENT)
+    public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
+                                        BlockState state, BlockPos pos, LocalPlayer observer,
+                                        ClientLevel world,
+                                        Direction hitFace, InteractionHand lensHand) {
+        super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace, lensHand);
 
         var bound = this.getPlayer();
         if (bound != null) {
@@ -60,13 +66,11 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
             String name = bound.getScoreboardName();
             tag.putString("SkullOwner", name);
             var head = new ItemStack(Items.PLAYER_HEAD, 1, tag);
-            list.add(new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
+            lines.add(new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
         } else {
-            list.add(new Pair<>(new ItemStack(Items.BARRIER),
+            lines.add(new Pair<>(new ItemStack(Items.BARRIER),
                 new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer.none")));
         }
-
-        return list;
     }
 
     @Override

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.blocks.HexBlocks;
 import at.petrak.hexcasting.common.items.HexItems;
+import at.petrak.hexcasting.common.items.ItemWand;
 import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
 import at.petrak.hexcasting.common.recipe.SealSpellbookRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
@@ -15,7 +16,6 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +29,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
 
@@ -44,39 +45,15 @@ public class HexRecipes extends PaucalRecipeProvider {
         specialRecipe(recipes, SealFocusRecipe.SERIALIZER);
         specialRecipe(recipes, SealSpellbookRecipe.SERIALIZER);
 
-        var wands = new Item[]{
-            HexItems.WAND_OAK.get(),
-            HexItems.WAND_BIRCH.get(),
-            HexItems.WAND_SPRUCE.get(),
-            HexItems.WAND_JUNGLE.get(),
-            HexItems.WAND_DARK_OAK.get(),
-            HexItems.WAND_ACACIA.get(),
-            HexItems.WAND_CRIMSON.get(),
-            HexItems.WAND_WARPED.get(),
-            HexItems.WAND_AKASHIC.get(),
-        };
-        var woods = new Item[]{
-            Items.OAK_PLANKS,
-            Items.BIRCH_PLANKS,
-            Items.SPRUCE_PLANKS,
-            Items.JUNGLE_PLANKS,
-            Items.DARK_OAK_PLANKS,
-            Items.ACACIA_PLANKS,
-            Items.CRIMSON_PLANKS,
-            Items.WARPED_PLANKS,
-            HexBlocks.AKASHIC_PLANKS.get().asItem(),
-        };
-        for (int i = 0; i < wands.length; i++) {
-            ShapedRecipeBuilder.shaped(wands[i])
-                .define('W', woods[i])
-                .define('S', Items.STICK)
-                .define('A', HexItems.CHARGED_AMETHYST.get())
-                .pattern(" SA")
-                .pattern(" WS")
-                .pattern("S  ")
-                .unlockedBy("has_item", has(HexItems.CHARGED_AMETHYST.get()))
-                .save(recipes);
-        }
+        wandRecipe(recipes, HexItems.WAND_OAK.get(), Items.OAK_PLANKS);
+        wandRecipe(recipes, HexItems.WAND_BIRCH.get(), Items.BIRCH_PLANKS);
+        wandRecipe(recipes, HexItems.WAND_SPRUCE.get(), Items.SPRUCE_PLANKS);
+        wandRecipe(recipes, HexItems.WAND_JUNGLE.get(), Items.JUNGLE_PLANKS);
+        wandRecipe(recipes, HexItems.WAND_DARK_OAK.get(), Items.DARK_OAK_PLANKS);
+        wandRecipe(recipes, HexItems.WAND_ACACIA.get(), Items.ACACIA_PLANKS);
+        wandRecipe(recipes, HexItems.WAND_CRIMSON.get(), Items.CRIMSON_PLANKS);
+        wandRecipe(recipes, HexItems.WAND_WARPED.get(), Items.WARPED_PLANKS);
+        wandRecipe(recipes, HexItems.WAND_AKASHIC.get(), HexBlocks.AKASHIC_PLANKS.get().asItem());
 
         ringCornered(HexItems.FOCUS.get(), 1, Ingredient.of(Tags.Items.DUSTS_GLOWSTONE),
             Ingredient.of(Tags.Items.LEATHER), Ingredient.of(HexItems.CHARGED_AMETHYST.get()))
@@ -149,33 +126,22 @@ public class HexRecipes extends PaucalRecipeProvider {
                 .pattern(" B ")
                 .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
         }
-        Item[] politicsInMyVidya = new Item[]{
-            Items.EGG,
-            Items.STONE_BRICK_WALL,
-            Items.GLASS,
-            Items.BREAD,
-            Items.WHEAT,
-            Items.CARROT,
-            Items.GLASS_BOTTLE,
-            Items.RAW_COPPER,
-            Items.MOSS_BLOCK,
-            Items.HONEYCOMB,
-            Items.RAW_IRON,
-            Items.WATER_BUCKET,
-            Items.AZALEA,
-            Items.ARROW,
-        };
-        for (int i = 0; i < politicsInMyVidya.length; i++) {
-            var item = HexItems.PRIDE_COLORIZERS[i].get();
-            ShapedRecipeBuilder.shaped(item)
-                .define('B', Items.BOWL)
-                .define('D', HexItems.AMETHYST_DUST.get())
-                .define('C', politicsInMyVidya[i])
-                .pattern(" C ")
-                .pattern(" D ")
-                .pattern(" B ")
-                .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
-        }
+
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[0].get(), Items.EGG); // Trans
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[1].get(), Items.STONE_BRICK_WALL); // Gay
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[2].get(), Items.GLASS); // Agender
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[3].get(), Items.BREAD); // Asexual
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[4].get(), Items.WHEAT); // Bisexual
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[5].get(), Items.CARROT); // Pansexual
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[6].get(), Items.GLASS_BOTTLE); // Genderqueer
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[7].get(), Items.RAW_COPPER); // Demigirl
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[8].get(), Items.MOSS_BLOCK); // Non-Binary
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[9].get(), Items.HONEYCOMB); // Lesbian
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[10].get(), Items.RAW_IRON); // Demiboy
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[11].get(), Items.WATER_BUCKET); // Genderfluid
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[12].get(), Items.AZALEA); // Intersex
+        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[13].get(), Items.ARROW); // Aroace
+
         ShapedRecipeBuilder.shaped(HexItems.UUID_COLORIZER.get())
             .define('B', Items.BOWL)
             .define('D', HexItems.AMETHYST_DUST.get())
@@ -292,7 +258,7 @@ public class HexRecipes extends PaucalRecipeProvider {
         var enlightenment = new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
             MinMaxBounds.Ints.ANY,
             // add a little bit of slop here
-            MinMaxBounds.Doubles.atLeast(17.95),
+            MinMaxBounds.Doubles.atLeast(0.8),
             MinMaxBounds.Doubles.between(0.1, 2.05));
 
         ShapedRecipeBuilder.shaped(HexBlocks.EMPTY_IMPETUS.get())
@@ -367,8 +333,31 @@ public class HexRecipes extends PaucalRecipeProvider {
             .save(recipes, modLoc("brainsweep/akashic_record"));
     }
 
+    private void wandRecipe(Consumer<FinishedRecipe> recipes, ItemWand wand, Item plank) {
+        ShapedRecipeBuilder.shaped(wand)
+            .define('W', plank)
+            .define('S', Items.STICK)
+            .define('A', HexItems.CHARGED_AMETHYST.get())
+            .pattern(" SA")
+            .pattern(" WS")
+            .pattern("S  ")
+            .unlockedBy("has_item", has(HexItems.CHARGED_AMETHYST.get()))
+            .save(recipes);
+    }
+
+    private void gayRecipe(Consumer<FinishedRecipe> recipes, Item colorizer, Item material) {
+        ShapedRecipeBuilder.shaped(colorizer)
+            .define('B', Items.BOWL)
+            .define('D', HexItems.AMETHYST_DUST.get())
+            .define('C', material)
+            .pattern(" C ")
+            .pattern(" D ")
+            .pattern(" B ")
+            .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
+    }
+
     protected void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {
-        var name = Registry.RECIPE_SERIALIZER.getKey(serializer);
+        var name = ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer);
         SpecialRecipeBuilder.special(serializer).save(consumer, prefix("dynamic/" + name.getPath()).toString());
     }
 

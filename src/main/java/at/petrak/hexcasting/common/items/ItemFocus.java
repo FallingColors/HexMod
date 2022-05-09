@@ -4,8 +4,8 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -29,15 +29,12 @@ public class ItemFocus extends Item implements DataHolderItem {
 
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
-        if (!stack.hasTag()) {
-            return null;
-        }
-        var tag = stack.getTag();
-        if (!tag.contains(TAG_DATA, Tag.TAG_COMPOUND)) {
-            return null;
-        }
+        return NBTHelper.getCompound(stack, TAG_DATA);
+    }
 
-        return tag.getCompound(TAG_DATA);
+    @Override
+    public String getDescriptionId(ItemStack stack) {
+        return super.getDescriptionId(stack) + (NBTHelper.getBoolean(stack, TAG_SEALED) ? ".sealed" : "");
     }
 
     @Override
@@ -47,18 +44,16 @@ public class ItemFocus extends Item implements DataHolderItem {
 
     @Override
     public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
-        return datum == null || !stack.hasTag() || !stack.getTag().getBoolean(TAG_SEALED);
+        return datum == null || !NBTHelper.getBoolean(stack, TAG_SEALED);
     }
 
     @Override
     public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
-        CompoundTag tag = stack.getOrCreateTag();
-
         if (datum == null) {
-            tag.remove(TAG_DATA);
-            tag.remove(TAG_SEALED);
-        } else if (!tag.getBoolean(TAG_SEALED))
-            tag.put(TAG_DATA, datum.serializeToNBT());
+            stack.removeTagKey(TAG_DATA);
+            stack.removeTagKey(TAG_SEALED);
+        } else if (!NBTHelper.getBoolean(stack, TAG_SEALED))
+            NBTHelper.put(stack, TAG_DATA, datum.serializeToNBT());
     }
 
     @Override

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.advancements.FailToCastGreatSpellTrigger;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.advancements.SpendManaTrigger;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.common.items.HexItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
@@ -16,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
@@ -37,14 +37,7 @@ public class HexAdvancements extends AdvancementProvider {
                 new ResourceLocation("minecraft", "textures/block/calcite.png"),
                 FrameType.TASK, true, true, true))
             // the only thing making this vaguely tolerable is the knowledge the json files are worse somehow
-            .addCriterion("on_thingy", new TickTrigger.TriggerInstance(EntityPredicate.Composite.wrap(
-                EntityPredicate.Builder.entity()
-                    .steppingOn(LocationPredicate.Builder.location()
-                        .setBlock(BlockPredicate.Builder.block()
-                            .of(Blocks.AMETHYST_BLOCK, Blocks.CALCITE)
-                            .build())
-                        .setY(MinMaxBounds.Doubles.between(-64.0, 30.0)).build())
-                    .build())))
+            .addCriterion("has_charged_amethyst", InventoryChangeTrigger.TriggerInstance.hasItems(HexItems.CHARGED_AMETHYST::get))
             .save(consumer, prefix("root")); // how the hell does one even read this
 
         // weird names so we have alphabetical parity
@@ -53,13 +46,13 @@ public class HexAdvancements extends AdvancementProvider {
             .parent(root)
             .addCriterion("waste_amt", new SpendManaTrigger.Instance(EntityPredicate.Composite.ANY,
                 MinMaxBounds.Ints.ANY,
-                MinMaxBounds.Ints.atLeast(89_000)))
+                MinMaxBounds.Ints.atLeast(89 * ManaConstants.DUST_UNIT / 10)))
             .save(consumer, prefix("aaa_wasteful_cast"));
         Advancement.Builder.advancement()
             .display(simple(HexItems.CHARGED_AMETHYST.get(), "big_cast", FrameType.TASK))
             .parent(root)
             .addCriterion("cast_amt", new SpendManaTrigger.Instance(EntityPredicate.Composite.ANY,
-                MinMaxBounds.Ints.atLeast(6_400_000),
+                MinMaxBounds.Ints.atLeast(64 * ManaConstants.CRYSTAL_UNIT),
                 MinMaxBounds.Ints.ANY))
             .save(consumer, prefix("aab_big_cast"));
 
@@ -92,7 +85,7 @@ public class HexAdvancements extends AdvancementProvider {
                 new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
                     MinMaxBounds.Ints.ANY,
                     // add a little bit of slop here
-                    MinMaxBounds.Doubles.atLeast(17.95),
+                    MinMaxBounds.Doubles.atLeast(0.8),
                     MinMaxBounds.Doubles.between(0.1, 2.05)))
             .save(consumer, prefix("enlightenment"));
 

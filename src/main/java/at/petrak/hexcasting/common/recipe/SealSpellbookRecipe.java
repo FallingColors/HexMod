@@ -1,58 +1,45 @@
 package at.petrak.hexcasting.common.recipe;
 
+import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.HexItems;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
+import at.petrak.hexcasting.common.recipe.ingredient.UnsealedIngredient;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
-import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-public class SealSpellbookRecipe extends CustomRecipe {
+public class SealSpellbookRecipe extends ShapelessRecipe {
     public static final SimpleRecipeSerializer<SealSpellbookRecipe> SERIALIZER =
         new SimpleRecipeSerializer<>(SealSpellbookRecipe::new);
 
+    private static ItemStack getSealedStack() {
+        ItemStack output = new ItemStack(HexItems.SPELLBOOK::get);
+        ItemSpellbook.SetSealed(output, true);
+        NBTHelper.putString(output, DataHolderItem.TAG_OVERRIDE_VISUALLY, "any");
+        return output;
+    }
+
+    private static NonNullList<Ingredient> createIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.createWithCapacity(2);
+        ingredients.add(UnsealedIngredient.of(new ItemStack(HexItems.SPELLBOOK::get)));
+        ingredients.add(Ingredient.of(Items.HONEYCOMB));
+        return ingredients;
+    }
+
     public SealSpellbookRecipe(ResourceLocation id) {
-        super(id);
+        super(id, "", getSealedStack(), createIngredients());
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level world) {
-        var foundWax = false;
-        var foundOkSpellbook = false;
-
-        for (int i = 0; i < inv.getContainerSize(); i++) {
-            var stack = inv.getItem(i);
-            if (!stack.isEmpty()) {
-                if (stack.is(HexItems.SPELLBOOK.get())) {
-                    if (foundOkSpellbook) {
-                        return false;
-                    }
-
-                    if (!ItemSpellbook.IsSealed(stack)) {
-                        foundOkSpellbook = true;
-                    } else {
-                        return false;
-                    }
-                } else if (stack.is(Items.HONEYCOMB)) {
-                    if (foundWax) {
-                        return false;
-                    }
-                    foundWax = true;
-                } else {
-                    return false;
-                }
-            }
-        }
-
-        return foundWax && foundOkSpellbook;
-    }
-
-    @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public @NotNull ItemStack assemble(CraftingContainer inv) {
         ItemStack out = ItemStack.EMPTY;
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -67,16 +54,12 @@ public class SealSpellbookRecipe extends CustomRecipe {
             ItemSpellbook.SetSealed(out, true);
             out.setCount(1);
         }
+
         return out;
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
 }

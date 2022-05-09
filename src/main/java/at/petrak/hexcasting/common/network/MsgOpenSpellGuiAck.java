@@ -56,8 +56,8 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            GuiOpener opener = new GuiOpener(this);
-            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> opener::openGui);
+            ClientPacketHandler handler = new ClientPacketHandler(this);
+            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> handler::openSpellGui);
         });
         ctx.get().setPacketHandled(true);
     }

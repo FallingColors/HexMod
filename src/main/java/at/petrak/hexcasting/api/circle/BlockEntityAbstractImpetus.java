@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.circle;
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.mod.HexApiItems;
 import at.petrak.hexcasting.api.mod.HexApiSounds;
 import at.petrak.hexcasting.api.mod.HexConfig;
@@ -37,6 +38,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -115,21 +118,22 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         this.stepCircle();
     }
 
-    public List<Pair<ItemStack, Component>> getScryingLensOverlay(BlockState state, BlockPos pos,
-        LocalPlayer observer, ClientLevel world, InteractionHand lensHand) {
-        var out = new ArrayList<Pair<ItemStack, Component>>();
+    @OnlyIn(Dist.CLIENT)
+    public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
+                                        BlockState state, BlockPos pos,
+                                        LocalPlayer observer, ClientLevel world,
+                                        Direction hitFace, InteractionHand lensHand) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-            var dustCount = (float) beai.getMana() / (float) HexConfig.dustManaAmount.get();
+            var dustCount = (float) beai.getMana() / (float) ManaConstants.DUST_UNIT;
             var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
                 String.format("%.2f", dustCount));
-            out.add(new Pair<>(new ItemStack(HexApiItems.AMETHYST_DUST), dustCmp));
+            lines.add(new Pair<>(new ItemStack(HexApiItems.AMETHYST_DUST), dustCmp));
 
             var mishap = this.getLastMishap();
             if (mishap != null) {
-                out.add(new Pair<>(new ItemStack(Items.MUSIC_DISC_11), mishap));
+                lines.add(new Pair<>(new ItemStack(Items.MUSIC_DISC_11), mishap));
             }
         }
-        return out;
     }
 
     @NotNull
@@ -173,7 +177,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
         if (tag.contains(TAG_ACTIVATOR, Tag.TAG_INT_ARRAY) &&
             tag.contains(TAG_COLORIZER, Tag.TAG_COMPOUND) &&
             tag.contains(TAG_NEXT_BLOCK, Tag.TAG_COMPOUND) &&
-            tag.contains(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND)) {
+            tag.contains(TAG_TRACKED_BLOCKS, Tag.TAG_LIST)) {
             this.activator = tag.getUUID(TAG_ACTIVATOR);
             this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
             this.nextBlock = NbtUtils.readBlockPos(tag.getCompound(TAG_NEXT_BLOCK));

@@ -1,10 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
-import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
@@ -51,23 +48,10 @@ public record MsgNewSpellPatternAck(ControllerInfo info) {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() ->
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                var mc = Minecraft.getInstance();
-                if (this.info.isStackClear()) {
-                    // don't pay attention to the screen, so it also stops when we die
-                    mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getId(), null);
-                }
-                var screen = Minecraft.getInstance().screen;
-                if (screen instanceof GuiSpellcasting spellGui) {
-                    if (this.info.isStackClear()) {
-                        mc.setScreen(null);
-                    } else {
-                        spellGui.recvServerUpdate(this.info);
-                    }
-                }
-            })
-        );
+        ctx.get().enqueueWork(() -> {
+            ClientPacketHandler handler = new ClientPacketHandler(this);
+            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> handler::newPattern);
+        });
         ctx.get().setPacketHandled(true);
     }
 

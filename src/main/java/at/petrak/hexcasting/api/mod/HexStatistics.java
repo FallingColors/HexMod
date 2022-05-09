@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.mod;
 
 import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
@@ -19,10 +20,10 @@ public class HexStatistics {
     @SubscribeEvent
     public static void register(RegistryEvent.Register<Block> evt) {
         MANA_USED = makeCustomStat("mana_used",
-            manamount -> StatFormatter.DEFAULT.format(manamount / HexConfig.dustManaAmount.get())
+            manamount -> StatFormatter.DEFAULT.format(manamount / ManaConstants.DUST_UNIT)
         );
         MANA_OVERCASTED = makeCustomStat("mana_overcasted",
-            manamount -> StatFormatter.DEFAULT.format(manamount / HexConfig.dustManaAmount.get())
+            manamount -> StatFormatter.DEFAULT.format(manamount / ManaConstants.DUST_UNIT)
         );
         PATTERNS_DRAWN = makeCustomStat("patterns_drawn", StatFormatter.DEFAULT);
         SPELLS_CAST = makeCustomStat("spells_cast", StatFormatter.DEFAULT);

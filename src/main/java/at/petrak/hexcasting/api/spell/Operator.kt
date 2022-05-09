@@ -23,7 +23,7 @@ interface Operator {
      *
      * A particle effect at the cast site and various messages and advancements are done automagically.
      */
-    fun operate(stack: MutableList<SpellDatum<*>>, ctx: CastingContext): OperationResult
+    fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult
 
     /**
      * Do you need to be enlightened to use this operator?

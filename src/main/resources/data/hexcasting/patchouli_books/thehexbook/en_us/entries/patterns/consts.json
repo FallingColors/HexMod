@@ -9,6 +9,7 @@
     {
       "type": "hexcasting:manual_pattern",
       "header": "hexcasting.spell.hexcasting:const/vec/x",
+      "anchor": "hexcasting:const/vec/x",
       "input": "",
       "output": "vector",
       "text": "hexcasting.page.consts.const/vec/x",
@@ -28,6 +29,7 @@
     {
       "type": "hexcasting:manual_pattern",
       "header": "hexcasting.spell.hexcasting:const/vec/y",
+      "anchor": "hexcasting:const/vec/y",
       "input": "",
       "output": "vector",
       "text": "hexcasting.page.consts.const/vec/y",
@@ -47,6 +49,7 @@
     {
       "type": "hexcasting:manual_pattern",
       "header": "hexcasting.spell.hexcasting:const/vec/z",
+      "anchor": "hexcasting:const/vec/z",
       "input": "",
       "output": "vector",
       "text": "hexcasting.page.consts.const/vec/z",
@@ -66,6 +69,7 @@
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:const/vec/0",
+      "anchor": "hexcasting:const/vec/0",
       "input": "",
       "output": "vector",
       "text": "hexcasting.page.consts.const/vec/0"
@@ -73,6 +77,7 @@
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:const/double/tau",
+      "anchor": "hexcasting:const/double/tau",
       "input": "",
       "output": "num",
       "text": "hexcasting.page.consts.const/double/tau"
@@ -80,6 +85,7 @@
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:const/double/pi",
+      "anchor": "hexcasting:const/double/pi",
       "input": "",
       "output": "num",
       "text": "hexcasting.page.consts.const/double/pi"
@@ -87,6 +93,7 @@
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:const/double/e",
+      "anchor": "hexcasting:const/double/e",
       "input": "",
       "output": "num",
       "text": "hexcasting.page.consts.const/double/e"
@@ -94,6 +101,7 @@
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:const/null",
+      "anchor": "hexcasting:const/null",
       "input": "",
       "output": "influence",
       "text": "hexcasting.page.consts.const/null"

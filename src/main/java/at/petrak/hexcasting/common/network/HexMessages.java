@@ -37,11 +37,13 @@ public class HexMessages {
         NETWORK.registerMessage(messageIdx++, MsgCastParticleAck.class, MsgCastParticleAck::serialize,
             MsgCastParticleAck::deserialize, MsgCastParticleAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgOpenSpellGuiAck.class, MsgOpenSpellGuiAck::serialize,
-                MsgOpenSpellGuiAck::deserialize, MsgOpenSpellGuiAck::handle);
+            MsgOpenSpellGuiAck::deserialize, MsgOpenSpellGuiAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgBeepAck.class, MsgBeepAck::serialize,
-                MsgBeepAck::deserialize, MsgBeepAck::handle);
+            MsgBeepAck::deserialize, MsgBeepAck::handle);
         NETWORK.registerMessage(messageIdx++, MsgBrainsweepAck.class, MsgBrainsweepAck::serialize,
-                MsgBrainsweepAck::deserialize, MsgBrainsweepAck::handle);
+            MsgBrainsweepAck::deserialize, MsgBrainsweepAck::handle);
+        NETWORK.registerMessage(messageIdx++, MsgUpdateComparatorVisualsAck.class, MsgUpdateComparatorVisualsAck::serialize,
+            MsgUpdateComparatorVisualsAck::deserialize, MsgUpdateComparatorVisualsAck::handle);
 
         HexApiMessages.setSyncChannel(NETWORK, MsgSentinelStatusUpdateAck::new, MsgColorizerUpdateAck::new, MsgCastParticleAck::new);
     }

@@ -33,7 +33,7 @@ public class HexPlayerDataHelper {
 	public static final String TAG_FLIGHT_ALLOWED = "hexcasting:flight_allowed";
 	public static final String TAG_FLIGHT_TIME = "hexcasting:flight_time";
 	public static final String TAG_FLIGHT_ORIGIN = "hexcasting:flight_origin";
-	public static final String TAG_FLIGHT_DIMENSION = "hexcasting:flight_origin";
+	public static final String TAG_FLIGHT_DIMENSION = "hexcasting:flight_dimension";
 	public static final String TAG_FLIGHT_RADIUS = "hexcasting:flight_radius";
 
 	public static final String TAG_HARNESS = "hexcasting:spell_harness";
@@ -100,6 +100,7 @@ public class HexPlayerDataHelper {
 		} else {
 			tag.remove(TAG_FLIGHT_TIME);
 			tag.remove(TAG_FLIGHT_ORIGIN);
+			tag.remove(TAG_FLIGHT_DIMENSION);
 			tag.remove(TAG_FLIGHT_RADIUS);
 		}
 	}
@@ -148,7 +149,7 @@ public class HexPlayerDataHelper {
 			var timeLeft = tag.getInt(TAG_FLIGHT_TIME);
 			var origin = HexUtils.DeserializeVec3FromNBT(tag.getLongArray(TAG_FLIGHT_ORIGIN));
 			var radius = tag.getDouble(TAG_FLIGHT_RADIUS);
-			var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
+			var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
 			return new FlightAbility(true, timeLeft, dimension, origin, radius);
 		}
 		return FlightAbility.deny();

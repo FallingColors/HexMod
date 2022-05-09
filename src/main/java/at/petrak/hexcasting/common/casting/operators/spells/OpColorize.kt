@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 
@@ -26,14 +27,14 @@ object OpColorize : SpellOperator {
         }
         return Triple(
             Spell,
-            10_000,
+            ManaConstants.DUST_UNIT,
             listOf()
         )
     }
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val (handStack) = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it) }.copy()
+            val handStack = ctx.getHeldItemToOperateOn { FrozenColorizer.isColorizer(it) }.first.copy()
             if (FrozenColorizer.isColorizer(handStack)) {
                 if (ctx.withdrawItem(handStack.item, 1, true)) {
                     HexPlayerDataHelper.setColorizer(ctx.caster,

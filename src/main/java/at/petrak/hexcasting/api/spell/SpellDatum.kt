@@ -1,10 +1,11 @@
 package at.petrak.hexcasting.api.spell
 
+import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidSpellDatumType
 import at.petrak.hexcasting.api.utils.HexUtils
 import at.petrak.hexcasting.api.utils.HexUtils.serializeToNBT
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidSpellDatumType
+import at.petrak.hexcasting.api.utils.getList
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
@@ -144,7 +145,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 TAG_DOUBLE -> SpellDatum(nbt.getDouble(key))
                 TAG_VEC3 -> SpellDatum(HexUtils.DeserializeVec3FromNBT(nbt.getLongArray(key)))
                 TAG_LIST -> {
-                    val arr = nbt.getList(key, Tag.TAG_COMPOUND.toInt())
+                    val arr = nbt.getList(key, Tag.TAG_COMPOUND)
                     val out = ArrayList<SpellDatum<*>>(arr.size)
                     for (subtag in arr) {
                         // this is safe because otherwise we wouldn't have been able to get the list before
@@ -188,7 +189,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 TAG_LIST -> {
                     val out = TextComponent("[").withStyle(ChatFormatting.WHITE)
 
-                    val arr = nbt.getList(key, Tag.TAG_COMPOUND.toInt())
+                    val arr = nbt.getList(key, Tag.TAG_COMPOUND)
                     for ((i, subtag) in arr.withIndex()) {
                         // this is safe because otherwise we wouldn't have been able to get the list before
                         out.append(DisplayFromTag(subtag as CompoundTag))
@@ -258,6 +259,19 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             } else {
                 ValidTypes.any { clazz -> clazz.isAssignableFrom(checkee.javaClass) }
             }
+
+        @JvmStatic
+        fun GetTagName(datumType: DatumType): String {
+            return when (datumType) {
+                DatumType.ENTITY -> TAG_ENTITY
+                DatumType.WIDGET -> TAG_WIDGET
+                DatumType.LIST -> TAG_LIST
+                DatumType.PATTERN -> TAG_PATTERN
+                DatumType.DOUBLE -> TAG_DOUBLE
+                DatumType.VEC -> TAG_VEC3
+                DatumType.OTHER, DatumType.EMPTY -> ""
+            }
+        }
 
 
     }

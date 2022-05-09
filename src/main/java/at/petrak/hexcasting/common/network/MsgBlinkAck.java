@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.network;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -11,9 +10,9 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 /**
- * Sent server->client to synchronize OpAddMotion when the target is a player.
+ * Sent server->client to synchronize OpBlink when the target is a player.
  */
-public record MsgBlinkAck(Vec3 addedMotion) {
+public record MsgBlinkAck(Vec3 addedPosition) {
     public static MsgBlinkAck deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var x = buf.readDouble();
@@ -24,18 +23,16 @@ public record MsgBlinkAck(Vec3 addedMotion) {
 
     public void serialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        buf.writeDouble(this.addedMotion.x);
-        buf.writeDouble(this.addedMotion.y);
-        buf.writeDouble(this.addedMotion.z);
+        buf.writeDouble(this.addedPosition.x);
+        buf.writeDouble(this.addedPosition.y);
+        buf.writeDouble(this.addedPosition.z);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() ->
-                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    var player = Minecraft.getInstance().player;
-                    player.setPos(player.position().add(this.addedMotion));
-                })
-        );
+        ctx.get().enqueueWork(() -> {
+            ClientPacketHandler handler = new ClientPacketHandler(this);
+            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> handler::blink);
+        });
         ctx.get().setPacketHandled(true);
     }
 }

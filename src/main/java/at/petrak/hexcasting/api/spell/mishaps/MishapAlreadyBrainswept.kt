@@ -14,7 +14,7 @@ class MishapAlreadyBrainswept(val villager: Villager) : Mishap() {
         dyeColor(DyeColor.GREEN)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        villager.hurt(HexDamageSources.OVERCAST, villager.health)
+        villager.hurt(HexDamageSources.overcastDamageFrom(ctx.caster), villager.health)
     }
 
     override fun particleSpray(ctx: CastingContext): ParticleSpray {

@@ -7,7 +7,7 @@ issueTrackerURL = "https://github.com/gamma-delta/HexMod/issues"
 [[mods]]
 modId = "hexcasting"
 version = "${file.jarVersion}"
-displayName = "Hexcasting"
+displayName = "Hex Casting"
 displayURL = "https://github.com/gamma-delta/HexMod"
 logoFile = "logo.png"
 credits = "Falkory for textures; Wiresegal for lots of polish; Alwinfy for visual effects, proofreading, and code help; Kra3tor for sound effects; naj77 for the nice logo; and all of my wonderful patrons for supporting me!"

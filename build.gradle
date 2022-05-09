@@ -1,4 +1,5 @@
 buildscript {
+    ext.kotlin_version = '1.6.21'
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
@@ -15,6 +16,7 @@ buildscript {
     }
 }
 
+
 import com.diluv.schoomp.Webhook
 import com.diluv.schoomp.message.Message
 
@@ -26,9 +28,10 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.8.0'
-group = 'at.petra-k.hexcasting' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'hexcasting-1.18.2'
+
+version = modVersion
+group = "at.petra-k.$modID" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "$modID-$minecraftVersion"
 
 def isRelease = { ->
     try {
@@ -82,25 +85,12 @@ apply plugin: 'kotlinx-serialization'
 // If you already know how to add the Kotlin plugin to Gradle, this is the only line you need for KFF
 apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle'
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    // The mappings can be changed at any time and must be in the following format.
-    // Channel:   Version:
-    // snapshot   YYYYMMDD   Snapshot are built nightly.
-    // stable     #          Stables are built at the discretion of the MCP team.
-    // official   MCVersion  Official field/method names from Mojang mapping files
-    //
-    // You must be aware of the Mojang license when using the 'official' mappings.
-    // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
-    //
-    // Use non-default mappings at your own risk. They may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'parchment', version: '2022.03.13-1.18.2'
+    // After running this the first time, switch which is commented and rerun genIntellijRuns
+    mappings channel: 'official', version: '1.18.2'
+    // mappings channel: 'parchment', version: '2022.03.13-1.18.2'
 
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             workingDirectory project.file('run')
@@ -117,12 +107,11 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            // unbreak patchi??
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', modID
 
             mods {
-                hexcasting {
+                create(modID) {
                     source sourceSets.main
                 }
             }
@@ -131,29 +120,24 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', modID
 
             mods {
-                hexcasting {
+                create(modID) {
                     source sourceSets.main
                 }
             }
         }
 
-        data {
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
             workingDirectory project.file('run')
 
             // Recommended logging data for a userdev environment
@@ -168,14 +152,28 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'hexcasting', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', modID
 
             mods {
-                hexcasting {
+                create(modID) {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', modID, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            mods {
+                create(modID) {
                     source sourceSets.main
                 }
             }
@@ -185,6 +183,13 @@ minecraft {
 
 // Include resources generated by data generators.
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+mixin {
+    add sourceSets.main, "${modID}.mixins.refmap.json"
+    config "${modID}.mixins.json"
+    dumpTargetOnFailure true
+}
+
 
 repositories {
     mavenCentral()
@@ -211,46 +216,34 @@ repositories {
 
 dependencies {
     implementation 'org.testng:testng:7.1.0'
-
+    
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.19'
+    minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-66:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-66")
+    compileOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion")
+    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
 
-    // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143:api")
-    // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143")
 
-    compileOnly fg.deobf("at.petra-k.paucal:paucal-1.18.2:0.3.2")
-    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-1.18.2:0.3.2")
-}
-
-mixin {
-    add sourceSets.main, 'hexcasting.mixins.refmap.json'
-    config 'hexcasting.mixins.json'
-    dumpTargetOnFailure true
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
+    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "hexcasting",
-                "Specification-Vendor"    : "petrak-at",
+                "Specification-Title"     : modID,
+                "Specification-Vendor"    : "petra-kat",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "petrak-at",
+                "Implementation-Vendor"   : "petra-kat",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -262,12 +255,10 @@ jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 // publish.dependsOn('reobfJar')
 
-
 // Disables Gradle's custom module metadata from being published to maven. The
 // metadata includes mapped dependencies which are not reasonably consumable by
 // other mod developers.
 tasks.withType(GenerateModuleMetadata) {
-
     enabled = false
 }
 
@@ -280,9 +271,7 @@ publishing {
             from components.java
 
             pom.withXml {
-
                 asNode().dependencies.dependency.each { dep ->
-
                     assert dep.parent().remove(dep)
                 }
             }
@@ -294,14 +283,6 @@ publishing {
         }
     }
 }
-compileKotlin {
-    kotlinOptions {
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-    }
-}
 
 def getGitChangelog = { ->
     try {
@@ -311,13 +292,13 @@ def getGitChangelog = { ->
         def travisRange = System.getenv('TRAVIS_COMMIT_RANGE')
         if (gitHash && gitPrevHash) {
             exec {
-                commandLine 'git', 'log', '--pretty=tformat:> %s', '' + gitPrevHash + '...' + gitHash
+                commandLine 'git', 'log', '--pretty=tformat:> - %s', '' + gitPrevHash + '...' + gitHash
                 standardOutput = stdout
             }
             return stdout.toString().trim()
         } else if (travisRange) {
             exec {
-                commandLine 'git', 'log', '--pretty=tformat:> %s', '' + travisRange
+                commandLine 'git', 'log', '--pretty=tformat:> - %s', '' + travisRange
                 standardOutput = stdout
             }
             return stdout.toString().trim()
@@ -340,7 +321,7 @@ task sendWebhook {
 
             def message = new Message()
             message.setUsername("Patreon Early Access")
-            message.setContent("New Hexcasting release! Download it here: ${System.getenv("BUILD_URL")}\nChangelog:\n${getGitChangelog()}")
+            message.setContent("New **$modName** release! Download it here: ${System.getenv("BUILD_URL")}\nChangelog:\n${getGitChangelog()}")
 
             webhook.sendMessage(message)
         } catch (ignored) {
@@ -349,3 +330,14 @@ task sendWebhook {
     }
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+compileKotlin {
+    kotlinOptions {
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+    }
+}

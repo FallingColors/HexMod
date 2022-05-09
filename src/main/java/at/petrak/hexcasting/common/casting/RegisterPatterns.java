@@ -1,9 +1,13 @@
 package at.petrak.hexcasting.common.casting;
 
 import at.petrak.hexcasting.api.PatternRegistry;
+import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.Operator;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.spell.math.HexAngle;
+import at.petrak.hexcasting.api.spell.math.HexDir;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.casting.operators.*;
 import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicRead;
@@ -16,6 +20,7 @@ import at.petrak.hexcasting.common.casting.operators.eval.OpEvalDelay;
 import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
 import at.petrak.hexcasting.common.casting.operators.lists.*;
 import at.petrak.hexcasting.common.casting.operators.math.*;
+import at.petrak.hexcasting.common.casting.operators.math.bit.*;
 import at.petrak.hexcasting.common.casting.operators.math.logic.*;
 import at.petrak.hexcasting.common.casting.operators.math.trig.*;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
@@ -29,9 +34,6 @@ import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentin
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
 import at.petrak.hexcasting.common.casting.operators.stack.*;
 import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.api.spell.math.HexAngle;
-import at.petrak.hexcasting.api.spell.math.HexDir;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
 import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.phys.Vec3;
@@ -81,11 +83,12 @@ public class RegisterPatterns {
 
             // == Modify Stack ==
 
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("d", HexDir.EAST), prefix("const/null"), Widget.NULL);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aadaa", HexDir.EAST), prefix("duplicate"),
                 OpDuplicate.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aadaadaa", HexDir.EAST), prefix("duplicate_n"),
                 OpDuplicateN.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qwaeawqaeaqa", HexDir.NORTH_WEST), prefix("stack_len"),
+                OpStackSize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawdd", HexDir.EAST), prefix("swap"), OpSwap.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ddad", HexDir.WEST), prefix("fisherman"),
                 OpFisherman.INSTANCE);
@@ -106,6 +109,12 @@ public class RegisterPatterns {
                 OpAbsLen.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wedew", HexDir.NORTH_WEST), prefix("pow_proj"),
                 OpPowProj.INSTANCE);
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ewq", HexDir.EAST), prefix("floor"),
+                OpFloor.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qwe", HexDir.EAST), prefix("ceil"),
+                OpCeil.INSTANCE);
+
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqqqqq", HexDir.EAST), prefix("construct_vec"),
                 OpConstructVec.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qeeeee", HexDir.EAST), prefix("deconstruct_vec"),
@@ -113,12 +122,14 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaww", HexDir.NORTH_WEST), prefix("coerce_axial"),
                 OpCoerceToAxial.INSTANCE);
 
+            // == Logic ==
+
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wdw", HexDir.NORTH_EAST), prefix("and"),
-                OpAnd.INSTANCE);
+                OpBoolAnd.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waw", HexDir.SOUTH_EAST), prefix("or"),
-                OpOr.INSTANCE);
+                OpBoolOr.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dwa", HexDir.NORTH_WEST), prefix("xor"),
-                OpXor.INSTANCE);
+                OpBoolXor.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("e", HexDir.SOUTH_EAST), prefix("greater"),
                 new OpCompare((a, b) -> a > b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("q", HexDir.SOUTH_WEST), prefix("less"),
@@ -132,16 +143,14 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("da", HexDir.EAST), prefix("not_equals"),
                 new OpEquality(true));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dw", HexDir.NORTH_WEST), prefix("not"),
-                OpNot.INSTANCE);
+                OpBoolNot.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aw", HexDir.NORTH_EAST), prefix("identity"),
-                OpIdentityKindOf.INSTANCE);
+                OpBoolIdentityKindOf.INSTANCE);
 
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ewq", HexDir.EAST), prefix("floor"),
-                OpFloor.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qwe", HexDir.EAST), prefix("ceil"),
-                OpCeil.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqaqe", HexDir.NORTH_WEST), prefix("logarithm"),
-                OpLog.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqqq", HexDir.NORTH_WEST), prefix("random"),
+                OpRandom.INSTANCE);
+
+            // == Advanced Math ==
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaa", HexDir.SOUTH_EAST), prefix("sin"),
                 OpSin.INSTANCE);
@@ -156,8 +165,21 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eadeeeeew", HexDir.NORTH_EAST), prefix("arctan"),
                 OpArcTan.INSTANCE);
 
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqqq", HexDir.NORTH_WEST), prefix("random"),
-                OpRandom.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqaqe", HexDir.NORTH_WEST), prefix("logarithm"),
+                OpLog.INSTANCE);
+
+            // == Sets ==
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wdweaqa", HexDir.NORTH_EAST), prefix("and_bit"),
+                OpAnd.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waweaqa", HexDir.SOUTH_EAST), prefix("or_bit"),
+                OpOr.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dwaeaqa", HexDir.NORTH_WEST), prefix("xor_bit"),
+                OpXor.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dweaqa", HexDir.NORTH_WEST), prefix("not_bit"),
+                OpNot.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aweaqa", HexDir.NORTH_EAST), prefix("to_set"),
+                OpToSet.INSTANCE);
 
             // == Spells ==
 
@@ -205,14 +227,14 @@ public class RegisterPatterns {
                 OpBeep.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqqqqq", HexDir.EAST), prefix("craft/cypher"),
-                new OpMakePackagedSpell<>(HexItems.CYPHER.get(), 100_000));
+                new OpMakePackagedSpell<>(HexItems.CYPHER.get(), ManaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
                 prefix("craft/trinket"),
-                new OpMakePackagedSpell<>(HexItems.TRINKET.get(), 500_000));
+                new OpMakePackagedSpell<>(HexItems.TRINKET.get(), 5 * ManaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(
                 HexPattern.FromAnglesSig("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
                 prefix("craft/artifact"),
-                new OpMakePackagedSpell<>(HexItems.ARTIFACT.get(), 1_000_000));
+                new OpMakePackagedSpell<>(HexItems.ARTIFACT.get(), 10 * ManaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(
                 HexPattern.FromAnglesSig("aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", HexDir.SOUTH_WEST),
                 prefix("craft/battery"),
@@ -221,35 +243,35 @@ public class RegisterPatterns {
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaqwawaw", HexDir.NORTH_WEST),
                 prefix("potion/weakness"),
-                new OpPotionEffect(MobEffects.WEAKNESS, 10_000 / 10, true, false, false));
+                new OpPotionEffect(MobEffects.WEAKNESS, ManaConstants.DUST_UNIT / 10, true, false, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqawwawawd", HexDir.WEST),
                 prefix("potion/levitation"),
-                new OpPotionEffect(MobEffects.LEVITATION, 10_000 / 5, false, false, false));
+                new OpPotionEffect(MobEffects.LEVITATION, ManaConstants.DUST_UNIT / 5, false, false, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqaewawawe", HexDir.SOUTH_WEST),
                 prefix("potion/wither"),
-                new OpPotionEffect(MobEffects.WITHER, 10_000, true, false, false));
+                new OpPotionEffect(MobEffects.WITHER, ManaConstants.DUST_UNIT, true, false, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqadwawaww", HexDir.SOUTH_EAST),
                 prefix("potion/poison"),
-                new OpPotionEffect(MobEffects.POISON, 10_000 / 3, true, false, false));
+                new OpPotionEffect(MobEffects.POISON, ManaConstants.DUST_UNIT / 3, true, false, false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqadwawaw", HexDir.SOUTH_EAST),
                 prefix("potion/slowness"),
-                new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, 10_000 / 3, true, false, false));
+                new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, ManaConstants.DUST_UNIT / 3, true, false, false));
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqaawawaedd", HexDir.NORTH_WEST),
                 prefix("potion/regeneration"),
-                new OpPotionEffect(MobEffects.REGENERATION, 10_000, true, true, true), true);
+                new OpPotionEffect(MobEffects.REGENERATION, ManaConstants.DUST_UNIT, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqaawawaeqdd", HexDir.WEST),
                 prefix("potion/night_vision"),
-                new OpPotionEffect(MobEffects.NIGHT_VISION, 10_000 / 5, false, true, true), true);
+                new OpPotionEffect(MobEffects.NIGHT_VISION, ManaConstants.DUST_UNIT / 5, false, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqaawawaeqqdd", HexDir.SOUTH_WEST),
                 prefix("potion/absorption"),
-                new OpPotionEffect(MobEffects.ABSORPTION, 10_000, true, true, true), true);
+                new OpPotionEffect(MobEffects.ABSORPTION, ManaConstants.DUST_UNIT, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaawawaeqqqdd", HexDir.SOUTH_EAST),
                 prefix("potion/haste"),
-                new OpPotionEffect(MobEffects.DIG_SPEED, 10_000 / 3, true, true, true), true);
+                new OpPotionEffect(MobEffects.DIG_SPEED, ManaConstants.DUST_UNIT / 3, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aawawaeqqqqdd", HexDir.EAST),
                 prefix("potion/strength"),
-                new OpPotionEffect(MobEffects.DAMAGE_BOOST, 10_000 / 3, true, true, true), true);
+                new OpPotionEffect(MobEffects.DAMAGE_BOOST, ManaConstants.DUST_UNIT / 3, true, true, true), true);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waeawae", HexDir.EAST),
                 prefix("sentinel/create"),
@@ -309,11 +331,20 @@ public class RegisterPatterns {
                 OpRead.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deeeee", HexDir.EAST), prefix("write"),
                 OpWrite.INSTANCE);
-            // lorge boy
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqqqqqe", HexDir.EAST), prefix("readable"),
+                OpReadable.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deeeeeq", HexDir.EAST), prefix("writable"),
+                OpWritable.INSTANCE);
+
+            // lorge boyes
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wawqwqwqwqwqw", HexDir.EAST),
                 prefix("read/entity"), OpTheCoolerRead.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wawqwqwqwqwqwew", HexDir.EAST),
+                prefix("readable/entity"), OpTheCoolerReadable.INSTANCE);
 
             // == Consts ==
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("d", HexDir.EAST), prefix("const/null"), Widget.NULL);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qqqqqea", HexDir.NORTH_WEST), prefix("const/vec/px"),
                 Operator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 0.0))));
@@ -419,6 +450,10 @@ public class RegisterPatterns {
                 OpIndexOf.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("edqdewaqa", HexDir.SOUTH_WEST), prefix("list_remove"),
                 OpRemove.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qaeaqwded", HexDir.NORTH_WEST), prefix("slice"),
+                OpSlice.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wqaeaqw", HexDir.NORTH_WEST), prefix("modify_in_place"),
+                OpModifyInPlace.INSTANCE);
 
         } catch (PatternRegistry.RegisterPatternException exn) {
             exn.printStackTrace();
@@ -455,13 +490,9 @@ public class RegisterPatterns {
         PatternRegistry.addSpecialHandler(prefix("mask"), pat -> {
             var directions = pat.directions();
 
-            HexDir flatDir;
-            if (pat.angles().isEmpty()) {
-                return null;
-            } else if (pat.angles().get(0) == HexAngle.LEFT_BACK) {
+            HexDir flatDir = pat.startDir();
+            if (!pat.angles().isEmpty() && pat.angles().get(0) == HexAngle.LEFT_BACK) {
                 flatDir = directions.get(0).rotatedBy(HexAngle.LEFT);
-            } else {
-                flatDir = pat.startDir();
             }
 
             var mask = new BooleanArrayList();
