@@ -2,14 +2,14 @@ package at.petrak.hexcasting.api.block.circle;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
-import at.petrak.hexcasting.api.mod.HexApiItems;
-import at.petrak.hexcasting.api.mod.HexApiSounds;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.SpellCircleContext;
 import at.petrak.hexcasting.api.utils.ManaHelper;
+import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -30,6 +30,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -118,7 +119,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             var dustCount = (float) beai.getMana() / (float) HexConfig.common().dustManaAmount();
             var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
                 String.format("%.2f", dustCount));
-            lines.add(new Pair<>(new ItemStack(HexApiItems.AMETHYST_DUST), dustCmp));
+            lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
 
             var mishap = this.getLastMishap();
             if (mishap != null) {
@@ -302,7 +303,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             }
 
             if (castSpell && makeSound) {
-                this.level.playSound(null, this.getBlockPos(), HexApiSounds.SPELL_CIRCLE_CAST, SoundSource.BLOCKS,
+                this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST, SoundSource.BLOCKS,
                     2f, 1f);
             }
 
@@ -389,14 +390,14 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             var spray = new ParticleSpray(vpos, vecOutDir.scale(success ? 1.0 : 1.5), success ? 0.1 : 0.5,
                 Mth.PI / (success ? 4 : 2), success ? 30 : 100);
             spray.sprayParticles(serverLevel,
-                success ? this.colorizer : new FrozenColorizer(new ItemStack(HexApiItems.COLORIZER_RED),
+                success ? this.colorizer : new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)),
                     this.activator));
         }
 
         var pitch = 1f;
-        var sound = HexApiSounds.SPELL_CIRCLE_FAIL;
+        var sound = HexSounds.SPELL_CIRCLE_FAIL;
         if (success) {
-            sound = HexApiSounds.SPELL_CIRCLE_FIND_BLOCK;
+            sound = HexSounds.SPELL_CIRCLE_FIND_BLOCK;
             // This is a good use of my time
             var note = this.trackedBlocks.size() - 1;
             var semitone = this.semitoneFromScale(note);

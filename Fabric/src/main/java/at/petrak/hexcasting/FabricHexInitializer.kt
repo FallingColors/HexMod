@@ -10,6 +10,7 @@ import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.ArgumentTypes
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer
 import net.minecraft.core.Registry
@@ -49,6 +50,43 @@ object FabricHexInitializer : ModInitializer {
         HexBlockEntities.registerTiles(bind(Registry.BLOCK_ENTITY_TYPE))
 
         HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
+
+        // Done with soft implements in forge
+        val flameOn = FlammableBlockRegistry.getDefaultInstance()
+        for (log in listOf(
+            HexBlocks.AKASHIC_LOG,
+            HexBlocks.AKASHIC_LOG_STRIPPED,
+            HexBlocks.AKASHIC_WOOD,
+            HexBlocks.AKASHIC_LOG_STRIPPED,
+        )) {
+            flameOn.add(log, 5, 5)
+        }
+        for (wood in listOf(
+            HexBlocks.AKASHIC_PLANKS,
+            HexBlocks.AKASHIC_PANEL,
+            HexBlocks.AKASHIC_TILE,
+            HexBlocks.AKASHIC_DOOR,
+            HexBlocks.AKASHIC_TRAPDOOR,
+            HexBlocks.AKASHIC_STAIRS,
+            HexBlocks.AKASHIC_SLAB,
+            HexBlocks.AKASHIC_STAIRS,
+            HexBlocks.AKASHIC_SLAB,
+            HexBlocks.AKASHIC_BUTTON,
+            HexBlocks.AKASHIC_PRESSURE_PLATE,
+        )) {
+            flameOn.add(wood, 20, 5)
+        }
+        for (papery in listOf(
+            HexBlocks.SCROLL_PAPER,
+            HexBlocks.SCROLL_PAPER_LANTERN,
+            HexBlocks.ANCIENT_SCROLL_PAPER,
+            HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN,
+            HexBlocks.AKASHIC_LEAVES1,
+            HexBlocks.AKASHIC_LEAVES2,
+            HexBlocks.AKASHIC_LEAVES3,
+        )) {
+            flameOn.add(papery, 100, 60)
+        }
     }
 
     private fun <T> bind(registry: Registry<in T>): BiConsumer<T, ResourceLocation> =

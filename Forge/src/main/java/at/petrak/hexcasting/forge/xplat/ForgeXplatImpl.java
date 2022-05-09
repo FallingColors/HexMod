@@ -15,7 +15,6 @@ import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.network.IMessage;
-import at.petrak.hexcasting.forge.block.BlockBurns;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
@@ -41,7 +40,6 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -255,11 +253,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
         Block... blocks) {
         return BlockEntityType.Builder.of(func::apply, blocks).build(null);
-    }
-
-    @Override
-    public Block makeFlammable(BlockBehaviour.Properties properties, int flammability, int spreadSpeed) {
-        return new BlockBurns(properties, flammability, spreadSpeed);
     }
 
     private static CreativeModeTab TAB = null;

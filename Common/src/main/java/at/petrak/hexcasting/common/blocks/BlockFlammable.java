@@ -1,15 +1,22 @@
-package at.petrak.hexcasting.common.blocks.akashic;
+package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BlockAkashicLeaves extends LeavesBlock {
-    public BlockAkashicLeaves(Properties props) {
-        super(props);
+/**
+ * Does absolutely nothing on Fabric; the flammable block registry is for that.
+ */
+public class BlockFlammable extends Block {
+    public final int burn, spread;
+
+    public BlockFlammable(Properties $$0, int burn, int spread) {
+        super($$0);
+        this.burn = burn;
+        this.spread = spread;
     }
 
     @SoftImplement("forge")
@@ -19,11 +26,11 @@ public class BlockAkashicLeaves extends LeavesBlock {
 
     @SoftImplement("forge")
     public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 60;
+        return burn;
     }
 
     @SoftImplement("forge")
     public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 30;
+        return spread;
     }
 }

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.common.blocks.BlockConjured;
 import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
+import at.petrak.hexcasting.common.blocks.BlockFlammable;
 import at.petrak.hexcasting.common.blocks.akashic.*;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
@@ -168,20 +169,20 @@ public class HexBlocks {
             .strength(1f)
             .lightLevel($ -> 15)));
 
+    public static final Block AKASHIC_LOG = blockItem("akashic_log",
+        new BlockFlammable(akashicWoody(), 5, 5));
     public static final BlockAxis AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
         new BlockAkashicLog(akashicWoody()));
-    public static final Block AKASHIC_LOG = blockItem("akashic_log",
-        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 5, 5));
-    public static final Block AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
-        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 5, 5));
     public static final Block AKASHIC_WOOD = blockItem("akashic_log",
-        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 5, 5));
+        new BlockFlammable(akashicWoody(), 5, 5));
+    public static final Block AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
+        new BlockFlammable(akashicWoody(), 5, 5));
     public static final Block AKASHIC_PLANKS = blockItem("akashic_planks",
-        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 20, 5));
+        new BlockFlammable(akashicWoody(), 20, 5));
     public static final Block AKASHIC_PANEL = blockItem("akashic_panel",
-        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 20, 5));
+        new BlockFlammable(akashicWoody(), 20, 5));
     public static final Block AKASHIC_TILE = blockItem("akashic_tile",
-        IXplatAbstractions.INSTANCE.makeFlammable(akashicWoody(), 20, 5));
+        new BlockFlammable(akashicWoody(), 20, 5));
     public static final DoorBlock AKASHIC_DOOR = blockItem("akashic_door",
         new BlockHexDoor(akashicWoody().noOcclusion()));
     public static final TrapDoorBlock AKASHIC_TRAPDOOR = blockItem("akashic_trapdoor",

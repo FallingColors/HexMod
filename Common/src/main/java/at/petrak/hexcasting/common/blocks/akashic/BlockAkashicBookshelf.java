@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
+import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -59,20 +60,20 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
                 if (!pLevel.isClientSide()) {
                     scroll.writeDatum(stack, SpellDatum.make(shelf.getPattern()));
                 }
-                pLevel.playSound(pPlayer, pPos, HexSounds.SCROLL_SCRIBBLE.get(), SoundSource.BLOCKS, 1f, 1f);
+                pLevel.playSound(pPlayer, pPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS, 1f, 1f);
                 return InteractionResult.sidedSuccess(pLevel.isClientSide);
             } else if (pPlayer.isDiscrete() && pHand == InteractionHand.MAIN_HAND && stack.isEmpty()) {
                 if (!pLevel.isClientSide()) {
                     shelf.setNewData(null, null, DatumType.EMPTY);
 
-                    var recordPos = HexBlocks.AKASHIC_BOOKSHELF.get().getRecordPosition(pPos, pState, pLevel);
+                    var recordPos = HexBlocks.AKASHIC_BOOKSHELF.getRecordPosition(pPos, pState, pLevel);
                     if (recordPos != null &&
                         pLevel.getBlockEntity(recordPos) instanceof BlockEntityAkashicRecord record) {
                         record.revalidateAllBookshelves();
                     }
                 }
 
-                pLevel.playSound(pPlayer, pPos, HexSounds.SCROLL_SCRIBBLE.get(), SoundSource.BLOCKS,
+                pLevel.playSound(pPlayer, pPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
                     1f, 0.8f);
                 return InteractionResult.sidedSuccess(pLevel.isClientSide);
             }
@@ -85,7 +86,7 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
     public void onPlace(BlockState pState, Level world, BlockPos pos, BlockState pOldState, boolean pIsMoving) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
             var recordPos = BlockAkashicFloodfiller.floodFillFor(pos, world,
-                (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
+                (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD));
             if (pOldState.getBlock() != pState.getBlock()) {
                 tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(),
                     recordPos == null ? DatumType.EMPTY : pState.getValue(DATUM_TYPE));
@@ -98,7 +99,7 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
         boolean pIsMoving) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
             var recordPos = BlockAkashicFloodfiller.floodFillFor(pos, world,
-                (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD.get()));
+                (here, bs, level) -> bs.is(HexBlocks.AKASHIC_RECORD));
             tile.setNewData(recordPos, recordPos == null ? null : tile.getPattern(),
                 recordPos == null ? DatumType.EMPTY : pState.getValue(DATUM_TYPE));
         }
@@ -114,7 +115,8 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
         return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
-    @Override
+    // TODO: fabric
+    @SoftImplement("Forge")
     public float getEnchantPowerBonus(BlockState state, LevelReader level, BlockPos pos) {
         return 1;
     }

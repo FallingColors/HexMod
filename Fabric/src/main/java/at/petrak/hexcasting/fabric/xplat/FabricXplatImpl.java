@@ -19,7 +19,6 @@ import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +30,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -184,14 +182,6 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return FabricBlockEntityTypeBuilder.create(func::apply, blocks).build();
     }
 
-    @Override
-    public Block makeFlammable(BlockBehaviour.Properties properties, int flammability, int spreadSpeed) {
-        var out = new Block(properties);
-        FlammableBlockRegistry.getDefaultInstance().add(out, flammability, spreadSpeed);
-        return out;
-    }
-
-
     private static CreativeModeTab TAB = null;
 
     @Override
@@ -221,14 +211,16 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
-        if (!bs.requiresCorrectToolForDrops())
+        if (!bs.requiresCorrectToolForDrops()) {
             return true;
+        }
 
         int level = HexConfig.server()
             .opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort();
         for (var tool : HARVEST_TOOLS_BY_LEVEL.get(level)) {
-            if (tool.isCorrectToolForDrops(bs))
+            if (tool.isCorrectToolForDrops(bs)) {
                 return true;
+            }
         }
 
         return false;
