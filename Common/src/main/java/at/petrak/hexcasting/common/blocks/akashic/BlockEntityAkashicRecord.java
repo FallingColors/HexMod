@@ -31,7 +31,7 @@ public class BlockEntityAkashicRecord extends HexBlockEntity {
     private final Map<String, Entry> entries = new HashMap<>();
 
     public BlockEntityAkashicRecord(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlockEntities.AKASHIC_RECORD_TILE.get(), pWorldPosition, pBlockState);
+        super(HexBlockEntities.AKASHIC_RECORD_TILE, pWorldPosition, pBlockState);
     }
 
     public void removeFloodfillerAt(BlockPos pos) {
@@ -58,7 +58,7 @@ public class BlockEntityAkashicRecord extends HexBlockEntity {
             var tile = (BlockEntityAkashicBookshelf) this.level.getBlockEntity(openPos);
             tile.setNewData(this.getBlockPos(), key, datum.getType());
 
-            this.entries.put(entryKey, new Entry(openPos, key.startDir(), datum.serializeToNBT()));
+            this.entries.put(entryKey, new Entry(openPos, key.getStartDir(), datum.serializeToNBT()));
             this.sync();
 
             return openPos;

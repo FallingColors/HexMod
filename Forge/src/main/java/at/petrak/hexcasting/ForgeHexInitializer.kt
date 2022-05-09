@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.RegisterPatterns
@@ -22,6 +23,7 @@ import net.minecraft.commands.synchronization.EmptyArgumentSerializer
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraftforge.common.ForgeConfigSpec
+import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingConversionEvent
 import net.minecraftforge.event.entity.living.LivingEvent
@@ -79,6 +81,8 @@ object ForgeHexInitializer {
         bind(ForgeRegistries.BLOCK_ENTITIES, HexBlockEntities::registerTiles)
         bind(ForgeRegistries.ITEMS, HexItems::registerItems)
 
+        bind(ForgeRegistries.RECIPE_SERIALIZERS, HexRecipeSerializers::registerSerializers)
+
         bind(ForgeRegistries.ENTITIES, HexEntities::registerEntities)
 
         bind(ForgeRegistries.PARTICLE_TYPES, HexParticles::registerParticles)
@@ -103,7 +107,7 @@ object ForgeHexInitializer {
         // We have to do these at some point when the registries are still open
         modBus.addListener { _: RegistryEvent<Item> ->
             HexRecipeSerializers.registerTypes()
-            // TODO statistics
+            HexStatistics.register()
         }
 
         modBus.addListener { _: FMLLoadCompleteEvent ->
@@ -130,6 +134,10 @@ object ForgeHexInitializer {
 
         evBus.addListener { evt: LivingEvent.LivingUpdateEvent ->
             OpFlight.tickDownFlight(evt.entityLiving)
+        }
+
+        evBus.addListener { evt: RegisterCommandsEvent ->
+            HexCommands.register(evt.dispatcher)
         }
 
         evBus.register(CapSyncers::class.java)

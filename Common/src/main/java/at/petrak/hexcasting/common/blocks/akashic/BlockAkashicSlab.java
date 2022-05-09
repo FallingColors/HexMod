@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
+import at.petrak.hexcasting.annotations.SoftImplement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -11,17 +12,17 @@ public class BlockAkashicSlab extends SlabBlock {
         super(props);
     }
 
-    @Override
+    @SoftImplement("forge")
     public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return true;
     }
 
-    @Override
+    @SoftImplement("forge")
     public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return 20;
     }
 
-    @Override
+    @SoftImplement("forge")
     public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return 5;
     }

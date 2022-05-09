@@ -1,14 +1,18 @@
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
+import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.command.PatternResLocArgument
+import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.misc.Brainsweeping
+import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import at.petrak.hexcasting.fabric.FabricHexConfig
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.ArgumentTypes
@@ -40,14 +44,20 @@ object FabricHexInitializer : ModInitializer {
     fun initListeners() {
         UseEntityCallback.EVENT.register(Brainsweeping::tradeWithVillager)
         VillagerConversionCallback.EVENT.register(Brainsweeping::copyBrainsweepFromVillager)
+
+        CommandRegistrationCallback.EVENT.register { dp, _ -> HexCommands.register(dp) }
     }
 
     fun initRegistries() {
         HexSounds.registerSounds(bind(Registry.SOUND_EVENT))
         HexBlocks.registerBlocks(bind(Registry.BLOCK))
         HexBlocks.registerBlockItems(bind(Registry.ITEM))
-        HexItems.registerItems(bind(Registry.ITEM))
         HexBlockEntities.registerTiles(bind(Registry.BLOCK_ENTITY_TYPE))
+        HexItems.registerItems(bind(Registry.ITEM))
+
+        HexEntities.registerEntities(bind(Registry.ENTITY_TYPE))
+
+        HexRecipeSerializers.registerSerializers(bind(Registry.RECIPE_SERIALIZER))
 
         HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
 
@@ -92,6 +102,9 @@ object FabricHexInitializer : ModInitializer {
         )) {
             flameOn.add(leaves, 60, 30)
         }
+
+        HexRecipeSerializers.registerTypes()
+        HexStatistics.register()
     }
 
     private fun <T> bind(registry: Registry<in T>): BiConsumer<T, ResourceLocation> =

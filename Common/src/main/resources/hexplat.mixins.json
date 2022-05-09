@@ -4,6 +4,9 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.mixin",
-  "mixins": ["MixinMob", "MixinVillager", "accessor.AccessorLivingEntity", "accessor.AccessorUseOnContext"],
+  "mixins": [
+    "MixinMob", "MixinVillager", "accessor.AccessorLivingEntity", "accessor.AccessorUseOnContext",
+    "accessor.CriteriaTriggersAccessor"
+  ],
   "client": ["client.AccessorItemProperties"]
 }

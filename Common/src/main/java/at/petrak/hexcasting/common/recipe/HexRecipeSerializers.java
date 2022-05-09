@@ -13,9 +13,9 @@ import java.util.function.BiConsumer;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexRecipeSerializers {
-    public void register(BiConsumer<ResourceLocation, RecipeSerializer<?>> r) {
+    public static void registerSerializers(BiConsumer<RecipeSerializer<?>, ResourceLocation> r) {
         for (var e : SERIALIZERS.entrySet()) {
-            r.accept(e.getKey(), e.getValue());
+            r.accept(e.getValue(), e.getKey());
         }
     }
 
