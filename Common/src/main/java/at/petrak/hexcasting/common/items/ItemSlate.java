@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.annotations.SoftImplement;
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -13,14 +15,19 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 public class ItemSlate extends BlockItem implements DataHolderItem {
-    public static final ResourceLocation WRITTEN_PRED = new ResourceLocation(HexMod.MOD_ID, "written");
+    public static final ResourceLocation WRITTEN_PRED = modLoc("written");
 
     public ItemSlate(Block pBlock, Properties pProperties) {
         super(pBlock, pProperties);
@@ -28,7 +35,7 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
 
     @Override
     public Component getName(ItemStack pStack) {
-        var key = "block." + HexMod.MOD_ID + ".slate." + (hasPattern(pStack) ? "written" : "blank");
+        var key = "block." + HexAPI.MOD_ID + ".slate." + (hasPattern(pStack) ? "written" : "blank");
         return new TranslatableComponent(key);
     }
 
@@ -42,13 +49,14 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
         return false;
     }
 
-    @Override
+    // TODO: what the hell does this do and how to do it on forge
+    @SoftImplement("forge")
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         var tag = stack.getTagElement("BlockEntityTag");
         if (tag != null && tag.isEmpty()) {
             stack.removeTagKey("BlockEntityTag");
         }
-        return super.onEntityItemUpdate(stack, entity);
+        return false;
     }
 
     @Override
@@ -98,5 +106,19 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
                 beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
             }
         }
+    }
+
+    @Override
+    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+        if (ItemSlate.hasPattern(stack)) {
+            var tag = stack.getOrCreateTag()
+                .getCompound("BlockEntityTag")
+                .getCompound(BlockEntitySlate.TAG_PATTERN);
+            var pattern = HexPattern.DeserializeFromNBT(tag);
+            return Optional.of(new PatternTooltipGreeble(
+                pattern,
+                PatternTooltipGreeble.SLATE_BG));
+        }
+        return Optional.empty();
     }
 }

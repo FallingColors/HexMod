@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.RenderType;
@@ -14,6 +16,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.level.block.Block;
 
 import java.util.function.Function;
@@ -39,5 +42,15 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
     public <T extends ParticleOptions> void registerParticleType(ParticleType<T> type,
         Function<SpriteSet, ParticleProvider<T>> factory) {
         ParticleFactoryRegistry.getInstance().register(type, factory::apply);
+    }
+
+    @Override
+    public <T extends ClientTooltipComponent & TooltipComponent> void registerIdentityTooltipMapping(Class<T> clazz) {
+        TooltipComponentCallback.EVENT.register(data -> {
+            if (clazz.isAssignableFrom(data.getClass())) {
+                return clazz.cast(data);
+            }
+            return null;
+        });
     }
 }

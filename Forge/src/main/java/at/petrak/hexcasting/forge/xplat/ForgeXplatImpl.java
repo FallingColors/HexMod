@@ -32,9 +32,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
@@ -43,6 +46,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.PacketDistributor;
@@ -61,6 +65,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public boolean isPhysicalClient() {
         return FMLLoader.getDist() == Dist.CLIENT;
+    }
+
+    @Override
+    public Attribute getReachDistance() {
+        return ForgeMod.REACH_DISTANCE.get();
     }
 
     @Override
@@ -280,6 +289,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
         return !bs.requiresCorrectToolForDrops() || TierSortingRegistry.isCorrectTierForDrops(tier, bs);
+    }
+
+    @Override
+    public Item.Properties addEquipSlotFabric(Item.Properties props, EquipmentSlot slot) {
+        return props;
     }
 
     public static final String TAG_BRAINSWEPT = "hexcasting:brainswept";

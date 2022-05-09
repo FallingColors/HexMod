@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
@@ -16,9 +15,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 public class ItemFocus extends Item implements DataHolderItem {
-    public static final ResourceLocation DATATYPE_PRED = new ResourceLocation(HexMod.MOD_ID, "datatype");
-    public static final ResourceLocation SEALED_PRED = new ResourceLocation(HexMod.MOD_ID, "sealed");
+    public static final ResourceLocation DATATYPE_PRED = modLoc("datatype");
+    public static final ResourceLocation SEALED_PRED = modLoc("sealed");
 
     public static final String TAG_DATA = "data";
     public static final String TAG_SEALED = "sealed";
@@ -42,7 +43,8 @@ public class ItemFocus extends Item implements DataHolderItem {
 
     @Override
     public String getDescriptionId(ItemStack stack) {
-        return super.getDescriptionId(stack) + (stack.hasTag() && stack.getTag().getBoolean(TAG_SEALED) ? ".sealed" : "");
+        return super.getDescriptionId(stack) + (stack.hasTag() && stack.getTag()
+            .getBoolean(TAG_SEALED) ? ".sealed" : "");
     }
 
     @Override
@@ -62,8 +64,9 @@ public class ItemFocus extends Item implements DataHolderItem {
         if (datum == null) {
             tag.remove(TAG_DATA);
             tag.remove(TAG_SEALED);
-        } else if (!tag.getBoolean(TAG_SEALED))
+        } else if (!tag.getBoolean(TAG_SEALED)) {
             tag.put(TAG_DATA, datum.serializeToNBT());
+        }
     }
 
     @Override

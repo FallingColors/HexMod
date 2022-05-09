@@ -1,7 +1,8 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.common.lib.HexMessages;
+import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.common.network.MsgUpdateComparatorVisualsAck;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
@@ -26,8 +27,6 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,8 +46,9 @@ public class ItemLens extends Item implements Wearable {
         });
     }
 
+    // In fabric impled with extension property?
     @Nullable
-    @Override
+    @SoftImplement("forge")
     public EquipmentSlot getEquipmentSlot(ItemStack stack) {
         return EquipmentSlot.HEAD;
     }
@@ -85,7 +85,7 @@ public class ItemLens extends Item implements Wearable {
     private static final Map<ServerPlayer, Pair<BlockPos, Integer>> comparatorDataMap = new WeakHashMap<>();
 
     private void sendComparatorDataToClient(ServerPlayer player) {
-        double reachAttribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
+        double reachAttribute = IXplatAbstractions.INSTANCE.getReachDistance(player);
         double distance = player.isCreative() ? reachAttribute : reachAttribute - 0.5;
         var hitResult = player.pick(distance, 0, false);
         if (hitResult.getType() == HitResult.Type.BLOCK) {
@@ -109,13 +109,11 @@ public class ItemLens extends Item implements Wearable {
         if (value == -1) {
             if (previous != null) {
                 comparatorDataMap.remove(player);
-                HexMessages.getNetwork()
-                    .send(PacketDistributor.PLAYER.with(() -> player), new MsgUpdateComparatorVisualsAck(null, -1));
+                IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(null, -1));
             }
         } else if (previous == null || (!pos.equals(previous.getFirst()) || value != previous.getSecond())) {
             comparatorDataMap.put(player, new Pair<>(pos, value));
-            HexMessages.getNetwork()
-                .send(PacketDistributor.PLAYER.with(() -> player), new MsgUpdateComparatorVisualsAck(pos, value));
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(pos, value));
         }
     }
 

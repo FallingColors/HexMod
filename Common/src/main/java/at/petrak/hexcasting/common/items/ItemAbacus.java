@@ -60,7 +60,7 @@ public class ItemAbacus extends Item implements DataHolderItem {
             }
             tag.putDouble(TAG_VALUE, 0d);
 
-            player.playSound(HexSounds.ABACUS_SHAKE.get(), 1f, 1f);
+            player.playSound(HexSounds.ABACUS_SHAKE, 1f, 1f);
 
             var key = "hexcasting.tooltip.abacus.reset";
             if (oldNum == 69) {

@@ -21,12 +21,15 @@ public class ForgeHexClientInitializer {
 
         var evBus = MinecraftForge.EVENT_BUS;
 
-        evBus.addListener(
-            (RenderLevelLastEvent e) -> HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick()));
+        evBus.addListener((RenderLevelLastEvent e) ->
+            HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick()));
+
         evBus.addListener((RenderGameOverlayEvent.PreLayer e) ->
             HexAdditionalRenderers.overlayGui(e.getMatrixStack(), e.getPartialTicks()));
+
         evBus.addListener(EventPriority.LOWEST, (ParticleFactoryRegisterEvent e) ->
             RegisterClientStuff.registerParticles());
+
         evBus.addListener((TickEvent.ClientTickEvent e) -> ClientTickCounter.onTick());
     }
 

@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
+import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -16,11 +16,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * TAG_OP_ID and TAG_PATTERN: "Ancient Scroll of %s" (Great Spells)
@@ -34,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 public class ItemScroll extends Item implements DataHolderItem {
     public static final String TAG_OP_ID = "op_id";
     public static final String TAG_PATTERN = "pattern";
-    public static final ResourceLocation ANCIENT_PREDICATE = new ResourceLocation(HexMod.MOD_ID, "ancient");
+    public static final ResourceLocation ANCIENT_PREDICATE = modLoc("ancient");
 
     public ItemScroll(Properties pProperties) {
         super(pProperties);
@@ -55,7 +60,8 @@ public class ItemScroll extends Item implements DataHolderItem {
 
     @Override
     public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
-        return datum != null && datum.getType() == DatumType.PATTERN && (!stack.hasTag() || !stack.getTag().contains(TAG_PATTERN, Tag.TAG_COMPOUND));
+        return datum != null && datum.getType() == DatumType.PATTERN && (!stack.hasTag() || !stack.getTag()
+            .contains(TAG_PATTERN, Tag.TAG_COMPOUND));
     }
 
     @Override
@@ -118,4 +124,18 @@ public class ItemScroll extends Item implements DataHolderItem {
     }
 
     // purposely no hover text
+    
+    @Override
+    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+        var tag = stack.getOrCreateTag();
+        if (tag.contains(ItemScroll.TAG_PATTERN, Tag.TAG_COMPOUND)) {
+            var pattern = HexPattern.DeserializeFromNBT(tag.getCompound(ItemScroll.TAG_PATTERN));
+            return Optional.of(new PatternTooltipGreeble(
+                pattern,
+                tag.contains(ItemScroll.TAG_OP_ID, Tag.TAG_STRING)
+                    ? PatternTooltipGreeble.ANCIENT_BG : PatternTooltipGreeble.PRISTINE_BG));
+        }
+
+        return Optional.empty();
+    }
 }

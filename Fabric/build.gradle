@@ -12,6 +12,10 @@ repositories {
     maven {
         url 'https://ladysnake.jfrog.io/artifactory/mods'
     }
+    maven {
+        name "entity reach"
+        url "https://maven.jamieswhiteshirt.com/libs-release/"
+    }
 }
 
 dependencies {
@@ -30,6 +34,9 @@ dependencies {
     implementation "me.zeroeightsix:fiber:$fiberVersion"
 
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:$cardinalComponentsVersion"
+
+    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
+    include "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
 }
 
 loom {

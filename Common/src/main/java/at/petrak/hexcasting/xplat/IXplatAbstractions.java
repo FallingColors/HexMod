@@ -14,9 +14,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
@@ -42,6 +45,8 @@ public interface IXplatAbstractions {
     void sendPacketToPlayer(ServerPlayer target, IMessage packet);
 
     void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet);
+
+    Attribute getReachDistance();
 
     // Things that used to be caps
 
@@ -85,6 +90,13 @@ public interface IXplatAbstractions {
     boolean isColorizer(ItemStack stack);
 
     int getRawColor(FrozenColorizer colorizer, float time, Vec3 position);
+
+    // Items
+
+    /**
+     * No-op on forge (use a SoftImplement)
+     */
+    Item.Properties addEquipSlotFabric(Item.Properties props, EquipmentSlot slot);
 
     // Blocks
 
