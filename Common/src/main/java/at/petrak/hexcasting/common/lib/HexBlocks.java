@@ -14,7 +14,6 @@ import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockLookingImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockStoredPlayerImpetus;
 import at.petrak.hexcasting.common.blocks.decoration.*;
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -154,15 +153,14 @@ public class HexBlocks {
     public static final AmethystBlock AMETHYST_TILES = blockItem("amethyst_tiles",
         new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
     public static final Block SCROLL_PAPER = blockItem("scroll_paper",
-        IXplatAbstractions.INSTANCE.makeFlammable(papery(MaterialColor.TERRACOTTA_WHITE), 100, 60));
+        new BlockFlammable(papery(MaterialColor.TERRACOTTA_WHITE), 100, 60));
     public static final Block ANCIENT_SCROLL_PAPER = blockItem("ancient_scroll_paper",
-        IXplatAbstractions.INSTANCE.makeFlammable(papery(MaterialColor.TERRACOTTA_ORANGE), 100, 60));
+        new BlockFlammable(papery(MaterialColor.TERRACOTTA_ORANGE), 100, 60));
     public static final Block SCROLL_PAPER_LANTERN = blockItem("scroll_paper_lantern",
-        IXplatAbstractions.INSTANCE.makeFlammable(papery(MaterialColor.TERRACOTTA_WHITE).lightLevel($ -> 15), 100, 60));
+        new BlockFlammable(papery(MaterialColor.TERRACOTTA_WHITE).lightLevel($ -> 15), 100, 60));
     public static final Block ANCIENT_SCROLL_PAPER_LANTERN = blockItem(
         "ancient_scroll_paper_lantern",
-        IXplatAbstractions.INSTANCE.makeFlammable(papery(MaterialColor.TERRACOTTA_ORANGE).lightLevel($ -> 12), 100,
-            60));
+        new BlockFlammable(papery(MaterialColor.TERRACOTTA_ORANGE).lightLevel($ -> 12), 100, 60));
     public static final BlockSconce SCONCE = blockItem("amethyst_sconce",
         new BlockSconce(BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.COLOR_PURPLE)
             .sound(SoundType.AMETHYST)
@@ -170,7 +168,7 @@ public class HexBlocks {
             .lightLevel($ -> 15)));
 
     public static final Block AKASHIC_LOG = blockItem("akashic_log",
-        new BlockFlammable(akashicWoody(), 5, 5));
+        new BlockAkashicLog(akashicWoody()));
     public static final BlockAxis AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
         new BlockAkashicLog(akashicWoody()));
     public static final Block AKASHIC_WOOD = blockItem("akashic_log",
@@ -190,7 +188,7 @@ public class HexBlocks {
     public static final StairBlock AKASHIC_STAIRS = blockItem("akashic_stairs",
         new BlockHexStairs(AKASHIC_PLANKS.defaultBlockState(), akashicWoody().noOcclusion()));
     public static final SlabBlock AKASHIC_SLAB = blockItem("akashic_slab",
-        new SlabBlock(akashicWoody().noOcclusion()));
+        new BlockHexSlab(akashicWoody().noOcclusion()));
     public static final WoodButtonBlock AKASHIC_BUTTON = blockItem("akashic_button",
         new BlockHexWoodButton(akashicWoody().noOcclusion()));
     public static final PressurePlateBlock AKASHIC_PRESSURE_PLATE = blockItem("akashic_pressure_plate",

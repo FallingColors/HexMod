@@ -4,12 +4,12 @@ import at.petrak.hexcasting.annotations.SoftImplement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BlockHexDoor extends DoorBlock {
-    public BlockHexDoor(Properties $$0) {
-        super($$0);
+public class BlockHexSlab extends SlabBlock {
+    public BlockHexSlab(Properties properties) {
+        super(properties);
     }
 
 

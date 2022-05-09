@@ -81,11 +81,16 @@ object FabricHexInitializer : ModInitializer {
             HexBlocks.SCROLL_PAPER_LANTERN,
             HexBlocks.ANCIENT_SCROLL_PAPER,
             HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN,
+
+            )) {
+            flameOn.add(papery, 100, 60)
+        }
+        for (leaves in listOf(
             HexBlocks.AKASHIC_LEAVES1,
             HexBlocks.AKASHIC_LEAVES2,
             HexBlocks.AKASHIC_LEAVES3,
         )) {
-            flameOn.add(papery, 100, 60)
+            flameOn.add(leaves, 60, 30)
         }
     }
 
