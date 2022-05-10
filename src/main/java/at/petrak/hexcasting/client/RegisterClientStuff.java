@@ -277,7 +277,7 @@ public class RegisterClientStuff {
     private static void registerPackagedSpellOverrides(ItemPackagedSpell item) {
         ItemProperties.register(item, ItemPackagedSpell.HAS_PATTERNS_PRED,
             (stack, level, holder, holderID) ->
-                item.getPatterns(stack) != null ? 1f : 0f
+                item.hasSpell(stack) ? 1f : 0f
         );
     }
 

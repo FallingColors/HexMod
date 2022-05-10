@@ -7,9 +7,6 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
-import at.petrak.hexcasting.api.spell.math.HexPattern
-import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
-import net.minecraft.network.chat.TranslatableComponent
 
 object OpEval : Operator {
     override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
@@ -23,13 +20,8 @@ object OpEval : Operator {
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
-        for (pat in instrs) {
-            val pattern = if (pat.payload is HexPattern) {
-                pat.payload
-            } else {
-                throw MishapInvalidIota(SpellDatum.make(instrs), 0, TranslatableComponent("hexcasting.mishap.invalid_value.list.pattern"))
-            }
-            val res = harness.getUpdate(pattern, ctx.world)
+        for (insn in instrs) {
+            val res = harness.getUpdate(insn, ctx.world)
             sideEffects.addAll(res.sideEffects)
             if (res.sideEffects.any { it is OperatorSideEffect.DoMishap }) {
                 break

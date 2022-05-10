@@ -7,13 +7,10 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
-import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.utils.ManaHelper
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.entity.item.ItemEntity
 
 class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int) : SpellOperator {
@@ -23,18 +20,17 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getChecked<ItemEntity>(0)
-        val patternsRaw = args.getChecked<List<SpellDatum<*>>>(1)
+        val patterns = args.getChecked<List<SpellDatum<*>>>(1)
 
-        val patterns = patternsRaw.map {
-            if (it.payload is HexPattern)
-                it.payload
-            else
-                throw MishapInvalidIota(SpellDatum.make(patternsRaw), 0, TranslatableComponent("hexcasting.mishap.invalid_value.list.pattern"))
+        val (handStack, hand) = ctx.getHeldItemToOperateOn {
+            val spellHolder = HexCapabilities.getCapability(it, HexCapabilities.SPELL)
+            it.`is`(itemType) && spellHolder.isPresent && !spellHolder.get().hasSpell()
         }
-
-        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
+        val spellHolder = HexCapabilities.getCapability(handStack, HexCapabilities.SPELL)
         if (!handStack.`is`(itemType)) {
             throw MishapBadOffhandItem(handStack, hand, itemType.description)
+        } else if (spellHolder.get().hasSpell()) {
+            throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
         }
 
         ctx.assertEntityInRange(entity)
@@ -53,12 +49,12 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
         return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }
 
-    private inner class Spell(val itemEntity: ItemEntity, val patterns: List<HexPattern>) : RenderedSpell {
+    private inner class Spell(val itemEntity: ItemEntity, val patterns: List<SpellDatum<*>>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
             val spellHolder = HexCapabilities.getCapability(handStack, HexCapabilities.SPELL)
             if (spellHolder.isPresent
-                && spellHolder.get().patterns == null
+                && !spellHolder.get().hasSpell()
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()

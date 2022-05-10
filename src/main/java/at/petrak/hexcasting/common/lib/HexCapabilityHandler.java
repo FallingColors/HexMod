@@ -1,15 +1,13 @@
 package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.api.cap.Colorizer;
-import at.petrak.hexcasting.api.cap.DataHolder;
-import at.petrak.hexcasting.api.cap.ManaHolder;
-import at.petrak.hexcasting.api.cap.SpellHolder;
+import at.petrak.hexcasting.api.cap.*;
+import at.petrak.hexcasting.api.item.ColorizerItem;
+import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.item.SpellHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.item.*;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.api.cap.HexCapabilities;
 import at.petrak.hexcasting.common.items.HexItems;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +16,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -51,44 +51,48 @@ public class HexCapabilityHandler {
     public static void attachCaps(AttachCapabilitiesEvent<ItemStack> evt) {
         ItemStack stack = evt.getObject();
         if (stack.getItem() instanceof ManaHolderItem holder)
-            evt.addCapability(MANA_HOLDER_CAPABILITY, provide(HexCapabilities.MANA,
+            evt.addCapability(MANA_HOLDER_CAPABILITY, provide(stack, HexCapabilities.MANA,
                     () -> new ItemBasedManaHolder(holder, stack)));
         else if (stack.is(HexItems.AMETHYST_DUST.get()))
-            evt.addCapability(MANA_ITEM_CAPABILITY, provide(HexCapabilities.MANA,
+            evt.addCapability(MANA_ITEM_CAPABILITY, provide(stack, HexCapabilities.MANA,
                     () -> new StaticManaHolder(HexConfig.dustManaAmount, 3, stack)));
         else if (stack.is(Items.AMETHYST_SHARD))
-            evt.addCapability(MANA_ITEM_CAPABILITY, provide(HexCapabilities.MANA,
+            evt.addCapability(MANA_ITEM_CAPABILITY, provide(stack, HexCapabilities.MANA,
                     () -> new StaticManaHolder(HexConfig.shardManaAmount, 2, stack)));
         else if (stack.is(HexItems.CHARGED_AMETHYST.get()))
-            evt.addCapability(MANA_ITEM_CAPABILITY, provide(HexCapabilities.MANA,
+            evt.addCapability(MANA_ITEM_CAPABILITY, provide(stack, HexCapabilities.MANA,
                     () -> new StaticManaHolder(HexConfig.chargedCrystalManaAmount, 1, stack)));
 
         if (stack.getItem() instanceof DataHolderItem holder)
-            evt.addCapability(DATA_HOLDER_CAPABILITY, provide(HexCapabilities.DATUM,
+            evt.addCapability(DATA_HOLDER_CAPABILITY, provide(stack, HexCapabilities.DATUM,
                     () -> new ItemBasedDataHolder(holder, stack)));
         else if (stack.is(Items.PUMPKIN_PIE)) // haha yes
-            evt.addCapability(DATA_ITEM_CAPABILITY, provide(HexCapabilities.DATUM,
+            evt.addCapability(DATA_ITEM_CAPABILITY, provide(stack, HexCapabilities.DATUM,
                     () -> new StaticDatumHolder((s) -> SpellDatum.make(Math.PI * s.getCount()), stack)));
 
         if (stack.getItem() instanceof SpellHolderItem holder)
-            evt.addCapability(SPELL_HOLDER_CAPABILITY, provide(HexCapabilities.SPELL,
+            evt.addCapability(SPELL_HOLDER_CAPABILITY, provide(stack, HexCapabilities.SPELL,
                     () -> new ItemBasedSpellHolder(holder, stack)));
 
         if (stack.getItem() instanceof ColorizerItem colorizer)
-            evt.addCapability(COLORIZER_CAPABILITY, provide(HexCapabilities.COLOR,
+            evt.addCapability(COLORIZER_CAPABILITY, provide(stack, HexCapabilities.COLOR,
                     () -> new ItemBasedColorizer(colorizer, stack)));
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
-        return new SimpleProvider<>(capability, LazyOptional.of(supplier));
+    private static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
+        return new SimpleProvider<>(stack, capability, LazyOptional.of(supplier));
     }
 
-    private record SimpleProvider<CAP>(Capability<CAP> capability,
+    private record SimpleProvider<CAP>(ItemStack stack,
+                                       Capability<CAP> capability,
                                        LazyOptional<CAP> instance) implements ICapabilityProvider {
 
         @NotNull
         @Override
         public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+            if (stack.isEmpty())
+                return LazyOptional.empty();
+
             return cap == capability ? instance.cast() : LazyOptional.empty();
         }
     }
@@ -245,12 +249,17 @@ public class HexCapabilityHandler {
         }
 
         @Override
-        public @Nullable List<HexPattern> getPatterns() {
-            return holder.getPatterns(stack);
+        public boolean hasSpell() {
+            return holder.hasSpell(stack);
         }
 
         @Override
-        public void writePatterns(List<HexPattern> patterns, int mana) {
+        public @Nullable List<SpellDatum<?>> getPatterns(ServerLevel level) {
+            return holder.getSpell(stack, level);
+        }
+
+        @Override
+        public void writePatterns(List<SpellDatum<?>> patterns, int mana) {
             holder.writePatterns(stack, patterns, mana);
         }
 

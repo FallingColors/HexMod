@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.item;
 
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.spell.SpellDatum;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,10 +11,12 @@ public interface SpellHolderItem extends ManaHolderItem {
 
 	boolean canDrawManaFromInventory(ItemStack stack);
 
-	@Nullable
-	List<HexPattern> getPatterns(ItemStack stack);
+	boolean hasSpell(ItemStack stack);
 
-	void writePatterns(ItemStack stack, List<HexPattern> patterns, int mana);
+	@Nullable
+	List<SpellDatum<?>> getSpell(ItemStack stack, ServerLevel level);
+
+	void writePatterns(ItemStack stack, List<SpellDatum<?>> patterns, int mana);
 
 	void clearPatterns(ItemStack stack);
 }

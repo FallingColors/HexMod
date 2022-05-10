@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.api.spell.casting
 
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.math.HexPattern
 
 /**
  * A change to the data in a CastHarness after a pattern is drawn.
@@ -11,7 +10,7 @@ import at.petrak.hexcasting.api.spell.math.HexPattern
 data class FunctionalData(
     val stack: List<SpellDatum<*>>,
     val parenCount: Int,
-    val parenthesized: List<HexPattern>,
+    val parenthesized: List<SpellDatum<*>>,
     val escapeNext: Boolean,
 ) {
     /**
