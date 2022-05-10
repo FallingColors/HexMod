@@ -12,7 +12,7 @@ import java.util.Optional;
 
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Fabric/src/main/java/vazkii/botania/fabric/mixin/FabricMixinAxeItem.java
 @Mixin(AxeItem.class)
-public class AxeItemMixin {
+public class FabricAxeItemMixin {
     @Inject(method = "getStripped", at = @At("RETURN"), cancellable = true)
     private void stripBlock(BlockState state, CallbackInfoReturnable<Optional<BlockState>> cir) {
         if (cir.getReturnValue().isEmpty()) {

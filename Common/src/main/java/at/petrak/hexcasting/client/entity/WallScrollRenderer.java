@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.client.entity;
 
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.HexMod;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -22,13 +21,12 @@ import net.minecraft.world.phys.Vec2;
 
 import java.util.List;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
-    private static final ResourceLocation PRISTINE_BG = new ResourceLocation(HexMod.MOD_ID,
-        "textures/entity/scroll.png");
-    private static final ResourceLocation ANCIENT_BG = new ResourceLocation(HexMod.MOD_ID,
-        "textures/entity/scroll_ancient.png");
-    private static final ResourceLocation WHITE = new ResourceLocation(HexMod.MOD_ID,
-        "textures/entity/white.png");
+    private static final ResourceLocation PRISTINE_BG = modLoc("textures/entity/scroll.png");
+    private static final ResourceLocation ANCIENT_BG = modLoc("textures/entity/scroll_ancient.png");
+    private static final ResourceLocation WHITE = modLoc("textures/entity/white.png");
 
     public WallScrollRenderer(EntityRendererProvider.Context p_174008_) {
         super(p_174008_);
@@ -120,7 +118,7 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             if (wallScroll.getShowsStrokeOrder()) {
                 var animTime = wallScroll.tickCount;
                 var pointCircuit =
-                    (animTime * HexConfig.Client.patternPointSpeedMultiplier.get()) % (points.size() + 10);
+                    (animTime * HexConfig.client().patternPointSpeedMultiplier()) % (points.size() + 10);
                 if (pointCircuit < points.size() - 1) {
                     var pointMacro = Mth.floor(pointCircuit);
                     var pointMicro = pointCircuit - pointMacro;

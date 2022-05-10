@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe.ingredient;
 
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,8 +22,9 @@ public record VillagerIngredient(
     @Override
     public boolean test(Villager villager) {
         var data = villager.getVillagerData();
-
-        return (this.profession == null || this.profession.equals(data.getProfession().getRegistryName()))
+        ResourceLocation profID = IXplatAbstractions.INSTANCE.getID(data.getProfession());
+        
+        return (this.profession == null || this.profession.equals(profID))
             && (this.biome == null || this.biome.equals(Registry.VILLAGER_TYPE.getKey(data.getType())))
             && this.minLevel <= data.getLevel();
     }

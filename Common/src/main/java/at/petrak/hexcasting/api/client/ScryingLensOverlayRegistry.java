@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.client;
 
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
@@ -45,10 +46,11 @@ public final class ScryingLensOverlayRegistry {
     public static void receiveComparatorValue(BlockPos pos, int value) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            if (pos == null || value == -1)
+            if (pos == null || value == -1) {
                 comparatorData.remove(player);
-            else
+            } else {
                 comparatorData.put(player, new Pair<>(pos, value));
+            }
         }
     }
 
@@ -58,20 +60,25 @@ public final class ScryingLensOverlayRegistry {
         var level = mc.level;
         var result = mc.hitResult;
 
-        if (player == null || level == null || result == null || result.getType() != HitResult.Type.BLOCK)
+        if (player == null || level == null || result == null || result.getType() != HitResult.Type.BLOCK) {
             return -1;
+        }
 
         var comparatorValue = comparatorData.get(player);
-        if (comparatorValue == null)
+        if (comparatorValue == null) {
             return -1;
+        }
 
-        var pos = ((BlockHitResult)result).getBlockPos();
-        if (!pos.equals(comparatorValue.getFirst()))
+        var pos = ((BlockHitResult) result).getBlockPos();
+        if (!pos.equals(comparatorValue.getFirst())) {
             return -1;
+        }
 
         var state = mc.level.getBlockState(pos);
-        if ((onlyRealComparators && !state.is(Blocks.COMPARATOR)) || (!onlyRealComparators && !state.hasAnalogOutputSignal()))
+        if ((onlyRealComparators && !state.is(
+            Blocks.COMPARATOR)) || (!onlyRealComparators && !state.hasAnalogOutputSignal())) {
             return -1;
+        }
 
         return comparatorValue.getSecond();
     }
@@ -82,7 +89,7 @@ public final class ScryingLensOverlayRegistry {
      * @throws IllegalArgumentException if the block is already registered.
      */
     public static void addDisplayer(Block block, OverlayBuilder displayer) {
-        addDisplayer(block.getRegistryName(), displayer);
+        addDisplayer(IXplatAbstractions.INSTANCE.getID(block), displayer);
     }
 
     /**
@@ -111,10 +118,10 @@ public final class ScryingLensOverlayRegistry {
      * Internal use only.
      */
     public static @NotNull List<Pair<ItemStack, Component>> getLines(BlockState state, BlockPos pos,
-                                                                     LocalPlayer observer, ClientLevel world,
-                                                                     Direction hitFace, @Nullable InteractionHand lensHand) {
+        LocalPlayer observer, ClientLevel world,
+        Direction hitFace, @Nullable InteractionHand lensHand) {
         List<Pair<ItemStack, Component>> lines = Lists.newArrayList();
-        var idLookedup = ID_LOOKUP.get(state.getBlock().getRegistryName());
+        var idLookedup = ID_LOOKUP.get(IXplatAbstractions.INSTANCE.getID(state.getBlock()));
         if (idLookedup != null) {
             idLookedup.addLines(lines, state, pos, observer, world, hitFace, lensHand);
         }
@@ -136,9 +143,9 @@ public final class ScryingLensOverlayRegistry {
     @FunctionalInterface
     public interface OverlayBuilder {
         void addLines(List<Pair<ItemStack, Component>> lines,
-                      BlockState state, BlockPos pos, LocalPlayer observer,
-                      ClientLevel world,
-                      Direction hitFace, @Nullable InteractionHand lensHand);
+            BlockState state, BlockPos pos, LocalPlayer observer,
+            ClientLevel world,
+            Direction hitFace, @Nullable InteractionHand lensHand);
     }
 
     /**
@@ -147,7 +154,7 @@ public final class ScryingLensOverlayRegistry {
     @FunctionalInterface
     public interface OverlayPredicate {
         boolean test(BlockState state, BlockPos pos, LocalPlayer observer,
-                     ClientLevel world,
-                     Direction hitFace, @Nullable InteractionHand lensHand);
+            ClientLevel world,
+            Direction hitFace, @Nullable InteractionHand lensHand);
     }
 }

@@ -8,7 +8,7 @@
  */
 package at.petrak.hexcasting.interop.patchouli;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.HexAPI;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -47,7 +47,7 @@ public class MultiCraftingProcessor implements IComponentProcessor {
                     }
                 }
             } else {
-                HexMod.getLogger().warn("Missing crafting recipe " + name);
+                HexAPI.LOGGER.warn("Missing crafting recipe " + name);
             }
         }
         this.hasCustomHeading = variables.has("heading");

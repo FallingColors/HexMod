@@ -1,19 +1,16 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.lib.HexMessages;
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn;
+import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ShiftScrollListener {
-    @SubscribeEvent
-    public static void onScroll(InputEvent.MouseScrollEvent evt) {
+    public static boolean onScroll(double delta) {
         LocalPlayer player = Minecraft.getInstance().player;
         // not .isCrouching! that fails for players who are not on the ground
         // yes, this does work if you remap your sneak key
@@ -26,14 +23,16 @@ public class ShiftScrollListener {
             }
 
             if (hand != null) {
-                evt.setCanceled(true);
-                HexMessages.getNetwork().sendToServer(new MsgShiftScrollSyn(hand, evt.getScrollDelta(),
-                    Screen.hasControlDown()));
+                IClientXplatAbstractions.INSTANCE.sendPacketToServer(
+                    new MsgShiftScrollSyn(hand, delta, Screen.hasControlDown()));
+                return true;
             }
         }
+
+        return false;
     }
 
     private static boolean IsScrollableItem(Item item) {
-        return item == HexItems.SPELLBOOK.get() || item == HexItems.ABACUS.get();
+        return item == HexItems.SPELLBOOK || item == HexItems.ABACUS;
     }
 }

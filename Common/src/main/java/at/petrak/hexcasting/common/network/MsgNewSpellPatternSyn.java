@@ -1,14 +1,13 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.mod.HexItemTags;
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity;
 import at.petrak.hexcasting.api.spell.math.HexCoord;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.common.lib.HexMessages;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +15,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +77,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 }
             }
 
-            var harness = HexPlayerDataHelper.getHarness(sender, this.handUsed);
+            var harness = IXplatAbstractions.INSTANCE.getHarness(sender, this.handUsed);
 
             ControllerInfo clientInfo;
             if (autoFail) {
@@ -90,25 +88,24 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
 
                 if (clientInfo.getWasSpellCast() && clientInfo.getHasCastingSound()) {
                     sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
-                        HexSounds.ACTUALLY_CAST.get(), SoundSource.PLAYERS, 1f,
+                        HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
                         1f + ((float) Math.random() - 0.5f) * 0.2f);
                 }
             }
 
             if (clientInfo.isStackClear()) {
-                HexPlayerDataHelper.setHarness(sender, null);
-                HexPlayerDataHelper.setPatterns(sender, List.of());
+                IXplatAbstractions.INSTANCE.setHarness(sender, null);
+                IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
             } else {
-                HexPlayerDataHelper.setHarness(sender, harness);
+                IXplatAbstractions.INSTANCE.setHarness(sender, harness);
                 if (!resolvedPatterns.isEmpty()) {
                     resolvedPatterns.get(resolvedPatterns.size() - 1).setValid(clientInfo.getWasPrevPatternInvalid() ?
                         ResolvedPatternValidity.ERROR : ResolvedPatternValidity.OK);
                 }
-                HexPlayerDataHelper.setPatterns(sender, resolvedPatterns);
+                IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
             }
 
-            HexMessages.getNetwork()
-                .send(PacketDistributor.PLAYER.with(() -> sender), new MsgNewSpellPatternAck(clientInfo));
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender, new MsgNewSpellPatternAck(clientInfo));
         }
     }
 

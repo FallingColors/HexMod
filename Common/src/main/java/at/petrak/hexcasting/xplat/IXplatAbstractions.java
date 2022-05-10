@@ -11,12 +11,14 @@ import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.common.network.IMessage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -96,18 +98,23 @@ public interface IXplatAbstractions {
     /**
      * No-op on forge (use a SoftImplement)
      */
-    Item.Properties addEquipSlotFabric(Item.Properties props, EquipmentSlot slot);
+    Item.Properties addEquipSlotFabric(EquipmentSlot slot);
 
     // Blocks
 
     <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
         Block... blocks);
 
+
     // misc
 
     CreativeModeTab getTab();
 
     boolean isCorrectTierForDrops(Tier tier, BlockState bs);
+
+    ResourceLocation getID(Block block);
+
+    ResourceLocation getID(VillagerProfession profession);
 
 
     IXplatAbstractions INSTANCE = find();

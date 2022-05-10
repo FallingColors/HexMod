@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(Villager.class)
-public class VillagerTurnIntoWitchMixin {
+public class FabricVillagerTurnIntoWitchMixin {
     @Inject(method = "thunderHit", locals = LocalCapture.PRINT, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"))
     public void onThunderHit(CallbackInfo cb) {
         // todo

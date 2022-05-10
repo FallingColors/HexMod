@@ -35,6 +35,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -264,6 +265,16 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return BlockEntityType.Builder.of(func::apply, blocks).build(null);
     }
 
+    @Override
+    public ResourceLocation getID(Block block) {
+        return block.getRegistryName();
+    }
+
+    @Override
+    public ResourceLocation getID(VillagerProfession profession) {
+        return profession.getRegistryName();
+    }
+
     private static CreativeModeTab TAB = null;
 
     @Override
@@ -292,8 +303,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Item.Properties addEquipSlotFabric(Item.Properties props, EquipmentSlot slot) {
-        return props;
+    public Item.Properties addEquipSlotFabric(EquipmentSlot slot) {
+        return new Item.Properties();
     }
 
     public static final String TAG_BRAINSWEPT = "hexcasting:brainswept";

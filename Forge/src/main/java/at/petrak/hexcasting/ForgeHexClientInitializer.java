@@ -3,10 +3,8 @@ package at.petrak.hexcasting;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.RegisterClientStuff;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import at.petrak.hexcasting.client.ShiftScrollListener;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -31,6 +29,11 @@ public class ForgeHexClientInitializer {
             RegisterClientStuff.registerParticles());
 
         evBus.addListener((TickEvent.ClientTickEvent e) -> ClientTickCounter.onTick());
+
+        evBus.addListener((InputEvent.MouseScrollEvent e) -> {
+            var cancel = ShiftScrollListener.onScroll(e.getScrollDelta());
+            e.setCanceled(cancel);
+        });
     }
 
     @SubscribeEvent

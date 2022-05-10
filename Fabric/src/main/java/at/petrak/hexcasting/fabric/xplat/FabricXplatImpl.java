@@ -22,12 +22,15 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -190,6 +193,16 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return FabricBlockEntityTypeBuilder.create(func::apply, blocks).build();
     }
 
+    @Override
+    public ResourceLocation getID(Block block) {
+        return Registry.BLOCK.getKey(block);
+    }
+
+    @Override
+    public ResourceLocation getID(VillagerProfession profession) {
+        return Registry.VILLAGER_PROFESSION.getKey(profession);
+    }
+
     private static CreativeModeTab TAB = null;
 
     @Override
@@ -235,7 +248,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Item.Properties addEquipSlotFabric(Item.Properties props, EquipmentSlot slot) {
-        new FabricItemSettings().
+    public Item.Properties addEquipSlotFabric(EquipmentSlot slot) {
+        return new FabricItemSettings().equipmentSlot(s -> slot);
     }
 }

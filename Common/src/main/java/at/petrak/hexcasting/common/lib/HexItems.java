@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.common.items.*;
-import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
 import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -44,7 +44,10 @@ public class HexItems {
     public static final ItemWand WAND_WARPED = make("wand_warped", new ItemWand(unstackable()));
     public static final ItemWand WAND_AKASHIC = make("wand_akashic", new ItemWand(unstackable()));
 
-    public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(unstackable()));
+    public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
+        IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
+            .stacksTo(1)
+            .tab(IXplatAbstractions.INSTANCE.getTab())));
 
     public static final ItemAbacus ABACUS = make("abacus", new ItemAbacus(unstackable()));
     public static final ItemFocus FOCUS = make("focus", new ItemFocus(unstackable()));

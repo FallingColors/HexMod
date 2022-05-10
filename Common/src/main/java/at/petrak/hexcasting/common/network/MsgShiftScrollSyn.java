@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.items.ItemAbacus;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
@@ -49,9 +49,9 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
     public void handle(MinecraftServer server, ServerPlayer sender) {
         var stack = sender.getItemInHand(hand);
 
-        if (stack.getItem() == HexItems.SPELLBOOK.get()) {
+        if (stack.getItem() == HexItems.SPELLBOOK) {
             spellbook(sender, stack);
-        } else if (stack.getItem() == HexItems.ABACUS.get()) {
+        } else if (stack.getItem() == HexItems.ABACUS) {
             abacus(sender, stack);
         }
     }
@@ -122,9 +122,9 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         pitch *= (increase ? 1.05f : 0.95f);
         pitch += (Math.random() - 0.5) * 0.1;
         sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
-            HexSounds.ABACUS.get(), SoundSource.PLAYERS, 0.5f, pitch);
+            HexSounds.ABACUS, SoundSource.PLAYERS, 0.5f, pitch);
 
-        var datumTag = HexItems.ABACUS.get().readDatumTag(stack);
+        var datumTag = HexItems.ABACUS.readDatumTag(stack);
         if (datumTag != null) {
             var popup = SpellDatum.DisplayFromTag(datumTag);
             sender.displayClientMessage(

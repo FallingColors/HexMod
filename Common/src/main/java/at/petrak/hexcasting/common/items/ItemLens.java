@@ -85,7 +85,7 @@ public class ItemLens extends Item implements Wearable {
     private static final Map<ServerPlayer, Pair<BlockPos, Integer>> comparatorDataMap = new WeakHashMap<>();
 
     private void sendComparatorDataToClient(ServerPlayer player) {
-        double reachAttribute = IXplatAbstractions.INSTANCE.getReachDistance(player);
+        double reachAttribute = player.getAttribute(IXplatAbstractions.INSTANCE.getReachDistance()).getValue();
         double distance = player.isCreative() ? reachAttribute : reachAttribute - 0.5;
         var hitResult = player.pick(distance, 0, false);
         if (hitResult.getType() == HitResult.Type.BLOCK) {

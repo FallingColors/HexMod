@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
+import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +27,7 @@ public class SealSpellbookRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             var stack = inv.getItem(i);
             if (!stack.isEmpty()) {
-                if (stack.is(HexItems.SPELLBOOK.get())) {
+                if (stack.is(HexItems.SPELLBOOK)) {
                     if (foundOkSpellbook) {
                         return false;
                     }
@@ -57,7 +57,7 @@ public class SealSpellbookRecipe extends CustomRecipe {
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
             var stack = inv.getItem(i);
-            if (stack.is(HexItems.SPELLBOOK.get())) {
+            if (stack.is(HexItems.SPELLBOOK)) {
                 out = stack.copy();
                 break;
             }

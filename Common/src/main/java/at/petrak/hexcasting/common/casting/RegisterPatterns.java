@@ -453,12 +453,12 @@ public class RegisterPatterns {
             var directions = pat.directions();
 
             HexDir flatDir;
-            if (pat.angles().isEmpty()) {
+            if (pat.getAngles().isEmpty()) {
                 return null;
-            } else if (pat.angles().get(0) == HexAngle.LEFT_BACK) {
+            } else if (pat.getAngles().get(0) == HexAngle.LEFT_BACK) {
                 flatDir = directions.get(0).rotatedBy(HexAngle.LEFT);
             } else {
-                flatDir = pat.startDir();
+                flatDir = pat.getStartDir();
             }
 
             var mask = new BooleanArrayList();

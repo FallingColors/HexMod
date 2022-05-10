@@ -2,9 +2,9 @@ package at.petrak.hexcasting.common.command;
 
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -12,6 +12,7 @@ import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
@@ -24,7 +25,7 @@ public class ListPatternsCommand {
                 var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
                 var listing = lookup.entrySet()
                     .stream()
-                    .sorted((a, b) -> a.getValue().getFirst().compareNamespaced(b.getValue().getFirst()))
+                    .sorted((a, b) -> compareResLoc(a.getValue().getFirst(), b.getValue().getFirst()))
                     .toList();
 
                 ctx.getSource().sendSuccess(new TranslatableComponent("command.hexcasting.pats.listing"), false);
@@ -51,7 +52,7 @@ public class ListPatternsCommand {
                             tag.put(ItemScroll.TAG_PATTERN,
                                 pat.serializeToNBT());
 
-                            var stack = new ItemStack(HexItems.SCROLL.get());
+                            var stack = new ItemStack(HexItems.SCROLL);
                             stack.setTag(tag);
 
                             ctx.getSource().sendSuccess(
@@ -87,7 +88,7 @@ public class ListPatternsCommand {
                         tag.put(ItemScroll.TAG_PATTERN,
                             HexPattern.FromAnglesSig(pattern, startDir).serializeToNBT());
 
-                        var stack = new ItemStack(HexItems.SCROLL.get());
+                        var stack = new ItemStack(HexItems.SCROLL);
                         stack.setTag(tag);
 
                         var stackEntity = player.drop(stack, false);
@@ -105,5 +106,13 @@ public class ListPatternsCommand {
                 }
             }))
         );
+    }
+
+    private static int compareResLoc(ResourceLocation a, ResourceLocation b) {
+        var ns = a.getNamespace().compareTo(b.getNamespace());
+        if (ns != 0) {
+            return ns;
+        }
+        return a.getPath().compareTo(b.getPath());
     }
 }
