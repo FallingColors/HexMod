@@ -2,8 +2,9 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.addldata.HexHolder;
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +16,7 @@ public abstract class CCHexHolder extends ItemComponent implements HexHolder {
     }
 
     public static class ItemBased extends CCHexHolder {
-        private final HexHolderItem spellHolder;
+        private final HexHolderItem hexHolder;
 
         public ItemBased(ItemStack owner) {
             super(owner);
@@ -23,28 +24,33 @@ public abstract class CCHexHolder extends ItemComponent implements HexHolder {
             if (!(item instanceof HexHolderItem hexHolderItem)) {
                 throw new IllegalStateException("item is not a colorizer: " + owner);
             }
-            this.spellHolder = hexHolderItem;
+            this.hexHolder = hexHolderItem;
         }
 
 
         @Override
         public boolean canDrawManaFromInventory() {
-            return this.spellHolder.canDrawManaFromInventory(this.stack);
+            return this.hexHolder.canDrawManaFromInventory(this.stack);
         }
 
         @Override
-        public @Nullable List<HexPattern> getPatterns() {
-            return this.spellHolder.getPatterns(this.stack);
+        public boolean hasHex() {
+            return this.hexHolder.hasHex(this.stack);
         }
 
         @Override
-        public void writePatterns(List<HexPattern> patterns, int mana) {
-            this.spellHolder.writePatterns(this.stack, patterns, mana);
+        public @Nullable List<SpellDatum<?>> getHex(ServerLevel level) {
+            return this.hexHolder.getHex(this.stack, level);
         }
 
         @Override
-        public void clearPatterns() {
-            this.spellHolder.clearPatterns(this.stack);
+        public void writeHex(List<SpellDatum<?>> patterns, int mana) {
+            this.hexHolder.writeHex(this.stack, patterns, mana);
+        }
+
+        @Override
+        public void clearHex() {
+            this.hexHolder.clearHex(this.stack);
         }
     }
 }

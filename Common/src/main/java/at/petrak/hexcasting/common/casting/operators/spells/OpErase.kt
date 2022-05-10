@@ -20,13 +20,13 @@ class OpErase : SpellOperator {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-            (hexHolder?.patterns != null) ||
+            (hexHolder?.hasHex() != true) ||
                     (datumHolder?.writeDatum(null, true) ?: false)
         }
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
 
-        if ((hexHolder?.patterns == null) &&
+        if ((hexHolder?.getHex(ctx.world) == null) &&
             (datumHolder?.writeDatum(null, true) == true)) {
             throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
         }
@@ -41,14 +41,14 @@ class OpErase : SpellOperator {
                 val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
                 val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-                (hexHolder?.patterns != null) ||
+                (hexHolder?.hasHex() != true) ||
                         (datumHolder?.writeDatum(null, true) ?: false)
             }
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
 
-            if (hexHolder?.patterns != null)
-                hexHolder.clearPatterns()
+            if (hexHolder?.hasHex() == true)
+                hexHolder.clearHex()
 
             if (datumHolder != null && datumHolder.writeDatum(null, true))
                 datumHolder.writeDatum(null, false)

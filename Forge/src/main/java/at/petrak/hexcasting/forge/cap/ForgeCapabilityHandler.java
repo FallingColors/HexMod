@@ -10,7 +10,6 @@ import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -50,50 +49,49 @@ public class ForgeCapabilityHandler {
 
     public static void attachItemCaps(AttachCapabilitiesEvent<ItemStack> evt) {
         ItemStack stack = evt.getObject();
-        if (stack.getItem() instanceof ManaHolderItem holder) {
-            evt.addCapability(MANA_HOLDER_CAPABILITY, provide(HexCapabilities.MANA,
-                () -> new ItemBasedManaHolder(holder, stack)));
-        } else if (stack.is(HexItems.AMETHYST_DUST)) {
-            evt.addCapability(MANA_ITEM_CAPABILITY, provide(HexCapabilities.MANA,
-                () -> new StaticManaHolder(() -> HexConfig.common().dustManaAmount(), 30, stack)));
-        } else if (stack.is(Items.AMETHYST_SHARD)) {
-            evt.addCapability(MANA_ITEM_CAPABILITY, provide(HexCapabilities.MANA,
-                () -> new StaticManaHolder(() -> HexConfig.common().shardManaAmount(), 20, stack)));
-        } else if (stack.is(HexItems.CHARGED_AMETHYST)) {
-            evt.addCapability(MANA_ITEM_CAPABILITY, provide(HexCapabilities.MANA,
-                () -> new StaticManaHolder(() -> HexConfig.common().chargedCrystalManaAmount(), 10, stack)));
-        }
+        if (stack.getItem() instanceof ManaHolderItem holder)
+            evt.addCapability(MANA_HOLDER_CAPABILITY, provide(stack, HexCapabilities.MANA,
+                    () -> new ItemBasedManaHolder(holder, stack)));
+        else if (stack.is(HexItems.AMETHYST_DUST))
+            evt.addCapability(MANA_ITEM_CAPABILITY, provide(stack, HexCapabilities.MANA,
+                    () -> new StaticManaHolder(HexConfig.common()::dustManaAmount, 3, stack)));
+        else if (stack.is(Items.AMETHYST_SHARD))
+            evt.addCapability(MANA_ITEM_CAPABILITY, provide(stack, HexCapabilities.MANA,
+                    () -> new StaticManaHolder(HexConfig.common()::shardManaAmount, 2, stack)));
+        else if (stack.is(HexItems.CHARGED_AMETHYST))
+            evt.addCapability(MANA_ITEM_CAPABILITY, provide(stack, HexCapabilities.MANA,
+                    () -> new StaticManaHolder(HexConfig.common()::chargedCrystalManaAmount, 1, stack)));
 
-        if (stack.getItem() instanceof DataHolderItem holder) {
-            evt.addCapability(DATA_HOLDER_CAPABILITY, provide(HexCapabilities.DATUM,
-                () -> new ItemBasedDataHolder(holder, stack)));
-        } else if (stack.is(Items.PUMPKIN_PIE)) {
-            // haha yes
-            evt.addCapability(DATA_ITEM_CAPABILITY, provide(HexCapabilities.DATUM,
-                () -> new StaticDatumHolder((s) -> SpellDatum.make(Math.PI * s.getCount()), stack)));
-        }
+        if (stack.getItem() instanceof DataHolderItem holder)
+            evt.addCapability(DATA_HOLDER_CAPABILITY, provide(stack, HexCapabilities.DATUM,
+                    () -> new ItemBasedDataHolder(holder, stack)));
+        else if (stack.is(Items.PUMPKIN_PIE)) // haha yes
+            evt.addCapability(DATA_ITEM_CAPABILITY, provide(stack, HexCapabilities.DATUM,
+                    () -> new StaticDatumHolder((s) -> SpellDatum.make(Math.PI * s.getCount()), stack)));
 
-        if (stack.getItem() instanceof HexHolderItem holder) {
-            evt.addCapability(SPELL_HOLDER_CAPABILITY, provide(HexCapabilities.STORED_HEX,
-                () -> new ItemBasedHexHolder(holder, stack)));
-        }
+        if (stack.getItem() instanceof HexHolderItem holder)
+            evt.addCapability(SPELL_HOLDER_CAPABILITY, provide(stack, HexCapabilities.STORED_HEX,
+                    () -> new ItemBasedHexHolder(holder, stack)));
 
-        if (stack.getItem() instanceof ColorizerItem colorizer) {
-            evt.addCapability(COLORIZER_CAPABILITY, provide(HexCapabilities.COLOR,
-                () -> new ItemBasedColorizer(colorizer, stack)));
-        }
+        if (stack.getItem() instanceof ColorizerItem colorizer)
+            evt.addCapability(COLORIZER_CAPABILITY, provide(stack, HexCapabilities.COLOR,
+                    () -> new ItemBasedColorizer(colorizer, stack)));
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
-        return new SimpleProvider<>(capability, LazyOptional.of(supplier));
+    private static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
+        return new SimpleProvider<>(stack, capability, LazyOptional.of(supplier));
     }
 
-    private record SimpleProvider<CAP>(Capability<CAP> capability,
+    private record SimpleProvider<CAP>(ItemStack stack,
+                                       Capability<CAP> capability,
                                        LazyOptional<CAP> instance) implements ICapabilityProvider {
 
         @NotNull
         @Override
         public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+            if (stack.isEmpty())
+                return LazyOptional.empty();
+
             return cap == capability ? instance.cast() : LazyOptional.empty();
         }
     }
@@ -259,19 +257,23 @@ public class ForgeCapabilityHandler {
         }
 
         @Override
-        public @Nullable
-        List<HexPattern> getPatterns() {
-            return holder.getPatterns(stack);
+        public boolean hasHex() {
+            return holder.hasHex(stack);
         }
 
         @Override
-        public void writePatterns(List<HexPattern> patterns, int mana) {
-            holder.writePatterns(stack, patterns, mana);
+        public @Nullable List<SpellDatum<?>> getHex(ServerLevel level) {
+            return holder.getHex(stack, level);
         }
 
         @Override
-        public void clearPatterns() {
-            holder.clearPatterns(stack);
+        public void writeHex(List<SpellDatum<?>> patterns, int mana) {
+            holder.writeHex(stack, patterns, mana);
+        }
+
+        @Override
+        public void clearHex() {
+            holder.clearHex(stack);
         }
     }
 

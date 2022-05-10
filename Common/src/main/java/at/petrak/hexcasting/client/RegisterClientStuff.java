@@ -276,7 +276,7 @@ public class RegisterClientStuff {
     private static void registerPackagedSpellOverrides(ItemPackagedHex item) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemPackagedHex.HAS_PATTERNS_PRED,
             (stack, level, holder, holderID) ->
-                item.getPatterns(stack) != null ? 1f : 0f
+                item.hasHex(stack) ? 1f : 0f
         );
     }
 

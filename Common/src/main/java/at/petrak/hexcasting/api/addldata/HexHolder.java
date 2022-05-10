@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.addldata;
 
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.spell.SpellDatum;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -9,10 +10,12 @@ public interface HexHolder {
 
     boolean canDrawManaFromInventory();
 
+    boolean hasHex();
+
     @Nullable
-    List<HexPattern> getPatterns();
+    List<SpellDatum<?>> getHex(ServerLevel level);
 
-    void writePatterns(List<HexPattern> patterns, int mana);
+    void writeHex(List<SpellDatum<?>> patterns, int mana);
 
-    void clearPatterns();
+    void clearHex();
 }

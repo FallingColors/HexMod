@@ -337,6 +337,7 @@
   "hexcasting.spell.unknown": "Special Handler",
 
   "hexcasting.mishap.invalid_pattern": "That pattern isn't associated with any action",
+  "hexcasting.mishap.unescaped": "Expected to evaluate a pattern, but evaluated %s instead",
   "hexcasting.mishap.invalid_value": "%s expected %s at index %s of the stack, but got %s",
   "hexcasting.mishap.invalid_value.class.double": "a number",
   "hexcasting.mishap.invalid_value.class.vector": "a vector",

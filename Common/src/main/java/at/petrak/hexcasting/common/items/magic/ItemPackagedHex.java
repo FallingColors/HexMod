@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.HexHolderItem;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
@@ -10,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stat;
@@ -51,25 +53,33 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     }
 
     @Override
-    public @Nullable List<HexPattern> getPatterns(ItemStack stack) {
+    public boolean hasHex(ItemStack stack) {
+        return NBTHelper.hasCompound(stack, TAG_PATTERNS);
+    }
+
+    @Override
+    public @Nullable List<SpellDatum<?>> getHex(ItemStack stack, ServerLevel level) {
         var patsTag = NBTHelper.getList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
 
         if (patsTag == null)
             return null;
 
-        var out = new ArrayList<HexPattern>();
+        var out = new ArrayList<SpellDatum<?>>();
         for (var patTag : patsTag) {
-            out.add(HexPattern.DeserializeFromNBT((CompoundTag) patTag));
+            CompoundTag tag = NBTHelper.getAsCompound(patTag);
+            if (tag.size() > 1)
+                out.add(SpellDatum.make(HexPattern.DeserializeFromNBT(tag)));
+            else
+                out.add(SpellDatum.DeserializeFromNBT(tag, level));
         }
         return out;
     }
 
     @Override
-    public void writePatterns(ItemStack stack, List<HexPattern> patterns, int mana) {
+    public void writeHex(ItemStack stack, List<SpellDatum<?>> patterns, int mana) {
         ListTag patsTag = new ListTag();
-        for (HexPattern pat : patterns) {
+        for (SpellDatum<?> pat : patterns)
             patsTag.add(pat.serializeToNBT());
-        }
 
         NBTHelper.putList(stack, TAG_PATTERNS, patsTag);
 
@@ -77,7 +87,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     }
 
     @Override
-    public void clearPatterns(ItemStack stack) {
+    public void clearHex(ItemStack stack) {
         NBTHelper.remove(stack, ItemPackagedHex.TAG_PATTERNS);
         withMana(stack, 0, 0);
     }
@@ -85,19 +95,23 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand usedHand) {
         var stack = player.getItemInHand(usedHand);
-        List<HexPattern> patterns = getPatterns(stack);
-        if (patterns == null) {
+        if (!hasHex(stack)) {
             return InteractionResultHolder.fail(stack);
         }
 
         if (world.isClientSide) {
             return InteractionResultHolder.success(stack);
         }
+
+        List<SpellDatum<?>> instrs = getHex(stack, (ServerLevel) world);
+        if (instrs == null) {
+            return InteractionResultHolder.fail(stack);
+        }
         var sPlayer = (ServerPlayer) player;
         var ctx = new CastingContext(sPlayer, usedHand);
         var harness = new CastingHarness(ctx);
-        for (var pattern : patterns) {
-            var info = harness.executeNewPattern(pattern, sPlayer.getLevel());
+        for (var insn : instrs) {
+            var info = harness.executeNewIota(insn, sPlayer.getLevel());
             if (info.getWasPrevPatternInvalid()) {
                 break;
             }

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity;
@@ -84,7 +85,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 clientInfo = new ControllerInfo(false, false, harness.getStack().isEmpty(), true,
                     harness.generateDescs());
             } else {
-                clientInfo = harness.executeNewPattern(this.pattern, sender.getLevel());
+                clientInfo = harness.executeNewIota(SpellDatum.make(this.pattern), sender.getLevel());
 
                 if (clientInfo.getWasSpellCast() && clientInfo.getHasCastingSound()) {
                     sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
