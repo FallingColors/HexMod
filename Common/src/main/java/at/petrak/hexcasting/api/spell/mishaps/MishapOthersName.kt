@@ -44,5 +44,10 @@ class MishapOthersName(val other: Player) : Mishap() {
 
             return null
         }
+
+        @JvmStatic
+        fun getTrueNameFromArgs(datums: List<SpellDatum<*>>, caster: Player): Player? {
+            return datums.firstNotNullOfOrNull { getTrueNameFromDatum(it, caster) }
+        }
     }
 }
