@@ -28,6 +28,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         simpleItem(HexItems.CHARGED_AMETHYST.get());
         simpleItem(HexItems.SUBMARINE_SANDWICH.get());
         simpleItem(HexItems.ABACUS.get());
+        brandishedItem(HexItems.JEWELER_HAMMER.get());
 
         simpleItem(modLoc("scroll_pristine"));
         simpleItem(modLoc("scroll_ancient"));

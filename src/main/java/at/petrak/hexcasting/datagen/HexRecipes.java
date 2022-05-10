@@ -166,6 +166,16 @@ public class HexRecipes extends PaucalRecipeProvider {
             .pattern("SSS")
             .unlockedBy("has_item", has(HexItems.AMETHYST_DUST.get())).save(recipes);
 
+        ShapedRecipeBuilder.shaped(HexItems.JEWELER_HAMMER.get())
+            .define('I', Items.IRON_INGOT)
+            .define('N', Items.IRON_NUGGET)
+            .define('A', Items.AMETHYST_SHARD)
+            .define('S', Items.STICK)
+            .pattern("IAN")
+            .pattern(" S ")
+            .pattern(" S ")
+            .unlockedBy("has_item", has(Items.AMETHYST_SHARD)).save(recipes);
+
         ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK.get())
             .define('S', HexItems.SLATE.get())
             .pattern("S")
