@@ -11,7 +11,7 @@ public interface SpellHolder {
 	boolean canDrawManaFromInventory();
 
 	boolean hasSpell();
-	
+
 	@Nullable
 	List<SpellDatum<?>> getPatterns(ServerLevel level);
 

@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 import at.petrak.hexcasting.api.utils.ManaHelper
 import at.petrak.hexcasting.common.items.magic.ItemPackagedSpell
 import net.minecraft.world.entity.item.ItemEntity
@@ -45,6 +46,10 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
                 "mana_for_battery"
             )
         }
+
+        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, ctx.caster)
+        if (trueName != null)
+            throw MishapOthersName(trueName)
 
         return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
     }
