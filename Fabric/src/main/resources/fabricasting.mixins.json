@@ -6,6 +6,7 @@
   "package": "at.petrak.hexcasting.fabric.mixin",
   "mixins": [
     "FabricAxeItemMixin",
+    "FabricBlockBehaviorMixin",
     "FabricIngredientMixin",
     "FabricItemEntityMixin",
     "FabricVillagerTurnIntoWitchMixin"

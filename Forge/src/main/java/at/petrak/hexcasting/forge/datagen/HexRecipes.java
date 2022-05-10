@@ -165,8 +165,23 @@ public class HexRecipes extends PaucalRecipeProvider {
             .pattern("SSS")
             .unlockedBy("has_item", has(HexItems.AMETHYST_DUST)).save(recipes);
 
+<<<<<<< HEAD:Forge/src/main/java/at/petrak/hexcasting/forge/datagen/HexRecipes.java
         ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK)
             .define('S', HexItems.SLATE)
+=======
+        ShapedRecipeBuilder.shaped(HexItems.JEWELER_HAMMER.get())
+            .define('I', Items.IRON_INGOT)
+            .define('N', Items.IRON_NUGGET)
+            .define('A', Items.AMETHYST_SHARD)
+            .define('S', Items.STICK)
+            .pattern("IAN")
+            .pattern(" S ")
+            .pattern(" S ")
+            .unlockedBy("has_item", has(Items.AMETHYST_SHARD)).save(recipes);
+
+        ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK.get())
+            .define('S', HexItems.SLATE.get())
+>>>>>>> 65b04c03 (jeweler's hammer):src/main/java/at/petrak/hexcasting/datagen/HexRecipes.java
             .pattern("S")
             .pattern("S")
             .unlockedBy("has_item", has(HexItems.SLATE))

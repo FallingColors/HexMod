@@ -11,6 +11,7 @@ import at.petrak.hexcasting.common.casting.RegisterPatterns;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hexcasting.common.command.PatternResLocArgument;
 import at.petrak.hexcasting.common.entities.HexEntities;
+import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
@@ -162,6 +163,9 @@ public class ForgeHexInitializer {
         });
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
+
+        evBus.addListener((PlayerEvent.BreakSpeed evt) ->
+            evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getPlayer(), evt.getState(), evt.getPos())));
 
         // === Events implemented in other ways on Fabric
 

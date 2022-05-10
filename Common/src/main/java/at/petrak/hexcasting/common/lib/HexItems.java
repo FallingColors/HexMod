@@ -12,9 +12,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
@@ -59,6 +57,7 @@ public class HexItems {
     public static final ItemTrinket TRINKET = make("trinket", new ItemTrinket(unstackable()));
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable()));
 
+    public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer", new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1)));
 
     public static final ItemScroll SCROLL = make("scroll", new ItemScroll(props()));
 

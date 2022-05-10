@@ -24,6 +24,7 @@
   "item.hexcasting.scroll.of": "Ancient Scroll of %s",
   "item.hexcasting.scroll.empty": "Empty Scroll",
   "item.hexcasting.abacus": "Abacus",
+  "item.hexcasting.jeweler_hammer": "Jeweler's Hammer",
   "item.hexcasting.sub_sandwich": "Submarine Sandwich",
   "item.hexcasting.dye_colorizer_white": "White Pigment",
   "item.hexcasting.dye_colorizer_orange": "Orange Pigment",
@@ -603,6 +604,10 @@
   "hexcasting.page.edified.1": "By infusing _media into a sapling via the use of $(l:patterns/spells/blockworks#hexcasting:edify)$(action)Edify Sapling/$, I can create what is called an $(l:items/edified)$(thing)Edified Tree/$. They tend to be tall and pointy, with ridged bark and wood that grows in a strange spiral pattern. Their leaves come in three pretty colors.",
   "hexcasting.page.edified.2": "I would assume the wood would have some properties relevant to _Hexcasting. But, if it does, I cannot seem to find them. For all intents and purposes it appears to be just wood, albeit of a very strange color.$(br2)I suppose for now I will use it for decoration; the full suite of standard wood blocks can be crafted from them.$(br2)Of course, I can strip them with an axe as well.",
   "hexcasting.page.edified.crafting.desc": "$(italic)Their smooth trunks, with white bark, gave the effect of enormous columns sustaining the weight of an immense foliage, full of shade and silence./$",
+
+  "hexcasting.entry.jeweler_hammer": "Jeweler's Hammer",
+  "hexcasting.page.jeweler_hammer.1": "After being careless with the sources of my _media one too many times, I have devised a tool to work around my clumsiness.$(br2)Using the delicate nature of crystallized _media as a fixture for a pickaxe, I can create the $(l:items/jeweler_hammer)$(item)Jeweler's Hammer/$. It acts like an $(item)Iron Pickaxe/$, for the most part, but can't break anything that takes up an entire block's space.",
+  "hexcasting.page.jeweler_hammer.crafting.desc": "$(italic)Carefully, she cracked the half ruby, letting the spren escape./$",
 
   "hexcasting.entry.decoration": "Decorative Blocks",
   "hexcasting.page.decoration.1": "In the course of my studies I have discovered some building blocks and trifles that I may find aesthetically pleasing. I've compiled the methods of making them here.",
