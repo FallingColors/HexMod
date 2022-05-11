@@ -53,7 +53,7 @@ public abstract class ItemPackagedSpell extends ItemManaHolder implements SpellH
 
     @Override
     public boolean hasSpell(ItemStack stack) {
-        return NBTHelper.hasCompound(stack, TAG_PATTERNS);
+        return NBTHelper.hasList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
     }
 
     @Override
