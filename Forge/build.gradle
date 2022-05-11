@@ -1,6 +1,10 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
+        maven {
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
+            content { includeGroup "org.spongepowered" }
+        }
         mavenCentral()
     }
     dependencies {
@@ -8,14 +12,16 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
         // OPTIONAL Kotlin Serialization plugin
         classpath 'org.jetbrains.kotlin:kotlin-serialization:1.6.10'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
 
-archivesBaseName = "${modID}-forge-${minecraftVersion}"
+version = getVersion("forge")
 
 // Adds the Kotlin Gradle plugin
 buildscript {
@@ -46,13 +52,13 @@ minecraft {
 
     runs {
         client {
-            workingDirectory project.file('../run')
+            workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Client'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
-                modClientRun {
+                create(modID) {
                     source sourceSets.main
                     source project(":Common").sourceSets.main
                 }
@@ -60,21 +66,26 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('../run')
+            workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Server'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
-                modServerRun {
+                create(modID) {
                     source sourceSets.main
                     source project(":Common").sourceSets.main
                 }
             }
         }
 
+        // We have to have a dummy data run to be parented from
+        data {}
+
         xplatDatagen {
-            workingDirectory project.file('../run')
+            parent minecraft.runs.data
+
+            workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
             args '--mod', modID, '--all', '--output', file('../Common/src/generated/resources/'), '--existing', file('../Common/src/main/resources/')
             taskName 'Xplat Data'
@@ -82,7 +93,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'hexcasting.xplat_datagen', 'true'
             mods {
-                modDataRun {
+                create(modID) {
                     source sourceSets.main
                     source project(":Common").sourceSets.main
                 }
@@ -90,14 +101,16 @@ minecraft {
         }
 
         forgeDatagen {
-            workingDirectory project.file('../run')
+            parent minecraft.runs.data
+
+            workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
             args '--mod', modID, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             taskName 'Data'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
-                modDataRun {
+                create(modID) {
                     source sourceSets.main
                     source project(":Common").sourceSets.main
                 }
@@ -142,8 +155,8 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    compileOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion")
-    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion")
+    compileOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion-forge")
+    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion-forge")
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
 
@@ -152,12 +165,28 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion")
 }
 
+mixin {
+    add sourceSets.main, "hexcasting.refmap.json"
+    config "hexplat.mixins.json"
+}
+
+
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
 
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    srcDir '../Common/src/generated/resources'
+}
+
 processResources {
     from project(":Common").sourceSets.main.resources
+    inputs.property "version", project.version
+
+    filesMatching("mods.toml") {
+        expand "version": project.version
+    }
 }
 
 

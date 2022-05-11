@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.forge.datagen;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexBlockTags;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import net.minecraft.data.DataGenerator;
@@ -12,71 +12,71 @@ import org.jetbrains.annotations.Nullable;
 public class HexBlockTagProvider extends BlockTagsProvider {
     public HexBlockTagProvider(DataGenerator pGenerator,
         @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, HexMod.MOD_ID, existingFileHelper);
+        super(pGenerator, HexAPI.MOD_ID, existingFileHelper);
     }
 
     @Override
     protected void addTags() {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .add(HexBlocks.SLATE_BLOCK.get(), HexBlocks.SLATE.get(),
-                HexBlocks.EMPTY_DIRECTRIX.get(), HexBlocks.DIRECTRIX_REDSTONE.get(),
-                HexBlocks.EMPTY_IMPETUS.get(),
-                HexBlocks.IMPETUS_RIGHTCLICK.get(), HexBlocks.IMPETUS_LOOK.get(), HexBlocks.IMPETUS_STOREDPLAYER.get(),
-                HexBlocks.AMETHYST_TILES.get(), HexBlocks.SCONCE.get());
+            .add(HexBlocks.SLATE_BLOCK, HexBlocks.SLATE,
+                HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE,
+                HexBlocks.EMPTY_IMPETUS,
+                HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_STOREDPLAYER,
+                HexBlocks.AMETHYST_TILES, HexBlocks.SCONCE);
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
-            .add(HexBlocks.AMETHYST_DUST_BLOCK.get());
+            .add(HexBlocks.AMETHYST_DUST_BLOCK);
 
         tag(BlockTags.MINEABLE_WITH_AXE)
-            .add(HexBlocks.AKASHIC_RECORD.get(), HexBlocks.AKASHIC_BOOKSHELF.get(), HexBlocks.AKASHIC_CONNECTOR.get(),
-                HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),
-                HexBlocks.AKASHIC_WOOD.get(), HexBlocks.AKASHIC_WOOD_STRIPPED.get(),
-                HexBlocks.AKASHIC_PLANKS.get(), HexBlocks.AKASHIC_PANEL.get(), HexBlocks.AKASHIC_TILE.get(),
-                HexBlocks.AKASHIC_DOOR.get(), HexBlocks.AKASHIC_TRAPDOOR.get(), HexBlocks.AKASHIC_SLAB.get(),
-                HexBlocks.AKASHIC_BUTTON.get());
+            .add(HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_CONNECTOR,
+                HexBlocks.AKASHIC_LOG, HexBlocks.AKASHIC_LOG_STRIPPED,
+                HexBlocks.AKASHIC_WOOD, HexBlocks.AKASHIC_WOOD_STRIPPED,
+                HexBlocks.AKASHIC_PLANKS, HexBlocks.AKASHIC_PANEL, HexBlocks.AKASHIC_TILE,
+                HexBlocks.AKASHIC_DOOR, HexBlocks.AKASHIC_TRAPDOOR, HexBlocks.AKASHIC_SLAB,
+                HexBlocks.AKASHIC_BUTTON);
 
         tag(BlockTags.MINEABLE_WITH_HOE)
-            .add(HexBlocks.AKASHIC_LEAVES1.get(), HexBlocks.AKASHIC_LEAVES2.get(), HexBlocks.AKASHIC_LEAVES3.get());
+            .add(HexBlocks.AKASHIC_LEAVES1, HexBlocks.AKASHIC_LEAVES2, HexBlocks.AKASHIC_LEAVES3);
 
         tag(BlockTags.CRYSTAL_SOUND_BLOCKS)
-            .add(HexBlocks.CONJURED_LIGHT.get(), HexBlocks.CONJURED_BLOCK.get(), HexBlocks.AMETHYST_TILES.get(),
-                HexBlocks.SCONCE.get());
+            .add(HexBlocks.CONJURED_LIGHT, HexBlocks.CONJURED_BLOCK, HexBlocks.AMETHYST_TILES,
+                HexBlocks.SCONCE);
 
         tag(HexBlockTags.AKASHIC_LOGS)
-            .add(HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),
-                HexBlocks.AKASHIC_WOOD.get(), HexBlocks.AKASHIC_WOOD_STRIPPED.get());
+            .add(HexBlocks.AKASHIC_LOG, HexBlocks.AKASHIC_LOG_STRIPPED,
+                HexBlocks.AKASHIC_WOOD, HexBlocks.AKASHIC_WOOD_STRIPPED);
         tag(BlockTags.LOGS)
-            .add(HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),
-                HexBlocks.AKASHIC_WOOD.get(), HexBlocks.AKASHIC_WOOD_STRIPPED.get());
+            .add(HexBlocks.AKASHIC_LOG, HexBlocks.AKASHIC_LOG_STRIPPED,
+                HexBlocks.AKASHIC_WOOD, HexBlocks.AKASHIC_WOOD_STRIPPED);
         tag(BlockTags.LOGS_THAT_BURN)
-            .add(HexBlocks.AKASHIC_LOG.get(), HexBlocks.AKASHIC_LOG_STRIPPED.get(),
-                HexBlocks.AKASHIC_WOOD.get(), HexBlocks.AKASHIC_WOOD_STRIPPED.get());
+            .add(HexBlocks.AKASHIC_LOG, HexBlocks.AKASHIC_LOG_STRIPPED,
+                HexBlocks.AKASHIC_WOOD, HexBlocks.AKASHIC_WOOD_STRIPPED);
         tag(BlockTags.LEAVES)
-            .add(HexBlocks.AKASHIC_LEAVES1.get(), HexBlocks.AKASHIC_LEAVES2.get(), HexBlocks.AKASHIC_LEAVES3.get());
+            .add(HexBlocks.AKASHIC_LEAVES1, HexBlocks.AKASHIC_LEAVES2, HexBlocks.AKASHIC_LEAVES3);
 
         tag(BlockTags.PLANKS)
-            .add(HexBlocks.AKASHIC_PLANKS.get(), HexBlocks.AKASHIC_PANEL.get(), HexBlocks.AKASHIC_TILE.get());
+            .add(HexBlocks.AKASHIC_PLANKS, HexBlocks.AKASHIC_PANEL, HexBlocks.AKASHIC_TILE);
         tag(HexBlockTags.AKASHIC_PLANKS)
-            .add(HexBlocks.AKASHIC_PLANKS.get(), HexBlocks.AKASHIC_PANEL.get(), HexBlocks.AKASHIC_TILE.get());
+            .add(HexBlocks.AKASHIC_PLANKS, HexBlocks.AKASHIC_PANEL, HexBlocks.AKASHIC_TILE);
         tag(BlockTags.SLABS)
-            .add(HexBlocks.AKASHIC_SLAB.get());
+            .add(HexBlocks.AKASHIC_SLAB);
         tag(BlockTags.WOODEN_SLABS)
-            .add(HexBlocks.AKASHIC_SLAB.get());
+            .add(HexBlocks.AKASHIC_SLAB);
         tag(BlockTags.DOORS)
-            .add(HexBlocks.AKASHIC_DOOR.get());
+            .add(HexBlocks.AKASHIC_DOOR);
         tag(BlockTags.WOODEN_DOORS)
-            .add(HexBlocks.AKASHIC_DOOR.get());
+            .add(HexBlocks.AKASHIC_DOOR);
         tag(BlockTags.TRAPDOORS)
-            .add(HexBlocks.AKASHIC_TRAPDOOR.get());
+            .add(HexBlocks.AKASHIC_TRAPDOOR);
         tag(BlockTags.WOODEN_TRAPDOORS)
-            .add(HexBlocks.AKASHIC_TRAPDOOR.get());
+            .add(HexBlocks.AKASHIC_TRAPDOOR);
         tag(BlockTags.PRESSURE_PLATES)
-            .add(HexBlocks.AKASHIC_PRESSURE_PLATE.get());
+            .add(HexBlocks.AKASHIC_PRESSURE_PLATE);
         tag(BlockTags.WOODEN_PRESSURE_PLATES)
-            .add(HexBlocks.AKASHIC_PRESSURE_PLATE.get());
+            .add(HexBlocks.AKASHIC_PRESSURE_PLATE);
         tag(BlockTags.BUTTONS)
-            .add(HexBlocks.AKASHIC_BUTTON.get());
+            .add(HexBlocks.AKASHIC_BUTTON);
         tag(BlockTags.WOODEN_BUTTONS)
-            .add(HexBlocks.AKASHIC_BUTTON.get());
+            .add(HexBlocks.AKASHIC_BUTTON);
     }
 }

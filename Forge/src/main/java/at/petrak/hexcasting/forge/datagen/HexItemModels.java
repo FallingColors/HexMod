@@ -1,12 +1,15 @@
 package at.petrak.hexcasting.forge.datagen;
 
-import at.petrak.hexcasting.HexMod;
-import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.hexcasting.common.items.*;
+import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.common.items.ItemFocus;
+import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.items.ItemSlate;
+import at.petrak.hexcasting.common.items.ItemWand;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.paucal.api.datagen.PaucalItemModelProvider;
+import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -17,7 +20,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class HexItemModels extends PaucalItemModelProvider {
     public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, HexMod.MOD_ID, existingFileHelper);
+        super(generator, HexAPI.MOD_ID, existingFileHelper);
     }
 
     private static final String[] DATUM_TYPES = {"empty", "entity", "double", "vec3", "widget", "list", "pattern"};
@@ -25,14 +28,14 @@ public class HexItemModels extends PaucalItemModelProvider {
 
     @Override
     protected void registerModels() {
-        simpleItem(HexItems.AMETHYST_DUST.get());
-        simpleItem(HexItems.CHARGED_AMETHYST.get());
-        simpleItem(HexItems.SUBMARINE_SANDWICH.get());
-        simpleItem(HexItems.ABACUS.get());
+        simpleItem(HexItems.AMETHYST_DUST);
+        simpleItem(HexItems.CHARGED_AMETHYST);
+        simpleItem(HexItems.SUBMARINE_SANDWICH);
+        simpleItem(HexItems.ABACUS);
 
         simpleItem(modLoc("scroll_pristine"));
         simpleItem(modLoc("scroll_ancient"));
-        getBuilder(HexItems.SCROLL.get().getRegistryName().getPath())
+        getBuilder(HexItems.SCROLL.getRegistryName().getPath())
             .override()
             .predicate(ItemScroll.ANCIENT_PREDICATE, 0f)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_pristine"))).end()
@@ -40,8 +43,8 @@ public class HexItemModels extends PaucalItemModelProvider {
             .predicate(ItemScroll.ANCIENT_PREDICATE, 1f)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_ancient"))).end();
 
-        simpleItem(HexItems.SCRYING_LENS.get());
-        getBuilder(HexItems.SCRYING_LENS.get().getRegistryName().getPath())
+        simpleItem(HexItems.SCRYING_LENS);
+        getBuilder(HexItems.SCRYING_LENS.getRegistryName().getPath())
             .transforms()
             .transform(ModelBuilder.Perspective.HEAD)
             .rotation(0f, 0f, 0f)
@@ -53,15 +56,15 @@ public class HexItemModels extends PaucalItemModelProvider {
         singleTexture("wand_bosnia", new ResourceLocation("item/handheld_rod"),
             "layer0", modLoc("item/wands/bosnia"));
 
-        buildWand(HexItems.WAND_OAK.get(), "oak");
-        buildWand(HexItems.WAND_BIRCH.get(), "birch");
-        buildWand(HexItems.WAND_SPRUCE.get(), "spruce");
-        buildWand(HexItems.WAND_JUNGLE.get(), "jungle");
-        buildWand(HexItems.WAND_DARK_OAK.get(), "dark_oak");
-        buildWand(HexItems.WAND_ACACIA.get(), "acacia");
-        buildWand(HexItems.WAND_CRIMSON.get(), "crimson");
-        buildWand(HexItems.WAND_WARPED.get(), "warped");
-        buildWand(HexItems.WAND_AKASHIC.get(), "akashic");
+        buildWand(HexItems.WAND_OAK, "oak");
+        buildWand(HexItems.WAND_BIRCH, "birch");
+        buildWand(HexItems.WAND_SPRUCE, "spruce");
+        buildWand(HexItems.WAND_JUNGLE, "jungle");
+        buildWand(HexItems.WAND_DARK_OAK, "dark_oak");
+        buildWand(HexItems.WAND_ACACIA, "acacia");
+        buildWand(HexItems.WAND_CRIMSON, "crimson");
+        buildWand(HexItems.WAND_WARPED, "warped");
+        buildWand(HexItems.WAND_AKASHIC, "akashic");
 
         simpleItem(modLoc("patchouli_book"));
 
@@ -76,7 +79,7 @@ public class HexItemModels extends PaucalItemModelProvider {
                 var focusName = "focus_" + suffix;
                 singleTexture(focusName, new ResourceLocation("item/generated"),
                     "layer0", modLoc("item/focus/" + suffix));
-                getBuilder(HexItems.FOCUS.get().getRegistryName().getPath())
+                getBuilder(HexItems.FOCUS.getRegistryName().getPath())
                     .override()
                     .predicate(ItemFocus.DATATYPE_PRED, i)
                     .predicate(ItemFocus.SEALED_PRED, sealed ? 1f : 0f)
@@ -86,7 +89,7 @@ public class HexItemModels extends PaucalItemModelProvider {
                 var spellbookName = "spellbook_" + type + (sealed ? "_sealed" : "");
                 singleTexture(spellbookName, new ResourceLocation("item/generated"),
                     "layer0", modLoc("item/spellbook/" + suffix));
-                getBuilder(HexItems.SPELLBOOK.get().getRegistryName().getPath())
+                getBuilder(HexItems.SPELLBOOK.getRegistryName().getPath())
                     .override()
                     .predicate(ItemFocus.DATATYPE_PRED, i)
                     .predicate(ItemFocus.SEALED_PRED, sealed ? 1f : 0f)
@@ -95,9 +98,9 @@ public class HexItemModels extends PaucalItemModelProvider {
             }
         }
 
-        buildPackagedSpell(HexItems.CYPHER.get(), "cypher");
-        buildPackagedSpell(HexItems.TRINKET.get(), "trinket");
-        buildPackagedSpell(HexItems.ARTIFACT.get(), "artifact");
+        buildPackagedSpell(HexItems.CYPHER, "cypher");
+        buildPackagedSpell(HexItems.TRINKET, "trinket");
+        buildPackagedSpell(HexItems.ARTIFACT, "artifact");
 
         int maxFill = 4;
         for (int size = 0; size < PHIAL_SIZES.length; size++) {
@@ -106,10 +109,10 @@ public class HexItemModels extends PaucalItemModelProvider {
                 singleTexture(
                     name,
                     new ResourceLocation("item/generated"),
-                    "layer0", new ResourceLocation(HexMod.MOD_ID, "item/phial/" + name));
+                    "layer0", modLoc("item/phial/" + name));
 
                 float fillProp = (float) fill / maxFill;
-                getBuilder(HexItems.BATTERY.getId().getPath()).override()
+                getBuilder(HexItems.BATTERY.getRegistryName().getPath()).override()
                     .predicate(ItemManaBattery.MANA_PREDICATE, fillProp)
                     .predicate(ItemManaBattery.MAX_MANA_PREDICATE, size)
                     .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
@@ -118,20 +121,21 @@ public class HexItemModels extends PaucalItemModelProvider {
         }
 
         for (int i = 0; i < DyeColor.values().length; i++) {
-            singleTexture(HexItems.DYE_COLORIZERS.get(DyeColor.values()[i]).getId().getPath(),
+            singleTexture(HexItems.DYE_COLORIZERS.get(DyeColor.values()[i]).getRegistryName().getPath(),
                 new ResourceLocation("item/generated"),
-                "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/dye" + i));
+                "layer0", modLoc("item/colorizer/dye" + i));
         }
         for (int i = 0; i < 14; i++) {
-            singleTexture(HexItems.PRIDE_COLORIZERS[i].getId().getPath(), new ResourceLocation("item/generated"),
-                "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/pride" + i));
+            singleTexture(HexItems.PRIDE_COLORIZERS[i].getRegistryName().getPath(),
+                new ResourceLocation("item/generated"),
+                "layer0", modLoc("item/colorizer/pride" + i));
         }
-        singleTexture(HexItems.UUID_COLORIZER.getId().getPath(), new ResourceLocation("item/generated"),
-            "layer0", new ResourceLocation(HexMod.MOD_ID, "item/colorizer/uuid"));
+        singleTexture(HexItems.UUID_COLORIZER.getRegistryName().getPath(), new ResourceLocation("item/generated"),
+            "layer0", modLoc("item/colorizer/uuid"));
 
         simpleItem(modLoc("slate_blank"));
         simpleItem(modLoc("slate_written"));
-        getBuilder(HexItems.SLATE.getId().getPath()).override()
+        getBuilder(HexItems.SLATE.getRegistryName().getPath()).override()
             .predicate(ItemSlate.WRITTEN_PRED, 0)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_blank")))
             .end()
@@ -140,23 +144,23 @@ public class HexItemModels extends PaucalItemModelProvider {
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_written")))
             .end();
 
-        getBuilder(HexBlocks.AKASHIC_RECORD.getId().getPath()).parent(
+        getBuilder(HexBlocks.AKASHIC_RECORD.getRegistryName().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_record")));
         simpleItem(modLoc("akashic_door"));
-        getBuilder(HexBlocks.AKASHIC_TRAPDOOR.getId().getPath()).parent(
+        getBuilder(HexBlocks.AKASHIC_TRAPDOOR.getRegistryName().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_trapdoor_bottom")));
-        getBuilder(HexBlocks.AKASHIC_LOG.getId().getPath()).parent(
+        getBuilder(HexBlocks.AKASHIC_LOG.getRegistryName().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_log")));
-        getBuilder(HexBlocks.AKASHIC_LOG_STRIPPED.getId().getPath()).parent(
+        getBuilder(HexBlocks.AKASHIC_LOG_STRIPPED.getRegistryName().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_log_stripped")));
-        getBuilder(HexBlocks.AKASHIC_STAIRS.getId().getPath()).parent(
+        getBuilder(HexBlocks.AKASHIC_STAIRS.getRegistryName().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_stairs")));
-        getBuilder(HexBlocks.AKASHIC_SLAB.getId().getPath()).parent(
+        getBuilder(HexBlocks.AKASHIC_SLAB.getRegistryName().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_slab")));
-        getBuilder(HexBlocks.AKASHIC_BUTTON.getId().getPath()).parent(
+        getBuilder(HexBlocks.AKASHIC_BUTTON.getRegistryName().getPath()).parent(
                 new ModelFile.UncheckedModelFile(new ResourceLocation("block/button_inventory")))
             .texture("texture", modLoc("block/akashic/planks1"));
-        getBuilder(HexBlocks.AKASHIC_PRESSURE_PLATE.getId().getPath())
+        getBuilder(HexBlocks.AKASHIC_PRESSURE_PLATE.getRegistryName().getPath())
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/akashic_pressure_plate")));
     }
 

@@ -11,11 +11,15 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -47,5 +51,10 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public <T extends ClientTooltipComponent & TooltipComponent> void registerIdentityTooltipMapping(Class<T> clazz) {
         MinecraftForgeClient.registerTooltipComponentFactory(clazz, Function.identity());
+    }
+
+    @Override
+    public void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func) {
+        ItemProperties.register(item, id, func);
     }
 }

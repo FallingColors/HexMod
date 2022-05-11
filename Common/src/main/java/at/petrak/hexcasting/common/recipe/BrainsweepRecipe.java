@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe;
 
+import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
@@ -89,6 +90,11 @@ public record BrainsweepRecipe(
             var villagerIn = VillagerIngredient.read(buf);
             var result = Block.stateById(buf.readVarInt());
             return new BrainsweepRecipe(recipeID, blockIn, villagerIn, result);
+        }
+
+        @SoftImplement("forge")
+        public Class<RecipeSerializer> getRegistryType() {
+            return RecipeSerializer.class;
         }
     }
 }

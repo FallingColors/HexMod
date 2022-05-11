@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.forge.datagen.lootmods;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.paucal.api.lootmod.PaucalAddItemModifier;
-import at.petrak.paucal.api.lootmod.PaucalLootMods;
+import at.petrak.paucal.api.forge.datagen.lootmod.PaucalAddItemModifier;
+import at.petrak.paucal.api.forge.datagen.lootmod.PaucalLootMods;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -26,14 +26,14 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class HexLootModifiers extends GlobalLootModifierProvider {
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODS = DeferredRegister.create(
-        ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, HexMod.MOD_ID);
+        ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, HexAPI.MOD_ID);
     private static final RegistryObject<PatternScrollModifier.Serializer> SCROLLS_IN_CHESTS = LOOT_MODS.register(
         "scrolls", PatternScrollModifier.Serializer::new);
     private static final RegistryObject<AmethystShardReducerModifier.Serializer> AMETHYST_SHARD_REDUCER = LOOT_MODS.register(
         "amethyst_shard_reducer", AmethystShardReducerModifier.Serializer::new);
 
     public HexLootModifiers(DataGenerator gen) {
-        super(gen, HexMod.MOD_ID);
+        super(gen, HexAPI.MOD_ID);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
         }));
 
         add("amethyst_cluster_dust", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
-            HexItems.AMETHYST_DUST.get(), new LootItemFunction[]{
+            HexItems.AMETHYST_DUST, new LootItemFunction[]{
             SetItemCountFunction.setCount(UniformGenerator.between(1, 4)).build(),
             ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE).build()
         }, new LootItemCondition[]{
@@ -62,7 +62,7 @@ public class HexLootModifiers extends GlobalLootModifierProvider {
         }
         ));
         add("amethyst_cluster_charged", PaucalLootMods.ADD_ITEM.get(), new PaucalAddItemModifier(
-            HexItems.CHARGED_AMETHYST.get(), 1, new LootItemCondition[]{
+            HexItems.CHARGED_AMETHYST, 1, new LootItemCondition[]{
             LootTableIdCondition.builder(amethystCluster).build(),
             MatchTool.toolMatches(
                     ItemPredicate.Builder.item().hasEnchantment(

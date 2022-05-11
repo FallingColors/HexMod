@@ -2,8 +2,8 @@ package at.petrak.hexcasting.forge.datagen.lootmods;
 
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.lib.HexItems;
 import com.google.gson.JsonObject;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -55,7 +55,7 @@ public class PatternScrollModifier extends LootModifier {
             tag.put(ItemScroll.TAG_PATTERN,
                 HexPattern.FromAnglesSig(pattern, startDir).serializeToNBT());
 
-            var stack = new ItemStack(HexItems.SCROLL.get());
+            var stack = new ItemStack(HexItems.SCROLL);
             stack.setTag(tag);
             generatedLoot.add(stack);
 

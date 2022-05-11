@@ -1,7 +1,64 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.1.0'
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+def isRelease() {
+    try {
+        def stdout = new ByteArrayOutputStream()
+        def gitHash = System.getenv('GIT_COMMIT')
+        def gitPrevHash = System.getenv('GIT_PREVIOUS_COMMIT')
+        def travisRange = System.getenv('TRAVIS_COMMIT_RANGE')
+        if (gitHash && gitPrevHash) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + gitPrevHash + '...' + gitHash
+                standardOutput = stdout
+            }
+            return stdout.toString().toLowerCase().contains("[release")
+        } else if (travisRange) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + travisRange
+                standardOutput = stdout
+            }
+            return stdout.toString().toLowerCase().contains("[release")
+        } else {
+            return false
+        }
+    } catch (ignored) {
+        return false
+    }
+}
+
+String getVersion(String platform) {
+    def v = "${modVersion}"
+    if (!isRelease() && System.getenv('BUILD_NUMBER') != null) {
+        v += "-prerelease-" + System.getenv('BUILD_NUMBER')
+    } else if (System.getenv('TAG_NAME') != null) {
+        v = System.getenv('TAG_NAME').substring(1)
+        println 'Version overridden to tag version ' + version
+    }
+    v += "-" + platform
+    return v
+}
+
 subprojects {
 
     apply plugin: 'java'
 //    apply plugin: 'kotlin'
+    apply plugin: 'maven-publish'
+
+    group = "at.petra-k.$modID" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+    archivesBaseName = "${modID}-${minecraftVersion}"
+    // Version is fixed up in each gradle
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()

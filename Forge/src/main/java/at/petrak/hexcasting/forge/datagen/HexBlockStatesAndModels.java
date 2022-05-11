@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.forge.datagen;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
 import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.paucal.api.datagen.PaucalBlockStateAndModelProvider;
+import at.petrak.paucal.api.forge.datagen.PaucalBlockStateAndModelProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -19,13 +19,13 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
     public HexBlockStatesAndModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, HexMod.MOD_ID, exFileHelper);
+        super(gen, HexAPI.MOD_ID, exFileHelper);
     }
 
     @Override
     protected void registerStatesAndModels() {
         var slateModel = models().getExistingFile(modLoc("slate"));
-        getVariantBuilder(HexBlocks.SLATE.get()).forAllStatesExcept(bs -> {
+        getVariantBuilder(HexBlocks.SLATE).forAllStatesExcept(bs -> {
             int rotationX = 0;
             int rotationY = 0;
             switch (bs.getValue(BlockSlate.ATTACH_FACE)) {
@@ -43,10 +43,10 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         }, BlockSlate.WATERLOGGED);
 
-        impetus(HexBlocks.IMPETUS_RIGHTCLICK.get(), "impetus_rightclick", "rightclick");
-        impetus(HexBlocks.IMPETUS_LOOK.get(), "impetus_look", "look");
-        impetus(HexBlocks.IMPETUS_STOREDPLAYER.get(), "impetus_storedplayer", "storedplayer");
-        arrowCircleBlock(HexBlocks.EMPTY_IMPETUS.get(), "empty_impetus", modLoc("block/slate"),
+        impetus(HexBlocks.IMPETUS_RIGHTCLICK, "impetus_rightclick", "rightclick");
+        impetus(HexBlocks.IMPETUS_LOOK, "impetus_look", "look");
+        impetus(HexBlocks.IMPETUS_STOREDPLAYER, "impetus_storedplayer", "storedplayer");
+        arrowCircleBlock(HexBlocks.EMPTY_IMPETUS, "empty_impetus", modLoc("block/slate"),
             "impetus/front_empty",
             "impetus/back_empty",
             "impetus/up_empty",
@@ -56,7 +56,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         );
 
         // auugh
-        getVariantBuilder(HexBlocks.DIRECTRIX_REDSTONE.get()).forAllStates(bs -> {
+        getVariantBuilder(HexBlocks.DIRECTRIX_REDSTONE).forAllStates(bs -> {
             var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
             var litness = isLit ? "lit" : "dim";
             var isPowered = bs.getValue(BlockRedstoneDirectrix.REDSTONE_POWERED);
@@ -76,13 +76,13 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             var model = models().cube(modelName, routing[0], routing[1], routing[2], routing[3], routing[4], routing[5])
                 .texture("particle", modLoc("block/slate"));
             if (!isLit && !isPowered && dir == Direction.NORTH) {
-                simpleBlockItem(HexBlocks.DIRECTRIX_REDSTONE.get(), model);
+                simpleBlockItem(HexBlocks.DIRECTRIX_REDSTONE, model);
             }
             return ConfiguredModel.builder()
                 .modelFile(model)
                 .build();
         });
-        getVariantBuilder(HexBlocks.EMPTY_DIRECTRIX.get()).forAllStates(bs -> {
+        getVariantBuilder(HexBlocks.EMPTY_DIRECTRIX).forAllStates(bs -> {
             var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
             var litness = isLit ? "lit" : "dim";
             var axis = bs.getValue(BlockStateProperties.AXIS);
@@ -114,7 +114,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             var model = models().cube(modelName, y, y, z, z, x, x)
                 .texture("particle", modLoc("block/slate"));
             if (!isLit && axis == Direction.Axis.Z) {
-                simpleBlockItem(HexBlocks.EMPTY_DIRECTRIX.get(), model);
+                simpleBlockItem(HexBlocks.EMPTY_DIRECTRIX, model);
             }
             return ConfiguredModel.builder()
                 .modelFile(model)
@@ -122,12 +122,12 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         });
 
         var akashicRecordModel = models().getExistingFile(modLoc("block/akashic_record"));
-        simpleBlock(HexBlocks.AKASHIC_RECORD.get(), akashicRecordModel);
-        simpleBlockItem(HexBlocks.AKASHIC_RECORD.get(), akashicRecordModel);
-        blockAndItem(HexBlocks.AKASHIC_CONNECTOR.get(),
+        simpleBlock(HexBlocks.AKASHIC_RECORD, akashicRecordModel);
+        simpleBlockItem(HexBlocks.AKASHIC_RECORD, akashicRecordModel);
+        blockAndItem(HexBlocks.AKASHIC_CONNECTOR,
             models().cubeAll("akashic_connector", modLoc("block/akashic/connector")));
 
-        getVariantBuilder(HexBlocks.AKASHIC_BOOKSHELF.get()).forAllStates(bs -> {
+        getVariantBuilder(HexBlocks.AKASHIC_BOOKSHELF).forAllStates(bs -> {
             var type = bs.getValue(BlockAkashicBookshelf.DATUM_TYPE);
 
             var side = modLoc("block/akashic/bookshelf/side");
@@ -152,7 +152,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
                 Direction dir = bs.getValue(BlockAkashicBookshelf.FACING);
                 if (dir == Direction.NORTH && type == DatumType.EMPTY) {
-                    simpleBlockItem(HexBlocks.AKASHIC_BOOKSHELF.get(), model);
+                    simpleBlockItem(HexBlocks.AKASHIC_BOOKSHELF, model);
                 }
 
                 builder.modelFile(model)
@@ -167,51 +167,51 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         });
 
 
-        blockAndItem(HexBlocks.SLATE_BLOCK.get(), models().cubeAll("slate_block", modLoc("block/slate")));
-        cubeBlockAndItem(HexBlocks.AMETHYST_DUST_BLOCK.get(), "amethyst_dust_block");
-        cubeBlockAndItem(HexBlocks.AMETHYST_TILES.get(), "amethyst_tiles");
-        cubeBlockAndItem(HexBlocks.SCROLL_PAPER.get(), "scroll_paper");
-        cubeBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER.get(), "ancient_scroll_paper");
+        blockAndItem(HexBlocks.SLATE_BLOCK, models().cubeAll("slate_block", modLoc("block/slate")));
+        cubeBlockAndItem(HexBlocks.AMETHYST_DUST_BLOCK, "amethyst_dust_block");
+        cubeBlockAndItem(HexBlocks.AMETHYST_TILES, "amethyst_tiles");
+        cubeBlockAndItem(HexBlocks.SCROLL_PAPER, "scroll_paper");
+        cubeBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER, "ancient_scroll_paper");
 
-        blockAndItem(HexBlocks.SCROLL_PAPER_LANTERN.get(), models().cubeBottomTop("scroll_paper_lantern",
+        blockAndItem(HexBlocks.SCROLL_PAPER_LANTERN, models().cubeBottomTop("scroll_paper_lantern",
             modLoc("block/scroll_paper_lantern_side"),
             modLoc("block/scroll_paper_lantern_bottom"),
             modLoc("block/scroll_paper_lantern_top")));
 
-        blockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(),
+        blockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN,
             models().cubeBottomTop("ancient_scroll_paper_lantern",
                 modLoc("block/ancient_scroll_paper_lantern_side"),
                 modLoc("block/ancient_scroll_paper_lantern_bottom"),
                 modLoc("block/ancient_scroll_paper_lantern_top")));
 
-        axisBlock(HexBlocks.AKASHIC_LOG.get(), modLoc("block/akashic/log"), modLoc("block/akashic/log_end"));
-        axisBlock(HexBlocks.AKASHIC_LOG_STRIPPED.get(), modLoc("block/akashic/log_stripped"),
+        axisBlock(HexBlocks.AKASHIC_LOG, modLoc("block/akashic/log"), modLoc("block/akashic/log_end"));
+        axisBlock(HexBlocks.AKASHIC_LOG_STRIPPED, modLoc("block/akashic/log_stripped"),
             modLoc("block/akashic/log_end_stripped"));
 
-        blockAndItem(HexBlocks.AKASHIC_WOOD.get(), models().cubeAll("akashic_wood", modLoc("block/akashic/log")));
-        blockAndItem(HexBlocks.AKASHIC_WOOD_STRIPPED.get(),
+        blockAndItem(HexBlocks.AKASHIC_WOOD, models().cubeAll("akashic_wood", modLoc("block/akashic/log")));
+        blockAndItem(HexBlocks.AKASHIC_WOOD_STRIPPED,
             models().cubeAll("akashic_wood_stripped", modLoc("block/akashic/log_stripped")));
-        blockAndItem(HexBlocks.AKASHIC_PANEL.get(), models().cubeAll("akashic_panel", modLoc("block/akashic/panel")));
-        blockAndItem(HexBlocks.AKASHIC_TILE.get(), models().cubeAll("akashic_tile", modLoc("block/akashic/tile")));
+        blockAndItem(HexBlocks.AKASHIC_PANEL, models().cubeAll("akashic_panel", modLoc("block/akashic/panel")));
+        blockAndItem(HexBlocks.AKASHIC_TILE, models().cubeAll("akashic_tile", modLoc("block/akashic/tile")));
 
         ResourceLocation leavesParent = new ResourceLocation("block/leaves");
-        blockAndItem(HexBlocks.AKASHIC_LEAVES1.get(),
+        blockAndItem(HexBlocks.AKASHIC_LEAVES1,
             models().withExistingParent("akashic_leaves1", leavesParent)
                 .texture("all", modLoc("block/akashic/leaves1")));
-        blockAndItem(HexBlocks.AKASHIC_LEAVES2.get(),
+        blockAndItem(HexBlocks.AKASHIC_LEAVES2,
             models().withExistingParent("akashic_leaves2", leavesParent)
                 .texture("all", modLoc("block/akashic/leaves2")));
-        blockAndItem(HexBlocks.AKASHIC_LEAVES3.get(),
+        blockAndItem(HexBlocks.AKASHIC_LEAVES3,
             models().withExistingParent("akashic_leaves3", leavesParent)
                 .texture("all", modLoc("block/akashic/leaves3")));
 
-        doorBlock(HexBlocks.AKASHIC_DOOR.get(), modLoc("block/akashic/door_lower"), modLoc("block/akashic/door_upper"));
+        doorBlock(HexBlocks.AKASHIC_DOOR, modLoc("block/akashic/door_lower"), modLoc("block/akashic/door_upper"));
         // door model via the given texture
-        trapdoorBlock(HexBlocks.AKASHIC_TRAPDOOR.get(), modLoc("block/akashic/trapdoor"), true);
+        trapdoorBlock(HexBlocks.AKASHIC_TRAPDOOR, modLoc("block/akashic/trapdoor"), true);
 
         ResourceLocation planks1 = modLoc("block/akashic/planks1");
         BlockModelBuilder planks_model = models().cubeAll("akashic_planks1", planks1);
-        simpleBlock(HexBlocks.AKASHIC_PLANKS.get(), ConfiguredModel.builder()
+        simpleBlock(HexBlocks.AKASHIC_PLANKS, ConfiguredModel.builder()
             .modelFile(planks_model)
             .weight(3)
             .nextModel()
@@ -220,17 +220,16 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             .nextModel()
             .modelFile(models().cubeAll("akashic_planks3", modLoc("block/akashic/planks3")))
             .build());
-        simpleBlockItem(HexBlocks.AKASHIC_PLANKS.get(),
-            planks_model);
+        simpleBlockItem(HexBlocks.AKASHIC_PLANKS, planks_model);
 
-        stairsBlock(HexBlocks.AKASHIC_STAIRS.get(), planks1);
-        slabBlock(HexBlocks.AKASHIC_SLAB.get(), modLoc("block/akashic_planks1"), planks1);
-        buttonBlock(HexBlocks.AKASHIC_BUTTON.get(), planks1);
-        pressurePlateBlock(HexBlocks.AKASHIC_PRESSURE_PLATE.get(), planks1);
+        stairsBlock(HexBlocks.AKASHIC_STAIRS, planks1);
+        slabBlock(HexBlocks.AKASHIC_SLAB, modLoc("block/akashic_planks1"), planks1);
+        buttonBlock(HexBlocks.AKASHIC_BUTTON, planks1);
+        pressurePlateBlock(HexBlocks.AKASHIC_PRESSURE_PLATE, planks1);
 
         var sconceModel = models().getExistingFile(modLoc("amethyst_sconce"));
-        simpleBlock(HexBlocks.SCONCE.get(), sconceModel);
-        simpleBlockItem(HexBlocks.SCONCE.get(), sconceModel);
+        simpleBlock(HexBlocks.SCONCE, sconceModel);
+        simpleBlockItem(HexBlocks.SCONCE, sconceModel);
     }
 
     private void impetus(Block block, String name, String stub) {

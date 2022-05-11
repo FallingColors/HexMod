@@ -167,7 +167,7 @@ public class HexBlocks {
             .strength(1f)
             .lightLevel($ -> 15)));
 
-    public static final Block AKASHIC_LOG = blockItem("akashic_log",
+    public static final BlockAxis AKASHIC_LOG = blockItem("akashic_log",
         new BlockAkashicLog(akashicWoody()));
     public static final BlockAxis AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
         new BlockAkashicLog(akashicWoody()));

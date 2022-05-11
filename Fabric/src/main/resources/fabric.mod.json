@@ -29,6 +29,7 @@
     ]
   },
   "mixins": [
+    "hexplat.mixins.json",
     "fabricasting.mixins.json"
   ],
 

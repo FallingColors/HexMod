@@ -2,7 +2,7 @@ package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.paucal.api.datagen.PaucalLootTableProvider;
+import at.petrak.paucal.api.forge.datagen.PaucalLootTableProvider;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -47,22 +47,22 @@ public class HexLootTables extends PaucalLootTableProvider {
             HexBlocks.AKASHIC_PLANKS, HexBlocks.AKASHIC_TILE, HexBlocks.AKASHIC_PANEL,
             HexBlocks.AKASHIC_TRAPDOOR);
 
-        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES1.get());
-        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES2.get());
-        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES3.get());
+        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES1);
+        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES2);
+        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES3);
 
         var slatePool = LootPool.lootPool().name("slate").
             setRolls(ConstantValue.exactly(1))
-            .add(LootItem.lootTableItem(HexBlocks.SLATE.get())
+            .add(LootItem.lootTableItem(HexBlocks.SLATE)
                 .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
                     .copy(BlockEntitySlate.TAG_PATTERN, "BlockEntityTag." + BlockEntitySlate.TAG_PATTERN)));
-        lootTables.put(HexBlocks.SLATE.get(), LootTable.lootTable().withPool(slatePool));
+        lootTables.put(HexBlocks.SLATE, LootTable.lootTable().withPool(slatePool));
 
-        var doorPool = dropThisPool(HexBlocks.AKASHIC_DOOR.get(), 1)
-            .when(new LootItemBlockStatePropertyCondition.Builder(HexBlocks.AKASHIC_DOOR.get()).setProperties(
+        var doorPool = dropThisPool(HexBlocks.AKASHIC_DOOR, 1)
+            .when(new LootItemBlockStatePropertyCondition.Builder(HexBlocks.AKASHIC_DOOR).setProperties(
                 StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER)
             ));
-        lootTables.put(HexBlocks.AKASHIC_DOOR.get(), LootTable.lootTable().withPool(doorPool));
+        lootTables.put(HexBlocks.AKASHIC_DOOR, LootTable.lootTable().withPool(doorPool));
     }
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {

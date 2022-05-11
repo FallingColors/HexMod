@@ -4,7 +4,7 @@ plugins {
     id 'idea'
 }
 
-archivesBaseName = "${modName}-fabric-${minecraftVersion}"
+version = getVersion("fabric")
 
 repositories {
     mavenCentral()
@@ -28,6 +28,7 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
+    modImplementation "at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion-fabric"
     modImplementation("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion:api")
 
     modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
@@ -40,22 +41,29 @@ dependencies {
 }
 
 loom {
+    mixin.defaultRefmapName = "hexcasting.refmap.json"
+
     runs {
         client {
             client()
             setConfigName("Fabric Client")
             ideConfigGenerated(true)
-            runDir("run")
+            runDir("Fabric/run")
         }
         server {
             server()
             setConfigName("Fabric Server")
             ideConfigGenerated(true)
-            runDir("run")
+            runDir("Fabric/run")
+
         }
     }
 }
 
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    srcDir '../Common/src/generated/resources'
+}
 
 processResources {
     from project(":Common").sourceSets.main.resources

@@ -3,12 +3,12 @@ package at.petrak.hexcasting.api.spell.casting
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.mod.HexApiSounds
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
 import at.petrak.hexcasting.common.lib.HexItems
+import at.petrak.hexcasting.common.lib.HexSounds
 import net.minecraft.Util
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.sounds.SoundSource
@@ -91,7 +91,7 @@ sealed class OperatorSideEffect {
 
             harness.ctx.world.playSound(
                 null, harness.ctx.position.x, harness.ctx.position.y, harness.ctx.position.z,
-                HexApiSounds.FAIL_PATTERN, SoundSource.PLAYERS, 1f, 1f
+                HexSounds.FAIL_PATTERN, SoundSource.PLAYERS, 1f, 1f
             )
 
             mishap.execute(harness.ctx, errorCtx, harness.stack)

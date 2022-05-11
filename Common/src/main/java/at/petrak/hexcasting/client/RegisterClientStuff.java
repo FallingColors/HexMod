@@ -25,7 +25,6 @@ import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexParticles;
-import at.petrak.hexcasting.mixin.client.AccessorItemProperties;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
@@ -57,22 +56,23 @@ public class RegisterClientStuff {
         registerPackagedSpellOverrides(HexItems.TRINKET);
         registerPackagedSpellOverrides(HexItems.ARTIFACT);
 
-        AccessorItemProperties.hex$register(HexItems.BATTERY, ItemManaBattery.MANA_PREDICATE,
+        var x = IClientXplatAbstractions.INSTANCE;
+        x.registerItemProperty(HexItems.BATTERY, ItemManaBattery.MANA_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var item = (ManaHolderItem) stack.getItem();
                 return item.getManaFullness(stack);
             });
-        AccessorItemProperties.hex$register(HexItems.BATTERY, ItemManaBattery.MAX_MANA_PREDICATE,
+        x.registerItemProperty(HexItems.BATTERY, ItemManaBattery.MAX_MANA_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var item = (ItemManaBattery) stack.getItem();
                 var max = item.getMaxMana(stack);
                 return (float) Math.sqrt((float) max / HexConfig.common().chargedCrystalManaAmount() / 10);
             });
 
-        AccessorItemProperties.hex$register(HexItems.SCROLL, ItemScroll.ANCIENT_PREDICATE,
+        x.registerItemProperty(HexItems.SCROLL, ItemScroll.ANCIENT_PREDICATE,
             (stack, level, holder, holderID) -> stack.getOrCreateTag().contains(ItemScroll.TAG_OP_ID) ? 1f : 0f);
 
-        AccessorItemProperties.hex$register(HexItems.SLATE, ItemSlate.WRITTEN_PRED,
+        x.registerItemProperty(HexItems.SLATE, ItemSlate.WRITTEN_PRED,
             (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
         registerWandOverrides(HexItems.WAND_OAK);
@@ -85,7 +85,6 @@ public class RegisterClientStuff {
 
         HexTooltips.init();
 
-        IClientXplatAbstractions x = IClientXplatAbstractions.INSTANCE;
         x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
         x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
         x.setRenderLayer(HexBlocks.AKASHIC_DOOR, RenderType.cutout());
@@ -193,7 +192,7 @@ public class RegisterClientStuff {
     }
 
     private static void registerDataHolderOverrides(DataHolderItem item) {
-        AccessorItemProperties.hex$register((Item) item, ItemFocus.DATATYPE_PRED,
+        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.DATATYPE_PRED,
             (stack, level, holder, holderID) -> {
                 var datum = item.readDatumTag(stack);
                 if (datum != null) {
@@ -210,19 +209,19 @@ public class RegisterClientStuff {
                 }
                 return 0f;
             });
-        AccessorItemProperties.hex$register((Item) item, ItemFocus.SEALED_PRED,
+        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.SEALED_PRED,
             (stack, level, holder, holderID) -> item.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);
     }
 
     private static void registerPackagedSpellOverrides(ItemPackagedHex item) {
-        AccessorItemProperties.hex$register(item, ItemPackagedHex.HAS_PATTERNS_PRED,
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemPackagedHex.HAS_PATTERNS_PRED,
             (stack, level, holder, holderID) ->
                 item.getPatterns(stack) != null ? 1f : 0f
         );
     }
 
     private static void registerWandOverrides(ItemWand item) {
-        AccessorItemProperties.hex$register(item, ItemWand.FUNNY_LEVEL_PREDICATE,
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemWand.FUNNY_LEVEL_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
                 if (name.contains("old")) {

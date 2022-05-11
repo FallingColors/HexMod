@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.forge.datagen;
 
-import at.petrak.hexcasting.HexMod;
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.lib.HexBlockTags;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -17,16 +17,16 @@ import org.jetbrains.annotations.Nullable;
 public class HexItemTagProvider extends ItemTagsProvider {
     public HexItemTagProvider(DataGenerator pGenerator, BlockTagsProvider pBlockTagsProvider,
         @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, pBlockTagsProvider, HexMod.MOD_ID, existingFileHelper);
+        super(pGenerator, pBlockTagsProvider, HexAPI.MOD_ID, existingFileHelper);
     }
 
     @Override
     protected void addTags() {
-        tag(Tags.Items.GEMS).add(HexItems.CHARGED_AMETHYST.get());
-        tag(HexItemTags.AMETHYST_DUST).add(HexItems.AMETHYST_DUST.get());
-        tag(HexItemTags.WANDS).add(HexItems.WAND_OAK.get(), HexItems.WAND_SPRUCE.get(), HexItems.WAND_BIRCH.get(),
-            HexItems.WAND_JUNGLE.get(), HexItems.WAND_ACACIA.get(), HexItems.WAND_DARK_OAK.get(),
-            HexItems.WAND_CRIMSON.get(), HexItems.WAND_WARPED.get(), HexItems.WAND_AKASHIC.get());
+        tag(Tags.Items.GEMS).add(HexItems.CHARGED_AMETHYST);
+        tag(HexItemTags.AMETHYST_DUST).add(HexItems.AMETHYST_DUST);
+        tag(HexItemTags.WANDS).add(HexItems.WAND_OAK, HexItems.WAND_SPRUCE, HexItems.WAND_BIRCH,
+            HexItems.WAND_JUNGLE, HexItems.WAND_ACACIA, HexItems.WAND_DARK_OAK,
+            HexItems.WAND_CRIMSON, HexItems.WAND_WARPED, HexItems.WAND_AKASHIC);
         tag(HexItemTags.PHIAL_BASE).add(Items.GLASS_BOTTLE);
 
         this.copy(HexBlockTags.AKASHIC_LOGS, HexItemTags.AKASHIC_LOGS);

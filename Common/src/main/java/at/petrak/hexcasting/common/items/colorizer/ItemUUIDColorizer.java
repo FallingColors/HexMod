@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.items.colorizer;
 
 import at.petrak.hexcasting.api.addldata.Colorizer;
 import at.petrak.hexcasting.api.item.ColorizerItem;
-import at.petrak.paucal.api.contrib.Contributors;
+import at.petrak.paucal.api.PaucalAPI;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -20,10 +20,10 @@ public class ItemUUIDColorizer extends Item implements ColorizerItem {
 
     @Override
     public int color(ItemStack stack, UUID owner, float time, Vec3 position) {
-        var contributor = Contributors.getContributor(owner);
+        var contributor = PaucalAPI.instance().getContributor(owner);
         if (contributor != null) {
-            Object colorObj = contributor.getRaw("hexcasting:colorizer");
-            if (colorObj instanceof List<?> colorList) {
+            List<?> colorList = contributor.get("hexcasting:colorizer");
+            if (colorList != null) {
                 var colors = new int[colorList.size()];
                 var ok = true;
                 for (int i = 0; i < colorList.size(); i++) {
