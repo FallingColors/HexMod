@@ -50,7 +50,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             is Vec3 -> out.put(
                 TAG_VEC3, pl.serializeToNBT()
             )
-            is ArrayList<*> -> {
+            is SpellList -> {
                 val subtag = ListTag()
                 for (elt in pl)
                     subtag.add((elt as SpellDatum<*>).serializeToNBT())
@@ -92,7 +92,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         when (this.payload) {
             is Entity -> DatumType.ENTITY
             is Widget -> DatumType.WIDGET
-            is List<*> -> DatumType.LIST
+            is SpellList -> DatumType.LIST
             is HexPattern -> DatumType.PATTERN
             is Double -> DatumType.DOUBLE
             is Vec3 -> DatumType.VEC
@@ -102,14 +102,15 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
     companion object {
         @JvmStatic
         fun make(payload: Any): SpellDatum<*> =
-            if (payload is List<*>) {
-                SpellDatum(payload.map {
+            if (payload is SpellDatum<*>) {
+                payload
+            } else if (payload is List<*>) {
+                SpellDatum(SpellList.LList(0, payload.map {
                     when (it) {
                         null -> make(Widget.NULL)
-                        is SpellDatum<*> -> it
                         else -> make(it)
                     }
-                })
+                }))
             } else if (payload is Vec3) {
                 SpellDatum(
                     Vec3(
@@ -151,7 +152,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                         // this is safe because otherwise we wouldn't have been able to get the list before
                         out.add(DeserializeFromNBT(subtag as CompoundTag, world))
                     }
-                    SpellDatum(out)
+                    SpellDatum(SpellList.LList(0, out))
                 }
                 TAG_WIDGET -> {
                     SpellDatum(Widget.valueOf(nbt.getString(key)))
@@ -234,7 +235,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             Entity::class.java,
             Double::class.java,
             Vec3::class.java,
-            List::class.java,
+            SpellList::class.java,
             Widget::class.java,
             HexPattern::class.java,
         )
@@ -252,13 +253,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         const val TAG_ENTITY_NAME_CHEATY = "name"
 
         fun <T : Any> IsValidType(checkee: T): Boolean =
-            if (checkee is List<*>) {
-                // note it should be impossible to pass a spell datum that doesn't contain a valid type,
-                // but we best make sure.
-                checkee.all { it is SpellDatum<*> && IsValidType(it.payload) }
-            } else {
-                ValidTypes.any { clazz -> clazz.isAssignableFrom(checkee.javaClass) }
-            }
+            ValidTypes.any { clazz -> clazz.isAssignableFrom(checkee.javaClass) }
 
         @JvmStatic
         fun GetTagName(datumType: DatumType): String {
