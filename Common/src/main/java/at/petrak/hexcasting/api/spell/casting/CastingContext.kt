@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
@@ -49,7 +50,7 @@ data class CastingContext(
     }
 
     /**
-     * Throws if we get too deep
+     * Throws if we get too deep.
      */
     fun incDepth() {
         this.depth++
@@ -60,17 +61,17 @@ data class CastingContext(
     }
 
     /**
-     * Check to make sure a vec is in range
+     * Check to make sure a vec is in range.
      */
     fun assertVecInRange(vec: Vec3) {
         if (!isVecInRange(vec)) throw MishapLocationTooFarAway(vec)
     }
 
     /**
-     * Check to make sure an entity is in range
+     * Check to make sure an entity is in range. Will not mishap for players.
      */
     fun assertEntityInRange(entity: Entity) {
-        if (!isEntityInRange(entity)) throw MishapEntityTooFarAway(entity)
+        if (entity !is Player && !isEntityInRange(entity)) throw MishapEntityTooFarAway(entity)
     }
 
     fun hasBeenGivenMotion(target: Entity): Boolean {
@@ -101,9 +102,8 @@ data class CastingContext(
     }
 
     fun isEntityInRange(entity: Entity): Boolean {
-        if (this.spellCircle != null && this.spellCircle.activatorAlwaysInRange && entity == this.caster) {
+        if (this.spellCircle != null && this.spellCircle.activatorAlwaysInRange && this.caster == entity)
             return true
-        }
         return isVecInRange(entity.position())
     }
 
