@@ -54,7 +54,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
 
     @Override
     public boolean hasHex(ItemStack stack) {
-        return NBTHelper.hasCompound(stack, TAG_PATTERNS);
+        return NBTHelper.hasList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
     }
 
     @Override
