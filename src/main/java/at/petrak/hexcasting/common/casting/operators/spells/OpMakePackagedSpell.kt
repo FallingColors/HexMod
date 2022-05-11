@@ -22,7 +22,7 @@ class OpMakePackagedSpell<T : ItemPackagedSpell>(val itemType: T, val cost: Int)
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getChecked<ItemEntity>(0)
-        val patterns = args.getChecked<SpellList>(1)
+        val patterns = args.getChecked<SpellList>(1).toList()
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val spellHolder = HexCapabilities.getCapability(it, HexCapabilities.SPELL)
