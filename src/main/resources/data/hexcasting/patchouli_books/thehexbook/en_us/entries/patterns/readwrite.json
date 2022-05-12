@@ -57,6 +57,22 @@
       "input": "any",
       "output": "num",
       "text": "hexcasting.page.readwrite.writable"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:write/local",
+      "anchor": "hexcasting:write/local",
+      "input": "any",
+      "output": "",
+      "text": "hexcasting.page.readwrite.write/local"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:read/local",
+      "anchor": "hexcasting:read/local",
+      "input": "",
+      "output": "any",
+      "text": "hexcasting.page.readwrite.read/local"
     }
   ]
 }
