@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.math.HexPattern
@@ -47,7 +48,7 @@ class MishapInvalidIota(
             val key = "hexcasting.mishap.invalid_value.class." + when {
                 Double::class.java.isAssignableFrom(cls) || Double::class.javaObjectType.isAssignableFrom(cls) -> "double"
                 Vec3::class.java.isAssignableFrom(cls) -> "vector"
-                List::class.java.isAssignableFrom(cls) -> "list"
+                SpellList::class.java.isAssignableFrom(cls) -> "list"
                 Widget::class.java.isAssignableFrom(cls) -> "widget"
                 HexPattern::class.java.isAssignableFrom(cls) -> "pattern"
 
