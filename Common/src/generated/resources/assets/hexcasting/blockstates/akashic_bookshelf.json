@@ -1,0 +1,156 @@
+{
+  "variants": {
+    "datum_type=empty,facing=north": {
+      "model": "hexcasting:block/akashic_bookshelf_empty0",
+      "uvlock": true
+    },
+    "datum_type=entity,facing=north": {
+      "model": "hexcasting:block/akashic_bookshelf_entity3",
+      "uvlock": true
+    },
+    "datum_type=widget,facing=north": {
+      "model": "hexcasting:block/akashic_bookshelf_widget3",
+      "uvlock": true
+    },
+    "datum_type=list,facing=north": {
+      "model": "hexcasting:block/akashic_bookshelf_list3",
+      "uvlock": true
+    },
+    "datum_type=pattern,facing=north": {
+      "model": "hexcasting:block/akashic_bookshelf_pattern3",
+      "uvlock": true
+    },
+    "datum_type=double,facing=north": {
+      "model": "hexcasting:block/akashic_bookshelf_double3",
+      "uvlock": true
+    },
+    "datum_type=vec,facing=north": {
+      "model": "hexcasting:block/akashic_bookshelf_vec3",
+      "uvlock": true
+    },
+    "datum_type=other,facing=north": {
+      "model": "hexcasting:block/akashic_bookshelf_other3",
+      "uvlock": true
+    },
+    "datum_type=empty,facing=south": {
+      "model": "hexcasting:block/akashic_bookshelf_empty0",
+      "y": 180,
+      "uvlock": true
+    },
+    "datum_type=entity,facing=south": {
+      "model": "hexcasting:block/akashic_bookshelf_entity3",
+      "y": 180,
+      "uvlock": true
+    },
+    "datum_type=widget,facing=south": {
+      "model": "hexcasting:block/akashic_bookshelf_widget3",
+      "y": 180,
+      "uvlock": true
+    },
+    "datum_type=list,facing=south": {
+      "model": "hexcasting:block/akashic_bookshelf_list3",
+      "y": 180,
+      "uvlock": true
+    },
+    "datum_type=pattern,facing=south": {
+      "model": "hexcasting:block/akashic_bookshelf_pattern3",
+      "y": 180,
+      "uvlock": true
+    },
+    "datum_type=double,facing=south": {
+      "model": "hexcasting:block/akashic_bookshelf_double3",
+      "y": 180,
+      "uvlock": true
+    },
+    "datum_type=vec,facing=south": {
+      "model": "hexcasting:block/akashic_bookshelf_vec3",
+      "y": 180,
+      "uvlock": true
+    },
+    "datum_type=other,facing=south": {
+      "model": "hexcasting:block/akashic_bookshelf_other3",
+      "y": 180,
+      "uvlock": true
+    },
+    "datum_type=empty,facing=west": {
+      "model": "hexcasting:block/akashic_bookshelf_empty0",
+      "y": 270,
+      "uvlock": true
+    },
+    "datum_type=entity,facing=west": {
+      "model": "hexcasting:block/akashic_bookshelf_entity3",
+      "y": 270,
+      "uvlock": true
+    },
+    "datum_type=widget,facing=west": {
+      "model": "hexcasting:block/akashic_bookshelf_widget3",
+      "y": 270,
+      "uvlock": true
+    },
+    "datum_type=list,facing=west": {
+      "model": "hexcasting:block/akashic_bookshelf_list3",
+      "y": 270,
+      "uvlock": true
+    },
+    "datum_type=pattern,facing=west": {
+      "model": "hexcasting:block/akashic_bookshelf_pattern3",
+      "y": 270,
+      "uvlock": true
+    },
+    "datum_type=double,facing=west": {
+      "model": "hexcasting:block/akashic_bookshelf_double3",
+      "y": 270,
+      "uvlock": true
+    },
+    "datum_type=vec,facing=west": {
+      "model": "hexcasting:block/akashic_bookshelf_vec3",
+      "y": 270,
+      "uvlock": true
+    },
+    "datum_type=other,facing=west": {
+      "model": "hexcasting:block/akashic_bookshelf_other3",
+      "y": 270,
+      "uvlock": true
+    },
+    "datum_type=empty,facing=east": {
+      "model": "hexcasting:block/akashic_bookshelf_empty0",
+      "y": 90,
+      "uvlock": true
+    },
+    "datum_type=entity,facing=east": {
+      "model": "hexcasting:block/akashic_bookshelf_entity3",
+      "y": 90,
+      "uvlock": true
+    },
+    "datum_type=widget,facing=east": {
+      "model": "hexcasting:block/akashic_bookshelf_widget3",
+      "y": 90,
+      "uvlock": true
+    },
+    "datum_type=list,facing=east": {
+      "model": "hexcasting:block/akashic_bookshelf_list3",
+      "y": 90,
+      "uvlock": true
+    },
+    "datum_type=pattern,facing=east": {
+      "model": "hexcasting:block/akashic_bookshelf_pattern3",
+      "y": 90,
+      "uvlock": true
+    },
+    "datum_type=double,facing=east": {
+      "model": "hexcasting:block/akashic_bookshelf_double3",
+      "y": 90,
+      "uvlock": true
+    },
+    "datum_type=vec,facing=east": {
+      "model": "hexcasting:block/akashic_bookshelf_vec3",
+      "y": 90,
+      "uvlock": true
+    },
+    "datum_type=other,facing=east": {
+      "model": "hexcasting:block/akashic_bookshelf_other3",
+      "y": 90,
+      "uvlock": true
+    }
+  }
+}

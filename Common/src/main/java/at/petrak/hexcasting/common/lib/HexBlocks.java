@@ -171,7 +171,7 @@ public class HexBlocks {
         new BlockAkashicLog(akashicWoody()));
     public static final BlockAxis AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
         new BlockAkashicLog(akashicWoody()));
-    public static final Block AKASHIC_WOOD = blockItem("akashic_log",
+    public static final Block AKASHIC_WOOD = blockItem("akashic_wood",
         new BlockFlammable(akashicWoody(), 5, 5));
     public static final Block AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
         new BlockFlammable(akashicWoody(), 5, 5));
@@ -213,7 +213,6 @@ public class HexBlocks {
     }
 
     private static <T extends Block> T blockItem(String name, T block) {
-        blockNoItem(name, block);
         return blockItem(name, block, HexItems.props());
     }
 

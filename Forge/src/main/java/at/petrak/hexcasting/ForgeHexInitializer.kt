@@ -17,6 +17,8 @@ import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import at.petrak.hexcasting.forge.ForgeHexConfig
 import at.petrak.hexcasting.forge.ForgeOnlyEvents
 import at.petrak.hexcasting.forge.cap.CapSyncers
+import at.petrak.hexcasting.forge.datagen.HexDataGenerators
+import at.petrak.hexcasting.forge.datagen.lootmods.HexLootModifiers
 import at.petrak.hexcasting.forge.network.ForgePacketHandler
 import net.minecraft.commands.synchronization.ArgumentTypes
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer
@@ -33,7 +35,6 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
@@ -55,7 +56,6 @@ object ForgeHexInitializer {
             PatternResLocArgument::class.java,
             EmptyArgumentSerializer { PatternResLocArgument.id() }
         )
-        RegisterPatterns.registerPatterns()
         HexAdvancementTriggers.registerTriggers()
     }
 
@@ -86,6 +86,9 @@ object ForgeHexInitializer {
         bind(ForgeRegistries.ENTITIES, HexEntities::registerEntities)
 
         bind(ForgeRegistries.PARTICLE_TYPES, HexParticles::registerParticles)
+
+        val modBus = thedarkcolour.kotlinforforge.forge.MOD_BUS
+        HexLootModifiers.LOOT_MODS.register(modBus)
     }
 
     fun initListeners() {
@@ -105,12 +108,13 @@ object ForgeHexInitializer {
         }
 
         // We have to do these at some point when the registries are still open
-        modBus.addListener { _: RegistryEvent<Item> ->
+        modBus.addGenericListener(Item::class.java) { _: RegistryEvent<Item> ->
             HexRecipeSerializers.registerTypes()
             HexStatistics.register()
         }
 
         modBus.addListener { _: FMLLoadCompleteEvent ->
+            RegisterPatterns.registerPatterns()
             getLogger().info(
                 PatternRegistry.getPatternCountInfo()
             )
@@ -140,15 +144,17 @@ object ForgeHexInitializer {
             HexCommands.register(evt.dispatcher)
         }
 
+        modBus.register(HexDataGenerators::class.java)
         evBus.register(CapSyncers::class.java)
         evBus.register(ForgeOnlyEvents::class.java)
+
     }
 
     private fun <T : IForgeRegistryEntry<T>> bind(
         registry: IForgeRegistry<T>,
         source: Consumer<BiConsumer<T, ResourceLocation>>
     ) {
-        FMLJavaModLoadingContext.get().modEventBus.addGenericListener(
+        thedarkcolour.kotlinforforge.forge.MOD_BUS.addGenericListener(
             registry.registrySuperType
         ) { event: RegistryEvent.Register<T> ->
             val forgeRegistry = event.registry

@@ -1,0 +1,109 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "hexcasting:mana": 0.0,
+        "hexcasting:max_mana": 0.0
+      },
+      "model": "hexcasting:item/phial_small_0"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.25,
+        "hexcasting:max_mana": 0.0
+      },
+      "model": "hexcasting:item/phial_small_1"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.5,
+        "hexcasting:max_mana": 0.0
+      },
+      "model": "hexcasting:item/phial_small_2"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.75,
+        "hexcasting:max_mana": 0.0
+      },
+      "model": "hexcasting:item/phial_small_3"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 1.0,
+        "hexcasting:max_mana": 0.0
+      },
+      "model": "hexcasting:item/phial_small_4"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.0,
+        "hexcasting:max_mana": 1.0
+      },
+      "model": "hexcasting:item/phial_medium_0"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.25,
+        "hexcasting:max_mana": 1.0
+      },
+      "model": "hexcasting:item/phial_medium_1"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.5,
+        "hexcasting:max_mana": 1.0
+      },
+      "model": "hexcasting:item/phial_medium_2"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.75,
+        "hexcasting:max_mana": 1.0
+      },
+      "model": "hexcasting:item/phial_medium_3"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 1.0,
+        "hexcasting:max_mana": 1.0
+      },
+      "model": "hexcasting:item/phial_medium_4"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.0,
+        "hexcasting:max_mana": 2.0
+      },
+      "model": "hexcasting:item/phial_large_0"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.25,
+        "hexcasting:max_mana": 2.0
+      },
+      "model": "hexcasting:item/phial_large_1"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.5,
+        "hexcasting:max_mana": 2.0
+      },
+      "model": "hexcasting:item/phial_large_2"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 0.75,
+        "hexcasting:max_mana": 2.0
+      },
+      "model": "hexcasting:item/phial_large_3"
+    },
+    {
+      "predicate": {
+        "hexcasting:mana": 1.0,
+        "hexcasting:max_mana": 2.0
+      },
+      "model": "hexcasting:item/phial_large_4"
+    }
+  ]
+}

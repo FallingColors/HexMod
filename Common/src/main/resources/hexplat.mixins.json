@@ -7,6 +7,5 @@
   "mixins": [
     "MixinMob", "MixinVillager", "accessor.AccessorLivingEntity", "accessor.AccessorUseOnContext",
     "accessor.CriteriaTriggersAccessor"
-  ],
-  "client": ["client.AccessorItemProperties"]
+  ]
 }

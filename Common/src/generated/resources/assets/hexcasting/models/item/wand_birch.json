@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/handheld_rod",
+  "textures": {
+    "layer0": "hexcasting:item/wands/birch"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "hexcasting:funny_level": 0.0
+      },
+      "model": "hexcasting:item/wand_birch"
+    },
+    {
+      "predicate": {
+        "hexcasting:funny_level": 1.0
+      },
+      "model": "hexcasting:item/wand_old"
+    },
+    {
+      "predicate": {
+        "hexcasting:funny_level": 2.0
+      },
+      "model": "hexcasting:item/wand_bosnia"
+    }
+  ]
+}

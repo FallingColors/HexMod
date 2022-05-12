@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
@@ -67,7 +66,7 @@ public record BrainsweepRecipe(
         return ItemStack.EMPTY.copy();
     }
 
-    public static class Serializer implements RecipeSerializer<BrainsweepRecipe> {
+    public static class Serializer extends RecipeSerializerBase<BrainsweepRecipe> {
         @Override
         public BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
             var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));
@@ -90,11 +89,6 @@ public record BrainsweepRecipe(
             var villagerIn = VillagerIngredient.read(buf);
             var result = Block.stateById(buf.readVarInt());
             return new BrainsweepRecipe(recipeID, blockIn, villagerIn, result);
-        }
-
-        @SoftImplement("forge")
-        public Class<RecipeSerializer> getRegistryType() {
-            return RecipeSerializer.class;
         }
     }
 }

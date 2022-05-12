@@ -1,0 +1,17 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "hexcasting:block/akashic_planks1",
+        "weight": 3
+      },
+      {
+        "model": "hexcasting:block/akashic_planks2",
+        "weight": 3
+      },
+      {
+        "model": "hexcasting:block/akashic_planks3"
+      }
+    ]
+  }
+}

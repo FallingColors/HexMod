@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DCD",
+    "CIC",
+    "DCD"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:amethyst_block"
+    },
+    "D": {
+      "item": "minecraft:amethyst_block"
+    },
+    "I": {
+      "item": "hexcasting:amethyst_dust"
+    }
+  },
+  "result": {
+    "item": "hexcasting:amethyst_tiles",
+    "count": 8
+  }
+}

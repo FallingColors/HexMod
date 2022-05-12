@@ -1,0 +1,10 @@
+{
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/shipwreck_map"
+    }
+  ],
+  "stddev": 1.0,
+  "type": "hexcasting:scrolls"
+}

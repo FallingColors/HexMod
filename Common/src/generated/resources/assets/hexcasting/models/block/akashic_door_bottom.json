@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom",
+  "textures": {
+    "bottom": "hexcasting:block/akashic/door_lower",
+    "top": "hexcasting:block/akashic/door_upper"
+  }
+}

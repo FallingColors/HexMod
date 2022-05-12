@@ -1,0 +1,55 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:budding_amethyst"
+    },
+    "title": {
+      "translate": "advancement.hexcasting:root"
+    },
+    "description": {
+      "translate": "advancement.hexcasting:root.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true,
+    "background": "minecraft:textures/block/calcite.png"
+  },
+  "criteria": {
+    "on_thingy": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "stepping_on": {
+                "position": {
+                  "y": {
+                    "min": -64.0,
+                    "max": 30.0
+                  }
+                }
+              }
+            },
+            "entity": "this"
+          }
+        ],
+        "items": [
+          {
+            "items": [
+              "hexcasting:amethyst_dust",
+              "minecraft:amethyst_shard",
+              "hexcasting:charged_amethyst"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "on_thingy"
+    ]
+  ]
+}

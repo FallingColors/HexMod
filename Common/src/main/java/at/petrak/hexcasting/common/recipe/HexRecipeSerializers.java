@@ -20,9 +20,14 @@ public class HexRecipeSerializers {
     }
 
     private static final Map<ResourceLocation, RecipeSerializer<?>> SERIALIZERS = new LinkedHashMap<>();
-    public static final RecipeSerializer<?> BRAINSWEEP = register("brainsweep",
-        new BrainsweepRecipe.Serializer());
+
+    public static final RecipeSerializer<?> BRAINSWEEP = register("brainsweep", new BrainsweepRecipe.Serializer());
     public static RecipeType<BrainsweepRecipe> BRAINSWEEP_TYPE;
+    public static final RecipeSerializer<SealFocusRecipe> SEAL_FOCUS = register("seal_focus",
+        SealFocusRecipe.SERIALIZER);
+    public static final RecipeSerializer<SealSpellbookRecipe> SEAL_SPELLBOOK = register(
+        "seal_spellbook",
+        SealSpellbookRecipe.SERIALIZER);
 
     private static <T extends Recipe<?>> RecipeSerializer<T> register(String name, RecipeSerializer<T> rs) {
         var old = SERIALIZERS.put(modLoc(name), rs);
