@@ -67,7 +67,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
         var out = new ArrayList<SpellDatum<?>>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
-            if (tag.size() > 1)
+            if (tag.size() != 1)
                 out.add(SpellDatum.make(HexPattern.DeserializeFromNBT(tag)));
             else
                 out.add(SpellDatum.DeserializeFromNBT(tag, level));
