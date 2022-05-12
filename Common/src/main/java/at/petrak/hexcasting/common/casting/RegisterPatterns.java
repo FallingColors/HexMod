@@ -19,6 +19,8 @@ import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
 import at.petrak.hexcasting.common.casting.operators.eval.OpEvalDelay;
 import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
 import at.petrak.hexcasting.common.casting.operators.lists.*;
+import at.petrak.hexcasting.common.casting.operators.local.OpPeekLocal;
+import at.petrak.hexcasting.common.casting.operators.local.OpPushLocal;
 import at.petrak.hexcasting.common.casting.operators.math.*;
 import at.petrak.hexcasting.common.casting.operators.math.bit.*;
 import at.petrak.hexcasting.common.casting.operators.math.logic.*;
@@ -337,6 +339,11 @@ public class RegisterPatterns {
                 modLoc("read/entity"), OpTheCoolerRead.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("wawqwqwqwqwqwew", HexDir.EAST),
                 modLoc("readable/entity"), OpTheCoolerReadable.INSTANCE);
+
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qeewdweddw", HexDir.NORTH_EAST),
+                modLoc("read/local"), OpPeekLocal.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqqwawqaaw", HexDir.NORTH_WEST),
+                modLoc("write/local"), OpPushLocal.INSTANCE);
 
             // == Consts ==
 
