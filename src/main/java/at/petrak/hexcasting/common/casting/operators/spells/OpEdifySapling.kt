@@ -30,7 +30,7 @@ object OpEdifySapling : SpellOperator {
 
         return Triple(
             Spell(bpos),
-            ManaConstants.DUST_UNIT,
+            ManaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray(Vec3.atCenterOf(bpos), Vec3(0.0, 2.0, 0.0), 0.1, Math.PI / 4, 100))
         )
     }
