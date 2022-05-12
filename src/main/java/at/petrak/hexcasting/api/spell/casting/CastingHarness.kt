@@ -56,23 +56,40 @@ class CastingHarness private constructor(
     }
 
     fun getUpdate(iota: SpellDatum<*>, world: ServerLevel): CastResult {
-        // wouldn't it be nice to be able to go paren'
-        // i guess i'll call it paren2
-        val paren2 = this.handleParentheses(iota)
-        if (paren2 != null) {
-            return CastResult(
-                paren2,
-                listOf()
-            )
-        }
+        try {
+            // wouldn't it be nice to be able to go paren'
+            // i guess i'll call it paren2
+            val paren2 = this.handleParentheses(iota)
+            if (paren2 != null) {
+                return CastResult(
+                    paren2,
+                    listOf()
+                )
+            }
 
-        return if (iota.getType() == DatumType.PATTERN) {
-            updateWithPattern(iota.payload as HexPattern, world)
-        } else {
-            CastResult(
+            return if (iota.getType() == DatumType.PATTERN) {
+                updateWithPattern(iota.payload as HexPattern, world)
+            } else {
+                CastResult(
+                    this.getFunctionalData(),
+                    listOf(
+                        OperatorSideEffect.DoMishap(
+                            MishapUnescapedValue(iota),
+                            Mishap.Context(HexPattern(HexDir.WEST), null)
+                        )
+                    ),
+                )
+            }
+        } catch (mishap: Mishap) {
+            return CastResult(
                 this.getFunctionalData(),
-                listOf(OperatorSideEffect.DoMishap(MishapUnescapedValue(iota),
-                    Mishap.Context(HexPattern(HexDir.WEST), null))),
+                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null))),
+            )
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            return CastResult(
+                this.getFunctionalData(),
+                listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)))
             )
         }
     }
@@ -398,15 +415,15 @@ class CastingHarness private constructor(
                 }
 
                 val localTag = nbt.getCompound(TAG_LOCAL)
-                val localIota = SpellDatum.DeserializeFromNBT(localTag, ctx.world)
+                val localIota = if (localTag.size() == 1) SpellDatum.DeserializeFromNBT(localTag, ctx.world) else SpellDatum.make(Widget.NULL)
 
                 val parenthesized = mutableListOf<SpellDatum<*>>()
                 val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND)
                 for (subtag in parenTag) {
-                    if (subtag.asCompound.size() > 1)
+                    if (subtag.asCompound.size() != 1)
                         parenthesized.add(SpellDatum.make(HexPattern.DeserializeFromNBT(subtag.asCompound)))
                     else
-                        parenthesized.add(SpellDatum.DeserializeFromNBT(nbt, ctx.world))
+                        parenthesized.add(SpellDatum.DeserializeFromNBT(subtag.asCompound, ctx.world))
                 }
 
                 val parenCount = nbt.getInt(TAG_PAREN_COUNT)
