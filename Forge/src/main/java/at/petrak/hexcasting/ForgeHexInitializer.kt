@@ -97,7 +97,7 @@ object ForgeHexInitializer {
         // game events
         val evBus = thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
-        modBus.register(ForgeHexClientInitializer::class.java)
+        modBus.addListener(ForgeHexClientInitializer::clientInit)
 
         modBus.addListener { evt: FMLCommonSetupEvent ->
             evt.enqueueWork {
@@ -147,7 +147,6 @@ object ForgeHexInitializer {
         modBus.register(HexDataGenerators::class.java)
         evBus.register(CapSyncers::class.java)
         evBus.register(ForgeOnlyEvents::class.java)
-
     }
 
     private fun <T : IForgeRegistryEntry<T>> bind(

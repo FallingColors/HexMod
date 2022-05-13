@@ -38,6 +38,6 @@ side = "BOTH"
 [[dependencies.hexcasting]]
 modId = "paucal"
 mandatory = true
-versionRange = "[0.2.0,)"
+versionRange = "[0.4.0,0.5.0)"
 ordering = "NONE"
 side = "BOTH"
