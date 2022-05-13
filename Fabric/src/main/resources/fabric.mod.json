@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      {"adapter": "kotlin", "value": "at.petrak.hexcasting.FabricHexInitializer"}
+      {"adapter": "kotlin", "value": "at.petrak.hexcasting.fabric.FabricHexInitializer"}
     ],
     "client": [
-      {"adapter": "kotlin", "value": "at.petrak.hexcasting.FabricHexInitializer"}
+      {"adapter": "kotlin", "value": "at.petrak.hexcasting.fabric.FabricHexClientInitializer"}
     ],
     "cardinal-components": [
       "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"

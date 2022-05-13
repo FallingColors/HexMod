@@ -28,7 +28,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern,
                                     List<ResolvedPattern> resolvedPatterns)
     implements IMessage {
-    public static final ResourceLocation ID = modLoc("patCS");
+    public static final ResourceLocation ID = modLoc("pat_cs");
 
     @Override
     public ResourceLocation getFabricId() {

@@ -212,6 +212,7 @@ object PatternRegistry {
     private const val TAG_OP_ID = "op_id"
     private const val TAG_START_DIR = "start_dir"
 
+    @JvmStatic
     fun getPatternCountInfo(): String = "Loaded ${regularPatternLookup.size} regular patterns, " +
             "${perWorldPatternLookup.size} per-world patterns, and " +
             "${specialHandlers.size} special handlers."

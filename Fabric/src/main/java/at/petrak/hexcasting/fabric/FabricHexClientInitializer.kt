@@ -1,3 +1,5 @@
+package at.petrak.hexcasting.fabric
+
 import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.HexAdditionalRenderers
 import at.petrak.hexcasting.client.RegisterClientStuff

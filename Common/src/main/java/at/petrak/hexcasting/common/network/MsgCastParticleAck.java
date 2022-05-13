@@ -18,7 +18,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * Sent server->client to spray particles everywhere.
  */
 public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer) implements IMessage {
-    public static final ResourceLocation ID = modLoc("cPrtl");
+    public static final ResourceLocation ID = modLoc("cprtcl");
 
     @Override
     public ResourceLocation getFabricId() {

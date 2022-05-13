@@ -1,3 +1,5 @@
+package at.petrak.hexcasting.fabric
+
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
@@ -8,7 +10,6 @@ import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
-import at.petrak.hexcasting.fabric.FabricHexConfig
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import net.fabricmc.api.ModInitializer

@@ -17,7 +17,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * Sent server->client when the player finishes casting a spell.
  */
 public record MsgNewSpellPatternAck(ControllerInfo info) implements IMessage {
-    public static final ResourceLocation ID = modLoc("patSC");
+    public static final ResourceLocation ID = modLoc("pat_sc");
 
     @Override
     public ResourceLocation getFabricId() {

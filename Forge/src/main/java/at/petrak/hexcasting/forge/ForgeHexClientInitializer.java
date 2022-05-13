@@ -1,4 +1,4 @@
-package at.petrak.hexcasting;
+package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.HexAdditionalRenderers;
@@ -10,22 +10,14 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // This is Java because I can't kotlin-fu some of the consumers
 public class ForgeHexClientInitializer {
     @SubscribeEvent
     public static void clientInit(FMLClientSetupEvent evt) {
-        RegisterClientStuff.init();
+        evt.enqueueWork(RegisterClientStuff::init);
 
-        var modBus = FMLJavaModLoadingContext.get().getModEventBus();
         var evBus = MinecraftForge.EVENT_BUS;
-
-        modBus.addListener(EventPriority.LOWEST, (ParticleFactoryRegisterEvent e) ->
-            RegisterClientStuff.registerParticles());
-
-        modBus.addListener((EntityRenderersEvent.RegisterRenderers e) ->
-            RegisterClientStuff.registerBlockEntityRenderers(e::registerBlockEntityRenderer));
 
         evBus.addListener((RenderLevelLastEvent e) ->
             HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick()));
@@ -39,5 +31,15 @@ public class ForgeHexClientInitializer {
             var cancel = ShiftScrollListener.onScroll(e.getScrollDelta());
             e.setCanceled(cancel);
         });
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void registerParticles(ParticleFactoryRegisterEvent evt) {
+        RegisterClientStuff.registerParticles();
+    }
+
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers evt) {
+        RegisterClientStuff.registerBlockEntityRenderers(evt::registerBlockEntityRenderer);
     }
 }

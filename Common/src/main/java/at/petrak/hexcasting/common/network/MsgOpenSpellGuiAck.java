@@ -19,7 +19,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> patterns, List<Component> components)
     implements IMessage {
-    public static final ResourceLocation ID = modLoc("cGui");
+    public static final ResourceLocation ID = modLoc("cgui");
 
     @Override
     public ResourceLocation getFabricId() {

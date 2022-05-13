@@ -25,7 +25,6 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +34,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ForgeCapabilityHandler {
-
     private static final ResourceLocation DATA_HOLDER_CAPABILITY = new ResourceLocation("hexcasting", "data_holder");
     private static final ResourceLocation DATA_ITEM_CAPABILITY = new ResourceLocation("hexcasting", "data_item");
     private static final ResourceLocation MANA_HOLDER_CAPABILITY = new ResourceLocation("hexcasting", "mana_holder");
@@ -43,7 +41,6 @@ public class ForgeCapabilityHandler {
     private static final ResourceLocation SPELL_HOLDER_CAPABILITY = new ResourceLocation("hexcasting", "spell_item");
     private static final ResourceLocation COLORIZER_CAPABILITY = new ResourceLocation("hexcasting", "colorizer");
 
-    @SubscribeEvent
     public static void registerCaps(RegisterCapabilitiesEvent evt) {
         evt.register(ManaHolder.class);
         evt.register(DataHolder.class);
@@ -51,8 +48,7 @@ public class ForgeCapabilityHandler {
         evt.register(Colorizer.class);
     }
 
-    @SubscribeEvent
-    public static void attachCaps(AttachCapabilitiesEvent<ItemStack> evt) {
+    public static void attachItemCaps(AttachCapabilitiesEvent<ItemStack> evt) {
         ItemStack stack = evt.getObject();
         if (stack.getItem() instanceof ManaHolderItem holder) {
             evt.addCapability(MANA_HOLDER_CAPABILITY, provide(HexCapabilities.MANA,
@@ -71,8 +67,8 @@ public class ForgeCapabilityHandler {
         if (stack.getItem() instanceof DataHolderItem holder) {
             evt.addCapability(DATA_HOLDER_CAPABILITY, provide(HexCapabilities.DATUM,
                 () -> new ItemBasedDataHolder(holder, stack)));
-        } else if (stack.is(Items.PUMPKIN_PIE)) // haha yes
-        {
+        } else if (stack.is(Items.PUMPKIN_PIE)) {
+            // haha yes
             evt.addCapability(DATA_ITEM_CAPABILITY, provide(HexCapabilities.DATUM,
                 () -> new StaticDatumHolder((s) -> SpellDatum.make(Math.PI * s.getCount()), stack)));
         }
