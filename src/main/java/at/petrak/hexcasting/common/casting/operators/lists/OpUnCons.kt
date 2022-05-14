@@ -7,10 +7,13 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 
-// it's still called beancounter's distillation in my heart
-object OpListSize : ConstManaOperator {
+object OpUnCons : ConstManaOperator {
     override val argc = 1
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        return spellListOf(args.getChecked<SpellList>(0).toList().size.toDouble()) // mmm one-liner
+        val list = args.getChecked<SpellList>(0)
+        if (list.nonEmpty) {
+            return spellListOf(list.cdr, list.car)
+        }
+        throw ArrayIndexOutOfBoundsException()
     }
 }

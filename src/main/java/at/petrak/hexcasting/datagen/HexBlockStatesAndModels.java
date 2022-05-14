@@ -17,6 +17,8 @@ import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
+
 public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
     public HexBlockStatesAndModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
         super(gen, HexMod.MOD_ID, exFileHelper);
@@ -168,7 +170,8 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
 
         blockAndItem(HexBlocks.SLATE_BLOCK.get(), models().cubeAll("slate_block", modLoc("block/slate")));
-        cubeBlockAndItem(HexBlocks.AMETHYST_DUST_BLOCK.get(), "amethyst_dust_block");
+        blockAndItem(HexBlocks.AMETHYST_DUST_BLOCK.get(),
+            models().singleTexture("amethyst_dust_block", modLoc(BLOCK_FOLDER + "/cube_half_mirrored"), "all", modLoc("block/amethyst_dust_block")));
         cubeBlockAndItem(HexBlocks.AMETHYST_TILES.get(), "amethyst_tiles");
         cubeBlockAndItem(HexBlocks.SCROLL_PAPER.get(), "scroll_paper");
         cubeBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER.get(), "ancient_scroll_paper");

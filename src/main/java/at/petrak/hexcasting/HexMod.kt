@@ -14,6 +14,7 @@ import at.petrak.hexcasting.common.command.HexCommands
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.HexItems
+import at.petrak.hexcasting.common.items.JewelerHammerHandler
 import at.petrak.hexcasting.common.lib.HexCapabilityHandler
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.misc.Brainsweeping
@@ -93,6 +94,7 @@ object HexMod {
         evBus.register(HexPlayerDataHelper::class.java)
         evBus.register(OpFlight)
         evBus.register(Brainsweeping::class.java)
+        evBus.register(JewelerHammerHandler::class.java)
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT) {
             Runnable {

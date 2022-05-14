@@ -10,10 +10,7 @@ import at.petrak.hexcasting.common.items.magic.ItemCypher;
 import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemTrinket;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -75,6 +72,9 @@ public class HexItems {
 
     public static final RegistryObject<ItemManaBattery> BATTERY = ITEMS.register("battery",
         () -> new ItemManaBattery(props().stacksTo(1)));
+
+    public static final RegistryObject<PickaxeItem> JEWELER_HAMMER = ITEMS.register("jeweler_hammer",
+        () -> new PickaxeItem(Tiers.IRON, 0, -2.8F, props().stacksTo(1)));
 
     public static final EnumMap<DyeColor, RegistryObject<ItemDyeColorizer>> DYE_COLORIZERS = new EnumMap<>(
         DyeColor.class);

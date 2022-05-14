@@ -20,13 +20,13 @@ class OpErase : SpellOperator {
             val spellHolder = HexCapabilities.getCapability(it, HexCapabilities.SPELL)
             val datumHolder = HexCapabilities.getCapability(it, HexCapabilities.DATUM)
 
-            (spellHolder.isPresent && spellHolder.get().patterns != null) ||
+            (spellHolder.isPresent && spellHolder.get().hasSpell()) ||
                     (datumHolder.isPresent && datumHolder.get().writeDatum(null, true))
         }
         val spellHolder = HexCapabilities.getCapability(handStack, HexCapabilities.SPELL)
         val datumHolder = HexCapabilities.getCapability(handStack, HexCapabilities.DATUM)
 
-        if ((!spellHolder.isPresent || spellHolder.get().patterns == null) &&
+        if ((!spellHolder.isPresent || !spellHolder.get().hasSpell()) &&
             (!datumHolder.isPresent || datumHolder.get().readDatum(ctx.world) == null ||
                     !datumHolder.get().writeDatum(null, true))) {
             throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
@@ -41,13 +41,13 @@ class OpErase : SpellOperator {
                 val spellHolder = HexCapabilities.getCapability(it, HexCapabilities.SPELL)
                 val datumHolder = HexCapabilities.getCapability(it, HexCapabilities.DATUM)
 
-                (spellHolder.isPresent && spellHolder.get().patterns != null) ||
+                (spellHolder.isPresent && spellHolder.get().hasSpell()) ||
                         (datumHolder.isPresent && datumHolder.get().writeDatum(null, true))
             }
             val spellHolder = HexCapabilities.getCapability(handStack, HexCapabilities.SPELL)
             val datumHolder = HexCapabilities.getCapability(handStack, HexCapabilities.DATUM)
 
-            if (spellHolder.isPresent && spellHolder.get().patterns != null)
+            if (spellHolder.isPresent && spellHolder.get().hasSpell())
                 spellHolder.get().clearPatterns()
 
             if (datumHolder.isPresent && datumHolder.get().writeDatum(null, true))

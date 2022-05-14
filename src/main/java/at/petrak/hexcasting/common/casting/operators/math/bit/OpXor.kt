@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.common.casting.operators.math.MathOpUtils
 import kotlin.math.roundToInt
@@ -16,7 +17,7 @@ object OpXor : ConstManaOperator {
 
         if (firstParam.right().isPresent) {
             val list1 = firstParam.right().get()
-            val list2 = args.getChecked<List<SpellDatum<*>>>(1)
+            val list2 = args.getChecked<SpellList>(1)
             return spellListOf(list1.filter { it !in list2 } + list2.filter { it !in list1 })
         }
 

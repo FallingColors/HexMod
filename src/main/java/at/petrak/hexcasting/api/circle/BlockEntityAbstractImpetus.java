@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.mod.HexApiSounds;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
+import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.SpellCircleContext;
@@ -310,7 +311,7 @@ public abstract class BlockEntityAbstractImpetus extends PaucalBlockEntity imple
                 if (bs.getBlock() instanceof BlockCircleComponent cc) {
                     var newPattern = cc.getPattern(tracked, bs, this.level);
                     if (newPattern != null) {
-                        var info = harness.executeNewPattern(newPattern, splayer.getLevel());
+                        var info = harness.executeNewIota(SpellDatum.make(newPattern), splayer.getLevel());
                         if (info.getWasSpellCast()) {
                             castSpell = true;
                             if (info.getHasCastingSound()) {

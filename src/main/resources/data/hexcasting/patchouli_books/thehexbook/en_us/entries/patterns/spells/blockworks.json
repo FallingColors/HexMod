@@ -86,9 +86,5 @@
       "output": "",
       "text": "hexcasting.page.blockworks.extinguish"
     }
-  ],
-  "extra_recipe_mappings": {
-    "hexcasting:conjured": 5,
-    "hexcasting:conjured_block": 4
-  }
+  ]
 }
