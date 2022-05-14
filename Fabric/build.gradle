@@ -1,6 +1,6 @@
 plugins {
-    id 'fabric-loom' version '0.11-SNAPSHOT'
-    id 'maven-publish'
+    id 'fabric-loom' version "$loomVersion"
+    id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
 }
 
 version = getVersion("fabric")
@@ -42,20 +42,21 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${fabricLoaderVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricVersion}"
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
+
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":Common")
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     modImplementation "at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion-fabric"
     modImplementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FABRIC"
 
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
-    implementation "me.zeroeightsix:fiber:$fiberVersion"
+    modImplementation "me.zeroeightsix:fiber:$fiberVersion"
+    include "me.zeroeightsix:fiber:$fiberVersion"
 
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:$cardinalComponentsVersion"
 
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
+    include "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
 }
 
 compileJava {

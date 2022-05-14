@@ -14,6 +14,7 @@ import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -59,7 +60,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public Attribute getReachDistance() {
-        return jaredFixYourSite;
+        return ReachEntityAttributes.REACH;
     }
 
     @Override

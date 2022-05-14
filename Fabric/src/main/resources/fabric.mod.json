@@ -49,6 +49,8 @@
       "hexcasting:favored_colorizer",
       "hexcasting:sentinel",
       "hexcasting:flight",
+      "hexcasting:harness",
+      "hexcasting:patterns",
 
       "hexcasting:colorizer",
       "hexcasting:data_holder",
