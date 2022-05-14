@@ -17,8 +17,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +32,6 @@ import java.util.concurrent.ConcurrentMap;
  * <p>
  * Client-side only.
  */
-@OnlyIn(Dist.CLIENT)
 public final class ScryingLensOverlayRegistry {
     private static final ConcurrentMap<ResourceLocation, OverlayBuilder> ID_LOOKUP = new ConcurrentHashMap<>();
     // vectors are thread-safe!

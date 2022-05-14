@@ -38,8 +38,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -110,7 +108,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         this.stepCircle();
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
         BlockState state, BlockPos pos,
         LocalPlayer observer, ClientLevel world,

@@ -93,7 +93,7 @@ subprojects {
         }
 
         maven {
-            name = 'BlameJared Maven (CrT / Bookshelf)'
+            name = 'BlameJared Maven'
             url = 'https://maven.blamejared.com'
         }
     }

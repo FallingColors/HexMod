@@ -1,10 +1,29 @@
 plugins {
     id 'fabric-loom' version '0.11-SNAPSHOT'
     id 'maven-publish'
-    id 'idea'
 }
 
 version = getVersion("fabric")
+
+loom {
+    mixin.defaultRefmapName = "hexcasting.refmap.json"
+
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+        }
+
+        configureEach {
+            runDir "run"
+            ideConfigGenerated(true)
+        }
+    }
+}
 
 repositories {
     mavenCentral()
@@ -24,12 +43,12 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabricLoaderVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricVersion}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    implementation project(":Common")
+    compileOnly project(":Common")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     modImplementation "at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion-fabric"
-    modImplementation("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion:api")
+    modImplementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FABRIC"
 
     modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
     implementation "me.zeroeightsix:fiber:$fiberVersion"
@@ -37,27 +56,14 @@ dependencies {
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:$cardinalComponentsVersion"
 
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
-    include "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
 }
 
-loom {
-    mixin.defaultRefmapName = "hexcasting.refmap.json"
+compileJava {
+    source(project(":Common").sourceSets.main.allSource)
+}
 
-    runs {
-        client {
-            client()
-            setConfigName("Fabric Client")
-            ideConfigGenerated(true)
-            runDir("Fabric/run")
-        }
-        server {
-            server()
-            setConfigName("Fabric Server")
-            ideConfigGenerated(true)
-            runDir("Fabric/run")
-
-        }
-    }
+sourcesJar {
+    from project(":Common").sourceSets.main.allJava
 }
 
 sourceSets.main.resources {
@@ -72,10 +78,6 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
-}
-
-tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
 }
 
 jar {

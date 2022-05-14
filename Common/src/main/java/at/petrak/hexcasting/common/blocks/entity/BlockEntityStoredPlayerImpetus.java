@@ -16,8 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -54,8 +52,6 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         return this.getPlayer();
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
         BlockState state, BlockPos pos, LocalPlayer observer,
         ClientLevel world,

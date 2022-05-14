@@ -14,12 +14,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class BlockEntitySlateRenderer implements BlockEntityRenderer<BlockEntitySlate> {
-
     public BlockEntitySlateRenderer(BlockEntityRendererProvider.Context ctx) {
         // NO-OP
     }

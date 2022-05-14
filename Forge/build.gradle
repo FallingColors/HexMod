@@ -126,7 +126,6 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
-    maven { url 'https://maven.blamejared.com' }
 
     maven {
         // location of the maven that hosts JEI files
@@ -167,7 +166,6 @@ mixin {
     config "hexcasting_forge.mixins.json"
 }
 
-
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
@@ -185,7 +183,6 @@ processResources {
         expand "version": project.version
     }
 }
-
 
 jar.finalizedBy('reobfJar')
 
