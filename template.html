@@ -12,24 +12,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <style>
       header {
-        width: 50%;
-        margin-top: 2em;
-        margin-left: auto;
-        margin-right: auto;
-        background: lightgrey;
-        padding: 2em;
-        border-radius: 1em;
       }
       main {
-        width: 70%;
-        margin-left: auto;
-        margin-right: auto;
       }
+      h4 {
+        min-width: 0;
+      }
+
       details {
         display: inline-block;
         border: 1px solid #aaa;
         border-radius: 4px;
         padding: .5em .5em 0;
+        margin-bottom: .5em;
       }
 
       summary {
@@ -46,21 +41,22 @@
         border-bottom: 1px solid #aaa;
         margin-bottom: .5em;
       }
-      details > .collapse-spell::before {
+
+      details .collapse-spell::before {
         content: "Click to show spell";
       }
-      details[open] > .collapse-spell::before {
+      details[open] .collapse-spell::before {
         content: "Click to hide spell";
       }
       a.permalink {
+        vertical-align: middle;
         margin-left: 0.5em;
-        color: lightgray;
       }
       a.permalink:hover {
-        color: gray;
+        color: lightgray;
       }
       p {
-        margin: 0.5ex;
+        margin: 0.5ex 0;
       }
       p.fake-li {
         margin: 0;
@@ -82,6 +78,8 @@
     </style>
     <script>
       "use strict";
+      const speeds = [0, 0.25, 0.5, 1, 2, 4];
+      const scrollThreshold = 100;
       const rfaQueue = [];
       function startAngle(str) {
         switch (str) {
@@ -109,6 +107,8 @@
         const str = canvas.dataset.string;
         let angle = startAngle(canvas.dataset.start);
         const perWorld = canvas.dataset.perWorld === "True";
+
+        // build geometry
         const points = [[0, 0]];
         let lastPoint = points[0];
         let minPoint = lastPoint, maxPoint = lastPoint;
@@ -142,6 +142,8 @@
           }
           uniqPoints.push(point);
         }
+
+        // rendering code
         const strokeStyle = "darkgray";
         const strokeVisitedStyle = "#0c8";
         const strokeWidth = scale / 12;
@@ -154,11 +156,18 @@
         const context = canvas.getContext("2d");
         const negaProgress = -3;
         let progress = 0;
+        let scrollTimeout = 1e309;
+        let speedLevel = 3;
+        let speedIncrement = 0;
+        function speedScale() {
+          return speeds[speedLevel];
+        }
         const tick = dt => {
+          scrollTimeout += dt;
           if (canvas.offsetParent === null) return;
 
           if (!perWorld) {
-            progress += speed * dt;
+            progress += speed * dt * (progress > 0 ? speedScale() : Math.sqrt(speedScale()));
           }
           if (progress >= truePoints.length - 1) {
             progress = negaProgress;
@@ -212,8 +221,31 @@
             context.fillStyle = `rgba(255, 255, 255, ${fadeColor})`;
             context.fillRect(0, 0, canvas.width, canvas.height);
           }
+          if (scrollTimeout <= 2000) {
+            context.fillStyle = `rgba(200, 200, 200, ${(2000 - scrollTimeout) / 1000})`;
+            context.font = `${scale * 0.5}px sans-serif`;
+            console.log(context.font);
+            context.fillText(speedScale() ? speedScale() + "x" : "Paused", 0.2 * scale, canvas.height - 0.2 * scale);
+          }
         };
         rfaQueue.push(tick);
+
+        // scrolling input
+        canvas.addEventListener("wheel", ev => {
+          speedIncrement += ev.deltaY;
+          const oldSpeedLevel = speedLevel;
+          if (speedIncrement >= scrollThreshold) {
+            speedLevel--;
+          } else if (speedIncrement <= -scrollThreshold) {
+            speedLevel++;
+          }
+          if (oldSpeedLevel != speedLevel) {
+            speedIncrement = 0;
+            speedLevel = Math.max(0, Math.min(speeds.length - 1, speedLevel));
+            scrollTimeout = 0;
+          }
+          ev.preventDefault();
+        });
       }
       function hookLoad(elem) {
         let init = false;
@@ -240,12 +272,13 @@
 
   </head>
   <body>
-  <header>
-    <h1>This is the online version of the Hexcasting documentation.</h1>
-    <p>It's a work in progress, but I'm posting it now so that you can all get some use out of it.</p>
-    <p><b>WARNING: THIS DOCUMENT CONTAINS SPOILERS!</b> Like, at the very beginning of the doc. Sorry, my bad, haven't figured out how to selectively disable entries yet.</p>
-    <i style="margin-right: 0.5em; color: #EEEEEE;" class="icon-home icon-4x">sus</i>
-  </header>
+  <div class="container" style="margin-top: 3em;">
+    <blockquote>
+      <h1>This is the online version of the Hexcasting documentation.</h1>
+      <p>It's a work in progress, but I'm posting it now so that you can all get some use out of it.</p>
+      <p><b>WARNING: THIS DOCUMENT CONTAINS SPOILERS!</b> Read at your own risk.</p>
+    </blockquote>
+  </div>
 #DO_NOT_RENDER basics/couldnt_cast basics/start_to_see
 #DUMP_BODY_HERE
   </body>

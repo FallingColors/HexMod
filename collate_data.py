@@ -84,10 +84,7 @@ def parse_style(sty):
     if sty[:2] == "k:":
         return keys[sty[2:]], None
     if sty[:2] == "l:":
-        link = sty[2:]
-        if "://" not in link:
-            link = "#" + link.replace("#", "@")
-        return "", Style("link", link)
+        return "", Style("link", sty[2:])
     if sty == "/l":
         return "", Style("link", None)
     if sty == "playername":
@@ -203,10 +200,14 @@ def resolve_pattern(root_data, page):
     page["op"] = [root_data["pattern_reg"][page["op_id"]]]
     page["name"] = localize(root_data["i18n"], "hexcasting.spell." + page["op_id"])
 
-def fixup_pattern(per_world, root_data, page):
+def fixup_pattern(do_sig, root_data, page):
     patterns = page["patterns"]
     if not isinstance(patterns, list): patterns = [patterns]
-    page["op"] = [(p["signature"], p["startdir"], per_world) for p in patterns]
+    if do_sig:
+        inp = page.get("input", None) or "nothing"
+        oup = page.get("output", None) or "nothing"
+        page["header"] += f" ({inp} \u2192 {oup})"
+    page["op"] = [(p["signature"], p["startdir"], False) for p in patterns]
 
 def fetch_recipe_result(root_data, recipe):
     modid, recipeid = recipe.split(":")
@@ -225,8 +226,8 @@ def localize_item(root_data, item):
 
 page_types = {
     "hexcasting:pattern": resolve_pattern,
-    "hexcasting:manual_pattern": bind1(fixup_pattern, False),
-    "hexcasting:manual_pattern_nosig": bind1(fixup_pattern, True),
+    "hexcasting:manual_pattern": bind1(fixup_pattern, True),
+    "hexcasting:manual_pattern_nosig": bind1(fixup_pattern, False),
     "patchouli:link": lambda rd, page: do_localize(rd, page, "link_text"),
     "patchouli:crafting": lambda rd, page: page.__setitem__("item_name", localize_item(rd, fetch_recipe_result(rd, page["recipe"]))),
     "hexcasting:crafting_multi": lambda rd, page: page.__setitem__("item_name", [localize_item(rd, fetch_recipe_result(rd, recipe)) for recipe in page["recipes"]]),
@@ -334,7 +335,9 @@ def get_format(out, ty, value):
     if ty == "color":
         return out.pair_tag("span", style=f"color: #{value}")
     if ty == "link":
-        # TODO fix this properly
+        link = value
+        if "://" not in link:
+            link = "#" + link.replace("#", "@")
         return out.pair_tag("a", href=value)
     if ty == "tooltip":
         return out.pair_tag("span", clazz="has-tooltip", title=value)
@@ -374,10 +377,10 @@ def write_page(out, pageid, page, anchor_id):
             return
 
     if "header" in page:
-        with out.pair_tag("h4", clazz="page-header"):
+        with out.pair_tag("h4"):
             out.text(page["header"])
             if anchor_id:
-                with out.pair_tag("a", href="#" + anchor_id, clazz="permalink"):
+                with out.pair_tag("a", href="#" + anchor_id, clazz="permalink small"):
                     with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
 
     ty = page["type"]
@@ -390,7 +393,7 @@ def write_page(out, pageid, page, anchor_id):
             with out.pair_tag("a", href=page["url"]):
                 out.text(page["link_text"])
     elif ty == "patchouli:spotlight":
-        with out.pair_tag("h4", clazz="spotlight-title"):
+        with out.pair_tag("h4", clazz="spotlight-title page-header"):
             out.text(page["item_name"])
         out.tag("hr", style="margin: 0")
         if "text" in page: write_block(out, page["text"])
@@ -425,12 +428,12 @@ def write_page(out, pageid, page, anchor_id):
                 oup = page.get("output", None) or "nothing"
                 out.text(f"{page['name']} ({inp} \u2192 {oup})")
                 if anchor_id:
-                    with out.pair_tag("a", href="#" + anchor_id, clazz="permalink"):
+                    with out.pair_tag("a", href="#" + anchor_id, clazz="permalink small"):
                         with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
         with out.pair_tag("details", clazz="spell-collapsible"):
             with out.pair_tag("summary", clazz="collapse-spell"): pass
             for string, start_angle, per_world in page["op"]:
-                with out.pair_tag("canvas", width=180, height=180, data_string=string, data_start=start_angle.lower(), data_per_world=per_world):
+                with out.pair_tag("canvas", width=216, height=216, data_string=string, data_start=start_angle.lower(), data_per_world=per_world):
                     out.text("Your browser does not support visualizing patterns. Pattern code: " + string)
         write_block(out, page["text"])
     else:
@@ -442,18 +445,18 @@ def write_page(out, pageid, page, anchor_id):
 
 def write_entry(out, entry):
     with out.pair_tag("div", id=entry["id"]):
-        with out.pair_tag("h3", clazz="entry-title"):
+        with out.pair_tag("h3", clazz="entry-title page-header"):
             write_block(out, entry["name"])
-            with out.pair_tag("a", href="#" + entry["id"], clazz="permalink"):
+            with out.pair_tag("a", href="#" + entry["id"], clazz="permalink small"):
                 with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
         for page in entry["pages"]:
             write_page(out, entry["id"], page, None)
 
 def write_category(out, blacklist, category):
     with out.pair_tag("section", id=category["id"]):
-        with out.pair_tag("h2", clazz="category-title"):
+        with out.pair_tag("h2", clazz="category-title page-header"):
             write_block(out, category["name"])
-            with out.pair_tag("a", href="#" + category["id"], clazz="permalink"):
+            with out.pair_tag("a", href="#" + category["id"], clazz="permalink small"):
                 with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
         write_block(out, category["description"])
         for entry in category["entries"]:
@@ -461,13 +464,14 @@ def write_category(out, blacklist, category):
                 write_entry(out, entry)
 
 def write_book(out, book):
-    with out.pair_tag("header", clazz="book-header"):
-        with out.pair_tag("h1", clazz="book-title"):
-            write_block(out, book["name"])
-        write_block(out, book["landing_text"])
-    with out.pair_tag("main", clazz="book-body"):
-        for category in book["categories"]:
-            write_category(out, book["blacklist"], category)
+    with out.pair_tag("div", clazz="container"):
+        with out.pair_tag("header", clazz="jumbotron"):
+            with out.pair_tag("h1", clazz="book-title"):
+                write_block(out, book["name"])
+            write_block(out, book["landing_text"])
+        with out.pair_tag("main", clazz="book-body"):
+            for category in book["categories"]:
+                write_category(out, book["blacklist"], category)
 
 def main(argv):
     if len(argv) < 3:
