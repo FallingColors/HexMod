@@ -1,0 +1,252 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The Hex Book, all in one place.">
+    <meta name="author" content="petrak@, Alwinfy">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Hex Book</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <style>
+      header {
+        width: 50%;
+        margin-top: 2em;
+        margin-left: auto;
+        margin-right: auto;
+        background: lightgrey;
+        padding: 2em;
+        border-radius: 1em;
+      }
+      main {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      details {
+        display: inline-block;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        padding: .5em .5em 0;
+      }
+
+      summary {
+        font-weight: bold;
+        margin: -.5em -.5em 0;
+        padding: .5em;
+      }
+
+      details[open] {
+        padding: .5em;
+      }
+
+      details[open] summary {
+        border-bottom: 1px solid #aaa;
+        margin-bottom: .5em;
+      }
+      details > .collapse-spell::before {
+        content: "Click to show spell";
+      }
+      details[open] > .collapse-spell::before {
+        content: "Click to hide spell";
+      }
+      a.permalink {
+        margin-left: 0.5em;
+        color: lightgray;
+      }
+      a.permalink:hover {
+        color: gray;
+      }
+      p {
+        margin: 0.5ex;
+      }
+      p.fake-li {
+        margin: 0;
+      }
+      p.fake-li::before {
+        content: "\2022";
+        margin: 1ex;
+      }
+      p.linkout::before {
+        content: "Link: ";
+      }
+      p.todo-note {
+        font-style: italic;
+        color: lightgray;
+      }
+      .obfuscated {
+        filter: blur(1em);
+      }
+    </style>
+    <script>
+      "use strict";
+      const rfaQueue = [];
+      function startAngle(str) {
+        switch (str) {
+          case "east": return 0;
+          case "north_east": return 1;
+          case "north_west": return 2;
+          case "west": return 3;
+          case "south_west": return 4;
+          case "south_east": return 5;
+          default: return 0;
+        }
+      }
+      function offsetAngle(str) {
+        switch (str) {
+          case "w": return 0;
+          case "q": return 1;
+          case "a": return 2;
+          case "s": return 3;
+          case "d": return 4;
+          case "e": return 5;
+          default: return -1;
+        }
+      }
+      function initializeElem(canvas) {
+        const str = canvas.dataset.string;
+        let angle = startAngle(canvas.dataset.start);
+        const perWorld = canvas.dataset.perWorld === "True";
+        const points = [[0, 0]];
+        let lastPoint = points[0];
+        let minPoint = lastPoint, maxPoint = lastPoint;
+        for (const ch of "w" + str) {
+          const addAngle = offsetAngle(ch);
+          if (addAngle < 0) continue;
+          angle = (angle + addAngle) % 6;
+          const trueAngle = Math.PI / 3 * angle;
+
+          const [lx, ly] = lastPoint;
+          const newPoint = [lx + Math.cos(trueAngle), ly - Math.sin(trueAngle)];
+
+          points.push(newPoint);
+          lastPoint = newPoint;
+
+          const [mix, miy] = minPoint;
+          minPoint = [Math.min(mix, newPoint[0]), Math.min(miy, newPoint[1])];
+          const [max, may] = maxPoint;
+          maxPoint = [Math.max(max, newPoint[0]), Math.max(may, newPoint[1])];
+        }
+        const size = Math.min(canvas.width, canvas.height) * 0.8;
+        const scale = size / Math.max(3, Math.max(maxPoint[1] - minPoint[1], maxPoint[0] - minPoint[0]));
+        const center = [(minPoint[0] + maxPoint[0]) * 0.5, (minPoint[1] + maxPoint[1]) * 0.5];
+        const truePoints = points.map(p => [canvas.width * 0.5 + scale * (p[0] - center[0]), canvas.height * 0.5 + scale * (p[1] - center[1])]);
+        let uniqPoints = [];
+        l1: for (const point of truePoints) {
+          for (const pt of uniqPoints) {
+            if (Math.abs(point[0] - pt[0]) < 0.00001 && Math.abs(point[1] - pt[1]) < 0.00001) {
+              continue l1;
+            }
+          }
+          uniqPoints.push(point);
+        }
+        const strokeStyle = "darkgray";
+        const strokeVisitedStyle = "#0c8";
+        const strokeWidth = scale / 12;
+        const startDotStyle = "#f009";
+        const dotStyle = "#777f";
+        const movDotStyle = "#0fa9";
+        const dotRadius = scale / 8;
+
+        const speed = 0.0025;
+        const context = canvas.getContext("2d");
+        const negaProgress = -3;
+        let progress = 0;
+        const tick = dt => {
+          if (canvas.offsetParent === null) return;
+
+          if (!perWorld) {
+            progress += speed * dt;
+          }
+          if (progress >= truePoints.length - 1) {
+            progress = negaProgress;
+          }
+          let ix = Math.floor(progress), frac = progress - ix, core = null, fadeColor = 0;
+          if (ix < 0) {
+            const rawFade = 2 * progress / negaProgress - 1;
+            fadeColor = 1 - Math.abs(rawFade);
+            context.strokeStyle = rawFade > 0 ? strokeVisitedStyle : strokeStyle;
+            ix = rawFade > 0 ? truePoints.length - 2 : 0;
+            frac = +(rawFade > 0);
+          } else {
+            context.strokeStyle = strokeVisitedStyle;
+          }
+          const [lx, ly] = truePoints[ix];
+          const [rx, ry] = truePoints[ix + 1];
+          core = [lx + (rx - lx) * frac, ly + (ry - ly) * frac];
+
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.beginPath();
+          context.lineWidth = strokeWidth;
+          context.moveTo(truePoints[0][0], truePoints[0][1]);
+          for (let i = 1; i < ix + 1; i++) {
+            context.lineTo(truePoints[i][0], truePoints[i][1]);
+          }
+          context.lineTo(core[0], core[1]);
+          context.stroke();
+          context.beginPath();
+          context.strokeStyle = strokeStyle;
+          context.moveTo(core[0], core[1]);
+          for (let i = ix + 1; i < truePoints.length; i++) {
+            context.lineTo(truePoints[i][0], truePoints[i][1]);
+          }
+          context.stroke();
+
+          for (let i = 0; i < uniqPoints.length; i++) {
+            context.beginPath();
+            context.fillStyle = (i == 0 && !perWorld) ? startDotStyle : dotStyle;
+            const radius = (i == 0 && !perWorld) ? dotRadius : dotRadius / 2;
+            context.arc(uniqPoints[i][0], uniqPoints[i][1], radius, 0, 2 * Math.PI);
+            context.fill();
+          }
+          
+          if (!perWorld) {
+            context.beginPath();
+            context.fillStyle = movDotStyle;
+            context.arc(core[0], core[1], dotRadius, 0, 2 * Math.PI);
+            context.fill();
+          }
+          if (fadeColor) {
+            context.fillStyle = `rgba(255, 255, 255, ${fadeColor})`;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+          }
+        };
+        rfaQueue.push(tick);
+      }
+      function hookLoad(elem) {
+        let init = false;
+        const canvases = elem.querySelectorAll("canvas");
+        elem.addEventListener("toggle", () => {
+          if (!init) {
+            canvases.forEach(initializeElem);
+            init = true;
+          }
+        });
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('details.spell-collapsible').forEach(hookLoad);
+        function tick(prevTime, time) {
+          const dt = time - prevTime;
+          for (const q of rfaQueue) {
+            q(dt);
+          }
+          requestAnimationFrame(t => tick(time, t));
+        }
+        requestAnimationFrame(t => tick(t, t));
+      });
+    </script>
+
+  </head>
+  <body>
+  <header>
+    <h1>This is the online version of the Hexcasting documentation.</h1>
+    <p>It's a work in progress, but I'm posting it now so that you can all get some use out of it.</p>
+    <p><b>WARNING: THIS DOCUMENT CONTAINS SPOILERS!</b> Like, at the very beginning of the doc. Sorry, my bad, haven't figured out how to selectively disable entries yet.</p>
+    <i style="margin-right: 0.5em; color: #EEEEEE;" class="icon-home icon-4x">sus</i>
+  </header>
+#DO_NOT_RENDER basics/couldnt_cast basics/start_to_see
+#DUMP_BODY_HERE
+  </body>
+</html>
