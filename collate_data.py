@@ -271,6 +271,12 @@ def parse_category(root_data, base_dir, cat_name):
 
     return data
 
+def parse_sortnum(cats, name):
+    if '/' in name:
+        ix = name.rindex('/')
+        return parse_sortnum(cats, name[:ix]) + (cats[name].get("sortnum", 0),)
+    return cats[name].get("sortnum", 0),
+
 def parse_book(root, mod_name, book_name):
     base_dir = f"{root}/data/{mod_name}/patchouli_books/{book_name}"
     root_info = slurp(f"{base_dir}/book.json")
@@ -288,7 +294,8 @@ def parse_book(root, mod_name, book_name):
     for filename in walk_dir(f"{book_dir}/categories", ""):
         basename = filename[:-5]
         categories.append(parse_category(root_info, book_dir, basename))
-    categories.sort(key=lambda cat: (cat.get("sortnum", 0), cat["name"]))
+    cats = {cat["id"]: cat for cat in categories}
+    categories.sort(key=lambda cat: (parse_sortnum(cats, cat["id"]), cat["name"]))
 
     do_localize(root_info, root_info, "name")
     do_format(root_info, root_info, "landing_text")
@@ -338,7 +345,7 @@ def get_format(out, ty, value):
         link = value
         if "://" not in link:
             link = "#" + link.replace("#", "@")
-        return out.pair_tag("a", href=value)
+        return out.pair_tag("a", href=link)
     if ty == "tooltip":
         return out.pair_tag("span", clazz="has-tooltip", title=value)
     if ty == "cmd_click":
@@ -463,12 +470,32 @@ def write_category(out, blacklist, category):
             if entry["id"] not in blacklist:
                 write_entry(out, entry)
 
+def write_toc(out, book):
+    with out.pair_tag("h2", id="table-of-contents", clazz="page-header"):
+        out.text("Table of Contents")
+        with out.pair_tag("a", href="#0", clazz="toggle-link small", data_target="toc-category"):
+            out.text("(toggle all)")
+        with out.pair_tag("a", href="#table-of-contents", clazz="permalink small"):
+            with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
+    for category in book["categories"]:
+        with out.pair_tag("details", clazz="toc-category"):
+            with out.pair_tag("summary"):
+                with out.pair_tag("a", href="#" + category["id"]):
+                    out.text(category["name"])
+            with out.pair_tag("ul"):
+                for entry in category["entries"]:
+                    with out.pair_tag("li"):
+                        with out.pair_tag("a", href="#" + entry["id"]):
+                            out.text(entry["name"])
+
 def write_book(out, book):
     with out.pair_tag("div", clazz="container"):
         with out.pair_tag("header", clazz="jumbotron"):
             with out.pair_tag("h1", clazz="book-title"):
                 write_block(out, book["name"])
             write_block(out, book["landing_text"])
+        with out.pair_tag("nav"):
+            write_toc(out, book)
         with out.pair_tag("main", clazz="book-body"):
             for category in book["categories"]:
                 write_category(out, book["blacklist"], category)

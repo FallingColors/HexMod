@@ -11,15 +11,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <style>
-      header {
-      }
-      main {
-      }
-      h4 {
-        min-width: 0;
-      }
+      summary { display: list-item; }
 
-      details {
+      details.spell-collapsible {
         display: inline-block;
         border: 1px solid #aaa;
         border-radius: 4px;
@@ -27,17 +21,17 @@
         margin-bottom: .5em;
       }
 
-      summary {
+      summary.collapse-spell {
         font-weight: bold;
         margin: -.5em -.5em 0;
         padding: .5em;
       }
 
-      details[open] {
+      details.spell-collapsible[open] {
         padding: .5em;
       }
 
-      details[open] summary {
+      details[open] summary.collapse-spell {
         border-bottom: 1px solid #aaa;
         margin-bottom: .5em;
       }
@@ -48,8 +42,10 @@
       details[open] .collapse-spell::before {
         content: "Click to hide spell";
       }
+      a.toggle-link {
+        margin-left: 0.5em;
+      }
       a.permalink {
-        vertical-align: middle;
         margin-left: 0.5em;
       }
       a.permalink:hover {
@@ -224,7 +220,6 @@
           if (scrollTimeout <= 2000) {
             context.fillStyle = `rgba(200, 200, 200, ${(2000 - scrollTimeout) / 1000})`;
             context.font = `${scale * 0.5}px sans-serif`;
-            console.log(context.font);
             context.fillText(speedScale() ? speedScale() + "x" : "Paused", 0.2 * scale, canvas.height - 0.2 * scale);
           }
         };
@@ -257,8 +252,19 @@
           }
         });
       }
+      function hookToggle(elem) {
+        const details = Array.from(document.querySelectorAll("details." + elem.dataset.target));
+        elem.addEventListener("click", () => {
+          if (details.some(x => x.open)) {
+            details.forEach(x => x.open = false);
+          } else {
+            details.forEach(x => x.open = true);
+          }
+        });
+      }
       document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('details.spell-collapsible').forEach(hookLoad);
+        document.querySelectorAll('a.toggle-link').forEach(hookToggle);
         function tick(prevTime, time) {
           const dt = time - prevTime;
           for (const q of rfaQueue) {
