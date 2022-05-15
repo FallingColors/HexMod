@@ -2,7 +2,7 @@ plugins {
     id 'fabric-loom' version "$loomVersion"
 }
 
-version = getVersion("fabric")
+archivesBaseName = getArtifactID("fabric")
 
 loom {
     mixin.defaultRefmapName = "hexcasting.refmap.json"
@@ -46,7 +46,7 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":Common")
 
-    modImplementation "at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion-fabric"
+    modImplementation "at.petra-k.paucal:paucal-fabric-$minecraftVersion:$paucalVersion"
     modImplementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FABRIC"
 
     modImplementation "me.zeroeightsix:fiber:$fiberVersion"

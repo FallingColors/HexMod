@@ -38,16 +38,8 @@ def isRelease() {
     }
 }
 
-String getVersion(String platform) {
-    def v = "${modVersion}"
-    if (!isRelease() && System.getenv('BUILD_NUMBER') != null) {
-        v += "-prerelease-" + System.getenv('BUILD_NUMBER')
-    } else if (System.getenv('TAG_NAME') != null) {
-        v = System.getenv('TAG_NAME').substring(1)
-        println 'Version overridden to tag version ' + version
-    }
-    v += "-" + platform
-    return v
+String getArtifactID(String platform) {
+    return "${modID}-${platform}-${minecraftVersion}"
 }
 
 subprojects {
@@ -57,8 +49,14 @@ subprojects {
     apply plugin: 'maven-publish'
 
     group = "at.petra-k.$modID" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-    archivesBaseName = "${modID}-${minecraftVersion}"
-    // Version is fixed up in each gradle
+    version = "${modVersion}"
+    if (!isRelease() && System.getenv('BUILD_NUMBER') != null) {
+        version += "-prerelease-" + System.getenv('BUILD_NUMBER')
+    } else if (System.getenv('TAG_NAME') != null) {
+        version = System.getenv('TAG_NAME').substring(1)
+        println 'Version overridden to tag version ' + version
+    }
+    // archivesBaseName set in each gradle
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()

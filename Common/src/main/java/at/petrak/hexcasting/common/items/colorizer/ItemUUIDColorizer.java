@@ -13,7 +13,6 @@ import java.util.Random;
 import java.util.UUID;
 
 public class ItemUUIDColorizer extends Item implements ColorizerItem {
-
     public ItemUUIDColorizer(Properties pProperties) {
         super(pProperties);
     }

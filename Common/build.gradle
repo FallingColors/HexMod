@@ -5,7 +5,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
 }
 
-version = getVersion("common")
+archivesBaseName = getArtifactID("common")
 
 minecraft {
     version(minecraftVersion)
@@ -27,7 +27,7 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
-    compileOnly "at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion-common"
+    compileOnly "at.petra-k.paucal:paucal-common-$minecraftVersion:$paucalVersion"
     compileOnly "vazkii.patchouli:Patchouli-xplat:$minecraftVersion-$patchouliVersion"
 }
 
