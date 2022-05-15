@@ -9,32 +9,16 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
-        // OPTIONAL Kotlin Serialization plugin
-        classpath 'org.jetbrains.kotlin:kotlin-serialization:1.6.10'
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
 archivesBaseName = getArtifactID("forge")
 
-// Adds the Kotlin Gradle plugin
-buildscript {
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
-        // OPTIONAL Kotlin Serialization plugin
-        classpath 'org.jetbrains.kotlin:kotlin-serialization:1.6.10'
-    }
-}
-
-apply plugin: 'kotlin'
-// OPTIONAL Kotlin Serialization plugin
-apply plugin: 'kotlinx-serialization'
 
 // Adds KFF as dependency and Kotlin libs to the runtime classpath
 // If you already know how to add the Kotlin plugin to Gradle, this is the only line you need for KFF
@@ -115,8 +99,6 @@ minecraft {
     }
 }
 
-sourceSets.main.resources.srcDir 'src/generated/resources'
-
 repositories {
     mavenCentral()
     // Put repositories for dependencies here
@@ -170,9 +152,9 @@ tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-    srcDir '../Common/src/generated/resources'
+sourceSets {
+    main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
+    main.kotlin.srcDirs += 'src/main/java'
 }
 
 processResources {
@@ -199,14 +181,5 @@ publishing {
         maven {
             url "file://" + System.getenv("local_maven")
         }
-    }
-}
-
-compileKotlin {
-    kotlinOptions {
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
     }
 }

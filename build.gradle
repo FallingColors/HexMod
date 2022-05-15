@@ -10,6 +10,7 @@ buildscript {
 
 plugins {
     id 'java'
+    id "org.jetbrains.kotlin.jvm"
 }
 
 def isRelease() {
@@ -44,6 +45,7 @@ String getArtifactID(String platform) {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
 
     group = "at.petra-k.$modID" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -109,3 +111,14 @@ subprojects {
 }
 
 allprojects { gradle.projectsEvaluated { tasks.withType(JavaCompile) { options.compilerArgs << "-Xmaxerrs" << "1000" } } }
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}

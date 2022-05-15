@@ -10,6 +10,10 @@ pluginManagement {
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
     }
+
+    plugins {
+        id "org.jetbrains.kotlin.jvm" version kotlinVersion
+    }
 }
 
 rootProject.name = 'Hex Casting'

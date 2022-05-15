@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.utils;
+package at.petrak.hexcasting.api.misc;
 
 import at.petrak.hexcasting.common.misc.DamageSourceOvercast;
 import net.minecraft.world.damagesource.DamageSource;

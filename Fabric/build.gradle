@@ -1,7 +1,7 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
     id 'fabric-loom' version "$loomVersion"
 }
+
 
 archivesBaseName = getArtifactID("fabric")
 
@@ -70,9 +70,9 @@ sourcesJar {
     from project(":Common").sourceSets.main.allJava
 }
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-    srcDir '../Common/src/generated/resources'
+sourceSets {
+    main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
+    main.kotlin.srcDirs += 'src/main/java'
 }
 
 processResources {

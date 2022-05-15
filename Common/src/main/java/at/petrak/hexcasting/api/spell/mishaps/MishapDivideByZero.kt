@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.utils.HexDamageSources
+import at.petrak.hexcasting.api.misc.HexDamageSources
+import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.Widget
+import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.item.DyeColor
@@ -37,15 +37,23 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         @JvmStatic
         fun tan(angle: Double): MishapDivideByZero {
             val translatedAngle = translate(angle)
-            return MishapDivideByZero(TranslatableComponent("$PREFIX.sin", translatedAngle), TranslatableComponent("$PREFIX.cos", translatedAngle))
+            return MishapDivideByZero(
+                TranslatableComponent("$PREFIX.sin", translatedAngle),
+                TranslatableComponent("$PREFIX.cos", translatedAngle)
+            )
         }
 
         @JvmStatic
-        val zero get() = TranslatableComponent("$PREFIX.zero")
+        val zero
+            get() = TranslatableComponent("$PREFIX.zero")
+
         @JvmStatic
-        val zerothPower get() = TranslatableComponent("$PREFIX.zero.power")
+        val zerothPower
+            get() = TranslatableComponent("$PREFIX.zero.power")
+
         @JvmStatic
-        val zeroVector get() = TranslatableComponent("$PREFIX.zero.vec")
+        val zeroVector
+            get() = TranslatableComponent("$PREFIX.zero.vec")
 
         @JvmStatic
         fun powerOf(power: Component) = TranslatableComponent("$PREFIX.power", power)

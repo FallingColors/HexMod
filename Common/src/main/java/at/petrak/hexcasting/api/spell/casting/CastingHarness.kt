@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
@@ -15,7 +16,6 @@ import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
 import at.petrak.hexcasting.api.spell.mishaps.MishapDisallowedSpell
 import at.petrak.hexcasting.api.spell.mishaps.MishapTooManyCloseParens
-import at.petrak.hexcasting.api.utils.HexDamageSources
 import at.petrak.hexcasting.api.utils.ManaHelper
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag

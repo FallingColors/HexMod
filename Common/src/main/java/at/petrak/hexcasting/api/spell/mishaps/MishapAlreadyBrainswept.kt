@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.utils.HexDamageSources
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.item.DyeColor
