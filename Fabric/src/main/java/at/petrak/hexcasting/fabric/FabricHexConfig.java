@@ -18,9 +18,9 @@ import java.util.List;
 
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Fabric/src/main/java/vazkii/botania/fabric/FiberBotaniaConfig.java
 public class FabricHexConfig {
-    private static Common COMMON;
-    private static Client CLIENT;
-    private static Server SERVER;
+    private static final Common COMMON = new Common();
+    private static final Client CLIENT = new Client();
+    private static final Server SERVER = new Server();
 
     private static void writeDefaultConfig(ConfigTree config, Path path, JanksonValueSerializer serializer) {
         try (OutputStream s = new BufferedOutputStream(

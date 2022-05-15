@@ -1,4 +1,5 @@
 plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
     id 'fabric-loom' version "$loomVersion"
 }
 
@@ -61,7 +62,7 @@ dependencies {
     compileOnly "com.demonwav.mcdev:annotations:1.0"
 }
 
-compileJava {
+tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
 
@@ -80,12 +81,6 @@ processResources {
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version
-    }
-}
-
-jar {
-    from("LICENSE") {
-        rename { "${it}_${modID}" }
     }
 }
 

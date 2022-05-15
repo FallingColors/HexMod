@@ -43,9 +43,7 @@ String getArtifactID(String platform) {
 }
 
 subprojects {
-
     apply plugin: 'java'
-//    apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
 
     group = "at.petra-k.$modID" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
