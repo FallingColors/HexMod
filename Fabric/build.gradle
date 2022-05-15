@@ -1,6 +1,5 @@
 plugins {
     id 'fabric-loom' version "$loomVersion"
-    id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
 }
 
 version = getVersion("fabric")
@@ -40,9 +39,9 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:${minecraftVersion}"
     mappings loom.officialMojangMappings()
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
     modImplementation "net.fabricmc:fabric-loader:${fabricLoaderVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricVersion}"
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
 
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":Common")
@@ -57,6 +56,9 @@ dependencies {
 
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
     include "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
+
+    // only to shut up compile warnings from CCA's usage of CheckEnv and Env
+    compileOnly "com.demonwav.mcdev:annotations:1.0"
 }
 
 compileJava {

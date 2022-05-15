@@ -6,10 +6,6 @@ pluginManagement {
             url = 'https://maven.fabricmc.net/'
         }
         maven {
-            name = 'QuiltFlower'
-            url = 'https://server.bbkr.space/artifactory/libs-release/'
-        }
-        maven {
             name = 'Sponge Snapshots'
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
