@@ -56,15 +56,18 @@ public class FabricHexConfig {
         setupConfig(common, Paths.get("config", HexAPI.MOD_ID + "-common.json5"), serializer);
         HexConfig.setCommon(COMMON);
 
+        // We care about the client only on the *physical* client ...
         if (IXplatAbstractions.INSTANCE.isPhysicalClient()) {
             var client = CLIENT.configure(ConfigTree.builder());
             setupConfig(client, Paths.get("config", HexAPI.MOD_ID + "-client.json5"), serializer);
             HexConfig.setClient(CLIENT);
-        } else {
-            var server = SERVER.configure(ConfigTree.builder());
-            setupConfig(server, Paths.get("config", HexAPI.MOD_ID + "-client.json5"), serializer);
-            HexConfig.setServer(SERVER);
         }
+        // but we care about the server on the *logical* server
+        // i believe this should Just Work without a guard? assuming we don't access it from the client ever
+        var server = SERVER.configure(ConfigTree.builder());
+        setupConfig(server, Paths.get("config", HexAPI.MOD_ID + "-server.json5"), serializer);
+        HexConfig.setServer(SERVER);
+
     }
 
     private static final class Common implements HexConfig.CommonConfigAccess {
@@ -197,7 +200,7 @@ public class FabricHexConfig {
 
         @Override
         public boolean isActionAllowed(ResourceLocation actionID) {
-            return actionDenyList.getValue().contains(actionID.toString());
+            return !actionDenyList.getValue().contains(actionID.toString());
         }
     }
 }

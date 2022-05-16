@@ -9,10 +9,7 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.api.distmarker.OnlyIn
 
-@OnlyIn(Dist.CLIENT)
 class GridSoundInstance(val player: Player) :
     AbstractTickableSoundInstance(HexSounds.CASTING_AMBIANCE, SoundSource.PLAYERS) {
     var mousePosX: Double = 0.5

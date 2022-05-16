@@ -19,7 +19,7 @@ loom {
         }
 
         configureEach {
-            runDir "run"
+            runDir "Fabric/run"
             ideConfigGenerated(true)
         }
     }
@@ -65,6 +65,9 @@ dependencies {
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
+compileKotlin {
+    source(project(":Common").sourceSets.main.allSource)
+}
 
 sourcesJar {
     from project(":Common").sourceSets.main.allJava
@@ -72,7 +75,6 @@ sourcesJar {
 
 sourceSets {
     main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
-    main.kotlin.srcDirs += 'src/main/java'
 }
 
 processResources {

@@ -11,6 +11,7 @@ buildscript {
 plugins {
     id 'java'
     id "org.jetbrains.kotlin.jvm"
+    id 'idea'
 }
 
 def isRelease() {
@@ -108,6 +109,8 @@ subprojects {
     tasks.withType(GenerateModuleMetadata) {
         enabled = false
     }
+
+    sourceSets.main.kotlin.srcDirs += 'src/main/java'
 }
 
 allprojects { gradle.projectsEvaluated { tasks.withType(JavaCompile) { options.compilerArgs << "-Xmaxerrs" << "1000" } } }

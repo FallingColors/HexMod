@@ -7,30 +7,21 @@ archivesBaseName = getArtifactID("common")
 
 minecraft {
     version(minecraftVersion)
-
-    runs {
-        if (project.hasProperty('common_runs_enabled') ? project.findProperty('common_runs_enabled').toBoolean() : true) {
-            server(project.hasProperty('common_server_run_name') ? project.findProperty('common_server_run_name') : 'vanilla_server') {
-                workingDirectory(this.file("run"))
-            }
-            client(project.hasProperty('common_client_run_name') ? project.findProperty('common_client_run_name') : 'vanilla_client') {
-                workingDirectory(this.file("run"))
-            }
-        }
-    }
 }
 
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
     compileOnly "at.petra-k.paucal:paucal-common-$minecraftVersion:$paucalVersion"
     compileOnly "vazkii.patchouli:Patchouli-xplat:$minecraftVersion-$patchouliVersion"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'
 }
 
-sourceSets {
-    main.kotlin.srcDirs += 'src/main/java'
+test {
+    useJUnitPlatform()
 }
 
 processResources {

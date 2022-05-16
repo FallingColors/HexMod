@@ -3,6 +3,8 @@ package at.petrak.hexcasting.fabric
 import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.HexAdditionalRenderers
 import at.petrak.hexcasting.client.RegisterClientStuff
+import at.petrak.hexcasting.client.ShiftScrollListener
+import at.petrak.hexcasting.fabric.event.MouseScrollCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
@@ -23,6 +25,7 @@ object FabricHexClientInitializer : ClientModInitializer {
         HudRenderCallback.EVENT.register(HexAdditionalRenderers::overlayGui)
         ClientTickEvents.START_CLIENT_TICK.register { ClientTickCounter.onTick() }
 
+        MouseScrollCallback.EVENT.register(ShiftScrollListener::onScroll)
 
         RegisterClientStuff.init()
         RegisterClientStuff.registerParticles()

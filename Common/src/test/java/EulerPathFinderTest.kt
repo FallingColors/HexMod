@@ -1,7 +1,7 @@
 import at.petrak.hexcasting.api.spell.math.EulerPathFinder.findAltDrawing
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern.Companion.FromAnglesSig
-import org.testng.annotations.Test
+import org.junit.jupiter.api.Test
 
 internal class EulerPathFinderTest {
     @Test

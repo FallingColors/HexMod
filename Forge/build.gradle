@@ -154,7 +154,6 @@ tasks.withType(JavaCompile) {
 
 sourceSets {
     main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
-    main.kotlin.srcDirs += 'src/main/java'
 }
 
 processResources {
