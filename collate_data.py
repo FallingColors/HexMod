@@ -54,7 +54,7 @@ colors = {
 }
 types = {
     "k": "obf",
-    "l": "italic",
+    "l": "bold",
     "m": "strikethrough",
     "n": "underline",
     "o": "italic",
@@ -168,7 +168,7 @@ def format_string(root_data, string):
 
     return style_stack[0]
 
-test_root = {"i18n": {}, "macros": default_macros, "resource_dir": "src/main/resources"}
+test_root = {"i18n": {}, "macros": default_macros, "resource_dir": "src/main/resources", "modid": "hexcasting"}
 test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
 
 def do_localize(root_data, obj, *names):
@@ -231,7 +231,7 @@ page_types = {
     "patchouli:link": lambda rd, page: do_localize(rd, page, "link_text"),
     "patchouli:crafting": lambda rd, page: page.__setitem__("item_name", localize_item(rd, fetch_recipe_result(rd, page["recipe"]))),
     "hexcasting:crafting_multi": lambda rd, page: page.__setitem__("item_name", [localize_item(rd, fetch_recipe_result(rd, recipe)) for recipe in page["recipes"]]),
-    "patchouli:spotlight": lambda rd, page: page.__setitem__("item_name", localize(rd, page["item"]))
+    "patchouli:spotlight": lambda rd, page: page.__setitem__("item_name", localize_item(rd, page["item"]))
 }
 
 def walk_dir(root_dir, prefix):
@@ -246,7 +246,7 @@ def parse_entry(root_data, entry_path, ent_name):
     data = slurp(f"{entry_path}")
     do_localize(root_data, data, "name")
     for page in data["pages"]:
-        do_localize(root_data, page, "header")
+        do_localize(root_data, page, "title", "header")
         do_format(root_data, page, "text")
         if page["type"] in page_types:
             page_types[page["type"]](root_data, page)
@@ -318,6 +318,10 @@ class PairTag:
     def __exit__(self, _1, _2, _3):
         print(f"</{self.name}>", file=self.stream, end="")
 
+class Empty:
+    def __enter__(self): pass
+    def __exit__(self, _1, _2, _3): pass
+
 class Stream:
     __slots__ = ["stream", "thunks"]
     def __init__(self, stream):
@@ -331,6 +335,12 @@ class Stream:
 
     def pair_tag(self, name, **kwargs):
         return PairTag(self.stream, name, **kwargs)
+
+    def pair_tag_if(self, cond, name, **kwargs):
+        return self.pair_tag(name, **kwargs) if cond else Empty()
+
+    def empty_pair_tag(self, name, **kwargs):
+        with self.pair_tag(name, **kwargs): pass
 
     def text(self, txt):
         print(txt, file=self.stream, end="")
@@ -376,78 +386,76 @@ def write_block(out, block):
             write_block(out, child)
 
 # TODO modularize
-def write_page(out, pageid, page, anchor_id):
-    if not anchor_id and "anchor" in page:
-        aid = pageid + "@" + page["anchor"]
-        with out.pair_tag("div", id=aid):
-            write_page(out, pageid, page, aid)
-            return
+def write_page(out, pageid, page):
+    if "anchor" in page:
+        anchor_id = pageid + "@" + page["anchor"]
+    else: anchor_id = None
 
-    if "header" in page:
-        with out.pair_tag("h4"):
-            out.text(page["header"])
-            if anchor_id:
-                with out.pair_tag("a", href="#" + anchor_id, clazz="permalink small"):
-                    with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
-
-    ty = page["type"]
-    if ty == "patchouli:text":
-        write_block(out, page["text"])
-    elif ty == "patchouli:empty": pass
-    elif ty == "patchouli:link":
-        write_block(out, page["text"])
-        with out.pair_tag("p", clazz="linkout"):
-            with out.pair_tag("a", href=page["url"]):
-                out.text(page["link_text"])
-    elif ty == "patchouli:spotlight":
-        with out.pair_tag("h4", clazz="spotlight-title page-header"):
-            out.text(page["item_name"])
-        out.tag("hr", style="margin: 0")
-        if "text" in page: write_block(out, page["text"])
-    elif ty == "patchouli:crafting":
-        with out.pair_tag("p", clazz="crafting-info"):
-            out.text(f"[Depicted in the book: The crafting recipe for the")
-            with out.pair_tag("code"): out.text(page["item_name"])
-            out.text(".]")
-        if "text" in page: write_block(out, page["text"])
-    elif ty == "patchouli:image":
-        with out.pair_tag("p", clazz="img-wrapper"):
-            for img in page["images"]:
-                modid, coords = img.split(":")
-                with out.pair_tag("img", src=f"{repo_names[modid]}/assets/{modid}/{coords}"): pass
-        if "text" in page: write_block(out, page["text"])
-    elif ty == "hexcasting:crafting_multi":
-        recipes = page["item_name"]
-        with out.pair_tag("p", clazz="crafting-info"):
-            out.text(f"[Depicted in the book: Several crafting recipes, for the")
-            with out.pair_tag("code"): out.text(recipes[0])
-            for i in recipes[1:]:
-                out.text(", ")
-                with out.pair_tag("code"): out.text(i)
-            out.text(".]")
-        if "text" in page: write_block(out, page["text"])
-    elif ty == "hexcasting:brainsweep": 
-        if "text" in page: write_block(out, page["text"])
-    elif ty in ("hexcasting:pattern", "hexcasting:manual_pattern_nosig", "hexcasting:manual_pattern"):
-        if "name" in page:
-            with out.pair_tag("h4", clazz="pattern-title"):
-                inp = page.get("input", None) or "nothing"
-                oup = page.get("output", None) or "nothing"
-                out.text(f"{page['name']} ({inp} \u2192 {oup})")
+    with out.pair_tag_if(anchor_id, "div", id=anchor_id):
+        if "header" in page or "title" in page:
+            with out.pair_tag("h4"):
+                out.text(page.get("header", page.get("title", None)))
                 if anchor_id:
                     with out.pair_tag("a", href="#" + anchor_id, clazz="permalink small"):
-                        with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
-        with out.pair_tag("details", clazz="spell-collapsible"):
-            with out.pair_tag("summary", clazz="collapse-spell"): pass
-            for string, start_angle, per_world in page["op"]:
-                with out.pair_tag("canvas", width=216, height=216, data_string=string, data_start=start_angle.lower(), data_per_world=per_world):
-                    out.text("Your browser does not support visualizing patterns. Pattern code: " + string)
-        write_block(out, page["text"])
-    else:
-        with out.pair_tag("p", clazz="todo-note"):
-            out.text("TODO: Missing processor for type: " + ty)
-        if "text" in page:
+                        out.empty_pair_tag("i", clazz="bi bi-link-45deg")
+
+        ty = page["type"]
+        if ty == "patchouli:text":
             write_block(out, page["text"])
+        elif ty == "patchouli:empty": pass
+        elif ty == "patchouli:link":
+            write_block(out, page["text"])
+            with out.pair_tag("p", clazz="linkout"):
+                with out.pair_tag("a", href=page["url"]):
+                    out.text(page["link_text"])
+        elif ty == "patchouli:spotlight":
+            with out.pair_tag("h4", clazz="spotlight-title page-header"):
+                out.text(page["item_name"])
+            if "text" in page: write_block(out, page["text"])
+        elif ty == "patchouli:crafting":
+            with out.pair_tag("blockquote", clazz="crafting-info"):
+                out.text(f"Depicted in the book: The crafting recipe for the ")
+                with out.pair_tag("code"): out.text(page["item_name"])
+                out.text(".")
+            if "text" in page: write_block(out, page["text"])
+        elif ty == "patchouli:image":
+            with out.pair_tag("p", clazz="img-wrapper"):
+                for img in page["images"]:
+                    modid, coords = img.split(":")
+                    out.empty_pair_tag("img", src=f"{repo_names[modid]}/assets/{modid}/{coords}")
+            if "text" in page: write_block(out, page["text"])
+        elif ty == "hexcasting:crafting_multi":
+            recipes = page["item_name"]
+            with out.pair_tag("blockquote", clazz="crafting-info"):
+                out.text(f"Depicted in the book: Several crafting recipes, for the ")
+                with out.pair_tag("code"): out.text(recipes[0])
+                for i in recipes[1:]:
+                    out.text(", ")
+                    with out.pair_tag("code"): out.text(i)
+                out.text(".")
+            if "text" in page: write_block(out, page["text"])
+        elif ty == "hexcasting:brainsweep": 
+            if "text" in page: write_block(out, page["text"])
+        elif ty in ("hexcasting:pattern", "hexcasting:manual_pattern_nosig", "hexcasting:manual_pattern"):
+            if "name" in page:
+                with out.pair_tag("h4", clazz="pattern-title"):
+                    inp = page.get("input", None) or "nothing"
+                    oup = page.get("output", None) or "nothing"
+                    out.text(f"{page['name']} ({inp} \u2192 {oup})")
+                    if anchor_id:
+                        with out.pair_tag("a", href="#" + anchor_id, clazz="permalink small"):
+                            out.empty_pair_tag("i", clazz="bi bi-link-45deg")
+            with out.pair_tag("details", clazz="spell-collapsible"):
+                out.empty_pair_tag("summary", clazz="collapse-spell")
+                for string, start_angle, per_world in page["op"]:
+                    with out.pair_tag("canvas", width=216, height=216, data_string=string, data_start=start_angle.lower(), data_per_world=per_world):
+                        out.text("Your browser does not support visualizing patterns. Pattern code: " + string)
+            write_block(out, page["text"])
+        else:
+            with out.pair_tag("p", clazz="todo-note"):
+                out.text("TODO: Missing processor for type: " + ty)
+            if "text" in page:
+                write_block(out, page["text"])
     out.tag("br")
 
 def write_entry(out, entry):
@@ -455,16 +463,16 @@ def write_entry(out, entry):
         with out.pair_tag("h3", clazz="entry-title page-header"):
             write_block(out, entry["name"])
             with out.pair_tag("a", href="#" + entry["id"], clazz="permalink small"):
-                with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
+                out.empty_pair_tag("i", clazz="bi bi-link-45deg")
         for page in entry["pages"]:
-            write_page(out, entry["id"], page, None)
+            write_page(out, entry["id"], page)
 
 def write_category(out, blacklist, category):
     with out.pair_tag("section", id=category["id"]):
         with out.pair_tag("h2", clazz="category-title page-header"):
             write_block(out, category["name"])
             with out.pair_tag("a", href="#" + category["id"], clazz="permalink small"):
-                with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
+                out.empty_pair_tag("i", clazz="bi bi-link-45deg")
         write_block(out, category["description"])
         for entry in category["entries"]:
             if entry["id"] not in blacklist:
@@ -476,7 +484,7 @@ def write_toc(out, book):
         with out.pair_tag("a", href="#0", clazz="toggle-link small", data_target="toc-category"):
             out.text("(toggle all)")
         with out.pair_tag("a", href="#table-of-contents", clazz="permalink small"):
-            with out.pair_tag("i", clazz="bi bi-link-45deg"): pass
+            out.empty_pair_tag("i", clazz="bi bi-link-45deg")
     for category in book["categories"]:
         with out.pair_tag("details", clazz="toc-category"):
             with out.pair_tag("summary"):
