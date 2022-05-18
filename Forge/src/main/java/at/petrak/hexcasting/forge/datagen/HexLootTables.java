@@ -51,7 +51,7 @@ public class HexLootTables extends PaucalLootTableProvider {
             HexBlocks.AKASHIC_PLANKS, HexBlocks.AKASHIC_TILE, HexBlocks.AKASHIC_PANEL,
             HexBlocks.AKASHIC_TRAPDOOR, HexBlocks.AKASHIC_STAIRS, HexBlocks.AKASHIC_PRESSURE_PLATE, HexBlocks.AKASHIC_BUTTON);
 
-        makeSlabTable(lootTables, HexBlocks.AKASHIC_SLAB.get());
+        makeSlabTable(lootTables, HexBlocks.AKASHIC_SLAB);
 
         makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES1);
         makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES2);
