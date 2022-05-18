@@ -53,7 +53,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             is SpellList -> {
                 val subtag = ListTag()
                 for (elt in pl)
-                    subtag.add((elt as SpellDatum<*>).serializeToNBT())
+                    subtag.add(elt.serializeToNBT())
                 out.put(TAG_LIST, subtag)
             }
             is Widget -> {

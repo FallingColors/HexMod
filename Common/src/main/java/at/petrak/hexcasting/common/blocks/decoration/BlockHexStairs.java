@@ -12,7 +12,6 @@ public class BlockHexStairs extends StairBlock {
         super($$0, $$1);
     }
 
-
     @SoftImplement("forge")
     public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return true;
