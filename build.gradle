@@ -1,39 +1,20 @@
 buildscript {
-    ext.kotlin_version = '1.6.21'
     repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://maven.parchmentmc.org' }
-        maven { url = 'https://repo.spongepowered.org/maven' }
-        maven { url = 'https://maven.blamejared.com' }
         mavenCentral()
     }
+
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-        classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.1.0'
+        classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.2.6'
     }
 }
 
+plugins {
+    id 'java'
+    id "org.jetbrains.kotlin.jvm"
+    id 'idea'
+}
 
-import com.diluv.schoomp.Webhook
-import com.diluv.schoomp.message.Message
-
-apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'org.spongepowered.mixin'
-
-
-version = modVersion
-group = "at.petra-k.$modID" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "$modID-$minecraftVersion"
-
-def isRelease = { ->
+def isRelease() {
     try {
         def stdout = new ByteArrayOutputStream()
         def gitHash = System.getenv('GIT_COMMIT')
@@ -59,285 +40,88 @@ def isRelease = { ->
     }
 }
 
-if (!isRelease() && System.getenv('BUILD_NUMBER') != null) {
-    version += "-prerelease-" + System.getenv('BUILD_NUMBER')
-} else if (System.getenv('TAG_NAME') != null) {
-    version = System.getenv('TAG_NAME').substring(1)
-    println 'Version overridden to tag version ' + version
+String getArtifactID(String platform) {
+    return "${modID}-${platform}-${minecraftVersion}"
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
+    apply plugin: 'maven-publish'
 
-// Adds the Kotlin Gradle plugin
-buildscript {
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
-        // OPTIONAL Kotlin Serialization plugin
-        classpath 'org.jetbrains.kotlin:kotlin-serialization:1.6.10'
+    group = "at.petra-k.$modID" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+    version = "${modVersion}"
+    if (!isRelease() && System.getenv('BUILD_NUMBER') != null) {
+        version += "-prerelease-" + System.getenv('BUILD_NUMBER')
+    } else if (System.getenv('TAG_NAME') != null) {
+        version = System.getenv('TAG_NAME').substring(1)
+        println 'Version overridden to tag version ' + version
     }
-}
-apply plugin: 'kotlin'
-// OPTIONAL Kotlin Serialization plugin
-apply plugin: 'kotlinx-serialization'
+    // archivesBaseName set in each gradle
 
-// Adds KFF as dependency and Kotlin libs to the runtime classpath
-// If you already know how to add the Kotlin plugin to Gradle, this is the only line you need for KFF
-apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle'
+    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    java.withSourcesJar()
+    java.withJavadocJar()
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    // After running this the first time, switch which is commented and rerun genIntellijRuns
-    mappings channel: 'official', version: '1.18.2'
-    // mappings channel: 'parchment', version: '2022.03.13-1.18.2'
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-            property 'forge.logging.console.level', 'debug'
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', modID
-
-            mods {
-                create(modID) {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', modID
-
-            mods {
-                create(modID) {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-            property 'forge.logging.console.level', 'debug'
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', modID
-
-            mods {
-                create(modID) {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', modID, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                create(modID) {
-                    source sourceSets.main
-                }
-            }
+    jar {
+        manifest {
+            attributes([
+                    'Specification-Title'     : modID,
+                    'Specification-Vendor'    : "petra-kat",
+                    'Specification-Version'   : project.jar.archiveVersion,
+                    'Implementation-Title'    : project.name,
+                    'Implementation-Version'  : project.jar.archiveVersion,
+                    'Implementation-Vendor'   : "petra-kat",
+                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    'Timestampe'              : System.currentTimeMillis(),
+                    'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+                    'Build-On-Minecraft'      : minecraftVersion
+            ])
         }
     }
-}
 
-// Include resources generated by data generators.
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-mixin {
-    add sourceSets.main, "${modID}.mixins.refmap.json"
-    config "${modID}.mixins.json"
-    dumpTargetOnFailure true
-}
-
-
-repositories {
-    mavenCentral()
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
-    maven { url 'https://maven.blamejared.com' }
-
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
-}
-
-dependencies {
-    implementation 'org.testng:testng:7.1.0'
-    
-    // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
-    compileOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion")
-    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-$minecraftVersion:$paucalVersion")
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
-
-
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion")
-}
-
-// Example for how to get properties into the manifest for reading at runtime.
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : modID,
-                "Specification-Vendor"    : "petra-kat",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "petra-kat",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-// Example configuration to allow publishing using the maven-publish plugin
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar')
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-// publish.dependsOn('reobfJar')
-
-// Disables Gradle's custom module metadata from being published to maven. The
-// metadata includes mapped dependencies which are not reasonably consumable by
-// other mod developers.
-tasks.withType(GenerateModuleMetadata) {
-    enabled = false
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            from components.java
-
-            pom.withXml {
-                asNode().dependencies.dependency.each { dep ->
-                    assert dep.parent().remove(dep)
-                }
-            }
-        }
-    }
     repositories {
+
+        maven { url "https://libraries.minecraft.net/" }
+
+        mavenCentral()
+
         maven {
-            url "file://" + System.getenv("local_maven")
+            name = 'Sponge / Mixin'
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
+
+        maven {
+            name = 'BlameJared Maven'
+            url = 'https://maven.blamejared.com'
         }
     }
-}
 
-def getGitChangelog = { ->
-    try {
-        def stdout = new ByteArrayOutputStream()
-        def gitHash = System.getenv('GIT_COMMIT')
-        def gitPrevHash = System.getenv('GIT_PREVIOUS_COMMIT')
-        def travisRange = System.getenv('TRAVIS_COMMIT_RANGE')
-        if (gitHash && gitPrevHash) {
-            exec {
-                commandLine 'git', 'log', '--pretty=tformat:> - %s', '' + gitPrevHash + '...' + gitHash
-                standardOutput = stdout
-            }
-            return stdout.toString().trim()
-        } else if (travisRange) {
-            exec {
-                commandLine 'git', 'log', '--pretty=tformat:> - %s', '' + travisRange
-                standardOutput = stdout
-            }
-            return stdout.toString().trim()
-        } else {
-            return ""
-        }
-    } catch (ignored) {
-        return ""
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = 'UTF-8'
+        it.options.release = 17
     }
-}
 
-task sendWebhook {
-    doLast {
-        try {
-            if (System.getenv('discordWebhook') == null || System.getenv("BUILD_URL") == null) {
-                println "Cannot send the webhook without the webhook url or the build url"
-                return
-            }
-            def webhook = new Webhook(System.getenv('discordWebhook'), 'Petrak@ Patreon Gradle')
-
-            def message = new Message()
-            message.setUsername("Patreon Early Access")
-            message.setContent("New **$modName** release! Download it here: ${System.getenv("BUILD_URL")}\nChangelog:\n${getGitChangelog()}")
-
-            webhook.sendMessage(message)
-        } catch (ignored) {
-            project.logger.error("Failed to push Discord webhook.")
-        }
+    // Disables Gradle's custom module metadata from being published to maven. The
+    // metadata includes mapped dependencies which are not reasonably consumable by
+    // other mod developers.
+    tasks.withType(GenerateModuleMetadata) {
+        enabled = false
     }
+
+    sourceSets.main.kotlin.srcDirs += 'src/main/java'
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-}
+allprojects { gradle.projectsEvaluated { tasks.withType(JavaCompile) { options.compilerArgs << "-Xmaxerrs" << "1000" } } }
+
 compileKotlin {
     kotlinOptions {
+        jvmTarget = "17"
     }
 }
 compileTestKotlin {
     kotlinOptions {
+        jvmTarget = "17"
     }
 }
