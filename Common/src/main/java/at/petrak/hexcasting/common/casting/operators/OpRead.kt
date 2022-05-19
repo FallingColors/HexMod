@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext

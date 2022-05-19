@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.misc.ManaConstants
-
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -18,9 +17,6 @@ import net.minecraft.world.level.block.AbstractCauldronBlock
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.fluids.FluidActionResult
-import net.minecraftforge.fluids.FluidStack
-import net.minecraftforge.fluids.FluidUtil
 
 object OpCreateLava : SpellOperator {
     override val argc = 1
@@ -50,7 +46,14 @@ object OpCreateLava : SpellOperator {
 
             if (state.block is AbstractCauldronBlock)
                 ctx.world.setBlock(pos, Blocks.LAVA_CAULDRON.defaultBlockState(), 3)
-            else if (!IXplatAbstractions.INSTANCE.tryPlaceFluid(ctx.world, ctx.castingHand, pos, ItemStack(Items.LAVA_BUCKET), Fluids.LAVA)) {
+            else if (!IXplatAbstractions.INSTANCE.tryPlaceFluid(
+                    ctx.world,
+                    ctx.castingHand,
+                    pos,
+                    ItemStack(Items.LAVA_BUCKET),
+                    Fluids.LAVA
+                )
+            ) {
                 // Just steal bucket code lmao
                 val charlie = Items.LAVA_BUCKET
                 if (charlie is BucketItem) {

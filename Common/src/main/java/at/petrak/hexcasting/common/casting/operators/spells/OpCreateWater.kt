@@ -1,8 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-
 import at.petrak.hexcasting.api.HexAPI
+import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -19,9 +18,6 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.LayeredCauldronBlock
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.fluids.FluidActionResult
-import net.minecraftforge.fluids.FluidStack
-import net.minecraftforge.fluids.FluidUtil
 
 object OpCreateWater : SpellOperator {
     override val argc = 1
@@ -48,8 +44,19 @@ object OpCreateWater : SpellOperator {
             val state = ctx.world.getBlockState(pos)
 
             if (state.block is AbstractCauldronBlock)
-                ctx.world.setBlock(pos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3), 3)
-            else if (IXplatAbstractions.INSTANCE.tryPlaceFluid(ctx.world, ctx.castingHand, pos, ItemStack(Items.WATER_BUCKET), Fluids.WATER)) {
+                ctx.world.setBlock(
+                    pos,
+                    Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3),
+                    3
+                )
+            else if (IXplatAbstractions.INSTANCE.tryPlaceFluid(
+                    ctx.world,
+                    ctx.castingHand,
+                    pos,
+                    ItemStack(Items.WATER_BUCKET),
+                    Fluids.WATER
+                )
+            ) {
                 // Just steal bucket code lmao
                 val charlie = Items.WATER_BUCKET
                 if (charlie is BucketItem) {

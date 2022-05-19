@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.cap.HexCapabilities
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -53,6 +52,5 @@ object OpWrite : SpellOperator {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             datumHolder?.writeDatum(datum, false)
         }
-
     }
 }

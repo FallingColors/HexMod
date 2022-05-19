@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.player.FlightAbility
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper
 import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
