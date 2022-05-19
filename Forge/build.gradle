@@ -22,7 +22,7 @@ archivesBaseName = getArtifactID("forge")
 
 // Adds KFF as dependency and Kotlin libs to the runtime classpath
 // If you already know how to add the Kotlin plugin to Gradle, this is the only line you need for KFF
-apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle'
+apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.3.2.gradle'
 
 minecraft {
     mappings channel: 'official', version: minecraftVersion
@@ -122,8 +122,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.testng:testng:7.1.0'
-
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
@@ -140,6 +138,10 @@ dependencies {
 
     compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion:api")
     runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion")
+
+    // aughh
+    testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
+    testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion:api")
 }
 
 mixin {
@@ -154,6 +156,7 @@ tasks.withType(JavaCompile) {
 
 sourceSets {
     main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
+    test.kotlin.srcDirs += 'src/main/java'
 }
 
 processResources {
