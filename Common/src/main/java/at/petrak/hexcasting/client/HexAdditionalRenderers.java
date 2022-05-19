@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
-import at.petrak.hexcasting.api.player.HexPlayerDataHelper;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -152,8 +151,9 @@ public class HexAdditionalRenderers {
 
         LocalPlayer player = mc.player;
         ClientLevel level = mc.level;
-        if (player == null || level == null)
+        if (player == null || level == null) {
             return;
+        }
 
         boolean foundLens = false;
         InteractionHand lensHand = null;
@@ -220,8 +220,9 @@ public class HexAdditionalRenderers {
                         mc.font.drawShadow(ps, actualLine, tx, ty, 0xffffffff);
                         ps.translate(0, mc.font.lineHeight, 0);
                     }
-                    if (text.isEmpty())
+                    if (text.isEmpty()) {
                         ps.translate(0, mc.font.lineHeight, 0);
+                    }
                 }
 
                 ps.popPose();

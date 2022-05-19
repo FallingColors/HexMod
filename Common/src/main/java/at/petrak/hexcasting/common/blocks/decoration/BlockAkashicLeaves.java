@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.blocks.akashic;
+package at.petrak.hexcasting.common.blocks.decoration;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import net.minecraft.core.BlockPos;

@@ -7,6 +7,7 @@ import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
+import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
@@ -16,12 +17,14 @@ import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.ArgumentTypes
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.InteractionResult
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
@@ -47,6 +50,16 @@ object FabricHexInitializer : ModInitializer {
     fun initListeners() {
         UseEntityCallback.EVENT.register(Brainsweeping::tradeWithVillager)
         VillagerConversionCallback.EVENT.register(Brainsweeping::copyBrainsweepFromVillager)
+        AttackBlockCallback.EVENT.register { player, world, _, pos, _ ->
+            // SUCCESS cancels further processing and, on the client, sends a packet to the server.
+            // PASS falls back to further processing.
+            // FAIL cancels further processing and does not send a packet to the server.
+            if (ItemJewelerHammer.shouldFailToBreak(player, world.getBlockState(pos), pos)) {
+                InteractionResult.SUCCESS // "success"
+            } else {
+                InteractionResult.PASS
+            }
+        }
 
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
 

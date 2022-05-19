@@ -2,8 +2,8 @@ package at.petrak.hexcasting.interop.patchouli;
 
 import at.petrak.hexcasting.api.spell.math.HexCoord;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.interop.utils.utils.PatternDrawingUtil;
-import at.petrak.hexcasting.interop.utils.utils.PatternEntry;
+import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
+import at.petrak.hexcasting.interop.utils.PatternEntry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.phys.Vec2;
@@ -39,7 +39,8 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
 
     @Override
     public void render(PoseStack poseStack, IComponentRenderContext ctx, float partialTicks, int mouseX, int mouseY) {
-        PatternDrawingUtil.drawPattern(poseStack, this.x, this.y, this.patterns, this.pathfinderDots, this.showStrokeOrder(), ctx.getTicksInBook(),
+        PatternDrawingUtil.drawPattern(poseStack, this.x, this.y, this.patterns, this.pathfinderDots,
+            this.showStrokeOrder(), ctx.getTicksInBook(),
             0xff_d2c8c8, 0xc8_aba2a2, 0xc8_322b33, 0x80_d1cccc);
     }
 
