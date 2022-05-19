@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import com.mojang.datafixers.util.Either
 import net.minecraft.network.chat.TranslatableComponent
@@ -18,10 +19,10 @@ object MathOpUtils {
             )
         }
 
-    fun GetNumOrList(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, List<SpellDatum<*>>> =
+    fun GetNumOrList(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, SpellList> =
         when (datum.payload) {
             is Double -> Either.left(datum.payload)
-            is List<*> -> Either.right(datum.payload.filterIsInstance<SpellDatum<*>>())
+            is SpellList -> Either.right(datum.payload)
             else -> throw MishapInvalidIota(
                 datum,
                 reverseIdx,
