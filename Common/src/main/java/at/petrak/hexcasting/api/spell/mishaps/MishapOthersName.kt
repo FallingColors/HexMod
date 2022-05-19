@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.network.chat.Component
 import net.minecraft.world.effect.MobEffectInstance
@@ -26,7 +27,7 @@ class MishapOthersName(val other: Player) : Mishap() {
         fun getTrueNameFromDatum(datum: SpellDatum<*>, caster: Player): Player? {
             if (datum.payload is Player && datum.payload != caster)
                 return datum.payload
-            else if (datum.payload !is List<*>)
+            else if (datum.payload !is SpellList)
                 return null
 
             val poolToSearch: MutableList<SpellDatum<*>> =
@@ -38,7 +39,7 @@ class MishapOthersName(val other: Player) : Mishap() {
 
                 if (datumToCheck.payload is Player && datumToCheck.payload != caster)
                     return datumToCheck.payload
-                else if (datumToCheck.payload is List<*>)
+                else if (datumToCheck.payload is SpellList)
                     poolToSearch.addAll(datumToCheck.payload.filterIsInstance<SpellDatum<*>>())
             }
 
