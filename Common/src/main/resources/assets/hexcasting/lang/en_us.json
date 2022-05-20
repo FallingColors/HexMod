@@ -381,6 +381,7 @@
   "hexcasting.mishap.bad_item.rechargable": "a rechargable item",
   "hexcasting.mishap.bad_block": "Expected %s at %s, but got %s",
   "hexcasting.mishap.bad_block.sapling": "a sapling",
+  "hexcasting.mishap.bad_block.replaceable": "somewhere to place a block",
   "hexcasting.mishap.bad_brainsweep": "The %s rejected the villager's mind",
   "hexcasting.mishap.already_brainswept": "The villager has already been used",
   "hexcasting.mishap.no_spell_circle": "%s requires a spell circle",
