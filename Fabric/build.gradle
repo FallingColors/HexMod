@@ -5,7 +5,7 @@ plugins {
 archivesBaseName = getArtifactID("fabric")
 
 loom {
-    mixin.defaultRefmapName = "hexcasting.refmap.json"
+    mixin.defaultRefmapName = "hexcasting.mixins.refmap.json"
 
     accessWidenerPath = file("src/main/resources/hexcasting.accesswidener")
 

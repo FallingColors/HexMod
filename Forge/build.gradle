@@ -143,7 +143,7 @@ dependencies {
 }
 
 mixin {
-    add sourceSets.main, "hexcasting.refmap.json"
+    add sourceSets.main, "hexcasting.mixins.refmap.json"
     config "hexplat.mixins.json"
     config "hexcasting_forge.mixins.json"
 }
