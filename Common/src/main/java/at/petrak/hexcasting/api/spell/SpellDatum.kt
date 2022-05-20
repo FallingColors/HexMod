@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 import java.util.*
+import kotlin.math.abs
 
 /**
  * Data allowed into a spell.
@@ -99,6 +100,21 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             else -> DatumType.OTHER
         }
 
+    // Todo: make more things use this
+    fun equalsWithDoubleTolerance(other: SpellDatum<*>): Boolean {
+        if (this == other) {
+            return true
+        }
+        val tolerance = 0.0001
+        if (this.payload is Double && other.payload is Double) {
+            return abs(this.payload - other.payload) < tolerance
+        }
+        if (this.payload is Vec3 && other.payload is Vec3) {
+            return this.payload.distanceToSqr(other.payload) < tolerance * tolerance
+        }
+        return false
+    }
+
     companion object {
         @JvmStatic
         fun make(payload: Any): SpellDatum<*> =
@@ -181,11 +197,23 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 throw IllegalArgumentException("Expected exactly one kv pair: $nbt")
 
             return when (val key = keys.iterator().next()) {
-                TAG_DOUBLE -> TextComponent(String.format("%.4f", nbt.getDouble(TAG_DOUBLE))).withStyle(ChatFormatting.GREEN)
+                TAG_DOUBLE -> TextComponent(
+                    String.format(
+                        "%.4f",
+                        nbt.getDouble(TAG_DOUBLE)
+                    )
+                ).withStyle(ChatFormatting.GREEN)
                 TAG_VEC3 -> {
                     val vec = HexUtils.DeserializeVec3FromNBT(nbt.getLongArray(key))
                     // the focus color is really more red, but we don't want to show an error-y color
-                    TextComponent(String.format("(%.2f, %.2f, %.2f)", vec.x, vec.y, vec.z)).withStyle(ChatFormatting.LIGHT_PURPLE)
+                    TextComponent(
+                        String.format(
+                            "(%.2f, %.2f, %.2f)",
+                            vec.x,
+                            vec.y,
+                            vec.z
+                        )
+                    ).withStyle(ChatFormatting.LIGHT_PURPLE)
                 }
                 TAG_LIST -> {
                     val out = TextComponent("[").withStyle(ChatFormatting.WHITE)
@@ -203,7 +231,10 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 }
                 TAG_WIDGET -> {
                     val widget = Widget.valueOf(nbt.getString(key))
-                    if (widget == Widget.GARBAGE) TextComponent("arimfexendrapuse").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.OBFUSCATED)
+                    if (widget == Widget.GARBAGE) TextComponent("arimfexendrapuse").withStyle(
+                        ChatFormatting.DARK_GRAY,
+                        ChatFormatting.OBFUSCATED
+                    )
                     // use dark purple instead of pink, so that vec3 can be pink instead of error red
                     else TextComponent(widget.toString()).withStyle(ChatFormatting.DARK_PURPLE)
                 }

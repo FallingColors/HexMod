@@ -18,7 +18,7 @@ object OpOr : ConstManaOperator {
         if (firstParam.right().isPresent) {
             val list1 = firstParam.right().get()
             val list2 = args.getChecked<SpellList>(1)
-            return spellListOf(list1 + list2.filter { it !in list1 })
+            return spellListOf(list1 + list2.filter { x -> list1.none { x.equalsWithDoubleTolerance(it) } })
         }
 
         val num1 = firstParam.left().get().roundToInt()
