@@ -17,10 +17,13 @@ public interface ManaHolder {
     boolean canConstructBattery();
 
     default int withdrawMana(int cost, boolean simulate) {
+        if (!canProvide()) {
+            return 0;
+        }
         var manaHere = getMana();
-		if (cost < 0) {
-			cost = manaHere;
-		}
+        if (cost < 0) {
+            cost = manaHere;
+        }
         if (!simulate) {
             var manaLeft = manaHere - cost;
             setMana(manaLeft);
