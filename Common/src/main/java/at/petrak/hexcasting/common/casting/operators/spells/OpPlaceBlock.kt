@@ -1,18 +1,16 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.mishaps.MishapBadBlock
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
@@ -24,13 +22,30 @@ object OpPlaceBlock : SpellOperator {
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val pos = args.getChecked<Vec3>(0, argc)
-        ctx.assertVecInRange(pos)
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+        val target = args.getChecked<Vec3>(0, argc)
+        ctx.assertVecInRange(target)
+
+        val pos = BlockPos(target)
+
+        if (!ctx.world.mayInteract(ctx.caster, pos))
+            return null
+
+
+        val blockHit = BlockHitResult(
+            Vec3.ZERO, ctx.caster.direction, pos, false
+        )
+        val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
+        val placeContext = BlockPlaceContext(itemUseCtx)
+
+        val worldState = ctx.world.getBlockState(pos)
+        if (!worldState.canBeReplaced(placeContext))
+            throw MishapBadBlock.of(pos, "replaceable")
+
         return Triple(
-            Spell(pos),
+            Spell(target),
             ManaConstants.DUST_UNIT,
-            listOf(ParticleSpray.Cloud(Vec3.atCenterOf(BlockPos(pos)), 1.0))
+            listOf(ParticleSpray.Cloud(Vec3.atCenterOf(pos), 1.0))
         )
     }
 
@@ -41,8 +56,14 @@ object OpPlaceBlock : SpellOperator {
             if (!ctx.world.mayInteract(ctx.caster, pos))
                 return
 
+            val blockHit = BlockHitResult(
+                Vec3.ZERO, ctx.caster.direction, pos, false
+            )
+            val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
+            val placeContext = BlockPlaceContext(itemUseCtx)
+
             val bstate = ctx.world.getBlockState(pos)
-            if (bstate.isAir || bstate.material.isReplaceable) {
+            if (bstate.canBeReplaced(placeContext)) {
                 val placeeSlot = ctx.getOperativeSlot { it.item is BlockItem }
                 if (placeeSlot != null) {
                     val placeeStack = ctx.caster.inventory.getItem(placeeSlot).copy()
@@ -64,11 +85,7 @@ object OpPlaceBlock : SpellOperator {
                             spoofedStack.count = 1
                             ctx.caster.setItemInHand(ctx.castingHand, spoofedStack)
 
-                            val blockHit = BlockHitResult(
-                                Vec3.ZERO, ctx.caster.direction, pos, false
-                            )
-                            val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
-                            val res = spoofedStack.useOn(itemUseCtx)
+                            val res = spoofedStack.useOn(placeContext)
 
                             ctx.caster.setItemInHand(ctx.castingHand, oldStack)
                             if (res != InteractionResult.FAIL) {
