@@ -12,13 +12,11 @@ buildscript {
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
-apply plugin: 'java'
+
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
 archivesBaseName = getArtifactID("forge")
-
 
 // Adds KFF as dependency and Kotlin libs to the runtime classpath
 // If you already know how to add the Kotlin plugin to Gradle, this is the only line you need for KFF
@@ -151,6 +149,9 @@ mixin {
 }
 
 tasks.withType(JavaCompile) {
+    source(project(":Common").sourceSets.main.allSource)
+}
+compileTestKotlin {
     source(project(":Common").sourceSets.main.allSource)
 }
 

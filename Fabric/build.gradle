@@ -2,7 +2,6 @@ plugins {
     id 'fabric-loom' version "$loomVersion"
 }
 
-
 archivesBaseName = getArtifactID("fabric")
 
 loom {
