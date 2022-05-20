@@ -19,7 +19,7 @@ object FabricHexClientInitializer : ClientModInitializer {
     override fun onInitializeClient() {
         FabricPacketHandler.initClient()
 
-        WorldRenderEvents.BEFORE_DEBUG_RENDER.register { ctx ->
+        WorldRenderEvents.LAST.register { ctx ->
             HexAdditionalRenderers.overlayLevel(ctx.matrixStack(), ctx.tickDelta())
         }
         HudRenderCallback.EVENT.register(HexAdditionalRenderers::overlayGui)

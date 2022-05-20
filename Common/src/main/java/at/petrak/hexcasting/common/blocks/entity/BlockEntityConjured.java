@@ -95,7 +95,7 @@ public class BlockEntityConjured extends HexBlockEntity {
 
     @Override
     protected void loadModData(CompoundTag tag) {
-        this.setColorizer(FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER)));
+        this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
     }
 
     public FrozenColorizer getColorizer() {
