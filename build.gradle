@@ -8,6 +8,9 @@ buildscript {
     }
 }
 
+import com.diluv.schoomp.Webhook
+import com.diluv.schoomp.message.Message
+
 plugins {
     id 'java'
     id "org.jetbrains.kotlin.jvm"
@@ -122,5 +125,51 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = "17"
+    }
+}
+
+def getGitChangelog = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        def gitHash = System.getenv('GIT_COMMIT')
+        def gitPrevHash = System.getenv('GIT_PREVIOUS_COMMIT')
+        def travisRange = System.getenv('TRAVIS_COMMIT_RANGE')
+        if (gitHash && gitPrevHash) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:> - %s', '' + gitPrevHash + '...' + gitHash
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        } else if (travisRange) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:> - %s', '' + travisRange
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        } else {
+            return ""
+        }
+    } catch (ignored) {
+        return ""
+    }
+}
+
+task sendWebhook {
+    doLast {
+        try {
+            if (System.getenv('discordWebhook') == null || System.getenv("BUILD_URL") == null) {
+                println "Cannot send the webhook without the webhook url or the build url"
+                return
+            }
+            def webhook = new Webhook(System.getenv('discordWebhook'), 'Petrak@ Patreon Gradle')
+
+            def message = new Message()
+            message.setUsername("Patreon Early Access")
+            message.setContent("New **$modName** release! Download it here: ${System.getenv("BUILD_URL")}\nChangelog:\n${getGitChangelog()}")
+
+            webhook.sendMessage(message)
+        } catch (ignored) {
+            project.logger.error("Failed to push Discord webhook.")
+        }
     }
 }
