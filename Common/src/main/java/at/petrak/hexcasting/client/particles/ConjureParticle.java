@@ -2,6 +2,7 @@ package at.petrak.hexcasting.client.particles;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
+import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -93,12 +94,8 @@ public class ConjureParticle extends TextureSheetParticle {
         }
     }
 
-    // pretty sure this prevents the gross culling
-    // https://github.com/VazkiiMods/Psi/blob/1.18/src/main/java/vazkii/psi/client/fx/FXWisp.java
+    // https://github.com/VazkiiMods/Botania/blob/db85d778ab23f44c11181209319066d1f04a9e3d/Xplat/src/main/java/vazkii/botania/client/fx/FXWisp.java
     private record ConjureRenderType(boolean light) implements ParticleRenderType {
-        private static boolean prevBlur;
-        private static boolean prevMipmap;
-
         @Override
         public void begin(BufferBuilder buf, TextureManager texMan) {
             Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
@@ -108,18 +105,17 @@ public class ConjureParticle extends TextureSheetParticle {
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
-            texMan.bindForSetup(TextureAtlas.LOCATION_PARTICLES);
-            texMan.getTexture(TextureAtlas.LOCATION_PARTICLES).setFilter(this.light, false);
+            var tex = texMan.getTexture(TextureAtlas.LOCATION_PARTICLES);
+            IClientXplatAbstractions.INSTANCE.setFilterSave(tex, this.light, false);
             buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 
         @Override
         public void end(Tesselator tess) {
             tess.end();
-            // Minecraft.getInstance()
-            //     .getTextureManager()
-            //     .getTexture(TextureAtlas.LOCATION_PARTICLES)
-            //     .restoreLastBlurMipmap();
+            IClientXplatAbstractions.INSTANCE.restoreLastFilter(
+                Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES)
+            );
             RenderSystem.disableBlend();
             RenderSystem.depthMask(true);
         }

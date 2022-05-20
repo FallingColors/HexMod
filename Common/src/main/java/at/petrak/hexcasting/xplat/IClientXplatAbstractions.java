@@ -8,6 +8,7 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -34,6 +35,11 @@ public interface IClientXplatAbstractions {
     <T extends ClientTooltipComponent & TooltipComponent> void registerIdentityTooltipMapping(Class<T> clazz);
 
     void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func);
+
+    // On Forge, these are already exposed; on Farbc we do a mixin
+    void setFilterSave(AbstractTexture texture, boolean filter, boolean mipmap);
+
+    void restoreLastFilter(AbstractTexture texture);
 
     IClientXplatAbstractions INSTANCE = find();
 

@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -56,5 +57,15 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func) {
         ItemProperties.register(item, id, func);
+    }
+
+    @Override
+    public void setFilterSave(AbstractTexture texture, boolean filter, boolean mipmap) {
+        texture.setBlurMipmap(filter, mipmap);
+    }
+
+    @Override
+    public void restoreLastFilter(AbstractTexture texture) {
+        texture.restoreLastBlurMipmap();
     }
 }
