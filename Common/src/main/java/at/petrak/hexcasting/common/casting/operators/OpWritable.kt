@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.casting.operators
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -19,15 +19,15 @@ object OpWritable : ConstManaOperator {
             datumHolder != null && datumHolder.writeDatum(datum, true)
         }
 
-        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack) ?: return spellListOf(0.0)
+        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack) ?: return false.asSpellResult
 
         if (!datumHolder.writeDatum(datum, true))
-            return spellListOf(0.0)
+            return false.asSpellResult
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
         if (trueName != null)
-            return spellListOf(0.0)
+            return false.asSpellResult
 
-        return spellListOf(1.0)
+        return true.asSpellResult
     }
 }

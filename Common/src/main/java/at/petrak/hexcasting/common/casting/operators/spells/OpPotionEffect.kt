@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -27,13 +27,13 @@ class OpPotionEffect(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<LivingEntity>(0)
+        val target = args.getChecked<LivingEntity>(0, argc)
         if (target is ArmorStand)
             throw MishapInvalidIota.ofClass(SpellDatum.make(target), 0, LivingEntity::class.java)
-        val duration = max(args.getChecked(1), 0.0)
+        val duration = max(args.getChecked(1, argc), 0.0)
         ctx.assertEntityInRange(target)
         val potency = if (this.allowPotency)
-            max(args.getChecked(2), 1.0)
+            max(args.getChecked(2, argc), 1.0)
         else 1.0
 
         val cost = this.baseCost * duration * if (potencyCubic) {

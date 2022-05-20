@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.casting.operators.circles
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapNoSpellCircle
 import net.minecraft.world.phys.Vec3
@@ -16,11 +16,9 @@ class OpCircleBounds(val max: Boolean) : ConstManaOperator {
 
         val aabb = ctx.spellCircle.aabb
 
-        return Operator.spellListOf(
-            if (max)
-                Vec3(aabb.maxX - 0.5, aabb.maxY - 0.5, aabb.maxZ - 0.5)
-            else
-                Vec3(aabb.minX + 0.5, aabb.minY + 0.5, aabb.minZ + 0.5)
-        )
+        return if (max)
+            Vec3(aabb.maxX - 0.5, aabb.maxY - 0.5, aabb.maxZ - 0.5).asSpellResult
+        else
+            Vec3(aabb.minX + 0.5, aabb.minY + 0.5, aabb.minZ + 0.5).asSpellResult
     }
 }

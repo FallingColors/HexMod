@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
@@ -14,7 +14,7 @@ object OpDuplicateN : ConstManaOperator {
         get() = 2
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val countDouble = args.getChecked<Double>(1)
+        val countDouble = args.getChecked<Double>(1, argc)
 
         if (abs(countDouble.roundToInt() - countDouble) >= 0.05f)
             throw MishapInvalidIota(

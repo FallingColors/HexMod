@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.mixin.accessor.AccessorUseOnContext
 import net.minecraft.core.BlockPos
@@ -23,7 +22,7 @@ object OpExtinguish : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Vec3>(0)
+        val target = args.getChecked<Vec3>(0, argc)
         ctx.assertVecInRange(target)
 
         return Triple(
@@ -47,15 +46,9 @@ object OpExtinguish : SpellOperator {
             while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
                 val here = todo.removeFirst()
                 val distFromFocus =
-                    ctx.caster.position().distanceToSqr(Vec3(here.x.toDouble(), here.y.toDouble(), here.z.toDouble()))
+                    ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
                 val distFromTarget =
-                    target.distanceTo(
-                        Vec3(
-                            here.x.toDouble(),
-                            here.y.toDouble(),
-                            here.z.toDouble()
-                        )
-                    ) // max distance to prevent runaway shenanigans
+                    target.distanceTo(Vec3.atCenterOf(here)) // max distance to prevent runaway shenanigans
                 if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && distFromTarget < 10 && ctx.world.mayInteract(
                         ctx.caster,
                         here
@@ -71,13 +64,13 @@ object OpExtinguish : SpellOperator {
                             is CampfireBlock -> {
                                 if (blockstate.getValue(CampfireBlock.LIT)) { // check if campfire is lit before putting it out
                                     val wilson = Items.WOODEN_SHOVEL // summon shovel from the ether to do our bidding
-                                    val hereVec = (Vec3(here.x.toDouble(), here.y.toDouble(), here.z.toDouble()))
+                                    val hereVec = Vec3.atCenterOf(here)
                                     wilson.useOn(
                                         AccessorUseOnContext.`hex$new`(
                                             ctx.world,
                                             null,
                                             InteractionHand.MAIN_HAND,
-                                            ItemStack(wilson.asItem()),
+                                            ItemStack(wilson),
                                             BlockHitResult(hereVec, Direction.UP, here, false)
                                         )
                                     ); true

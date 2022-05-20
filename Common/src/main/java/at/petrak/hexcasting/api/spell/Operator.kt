@@ -1,8 +1,6 @@
 package at.petrak.hexcasting.api.spell
 
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
-import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -39,27 +37,6 @@ interface Operator {
         fun raycastEnd(origin: Vec3, look: Vec3): Vec3 =
             origin.add(look.normalize().scale(MAX_DISTANCE))
 
-        /**
-         * Try to get a value of the given type.
-         */
-        @JvmStatic
-        inline fun <reified T : Any> List<SpellDatum<*>>.getChecked(idx: Int): T {
-            val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
-            if (x.payload is T)
-                return x.payload
-            else
-                throw MishapInvalidIota.ofClass(x, idx, T::class.java)
-        }
-
-        @JvmStatic
-        fun spellListOf(vararg vs: Any): List<SpellDatum<*>> {
-            val out = ArrayList<SpellDatum<*>>(vs.size)
-            for (v in vs) {
-                out.add(SpellDatum.make(v))
-            }
-            return out
-        }
-
         @JvmStatic
         fun makeConstantOp(x: SpellDatum<*>): Operator = object : ConstManaOperator {
             override val argc: Int
@@ -70,3 +47,4 @@ interface Operator {
         }
     }
 }
+

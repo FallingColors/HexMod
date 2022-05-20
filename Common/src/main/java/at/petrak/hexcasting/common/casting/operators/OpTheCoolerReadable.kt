@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
 
@@ -15,16 +15,16 @@ object OpTheCoolerReadable : ConstManaOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): List<SpellDatum<*>> {
-        val target = args.getChecked<ItemEntity>(0)
+        val target = args.getChecked<ItemEntity>(0, argc)
         ctx.assertEntityInRange(target)
 
         val stack = target.item
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack)
-            ?: return spellListOf(0.0)
+            ?: return false.asSpellResult
 
         if (datumHolder.readDatum(ctx.world) == null && datumHolder.emptyDatum() == null)
-            return spellListOf(0.0)
+            return false.asSpellResult
 
-        return spellListOf(1.0)
+        return true.asSpellResult
     }
 }

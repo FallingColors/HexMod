@@ -63,9 +63,9 @@ sealed class SpellList: Iterable<SpellDatum<*>> {
 
     override fun toString() = toList().toString()
 
-    override fun iterator() = Iterator(this)
+    override fun iterator() = SpellListIterator(this)
 
-    class Iterator(var list: SpellList): kotlin.collections.Iterator<SpellDatum<*>> {
+    class SpellListIterator(var list: SpellList): Iterator<SpellDatum<*>> {
         override fun hasNext() = list.nonEmpty
         override operator fun next(): SpellDatum<*> {
             val car = list.car

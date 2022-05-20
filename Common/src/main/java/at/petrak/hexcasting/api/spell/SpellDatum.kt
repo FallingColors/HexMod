@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 import java.util.*
-import kotlin.math.abs
 
 /**
  * Data allowed into a spell.
@@ -99,21 +98,6 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             is Vec3 -> DatumType.VEC
             else -> DatumType.OTHER
         }
-
-    // Todo: make more things use this
-    fun equalsWithDoubleTolerance(other: SpellDatum<*>): Boolean {
-        if (this == other) {
-            return true
-        }
-        val tolerance = 0.0001
-        if (this.payload is Double && other.payload is Double) {
-            return abs(this.payload - other.payload) < tolerance
-        }
-        if (this.payload is Vec3 && other.payload is Vec3) {
-            return this.payload.distanceToSqr(other.payload) < tolerance * tolerance
-        }
-        return false
-    }
 
     companion object {
         @JvmStatic

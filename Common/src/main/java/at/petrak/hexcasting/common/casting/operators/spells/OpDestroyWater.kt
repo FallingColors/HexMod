@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -24,7 +23,7 @@ object OpDestroyWater : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Vec3>(0)
+        val target = args.getChecked<Vec3>(0, argc)
         ctx.assertVecInRange(target)
 
         return Triple(
@@ -53,7 +52,7 @@ object OpDestroyWater : SpellOperator {
             while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
                 val here = todo.removeFirst()
                 val distFromFocus =
-                    ctx.caster.position().distanceToSqr(Vec3(here.x.toDouble(), here.y.toDouble(), here.z.toDouble()))
+                    ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
                 if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && ctx.world.mayInteract(ctx.caster, here)) {
                     // never seen this pos in my life
                     val fluid = ctx.world.getFluidState(here)

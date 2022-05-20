@@ -1,8 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
+import at.petrak.hexcasting.api.spell.GetNumOrVec
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import kotlin.math.absoluteValue
 
@@ -11,10 +12,8 @@ object OpAbsLen : ConstManaOperator {
         get() = 1
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val x = MathOpUtils.GetNumOrVec(args[0], 0)
+        val x = GetNumOrVec(args[0], 0)
 
-        return spellListOf(
-            x.map({ num -> num.absoluteValue }, { vec -> vec.length() })
-        )
+        return x.map({ num -> num.absoluteValue }, { vec -> vec.length() }).asSpellResult
     }
 }
