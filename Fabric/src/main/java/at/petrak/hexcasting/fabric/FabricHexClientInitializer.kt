@@ -20,7 +20,14 @@ object FabricHexClientInitializer : ClientModInitializer {
         FabricPacketHandler.initClient()
 
         WorldRenderEvents.LAST.register { ctx ->
+            // https://www.3dgep.com/understanding-quaternions/
+            val quat = ctx.camera().rotation().copy()
+            quat.mul(-1f) // this should invert it?
+            ctx.matrixStack().pushPose()
+            ctx.matrixStack().mulPose(quat)
+            ctx.matrixStack().scale(-1f, 1f, -1f)
             HexAdditionalRenderers.overlayLevel(ctx.matrixStack(), ctx.tickDelta())
+            ctx.matrixStack().popPose()
         }
         HudRenderCallback.EVENT.register(HexAdditionalRenderers::overlayGui)
         WorldRenderEvents.START.register { ClientTickCounter.renderTickStart(it.tickDelta()) }
