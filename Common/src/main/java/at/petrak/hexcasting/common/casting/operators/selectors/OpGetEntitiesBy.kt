@@ -12,8 +12,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.animal.WaterAnimal
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.monster.Monster
-import net.minecraft.world.entity.monster.Slime
+import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -31,7 +30,11 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
         val entitiesGot = ctx.world.getEntities(
             null,
             aabb
-        ) { (checker.test(it) != negate) && ctx.isEntityInRange(it) && it.isAlive && !it.isSpectator && it.distanceToSqr(pos) <= radius * radius }
+        ) {
+            (checker.test(it) != negate) && ctx.isEntityInRange(it) && it.isAlive && !it.isSpectator && it.distanceToSqr(
+                pos
+            ) <= radius * radius
+        }
             .sortedBy { it.distanceToSqr(pos) }
         return spellListOf(entitiesGot)
     }
@@ -42,7 +45,7 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
         fun isAnimal(e: Entity): Boolean = e is Animal || e is WaterAnimal
 
         @JvmStatic
-        fun isMonster(e: Entity): Boolean = e is Monster || e is Slime
+        fun isMonster(e: Entity): Boolean = e is Enemy
 
         @JvmStatic
         fun isItem(e: Entity): Boolean = e is ItemEntity
