@@ -184,7 +184,7 @@ def do_format(root_data, obj, *names):
 
 def identity(x): return x
 
-pattern_pat = re.compile(r'HexPattern\.FromAnglesSig\("([qweasd]+)", HexDir\.(\w+)\),\s*prefix\("([^"]+)"\)([^;]*true\);)?')
+pattern_pat = re.compile(r'HexPattern\.FromAnglesSig\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?')
 def fetch_patterns(root_data):
     filename = f"{root_data['resource_dir']}/../java/at/petrak/hexcasting/common/casting/RegisterPatterns.java"
     registry = {}
@@ -510,15 +510,16 @@ def write_book(out, book):
                 write_category(out, book["blacklist"], category)
 
 def main(argv):
-    if len(argv) < 3:
-        print(f"Usage: {argv[0]} <resources dir> <mod name> <book name> [<output>]")
+    if len(argv) < 5:
+        print(f"Usage: {argv[0]} <resources dir> <mod name> <book name> <template file> [<output>]")
         return
     root = argv[1]
     mod_name = argv[2]
     book_name = argv[3]
     book = parse_book(root, mod_name, book_name)
-    with open("doc/template.html", "r") as fh:
-        with stdout if len(argv) < 5 else open(argv[4], "w") as out:
+    template_file = argv[4]
+    with open(template_file, "r") as fh:
+        with stdout if len(argv) < 6 else open(argv[5], "w") as out:
             for line in fh:
                 if line.startswith("#DO_NOT_RENDER"):
                     _, *blacklist = line.split()

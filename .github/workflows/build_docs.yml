@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Generate file
-      run: doc/collate_data.py Common/src/main/resources hexcasting thehexbook index.html.uncommitted
+      run: doc/collate_data.py Common/src/main/resources hexcasting thehexbook doc/template.html index.html.uncommitted
     - name: Check out gh-pages
       uses: actions/checkout@v3
       with:
