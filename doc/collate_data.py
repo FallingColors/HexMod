@@ -10,10 +10,11 @@ import os # listdir
 # extra info :(
 lang = "en_us"
 repo_names = {
-    "hexcasting": "https://raw.githubusercontent.com/gamma-delta/HexMod/main/src/main/resources",
+    "hexcasting": "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources",
 }
 extra_i18n = {
     "item.minecraft.amethyst_shard": "Amethyst Shard",
+    "item.minecraft.budding_amethyst": "Budding Amethyst",
     "block.hexcasting.slate": "Blank Slate",
 }
 
@@ -210,12 +211,15 @@ def fixup_pattern(do_sig, root_data, page):
         page["header"] += f" ({inp} \u2192 {oup})"
     page["op"] = [(p["signature"], p["startdir"], False) for p in patterns]
 
-def fetch_recipe_result(root_data, recipe):
+def fetch_recipe(root_data, recipe):
     modid, recipeid = recipe.split(":")
     gen_resource_dir = root_data["resource_dir"].replace("/main", "/generated") # TODO hack
     recipe_path = f"{gen_resource_dir}/data/{modid}/recipes/{recipeid}.json"
-    recipe_data = slurp(recipe_path)
-    return recipe_data["result"]["item"]
+    return slurp(recipe_path)
+def fetch_recipe_result(root_data, recipe):
+    return fetch_recipe(root_data, recipe)["result"]["item"]
+def fetch_bswp_recipe_result(root_data, recipe):
+    return fetch_recipe(root_data, recipe)["result"]["name"]
 
 def localize_item(root_data, item):
     # TODO hack
@@ -229,8 +233,9 @@ page_types = {
     "hexcasting:pattern": resolve_pattern,
     "hexcasting:manual_pattern": bind1(fixup_pattern, True),
     "hexcasting:manual_pattern_nosig": bind1(fixup_pattern, False),
+    "hexcasting:brainsweep": lambda rd, page: page.__setitem__("output_name", localize_item(rd, fetch_bswp_recipe_result(rd, page["recipe"]))),
     "patchouli:link": lambda rd, page: do_localize(rd, page, "link_text"),
-    "patchouli:crafting": lambda rd, page: page.__setitem__("item_name", localize_item(rd, fetch_recipe_result(rd, page["recipe"]))),
+    "patchouli:crafting": lambda rd, page: page.__setitem__("item_name", [localize_item(rd, fetch_recipe_result(rd, page[ty])) for ty in ("recipe", "recipe2") if ty in page]),
     "hexcasting:crafting_multi": lambda rd, page: page.__setitem__("item_name", [localize_item(rd, fetch_recipe_result(rd, recipe)) for recipe in page["recipes"]]),
     "patchouli:spotlight": lambda rd, page: page.__setitem__("item_name", localize_item(rd, page["item"]))
 }
@@ -302,6 +307,7 @@ def parse_book(root, mod_name, book_name):
     do_format(root_info, root_info, "landing_text")
     root_info["categories"] = categories
     root_info["blacklist"] = set()
+    root_info["spoilers"] = set()
 
     return root_info
 
@@ -406,7 +412,7 @@ def write_page(out, pageid, page):
         elif ty == "patchouli:empty": pass
         elif ty == "patchouli:link":
             write_block(out, page["text"])
-            with out.pair_tag("p", clazz="linkout"):
+            with out.pair_tag("h4", clazz="linkout"):
                 with out.pair_tag("a", href=page["url"]):
                     out.text(page["link_text"])
         elif ty == "patchouli:spotlight":
@@ -416,7 +422,11 @@ def write_page(out, pageid, page):
         elif ty == "patchouli:crafting":
             with out.pair_tag("blockquote", clazz="crafting-info"):
                 out.text(f"Depicted in the book: The crafting recipe for the ")
-                with out.pair_tag("code"): out.text(page["item_name"])
+                first = True
+                for name in page["item_name"]:
+                    if not first: out.text(" and ")
+                    first = False
+                    with out.pair_tag("code"): out.text(name)
                 out.text(".")
             if "text" in page: write_block(out, page["text"])
         elif ty == "patchouli:image":
@@ -436,12 +446,16 @@ def write_page(out, pageid, page):
                 out.text(".")
             if "text" in page: write_block(out, page["text"])
         elif ty == "hexcasting:brainsweep": 
+            with out.pair_tag("blockquote", clazz="crafting-info"):
+                out.text(f"Depicted in the book: A mind-flaying recipe producing the ")
+                with out.pair_tag("code"): out.text(page["output_name"])
+                out.text(".")
             if "text" in page: write_block(out, page["text"])
         elif ty in ("hexcasting:pattern", "hexcasting:manual_pattern_nosig", "hexcasting:manual_pattern"):
             if "name" in page:
                 with out.pair_tag("h4", clazz="pattern-title"):
-                    inp = page.get("input", None) or "nothing"
-                    oup = page.get("output", None) or "nothing"
+                    inp = page.get("input", None) or ""
+                    oup = page.get("output", None) or ""
                     out.text(f"{page['name']} ({inp} \u2192 {oup})")
                     if anchor_id:
                         with out.pair_tag("a", href="#" + anchor_id, clazz="permalink small"):
@@ -468,7 +482,7 @@ def write_entry(out, entry):
         for page in entry["pages"]:
             write_page(out, entry["id"], page)
 
-def write_category(out, blacklist, category):
+def write_category(out, book, category):
     with out.pair_tag("section", id=category["id"]):
         with out.pair_tag("h2", clazz="category-title page-header"):
             write_block(out, category["name"])
@@ -476,8 +490,9 @@ def write_category(out, blacklist, category):
                 out.empty_pair_tag("i", clazz="bi bi-link-45deg")
         write_block(out, category["description"])
         for entry in category["entries"]:
-            if entry["id"] not in blacklist:
-                write_entry(out, entry)
+            if entry["id"] not in book["blacklist"]:
+                with out.pair_tag_if(entry.get("advancement", None) in book["spoilers"], "div", clazz="spoilered"):
+                    write_entry(out, entry)
 
 def write_toc(out, book):
     with out.pair_tag("h2", id="table-of-contents", clazz="page-header"):
@@ -507,7 +522,7 @@ def write_book(out, book):
             write_toc(out, book)
         with out.pair_tag("main", clazz="book-body"):
             for category in book["categories"]:
-                write_category(out, book["blacklist"], category)
+                write_category(out, book, category)
 
 def main(argv):
     if len(argv) < 5:
@@ -524,6 +539,9 @@ def main(argv):
                 if line.startswith("#DO_NOT_RENDER"):
                     _, *blacklist = line.split()
                     book["blacklist"].update(blacklist)
+                if line.startswith("#SPOILER"):
+                    _, *spoilers = line.split()
+                    book["spoilers"].update(spoilers)
                 elif line == "#DUMP_BODY_HERE\n":
                     write_book(Stream(out), book)
                     print('', file=out)

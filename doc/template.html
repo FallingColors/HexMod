@@ -64,7 +64,7 @@
         content: "\2022";
         margin: 1ex;
       }
-      p.linkout::before {
+      .linkout::before {
         content: "Link: ";
       }
       p.todo-note {
@@ -73,6 +73,16 @@
       }
       .obfuscated {
         filter: blur(1em);
+      }
+      .spoilered {
+        filter: blur(1ex);
+        transition: filter 0.2s ease;
+      }
+      .spoilered:hover {
+        filter: blur(0.5ex);
+      }
+      .spoilered.unspoilered {
+        filter: blur(0);
       }
     </style>
     <script>
@@ -229,21 +239,23 @@
         rfaQueue.push(tick);
 
         // scrolling input
-        canvas.addEventListener("wheel", ev => {
-          speedIncrement += ev.deltaY;
-          const oldSpeedLevel = speedLevel;
-          if (speedIncrement >= scrollThreshold) {
-            speedLevel--;
-          } else if (speedIncrement <= -scrollThreshold) {
-            speedLevel++;
-          }
-          if (oldSpeedLevel != speedLevel) {
-            speedIncrement = 0;
-            speedLevel = Math.max(0, Math.min(speeds.length - 1, speedLevel));
-            scrollTimeout = 0;
-          }
-          ev.preventDefault();
-        });
+        if (!perWorld) {
+          canvas.addEventListener("wheel", ev => {
+            speedIncrement += ev.deltaY;
+            const oldSpeedLevel = speedLevel;
+            if (speedIncrement >= scrollThreshold) {
+              speedLevel--;
+            } else if (speedIncrement <= -scrollThreshold) {
+              speedLevel++;
+            }
+            if (oldSpeedLevel != speedLevel) {
+              speedIncrement = 0;
+              speedLevel = Math.max(0, Math.min(speeds.length - 1, speedLevel));
+              scrollTimeout = 0;
+            }
+            ev.preventDefault();
+          });
+        }
       }
       function hookLoad(elem) {
         let init = false;
@@ -265,9 +277,23 @@
           }
         });
       }
+      const params = new URLSearchParams(document.location.search);
+      function hookSpoiler(elem) {
+        if (params.get("nospoiler") !== null) {
+          elem.classList.add("unspoilered");
+        } else {
+          const thunk = ev => {
+            ev.preventDefault();
+            elem.classList.add("unspoilered");
+            elem.removeEventListener("click", thunk);
+          };
+          elem.addEventListener("click", thunk);
+        }
+      }
       document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('details.spell-collapsible').forEach(hookLoad);
         document.querySelectorAll('a.toggle-link').forEach(hookToggle);
+        document.querySelectorAll('div.spoilered').forEach(hookSpoiler);
         function tick(prevTime, time) {
           const dt = time - prevTime;
           for (const q of rfaQueue) {
@@ -285,11 +311,11 @@
     <blockquote>
       <h1>This is the online version of the Hexcasting documentation.</h1>
       <p>Embedded images and patterns are included, but not crafting recipes or items. There's an in-game book for those.</p>
-      <p>Additionally, this is built from the latest commits on the source code. It may describe <b>newer</b> features that you may not necessarily have, even on latest!</p>
-      <p><b>WARNING: THIS DOCUMENT CONTAINS SPOILERS!</b> Read at your own risk.</p>
+      <p>Additionally, this is built from the latest code on GitHub. It may describe <b>newer</b> features that you may not necessarily have, even on the latest CurseForge version!</p>
+      <p><b>Entries which are blurred are spoilers</b>. Click to reveal them, but be aware that they may spoil endgame progression. Alternatively, click <a href="?nospoiler">here</a> to get a version with all spoilers showing.</p>
     </blockquote>
   </div>
-#DO_NOT_RENDER basics/couldnt_cast basics/start_to_see
+#SPOILER hexcasting:opened_eyes hexcasting:y_u_no_cast_angy hexcasting:enlightenment
 #DUMP_BODY_HERE
   </body>
 </html>
