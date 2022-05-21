@@ -43,7 +43,7 @@
       "op_id": "hexcasting:get_entity_velocity",
       "anchor": "hexcasting:get_entity_velocity",
       "input": "entity",
-      "output": "num",
+      "output": "vector",
       "text": "hexcasting.page.basics_pattern.get_entity_velocity"
     },
     {
