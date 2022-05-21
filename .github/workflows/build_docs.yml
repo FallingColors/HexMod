@@ -1,6 +1,8 @@
 name: Build the Python doc-gen
 
-on: [push]
+on:
+  push:
+    branches: [main]
 
 jobs:
   build_docs:
