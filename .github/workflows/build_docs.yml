@@ -22,6 +22,6 @@ jobs:
           git config user.name "Documentation Generation Bot"
           git config user.email "noreply@github.com"
           git add index.html
-          git diff-index --quiet HEAD || git commit -m "Update docs at index.html from $GITHUB_HEAD_REF"
+          git diff-index --quiet HEAD || git commit -m "Update docs at index.html from $GITHUB_REF"
     - name: Upload changes
       run: git push
