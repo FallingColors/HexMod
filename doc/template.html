@@ -283,17 +283,28 @@
           elem.classList.add("unspoilered");
         } else {
           const thunk = ev => {
-            ev.preventDefault();
-            elem.classList.add("unspoilered");
+            if (!elem.classList.contains("unspoilered")) {
+              ev.preventDefault();
+              ev.stopImmediatePropagation();
+              elem.classList.add("unspoilered");
+            }
             elem.removeEventListener("click", thunk);
           };
           elem.addEventListener("click", thunk);
+
+          if (elem instanceof HTMLAnchorElement) {
+            const href = elem.getAttribute("href");
+            if (href.startsWith("#")) {
+              console.log(document.getElementById(href.substring(1)));
+              elem.addEventListener("click", () => document.getElementById(href.substring(1)).querySelector(".spoilered").classList.add("unspoilered"));
+            }
+          }
         }
       }
       document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('details.spell-collapsible').forEach(hookLoad);
         document.querySelectorAll('a.toggle-link').forEach(hookToggle);
-        document.querySelectorAll('div.spoilered').forEach(hookSpoiler);
+        document.querySelectorAll('.spoilered').forEach(hookSpoiler);
         function tick(prevTime, time) {
           const dt = time - prevTime;
           for (const q of rfaQueue) {

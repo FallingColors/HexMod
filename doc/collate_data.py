@@ -379,6 +379,12 @@ def get_format(out, ty, value):
         return out.pair_tag("span", style="text-decoration: underline")
     raise ValueError("Unknown format type: " + ty)
 
+def entry_spoilered(root_info, entry):
+    return entry.get("advancement", None) in root_info["spoilers"]
+
+def category_spoilered(root_info, category):
+    return all(entry_spoilered(root_info, ent) for ent in category["entries"])
+
 def write_block(out, block):
     if isinstance(block, str):
         out.text(block)
@@ -475,26 +481,27 @@ def write_page(out, pageid, page):
                 write_block(out, page["text"])
     out.tag("br")
 
-def write_entry(out, entry):
+def write_entry(out, book, entry):
     with out.pair_tag("div", id=entry["id"]):
-        with out.pair_tag("h3", clazz="entry-title page-header"):
-            write_block(out, entry["name"])
-            with out.pair_tag("a", href="#" + entry["id"], clazz="permalink small"):
-                out.empty_pair_tag("i", clazz="bi bi-link-45deg")
-        for page in entry["pages"]:
-            write_page(out, entry["id"], page)
+        with out.pair_tag_if(entry_spoilered(book, entry), "div", clazz="spoilered"):
+            with out.pair_tag("h3", clazz="entry-title page-header"):
+                write_block(out, entry["name"])
+                with out.pair_tag("a", href="#" + entry["id"], clazz="permalink small"):
+                    out.empty_pair_tag("i", clazz="bi bi-link-45deg")
+            for page in entry["pages"]:
+                write_page(out, entry["id"], page)
 
 def write_category(out, book, category):
     with out.pair_tag("section", id=category["id"]):
-        with out.pair_tag("h2", clazz="category-title page-header"):
-            write_block(out, category["name"])
-            with out.pair_tag("a", href="#" + category["id"], clazz="permalink small"):
-                out.empty_pair_tag("i", clazz="bi bi-link-45deg")
-        write_block(out, category["description"])
+        with out.pair_tag_if(category_spoilered(book, category), "div", clazz="spoilered"):
+            with out.pair_tag("h2", clazz="category-title page-header"):
+                write_block(out, category["name"])
+                with out.pair_tag("a", href="#" + category["id"], clazz="permalink small"):
+                    out.empty_pair_tag("i", clazz="bi bi-link-45deg")
+            write_block(out, category["description"])
         for entry in category["entries"]:
             if entry["id"] not in book["blacklist"]:
-                with out.pair_tag_if(entry.get("advancement", None) in book["spoilers"], "div", clazz="spoilered"):
-                    write_entry(out, entry)
+                    write_entry(out, book, entry)
 
 def write_toc(out, book):
     with out.pair_tag("h2", id="table-of-contents", clazz="page-header"):
@@ -506,12 +513,12 @@ def write_toc(out, book):
     for category in book["categories"]:
         with out.pair_tag("details", clazz="toc-category"):
             with out.pair_tag("summary"):
-                with out.pair_tag("a", href="#" + category["id"]):
+                with out.pair_tag("a", href="#" + category["id"], clazz="spoilered" if category_spoilered(book, category) else ""):
                     out.text(category["name"])
             with out.pair_tag("ul"):
                 for entry in category["entries"]:
                     with out.pair_tag("li"):
-                        with out.pair_tag("a", href="#" + entry["id"]):
+                        with out.pair_tag("a", href="#" + entry["id"], clazz="spoilered" if entry_spoilered(book, entry) else ""):
                             out.text(entry["name"])
 
 def write_book(out, book):
