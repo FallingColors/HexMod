@@ -244,6 +244,7 @@
   "hexcasting.spell.hexcasting:xor": "Exclusion Distillation",
   "hexcasting.spell.hexcasting:floor": "Floor Purification",
   "hexcasting.spell.hexcasting:ceil": "Ceiling Purification",
+  "hexcasting.spell.hexcasting:modulo": "Modulus Distillation",
   "hexcasting.spell.hexcasting:greater": "Maximus Distillation",
   "hexcasting.spell.hexcasting:less": "Minimus Distillation",
   "hexcasting.spell.hexcasting:greater_eq": "Maximus Distillation II",
@@ -718,6 +719,7 @@
   "hexcasting.page.math.ceil": "\"Ceilings\" a number, raising it to the next integer value if it has a fractional component.",
   "hexcasting.page.math.construct_vec": "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (top to bottom).",
   "hexcasting.page.math.deconstruct_vec": "Split a vector into its X, Y, and Z components (top to bottom).",
+  "hexcasting.page.math.modulo": "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 % 2 is 1, and 5 % 3 is 2.",
   "hexcasting.page.math.coerce_axial": "Coerces a vector to its nearest axial direction, a unit vector. The zero vector is unaffected.",
   "hexcasting.page.math.random": "Creates a random number between 0 and 1.",
 

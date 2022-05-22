@@ -3,7 +3,7 @@ package at.petrak.hexcasting.client.gui
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern
-import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity
+import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
 import at.petrak.hexcasting.api.spell.math.HexAngle
 import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
@@ -52,13 +52,10 @@ class GuiSpellcasting(
     fun recvServerUpdate(info: ControllerInfo) {
         this.stackDescs = info.stackDesc
         this.patterns.lastOrNull()?.let {
-            it.valid = if (info.wasPrevPatternInvalid)
-                ResolvedPatternValidity.ERROR
-            else
-                ResolvedPatternValidity.OK
+            it.type = info.resolutionType
         }
 
-        if (!info.wasPrevPatternInvalid) {
+        if (info.resolutionType.success) {
             Minecraft.getInstance().soundManager.play(
                 SimpleSoundInstance(
                     HexSounds.ADD_PATTERN,
@@ -214,7 +211,7 @@ class GuiSpellcasting(
             is PatternDrawState.Drawing -> {
                 val (start, _, pat) = this.drawState as PatternDrawState.Drawing
                 this.drawState = PatternDrawState.BetweenPatterns
-                this.patterns.add(ResolvedPattern(pat, start, ResolvedPatternValidity.UNKNOWN))
+                this.patterns.add(ResolvedPattern(pat, start, ResolvedPatternType.UNKNOWN))
 
                 this.usedSpots.addAll(pat.positions(start))
 
@@ -295,21 +292,11 @@ class GuiSpellcasting(
         }
         RenderSystem.defaultBlendFunc()
 
-        val alreadyPats = this.patterns.map { (pat, origin, valid) ->
-            val colors: Pair<Int, Int> = when (valid) {
-                ResolvedPatternValidity.UNKNOWN -> Pair(0xc8_7f7f7f_u.toInt(), 0xc8_7f7f7f_u.toInt())
-                ResolvedPatternValidity.OK -> Pair(0xc8_7385de_u.toInt(), 0xc8_fecbe6_u.toInt())
-                ResolvedPatternValidity.ERROR -> Pair(0xc8_de6262_u.toInt(), 0xc8_e6755c_u.toInt())
-            }
-            Pair(
-                pat.toLines(
-                    this.hexSize(),
-                    this.coordToPx(origin)
-                ), colors
-            )
-        }
-        for ((pat, color) in alreadyPats) {
-            RenderLib.drawPatternFromPoints(mat, pat, true, color.first, color.second)
+        for ((pat, origin, valid) in this.patterns) {
+            RenderLib.drawPatternFromPoints(mat, pat.toLines(
+                this.hexSize(),
+                this.coordToPx(origin)
+            ), true, valid.color or (0xC8 shl 24), valid.fadeColor or (0xC8 shl 24))
         }
 
         // Now draw the currently WIP pattern

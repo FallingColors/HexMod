@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
+import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
@@ -28,9 +29,8 @@ public record MsgNewSpellPatternAck(ControllerInfo info) implements IMessage {
         var buf = new FriendlyByteBuf(buffer);
 
         var wasSpellCast = buf.readBoolean();
-        var hasCastingSound = buf.readBoolean();
         var isStackEmpty = buf.readBoolean();
-        var wasPrevPatternInvalid = buf.readBoolean();
+        var resolutionType = buf.readEnum(ResolvedPatternType.class);
         var descsLen = buf.readInt();
         var desc = new ArrayList<Component>(descsLen);
         for (int i = 0; i < descsLen; i++) {
@@ -38,16 +38,15 @@ public record MsgNewSpellPatternAck(ControllerInfo info) implements IMessage {
         }
 
         return new MsgNewSpellPatternAck(
-            new ControllerInfo(wasSpellCast, hasCastingSound, isStackEmpty, wasPrevPatternInvalid, desc)
+            new ControllerInfo(wasSpellCast, isStackEmpty, resolutionType, desc)
         );
     }
 
     @Override
     public void serialize(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.info.getWasSpellCast());
-        buf.writeBoolean(this.info.getHasCastingSound());
+        buf.writeBoolean(this.info.getMakesCastSound());
         buf.writeBoolean(this.info.isStackClear());
-        buf.writeBoolean(this.info.getWasPrevPatternInvalid());
+        buf.writeEnum(this.info.getResolutionType());
         buf.writeInt(this.info.getStackDesc().size());
         for (var desc : this.info.getStackDesc()) {
             buf.writeComponent(desc);

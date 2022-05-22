@@ -165,6 +165,8 @@ public class RegisterPatterns {
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqaqe", HexDir.NORTH_WEST), modLoc("logarithm"),
                 OpLog.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("addwaad", HexDir.NORTH_EAST), modLoc("modulo"),
+                OpModulo.INSTANCE);
 
             // == Sets ==
 
