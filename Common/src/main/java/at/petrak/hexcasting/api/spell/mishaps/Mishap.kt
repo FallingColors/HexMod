@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.mixin.accessor.AccessorLivingEntity
@@ -27,6 +28,8 @@ sealed class Mishap : Throwable() {
     open fun particleSpray(ctx: CastingContext): ParticleSpray {
         return ParticleSpray(ctx.position.add(0.0, 0.2, 0.0), Vec3(0.0, 2.0, 0.0), 0.2, Math.PI / 4, 40)
     }
+
+    open fun resolutionType(ctx: CastingContext): ResolvedPatternType = ResolvedPatternType.ERROR
 
     /**
      * Execute the actual effect, not any sfx.

@@ -112,7 +112,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
         var harness = new CastingHarness(ctx);
         for (var insn : instrs) {
             var info = harness.executeNewIota(insn, sPlayer.getLevel());
-            if (info.getWasPrevPatternInvalid()) {
+            if (!info.getResolutionType().getSuccess()) {
                 break;
             }
         }

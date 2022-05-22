@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPatternValidity;
+import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType;
 import at.petrak.hexcasting.api.spell.math.HexCoord;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexSounds;
@@ -82,12 +82,12 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
 
             ControllerInfo clientInfo;
             if (autoFail) {
-                clientInfo = new ControllerInfo(false, false, harness.getStack().isEmpty(), true,
+                clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
                     harness.generateDescs());
             } else {
                 clientInfo = harness.executeNewIota(SpellDatum.make(this.pattern), sender.getLevel());
 
-                if (clientInfo.getWasSpellCast() && clientInfo.getHasCastingSound()) {
+                if (clientInfo.getMakesCastSound()) {
                     sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
                         HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
                         1f + ((float) Math.random() - 0.5f) * 0.2f);
@@ -100,8 +100,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
             } else {
                 IXplatAbstractions.INSTANCE.setHarness(sender, harness);
                 if (!resolvedPatterns.isEmpty()) {
-                    resolvedPatterns.get(resolvedPatterns.size() - 1).setValid(clientInfo.getWasPrevPatternInvalid() ?
-                        ResolvedPatternValidity.ERROR : ResolvedPatternValidity.OK);
+                    resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
                 }
                 IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
             }

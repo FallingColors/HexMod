@@ -278,7 +278,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 new SpellCircleContext(this.getBlockPos(), bounds, this.activatorAlwaysInRange()));
             var harness = new CastingHarness(ctx);
 
-            var castSpell = false;
             var makeSound = false;
             BlockPos erroredPos = null;
             for (var tracked : this.trackedBlocks) {
@@ -287,13 +286,10 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                     var newPattern = cc.getPattern(tracked, bs, this.level);
                     if (newPattern != null) {
                         var info = harness.executeNewIota(SpellDatum.make(newPattern), splayer.getLevel());
-                        if (info.getWasSpellCast()) {
-                            castSpell = true;
-                            if (info.getHasCastingSound()) {
-                                makeSound = true;
-                            }
+                        if (info.getMakesCastSound()) {
+                            makeSound = true;
                         }
-                        if (info.getWasPrevPatternInvalid()) {
+                        if (!info.getResolutionType().getSuccess()) {
                             erroredPos = tracked;
                             break;
                         }
@@ -301,7 +297,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 }
             }
 
-            if (castSpell && makeSound) {
+            if (makeSound) {
                 this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST, SoundSource.BLOCKS,
                     2f, 1f);
             }
