@@ -471,7 +471,7 @@ def write_page(out, pageid, page):
             with out.pair_tag("details", clazz="spell-collapsible"):
                 out.empty_pair_tag("summary", clazz="collapse-spell")
                 for string, start_angle, per_world in page["op"]:
-                    with out.pair_tag("canvas", width=216, height=216, data_string=string, data_start=start_angle.lower(), data_per_world=per_world):
+                    with out.pair_tag("canvas", clazz="spell-viz", width=216, height=216, data_string=string, data_start=start_angle.lower(), data_per_world=per_world):
                         out.text("Your browser does not support visualizing patterns. Pattern code: " + string)
             write_block(out, page["text"])
         else:

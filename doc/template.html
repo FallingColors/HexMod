@@ -84,6 +84,19 @@
       .spoilered.unspoilered {
         filter: blur(0);
       }
+      canvas.spell-viz {
+        --dot-color: #777f;
+        --start-dot-color: #f009;
+        --moving-dot-color: #0fa9;
+
+        --path-color: darkgray;
+        --visited-path-color: #0c8;
+
+        --dot-scale: 0.0625;
+        --moving-dot-scale: 0.125;
+        --line-scale: 0.08333;
+        --pausetext-scale: 0.5;
+      }
     </style>
     <script>
       "use strict";
@@ -153,14 +166,6 @@
         }
 
         // rendering code
-        const strokeStyle = "darkgray";
-        const strokeVisitedStyle = "#0c8";
-        const strokeWidth = scale / 12;
-        const startDotStyle = "#f009";
-        const dotStyle = "#777f";
-        const movDotStyle = "#0fa9";
-        const dotRadius = scale / 8;
-
         const speed = 0.0025;
         const context = canvas.getContext("2d");
         const negaProgress = -3;
@@ -171,9 +176,26 @@
         function speedScale() {
           return speeds[speedLevel];
         }
+
+        const style = getComputedStyle(canvas);
+        const getProp = n => style.getPropertyValue(n);
+
         const tick = dt => {
           scrollTimeout += dt;
           if (canvas.offsetParent === null) return;
+
+          const strokeStyle = getProp("--path-color");
+          const strokeVisitedStyle = getProp("--visited-path-color");
+
+          const startDotStyle = getProp("--start-dot-color");
+          const dotStyle = getProp("--dot-color");
+          const movDotStyle = getProp("--moving-dot-color");
+
+          const strokeWidth = scale * +getProp("--line-scale");
+          const dotRadius = scale * +getProp("--dot-scale");
+          const movDotRadius = scale * +getProp("--moving-dot-scale");
+          const pauseScale = scale * +getProp("--pausetext-scale");
+
 
           if (!perWorld) {
             progress += speed * dt * (progress > 0 ? speedScale() : Math.sqrt(speedScale()));
@@ -191,9 +213,11 @@
           } else {
             context.strokeStyle = strokeVisitedStyle;
           }
+
           const [lx, ly] = truePoints[ix];
           const [rx, ry] = truePoints[ix + 1];
           core = [lx + (rx - lx) * frac, ly + (ry - ly) * frac];
+
 
           context.clearRect(0, 0, canvas.width, canvas.height);
           context.beginPath();
@@ -215,15 +239,15 @@
           for (let i = 0; i < uniqPoints.length; i++) {
             context.beginPath();
             context.fillStyle = (i == 0 && !perWorld) ? startDotStyle : dotStyle;
-            const radius = (i == 0 && !perWorld) ? dotRadius : dotRadius / 2;
+            const radius = (i == 0 && !perWorld) ? movDotRadius : dotRadius;
             context.arc(uniqPoints[i][0], uniqPoints[i][1], radius, 0, 2 * Math.PI);
             context.fill();
           }
-          
+
           if (!perWorld) {
             context.beginPath();
             context.fillStyle = movDotStyle;
-            context.arc(core[0], core[1], dotRadius, 0, 2 * Math.PI);
+            context.arc(core[0], core[1], movDotRadius, 0, 2 * Math.PI);
             context.fill();
           }
           if (fadeColor) {
@@ -232,7 +256,7 @@
           }
           if (scrollTimeout <= 2000) {
             context.fillStyle = `rgba(200, 200, 200, ${(2000 - scrollTimeout) / 1000})`;
-            context.font = `${scale * 0.5}px sans-serif`;
+            context.font = `${pauseScale}px sans-serif`;
             context.fillText(speedScale() ? speedScale() + "x" : "Paused", 0.2 * scale, canvas.height - 0.2 * scale);
           }
         };
@@ -295,7 +319,6 @@
           if (elem instanceof HTMLAnchorElement) {
             const href = elem.getAttribute("href");
             if (href.startsWith("#")) {
-              console.log(document.getElementById(href.substring(1)));
               elem.addEventListener("click", () => document.getElementById(href.substring(1)).querySelector(".spoilered").classList.add("unspoilered"));
             }
           }
