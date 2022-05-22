@@ -11,7 +11,5 @@
     "FabricItemEntityMixin",
     "FabricVillagerTurnIntoWitchMixin"
   ],
-  "client": [
-    "client.FabricMouseHandlerMixin"
-  ]
+  "client": ["client.FabricAbstractTextureMixin", "client.FabricMouseHandlerMixin"]
 }

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.xplat;
 
 import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.fabric.client.ExtendedTexture;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -80,5 +82,15 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func) {
         ItemProperties.register(item, id, new UnclampedClampedItemPropFunc(func));
+    }
+
+    @Override
+    public void setFilterSave(AbstractTexture texture, boolean filter, boolean mipmap) {
+        ((ExtendedTexture) texture).setFilterSave(filter, mipmap);
+    }
+
+    @Override
+    public void restoreLastFilter(AbstractTexture texture) {
+        ((ExtendedTexture) texture).restoreLastFilter();
     }
 }

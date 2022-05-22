@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -21,8 +21,8 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val entity = args.getChecked<ItemEntity>(0)
-        val patterns = args.getChecked<SpellList>(1).toList()
+        val entity = args.getChecked<ItemEntity>(0, argc)
+        val patterns = args.getChecked<SpellList>(1, argc).toList()
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)

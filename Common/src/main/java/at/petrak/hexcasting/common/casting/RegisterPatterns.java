@@ -131,13 +131,13 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("dwa", HexDir.NORTH_WEST), modLoc("xor"),
                 OpBoolXor.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("e", HexDir.SOUTH_EAST), modLoc("greater"),
-                new OpCompare((a, b) -> a > b));
+                new OpCompare(false, (a, b) -> a > b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("q", HexDir.SOUTH_WEST), modLoc("less"),
-                new OpCompare((a, b) -> a < b));
+                new OpCompare(false, (a, b) -> a < b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ee", HexDir.SOUTH_EAST), modLoc("greater_eq"),
-                new OpCompare((a, b) -> a >= b));
+                new OpCompare(true, (a, b) -> a >= b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qq", HexDir.SOUTH_WEST), modLoc("less_eq"),
-                new OpCompare((a, b) -> a <= b));
+                new OpCompare(true, (a, b) -> a <= b));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("ad", HexDir.EAST), modLoc("equals"),
                 new OpEquality(false));
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("da", HexDir.EAST), modLoc("not_equals"),

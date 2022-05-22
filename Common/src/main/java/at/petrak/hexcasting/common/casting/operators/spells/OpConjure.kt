@@ -1,12 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.mishaps.MishapBadBlock
 import at.petrak.hexcasting.common.blocks.BlockConjured
 import at.petrak.hexcasting.common.lib.HexBlocks
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -21,14 +18,25 @@ class OpConjure(val light: Boolean) : SpellOperator {
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Vec3>(0)
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+        val target = args.getChecked<Vec3>(0, argc)
         ctx.assertVecInRange(target)
+
+        val pos = BlockPos(target)
+
+        if (!ctx.world.mayInteract(ctx.caster, pos))
+            return null
+
+        val placeContext = DirectionalPlaceContext(ctx.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
+
+        val worldState = ctx.world.getBlockState(pos)
+        if (!worldState.canBeReplaced(placeContext))
+            throw MishapBadBlock.of(pos, "replaceable")
 
         return Triple(
             Spell(target, light),
             ManaConstants.DUST_UNIT,
-            listOf(ParticleSpray.Cloud(Vec3.atCenterOf(BlockPos(target)), 1.0))
+            listOf(ParticleSpray.Cloud(Vec3.atCenterOf(pos), 1.0))
         )
     }
 

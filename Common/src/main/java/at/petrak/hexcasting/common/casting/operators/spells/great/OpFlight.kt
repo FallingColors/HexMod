@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.player.FlightAbility
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -22,9 +22,9 @@ object OpFlight : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<ServerPlayer>(0)
-        val timeRaw = max(args.getChecked(1), 0.0)
-        val radiusRaw = max(args.getChecked(2), 0.0)
+        val target = args.getChecked<ServerPlayer>(0, argc)
+        val timeRaw = max(args.getChecked(1, argc), 0.0)
+        val radiusRaw = max(args.getChecked(2, argc), 0.0)
         ctx.assertEntityInRange(target)
 
         // Convert to ticks

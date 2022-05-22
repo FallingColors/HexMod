@@ -1,10 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.lists
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.spell.Operator.Companion.spellListOf
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellList
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 
 object OpRemove : ConstManaOperator {
@@ -12,11 +8,11 @@ object OpRemove : ConstManaOperator {
         get() = 2
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val list = args.getChecked<SpellList>(0).toMutableList()
-        val index = args.getChecked<Double>(1).toInt()
+        val list = args.getChecked<SpellList>(0, argc).toMutableList()
+        val index = args.getChecked<Double>(1, argc).toInt()
         if (index < 0 || index >= list.size)
             return list
         list.removeAt(index)
-        return spellListOf(list)
+        return list.asSpellResult
     }
 }

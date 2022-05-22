@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.eval
 
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext

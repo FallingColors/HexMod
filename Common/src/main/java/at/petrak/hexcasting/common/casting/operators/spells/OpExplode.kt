@@ -1,11 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
@@ -20,8 +16,8 @@ class OpExplode(val fire: Boolean) : SpellOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val pos = args.getChecked<Vec3>(0)
-        val strength = args.getChecked<Double>(1)
+        val pos = args.getChecked<Vec3>(0, argc)
+        val strength = args.getChecked<Double>(1, argc)
         ctx.assertVecInRange(pos)
         return Triple(
             Spell(pos, strength, this.fire),

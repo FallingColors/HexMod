@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
@@ -34,7 +34,7 @@ object OpRecharge : SpellOperator {
                 "rechargable"
             )
 
-        val entity = args.getChecked<ItemEntity>(0)
+        val entity = args.getChecked<ItemEntity>(0, argc)
         ctx.assertEntityInRange(entity)
 
         if (!ManaHelper.isManaItem(entity.item)) {

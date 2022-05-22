@@ -5,7 +5,7 @@ plugins {
 archivesBaseName = getArtifactID("fabric")
 
 loom {
-    mixin.defaultRefmapName = "hexcasting.refmap.json"
+    mixin.defaultRefmapName = "hexcasting.mixins.refmap.json"
 
     accessWidenerPath = file("src/main/resources/hexcasting.accesswidener")
 
@@ -84,22 +84,5 @@ processResources {
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            from components.java
-        }
-    }
-
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
     }
 }

@@ -143,7 +143,7 @@ dependencies {
 }
 
 mixin {
-    add sourceSets.main, "hexcasting.refmap.json"
+    add sourceSets.main, "hexcasting.mixins.refmap.json"
     config "hexplat.mixins.json"
     config "hexcasting_forge.mixins.json"
 }
@@ -170,19 +170,3 @@ processResources {
 }
 
 jar.finalizedBy('reobfJar')
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
-}

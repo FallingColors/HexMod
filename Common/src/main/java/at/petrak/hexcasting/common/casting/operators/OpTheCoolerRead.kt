@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.Operator.Companion.getChecked
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
@@ -15,7 +15,7 @@ object OpTheCoolerRead : ConstManaOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): List<SpellDatum<*>> {
-        val target = args.getChecked<ItemEntity>(0)
+        val target = args.getChecked<ItemEntity>(0, argc)
 
         ctx.assertEntityInRange(target)
 
