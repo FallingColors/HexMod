@@ -23,7 +23,7 @@
       "op_id": "hexcasting:for_each",
       "anchor": "hexcasting:for_each",
       "input": "list of patterns, list",
-      "output": "many",
+      "output": "list",
       "text": "hexcasting.page.meta.for_each.1"
     },
     {
