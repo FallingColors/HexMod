@@ -456,7 +456,9 @@ def write_page(out, pageid, page):
                 with out.pair_tag("h4", clazz="pattern-title"):
                     inp = page.get("input", None) or ""
                     oup = page.get("output", None) or ""
-                    out.text(f"{page['name']} ({inp} \u2192 {oup})")
+                    pipe = f"{inp} \u2192 {oup}".strip()
+                    suffix = f" ({pipe})" if inp or oup else ""
+                    out.text(f"{page['name']}{suffix}")
                     if anchor_id:
                         with out.pair_tag("a", href="#" + anchor_id, clazz="permalink small"):
                             out.empty_pair_tag("i", clazz="bi bi-link-45deg")
