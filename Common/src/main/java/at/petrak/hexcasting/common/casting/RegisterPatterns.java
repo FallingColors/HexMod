@@ -112,6 +112,8 @@ public class RegisterPatterns {
                 OpFloor.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("qwe", HexDir.EAST), modLoc("ceil"),
                 OpCeil.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("waqaa", HexDir.SOUTH_EAST), modLoc("mod"),
+                OpMod.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("eqqqqq", HexDir.EAST), modLoc("construct_vec"),
                 OpConstructVec.INSTANCE);
