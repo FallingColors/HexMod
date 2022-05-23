@@ -56,10 +56,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.TierSortingRegistry;
+import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.common.loot.CanToolPerformAction;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -292,6 +295,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public ResourceLocation getID(Item item) {
+        return item.getRegistryName();
+    }
+
+    @Override
     public ResourceLocation getID(VillagerProfession profession) {
         return profession.getRegistryName();
     }
@@ -338,16 +346,26 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return new Item.Properties();
     }
 
-    private static IXplatTags tags = new IXplatTags() {
+    private static final IXplatTags TAGS = new IXplatTags() {
         @Override
         public TagKey<Item> amethystDust() {
             return HexItemTags.create(new ResourceLocation("forge", "dusts/amethyst"));
+        }
+
+        @Override
+        public TagKey<Item> gems() {
+            return HexItemTags.create(new ResourceLocation("forge", "gems"));
         }
     };
 
     @Override
     public IXplatTags tags() {
-        return tags;
+        return TAGS;
+    }
+
+    @Override
+    public LootItemCondition.Builder isShearsCondition() {
+        return CanToolPerformAction.canToolPerformAction(ToolActions.SHEARS_DIG);
     }
 
     public static final String TAG_BRAINSWEPT = "hexcasting:brainswept";

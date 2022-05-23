@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -123,6 +124,8 @@ public interface IXplatAbstractions {
 
     ResourceLocation getID(Block block);
 
+    ResourceLocation getID(Item item);
+
     ResourceLocation getID(VillagerProfession profession);
 
     Ingredient getUnsealedIngredient(ItemStack stack);
@@ -130,6 +133,8 @@ public interface IXplatAbstractions {
     void saveRecipeAdvancement(DataGenerator generator, HashCache cache, JsonObject json, Path path);
 
     IXplatTags tags();
+
+    LootItemCondition.Builder isShearsCondition();
 
     ///
 

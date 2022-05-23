@@ -2,7 +2,14 @@ package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.forge.datagen.forge.lootmods.HexLootModifiers;
-import at.petrak.hexcasting.forge.datagen.xplat.*;
+import at.petrak.hexcasting.forge.datagen.xplat.HexAdvancements;
+import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
+import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
+import at.petrak.hexcasting.forge.mixin.ForgeAccessorTagsProvider;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.datagen.HexBlockTagProvider;
+import at.petrak.hexcasting.xplat.datagen.HexItemTagProvider;
+import at.petrak.hexcasting.xplat.datagen.HexLootTables;
 import at.petrak.hexcasting.xplat.datagen.IXplatIngredients;
 import at.petrak.hexcasting.xplat.datagen.recipe.HexplatRecipes;
 import net.minecraft.data.DataGenerator;
@@ -40,11 +47,7 @@ public class HexForgeDataGenerators {
             gen.addProvider(new HexBlockStatesAndModels(gen, efh));
         }
         if (ev.includeServer()) {
-            HexBlockTagProvider blockTagProvider = new HexBlockTagProvider(gen, efh);
-            gen.addProvider(blockTagProvider);
-            gen.addProvider(new HexItemTagProvider(gen, blockTagProvider, efh));
             gen.addProvider(new HexAdvancements(gen, efh));
-            gen.addProvider(new HexLootTables(gen));
         }
     }
 
@@ -54,7 +57,17 @@ public class HexForgeDataGenerators {
         DataGenerator gen = ev.getGenerator();
         ExistingFileHelper efh = ev.getExistingFileHelper();
         if (ev.includeServer()) {
+            gen.addProvider(new HexLootTables(gen));
             gen.addProvider(new HexplatRecipes(gen, INGREDIENTS));
+
+            var xtags = IXplatAbstractions.INSTANCE.tags();
+            var blockTagProvider = new HexBlockTagProvider(gen, xtags);
+            ((ForgeAccessorTagsProvider) blockTagProvider).hex$setExistingFileHelper(efh);
+            gen.addProvider(blockTagProvider);
+            var itemTagProvider = new HexItemTagProvider(gen, blockTagProvider, IXplatAbstractions.INSTANCE.tags());
+            ((ForgeAccessorTagsProvider) itemTagProvider).hex$setExistingFileHelper(efh);
+            gen.addProvider(itemTagProvider);
+
             gen.addProvider(new HexLootModifiers(gen));
         }
     }

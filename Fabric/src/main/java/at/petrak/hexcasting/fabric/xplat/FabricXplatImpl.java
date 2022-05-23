@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.addldata.HexHolder;
 import at.petrak.hexcasting.api.addldata.ManaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
@@ -14,6 +15,7 @@ import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.google.gson.JsonObject;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
@@ -24,6 +26,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -32,6 +35,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -46,6 +50,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -216,6 +223,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public ResourceLocation getID(Item item) {
+        return Registry.ITEM.getKey(item);
+    }
+
+    @Override
     public ResourceLocation getID(VillagerProfession profession) {
         return Registry.VILLAGER_PROFESSION.getKey(profession);
     }
@@ -276,5 +288,31 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public void saveRecipeAdvancement(DataGenerator generator, HashCache cache, JsonObject json, Path path) {
         RecipeProvider.saveAdvancement(cache, json, path);
+    }
+
+    private static final IXplatTags TAGS = new IXplatTags() {
+        @Override
+        public TagKey<Item> amethystDust() {
+            return HexItemTags.create(new ResourceLocation("c", "amethyst_dusts"));
+        }
+
+        @Override
+        public TagKey<Item> gems() {
+            return HexItemTags.create(new ResourceLocation("c", "gems"));
+        }
+    };
+
+    @Override
+    public IXplatTags tags() {
+        return TAGS;
+    }
+
+    @Override
+    public LootItemCondition.Builder isShearsCondition() {
+        return AlternativeLootItemCondition.alternative(
+            MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS)),
+            MatchTool.toolMatches(ItemPredicate.Builder.item().of(
+                HexItemTags.create(new ResourceLocation("c", "shears"))))
+        );
     }
 }

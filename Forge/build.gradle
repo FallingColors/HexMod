@@ -166,6 +166,8 @@ processResources {
     filesMatching("mods.toml") {
         expand "version": project.version
     }
+
+    duplicatesStrategy 'exclude'
 }
 
 jar.finalizedBy('reobfJar')

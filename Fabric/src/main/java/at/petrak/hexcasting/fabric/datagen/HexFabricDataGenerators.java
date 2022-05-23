@@ -1,6 +1,10 @@
 package at.petrak.hexcasting.fabric.datagen;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.datagen.HexBlockTagProvider;
+import at.petrak.hexcasting.xplat.datagen.HexItemTagProvider;
+import at.petrak.hexcasting.xplat.datagen.HexLootTables;
 import at.petrak.hexcasting.xplat.datagen.IXplatIngredients;
 import at.petrak.hexcasting.xplat.datagen.recipe.HexplatRecipes;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
@@ -18,10 +22,18 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator gen) {
         HexAPI.LOGGER.info("Starting Fabric-specific datagen");
+
         gen.addProvider(new HexplatRecipes(gen, INGREDIENTS));
+
+        var xtags = IXplatAbstractions.INSTANCE.tags();
+        var blockTagProvider = new HexBlockTagProvider(gen, xtags);
+        gen.addProvider(blockTagProvider);
+        gen.addProvider(new HexItemTagProvider(gen, blockTagProvider, xtags));
+
+        gen.addProvider(new HexLootTables(gen));
     }
 
-    private static IXplatIngredients INGREDIENTS = new IXplatIngredients() {
+    private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {
         @Override
         public Ingredient glowstoneDust() {
             return new Ingredient(Stream.of(

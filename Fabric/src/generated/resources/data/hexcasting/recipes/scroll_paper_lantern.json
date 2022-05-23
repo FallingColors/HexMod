@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "T",
+    "B"
+  ],
+  "key": {
+    "T": {
+      "item": "hexcasting:scroll_paper"
+    },
+    "B": {
+      "item": "minecraft:torch"
+    }
+  },
+  "result": {
+    "item": "hexcasting:scroll_paper_lantern"
+  }
+}

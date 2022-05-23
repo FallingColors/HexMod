@@ -128,7 +128,7 @@ subprojects {
     }
 
     sourceSets.main.kotlin.srcDirs += 'src/main/java'
-    
+
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()
     java.withJavadocJar()
@@ -191,4 +191,10 @@ task sendWebhook {
             project.logger.error("Failed to push Discord webhook.")
         }
     }
+}
+
+task runAllDatagen {
+    dependsOn "Forge:runXplatDatagen"
+    dependsOn "Forge:runForgeDatagen"
+    dependsOn "Fabric:runDatagen"
 }
