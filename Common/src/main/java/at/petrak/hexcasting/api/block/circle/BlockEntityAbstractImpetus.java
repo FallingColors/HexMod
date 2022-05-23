@@ -278,7 +278,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 new SpellCircleContext(this.getBlockPos(), bounds, this.activatorAlwaysInRange()));
             var harness = new CastingHarness(ctx);
 
-            var castSpell = false;
             var makeSound = false;
             BlockPos erroredPos = null;
             for (var tracked : this.trackedBlocks) {
@@ -286,7 +285,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 if (bs.getBlock() instanceof BlockCircleComponent cc) {
                     var newPattern = cc.getPattern(tracked, bs, this.level);
                     if (newPattern != null) {
-                        var info = harness.executeIotas(List.of(SpellDatum.make(newPattern)), splayer.getLevel());
+                        var info = harness.executeIota(SpellDatum.make(newPattern), splayer.getLevel());
                         if (info.getMakesCastSound()) {
                             makeSound = true;
                         }

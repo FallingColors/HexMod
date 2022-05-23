@@ -54,6 +54,11 @@ class CastingHarness private constructor(
     ) : this(mutableListOf(), SpellDatum.make(Widget.NULL), 0, mutableListOf(), false, ctx, prepackagedColorizer)
 
     /**
+     * Execute a single iota.
+     */
+    fun executeIota(iota: SpellDatum<*>, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
+
+    /**
      * Given a list of iotas, execute them in sequence.
      */
     fun executeIotas(iotas: List<SpellDatum<*>>, world: ServerLevel): ControllerInfo {
