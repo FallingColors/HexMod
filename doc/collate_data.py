@@ -206,9 +206,11 @@ def fixup_pattern(do_sig, root_data, page):
     patterns = page["patterns"]
     if not isinstance(patterns, list): patterns = [patterns]
     if do_sig:
-        inp = page.get("input", None) or "nothing"
-        oup = page.get("output", None) or "nothing"
-        page["header"] += f" ({inp} \u2192 {oup})"
+        inp = page.get("input", None) or ""
+        oup = page.get("output", None) or ""
+        pipe = f"{inp} \u2192 {oup}".strip()
+        suffix = f" ({pipe})" if inp or oup else ""
+        page["header"] += suffix
     page["op"] = [(p["signature"], p["startdir"], False) for p in patterns]
 
 def fetch_recipe(root_data, recipe):
