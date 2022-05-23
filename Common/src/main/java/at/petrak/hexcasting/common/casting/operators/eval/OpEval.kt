@@ -7,29 +7,19 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.CastingHarness
+import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 
 object OpEval : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         val instrs: SpellList = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
 
         ctx.incDepth()
-        val harness = CastingHarness(ctx)
-        harness.stack.addAll(stack)
-        harness.localIota = local
 
-        val sideEffects = mutableListOf<OperatorSideEffect>()
+        continuation.add(ContinuationFrame.FinishEval())
+        continuation.add(ContinuationFrame.Evaluate(instrs))
 
-        for (insn in instrs) {
-            val res = harness.getUpdate(insn, ctx.world)
-            sideEffects.addAll(res.sideEffects)
-            if (res.sideEffects.any { it is OperatorSideEffect.DoMishap }) {
-                break
-            }
-            harness.applyFunctionalData(res.newData)
-        }
-
-        return OperationResult(harness.stack, harness.localIota, sideEffects)
+        return OperationResult(true, stack, localIota, listOf())
     }
 }

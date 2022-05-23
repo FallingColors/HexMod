@@ -5,12 +5,13 @@ import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import net.minecraft.Util
 
 object OpPrint : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty()) {
             throw MishapNotEnoughArgs(1, 0)
         }

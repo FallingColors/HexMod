@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.spell
 
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 
@@ -14,7 +15,7 @@ interface ConstManaOperator : Operator {
 
     fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>>
 
-    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)

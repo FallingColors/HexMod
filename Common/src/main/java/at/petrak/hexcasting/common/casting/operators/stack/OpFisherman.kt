@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import net.minecraft.network.chat.TranslatableComponent
@@ -12,7 +13,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object OpFisherman : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
         val arg = stack.getChecked<Double>(stack.lastIndex)

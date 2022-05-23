@@ -54,15 +54,27 @@ class CastingHarness private constructor(
     ) : this(mutableListOf(), SpellDatum.make(Widget.NULL), 0, mutableListOf(), false, ctx, prepackagedColorizer)
 
     /**
-     * Given an iota, do all the updating/side effects/etc required.
+     * Given a list of iotas, execute them in sequence.
      */
-    fun executeNewIota(iota: SpellDatum<*>, world: ServerLevel): ControllerInfo {
-        val result = this.getUpdate(iota, world)
-        this.applyFunctionalData(result.newData)
-        return this.performSideEffects(result.sideEffects)
+    fun executeIotas(iotas: List<SpellDatum<*>>, world: ServerLevel): ControllerInfo {
+        val continuation = mutableListOf(Execute(iotas))
+        val info = TempControllerInfo(false, false, false)
+        while (continuation.isNotEmpty() && !info.haveWeFuckedUp) {
+            val next = continuation.removeLast()
+            val newData = next.evaluate(continuation, world, this)
+            performSideEffects(info, newData.sideEffects)
+        }
+
+        return ControllerInfo(
+            info.spellCast,
+            info.playSound,
+            this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
+            info.haveWeFuckedUp,
+            generateDescs()
+        )
     }
 
-    fun getUpdate(iota: SpellDatum<*>, world: ServerLevel): CastResult {
+    fun getUpdate(iota: SpellDatum<*>, world: ServerLevel, continuation: MutableList<ContinuationFrame>): CastResult {
         try {
             // wouldn't it be nice to be able to go paren'
             // i guess i'll call it paren2
@@ -75,7 +87,7 @@ class CastingHarness private constructor(
             }
 
             return if (iota.getType() == DatumType.PATTERN) {
-                updateWithPattern(iota.payload as HexPattern, world)
+                updateWithPattern(iota.payload as HexPattern, world, stack)
             } else {
                 CastResult(
                     this.getFunctionalData(),
@@ -105,7 +117,7 @@ class CastingHarness private constructor(
      * When the server gets a packet from the client with a new pattern,
      * handle it functionally.
      */
-    fun updateWithPattern(newPat: HexPattern, world: ServerLevel): CastResult {
+    fun updateWithPattern(newPat: HexPattern, world: ServerLevel, continuation: MutableList<ContinuationFrame>): CastResult {
         if (this.ctx.spellCircle == null)
             this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
 
@@ -117,7 +129,7 @@ class CastingHarness private constructor(
             if (!HexConfig.server().isActionAllowed(operatorIdPair.second)) {
                 throw MishapDisallowedSpell()
             }
-            val (stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(this.stack.toMutableList(), this.localIota, this.ctx)
+            val (stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(continuation, this.stack.toMutableList(), this.localIota, this.ctx)
             this.localIota = local2
             // Stick a poofy particle effect at the caster position
             val sideEffects = sideEffectsUnmut.toMutableList()
@@ -155,34 +167,23 @@ class CastingHarness private constructor(
     }
 
     /**
-     * Execute the side effects of a cast, and then tell the client what to think about it.
+     * Execute the side effects of a pattern, updating our aggregated info.
      */
-    fun performSideEffects(sideEffects: List<OperatorSideEffect>): ControllerInfo {
-        var wasSpellCast = false
-        var wasPrevPatternInvalid = false
-        var hasCastingSound = false
+    fun performSideEffects(info: TempControllerInfo, sideEffects: List<OperatorSideEffect>) {
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
             if (mustStop) {
-                wasPrevPatternInvalid = true
+                info.haveWeFuckedUp = true
                 break
             }
 
 
             if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell) {
-                wasSpellCast = true
+                info.spellCast = true
                 if (haskellProgrammersShakingandCryingRN.hasCastingSound)
-                    hasCastingSound = true
-            }
+                    info.playSound = true
+            d
         }
-
-        return ControllerInfo(
-            wasSpellCast,
-            hasCastingSound,
-            this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
-            wasPrevPatternInvalid,
-            generateDescs()
-        )
     }
 
     fun generateDescs(): List<Component> {
@@ -402,7 +403,6 @@ class CastingHarness private constructor(
         return out
     }
 
-
     companion object {
         const val TAG_STACK = "stack"
         const val TAG_LOCAL = "local"
@@ -448,6 +448,12 @@ class CastingHarness private constructor(
             }
         }
     }
+
+    data class TempControllerInfo(
+        var spellCast: Boolean,
+        var playSound: Boolean,
+        var haveWeFuckedUp: Boolean,
+    )
 
     data class CastResult(
         val newData: FunctionalData,
