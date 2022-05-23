@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.lists
 
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
+import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import net.minecraft.network.chat.TranslatableComponent
@@ -10,7 +10,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object OpLastNToList : Operator {
-    override fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
         val arg = stack.takeLast(1).getChecked<Double>(0)
@@ -31,6 +31,6 @@ object OpLastNToList : Operator {
         }
         stack.addAll(output.asSpellResult)
 
-        return OperationResult(stack, local, listOf())
+        return OperationResult(continuation, stack, local, listOf())
     }
 }

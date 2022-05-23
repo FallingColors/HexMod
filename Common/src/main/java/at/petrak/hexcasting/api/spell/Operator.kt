@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.spell
 
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
+import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -22,7 +22,7 @@ interface Operator {
      *
      * A particle effect at the cast site and various messages and advancements are done automagically.
      */
-    fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult
+    fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult
 
     /**
      * Do you need to be enlightened to use this operator?

@@ -9,20 +9,23 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
+import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 
 object OpEval : Operator {
-    override fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         val instrs: SpellList = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
 
         ctx.incDepth()
 
         // if not installed already...
-        if (!(continuation.isNotEmpty() && continuation.last() is ContinuationFrame.FinishEval)) {
-            continuation.add(ContinuationFrame.FinishEval()) // install a break-boundary after eval
+        val newCont = if (continuation is SpellContinuation.NotDone && continuation.frame is ContinuationFrame.FinishEval) {
+            continuation
+        } else {
+            continuation.pushFrame(ContinuationFrame.FinishEval()) // install a break-boundary after eval
         }
-        continuation.add(ContinuationFrame.Evaluate(instrs))
 
-        return OperationResult(stack, local, listOf())
+        val frame = ContinuationFrame.Evaluate(instrs)
+        return OperationResult(newCont.pushFrame(frame), stack, local, listOf())
     }
 }

@@ -23,7 +23,7 @@ sealed interface ContinuationFrame {
      * For Evaluate, this consumes one pattern; for ForEach this queues the next iteration of the outer loop.
      * @return the result of this pattern step
      */
-    fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult
+    fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingHarness): CastResult
     /**
      * The OpHalt instruction wants us to "jump to" the END of the nearest meta-eval.
      * In other words, we should consume Evaluate frames until we hit a FinishEval or Thoth frame.
@@ -35,25 +35,23 @@ sealed interface ContinuationFrame {
      * A list of patterns to be evaluated in sequence.
      * @property list the *remaining* list of patterns to be evaluated
      */
-    data class Evaluate(var list: SpellList): ContinuationFrame {
+    data class Evaluate(val list: SpellList): ContinuationFrame {
         // Discard this frame and keep discarding frames.
         override fun breakDownwards(stack: List<SpellDatum<*>>) = Pair(false, stack)
 
         // Step the list of patterns, evaluating a single one.
-        override fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult {
+        override fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingHarness): CastResult {
             // If there are patterns left...
             if (list.nonEmpty) {
-                val toEval = list.car
-                list = list.cdr
-                if (list.nonEmpty) { // yay TCO
+                val newCont = if (list.cdr.nonEmpty) { // yay TCO
                     // ...enqueue the evaluation of the rest of the patterns...
-                    continuation.add(this)
-                }
+                    continuation.pushFrame(Evaluate(list.cdr))
+                } else continuation
                 // ...before evaluating the first one in the list.
-                return harness.getUpdate(toEval, level, continuation)
+                return harness.getUpdate(list.car, level, newCont)
             } else {
                 // If there are no patterns (e.g. empty Hermes), just return OK.
-                return CastResult(null, ResolvedPatternType.OK, listOf())
+                return CastResult(continuation, null, ResolvedPatternType.OK, listOf())
             }
         }
 
@@ -68,8 +66,8 @@ sealed interface ContinuationFrame {
         override fun breakDownwards(stack: List<SpellDatum<*>>) = Pair(true, stack)
 
         // Evaluating it does nothing; it's only a boundary condition.
-        override fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult {
-            return CastResult(FunctionalData(harness.stack.toList(), 0, listOf(), false), ResolvedPatternType.OK, listOf())
+        override fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingHarness): CastResult {
+            return CastResult(continuation, FunctionalData(harness.stack.toList(), 0, listOf(), false), ResolvedPatternType.OK, listOf())
         }
     }
 
@@ -82,44 +80,45 @@ sealed interface ContinuationFrame {
      * @property baseStack the stack state at Thoth entry
      * @property acc concatenated list of final stack states after Thoth exit
      */
-    data class ForEach(var first: Boolean, var data: SpellList, val code: SpellList, val baseStack: List<SpellDatum<*>>, var acc: MutableList<SpellDatum<*>>): ContinuationFrame {
-        /** Helper to append something to the original stack. */
-        fun appendBase(iota: SpellDatum<*>): List<SpellDatum<*>> {
-            val mutStack = baseStack.toMutableList()
-            mutStack.add(iota)
-            return mutStack
-        }
+    data class ForEach(val data: SpellList, val code: SpellList, val baseStack: List<SpellDatum<*>>?, val acc: MutableList<SpellDatum<*>>): ContinuationFrame {
 
         /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
         override fun breakDownwards(stack: List<SpellDatum<*>>): Pair<Boolean, List<SpellDatum<*>>> {
+            val newStack = baseStack!!.toMutableList()
             acc.addAll(stack)
-            return Pair(true, appendBase(SpellDatum.make(acc)))
+            newStack.add(SpellDatum.make(acc))
+            return Pair(true, newStack)
         }
 
         /** Step the Thoth computation, enqueueing one code evaluation. */
-        override fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult {
+        override fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingHarness): CastResult {
             // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
-            if (!first) {
-                // add everything we've added 
+            val stack = if (baseStack == null) {
+                // init stack to the harness stack...
+                harness.stack.toList()
+            } else {
+                // else save the stack to the accumulator and reuse the saved base stack.
                 acc.addAll(harness.stack)
+                baseStack
             }
-            first = false
+
             // If we still have data to process...
-            val stackTop = if (data.nonEmpty) {
-                // queue next datum for Thoth eval.
-                val toEval = data.car
-                data = data.cdr
-                // Put this Thoth object: back on the stack for the next Thoth cycle,
-                continuation.add(this)
-                // and prep the Thoth'd code block for evaluation.
-                continuation.add(Evaluate(code))
-                // Push the next datum to the top of the stack.
-                toEval
+            val (stackTop, newCont) = if (data.nonEmpty) {
+                Pair(
+                    data.car, // Push the next datum to the top of the stack,
+                    continuation
+                        // put the next Thoth object back on the stack for the next Thoth cycle,
+                        .pushFrame(ForEach(data.cdr, code, stack, acc))
+                        // and prep the Thoth'd code block for evaluation.
+                        .pushFrame(Evaluate(code))
+                )
             } else {
                 // Else, dump our final list onto the stack.
-                SpellDatum.make(acc)
+                Pair(SpellDatum.make(acc), continuation)
             }
-            return CastResult(FunctionalData(appendBase(stackTop), 0, listOf(), false), ResolvedPatternType.OK, listOf())
+            val tStack = stack.toMutableList()
+            tStack.add(stackTop)
+            return CastResult(newCont, FunctionalData(tStack, 0, listOf(), false), ResolvedPatternType.OK, listOf())
         }
     }
 }

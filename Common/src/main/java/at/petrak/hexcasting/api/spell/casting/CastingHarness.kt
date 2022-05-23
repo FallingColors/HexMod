@@ -63,19 +63,20 @@ class CastingHarness private constructor(
      */
     fun executeIotas(iotas: List<SpellDatum<*>>, world: ServerLevel): ControllerInfo {
         // Initialize the continuation stack to a single top-level eval for all iotas.
-        val continuation: MutableList<ContinuationFrame> = mutableListOf(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
+        var continuation = SpellContinuation.Done.pushFrame(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
         // Begin aggregating info
         val info = TempControllerInfo(false, false)
         var lastResolutionType = ResolvedPatternType.UNKNOWN
-        while (continuation.isNotEmpty() && !info.earlyExit) {
+        while (continuation is SpellContinuation.NotDone && !info.earlyExit) {
             // Take the top of the continuation stack...
-            val next = continuation.removeLast()
+            val next = continuation.frame
             // ...and execute it.
-            val result = next.evaluate(continuation, world, this)
+            val result = next.evaluate(continuation.next, world, this)
             // Then write all pertinent data back to the harness for the next iteration.
             if (result.newData != null) {
                 this.applyFunctionalData(result.newData)
             }
+            continuation = result.continuation
             lastResolutionType = result.resolutionType
             performSideEffects(info, result.sideEffects)
             info.earlyExit = info.earlyExit || !lastResolutionType.success
@@ -89,16 +90,17 @@ class CastingHarness private constructor(
         )
     }
 
-    fun getUpdate(iota: SpellDatum<*>, world: ServerLevel, continuation: MutableList<ContinuationFrame>): CastResult {
+    fun getUpdate(iota: SpellDatum<*>, world: ServerLevel, continuation: SpellContinuation): CastResult {
         try {
             this.handleParentheses(iota)?.let { (data, resolutionType) ->
-                return@getUpdate CastResult(data, resolutionType, listOf())
+                return@getUpdate CastResult(continuation, data, resolutionType, listOf())
             }
 
             return if (iota.getType() == DatumType.PATTERN) {
                 updateWithPattern(iota.payload as HexPattern, world, continuation)
             } else {
                 CastResult(
+                    continuation,
                     null,
                     ResolvedPatternType.INVALID, // Should never matter
                     listOf(
@@ -111,6 +113,7 @@ class CastingHarness private constructor(
             }
         } catch (mishap: Mishap) {
             return CastResult(
+                continuation,
                 null,
                 mishap.resolutionType(ctx),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null))),
@@ -118,6 +121,7 @@ class CastingHarness private constructor(
         } catch (exception: Exception) {
             exception.printStackTrace()
             return CastResult(
+                continuation,
                 null,
                 ResolvedPatternType.ERROR,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)))
@@ -129,7 +133,7 @@ class CastingHarness private constructor(
      * When the server gets a packet from the client with a new pattern,
      * handle it functionally.
      */
-    fun updateWithPattern(newPat: HexPattern, world: ServerLevel, continuation: MutableList<ContinuationFrame>): CastResult {
+    fun updateWithPattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
         if (this.ctx.spellCircle == null)
             this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
 
@@ -141,7 +145,7 @@ class CastingHarness private constructor(
             if (!HexConfig.server().isActionAllowed(operatorIdPair.second)) {
                 throw MishapDisallowedSpell()
             }
-            val (stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(continuation, this.stack.toMutableList(), this.localIota, this.ctx)
+            val (cont2, stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(continuation, this.stack.toMutableList(), this.localIota, this.ctx)
             this.localIota = local2
             // Stick a poofy particle effect at the caster position
             val sideEffects = sideEffectsUnmut.toMutableList()
@@ -161,12 +165,14 @@ class CastingHarness private constructor(
             )
 
             return CastResult(
+                cont2,
                 fd,
                 ResolvedPatternType.OK,
                 sideEffects,
             )
         } catch (mishap: Mishap) {
             return CastResult(
+                continuation,
                 null,
                 mishap.resolutionType(ctx),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.second))),
@@ -174,6 +180,7 @@ class CastingHarness private constructor(
         } catch (exception: Exception) {
             exception.printStackTrace()
             return CastResult(
+                continuation,
                 null,
                 ResolvedPatternType.ERROR,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(newPat, operatorIdPair?.second)))
@@ -469,6 +476,7 @@ class CastingHarness private constructor(
     )
 
     data class CastResult(
+        val continuation: SpellContinuation,
         val newData: FunctionalData?,
         val resolutionType: ResolvedPatternType,
         val sideEffects: List<OperatorSideEffect>,

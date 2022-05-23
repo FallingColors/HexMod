@@ -10,9 +10,10 @@ import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 
 object OpForEach : Operator {
-    override fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)
 
@@ -21,8 +22,13 @@ object OpForEach : Operator {
         stack.removeLastOrNull()
         stack.removeLastOrNull()
 
-        continuation.add(ContinuationFrame.ForEach(true, datums, instrs, stack, mutableListOf()))
+        val frame = ContinuationFrame.ForEach(datums, instrs, null, mutableListOf())
 
-        return OperationResult(stack, local, listOf())
+        return OperationResult(
+            continuation.pushFrame(frame),
+            stack,
+            local,
+            listOf()
+        )
     }
 }
