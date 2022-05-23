@@ -286,7 +286,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 if (bs.getBlock() instanceof BlockCircleComponent cc) {
                     var newPattern = cc.getPattern(tracked, bs, this.level);
                     if (newPattern != null) {
-                        var info = harness.executeNewIota(SpellDatum.make(newPattern), splayer.getLevel());
+                        var info = harness.executeIotas(List.of(SpellDatum.make(newPattern)), splayer.getLevel());
                         if (info.getWasSpellCast()) {
                             castSpell = true;
                             if (info.getHasCastingSound()) {

@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
@@ -57,13 +58,18 @@ class CastingHarness private constructor(
      * Given a list of iotas, execute them in sequence.
      */
     fun executeIotas(iotas: List<SpellDatum<*>>, world: ServerLevel): ControllerInfo {
-        val continuation = mutableListOf(Execute(iotas))
+        val continuation: MutableList<ContinuationFrame> = mutableListOf(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
         val info = TempControllerInfo(false, false, false)
         while (continuation.isNotEmpty() && !info.haveWeFuckedUp) {
             val next = continuation.removeLast()
-            val newData = next.evaluate(continuation, world, this)
-            performSideEffects(info, newData.sideEffects)
+            val result = next.evaluate(continuation, world, this)
+            if (result.newData != null) {
+                this.applyFunctionalData(result.newData)
+            }
+            performSideEffects(info, result.sideEffects)
         }
+
+        
 
         return ControllerInfo(
             info.spellCast,
@@ -87,10 +93,10 @@ class CastingHarness private constructor(
             }
 
             return if (iota.getType() == DatumType.PATTERN) {
-                updateWithPattern(iota.payload as HexPattern, world, stack)
+                updateWithPattern(iota.payload as HexPattern, world, continuation)
             } else {
                 CastResult(
-                    this.getFunctionalData(),
+                    null,
                     listOf(
                         OperatorSideEffect.DoMishap(
                             MishapUnescapedValue(iota),
@@ -101,13 +107,13 @@ class CastingHarness private constructor(
             }
         } catch (mishap: Mishap) {
             return CastResult(
-                this.getFunctionalData(),
+                null,
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null))),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
             return CastResult(
-                this.getFunctionalData(),
+                null,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)))
             )
         }
@@ -154,13 +160,13 @@ class CastingHarness private constructor(
             )
         } catch (mishap: Mishap) {
             return CastResult(
-                this.getFunctionalData(),
+                null,
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.second))),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
             return CastResult(
-                this.getFunctionalData(),
+                null,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(newPat, operatorIdPair?.second)))
             )
         }
@@ -182,7 +188,7 @@ class CastingHarness private constructor(
                 info.spellCast = true
                 if (haskellProgrammersShakingandCryingRN.hasCastingSound)
                     info.playSound = true
-            d
+            }
         }
     }
 
@@ -197,7 +203,7 @@ class CastingHarness private constructor(
     /**
      * Return the functional update represented by the current state (for use with `copy`)
      */
-    private fun getFunctionalData() = FunctionalData(
+    fun getFunctionalData() = FunctionalData(
         this.stack.toList(),
         this.parenCount,
         this.parenthesized.toList(),
@@ -456,7 +462,7 @@ class CastingHarness private constructor(
     )
 
     data class CastResult(
-        val newData: FunctionalData,
+        val newData: FunctionalData?,
         val sideEffects: List<OperatorSideEffect>,
     )
 }

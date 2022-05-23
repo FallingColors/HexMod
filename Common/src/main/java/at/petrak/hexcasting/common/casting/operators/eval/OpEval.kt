@@ -17,9 +17,9 @@ object OpEval : Operator {
 
         ctx.incDepth()
 
-        continuation.add(ContinuationFrame.FinishEval())
+        continuation.add(ContinuationFrame.FinishEval()) // boundary for break
         continuation.add(ContinuationFrame.Evaluate(instrs))
 
-        return OperationResult(true, stack, localIota, listOf())
+        return OperationResult(stack, local, listOf())
     }
 }

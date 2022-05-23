@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.spell
 
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import net.minecraft.world.phys.Vec3
 
 /**

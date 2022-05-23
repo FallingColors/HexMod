@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.CastingHarness
+import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 
@@ -20,8 +21,8 @@ object OpForEach : Operator {
         stack.removeLastOrNull()
         stack.removeLastOrNull()
 
-        continuation.add(ContinuationFrame.ForEach(datums, instrs, stack, mutableListOf()))
+        continuation.add(ContinuationFrame.ForEach(true, datums, instrs, stack, mutableListOf()))
 
-        return OperationResult(stack, localIota, listOf())
+        return OperationResult(stack, local, listOf())
     }
 }

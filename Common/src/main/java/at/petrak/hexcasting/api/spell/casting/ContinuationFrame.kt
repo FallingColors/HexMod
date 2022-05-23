@@ -3,58 +3,72 @@ package at.petrak.hexcasting.api.spell.casting
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingHarness.CastResult
+import net.minecraft.server.level.ServerLevel
 
 /**
  * A single frame of evaluation during the 
  */
 sealed interface ContinuationFrame {
-    fun evaluate(stack: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness) -> CastResult
+    fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult
     /** @return whether the break should stop here */
-    fun breakDownwards(): Boolean
+    fun breakDownwards(stack: List<SpellDatum<*>>): Pair<Boolean, List<SpellDatum<*>>>
 
-    class Evaluate(var list: SpellList): ContinuationFrame {
-        override fun breakDownwards() = false
+    data class Evaluate(var list: SpellList): ContinuationFrame {
+        override fun breakDownwards(stack: List<SpellDatum<*>>) = Pair(false, stack)
 
-        fun evaluate(stack: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness) -> CastResult {
+        override fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult {
             if (list.nonEmpty) {
                 val toEval = list.car
                 list = list.cdr
                 if (list.nonEmpty) { // yay TCO
-                    stack.push(this)
+                    continuation.add(this)
                 }
-                return harness.getUpdate(toEval, level, stack)
+                return harness.getUpdate(toEval, level, continuation)
             } else {
-                return CastResult(harness.getFunctionalData(), listOf())
+                return CastResult(null, listOf())
             }
         }
 
     }
-    class FinishEval(): ContinuationFrame {
-        override fun breakDownwards() = true // TODO: properly reset state
 
-        fun evaluate(stack: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness) -> CastResult {
-            return CastResult(FunctionalData(harness.stack, 0, listOf(), false), listOf())
+    // I'd put this in the else-branch for Evaluate, but we want to properly set the ctn boundary for break.
+    class FinishEval(): ContinuationFrame {
+        override fun breakDownwards(stack: List<SpellDatum<*>>) = Pair(true, stack)
+
+        override fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult {
+            return CastResult(FunctionalData(harness.stack.toList(), 0, listOf(), false), listOf())
         }
     }
-    class ForEach(var first: Boolean, var data: SpellList, val code: SpellList, val baseStack: List<SpellDatum<*>>, var acc: MutableList<SpellDatum<*>>): ContinuationFrame {
-        override fun breakDownwards() = true // TODO: properly reset state
 
-        fun evaluate(stack: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness) -> CastResult {
-            if (data.nonEmpty) {
+    data class ForEach(var first: Boolean, var data: SpellList, val code: SpellList, val baseStack: List<SpellDatum<*>>, var acc: MutableList<SpellDatum<*>>): ContinuationFrame {
+        fun appendBase(iota: SpellDatum<*>): List<SpellDatum<*>> {
+            val mutStack = baseStack.toMutableList()
+            mutStack.add(iota)
+            return mutStack
+        }
+
+        override fun breakDownwards(stack: List<SpellDatum<*>>): Pair<Boolean, List<SpellDatum<*>>> {
+            acc.addAll(stack)
+            return Pair(true, appendBase(SpellDatum.make(acc)))
+        }
+
+        override fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult {
+            if (!first) {
+                acc.addAll(harness.stack)
+            }
+            first = false
+            val stackTop = if (data.nonEmpty) {
+                // queue next datum for Thoth eval
                 val toEval = data.car
                 data = data.cdr
-                if (!first) {
-                    acc.addAll(stack)
-                }
-                first = false
-                stack.push(this)
-                return harness.getUpdate(toEval, level, baseStack)
+                continuation.add(this)
+                continuation.add(Evaluate(code))
+                toEval
             } else {
-                val newStack = baseStack.toMutableList()
-                acc.addAll(stack)
-                newStack.add(SpellDatum.make(acc))
-                return CastResult(FunctionalData(newStack, 0, listOf(), false), listOf())
+                // dump our final list onto the stack
+                SpellDatum.make(acc)
             }
+            return CastResult(FunctionalData(appendBase(stackTop), 0, listOf(), false), listOf())
         }
     }
 }
