@@ -18,6 +18,7 @@ import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusPos;
 import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
 import at.petrak.hexcasting.common.casting.operators.eval.OpEvalDelay;
 import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
+import at.petrak.hexcasting.common.casting.operators.eval.OpHalt;
 import at.petrak.hexcasting.common.casting.operators.lists.*;
 import at.petrak.hexcasting.common.casting.operators.local.OpPeekLocal;
 import at.petrak.hexcasting.common.casting.operators.local.OpPushLocal;
@@ -325,8 +326,8 @@ public class RegisterPatterns {
             // eval being a space filling curve feels apt doesn't it
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deaqq", HexDir.SOUTH_EAST), modLoc("eval"),
                 OpEval.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqdee", HexDir.SOUTH_WEST), modLoc("eval/delay"),
-                OpEvalDelay.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqdee", HexDir.SOUTH_WEST), modLoc("halt"),
+                OpHalt.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("aqqqqq", HexDir.EAST), modLoc("read"),
                 OpRead.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.FromAnglesSig("deeeee", HexDir.EAST), modLoc("write"),

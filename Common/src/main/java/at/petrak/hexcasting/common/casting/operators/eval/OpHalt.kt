@@ -12,13 +12,13 @@ import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 
 object OpHalt : Operator {
     override fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
-        var newStack = stack
+        var newStack = stack.toList()
         var done = false
-        while (!done && continuation.isNotEmpty() && !done) {
+        while (!done && continuation.isNotEmpty()) {
             // Kotlin Y U NO destructuring assignment
             val newInfo = continuation.removeLast().breakDownwards(newStack)
-            newStack = newInfo.first
-            done = newInfo.second
+            done = newInfo.first
+            newStack = newInfo.second
         }
         // if we hit no continuation boundaries (i.e. thoth/hermes exits), we've TOTALLY cleared the itinerary...
         if (!done) {
