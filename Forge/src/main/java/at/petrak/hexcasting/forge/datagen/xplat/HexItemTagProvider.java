@@ -1,9 +1,10 @@
-package at.petrak.hexcasting.forge.datagen;
+package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.lib.HexBlockTags;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -22,8 +23,10 @@ public class HexItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags() {
+        var xtags = IXplatAbstractions.INSTANCE.tags();
+        
         tag(Tags.Items.GEMS).add(HexItems.CHARGED_AMETHYST);
-        tag(HexItemTags.AMETHYST_DUST).add(HexItems.AMETHYST_DUST);
+        tag(xtags.amethystDust()).add(HexItems.AMETHYST_DUST);
         tag(HexItemTags.WANDS).add(HexItems.WAND_OAK, HexItems.WAND_SPRUCE, HexItems.WAND_BIRCH,
             HexItems.WAND_JUNGLE, HexItems.WAND_ACACIA, HexItems.WAND_DARK_OAK,
             HexItems.WAND_CRIMSON, HexItems.WAND_WARPED, HexItems.WAND_AKASHIC);

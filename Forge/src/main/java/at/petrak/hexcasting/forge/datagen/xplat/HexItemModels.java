@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.datagen;
+package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.items.ItemFocus;

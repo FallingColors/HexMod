@@ -18,22 +18,6 @@
       }
     }
   ],
-  "item": "hexcasting:amethyst_dust",
-  "functions": [
-    {
-      "function": "minecraft:set_count",
-      "count": {
-        "type": "minecraft:uniform",
-        "min": 2.0,
-        "max": 4.0
-      },
-      "add": false
-    },
-    {
-      "function": "minecraft:apply_bonus",
-      "enchantment": "minecraft:fortune",
-      "formula": "minecraft:ore_drops"
-    }
-  ],
-  "type": "paucal:add_item"
+  "modifier": -2.0,
+  "type": "hexcasting:amethyst_shard_reducer"
 }

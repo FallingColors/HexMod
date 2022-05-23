@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.addldata.DataHolder;
 import at.petrak.hexcasting.api.addldata.HexHolder;
 import at.petrak.hexcasting.api.addldata.ManaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
@@ -16,14 +17,20 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
+import at.petrak.hexcasting.forge.mixin.ForgeAccessorRecipeProvider;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
+import com.google.gson.JsonObject;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -31,6 +38,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -60,6 +68,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -314,6 +323,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public void saveRecipeAdvancement(DataGenerator generator, HashCache cache, JsonObject json, Path path) {
+        // this is dumb
+        ((ForgeAccessorRecipeProvider) new RecipeProvider(generator)).hex$saveRecipeAdvancement(cache, json, path);
+    }
+
+    @Override
     public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
         return !bs.requiresCorrectToolForDrops() || TierSortingRegistry.isCorrectTierForDrops(tier, bs);
     }
@@ -321,6 +336,18 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public Item.Properties addEquipSlotFabric(EquipmentSlot slot) {
         return new Item.Properties();
+    }
+
+    private static IXplatTags tags = new IXplatTags() {
+        @Override
+        public TagKey<Item> amethystDust() {
+            return HexItemTags.create(new ResourceLocation("forge", "dusts/amethyst"));
+        }
+    };
+
+    @Override
+    public IXplatTags tags() {
+        return tags;
     }
 
     public static final String TAG_BRAINSWEPT = "hexcasting:brainswept";

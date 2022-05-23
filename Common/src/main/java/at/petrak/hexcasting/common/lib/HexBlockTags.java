@@ -10,7 +10,7 @@ public class HexBlockTags {
     public static final TagKey<Block> AKASHIC_LOGS = create("akashic_logs");
     public static final TagKey<Block> AKASHIC_PLANKS = create("akashic_planks");
 
-    private static TagKey<Block> create(String name) {
+    public static TagKey<Block> create(String name) {
         return TagKey.create(Registry.BLOCK_REGISTRY, modLoc(name));
     }
 }

@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.datagen.lootmods;
+package at.petrak.hexcasting.forge.datagen.forge.lootmods;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;

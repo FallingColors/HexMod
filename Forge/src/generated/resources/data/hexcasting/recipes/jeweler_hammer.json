@@ -7,17 +7,22 @@
   ],
   "key": {
     "I": {
-      "item": "minecraft:iron_ingot"
+      "tag": "forge:ingots/iron"
     },
     "N": {
-      "item": "minecraft:iron_nugget"
+      "tag": "forge:nuggets/iron"
     },
     "A": {
       "item": "minecraft:amethyst_shard"
     },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "S": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ]
   },
   "result": {
     "item": "hexcasting:jeweler_hammer"

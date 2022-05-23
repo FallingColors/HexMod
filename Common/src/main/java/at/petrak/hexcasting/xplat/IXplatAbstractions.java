@@ -10,7 +10,10 @@ import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.common.network.IMessage;
+import com.google.gson.JsonObject;
 import net.minecraft.core.BlockPos;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,6 +37,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.function.BiFunction;
@@ -122,6 +126,12 @@ public interface IXplatAbstractions {
     ResourceLocation getID(VillagerProfession profession);
 
     Ingredient getUnsealedIngredient(ItemStack stack);
+
+    void saveRecipeAdvancement(DataGenerator generator, HashCache cache, JsonObject json, Path path);
+
+    IXplatTags tags();
+
+    ///
 
     IXplatAbstractions INSTANCE = find();
 

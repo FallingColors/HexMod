@@ -18,8 +18,8 @@ import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
-import at.petrak.hexcasting.forge.datagen.HexDataGenerators;
-import at.petrak.hexcasting.forge.datagen.lootmods.HexLootModifiers;
+import at.petrak.hexcasting.forge.datagen.HexForgeDataGenerators;
+import at.petrak.hexcasting.forge.datagen.forge.lootmods.HexLootModifiers;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
@@ -158,8 +158,9 @@ public class ForgeHexInitializer {
         });
 
         evBus.addListener((TickEvent.WorldTickEvent evt) -> {
-            if (evt.phase == TickEvent.Phase.END && evt.world instanceof ServerLevel world)
+            if (evt.phase == TickEvent.Phase.END && evt.world instanceof ServerLevel world) {
                 PlayerPositionRecorder.updateAllPlayers(world);
+            }
         });
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
@@ -194,7 +195,7 @@ public class ForgeHexInitializer {
         modBus.addListener(ForgeCapabilityHandler::registerCaps);
         evBus.addGenericListener(ItemStack.class, ForgeCapabilityHandler::attachItemCaps);
 
-        modBus.register(HexDataGenerators.class);
+        modBus.register(HexForgeDataGenerators.class);
         modBus.register(ForgeCapabilityHandler.class);
         evBus.register(CapSyncers.class);
     }

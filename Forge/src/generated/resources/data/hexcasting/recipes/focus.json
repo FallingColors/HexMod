@@ -6,16 +6,12 @@
     "DCD"
   ],
   "key": {
-    "C": [{
+    "C": {
       "tag": "forge:dusts/glowstone"
-    }, {
-      "item": "minecraft:glowstone_dust"
-    }],
-    "D": [{
+    },
+    "D": {
       "tag": "forge:leather"
-    }, {
-      "item": "minecraft:leather"
-    }],
+    },
     "I": {
       "item": "hexcasting:charged_amethyst"
     }

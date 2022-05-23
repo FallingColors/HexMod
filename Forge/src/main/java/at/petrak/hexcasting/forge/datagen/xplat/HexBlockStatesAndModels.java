@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.datagen;
+package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
@@ -171,7 +171,8 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
         blockAndItem(HexBlocks.SLATE_BLOCK, models().cubeAll("slate_block", modLoc("block/slate")));
         blockAndItem(HexBlocks.AMETHYST_DUST_BLOCK,
-            models().singleTexture("amethyst_dust_block", modLoc(BLOCK_FOLDER + "/cube_half_mirrored"), "all", modLoc("block/amethyst_dust_block")));
+            models().singleTexture("amethyst_dust_block", modLoc(BLOCK_FOLDER + "/cube_half_mirrored"), "all",
+                modLoc("block/amethyst_dust_block")));
         cubeBlockAndItem(HexBlocks.AMETHYST_TILES, "amethyst_tiles");
         cubeBlockAndItem(HexBlocks.SCROLL_PAPER, "scroll_paper");
         cubeBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER, "ancient_scroll_paper");

@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.datagen;
+package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
@@ -49,7 +49,8 @@ public class HexLootTables extends PaucalLootTableProvider {
             HexBlocks.AKASHIC_LOG, HexBlocks.AKASHIC_LOG_STRIPPED, HexBlocks.AKASHIC_WOOD,
             HexBlocks.AKASHIC_WOOD_STRIPPED,
             HexBlocks.AKASHIC_PLANKS, HexBlocks.AKASHIC_TILE, HexBlocks.AKASHIC_PANEL,
-            HexBlocks.AKASHIC_TRAPDOOR, HexBlocks.AKASHIC_STAIRS, HexBlocks.AKASHIC_PRESSURE_PLATE, HexBlocks.AKASHIC_BUTTON);
+            HexBlocks.AKASHIC_TRAPDOOR, HexBlocks.AKASHIC_STAIRS, HexBlocks.AKASHIC_PRESSURE_PLATE,
+            HexBlocks.AKASHIC_BUTTON);
 
         makeSlabTable(lootTables, HexBlocks.AKASHIC_SLAB);
 

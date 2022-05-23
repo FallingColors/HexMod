@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.datagen.lootmods;
+package at.petrak.hexcasting.forge.datagen.forge.lootmods;
 
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.math.HexPattern;

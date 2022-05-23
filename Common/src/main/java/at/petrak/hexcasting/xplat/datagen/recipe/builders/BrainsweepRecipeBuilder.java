@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.datagen.recipebuilders;
+package at.petrak.hexcasting.xplat.datagen.recipe.builders;
 
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;

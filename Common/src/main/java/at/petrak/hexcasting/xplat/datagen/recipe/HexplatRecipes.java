@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.datagen;
+package at.petrak.hexcasting.xplat.datagen.recipe;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
@@ -10,13 +10,19 @@ import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
 import at.petrak.hexcasting.common.recipe.SealSpellbookRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
-import at.petrak.hexcasting.forge.datagen.recipebuilders.BrainsweepRecipeBuilder;
-import at.petrak.paucal.api.forge.datagen.PaucalRecipeProvider;
+import at.petrak.hexcasting.mixin.accessor.AccessorRecipeProvider;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.datagen.IXplatIngredients;
+import at.petrak.hexcasting.xplat.datagen.recipe.builders.BrainsweepRecipeBuilder;
+import com.google.common.collect.Sets;
+import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.HashCache;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -27,20 +33,54 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
+import java.util.Set;
 import java.util.function.Consumer;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class HexRecipes extends PaucalRecipeProvider {
-    public HexRecipes(DataGenerator pGenerator) {
-        super(pGenerator, HexAPI.MOD_ID);
+
+public class HexplatRecipes extends RecipeProvider {
+    public DataGenerator generator;
+    public IXplatIngredients ingredients;
+
+    public HexplatRecipes(DataGenerator pGenerator, IXplatIngredients ingredients) {
+        super(pGenerator);
+        this.generator = pGenerator;
+        this.ingredients = ingredients;
     }
 
+
+    // [VanillaCopy] RecipeProvider
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> recipes) {
+    public void run(HashCache cache) {
+        Path path = this.generator.getOutputFolder();
+        Set<ResourceLocation> set = Sets.newHashSet();
+        makeRecipes((recipeJsonProvider) -> {
+            if (!set.add(recipeJsonProvider.getId())) {
+                throw new IllegalStateException("Duplicate recipe " + recipeJsonProvider.getId());
+            } else {
+                AccessorRecipeProvider.hex$SaveRecipe(cache, recipeJsonProvider.serializeRecipe(), path.resolve(
+                    "data/" + recipeJsonProvider.getId().getNamespace() + "/recipes/" + recipeJsonProvider.getId()
+                        .getPath() + ".json"));
+                JsonObject jsonObject = recipeJsonProvider.serializeAdvancement();
+                if (jsonObject != null) {
+                    IXplatAbstractions.INSTANCE.saveRecipeAdvancement(this.generator, cache, jsonObject, path.resolve(
+                        "data/"
+                            + recipeJsonProvider.getId().getNamespace()
+                            + "/advancements/" +
+                            recipeJsonProvider.getAdvancementId().getPath()
+                            + ".json"));
+                }
+            }
+        });
+    }
+
+    protected void makeRecipes(Consumer<FinishedRecipe> recipes) {
         specialRecipe(recipes, SealFocusRecipe.SERIALIZER);
         specialRecipe(recipes, SealSpellbookRecipe.SERIALIZER);
 
@@ -54,13 +94,13 @@ public class HexRecipes extends PaucalRecipeProvider {
         wandRecipe(recipes, HexItems.WAND_WARPED, Items.WARPED_PLANKS);
         wandRecipe(recipes, HexItems.WAND_AKASHIC, HexBlocks.AKASHIC_PLANKS.asItem());
 
-        ringCornered(HexItems.FOCUS, 1, Ingredient.of(Tags.Items.DUSTS_GLOWSTONE),
-            Ingredient.of(Tags.Items.LEATHER), Ingredient.of(HexItems.CHARGED_AMETHYST))
+        ringCornered(HexItems.FOCUS, 1, ingredients.glowstoneDust(),
+            ingredients.leather(), Ingredient.of(HexItems.CHARGED_AMETHYST))
             .unlockedBy("has_item", has(HexItemTags.WANDS))
             .save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.SPELLBOOK)
-            .define('N', Tags.Items.NUGGETS_GOLD)
+            .define('N', ingredients.goldNugget())
             .define('B', Items.WRITABLE_BOOK)
             .define('A', HexItems.CHARGED_AMETHYST)
             .define('F', Items.CHORUS_FRUIT) // i wanna gate this behind the end SOMEHOW
@@ -72,17 +112,17 @@ public class HexRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_chorus", has(Items.CHORUS_FRUIT)).save(recipes);
 
         ringCornerless(HexItems.CYPHER, 1,
-            Ingredient.of(Tags.Items.INGOTS_COPPER),
+            ingredients.copperIngot(),
             Ingredient.of(HexItems.AMETHYST_DUST))
             .unlockedBy("has_item", has(HexItemTags.WANDS)).save(recipes);
 
         ringCornerless(HexItems.TRINKET, 1,
-            Ingredient.of(Tags.Items.INGOTS_IRON),
+            ingredients.ironIngot(),
             Ingredient.of(Items.AMETHYST_SHARD))
             .unlockedBy("has_item", has(HexItemTags.WANDS)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.ARTIFACT)
-            .define('F', Tags.Items.INGOTS_GOLD)
+            .define('F', ingredients.goldIngot())
             .define('A', HexItems.CHARGED_AMETHYST)
             // why in god's name does minecraft have two different places for item tags
             .define('D', ItemTags.MUSIC_DISCS)
@@ -166,10 +206,10 @@ public class HexRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", has(HexItems.AMETHYST_DUST)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.JEWELER_HAMMER)
-            .define('I', Items.IRON_INGOT)
-            .define('N', Items.IRON_NUGGET)
+            .define('I', ingredients.ironIngot())
+            .define('N', ingredients.ironNugget())
             .define('A', Items.AMETHYST_SHARD)
-            .define('S', Items.STICK)
+            .define('S', ingredients.stick())
             .pattern("IAN")
             .pattern(" S ")
             .pattern(" S ")
@@ -197,7 +237,7 @@ public class HexRecipes extends PaucalRecipeProvider {
         ringAll(HexBlocks.SCROLL_PAPER, 8, Items.PAPER, Items.AMETHYST_SHARD)
             .unlockedBy("has_item", has(Items.AMETHYST_SHARD)).save(recipes);
         ShapelessRecipeBuilder.shapeless(HexBlocks.ANCIENT_SCROLL_PAPER, 8)
-            .requires(Tags.Items.DYES_BROWN)
+            .requires(ingredients.dyes().get(DyeColor.BROWN))
             .requires(HexBlocks.SCROLL_PAPER, 8)
             .unlockedBy("has_item", has(HexBlocks.SCROLL_PAPER)).save(recipes);
         stack(HexBlocks.SCROLL_PAPER_LANTERN, 1, HexBlocks.SCROLL_PAPER, Items.TORCH)
@@ -205,13 +245,13 @@ public class HexRecipes extends PaucalRecipeProvider {
         stack(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN, 1, HexBlocks.ANCIENT_SCROLL_PAPER, Items.TORCH)
             .unlockedBy("has_item", has(HexBlocks.ANCIENT_SCROLL_PAPER)).save(recipes);
         ShapelessRecipeBuilder.shapeless(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN, 8)
-            .requires(Tags.Items.DYES_BROWN)
+            .requires(ingredients.dyes().get(DyeColor.BROWN))
             .requires(HexBlocks.SCROLL_PAPER_LANTERN, 8)
             .unlockedBy("has_item", has(HexBlocks.SCROLL_PAPER_LANTERN))
             .save(recipes, modLoc("ageing_scroll_paper_lantern"));
 
         stack(HexBlocks.SCONCE, 4, Ingredient.of(HexItems.CHARGED_AMETHYST),
-            Ingredient.of(Tags.Items.INGOTS_COPPER))
+            ingredients.copperIngot())
             .unlockedBy("has_item", has(HexItems.CHARGED_AMETHYST)).save(recipes);
 
         ShapelessRecipeBuilder.shapeless(HexBlocks.AKASHIC_PLANKS, 4)
@@ -366,12 +406,156 @@ public class HexRecipes extends PaucalRecipeProvider {
     }
 
     protected void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {
-        var name = ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer);
+        var name = Registry.RECIPE_SERIALIZER.getKey(serializer);
         SpecialRecipeBuilder.special(serializer).save(consumer, HexAPI.MOD_ID + ":dynamic/" + name.getPath());
     }
 
     // why is this private waa
-    protected static InventoryChangeTrigger.TriggerInstance has(TagKey<Item> pTag) {
+    public static InventoryChangeTrigger.TriggerInstance has(TagKey<Item> pTag) {
         return inventoryTrigger(ItemPredicate.Builder.item().of(pTag).build());
+    }
+
+    public static InventoryChangeTrigger.TriggerInstance has(ItemLike $$0) {
+        return inventoryTrigger(ItemPredicate.Builder.item().of($$0).build());
+    }
+
+    public static InventoryChangeTrigger.TriggerInstance inventoryTrigger(ItemPredicate... $$0) {
+        return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY,
+            MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, $$0);
+    }
+
+    // steal from paucal
+    protected ShapedRecipeBuilder ring(ItemLike out, int count, Ingredient outer, @Nullable Ingredient inner) {
+        return this.ringCornered(out, count, outer, outer, inner);
+    }
+
+    protected ShapedRecipeBuilder ring(ItemLike out, int count, ItemLike outer, @Nullable ItemLike inner) {
+        return this.ring(out, count, Ingredient.of(new ItemLike[]{outer}), this.ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ring(ItemLike out, int count, TagKey<Item> outer, @Nullable TagKey<Item> inner) {
+        return this.ring(out, count, Ingredient.of(outer), this.ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ringCornerless(ItemLike out, int count, Ingredient outer,
+        @Nullable Ingredient inner) {
+        return this.ringCornered(out, count, (Ingredient) outer, (Ingredient) null, (Ingredient) inner);
+    }
+
+    protected ShapedRecipeBuilder ringCornerless(ItemLike out, int count, ItemLike outer, @Nullable ItemLike inner) {
+        return this.ringCornerless(out, count, Ingredient.of(new ItemLike[]{outer}), this.ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ringCornerless(ItemLike out, int count, TagKey<Item> outer,
+        @Nullable TagKey<Item> inner) {
+        return this.ringCornerless(out, count, Ingredient.of(outer), this.ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ringAll(ItemLike out, int count, Ingredient outer, @Nullable Ingredient inner) {
+        return this.ringCornered(out, count, outer, outer, inner);
+    }
+
+    protected ShapedRecipeBuilder ringAll(ItemLike out, int count, ItemLike outer, @Nullable ItemLike inner) {
+        return this.ringAll(out, count, Ingredient.of(outer), this.ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ringAll(ItemLike out, int count, TagKey<Item> outer, @Nullable TagKey<Item> inner) {
+        return this.ringAll(out, count, Ingredient.of(outer), this.ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ringCornered(ItemLike out, int count, @Nullable Ingredient cardinal,
+        @Nullable Ingredient diagonal, @Nullable Ingredient inner) {
+        if (cardinal == null && diagonal == null && inner == null) {
+            throw new IllegalArgumentException("at least one ingredient must be non-null");
+        } else if (inner != null && cardinal == null && diagonal == null) {
+            throw new IllegalArgumentException("if inner is non-null, either cardinal or diagonal must not be");
+        } else {
+            ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(out, count);
+            char C = ' ';
+            if (cardinal != null) {
+                builder.define('C', cardinal);
+                C = 'C';
+            }
+
+            char D = ' ';
+            if (diagonal != null) {
+                builder.define('D', diagonal);
+                D = 'D';
+            }
+
+            char I = ' ';
+            if (inner != null) {
+                builder.define('I', inner);
+                I = 'I';
+            }
+
+            builder.pattern(String.format("%c%c%c", D, C, D))
+                .pattern(String.format("%c%c%c", C, I, C))
+                .pattern(String.format("%c%c%c", D, C, D));
+            return builder;
+        }
+    }
+
+    protected ShapedRecipeBuilder ringCornered(ItemLike out, int count, @Nullable ItemLike cardinal,
+        @Nullable ItemLike diagonal, @Nullable ItemLike inner) {
+        return this.ringCornered(out, count, this.ingredientOf(cardinal), this.ingredientOf(diagonal),
+            this.ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ringCornered(ItemLike out, int count, @Nullable TagKey<Item> cardinal,
+        @Nullable TagKey<Item> diagonal, @Nullable TagKey<Item> inner) {
+        return this.ringCornered(out, count, this.ingredientOf(cardinal), this.ingredientOf(diagonal),
+            this.ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder stack(ItemLike out, int count, Ingredient top, Ingredient bottom) {
+        return ShapedRecipeBuilder.shaped(out, count).define('T', top).define('B', bottom).pattern("T").pattern("B");
+    }
+
+    protected ShapedRecipeBuilder stack(ItemLike out, int count, ItemLike top, ItemLike bottom) {
+        return this.stack(out, count, Ingredient.of(top), Ingredient.of(bottom));
+    }
+
+    protected ShapedRecipeBuilder stack(ItemLike out, int count, TagKey<Item> top, TagKey<Item> bottom) {
+        return this.stack(out, count, Ingredient.of(top), Ingredient.of(bottom));
+    }
+
+    protected ShapedRecipeBuilder stick(ItemLike out, int count, Ingredient input) {
+        return this.stack(out, count, input, input);
+    }
+
+    protected ShapedRecipeBuilder stick(ItemLike out, int count, ItemLike input) {
+        return this.stick(out, count, Ingredient.of(input));
+    }
+
+    protected ShapedRecipeBuilder stick(ItemLike out, int count, TagKey<Item> input) {
+        return this.stick(out, count, Ingredient.of(input));
+    }
+
+    protected void packing(ItemLike free, ItemLike compressed, String freeName, boolean largeSize,
+        Consumer<FinishedRecipe> recipes) {
+        ShapedRecipeBuilder pack = ShapedRecipeBuilder.shaped(compressed).define('X', free);
+        if (largeSize) {
+            pack.pattern("XXX").pattern("XXX").pattern("XXX");
+        } else {
+            pack.pattern("XX").pattern("XX");
+        }
+
+        pack.unlockedBy("has_item", has(free)).save(recipes, modLoc(freeName + "_packing"));
+        ShapelessRecipeBuilder.shapeless(free, largeSize ? 9 : 4)
+            .requires(compressed)
+            .unlockedBy("has_item", has(free))
+            .save(recipes, modLoc(freeName + "_unpacking"));
+    }
+
+
+    @Nullable
+    protected Ingredient ingredientOf(@Nullable ItemLike item) {
+        return item == null ? null : Ingredient.of(new ItemLike[]{item});
+    }
+
+    @Nullable
+    protected Ingredient ingredientOf(@Nullable TagKey<Item> item) {
+        return item == null ? null : Ingredient.of(item);
     }
 }

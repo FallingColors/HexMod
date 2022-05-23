@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.datagen.lootmods;
+package at.petrak.hexcasting.forge.datagen.forge.lootmods;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexItems;
