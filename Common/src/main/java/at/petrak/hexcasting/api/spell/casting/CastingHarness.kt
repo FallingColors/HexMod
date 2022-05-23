@@ -84,7 +84,7 @@ class CastingHarness private constructor(
             exception.printStackTrace()
             return CastResult(
                 this.getFunctionalData(),
-                ResolvedPatternType.ERROR,
+                ResolvedPatternType.ERRORED,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)))
             )
         }
@@ -127,7 +127,7 @@ class CastingHarness private constructor(
 
             return CastResult(
                 fd,
-                ResolvedPatternType.OK,
+                ResolvedPatternType.EVALUATED,
                 sideEffects,
             )
         } catch (mishap: Mishap) {
@@ -140,7 +140,7 @@ class CastingHarness private constructor(
             exception.printStackTrace()
             return CastResult(
                 this.getFunctionalData(),
-                ResolvedPatternType.ERROR,
+                ResolvedPatternType.ERRORED,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(newPat, operatorIdPair?.second)))
             )
         }
@@ -217,11 +217,11 @@ class CastingHarness private constructor(
                 this.getFunctionalData().copy(
                     escapeNext = false,
                     parenthesized = newParens
-                ) to ResolvedPatternType.PATTERN
+                ) to ResolvedPatternType.ESCAPED
             } else if (operator == Widget.ESCAPE) {
                 this.getFunctionalData().copy(
                     escapeNext = true,
-                ) to ResolvedPatternType.OK
+                ) to ResolvedPatternType.EVALUATED
             } else if (operator == Widget.OPEN_PAREN) {
                 // we have escaped the parens onto the stack; we just also record our count.
                 val newParens = this.parenthesized.toMutableList()
@@ -229,7 +229,7 @@ class CastingHarness private constructor(
                 this.getFunctionalData().copy(
                     parenthesized = newParens,
                     parenCount = this.parenCount + 1
-                ) to ResolvedPatternType.OK
+                ) to ResolvedPatternType.EVALUATED
             } else if (operator == Widget.CLOSE_PAREN) {
                 val newParenCount = this.parenCount - 1
                 if (newParenCount == 0) {
@@ -239,7 +239,7 @@ class CastingHarness private constructor(
                         stack = newStack,
                         parenCount = newParenCount,
                         parenthesized = listOf()
-                    ) to ResolvedPatternType.OK
+                    ) to ResolvedPatternType.EVALUATED
                 } else if (newParenCount < 0) {
                     throw MishapTooManyCloseParens()
                 } else {
@@ -250,14 +250,14 @@ class CastingHarness private constructor(
                     this.getFunctionalData().copy(
                         parenCount = newParenCount,
                         parenthesized = newParens
-                    ) to ResolvedPatternType.PATTERN
+                    ) to ResolvedPatternType.ESCAPED
                 }
             } else {
                 val newParens = this.parenthesized.toMutableList()
                 newParens.add(iota)
                 this.getFunctionalData().copy(
                     parenthesized = newParens
-                ) to ResolvedPatternType.PATTERN
+                ) to ResolvedPatternType.ESCAPED
             }
         } else if (this.escapeNext) {
             val newStack = this.stack.toMutableList()
@@ -265,15 +265,15 @@ class CastingHarness private constructor(
             this.getFunctionalData().copy(
                 stack = newStack,
                 escapeNext = false,
-            ) to ResolvedPatternType.PATTERN
+            ) to ResolvedPatternType.ESCAPED
         } else if (operator == Widget.ESCAPE) {
             this.getFunctionalData().copy(
                 escapeNext = true
-            ) to ResolvedPatternType.OK
+            ) to ResolvedPatternType.EVALUATED
         } else if (operator == Widget.OPEN_PAREN) {
             this.getFunctionalData().copy(
                 parenCount = this.parenCount + 1
-            ) to ResolvedPatternType.OK
+            ) to ResolvedPatternType.EVALUATED
         } else if (operator == Widget.CLOSE_PAREN) {
             throw MishapTooManyCloseParens()
         } else {
