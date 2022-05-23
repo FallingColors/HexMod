@@ -260,7 +260,7 @@ class CastingHarness private constructor(
                 this.getFunctionalData().copy(
                     parenthesized = newParens,
                     parenCount = this.parenCount + 1
-                ) to ResolvedPatternType.OK
+                ) to if (this.parenCount == 0) ResolvedPatternType.OK else ResolvedPatternType.PATTERN
             } else if (operator == Widget.CLOSE_PAREN) {
                 val newParenCount = this.parenCount - 1
                 if (newParenCount == 0) {
