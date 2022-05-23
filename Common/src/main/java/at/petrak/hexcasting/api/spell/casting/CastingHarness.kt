@@ -62,7 +62,7 @@ class CastingHarness private constructor(
         // Begin aggregating info
         val info = TempControllerInfo(false, false)
         var lastResolutionType = ResolvedPatternType.UNKNOWN
-        while (continuation.isNotEmpty() && !info.haveWeFuckedUp) {
+        while (continuation.isNotEmpty() && !info.earlyExit) {
             // Take the top of the continuation stack...
             val next = continuation.removeLast()
             // ...and execute it.
@@ -73,7 +73,7 @@ class CastingHarness private constructor(
             }
             lastResolutionType = result.resolutionType
             performSideEffects(info, result.sideEffects)
-            info.haveWeFuckedUp = info.haveWeFuckedUp || !lastResolutionType.success
+            info.earlyExit = info.earlyExit || !lastResolutionType.success
         }
 
         return ControllerInfo(
@@ -183,7 +183,7 @@ class CastingHarness private constructor(
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
             if (mustStop) {
-                info.haveWeFuckedUp = true
+                info.earlyExit = true
                 break
             }
 
@@ -460,7 +460,7 @@ class CastingHarness private constructor(
 
     data class TempControllerInfo(
         var playSound: Boolean,
-        var haveWeFuckedUp: Boolean,
+        var earlyExit: Boolean,
     )
 
     data class CastResult(

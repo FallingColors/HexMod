@@ -60,7 +60,7 @@ sealed interface ContinuationFrame {
     }
 
     /**
-     * A stack marker representing the end of a Hermean evaluation,
+     * A stack marker representing the end of a Hermes evaluation,
      * so that we know when to stop removing frames during a Halt.
      */
     class FinishEval(): ContinuationFrame {
