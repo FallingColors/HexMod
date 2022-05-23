@@ -57,12 +57,17 @@ class CastingHarness private constructor(
      * Given a list of iotas, execute them in sequence.
      */
     fun executeIotas(iotas: List<SpellDatum<*>>, world: ServerLevel): ControllerInfo {
+        // Initialize the continuation stack to a single top-level eval for all iotas.
         val continuation: MutableList<ContinuationFrame> = mutableListOf(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
+        // Begin aggregating info
         val info = TempControllerInfo(false, false)
         var lastResolutionType = ResolvedPatternType.UNKNOWN
         while (continuation.isNotEmpty() && !info.haveWeFuckedUp) {
+            // Take the top of the continuation stack...
             val next = continuation.removeLast()
+            // ...and execute it.
             val result = next.evaluate(continuation, world, this)
+            // Then write all pertinent data back to the harness for the next iteration.
             if (result.newData != null) {
                 this.applyFunctionalData(result.newData)
             }
@@ -70,8 +75,6 @@ class CastingHarness private constructor(
             performSideEffects(info, result.sideEffects)
             info.haveWeFuckedUp = info.haveWeFuckedUp || !lastResolutionType.success
         }
-
-        
 
         return ControllerInfo(
             info.playSound,
