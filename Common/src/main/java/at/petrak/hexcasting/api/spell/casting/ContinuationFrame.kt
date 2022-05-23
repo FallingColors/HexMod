@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingHarness.CastResult
 import net.minecraft.server.level.ServerLevel
 
 /**
- * A single frame of evaluation during the 
+ * A single frame of evaluation during the execution of a spell.
  */
 sealed interface ContinuationFrame {
     fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult

@@ -10,19 +10,22 @@ import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 
-object OpEval : Operator {
+object OpHalt : Operator {
     override fun operate(continuation: MutableList<ContinuationFrame>, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
-        val instrs: SpellList = stack.getChecked(stack.lastIndex)
-        stack.removeLastOrNull()
-
-        ctx.incDepth()
-
-        // if not installed already...
-        if (!(continuation.isNotEmpty() && continuation.last() is ContinuationFrame.FinishEval)) {
-            continuation.add(ContinuationFrame.FinishEval()) // install a break-boundary after eval
+        var newStack = stack
+        var done = false
+        while (!done && continuation.isNotEmpty() && !done) {
+            // Kotlin Y U NO destructuring assignment
+            val newInfo = continuation.removeLast().breakDownwards(newStack)
+            newStack = newInfo.first
+            done = newInfo.second
         }
-        continuation.add(ContinuationFrame.Evaluate(instrs))
+        // if we hit no continuation boundaries (i.e. thoth/hermes exits), we've TOTALLY cleared the itinerary...
+        if (!done) {
+            // bomb the stack so we exit
+            newStack = listOf()
+        }
 
-        return OperationResult(stack, local, listOf())
+        return OperationResult(newStack, local, listOf())
     }
 }
