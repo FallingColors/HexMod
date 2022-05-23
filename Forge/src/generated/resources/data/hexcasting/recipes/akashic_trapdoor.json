@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "tag": "hexcasting:akashic_planks"
+    }
+  },
+  "result": {
+    "item": "hexcasting:akashic_trapdoor",
+    "count": 2
+  }
+}

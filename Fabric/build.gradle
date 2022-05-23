@@ -18,6 +18,12 @@ loom {
             server()
             setConfigName("Fabric Server")
         }
+        datagen {
+            client()
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.modid=${modID}"
+            vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}"
+        }
 
         configureEach {
             runDir "Fabric/run"
@@ -85,4 +91,8 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
+
+    duplicatesStrategy 'exclude'
 }
+
+setupJar(this)

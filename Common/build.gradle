@@ -52,3 +52,5 @@ processResources {
         expand buildProps
     }
 }
+
+setupJar(this)

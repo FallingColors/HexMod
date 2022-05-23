@@ -29,7 +29,7 @@ sealed class Mishap : Throwable() {
         return ParticleSpray(ctx.position.add(0.0, 0.2, 0.0), Vec3(0.0, 2.0, 0.0), 0.2, Math.PI / 4, 40)
     }
 
-    open fun resolutionType(ctx: CastingContext): ResolvedPatternType = ResolvedPatternType.ERROR
+    open fun resolutionType(ctx: CastingContext): ResolvedPatternType = ResolvedPatternType.ERRORED
 
     /**
      * Execute the actual effect, not any sfx.

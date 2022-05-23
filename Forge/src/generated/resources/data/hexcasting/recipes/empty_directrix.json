@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSS",
+    "OAO",
+    "SSC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "O": {
+      "item": "minecraft:observer"
+    },
+    "A": {
+      "item": "hexcasting:charged_amethyst"
+    },
+    "S": {
+      "item": "hexcasting:slate_block"
+    }
+  },
+  "result": {
+    "item": "hexcasting:empty_directrix"
+  }
+}

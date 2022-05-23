@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WW",
+    "WW"
+  ],
+  "key": {
+    "W": {
+      "item": "hexcasting:akashic_log"
+    }
+  },
+  "result": {
+    "item": "hexcasting:akashic_wood",
+    "count": 3
+  }
+}

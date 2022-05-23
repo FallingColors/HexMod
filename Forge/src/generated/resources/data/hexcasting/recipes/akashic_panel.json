@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DCD",
+    "C C",
+    "DCD"
+  ],
+  "key": {
+    "C": {
+      "tag": "hexcasting:akashic_planks"
+    },
+    "D": {
+      "tag": "hexcasting:akashic_planks"
+    }
+  },
+  "result": {
+    "item": "hexcasting:akashic_panel",
+    "count": 8
+  }
+}

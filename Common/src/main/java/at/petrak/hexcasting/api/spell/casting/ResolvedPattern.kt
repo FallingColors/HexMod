@@ -24,7 +24,7 @@ data class ResolvedPattern(val pattern: HexPattern, val origin: HexCoord, var ty
             val valid = try {
                 ResolvedPatternType.valueOf(tag.getString("Valid").uppercase(Locale.ROOT))
             } catch (e: IllegalArgumentException) {
-                ResolvedPatternType.UNKNOWN
+                ResolvedPatternType.UNRESOLVED
             }
             return ResolvedPattern(pattern, origin, valid)
         }

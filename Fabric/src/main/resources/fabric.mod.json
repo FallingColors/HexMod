@@ -24,6 +24,9 @@
     "client": [
       {"adapter": "kotlin", "value": "at.petrak.hexcasting.fabric.FabricHexClientInitializer"}
     ],
+    "fabric-datagen": [
+      "at.petrak.hexcasting.fabric.datagen.HexFabricDataGenerators"
+    ],
     "cardinal-components": [
       "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"
     ]

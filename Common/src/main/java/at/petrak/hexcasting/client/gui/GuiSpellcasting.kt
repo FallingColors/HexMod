@@ -211,7 +211,7 @@ class GuiSpellcasting(
             is PatternDrawState.Drawing -> {
                 val (start, _, pat) = this.drawState as PatternDrawState.Drawing
                 this.drawState = PatternDrawState.BetweenPatterns
-                this.patterns.add(ResolvedPattern(pat, start, ResolvedPatternType.UNKNOWN))
+                this.patterns.add(ResolvedPattern(pat, start, ResolvedPatternType.UNRESOLVED))
 
                 this.usedSpots.addAll(pat.positions(start))
 

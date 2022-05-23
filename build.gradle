@@ -47,6 +47,42 @@ String getArtifactID(String platform) {
     return "${modID}-${platform}-${minecraftVersion}"
 }
 
+void setupJar(Object project) {
+    project.jar {
+        manifest {
+            attributes([
+                    'Specification-Title'     : modID,
+                    'Specification-Vendor'    : "petra-kat",
+                    'Specification-Version'   : project.jar.archiveVersion,
+                    'Implementation-Title'    : project.name,
+                    'Implementation-Version'  : project.jar.archiveVersion,
+                    'Implementation-Vendor'   : "petra-kat",
+                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    'Timestampe'              : System.currentTimeMillis(),
+                    'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+                    'Build-On-Minecraft'      : minecraftVersion
+            ])
+        }
+    }
+
+    project.publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                groupId project.group
+                artifactId project.archivesBaseName
+                version project.version
+                from project.components.java
+            }
+        }
+
+        repositories {
+            maven {
+                url "file://" + System.getenv("local_maven")
+            }
+        }
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
@@ -93,44 +129,9 @@ subprojects {
 
     sourceSets.main.kotlin.srcDirs += 'src/main/java'
 
-
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()
     java.withJavadocJar()
-
-    jar {
-        manifest {
-            attributes([
-                    'Specification-Title'     : modID,
-                    'Specification-Vendor'    : "petra-kat",
-                    'Specification-Version'   : project.jar.archiveVersion,
-                    'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : project.jar.archiveVersion,
-                    'Implementation-Vendor'   : "petra-kat",
-                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    'Timestampe'              : System.currentTimeMillis(),
-                    'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
-                    'Build-On-Minecraft'      : minecraftVersion
-            ])
-        }
-    }
-
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                groupId project.group
-                artifactId project.archivesBaseName
-                version project.version
-                artifact jar
-            }
-        }
-
-        repositories {
-            maven {
-                url "file://" + System.getenv("local_maven")
-            }
-        }
-    }
 }
 
 allprojects { gradle.projectsEvaluated { tasks.withType(JavaCompile) { options.compilerArgs << "-Xmaxerrs" << "1000" } } }
@@ -190,4 +191,10 @@ task sendWebhook {
             project.logger.error("Failed to push Discord webhook.")
         }
     }
+}
+
+task runAllDatagen {
+    dependsOn "Forge:runXplatDatagen"
+    dependsOn "Forge:runForgeDatagen"
+    dependsOn "Fabric:runDatagen"
 }
