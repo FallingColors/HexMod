@@ -312,7 +312,6 @@
   "hexcasting.spell.hexcasting:escape": "Consideration",
   "hexcasting.spell.hexcasting:eval": "Hermes' Gambit",
   "hexcasting.spell.hexcasting:halt": "Charon's Gambit",
-  "hexcasting.spell.hexcasting:eval/delay": "Secret Gambit!",
   "hexcasting.spell.hexcasting:read/local": "Muninn's Reflection",
   "hexcasting.spell.hexcasting:write/local": "Huginn's Gambit",
   "hexcasting.spell.hexcasting:read": "Scribe's Reflection",
