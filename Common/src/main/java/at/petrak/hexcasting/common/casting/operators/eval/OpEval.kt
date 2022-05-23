@@ -7,29 +7,25 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.CastingHarness
+import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
+import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 
 object OpEval : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         val instrs: SpellList = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
 
         ctx.incDepth()
-        val harness = CastingHarness(ctx)
-        harness.stack.addAll(stack)
-        harness.localIota = local
 
-        val sideEffects = mutableListOf<OperatorSideEffect>()
-
-        for (insn in instrs) {
-            val res = harness.getUpdate(insn, ctx.world)
-            sideEffects.addAll(res.sideEffects)
-            if (res.sideEffects.any { it is OperatorSideEffect.DoMishap }) {
-                break
-            }
-            harness.applyFunctionalData(res.newData)
+        // if not installed already...
+        val newCont = if (continuation is SpellContinuation.NotDone && continuation.frame is ContinuationFrame.FinishEval) {
+            continuation
+        } else {
+            continuation.pushFrame(ContinuationFrame.FinishEval()) // install a break-boundary after eval
         }
 
-        return OperationResult(harness.stack, harness.localIota, sideEffects)
+        val frame = ContinuationFrame.Evaluate(instrs)
+        return OperationResult(newCont.pushFrame(frame), stack, local, listOf())
     }
 }

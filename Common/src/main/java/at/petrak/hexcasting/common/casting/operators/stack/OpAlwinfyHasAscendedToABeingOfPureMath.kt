@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import net.minecraft.network.chat.TranslatableComponent
 import kotlin.math.abs
@@ -17,7 +18,7 @@ import kotlin.math.roundToInt
 
 // "lehmer code"
 object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
-    override fun operate(stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0) // todo: better message?
 
@@ -55,6 +56,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
         val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * ManaConstants.DUST_UNIT).toInt()
 
         return OperationResult(
+            continuation,
             stack,
             local,
             listOf(OperatorSideEffect.ConsumeMana(cost))

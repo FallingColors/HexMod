@@ -8,14 +8,22 @@ import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
+import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.Widget
+import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.spell.mishaps.Mishap
+import at.petrak.hexcasting.api.spell.mishaps.MishapDisallowedSpell
+import at.petrak.hexcasting.api.spell.mishaps.MishapError
+import at.petrak.hexcasting.api.spell.mishaps.MishapTooManyCloseParens
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.math.HexDir
-import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.ManaHelper
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import at.petrak.hexcasting.api.utils.asCompound
 import at.petrak.hexcasting.api.utils.getList
-import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
@@ -46,25 +54,54 @@ class CastingHarness private constructor(
     ) : this(mutableListOf(), SpellDatum.make(Widget.NULL), 0, mutableListOf(), false, ctx, prepackagedColorizer)
 
     /**
-     * Given an iota, do all the updating/side effects/etc required.
+     * Execute a single iota.
      */
-    fun executeNewIota(iota: SpellDatum<*>, world: ServerLevel): ControllerInfo {
-        val result = this.getUpdate(iota, world)
-        this.applyFunctionalData(result.newData)
-        return this.performSideEffects(result.sideEffects, result.resolutionType)
+    fun executeIota(iota: SpellDatum<*>, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
+
+    /**
+     * Given a list of iotas, execute them in sequence.
+     */
+    fun executeIotas(iotas: List<SpellDatum<*>>, world: ServerLevel): ControllerInfo {
+        // Initialize the continuation stack to a single top-level eval for all iotas.
+        var continuation = SpellContinuation.Done.pushFrame(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
+        // Begin aggregating info
+        val info = TempControllerInfo(false, false)
+        var lastResolutionType = ResolvedPatternType.UNKNOWN
+        while (continuation is SpellContinuation.NotDone && !info.earlyExit) {
+            // Take the top of the continuation stack...
+            val next = continuation.frame
+            // ...and execute it.
+            val result = next.evaluate(continuation.next, world, this)
+            // Then write all pertinent data back to the harness for the next iteration.
+            if (result.newData != null) {
+                this.applyFunctionalData(result.newData)
+            }
+            continuation = result.continuation
+            lastResolutionType = result.resolutionType
+            performSideEffects(info, result.sideEffects)
+            info.earlyExit = info.earlyExit || !lastResolutionType.success
+        }
+
+        return ControllerInfo(
+            info.playSound,
+            this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
+            lastResolutionType,
+            generateDescs()
+        )
     }
 
-    fun getUpdate(iota: SpellDatum<*>, world: ServerLevel): CastResult {
+    fun getUpdate(iota: SpellDatum<*>, world: ServerLevel, continuation: SpellContinuation): CastResult {
         try {
             this.handleParentheses(iota)?.let { (data, resolutionType) ->
-                return@getUpdate CastResult(data, resolutionType, listOf())
+                return@getUpdate CastResult(continuation, data, resolutionType, listOf())
             }
 
             return if (iota.getType() == DatumType.PATTERN) {
-                updateWithPattern(iota.payload as HexPattern, world)
+                updateWithPattern(iota.payload as HexPattern, world, continuation)
             } else {
                 CastResult(
-                    this.getFunctionalData(),
+                    continuation,
+                    null,
                     ResolvedPatternType.INVALID, // Should never matter
                     listOf(
                         OperatorSideEffect.DoMishap(
@@ -76,14 +113,16 @@ class CastingHarness private constructor(
             }
         } catch (mishap: Mishap) {
             return CastResult(
-                this.getFunctionalData(),
+                continuation,
+                null,
                 mishap.resolutionType(ctx),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null))),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
             return CastResult(
-                this.getFunctionalData(),
+                continuation,
+                null,
                 ResolvedPatternType.ERRORED,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)))
             )
@@ -94,7 +133,7 @@ class CastingHarness private constructor(
      * When the server gets a packet from the client with a new pattern,
      * handle it functionally.
      */
-    fun updateWithPattern(newPat: HexPattern, world: ServerLevel): CastResult {
+    fun updateWithPattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
         if (this.ctx.spellCircle == null)
             this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
 
@@ -106,7 +145,7 @@ class CastingHarness private constructor(
             if (!HexConfig.server().isActionAllowed(operatorIdPair.second)) {
                 throw MishapDisallowedSpell()
             }
-            val (stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(this.stack.toMutableList(), this.localIota, this.ctx)
+            val (cont2, stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(continuation, this.stack.toMutableList(), this.localIota, this.ctx)
             this.localIota = local2
             // Stick a poofy particle effect at the caster position
             val sideEffects = sideEffectsUnmut.toMutableList()
@@ -126,20 +165,23 @@ class CastingHarness private constructor(
             )
 
             return CastResult(
+                cont2,
                 fd,
                 ResolvedPatternType.EVALUATED,
                 sideEffects,
             )
         } catch (mishap: Mishap) {
             return CastResult(
-                this.getFunctionalData(),
+                continuation,
+                null,
                 mishap.resolutionType(ctx),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.second))),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
             return CastResult(
-                this.getFunctionalData(),
+                continuation,
+                null,
                 ResolvedPatternType.ERRORED,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(newPat, operatorIdPair?.second)))
             )
@@ -147,25 +189,21 @@ class CastingHarness private constructor(
     }
 
     /**
-     * Execute the side effects of a cast, and then tell the client what to think about it.
+     * Execute the side effects of a pattern, updating our aggregated info.
      */
-    fun performSideEffects(sideEffects: List<OperatorSideEffect>, resolutionType: ResolvedPatternType): ControllerInfo {
-        var makesCastSound = false
+    fun performSideEffects(info: TempControllerInfo, sideEffects: List<OperatorSideEffect>) {
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
-            if (mustStop) break
-
-            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell &&
-                haskellProgrammersShakingandCryingRN.hasCastingSound)
-                    makesCastSound = true
+            if (mustStop) {
+                info.earlyExit = true
+                break
             }
 
-        return ControllerInfo(
-            makesCastSound,
-            this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
-            resolutionType,
-            generateDescs()
-        )
+            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell &&
+                haskellProgrammersShakingandCryingRN.hasCastingSound) {
+                    info.playSound = true
+            }
+        }
     }
 
     fun generateDescs(): List<Component> {
@@ -179,7 +217,7 @@ class CastingHarness private constructor(
     /**
      * Return the functional update represented by the current state (for use with `copy`)
      */
-    private fun getFunctionalData() = FunctionalData(
+    fun getFunctionalData() = FunctionalData(
         this.stack.toList(),
         this.parenCount,
         this.parenthesized.toList(),
@@ -229,7 +267,7 @@ class CastingHarness private constructor(
                 this.getFunctionalData().copy(
                     parenthesized = newParens,
                     parenCount = this.parenCount + 1
-                ) to ResolvedPatternType.EVALUATED
+                ) to if (this.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
             } else if (operator == Widget.CLOSE_PAREN) {
                 val newParenCount = this.parenCount - 1
                 if (newParenCount == 0) {
@@ -432,9 +470,15 @@ class CastingHarness private constructor(
         }
     }
 
+    data class TempControllerInfo(
+        var playSound: Boolean,
+        var earlyExit: Boolean,
+    )
+
     data class CastResult(
-        val newData: FunctionalData,
+        val continuation: SpellContinuation,
+        val newData: FunctionalData?,
         val resolutionType: ResolvedPatternType,
-        val sideEffects: List<OperatorSideEffect>
+        val sideEffects: List<OperatorSideEffect>,
     )
 }

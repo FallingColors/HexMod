@@ -85,7 +85,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
                     harness.generateDescs());
             } else {
-                clientInfo = harness.executeNewIota(SpellDatum.make(this.pattern), sender.getLevel());
+                clientInfo = harness.executeIota(SpellDatum.make(this.pattern), sender.getLevel());
 
                 if (clientInfo.getMakesCastSound()) {
                     sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),

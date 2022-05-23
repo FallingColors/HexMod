@@ -110,12 +110,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
         var sPlayer = (ServerPlayer) player;
         var ctx = new CastingContext(sPlayer, usedHand);
         var harness = new CastingHarness(ctx);
-        for (var insn : instrs) {
-            var info = harness.executeNewIota(insn, sPlayer.getLevel());
-            if (!info.getResolutionType().getSuccess()) {
-                break;
-            }
-        }
+        var info = harness.executeIotas(instrs, sPlayer.getLevel());
 
         boolean broken = breakAfterDepletion() && getMana(stack) == 0;
 
