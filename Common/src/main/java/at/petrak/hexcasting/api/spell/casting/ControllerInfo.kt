@@ -6,9 +6,8 @@ import net.minecraft.network.chat.Component
  * Information for the sake of the GUI.
  */
 data class ControllerInfo(
-    val wasSpellCast: Boolean,
-    val hasCastingSound: Boolean,
+    val makesCastSound: Boolean,
     val isStackClear: Boolean,
-    val wasPrevPatternInvalid: Boolean,
+    val resolutionType: ResolvedPatternType,
     val stackDesc: List<Component>
 )

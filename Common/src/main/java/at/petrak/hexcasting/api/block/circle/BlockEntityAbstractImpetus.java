@@ -287,13 +287,10 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                     var newPattern = cc.getPattern(tracked, bs, this.level);
                     if (newPattern != null) {
                         var info = harness.executeIotas(List.of(SpellDatum.make(newPattern)), splayer.getLevel());
-                        if (info.getWasSpellCast()) {
-                            castSpell = true;
-                            if (info.getHasCastingSound()) {
-                                makeSound = true;
-                            }
+                        if (info.getMakesCastSound()) {
+                            makeSound = true;
                         }
-                        if (info.getWasPrevPatternInvalid()) {
+                        if (!info.getResolutionType().getSuccess()) {
                             erroredPos = tracked;
                             break;
                         }
@@ -301,7 +298,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 }
             }
 
-            if (castSpell && makeSound) {
+            if (makeSound) {
                 this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST, SoundSource.BLOCKS,
                     2f, 1f);
             }

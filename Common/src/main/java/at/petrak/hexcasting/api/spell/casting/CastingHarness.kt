@@ -11,7 +11,6 @@ import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
@@ -59,37 +58,33 @@ class CastingHarness private constructor(
      */
     fun executeIotas(iotas: List<SpellDatum<*>>, world: ServerLevel): ControllerInfo {
         val continuation: MutableList<ContinuationFrame> = mutableListOf(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
-        val info = TempControllerInfo(false, false, false)
+        val info = TempControllerInfo(false, false)
+        var lastResolutionType = ResolvedPatternType.UNKNOWN
         while (continuation.isNotEmpty() && !info.haveWeFuckedUp) {
             val next = continuation.removeLast()
             val result = next.evaluate(continuation, world, this)
             if (result.newData != null) {
                 this.applyFunctionalData(result.newData)
             }
+            lastResolutionType = result.resolutionType
             performSideEffects(info, result.sideEffects)
+            info.haveWeFuckedUp = info.haveWeFuckedUp || !lastResolutionType.success
         }
 
         
 
         return ControllerInfo(
-            info.spellCast,
             info.playSound,
             this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
-            info.haveWeFuckedUp,
+            lastResolutionType,
             generateDescs()
         )
     }
 
     fun getUpdate(iota: SpellDatum<*>, world: ServerLevel, continuation: MutableList<ContinuationFrame>): CastResult {
         try {
-            // wouldn't it be nice to be able to go paren'
-            // i guess i'll call it paren2
-            val paren2 = this.handleParentheses(iota)
-            if (paren2 != null) {
-                return CastResult(
-                    paren2,
-                    listOf()
-                )
+            this.handleParentheses(iota)?.let { (data, resolutionType) ->
+                return@getUpdate CastResult(data, resolutionType, listOf())
             }
 
             return if (iota.getType() == DatumType.PATTERN) {
@@ -97,6 +92,7 @@ class CastingHarness private constructor(
             } else {
                 CastResult(
                     null,
+                    ResolvedPatternType.INVALID, // Should never matter
                     listOf(
                         OperatorSideEffect.DoMishap(
                             MishapUnescapedValue(iota),
@@ -108,12 +104,14 @@ class CastingHarness private constructor(
         } catch (mishap: Mishap) {
             return CastResult(
                 null,
+                mishap.resolutionType(ctx),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null))),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
             return CastResult(
                 null,
+                ResolvedPatternType.ERROR,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)))
             )
         }
@@ -156,17 +154,20 @@ class CastingHarness private constructor(
 
             return CastResult(
                 fd,
+                ResolvedPatternType.OK,
                 sideEffects,
             )
         } catch (mishap: Mishap) {
             return CastResult(
                 null,
+                mishap.resolutionType(ctx),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.second))),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
             return CastResult(
                 null,
+                ResolvedPatternType.ERROR,
                 listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(newPat, operatorIdPair?.second)))
             )
         }
@@ -183,10 +184,8 @@ class CastingHarness private constructor(
                 break
             }
 
-
-            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell) {
-                info.spellCast = true
-                if (haskellProgrammersShakingandCryingRN.hasCastingSound)
+            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell &&
+                haskellProgrammersShakingandCryingRN.hasCastingSound) {
                     info.playSound = true
             }
         }
@@ -225,7 +224,7 @@ class CastingHarness private constructor(
      * Return a non-null value if we handled this in some sort of parenthesey way,
      * either escaping it onto the stack or changing the parenthese-handling state.
      */
-    private fun handleParentheses(iota: SpellDatum<*>): FunctionalData? {
+    private fun handleParentheses(iota: SpellDatum<*>): Pair<FunctionalData, ResolvedPatternType>? {
         val operator = (iota.payload as? HexPattern)?.let {
             try {
                 PatternRegistry.matchPattern(it, this.ctx.world)
@@ -241,11 +240,11 @@ class CastingHarness private constructor(
                 this.getFunctionalData().copy(
                     escapeNext = false,
                     parenthesized = newParens
-                )
+                ) to ResolvedPatternType.PATTERN
             } else if (operator == Widget.ESCAPE) {
                 this.getFunctionalData().copy(
                     escapeNext = true,
-                )
+                ) to ResolvedPatternType.OK
             } else if (operator == Widget.OPEN_PAREN) {
                 // we have escaped the parens onto the stack; we just also record our count.
                 val newParens = this.parenthesized.toMutableList()
@@ -253,7 +252,7 @@ class CastingHarness private constructor(
                 this.getFunctionalData().copy(
                     parenthesized = newParens,
                     parenCount = this.parenCount + 1
-                )
+                ) to ResolvedPatternType.OK
             } else if (operator == Widget.CLOSE_PAREN) {
                 val newParenCount = this.parenCount - 1
                 if (newParenCount == 0) {
@@ -263,7 +262,7 @@ class CastingHarness private constructor(
                         stack = newStack,
                         parenCount = newParenCount,
                         parenthesized = listOf()
-                    )
+                    ) to ResolvedPatternType.OK
                 } else if (newParenCount < 0) {
                     throw MishapTooManyCloseParens()
                 } else {
@@ -274,14 +273,14 @@ class CastingHarness private constructor(
                     this.getFunctionalData().copy(
                         parenCount = newParenCount,
                         parenthesized = newParens
-                    )
+                    ) to ResolvedPatternType.PATTERN
                 }
             } else {
                 val newParens = this.parenthesized.toMutableList()
                 newParens.add(iota)
                 this.getFunctionalData().copy(
                     parenthesized = newParens
-                )
+                ) to ResolvedPatternType.PATTERN
             }
         } else if (this.escapeNext) {
             val newStack = this.stack.toMutableList()
@@ -289,15 +288,15 @@ class CastingHarness private constructor(
             this.getFunctionalData().copy(
                 stack = newStack,
                 escapeNext = false,
-            )
+            ) to ResolvedPatternType.PATTERN
         } else if (operator == Widget.ESCAPE) {
             this.getFunctionalData().copy(
                 escapeNext = true
-            )
+            ) to ResolvedPatternType.OK
         } else if (operator == Widget.OPEN_PAREN) {
             this.getFunctionalData().copy(
                 parenCount = this.parenCount + 1
-            )
+            ) to ResolvedPatternType.OK
         } else if (operator == Widget.CLOSE_PAREN) {
             throw MishapTooManyCloseParens()
         } else {
@@ -409,6 +408,7 @@ class CastingHarness private constructor(
         return out
     }
 
+
     companion object {
         const val TAG_STACK = "stack"
         const val TAG_LOCAL = "local"
@@ -456,13 +456,13 @@ class CastingHarness private constructor(
     }
 
     data class TempControllerInfo(
-        var spellCast: Boolean,
         var playSound: Boolean,
         var haveWeFuckedUp: Boolean,
     )
 
     data class CastResult(
         val newData: FunctionalData?,
+        val resolutionType: ResolvedPatternType,
         val sideEffects: List<OperatorSideEffect>,
     )
 }

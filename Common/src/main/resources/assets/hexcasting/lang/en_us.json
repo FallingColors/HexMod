@@ -244,6 +244,7 @@
   "hexcasting.spell.hexcasting:xor": "Exclusion Distillation",
   "hexcasting.spell.hexcasting:floor": "Floor Purification",
   "hexcasting.spell.hexcasting:ceil": "Ceiling Purification",
+  "hexcasting.spell.hexcasting:modulo": "Modulus Distillation",
   "hexcasting.spell.hexcasting:greater": "Maximus Distillation",
   "hexcasting.spell.hexcasting:less": "Minimus Distillation",
   "hexcasting.spell.hexcasting:greater_eq": "Maximus Distillation II",
@@ -682,9 +683,9 @@
   "hexcasting.page.basics_pattern.print": "Displays the top iota of the stack to me.",
   "hexcasting.page.basics_pattern.raycast.1": "Combines two vectors (a position and a direction) into the answer to the question: If I stood at the position and looked in the direction, what block would I be looking at? Costs a negligible amount of _media.",
   "hexcasting.page.basics_pattern.raycast.2": "For example, casting this with my own position and look vectors will return the coordinates of the block I am looking at.$(br2)If it doesn't hit anything, the vectors will combine into $(l:casting/influences)$(thing)Null/$.",
-  "hexcasting.page.basics_pattern.raycast/axis.1": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation$(/l), but instead returns a vector representing the answer to the question: Which $(italic)side/$ of the block am I looking at? Costs a negligible amount of _media.",
+  "hexcasting.page.basics_pattern.raycast/axis.1": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$, but instead returns a vector representing the answer to the question: Which $(italic)side/$ of the block am I looking at? Costs a negligible amount of _media.",
   "hexcasting.page.basics_pattern.raycast/axis.2": "More specifically, it returns the $(italic)normal vector/$ of the face hit, or a unit vector pointing perpendicular to the face.$(li)If I am looking at a floor, it will return (0, 1, 0).$(li)If I am looking at the south face of a block, it will return (0, 0, 1).",
-  "hexcasting.page.basics_pattern.raycast/entity": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation$(/l), but instead returns the $(italic)entity/$ I am looking at. Costs a negligible amount of _media.",
+  "hexcasting.page.basics_pattern.raycast/entity": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$, but instead returns the $(italic)entity/$ I am looking at. Costs a negligible amount of _media.",
 
   "hexcasting.entry.numbers": "Number Literals",
   "hexcasting.page.numbers.1.header": "Numerical Reflection",
@@ -718,6 +719,7 @@
   "hexcasting.page.math.ceil": "\"Ceilings\" a number, raising it to the next integer value if it has a fractional component.",
   "hexcasting.page.math.construct_vec": "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (top to bottom).",
   "hexcasting.page.math.deconstruct_vec": "Split a vector into its X, Y, and Z components (top to bottom).",
+  "hexcasting.page.math.modulo": "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 % 2 is 1, and 5 % 3 is 2.",
   "hexcasting.page.math.coerce_axial": "Coerces a vector to its nearest axial direction, a unit vector. The zero vector is unaffected.",
   "hexcasting.page.math.random": "Creates a random number between 0 and 1.",
 

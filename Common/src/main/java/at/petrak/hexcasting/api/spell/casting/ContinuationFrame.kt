@@ -25,7 +25,7 @@ sealed interface ContinuationFrame {
                 }
                 return harness.getUpdate(toEval, level, continuation)
             } else {
-                return CastResult(null, listOf())
+                return CastResult(null, ResolvedPatternType.OK, listOf())
             }
         }
 
@@ -36,7 +36,7 @@ sealed interface ContinuationFrame {
         override fun breakDownwards(stack: List<SpellDatum<*>>) = Pair(true, stack)
 
         override fun evaluate(continuation: MutableList<ContinuationFrame>, level: ServerLevel, harness: CastingHarness): CastResult {
-            return CastResult(FunctionalData(harness.stack.toList(), 0, listOf(), false), listOf())
+            return CastResult(FunctionalData(harness.stack.toList(), 0, listOf(), false), ResolvedPatternType.OK, listOf())
         }
     }
 
@@ -68,7 +68,7 @@ sealed interface ContinuationFrame {
                 // dump our final list onto the stack
                 SpellDatum.make(acc)
             }
-            return CastResult(FunctionalData(appendBase(stackTop), 0, listOf(), false), listOf())
+            return CastResult(FunctionalData(appendBase(stackTop), 0, listOf(), false), ResolvedPatternType.OK, listOf())
         }
     }
 }
