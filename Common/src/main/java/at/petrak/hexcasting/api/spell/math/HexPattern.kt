@@ -18,7 +18,6 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
         // Two restrictions:
         // - No adding a pos/dir pair we previously added
         // - No backtracking
-        // TODO this doesn't seem to work very well
         val linesSeen = mutableSetOf<Pair<HexCoord, HexDir>>()
 
         var compass = this.startDir

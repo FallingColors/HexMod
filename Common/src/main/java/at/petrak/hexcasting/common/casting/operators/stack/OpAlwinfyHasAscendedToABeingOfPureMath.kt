@@ -3,13 +3,13 @@ package at.petrak.hexcasting.common.casting.operators.stack
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
+import at.petrak.hexcasting.api.spell.casting.SpellContinuation
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
-import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import net.minecraft.network.chat.TranslatableComponent
 import kotlin.math.abs
@@ -18,9 +18,14 @@ import kotlin.math.roundToInt
 
 // "lehmer code"
 object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
-    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(
+        continuation: SpellContinuation,
+        stack: MutableList<SpellDatum<*>>,
+        local: SpellDatum<*>,
+        ctx: CastingContext
+    ): OperationResult {
         if (stack.isEmpty())
-            throw MishapNotEnoughArgs(1, 0) // todo: better message?
+            throw MishapNotEnoughArgs(1, 0)
 
         val codeDouble = stack.getChecked<Double>(stack.lastIndex)
         if (abs(codeDouble.roundToInt() - codeDouble) >= 0.05f)
