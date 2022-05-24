@@ -296,7 +296,7 @@ class GuiSpellcasting(
             RenderLib.drawPatternFromPoints(mat, pat.toLines(
                 this.hexSize(),
                 this.coordToPx(origin)
-            ), true, valid.color or (0xC8 shl 24), valid.fadeColor or (0xC8 shl 24), if (valid.success) 0.2f else 0.5f)
+            ), true, valid.color or (0xC8 shl 24), valid.fadeColor or (0xC8 shl 24), if (valid.success) 0.2f else 0.9f)
         }
 
         // Now draw the currently WIP pattern
