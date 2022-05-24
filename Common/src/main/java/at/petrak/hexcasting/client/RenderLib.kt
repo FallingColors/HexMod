@@ -135,9 +135,10 @@ object RenderLib {
         drawLast: Boolean,
         tail: Int,
         head: Int,
+        flowIrregular: Float,
         animTime: Float? = null
     ) {
-        val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f)
+        val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f, flowIrregular)
         val nodes = if (drawLast) {
             points
         } else {
@@ -164,7 +165,7 @@ object RenderLib {
      * @param speed: rate at which the lightning effect should move/shake/etc
      */
     @JvmStatic
-    fun makeZappy(points: List<Vec2>, hops: Float, variance: Float, speed: Float): List<Vec2> {
+    fun makeZappy(points: List<Vec2>, hops: Float, variance: Float, speed: Float, flowIrregular: Float): List<Vec2> {
         // Nothing in, nothing out
         if (points.isEmpty()) {
             return emptyList()
@@ -190,7 +191,7 @@ object RenderLib {
                 // as well as some random variance...
                 // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
                 // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
-                val minorPerturb = NOISE.getValue(i.toDouble(), j.toDouble(), Math.sin(zSeed)) * 0.5
+                val minorPerturb = NOISE.getValue(i.toDouble(), j.toDouble(), Math.sin(zSeed)) * flowIrregular
                 val theta = (3 * NOISE.getValue(i.toDouble() + j.toDouble() / (hops + 1) + minorPerturb - zSeed, 1337.0, 0.0) * HexUtils.TAU).toFloat()
                 val r = (NOISE.getValue(i.toDouble() + j.toDouble() / (hops + 1) - zSeed, 69420.0, 0.0) * maxVariance * scaleVariance(progress)).toFloat()
                 val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))

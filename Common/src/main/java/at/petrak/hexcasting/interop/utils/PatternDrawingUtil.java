@@ -106,7 +106,7 @@ public final class PatternDrawingUtil {
         for (var pat : patternEntries) {
             var localOrigin = HexUtils.coordToPx(pat.origin(), hexSize, realCom.negated());
             var points = pat.pattern().toLines(hexSize, localOrigin);
-            pat.zappyPoints().addAll(RenderLib.makeZappy(points, 10f, 0.8f, 0f));
+            pat.zappyPoints().addAll(RenderLib.makeZappy(points, 10f, 0.8f, 0f, 0f));
         }
 
         var pathfinderDots = seenCoords.stream()
