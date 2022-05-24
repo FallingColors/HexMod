@@ -362,6 +362,8 @@
   "hexcasting.mishap.not_enough_args": "%s expected %s or more arguments but the stack was only %s tall",
   "hexcasting.mishap.too_many_close_parens": "Used Retrospection without first using Introspection",
   "hexcasting.mishap.location_too_far": "%s is out of range for %s",
+  "hexcasting.mishap.location_out_of_world": "%s is not within the world",
+  "hexcasting.mishap.location_too_close_to_out": "%s is too close to the boundary of the world",
   "hexcasting.mishap.wrong_dimension": "%s cannot see %s from %s",
   "hexcasting.mishap.entity_too_far": "%s is out of range for %s",
   "hexcasting.mishap.immune_entity": "%s cannot alter %s",
