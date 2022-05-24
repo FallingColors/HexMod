@@ -22,10 +22,8 @@ public class AmethystReducerFunc extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
-        if (stack.getItem() == Items.AMETHYST_SHARD) {
-            if (stack.is(Items.AMETHYST_SHARD)) {
-                stack.setCount((int) (stack.getCount() * (1 + delta)));
-            }
+        if (stack.is(Items.AMETHYST_SHARD)) {
+            stack.setCount((int) (stack.getCount() * (1 + delta)));
         }
         return stack;
     }
