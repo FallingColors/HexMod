@@ -22,23 +22,28 @@ sealed class OperatorSideEffect {
     /** Return whether to cancel all further [OperatorSideEffect] */
     abstract fun performEffect(harness: CastingHarness): Boolean
 
+    data class RequiredEnlightenment(val awardStat: Boolean) : OperatorSideEffect() {
+        override fun performEffect(harness: CastingHarness): Boolean {
+            harness.ctx.caster.sendMessage(
+                TranslatableComponent("hexcasting.message.cant_great_spell"),
+                Util.NIL_UUID
+            )
+
+            if (awardStat)
+                HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.ctx.caster)
+
+            return true
+        }
+    }
+
     /** Try to cast a spell  */
-    data class AttemptSpell(val spell: RenderedSpell, val isGreat: Boolean, val hasCastingSound: Boolean = true, val awardStat: Boolean = true) :
+    data class AttemptSpell(val spell: RenderedSpell, val hasCastingSound: Boolean = true, val awardStat: Boolean = true) :
         OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
-            return if (this.isGreat && !harness.ctx.isCasterEnlightened) {
-                harness.ctx.caster.sendMessage(
-                    TranslatableComponent("hexcasting.message.cant_great_spell"),
-                    Util.NIL_UUID
-                )
-                HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.ctx.caster)
-                true
-            } else {
-                this.spell.cast(harness.ctx)
-                if (awardStat)
-                    harness.ctx.caster.awardStat(HexStatistics.SPELLS_CAST)
-                false
-            }
+            this.spell.cast(harness.ctx)
+            if (awardStat)
+                harness.ctx.caster.awardStat(HexStatistics.SPELLS_CAST)
+            return false
         }
     }
 

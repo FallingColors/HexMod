@@ -147,15 +147,32 @@ class CastingHarness private constructor(
             if (!HexConfig.server().isActionAllowed(operatorIdPair.second)) {
                 throw MishapDisallowedSpell()
             }
-            val (cont2, stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(
-                continuation,
-                this.stack.toMutableList(),
-                this.localIota,
-                this.ctx
-            )
-            this.localIota = local2
+            val pattern = operatorIdPair.first
+
+            val unenlightened = pattern.isGreat && !ctx.isCasterEnlightened
+
+            val sideEffects = mutableListOf<OperatorSideEffect>()
+            var stack2: List<SpellDatum<*>>? = null
+            var cont2 = continuation
+
+            if (!unenlightened || pattern.alwaysProcessGreatSpell) {
+                val result = pattern.operate(
+                    continuation,
+                    this.stack.toMutableList(),
+                    this.localIota,
+                    this.ctx
+                )
+                cont2 = result.newContinuation
+                stack2 = result.newStack
+                this.localIota = result.newLocalIota
+                sideEffects.addAll(result.sideEffects)
+            }
+
+            if (unenlightened) {
+                sideEffects.add(OperatorSideEffect.RequiredEnlightenment(pattern.causesBlindDiversion))
+            }
+
             // Stick a poofy particle effect at the caster position
-            val sideEffects = sideEffectsUnmut.toMutableList()
             if (this.ctx.spellCircle == null)
                 sideEffects.add(
                     OperatorSideEffect.Particles(
@@ -167,9 +184,11 @@ class CastingHarness private constructor(
                     )
                 )
 
-            val fd = this.getFunctionalData().copy(
-                stack = stack2,
-            )
+            val fd = stack2?.let {
+                this.getFunctionalData().copy(
+                    stack = it,
+                )
+            }
 
             return CastResult(
                 cont2,
@@ -177,6 +196,7 @@ class CastingHarness private constructor(
                 ResolvedPatternType.EVALUATED,
                 sideEffects,
             )
+
         } catch (mishap: Mishap) {
             return CastResult(
                 continuation,

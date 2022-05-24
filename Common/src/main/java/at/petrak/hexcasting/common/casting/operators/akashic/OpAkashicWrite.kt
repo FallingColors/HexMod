@@ -1,11 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapNoAkashicRecord
@@ -18,6 +14,8 @@ import net.minecraft.world.phys.Vec3
 
 object OpAkashicWrite : SpellOperator {
     override val argc = 3
+
+    override val isGreat = true
 
     override fun execute(
         args: List<SpellDatum<*>>,
