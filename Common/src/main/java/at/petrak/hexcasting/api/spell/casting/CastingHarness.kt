@@ -8,22 +8,14 @@ import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
-import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.Widget
-import at.petrak.hexcasting.api.spell.math.HexPattern
-import at.petrak.hexcasting.api.spell.mishaps.Mishap
-import at.petrak.hexcasting.api.spell.mishaps.MishapDisallowedSpell
-import at.petrak.hexcasting.api.spell.mishaps.MishapError
-import at.petrak.hexcasting.api.spell.mishaps.MishapTooManyCloseParens
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.math.HexDir
+import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.ManaHelper
-import at.petrak.hexcasting.xplat.IXplatAbstractions
 import at.petrak.hexcasting.api.utils.asCompound
 import at.petrak.hexcasting.api.utils.getList
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
@@ -66,7 +58,7 @@ class CastingHarness private constructor(
         var continuation = SpellContinuation.Done.pushFrame(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
         // Begin aggregating info
         val info = TempControllerInfo(false, false)
-        var lastResolutionType = ResolvedPatternType.UNKNOWN
+        var lastResolutionType = ResolvedPatternType.UNRESOLVED
         while (continuation is SpellContinuation.NotDone && !info.earlyExit) {
             // Take the top of the continuation stack...
             val next = continuation.frame
@@ -116,7 +108,12 @@ class CastingHarness private constructor(
                 continuation,
                 null,
                 mishap.resolutionType(ctx),
-                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null))),
+                listOf(
+                    OperatorSideEffect.DoMishap(
+                        mishap,
+                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)
+                    )
+                ),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
@@ -124,7 +121,12 @@ class CastingHarness private constructor(
                 continuation,
                 null,
                 ResolvedPatternType.ERRORED,
-                listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)))
+                listOf(
+                    OperatorSideEffect.DoMishap(
+                        MishapError(exception),
+                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)
+                    )
+                )
             )
         }
     }
@@ -145,7 +147,12 @@ class CastingHarness private constructor(
             if (!HexConfig.server().isActionAllowed(operatorIdPair.second)) {
                 throw MishapDisallowedSpell()
             }
-            val (cont2, stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(continuation, this.stack.toMutableList(), this.localIota, this.ctx)
+            val (cont2, stack2, local2, sideEffectsUnmut) = operatorIdPair.first.operate(
+                continuation,
+                this.stack.toMutableList(),
+                this.localIota,
+                this.ctx
+            )
             this.localIota = local2
             // Stick a poofy particle effect at the caster position
             val sideEffects = sideEffectsUnmut.toMutableList()
@@ -183,7 +190,12 @@ class CastingHarness private constructor(
                 continuation,
                 null,
                 ResolvedPatternType.ERRORED,
-                listOf(OperatorSideEffect.DoMishap(MishapError(exception), Mishap.Context(newPat, operatorIdPair?.second)))
+                listOf(
+                    OperatorSideEffect.DoMishap(
+                        MishapError(exception),
+                        Mishap.Context(newPat, operatorIdPair?.second)
+                    )
+                )
             )
         }
     }
@@ -200,8 +212,9 @@ class CastingHarness private constructor(
             }
 
             if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell &&
-                haskellProgrammersShakingandCryingRN.hasCastingSound) {
-                    info.playSound = true
+                haskellProgrammersShakingandCryingRN.hasCastingSound
+            ) {
+                info.playSound = true
             }
         }
     }
@@ -443,7 +456,10 @@ class CastingHarness private constructor(
                 }
 
                 val localTag = nbt.getCompound(TAG_LOCAL)
-                val localIota = if (localTag.size() == 1) SpellDatum.DeserializeFromNBT(localTag, ctx.world) else SpellDatum.make(Widget.NULL)
+                val localIota =
+                    if (localTag.size() == 1) SpellDatum.DeserializeFromNBT(localTag, ctx.world) else SpellDatum.make(
+                        Widget.NULL
+                    )
 
                 val parenthesized = mutableListOf<SpellDatum<*>>()
                 val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND)

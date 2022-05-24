@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.xplat.datagen;
+package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.lib.HexBlockTags;

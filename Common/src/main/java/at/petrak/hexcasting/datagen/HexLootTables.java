@@ -1,7 +1,11 @@
-package at.petrak.hexcasting.xplat.datagen;
+package at.petrak.hexcasting.datagen;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
+import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.loot.HexLootHandler;
+import at.petrak.hexcasting.common.loot.PatternScrollFunc;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,21 +29,23 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexLootTables extends LootTableProvider {
     // steal it ALL from paucal
@@ -50,8 +56,9 @@ public class HexLootTables extends LootTableProvider {
         this.generator = pGenerator;
     }
 
-    protected void makeLootTables(Map<Block, LootTable.Builder> lootTables) {
-        dropSelf(lootTables, HexBlocks.EMPTY_IMPETUS,
+    protected void makeLootTables(Map<Block, LootTable.Builder> blockTables,
+        Map<ResourceLocation, LootTable.Builder> lootTables) {
+        dropSelf(blockTables, HexBlocks.EMPTY_IMPETUS,
             HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_STOREDPLAYER,
             HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.EMPTY_DIRECTRIX,
             HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_CONNECTOR,
@@ -64,24 +71,55 @@ public class HexLootTables extends LootTableProvider {
             HexBlocks.AKASHIC_TRAPDOOR, HexBlocks.AKASHIC_STAIRS, HexBlocks.AKASHIC_PRESSURE_PLATE,
             HexBlocks.AKASHIC_BUTTON);
 
-        makeSlabTable(lootTables, HexBlocks.AKASHIC_SLAB);
+        makeSlabTable(blockTables, HexBlocks.AKASHIC_SLAB);
 
-        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES1);
-        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES2);
-        makeLeafTable(lootTables, HexBlocks.AKASHIC_LEAVES3);
+        makeLeafTable(blockTables, HexBlocks.AKASHIC_LEAVES1);
+        makeLeafTable(blockTables, HexBlocks.AKASHIC_LEAVES2);
+        makeLeafTable(blockTables, HexBlocks.AKASHIC_LEAVES3);
 
         var slatePool = LootPool.lootPool()
             .setRolls(ConstantValue.exactly(1))
             .add(LootItem.lootTableItem(HexBlocks.SLATE)
                 .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
                     .copy(BlockEntitySlate.TAG_PATTERN, "BlockEntityTag." + BlockEntitySlate.TAG_PATTERN)));
-        lootTables.put(HexBlocks.SLATE, LootTable.lootTable().withPool(slatePool));
+        blockTables.put(HexBlocks.SLATE, LootTable.lootTable().withPool(slatePool));
 
         var doorPool = dropThisPool(HexBlocks.AKASHIC_DOOR, 1)
             .when(new LootItemBlockStatePropertyCondition.Builder(HexBlocks.AKASHIC_DOOR).setProperties(
                 StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER)
             ));
-        lootTables.put(HexBlocks.AKASHIC_DOOR, LootTable.lootTable().withPool(doorPool));
+        blockTables.put(HexBlocks.AKASHIC_DOOR, LootTable.lootTable().withPool(doorPool));
+
+        var dustPool = LootPool.lootPool()
+            .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST))
+            .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4)))
+            .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
+            .when(MatchTool.toolMatches(
+                    ItemPredicate.Builder.item().hasEnchantment(
+                        new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
+                .invert());
+        var isThatAnMFingBrandonSandersonReference = LootPool.lootPool()
+            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
+            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
+            .when(MatchTool.toolMatches(
+                    ItemPredicate.Builder.item().hasEnchantment(
+                        new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
+                .invert())
+            .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
+                0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
+        lootTables.put(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER, LootTable.lootTable()
+            .withPool(dustPool)
+            .withPool(isThatAnMFingBrandonSandersonReference));
+
+        String[] rarities = new String[]{
+            "few",
+            "some",
+            "many"
+        };
+        for (int i = 0; i < rarities.length; i++) {
+            var scrollPool = makeScrollAdder(i + 1);
+            lootTables.put(modLoc("inject/scroll_loot_" + rarities[i]), scrollPool);
+        }
     }
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {
@@ -139,21 +177,34 @@ public class HexLootTables extends LootTableProvider {
         lootTables.put(block, table);
     }
 
+    // "stddev"
+    private LootTable.Builder makeScrollAdder(float stddev) {
+        var pool = LootPool.lootPool()
+            .setRolls(UniformGenerator.between(-stddev, stddev))
+            .add(LootItem.lootTableItem(HexItems.SCROLL))
+            .apply(() -> new PatternScrollFunc(new LootItemCondition[0]));
+        return LootTable.lootTable().withPool(pool);
+    }
+
     @Override
     public void run(HashCache cache) {
-        var lootTables = new HashMap<Block, LootTable.Builder>();
-        this.makeLootTables(lootTables);
+        var blockTables = new HashMap<Block, LootTable.Builder>();
+        var lootTables = new HashMap<ResourceLocation, LootTable.Builder>();
+        this.makeLootTables(blockTables, lootTables);
 
-        var tables = new HashMap<ResourceLocation, LootTable>();
-        for (var entry : lootTables.entrySet()) {
-            tables.put(entry.getKey().getLootTable(), entry.getValue().setParamSet(LootContextParamSets.BLOCK).build());
+        for (var entry : blockTables.entrySet()) {
+            var old = lootTables.put(entry.getKey().getLootTable(),
+                entry.getValue().setParamSet(LootContextParamSets.BLOCK));
+            if (old != null) {
+                HexAPI.LOGGER.warn("Whoopsy, clobbered a loot table '{}': {}", entry.getKey(), old);
+            }
         }
 
         var outputFolder = this.generator.getOutputFolder();
-        tables.forEach((key, lootTable) -> {
+        lootTables.forEach((key, lootTable) -> {
             Path path = outputFolder.resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
             try {
-                DataProvider.save(GSON, cache, LootTables.serialize(lootTable), path);
+                DataProvider.save(GSON, cache, LootTables.serialize(lootTable.build()), path);
             } catch (IOException e) {
                 e.printStackTrace();
             }

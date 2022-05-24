@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.xplat.datagen.recipe;
+package at.petrak.hexcasting.datagen.recipe;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
@@ -10,10 +10,10 @@ import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
 import at.petrak.hexcasting.common.recipe.SealSpellbookRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
+import at.petrak.hexcasting.datagen.IXplatIngredients;
+import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder;
 import at.petrak.hexcasting.mixin.accessor.AccessorRecipeProvider;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.datagen.IXplatIngredients;
-import at.petrak.hexcasting.xplat.datagen.recipe.builders.BrainsweepRecipeBuilder;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.EntityPredicate;

@@ -13,19 +13,20 @@ import at.petrak.hexcasting.common.command.PatternResLocArgument;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.lib.*;
+import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
 import at.petrak.hexcasting.forge.datagen.HexForgeDataGenerators;
-import at.petrak.hexcasting.forge.datagen.forge.lootmods.HexLootModifiers;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,6 +39,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
@@ -98,8 +100,6 @@ public class ForgeHexInitializer {
 
         bind(ForgeRegistries.PARTICLE_TYPES, HexParticles::registerParticles);
 
-        HexLootModifiers.LOOT_MODS.register(getModEventBus());
-
         ArgumentTypes.register(HexAPI.MOD_ID + ":pattern", PatternResLocArgument.class,
             new EmptyArgumentSerializer<>(PatternResLocArgument::id));
         HexAdvancementTriggers.registerTriggers();
@@ -137,6 +137,8 @@ public class ForgeHexInitializer {
             HexRecipeSerializers.registerTypes();
             CraftingHelper.register(modLoc("unsealed"), ForgeUnsealedIngredient.Serializer.INSTANCE);
             HexStatistics.register();
+            HexLootFunctions.registerSerializers((lift, id) ->
+                Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));
         });
 
         modBus.addListener((FMLLoadCompleteEvent evt) ->
@@ -167,6 +169,10 @@ public class ForgeHexInitializer {
 
         evBus.addListener((PlayerEvent.BreakSpeed evt) ->
             evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getPlayer(), evt.getState(), evt.getPos())));
+
+        evBus.addListener((LootTableLoadEvent evt) -> HexLootHandler.lootLoad(
+            evt.getName(),
+            evt.getTable()::addPool));
 
         // === Events implemented in other ways on Fabric
 

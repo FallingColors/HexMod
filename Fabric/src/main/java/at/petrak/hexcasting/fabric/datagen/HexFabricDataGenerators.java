@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.fabric.datagen;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.datagen.HexBlockTagProvider;
+import at.petrak.hexcasting.datagen.HexItemTagProvider;
+import at.petrak.hexcasting.datagen.HexLootTables;
+import at.petrak.hexcasting.datagen.IXplatIngredients;
+import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.datagen.HexBlockTagProvider;
-import at.petrak.hexcasting.xplat.datagen.HexItemTagProvider;
-import at.petrak.hexcasting.xplat.datagen.HexLootTables;
-import at.petrak.hexcasting.xplat.datagen.IXplatIngredients;
-import at.petrak.hexcasting.xplat.datagen.recipe.HexplatRecipes;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.Registry;

@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.lib.*
+import at.petrak.hexcasting.common.loot.HexLootHandler
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
@@ -19,12 +20,14 @@ import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
+import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.ArgumentTypes
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.level.storage.loot.LootPool
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
@@ -64,6 +67,13 @@ object FabricHexInitializer : ModInitializer {
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
 
         CommandRegistrationCallback.EVENT.register { dp, _ -> HexCommands.register(dp) }
+
+        LootTableLoadingCallback.EVENT.register { recman, manager, id, supplier, setter ->
+            HexLootHandler.lootLoad(
+                id,
+                { b: LootPool -> supplier.withPool(b) },
+            )
+        }
     }
 
     fun initRegistries() {
@@ -76,8 +86,9 @@ object FabricHexInitializer : ModInitializer {
         HexEntities.registerEntities(bind(Registry.ENTITY_TYPE))
 
         HexRecipeSerializers.registerSerializers(bind(Registry.RECIPE_SERIALIZER))
-
         HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
+
+        HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
 
         // Done with soft implements in forge
         val flameOn = FlammableBlockRegistry.getDefaultInstance()

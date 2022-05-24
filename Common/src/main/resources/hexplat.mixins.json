@@ -6,6 +6,7 @@
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
     "AccessorTagsProvider", "MixinMob", "MixinRaider", "MixinVillager", "MixinWitch", "accessor.AccessorLivingEntity",
-    "accessor.AccessorRecipeProvider", "accessor.AccessorUseOnContext", "accessor.CriteriaTriggersAccessor"
+    "accessor.AccessorLootTable", "accessor.AccessorRecipeProvider", "accessor.AccessorUseOnContext",
+    "accessor.CriteriaTriggersAccessor"
   ]
 }
