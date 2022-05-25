@@ -40,12 +40,15 @@ object NBTBuilder {
 
     inline fun string(value: String): StringTag = StringTag.valueOf(value)
 
+    inline fun byteArray(value: Collection<Number>): ByteArrayTag = ByteArrayTag(value.map { it.toByte() })
     inline fun byteArray(vararg value: Int): ByteArrayTag = ByteArrayTag(ByteArray(value.size) { value[it].toByte() })
     inline fun byteArray(vararg value: Byte): ByteArrayTag = ByteArrayTag(value)
     inline fun byteArray(): ByteArrayTag = ByteArrayTag(byteArrayOf()) // avoiding overload ambiguity
+    inline fun longArray(value: Collection<Number>): LongArrayTag = LongArrayTag(value.map { it.toLong() })
     inline fun longArray(vararg value: Int): LongArrayTag = LongArrayTag(LongArray(value.size) { value[it].toLong() })
     inline fun longArray(vararg value: Long): LongArrayTag = LongArrayTag(value)
     inline fun longArray(): LongArrayTag = LongArrayTag(longArrayOf()) // avoiding overload ambiguity
+    inline fun intArray(value: Collection<Number>): IntArrayTag = IntArrayTag(value.map { it.toInt() })
     inline fun intArray(vararg value: Int): IntArrayTag = IntArrayTag(value)
 }
 
@@ -104,12 +107,15 @@ value class NbtCompoundBuilder(val tag: CompoundTag) {
 
     inline fun string(value: String): StringTag = StringTag.valueOf(value)
 
+    inline fun byteArray(value: Collection<Number>): ByteArrayTag = ByteArrayTag(value.map { it.toByte() })
     inline fun byteArray(vararg value: Int): ByteArrayTag = ByteArrayTag(ByteArray(value.size) { value[it].toByte() })
     inline fun byteArray(vararg value: Byte): ByteArrayTag = ByteArrayTag(value)
     inline fun byteArray(): ByteArrayTag = ByteArrayTag(byteArrayOf()) // avoiding overload ambiguity
+    inline fun longArray(value: Collection<Number>): LongArrayTag = LongArrayTag(value.map { it.toLong() })
     inline fun longArray(vararg value: Int): LongArrayTag = LongArrayTag(LongArray(value.size) { value[it].toLong() })
     inline fun longArray(vararg value: Long): LongArrayTag = LongArrayTag(value)
     inline fun longArray(): LongArrayTag = LongArrayTag(longArrayOf()) // avoiding overload ambiguity
+    inline fun intArray(value: Collection<Number>): IntArrayTag = IntArrayTag(value.map { it.toInt() })
     inline fun intArray(vararg value: Int): IntArrayTag = IntArrayTag(value)
 }
 
@@ -174,12 +180,15 @@ value class NbtListBuilder(val tag: ListTag) {
 
     inline fun string(value: String): StringTag = StringTag.valueOf(value)
 
+    inline fun byteArray(value: Collection<Number>): ByteArrayTag = ByteArrayTag(value.map { it.toByte() })
     inline fun byteArray(vararg value: Int): ByteArrayTag = ByteArrayTag(ByteArray(value.size) { value[it].toByte() })
     inline fun byteArray(vararg value: Byte): ByteArrayTag = ByteArrayTag(value)
     inline fun byteArray(): ByteArrayTag = ByteArrayTag(byteArrayOf()) // avoiding overload ambiguity
+    inline fun longArray(value: Collection<Number>): LongArrayTag = LongArrayTag(value.map { it.toLong() })
     inline fun longArray(vararg value: Int): LongArrayTag = LongArrayTag(LongArray(value.size) { value[it].toLong() })
     inline fun longArray(vararg value: Long): LongArrayTag = LongArrayTag(value)
     inline fun longArray(): LongArrayTag = LongArrayTag(longArrayOf()) // avoiding overload ambiguity
+    inline fun intArray(value: Collection<Number>): IntArrayTag = IntArrayTag(value.map { it.toInt() })
     inline fun intArray(vararg value: Int): IntArrayTag = IntArrayTag(value)
 
     inline fun doubles(vararg value: Int): List<DoubleTag> = value.map { DoubleTag.valueOf(it.toDouble()) }

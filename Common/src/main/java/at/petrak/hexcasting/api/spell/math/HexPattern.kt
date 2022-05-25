@@ -73,7 +73,7 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
 
     fun serializeToNBT() = NBTBuilder {
         TAG_START_DIR %= byte(startDir.ordinal)
-        TAG_ANGLES %= byteArray(*angles.map(HexAngle::ordinal).toIntArray())
+        TAG_ANGLES %= byteArray(angles.map(HexAngle::ordinal))
     }
 
     // Terrible shorthand method for easy matching
