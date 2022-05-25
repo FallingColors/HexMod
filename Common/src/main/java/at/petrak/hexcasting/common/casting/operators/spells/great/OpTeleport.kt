@@ -1,13 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
+import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
@@ -27,6 +24,11 @@ object OpTeleport : SpellOperator {
 
         if (!teleportee.canChangeDimensions())
             throw MishapImmuneEntity(teleportee)
+
+        val targetPos = teleportee.position().add(delta)
+        ctx.assertVecInWorld(targetPos)
+        if (!ctx.isVecInWorld(targetPos.subtract(0.0, 1.0, 0.0)))
+            throw MishapLocationTooFarAway(targetPos, "too_close_to_out")
 
         val targetMiddlePos = teleportee.position().add(0.0, teleportee.eyeHeight / 2.0, 0.0)
 

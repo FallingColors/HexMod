@@ -1,17 +1,16 @@
 package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.forge.datagen.forge.lootmods.HexLootModifiers;
+import at.petrak.hexcasting.datagen.HexBlockTagProvider;
+import at.petrak.hexcasting.datagen.HexItemTagProvider;
+import at.petrak.hexcasting.datagen.HexLootTables;
+import at.petrak.hexcasting.datagen.IXplatIngredients;
+import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
 import at.petrak.hexcasting.forge.datagen.xplat.HexAdvancements;
 import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
 import at.petrak.hexcasting.forge.mixin.ForgeAccessorTagsProvider;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.datagen.HexBlockTagProvider;
-import at.petrak.hexcasting.xplat.datagen.HexItemTagProvider;
-import at.petrak.hexcasting.xplat.datagen.HexLootTables;
-import at.petrak.hexcasting.xplat.datagen.IXplatIngredients;
-import at.petrak.hexcasting.xplat.datagen.recipe.HexplatRecipes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -67,8 +66,6 @@ public class HexForgeDataGenerators {
             var itemTagProvider = new HexItemTagProvider(gen, blockTagProvider, IXplatAbstractions.INSTANCE.tags());
             ((ForgeAccessorTagsProvider) itemTagProvider).hex$setExistingFileHelper(efh);
             gen.addProvider(itemTagProvider);
-
-            gen.addProvider(new HexLootModifiers(gen));
         }
     }
 

@@ -8,7 +8,7 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.api.utils.HexUtils
 import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -61,10 +61,19 @@ data class CastingContext(
     }
 
     /**
+     * Check to make sure a vec is in world.
+     */
+    fun assertVecInWorld(vec: Vec3) {
+        if (!isVecInWorld(vec))
+            throw MishapLocationTooFarAway(vec, "out_of_world")
+    }
+
+    /**
      * Check to make sure a vec is in range.
      */
     fun assertVecInRange(vec: Vec3) {
         if (!isVecInRange(vec)) throw MishapLocationTooFarAway(vec)
+        assertVecInWorld(vec)
     }
 
     /**
@@ -77,6 +86,8 @@ data class CastingContext(
     fun hasBeenGivenMotion(target: Entity): Boolean {
         return entitiesGivenMotion.contains(target)
     }
+
+    fun isVecInWorld(vec: Vec3) = world.isInWorldBounds(BlockPos(vec)) && world.worldBorder.isWithinBounds(vec.x, vec.z)
 
     fun isVecInRange(vec: Vec3): Boolean {
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(caster)
@@ -100,6 +111,8 @@ data class CastingContext(
 
         return false
     }
+
+    fun isEntityInWorld(entity: Entity) = isVecInWorld(entity.position())
 
     fun isEntityInRange(entity: Entity): Boolean {
         if (this.spellCircle != null && this.spellCircle.activatorAlwaysInRange && this.caster == entity)

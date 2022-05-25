@@ -7,8 +7,7 @@ import net.minecraft.world.phys.Vec3
 /**
  * Manipulates the stack in some way, usually by popping some number of values off the stack
  * and pushing one new value.
- * For a more "traditional" pop arguments, push return experience, see
- * [SimpleOperator][at.petrak.hexcasting.api.spell.ConstManaOperator]
+ * For a more "traditional" pop arguments, push return experience, see [ConstManaOperator].
  *
  * Implementors MUST NOT mutate the context.
  */
@@ -25,9 +24,21 @@ interface Operator {
     fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult
 
     /**
-     * Do you need to be enlightened to use this operator?
+     * Do you need to be enlightened to use this operator? (i.e. is this operator a Great Pattern)
      */
     val isGreat: Boolean get() = false
+
+    /**
+     * Should this Great Pattern process and have side effects, even if its user isn't enlightened?
+     *
+     * The pattern itself may modify its effects based on whether the user is enlightened or not, regardless of what this value is.
+     */
+    val alwaysProcessGreatSpell: Boolean get() = this is SpellOperator
+
+    /**
+     * Can this Great Pattern give you Blind Diversion?
+     */
+    val causesBlindDiversion: Boolean get() = this is SpellOperator
 
     companion object {
         // I see why vzakii did this: you can't raycast out to infinity!

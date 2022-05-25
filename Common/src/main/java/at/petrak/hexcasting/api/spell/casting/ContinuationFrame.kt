@@ -24,6 +24,7 @@ sealed interface ContinuationFrame {
      * @return the result of this pattern step
      */
     fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingHarness): CastResult
+
     /**
      * The OpHalt instruction wants us to "jump to" the END of the nearest meta-eval.
      * In other words, we should consume Evaluate frames until we hit a FinishEval or Thoth frame.
@@ -35,12 +36,16 @@ sealed interface ContinuationFrame {
      * A list of patterns to be evaluated in sequence.
      * @property list the *remaining* list of patterns to be evaluated
      */
-    data class Evaluate(val list: SpellList): ContinuationFrame {
+    data class Evaluate(val list: SpellList) : ContinuationFrame {
         // Discard this frame and keep discarding frames.
         override fun breakDownwards(stack: List<SpellDatum<*>>) = Pair(false, stack)
 
         // Step the list of patterns, evaluating a single one.
-        override fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingHarness): CastResult {
+        override fun evaluate(
+            continuation: SpellContinuation,
+            level: ServerLevel,
+            harness: CastingHarness
+        ): CastResult {
             // If there are patterns left...
             if (list.nonEmpty) {
                 val newCont = if (list.cdr.nonEmpty) { // yay TCO
@@ -51,7 +56,7 @@ sealed interface ContinuationFrame {
                 return harness.getUpdate(list.car, level, newCont)
             } else {
                 // If there are no patterns (e.g. empty Hermes), just return OK.
-                return CastResult(continuation, null, ResolvedPatternType.OK, listOf())
+                return CastResult(continuation, null, ResolvedPatternType.EVALUATED, listOf())
             }
         }
 
@@ -61,13 +66,22 @@ sealed interface ContinuationFrame {
      * A stack marker representing the end of a Hermes evaluation,
      * so that we know when to stop removing frames during a Halt.
      */
-    class FinishEval(): ContinuationFrame {
+    class FinishEval() : ContinuationFrame {
         // Don't do anything else to the stack, just finish the halt statement.
         override fun breakDownwards(stack: List<SpellDatum<*>>) = Pair(true, stack)
 
         // Evaluating it does nothing; it's only a boundary condition.
-        override fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingHarness): CastResult {
-            return CastResult(continuation, FunctionalData(harness.stack.toList(), 0, listOf(), false), ResolvedPatternType.OK, listOf())
+        override fun evaluate(
+            continuation: SpellContinuation,
+            level: ServerLevel,
+            harness: CastingHarness
+        ): CastResult {
+            return CastResult(
+                continuation,
+                FunctionalData(harness.stack.toList(), 0, listOf(), false),
+                ResolvedPatternType.EVALUATED,
+                listOf()
+            )
         }
     }
 
@@ -80,7 +94,12 @@ sealed interface ContinuationFrame {
      * @property baseStack the stack state at Thoth entry
      * @property acc concatenated list of final stack states after Thoth exit
      */
-    data class ForEach(val data: SpellList, val code: SpellList, val baseStack: List<SpellDatum<*>>?, val acc: MutableList<SpellDatum<*>>): ContinuationFrame {
+    data class ForEach(
+        val data: SpellList,
+        val code: SpellList,
+        val baseStack: List<SpellDatum<*>>?,
+        val acc: MutableList<SpellDatum<*>>
+    ) : ContinuationFrame {
 
         /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
         override fun breakDownwards(stack: List<SpellDatum<*>>): Pair<Boolean, List<SpellDatum<*>>> {
@@ -91,7 +110,11 @@ sealed interface ContinuationFrame {
         }
 
         /** Step the Thoth computation, enqueueing one code evaluation. */
-        override fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingHarness): CastResult {
+        override fun evaluate(
+            continuation: SpellContinuation,
+            level: ServerLevel,
+            harness: CastingHarness
+        ): CastResult {
             // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
             val stack = if (baseStack == null) {
                 // init stack to the harness stack...
@@ -118,7 +141,12 @@ sealed interface ContinuationFrame {
             }
             val tStack = stack.toMutableList()
             tStack.add(stackTop)
-            return CastResult(newCont, FunctionalData(tStack, 0, listOf(), false), ResolvedPatternType.OK, listOf())
+            return CastResult(
+                newCont,
+                FunctionalData(tStack, 0, listOf(), false),
+                ResolvedPatternType.EVALUATED,
+                listOf()
+            )
         }
     }
 }

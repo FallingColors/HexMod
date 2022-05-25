@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.xplat.datagen;
+package at.petrak.hexcasting.datagen;
 
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.crafting.Ingredient;

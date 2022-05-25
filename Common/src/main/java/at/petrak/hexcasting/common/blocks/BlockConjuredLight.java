@@ -37,7 +37,7 @@ public class BlockConjuredLight extends BlockConjured implements SimpleWaterlogg
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED);
     }
 
@@ -61,7 +61,8 @@ public class BlockConjuredLight extends BlockConjured implements SimpleWaterlogg
 
     @Nonnull
     @Override
-    public BlockState updateShape(BlockState state, @Nonnull Direction facing, @Nonnull BlockState facingState, @Nonnull LevelAccessor level, @Nonnull BlockPos pos, @Nonnull BlockPos facingPos) {
+    public BlockState updateShape(BlockState state, @Nonnull Direction facing, @Nonnull BlockState facingState,
+        @Nonnull LevelAccessor level, @Nonnull BlockPos pos, @Nonnull BlockPos facingPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
