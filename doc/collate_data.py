@@ -170,7 +170,7 @@ def format_string(root_data, string):
 
     return style_stack[0]
 
-test_root = {"i18n": {}, "macros": default_macros, "resource_dir": "src/main/resources", "modid": "hexcasting"}
+test_root = {"i18n": {}, "macros": default_macros, "resource_dir": "Common/src/main/resources", "modid": "hexcasting"}
 test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
 
 def do_localize(root_data, obj, *names):
@@ -185,7 +185,7 @@ def do_format(root_data, obj, *names):
 
 def identity(x): return x
 
-pattern_pat = re.compile(r'HexPattern\.FromAnglesSig\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?')
+pattern_pat = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?')
 def fetch_patterns(root_data):
     filename = f"{root_data['resource_dir']}/../java/at/petrak/hexcasting/common/casting/RegisterPatterns.java"
     registry = {}
@@ -215,7 +215,7 @@ def fixup_pattern(do_sig, root_data, page):
 
 def fetch_recipe(root_data, recipe):
     modid, recipeid = recipe.split(":")
-    gen_resource_dir = root_data["resource_dir"].replace("/main", "/generated") # TODO hack
+    gen_resource_dir = root_data["resource_dir"].replace("/main/", "/generated/").replace("Common/", "Forge/") # TODO hack
     recipe_path = f"{gen_resource_dir}/data/{modid}/recipes/{recipeid}.json"
     return slurp(recipe_path)
 def fetch_recipe_result(root_data, recipe):
