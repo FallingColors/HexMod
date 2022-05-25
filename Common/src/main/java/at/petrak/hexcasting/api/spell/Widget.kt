@@ -16,7 +16,7 @@ enum class Widget : ConstManaOperator {
     override val argc: Int
         get() = 0
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> =
+    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> =
         this.asSpellResult
 
     companion object {

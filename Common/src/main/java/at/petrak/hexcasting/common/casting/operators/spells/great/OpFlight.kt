@@ -15,7 +15,7 @@ object OpFlight : SpellOperator {
     override val argc = 3
     override val isGreat = true
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<LegacySpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<ServerPlayer>(0, argc)

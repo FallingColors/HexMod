@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.common.lib.HexItems;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
@@ -63,7 +63,7 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         // oh havoc, you think you're so funny
         // the worst part is you're /right/
         registry.register(Items.PUMPKIN_PIE, DATA_HOLDER, stack -> new CCDataHolder.Static(stack,
-            s -> SpellDatum.make(Math.PI * s.getCount())));
+            s -> LegacySpellDatum.make(Math.PI * s.getCount())));
 
         registry.register(i -> i instanceof ManaHolderItem, MANA_HOLDER, CCManaHolder.ItemBased::new);
         registry.register(HexItems.AMETHYST_DUST, MANA_HOLDER, s -> new CCManaHolder.Static(

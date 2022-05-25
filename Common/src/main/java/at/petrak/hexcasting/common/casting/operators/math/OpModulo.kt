@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getChecked
@@ -11,7 +11,7 @@ object OpModulo : ConstManaOperator {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
+    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
         val l = args.getChecked<Double>(0, argc)
         val r = args.getChecked<Double>(1, argc)
         if (r == 0.0)

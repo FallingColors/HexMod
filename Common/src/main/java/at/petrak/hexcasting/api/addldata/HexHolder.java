@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.addldata;
 
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,9 +13,9 @@ public interface HexHolder {
     boolean hasHex();
 
     @Nullable
-    List<SpellDatum<?>> getHex(ServerLevel level);
+    List<LegacySpellDatum<?>> getHex(ServerLevel level);
 
-    void writeHex(List<SpellDatum<?>> patterns, int mana);
+    void writeHex(List<LegacySpellDatum<?>> patterns, int mana);
 
     void clearHex();
 }

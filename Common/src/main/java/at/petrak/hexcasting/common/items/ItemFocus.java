@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
@@ -39,22 +39,23 @@ public class ItemFocus extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable SpellDatum<?> emptyDatum(ItemStack stack) {
-        return SpellDatum.make(Widget.NULL);
+    public @Nullable LegacySpellDatum<?> emptyDatum(ItemStack stack) {
+        return LegacySpellDatum.make(Widget.NULL);
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, LegacySpellDatum<?> datum) {
         return datum == null || !NBTHelper.getBoolean(stack, TAG_SEALED);
     }
 
     @Override
-    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, LegacySpellDatum<?> datum) {
         if (datum == null) {
             stack.removeTagKey(TAG_DATA);
             stack.removeTagKey(TAG_SEALED);
-        } else if (!NBTHelper.getBoolean(stack, TAG_SEALED))
+        } else if (!NBTHelper.getBoolean(stack, TAG_SEALED)) {
             NBTHelper.put(stack, TAG_DATA, datum.serializeToNBT());
+        }
     }
 
     @Override

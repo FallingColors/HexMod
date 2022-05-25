@@ -2,7 +2,7 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.addldata.DataHolder;
 import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +32,7 @@ public abstract class CCDataHolder extends ItemComponent implements DataHolder {
         }
 
         @Override
-        public boolean writeDatum(@Nullable SpellDatum<?> datum, boolean simulate) {
+        public boolean writeDatum(@Nullable LegacySpellDatum<?> datum, boolean simulate) {
             var canWrite = this.dataHolder.canWrite(this.stack, datum);
             if (!canWrite) {
                 return false;
@@ -45,21 +45,21 @@ public abstract class CCDataHolder extends ItemComponent implements DataHolder {
     }
 
     public static class Static extends CCDataHolder {
-        private final Function<ItemStack, SpellDatum<?>> provider;
+        private final Function<ItemStack, LegacySpellDatum<?>> provider;
 
-        public Static(ItemStack stack, Function<ItemStack, SpellDatum<?>> provider) {
+        public Static(ItemStack stack, Function<ItemStack, LegacySpellDatum<?>> provider) {
             super(stack);
             this.provider = provider;
         }
 
         @Override
         public @Nullable CompoundTag readRawDatum() {
-            SpellDatum<?> datum = this.provider.apply(this.stack);
+            LegacySpellDatum<?> datum = this.provider.apply(this.stack);
             return datum == null ? null : datum.serializeToNBT();
         }
 
         @Override
-        public boolean writeDatum(@Nullable SpellDatum<?> datum, boolean simulate) {
+        public boolean writeDatum(@Nullable LegacySpellDatum<?> datum, boolean simulate) {
             return false;
         }
     }

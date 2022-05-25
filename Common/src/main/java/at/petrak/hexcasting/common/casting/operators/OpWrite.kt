@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators
 
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
@@ -13,7 +13,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 object OpWrite : SpellOperator {
     override val argc = 1
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<LegacySpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val datum = args[0]
@@ -41,7 +41,7 @@ object OpWrite : SpellOperator {
         )
     }
 
-    private data class Spell(val datum: SpellDatum<*>) : RenderedSpell {
+    private data class Spell(val datum: LegacySpellDatum<*>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn {
                 val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)

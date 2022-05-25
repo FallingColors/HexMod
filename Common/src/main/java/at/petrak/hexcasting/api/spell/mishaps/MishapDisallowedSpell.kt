@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
 import net.minecraft.world.item.DyeColor
@@ -12,7 +12,7 @@ class MishapDisallowedSpell(val type: String = "disallowed") : Mishap() {
 
     override fun resolutionType(ctx: CastingContext) = ResolvedPatternType.INVALID
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
+    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<LegacySpellDatum<*>>) {
         // NO-OP
     }
 

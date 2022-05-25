@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.Operator;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
 import at.petrak.hexcasting.api.spell.math.HexAngle;
 import at.petrak.hexcasting.api.spell.math.HexDir;
@@ -352,29 +352,29 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.fromAngles("d", HexDir.EAST), modLoc("const/null"), Widget.NULL);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqea", HexDir.NORTH_WEST), modLoc("const/vec/px"),
-                Operator.makeConstantOp(SpellDatum.make(new Vec3(1.0, 0.0, 0.0))));
+                Operator.makeConstantOp(LegacySpellDatum.make(new Vec3(1.0, 0.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqew", HexDir.NORTH_WEST), modLoc("const/vec/py"),
-                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 1.0, 0.0))));
+                Operator.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, 1.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqed", HexDir.NORTH_WEST), modLoc("const/vec/pz"),
-                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 1.0))));
+                Operator.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, 0.0, 1.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeeqa", HexDir.SOUTH_WEST), modLoc("const/vec/nx"),
-                Operator.makeConstantOp(SpellDatum.make(new Vec3(-1.0, 0.0, 0.0))));
+                Operator.makeConstantOp(LegacySpellDatum.make(new Vec3(-1.0, 0.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeeqw", HexDir.SOUTH_WEST), modLoc("const/vec/ny"),
-                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, -1.0, 0.0))));
+                Operator.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, -1.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeeqd", HexDir.SOUTH_WEST), modLoc("const/vec/nz"),
-                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, -1.0))));
+                Operator.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, 0.0, -1.0))));
             // Yep, this is what I spend the "plain hexagon" pattern on.
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqq", HexDir.NORTH_WEST), modLoc("const/vec/0"),
-                Operator.makeConstantOp(SpellDatum.make(new Vec3(0.0, 0.0, 0.0))));
+                Operator.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, 0.0, 0.0))));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qdwdq", HexDir.NORTH_EAST), modLoc("const/double/pi"),
-                Operator.makeConstantOp(SpellDatum.make(Math.PI)));
+                Operator.makeConstantOp(LegacySpellDatum.make(Math.PI)));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eawae", HexDir.NORTH_WEST), modLoc("const/double/tau"),
-                Operator.makeConstantOp(SpellDatum.make(HexUtils.TAU)));
+                Operator.makeConstantOp(LegacySpellDatum.make(HexUtils.TAU)));
 
             // e
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaq", HexDir.EAST), modLoc("const/double/e"),
-                Operator.makeConstantOp(SpellDatum.make(Math.E)));
+                Operator.makeConstantOp(LegacySpellDatum.make(Math.E)));
 
             // == Entities ==
 
@@ -490,7 +490,7 @@ public class RegisterPatterns {
                 if (negate) {
                     accumulator = -accumulator;
                 }
-                return Operator.makeConstantOp(SpellDatum.make(accumulator));
+                return Operator.makeConstantOp(LegacySpellDatum.make(accumulator));
             } else {
                 return null;
             }

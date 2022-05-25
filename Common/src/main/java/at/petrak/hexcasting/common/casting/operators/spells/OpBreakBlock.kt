@@ -13,7 +13,7 @@ object OpBreakBlock : SpellOperator {
         get() = 1
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<LegacySpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getChecked<Vec3>(0, argc)

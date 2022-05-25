@@ -21,7 +21,7 @@ interface Operator {
      *
      * A particle effect at the cast site and various messages and advancements are done automagically.
      */
-    fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult
+    fun operate(continuation: SpellContinuation, stack: MutableList<LegacySpellDatum<*>>, local: LegacySpellDatum<*>, ctx: CastingContext): OperationResult
 
     /**
      * Do you need to be enlightened to use this operator? (i.e. is this operator a Great Pattern)
@@ -50,11 +50,11 @@ interface Operator {
             origin.add(look.normalize().scale(MAX_DISTANCE))
 
         @JvmStatic
-        fun makeConstantOp(x: SpellDatum<*>): Operator = object : ConstManaOperator {
+        fun makeConstantOp(x: LegacySpellDatum<*>): Operator = object : ConstManaOperator {
             override val argc: Int
                 get() = 0
 
-            override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> =
+            override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> =
                 listOf(x)
         }
     }

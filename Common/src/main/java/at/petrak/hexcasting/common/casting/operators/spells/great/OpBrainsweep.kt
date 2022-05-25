@@ -23,7 +23,7 @@ object OpBrainsweep : SpellOperator {
     override val isGreat = true
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<LegacySpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val sacrifice = args.getChecked<Villager>(0, argc)
@@ -49,7 +49,12 @@ object OpBrainsweep : SpellOperator {
         )
     }
 
-    private data class Spell(val pos: BlockPos, val state: BlockState, val sacrifice: Villager, val recipe: BrainsweepRecipe) : RenderedSpell {
+    private data class Spell(
+        val pos: BlockPos,
+        val state: BlockState,
+        val sacrifice: Villager,
+        val recipe: BrainsweepRecipe
+    ) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
             Brainsweeping.brainsweep(sacrifice)
@@ -61,6 +66,4 @@ object OpBrainsweep : SpellOperator {
             ctx.world.playSound(null, sacrifice, SoundEvents.PLAYER_LEVELUP, SoundSource.AMBIENT, 0.5f, 0.8f)
         }
     }
-
-
 }

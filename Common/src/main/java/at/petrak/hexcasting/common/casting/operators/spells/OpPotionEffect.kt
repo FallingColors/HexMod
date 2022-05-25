@@ -20,12 +20,12 @@ class OpPotionEffect(
         get() = if (this.allowPotency) 3 else 2
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<LegacySpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<LivingEntity>(0, argc)
         if (target is ArmorStand)
-            throw MishapInvalidIota.ofClass(SpellDatum.make(target), 0, LivingEntity::class.java)
+            throw MishapInvalidIota.ofClass(LegacySpellDatum.make(target), 0, LivingEntity::class.java)
         val duration = max(args.getChecked(1, argc), 0.0)
         ctx.assertEntityInRange(target)
         val potency = if (this.allowPotency)

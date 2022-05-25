@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3
 object OpExtinguish : SpellOperator {
     override val argc = 1
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<LegacySpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Vec3>(0, argc)

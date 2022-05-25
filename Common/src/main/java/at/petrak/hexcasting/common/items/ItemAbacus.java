@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
@@ -27,17 +27,17 @@ public class ItemAbacus extends Item implements DataHolderItem {
 
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
-        var datum = SpellDatum.make(NBTHelper.getDouble(stack, TAG_VALUE));
+        var datum = LegacySpellDatum.make(NBTHelper.getDouble(stack, TAG_VALUE));
         return datum.serializeToNBT();
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, LegacySpellDatum<?> datum) {
         return false;
     }
 
     @Override
-    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, LegacySpellDatum<?> datum) {
         // nope
     }
 

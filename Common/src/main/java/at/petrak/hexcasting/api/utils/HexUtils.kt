@@ -2,7 +2,7 @@
 
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.math.HexCoord
 import net.minecraft.ChatFormatting
@@ -88,7 +88,7 @@ fun pxToCoord(px: Vec2, size: Float, offset: Vec2): HexCoord {
     else
         HexCoord(q, r + (rf + 0.5 * qf).roundToInt())
 }
-
+s
 fun String.withStyle(op: (Style) -> Style): MutableComponent = asTextComponent.withStyle(op)
 fun String.withStyle(style: Style): MutableComponent = asTextComponent.withStyle(style)
 fun String.withStyle(formatting: ChatFormatting): MutableComponent = asTextComponent.withStyle(formatting)
@@ -234,12 +234,12 @@ inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty
 /**
  * Returns an empty list if it's too complicated.
  */
-fun Iterable<SpellDatum<*>>.serializeToNBT(): ListTag {
-    val out = SpellDatum.make(SpellList.LList(0, this.toList())).serializeToNBT()
-    return if (out.contains(SpellDatum.TAG_WIDGET))
+fun Iterable<LegacySpellDatum<*>>.serializeToNBT(): ListTag {
+    val out = LegacySpellDatum.make(SpellList.LList(0, this.toList())).serializeToNBT()
+    return if (out.contains(LegacySpellDatum.TAG_WIDGET))
         ListTag()
     else
-        out.getList(SpellDatum.TAG_LIST, Tag.TAG_COMPOUND)
+        out.getList(LegacySpellDatum.TAG_LIST, Tag.TAG_COMPOUND)
 }
 
 // Copy the impl from forge

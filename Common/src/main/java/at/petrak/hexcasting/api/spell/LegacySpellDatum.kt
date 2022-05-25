@@ -28,7 +28,7 @@ import java.util.*
  *
  *
  */
-class SpellDatum<T : Any> private constructor(val payload: T) {
+class LegacySpellDatum<T : Any> private constructor(val payload: T) {
     val clazz: Class<T> = payload.javaClass
 
     fun serializeToNBT(): CompoundTag = this.serializeToNBTWithDepthCheck(0, 0)?.first
@@ -77,12 +77,12 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
     override fun toString(): String =
         buildString {
             append("SpellDatum[")
-            append(this@SpellDatum.payload.toString())
+            append(this@LegacySpellDatum.payload.toString())
             append(']')
         }
 
     override fun equals(other: Any?): Boolean {
-        return other is SpellDatum<*> && other.payload == payload
+        return other is LegacySpellDatum<*> && other.payload == payload
     }
 
     override fun hashCode(): Int {
@@ -111,18 +111,18 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
 
         @JvmStatic
         @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
-        fun make(payload: Any): SpellDatum<*> =
-            if (payload is SpellDatum<*>) {
+        fun make(payload: Any): LegacySpellDatum<*> =
+            if (payload is LegacySpellDatum<*>) {
                 payload
             } else if (payload is List<*>) {
-                SpellDatum(SpellList.LList(0, payload.map {
+                LegacySpellDatum(SpellList.LList(0, payload.map {
                     when (it) {
                         null -> make(Widget.NULL)
                         else -> make(it)
                     }
                 }))
             } else if (payload is Vec3) {
-                SpellDatum(
+                LegacySpellDatum(
                     Vec3(
                         fixNAN(payload.x),
                         fixNAN(payload.y),
@@ -130,17 +130,17 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     )
                 )
             } else if (isValidType(payload)) {
-                SpellDatum(payload)
+                LegacySpellDatum(payload)
             } else if (payload is java.lang.Double) {
                 // Check to see if it's a java *boxed* double, for when we call this from Java
                 val num = payload.toDouble()
-                SpellDatum(fixNAN(num))
+                LegacySpellDatum(fixNAN(num))
             } else {
                 throw MishapInvalidSpellDatumType(payload)
             }
 
         @JvmStatic
-        fun fromNBT(nbt: CompoundTag, world: ServerLevel): SpellDatum<*> {
+        fun fromNBT(nbt: CompoundTag, world: ServerLevel): LegacySpellDatum<*> {
             val keys = nbt.allKeys
             if (keys.size != 1)
                 return SpellDatum(Widget.GARBAGE) // Invalid iota format
@@ -151,18 +151,18 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     val uuid = subtag.getUUID(TAG_ENTITY_UUID) // and throw away name
                     val entity = world.getEntity(uuid)
                     // If the entity died or something return Unit
-                    SpellDatum(if (entity == null || !entity.isAlive) Widget.NULL else entity)
+                    LegacySpellDatum(if (entity == null || !entity.isAlive) Widget.NULL else entity)
                 }
-                TAG_DOUBLE -> SpellDatum(nbt.getDouble(key))
-                TAG_VEC3 -> SpellDatum(vecFromNBT(nbt.getLongArray(key)))
+                TAG_DOUBLE -> LegacySpellDatum(nbt.getDouble(key))
+                TAG_VEC3 -> LegacySpellDatum(vecFromNBT(nbt.getLongArray(key)))
                 TAG_LIST -> {
-                    SpellDatum(SpellList.fromNBT(nbt.getList(key, Tag.TAG_COMPOUND), world))
+                    LegacySpellDatum(SpellList.fromNBT(nbt.getList(key, Tag.TAG_COMPOUND), world))
                 }
                 TAG_WIDGET -> {
-                    SpellDatum(Widget.fromString(nbt.getString(key)))
+                    LegacySpellDatum(Widget.fromString(nbt.getString(key)))
                 }
                 TAG_PATTERN -> {
-                    SpellDatum(HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN)))
+                    LegacySpellDatum(HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN)))
                 }
                 else -> SpellDatum(Widget.GARBAGE) // Invalid iota type
             }
@@ -175,7 +175,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             )
         )
         @JvmStatic
-        fun fromNBT(nbt: CompoundTag, ctx: CastingContext): SpellDatum<*> =
+        fun fromNBT(nbt: CompoundTag, ctx: CastingContext): LegacySpellDatum<*> =
             fromNBT(nbt, ctx.world)
 
         @JvmStatic
@@ -282,7 +282,5 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 DatumType.OTHER, DatumType.EMPTY -> ""
             }
         }
-
-
     }
 }

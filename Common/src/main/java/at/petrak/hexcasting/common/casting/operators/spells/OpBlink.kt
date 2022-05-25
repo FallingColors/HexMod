@@ -15,7 +15,7 @@ import kotlin.math.roundToInt
 object OpBlink : SpellOperator {
     override val argc = 2
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<LegacySpellDatum<*>>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Entity>(0, argc)

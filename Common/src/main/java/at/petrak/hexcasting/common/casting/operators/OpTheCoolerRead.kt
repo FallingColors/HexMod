@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -12,9 +12,9 @@ object OpTheCoolerRead : ConstManaOperator {
     override val argc = 1
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<LegacySpellDatum<*>>,
         ctx: CastingContext
-    ): List<SpellDatum<*>> {
+    ): List<LegacySpellDatum<*>> {
         val target = args.getChecked<ItemEntity>(0, argc)
 
         ctx.assertEntityInRange(target)

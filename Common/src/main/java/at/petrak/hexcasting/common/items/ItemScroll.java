@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
@@ -55,17 +55,17 @@ public class ItemScroll extends Item implements DataHolderItem {
             return null;
         }
         var out = new CompoundTag();
-        out.put(SpellDatum.TAG_PATTERN, pattern);
+        out.put(LegacySpellDatum.TAG_PATTERN, pattern);
         return out;
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, LegacySpellDatum<?> datum) {
         return datum != null && datum.getType() == DatumType.PATTERN && !NBTHelper.hasCompound(stack, TAG_PATTERN);
     }
 
     @Override
-    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, LegacySpellDatum<?> datum) {
         if (this.canWrite(stack, datum) && datum.getPayload() instanceof HexPattern pat) {
             NBTHelper.putCompound(stack, TAG_PATTERN, pat.serializeToNBT());
         }

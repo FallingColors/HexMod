@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -9,7 +9,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 object OpRead : ConstManaOperator {
     override val argc = 0
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
+    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val dataHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
             dataHolder != null && (dataHolder.readDatum(ctx.world) != null || dataHolder.emptyDatum() != null)

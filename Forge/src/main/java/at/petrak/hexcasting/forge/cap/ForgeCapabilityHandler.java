@@ -10,7 +10,7 @@ import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -73,7 +73,7 @@ public class ForgeCapabilityHandler {
                     () -> new ItemBasedDataHolder(holder, stack)));
         else if (stack.is(Items.PUMPKIN_PIE)) // haha yes
             evt.addCapability(DATA_ITEM_CAPABILITY, provide(stack, HexCapabilities.DATUM,
-                    () -> new StaticDatumHolder((s) -> SpellDatum.make(Math.PI * s.getCount()), stack)));
+                    () -> new StaticDatumHolder((s) -> LegacySpellDatum.make(Math.PI * s.getCount()), stack)));
 
         if (stack.getItem() instanceof HexHolderItem holder)
             evt.addCapability(SPELL_HOLDER_CAPABILITY, provide(stack, HexCapabilities.STORED_HEX,
@@ -213,24 +213,24 @@ public class ForgeCapabilityHandler {
         }
     }
 
-    private record StaticDatumHolder(Function<ItemStack, SpellDatum<?>> provider,
+    private record StaticDatumHolder(Function<ItemStack, LegacySpellDatum<?>> provider,
                                      ItemStack stack) implements DataHolder {
 
         @Override
         public @Nullable
         CompoundTag readRawDatum() {
-            SpellDatum<?> datum = provider.apply(stack);
+            LegacySpellDatum<?> datum = provider.apply(stack);
             return datum == null ? null : datum.serializeToNBT();
         }
 
         @Override
         public @Nullable
-        SpellDatum<?> readDatum(ServerLevel world) {
+        LegacySpellDatum<?> readDatum(ServerLevel world) {
             return provider.apply(stack);
         }
 
         @Override
-        public boolean writeDatum(@Nullable SpellDatum<?> datum, boolean simulate) {
+        public boolean writeDatum(@Nullable LegacySpellDatum<?> datum, boolean simulate) {
             return false;
         }
     }
@@ -246,18 +246,18 @@ public class ForgeCapabilityHandler {
 
         @Override
         public @Nullable
-        SpellDatum<?> readDatum(ServerLevel world) {
+        LegacySpellDatum<?> readDatum(ServerLevel world) {
             return holder.readDatum(stack, world);
         }
 
         @Override
         public @Nullable
-        SpellDatum<?> emptyDatum() {
+        LegacySpellDatum<?> emptyDatum() {
             return holder.emptyDatum(stack);
         }
 
         @Override
-        public boolean writeDatum(@Nullable SpellDatum<?> datum, boolean simulate) {
+        public boolean writeDatum(@Nullable LegacySpellDatum<?> datum, boolean simulate) {
             if (!holder.canWrite(stack, datum)) {
                 return false;
             }
@@ -282,12 +282,12 @@ public class ForgeCapabilityHandler {
         }
 
         @Override
-        public @Nullable List<SpellDatum<?>> getHex(ServerLevel level) {
+        public @Nullable List<LegacySpellDatum<?>> getHex(ServerLevel level) {
             return holder.getHex(stack, level);
         }
 
         @Override
-        public void writeHex(List<SpellDatum<?>> patterns, int mana) {
+        public void writeHex(List<LegacySpellDatum<?>> patterns, int mana) {
             holder.writeHex(stack, patterns, mana);
         }
 

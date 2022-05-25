@@ -6,7 +6,7 @@ import kotlin.math.roundToInt
 
 object OpModifyInPlace : ConstManaOperator {
     override val argc = 3
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
+    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
         val list = args.getChecked<SpellList>(0, argc)
         val index = args.getChecked<Double>(1, argc).roundToInt()
         val iota = args[2]

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
@@ -58,29 +58,29 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     }
 
     @Override
-    public @Nullable List<SpellDatum<?>> getHex(ItemStack stack, ServerLevel level) {
+    public @Nullable List<LegacySpellDatum<?>> getHex(ItemStack stack, ServerLevel level) {
         var patsTag = NBTHelper.getList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
 
         if (patsTag == null) {
             return null;
         }
 
-        var out = new ArrayList<SpellDatum<?>>();
+        var out = new ArrayList<LegacySpellDatum<?>>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
             if (tag.size() != 1) {
-                out.add(SpellDatum.make(HexPattern.fromNBT(tag)));
+                out.add(LegacySpellDatum.make(HexPattern.fromNBT(tag)));
             } else {
-                out.add(SpellDatum.fromNBT(tag, level));
+                out.add(LegacySpellDatum.fromNBT(tag, level));
             }
         }
         return out;
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<SpellDatum<?>> patterns, int mana) {
+    public void writeHex(ItemStack stack, List<LegacySpellDatum<?>> patterns, int mana) {
         ListTag patsTag = new ListTag();
-        for (SpellDatum<?> pat : patterns) {
+        for (LegacySpellDatum<?> pat : patterns) {
             patsTag.add(pat.serializeToNBT());
         }
 
@@ -107,7 +107,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
             return InteractionResultHolder.success(stack);
         }
 
-        List<SpellDatum<?>> instrs = getHex(stack, (ServerLevel) world);
+        List<LegacySpellDatum<?>> instrs = getHex(stack, (ServerLevel) world);
         if (instrs == null) {
             return InteractionResultHolder.fail(stack);
         }

@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.misc.ManaConstants;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
@@ -266,17 +266,17 @@ public class RegisterClientStuff {
                 }
 
                 return typename == null ? 0f : switch (typename) {
-                    case SpellDatum.TAG_ENTITY -> 1f;
-                    case SpellDatum.TAG_DOUBLE -> 2f;
-                    case SpellDatum.TAG_VEC3 -> 3f;
-                    case SpellDatum.TAG_WIDGET -> 4f;
-                    case SpellDatum.TAG_LIST -> 5f;
-                    case SpellDatum.TAG_PATTERN -> 6f;
+                    case LegacySpellDatum.TAG_ENTITY -> 1f;
+                    case LegacySpellDatum.TAG_DOUBLE -> 2f;
+                    case LegacySpellDatum.TAG_VEC3 -> 3f;
+                    case LegacySpellDatum.TAG_WIDGET -> 4f;
+                    case LegacySpellDatum.TAG_LIST -> 5f;
+                    case LegacySpellDatum.TAG_PATTERN -> 6f;
                     default -> 0f; // uh oh
                 };
             });
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.SEALED_PRED,
-            (stack, level, holder, holderID) -> item.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);
+            (stack, level, holder, holderID) -> item.canWrite(stack, LegacySpellDatum.make(Widget.NULL)) ? 0f : 1f);
     }
 
     private static void registerPackagedSpellOverrides(ItemPackagedHex item) {

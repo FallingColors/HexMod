@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.datum.SpellDatum
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
@@ -27,10 +28,10 @@ import kotlin.math.min
  * It's stored as NBT on the wand.
  */
 class CastingHarness private constructor(
-    var stack: MutableList<SpellDatum<*>>,
-    var localIota: SpellDatum<*>,
+    var stack: MutableList<LegacySpellDatum<*>>,
+    var localIota: LegacySpellDatum<*>,
     var parenCount: Int,
-    var parenthesized: List<SpellDatum<*>>,
+    var parenthesized: List<LegacySpellDatum<*>>,
     var escapeNext: Boolean,
     val ctx: CastingContext,
     val prepackagedColorizer: FrozenColorizer? // for trinkets with colorizers
@@ -40,17 +41,17 @@ class CastingHarness private constructor(
     constructor(
         ctx: CastingContext,
         prepackagedColorizer: FrozenColorizer? = null
-    ) : this(mutableListOf(), SpellDatum.make(Widget.NULL), 0, mutableListOf(), false, ctx, prepackagedColorizer)
+    ) : this(mutableListOf(), LegacySpellDatum.make(Widget.NULL), 0, mutableListOf(), false, ctx, prepackagedColorizer)
 
     /**
      * Execute a single iota.
      */
-    fun executeIota(iota: SpellDatum<*>, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
+    fun executeIota(iota: LegacySpellDatum<*>, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
 
     /**
      * Given a list of iotas, execute them in sequence.
      */
-    fun executeIotas(iotas: List<SpellDatum<*>>, world: ServerLevel): ControllerInfo {
+    fun executeIotas(iotas: List<LegacySpellDatum<*>>, world: ServerLevel): ControllerInfo {
         // Initialize the continuation stack to a single top-level eval for all iotas.
         var continuation = SpellContinuation.Done.pushFrame(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
         // Begin aggregating info
@@ -79,7 +80,7 @@ class CastingHarness private constructor(
         )
     }
 
-    fun getUpdate(iota: SpellDatum<*>, world: ServerLevel, continuation: SpellContinuation): CastResult {
+    fun getUpdate(iota: LegacySpellDatum<*>, world: ServerLevel, continuation: SpellContinuation): CastResult {
         try {
             this.handleParentheses(iota)?.let { (data, resolutionType) ->
                 return@getUpdate CastResult(continuation, data, resolutionType, listOf())
@@ -150,7 +151,7 @@ class CastingHarness private constructor(
             val unenlightened = pattern.isGreat && !ctx.isCasterEnlightened
 
             val sideEffects = mutableListOf<OperatorSideEffect>()
-            var stack2: List<SpellDatum<*>>? = null
+            var stack2: List<LegacySpellDatum<*>>? = null
             var cont2 = continuation
 
             if (!unenlightened || pattern.alwaysProcessGreatSpell) {
@@ -237,7 +238,7 @@ class CastingHarness private constructor(
         }
     }
 
-    fun generateDescs() = stack.map(SpellDatum<*>::display)
+    fun generateDescs() = stack.map(SpellDatum::display)
 
     /**
      * Return the functional update represented by the current state (for use with `copy`)
@@ -264,7 +265,7 @@ class CastingHarness private constructor(
      * Return a non-null value if we handled this in some sort of parenthesey way,
      * either escaping it onto the stack or changing the parenthese-handling state.
      */
-    private fun handleParentheses(iota: SpellDatum<*>): Pair<FunctionalData, ResolvedPatternType>? {
+    private fun handleParentheses(iota: LegacySpellDatum<*>): Pair<FunctionalData, ResolvedPatternType>? {
         val operator = (iota.payload as? HexPattern)?.let {
             try {
                 PatternRegistry.matchPattern(it, this.ctx.world)
@@ -297,7 +298,7 @@ class CastingHarness private constructor(
                 val newParenCount = this.parenCount - 1
                 if (newParenCount == 0) {
                     val newStack = this.stack.toMutableList()
-                    newStack.add(SpellDatum.make(this.parenthesized.toList()))
+                    newStack.add(LegacySpellDatum.make(this.parenthesized.toList()))
                     this.getFunctionalData().copy(
                         stack = newStack,
                         parenCount = newParenCount,
@@ -457,26 +458,26 @@ class CastingHarness private constructor(
         @JvmStatic
         fun fromNBT(nbt: CompoundTag, ctx: CastingContext): CastingHarness {
             return try {
-                val stack = mutableListOf<SpellDatum<*>>()
+                val stack = mutableListOf<LegacySpellDatum<*>>()
                 val stackTag = nbt.getList(TAG_STACK, Tag.TAG_COMPOUND)
                 for (subtag in stackTag) {
-                    val datum = SpellDatum.fromNBT(subtag.asCompound, ctx.world)
+                    val datum = LegacySpellDatum.fromNBT(subtag.asCompound, ctx.world)
                     stack.add(datum)
                 }
 
                 val localTag = nbt.getCompound(TAG_LOCAL)
                 val localIota =
-                    if (localTag.size() == 1) SpellDatum.fromNBT(localTag, ctx.world) else SpellDatum.make(
+                    if (localTag.size() == 1) LegacySpellDatum.fromNBT(localTag, ctx.world) else LegacySpellDatum.make(
                         Widget.NULL
                     )
 
-                val parenthesized = mutableListOf<SpellDatum<*>>()
+                val parenthesized = mutableListOf<LegacySpellDatum<*>>()
                 val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND)
                 for (subtag in parenTag) {
                     if (subtag.asCompound.size() != 1)
-                        parenthesized.add(SpellDatum.make(HexPattern.fromNBT(subtag.asCompound)))
+                        parenthesized.add(LegacySpellDatum.make(HexPattern.fromNBT(subtag.asCompound)))
                     else
-                        parenthesized.add(SpellDatum.fromNBT(subtag.asCompound, ctx.world))
+                        parenthesized.add(LegacySpellDatum.fromNBT(subtag.asCompound, ctx.world))
                 }
 
                 val parenCount = nbt.getInt(TAG_PAREN_COUNT)

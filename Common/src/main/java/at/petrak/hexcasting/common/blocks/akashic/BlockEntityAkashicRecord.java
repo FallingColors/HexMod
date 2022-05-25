@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexDir;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
@@ -45,7 +45,7 @@ public class BlockEntityAkashicRecord extends HexBlockEntity {
      * Will never clobber anything.
      */
     public @Nullable
-    BlockPos addNewDatum(HexPattern key, SpellDatum<?> datum) {
+    BlockPos addNewDatum(HexPattern key, LegacySpellDatum<?> datum) {
         String entryKey = getKey(key);
         if (this.entries.containsKey(entryKey)) {
             return null; // would clobber
@@ -76,19 +76,19 @@ public class BlockEntityAkashicRecord extends HexBlockEntity {
     }
 
     public @Nullable
-    SpellDatum<?> lookupPattern(HexPattern key, ServerLevel slevel) {
+    LegacySpellDatum<?> lookupPattern(HexPattern key, ServerLevel slevel) {
         var entry = this.entries.get(getKey(key));
         if (entry == null) {
             return null;
         } else {
-            return SpellDatum.fromNBT(entry.datum, slevel);
+            return LegacySpellDatum.fromNBT(entry.datum, slevel);
         }
     }
 
     public Component getDisplayAt(HexPattern key) {
         var entry = this.entries.get(getKey(key));
         if (entry != null) {
-            return SpellDatum.displayFromNBT(entry.datum);
+            return LegacySpellDatum.displayFromNBT(entry.datum);
         } else {
             return new TranslatableComponent("hexcasting.spelldata.akashic.nopos").withStyle(ChatFormatting.RED);
         }

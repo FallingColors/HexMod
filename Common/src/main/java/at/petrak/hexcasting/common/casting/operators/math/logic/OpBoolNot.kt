@@ -7,9 +7,10 @@ import net.minecraft.world.phys.Vec3
 object OpBoolNot : ConstManaOperator {
     override val argc = 1
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
+    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
         val payload = args[0].payload
-        val falsy = payload == Widget.NULL || payload.tolerantEquals(0.0) || payload.tolerantEquals(Vec3.ZERO) || (payload is SpellList && !payload.nonEmpty)
+        val falsy =
+            payload == Widget.NULL || payload.tolerantEquals(0.0) || payload.tolerantEquals(Vec3.ZERO) || (payload is SpellList && !payload.nonEmpty)
         return falsy.asSpellResult
     }
 }

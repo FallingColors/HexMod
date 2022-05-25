@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexSounds;
@@ -59,7 +59,7 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
             var stack = pPlayer.getItemInHand(pHand);
             if (stack.getItem() instanceof ItemScroll scroll) {
                 if (!pLevel.isClientSide()) {
-                    scroll.writeDatum(stack, SpellDatum.make(shelf.getPattern()));
+                    scroll.writeDatum(stack, LegacySpellDatum.make(shelf.getPattern()));
                 }
                 pLevel.playSound(pPlayer, pPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS, 1f, 1f);
                 return InteractionResult.sidedSuccess(pLevel.isClientSide);

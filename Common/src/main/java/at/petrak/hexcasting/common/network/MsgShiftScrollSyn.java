@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemAbacus;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
@@ -123,7 +123,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
         var datumTag = HexItems.ABACUS.readDatumTag(stack);
         if (datumTag != null) {
-            var popup = SpellDatum.displayFromNBT(datumTag);
+            var popup = LegacySpellDatum.displayFromNBT(datumTag);
             sender.displayClientMessage(
                 new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
         }

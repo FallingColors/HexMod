@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.spell.casting
 
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingHarness.CastResult
 import at.petrak.hexcasting.api.utils.NBTBuilder
@@ -36,7 +36,7 @@ sealed interface ContinuationFrame {
      * In other words, we should consume Evaluate frames until we hit a FinishEval or Thoth frame.
      * @return whether the break should stop here, alongside the new stack state (e.g. for finalizing a Thoth)
      */
-    fun breakDownwards(stack: List<SpellDatum<*>>): Pair<Boolean, List<SpellDatum<*>>>
+    fun breakDownwards(stack: List<LegacySpellDatum<*>>): Pair<Boolean, List<LegacySpellDatum<*>>>
 
     /**
      * Serializes this frame. Used for things like delays, where we pause execution.
@@ -49,7 +49,7 @@ sealed interface ContinuationFrame {
      */
     data class Evaluate(val list: SpellList) : ContinuationFrame {
         // Discard this frame and keep discarding frames.
-        override fun breakDownwards(stack: List<SpellDatum<*>>) = false to stack
+        override fun breakDownwards(stack: List<LegacySpellDatum<*>>) = false to stack
 
         // Step the list of patterns, evaluating a single one.
         override fun evaluate(
@@ -83,7 +83,7 @@ sealed interface ContinuationFrame {
      */
     object FinishEval : ContinuationFrame {
         // Don't do anything else to the stack, just finish the halt statement.
-        override fun breakDownwards(stack: List<SpellDatum<*>>) = true to stack
+        override fun breakDownwards(stack: List<LegacySpellDatum<*>>) = true to stack
 
         // Evaluating it does nothing; it's only a boundary condition.
         override fun evaluate(
@@ -116,15 +116,15 @@ sealed interface ContinuationFrame {
     data class ForEach(
         val data: SpellList,
         val code: SpellList,
-        val baseStack: List<SpellDatum<*>>?,
-        val acc: MutableList<SpellDatum<*>>
+        val baseStack: List<LegacySpellDatum<*>>?,
+        val acc: MutableList<LegacySpellDatum<*>>
     ) : ContinuationFrame {
 
         /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
-        override fun breakDownwards(stack: List<SpellDatum<*>>): Pair<Boolean, List<SpellDatum<*>>> {
+        override fun breakDownwards(stack: List<LegacySpellDatum<*>>): Pair<Boolean, List<LegacySpellDatum<*>>> {
             val newStack = baseStack?.toMutableList() ?: mutableListOf()
             acc.addAll(stack)
-            newStack.add(SpellDatum.make(acc))
+            newStack.add(LegacySpellDatum.make(acc))
             return true to newStack
         }
 
@@ -154,7 +154,7 @@ sealed interface ContinuationFrame {
                     .pushFrame(Evaluate(code))
             } else {
                 // Else, dump our final list onto the stack.
-                SpellDatum.make(acc) to continuation
+                LegacySpellDatum.make(acc) to continuation
             }
             val tStack = stack.toMutableList()
             tStack.add(stackTop)

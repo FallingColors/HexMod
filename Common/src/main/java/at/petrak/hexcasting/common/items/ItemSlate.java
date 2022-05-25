@@ -4,7 +4,7 @@ import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -75,17 +75,17 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
             return null;
         }
         var out = new CompoundTag();
-        out.put(SpellDatum.TAG_PATTERN, patTag);
+        out.put(LegacySpellDatum.TAG_PATTERN, patTag);
         return out;
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, LegacySpellDatum<?> datum) {
         return datum == null || datum.getType() == DatumType.PATTERN;
     }
 
     @Override
-    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, LegacySpellDatum<?> datum) {
         if (this.canWrite(stack, datum)) {
             if (datum == null) {
                 var beTag = NBTHelper.getOrCreateCompound(stack, "BlockEntityTag");

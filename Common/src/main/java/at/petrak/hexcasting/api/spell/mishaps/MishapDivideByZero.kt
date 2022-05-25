@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.misc.HexDamageSources
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
@@ -15,8 +15,8 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
     override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.RED)
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        stack.add(SpellDatum.make(Widget.GARBAGE))
+    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<LegacySpellDatum<*>>) {
+        stack.add(LegacySpellDatum.make(Widget.GARBAGE))
         trulyHurt(ctx.caster, HexDamageSources.OVERCAST, ctx.caster.health / 2)
     }
 
@@ -60,14 +60,14 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         @JvmStatic
         fun powerOf(datum: Any) = when (datum) {
             0.0 -> zerothPower
-            else -> powerOf(SpellDatum.make(datum).display())
+            else -> powerOf(LegacySpellDatum.make(datum).display())
         }
 
         @JvmStatic
         fun translate(datum: Any): Component = when (datum) {
             0.0 -> zero
             Vec3.ZERO -> zeroVector
-            else -> SpellDatum.make(datum).display()
+            else -> LegacySpellDatum.make(datum).display()
         }
     }
 }

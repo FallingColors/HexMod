@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.item;
 
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -21,29 +21,34 @@ public interface DataHolderItem {
     @Nullable CompoundTag readDatumTag(ItemStack stack);
 
     @Nullable
-    default SpellDatum<?> readDatum(ItemStack stack, ServerLevel world) {
-        var tag = readDatumTag(stack);
+    default LegacySpellDatum<?> readDatum(ItemStack stack, ServerLevel world) {
+        if (!(stack.getItem() instanceof DataHolderItem dh)) {
+            // this should be checked via mishap beforehand
+            throw new IllegalArgumentException("stack's item must be an ItemDataholder but was " + stack.getItem());
+        }
+
+        var tag = dh.readDatumTag(stack);
         if (tag != null) {
-            return SpellDatum.fromNBT(tag, world);
+            return LegacySpellDatum.fromNBT(tag, world);
         } else {
             return null;
         }
     }
 
     @Nullable
-    default SpellDatum<?> emptyDatum(ItemStack stack) {
+    default LegacySpellDatum<?> emptyDatum(ItemStack stack) {
         return null;
     }
 
-    boolean canWrite(ItemStack stack, @Nullable SpellDatum<?> datum);
+    boolean canWrite(ItemStack stack, @Nullable LegacySpellDatum<?> datum);
 
-    void writeDatum(ItemStack stack, @Nullable SpellDatum<?> datum);
+    void writeDatum(ItemStack stack, @Nullable LegacySpellDatum<?> datum);
 
     static void appendHoverText(DataHolderItem self, ItemStack pStack, List<Component> pTooltipComponents,
-                                TooltipFlag pIsAdvanced) {
+        TooltipFlag pIsAdvanced) {
         var datumTag = self.readDatumTag(pStack);
         if (datumTag != null) {
-            var component = SpellDatum.displayFromNBT(datumTag);
+            var component = LegacySpellDatum.displayFromNBT(datumTag);
             pTooltipComponents.add(new TranslatableComponent("hexcasting.spelldata.onitem", component));
 
             if (pIsAdvanced.isAdvanced()) {

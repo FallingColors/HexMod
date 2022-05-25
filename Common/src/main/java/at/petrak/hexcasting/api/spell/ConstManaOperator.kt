@@ -13,9 +13,9 @@ interface ConstManaOperator : Operator {
     val manaCost: Int
         get() = 0
 
-    fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>>
+    fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>>
 
-    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: SpellContinuation, stack: MutableList<LegacySpellDatum<*>>, local: LegacySpellDatum<*>, ctx: CastingContext): OperationResult {
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)

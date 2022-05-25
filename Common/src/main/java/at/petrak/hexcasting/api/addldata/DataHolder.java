@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.addldata;
 
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
@@ -10,19 +10,19 @@ public interface DataHolder {
     CompoundTag readRawDatum();
 
     @Nullable
-    default SpellDatum<?> readDatum(ServerLevel world) {
+    default LegacySpellDatum<?> readDatum(ServerLevel world) {
         var tag = readRawDatum();
         if (tag != null) {
-            return SpellDatum.fromNBT(tag, world);
+            return LegacySpellDatum.fromNBT(tag, world);
         } else {
             return null;
         }
     }
 
     @Nullable
-    default SpellDatum<?> emptyDatum() {
+    default LegacySpellDatum<?> emptyDatum() {
         return null;
     }
 
-    boolean writeDatum(@Nullable SpellDatum<?> datum, boolean simulate);
+    boolean writeDatum(@Nullable LegacySpellDatum<?> datum, boolean simulate);
 }

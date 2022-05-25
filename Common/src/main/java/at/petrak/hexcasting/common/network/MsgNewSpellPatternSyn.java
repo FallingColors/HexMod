@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.api.mod.HexStatistics;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType;
@@ -74,7 +74,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     }
                     var currentResolvedPattern = resolvedPatterns.get(resolvedPatterns.size() - 1);
                     var currentSpellPoints = currentResolvedPattern.getPattern()
-                            .positions(currentResolvedPattern.getOrigin());
+                        .positions(currentResolvedPattern.getOrigin());
                     if (currentSpellPoints.stream().anyMatch(allPoints::contains)) {
                         autoFail = true;
                     }
@@ -87,14 +87,14 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 ControllerInfo clientInfo;
                 if (autoFail) {
                     clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
-                            harness.generateDescs());
+                        harness.generateDescs());
                 } else {
-                    clientInfo = harness.executeIota(SpellDatum.make(this.pattern), sender.getLevel());
+                    clientInfo = harness.executeIota(LegacySpellDatum.make(this.pattern), sender.getLevel());
 
                     if (clientInfo.getMakesCastSound()) {
                         sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
-                                HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
-                                1f + ((float) Math.random() - 0.5f) * 0.2f);
+                            HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
+                            1f + ((float) Math.random() - 0.5f) * 0.2f);
                     }
                 }
 
