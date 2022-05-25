@@ -17,10 +17,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
+    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+
     public BlockStoredPlayerImpetus(Properties p_49795_) {
         super(p_49795_);
     }
@@ -29,6 +34,12 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityStoredPlayerImpetus(pPos, pState);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(POWERED);
     }
 
     @Override
@@ -64,14 +75,20 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
         boolean pIsMoving) {
         super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
 
-        if (!pLevel.isClientSide()
-            && pLevel.hasNeighborSignal(pPos)
-            && !pState.getValue(ENERGIZED)
-            && pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
-            var player = tile.getStoredPlayer();
-            if (player instanceof ServerPlayer splayer) {
-                // phew
-                tile.activateSpellCircle(splayer);
+        if (!pLevel.isClientSide()) {
+            boolean prevPowered = pState.getValue(POWERED);
+            boolean isPowered = pLevel.hasNeighborSignal(pPos);
+
+            if (prevPowered != isPowered) {
+                pLevel.setBlockAndUpdate(pPos, pState.setValue(POWERED, isPowered));
+
+                if (isPowered && pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
+                    var player = tile.getStoredPlayer();
+                    if (player instanceof ServerPlayer splayer) {
+                        // phew
+                        tile.activateSpellCircle(splayer);
+                    }
+                }
             }
         }
     }
