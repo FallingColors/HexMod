@@ -20,7 +20,7 @@ class MishapBadBlock(val pos: BlockPos, val expected: Component) : Mishap() {
     }
 
     override fun particleSpray(ctx: CastingContext): ParticleSpray {
-        return ParticleSpray.Burst(Vec3.atCenterOf(pos), 1.0)
+        return ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0)
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component {

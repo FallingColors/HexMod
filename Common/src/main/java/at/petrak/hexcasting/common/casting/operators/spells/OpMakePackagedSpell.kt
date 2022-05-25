@@ -52,7 +52,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         if (trueName != null)
             throw MishapOthersName(trueName)
 
-        return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
+        return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<SpellDatum<*>>) : RenderedSpell {

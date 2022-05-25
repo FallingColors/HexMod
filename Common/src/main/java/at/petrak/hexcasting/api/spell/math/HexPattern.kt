@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.spell.math
 
-import at.petrak.hexcasting.api.utils.HexUtils
+import at.petrak.hexcasting.api.utils.findCenter
+import at.petrak.hexcasting.api.utils.coordToPx
 import net.minecraft.nbt.ByteArrayTag
 import net.minecraft.nbt.ByteTag
 import net.minecraft.nbt.CompoundTag
@@ -103,9 +104,9 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
      */
     @JvmOverloads
     fun getCenter(hexRadius: Float, origin: HexCoord = HexCoord.Origin): Vec2 {
-        val originPx = HexUtils.coordToPx(origin, hexRadius, Vec2.ZERO)
+        val originPx = coordToPx(origin, hexRadius, Vec2.ZERO)
         val points = this.toLines(hexRadius, originPx)
-        return HexUtils.FindCenter(points)
+        return findCenter(points)
     }
 
 
@@ -113,7 +114,7 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
      * Convert a hex pattern into a sequence of straight linePoints spanning its points.
      */
     fun toLines(hexSize: Float, origin: Vec2): List<Vec2> =
-        this.positions().map { HexUtils.coordToPx(it, hexSize, origin) }
+        this.positions().map { coordToPx(it, hexSize, origin) }
 
     override fun toString(): String = buildString {
         append("HexPattern[")
@@ -128,7 +129,7 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
         const val TAG_ANGLES = "angles"
 
         @JvmStatic
-        fun IsHexPattern(tag: CompoundTag): Boolean {
+        fun isPattern(tag: CompoundTag): Boolean {
             return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt()) && tag.contains(
                 TAG_ANGLES,
                 Tag.TAG_BYTE_ARRAY.toInt()
@@ -136,14 +137,14 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
         }
 
         @JvmStatic
-        fun DeserializeFromNBT(tag: CompoundTag): HexPattern {
+        fun fromNBT(tag: CompoundTag): HexPattern {
             val startDir = HexDir.values()[tag.getByte(TAG_START_DIR).toInt()]
             val angles = tag.getByteArray(TAG_ANGLES).map { HexAngle.values()[it.toInt()] }
             return HexPattern(startDir, angles.toMutableList())
         }
 
         @JvmStatic
-        fun FromAnglesSig(signature: String, startDir: HexDir): HexPattern {
+        fun fromAngles(signature: String, startDir: HexDir): HexPattern {
             val out = HexPattern(startDir)
             var compass = startDir
 

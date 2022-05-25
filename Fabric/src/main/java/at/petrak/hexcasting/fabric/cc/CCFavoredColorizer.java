@@ -31,11 +31,11 @@ public class CCFavoredColorizer implements Component, AutoSyncedComponent {
 
     @Override
     public void readFromNbt(CompoundTag tag) {
-        this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
+        this.colorizer = FrozenColorizer.fromNBT(tag.getCompound(TAG_COLORIZER));
     }
 
     @Override
     public void writeToNbt(CompoundTag tag) {
-        tag.put(TAG_COLORIZER, this.colorizer.serialize());
+        tag.put(TAG_COLORIZER, this.colorizer.serializeToNBT());
     }
 }

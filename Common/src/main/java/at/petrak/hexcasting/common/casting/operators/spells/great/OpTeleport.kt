@@ -36,7 +36,7 @@ object OpTeleport : SpellOperator {
         return Triple(
             Spell(teleportee, delta),
             10 * ManaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.Cloud(targetMiddlePos, 2.0), ParticleSpray.Burst(targetMiddlePos.add(delta), 2.0))
+            listOf(ParticleSpray.cloud(targetMiddlePos, 2.0), ParticleSpray.burst(targetMiddlePos.add(delta), 2.0))
         )
     }
 

@@ -47,7 +47,7 @@ object OpBrainsweep : SpellOperator {
         return Triple(
             Spell(bpos, state, sacrifice, recipe),
             10 * ManaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.Cloud(sacrifice.position(), 1.0), ParticleSpray.Burst(Vec3.atCenterOf(bpos), 0.3, 100))
+            listOf(ParticleSpray.cloud(sacrifice.position(), 1.0), ParticleSpray.burst(Vec3.atCenterOf(bpos), 0.3, 100))
         )
     }
 

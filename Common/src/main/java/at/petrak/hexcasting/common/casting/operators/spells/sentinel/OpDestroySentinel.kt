@@ -22,7 +22,7 @@ object OpDestroySentinel : SpellOperator {
         // TODO why can't you remove things from other dimensions?
         if (sentinel.dimension != ctx.world.dimension())
             throw MishapLocationInWrongDimension(sentinel.dimension.location())
-        particles.add(ParticleSpray.Cloud(sentinel.position, 2.0))
+        particles.add(ParticleSpray.cloud(sentinel.position, 2.0))
 
         return Triple(
             Spell,

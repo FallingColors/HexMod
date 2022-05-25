@@ -17,13 +17,13 @@ public class CCHarness implements Component {
     public CCHarness(ServerPlayer owner) {
         this.owner = owner;
     }
-    
+
     public CastingHarness getHarness(InteractionHand hand) {
         var ctx = new CastingContext(this.owner, hand);
         if (this.lazyLoadedTag.isEmpty()) {
             return new CastingHarness(ctx);
         } else {
-            return CastingHarness.DeserializeFromNBT(this.lazyLoadedTag, ctx);
+            return CastingHarness.fromNBT(this.lazyLoadedTag, ctx);
         }
     }
 

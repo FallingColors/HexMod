@@ -129,7 +129,7 @@ object PatternRegistry {
         }
         for ((sig, entry) in this.regularPatternLookup) {
             if (entry.opId == opId) {
-                val pattern = HexPattern.FromAnglesSig(sig, entry.preferredStart)
+                val pattern = HexPattern.fromAngles(sig, entry.preferredStart)
                 return PatternEntry(pattern, this.operatorLookup[entry.opId]!!, false)
             }
         }

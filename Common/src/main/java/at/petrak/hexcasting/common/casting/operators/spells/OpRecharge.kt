@@ -48,7 +48,7 @@ object OpRecharge : SpellOperator {
             return null
 
         return Triple(Spell(entity),
-            ManaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
+            ManaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {

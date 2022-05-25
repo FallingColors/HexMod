@@ -44,7 +44,7 @@ class OpPotionEffect(
         return Triple(
             Spell(effect, target, duration, potency),
             cost.toInt(),
-            listOf(ParticleSpray.Cloud(target.position().add(0.0, target.eyeHeight / 2.0, 0.0), 1.0))
+            listOf(ParticleSpray.cloud(target.position().add(0.0, target.eyeHeight / 2.0, 0.0), 1.0))
         )
     }
 

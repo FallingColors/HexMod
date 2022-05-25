@@ -22,7 +22,7 @@ class OpExplode(val fire: Boolean) : SpellOperator {
         return Triple(
             Spell(pos, strength, this.fire),
             ((1 + Mth.clamp(strength.toFloat(), 0f, 10f) + if (this.fire) 2 else 0) * ManaConstants.SHARD_UNIT).toInt(),
-            listOf(ParticleSpray.Burst(pos, strength, 50))
+            listOf(ParticleSpray.burst(pos, strength, 50))
         )
     }
 

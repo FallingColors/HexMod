@@ -32,7 +32,7 @@ public class PatternScrollFunc extends LootItemConditionalFunction {
         var startDir = entry.component2();
         var tag = new CompoundTag();
         tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
-        tag.put(ItemScroll.TAG_PATTERN, HexPattern.FromAnglesSig(sig, startDir).serializeToNBT());
+        tag.put(ItemScroll.TAG_PATTERN, HexPattern.fromAngles(sig, startDir).serializeToNBT());
 
         stack.getOrCreateTag().merge(tag);
 

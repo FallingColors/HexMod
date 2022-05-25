@@ -8,7 +8,7 @@ object OpOr : ConstManaOperator {
     override val argc = 2
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val firstParam = GetNumOrList(args[0], 0)
+        val firstParam = numOrList(args[0], 0)
 
         if (firstParam.right().isPresent) {
             val list1 = firstParam.right().get()

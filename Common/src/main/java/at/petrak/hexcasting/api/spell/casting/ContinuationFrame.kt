@@ -3,6 +3,12 @@ package at.petrak.hexcasting.api.spell.casting
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingHarness.CastResult
+import at.petrak.hexcasting.api.utils.NBTBuilder
+import at.petrak.hexcasting.api.utils.getList
+import at.petrak.hexcasting.api.utils.hasList
+import at.petrak.hexcasting.api.utils.serializeToNBT
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -33,6 +39,11 @@ sealed interface ContinuationFrame {
     fun breakDownwards(stack: List<SpellDatum<*>>): Pair<Boolean, List<SpellDatum<*>>>
 
     /**
+     * Serializes this frame. Used for things like delays, where we pause execution.
+     */
+    fun serializeToNBT(): CompoundTag
+
+    /**
      * A list of patterns to be evaluated in sequence.
      * @property list the *remaining* list of patterns to be evaluated
      */
@@ -60,13 +71,19 @@ sealed interface ContinuationFrame {
             }
         }
 
+        override fun serializeToNBT(): CompoundTag {
+            return NBTBuilder {
+                "type" %= "evaluate"
+                "patterns" %= list.serializeToNBT()
+            }
+        }
     }
 
     /**
      * A stack marker representing the end of a Hermes evaluation,
      * so that we know when to stop removing frames during a Halt.
      */
-    class FinishEval() : ContinuationFrame {
+    object FinishEval : ContinuationFrame {
         // Don't do anything else to the stack, just finish the halt statement.
         override fun breakDownwards(stack: List<SpellDatum<*>>) = Pair(true, stack)
 
@@ -82,6 +99,10 @@ sealed interface ContinuationFrame {
                 ResolvedPatternType.EVALUATED,
                 listOf()
             )
+        }
+
+        override fun serializeToNBT() = NBTBuilder {
+            "type" %= "end"
         }
     }
 
@@ -147,6 +168,32 @@ sealed interface ContinuationFrame {
                 ResolvedPatternType.EVALUATED,
                 listOf()
             )
+        }
+
+        override fun serializeToNBT() = NBTBuilder {
+            "type" %= "foreach"
+            "data" %= data.serializeToNBT()
+            "code" %= code.serializeToNBT()
+            if (baseStack != null)
+                "base" %= baseStack.serializeToNBT()
+            "accumulator" %= acc.serializeToNBT()
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun fromNBT(tag: CompoundTag, world: ServerLevel): ContinuationFrame {
+            return when (tag.getString("type")) {
+                "eval" -> Evaluate(SpellList.fromNBT(tag.getList("patterns", Tag.TAG_COMPOUND), world))
+                "end" -> FinishEval
+                "foreach" -> ForEach(
+                    SpellList.fromNBT(tag.getList("data", Tag.TAG_COMPOUND), world),
+                    SpellList.fromNBT(tag.getList("code", Tag.TAG_COMPOUND), world),
+                    if (tag.hasList("base", Tag.TAG_COMPOUND)) SpellList.fromNBT(tag.getList("base", Tag.TAG_COMPOUND), world).toList() else null,
+                    SpellList.fromNBT(tag.getList("accumulator", Tag.TAG_COMPOUND), world).toMutableList()
+                )
+                else -> Evaluate(SpellList.LList(0, listOf()));
+            }
         }
     }
 }

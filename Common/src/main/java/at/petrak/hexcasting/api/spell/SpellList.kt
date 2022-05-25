@@ -1,5 +1,9 @@
 package at.petrak.hexcasting.api.spell
 
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.server.level.ServerLevel
+
 /**
  * Restricted interface for functional lists.
  *
@@ -71,6 +75,18 @@ sealed class SpellList: Iterable<SpellDatum<*>> {
             val car = list.car
             list = list.cdr
             return car
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun fromNBT(nbt: ListTag, world: ServerLevel): LList {
+            val out = ArrayList<SpellDatum<*>>(nbt.size)
+            for (subtag in nbt) {
+                // this is safe because otherwise we wouldn't have been able to get the list before
+                out.add(SpellDatum.fromNBT(subtag as CompoundTag, world))
+            }
+            return LList(0, out)
         }
     }
 }

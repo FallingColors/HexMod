@@ -35,7 +35,7 @@ public class ManualPatternComponent extends AbstractPatternComponent {
             RawPattern raw = new Gson().fromJson(json, RawPattern.class);
 
             var dir = HexDir.valueOf(raw.startdir);
-            var pat = HexPattern.FromAnglesSig(raw.signature, dir);
+            var pat = HexPattern.fromAngles(raw.signature, dir);
             var origin = new HexCoord(raw.q, raw.r);
             out.add(new Pair<>(pat, origin));
         }

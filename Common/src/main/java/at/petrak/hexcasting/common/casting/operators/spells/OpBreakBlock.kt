@@ -27,7 +27,7 @@ object OpBreakBlock : SpellOperator {
         return Triple(
             Spell(pos),
             ManaConstants.DUST_UNIT * 2,
-            listOf(ParticleSpray.Burst(centered, 1.0))
+            listOf(ParticleSpray.burst(centered, 1.0))
         )
     }
 

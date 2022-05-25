@@ -28,7 +28,7 @@ public interface DataHolderItem {
 
         var tag = dh.readDatumTag(stack);
         if (tag != null) {
-            return SpellDatum.DeserializeFromNBT(tag, world);
+            return SpellDatum.fromNBT(tag, world);
         } else {
             return null;
         }
@@ -47,7 +47,7 @@ public interface DataHolderItem {
                                 TooltipFlag pIsAdvanced) {
         var datumTag = self.readDatumTag(pStack);
         if (datumTag != null) {
-            var component = SpellDatum.DisplayFromTag(datumTag);
+            var component = SpellDatum.displayFromNBT(datumTag);
             pTooltipComponents.add(new TranslatableComponent("hexcasting.spelldata.onitem", component));
 
             if (pIsAdvanced.isAdvanced()) {

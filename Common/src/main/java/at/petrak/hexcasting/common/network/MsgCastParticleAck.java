@@ -37,7 +37,7 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer)
         var spread = buf.readDouble();
         var count = buf.readInt();
         var tag = buf.readAnySizeNbt();
-        var colorizer = FrozenColorizer.deserialize(tag);
+        var colorizer = FrozenColorizer.fromNBT(tag);
         return new MsgCastParticleAck(
             new ParticleSpray(new Vec3(posX, posY, posZ), new Vec3(velX, velY, velZ), fuzziness, spread, count),
             colorizer);
@@ -54,7 +54,7 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer)
         buf.writeDouble(this.spray.getFuzziness());
         buf.writeDouble(this.spray.getSpread());
         buf.writeInt(this.spray.getCount());
-        buf.writeNbt(this.colorizer.serialize());
+        buf.writeNbt(this.colorizer.serializeToNBT());
     }
 
 

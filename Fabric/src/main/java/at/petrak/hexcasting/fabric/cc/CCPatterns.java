@@ -39,7 +39,7 @@ public class CCPatterns implements Component {
         List<ResolvedPattern> patterns = new ArrayList<>(patternsTag.size());
 
         for (int i = 0; i < patternsTag.size(); i++) {
-            patterns.add(ResolvedPattern.DeserializeFromNBT(patternsTag.getCompound(i)));
+            patterns.add(ResolvedPattern.fromNBT(patternsTag.getCompound(i)));
         }
         this.patterns = patterns;
     }

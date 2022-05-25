@@ -2,7 +2,7 @@ package at.petrak.hexcasting.client
 
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.math.HexPattern
-import at.petrak.hexcasting.api.utils.HexUtils
+import at.petrak.hexcasting.api.utils.TAU
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
@@ -191,7 +191,7 @@ object RenderLib {
                 // as well as some random variance...
                 // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
                 // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
-                val theta = (3 * NOISE.getValue(i.toDouble(), j.toDouble(), zSeed) * HexUtils.TAU).toFloat()
+                val theta = (3 * NOISE.getValue(i.toDouble(), j.toDouble(), zSeed) * TAU).toFloat()
                 val r = NOISE.getValue(i.inv().toDouble(), j.toDouble(), zSeed).toFloat() * maxVariance
                 val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
                 position = position.add(hop).add(randomHop)
@@ -223,7 +223,7 @@ object RenderLib {
         val fracOfCircle = 6
         // run 0 AND last; this way the circle closes
         for (i in 0..fracOfCircle) {
-            val theta = i.toFloat() / fracOfCircle * HexUtils.TAU.toFloat()
+            val theta = i.toFloat() / fracOfCircle * TAU.toFloat()
             val rx = Mth.cos(theta) * radius + point.x
             val ry = Mth.sin(theta) * radius + point.y
             buf.vertex(mat, rx, ry, 1f).color(r, g, b, a).endVertex()

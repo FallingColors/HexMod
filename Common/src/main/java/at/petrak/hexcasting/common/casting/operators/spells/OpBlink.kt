@@ -39,8 +39,8 @@ object OpBlink : SpellOperator {
             Spell(target, delta),
             ManaConstants.SHARD_UNIT * delta.roundToInt(),
             listOf(
-                ParticleSpray.Cloud(targetMiddlePos, 2.0, 50),
-                ParticleSpray.Burst(targetMiddlePos.add(dvec), 2.0, 100)
+                ParticleSpray.cloud(targetMiddlePos, 2.0, 50),
+                ParticleSpray.burst(targetMiddlePos.add(dvec), 2.0, 100)
             )
         )
     }

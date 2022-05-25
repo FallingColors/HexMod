@@ -18,8 +18,8 @@ data class ResolvedPattern(val pattern: HexPattern, val origin: HexCoord, var ty
 
     companion object {
         @JvmStatic
-        fun DeserializeFromNBT(tag: CompoundTag): ResolvedPattern {
-            val pattern = HexPattern.DeserializeFromNBT(tag.getCompound("Pattern"))
+        fun fromNBT(tag: CompoundTag): ResolvedPattern {
+            val pattern = HexPattern.fromNBT(tag.getCompound("Pattern"))
             val origin = HexCoord(tag.getInt("OriginQ"), tag.getInt("OriginR"))
             val valid = try {
                 ResolvedPatternType.valueOf(tag.getString("Valid").uppercase(Locale.ROOT))

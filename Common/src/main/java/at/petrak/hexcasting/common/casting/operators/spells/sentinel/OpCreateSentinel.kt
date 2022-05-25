@@ -26,7 +26,7 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
         return Triple(
             Spell(target, this.extendsRange),
             ManaConstants.DUST_UNIT,
-            listOf(ParticleSpray.Burst(target, 2.0))
+            listOf(ParticleSpray.burst(target, 2.0))
         )
     }
 

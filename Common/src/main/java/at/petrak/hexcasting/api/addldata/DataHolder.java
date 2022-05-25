@@ -13,7 +13,7 @@ public interface DataHolder {
     default SpellDatum<?> readDatum(ServerLevel world) {
         var tag = readRawDatum();
         if (tag != null) {
-            return SpellDatum.DeserializeFromNBT(tag, world);
+            return SpellDatum.fromNBT(tag, world);
         } else {
             return null;
         }

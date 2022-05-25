@@ -125,7 +125,7 @@ public class ItemScroll extends Item implements DataHolderItem {
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         var compound = NBTHelper.getCompound(stack, ItemScroll.TAG_PATTERN);
         if (compound != null) {
-            var pattern = HexPattern.DeserializeFromNBT(compound);
+            var pattern = HexPattern.fromNBT(compound);
             return Optional.of(new PatternTooltipGreeble(
                 pattern,
                 NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? PatternTooltipGreeble.ANCIENT_BG : PatternTooltipGreeble.PRISTINE_BG));

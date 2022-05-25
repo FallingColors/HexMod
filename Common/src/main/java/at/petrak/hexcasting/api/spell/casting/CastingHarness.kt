@@ -450,7 +450,7 @@ class CastingHarness private constructor(
         out.put(TAG_PARENTHESIZED, parensTag)
 
         if (this.prepackagedColorizer != null) {
-            out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serialize())
+            out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serializeToNBT())
         }
 
         return out
@@ -466,18 +466,18 @@ class CastingHarness private constructor(
         const val TAG_PREPACKAGED_COLORIZER = "prepackaged_colorizer"
 
         @JvmStatic
-        fun DeserializeFromNBT(nbt: CompoundTag, ctx: CastingContext): CastingHarness {
+        fun fromNBT(nbt: CompoundTag, ctx: CastingContext): CastingHarness {
             return try {
                 val stack = mutableListOf<SpellDatum<*>>()
                 val stackTag = nbt.getList(TAG_STACK, Tag.TAG_COMPOUND)
                 for (subtag in stackTag) {
-                    val datum = SpellDatum.DeserializeFromNBT(subtag.asCompound, ctx.world)
+                    val datum = SpellDatum.fromNBT(subtag.asCompound, ctx.world)
                     stack.add(datum)
                 }
 
                 val localTag = nbt.getCompound(TAG_LOCAL)
                 val localIota =
-                    if (localTag.size() == 1) SpellDatum.DeserializeFromNBT(localTag, ctx.world) else SpellDatum.make(
+                    if (localTag.size() == 1) SpellDatum.fromNBT(localTag, ctx.world) else SpellDatum.make(
                         Widget.NULL
                     )
 
@@ -485,16 +485,16 @@ class CastingHarness private constructor(
                 val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND)
                 for (subtag in parenTag) {
                     if (subtag.asCompound.size() != 1)
-                        parenthesized.add(SpellDatum.make(HexPattern.DeserializeFromNBT(subtag.asCompound)))
+                        parenthesized.add(SpellDatum.make(HexPattern.fromNBT(subtag.asCompound)))
                     else
-                        parenthesized.add(SpellDatum.DeserializeFromNBT(subtag.asCompound, ctx.world))
+                        parenthesized.add(SpellDatum.fromNBT(subtag.asCompound, ctx.world))
                 }
 
                 val parenCount = nbt.getInt(TAG_PAREN_COUNT)
                 val escapeNext = nbt.getBoolean(TAG_ESCAPE_NEXT)
 
                 val colorizer = if (nbt.contains(TAG_PREPACKAGED_COLORIZER)) {
-                    FrozenColorizer.deserialize(nbt.getCompound(TAG_PREPACKAGED_COLORIZER))
+                    FrozenColorizer.fromNBT(nbt.getCompound(TAG_PREPACKAGED_COLORIZER))
                 } else {
                     null
                 }

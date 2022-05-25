@@ -27,7 +27,7 @@ object OpBeep : SpellOperator {
         return Triple(
             Spell(target, note, NoteBlockInstrument.values()[instrument]),
             ManaConstants.DUST_UNIT / 10,
-            listOf(ParticleSpray.Cloud(target, 1.0))
+            listOf(ParticleSpray.cloud(target, 1.0))
         )
     }
 
