@@ -527,11 +527,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     @Override
-    public void setChanged() {
-        this.sync();
-    }
-
-    @Override
     public boolean stillValid(Player player) {
         return false;
     }
