@@ -70,8 +70,8 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
         } else {
             this.recordPos = null;
         }
-        if (HexPattern.IsHexPattern(pattern)) {
-            this.pattern = HexPattern.DeserializeFromNBT(pattern);
+        if (HexPattern.isPattern(pattern)) {
+            this.pattern = HexPattern.fromNBT(pattern);
         } else {
             this.pattern = null;
         }

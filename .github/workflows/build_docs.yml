@@ -1,0 +1,29 @@
+name: Build the Python doc-gen
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build_docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v3
+    - name: Generate file
+      run: doc/collate_data.py Common/src/main/resources hexcasting thehexbook doc/template.html index.html.uncommitted
+    - name: Check out gh-pages
+      uses: actions/checkout@v3
+      with:
+        clean: false
+        ref: gh-pages
+    - name: Overwrite file and commmit
+      run: |
+          mv index.html.uncommitted index.html
+          git config user.name "Documentation Generation Bot"
+          git config user.email "noreply@github.com"
+          git add index.html
+          git diff-index --quiet HEAD || git commit -m "Update docs at index.html from $GITHUB_REF"
+    - name: Upload changes
+      run: git push

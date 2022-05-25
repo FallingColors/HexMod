@@ -10,7 +10,8 @@ import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
-import at.petrak.hexcasting.api.utils.ManaHelper
+import at.petrak.hexcasting.api.utils.extractMana
+import at.petrak.hexcasting.api.utils.isManaItem
 import at.petrak.hexcasting.common.items.magic.ItemManaHolder
 import at.petrak.hexcasting.common.lib.HexItems
 import net.minecraft.world.entity.item.ItemEntity
@@ -46,7 +47,7 @@ object OpMakeBattery : SpellOperator {
 
         ctx.assertEntityInRange(entity)
 
-        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(
+        if (!isManaItem(entity.item) || extractMana(
                 entity.item,
                 drainForBatteries = true,
                 simulate = true
@@ -59,7 +60,7 @@ object OpMakeBattery : SpellOperator {
         }
 
         return Triple(Spell(entity),
-            ManaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
+            ManaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
@@ -67,7 +68,7 @@ object OpMakeBattery : SpellOperator {
             val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexItemTags.PHIAL_BASE) }
             if (handStack.`is`(HexItemTags.PHIAL_BASE) && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = true)
+                val manaAmt = extractMana(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
                     ctx.caster.setItemInHand(
                         hand,

@@ -12,7 +12,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
 
-fun GetNumOrVec(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, Vec3> =
+fun numOrVec(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, Vec3> =
     when (datum.payload) {
         is Double -> Either.left(datum.payload)
         is Vec3 -> Either.right(datum.payload)
@@ -23,7 +23,7 @@ fun GetNumOrVec(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, Vec3> =
         )
     }
 
-fun GetNumOrList(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, SpellList> =
+fun numOrList(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, SpellList> =
     when (datum.payload) {
         is Double -> Either.left(datum.payload)
         is SpellList -> Either.right(datum.payload)

@@ -4,8 +4,6 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 
 /**
  * A change to the data in a CastHarness after a pattern is drawn.
- *
- * [wasThisPatternInvalid] is for the benefit of the controller.
  */
 data class FunctionalData(
     val stack: List<SpellDatum<*>>,

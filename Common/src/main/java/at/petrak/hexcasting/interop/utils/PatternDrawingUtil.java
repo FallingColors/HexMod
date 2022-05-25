@@ -77,7 +77,7 @@ public final class PatternDrawingUtil {
             patternEntries.add(new PatternEntry(pattern, origin, new ArrayList<>()));
             seenCoords.addAll(pattern.positions(origin));
         }
-        var fakeCom = HexUtils.FindCenter(seenFakePoints);
+        var fakeCom = HexUtils.findCenter(seenFakePoints);
 
         var maxDx = -1f;
         var maxDy = -1f;
@@ -100,7 +100,7 @@ public final class PatternDrawingUtil {
                 seenRealPoints.add(px);
             }
         }
-        var realCom = HexUtils.FindCenter(seenRealPoints);
+        var realCom = HexUtils.findCenter(seenRealPoints);
 
         // and NOW for real!
         for (var pat : patternEntries) {

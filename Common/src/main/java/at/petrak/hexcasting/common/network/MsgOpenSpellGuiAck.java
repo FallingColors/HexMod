@@ -34,7 +34,7 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
         var patternsLen = buf.readInt();
         var patterns = new ArrayList<ResolvedPattern>(patternsLen);
         for (int i = 0; i < patternsLen; i++) {
-            patterns.add(ResolvedPattern.DeserializeFromNBT(buf.readAnySizeNbt()));
+            patterns.add(ResolvedPattern.fromNBT(buf.readAnySizeNbt()));
         }
 
         var descsLen = buf.readInt();

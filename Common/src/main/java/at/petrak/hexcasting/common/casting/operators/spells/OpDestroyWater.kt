@@ -29,7 +29,7 @@ object OpDestroyWater : SpellOperator {
         return Triple(
             Spell(target),
             2 * ManaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.Burst(target, 3.0))
+            listOf(ParticleSpray.burst(target, 3.0))
         )
     }
 

@@ -57,14 +57,14 @@ public abstract class ItemManaHolder extends Item implements ManaHolderItem {
     public int getBarColor(ItemStack pStack) {
         var mana = getMana(pStack);
         var maxMana = getMaxMana(pStack);
-        return ManaHelper.barColor(mana, maxMana);
+        return ManaHelper.manaBarColor(mana, maxMana);
     }
 
     @Override
     public int getBarWidth(ItemStack pStack) {
         var mana = getMana(pStack);
         var maxMana = getMaxMana(pStack);
-        return ManaHelper.barWidth(mana, maxMana);
+        return ManaHelper.manaBarWidth(mana, maxMana);
     }
 
     @Override

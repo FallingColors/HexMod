@@ -106,7 +106,7 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
         if (bet != null && bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND)) {
             var patTag = bet.getCompound(BlockEntitySlate.TAG_PATTERN);
             if (!patTag.isEmpty()) {
-                var pattern = HexPattern.DeserializeFromNBT(patTag);
+                var pattern = HexPattern.fromNBT(patTag);
                 return Optional.of(new PatternTooltipGreeble(
                     pattern,
                     PatternTooltipGreeble.SLATE_BG));

@@ -30,7 +30,7 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
 			.filter((it) -> it != DatumType.EMPTY && it != DatumType.OTHER)
 			.map((type) -> {
 				ItemStack newStack = stack.copy();
-				NBTHelper.putString(newStack, DataHolderItem.TAG_OVERRIDE_VISUALLY, SpellDatum.GetTagName(type));
+				NBTHelper.putString(newStack, DataHolderItem.TAG_OVERRIDE_VISUALLY, SpellDatum.tagForType(type));
 				return new Ingredient.ItemValue(newStack);
 			}));
 		this.stack = stack;

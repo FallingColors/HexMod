@@ -8,8 +8,9 @@ import at.petrak.hexcasting.api.spell.math.HexAngle
 import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
-import at.petrak.hexcasting.api.utils.HexUtils
-import at.petrak.hexcasting.client.RenderLib
+import at.petrak.hexcasting.api.utils.otherHand
+import at.petrak.hexcasting.client.drawPatternFromPoints
+import at.petrak.hexcasting.client.drawSpot
 import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexItems
@@ -231,7 +232,7 @@ class GuiSpellcasting(
     override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pDelta: Double): Boolean {
         super.mouseScrolled(pMouseX, pMouseY, pDelta)
 
-        val otherHand = HexUtils.OtherHand(this.handOpenedWith)
+        val otherHand = otherHand(this.handOpenedWith)
         if (Minecraft.getInstance().player!!.getItemInHand(otherHand).item is ItemSpellbook)
             IClientXplatAbstractions.INSTANCE.sendPacketToServer(
                 MsgShiftScrollSyn(
@@ -279,7 +280,7 @@ class GuiSpellcasting(
                     0f,
                     1f
                 )
-                RenderLib.drawSpot(
+                drawSpot(
                     mat,
                     dotPx,
                     scaledDist * 2f,
@@ -293,7 +294,7 @@ class GuiSpellcasting(
         RenderSystem.defaultBlendFunc()
 
         for ((pat, origin, valid) in this.patterns) {
-            RenderLib.drawPatternFromPoints(mat, pat.toLines(
+            drawPatternFromPoints(mat, pat.toLines(
                 this.hexSize(),
                 this.coordToPx(origin)
             ), true, valid.color or (0xC8 shl 24), valid.fadeColor or (0xC8 shl 24), if (valid.success) 0.2f else 0.9f)
@@ -315,7 +316,7 @@ class GuiSpellcasting(
             }
 
             points.add(mousePos)
-            RenderLib.drawPatternFromPoints(mat, points, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt(), 0.2f)
+            drawPatternFromPoints(mat, points, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt(), 0.1f)
         }
 
         RenderSystem.setShader { prevShader }
@@ -338,7 +339,7 @@ class GuiSpellcasting(
     /** Distance between adjacent hex centers */
     fun hexSize(): Float {
         val hasLens = Minecraft.getInstance().player!!
-            .getItemInHand(HexUtils.OtherHand(this.handOpenedWith)).`is`(HexItems.SCRYING_LENS)
+            .getItemInHand(otherHand(this.handOpenedWith)).`is`(HexItems.SCRYING_LENS)
 
         // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like 500-odd area.
         // Let's be generous and give them 512.
@@ -348,8 +349,9 @@ class GuiSpellcasting(
 
     fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)
 
-    fun coordToPx(coord: HexCoord) = HexUtils.coordToPx(coord, this.hexSize(), this.coordsOffset())
-    fun pxToCoord(px: Vec2) = HexUtils.pxToCoord(px, this.hexSize(), this.coordsOffset())
+    fun coordToPx(coord: HexCoord) =
+        at.petrak.hexcasting.api.utils.coordToPx(coord, this.hexSize(), this.coordsOffset())
+    fun pxToCoord(px: Vec2) = at.petrak.hexcasting.api.utils.pxToCoord(px, this.hexSize(), this.coordsOffset())
 
 
     private sealed class PatternDrawState {

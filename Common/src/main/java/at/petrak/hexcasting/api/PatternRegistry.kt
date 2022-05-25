@@ -86,14 +86,14 @@ object PatternRegistry {
         // when we try to look
         for (handler in specialHandlers) {
             val op = handler.handler.handlePattern(pat)
-            if (op != null) return Pair(op, handler.id)
+            if (op != null) return op to handler.id
         }
 
         // Is it global?
         val sig = pat.anglesSignature()
         this.regularPatternLookup[sig]?.let {
             val op = this.operatorLookup[it.opId] ?: throw MishapInvalidPattern()
-            return Pair(op, it.opId)
+            return op to it.opId
         }
 
         // Look it up in the world?
@@ -102,7 +102,7 @@ object PatternRegistry {
             ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
         perWorldPatterns.lookup[sig]?.let {
             val op = this.operatorLookup[it.first]!!
-            return Pair(op, it.first)
+            return op to it.first
         }
 
         throw MishapInvalidPattern()
@@ -129,7 +129,7 @@ object PatternRegistry {
         }
         for ((sig, entry) in this.regularPatternLookup) {
             if (entry.opId == opId) {
-                val pattern = HexPattern.FromAnglesSig(sig, entry.preferredStart)
+                val pattern = HexPattern.fromAngles(sig, entry.preferredStart)
                 return PatternEntry(pattern, this.operatorLookup[entry.opId]!!, false)
             }
         }
@@ -188,7 +188,7 @@ object PatternRegistry {
                     val entry = tag.getCompound(sig)
                     val opId = ResourceLocation.tryParse(entry.getString(TAG_OP_ID))!!
                     val startDir = HexDir.values()[entry.getInt(TAG_START_DIR)]
-                    map[sig] = Pair(opId, startDir)
+                    map[sig] = opId to startDir
                 }
                 return Save(map)
             }
@@ -199,7 +199,7 @@ object PatternRegistry {
                 for ((opId, entry) in PatternRegistry.perWorldPatternLookup) {
                     // waugh why doesn't kotlin recursively destructure things
                     val scrungled = EulerPathFinder.findAltDrawing(entry.prototype, seed)
-                    map[scrungled.anglesSignature()] = Pair(opId, scrungled.startDir)
+                    map[scrungled.anglesSignature()] = opId to scrungled.startDir
                 }
                 val save = Save(map)
                 save.setDirty()

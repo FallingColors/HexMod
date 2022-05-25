@@ -32,7 +32,7 @@ public class ListPatternsCommand {
                 for (var pair : listing) {
                     ctx.getSource().sendSuccess(new TextComponent(pair.getValue().getFirst().toString())
                         .append(": ")
-                        .append(SpellDatum.make(HexPattern.FromAnglesSig(pair.getKey(), pair.getValue().getSecond()))
+                        .append(SpellDatum.make(HexPattern.fromAngles(pair.getKey(), pair.getValue().getSecond()))
                             .display()), false);
                 }
 
@@ -86,7 +86,7 @@ public class ListPatternsCommand {
                         var tag = new CompoundTag();
                         tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
                         tag.put(ItemScroll.TAG_PATTERN,
-                            HexPattern.FromAnglesSig(pattern, startDir).serializeToNBT());
+                            HexPattern.fromAngles(pattern, startDir).serializeToNBT());
 
                         var stack = new ItemStack(HexItems.SCROLL);
                         stack.setTag(tag);

@@ -10,7 +10,8 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
-import at.petrak.hexcasting.api.utils.ManaHelper
+import at.petrak.hexcasting.api.utils.extractMana
+import at.petrak.hexcasting.api.utils.isManaItem
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
@@ -36,7 +37,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         }
 
         ctx.assertEntityInRange(entity)
-        if (!ManaHelper.isManaItem(entity.item) || ManaHelper.extractMana(
+        if (!isManaItem(entity.item) || extractMana(
                 entity.item,
                 drainForBatteries = true,
                 simulate = true
@@ -52,7 +53,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         if (trueName != null)
             throw MishapOthersName(trueName)
 
-        return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.Burst(entity.position(), 0.5)))
+        return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<SpellDatum<*>>) : RenderedSpell {
@@ -64,7 +65,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = ManaHelper.extractMana(entityStack, drainForBatteries = true)
+                val manaAmt = extractMana(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
                     hexHolder.writeHex(patterns, manaAmt)
                 }

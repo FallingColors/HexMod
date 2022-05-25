@@ -29,14 +29,14 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
     public static final Supplier<FrozenColorizer> DEFAULT =
         () -> new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.WHITE)), Util.NIL_UUID);
 
-    public CompoundTag serialize() {
+    public CompoundTag serializeToNBT() {
         var out = new CompoundTag();
-        out.put(TAG_STACK, HexUtils.serialize(this.item));
+        out.put(TAG_STACK, HexUtils.serializeToNBT(this.item));
         out.putUUID(TAG_OWNER, this.owner);
         return out;
     }
 
-    public static FrozenColorizer deserialize(CompoundTag tag) {
+    public static FrozenColorizer fromNBT(CompoundTag tag) {
         if (tag.isEmpty()) {
             return FrozenColorizer.DEFAULT.get();
         }

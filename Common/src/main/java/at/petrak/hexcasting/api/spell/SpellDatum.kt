@@ -3,11 +3,11 @@ package at.petrak.hexcasting.api.spell
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidSpellDatumType
-import at.petrak.hexcasting.api.utils.HexUtils
-import at.petrak.hexcasting.api.utils.HexUtils.serializeToNBT
-import at.petrak.hexcasting.api.utils.getList
+import at.petrak.hexcasting.api.utils.*
 import net.minecraft.ChatFormatting
-import net.minecraft.nbt.*
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtUtils
+import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TextComponent
 import net.minecraft.network.chat.TranslatableComponent
@@ -22,7 +22,7 @@ import java.util.*
  * We use the following types:
  *  * [Entity]
  *  * [Double]
- *  * [Vec3][net.minecraft.world.phys.Vec3] as both position and (when normalized) direction
+ *  * [Vec3] as both position and (when normalized) direction
  *  * [Widget]; [Widget.NULL] is used as our null value
  *  * [SpellList]
  *  * [HexPattern]! Yes, we have meta-evaluation everyone.
@@ -33,39 +33,19 @@ import java.util.*
 class SpellDatum<T : Any> private constructor(val payload: T) {
     val clazz: Class<T> = payload.javaClass
 
-    fun serializeToNBT(): CompoundTag {
-        val out = CompoundTag()
-        when (val pl = this.payload) {
-            is Entity -> {
-                val subtag = CompoundTag()
-                subtag.put(TAG_ENTITY_UUID, NbtUtils.createUUID(pl.uuid))
-                // waayyghg
-                val json = Component.Serializer.toJson(pl.displayName)
-                subtag.putString(TAG_ENTITY_NAME_CHEATY, json)
-                out.put(TAG_ENTITY, subtag)
+    fun serializeToNBT() = NBTBuilder {
+        when (val pl = payload) {
+            is Entity -> TAG_ENTITY %= compound {
+                TAG_ENTITY_UUID %= NbtUtils.createUUID(pl.uuid)
+                TAG_ENTITY_NAME_CHEATY %= Component.Serializer.toJson(pl.displayName)
             }
-            is Double -> out.put(
-                TAG_DOUBLE, DoubleTag.valueOf(pl)
-            )
-            is Vec3 -> out.put(
-                TAG_VEC3, pl.serializeToNBT()
-            )
-            is SpellList -> {
-                val subtag = ListTag()
-                for (elt in pl)
-                    subtag.add(elt.serializeToNBT())
-                out.put(TAG_LIST, subtag)
-            }
-            is Widget -> {
-                out.putString(TAG_WIDGET, pl.name)
-            }
-            is HexPattern -> {
-                out.put(TAG_PATTERN, pl.serializeToNBT())
-            }
+            is Double -> TAG_DOUBLE %= pl
+            is Vec3 -> TAG_VEC3 %= pl.serializeToNBT()
+            is SpellList -> TAG_LIST %= pl.serializeToNBT()
+            is Widget -> TAG_WIDGET %= pl.name
+            is HexPattern -> TAG_PATTERN %= pl.serializeToNBT()
             else -> throw RuntimeException("cannot serialize $pl because it is of type ${pl.javaClass.canonicalName} which is not serializable")
         }
-
-        return out
     }
 
     override fun toString(): String =
@@ -85,7 +65,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
 
     fun display(): Component {
         val nbt = this.serializeToNBT()
-        return DisplayFromTag(nbt)
+        return displayFromNBT(nbt)
     }
 
     fun getType(): DatumType =
@@ -101,6 +81,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
 
     companion object {
         @JvmStatic
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
         fun make(payload: Any): SpellDatum<*> =
             if (payload is SpellDatum<*>) {
                 payload
@@ -114,23 +95,23 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             } else if (payload is Vec3) {
                 SpellDatum(
                     Vec3(
-                        HexUtils.FixNANs(payload.x),
-                        HexUtils.FixNANs(payload.y),
-                        HexUtils.FixNANs(payload.z),
+                        fixNAN(payload.x),
+                        fixNAN(payload.y),
+                        fixNAN(payload.z),
                     )
                 )
-            } else if (IsValidType(payload)) {
+            } else if (isValidType(payload)) {
                 SpellDatum(payload)
             } else if (payload is java.lang.Double) {
                 // Check to see if it's a java *boxed* double, for when we call this from Java
                 val num = payload.toDouble()
-                SpellDatum(HexUtils.FixNANs(num))
+                SpellDatum(fixNAN(num))
             } else {
                 throw MishapInvalidSpellDatumType(payload)
             }
 
         @JvmStatic
-        fun DeserializeFromNBT(nbt: CompoundTag, world: ServerLevel): SpellDatum<*> {
+        fun fromNBT(nbt: CompoundTag, world: ServerLevel): SpellDatum<*> {
             val keys = nbt.allKeys
             if (keys.size != 1)
                 throw IllegalArgumentException("Expected exactly one kv pair: $nbt")
@@ -144,21 +125,15 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     SpellDatum(if (entity == null || !entity.isAlive) Widget.NULL else entity)
                 }
                 TAG_DOUBLE -> SpellDatum(nbt.getDouble(key))
-                TAG_VEC3 -> SpellDatum(HexUtils.DeserializeVec3FromNBT(nbt.getLongArray(key)))
+                TAG_VEC3 -> SpellDatum(vecFromNBT(nbt.getLongArray(key)))
                 TAG_LIST -> {
-                    val arr = nbt.getList(key, Tag.TAG_COMPOUND)
-                    val out = ArrayList<SpellDatum<*>>(arr.size)
-                    for (subtag in arr) {
-                        // this is safe because otherwise we wouldn't have been able to get the list before
-                        out.add(DeserializeFromNBT(subtag as CompoundTag, world))
-                    }
-                    SpellDatum(SpellList.LList(0, out))
+                    SpellDatum(SpellList.fromNBT(nbt.getList(key, Tag.TAG_COMPOUND), world))
                 }
                 TAG_WIDGET -> {
                     SpellDatum(Widget.valueOf(nbt.getString(key)))
                 }
                 TAG_PATTERN -> {
-                    SpellDatum(HexPattern.DeserializeFromNBT(nbt.getCompound(TAG_PATTERN)))
+                    SpellDatum(HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN)))
                 }
                 else -> throw IllegalArgumentException("Unknown key $key: $nbt")
             }
@@ -171,11 +146,11 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             )
         )
         @JvmStatic
-        fun DeserializeFromNBT(nbt: CompoundTag, ctx: CastingContext): SpellDatum<*> =
-            DeserializeFromNBT(nbt, ctx.world)
+        fun fromNBT(nbt: CompoundTag, ctx: CastingContext): SpellDatum<*> =
+            fromNBT(nbt, ctx.world)
 
         @JvmStatic
-        fun DisplayFromTag(nbt: CompoundTag): Component {
+        fun displayFromNBT(nbt: CompoundTag): Component {
             val keys = nbt.allKeys
             if (keys.size != 1)
                 throw IllegalArgumentException("Expected exactly one kv pair: $nbt")
@@ -188,7 +163,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     )
                 ).withStyle(ChatFormatting.GREEN)
                 TAG_VEC3 -> {
-                    val vec = HexUtils.DeserializeVec3FromNBT(nbt.getLongArray(key))
+                    val vec = vecFromNBT(nbt.getLongArray(key))
                     // the focus color is really more red, but we don't want to show an error-y color
                     TextComponent(
                         String.format(
@@ -205,7 +180,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     val arr = nbt.getList(key, Tag.TAG_COMPOUND)
                     for ((i, subtag) in arr.withIndex()) {
                         // this is safe because otherwise we wouldn't have been able to get the list before
-                        out.append(DisplayFromTag(subtag as CompoundTag))
+                        out.append(displayFromNBT(subtag as CompoundTag))
                         if (i != arr.lastIndex) {
                             out.append(", ")
                         }
@@ -223,7 +198,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     else TextComponent(widget.toString()).withStyle(ChatFormatting.DARK_PURPLE)
                 }
                 TAG_PATTERN -> {
-                    val pat = HexPattern.DeserializeFromNBT(nbt.getCompound(TAG_PATTERN))
+                    val pat = HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN))
                     var angleDesc = pat.anglesSignature()
                     if (angleDesc.isNotBlank()) angleDesc = " $angleDesc";
                     val out = TextComponent("HexPattern(").withStyle(ChatFormatting.GOLD)
@@ -267,11 +242,11 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         // Also encode the entity's name as a component for the benefit of the client
         const val TAG_ENTITY_NAME_CHEATY = "name"
 
-        fun <T : Any> IsValidType(checkee: T): Boolean =
+        fun <T : Any> isValidType(checkee: T): Boolean =
             ValidTypes.any { clazz -> clazz.isAssignableFrom(checkee.javaClass) }
 
         @JvmStatic
-        fun GetTagName(datumType: DatumType): String {
+        fun tagForType(datumType: DatumType): String {
             return when (datumType) {
                 DatumType.ENTITY -> TAG_ENTITY
                 DatumType.WIDGET -> TAG_WIDGET

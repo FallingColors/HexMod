@@ -36,7 +36,7 @@ class OpConjure(val light: Boolean) : SpellOperator {
         return Triple(
             Spell(target, light),
             ManaConstants.DUST_UNIT,
-            listOf(ParticleSpray.Cloud(Vec3.atCenterOf(pos), 1.0))
+            listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
         )
     }
 

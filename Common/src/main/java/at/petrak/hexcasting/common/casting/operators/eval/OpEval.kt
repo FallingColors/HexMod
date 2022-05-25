@@ -1,14 +1,8 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
-import at.petrak.hexcasting.api.spell.OperationResult
-import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellList
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
-import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 
 object OpEval : Operator {
@@ -22,7 +16,7 @@ object OpEval : Operator {
         val newCont = if (continuation is SpellContinuation.NotDone && continuation.frame is ContinuationFrame.FinishEval) {
             continuation
         } else {
-            continuation.pushFrame(ContinuationFrame.FinishEval()) // install a break-boundary after eval
+            continuation.pushFrame(ContinuationFrame.FinishEval) // install a break-boundary after eval
         }
 
         val frame = ContinuationFrame.Evaluate(instrs)

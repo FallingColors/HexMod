@@ -38,7 +38,7 @@ public class PatternResLocArgument extends ResourceLocationArgument {
         for (var key : lookup.keySet()) {
             var rhs = lookup.get(key);
             if (rhs.getFirst().equals(targetId)) {
-                foundPat = HexPattern.FromAnglesSig(key, rhs.getSecond());
+                foundPat = HexPattern.fromAngles(key, rhs.getSecond());
                 break;
             }
         }

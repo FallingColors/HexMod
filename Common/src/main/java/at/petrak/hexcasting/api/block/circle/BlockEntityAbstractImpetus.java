@@ -132,7 +132,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         if (this.activator != null && this.colorizer != null && this.nextBlock != null && this.trackedBlocks != null) {
             tag.putUUID(TAG_ACTIVATOR, this.activator);
             tag.put(TAG_NEXT_BLOCK, NbtUtils.writeBlockPos(this.nextBlock));
-            tag.put(TAG_COLORIZER, this.colorizer.serialize());
+            tag.put(TAG_COLORIZER, this.colorizer.serializeToNBT());
             tag.putBoolean(TAG_FOUND_ALL, this.foundAll);
 
             var trackeds = new ListTag();
@@ -155,7 +155,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             tag.contains(TAG_NEXT_BLOCK, Tag.TAG_COMPOUND) &&
             tag.contains(TAG_TRACKED_BLOCKS, Tag.TAG_LIST)) {
             this.activator = tag.getUUID(TAG_ACTIVATOR);
-            this.colorizer = FrozenColorizer.deserialize(tag.getCompound(TAG_COLORIZER));
+            this.colorizer = FrozenColorizer.fromNBT(tag.getCompound(TAG_COLORIZER));
             this.nextBlock = NbtUtils.readBlockPos(tag.getCompound(TAG_NEXT_BLOCK));
             this.foundAll = tag.getBoolean(TAG_FOUND_ALL);
             var trackeds = tag.getList(TAG_TRACKED_BLOCKS, Tag.TAG_COMPOUND);
@@ -524,11 +524,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.mana += manamount;
             this.sync();
         }
-    }
-
-    @Override
-    public void setChanged() {
-        this.sync();
     }
 
     @Override

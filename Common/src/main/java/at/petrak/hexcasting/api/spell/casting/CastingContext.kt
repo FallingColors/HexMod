@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.api.spell.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
-import at.petrak.hexcasting.api.utils.HexUtils
+import at.petrak.hexcasting.api.utils.otherHand
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -33,7 +33,7 @@ data class CastingContext(
     private var depth: Int = 0
 
     val world: ServerLevel get() = caster.getLevel()
-    val otherHand: InteractionHand get() = HexUtils.OtherHand(this.castingHand)
+    val otherHand: InteractionHand get() = otherHand(this.castingHand)
     val position: Vec3 get() = caster.position()
 
     private val entitiesGivenMotion = mutableSetOf<Entity>()

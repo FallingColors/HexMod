@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.spell.math
 
-import at.petrak.hexcasting.api.utils.HexUtils
-import net.minecraft.nbt.ByteArrayTag
-import net.minecraft.nbt.ByteTag
+import at.petrak.hexcasting.api.utils.NBTBuilder
+import at.petrak.hexcasting.api.utils.coordToPx
+import at.petrak.hexcasting.api.utils.findCenter
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.world.phys.Vec2
@@ -23,15 +23,15 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
         var compass = this.startDir
         var cursor = HexCoord.Origin
         for (a in this.angles) {
-            linesSeen.add(Pair(cursor, compass))
+            linesSeen.add(cursor to compass)
             // Line from here to there also blocks there to here
-            linesSeen.add(Pair(cursor + compass, compass.rotatedBy(HexAngle.BACK)))
+            linesSeen.add(cursor + compass to compass.rotatedBy(HexAngle.BACK))
             cursor += compass
             compass *= a
         }
         cursor += compass
 
-        val potentialNewLine = Pair(cursor, newDir)
+        val potentialNewLine = cursor to newDir
         if (potentialNewLine in linesSeen) return false
         val nextAngle = newDir - compass
         if (nextAngle == HexAngle.BACK) return false
@@ -71,12 +71,9 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
         this.angles.fold(this.startDir) { acc, angle -> acc * angle }
 
 
-    fun serializeToNBT(): CompoundTag {
-        val out = CompoundTag()
-        out.put(TAG_START_DIR, ByteTag.valueOf(this.startDir.ordinal.toByte()))
-        val anglesTag = ByteArrayTag(this.angles.map { it.ordinal.toByte() })
-        out.put(TAG_ANGLES, anglesTag)
-        return out
+    fun serializeToNBT() = NBTBuilder {
+        TAG_START_DIR %= byte(startDir.ordinal)
+        TAG_ANGLES %= byteArray(angles.map(HexAngle::ordinal))
     }
 
     // Terrible shorthand method for easy matching
@@ -103,9 +100,9 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
      */
     @JvmOverloads
     fun getCenter(hexRadius: Float, origin: HexCoord = HexCoord.Origin): Vec2 {
-        val originPx = HexUtils.coordToPx(origin, hexRadius, Vec2.ZERO)
+        val originPx = coordToPx(origin, hexRadius, Vec2.ZERO)
         val points = this.toLines(hexRadius, originPx)
-        return HexUtils.FindCenter(points)
+        return findCenter(points)
     }
 
 
@@ -113,7 +110,7 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
      * Convert a hex pattern into a sequence of straight linePoints spanning its points.
      */
     fun toLines(hexSize: Float, origin: Vec2): List<Vec2> =
-        this.positions().map { HexUtils.coordToPx(it, hexSize, origin) }
+        this.positions().map { coordToPx(it, hexSize, origin) }
 
     override fun toString(): String = buildString {
         append("HexPattern[")
@@ -128,7 +125,7 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
         const val TAG_ANGLES = "angles"
 
         @JvmStatic
-        fun IsHexPattern(tag: CompoundTag): Boolean {
+        fun isPattern(tag: CompoundTag): Boolean {
             return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt()) && tag.contains(
                 TAG_ANGLES,
                 Tag.TAG_BYTE_ARRAY.toInt()
@@ -136,14 +133,14 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
         }
 
         @JvmStatic
-        fun DeserializeFromNBT(tag: CompoundTag): HexPattern {
+        fun fromNBT(tag: CompoundTag): HexPattern {
             val startDir = HexDir.values()[tag.getByte(TAG_START_DIR).toInt()]
             val angles = tag.getByteArray(TAG_ANGLES).map { HexAngle.values()[it.toInt()] }
             return HexPattern(startDir, angles.toMutableList())
         }
 
         @JvmStatic
-        fun FromAnglesSig(signature: String, startDir: HexDir): HexPattern {
+        fun fromAngles(signature: String, startDir: HexDir): HexPattern {
             val out = HexPattern(startDir)
             var compass = startDir
 

@@ -22,8 +22,10 @@ public class ForgeHexClientInitializer {
         evBus.addListener((RenderLevelLastEvent e) ->
             HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick()));
 
-        evBus.addListener((RenderGameOverlayEvent.PreLayer e) ->
-            HexAdditionalRenderers.overlayGui(e.getMatrixStack(), e.getPartialTicks()));
+        evBus.addListener((RenderGameOverlayEvent.Post e) -> {
+            if (e.getType() == RenderGameOverlayEvent.ElementType.ALL)
+                HexAdditionalRenderers.overlayGui(e.getMatrixStack(), e.getPartialTicks());
+        });
 
 
         evBus.addListener((TickEvent.RenderTickEvent e) -> {

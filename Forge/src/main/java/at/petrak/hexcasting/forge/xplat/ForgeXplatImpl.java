@@ -124,7 +124,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public void setColorizer(Player player, FrozenColorizer colorizer) {
         CompoundTag tag = player.getPersistentData();
-        tag.put(TAG_COLOR, colorizer.serialize());
+        tag.put(TAG_COLOR, colorizer.serializeToNBT());
 
         if (player instanceof ServerPlayer serverPlayer) {
             CapSyncers.syncColorizer(serverPlayer);
@@ -175,7 +175,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         boolean allowed = tag.getBoolean(TAG_FLIGHT_ALLOWED);
         if (allowed) {
             var timeLeft = tag.getInt(TAG_FLIGHT_TIME);
-            var origin = HexUtils.DeserializeVec3FromNBT(tag.getLongArray(TAG_FLIGHT_ORIGIN));
+            var origin = HexUtils.vecFromNBT(tag.getLongArray(TAG_FLIGHT_ORIGIN));
             var radius = tag.getDouble(TAG_FLIGHT_RADIUS);
             var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
                 new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
@@ -186,7 +186,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public FrozenColorizer getColorizer(Player player) {
-        return FrozenColorizer.deserialize(player.getPersistentData().getCompound(TAG_COLOR));
+        return FrozenColorizer.fromNBT(player.getPersistentData().getCompound(TAG_COLOR));
     }
 
     @Override
@@ -197,7 +197,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             return Sentinel.none();
         }
         var extendsRange = tag.getBoolean(TAG_SENTINEL_GREATER);
-        var position = HexUtils.DeserializeVec3FromNBT(tag.getLongArray(TAG_SENTINEL_POSITION));
+        var position = HexUtils.vecFromNBT(tag.getLongArray(TAG_SENTINEL_POSITION));
         var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
             new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
 
@@ -207,7 +207,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
         var ctx = new CastingContext(player, hand);
-        return CastingHarness.DeserializeFromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
+        return CastingHarness.fromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
     }
 
     @Override
@@ -217,7 +217,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         List<ResolvedPattern> patterns = new ArrayList<>(patternsTag.size());
 
         for (int i = 0; i < patternsTag.size(); i++) {
-            patterns.add(ResolvedPattern.DeserializeFromNBT(patternsTag.getCompound(i)));
+            patterns.add(ResolvedPattern.fromNBT(patternsTag.getCompound(i)));
         }
         return patterns;
     }

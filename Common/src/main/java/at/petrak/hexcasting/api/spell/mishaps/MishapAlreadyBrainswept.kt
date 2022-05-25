@@ -18,7 +18,7 @@ class MishapAlreadyBrainswept(val villager: Villager) : Mishap() {
     }
 
     override fun particleSpray(ctx: CastingContext): ParticleSpray {
-        return ParticleSpray.Burst(villager.eyePosition, 1.0)
+        return ParticleSpray.burst(villager.eyePosition, 1.0)
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =

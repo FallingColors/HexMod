@@ -32,8 +32,8 @@ public class BlockEntitySlate extends HexBlockEntity {
     protected void loadModData(CompoundTag tag) {
         if (tag.contains(TAG_PATTERN, Tag.TAG_COMPOUND)) {
             CompoundTag patternTag = tag.getCompound(TAG_PATTERN);
-            if (HexPattern.IsHexPattern(patternTag)) {
-                this.pattern = HexPattern.DeserializeFromNBT(patternTag);
+            if (HexPattern.isPattern(patternTag)) {
+                this.pattern = HexPattern.fromNBT(patternTag);
             } else {
                 this.pattern = null;
             }

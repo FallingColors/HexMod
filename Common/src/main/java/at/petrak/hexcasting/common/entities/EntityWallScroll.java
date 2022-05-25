@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.entities;
 
-import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -27,7 +26,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +58,7 @@ public class EntityWallScroll extends HangingEntity {
 
         CompoundTag patternTag = NBTHelper.getCompound(scroll, ItemScroll.TAG_PATTERN);
         if (patternTag != null) {
-            this.pattern = HexPattern.DeserializeFromNBT(patternTag);
+            this.pattern = HexPattern.fromNBT(patternTag);
             if (this.level.isClientSide) {
                 var pair = RenderLib.getCenteredPattern(pattern, 128, 128, 16f);
                 var dots = pair.getSecond();
@@ -160,7 +158,7 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putByte("direction", (byte) this.direction.ordinal());
-        tag.put("scroll", HexUtils.serialize(this.scroll));
+        tag.put("scroll", HexUtils.serializeToNBT(this.scroll));
         tag.putBoolean("showsStrokeOrder", this.getShowsStrokeOrder());
         super.addAdditionalSaveData(tag);
     }

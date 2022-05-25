@@ -39,12 +39,12 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
     public static MsgNewSpellPatternSyn deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var hand = buf.readEnum(InteractionHand.class);
-        var pattern = HexPattern.DeserializeFromNBT(buf.readAnySizeNbt());
+        var pattern = HexPattern.fromNBT(buf.readAnySizeNbt());
 
         var resolvedPatternsLen = buf.readInt();
         var resolvedPatterns = new ArrayList<ResolvedPattern>(resolvedPatternsLen);
         for (int i = 0; i < resolvedPatternsLen; i++) {
-            resolvedPatterns.add(ResolvedPattern.DeserializeFromNBT(buf.readAnySizeNbt()));
+            resolvedPatterns.add(ResolvedPattern.fromNBT(buf.readAnySizeNbt()));
         }
         return new MsgNewSpellPatternSyn(hand, pattern, resolvedPatterns);
     }

@@ -25,13 +25,13 @@ public record MsgColorizerUpdateAck(FrozenColorizer update) implements IMessage 
         var buf = new FriendlyByteBuf(buffer);
 
         var tag = buf.readAnySizeNbt();
-        var colorizer = FrozenColorizer.deserialize(tag);
+        var colorizer = FrozenColorizer.fromNBT(tag);
         return new MsgColorizerUpdateAck(colorizer);
     }
 
     @Override
     public void serialize(FriendlyByteBuf buf) {
-        buf.writeNbt(this.update.serialize());
+        buf.writeNbt(this.update.serializeToNBT());
     }
 
     public static void handle(MsgColorizerUpdateAck self) {

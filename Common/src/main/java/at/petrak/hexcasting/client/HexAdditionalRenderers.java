@@ -223,6 +223,7 @@ public class HexAdditionalRenderers {
                     if (text.isEmpty()) {
                         ps.translate(0, mc.font.lineHeight, 0);
                     }
+                    ps.translate(0, 6, 0);
                 }
 
                 ps.popPose();

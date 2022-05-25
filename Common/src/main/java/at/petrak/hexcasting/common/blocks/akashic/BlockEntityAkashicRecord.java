@@ -81,14 +81,14 @@ public class BlockEntityAkashicRecord extends HexBlockEntity {
         if (entry == null) {
             return null;
         } else {
-            return SpellDatum.DeserializeFromNBT(entry.datum, slevel);
+            return SpellDatum.fromNBT(entry.datum, slevel);
         }
     }
 
     public Component getDisplayAt(HexPattern key) {
         var entry = this.entries.get(getKey(key));
         if (entry != null) {
-            return SpellDatum.DisplayFromTag(entry.datum);
+            return SpellDatum.displayFromNBT(entry.datum);
         } else {
             return new TranslatableComponent("hexcasting.spelldata.akashic.nopos").withStyle(ChatFormatting.RED);
         }
