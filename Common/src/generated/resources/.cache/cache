@@ -207,6 +207,7 @@ df940dd798240fac6fde700c57f8ae6aa43d1c9e assets/hexcasting/models/item/artifact.
 1a66f279c030ebd5ed6a596f63205094b2529819 assets/hexcasting/models/item/artifact_filled.json
 1b3a4bd9dd3c2af2894e0acc1d9d3c74d16c7625 assets/hexcasting/models/item/battery.json
 dc72e3345c4375b37f3624040c9a8df435c958d1 assets/hexcasting/models/item/charged_amethyst.json
+1dd6767c74cd7ce5fed8e66476af1358db3cf7ce assets/hexcasting/models/item/creative_unlocker.json
 b9916a82d647db5d3c505de2eb5f0a528169e1db assets/hexcasting/models/item/cypher.json
 5082df8eee8f56f8c0d74db71ccda37a165bc76f assets/hexcasting/models/item/cypher_filled.json
 81c0a8098b595f9704e3b7b65f240bdd48457289 assets/hexcasting/models/item/directrix_redstone.json

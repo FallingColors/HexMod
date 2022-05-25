@@ -33,6 +33,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         simpleItem(HexItems.SUBMARINE_SANDWICH);
         simpleItem(HexItems.ABACUS);
         brandishedItem(HexItems.JEWELER_HAMMER);
+        simpleItem(HexItems.CREATIVE_UNLOCKER);
 
         simpleItem(modLoc("scroll_pristine"));
         simpleItem(modLoc("scroll_ancient"));

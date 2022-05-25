@@ -4,15 +4,15 @@ import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
-import at.petrak.hexcasting.common.items.magic.ItemArtifact;
-import at.petrak.hexcasting.common.items.magic.ItemCypher;
-import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
-import at.petrak.hexcasting.common.items.magic.ItemTrinket;
+import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tiers;
 
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
@@ -57,7 +57,8 @@ public class HexItems {
     public static final ItemTrinket TRINKET = make("trinket", new ItemTrinket(unstackable()));
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable()));
 
-    public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer", new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1)));
+    public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
+        new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1)));
 
     public static final ItemScroll SCROLL = make("scroll", new ItemScroll(props()));
 
@@ -84,6 +85,9 @@ public class HexItems {
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
         new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
+
+    public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
+        new ItemCreativeUnlocker(props()));
 
     //
 
