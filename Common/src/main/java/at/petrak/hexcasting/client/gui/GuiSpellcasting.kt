@@ -9,7 +9,8 @@ import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.otherHand
-import at.petrak.hexcasting.client.RenderLib
+import at.petrak.hexcasting.client.drawPatternFromPoints
+import at.petrak.hexcasting.client.drawSpot
 import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexItems
@@ -279,7 +280,7 @@ class GuiSpellcasting(
                     0f,
                     1f
                 )
-                RenderLib.drawSpot(
+                drawSpot(
                     mat,
                     dotPx,
                     scaledDist * 2f,
@@ -293,7 +294,7 @@ class GuiSpellcasting(
         RenderSystem.defaultBlendFunc()
 
         for ((pat, origin, valid) in this.patterns) {
-            RenderLib.drawPatternFromPoints(mat, pat.toLines(
+            drawPatternFromPoints(mat, pat.toLines(
                 this.hexSize(),
                 this.coordToPx(origin)
             ), true, valid.color or (0xC8 shl 24), valid.fadeColor or (0xC8 shl 24))
@@ -315,7 +316,7 @@ class GuiSpellcasting(
             }
 
             points.add(mousePos)
-            RenderLib.drawPatternFromPoints(mat, points, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt())
+            drawPatternFromPoints(mat, points, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt())
         }
 
         RenderSystem.setShader { prevShader }

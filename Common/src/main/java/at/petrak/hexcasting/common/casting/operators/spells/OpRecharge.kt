@@ -10,7 +10,8 @@ import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
-import at.petrak.hexcasting.api.utils.ManaHelper
+import at.petrak.hexcasting.api.utils.extractMana
+import at.petrak.hexcasting.api.utils.isManaItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
 
@@ -37,7 +38,7 @@ object OpRecharge : SpellOperator {
         val entity = args.getChecked<ItemEntity>(0, argc)
         ctx.assertEntityInRange(entity)
 
-        if (!ManaHelper.isManaItem(entity.item)) {
+        if (!isManaItem(entity.item)) {
             throw MishapBadItem.of(
                 entity,
                 "mana"
@@ -65,7 +66,7 @@ object OpRecharge : SpellOperator {
                 val maxMana = mana.maxMana
                 val existingMana = mana.mana
 
-                val manaAmt = ManaHelper.extractMana(entityStack, maxMana - existingMana)
+                val manaAmt = extractMana(entityStack, maxMana - existingMana)
 
                 mana.mana = manaAmt + existingMana
 

@@ -134,15 +134,15 @@ value class NbtListBuilder(val tag: ListTag) {
     }
 
     /**
-     * Add the given Tag<* tags to this list
+     * Add the given  tags to this list
      */
     inline operator fun Collection<Tag>.unaryPlus() {
         tag.addAll(this)
     }
 
     /**
-     * Add the given Tag<* tag to this list. This is explicitly defined for [ListTag] because otherwise there is overload
-     * ambiguity between the [Tag<*] and [Collection]<[Tag<*]> methods.
+     * Add the given  tag to this list. This is explicitly defined for [ListTag] because otherwise there is overload
+     * ambiguity between the [Tag] and [Collection]<Tag> methods.
      */
     inline operator fun ListTag.unaryPlus() {
         tag.add(this)

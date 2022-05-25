@@ -385,10 +385,10 @@ class CastingHarness private constructor(
             }
             if (casterStack.`is`(HexItemTags.WANDS) || ipsCanDrawFromInv) {
                 val manableItems = this.ctx.caster.inventory.items
-                    .filter(ManaHelper::isManaItem)
-                    .sortedWith(Comparator(ManaHelper::compare).reversed())
+                    .filter(::isManaItem)
+                    .sortedWith(Comparator(::compareManaItem).reversed())
                 for (stack in manableItems) {
-                    costLeft -= ManaHelper.extractMana(stack, costLeft)
+                    costLeft -= extractMana(stack, costLeft)
                     if (costLeft <= 0)
                         break
                 }

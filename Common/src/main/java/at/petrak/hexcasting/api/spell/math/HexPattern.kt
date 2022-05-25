@@ -23,15 +23,15 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
         var compass = this.startDir
         var cursor = HexCoord.Origin
         for (a in this.angles) {
-            linesSeen.add(Pair(cursor, compass))
+            linesSeen.add(cursor to compass)
             // Line from here to there also blocks there to here
-            linesSeen.add(Pair(cursor + compass, compass.rotatedBy(HexAngle.BACK)))
+            linesSeen.add(cursor + compass to compass.rotatedBy(HexAngle.BACK))
             cursor += compass
             compass *= a
         }
         cursor += compass
 
-        val potentialNewLine = Pair(cursor, newDir)
+        val potentialNewLine = cursor to newDir
         if (potentialNewLine in linesSeen) return false
         val nextAngle = newDir - compass
         if (nextAngle == HexAngle.BACK) return false
