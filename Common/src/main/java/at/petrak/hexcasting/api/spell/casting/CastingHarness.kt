@@ -12,12 +12,9 @@ import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
-import at.petrak.hexcasting.api.utils.ManaHelper
-import at.petrak.hexcasting.api.utils.asCompound
-import at.petrak.hexcasting.api.utils.getList
+import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -57,7 +54,7 @@ class CastingHarness private constructor(
         // Initialize the continuation stack to a single top-level eval for all iotas.
         var continuation = SpellContinuation.Done.pushFrame(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
         // Begin aggregating info
-        val info = TempControllerInfo(false, false)
+        val info = TempControllerInfo(playSound = false, earlyExit = false)
         var lastResolutionType = ResolvedPatternType.UNRESOLVED
         while (continuation is SpellContinuation.NotDone && !info.earlyExit) {
             // Take the top of the continuation stack...
@@ -431,29 +428,20 @@ class CastingHarness private constructor(
     }
 
 
-    fun serializeToNBT(): CompoundTag {
-        val out = CompoundTag()
-
-        val stackTag = ListTag()
-        for (datum in this.stack)
-            stackTag.add(datum.serializeToNBT())
-        out.put(TAG_STACK, stackTag)
-
-        out.put(TAG_LOCAL, localIota.serializeToNBT())
-
-        out.putInt(TAG_PAREN_COUNT, this.parenCount)
-        out.putBoolean(TAG_ESCAPE_NEXT, this.escapeNext)
-
-        val parensTag = ListTag()
-        for (pat in this.parenthesized)
-            parensTag.add(pat.serializeToNBT())
-        out.put(TAG_PARENTHESIZED, parensTag)
-
-        if (this.prepackagedColorizer != null) {
-            out.put(TAG_PREPACKAGED_COLORIZER, this.prepackagedColorizer.serializeToNBT())
+    fun serializeToNBT() = NBTBuilder {
+        TAG_STACK %= list {
+            for (datum in stack)
+                +datum.serializeToNBT()
         }
 
-        return out
+        TAG_LOCAL %= localIota.serializeToNBT()
+        TAG_PAREN_COUNT %= parenCount
+        TAG_ESCAPE_NEXT %= escapeNext
+
+        TAG_PARENTHESIZED %= parenthesized.serializeToNBT()
+
+        if (prepackagedColorizer != null)
+            TAG_PREPACKAGED_COLORIZER %= prepackagedColorizer.serializeToNBT()
     }
 
 

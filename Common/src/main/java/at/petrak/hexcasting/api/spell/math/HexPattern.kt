@@ -1,9 +1,8 @@
 package at.petrak.hexcasting.api.spell.math
 
-import at.petrak.hexcasting.api.utils.findCenter
+import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.coordToPx
-import net.minecraft.nbt.ByteArrayTag
-import net.minecraft.nbt.ByteTag
+import at.petrak.hexcasting.api.utils.findCenter
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.world.phys.Vec2
@@ -72,12 +71,9 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
         this.angles.fold(this.startDir) { acc, angle -> acc * angle }
 
 
-    fun serializeToNBT(): CompoundTag {
-        val out = CompoundTag()
-        out.put(TAG_START_DIR, ByteTag.valueOf(this.startDir.ordinal.toByte()))
-        val anglesTag = ByteArrayTag(this.angles.map { it.ordinal.toByte() })
-        out.put(TAG_ANGLES, anglesTag)
-        return out
+    fun serializeToNBT() = NBTBuilder {
+        TAG_START_DIR %= byte(startDir.ordinal)
+        TAG_ANGLES %= byteArray(*angles.map(HexAngle::ordinal).toIntArray())
     }
 
     // Terrible shorthand method for easy matching

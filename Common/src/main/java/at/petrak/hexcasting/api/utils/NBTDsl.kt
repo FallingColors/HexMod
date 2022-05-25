@@ -11,6 +11,7 @@ internal annotation class NBTDslMarker
 @NBTDslMarker
 object NBTBuilder {
     inline operator fun invoke(block: NbtCompoundBuilder.() -> Unit) = compound(block)
+    inline operator fun invoke(tag: CompoundTag, block: NbtCompoundBuilder.() -> Unit) = use(tag, block)
 
     inline fun use(tag: CompoundTag, block: NbtCompoundBuilder.() -> Unit): CompoundTag =
         NbtCompoundBuilder(tag).also(block).tag
@@ -65,6 +66,18 @@ value class NbtCompoundBuilder(val tag: CompoundTag) {
         tag.put(this, int(num))
     }
 
+    inline operator fun String.remAssign(num: Double) {
+        tag.put(this, double(num))
+    }
+
+    inline operator fun String.remAssign(num: Float) {
+        tag.put(this, float(num))
+    }
+
+    inline operator fun String.remAssign(bool: Boolean) {
+        tag.put(this, byte(if (bool) 1 else 0))
+    }
+
     // creating new tags
 
     inline fun compound(block: NbtCompoundBuilder.() -> Unit): CompoundTag =
@@ -106,16 +119,16 @@ value class NbtListBuilder(val tag: ListTag) {
     // configuring this tag
 
     /**
-     * Add the given Tag<* tag to this list
+     * Add the given tag to this list
      */
-    operator fun Tag.unaryPlus() {
+    inline operator fun Tag.unaryPlus() {
         tag.add(this)
     }
 
     /**
      * Add the given Tag<* tags to this list
      */
-    operator fun Collection<Tag>.unaryPlus() {
+    inline operator fun Collection<Tag>.unaryPlus() {
         tag.addAll(this)
     }
 
@@ -123,15 +136,15 @@ value class NbtListBuilder(val tag: ListTag) {
      * Add the given Tag<* tag to this list. This is explicitly defined for [ListTag] because otherwise there is overload
      * ambiguity between the [Tag<*] and [Collection]<[Tag<*]> methods.
      */
-    operator fun ListTag.unaryPlus() {
+    inline operator fun ListTag.unaryPlus() {
         tag.add(this)
     }
 
-    fun addAll(nbt: Collection<Tag>) {
+    inline fun addAll(nbt: Collection<Tag>) {
         this.tag.addAll(nbt)
     }
 
-    fun add(nbt: Tag) {
+    inline fun add(nbt: Tag) {
         this.tag.add(nbt)
     }
 

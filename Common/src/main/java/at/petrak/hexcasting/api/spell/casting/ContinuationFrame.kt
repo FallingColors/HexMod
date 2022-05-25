@@ -71,11 +71,9 @@ sealed interface ContinuationFrame {
             }
         }
 
-        override fun serializeToNBT(): CompoundTag {
-            return NBTBuilder {
-                "type" %= "evaluate"
-                "patterns" %= list.serializeToNBT()
-            }
+        override fun serializeToNBT() = NBTBuilder {
+            "type" %= "evaluate"
+            "patterns" %= list.serializeToNBT()
         }
     }
 

@@ -2,18 +2,17 @@ package at.petrak.hexcasting.api.spell.casting
 
 import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.utils.NBTBuilder
 import net.minecraft.nbt.CompoundTag
 import java.util.*
 
 
 data class ResolvedPattern(val pattern: HexPattern, val origin: HexCoord, var type: ResolvedPatternType) {
-    fun serializeToNBT(): CompoundTag {
-        val tag = CompoundTag()
-        tag.put("Pattern", pattern.serializeToNBT())
-        tag.putInt("OriginQ", origin.q)
-        tag.putInt("OriginR", origin.r)
-        tag.putString("Valid", type.name.lowercase(Locale.ROOT))
-        return tag
+    fun serializeToNBT() = NBTBuilder {
+        "Pattern" %= pattern.serializeToNBT()
+        "OriginQ" %= origin.q
+        "OriginR" %= origin.r
+        "Valid" %= type.name.lowercase(Locale.ROOT)
     }
 
     companion object {

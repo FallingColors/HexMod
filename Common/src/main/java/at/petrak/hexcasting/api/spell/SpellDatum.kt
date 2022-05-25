@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidSpellDatumType
 import at.petrak.hexcasting.api.utils.*
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.DoubleTag
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
@@ -34,36 +33,19 @@ import java.util.*
 class SpellDatum<T : Any> private constructor(val payload: T) {
     val clazz: Class<T> = payload.javaClass
 
-    fun serializeToNBT(): CompoundTag {
-        val out = CompoundTag()
-        when (val pl = this.payload) {
-            is Entity -> {
-                val subtag = CompoundTag()
-                subtag.put(TAG_ENTITY_UUID, NbtUtils.createUUID(pl.uuid))
-                // waayyghg
-                val json = Component.Serializer.toJson(pl.displayName)
-                subtag.putString(TAG_ENTITY_NAME_CHEATY, json)
-                out.put(TAG_ENTITY, subtag)
+    fun serializeToNBT() = NBTBuilder {
+        when (val pl = payload) {
+            is Entity -> TAG_ENTITY %= compound {
+                TAG_ENTITY_UUID %= NbtUtils.createUUID(pl.uuid)
+                TAG_ENTITY_NAME_CHEATY %= Component.Serializer.toJson(pl.displayName)
             }
-            is Double -> out.put(
-                TAG_DOUBLE, DoubleTag.valueOf(pl)
-            )
-            is Vec3 -> out.put(
-                TAG_VEC3, pl.serializeToNBT()
-            )
-            is SpellList -> {
-                out.put(TAG_LIST, pl.serializeToNBT())
-            }
-            is Widget -> {
-                out.putString(TAG_WIDGET, pl.name)
-            }
-            is HexPattern -> {
-                out.put(TAG_PATTERN, pl.serializeToNBT())
-            }
+            is Double -> TAG_DOUBLE %= pl
+            is Vec3 -> TAG_VEC3 %= pl.serializeToNBT()
+            is SpellList -> TAG_LIST %= pl.serializeToNBT()
+            is Widget -> TAG_WIDGET %= pl.name
+            is HexPattern -> TAG_PATTERN %= pl.serializeToNBT()
             else -> throw RuntimeException("cannot serialize $pl because it is of type ${pl.javaClass.canonicalName} which is not serializable")
         }
-
-        return out
     }
 
     override fun toString(): String =
