@@ -1,0 +1,33 @@
+{
+  "parent": "hexcasting:y_u_no_cast_angy",
+  "display": {
+    "icon": {
+      "item": "minecraft:ender_eye"
+    },
+    "title": {
+      "translate": "advancement.hexcasting:opened_eyes"
+    },
+    "description": {
+      "translate": "advancement.hexcasting:opened_eyes.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "health_used": {
+      "trigger": "hexcasting:overcast",
+      "conditions": {
+        "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion": {
+          "min": 0.1
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "health_used"
+    ]
+  ]
+}

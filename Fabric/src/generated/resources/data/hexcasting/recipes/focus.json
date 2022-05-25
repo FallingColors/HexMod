@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DCD",
+    "CIC",
+    "DCD"
+  ],
+  "key": {
+    "C": [
+      {
+        "item": "minecraft:glowstone_dust"
+      },
+      {
+        "tag": "c:glowstone_dusts"
+      }
+    ],
+    "D": {
+      "item": "minecraft:leather"
+    },
+    "I": {
+      "item": "hexcasting:charged_amethyst"
+    }
+  },
+  "result": {
+    "item": "hexcasting:focus"
+  }
+}

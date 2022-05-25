@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "CIC",
+    " C "
+  ],
+  "key": {
+    "C": [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "tag": "c:iron_ingots"
+      }
+    ],
+    "I": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "result": {
+    "item": "hexcasting:trinket"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PSS",
+    "BAB",
+    "SSP"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "A": {
+      "item": "hexcasting:charged_amethyst"
+    },
+    "S": {
+      "item": "hexcasting:slate_block"
+    },
+    "P": {
+      "item": "minecraft:purpur_block"
+    }
+  },
+  "result": {
+    "item": "hexcasting:empty_impetus"
+  }
+}

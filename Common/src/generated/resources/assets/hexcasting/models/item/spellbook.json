@@ -1,0 +1,102 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "hexcasting:datatype": 0.0,
+        "hexcasting:sealed": 0.0
+      },
+      "model": "hexcasting:item/spellbook_empty"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 1.0,
+        "hexcasting:sealed": 0.0
+      },
+      "model": "hexcasting:item/spellbook_entity"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 2.0,
+        "hexcasting:sealed": 0.0
+      },
+      "model": "hexcasting:item/spellbook_double"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 3.0,
+        "hexcasting:sealed": 0.0
+      },
+      "model": "hexcasting:item/spellbook_vec3"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 4.0,
+        "hexcasting:sealed": 0.0
+      },
+      "model": "hexcasting:item/spellbook_widget"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 5.0,
+        "hexcasting:sealed": 0.0
+      },
+      "model": "hexcasting:item/spellbook_list"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 6.0,
+        "hexcasting:sealed": 0.0
+      },
+      "model": "hexcasting:item/spellbook_pattern"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 0.0,
+        "hexcasting:sealed": 1.0
+      },
+      "model": "hexcasting:item/spellbook_empty_sealed"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 1.0,
+        "hexcasting:sealed": 1.0
+      },
+      "model": "hexcasting:item/spellbook_entity_sealed"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 2.0,
+        "hexcasting:sealed": 1.0
+      },
+      "model": "hexcasting:item/spellbook_double_sealed"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 3.0,
+        "hexcasting:sealed": 1.0
+      },
+      "model": "hexcasting:item/spellbook_vec3_sealed"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 4.0,
+        "hexcasting:sealed": 1.0
+      },
+      "model": "hexcasting:item/spellbook_widget_sealed"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 5.0,
+        "hexcasting:sealed": 1.0
+      },
+      "model": "hexcasting:item/spellbook_list_sealed"
+    },
+    {
+      "predicate": {
+        "hexcasting:datatype": 6.0,
+        "hexcasting:sealed": 1.0
+      },
+      "model": "hexcasting:item/spellbook_pattern_sealed"
+    }
+  ]
+}

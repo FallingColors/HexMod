@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    " D ",
+    " B "
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:bowl"
+    },
+    "D": {
+      "item": "hexcasting:amethyst_dust"
+    },
+    "C": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "hexcasting:pride_colorizer_2"
+  }
+}

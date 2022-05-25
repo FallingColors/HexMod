@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "axis=x,energized=false": {
+      "model": "hexcasting:block/empty_directrix_dim_x"
+    },
+    "axis=y,energized=false": {
+      "model": "hexcasting:block/empty_directrix_dim_y"
+    },
+    "axis=z,energized=false": {
+      "model": "hexcasting:block/empty_directrix_dim_z"
+    },
+    "axis=x,energized=true": {
+      "model": "hexcasting:block/empty_directrix_lit_x"
+    },
+    "axis=y,energized=true": {
+      "model": "hexcasting:block/empty_directrix_lit_y"
+    },
+    "axis=z,energized=true": {
+      "model": "hexcasting:block/empty_directrix_lit_z"
+    }
+  }
+}

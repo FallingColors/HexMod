@@ -1,0 +1,122 @@
+{
+  "variants": {
+    "energized=false,face=floor,facing=north": {
+      "model": "hexcasting:block/slate",
+      "uvlock": true
+    },
+    "energized=true,face=floor,facing=north": {
+      "model": "hexcasting:block/slate",
+      "uvlock": true
+    },
+    "energized=false,face=wall,facing=north": {
+      "model": "hexcasting:block/slate",
+      "x": 90,
+      "uvlock": true
+    },
+    "energized=true,face=wall,facing=north": {
+      "model": "hexcasting:block/slate",
+      "x": 90,
+      "uvlock": true
+    },
+    "energized=false,face=ceiling,facing=north": {
+      "model": "hexcasting:block/slate",
+      "x": 180,
+      "uvlock": true
+    },
+    "energized=true,face=ceiling,facing=north": {
+      "model": "hexcasting:block/slate",
+      "x": 180,
+      "uvlock": true
+    },
+    "energized=false,face=floor,facing=south": {
+      "model": "hexcasting:block/slate",
+      "uvlock": true
+    },
+    "energized=true,face=floor,facing=south": {
+      "model": "hexcasting:block/slate",
+      "uvlock": true
+    },
+    "energized=false,face=wall,facing=south": {
+      "model": "hexcasting:block/slate",
+      "x": 90,
+      "y": 180,
+      "uvlock": true
+    },
+    "energized=true,face=wall,facing=south": {
+      "model": "hexcasting:block/slate",
+      "x": 90,
+      "y": 180,
+      "uvlock": true
+    },
+    "energized=false,face=ceiling,facing=south": {
+      "model": "hexcasting:block/slate",
+      "x": 180,
+      "uvlock": true
+    },
+    "energized=true,face=ceiling,facing=south": {
+      "model": "hexcasting:block/slate",
+      "x": 180,
+      "uvlock": true
+    },
+    "energized=false,face=floor,facing=west": {
+      "model": "hexcasting:block/slate",
+      "uvlock": true
+    },
+    "energized=true,face=floor,facing=west": {
+      "model": "hexcasting:block/slate",
+      "uvlock": true
+    },
+    "energized=false,face=wall,facing=west": {
+      "model": "hexcasting:block/slate",
+      "x": 90,
+      "y": 270,
+      "uvlock": true
+    },
+    "energized=true,face=wall,facing=west": {
+      "model": "hexcasting:block/slate",
+      "x": 90,
+      "y": 270,
+      "uvlock": true
+    },
+    "energized=false,face=ceiling,facing=west": {
+      "model": "hexcasting:block/slate",
+      "x": 180,
+      "uvlock": true
+    },
+    "energized=true,face=ceiling,facing=west": {
+      "model": "hexcasting:block/slate",
+      "x": 180,
+      "uvlock": true
+    },
+    "energized=false,face=floor,facing=east": {
+      "model": "hexcasting:block/slate",
+      "uvlock": true
+    },
+    "energized=true,face=floor,facing=east": {
+      "model": "hexcasting:block/slate",
+      "uvlock": true
+    },
+    "energized=false,face=wall,facing=east": {
+      "model": "hexcasting:block/slate",
+      "x": 90,
+      "y": 90,
+      "uvlock": true
+    },
+    "energized=true,face=wall,facing=east": {
+      "model": "hexcasting:block/slate",
+      "x": 90,
+      "y": 90,
+      "uvlock": true
+    },
+    "energized=false,face=ceiling,facing=east": {
+      "model": "hexcasting:block/slate",
+      "x": 180,
+      "uvlock": true
+    },
+    "energized=true,face=ceiling,facing=east": {
+      "model": "hexcasting:block/slate",
+      "x": 180,
+      "uvlock": true
+    }
+  }
+}

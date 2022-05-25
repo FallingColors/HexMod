@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "hexcasting:block/akashic_slab_top"
+    },
+    "type=bottom": {
+      "model": "hexcasting:block/akashic_slab"
+    },
+    "type=double": {
+      "model": "hexcasting:block/akashic_planks1"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LPL",
+    "CCC",
+    "LPL"
+  ],
+  "key": {
+    "L": {
+      "tag": "hexcasting:akashic_logs"
+    },
+    "P": {
+      "tag": "hexcasting:akashic_planks"
+    },
+    "C": {
+      "item": "minecraft:book"
+    }
+  },
+  "result": {
+    "item": "hexcasting:akashic_bookshelf"
+  }
+}

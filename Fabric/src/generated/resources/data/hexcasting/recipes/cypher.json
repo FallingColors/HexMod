@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "CIC",
+    " C "
+  ],
+  "key": {
+    "C": [
+      {
+        "item": "minecraft:copper_ingot"
+      },
+      {
+        "tag": "c:copper_ingots"
+      }
+    ],
+    "I": {
+      "item": "hexcasting:amethyst_dust"
+    }
+  },
+  "result": {
+    "item": "hexcasting:cypher"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "hexcasting:akashic_logs"
+    }
+  ],
+  "result": {
+    "item": "hexcasting:akashic_planks",
+    "count": 4
+  }
+}

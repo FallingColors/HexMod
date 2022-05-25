@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NBA",
+    "NFA",
+    "NBA"
+  ],
+  "key": {
+    "N": [
+      {
+        "item": "minecraft:gold_nugget"
+      },
+      {
+        "tag": "c:gold_nuggets"
+      }
+    ],
+    "B": {
+      "item": "minecraft:writable_book"
+    },
+    "A": {
+      "item": "hexcasting:charged_amethyst"
+    },
+    "F": {
+      "item": "minecraft:chorus_fruit"
+    }
+  },
+  "result": {
+    "item": "hexcasting:spellbook"
+  }
+}
