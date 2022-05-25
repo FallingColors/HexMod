@@ -1,4 +1,4 @@
-# Hex
+# Hex Casting
 
 A minecraft mod about casting Hexes, powerful and programmable magical effects, inspired by PSI.
 
@@ -6,3 +6,4 @@ A minecraft mod about casting Hexes, powerful and programmable magical effects, 
 
 This mod requires PAUCAL, Patchouli and Kotlin for Forge!
 
+## [Read the documentation online here!](https://gamma-delta.github.io/HexMod/)
