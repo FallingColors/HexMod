@@ -30,6 +30,7 @@ object NBTBuilder {
 
     inline fun list(vararg elements: Tag): ListTag = ListTag().also { it.addAll(elements) }
     inline fun list(elements: Collection<Tag>): ListTag = ListTag().also { it.addAll(elements) }
+    inline fun <T> list(elements: Collection<T>, mapper: (T) -> Tag): ListTag = ListTag().also { it.addAll(elements.map(mapper)) }
 
     inline fun double(value: Number): DoubleTag = DoubleTag.valueOf(value.toDouble())
     inline fun float(value: Number): FloatTag = FloatTag.valueOf(value.toFloat())
@@ -97,6 +98,7 @@ value class NbtCompoundBuilder(val tag: CompoundTag) {
 
     inline fun list(vararg elements: Tag): ListTag = ListTag().also { it.addAll(elements) }
     inline fun list(elements: Collection<Tag>): ListTag = ListTag().also { it.addAll(elements) }
+    inline fun <T> list(elements: Collection<T>, mapper: (T) -> Tag): ListTag = ListTag().also { it.addAll(elements.map(mapper)) }
 
     inline fun double(value: Number): DoubleTag = DoubleTag.valueOf(value.toDouble())
     inline fun float(value: Number): FloatTag = FloatTag.valueOf(value.toFloat())
@@ -170,6 +172,7 @@ value class NbtListBuilder(val tag: ListTag) {
 
     inline fun list(vararg elements: Tag): ListTag = ListTag().also { it.addAll(elements) }
     inline fun list(elements: Collection<Tag>): ListTag = ListTag().also { it.addAll(elements) }
+    inline fun <T> list(elements: Collection<T>, mapper: (T) -> Tag): ListTag = ListTag().also { it.addAll(elements.map(mapper)) }
 
     inline fun double(value: Number): DoubleTag = DoubleTag.valueOf(value.toDouble())
     inline fun float(value: Number): FloatTag = FloatTag.valueOf(value.toFloat())

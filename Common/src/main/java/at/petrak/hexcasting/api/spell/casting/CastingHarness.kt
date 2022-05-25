@@ -429,10 +429,7 @@ class CastingHarness private constructor(
 
 
     fun serializeToNBT() = NBTBuilder {
-        TAG_STACK %= list {
-            for (datum in stack)
-                +datum.serializeToNBT()
-        }
+        TAG_STACK %= stack.serializeToNBT()
 
         TAG_LOCAL %= localIota.serializeToNBT()
         TAG_PAREN_COUNT %= parenCount
