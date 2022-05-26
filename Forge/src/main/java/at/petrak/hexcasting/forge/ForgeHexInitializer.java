@@ -71,7 +71,6 @@ public class ForgeHexInitializer {
         initConfig();
         initRegistry();
         initListeners();
-
     }
 
     private static void initConfig() {
