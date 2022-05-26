@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.datagen.xplat;
+package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.FailToCastGreatSpellTrigger;
@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.advancements.SpendManaTrigger;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.paucal.api.forge.datagen.PaucalAdvancementProvider;
+import at.petrak.paucal.api.datagen.PaucalAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.advancements.FrameType;
@@ -18,17 +18,16 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
 
 public class HexAdvancements extends PaucalAdvancementProvider {
-    public HexAdvancements(DataGenerator generatorIn, ExistingFileHelper fileHelperIn) {
-        super(generatorIn, fileHelperIn, HexAPI.MOD_ID);
+    public HexAdvancements(DataGenerator generatorIn) {
+        super(generatorIn, HexAPI.MOD_ID);
     }
 
     @Override
-    protected void registerAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper) {
+    protected void makeAdvancements(Consumer<Advancement> consumer) {
         var root = Advancement.Builder.advancement()
             // what an ergonomic design decision
             // i am so happy that data generators are the future

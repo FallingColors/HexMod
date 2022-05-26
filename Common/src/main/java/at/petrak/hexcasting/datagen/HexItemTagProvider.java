@@ -3,30 +3,20 @@ package at.petrak.hexcasting.datagen;
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.lib.HexBlockTags;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.mixin.AccessorTagsProvider;
 import at.petrak.hexcasting.xplat.IXplatTags;
-import net.minecraft.core.Registry;
+import at.petrak.paucal.api.datagen.PaucalItemTagProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
-import java.util.function.Function;
-
-// ForgeCopy, mostly
-public class HexItemTagProvider extends TagsProvider<Item> {
-    private final Function<TagKey<Block>, Tag.Builder> blockTags;
+public class HexItemTagProvider extends PaucalItemTagProvider {
     private final IXplatTags xtags;
 
-
     public HexItemTagProvider(DataGenerator pGenerator, TagsProvider<Block> pBlockTagsProvider, IXplatTags xtags) {
-        super(pGenerator, Registry.ITEM);
-        this.blockTags = tag -> ((AccessorTagsProvider<Block>) pBlockTagsProvider).hex$getOrCreateRawBuilder(tag);
+        super(pGenerator, pBlockTagsProvider);
         this.xtags = xtags;
     }
 
@@ -56,12 +46,6 @@ public class HexItemTagProvider extends TagsProvider<Item> {
         this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
         this.copy(BlockTags.BUTTONS, ItemTags.BUTTONS);
         this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
-    }
-
-    protected void copy(TagKey<Block> p_206422_, TagKey<Item> p_206423_) {
-        Tag.Builder tag$builder = this.getOrCreateRawBuilder(p_206423_);
-        Tag.Builder tag$builder1 = this.blockTags.apply(p_206422_);
-        tag$builder1.getEntries().forEach(tag$builder::add);
     }
 
     @Override

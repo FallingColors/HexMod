@@ -87,6 +87,7 @@ minecraft {
             args '--mod', modID, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'hexcasting.forge_datagen', 'true'
             mods {
                 create(modID) {
                     source sourceSets.main

@@ -17,7 +17,6 @@ import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
-import com.google.gson.JsonObject;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -29,9 +28,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.HashCache;
-import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -56,7 +52,6 @@ import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -283,11 +278,6 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public Item.Properties addEquipSlotFabric(EquipmentSlot slot) {
         return new FabricItemSettings().equipmentSlot(s -> slot);
-    }
-
-    @Override
-    public void saveRecipeAdvancement(DataGenerator generator, HashCache cache, JsonObject json, Path path) {
-        RecipeProvider.saveAdvancement(cache, json, path);
     }
 
     private static final IXplatTags TAGS = new IXplatTags() {

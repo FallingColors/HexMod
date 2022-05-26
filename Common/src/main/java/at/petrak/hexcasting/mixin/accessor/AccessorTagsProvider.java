@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.mixin;
+package at.petrak.hexcasting.mixin.accessor;
 
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.Tag;

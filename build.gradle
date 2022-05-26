@@ -192,9 +192,3 @@ task sendWebhook {
         }
     }
 }
-
-task runAllDatagen {
-    dependsOn "Forge:runXplatDatagen"
-    dependsOn "Forge:runForgeDatagen"
-    dependsOn "Fabric:runDatagen"
-}

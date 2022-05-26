@@ -3,17 +3,15 @@ package at.petrak.hexcasting.datagen;
 import at.petrak.hexcasting.common.lib.HexBlockTags;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.xplat.IXplatTags;
-import net.minecraft.core.Registry;
+import at.petrak.paucal.api.datagen.PaucalBlockTagProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Block;
 
-public class HexBlockTagProvider extends TagsProvider<Block> {
+public class HexBlockTagProvider extends PaucalBlockTagProvider {
     public final IXplatTags xtags;
 
     public HexBlockTagProvider(DataGenerator pGenerator, IXplatTags xtags) {
-        super(pGenerator, Registry.BLOCK);
+        super(pGenerator);
         this.xtags = xtags;
     }
 

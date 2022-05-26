@@ -11,6 +11,7 @@
   "result": {
     "name": "hexcasting:impetus_storedplayer",
     "properties": {
+      "powered": "true",
       "facing": "north",
       "energized": "false"
     }
