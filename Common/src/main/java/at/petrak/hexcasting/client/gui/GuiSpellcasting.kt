@@ -297,7 +297,7 @@ class GuiSpellcasting(
             drawPatternFromPoints(mat, pat.toLines(
                 this.hexSize(),
                 this.coordToPx(origin)
-            ), true, valid.color or (0xC8 shl 24), valid.fadeColor or (0xC8 shl 24))
+            ), true, valid.color or (0xC8 shl 24), valid.fadeColor or (0xC8 shl 24), if (valid.success) 0.2f else 0.9f)
         }
 
         // Now draw the currently WIP pattern
@@ -316,7 +316,7 @@ class GuiSpellcasting(
             }
 
             points.add(mousePos)
-            drawPatternFromPoints(mat, points, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt())
+            drawPatternFromPoints(mat, points, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt(), 0.1f)
         }
 
         RenderSystem.setShader { prevShader }

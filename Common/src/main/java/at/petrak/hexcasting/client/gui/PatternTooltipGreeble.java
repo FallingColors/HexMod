@@ -43,7 +43,7 @@ public class PatternTooltipGreeble implements ClientTooltipComponent, TooltipCom
         var pair = RenderLib.getCenteredPattern(pattern, SIZE, SIZE, 8f);
         this.scale = pair.getFirst();
         var dots = pair.getSecond();
-        this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f);
+        this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f, 0f);
         this.pathfinderDots = dots.stream().distinct().collect(Collectors.toList());
     }
 

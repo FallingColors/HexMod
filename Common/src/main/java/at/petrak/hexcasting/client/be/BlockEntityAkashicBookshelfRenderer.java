@@ -73,7 +73,7 @@ public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<
             lines2.set(j, new Vec2(-v.x, v.y));
         }
 
-        var zappy = RenderLib.makeZappy(lines2, 10f, 0.5f, 0f);
+        var zappy = RenderLib.makeZappy(lines2, 10f, 0.5f, 0f, 0f);
 
         int outer = 0xff_d2c8c8;
         int inner = 0xc8_322b33;

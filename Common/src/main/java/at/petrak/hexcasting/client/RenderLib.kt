@@ -122,9 +122,9 @@ fun drawLineSeq(
 }
 
 /**
- * Draw a hex pattern from the given list of non-zappy points (as in, do the *style* of drawing it,
- * you have to do the conversion yourself.)
- */
+ *  * Draw a hex pattern from the given list of non-zappy points (as in, do the *style* of drawing it,
+ *   * you have to do the conversion yourself.)
+ *    */
 @JvmOverloads
 fun drawPatternFromPoints(
     mat: Matrix4f,
@@ -132,9 +132,10 @@ fun drawPatternFromPoints(
     drawLast: Boolean,
     tail: Int,
     head: Int,
+    flowIrregular: Float,
     animTime: Float? = null
 ) {
-    val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f)
+    val zappyPts = makeZappy(points, 10f, 2.5f, 0.1f, flowIrregular)
     val nodes = if (drawLast) {
         points
     } else {
@@ -160,40 +161,38 @@ fun drawPatternFromPoints(
  * @param hops: rough number of points to subdivide each segment into
  * @param speed: rate at which the lightning effect should move/shake/etc
  */
-fun makeZappy(points: List<Vec2>, hops: Float, variance: Float, speed: Float): List<Vec2> {
+fun makeZappy(points: List<Vec2>, hops: Float, variance: Float, speed: Float, flowIrregular: Float): List<Vec2> {
     // Nothing in, nothing out
     if (points.isEmpty()) {
         return emptyList()
     }
-    val zSeed = (ClientTickCounter.total.toDouble()) * speed
+    val scaleVariance = { it: Double -> Math.min(1.0, 8 * (0.5 - Math.abs(0.5 - it))) }
+    val hops = hops.toInt()
+    val zSeed = ClientTickCounter.total.toDouble() * speed
     // Create our output list of zap points
     val zappyPts = mutableListOf(points[0])
     // For each segment in the original...
     for ((i, pair) in points.zipWithNext().withIndex()) {
         val (src, target) = pair
-        // Compute distance-squared to the destination, then scale it down by # of hops
-        // to know how long each individual hop should be (squared)
-        val hopDistSqr = src.distanceToSqr(target) / (hops * hops)
-        // Then take the square root to find the actual hop distance
-        val hopDist = Mth.sqrt(hopDistSqr)
+        val delta = target.add(src.negated())
+        // Take hop distance
+        val hopDist = Mth.sqrt(src.distanceToSqr(target)) / hops
         // Compute how big the radius of variance should be
         val maxVariance = hopDist * variance
 
-        var position = src
-        var j = 0
-        while (position.distanceToSqr(target) > hopDistSqr) {
+        for (j in 1..hops) {
+            val progress = j.toDouble() / (hops + 1)
             // Add the next hop...
-            val hop = target.add(position.negated()).normalized().scale(hopDist)
+            val pos = src.add(delta.scale(progress.toFloat()))
             // as well as some random variance...
             // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
             // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
-            val theta = (3 * NOISE.getValue(i.toDouble(), j.toDouble(), zSeed) * TAU).toFloat()
-            val r = NOISE.getValue(i.inv().toDouble(), j.toDouble(), zSeed).toFloat() * maxVariance
+            val minorPerturb = NOISE.getValue(i.toDouble(), j.toDouble(), Math.sin(zSeed)) * flowIrregular
+            val theta = (3 * NOISE.getValue(i.toDouble() + j.toDouble() / (hops + 1) + minorPerturb - zSeed, 1337.0, 0.0) * TAU).toFloat()
+            val r = (NOISE.getValue(i.toDouble() + j.toDouble() / (hops + 1) - zSeed, 69420.0, 0.0) * maxVariance * scaleVariance(progress)).toFloat()
             val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
-            position = position.add(hop).add(randomHop)
             // Then record the new location.
-            zappyPts.add(position)
-            j += 1
+            zappyPts.add(pos.add(randomHop))
         }
         // Finally, we hit the destination, add that too
         zappyPts.add(target)
