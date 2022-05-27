@@ -126,6 +126,6 @@ public class ConjureParticle extends TextureSheetParticle {
         }
     }
 
-    private static final ConjureRenderType CONJURE_RENDER_TYPE = new ConjureRenderType(false);
-    private static final ConjureRenderType LIGHT_RENDER_TYPE = new ConjureRenderType(true);
+    public static final ConjureRenderType CONJURE_RENDER_TYPE = new ConjureRenderType(false);
+    public static final ConjureRenderType LIGHT_RENDER_TYPE = new ConjureRenderType(true);
 }

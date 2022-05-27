@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.ManaHolderItem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -82,8 +83,8 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
         TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TranslatableComponent("item.hexcasting.creative_unlocker.tooltip.0"));
-        tooltipComponents.add(new TranslatableComponent("item.hexcasting.creative_unlocker.tooltip.1"));
+        tooltipComponents.add(new TranslatableComponent("item.hexcasting.creative_unlocker.tooltip.0").withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(new TranslatableComponent("item.hexcasting.creative_unlocker.tooltip.1").withStyle(ChatFormatting.GRAY));
     }
 
     private static void addChildren(Advancement root, List<Advancement> out) {
