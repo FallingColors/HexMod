@@ -132,6 +132,13 @@ subprojects {
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()
     java.withJavadocJar()
+
+    processResources {
+        duplicatesStrategy 'exclude'
+    }
+    sourcesJar {
+        duplicatesStrategy 'exclude'
+    }
 }
 
 allprojects { gradle.projectsEvaluated { tasks.withType(JavaCompile) { options.compilerArgs << "-Xmaxerrs" << "1000" } } }
