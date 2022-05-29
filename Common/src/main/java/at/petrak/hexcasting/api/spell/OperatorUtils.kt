@@ -1,4 +1,5 @@
 @file:JvmName("OperatorUtils")
+
 package at.petrak.hexcasting.api.spell
 
 import at.petrak.hexcasting.api.spell.math.HexPattern
@@ -90,6 +91,7 @@ private fun Any.tolerantEquals(other: Any, recursionsLeft: Int): Boolean {
                     return false
             true
         }
+        this is Entity && other is Entity -> this.uuid == other.uuid
         else -> this == other
     }
 }

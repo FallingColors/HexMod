@@ -29,15 +29,15 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
-modId = "patchouli"
+modId = "paucal"
 mandatory = true
-versionRange = "[1.18.2-66,)"
+versionRange = "[0.4.4,0.5.0)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
-modId = "paucal"
+modId = "patchouli"
 mandatory = true
-versionRange = "[0.4.0,0.5.0)"
+versionRange = "[1.18.2-67,)"
 ordering = "NONE"
 side = "BOTH"

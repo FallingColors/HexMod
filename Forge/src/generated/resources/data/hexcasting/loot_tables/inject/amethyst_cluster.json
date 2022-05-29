@@ -22,6 +22,12 @@
               ]
             }
           }
+        },
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "tag": "minecraft:cluster_max_harvestables"
+          }
         }
       ],
       "functions": [
@@ -62,6 +68,12 @@
                 }
               ]
             }
+          }
+        },
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "tag": "minecraft:cluster_max_harvestables"
           }
         },
         {
