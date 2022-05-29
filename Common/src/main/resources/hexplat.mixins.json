@@ -5,8 +5,19 @@
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
-    "MixinMob", "MixinRaider", "MixinReloadableServerResources", "MixinVillager", "MixinWitch",
-    "accessor.AccessorLivingEntity", "accessor.AccessorLootTable", "accessor.AccessorRecipeProvider",
-    "accessor.AccessorTagsProvider", "accessor.AccessorUseOnContext", "accessor.CriteriaTriggersAccessor"
+    "MixinMob",
+    "MixinRaider",
+    "MixinReloadableServerResources",
+    "MixinVillager",
+    "MixinWitch",
+    "accessor.AccessorLivingEntity",
+    "accessor.AccessorLootTable",
+    "accessor.AccessorRecipeProvider",
+    "accessor.AccessorTagsProvider",
+    "accessor.AccessorUseOnContext",
+    "accessor.CriteriaTriggersAccessor"
+  ],
+  "client": [
+    "client.MixinClientLevel"
   ]
 }

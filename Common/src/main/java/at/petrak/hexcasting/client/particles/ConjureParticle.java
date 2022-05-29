@@ -42,7 +42,7 @@ public class ConjureParticle extends TextureSheetParticle {
         this.setAlpha(a / 255f * lightness);
 
         this.friction = 0.96F;
-        this.gravity = light ? -0.01F : 0F;
+        this.gravity = light && dy != 0 && dx != 0 && dz != 0 ? -0.01F : 0F;
         this.speedUpWhenYMotionIsBlocked = true;
         this.sprites = pSprites;
 
