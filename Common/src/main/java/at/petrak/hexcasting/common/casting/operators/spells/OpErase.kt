@@ -20,19 +20,22 @@ class OpErase : SpellOperator {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-            (hexHolder?.hasHex() != true) ||
-                    (datumHolder?.writeDatum(null, true) ?: false)
+            (hexHolder?.hasHex() == true) ||
+                    (datumHolder?.writeDatum(null, true) == true)
         }
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
 
         if ((hexHolder?.getHex(ctx.world) == null) &&
-            (datumHolder?.writeDatum(null, true) == true)) {
+            (datumHolder?.writeDatum(null, true) == false)
+        ) {
             throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
         }
 
-        return Triple(Spell,
-            ManaConstants.DUST_UNIT, listOf())
+        return Triple(
+            Spell,
+            ManaConstants.DUST_UNIT, listOf()
+        )
     }
 
     private object Spell : RenderedSpell {
@@ -41,8 +44,8 @@ class OpErase : SpellOperator {
                 val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
                 val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-                (hexHolder?.hasHex() != true) ||
-                        (datumHolder?.writeDatum(null, true) ?: false)
+                (hexHolder?.hasHex() == true) ||
+                        (datumHolder?.writeDatum(null, true) == true)
             }
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)

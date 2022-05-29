@@ -61,16 +61,18 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     public @Nullable List<SpellDatum<?>> getHex(ItemStack stack, ServerLevel level) {
         var patsTag = NBTHelper.getList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
 
-        if (patsTag == null)
+        if (patsTag == null) {
             return null;
+        }
 
         var out = new ArrayList<SpellDatum<?>>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
-            if (tag.size() != 1)
+            if (tag.size() != 1) {
                 out.add(SpellDatum.make(HexPattern.fromNBT(tag)));
-            else
+            } else {
                 out.add(SpellDatum.fromNBT(tag, level));
+            }
         }
         return out;
     }
@@ -78,8 +80,9 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     @Override
     public void writeHex(ItemStack stack, List<SpellDatum<?>> patterns, int mana) {
         ListTag patsTag = new ListTag();
-        for (SpellDatum<?> pat : patterns)
+        for (SpellDatum<?> pat : patterns) {
             patsTag.add(pat.serializeToNBT());
+        }
 
         NBTHelper.putList(stack, TAG_PATTERNS, patsTag);
 
@@ -89,7 +92,8 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     @Override
     public void clearHex(ItemStack stack) {
         NBTHelper.remove(stack, ItemPackagedHex.TAG_PATTERNS);
-        withMana(stack, 0, 0);
+        NBTHelper.remove(stack, TAG_MANA);
+        NBTHelper.remove(stack, TAG_MAX_MANA);
     }
 
     @Override

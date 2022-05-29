@@ -1,14 +1,15 @@
 @file:JvmName("NBTHelper")
+
 package at.petrak.hexcasting.api.utils
 
 import net.minecraft.nbt.*
 import net.minecraft.world.item.ItemStack
 import java.util.*
 
-private inline fun <T: Any, K, E> T?.getIf(key: K, predicate: T?.(K) -> Boolean, get: T.(K) -> E): E? =
+private inline fun <T : Any, K, E> T?.getIf(key: K, predicate: T?.(K) -> Boolean, get: T.(K) -> E): E? =
     getIf(key, predicate, get, null)
 
-private inline fun <T: Any, K, E> T?.getIf(key: K, predicate: T?.(K) -> Boolean, get: T.(K) -> E, default: E): E {
+private inline fun <T : Any, K, E> T?.getIf(key: K, predicate: T?.(K) -> Boolean, get: T.(K) -> E, default: E): E {
     if (this != null && predicate(key))
         return get(key)
     return default
@@ -32,7 +33,12 @@ fun CompoundTag?.hasCompound(key: String) = contains(key, Tag.TAG_COMPOUND)
 fun CompoundTag?.hasString(key: String) = contains(key, Tag.TAG_STRING)
 fun CompoundTag?.hasList(key: String) = contains(key, Tag.TAG_LIST)
 fun CompoundTag?.hasList(key: String, objType: Int) = hasList(key, objType.toByte())
-fun CompoundTag?.hasList(key: String, objType: Byte) = hasList(key) && (get(key) as ListTag).elementType == objType
+fun CompoundTag?.hasList(key: String, objType: Byte): Boolean {
+    if (!hasList(key)) return false
+    val lt = get(key) as ListTag
+    return lt.elementType == objType || lt.elementType == 0.toByte()
+}
+
 fun CompoundTag?.hasUUID(key: String) = this != null && hasUUID(key)
 
 fun CompoundTag?.contains(key: String, id: Byte) = contains(key, id.toInt())
@@ -64,24 +70,39 @@ fun CompoundTag?.remove(key: String) = this?.remove(key)
 // Gets
 
 @JvmOverloads
-fun CompoundTag?.getBoolean(key: String, defaultExpected: Boolean = false) = getIf(key, CompoundTag?::hasNumber, CompoundTag::getBoolean, defaultExpected)
+fun CompoundTag?.getBoolean(key: String, defaultExpected: Boolean = false) =
+    getIf(key, CompoundTag?::hasNumber, CompoundTag::getBoolean, defaultExpected)
+
 @JvmOverloads
-fun CompoundTag?.getByte(key: String, defaultExpected: Byte = 0) = getIf(key, CompoundTag?::hasNumber, CompoundTag::getByte, defaultExpected)
+fun CompoundTag?.getByte(key: String, defaultExpected: Byte = 0) =
+    getIf(key, CompoundTag?::hasNumber, CompoundTag::getByte, defaultExpected)
+
 @JvmOverloads
-fun CompoundTag?.getShort(key: String, defaultExpected: Short = 0) = getIf(key, CompoundTag?::hasNumber, CompoundTag::getShort, defaultExpected)
+fun CompoundTag?.getShort(key: String, defaultExpected: Short = 0) =
+    getIf(key, CompoundTag?::hasNumber, CompoundTag::getShort, defaultExpected)
+
 @JvmOverloads
-fun CompoundTag?.getInt(key: String, defaultExpected: Int = 0) = getIf(key, CompoundTag?::hasNumber, CompoundTag::getInt, defaultExpected)
+fun CompoundTag?.getInt(key: String, defaultExpected: Int = 0) =
+    getIf(key, CompoundTag?::hasNumber, CompoundTag::getInt, defaultExpected)
+
 @JvmOverloads
-fun CompoundTag?.getLong(key: String, defaultExpected: Long = 0) = getIf(key, CompoundTag?::hasNumber, CompoundTag::getLong, defaultExpected)
+fun CompoundTag?.getLong(key: String, defaultExpected: Long = 0) =
+    getIf(key, CompoundTag?::hasNumber, CompoundTag::getLong, defaultExpected)
+
 @JvmOverloads
-fun CompoundTag?.getFloat(key: String, defaultExpected: Float = 0f) = getIf(key, CompoundTag?::hasNumber, CompoundTag::getFloat, defaultExpected)
+fun CompoundTag?.getFloat(key: String, defaultExpected: Float = 0f) =
+    getIf(key, CompoundTag?::hasNumber, CompoundTag::getFloat, defaultExpected)
+
 @JvmOverloads
-fun CompoundTag?.getDouble(key: String, defaultExpected: Double = 0.0) = getIf(key, CompoundTag?::hasNumber, CompoundTag::getDouble, defaultExpected)
+fun CompoundTag?.getDouble(key: String, defaultExpected: Double = 0.0) =
+    getIf(key, CompoundTag?::hasNumber, CompoundTag::getDouble, defaultExpected)
 
 fun CompoundTag?.getLongArray(key: String) = getIf(key, CompoundTag?::hasLongArray, CompoundTag::getLongArray)
 fun CompoundTag?.getIntArray(key: String) = getIf(key, CompoundTag?::hasIntArray, CompoundTag::getIntArray)
 fun CompoundTag?.getByteArray(key: String) = getIf(key, CompoundTag?::hasByteArray, CompoundTag::getByteArray)
-fun CompoundTag?.getCompound(key: String): CompoundTag? = getIf(key, CompoundTag?::hasCompound, CompoundTag::getCompound)
+fun CompoundTag?.getCompound(key: String): CompoundTag? =
+    getIf(key, CompoundTag?::hasCompound, CompoundTag::getCompound)
+
 fun CompoundTag?.getString(key: String) = getIf(key, CompoundTag?::hasString, CompoundTag::getString)
 fun CompoundTag?.getList(key: String, objType: Byte) = getList(key, objType.toInt())
 fun CompoundTag?.getList(key: String, objType: Int) = getIf(key, { hasList(key, objType) }) { getList(it, objType) }
@@ -149,6 +170,7 @@ val Tag.asByteArray: ByteArray
     }
 
 val Tag.asCompound get() = this as? CompoundTag ?: CompoundTag()
+
 // asString is defined in Tag
 val Tag.asList get() = this as? ListTag ?: ListTag()
 val Tag.asUUID: UUID get() = if (this is IntArrayTag && this.size == 4) NbtUtils.loadUUID(this) else UUID(0, 0)
@@ -176,8 +198,10 @@ fun ItemStack.hasUUID(key: String) = tag.hasUUID(key)
 
 @JvmName("contains")
 fun ItemStack.containsTag(key: String) = tag.contains(key)
+
 @JvmName("contains")
 fun ItemStack.containsTag(key: String, id: Byte) = tag.contains(key, id)
+
 @JvmName("contains")
 fun ItemStack.containsTag(key: String, id: Int) = tag.contains(key, id)
 
@@ -198,6 +222,7 @@ fun ItemStack.putCompound(key: String, value: CompoundTag) = putTag(key, value)
 fun ItemStack.putString(key: String, value: String) = orCreateTag.putString(key, value)
 fun ItemStack.putList(key: String, value: ListTag) = putTag(key, value)
 fun ItemStack.putUUID(key: String, value: UUID) = orCreateTag.putUUID(key, value)
+
 @JvmName("put")
 fun ItemStack.putTag(key: String, value: Tag) = orCreateTag.put(key, value)
 
@@ -209,16 +234,22 @@ fun ItemStack.remove(key: String) = removeTagKey(key)
 
 @JvmOverloads
 fun ItemStack.getBoolean(key: String, defaultExpected: Boolean = false) = tag.getBoolean(key, defaultExpected)
+
 @JvmOverloads
 fun ItemStack.getByte(key: String, defaultExpected: Byte = 0) = tag.getByte(key, defaultExpected)
+
 @JvmOverloads
 fun ItemStack.getShort(key: String, defaultExpected: Short = 0) = tag.getShort(key, defaultExpected)
+
 @JvmOverloads
 fun ItemStack.getInt(key: String, defaultExpected: Int = 0) = tag.getInt(key, defaultExpected)
+
 @JvmOverloads
 fun ItemStack.getLong(key: String, defaultExpected: Long = 0) = tag.getLong(key, defaultExpected)
+
 @JvmOverloads
 fun ItemStack.getFloat(key: String, defaultExpected: Float = 0f) = tag.getFloat(key, defaultExpected)
+
 @JvmOverloads
 fun ItemStack.getDouble(key: String, defaultExpected: Double = 0.0) = tag.getDouble(key, defaultExpected)
 
@@ -229,6 +260,7 @@ fun ItemStack.getCompound(key: String) = tag.getCompound(key)
 fun ItemStack.getString(key: String) = tag.getString(key)
 fun ItemStack.getList(key: String, objType: Int) = tag.getList(key, objType)
 fun ItemStack.getUUID(key: String) = tag.getUUID(key)
+
 @JvmName("get")
 fun ItemStack.getTag(key: String) = tag.get(key)
 

@@ -16,8 +16,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class ItemManaHolder extends Item implements ManaHolderItem {
-    private static final String TAG_MANA = "hexcasting:mana";
-    private static final String TAG_MAX_MANA = "hexcasting:start_mana";
+    public static final String TAG_MANA = "hexcasting:mana";
+    public static final String TAG_MAX_MANA = "hexcasting:start_mana";
 
     public ItemManaHolder(Properties pProperties) {
         super(pProperties);
