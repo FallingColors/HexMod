@@ -20,8 +20,10 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource
 import net.minecraft.world.level.levelgen.synth.PerlinNoise
 import net.minecraft.world.phys.Vec2
+import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.min
+import kotlin.math.sin
 
 /**
  * Source of perlin noise
@@ -156,18 +158,20 @@ fun drawPatternFromPoints(
     }
 }
 
+fun makeZappy(points: List<Vec2>, hops: Float, variance: Float, speed: Float, flowIrregular: Float) =
+    makeZappy(points, hops.toInt(), variance, speed, flowIrregular)
+
 /**
  * Split up a sequence of linePoints with a lightning effect
  * @param hops: rough number of points to subdivide each segment into
  * @param speed: rate at which the lightning effect should move/shake/etc
  */
-fun makeZappy(points: List<Vec2>, hops: Float, variance: Float, speed: Float, flowIrregular: Float): List<Vec2> {
+fun makeZappy(points: List<Vec2>, hops: Int, variance: Float, speed: Float, flowIrregular: Float): List<Vec2> {
     // Nothing in, nothing out
     if (points.isEmpty()) {
         return emptyList()
     }
-    val scaleVariance = { it: Double -> Math.min(1.0, 8 * (0.5 - Math.abs(0.5 - it))) }
-    val hops = hops.toInt()
+    val scaleVariance = { it: Double -> 1.0.coerceAtMost(8 * (0.5 - abs(0.5 - it))) }
     val zSeed = ClientTickCounter.total.toDouble() * speed
     // Create our output list of zap points
     val zappyPts = mutableListOf(points[0])
@@ -187,7 +191,7 @@ fun makeZappy(points: List<Vec2>, hops: Float, variance: Float, speed: Float, fl
             // as well as some random variance...
             // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
             // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
-            val minorPerturb = NOISE.getValue(i.toDouble(), j.toDouble(), Math.sin(zSeed)) * flowIrregular
+            val minorPerturb = NOISE.getValue(i.toDouble(), j.toDouble(), sin(zSeed)) * flowIrregular
             val theta = (3 * NOISE.getValue(i.toDouble() + j.toDouble() / (hops + 1) + minorPerturb - zSeed, 1337.0, 0.0) * TAU).toFloat()
             val r = (NOISE.getValue(i.toDouble() + j.toDouble() / (hops + 1) - zSeed, 69420.0, 0.0) * maxVariance * scaleVariance(progress)).toFloat()
             val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
