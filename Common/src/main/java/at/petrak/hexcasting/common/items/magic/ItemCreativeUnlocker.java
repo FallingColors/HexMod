@@ -3,10 +3,8 @@ package at.petrak.hexcasting.common.items.magic;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -86,24 +84,30 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
     private static final TextColor HEX_COLOR = TextColor.fromRgb(0xb38ef3);
 
-    private static Style rainbow(Style style, Level level) {
+    private static MutableComponent rainbow(MutableComponent component, int shift, Level level) {
         if (level == null) {
-            return style.withColor(ChatFormatting.WHITE);
+            return component.withStyle(ChatFormatting.WHITE);
         }
 
-        return style.withColor(TextColor.fromRgb(Mth.hsvToRgb(level.getGameTime() * 2 % 360 / 360F, 1F, 1F)));
+        return component.withStyle((s) -> s.withColor(
+                TextColor.fromRgb(Mth.hsvToRgb((level.getGameTime() + shift) * 2 % 360 / 360F, 1F, 1F))));
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
         TooltipFlag isAdvanced) {
         String prefix = "item.hexcasting.creative_unlocker.";
-        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.0",
-                new TranslatableComponent(prefix + "for_emphasis").withStyle((s) -> rainbow(s, level)))
-                .withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.1",
-                new TranslatableComponent(prefix + "mod_name").withStyle((s) -> s.withColor(HEX_COLOR)))
-                .withStyle(ChatFormatting.GRAY));
+
+        String emphasis = Language.getInstance().getOrDefault(prefix + "for_emphasis");
+        MutableComponent emphasized = new TextComponent("");
+        for (int i = 0; i < emphasis.length(); i++) {
+            emphasized.append(rainbow(new TextComponent("" + emphasis.charAt(i)), i, level));
+        }
+
+        MutableComponent modName = new TranslatableComponent(prefix + "mod_name").withStyle((s) -> s.withColor(HEX_COLOR));
+
+        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.0", emphasized).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.1", modName).withStyle(ChatFormatting.GRAY));
     }
 
     private static void addChildren(Advancement root, List<Advancement> out) {
