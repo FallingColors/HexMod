@@ -5,7 +5,6 @@ import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
-import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 
 class MishapInvalidPattern : Mishap() {
@@ -18,6 +17,6 @@ class MishapInvalidPattern : Mishap() {
         stack.add(SpellDatum.make(Widget.GARBAGE))
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
         error("invalid_pattern")
 }

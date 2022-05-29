@@ -130,6 +130,8 @@
   "hexcasting.spelldata.entity.whoknows": "An Entity (this should only show up if this was stored before the 0.5.0 update, use Scribe's Reflection, Scribe's Gambit to fix)",
   "hexcasting.spelldata.akashic.nopos": "The owning record does not know of any iota here (this is a bug)",
 
+  "gui.hexcasting.spellcasting": "Hex Grid",
+
   "advancement.hexcasting:root": "Hexcasting Research",
   "advancement.hexcasting:root.desc": "Find a concentrated form of media growing deep beneath the earth.",
   "advancement.hexcasting:enlightenment": "Achieve Enlightenment",

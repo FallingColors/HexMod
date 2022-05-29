@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.spell.math.HexAngle
 import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.otherHand
 import at.petrak.hexcasting.client.drawPatternFromPoints
 import at.petrak.hexcasting.client.drawSpot
@@ -25,7 +26,6 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.TextComponent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
@@ -38,7 +38,7 @@ class GuiSpellcasting(
     private val handOpenedWith: InteractionHand,
     private var patterns: MutableList<ResolvedPattern>,
     private var stackDescs: List<Component>
-) : Screen(TextComponent("")) {
+) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 

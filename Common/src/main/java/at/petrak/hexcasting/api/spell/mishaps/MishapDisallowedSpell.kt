@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
-import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 
 class MishapDisallowedSpell : Mishap() {
@@ -17,6 +16,6 @@ class MishapDisallowedSpell : Mishap() {
         // NO-OP
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
         error("disallowed", actionName(errorCtx.action))
 }

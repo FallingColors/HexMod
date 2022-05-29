@@ -3,9 +3,11 @@ package at.petrak.hexcasting.api.utils
 
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.math.HexCoord
+import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.LongArrayTag
+import net.minecraft.network.chat.*
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
@@ -80,6 +82,91 @@ fun pxToCoord(px: Vec2, size: Float, offset: Vec2): HexCoord {
     else
         HexCoord(q, r + (rf + 0.5 * qf).roundToInt())
 }
+
+fun String.withStyle(op: (Style) -> Style): MutableComponent = asTextComponent.withStyle(op)
+fun String.withStyle(style: Style): MutableComponent = asTextComponent.withStyle(style)
+fun String.withStyle(formatting: ChatFormatting): MutableComponent = asTextComponent.withStyle(formatting)
+fun String.withStyle(vararg formatting: ChatFormatting): MutableComponent = asTextComponent.withStyle(*formatting)
+
+infix fun String.styledWith(op: (Style) -> Style) = withStyle(op)
+infix fun String.styledWith(style: Style) = withStyle(style)
+infix fun String.styledWith(formatting: ChatFormatting) = withStyle(formatting)
+
+infix fun MutableComponent.styledWith(op: (Style) -> Style): MutableComponent = withStyle(op)
+infix fun MutableComponent.styledWith(style: Style): MutableComponent = withStyle(style)
+infix fun MutableComponent.styledWith(formatting: ChatFormatting): MutableComponent = withStyle(formatting)
+
+val String.black get() = this styledWith ChatFormatting.BLACK
+val MutableComponent.black get() = this styledWith ChatFormatting.BLACK
+
+val String.darkBlue get() = this styledWith ChatFormatting.DARK_BLUE
+val MutableComponent.darkBlue get() = this styledWith ChatFormatting.DARK_BLUE
+
+val String.darkGreen get() = this styledWith ChatFormatting.DARK_GREEN
+val MutableComponent.darkGreen get() = this styledWith ChatFormatting.DARK_GREEN
+
+val String.darkAqua get() = this styledWith ChatFormatting.DARK_AQUA
+val MutableComponent.darkAqua get() = this styledWith ChatFormatting.DARK_AQUA
+
+val String.darkRed get() = this styledWith ChatFormatting.DARK_RED
+val MutableComponent.darkRed get() = this styledWith ChatFormatting.DARK_RED
+
+val String.darkPurple get() = this styledWith ChatFormatting.DARK_PURPLE
+val MutableComponent.darkPurple get() = this styledWith ChatFormatting.DARK_PURPLE
+
+val String.gold get() = this styledWith ChatFormatting.GOLD
+val MutableComponent.gold get() = this styledWith ChatFormatting.GOLD
+
+val String.gray get() = this styledWith ChatFormatting.GRAY
+val MutableComponent.gray get() = this styledWith ChatFormatting.GRAY
+
+val String.darkGray get() = this styledWith ChatFormatting.DARK_GRAY
+val MutableComponent.darkGray get() = this styledWith ChatFormatting.DARK_GRAY
+
+val String.blue get() = this styledWith ChatFormatting.BLUE
+val MutableComponent.blue get() = this styledWith ChatFormatting.BLUE
+
+val String.green get() = this styledWith ChatFormatting.GREEN
+val MutableComponent.green get() = this styledWith ChatFormatting.GREEN
+
+val String.aqua get() = this styledWith ChatFormatting.AQUA
+val MutableComponent.aqua get() = this styledWith ChatFormatting.AQUA
+
+val String.red get() = this styledWith ChatFormatting.RED
+val MutableComponent.red get() = this styledWith ChatFormatting.RED
+
+val String.lightPurple get() = this styledWith ChatFormatting.LIGHT_PURPLE
+val MutableComponent.lightPurple get() = this styledWith ChatFormatting.LIGHT_PURPLE
+
+val String.yellow get() = this styledWith ChatFormatting.YELLOW
+val MutableComponent.yellow get() = this styledWith ChatFormatting.YELLOW
+
+val String.white get() = this styledWith ChatFormatting.WHITE
+val MutableComponent.white get() = this styledWith ChatFormatting.WHITE
+
+val String.obfuscated get() = this styledWith ChatFormatting.OBFUSCATED
+val MutableComponent.obfuscated get() = this styledWith ChatFormatting.OBFUSCATED
+
+val String.bold get() = this styledWith ChatFormatting.BOLD
+val MutableComponent.bold get() = this styledWith ChatFormatting.BOLD
+
+val String.strikethrough get() = this styledWith ChatFormatting.STRIKETHROUGH
+val MutableComponent.strikethrough get() = this styledWith ChatFormatting.STRIKETHROUGH
+
+val String.underline get() = this styledWith ChatFormatting.UNDERLINE
+val MutableComponent.underline get() = this styledWith ChatFormatting.UNDERLINE
+
+val String.italic get() = this styledWith ChatFormatting.ITALIC
+val MutableComponent.italic get() = this styledWith ChatFormatting.ITALIC
+
+operator fun MutableComponent.plusAssign(component: Component) {
+    append(component)
+}
+
+val String.asTextComponent get() = TextComponent(this)
+val String.asTranslatedComponent get() = TranslatableComponent(this)
+
+fun String.asTranslatedComponent(vararg args: Any) = TranslatableComponent(this, *args)
 
 fun Iterable<SpellDatum<*>>.serializeToNBT(): ListTag {
     val tag = ListTag()

@@ -14,6 +14,6 @@ class MishapTooManyCloseParens : Mishap() {
         stack.add(SpellDatum.make(errorCtx.pattern))
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
         error("too_many_close_parens")
 }

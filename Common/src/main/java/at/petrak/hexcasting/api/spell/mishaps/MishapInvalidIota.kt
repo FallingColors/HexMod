@@ -6,8 +6,8 @@ import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
@@ -33,14 +33,9 @@ class MishapInvalidIota(
         stack[stack.size - 1 - reverseIdx] = SpellDatum.make(Widget.GARBAGE)
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
-        error(
-            "invalid_value",
-            actionName(errorCtx.action),
-            expected,
-            reverseIdx,
-            perpetrator.display()
-        )
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
+        error("invalid_value", actionName(errorCtx.action), expected, reverseIdx,
+            perpetrator.display())
 
     companion object {
         @JvmStatic
@@ -60,7 +55,7 @@ class MishapInvalidIota(
 
                 else -> "unknown"
             }
-            return MishapInvalidIota(perpetrator, reverseIdx, TranslatableComponent(key))
+            return MishapInvalidIota(perpetrator, reverseIdx, key.asTranslatedComponent)
         }
     }
 }

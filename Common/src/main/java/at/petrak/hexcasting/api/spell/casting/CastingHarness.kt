@@ -16,7 +16,6 @@ import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
@@ -236,13 +235,7 @@ class CastingHarness private constructor(
         }
     }
 
-    fun generateDescs(): List<Component> {
-        val descs = ArrayList<Component>(this.stack.size)
-        for (datum in this.stack) {
-            descs.add(datum.display())
-        }
-        return descs
-    }
+    fun generateDescs() = stack.map(SpellDatum<*>::display)
 
     /**
      * Return the functional update represented by the current state (for use with `copy`)

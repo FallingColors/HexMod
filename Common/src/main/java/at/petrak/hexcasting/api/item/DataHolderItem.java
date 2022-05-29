@@ -6,6 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -21,12 +22,7 @@ public interface DataHolderItem {
 
     @Nullable
     default SpellDatum<?> readDatum(ItemStack stack, ServerLevel world) {
-        if (!(stack.getItem() instanceof DataHolderItem dh)) {
-            // this should be checked via mishap beforehand
-            throw new IllegalArgumentException("stack's item must be an ItemDataholder but was " + stack.getItem());
-        }
-
-        var tag = dh.readDatumTag(stack);
+        var tag = readDatumTag(stack);
         if (tag != null) {
             return SpellDatum.fromNBT(tag, world);
         } else {
@@ -51,7 +47,7 @@ public interface DataHolderItem {
             pTooltipComponents.add(new TranslatableComponent("hexcasting.spelldata.onitem", component));
 
             if (pIsAdvanced.isAdvanced()) {
-                pTooltipComponents.add(NbtUtils.toPrettyComponent(datumTag));
+                pTooltipComponents.add(new TextComponent("").append(NbtUtils.toPrettyComponent(datumTag)));
             }
         } else if (NBTHelper.hasString(pStack, DataHolderItem.TAG_OVERRIDE_VISUALLY)) {
             pTooltipComponents.add(new TranslatableComponent("hexcasting.spelldata.onitem",

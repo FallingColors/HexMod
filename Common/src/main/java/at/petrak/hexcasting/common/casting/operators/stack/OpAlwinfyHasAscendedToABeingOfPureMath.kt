@@ -10,8 +10,8 @@ import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import it.unimi.dsi.fastutil.ints.IntArrayList
-import net.minecraft.network.chat.TranslatableComponent
 import kotlin.math.abs
 import kotlin.math.ln
 import kotlin.math.roundToInt
@@ -32,7 +32,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
             throw MishapInvalidIota(
                 stack.last(),
                 0,
-                TranslatableComponent("hexcasting.mishap.invalid_value.int", 0)
+                "hexcasting.mishap.invalid_value.int".asTranslatedComponent(0)
             )
         stack.removeLast()
         val code = codeDouble.roundToInt()

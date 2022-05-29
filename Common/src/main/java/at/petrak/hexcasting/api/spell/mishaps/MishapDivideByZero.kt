@@ -5,8 +5,8 @@ import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.phys.Vec3
 
@@ -20,9 +20,8 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         trulyHurt(ctx.caster, HexDamageSources.OVERCAST, ctx.caster.health / 2)
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component {
-        return error("divide_by_zero.$suffix", operand1, operand2)
-    }
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
+        error("divide_by_zero.$suffix", operand1, operand2)
 
     companion object {
         private const val PREFIX = "hexcasting.mishap.divide_by_zero"
@@ -38,25 +37,25 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         fun tan(angle: Double): MishapDivideByZero {
             val translatedAngle = translate(angle)
             return MishapDivideByZero(
-                TranslatableComponent("$PREFIX.sin", translatedAngle),
-                TranslatableComponent("$PREFIX.cos", translatedAngle)
+                "$PREFIX.sin".asTranslatedComponent(translatedAngle),
+                "$PREFIX.cos".asTranslatedComponent(translatedAngle)
             )
         }
 
         @JvmStatic
         val zero
-            get() = TranslatableComponent("$PREFIX.zero")
+            get() = "$PREFIX.zero".asTranslatedComponent
 
         @JvmStatic
         val zerothPower
-            get() = TranslatableComponent("$PREFIX.zero.power")
+            get() = "$PREFIX.zero.power".asTranslatedComponent
 
         @JvmStatic
         val zeroVector
-            get() = TranslatableComponent("$PREFIX.zero.vec")
+            get() = "$PREFIX.zero.vec".asTranslatedComponent
 
         @JvmStatic
-        fun powerOf(power: Component) = TranslatableComponent("$PREFIX.power", power)
+        fun powerOf(power: Component) = "$PREFIX.power".asTranslatedComponent(power)
 
         @JvmStatic
         fun powerOf(datum: Any) = when (datum) {

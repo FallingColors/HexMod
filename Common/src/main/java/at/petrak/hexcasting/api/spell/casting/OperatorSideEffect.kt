@@ -7,10 +7,10 @@ import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.lib.HexSounds
 import net.minecraft.Util
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
@@ -25,7 +25,7 @@ sealed class OperatorSideEffect {
     data class RequiredEnlightenment(val awardStat: Boolean) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
             harness.ctx.caster.sendMessage(
-                TranslatableComponent("hexcasting.message.cant_great_spell"),
+                "hexcasting.message.cant_great_spell".asTranslatedComponent,
                 Util.NIL_UUID
             )
 
@@ -53,7 +53,7 @@ sealed class OperatorSideEffect {
             val leftoverMana = harness.withdrawMana(this.amount, overcastOk)
             if (leftoverMana > 0 && !overcastOk) {
                 harness.ctx.caster.sendMessage(
-                    TranslatableComponent("hexcasting.message.cant_overcast"),
+                    "hexcasting.message.cant_overcast".asTranslatedComponent,
                     Util.NIL_UUID
                 )
             }

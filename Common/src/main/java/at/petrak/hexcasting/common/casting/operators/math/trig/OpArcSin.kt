@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
-import net.minecraft.network.chat.TranslatableComponent
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import kotlin.math.asin
 
 object OpArcSin : ConstManaOperator {
@@ -19,7 +19,7 @@ object OpArcSin : ConstManaOperator {
             throw MishapInvalidIota(
                 SpellDatum.make(value),
                 0,
-                TranslatableComponent("hexcasting.mishap.invalid_value.double.between", -1, 1)
+                "hexcasting.mishap.invalid_value.double.between".asTranslatedComponent(-1, 1)
             )
         return asin(value).asSpellResult
     }

@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
-import net.minecraft.network.chat.TranslatableComponent
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -20,7 +20,7 @@ object OpDuplicateN : ConstManaOperator {
             throw MishapInvalidIota(
                 args[1],
                 0,
-                TranslatableComponent("hexcasting.mishap.invalid_value.int.between", 0, args.size)
+                "hexcasting.mishap.invalid_value.int.between".asTranslatedComponent(0, args.size)
             )
 
         val count = countDouble.roundToInt()

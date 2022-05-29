@@ -16,6 +16,6 @@ class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
             stack.add(SpellDatum.make(Widget.GARBAGE))
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
         error("not_enough_args", actionName(errorCtx.action), expected, got)
 }

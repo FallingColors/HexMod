@@ -4,9 +4,9 @@ import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.Explosion
 import net.minecraft.world.phys.Vec3
@@ -19,19 +19,16 @@ class MishapBadBlock(val pos: BlockPos, val expected: Component) : Mishap() {
         ctx.world.explode(null, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 0.25f, Explosion.BlockInteraction.NONE)
     }
 
-    override fun particleSpray(ctx: CastingContext): ParticleSpray {
-        return ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0)
-    }
+    override fun particleSpray(ctx: CastingContext) =
+        ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0)
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component {
-        val bs = ctx.world.getBlockState(this.pos)
-        return error("bad_block", expected, this.pos.toShortString(), bs.block.name)
-    }
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
+        error("bad_block", expected, this.pos.toShortString(), blockAtPos(ctx, this.pos))
 
     companion object {
         @JvmStatic
         fun of(pos: BlockPos, stub: String): MishapBadBlock {
-            return MishapBadBlock(pos, TranslatableComponent("hexcasting.mishap.bad_block.$stub"))
+            return MishapBadBlock(pos, "hexcasting.mishap.bad_block.$stub".asTranslatedComponent)
         }
     }
 }
