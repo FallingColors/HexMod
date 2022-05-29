@@ -91,7 +91,7 @@ subprojects {
     group = "at.petra-k.$modID" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
     version = "${modVersion}"
     if (!isRelease() && System.getenv('BUILD_NUMBER') != null) {
-        version += "-prerelease-" + System.getenv('BUILD_NUMBER')
+        version += "-pre-" + System.getenv('BUILD_NUMBER')
     } else if (System.getenv('TAG_NAME') != null) {
         version = System.getenv('TAG_NAME').substring(1)
         println 'Version overridden to tag version ' + version
