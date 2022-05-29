@@ -4,15 +4,13 @@ import at.petrak.hexcasting.api.item.ManaHolderItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -60,15 +58,15 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
-        if (level instanceof ServerLevel slevel) {
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity consumer) {
+        if (level instanceof ServerLevel slevel && consumer instanceof ServerPlayer player) {
             var rootAdv = slevel.getServer().getAdvancements().getAdvancement(modLoc("root"));
             if (rootAdv != null) {
                 var children = new ArrayList<Advancement>();
                 children.add(rootAdv);
                 addChildren(rootAdv, children);
 
-                var adman = ((ServerPlayer) player).getAdvancements();
+                var adman = player.getAdvancements();
 
                 for (var kid : children) {
                     var progress = adman.getOrStartProgress(kid);
@@ -81,25 +79,31 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
             }
         }
 
-        return InteractionResultHolder.success(player.getItemInHand(usedHand));
+        ItemStack copy = stack.copy();
+        super.finishUsingItem(stack, level, consumer);
+        return copy;
     }
 
-    private static MutableComponent rainbow(MutableComponent component, Level level) {
+    private static final TextColor HEX_COLOR = TextColor.fromRgb(0xb38ef3);
+
+    private static Style rainbow(Style style, Level level) {
         if (level == null) {
-            return component.withStyle(ChatFormatting.WHITE);
+            return style.withColor(ChatFormatting.WHITE);
         }
 
-        return component.withStyle((s) ->
-                s.withColor(TextColor.fromRgb(Mth.hsvToRgb(level.getGameTime() * 2 % 360 / 360F, 1F, 1F))));
+        return style.withColor(TextColor.fromRgb(Mth.hsvToRgb(level.getGameTime() * 2 % 360 / 360F, 1F, 1F)));
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
         TooltipFlag isAdvanced) {
         String prefix = "item.hexcasting.creative_unlocker.";
-        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.0", rainbow(new TranslatableComponent(prefix + "for_emphasis"), level)
-                        .withStyle(ChatFormatting.GRAY)));
-        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.1").withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.0",
+                new TranslatableComponent(prefix + "for_emphasis").withStyle((s) -> rainbow(s, level)))
+                .withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.1",
+                new TranslatableComponent(prefix + "mod_name").withStyle((s) -> s.withColor(HEX_COLOR)))
+                .withStyle(ChatFormatting.GRAY));
     }
 
     private static void addChildren(Advancement root, List<Advancement> out) {

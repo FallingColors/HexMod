@@ -57,10 +57,11 @@
   "item.hexcasting.pride_colorizer_12": "Intersex Pigment",
   "item.hexcasting.pride_colorizer_13": "Aroace Pigment",
   "item.hexcasting.uuid_colorizer": "Soulglimmer Pigment",
-  "item.hexcasting.creative_unlocker": "Creative Unlocker",
-  "item.hexcasting.creative_unlocker.for_emphasis": "INFINITE MEDIA",
+  "item.hexcasting.creative_unlocker": "The Media Cube",
   "item.hexcasting.creative_unlocker.tooltip.0": "Contains %s.",
-  "item.hexcasting.creative_unlocker.tooltip.1": "Right-click to unlock all Hexcasting advancements and abilities.",
+  "item.hexcasting.creative_unlocker.for_emphasis": "INFINITE MEDIA",
+  "item.hexcasting.creative_unlocker.tooltip.1": "Consume to unlock all %s knowledge.",
+  "item.hexcasting.creative_unlocker.mod_name": "Hexcasting",
 
 
   "block.hexcasting.conjured": "Conjured Block",

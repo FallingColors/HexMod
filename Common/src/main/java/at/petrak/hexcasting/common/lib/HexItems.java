@@ -9,10 +9,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.*;
 
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
@@ -87,7 +84,9 @@ public class HexItems {
         new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
 
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
-        new ItemCreativeUnlocker(props()));
+        new ItemCreativeUnlocker(unstackable()
+                .rarity(Rarity.EPIC)
+                .food(new FoodProperties.Builder().nutrition(20).saturationMod(1f).alwaysEat().build())));
 
     //
 
