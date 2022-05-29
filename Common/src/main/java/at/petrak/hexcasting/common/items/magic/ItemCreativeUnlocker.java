@@ -4,9 +4,12 @@ import at.petrak.hexcasting.api.item.ManaHolderItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -38,6 +41,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
     @Override
     public void setMana(ItemStack stack, int mana) {
+        // NO-OP
     }
 
     @Override
@@ -47,7 +51,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
     @Override
     public boolean canRecharge(ItemStack stack) {
-        return true;
+        return false;
     }
 
     @Override
@@ -80,11 +84,22 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
         return InteractionResultHolder.success(player.getItemInHand(usedHand));
     }
 
+    private static MutableComponent rainbow(MutableComponent component, Level level) {
+        if (level == null) {
+            return component.withStyle(ChatFormatting.WHITE);
+        }
+
+        return component.withStyle((s) ->
+                s.withColor(TextColor.fromRgb(Mth.hsvToRgb(level.getGameTime() * 2 % 360 / 360F, 1F, 1F))));
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
         TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TranslatableComponent("item.hexcasting.creative_unlocker.tooltip.0").withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(new TranslatableComponent("item.hexcasting.creative_unlocker.tooltip.1").withStyle(ChatFormatting.GRAY));
+        String prefix = "item.hexcasting.creative_unlocker.";
+        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.0", rainbow(new TranslatableComponent(prefix + "for_emphasis"), level)
+                        .withStyle(ChatFormatting.GRAY)));
+        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.1").withStyle(ChatFormatting.GRAY));
     }
 
     private static void addChildren(Advancement root, List<Advancement> out) {
