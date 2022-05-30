@@ -234,6 +234,10 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         var sconceModel = models().getExistingFile(modLoc("amethyst_sconce"));
         simpleBlock(HexBlocks.SCONCE, sconceModel);
         simpleBlockItem(HexBlocks.SCONCE, sconceModel);
+
+        var conjuredModel = models().getExistingFile(modLoc("conjured"));
+        simpleBlock(HexBlocks.CONJURED_BLOCK, conjuredModel);
+        simpleBlock(HexBlocks.CONJURED_LIGHT, conjuredModel);
     }
 
     private void impetus(Block block, String name, String stub) {

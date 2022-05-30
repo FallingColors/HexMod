@@ -35,6 +35,13 @@ public class HexItemModels extends PaucalItemModelProvider {
         brandishedItem(HexItems.JEWELER_HAMMER);
         simpleItem(HexItems.CREATIVE_UNLOCKER);
 
+        singleTexture(HexBlocks.CONJURED_BLOCK.getRegistryName().getPath(),
+            new ResourceLocation("item/generated"),
+            "layer0", new ResourceLocation("item/amethyst_shard"));
+        singleTexture(HexBlocks.CONJURED_LIGHT.getRegistryName().getPath(),
+            new ResourceLocation("item/generated"),
+            "layer0", new ResourceLocation("item/amethyst_shard"));
+
         simpleItem(modLoc("scroll_pristine"));
         simpleItem(modLoc("scroll_ancient"));
         getBuilder(HexItems.SCROLL.getRegistryName().getPath())
