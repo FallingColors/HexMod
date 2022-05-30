@@ -4,13 +4,10 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidSpellDatumType
 import at.petrak.hexcasting.api.utils.*
-import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.TextComponent
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
@@ -155,69 +152,59 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
             if (keys.size != 1)
                 throw IllegalArgumentException("Expected exactly one kv pair: $nbt")
 
-            return when (val key = keys.iterator().next()) {
-                TAG_DOUBLE -> TextComponent(
-                    String.format(
-                        "%.4f",
-                        nbt.getDouble(TAG_DOUBLE)
-                    )
-                ).withStyle(ChatFormatting.GREEN)
+            val out = "".asTextComponent
+            when (val key = keys.iterator().next()) {
+                TAG_DOUBLE -> out += String.format(
+                    "%.4f",
+                    nbt.getDouble(TAG_DOUBLE)
+                ).green
                 TAG_VEC3 -> {
                     val vec = vecFromNBT(nbt.getLongArray(key))
                     // the focus color is really more red, but we don't want to show an error-y color
-                    TextComponent(
-                        String.format(
+                    out += String.format(
                             "(%.2f, %.2f, %.2f)",
                             vec.x,
                             vec.y,
                             vec.z
-                        )
-                    ).withStyle(ChatFormatting.LIGHT_PURPLE)
+                    ).lightPurple
                 }
                 TAG_LIST -> {
-                    val out = TextComponent("[").withStyle(ChatFormatting.WHITE)
+                    out += "[".white
 
                     val arr = nbt.getList(key, Tag.TAG_COMPOUND)
                     for ((i, subtag) in arr.withIndex()) {
-                        // this is safe because otherwise we wouldn't have been able to get the list before
-                        out.append(displayFromNBT(subtag as CompoundTag))
+                        out += displayFromNBT(subtag.asCompound)
                         if (i != arr.lastIndex) {
-                            out.append(", ")
+                            out += ", ".white
                         }
                     }
 
-                    out.append("]")
+                    out += "]".white
                 }
                 TAG_WIDGET -> {
                     val widget = Widget.valueOf(nbt.getString(key))
-                    if (widget == Widget.GARBAGE) TextComponent("arimfexendrapuse").withStyle(
-                        ChatFormatting.DARK_GRAY,
-                        ChatFormatting.OBFUSCATED
-                    )
-                    // use dark purple instead of pink, so that vec3 can be pink instead of error red
-                    else TextComponent(widget.toString()).withStyle(ChatFormatting.DARK_PURPLE)
+                    out += if (widget == Widget.GARBAGE)
+                        "arimfexendrapuse".darkGray.obfuscated
+                    else
+                        widget.toString().darkPurple
                 }
                 TAG_PATTERN -> {
                     val pat = HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN))
                     var angleDesc = pat.anglesSignature()
                     if (angleDesc.isNotBlank()) angleDesc = " $angleDesc";
-                    val out = TextComponent("HexPattern(").withStyle(ChatFormatting.GOLD)
-                    out.append(TextComponent("${pat.startDir}$angleDesc").withStyle(ChatFormatting.WHITE))
-                    out.append(")")
+                    out += "HexPattern(".gold
+                    out += "${pat.startDir}$angleDesc".white
+                    out += ")".gold
                 }
                 TAG_ENTITY -> {
+                    val subtag = nbt.getCompound(TAG_ENTITY)
+                    val json = subtag.getString(TAG_ENTITY_NAME_CHEATY)
                     // handle pre-0.5.0 foci not having the tag
-                    try {
-                        val subtag = nbt.getCompound(TAG_ENTITY)
-                        val json = subtag.getString(TAG_ENTITY_NAME_CHEATY)
-                        val out = Component.Serializer.fromJson(json)!!
-                        out.withStyle(ChatFormatting.AQUA)
-                    } catch (exn: NullPointerException) {
-                        TranslatableComponent("hexcasting.spelldata.entity.whoknows").withStyle(ChatFormatting.WHITE)
-                    }
+                    out += Component.Serializer.fromJson(json)?.aqua ?: "hexcasting.spelldata.entity.whoknows".asTranslatedComponent.white
                 }
                 else -> throw IllegalArgumentException("Unknown key $key: $nbt")
             }
+            return out
         }
 
         // Set of legal types to go in a spell

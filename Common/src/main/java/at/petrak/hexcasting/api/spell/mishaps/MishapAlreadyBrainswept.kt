@@ -5,7 +5,6 @@ import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.item.DyeColor
 
@@ -14,14 +13,13 @@ class MishapAlreadyBrainswept(val villager: Villager) : Mishap() {
         dyeColor(DyeColor.GREEN)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        villager.hurt(HexDamageSources.overcastDamageFrom(ctx.caster), villager.health)
+        trulyHurt(villager, HexDamageSources.overcastDamageFrom(ctx.caster), villager.health)
     }
 
-    override fun particleSpray(ctx: CastingContext): ParticleSpray {
-        return ParticleSpray.burst(villager.eyePosition, 1.0)
-    }
+    override fun particleSpray(ctx: CastingContext) =
+        ParticleSpray.burst(villager.eyePosition, 1.0)
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
         error("already_brainswept")
 
 }

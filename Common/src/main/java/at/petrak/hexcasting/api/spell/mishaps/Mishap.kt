@@ -1,19 +1,22 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
 import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
+import at.petrak.hexcasting.api.utils.lightPurple
+import at.petrak.hexcasting.api.utils.obfuscated
 import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.mixin.accessor.AccessorLivingEntity
-import net.minecraft.ChatFormatting
 import net.minecraft.Util
+import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Style
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
@@ -40,6 +43,8 @@ sealed class Mishap : Throwable() {
 
     abstract fun errorMessage(ctx: CastingContext, errorCtx: Context): Component
 
+    // Useful helper functions
+
     protected fun dyeColor(color: DyeColor): FrozenColorizer =
         FrozenColorizer(
             ItemStack(HexItems.DYE_COLORIZERS[color]!!),
@@ -47,11 +52,35 @@ sealed class Mishap : Throwable() {
         )
 
     protected fun error(stub: String, vararg args: Any): Component =
-        TranslatableComponent("hexcasting.mishap.$stub", *args)
+        "hexcasting.mishap.$stub".asTranslatedComponent(*args)
 
     protected fun actionName(action: ResourceLocation?): Component =
-        TranslatableComponent("hexcasting.spell.${action ?: "unknown"}")
-            .setStyle(Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE).withUnderlined(true))
+        "hexcasting.spell.${action ?: "unknown"}".asTranslatedComponent.lightPurple.obfuscated
+
+    protected fun yeetHeldItemsTowards(ctx: CastingContext, targetPos: Vec3) {
+        // Knock the player's items out of their hands
+        val items = mutableListOf<ItemStack>()
+        for (hand in InteractionHand.values()) {
+            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).`is`(HexItemTags.WANDS)) {
+                items.add(ctx.caster.getItemInHand(hand).copy())
+                ctx.caster.setItemInHand(hand, ItemStack.EMPTY)
+            }
+        }
+
+        val delta = targetPos.subtract(ctx.position).normalize().scale(0.5)
+
+        for (item in items) {
+            yeetItem(item, ctx, delta)
+        }
+    }
+
+    protected fun yeetHeldItem(ctx: CastingContext, hand: InteractionHand) {
+        val item = ctx.caster.getItemInHand(hand).copy()
+        ctx.caster.setItemInHand(hand, ItemStack.EMPTY)
+
+        val delta = ctx.caster.lookAngle.scale(0.5)
+        yeetItem(item, ctx, delta)
+    }
 
     protected fun yeetItem(stack: ItemStack, ctx: CastingContext, delta: Vec3) {
         val entity = ItemEntity(
@@ -64,6 +93,10 @@ sealed class Mishap : Throwable() {
         )
         entity.setPickUpDelay(40)
         ctx.world.addWithUUID(entity)
+    }
+
+    protected fun blockAtPos(ctx: CastingContext, pos: BlockPos): Component {
+        return ctx.world.getBlockState(pos).block.name
     }
 
     data class Context(val pattern: HexPattern, val action: ResourceLocation?)

@@ -27,7 +27,6 @@ import net.minecraft.commands.synchronization.EmptyArgumentSerializer
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.level.storage.loot.LootPool
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
@@ -68,11 +67,10 @@ object FabricHexInitializer : ModInitializer {
 
         CommandRegistrationCallback.EVENT.register { dp, _ -> HexCommands.register(dp) }
 
-        LootTableLoadingCallback.EVENT.register { recman, manager, id, supplier, setter ->
+        LootTableLoadingCallback.EVENT.register { _, _, id, supplier, _ ->
             HexLootHandler.lootLoad(
                 id,
-                { b: LootPool -> supplier.withPool(b) },
-            )
+            ) { supplier.withPool(it) }
         }
     }
 

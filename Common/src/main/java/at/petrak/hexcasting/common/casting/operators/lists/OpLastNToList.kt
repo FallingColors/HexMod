@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
-import net.minecraft.network.chat.TranslatableComponent
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -20,7 +20,7 @@ object OpLastNToList : Operator {
             throw MishapInvalidIota(
                 datum,
                 0,
-                TranslatableComponent("hexcasting.mishap.invalid_value.int.between", 0, stack.size)
+                "hexcasting.mishap.invalid_value.int.between".asTranslatedComponent(0, stack.size)
             )
         }
         val output = mutableListOf<SpellDatum<*>>()

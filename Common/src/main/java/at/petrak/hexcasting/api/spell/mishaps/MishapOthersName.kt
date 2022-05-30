@@ -15,11 +15,10 @@ class MishapOthersName(val other: Player) : Mishap() {
         dyeColor(DyeColor.BLACK)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
-        val effect = MobEffectInstance(MobEffects.BLINDNESS, 20 * 60)
-        ctx.caster.addEffect(effect)
+        ctx.caster.addEffect(MobEffectInstance(MobEffects.BLINDNESS, 20 * 60))
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context): Component =
+    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
         error("others_name", other.name)
 
     companion object {

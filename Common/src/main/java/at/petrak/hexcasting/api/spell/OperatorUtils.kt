@@ -5,10 +5,10 @@ package at.petrak.hexcasting.api.spell
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import com.mojang.datafixers.util.Either
 import com.mojang.math.Vector3f
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
@@ -20,7 +20,7 @@ fun numOrVec(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, Vec3> =
         else -> throw MishapInvalidIota(
             datum,
             reverseIdx,
-            TranslatableComponent("hexcasting.mishap.invalid_value.numvec")
+            "hexcasting.mishap.invalid_value.numvec".asTranslatedComponent
         )
     }
 
@@ -31,7 +31,7 @@ fun numOrList(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, SpellList> 
         else -> throw MishapInvalidIota(
             datum,
             reverseIdx,
-            TranslatableComponent("hexcasting.mishap.invalid_value.numlist")
+            "hexcasting.mishap.invalid_value.numlist".asTranslatedComponent
         )
     }
 
