@@ -69,13 +69,14 @@ public class FabricUnsealedIngredient extends Ingredient {
 	}
 
 	public static Ingredient fromNetwork(FriendlyByteBuf friendlyByteBuf) {
-		FriendlyByteBuf copy = new FriendlyByteBuf(friendlyByteBuf.copy());
+		int readerIndex = friendlyByteBuf.readerIndex();
 		try {
-			if (copy.readResourceLocation().equals(ID)) {
-				return new FabricUnsealedIngredient(copy.readItem());
+			if (friendlyByteBuf.readResourceLocation().equals(ID)) {
+				return new FabricUnsealedIngredient(friendlyByteBuf.readItem());
 			}
 		} catch (Exception e) {
-			// NO-OP, there clearly wasn't a resource location there. This is kind of a hack but ehh
+			// There clearly wasn't a resource location there. This is kind of a hack but ehh
+			friendlyByteBuf.readerIndex(readerIndex);
 		}
 
 		return null;
