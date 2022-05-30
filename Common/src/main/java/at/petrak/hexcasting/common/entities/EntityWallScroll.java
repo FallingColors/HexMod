@@ -7,6 +7,8 @@ import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.hexcasting.common.network.MsgNewWallScrollAck;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -47,10 +49,11 @@ public class EntityWallScroll extends HangingEntity {
         super(type, world);
     }
 
-    public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll) {
+    public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll, boolean showStrokeOrder) {
         super(HexEntities.WALL_SCROLL, world, pos);
         this.loadDataFromScrollItem(scroll);
         this.setDirection(dir);
+        this.setShowsStrokeOrder(showStrokeOrder);
     }
 
     private void loadDataFromScrollItem(ItemStack scroll) {
@@ -133,27 +136,18 @@ public class EntityWallScroll extends HangingEntity {
 
     @Override
     public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
+        return IXplatAbstractions.INSTANCE.toVanillaClientboundPacket(
+            new MsgNewWallScrollAck(new ClientboundAddEntityPacket(this),
+                pos, direction, scroll, getShowsStrokeOrder()));
     }
 
-    /*
-    @Override
-    public void writeSpawnData(FriendlyByteBuf buf) {
-        buf.writeVarInt(this.direction.ordinal());
-        buf.writeItem(this.scroll);
-        buf.writeBoolean(this.getShowsStrokeOrder());
+    public void readSpawnData(BlockPos pos, Direction dir, ItemStack scrollItem,
+        boolean showsStrokeOrder) {
+        this.pos = pos;
+        this.setDirection(dir);
+        this.loadDataFromScrollItem(scrollItem);
+        this.setShowsStrokeOrder(showsStrokeOrder);
     }
-
-    @Override
-    public void readSpawnData(FriendlyByteBuf buf) {
-        this.direction = Direction.values()[buf.readVarInt()];
-        var scroll = buf.readItem();
-        this.setShowsStrokeOrder(buf.readBoolean());
-
-        this.loadDataFromScrollItem(scroll);
-        this.setDirection(this.direction);
-    }
-     */
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {

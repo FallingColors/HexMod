@@ -28,6 +28,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -86,6 +87,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
         for (var p : nears) {
             p.connection.send(pkt);
         }
+    }
+
+    @Override
+    public Packet<?> toVanillaClientboundPacket(IMessage message) {
+        return ServerPlayNetworking.createS2CPacket(message.getFabricId(), message.toBuf());
     }
 
     @Override

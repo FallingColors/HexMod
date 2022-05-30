@@ -48,8 +48,9 @@ public class ItemScroll extends Item implements DataHolderItem {
     @Override
     public @Nullable CompoundTag readDatumTag(ItemStack stack) {
         CompoundTag pattern = NBTHelper.getCompound(stack, TAG_PATTERN);
-        if (pattern == null)
+        if (pattern == null) {
             return null;
+        }
         var out = new CompoundTag();
         out.put(SpellDatum.TAG_PATTERN, pattern);
         return out;
@@ -80,7 +81,7 @@ public class ItemScroll extends Item implements DataHolderItem {
         var level = ctx.getLevel();
         var scrollStack = itemstack.copy();
         scrollStack.setCount(1);
-        var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack);
+        var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack, false);
 
         // i guess
         var stackTag = itemstack.getTag();
@@ -128,7 +129,8 @@ public class ItemScroll extends Item implements DataHolderItem {
             var pattern = HexPattern.fromNBT(compound);
             return Optional.of(new PatternTooltipGreeble(
                 pattern,
-                NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? PatternTooltipGreeble.ANCIENT_BG : PatternTooltipGreeble.PRISTINE_BG));
+                NBTHelper.hasString(stack,
+                    ItemScroll.TAG_OP_ID) ? PatternTooltipGreeble.ANCIENT_BG : PatternTooltipGreeble.PRISTINE_BG));
         }
 
         return Optional.empty();

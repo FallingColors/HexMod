@@ -57,6 +57,10 @@ public class ForgePacketHandler {
             MsgUpdateComparatorVisualsAck::serialize,
             MsgUpdateComparatorVisualsAck::deserialize,
             makeClientBoundHandler(MsgUpdateComparatorVisualsAck::handle));
+        NETWORK.registerMessage(messageIdx++, MsgNewWallScrollAck.class,
+            MsgNewWallScrollAck::serialize,
+            MsgNewWallScrollAck::deserialize,
+            makeClientBoundHandler(MsgNewWallScrollAck::handle));
     }
 
     private static <T> BiConsumer<T, Supplier<NetworkEvent.Context>> makeServerBoundHandler(

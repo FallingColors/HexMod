@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.common.network.IMessage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,6 +52,9 @@ public interface IXplatAbstractions {
     void sendPacketToPlayer(ServerPlayer target, IMessage packet);
 
     void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet);
+
+    // https://github.com/VazkiiMods/Botania/blob/13b7bcd9cbb6b1a418b0afe455662d29b46f1a7f/Xplat/src/main/java/vazkii/botania/xplat/IXplatAbstractions.java#L157
+    Packet<?> toVanillaClientboundPacket(IMessage message);
 
     Attribute getReachDistance();
 

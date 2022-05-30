@@ -36,8 +36,7 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
     @Override
     public void render(EntityWallScroll wallScroll, float yaw, float partialTicks, PoseStack ps,
         MultiBufferSource bufSource, int packedLight) {
-
-
+        
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
         ps.pushPose();
