@@ -55,7 +55,7 @@ public class HexItems {
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable()));
 
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
-        new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1)));
+        new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1).defaultDurability(Tiers.DIAMOND.getUses())));
 
     public static final ItemScroll SCROLL = make("scroll", new ItemScroll(props()));
 
