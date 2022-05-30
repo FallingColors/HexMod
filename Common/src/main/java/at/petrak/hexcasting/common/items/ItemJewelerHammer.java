@@ -6,18 +6,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ItemJewelerHammer extends PickaxeItem {
 	public ItemJewelerHammer(Tier tier, int damageMod, float attackSpeedMod, Properties props) {
 		super(tier, damageMod, attackSpeedMod, props);
-	}
-
-	@Override
-	public int getEnchantmentValue() {
-		return Tiers.DIAMOND.getEnchantmentValue();
 	}
 
 	public static boolean shouldFailToBreak(Player player, BlockState state, BlockPos pos) {
