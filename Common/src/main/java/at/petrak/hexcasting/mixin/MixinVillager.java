@@ -26,4 +26,12 @@ public class MixinVillager {
             cir.setReturnValue(false);
         }
     }
+
+    @Inject(method = "setUnhappy", at = @At("HEAD"), cancellable = true)
+    private void preventUnhappiness(CallbackInfo ci) {
+        var self = (Villager) (Object) this;
+        if (Brainsweeping.isBrainswept(self)) {
+            ci.cancel();
+        }
+    }
 }

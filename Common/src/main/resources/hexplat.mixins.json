@@ -5,6 +5,7 @@
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
+    "MixinAbstractVillager",
     "MixinMob",
     "MixinRaider",
     "MixinReloadableServerResources",
