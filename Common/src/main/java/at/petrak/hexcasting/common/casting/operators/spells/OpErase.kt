@@ -26,8 +26,8 @@ class OpErase : SpellOperator {
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
 
-        if ((hexHolder?.getHex(ctx.world) == null) &&
-            (datumHolder?.writeDatum(null, true) == false)
+        if ((hexHolder?.hasHex() != true) &&
+            (datumHolder?.writeDatum(null, true) != true)
         ) {
             throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
         }
