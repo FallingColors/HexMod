@@ -9,19 +9,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Ingredient.class)
+@Mixin(value = Ingredient.class, priority = 4000)
 public class FabricIngredientMixin {
     @Inject(method = "fromJson", at = @At("HEAD"), cancellable = true)
     private static void fromJson(JsonElement jsonElement, CallbackInfoReturnable<Ingredient> cir) {
         Ingredient overridden = FabricUnsealedIngredient.fromJson(jsonElement);
-        if (overridden != null)
+        if (overridden != null) {
             cir.setReturnValue(overridden);
+        }
     }
 
     @Inject(method = "fromNetwork", at = @At("HEAD"), cancellable = true)
     private static void fromNetwork(FriendlyByteBuf friendlyByteBuf, CallbackInfoReturnable<Ingredient> cir) {
         Ingredient overridden = FabricUnsealedIngredient.fromNetwork(friendlyByteBuf);
-        if (overridden != null)
+        if (overridden != null) {
             cir.setReturnValue(overridden);
+        }
     }
 }
