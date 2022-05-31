@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = Ingredient.class, priority = 4000)
+@Mixin(value = Ingredient.class)
 public class FabricIngredientMixin {
     @Inject(method = "fromJson", at = @At("HEAD"), cancellable = true)
     private static void fromJson(JsonElement jsonElement, CallbackInfoReturnable<Ingredient> cir) {
