@@ -44,6 +44,8 @@ public class HexConfig {
 
         boolean isActionAllowedInCircles(ResourceLocation actionID);
 
+        boolean doVillagersTakeOffenseAtMindMurder();
+
         int DEFAULT_MAX_RECURSE_DEPTH = 64;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;

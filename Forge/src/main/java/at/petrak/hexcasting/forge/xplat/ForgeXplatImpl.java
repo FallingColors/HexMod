@@ -20,6 +20,7 @@ import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
+import at.petrak.hexcasting.ktxt.AccessorWrappers;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
@@ -39,6 +40,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -93,6 +95,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         mob.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
 
         mob.removeFreeWill();
+        if (mob instanceof Villager villager) {
+            AccessorWrappers.releaseAllPois(villager);
+        }
 
         if (mob.level instanceof ServerLevel) {
             ForgePacketHandler.getNetwork()

@@ -13,9 +13,8 @@
     "MixinWitch",
     "accessor.AccessorLivingEntity",
     "accessor.AccessorLootTable",
-    "accessor.AccessorRecipeProvider",
-    "accessor.AccessorTagsProvider",
     "accessor.AccessorUseOnContext",
+    "accessor.AccessorVillager",
     "accessor.CriteriaTriggersAccessor"
   ],
   "client": [

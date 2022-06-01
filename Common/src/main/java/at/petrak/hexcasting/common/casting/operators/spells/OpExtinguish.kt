@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.mixin.accessor.AccessorUseOnContext
+import at.petrak.hexcasting.ktxt.UseOnContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
@@ -66,7 +66,7 @@ object OpExtinguish : SpellOperator {
                                     val wilson = Items.WOODEN_SHOVEL // summon shovel from the ether to do our bidding
                                     val hereVec = Vec3.atCenterOf(here)
                                     wilson.useOn(
-                                        AccessorUseOnContext.`hex$new`(
+                                        UseOnContext(
                                             ctx.world,
                                             null,
                                             InteractionHand.MAIN_HAND,

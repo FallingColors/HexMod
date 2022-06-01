@@ -159,6 +159,8 @@ public class FabricHexConfig {
             ConfigTypes.makeList(ConfigTypes.STRING));
         private final PropertyMirror<List<String>> circleActionDenyList = PropertyMirror.create(
                 ConfigTypes.makeList(ConfigTypes.STRING));
+        private final PropertyMirror<Boolean> villagersOffendedByMindMurder = PropertyMirror.create(
+                ConfigTypes.BOOLEAN);
 
         public ConfigTree configure(ConfigTreeBuilder bob) {
             bob.fork("Spells")
@@ -184,7 +186,11 @@ public class FabricHexConfig {
 
                 .beginValue("actionDenyList", ConfigTypes.makeList(ConfigTypes.STRING), List.of())
                 .withComment("Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
-                .finishValue(actionDenyList::mirror);
+                .finishValue(actionDenyList::mirror)
+
+                .beginValue("villagersOffendedByMindMurder", ConfigTypes.BOOLEAN, true)
+                .withComment("Should villagers take offense when you flay the mind of their fellow villagers?")
+                .finishValue(villagersOffendedByMindMurder::mirror);
 
             return bob.build();
         }
@@ -211,7 +217,12 @@ public class FabricHexConfig {
 
         @Override
         public boolean isActionAllowedInCircles(ResourceLocation actionID) {
-            return false;
+            return !circleActionDenyList.getValue().contains(actionID.toString());
+        }
+
+        @Override
+        public boolean doVillagersTakeOffenseAtMindMurder() {
+            return villagersOffendedByMindMurder.getValue();
         }
     }
 }

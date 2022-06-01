@@ -11,7 +11,7 @@ import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import at.petrak.hexcasting.api.utils.obfuscated
 import at.petrak.hexcasting.common.lib.HexItems
-import at.petrak.hexcasting.mixin.accessor.AccessorLivingEntity
+import at.petrak.hexcasting.ktxt.lastHurt
 import net.minecraft.Util
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
@@ -104,11 +104,11 @@ sealed class Mishap : Throwable() {
     companion object {
         fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
             if (entity.invulnerableTime > 10) {
-                val lastHurt = (entity as AccessorLivingEntity).`hex$getLastHurt`()
+                val lastHurt = entity.lastHurt
                 if (lastHurt < amount)
                     entity.invulnerableTime = 0
                 else
-                    entity.`hex$setLastHurt`(lastHurt - amount)
+                    entity.lastHurt -= amount
             }
             entity.hurt(source, amount)
         }

@@ -79,6 +79,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
 
+        private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
+
+
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Spells");
             maxRecurseDepth = builder.comment("How many times a spell can recursively cast other spells")
@@ -103,6 +106,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
                 .defineList("actionDenyList", List.of(),
                     obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
+
+            villagersOffendedByMindMurder = builder.comment(
+                    "Should villagers take offense when you flay the mind of their fellow villagers?")
+                    .define("villagersOffendedByMindMurder", true);
         }
 
         @Override
@@ -128,6 +135,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean isActionAllowedInCircles(ResourceLocation actionID) {
             return !circleActionDenyList.get().contains(actionID.toString());
+        }
+
+        @Override
+        public boolean doVillagersTakeOffenseAtMindMurder() {
+            return villagersOffendedByMindMurder.get();
         }
     }
 }

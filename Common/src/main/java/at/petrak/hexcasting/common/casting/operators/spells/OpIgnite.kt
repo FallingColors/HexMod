@@ -1,15 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-
 import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.mixin.accessor.AccessorUseOnContext
+import at.petrak.hexcasting.ktxt.UseOnContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
@@ -46,7 +41,7 @@ object OpIgnite : SpellOperator {
             if (maxwell is FireChargeItem) {
                 // help
                 maxwell.useOn(
-                    AccessorUseOnContext.`hex$new`(
+                    UseOnContext(
                         ctx.world,
                         null,
                         InteractionHand.MAIN_HAND,

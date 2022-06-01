@@ -1,17 +1,15 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapAlreadyBrainswept
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadBrainsweep
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
+import at.petrak.hexcasting.ktxt.tellWitnessesThatIWasMurdered
 import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -55,6 +53,9 @@ object OpBrainsweep : SpellOperator {
         override fun cast(ctx: CastingContext) {
             ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
             Brainsweeping.brainsweep(sacrifice)
+            if (HexConfig.server().doVillagersTakeOffenseAtMindMurder()) {
+                sacrifice.tellWitnessesThatIWasMurdered(ctx.caster)
+            }
 
             ctx.world.playSound(null, sacrifice, SoundEvents.VILLAGER_DEATH, SoundSource.AMBIENT, 0.8f, 1f)
             ctx.world.playSound(null, sacrifice, SoundEvents.PLAYER_LEVELUP, SoundSource.AMBIENT, 0.5f, 0.8f)
