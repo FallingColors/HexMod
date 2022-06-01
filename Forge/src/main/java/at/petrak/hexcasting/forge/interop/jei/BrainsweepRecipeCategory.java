@@ -94,8 +94,13 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
                     new TranslatableComponent(biomeKey)));
             }
 
-            tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level",
-                recipe.villagerIn().minLevel()));
+            var minLevel = recipe.villagerIn().minLevel();
+            if (minLevel == 5)
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level",
+                        new TranslatableComponent("merchant.level." + minLevel)));
+            else
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level",
+                        new TranslatableComponent("merchant.level." + minLevel)));
             return tooltip;
         }
 

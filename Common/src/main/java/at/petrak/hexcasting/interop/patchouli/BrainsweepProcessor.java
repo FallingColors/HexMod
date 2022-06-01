@@ -81,8 +81,13 @@ public class BrainsweepProcessor implements IComponentProcessor {
                 return IVariable.wrap(out);
             }
             case "minLevel" -> {
-                return IVariable.wrap(
-                    I18n.get("hexcasting.tooltip.brainsweep.min_level", this.recipe.villagerIn().minLevel()));
+                var minLevel = this.recipe.villagerIn().minLevel();
+                if (minLevel == 5)
+                    return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.level",
+                            I18n.get("merchant.level." + minLevel)));
+                else
+                    return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.min_level",
+                            I18n.get("merchant.level." + minLevel)));
             }
             default -> {
                 return null;

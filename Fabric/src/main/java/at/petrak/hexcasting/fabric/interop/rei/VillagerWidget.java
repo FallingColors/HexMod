@@ -96,8 +96,13 @@ public class VillagerWidget extends Widget {
 					new TranslatableComponent(biomeKey)));
 		}
 
-		tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level",
-				villager.minLevel()));
+		var minLevel = villager.minLevel();
+		if (minLevel == 5)
+			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level",
+					new TranslatableComponent("merchant.level." + minLevel)));
+		else
+			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level",
+					new TranslatableComponent("merchant.level." + minLevel)));
 
 		return Tooltip.create(mouse, tooltip);
 	}
