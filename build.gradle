@@ -83,6 +83,10 @@ void setupJar(Object project) {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'

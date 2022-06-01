@@ -65,6 +65,9 @@ dependencies {
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
     include "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
 
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:$reiVersion"
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$reiVersion"
+
     // only to shut up compile warnings from CCA's usage of CheckEnv and Env
     compileOnly "com.demonwav.mcdev:annotations:1.0"
 }
