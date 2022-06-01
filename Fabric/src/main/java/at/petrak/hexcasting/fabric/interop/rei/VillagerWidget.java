@@ -97,9 +97,11 @@ public class VillagerWidget extends Widget {
 		}
 
 		var minLevel = villager.minLevel();
-		if (minLevel == 5)
+		if (minLevel >= 5)
 			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level",
 					new TranslatableComponent("merchant.level." + minLevel)));
+		else if (minLevel <= 1)
+			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level.any"));
 		else
 			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level",
 					new TranslatableComponent("merchant.level." + minLevel)));

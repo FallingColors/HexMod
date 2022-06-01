@@ -82,9 +82,11 @@ public class BrainsweepProcessor implements IComponentProcessor {
             }
             case "minLevel" -> {
                 var minLevel = this.recipe.villagerIn().minLevel();
-                if (minLevel == 5)
+                if (minLevel >= 5)
                     return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.level",
                             I18n.get("merchant.level." + minLevel)));
+                else if (minLevel <= 1)
+                    return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.level.any"));
                 else
                     return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.min_level",
                             I18n.get("merchant.level." + minLevel)));
