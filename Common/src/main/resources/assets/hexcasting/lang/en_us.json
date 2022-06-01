@@ -409,6 +409,7 @@
   "hexcasting.mishap.divide_by_zero.cos": "the cosine of %s",
   "hexcasting.mishap.no_akashic_record": "No Akashic Record at %s",
   "hexcasting.mishap.disallowed": "%s has been disallowed by the server admins",
+  "hexcasting.mishap.disallowed_circle": "%s has been disallowed in spell circles by the server admins",
   "hexcasting.mishap.invalid_spell_datum_type": "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
   "hexcasting.mishap.unknown": "%s threw an exception (%s). This is a bug in the mod.",
 

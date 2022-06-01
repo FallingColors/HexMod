@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
 import net.minecraft.world.item.DyeColor
 
-class MishapDisallowedSpell : Mishap() {
+class MishapDisallowedSpell(val type: String = "disallowed") : Mishap() {
     override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.BLACK)
 
@@ -17,5 +17,5 @@ class MishapDisallowedSpell : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
-        error("disallowed", actionName(errorCtx.action))
+        error(type, actionName(errorCtx.action))
 }

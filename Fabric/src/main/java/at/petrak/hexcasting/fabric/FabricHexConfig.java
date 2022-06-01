@@ -157,6 +157,8 @@ public class FabricHexConfig {
             ConfigTypes.INTEGER.withMinimum(4));
         private final PropertyMirror<List<String>> actionDenyList = PropertyMirror.create(
             ConfigTypes.makeList(ConfigTypes.STRING));
+        private final PropertyMirror<List<String>> circleActionDenyList = PropertyMirror.create(
+                ConfigTypes.makeList(ConfigTypes.STRING));
 
         public ConfigTree configure(ConfigTreeBuilder bob) {
             bob.fork("Spells")
@@ -174,10 +176,14 @@ public class FabricHexConfig {
                 .beginValue("maxSpellCircleLength", ConfigTypes.NATURAL, DEFAULT_MAX_SPELL_CIRCLE_LENGTH)
                 .withComment("The maximum number of slates in a spell circle")
                 .finishValue(maxSpellCircleLength::mirror)
+
+                .beginValue("circleActionDenyList", ConfigTypes.makeList(ConfigTypes.STRING), List.of())
+                .withComment("Resource locations of disallowed actions within circles. Trying to cast one of these in a circle will result in a mishap.")
+                .finishValue(circleActionDenyList::mirror)
                 .finishBranch()
 
                 .beginValue("actionDenyList", ConfigTypes.makeList(ConfigTypes.STRING), List.of())
-                .withComment("The maximum number of slates in a spell circle")
+                .withComment("Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
                 .finishValue(actionDenyList::mirror);
 
             return bob.build();
@@ -201,6 +207,11 @@ public class FabricHexConfig {
         @Override
         public boolean isActionAllowed(ResourceLocation actionID) {
             return !actionDenyList.getValue().contains(actionID.toString());
+        }
+
+        @Override
+        public boolean isActionAllowedInCircles(ResourceLocation actionID) {
+            return false;
         }
     }
 }

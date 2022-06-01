@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
@@ -77,6 +78,8 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     autoFail = true;
                 }
             }
+
+            sender.awardStat(HexStatistics.PATTERNS_DRAWN);
 
             var harness = IXplatAbstractions.INSTANCE.getHarness(sender, this.handUsed);
 

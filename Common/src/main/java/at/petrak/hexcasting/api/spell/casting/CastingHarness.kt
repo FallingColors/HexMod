@@ -132,9 +132,6 @@ class CastingHarness private constructor(
      * handle it functionally.
      */
     fun updateWithPattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
-        if (this.ctx.spellCircle == null)
-            this.ctx.caster.awardStat(HexStatistics.PATTERNS_DRAWN)
-
         var operatorIdPair: Pair<Operator, ResourceLocation>? = null
         try {
 
@@ -142,7 +139,10 @@ class CastingHarness private constructor(
             operatorIdPair = PatternRegistry.matchPatternAndID(newPat, world)
             if (!HexConfig.server().isActionAllowed(operatorIdPair.second)) {
                 throw MishapDisallowedSpell()
+            } else if (this.ctx.spellCircle != null && !HexConfig.server().isActionAllowedInCircles(operatorIdPair.second)) {
+                throw MishapDisallowedSpell("disallowed_circle")
             }
+
             val pattern = operatorIdPair.first
 
             val unenlightened = pattern.isGreat && !ctx.isCasterEnlightened

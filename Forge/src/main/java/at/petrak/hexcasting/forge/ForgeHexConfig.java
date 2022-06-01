@@ -77,6 +77,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.IntValue maxSpellCircleLength;
 
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
+        private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Spells");
@@ -91,6 +92,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             builder.push("Spell Circles");
             maxSpellCircleLength = builder.comment("The maximum number of slates in a spell circle")
                 .defineInRange("maxSpellCircleLength", DEFAULT_MAX_SPELL_CIRCLE_LENGTH, 4, Integer.MAX_VALUE);
+
+            circleActionDenyList = builder.comment(
+                            "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle will result in a mishap.")
+                    .defineList("circleActionDenyList", List.of(),
+                            obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
             builder.pop();
 
             actionDenyList = builder.comment(
@@ -117,6 +123,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean isActionAllowed(ResourceLocation actionID) {
             return !actionDenyList.get().contains(actionID.toString());
+        }
+
+        @Override
+        public boolean isActionAllowedInCircles(ResourceLocation actionID) {
+            return !circleActionDenyList.get().contains(actionID.toString());
         }
     }
 }
