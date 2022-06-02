@@ -69,8 +69,8 @@ dependencies {
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
     include "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
 
-    modImplementation "io.github.tropheusj:serialization-hooks:0.1.0+1.18.170eaf6"
-    include "io.github.tropheusj:serialization-hooks:0.1.0+1.18.170eaf6"
+    modImplementation "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
+    include "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
 
     // Optional integrations
 
