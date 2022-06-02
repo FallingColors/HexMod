@@ -67,6 +67,7 @@ import net.minecraftforge.common.loot.CanToolPerformAction;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -387,6 +388,18 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public LootItemCondition.Builder isShearsCondition() {
         return CanToolPerformAction.canToolPerformAction(ToolActions.SHEARS_DIG);
+    }
+
+    @Override
+    public String getModName(String namespace) {
+        if (namespace.equals("c")) {
+            return "Common";
+        }
+        Optional<? extends ModContainer> container = ModList.get().getModContainerById(namespace);
+        if (container.isPresent()) {
+            return container.get().getModInfo().getDisplayName();
+        }
+        return namespace;
     }
 
     // it's literally the EXACT SAME on fabric aaa

@@ -15,6 +15,7 @@
   "client": [
     "client.FabricAbstractTextureMixin",
     "client.FabricMouseHandlerMixin",
-    "client.FabricParticleEngineMixin"
+    "client.FabricParticleEngineMixin",
+    "client.accessor.FabricAccessorGameRenderer"
   ]
 }

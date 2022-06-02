@@ -141,6 +141,8 @@ public interface IXplatAbstractions {
 
     LootItemCondition.Builder isShearsCondition();
 
+    String getModName(String namespace);
+
     // interop
 
     PehkuiInterop.ApiAbstraction getPehkuiApi();

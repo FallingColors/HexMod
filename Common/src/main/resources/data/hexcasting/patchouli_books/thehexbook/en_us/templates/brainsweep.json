@@ -23,16 +23,13 @@
       "entity": "#entity"
     },
     {
-      "type": "patchouli:tooltip",
+      "type": "patchouli:custom",
+      "class": "at.petrak.hexcasting.interop.patchouli.CustomComponentTooltip",
       "x": 36,
       "y": 18,
       "width": 26,
       "height": 49,
-      "tooltip": [
-        "#profession",
-        "#biome",
-        "#minLevel"
-      ]
+      "tooltip": "#entityTooltip"
     },
     {
       "type": "patchouli:item",

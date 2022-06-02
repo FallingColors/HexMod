@@ -2,13 +2,21 @@ package at.petrak.hexcasting.common.recipe.ingredient;
 
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 // you ever step back and realize the thoughts that have coursed through your mind for so long
@@ -23,10 +31,80 @@ public record VillagerIngredient(
     public boolean test(Villager villager) {
         var data = villager.getVillagerData();
         ResourceLocation profID = IXplatAbstractions.INSTANCE.getID(data.getProfession());
-        
+
         return (this.profession == null || this.profession.equals(profID))
             && (this.biome == null || this.biome.equals(Registry.VILLAGER_TYPE.getKey(data.getType())))
             && this.minLevel <= data.getLevel();
+    }
+
+    public Component name() {
+        MutableComponent component = new TextComponent("");
+
+        boolean addedAny = false;
+
+        if (profession != null) {
+            component.append(new TranslatableComponent("entity.minecraft.villager." + profession.getPath()));
+            addedAny = true;
+        }
+
+        if (biome != null) {
+            if (addedAny)
+                component.append(" ");
+            component.append(new TranslatableComponent("biome.minecraft." + biome.getPath()));
+            addedAny = true;
+        }
+
+        if (minLevel >= 5) {
+            if (addedAny)
+                component.append(" ");
+            component.append(new TranslatableComponent("merchant.level.5"));
+            addedAny = true;
+        } else if (minLevel > 1) {
+            if (addedAny)
+                component.append(" ");
+            component.append(new TranslatableComponent("merchant.level." + minLevel));
+            addedAny = true;
+        }
+
+        if (addedAny)
+            component.append(" ");
+        component.append(EntityType.VILLAGER.getDescription());
+
+        return component;
+    }
+
+    public List<Component> getTooltip() {
+        List<Component> tooltip = new ArrayList<>();
+        tooltip.add(EntityType.VILLAGER.getDescription());
+
+        if (profession != null) {
+            var professionKey = "entity.minecraft.villager." + profession.getPath();
+            tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.profession",
+                    new TranslatableComponent(professionKey)));
+        }
+
+        if (biome != null) {
+            var biomeKey = "biome.minecraft." + biome.getPath();
+            tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.biome",
+                    new TranslatableComponent(biomeKey)));
+        }
+
+        if (minLevel >= 5)
+            tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level",
+                    new TranslatableComponent("merchant.level.5")));
+        else if (minLevel > 1)
+            tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level",
+                    new TranslatableComponent("merchant.level." + minLevel)));
+
+        tooltip.add(getModNameComponent());
+
+        return tooltip;
+    }
+
+    public Component getModNameComponent() {
+        String namespace = profession == null ? "minecraft" : profession.getNamespace();
+        String mod = IXplatAbstractions.INSTANCE.getModName(namespace);
+        return new TextComponent(mod).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
     }
 
     public JsonObject serialize() {

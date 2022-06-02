@@ -35,6 +35,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -67,6 +68,7 @@ import org.jetbrains.annotations.Nullable;
 import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -341,6 +343,18 @@ public class FabricXplatImpl implements IXplatAbstractions {
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(
                 HexItemTags.create(new ResourceLocation("c", "shears"))))
         );
+    }
+
+    @Override
+    public String getModName(String namespace) {
+        if (namespace.equals("c")) {
+            return "Common";
+        }
+        Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(namespace);
+        if (container.isPresent()) {
+            return container.get().getMetadata().getName();
+        }
+        return namespace;
     }
 
     private static PehkuiInterop.ApiAbstraction PEHKUI_API = null;

@@ -3,7 +3,6 @@ package at.petrak.hexcasting.interop.patchouli;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import vazkii.patchouli.api.IComponentProcessor;
@@ -58,38 +57,8 @@ public class BrainsweepProcessor implements IComponentProcessor {
                     profession, biome, level);
                 return IVariable.wrap(iHatePatchouli);
             }
-            case "profession" -> {
-                var profession = this.recipe.villagerIn().profession();
-                if (profession == null) {
-                    return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.profession.any"));
-                }
-                // Villager.java:677
-                // jesus christ the things i do for this mod
-                var probablyTheKeyForTheName = "entity.minecraft.villager." + profession.getPath();
-                var out = I18n.get("hexcasting.tooltip.brainsweep.profession", I18n.get(probablyTheKeyForTheName));
-                return IVariable.wrap(out);
-            }
-            case "biome" -> {
-                var biome = this.recipe.villagerIn().biome();
-                if (biome == null) {
-                    return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.biome.any"));
-                }
-                // i fucking give up
-                var definitelyProbablyTheKeyWhyDidIMakeThisUpdateSoBig = "biome.minecraft." + biome.getPath();
-                var out = I18n.get("hexcasting.tooltip.brainsweep.biome",
-                    I18n.get(definitelyProbablyTheKeyWhyDidIMakeThisUpdateSoBig));
-                return IVariable.wrap(out);
-            }
-            case "minLevel" -> {
-                var minLevel = this.recipe.villagerIn().minLevel();
-                if (minLevel >= 5)
-                    return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.level",
-                            I18n.get("merchant.level." + minLevel)));
-                else if (minLevel <= 1)
-                    return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.level.any"));
-                else
-                    return IVariable.wrap(I18n.get("hexcasting.tooltip.brainsweep.min_level",
-                            I18n.get("merchant.level." + minLevel)));
+            case "entityTooltip" -> {
+                return IVariable.wrapList(this.recipe.villagerIn().getTooltip().stream().map(IVariable::from).toList());
             }
             default -> {
                 return null;

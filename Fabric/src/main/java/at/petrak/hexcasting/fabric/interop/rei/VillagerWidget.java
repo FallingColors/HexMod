@@ -4,29 +4,23 @@ import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import me.shedaniel.math.Point;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static at.petrak.hexcasting.client.RenderLib.renderEntity;
 
 public class VillagerWidget extends Widget {
 	protected final VillagerIngredient villager;
@@ -78,57 +72,11 @@ public class VillagerWidget extends Widget {
 	@NotNull
 	@Override
 	public Tooltip getTooltip(Point mouse) {
-		List<Component> tooltip = new ArrayList<>(3);
-		var profession = villager.profession();
-		if (profession == null) {
-			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.profession.any"));
-		} else {
-			var professionKey = "entity.minecraft.villager." + profession.getPath();
-			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.profession",
-					new TranslatableComponent(professionKey)));
-		}
-		var biome = villager.biome();
-		if (biome == null) {
-			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.biome.any"));
-		} else {
-			var biomeKey = "biome.minecraft." + biome.getPath();
-			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.biome",
-					new TranslatableComponent(biomeKey)));
-		}
-
-		var minLevel = villager.minLevel();
-		if (minLevel >= 5)
-			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level",
-					new TranslatableComponent("merchant.level." + minLevel)));
-		else if (minLevel <= 1)
-			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level.any"));
-		else
-			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level",
-					new TranslatableComponent("merchant.level." + minLevel)));
-
-		return Tooltip.create(mouse, tooltip);
+		return Tooltip.create(mouse, villager.getTooltip());
 	}
 
 	@Override
 	public List<? extends GuiEventListener> children() {
 		return Collections.emptyList();
-	}
-
-	private static void renderEntity(PoseStack ms, Entity entity, Level world, float x, float y, float rotation,
-									 float renderScale, float offset) {
-		entity.level = world;
-		ms.pushPose();
-		ms.translate(x, y, 50.0D);
-		ms.scale(renderScale, renderScale, renderScale);
-		ms.translate(0.0D, offset, 0.0D);
-		ms.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-		ms.mulPose(Vector3f.YP.rotationDegrees(rotation));
-		EntityRenderDispatcher erd = Minecraft.getInstance().getEntityRenderDispatcher();
-		MultiBufferSource.BufferSource immediate = Minecraft.getInstance().renderBuffers().bufferSource();
-		erd.setRenderShadow(false);
-		erd.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, ms, immediate, 15728880);
-		erd.setRenderShadow(true);
-		immediate.endBatch();
-		ms.popPose();
 	}
 }

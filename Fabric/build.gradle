@@ -34,6 +34,7 @@ loom {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven { url "https://maven.shedaniel.me/" }
     maven {
         url 'https://ladysnake.jfrog.io/artifactory/mods'
@@ -76,7 +77,8 @@ dependencies {
     // Optional integrations
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:$reiVersion"
-    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$reiVersion"
+
+    modImplementation "dev.emi:emi:1.0.0-beta"
 
     modImplementation "maven.modrinth:fusions-gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {

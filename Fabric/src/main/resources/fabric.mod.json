@@ -32,6 +32,9 @@
     ],
     "rei_plugins_v0": [
       "at.petrak.hexcasting.fabric.interop.rei.HexREIPlugin"
+    ],
+    "emi": [
+      "at.petrak.hexcasting.fabric.interop.emi.HexEMIPlugin"
     ]
   },
   "mixins": [

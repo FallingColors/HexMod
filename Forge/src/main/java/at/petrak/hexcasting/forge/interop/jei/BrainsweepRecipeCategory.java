@@ -4,7 +4,6 @@ import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -16,30 +15,26 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import static at.petrak.hexcasting.client.RenderLib.renderEntity;
 
 public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecipe> {
     public static final ResourceLocation UID = modLoc("brainsweep");
@@ -76,34 +71,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     public @NotNull List<Component> getTooltipStrings(@NotNull BrainsweepRecipe recipe,
         @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
-            List<Component> tooltip = new ArrayList<>(3);
-            var profession = recipe.villagerIn().profession();
-            if (profession == null) {
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.profession.any"));
-            } else {
-                var professionKey = "entity.minecraft.villager." + profession.getPath();
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.profession",
-                    new TranslatableComponent(professionKey)));
-            }
-            var biome = recipe.villagerIn().biome();
-            if (biome == null) {
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.biome.any"));
-            } else {
-                var biomeKey = "biome.minecraft." + biome.getPath();
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.biome",
-                    new TranslatableComponent(biomeKey)));
-            }
-
-            var minLevel = recipe.villagerIn().minLevel();
-            if (minLevel >= 5)
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level",
-                        new TranslatableComponent("merchant.level." + minLevel)));
-            else if (minLevel <= 1)
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level.any"));
-            else
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level",
-                        new TranslatableComponent("merchant.level." + minLevel)));
-            return tooltip;
+            return recipe.villagerIn().getTooltip();
         }
 
         return Collections.emptyList();
@@ -135,24 +103,6 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             renderEntity(stack, villager, level, 50, 62.5f, ClientTickCounter.total, 20, 0);
         }
-    }
-
-    private static void renderEntity(PoseStack ms, Entity entity, Level world, float x, float y, float rotation,
-        float renderScale, float offset) {
-        entity.level = world;
-        ms.pushPose();
-        ms.translate(x, y, 50.0D);
-        ms.scale(renderScale, renderScale, renderScale);
-        ms.translate(0.0D, offset, 0.0D);
-        ms.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-        ms.mulPose(Vector3f.YP.rotationDegrees(rotation));
-        EntityRenderDispatcher erd = Minecraft.getInstance().getEntityRenderDispatcher();
-        MultiBufferSource.BufferSource immediate = Minecraft.getInstance().renderBuffers().bufferSource();
-        erd.setRenderShadow(false);
-        erd.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, ms, immediate, 15728880);
-        erd.setRenderShadow(true);
-        immediate.endBatch();
-        ms.popPose();
     }
 
     @Override
