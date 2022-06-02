@@ -24,8 +24,12 @@ import java.util.List;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
-    private static final ResourceLocation PRISTINE_BG = modLoc("textures/entity/scroll.png");
-    private static final ResourceLocation ANCIENT_BG = modLoc("textures/entity/scroll_ancient.png");
+    private static final ResourceLocation PRISTINE_BG_LARGE = modLoc("textures/entity/scroll_large.png");
+    private static final ResourceLocation PRISTINE_BG_MEDIUM = modLoc("textures/entity/scroll_medium.png");
+    private static final ResourceLocation PRISTINE_BG_SMOL = modLoc("textures/block/scroll_paper.png");
+    private static final ResourceLocation ANCIENT_BG_LARGE = modLoc("textures/entity/scroll_ancient_large.png");
+    private static final ResourceLocation ANCIENT_BG_MEDIUM = modLoc("textures/entity/scroll_ancient_medium.png");
+    private static final ResourceLocation ANCIENT_BG_SMOL = modLoc("textures/block/ancient_scroll_paper.png");
     private static final ResourceLocation WHITE = modLoc("textures/entity/white.png");
 
     public WallScrollRenderer(EntityRendererProvider.Context p_174008_) {
@@ -36,7 +40,7 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
     @Override
     public void render(EntityWallScroll wallScroll, float yaw, float partialTicks, PoseStack ps,
         MultiBufferSource bufSource, int packedLight) {
-        
+
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
         ps.pushPose();
@@ -51,9 +55,9 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             // X is right, Y is down, Z is *in*
             // Our origin will be the lower-left corner of the scroll touching the wall
             // (so it has "negative" thickness)
-            ps.translate(-1.5, -1.5, 1f / 32f);
+            ps.translate(-wallScroll.blockSize / 2f, -wallScroll.blockSize / 2f, 1f / 32f);
 
-            float dx = 3f, dy = 3f, dz = -1f / 16f;
+            float dx = wallScroll.blockSize, dy = wallScroll.blockSize, dz = -1f / 16f;
             float margin = 1f / 48f;
             var last = ps.last();
             var mat = last.pose();
@@ -101,8 +105,12 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
 
             ps.mulPose(Vector3f.YP.rotationDegrees(180f));
             ps.translate(0, 0, 1.1f / 16f);
-            float scale = 1f / 40f;
-            ps.scale(scale, scale, scale);
+            // make smaller scrolls not be charlie kirk-sized
+            // i swear, learning about these functions with asymptotes where slope != 0 is the most useful thing
+            // I've ever learned in a math class
+            float unCharlieKirk = Mth.sqrt(wallScroll.blockSize * wallScroll.blockSize + 60);
+            float scale = 1f / 300f * unCharlieKirk;
+            ps.scale(scale, scale, 0.01f);
 
             var last = ps.last();
             var mat = last.pose();
@@ -110,11 +118,13 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             var outer = 0xff_d2c8c8;
             var inner = 0xc8_322b33;
             var verts = bufSource.getBuffer(RenderType.entityCutout(WHITE));
-            theCoolerDrawLineSeq(mat, norm, light, verts, points, 5, outer);
+            theCoolerDrawLineSeq(mat, norm, light, verts, points, wallScroll.blockSize * 5f / 3f, outer);
             ps.translate(0, 0, 0.01);
-            theCoolerDrawLineSeq(mat, norm, light, verts, points, 2, inner);
+            theCoolerDrawLineSeq(mat, norm, light, verts, points, wallScroll.blockSize * 2f / 3f, inner);
 
             if (wallScroll.getShowsStrokeOrder()) {
+                var spotFrac = 0.8f * wallScroll.blockSize;
+
                 var animTime = wallScroll.tickCount;
                 var pointCircuit =
                     (animTime * HexConfig.client().patternPointSpeedMultiplier()) % (points.size() + 10);
@@ -130,17 +140,20 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
                     );
 
                     ps.translate(0, 0, 0.01);
-                    theCoolerDrawSpot(mat, norm, light, verts, drawPos, 2.6666f, 0xff_cfa0f3);
+                    theCoolerDrawSpot(mat, norm, light, verts, drawPos, 2.6666f / 3f * spotFrac,
+                        0xff_cfa0f3);
                     ps.translate(0, 0, 0.01);
-                    theCoolerDrawSpot(mat, norm, light, verts, drawPos, 2f, 0xff_8d6acc);
+                    theCoolerDrawSpot(mat, norm, light, verts, drawPos, 2f / 3f * spotFrac,
+                        0xff_8d6acc);
                 } else {
                     ps.translate(0, 0, 0.02);
                 }
 
                 ps.translate(0, 0, 0.01);
-                theCoolerDrawSpot(mat, norm, light, verts, points.get(0), 3f, 0xff_4946d3);
+                theCoolerDrawSpot(mat, norm, light, verts, points.get(0), spotFrac, 0xff_4946d3);
                 ps.translate(0, 0, 0.01);
-                theCoolerDrawSpot(mat, norm, light, verts, points.get(0), 2f, 0xff_5b7bd7);
+                theCoolerDrawSpot(mat, norm, light, verts, points.get(0), 2f / 3f * spotFrac,
+                    0xff_5b7bd7);
             }
 
             ps.popPose();
@@ -153,9 +166,21 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
     @Override
     public ResourceLocation getTextureLocation(EntityWallScroll wallScroll) {
         if (wallScroll.isAncient) {
-            return ANCIENT_BG;
+            if (wallScroll.blockSize <= 1) {
+                return ANCIENT_BG_SMOL;
+            } else if (wallScroll.blockSize == 2) {
+                return ANCIENT_BG_MEDIUM;
+            } else {
+                return ANCIENT_BG_LARGE;
+            }
         } else {
-            return PRISTINE_BG;
+            if (wallScroll.blockSize <= 1) {
+                return PRISTINE_BG_SMOL;
+            } else if (wallScroll.blockSize == 2) {
+                return PRISTINE_BG_MEDIUM;
+            } else {
+                return PRISTINE_BG_LARGE;
+            }
         }
     }
 

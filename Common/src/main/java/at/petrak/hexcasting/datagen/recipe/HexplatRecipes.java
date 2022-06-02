@@ -151,12 +151,25 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern(" B ")
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.SCROLL)
+        ShapedRecipeBuilder.shaped(HexItems.SCROLL_SMOL)
+            .define('P', Items.PAPER)
+            .define('A', Items.AMETHYST_SHARD)
+            .pattern(" A")
+            .pattern("P ")
+            .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
+        ShapedRecipeBuilder.shaped(HexItems.SCROLL_MEDIUM)
             .define('P', Items.PAPER)
             .define('A', Items.AMETHYST_SHARD)
             .pattern("  A")
             .pattern("PP ")
             .pattern("PP ")
+            .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
+        ShapedRecipeBuilder.shaped(HexItems.SCROLL_LARGE)
+            .define('P', Items.PAPER)
+            .define('A', Items.AMETHYST_SHARD)
+            .pattern("PPA")
+            .pattern("PPP")
+            .pattern("PPP")
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.SLATE, 6)

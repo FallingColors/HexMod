@@ -13,7 +13,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/network/clientbound/PacketSpawnDoppleganger.java
 public record MsgNewWallScrollAck(ClientboundAddEntityPacket inner, BlockPos pos, Direction dir, ItemStack scrollItem,
-                                  boolean showsStrokeOrder) implements IMessage {
+                                  boolean showsStrokeOrder, int blockSize) implements IMessage {
     public static final ResourceLocation ID = modLoc("wallscr");
 
     @Override
@@ -28,6 +28,7 @@ public record MsgNewWallScrollAck(ClientboundAddEntityPacket inner, BlockPos pos
         buf.writeByte(dir.ordinal());
         buf.writeItem(scrollItem);
         buf.writeBoolean(showsStrokeOrder);
+        buf.writeVarInt(blockSize);
     }
 
     public static MsgNewWallScrollAck deserialize(FriendlyByteBuf buf) {
@@ -36,7 +37,8 @@ public record MsgNewWallScrollAck(ClientboundAddEntityPacket inner, BlockPos pos
         var dir = Direction.values()[buf.readByte()];
         var scroll = buf.readItem();
         var strokeOrder = buf.readBoolean();
-        return new MsgNewWallScrollAck(inner, pos, dir, scroll, strokeOrder);
+        var blockSize = buf.readVarInt();
+        return new MsgNewWallScrollAck(inner, pos, dir, scroll, strokeOrder, blockSize);
     }
 
     public static void handle(MsgNewWallScrollAck self) {
@@ -48,7 +50,8 @@ public record MsgNewWallScrollAck(ClientboundAddEntityPacket inner, BlockPos pos
                     player.connection.handleAddEntity(self.inner);
                     var e = player.level.getEntity(self.inner.getId());
                     if (e instanceof EntityWallScroll scroll) {
-                        scroll.readSpawnData(self.pos, self.dir, self.scrollItem, self.showsStrokeOrder);
+                        scroll.readSpawnData(self.pos, self.dir, self.scrollItem, self.showsStrokeOrder,
+                            self.blockSize);
                     }
                 }
             }

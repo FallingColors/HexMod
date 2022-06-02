@@ -134,7 +134,7 @@ public class HexLootTables extends PaucalLootTableProvider {
     private LootTable.Builder makeScrollAdder(float stddev) {
         var pool = LootPool.lootPool()
             .setRolls(UniformGenerator.between(-stddev, stddev))
-            .add(LootItem.lootTableItem(HexItems.SCROLL))
+            .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE))
             .apply(() -> new PatternScrollFunc(new LootItemCondition[0]));
         return LootTable.lootTable().withPool(pool);
     }

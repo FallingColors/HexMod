@@ -57,7 +57,9 @@ public class HexItems {
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
         new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1).defaultDurability(Tiers.DIAMOND.getUses())));
 
-    public static final ItemScroll SCROLL = make("scroll", new ItemScroll(props()));
+    public static final ItemScroll SCROLL_SMOL = make("scroll_small", new ItemScroll(props(), 1));
+    public static final ItemScroll SCROLL_MEDIUM = make("scroll_medium", new ItemScroll(props(), 2));
+    public static final ItemScroll SCROLL_LARGE = make("scroll", new ItemScroll(props(), 3));
 
     public static final ItemSlate SLATE = make("slate", new ItemSlate(HexBlocks.SLATE, props()));
 
@@ -85,8 +87,8 @@ public class HexItems {
 
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
         new ItemCreativeUnlocker(unstackable()
-                .rarity(Rarity.EPIC)
-                .food(new FoodProperties.Builder().nutrition(20).saturationMod(1f).alwaysEat().build())));
+            .rarity(Rarity.EPIC)
+            .food(new FoodProperties.Builder().nutrition(20).saturationMod(1f).alwaysEat().build())));
 
     //
 

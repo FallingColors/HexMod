@@ -42,15 +42,14 @@ public class HexItemModels extends PaucalItemModelProvider {
             new ResourceLocation("item/generated"),
             "layer0", new ResourceLocation("item/amethyst_shard"));
 
-        simpleItem(modLoc("scroll_pristine"));
-        simpleItem(modLoc("scroll_ancient"));
-        getBuilder(HexItems.SCROLL.getRegistryName().getPath())
-            .override()
-            .predicate(ItemScroll.ANCIENT_PREDICATE, 0f)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_pristine"))).end()
-            .override()
-            .predicate(ItemScroll.ANCIENT_PREDICATE, 1f)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_ancient"))).end();
+        for (var age : new String[]{"pristine", "ancient"}) {
+            for (var size : new String[]{"small", "medium", "large"}) {
+                simpleItem(modLoc("scroll_" + age + "_" + size));
+            }
+        }
+        buildScroll(HexItems.SCROLL_SMOL, "small");
+        buildScroll(HexItems.SCROLL_MEDIUM, "medium");
+        buildScroll(HexItems.SCROLL_LARGE, "large");
 
         simpleItem(HexItems.SCRYING_LENS);
         getBuilder(HexItems.SCRYING_LENS.getRegistryName().getPath())
@@ -171,6 +170,16 @@ public class HexItemModels extends PaucalItemModelProvider {
             .texture("texture", modLoc("block/akashic/planks1"));
         getBuilder(HexBlocks.AKASHIC_PRESSURE_PLATE.getRegistryName().getPath())
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/akashic_pressure_plate")));
+    }
+
+    private void buildScroll(Item item, String size) {
+        getBuilder(item.getRegistryName().getPath())
+            .override()
+            .predicate(ItemScroll.ANCIENT_PREDICATE, 0f)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_pristine_" + size))).end()
+            .override()
+            .predicate(ItemScroll.ANCIENT_PREDICATE, 1f)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_ancient_" + size))).end();
     }
 
     private void buildWand(Item item, String name) {

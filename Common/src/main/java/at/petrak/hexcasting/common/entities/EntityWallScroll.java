@@ -42,6 +42,7 @@ public class EntityWallScroll extends HangingEntity {
     public ItemStack scroll;
     public HexPattern pattern;
     public boolean isAncient;
+    public int blockSize;
     // Client-side only!
     public List<Vec2> zappyPoints;
 
@@ -49,11 +50,15 @@ public class EntityWallScroll extends HangingEntity {
         super(type, world);
     }
 
-    public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll, boolean showStrokeOrder) {
+    public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll, boolean showStrokeOrder,
+        int blockSize) {
         super(HexEntities.WALL_SCROLL, world, pos);
-        this.loadDataFromScrollItem(scroll);
         this.setDirection(dir);
+        this.blockSize = blockSize;
         this.setShowsStrokeOrder(showStrokeOrder);
+
+        this.loadDataFromScrollItem(scroll);
+        this.recalculateBoundingBox();
     }
 
     private void loadDataFromScrollItem(ItemStack scroll) {
@@ -63,7 +68,8 @@ public class EntityWallScroll extends HangingEntity {
         if (patternTag != null) {
             this.pattern = HexPattern.fromNBT(patternTag);
             if (this.level.isClientSide) {
-                var pair = RenderLib.getCenteredPattern(pattern, 128, 128, 16f);
+                var pair = RenderLib.getCenteredPattern(pattern, 128f / 3 * blockSize, 128f / 3 * blockSize,
+                    16f / 3 * blockSize);
                 var dots = pair.getSecond();
                 this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f, 0f);
             }
@@ -92,12 +98,12 @@ public class EntityWallScroll extends HangingEntity {
 
     @Override
     public int getWidth() {
-        return 48;
+        return 16 * blockSize;
     }
 
     @Override
     public int getHeight() {
-        return 48;
+        return 16 * blockSize;
     }
 
     @Override
@@ -138,15 +144,18 @@ public class EntityWallScroll extends HangingEntity {
     public Packet<?> getAddEntityPacket() {
         return IXplatAbstractions.INSTANCE.toVanillaClientboundPacket(
             new MsgNewWallScrollAck(new ClientboundAddEntityPacket(this),
-                pos, direction, scroll, getShowsStrokeOrder()));
+                pos, direction, scroll, getShowsStrokeOrder(), blockSize));
     }
 
     public void readSpawnData(BlockPos pos, Direction dir, ItemStack scrollItem,
-        boolean showsStrokeOrder) {
+        boolean showsStrokeOrder, int blockSize) {
         this.pos = pos;
         this.setDirection(dir);
-        this.loadDataFromScrollItem(scrollItem);
         this.setShowsStrokeOrder(showsStrokeOrder);
+        this.blockSize = blockSize;
+
+        this.recalculateBoundingBox();
+        this.loadDataFromScrollItem(scrollItem);
     }
 
     @Override
@@ -154,6 +163,7 @@ public class EntityWallScroll extends HangingEntity {
         tag.putByte("direction", (byte) this.direction.ordinal());
         tag.put("scroll", HexUtils.serializeToNBT(this.scroll));
         tag.putBoolean("showsStrokeOrder", this.getShowsStrokeOrder());
+        tag.putInt("blockSize", this.blockSize);
         super.addAdditionalSaveData(tag);
     }
 
@@ -162,10 +172,16 @@ public class EntityWallScroll extends HangingEntity {
         this.direction = Direction.values()[tag.getByte("direction")];
         var scroll = ItemStack.of(tag.getCompound("scroll"));
         this.setShowsStrokeOrder(tag.getBoolean("showsStrokeOrder"));
+        if (tag.contains("blockSize")) {
+            this.blockSize = tag.getInt("blockSize");
+        } else {
+            this.blockSize = 3;
+        }
 
         super.readAdditionalSaveData(tag);
         this.setDirection(this.direction);
         this.loadDataFromScrollItem(scroll);
+        this.recalculateBoundingBox();
     }
 
     @Override

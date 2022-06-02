@@ -41,8 +41,11 @@ public class ItemScroll extends Item implements DataHolderItem {
     public static final String TAG_PATTERN = "pattern";
     public static final ResourceLocation ANCIENT_PREDICATE = modLoc("ancient");
 
-    public ItemScroll(Properties pProperties) {
+    public final int blockSize;
+
+    public ItemScroll(Properties pProperties, int blockSize) {
         super(pProperties);
+        this.blockSize = blockSize;
     }
 
     @Override
@@ -81,7 +84,7 @@ public class ItemScroll extends Item implements DataHolderItem {
         var level = ctx.getLevel();
         var scrollStack = itemstack.copy();
         scrollStack.setCount(1);
-        var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack, false);
+        var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack, false, this.blockSize);
 
         // i guess
         var stackTag = itemstack.getTag();
@@ -103,20 +106,22 @@ public class ItemScroll extends Item implements DataHolderItem {
         }
     }
 
+    // [VanillaCopy] of HangingEntityItem
     protected boolean mayPlace(Player pPlayer, Direction pDirection, ItemStack pHangingEntityStack, BlockPos pPos) {
         return !pDirection.getAxis().isVertical() && pPlayer.mayUseItemAt(pPos, pDirection, pHangingEntityStack);
     }
 
     @Override
     public Component getName(ItemStack pStack) {
+        var descID = this.getDescriptionId(pStack);
         var ancientId = NBTHelper.getString(pStack, TAG_OP_ID);
         if (ancientId != null) {
-            return new TranslatableComponent("item.hexcasting.scroll.of",
+            return new TranslatableComponent(descID + ".of",
                 new TranslatableComponent("hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
         } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
-            return new TranslatableComponent("item.hexcasting.scroll");
+            return new TranslatableComponent(descID);
         } else {
-            return new TranslatableComponent("item.hexcasting.scroll.empty");
+            return new TranslatableComponent(descID + ".empty");
         }
     }
 

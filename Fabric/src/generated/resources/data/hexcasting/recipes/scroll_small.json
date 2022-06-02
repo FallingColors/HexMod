@@ -1,9 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "PPA",
-    "PPP",
-    "PPP"
+    " A",
+    "P "
   ],
   "key": {
     "P": {
@@ -14,6 +13,6 @@
     }
   },
   "result": {
-    "item": "hexcasting:scroll"
+    "item": "hexcasting:scroll_small"
   }
 }

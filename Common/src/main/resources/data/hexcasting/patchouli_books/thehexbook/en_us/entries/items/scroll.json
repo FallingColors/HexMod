@@ -5,13 +5,12 @@
   "sortnum": 4,
   "advancement": "hexcasting:root",
   "pages": [
+    "hexcasting.page.scroll.1",
+    "hexcasting.page.scroll.2",
     {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.scroll.1"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.scroll.2"
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:scroll_small",
+      "recipe2": "hexcasting:scroll_medium"
     },
     {
       "type": "patchouli:crafting",

@@ -73,8 +73,9 @@ public class RegisterClientStuff {
                 return (float) Math.sqrt((float) max / ManaConstants.CRYSTAL_UNIT / 10);
             });
 
-        x.registerItemProperty(HexItems.SCROLL, ItemScroll.ANCIENT_PREDICATE,
-            (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
+        registerScollOverrides(HexItems.SCROLL_SMOL);
+        registerScollOverrides(HexItems.SCROLL_MEDIUM);
+        registerScollOverrides(HexItems.SCROLL_LARGE);
 
         x.registerItemProperty(HexItems.SLATE, ItemSlate.WRITTEN_PRED,
             (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
@@ -229,7 +230,7 @@ public class RegisterClientStuff {
     }
 
     private static int instrumentColor(NoteBlockInstrument instrument) {
-        return switch(instrument) {
+        return switch (instrument) {
             case BASEDRUM -> MaterialColor.STONE.col;
             case SNARE, XYLOPHONE, PLING -> MaterialColor.SAND.col;
             case HAT -> MaterialColor.QUARTZ.col;
@@ -245,6 +246,11 @@ public class RegisterClientStuff {
             case BANJO -> MaterialColor.COLOR_YELLOW.col;
             default -> -1;
         };
+    }
+
+    private static void registerScollOverrides(ItemScroll scroll) {
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(scroll, ItemScroll.ANCIENT_PREDICATE,
+            (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
     }
 
     private static void registerDataHolderOverrides(DataHolderItem item) {

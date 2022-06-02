@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "hexcasting:item/scroll_ancient"
+    "layer0": "hexcasting:item/scroll_ancient_large"
   }
 }

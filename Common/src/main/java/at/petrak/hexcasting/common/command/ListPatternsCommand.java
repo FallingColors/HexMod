@@ -52,7 +52,7 @@ public class ListPatternsCommand {
                             tag.put(ItemScroll.TAG_PATTERN,
                                 pat.serializeToNBT());
 
-                            var stack = new ItemStack(HexItems.SCROLL);
+                            var stack = new ItemStack(HexItems.SCROLL_LARGE);
                             stack.setTag(tag);
 
                             ctx.getSource().sendSuccess(
@@ -88,7 +88,7 @@ public class ListPatternsCommand {
                         tag.put(ItemScroll.TAG_PATTERN,
                             HexPattern.fromAngles(pattern, startDir).serializeToNBT());
 
-                        var stack = new ItemStack(HexItems.SCROLL);
+                        var stack = new ItemStack(HexItems.SCROLL_LARGE);
                         stack.setTag(tag);
 
                         var stackEntity = player.drop(stack, false);
