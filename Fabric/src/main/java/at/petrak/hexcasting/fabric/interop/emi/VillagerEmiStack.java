@@ -5,9 +5,11 @@ import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.client.shader.FakeBufferSource;
 import at.petrak.hexcasting.client.shader.HexRenderTypes;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
+import at.petrak.hexcasting.mixin.accessor.AccessorPoiType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.emi.EmiRenderHelper;
+import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.screen.tooltip.RemainderTooltipComponent;
 import net.minecraft.ChatFormatting;
@@ -56,10 +58,33 @@ public class VillagerEmiStack extends EmiStack {
 				.replace(':', '-'));
 	}
 
+	public static EmiIngredient atLevelOrHigher(VillagerIngredient ingredient, boolean remainder) {
+		if (ingredient.profession() == null) {
+			return EmiIngredient.of(Registry.VILLAGER_PROFESSION.stream()
+					.filter(it -> !((AccessorPoiType) it.getJobPoiType()).hex$matchingStates().isEmpty())
+					.map(it -> atLevelOrHigher(new VillagerIngredient(Registry.VILLAGER_PROFESSION.getKey(it),
+							ingredient.biome(), ingredient.minLevel()), true))
+					.toList());
+		}
+
+		VillagerEmiStack stack = new VillagerEmiStack(ingredient).orHigher(true);
+		if (remainder) {
+			stack.setRemainder(new VillagerEmiStack(ingredient, true));
+		}
+		return stack;
+	}
+
+	private boolean orHigher = false;
+
+	public VillagerEmiStack orHigher(boolean orHigher) {
+		this.orHigher = orHigher;
+		return this;
+	}
+
 	@Override
 	public EmiStack copy() {
 		VillagerEmiStack e = new VillagerEmiStack(ingredient, mindless, amount);
-		e.setRemainder(getRemainder().copy());
+		e.orHigher(orHigher).setRemainder(getRemainder().copy());
 		e.comparison = comparison;
 		return e;
 	}
@@ -111,7 +136,7 @@ public class VillagerEmiStack extends EmiStack {
 			return tooltip;
 		}
 
-		return ingredient.getTooltip(advanced);
+		return ingredient.getTooltip(advanced, orHigher);
 	}
 
 	@Override
@@ -163,7 +188,26 @@ public class VillagerEmiStack extends EmiStack {
 
 		@Override
 		public boolean equals(Object obj) {
-			return obj instanceof VillagerEntry e && getValue().equals(e.getValue());
+			if(!(obj instanceof VillagerEntry e)) {
+				return false;
+			}
+
+			VillagerVariant self = getValue();
+			VillagerVariant other = e.getValue();
+
+			ResourceLocation selfBiome = self.ingredient().biome();
+			ResourceLocation otherBiome = other.ingredient().biome();
+			if (selfBiome != null && otherBiome != null && !selfBiome.equals(otherBiome)) {
+				return false;
+			}
+
+			ResourceLocation selfProfession = self.ingredient().profession();
+			ResourceLocation otherProfession = other.ingredient().profession();
+			if (selfProfession != null && otherProfession != null && !selfProfession.equals(otherProfession)) {
+				return false;
+			}
+
+			return self.ingredient().minLevel() == other.ingredient().minLevel() && self.mindless() == other.mindless();
 		}
 	}
 

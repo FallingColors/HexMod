@@ -298,11 +298,11 @@ fun transferMsToGl(ms: PoseStack, toRun: Runnable) {
 private var villager: Villager? by weakMapped { it.level }
 
 fun prepareVillagerForRendering(ingredient: VillagerIngredient, level: Level): Villager {
+    val minLevel: Int = ingredient.minLevel()
     val profession: VillagerProfession = Registry.VILLAGER_PROFESSION.getOptional(ingredient.profession())
-        .orElse(VillagerProfession.TOOLSMITH)
+        .orElse(VillagerProfession.NONE)
     val biome: VillagerType = Registry.VILLAGER_TYPE.getOptional(ingredient.biome())
         .orElse(VillagerType.PLAINS)
-    val minLevel: Int = ingredient.minLevel()
 
     val instantiatedVillager = villager ?: run {
         val newVillager = Villager(EntityType.VILLAGER, level)

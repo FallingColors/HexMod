@@ -11,6 +11,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +50,9 @@ public record VillagerIngredient(
         } else if (minLevel > 1) {
             component.append(new TranslatableComponent("merchant.level." + minLevel));
             addedAny = true;
+        } else if (profession != null) {
+            component.append(new TranslatableComponent("merchant.level.1"));
+            addedAny = true;
         }
 
         if (biome != null) {
@@ -59,8 +63,8 @@ public record VillagerIngredient(
         }
 
         if (profession != null) {
-            if (addedAny)
-                component.append(" ");
+            // We've for sure added something
+            component.append(" ");
             component.append(new TranslatableComponent("entity.minecraft.villager." + profession.getPath()));
         } else {
             if (addedAny)
@@ -72,14 +76,22 @@ public record VillagerIngredient(
     }
 
     public List<Component> getTooltip(boolean advanced) {
+        return getTooltip(advanced, true);
+    }
+
+    public List<Component> getTooltip(boolean advanced, boolean orHigher) {
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(name());
 
         if (advanced) {
-            if (minLevel >= 5) {
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level", 5).withStyle(ChatFormatting.DARK_GRAY));
-            } else if (minLevel > 1) {
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level", minLevel).withStyle(ChatFormatting.DARK_GRAY));
+            if (orHigher) {
+                if (minLevel >= 5) {
+                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level", 5).withStyle(ChatFormatting.DARK_GRAY));
+                } else if (minLevel > 1) {
+                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level", minLevel).withStyle(ChatFormatting.DARK_GRAY));
+                }
+            } else if (profession != null || minLevel > 1) {
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level", Mth.clamp(minLevel, 1, 5)).withStyle(ChatFormatting.DARK_GRAY));
             }
 
             if (biome != null) {

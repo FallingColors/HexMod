@@ -144,6 +144,8 @@
   "tag.hexcasting.akashic_planks": "Edified Planks",
   "tag.hexcasting.phial_base": "Empty Phials",
   "emi.category.hexcasting.brainsweep": "Flay Mind",
+  "emi.category.hexcasting.villager_leveling": "Trade Leveling",
+  "emi.category.hexcasting.villager_profession": "Villager Profession",
 
   "advancement.hexcasting:root": "Hexcasting Research",
   "advancement.hexcasting:root.desc": "Find a concentrated form of media growing deep beneath the earth.",
