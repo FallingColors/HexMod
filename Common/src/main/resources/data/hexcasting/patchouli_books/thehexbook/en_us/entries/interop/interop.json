@@ -2,6 +2,7 @@
   "name": "hexcasting.entry.interop",
   "icon": "minecraft:chain",
   "category": "hexcasting:interop",
+  "flag": "hexcasting:any_interop",
   "pages": [
     "hexcasting.page.interop.1",
     "hexcasting.page.interop.2",
