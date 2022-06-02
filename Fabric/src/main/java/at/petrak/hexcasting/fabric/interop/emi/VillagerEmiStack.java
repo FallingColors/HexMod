@@ -9,12 +9,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.emi.EmiRenderHelper;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.screen.tooltip.RemainderTooltipComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -22,6 +24,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -89,11 +92,27 @@ public class VillagerEmiStack extends EmiStack {
 
 	@Override
 	public List<Component> getTooltipText() {
-		if (mindless)
-			return List.of(new TranslatableComponent("hexcasting.tooltip.brainsweep.product"), ingredient.getModNameComponent());
-
 		Minecraft mc = Minecraft.getInstance();
-		return ingredient.getTooltip(mc.options.advancedItemTooltips);
+		boolean advanced = mc.options.advancedItemTooltips;
+
+		if (mindless) {
+			List<Component> tooltip = new ArrayList<>();
+			tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.product"));
+
+			if (advanced) {
+				if (ingredient.biome() != null) {
+					tooltip.add(new TextComponent(ingredient.biome().toString()).withStyle(ChatFormatting.DARK_GRAY));
+				}
+
+				ResourceLocation displayId = Objects.requireNonNullElseGet(ingredient.profession(), () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
+				tooltip.add(new TextComponent(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
+			}
+
+			tooltip.add(ingredient.getModNameComponent());
+			return tooltip;
+		}
+
+		return ingredient.getTooltip(advanced);
 	}
 
 	@Override
