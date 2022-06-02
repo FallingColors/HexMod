@@ -54,7 +54,7 @@ public class VillagerEmiStack extends EmiStack {
 		this.mindless = mindless;
 		this.amount = amount;
 		// This is so scuffed
-		this.id = modLoc((Objects.toString(villager.profession()) + villager.biome() + villager.minLevel() + mindless)
+		this.id = modLoc((Objects.toString(villager.profession()) + villager.minLevel() + mindless)
 				.replace(':', '-'));
 	}
 
