@@ -42,6 +42,7 @@ repositories {
         name "entity reach"
         url "https://maven.jamieswhiteshirt.com/libs-release/"
     }
+    maven { url "https://mvn.devos.one/snapshots/" }
 }
 
 dependencies {
@@ -72,6 +73,8 @@ dependencies {
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:$reiVersion"
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$reiVersion"
+
+    modImplementation "io.github.tropheusj:serialization-hooks:0.1.0+1.18.170eaf6"
 
     modImplementation "maven.modrinth:fusions-gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {

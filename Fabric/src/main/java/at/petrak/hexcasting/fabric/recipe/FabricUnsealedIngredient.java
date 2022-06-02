@@ -9,6 +9,8 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.tropheusj.serialization_hooks.BaseCustomIngredient;
+import io.github.tropheusj.serialization_hooks.IngredientDeserializer;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +25,7 @@ import java.util.Objects;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class FabricUnsealedIngredient extends Ingredient {
+public class FabricUnsealedIngredient extends BaseCustomIngredient {
 	private static final ResourceLocation ID = modLoc("unsealed");
 
 	private final ItemStack stack;
@@ -68,18 +70,13 @@ public class FabricUnsealedIngredient extends Ingredient {
 		return json;
 	}
 
-	public static Ingredient fromNetwork(FriendlyByteBuf friendlyByteBuf) {
-		friendlyByteBuf.markReaderIndex();
-		try {
-			if (friendlyByteBuf.readResourceLocation().equals(ID)) {
-				return new FabricUnsealedIngredient(friendlyByteBuf.readItem());
-			}
-		} catch (Exception e) {
-			// There clearly wasn't a resource location there. This is kind of a hack but ehh
-			friendlyByteBuf.resetReaderIndex();
-		}
+	@Override
+	public IngredientDeserializer getDeserializer() {
+		return Deserializer.INSTANCE;
+	}
 
-		return null;
+	public static Ingredient fromNetwork(FriendlyByteBuf friendlyByteBuf) {
+		return new FabricUnsealedIngredient(friendlyByteBuf.readItem());
 	}
 
 	public static Ingredient fromJson(JsonElement element) {
@@ -97,7 +94,21 @@ public class FabricUnsealedIngredient extends Ingredient {
 
 	@Override
 	public void toNetwork(FriendlyByteBuf friendlyByteBuf) {
-		friendlyByteBuf.writeResourceLocation(ID);
 		friendlyByteBuf.writeItem(stack);
+	}
+
+	public static class Deserializer implements IngredientDeserializer {
+		public static final Deserializer INSTANCE = new Deserializer();
+
+		@Override
+		public Ingredient fromNetwork(FriendlyByteBuf buffer) {
+			return FabricUnsealedIngredient.fromNetwork(buffer);
+		}
+
+		@Nullable
+		@Override
+		public Ingredient fromJson(JsonObject object) {
+			return FabricUnsealedIngredient.fromJson(object);
+		}
 	}
 }

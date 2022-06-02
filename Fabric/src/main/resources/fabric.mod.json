@@ -47,6 +47,7 @@
     "java": ">=17",
     "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
     "patchouli": ">=1.18.2-69",
+    "serialization_hooks": ">=0.1.0",
     "paucal": ">=0.4.4"
   },
   "suggests": {
