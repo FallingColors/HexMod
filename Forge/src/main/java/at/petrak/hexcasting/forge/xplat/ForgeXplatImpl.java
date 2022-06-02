@@ -22,7 +22,7 @@ import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
-import at.petrak.hexcasting.ktxt.AccessorWrappers;
+import at.petrak.hexcasting.mixin.accessor.AccessorVillager;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
@@ -113,7 +113,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
         mob.removeFreeWill();
         if (mob instanceof Villager villager) {
-            AccessorWrappers.releaseAllPois(villager);
+            ((AccessorVillager) villager).hex$releaseAllPois();
         }
 
         if (mob.level instanceof ServerLevel) {

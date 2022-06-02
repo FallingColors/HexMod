@@ -4,8 +4,6 @@ package at.petrak.hexcasting.ktxt
 import at.petrak.hexcasting.mixin.accessor.AccessorLivingEntity
 import at.petrak.hexcasting.mixin.accessor.AccessorUseOnContext
 import at.petrak.hexcasting.mixin.accessor.AccessorVillager
-import at.petrak.hexcasting.mixin.accessor.CriteriaTriggersAccessor
-import net.minecraft.advancements.CriterionTrigger
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
@@ -21,10 +19,6 @@ var LivingEntity.lastHurt: Float
     set(value) = (this as AccessorLivingEntity).`hex$setLastHurt`(value)
 
 fun Villager.tellWitnessesThatIWasMurdered(murderer: Entity) = (this as AccessorVillager).`hex$tellWitnessesThatIWasMurdered`(murderer)
-
-fun Villager.releaseAllPois() = (this as AccessorVillager).`hex$releaseAllPois`()
-
-fun <T : CriterionTrigger<*>> registerCriteriaTrigger(trigger: T): T = CriteriaTriggersAccessor.`hex$register`(trigger)
 
 @Suppress("FunctionName")
 fun UseOnContext(level: Level, player: Player?, hand: InteractionHand, stack: ItemStack, hitResult: BlockHitResult): UseOnContext =
