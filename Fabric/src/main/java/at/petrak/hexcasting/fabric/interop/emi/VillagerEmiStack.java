@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.client.shader.FakeBufferSource;
+import at.petrak.hexcasting.client.shader.HexRenderTypes;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -133,7 +135,8 @@ public class VillagerEmiStack extends EmiStack {
 
 				RenderSystem.enableBlend();
 				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-				renderEntity(poseStack, villager, level, x + 8, y + 16, ClientTickCounter.total, 8, 0);
+				renderEntity(poseStack, villager, level, x + 8, y + 16, ClientTickCounter.total, 8, 0,
+						mindless ? (it) -> new FakeBufferSource(it, HexRenderTypes::getGrayscaleLayer) : it -> it);
 			}
 		}
 

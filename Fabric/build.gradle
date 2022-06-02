@@ -7,7 +7,7 @@ archivesBaseName = getArtifactID("fabric")
 loom {
     mixin.defaultRefmapName = "hexcasting.mixins.refmap.json"
 
-    accessWidenerPath = file("src/main/resources/hexcasting.accesswidener")
+    accessWidenerPath = file("src/main/resources/fabricasting.accesswidener")
 
     runs {
         client {

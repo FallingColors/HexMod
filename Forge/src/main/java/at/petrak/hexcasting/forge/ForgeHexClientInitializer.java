@@ -4,12 +4,15 @@ import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
+import at.petrak.hexcasting.client.shader.HexShaders;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import java.io.IOException;
 
 // This is Java because I can't kotlin-fu some of the consumers
 public class ForgeHexClientInitializer {
@@ -46,6 +49,11 @@ public class ForgeHexClientInitializer {
             var cancel = ShiftScrollListener.onScroll(e.getScrollDelta());
             e.setCanceled(cancel);
         });
+    }
+
+    @SubscribeEvent
+    public static void registerShaders(RegisterShadersEvent evt) throws IOException {
+        HexShaders.init(evt.getResourceManager(), p -> evt.registerShader(p.getFirst(), p.getSecond()));
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

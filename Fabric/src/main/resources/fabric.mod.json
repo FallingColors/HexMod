@@ -41,7 +41,7 @@
     "hexplat.mixins.json",
     "fabricasting.mixins.json"
   ],
-  "accessWidener": "hexcasting.accesswidener",
+  "accessWidener": "fabricasting.accesswidener",
 
   "depends": {
     "fabricloader": ">=0.13",

@@ -6,6 +6,7 @@ archivesBaseName = getArtifactID("common")
 
 minecraft {
     version(minecraftVersion)
+    accessWideners 'src/main/resources/hexplat.accesswidener'
 }
 
 repositories {

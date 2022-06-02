@@ -24,6 +24,7 @@ apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site
 
 minecraft {
     mappings channel: 'official', version: minecraftVersion
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
         // This location is hardcoded in Forge and can not be changed.

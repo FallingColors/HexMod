@@ -14,6 +14,7 @@ import com.mojang.math.Matrix4f
 import com.mojang.math.Vector3f
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
 import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
@@ -285,9 +286,11 @@ fun transferMsToGl(ms: PoseStack, toRun: Runnable) {
     RenderSystem.applyModelViewMatrix()
 }
 
+@JvmOverloads
 fun renderEntity(
     ms: PoseStack, entity: Entity, world: Level, x: Float, y: Float, rotation: Float,
-    renderScale: Float, offset: Float
+    renderScale: Float, offset: Float,
+    bufferTransformer: (MultiBufferSource) -> MultiBufferSource = { it -> it }
 ) {
     entity.level = world
     ms.pushPose()
@@ -299,7 +302,7 @@ fun renderEntity(
     val erd = Minecraft.getInstance().entityRenderDispatcher
     val immediate = Minecraft.getInstance().renderBuffers().bufferSource()
     erd.setRenderShadow(false)
-    erd.render(entity, 0.0, 0.0, 0.0, 0.0f, 1.0f, ms, immediate, 15728880)
+    erd.render(entity, 0.0, 0.0, 0.0, 0.0f, 1.0f, ms, bufferTransformer(immediate), 0xf000f0)
     erd.setRenderShadow(true)
     immediate.endBatch()
     ms.popPose()

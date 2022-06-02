@@ -18,6 +18,10 @@
     "accessor.CriteriaTriggersAccessor"
   ],
   "client": [
+    "accessor.client.AccessorCompositeRenderType",
+    "accessor.client.AccessorEmptyTextureStateShard",
+    "accessor.client.AccessorRenderStateShard",
+    "accessor.client.AccessorRenderType",
     "client.MixinClientLevel"
   ]
 }
