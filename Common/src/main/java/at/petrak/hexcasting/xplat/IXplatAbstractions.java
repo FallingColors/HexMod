@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
@@ -140,6 +141,10 @@ public interface IXplatAbstractions {
     IXplatTags tags();
 
     LootItemCondition.Builder isShearsCondition();
+
+    // interop
+
+    PehkuiInterop.ApiAbstraction getPehkuiApi();
 
     ///
 

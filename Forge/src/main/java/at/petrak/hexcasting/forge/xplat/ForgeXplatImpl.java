@@ -20,6 +20,8 @@ import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
+import at.petrak.hexcasting.interop.HexInterop;
+import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.ktxt.AccessorWrappers;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
@@ -37,6 +39,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -70,6 +73,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -377,6 +381,31 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public LootItemCondition.Builder isShearsCondition() {
         return CanToolPerformAction.canToolPerformAction(ToolActions.SHEARS_DIG);
+    }
+
+    // it's literally the EXACT SAME on fabric aaa
+    private static PehkuiInterop.ApiAbstraction PEHKUI_API = null;
+
+    @Override
+    public PehkuiInterop.ApiAbstraction getPehkuiApi() {
+        if (!this.isModPresent(HexInterop.PEHKUI_ID)) {
+            throw new IllegalArgumentException("cannot get the pehkui api without pehkui");
+        }
+
+        if (PEHKUI_API == null) {
+            PEHKUI_API = new PehkuiInterop.ApiAbstraction() {
+                @Override
+                public float getScale(Entity e) {
+                    return ScaleTypes.BASE.getScaleData(e).getScale();
+                }
+
+                @Override
+                public void setScale(Entity e, float scale) {
+                    ScaleTypes.BASE.getScaleData(e).setScale(scale);
+                }
+            };
+        }
+        return PEHKUI_API;
     }
 
     public static final String TAG_BRAINSWEPT = "hexcasting:brainswept";

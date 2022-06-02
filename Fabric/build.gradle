@@ -74,9 +74,9 @@ dependencies {
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$reiVersion"
 
     modImplementation "maven.modrinth:fusions-gravity-api:$gravityApiVersion"
-    // modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
-    //     exclude group: "net.fabricmc.fabric-api"
-    // })
+    modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
+        exclude group: "net.fabricmc.fabric-api"
+    })
 }
 
 tasks.withType(JavaCompile) {

@@ -357,6 +357,8 @@
   
   "hexcasting.spell.hexcasting:interop/gravity/get": "Gravitational Purification",
   "hexcasting.spell.hexcasting:interop/gravity/set": "Alter Gravity",
+  "hexcasting.spell.hexcasting:interop/pehkui/get": "Gulliver's Purification",
+  "hexcasting.spell.hexcasting:interop/pehkui/set": "Alter Scale",
 
   "hexcasting.mishap.invalid_pattern": "That pattern isn't associated with any action",
   "hexcasting.mishap.unescaped": "Expected to evaluate a pattern, but evaluated %s instead",

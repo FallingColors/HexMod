@@ -16,6 +16,7 @@ import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
+import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.ktxt.AccessorWrappers;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
@@ -37,6 +38,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -56,6 +58,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -329,5 +332,29 @@ public class FabricXplatImpl implements IXplatAbstractions {
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(
                 HexItemTags.create(new ResourceLocation("c", "shears"))))
         );
+    }
+
+    private static PehkuiInterop.ApiAbstraction PEHKUI_API = null;
+
+    @Override
+    public PehkuiInterop.ApiAbstraction getPehkuiApi() {
+        if (!this.isModPresent(HexInterop.PEHKUI_ID)) {
+            throw new IllegalArgumentException("cannot get the pehkui api without pehkui");
+        }
+
+        if (PEHKUI_API == null) {
+            PEHKUI_API = new PehkuiInterop.ApiAbstraction() {
+                @Override
+                public float getScale(Entity e) {
+                    return ScaleTypes.BASE.getScaleData(e).getScale();
+                }
+
+                @Override
+                public void setScale(Entity e, float scale) {
+                    ScaleTypes.BASE.getScaleData(e).setScale(scale);
+                }
+            };
+        }
+        return PEHKUI_API;
     }
 }

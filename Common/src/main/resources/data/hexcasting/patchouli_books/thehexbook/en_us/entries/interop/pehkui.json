@@ -1,9 +1,9 @@
 {
   "name": "hexcasting.entry.interop.pehkui",
-  "icon": "minecraft:iron_nugget",
+  "icon": "minecraft:red_mushroom",
   "category": "hexcasting:interop",
   "advancement": "hexcasting:root",
-  "flag": "never",
+  "flag": "mod:pehkui",
   "pages": [
     "hexcasting.page.interop.pehkui.1",
     {

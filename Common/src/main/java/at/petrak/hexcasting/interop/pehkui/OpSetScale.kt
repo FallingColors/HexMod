@@ -2,8 +2,8 @@ package at.petrak.hexcasting.interop.pehkui
 
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.Entity
-import virtuoel.pehkui.api.ScaleTypes
 
 object OpSetScale : SpellOperator {
     override val argc = 2
@@ -24,10 +24,7 @@ object OpSetScale : SpellOperator {
 
     private data class Spell(val target: Entity, val scale: Double) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val scaleType = ScaleTypes.BASE
-            val data = scaleType.getScaleData(target)
-
-            data.scale = scale.toFloat()
+            IXplatAbstractions.INSTANCE.pehkuiApi.setScale(target, scale.toFloat())
         }
     }
 }

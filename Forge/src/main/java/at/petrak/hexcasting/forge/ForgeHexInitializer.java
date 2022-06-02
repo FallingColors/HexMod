@@ -72,8 +72,6 @@ public class ForgeHexInitializer {
         initConfig();
         initRegistry();
         initListeners();
-
-        HexInterop.init();
     }
 
     private static void initConfig() {
@@ -132,6 +130,8 @@ public class ForgeHexInitializer {
                 HexComposting.setup();
                 HexStrippables.init();
                 RegisterPatterns.registerPatterns();
+
+                HexInterop.init();
             }));
 
         // We have to do these at some point when the registries are still open
