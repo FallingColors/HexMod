@@ -9,7 +9,6 @@ import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
-import at.petrak.hexcasting.api.utils.obfuscated
 import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.ktxt.lastHurt
 import net.minecraft.Util
@@ -55,7 +54,7 @@ sealed class Mishap : Throwable() {
         "hexcasting.mishap.$stub".asTranslatedComponent(*args)
 
     protected fun actionName(action: ResourceLocation?): Component =
-        "hexcasting.spell.${action ?: "unknown"}".asTranslatedComponent.lightPurple.obfuscated
+        "hexcasting.spell.${action ?: "unknown"}".asTranslatedComponent.lightPurple
 
     protected fun yeetHeldItemsTowards(ctx: CastingContext, targetPos: Vec3) {
         // Knock the player's items out of their hands
