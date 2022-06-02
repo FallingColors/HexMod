@@ -354,7 +354,7 @@
   "hexcasting.spell.hexcasting:number": "Numerical Reflection",
   "hexcasting.spell.hexcasting:mask": "Bookkeeper's Gambit",
   "hexcasting.spell.unknown": "Special Handler",
-  
+
   "hexcasting.spell.hexcasting:interop/gravity/get": "Gravitational Purification",
   "hexcasting.spell.hexcasting:interop/gravity/set": "Alter Gravity",
   "hexcasting.spell.hexcasting:interop/pehkui/get": "Gulliver's Purification",
@@ -473,7 +473,7 @@
   "hexcasting.page.start_to_see.1": "The texts weren't lying. Nature took its due.",
   "hexcasting.page.start_to_see.2": "That... that was...$(p)...that was one of the $(italic)worst/$ things I've $(italic)ever/$ experienced. I offered my plan to Nature, and got a firm smile and a tearing sensation in return-- a piece of myself breaking away, like amethyst dust in the rain.$(p)I feel lucky to have $(italic)survived/$, much less have the sagacity to write this-- I should declare the matter closed, double-check my math before I cast any more _Hexes, and never make such a mistake again.",
   "hexcasting.page.start_to_see.3": "...But.$(br2)But for the scarcest instant, that part of myself... it $(italic)saw/$... $(l:greatwork/the_work)$(thing)something/$. A place-- a design, perhaps? (Such distinctions didn't seem to matter in the face of... that.)$(p)And a... a membrane-barrier-skin-border, separating myself from a realm of raw thought-flow-light-energy. I remember-- I saw-thought-recalled-felt-- the barrier fuzzing at its edges, just so slightly.$(p)I wanted $(italic)through./$",
-  "hexcasting.page.start_to_see.4": "I shouldn't. I $(italic)know/$ I shouldn't. It's dangerous. It's too dangerous. I'd have to bring myself within a hair's breadth of Death itself.$(br2)But I'm. So. $(italic)Close/$.$(p)$(italic)This/$ is the culmination of my art. This is the $(#54398a)Enlightenment/$ I've been seeking. $(br2)I want more. I need to see it again. I $(italic)will/$ see it.$(p)What is my mortal mind against immortal glory?",
+  "hexcasting.page.start_to_see.4": "I shouldn't. I $(italic)know/$ I shouldn't. It's dangerous. It's too dangerous. The force required... I'd have to bring myself within a hair's breadth of Death itself with a $(italic)single stroke/$.$(br2)But I'm. So. $(italic)Close/$.$(p)$(italic)This/$ is the culmination of my art. This is the $(#54398a)Enlightenment/$ I've been seeking. $(br2)I want more. I need to see it again. I $(italic)will/$ see it.$(p)What is my mortal mind against immortal glory?",
 
 
   "_comment": "Casting",
@@ -972,12 +972,12 @@
   "hexcasting.page.interop.1": "The art of _Hexcasting is versatile. If I find that my world has been $(italic)modified/$ by certain other powers, it's possible that I may use _Hexcasting in harmony and combination with them.",
   "hexcasting.page.interop.2": "I should keep in mind, however, that Nature seems to have paid less attention in crafting these aspects of my art; strange behavior and bugs are to be expected. I'm sure the mod developer will do her best to correct them, but I must remember this is a less important pastime to her.$(br2)I may also find that there are sharp disregards to balance in the costs and effects of the interoperating powers. In such a case I suppose I will have to be responsible and restrain myself from using them.",
   "hexcasting.page.interop.3": "Finally, if I find myself interested in the lore and stories of this world, I do not think any notes compiled while examining these interoperations should be considered as anything more than light trifles.",
-  
+
   "hexcasting.entry.interop.gravity": "Gravity Changer",
   "hexcasting.page.interop.gravity.1": "I have discovered actions to get and set an entity's gravity. I find them interesting, if slightly nauseating.$(br2)Interestingly, although $(l:patterns/great_spells/flight)$(action)Flight/$ is a great spell, and manipulates gravity similarly, these are not. It baffles me why... Perhaps the mod developer wanted players to have fun, for once.",
   "hexcasting.page.interop.gravity.get": "Get the main direction gravity pulls the given entity in, as a unit vector. For most entities, this will be down: [0, -1, 0].",
   "hexcasting.page.interop.gravity.set": "Set the main direction gravity pulls the given entity in. The given vector will be coerced into the nearest axis, as per $(l:patterns/math#hexcasting:coerce_axial)$(action)Axial Purification/$. Costs about 1 $(item)Charged Amethyst Crystal/$.",
-  
+
  "hexcasting.entry.interop.pehkui": "Pehkui",
  "hexcasting.page.interop.pehkui.1": "I have discovered methods of changing the size of entities, and querying how much larger or smaller they are than normal.",
   "hexcasting.page.interop.pehkui.get": "Get the scale of the entity, as a proportion of their normal size. For most entities, this will be 1.",
