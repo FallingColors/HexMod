@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.interop.rei;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,11 +11,7 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.Registry;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -27,8 +24,6 @@ public class VillagerWidget extends Widget {
 	private final int x;
 	private final int y;
 
-	private Villager displayVillager;
-
 	public VillagerWidget(VillagerIngredient villager, int x, int y) {
 		this.villager = villager;
 		this.x = x;
@@ -39,19 +34,7 @@ public class VillagerWidget extends Widget {
 	public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float delta) {
 		ClientLevel level = Minecraft.getInstance().level;
 		if (level != null) {
-			VillagerProfession profession = Registry.VILLAGER_PROFESSION.getOptional(villager.profession())
-					.orElse(VillagerProfession.TOOLSMITH);
-			VillagerType biome = Registry.VILLAGER_TYPE.getOptional(villager.biome())
-					.orElse(VillagerType.PLAINS);
-			int minLevel = villager.minLevel();
-			if (displayVillager == null) {
-				displayVillager = new Villager(EntityType.VILLAGER, level);
-			}
-
-			displayVillager.setVillagerData(displayVillager.getVillagerData()
-					.setProfession(profession)
-					.setType(biome)
-					.setLevel(minLevel));
+			Villager displayVillager = RenderLib.prepareVillagerForRendering(villager, level);
 
 			RenderSystem.enableBlend();
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

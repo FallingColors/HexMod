@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.client.shader.FakeBufferSource;
 import at.petrak.hexcasting.client.shader.HexRenderTypes;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
@@ -21,8 +22,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,28 +129,13 @@ public class VillagerEmiStack extends EmiStack {
 		return ingredient.name();
 	}
 
-	// Used for rendering
-	private static Villager villager;
-
 	@Override
 	public void render(PoseStack poseStack, int x, int y, float delta, int flags) {
 		if ((flags & RENDER_ICON) != 0) {
 			Minecraft mc = Minecraft.getInstance();
 			ClientLevel level = mc.level;
 			if (level != null) {
-				VillagerProfession profession = Registry.VILLAGER_PROFESSION.getOptional(ingredient.profession())
-						.orElse(VillagerProfession.TOOLSMITH);
-				VillagerType biome = Registry.VILLAGER_TYPE.getOptional(ingredient.biome())
-						.orElse(VillagerType.PLAINS);
-				int minLevel = ingredient.minLevel();
-				if (villager == null) {
-					villager = new Villager(EntityType.VILLAGER, level);
-				}
-
-				villager.setVillagerData(villager.getVillagerData()
-						.setProfession(profession)
-						.setType(biome)
-						.setLevel(minLevel));
+				Villager villager = RenderLib.prepareVillagerForRendering(ingredient, level);
 
 				RenderSystem.enableBlend();
 				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

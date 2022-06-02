@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,23 +16,17 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.client.RenderLib.renderEntity;
@@ -78,27 +73,12 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         return Collections.emptyList();
     }
 
-    private Villager villager;
-
     @Override
     public void draw(@NotNull BrainsweepRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView,
         @NotNull PoseStack stack, double mouseX, double mouseY) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {
-            VillagerProfession profession = Objects.requireNonNullElse(
-                ForgeRegistries.PROFESSIONS.getValue(recipe.villagerIn().profession()),
-                VillagerProfession.TOOLSMITH);
-            VillagerType biome = Objects.requireNonNullElse(Registry.VILLAGER_TYPE.get(recipe.villagerIn().biome()),
-                VillagerType.PLAINS);
-            int minLevel = recipe.villagerIn().minLevel();
-            if (villager == null) {
-                villager = new Villager(EntityType.VILLAGER, level);
-            }
-
-            villager.setVillagerData(villager.getVillagerData()
-                .setProfession(profession)
-                .setType(biome)
-                .setLevel(minLevel));
+            Villager villager = RenderLib.prepareVillagerForRendering(recipe.villagerIn(), level);
 
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

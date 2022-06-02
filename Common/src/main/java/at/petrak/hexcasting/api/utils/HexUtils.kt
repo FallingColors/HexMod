@@ -12,10 +12,13 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
+import java.lang.ref.WeakReference
+import java.util.*
 import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.reflect.KProperty
 
 const val TAU = Math.PI * 2.0
 const val SQRT_3 = 1.7320508f
@@ -167,6 +170,34 @@ val String.asTextComponent get() = TextComponent(this)
 val String.asTranslatedComponent get() = TranslatableComponent(this)
 
 fun String.asTranslatedComponent(vararg args: Any) = TranslatableComponent(this, *args)
+
+
+interface WeakValue<T> {
+    var value: T?
+}
+
+private class WeakReferencedValue<T>(var reference: WeakReference<T>?) : WeakValue<T> {
+    override var value: T?
+        get() = reference?.get()
+        set(value) { reference = value?.let { WeakReference(it) } }
+}
+
+private class WeakMappedValue<K, T>(val keyGen: (T) -> K) : WeakValue<T> {
+    val reference = WeakHashMap<K, T>()
+    override var value: T?
+        get() = reference.values.firstOrNull()
+        set(value) { if (value != null) reference[keyGen(value)] = value else reference.clear() }
+}
+
+fun <T> weakReference(value: T? = null): WeakValue<T> = WeakReferencedValue(value?.let { WeakReference(it) })
+fun <T, K> weakMapped(keyGen: (T) -> K): WeakValue<T> = WeakMappedValue(keyGen)
+
+
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun <T> WeakValue<T>.getValue(thisRef: Any?, property: KProperty<*>): T? = value
+
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty<*>, value: T?) { this.value = value }
 
 fun Iterable<SpellDatum<*>>.serializeToNBT(): ListTag {
     val tag = ListTag()
