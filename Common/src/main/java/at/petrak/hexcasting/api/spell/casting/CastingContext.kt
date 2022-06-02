@@ -101,7 +101,8 @@ data class CastingContext(
 
         if (this.spellCircle != null) {
             // we use the eye position cause thats where the caster gets their "position" from
-            if (this.spellCircle.activatorAlwaysInRange && vec.distanceToSqr(this.caster.eyePosition) < 2 * 2)
+            val range = this.caster.bbHeight
+            if (this.spellCircle.activatorAlwaysInRange && vec.distanceToSqr(this.caster.eyePosition) < range * range)
                 return true
             return this.spellCircle.aabb.contains(vec)
         }
