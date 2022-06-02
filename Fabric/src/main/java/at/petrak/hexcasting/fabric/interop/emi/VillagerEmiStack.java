@@ -92,7 +92,8 @@ public class VillagerEmiStack extends EmiStack {
 		if (mindless)
 			return List.of(new TranslatableComponent("hexcasting.tooltip.brainsweep.product"), ingredient.getModNameComponent());
 
-		return ingredient.getTooltip();
+		Minecraft mc = Minecraft.getInstance();
+		return ingredient.getTooltip(mc.options.advancedItemTooltips);
 	}
 
 	@Override

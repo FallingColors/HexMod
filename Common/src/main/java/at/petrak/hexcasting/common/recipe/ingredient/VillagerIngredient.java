@@ -42,8 +42,11 @@ public record VillagerIngredient(
 
         boolean addedAny = false;
 
-        if (profession != null) {
-            component.append(new TranslatableComponent("entity.minecraft.villager." + profession.getPath()));
+        if (minLevel >= 5) {
+            component.append(new TranslatableComponent("merchant.level.5"));
+            addedAny = true;
+        } else if (minLevel > 1) {
+            component.append(new TranslatableComponent("merchant.level." + minLevel));
             addedAny = true;
         }
 
@@ -54,47 +57,38 @@ public record VillagerIngredient(
             addedAny = true;
         }
 
-        if (minLevel >= 5) {
+        if (profession != null) {
             if (addedAny)
                 component.append(" ");
-            component.append(new TranslatableComponent("merchant.level.5"));
-            addedAny = true;
-        } else if (minLevel > 1) {
+            component.append(new TranslatableComponent("entity.minecraft.villager." + profession.getPath()));
+        } else {
             if (addedAny)
                 component.append(" ");
-            component.append(new TranslatableComponent("merchant.level." + minLevel));
-            addedAny = true;
+            component.append(EntityType.VILLAGER.getDescription());
         }
-
-        if (addedAny)
-            component.append(" ");
-        component.append(EntityType.VILLAGER.getDescription());
 
         return component;
     }
 
-    public List<Component> getTooltip() {
+    public List<Component> getTooltip(boolean advanced) {
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(EntityType.VILLAGER.getDescription());
+        tooltip.add(name());
 
-        if (profession != null) {
-            var professionKey = "entity.minecraft.villager." + profession.getPath();
-            tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.profession",
-                    new TranslatableComponent(professionKey)));
+        if (advanced) {
+            if (minLevel >= 5) {
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level", 5).withStyle(ChatFormatting.DARK_GRAY));
+            } else if (minLevel > 1) {
+                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level", minLevel).withStyle(ChatFormatting.DARK_GRAY));
+            }
+
+            if (biome != null) {
+                tooltip.add(new TextComponent(biome.toString()).withStyle(ChatFormatting.DARK_GRAY));
+            }
+
+            if (profession != null) {
+                tooltip.add(new TextComponent(profession.toString()).withStyle(ChatFormatting.DARK_GRAY));
+            }
         }
-
-        if (biome != null) {
-            var biomeKey = "biome.minecraft." + biome.getPath();
-            tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.biome",
-                    new TranslatableComponent(biomeKey)));
-        }
-
-        if (minLevel >= 5)
-            tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level",
-                    new TranslatableComponent("merchant.level.5")));
-        else if (minLevel > 1)
-            tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level",
-                    new TranslatableComponent("merchant.level." + minLevel)));
 
         tooltip.add(getModNameComponent());
 

@@ -71,7 +71,8 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     public @NotNull List<Component> getTooltipStrings(@NotNull BrainsweepRecipe recipe,
         @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
-            return recipe.villagerIn().getTooltip();
+            Minecraft mc = Minecraft.getInstance();
+            return recipe.villagerIn().getTooltip(mc.options.advancedItemTooltips);
         }
 
         return Collections.emptyList();

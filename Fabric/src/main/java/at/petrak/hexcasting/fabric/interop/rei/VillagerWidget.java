@@ -72,7 +72,8 @@ public class VillagerWidget extends Widget {
 	@NotNull
 	@Override
 	public Tooltip getTooltip(Point mouse) {
-		return Tooltip.create(mouse, villager.getTooltip());
+		Minecraft mc = Minecraft.getInstance();
+		return Tooltip.create(mouse, villager.getTooltip(mc.options.advancedItemTooltips));
 	}
 
 	@Override

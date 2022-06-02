@@ -58,7 +58,8 @@ public class BrainsweepProcessor implements IComponentProcessor {
                 return IVariable.wrap(iHatePatchouli);
             }
             case "entityTooltip" -> {
-                return IVariable.wrapList(this.recipe.villagerIn().getTooltip().stream().map(IVariable::from).toList());
+                Minecraft mc = Minecraft.getInstance();
+                return IVariable.wrapList(this.recipe.villagerIn().getTooltip(mc.options.advancedItemTooltips).stream().map(IVariable::from).toList());
             }
             default -> {
                 return null;
