@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 // you ever step back and realize the thoughts that have coursed through your mind for so long
@@ -85,9 +86,8 @@ public record VillagerIngredient(
                 tooltip.add(new TextComponent(biome.toString()).withStyle(ChatFormatting.DARK_GRAY));
             }
 
-            if (profession != null) {
-                tooltip.add(new TextComponent(profession.toString()).withStyle(ChatFormatting.DARK_GRAY));
-            }
+            ResourceLocation displayId = Objects.requireNonNullElseGet(profession, () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
+            tooltip.add(new TextComponent(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         tooltip.add(getModNameComponent());
