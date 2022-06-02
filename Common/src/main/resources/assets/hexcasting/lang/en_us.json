@@ -140,6 +140,9 @@
 
   "gui.hexcasting.spellcasting": "Hex Grid",
   "tag.hexcasting.wands": "Hex Wands",
+  "tag.hexcasting.akashic_logs": "Edified Logs",
+  "tag.hexcasting.akashic_planks": "Edified Planks",
+  "tag.hexcasting.phial_base": "Empty Phials",
   "emi.category.hexcasting.brainsweep": "Flay Mind",
 
   "advancement.hexcasting:root": "Hexcasting Research",
