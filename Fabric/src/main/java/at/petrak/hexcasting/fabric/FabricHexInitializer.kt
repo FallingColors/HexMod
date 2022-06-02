@@ -15,6 +15,7 @@ import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
+import at.petrak.hexcasting.interop.HexInterop
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
@@ -47,6 +48,8 @@ object FabricHexInitializer : ModInitializer {
         HexAdvancementTriggers.registerTriggers()
         HexComposting.setup()
         HexStrippables.init()
+
+        HexInterop.init()
     }
 
     fun initListeners() {

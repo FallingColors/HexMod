@@ -51,6 +51,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabricLoaderVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricVersion}"
 
+    // Reqs
+    compileOnly "com.demonwav.mcdev:annotations:1.0"
+
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":Common")
 
@@ -65,11 +68,15 @@ dependencies {
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
     include "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
 
+    // Optional integrations
+
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:$reiVersion"
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$reiVersion"
 
-    // only to shut up compile warnings from CCA's usage of CheckEnv and Env
-    compileOnly "com.demonwav.mcdev:annotations:1.0"
+    modImplementation "maven.modrinth:fusions-gravity-api:$gravityApiVersion"
+    // modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
+    //     exclude group: "net.fabricmc.fabric-api"
+    // })
 }
 
 tasks.withType(JavaCompile) {

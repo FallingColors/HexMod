@@ -116,6 +116,18 @@ subprojects {
             name = 'BlameJared Maven'
             url = 'https://maven.blamejared.com'
         }
+
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup "maven.modrinth"
+            }
+        }
+
+        maven {
+            url = "https://jitpack.io"
+        }
     }
 
 

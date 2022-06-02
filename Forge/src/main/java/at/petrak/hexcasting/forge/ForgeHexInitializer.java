@@ -23,6 +23,7 @@ import at.petrak.hexcasting.forge.datagen.HexForgeDataGenerators;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
+import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
@@ -71,6 +72,8 @@ public class ForgeHexInitializer {
         initConfig();
         initRegistry();
         initListeners();
+
+        HexInterop.init();
     }
 
     private static void initConfig() {

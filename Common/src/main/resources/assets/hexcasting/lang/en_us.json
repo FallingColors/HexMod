@@ -348,6 +348,9 @@
   "hexcasting.spell.hexcasting:number": "Numerical Reflection",
   "hexcasting.spell.hexcasting:mask": "Bookkeeper's Gambit",
   "hexcasting.spell.unknown": "Special Handler",
+  
+  "hexcasting.spell.hexcasting:interop/gravity/get": "Gravitational Purification",
+  "hexcasting.spell.hexcasting:interop/gravity/set": "Alter Gravity",
 
   "hexcasting.mishap.invalid_pattern": "That pattern isn't associated with any action",
   "hexcasting.mishap.unescaped": "Expected to evaluate a pattern, but evaluated %s instead",
@@ -935,7 +938,7 @@
   "hexcasting.page.weather_manip.dispel_rain": "A counterpart to summoning rain. This spell will dispel rain across the world I cast it upon. Costs about one $(l:items/amethyst)$(item)Amethyst Shard/$. Does nothing if the skies are already clear.",
 
   "hexcasting.page.flight.1": "The power of flight! I have wrestled Nature to its knees. But Nature is vengeful, and itches for me to break its contract so it may break my shins.",
-  "hexcasting.page.flight.2": "The entity (which must be a player) will be endowed with flight. The first number is the number of seconds they may fly for, and the second number is the radius of the zone they may fly in. If the recipient exits that zone, or their timer runs out while midair, the gravity that they spurned will get its revenge. Painfully.$(br2)It costs approximately one $(l:items/amethyst)$(item)Amethyst Dust/$ multiplied by the radius per second of flight.",
+  "hexcasting.page.flight.2": "The entity (which must be a player) will be endowed with flight. The first number is the number of seconds they may fly for, and the second number is the radius of the zone they may fly in. If the recipient exits that zone, or their timer runs out while midair, the gravity that they spurned will get its revenge. Painfully.$(br2)It costs one quarter of an $(l:items/amethyst)$(item)Amethyst Dust/$, per meter of radius, per second in flight.",
 
   "hexcasting.page.teleport.1": "Far more powerful than $(l:patterns/spells/basic#hexcasting:blink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to.",
   "hexcasting.page.teleport.2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(l:items/amethyst)$(item)Charged Amethyst/$.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination.",
@@ -954,5 +957,23 @@
   "hexcasting.page.make_battery.1": "Infuse a bottle with _media to form a $(l:items/phials)$(item)Phial./$",
   "hexcasting.page.make_battery.2": "Similarly to the spells for $(l:patterns/spells/hexcasting)$(action)Crafting Casting Items/$, I must hold a $(item)Glass Bottle/$ in my other hand, and provide the spell with a dropped stack of $(l:items/amethyst)$(item)Amethyst/$. See $(l:items/phials)this page/$ for more information.$(br2)Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
 
-  "hexcasting.page.brainsweep_spell.1": "I cannot make heads or tails of this spell... To be honest, I'm not sure I want to know what it does."
+  "hexcasting.page.brainsweep_spell.1": "I cannot make heads or tails of this spell... To be honest, I'm not sure I want to know what it does.",
+
+  "hexcasting.entry.interop": "Cross-Mod Compatibility",
+  "hexcasting.entry.interop.desc": "It appears I have installed some mods Hexcasting interoperates with! I've detailed them here.",
+  "hexcasting.page.interop.1": "The art of _Hexcasting is versatile. If I find that my world has been $(italic)modified/$ by certain other powers, it's possible that I may use _Hexcasting in harmony and combination with them.",
+  "hexcasting.page.interop.2": "I should keep in mind, however, that Nature seems to have paid less attention in crafting these aspects of my art; strange behavior and bugs are to be expected. I'm sure the mod developer will do her best to correct them, but I must remember this is a less important pastime to her.$(br2)I may also find that there are sharp disregards to balance in the costs and effects of the interoperating powers. In such a case I suppose I will have to be responsible and restrain myself from using them.",
+  "hexcasting.page.interop.3": "Finally, if I find myself interested in the lore and stories of this world, I do not think any notes compiled while examining these interoperations should be considered as anything more than light trifles.",
+  
+  "hexcasting.entry.interop.gravity": "Gravity Changer",
+  "hexcasting.page.interop.gravity.1": "I have discovered actions to get and set an entity's gravity. I find them interesting, if slightly nauseating.$(br2)Interestingly, although $(l:patterns/great_spells/flight)$(action)Flight/$ is a great spell, and manipulates gravity similarly, these are not. It baffles me why... Perhaps the mod developer wanted players to have fun, for once.",
+  "hexcasting.page.interop.gravity.get": "Get the main direction gravity pulls the given entity in, as a unit vector. For most entities, this will be down: [0, -1, 0].",
+  "hexcasting.page.interop.gravity.set": "Set the main direction gravity pulls the given entity in. The given vector will be coerced into the nearest axis, as per $(l:patterns/math#hexcasting:coerce_axial)$(action)Axial Purification/$. Costs about 1 $(item)Charged Amethyst Crystal/$.",
+  
+ "hexcasting.entry.interop.pehkui": "Pehkui",
+ "hexcasting.page.interop.pehkui.1": "I have discovered methods of changing the size of entities, and querying how much larger or smaller they are than normal.",
+  "hexcasting.page.interop.pehkui.get": "Get the scale of the entity, as a proportion of their normal size. For most entities, this will be 1.",
+  "hexcasting.page.interop.pehkui.set": "Set the scale of the entity, passing in a proportion of their normal size. Costs about 1 $(item)Amethyst Shard/$.",
+
+  "":""
 }

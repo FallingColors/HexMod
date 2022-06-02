@@ -13,7 +13,9 @@ import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
+import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
+import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.ktxt.AccessorWrappers;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
@@ -70,6 +72,18 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public boolean isPhysicalClient() {
         return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
+    }
+
+    @Override
+    public boolean isModPresent(String id) {
+        return FabricLoader.getInstance().isModLoaded(id);
+    }
+
+    @Override
+    public void initPlatformSpecific() {
+        if (this.isModPresent(HexInterop.Fabric.GRAVITY_CHANGER_API_ID)) {
+            GravityApiInterop.init();
+        }
     }
 
     @Override

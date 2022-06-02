@@ -1,0 +1,10 @@
+{
+  "name": "hexcasting.entry.interop",
+  "icon": "minecraft:chain",
+  "category": "hexcasting:interop",
+  "pages": [
+    "hexcasting.page.interop.1",
+    "hexcasting.page.interop.2",
+    "hexcasting.page.interop.3"
+  ]
+}

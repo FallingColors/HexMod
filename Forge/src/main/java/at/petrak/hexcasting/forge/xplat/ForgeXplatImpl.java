@@ -65,6 +65,7 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
@@ -83,6 +84,16 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public boolean isPhysicalClient() {
         return FMLLoader.getDist() == Dist.CLIENT;
+    }
+
+    @Override
+    public boolean isModPresent(String id) {
+        return ModList.get().isLoaded(id);
+    }
+
+    @Override
+    public void initPlatformSpecific() {
+        // NO-OP
     }
 
     @Override

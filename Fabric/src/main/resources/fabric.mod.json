@@ -49,6 +49,10 @@
     "patchouli": ">=1.18.2-69",
     "paucal": ">=0.4.4"
   },
+  "suggests": {
+    "gravitychanger": "0.7.7+fabric",
+    "pehkui": "3.3.2+1.14.4-1.19"
+  },
 
   "custom": {
     "cardinal-components": [

@@ -47,7 +47,11 @@ import java.util.stream.Collectors;
 public interface IXplatAbstractions {
     Platform platform();
 
+    boolean isModPresent(String id);
+
     boolean isPhysicalClient();
+
+    void initPlatformSpecific();
 
     void sendPacketToPlayer(ServerPlayer target, IMessage packet);
 
@@ -89,11 +93,14 @@ public interface IXplatAbstractions {
 
     void clearCastingData(ServerPlayer player);
 
-    @Nullable ManaHolder findManaHolder(ItemStack stack);
+    @Nullable
+    ManaHolder findManaHolder(ItemStack stack);
 
-    @Nullable DataHolder findDataHolder(ItemStack stack);
+    @Nullable
+    DataHolder findDataHolder(ItemStack stack);
 
-    @Nullable HexHolder findHexHolder(ItemStack stack);
+    @Nullable
+    HexHolder findHexHolder(ItemStack stack);
 
     // coooollooorrrs
 

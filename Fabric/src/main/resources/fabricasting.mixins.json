@@ -7,7 +7,6 @@
   "mixins": [
     "FabricAxeItemMixin",
     "FabricBlockBehaviorMixin",
-    "FabricIngredientMixin",
     "FabricItemEntityMixin",
     "FabricVillagerTurnIntoWitchMixin"
   ],
