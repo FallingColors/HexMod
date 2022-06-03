@@ -65,6 +65,7 @@ dependencies {
     include "me.zeroeightsix:fiber:$fiberVersion"
 
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:$cardinalComponentsVersion"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-api:$cardinalComponentsVersion"
 
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
     include "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
