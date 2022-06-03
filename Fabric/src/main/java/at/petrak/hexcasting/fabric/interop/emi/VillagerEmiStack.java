@@ -8,7 +8,7 @@ import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
 import at.petrak.hexcasting.mixin.accessor.AccessorPoiType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.emi.emi.EmiRenderHelper;
+import dev.emi.emi.api.EmiRender;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.screen.tooltip.RemainderTooltipComponent;
@@ -171,7 +171,7 @@ public class VillagerEmiStack extends EmiStack {
 
 
 		if ((flags & RENDER_REMAINDER) != 0) {
-			EmiRenderHelper.renderRemainder(this, poseStack, x, y);
+			EmiRender.renderRemainderIcon(this, poseStack, x, y);
 		}
 	}
 
