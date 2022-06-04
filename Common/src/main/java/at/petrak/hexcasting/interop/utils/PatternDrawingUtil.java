@@ -56,6 +56,8 @@ public final class PatternDrawingUtil {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(() -> prevShader);
 
+        RenderSystem.enableCull();
+
         poseStack.popPose();
     }
 
