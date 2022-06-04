@@ -6,13 +6,13 @@ import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
 import at.petrak.hexcasting.interop.utils.PatternEntry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.render.EmiRenderable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 
 import java.util.List;
 
-public class PatternRendererEMI implements EmiRecipeCategory.Renderer {
+public class PatternRendererEMI implements EmiRenderable {
 
     private final long startTime = System.currentTimeMillis();
 

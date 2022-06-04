@@ -5,13 +5,12 @@ import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
 import at.petrak.hexcasting.mixin.accessor.AccessorPoiType;
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
@@ -37,22 +36,16 @@ public class HexEMIPlugin implements EmiPlugin {
 	private static final ResourceLocation SIMPLIFIED_ICON_PROFESSION = modLoc("textures/gui/villager_profession.png");
 
 	public static final EmiRecipeCategory BRAINSWEEP = new EmiRecipeCategory(BRAINSWEEP_ID,
-					new PatternRendererEMI(BRAINSWEEP_ID, 16, 16), (matrices, x, y, delta) -> {
-		RenderSystem.setShaderTexture(0, SIMPLIFIED_ICON_BRAINSWEEP);
-		GuiComponent.blit(matrices, x, y, 0, 0, 16, 16, 16, 16);
-	});
+		new PatternRendererEMI(BRAINSWEEP_ID, 16, 16),
+		new EmiTexture(SIMPLIFIED_ICON_BRAINSWEEP, 0, 0, 16, 16, 16, 16, 16, 16));
 
 	public static final EmiRecipeCategory VILLAGER_LEVELING = new EmiRecipeCategory(VILLAGER_LEVELING_ID,
-			EmiStack.of(Items.EMERALD), (matrices, x, y, delta) -> {
-		RenderSystem.setShaderTexture(0, SIMPLIFIED_ICON_LEVELING);
-		GuiComponent.blit(matrices, x, y, 0, 0, 16, 16, 16, 16);
-	});
+		EmiStack.of(Items.EMERALD),
+		new EmiTexture(SIMPLIFIED_ICON_LEVELING, 0, 0, 16, 16, 16, 16, 16, 16));
 
 	public static final EmiRecipeCategory VILLAGER_PROFESSION = new EmiRecipeCategory(VILLAGER_PROFESSION_ID,
-			EmiStack.of(Blocks.GRINDSTONE), (matrices, x, y, delta) -> {
-		RenderSystem.setShaderTexture(0, SIMPLIFIED_ICON_PROFESSION);
-		GuiComponent.blit(matrices, x, y, 0, 0, 16, 16, 16, 16);
-	});
+		EmiStack.of(Blocks.LECTERN),
+		new EmiTexture(SIMPLIFIED_ICON_PROFESSION, 0, 0, 16, 16, 16, 16, 16, 16));
 
 	@Override
 	public void register(EmiRegistry registry) {
@@ -63,7 +56,7 @@ public class HexEMIPlugin implements EmiPlugin {
 
 		for (BrainsweepRecipe recipe : registry.getRecipeManager().getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE)) {
 			var inputs = EmiIngredient.of(recipe.blockIn().getDisplayedStacks().stream()
-					.map(EmiStack::of).toList());
+				.map(EmiStack::of).toList());
 			var villagerInput = VillagerEmiStack.atLevelOrHigher(recipe.villagerIn(), true);
 			var output = EmiStack.of(recipe.result().getBlock());
 			registry.addRecipe(new EmiBrainsweepRecipe(inputs, villagerInput, output, recipe.getId()));
@@ -80,18 +73,18 @@ public class HexEMIPlugin implements EmiPlugin {
 			Set<BlockState> states = ((AccessorPoiType) poi).hex$matchingStates();
 			if (!states.isEmpty()) {
 				List<Item> workstations = states.stream()
-						.map(BlockState::getBlock)
-						.map(Block::asItem)
-						.distinct()
-						.filter((it) -> it != Items.AIR)
-						.toList();
+					.map(BlockState::getBlock)
+					.map(Block::asItem)
+					.distinct()
+					.filter((it) -> it != Items.AIR)
+					.toList();
 
 				if (!workstations.isEmpty()) {
 					registry.addWorkstation(VILLAGER_LEVELING, EmiIngredient.of(workstations.stream().map(EmiStack::of).toList()));
 					registry.addWorkstation(VILLAGER_PROFESSION, EmiIngredient.of(workstations.stream().map(EmiStack::of).toList()));
 					registry.addRecipe(new EmiProfessionRecipe(new VillagerEmiStack(basicVillager),
-							EmiIngredient.of(workstations.stream().map(EmiStack::of).toList()),
-							new VillagerEmiStack(manWithJob), poiRecipeId));
+						EmiIngredient.of(workstations.stream().map(EmiStack::of).toList()),
+						new VillagerEmiStack(manWithJob), poiRecipeId));
 
 					for (int lvl = 1; lvl < 5; lvl++) {
 						ResourceLocation levelRecipeId = modLoc("villager/levelup/" + lvl + "/" + id.getNamespace() + "/" + id.getPath());

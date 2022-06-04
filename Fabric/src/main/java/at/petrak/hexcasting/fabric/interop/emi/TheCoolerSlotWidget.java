@@ -2,8 +2,8 @@ package at.petrak.hexcasting.fabric.interop.emi;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.emi.emi.EmiRenderHelper;
-import dev.emi.emi.api.EmiRender;
+import dev.emi.emi.api.render.EmiRender;
+import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.SlotWidget;
@@ -46,11 +46,10 @@ public class TheCoolerSlotWidget extends SlotWidget {
                 RenderSystem.setShaderTexture(0, this.textureId);
                 GuiComponent.blit(poseStack, bounds.x(), bounds.y(), width, height, (float)this.u, (float)this.v, width, height, 256, 256);
             } else {
-                RenderSystem.setShaderTexture(0, EmiRenderHelper.WIDGETS);
                 if (this.output) {
-                    GuiComponent.blit(poseStack, bounds.x(), bounds.y(), 26, 26, 18.0F, 0.0F, 26, 26, 256, 256);
+                    EmiTexture.LARGE_SLOT.render(poseStack, bounds.x(), bounds.y(), delta);
                 } else {
-                    GuiComponent.blit(poseStack, bounds.x(), bounds.y(), 18, 18, 0.0F, 0.0F, 18, 18, 256, 256);
+                    EmiTexture.SLOT.render(poseStack, bounds.x(), bounds.y(), delta);
                 }
             }
         }
