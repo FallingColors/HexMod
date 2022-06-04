@@ -42,7 +42,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
@@ -101,8 +100,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Attribute getReachDistance() {
-        return ForgeMod.REACH_DISTANCE.get();
+    public double getReachDistance(Player player) {
+        return player.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
     }
 
     @Override
