@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import io.github.fablabsmc.fablabs.api.fiber.v1.builder.ConfigTreeBuilder;
@@ -15,6 +16,9 @@ import net.minecraft.resources.ResourceLocation;
 import java.io.*;
 import java.nio.file.*;
 import java.util.List;
+
+import static at.petrak.hexcasting.api.mod.HexConfig.anyMatch;
+import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Fabric/src/main/java/vazkii/botania/fabric/FiberBotaniaConfig.java
 public class FabricHexConfig {
@@ -161,6 +165,12 @@ public class FabricHexConfig {
                 ConfigTypes.makeList(ConfigTypes.STRING));
         private final PropertyMirror<Boolean> villagersOffendedByMindMurder = PropertyMirror.create(
                 ConfigTypes.BOOLEAN);
+        private final PropertyMirror<List<String>> fewScrollTables = PropertyMirror.create(
+            ConfigTypes.makeList(ConfigTypes.STRING));
+        private final PropertyMirror<List<String>> someScrollTables = PropertyMirror.create(
+            ConfigTypes.makeList(ConfigTypes.STRING));
+        private final PropertyMirror<List<String>> manyScrollTables = PropertyMirror.create(
+            ConfigTypes.makeList(ConfigTypes.STRING));
 
         public ConfigTree configure(ConfigTreeBuilder bob) {
             bob.fork("Spells")
@@ -190,7 +200,21 @@ public class FabricHexConfig {
 
                 .beginValue("villagersOffendedByMindMurder", ConfigTypes.BOOLEAN, true)
                 .withComment("Should villagers take offense when you flay the mind of their fellow villagers?")
-                .finishValue(villagersOffendedByMindMurder::mirror);
+                .finishValue(villagersOffendedByMindMurder::mirror)
+
+                .fork("Scrolls in Loot")
+                .beginValue("fewScrollTables", ConfigTypes.makeList(ConfigTypes.STRING), DEFAULT_FEW_SCROLL_TABLES)
+                .withComment("Which loot tables should a small number of Ancient Scrolls be injected into?")
+                .finishValue(fewScrollTables::mirror)
+
+                .beginValue("someScrollTables", ConfigTypes.makeList(ConfigTypes.STRING), DEFAULT_SOME_SCROLL_TABLES)
+                .withComment("Which loot tables should a decent number of Ancient Scrolls be injected into?")
+                .finishValue(someScrollTables::mirror)
+
+                .beginValue("manyScrollTables", ConfigTypes.makeList(ConfigTypes.STRING), DEFAULT_MANY_SCROLL_TABLES)
+                .withComment("Which loot tables should a huge number of Ancient Scrolls be injected into?")
+                .finishValue(manyScrollTables::mirror)
+                .finishBranch();
 
             return bob.build();
         }
@@ -212,17 +236,28 @@ public class FabricHexConfig {
 
         @Override
         public boolean isActionAllowed(ResourceLocation actionID) {
-            return !actionDenyList.getValue().contains(actionID.toString());
+            return noneMatch(actionDenyList.getValue(), actionID);
         }
 
         @Override
         public boolean isActionAllowedInCircles(ResourceLocation actionID) {
-            return !circleActionDenyList.getValue().contains(actionID.toString());
+            return noneMatch(circleActionDenyList.getValue(), actionID);
         }
 
         @Override
         public boolean doVillagersTakeOffenseAtMindMurder() {
             return villagersOffendedByMindMurder.getValue();
+        }
+
+        @Override
+        public ScrollQuantity scrollsForLootTable(ResourceLocation lootTable) {
+            if (anyMatch(fewScrollTables.getValue(), lootTable))
+                return ScrollQuantity.FEW;
+            else if (anyMatch(someScrollTables.getValue(), lootTable))
+                return ScrollQuantity.SOME;
+            else if (anyMatch(manyScrollTables.getValue(), lootTable))
+                return ScrollQuantity.MANY;
+            return ScrollQuantity.NONE;
         }
     }
 }

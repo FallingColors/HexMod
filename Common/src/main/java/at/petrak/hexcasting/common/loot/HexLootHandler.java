@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.common.loot;
 
+import at.petrak.hexcasting.api.misc.ScrollQuantity;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -21,20 +23,12 @@ public class HexLootHandler {
         Consumer<LootPool> addPool) {
         if (id.equals(Blocks.AMETHYST_CLUSTER.getLootTable())) {
             addPool.accept(getInjectPool(TABLE_INJECT_AMETHYST_CLUSTER));
-        } else if (
-            id.equals(new ResourceLocation("minecraft:chests/jungle_temple"))
-                || id.equals(new ResourceLocation("minecraft:chests/simple_dungeon"))
-                || id.equals(new ResourceLocation("minecraft:chests/village/village_cartographer"))
-        ) {
-            addPool.accept(getInjectPool(modLoc("inject/scroll_loot_few")));
-        } else if (
-            id.equals(new ResourceLocation("minecraft:chests/bastion_treasure"))
-                || id.equals(new ResourceLocation("minecraft:chests/shipwreck_map"))
-        ) {
-            addPool.accept(getInjectPool(modLoc("inject/scroll_loot_some")));
-        } else if (id.equals(new ResourceLocation("minecraft:chests/stronghold_library"))
-        ) {
-            addPool.accept(getInjectPool(modLoc("inject/scroll_loot_many")));
+        } else {
+            ScrollQuantity scrolls = HexConfig.server().scrollsForLootTable(id);
+            ResourceLocation injection = scrolls.getPool();
+            if (injection != null) {
+                addPool.accept(getInjectPool(injection));
+            }
         }
     }
 

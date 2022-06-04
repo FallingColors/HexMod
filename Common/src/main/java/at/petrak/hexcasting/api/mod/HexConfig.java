@@ -2,9 +2,12 @@ package at.petrak.hexcasting.api.mod;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
+
+import java.util.List;
 
 public class HexConfig {
     public interface CommonConfigAccess {
@@ -46,9 +49,14 @@ public class HexConfig {
 
         boolean doVillagersTakeOffenseAtMindMurder();
 
+        ScrollQuantity scrollsForLootTable(ResourceLocation lootTable);
+
         int DEFAULT_MAX_RECURSE_DEPTH = 64;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
+        List<String> DEFAULT_FEW_SCROLL_TABLES = List.of("minecraft:chests/jungle_temple", "minecraft:chests/simple_dungeon", "minecraft:chests/village/village_cartographer");
+        List<String> DEFAULT_SOME_SCROLL_TABLES = List.of("minecraft:chests/bastion_treasure", "minecraft:chests/shipwreck_map");
+        List<String> DEFAULT_MANY_SCROLL_TABLES = List.of("minecraft:chests/stronghold_library");
         // We can't have default values for the break harvest level or if
 
         default Tier opBreakHarvestLevel() {
@@ -61,6 +69,15 @@ public class HexConfig {
                 default -> throw new RuntimeException("please only return a value in 0<=x<=4");
             };
         }
+    }
+
+    // Simple extensions for resource location configs
+    public static boolean anyMatch(List<? extends String> keys, ResourceLocation key) {
+        return keys.stream().map(ResourceLocation::new).anyMatch(key::equals);
+    }
+
+    public static boolean noneMatch(List<? extends String> keys, ResourceLocation key) {
+        return keys.stream().map(ResourceLocation::new).noneMatch(key::equals);
     }
 
     // oh man this is aesthetically pleasing

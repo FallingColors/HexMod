@@ -1,10 +1,14 @@
 package at.petrak.hexcasting.forge;
 
+import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
+
+import static at.petrak.hexcasting.api.mod.HexConfig.anyMatch;
+import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
 public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     private static ForgeConfigSpec.IntValue dustManaAmount;
@@ -81,6 +85,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
 
+        private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
+        private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
+        private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Spells");
@@ -110,6 +117,21 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             villagersOffendedByMindMurder = builder.comment(
                     "Should villagers take offense when you flay the mind of their fellow villagers?")
                     .define("villagersOffendedByMindMurder", true);
+
+            builder.push("Scrolls in Loot");
+
+            fewScrollTables = builder.comment(
+                    "Which loot tables should a small number of Ancient Scrolls be injected into?")
+                .defineList("fewScrollTables", DEFAULT_FEW_SCROLL_TABLES,
+                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
+            someScrollTables = builder.comment(
+                    "Which loot tables should a decent number of Ancient Scrolls be injected into?")
+                .defineList("someScrollTables", DEFAULT_SOME_SCROLL_TABLES,
+                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
+            manyScrollTables = builder.comment(
+                    "Which loot tables should a huge number of Ancient Scrolls be injected into?")
+                .defineList("manyScrollTables", DEFAULT_MANY_SCROLL_TABLES,
+                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
         }
 
         @Override
@@ -129,17 +151,28 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         @Override
         public boolean isActionAllowed(ResourceLocation actionID) {
-            return !actionDenyList.get().contains(actionID.toString());
+            return noneMatch(actionDenyList.get(), actionID);
         }
 
         @Override
         public boolean isActionAllowedInCircles(ResourceLocation actionID) {
-            return !circleActionDenyList.get().contains(actionID.toString());
+            return noneMatch(circleActionDenyList.get(), actionID);
         }
 
         @Override
         public boolean doVillagersTakeOffenseAtMindMurder() {
             return villagersOffendedByMindMurder.get();
+        }
+
+        @Override
+        public ScrollQuantity scrollsForLootTable(ResourceLocation lootTable) {
+            if (anyMatch(fewScrollTables.get(), lootTable))
+                return ScrollQuantity.FEW;
+            else if (anyMatch(someScrollTables.get(), lootTable))
+                return ScrollQuantity.SOME;
+            else if (anyMatch(manyScrollTables.get(), lootTable))
+                return ScrollQuantity.MANY;
+            return ScrollQuantity.NONE;
         }
     }
 }
