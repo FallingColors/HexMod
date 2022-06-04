@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.items.ItemWand;
+import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
@@ -127,20 +128,22 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                 .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
         }
 
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[0], Items.EGG); // Trans
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[1], Items.STONE_BRICK_WALL); // Gay
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[2], Items.GLASS); // Agender
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[3], Items.BREAD); // Asexual
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[4], Items.WHEAT); // Bisexual
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[5], Items.CARROT); // Pansexual
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[6], Items.GLASS_BOTTLE); // Genderqueer
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[7], Items.RAW_COPPER); // Demigirl
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[8], Items.MOSS_BLOCK); // Non-Binary
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[9], Items.HONEYCOMB); // Lesbian
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[10], Items.RAW_IRON); // Demiboy
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[11], Items.WATER_BUCKET); // Genderfluid
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[12], Items.AZALEA); // Intersex
-        gayRecipe(recipes, HexItems.PRIDE_COLORIZERS[13], Items.ARROW); // Aroace
+        gayRecipe(recipes, ItemPrideColorizer.Type.AGENDER, Items.GLASS);
+        gayRecipe(recipes, ItemPrideColorizer.Type.AROACE, Items.WHEAT_SEEDS);
+        gayRecipe(recipes, ItemPrideColorizer.Type.AROMANTIC, Items.ARROW);
+        gayRecipe(recipes, ItemPrideColorizer.Type.ASEXUAL, Items.BREAD);
+        gayRecipe(recipes, ItemPrideColorizer.Type.BISEXUAL, Items.WHEAT);
+        gayRecipe(recipes, ItemPrideColorizer.Type.DEMIBOY, Items.RAW_IRON);
+        gayRecipe(recipes, ItemPrideColorizer.Type.DEMIGIRL, Items.RAW_COPPER);
+        gayRecipe(recipes, ItemPrideColorizer.Type.GAY, Items.STONE_BRICK_WALL);
+        gayRecipe(recipes, ItemPrideColorizer.Type.GENDERFLUID, Items.WATER_BUCKET);
+        gayRecipe(recipes, ItemPrideColorizer.Type.GENDERQUEER, Items.GLASS_BOTTLE);
+        gayRecipe(recipes, ItemPrideColorizer.Type.INTERSEX, Items.AZALEA);
+        gayRecipe(recipes, ItemPrideColorizer.Type.LESBIAN, Items.HONEYCOMB);
+        gayRecipe(recipes, ItemPrideColorizer.Type.NONBINARY, Items.MOSS_BLOCK);
+        gayRecipe(recipes, ItemPrideColorizer.Type.PANSEXUAL, Items.CARROT);
+        gayRecipe(recipes, ItemPrideColorizer.Type.PLURAL, Items.REPEATER);
+        gayRecipe(recipes, ItemPrideColorizer.Type.TRANSGENDER, Items.EGG);
 
         ShapedRecipeBuilder.shaped(HexItems.UUID_COLORIZER)
             .define('B', Items.BOWL)
@@ -368,7 +371,8 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes);
     }
 
-    private void gayRecipe(Consumer<FinishedRecipe> recipes, Item colorizer, Item material) {
+    private void gayRecipe(Consumer<FinishedRecipe> recipes, ItemPrideColorizer.Type type, Item material) {
+        var colorizer = HexItems.PRIDE_COLORIZERS.get(type);
         ShapedRecipeBuilder.shaped(colorizer)
             .define('B', Items.BOWL)
             .define('D', HexItems.AMETHYST_DUST)

@@ -5,14 +5,8 @@
   "sortnum": 8,
   "advancement": "hexcasting:root",
   "pages": [
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.pigments.1"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.pigments.2"
-    },
+    "hexcasting.page.pigments.1",
+    "hexcasting.page.pigments.2",
     {
       "type": "hexcasting:crafting_multi",
       "heading": "hexcasting.page.pigments.colored.crafting.header",
@@ -37,38 +31,43 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:pride_colorizer_0",
-      "recipe2": "hexcasting:pride_colorizer_1"
+      "recipe": "hexcasting:pride_colorizer_agender",
+      "recipe2": "hexcasting:pride_colorizer_aroace"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:pride_colorizer_2",
-      "recipe2": "hexcasting:pride_colorizer_3"
+      "recipe": "hexcasting:pride_colorizer_aromantic",
+      "recipe2": "hexcasting:pride_colorizer_asexual"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:pride_colorizer_4",
-      "recipe2": "hexcasting:pride_colorizer_5"
+      "recipe": "hexcasting:pride_colorizer_bisexual",
+      "recipe2": "hexcasting:pride_colorizer_demiboy"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:pride_colorizer_6",
-      "recipe2": "hexcasting:pride_colorizer_7"
+      "recipe": "hexcasting:pride_colorizer_demigirl",
+      "recipe2": "hexcasting:pride_colorizer_gay"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:pride_colorizer_8",
-      "recipe2": "hexcasting:pride_colorizer_9"
+      "recipe": "hexcasting:pride_colorizer_genderfluid",
+      "recipe2": "hexcasting:pride_colorizer_genderqueer"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:pride_colorizer_10",
-      "recipe2": "hexcasting:pride_colorizer_11"
+      "recipe": "hexcasting:pride_colorizer_intersex",
+      "recipe2": "hexcasting:pride_colorizer_lesbian"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:pride_colorizer_12",
-      "recipe2": "hexcasting:pride_colorizer_13"
+      "recipe": "hexcasting:pride_colorizer_nonbinary",
+      "recipe2": "hexcasting:pride_colorizer_pansexual"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:pride_colorizer_plural",
+      "recipe2": "hexcasting:pride_colorizer_transgender"
     },
     {
       "type": "patchouli:crafting",

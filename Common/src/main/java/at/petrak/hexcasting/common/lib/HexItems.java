@@ -6,6 +6,7 @@ import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
 import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
@@ -66,18 +67,21 @@ public class HexItems {
     public static final ItemManaBattery BATTERY = make("battery",
         new ItemManaBattery(new Item.Properties().stacksTo(1)));
 
-    public static final EnumMap<DyeColor, ItemDyeColorizer> DYE_COLORIZERS = new EnumMap<>(
-        DyeColor.class);
-    public static final ItemPrideColorizer[] PRIDE_COLORIZERS = new ItemPrideColorizer[14];
-
-    static {
+    public static final EnumMap<DyeColor, ItemDyeColorizer> DYE_COLORIZERS = Util.make(() -> {
+        var out = new EnumMap<DyeColor, ItemDyeColorizer>(DyeColor.class);
         for (var dye : DyeColor.values()) {
-            DYE_COLORIZERS.put(dye, make("dye_colorizer_" + dye.getName(), new ItemDyeColorizer(dye, unstackable())));
+            out.put(dye, make("dye_colorizer_" + dye.getName(), new ItemDyeColorizer(dye, unstackable())));
         }
-        for (int i = 0; i < PRIDE_COLORIZERS.length; i++) {
-            PRIDE_COLORIZERS[i] = make("pride_colorizer_" + i, new ItemPrideColorizer(i, unstackable()));
+        return out;
+    });
+    public static final EnumMap<ItemPrideColorizer.Type, ItemPrideColorizer> PRIDE_COLORIZERS = Util.make(() -> {
+        var out = new EnumMap<ItemPrideColorizer.Type, ItemPrideColorizer>(ItemPrideColorizer.Type.class);
+        for (var politicsInMyVidya : ItemPrideColorizer.Type.values()) {
+            out.put(politicsInMyVidya, make("pride_colorizer_" + politicsInMyVidya.getName(),
+                new ItemPrideColorizer(politicsInMyVidya, unstackable())));
         }
-    }
+        return out;
+    });
 
     public static final Item UUID_COLORIZER = make("uuid_colorizer", new ItemUUIDColorizer(unstackable()));
 
