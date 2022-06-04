@@ -1,0 +1,8 @@
+{
+  "name": "hexcasting.entry.lore.inventory",
+  "icon": "hexcasting:lore_fragment",
+  "category": "hexcasting:lore",
+  "advancement": "hexcasting:lore/inventory",
+  "sortnum": 7,
+  "pages": []
+}

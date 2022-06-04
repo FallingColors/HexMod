@@ -1,0 +1,8 @@
+{
+  "name": "hexcasting.entry.lore.terabithia5",
+  "icon": "hexcasting:lore_fragment",
+  "category": "hexcasting:lore",
+  "advancement": "hexcasting:lore/terabithia5",
+  "sortnum": 4,
+  "pages": []
+}

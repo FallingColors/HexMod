@@ -5,15 +5,16 @@ import at.petrak.hexcasting.api.advancements.FailToCastGreatSpellTrigger;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.advancements.SpendManaTrigger;
 import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.common.items.ItemLoreFragment;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.datagen.PaucalAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -89,6 +90,23 @@ public class HexAdvancements extends PaucalAdvancementProvider {
                     MinMaxBounds.Doubles.atLeast(0.8),
                     MinMaxBounds.Doubles.between(0.1, 2.05)))
             .save(consumer, prefix("enlightenment"));
+
+        var loreRoot = Advancement.Builder.advancement()
+            .display(simpleDisplayWithBackground(HexBlocks.AKASHIC_CONNECTOR, "lore", FrameType.GOAL,
+                modLoc("textures/block/slate.png")))
+            .addCriterion("used_item", new ConsumeItemTrigger.TriggerInstance(EntityPredicate.Composite.ANY,
+                ItemPredicate.Builder.item().of(HexItems.LORE_FRAGMENT).build()))
+            .save(consumer, prefix("lore"));
+
+        for (var advId : ItemLoreFragment.NAMES) {
+            Advancement.Builder.advancement()
+                .display(new DisplayInfo(new ItemStack(HexItems.LORE_FRAGMENT),
+                    new TranslatableComponent("advancement." + advId), TextComponent.EMPTY,
+                    null, FrameType.TASK, true, true, true))
+                .parent(loreRoot)
+                .addCriterion(ItemLoreFragment.CRITEREON_KEY, new ImpossibleTrigger.TriggerInstance())
+                .save(consumer, advId.toString());
+        }
 
 //        super.registerAdvancements(consumer, fileHelper);
     }

@@ -113,5 +113,14 @@
       "minecraft:random/orb"
     ],
     "subtitle": "hexcasting.subtitles.impetus.cleric.register"
+  },
+
+  "lore_fragment.read": {
+    "sounds": [
+      "block/enchantment_table/enchant1",
+      "block/enchantment_table/enchant2",
+      "block/enchantment_table/enchant3"
+    ],
+    "subtitle": "hexcasting.subtitles.lore_fragment.read"
   }
 }

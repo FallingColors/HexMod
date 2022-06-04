@@ -70,7 +70,8 @@
   "item.hexcasting.creative_unlocker.for_emphasis": "INFINITE MEDIA",
   "item.hexcasting.creative_unlocker.tooltip.1": "Consume to unlock all %s knowledge.",
   "item.hexcasting.creative_unlocker.mod_name": "Hexcasting",
-
+  "item.hexcasting.lore_fragment": "Lore Fragment",
+  "item.hexcasting.lore_fragment.all": "It seems I have found all the lore this world has to offer.",
 
   "block.hexcasting.conjured": "Conjured Block",
   "block.hexcasting.slate.blank": "Blank Slate",
@@ -156,6 +157,13 @@
   "advancement.hexcasting:y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
   "advancement.hexcasting:opened_eyes": "Opened Eyes",
   "advancement.hexcasting:opened_eyes.desc": "Have nature take a piece of your mind in payment for a hex.",
+  "advancement.hexcasting:lore": "Hexcasting Lore",
+  "advancement.hexcasting:lore.desc": "Read a Lore Fragment",
+  "advancement.hexcasting:lore/terabithia1": "Letter from Terabithia Steles to Her Father, #1",
+  "advancement.hexcasting:lore/terabithia2": "Letter from Terabithia Steles to Her Father, #2",
+  "advancement.hexcasting:lore/terabithia3": "Letter from Terabithia Steles to Her Father, #3, 1/2",
+  "advancement.hexcasting:lore/terabithia4": "Letter from Terabithia Steles to Her Father, #3, 2/2",
+  "advancement.hexcasting:lore/terabithia5": "Letter from Terabithia Steles to Her Father, #4",
 
   "stat.hexcasting.mana_used": "Media Consumed (in dust)",
   "stat.hexcasting.mana_overcasted": "Media Overcast (in dust)",
@@ -191,6 +199,7 @@
   "hexcasting.subtitles.scroll.scribble": "Scroll is scribbled",
   "hexcasting.subtitles.impetus.fletcher.tick": "Fletcher Impetus ticks",
   "hexcasting.subtitles.impetus.cleric.register": "Cleric Impetus dings",
+  "hexcasting.subtitles.lore_fragment.read": "Read lore fragment",
 
   "hexcasting.spell.hexcasting:get_caster": "Mind's Reflection",
   "hexcasting.spell.hexcasting:get_entity_pos": "Compass' Purification",
@@ -971,6 +980,19 @@
 
   "hexcasting.page.brainsweep_spell.1": "I cannot make heads or tails of this spell... To be honest, I'm not sure I want to know what it does.",
 
+  "hexcasting.entry.lore": "Lore",
+  "hexcasting.entry.lore.desc": "I have uncovered some letters and text not of direct relavence to my art. But, I think I may be able to divine some of the history of the world from these. Let me see...",
+
+  "hexcasting.entry.lore.terabithia1": "Terabithia Steles, #1",
+  "hexcasting.page.lore.terabithia1.1": "$(italic)Full title: Letter from Terabithia Steles to Her Father, #1/$$(br2)Dear Papa,$(br2)Every day it seems I have more reason to thank you for saving up to send me to the Grand Library. The amount I am learning is incredible! I feel I don't have the skill with words needed to express myself fully... it is wonderful to be here.",
+  "hexcasting.page.lore.terabithia1.2": "I sit in the main dome as I write this. It's maintained by the Hexcasting Corps; they have some sort of peculiar mechanism at the top that captures the stray thought energy as it leaks out from the desks and desks of hard-working students, as I understand it. One of my friends in the dormitory, Amanita, is studying the subject, and oh how she loves to explain it to me at length, although I confess I do not understand it very well.",
+  "hexcasting.page.lore.terabithia1.3": "The way I understand it, our processes of thought--the intangible mechanisms by which I move my pen and by which you read this letter--are not completely efficient. A small amount of that energy is released into the environment, like how a wagon's axle is hot to the touch after it has been turning for a while. This spare energy is called \"media.\" One person's spare media is trifiling, but the hundreds of thinking people in the main dome have a sort of multiplicative effect, and combined with some sort of ingenious mechanism, it can be solidified into a sort of purple crystal.",
+  "hexcasting.page.lore.terabithia1.4": "But that's enough about her studies. I returned from my first expedition with the Geology Corps today! My apologies for not sending a letter before I left; the date crept up on me. We ventured into a crack in the earth to the east of the Grand and spent the night camping under the rock and soil. We kept to well-lit and well-traveled areas of the cave, of course, and in all honesty it was likely safer in there than the night surface, but oh how I was scared!",
+  "hexcasting.page.lore.terabithia1.5": "Fortunately the night passed without mishap, and we proceeded deeper into the cave for our examination of the local veins of ore. We were looking for trace veins of a purple crystal called \"amethyst,\" which supposedly occurs in small amounts deep in the rock. We did not find anything, sadly, and returned to the sunlit surface empty-handed.",
+  "hexcasting.page.lore.terabithia1.6": "Come to think of it, the description of this \"amethyst\" I now realize closely matches those crystals of media Amanita speaks of. Imagine if these nuggets of thought occurred naturally under the ground! I can't imagine why that might happen, though... ",
+  "hexcasting.page.lore.terabithia1.7": "As a student, I am entitled to send one letter by Akashic post every three months, free of charge. Unfortunately, you know how thin my moneybags are ... so I am afraid this offer is the only method I may communicate with you. I will of course appreciate immensely if you manage to scrounge together the money to send a letter back, but it seems our communications may be limited. I hate to be cut off from you so, but the skills I gain here will be more than repayment. Imagine, I will be the first member of our family to be anything other than a farmer!",
+  "hexcasting.page.lore.terabithia1.8": "So, I suppose I will write again in three months' time.$(br2)Yours,$(br)-- Terabithia Steles",
+
   "hexcasting.entry.interop": "Cross-Mod Compatibility",
   "hexcasting.entry.interop.desc": "It appears I have installed some mods Hexcasting interoperates with! I've detailed them here.",
   "hexcasting.page.interop.1": "The art of _Hexcasting is versatile. If I find that my world has been $(italic)modified/$ by certain other powers, it's possible that I may use _Hexcasting in harmony and combination with them.",
@@ -982,10 +1004,8 @@
   "hexcasting.page.interop.gravity.get": "Get the main direction gravity pulls the given entity in, as a unit vector. For most entities, this will be down: [0, -1, 0].",
   "hexcasting.page.interop.gravity.set": "Set the main direction gravity pulls the given entity in. The given vector will be coerced into the nearest axis, as per $(l:patterns/math#hexcasting:coerce_axial)$(action)Axial Purification/$. Costs about 1 $(item)Charged Amethyst Crystal/$.",
 
- "hexcasting.entry.interop.pehkui": "Pehkui",
- "hexcasting.page.interop.pehkui.1": "I have discovered methods of changing the size of entities, and querying how much larger or smaller they are than normal.",
+  "hexcasting.entry.interop.pehkui": "Pehkui",
+  "hexcasting.page.interop.pehkui.1": "I have discovered methods of changing the size of entities, and querying how much larger or smaller they are than normal.",
   "hexcasting.page.interop.pehkui.get": "Get the scale of the entity, as a proportion of their normal size. For most entities, this will be 1.",
-  "hexcasting.page.interop.pehkui.set": "Set the scale of the entity, passing in a proportion of their normal size. Costs about 1 $(item)Amethyst Shard/$.",
-
-  "":""
+  "hexcasting.page.interop.pehkui.set": "Set the scale of the entity, passing in a proportion of their normal size. Costs about 1 $(item)Amethyst Shard/$."
 }

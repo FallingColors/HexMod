@@ -1,0 +1,8 @@
+{
+  "name": "hexcasting.entry.lore.experiment2",
+  "icon": "hexcasting:lore_fragment",
+  "category": "hexcasting:lore",
+  "advancement": "hexcasting:lore/experiment2",
+  "sortnum": 6,
+  "pages": []
+}
