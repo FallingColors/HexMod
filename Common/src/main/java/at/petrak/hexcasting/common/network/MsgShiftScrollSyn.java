@@ -48,13 +48,15 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
     }
 
     public void handle(MinecraftServer server, ServerPlayer sender) {
-        var stack = sender.getItemInHand(hand);
+        server.execute(() -> {
+            var stack = sender.getItemInHand(hand);
 
-        if (stack.getItem() == HexItems.SPELLBOOK) {
-            spellbook(sender, stack);
-        } else if (stack.getItem() == HexItems.ABACUS) {
-            abacus(sender, stack);
-        }
+            if (stack.getItem() == HexItems.SPELLBOOK) {
+                spellbook(sender, stack);
+            } else if (stack.getItem() == HexItems.ABACUS) {
+                abacus(sender, stack);
+            }
+        });
     }
 
     private void spellbook(ServerPlayer sender, ItemStack stack) {

@@ -16,6 +16,8 @@ object OpAkashicWrite : SpellOperator {
     override val argc = 3
 
     override val isGreat = true
+    override val alwaysProcessGreatSpell = false
+    override val causesBlindDiversion = false
 
     override fun execute(
         args: List<SpellDatum<*>>,

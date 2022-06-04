@@ -61,55 +61,57 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
     }
 
     public void handle(MinecraftServer server, ServerPlayer sender) {
-        var held = sender.getItemInHand(this.handUsed);
-        if (held.is(HexItemTags.WANDS)) {
-            boolean autoFail = false;
+        server.execute(() -> {
+            var held = sender.getItemInHand(this.handUsed);
+            if (held.is(HexItemTags.WANDS)) {
+                boolean autoFail = false;
 
-            if (!resolvedPatterns.isEmpty()) {
-                var allPoints = new ArrayList<HexCoord>();
-                for (int i = 0; i < resolvedPatterns.size() - 1; i++) {
-                    ResolvedPattern pat = resolvedPatterns.get(i);
-                    allPoints.addAll(pat.getPattern().positions(pat.getOrigin()));
-                }
-                var currentResolvedPattern = resolvedPatterns.get(resolvedPatterns.size() - 1);
-                var currentSpellPoints = currentResolvedPattern.getPattern()
-                    .positions(currentResolvedPattern.getOrigin());
-                if (currentSpellPoints.stream().anyMatch(allPoints::contains)) {
-                    autoFail = true;
-                }
-            }
-
-            sender.awardStat(HexStatistics.PATTERNS_DRAWN);
-
-            var harness = IXplatAbstractions.INSTANCE.getHarness(sender, this.handUsed);
-
-            ControllerInfo clientInfo;
-            if (autoFail) {
-                clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
-                    harness.generateDescs());
-            } else {
-                clientInfo = harness.executeIota(SpellDatum.make(this.pattern), sender.getLevel());
-
-                if (clientInfo.getMakesCastSound()) {
-                    sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
-                        HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
-                        1f + ((float) Math.random() - 0.5f) * 0.2f);
-                }
-            }
-
-            if (clientInfo.isStackClear()) {
-                IXplatAbstractions.INSTANCE.setHarness(sender, null);
-                IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
-            } else {
-                IXplatAbstractions.INSTANCE.setHarness(sender, harness);
                 if (!resolvedPatterns.isEmpty()) {
-                    resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
+                    var allPoints = new ArrayList<HexCoord>();
+                    for (int i = 0; i < resolvedPatterns.size() - 1; i++) {
+                        ResolvedPattern pat = resolvedPatterns.get(i);
+                        allPoints.addAll(pat.getPattern().positions(pat.getOrigin()));
+                    }
+                    var currentResolvedPattern = resolvedPatterns.get(resolvedPatterns.size() - 1);
+                    var currentSpellPoints = currentResolvedPattern.getPattern()
+                            .positions(currentResolvedPattern.getOrigin());
+                    if (currentSpellPoints.stream().anyMatch(allPoints::contains)) {
+                        autoFail = true;
+                    }
                 }
-                IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
-            }
 
-            IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender, new MsgNewSpellPatternAck(clientInfo));
-        }
+                sender.awardStat(HexStatistics.PATTERNS_DRAWN);
+
+                var harness = IXplatAbstractions.INSTANCE.getHarness(sender, this.handUsed);
+
+                ControllerInfo clientInfo;
+                if (autoFail) {
+                    clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
+                            harness.generateDescs());
+                } else {
+                    clientInfo = harness.executeIota(SpellDatum.make(this.pattern), sender.getLevel());
+
+                    if (clientInfo.getMakesCastSound()) {
+                        sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
+                                HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
+                                1f + ((float) Math.random() - 0.5f) * 0.2f);
+                    }
+                }
+
+                if (clientInfo.isStackClear()) {
+                    IXplatAbstractions.INSTANCE.setHarness(sender, null);
+                    IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
+                } else {
+                    IXplatAbstractions.INSTANCE.setHarness(sender, harness);
+                    if (!resolvedPatterns.isEmpty()) {
+                        resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
+                    }
+                    IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
+                }
+
+                IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender, new MsgNewSpellPatternAck(clientInfo));
+            }
+        });
     }
 
 }
