@@ -172,6 +172,9 @@
   "command.hexcasting.brainsweep.fail.badtype": "%s is not a villager",
   "command.hexcasting.brainsweep.fail.already": "%s is already empty",
   "hexcasting.pattern.unknown": "Unknown pattern resource location %s",
+  "hexcasting.debug.mana_withdrawn": "%s - Mana withdrawn: %s",
+  "hexcasting.debug.mana_withdrawn_with_dust": "%s - Mana withdrawn: %s (%s in dust)",
+  "hexcasting.debug.all_mana": "Entire contents",
 
   "hexcasting.message.cant_overcast": "That Hex needed more media than I had... I should double-check my math.",
   "hexcasting.message.cant_great_spell": "The spell failed, somehow... am I not skilled enough?",

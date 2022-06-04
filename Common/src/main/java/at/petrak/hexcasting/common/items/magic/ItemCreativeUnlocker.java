@@ -1,13 +1,18 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,11 +21,21 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
+
+    public static boolean isDebug(ItemStack stack) {
+        return stack.is(HexItems.CREATIVE_UNLOCKER) &&
+            stack.getHoverName().getString().toLowerCase(Locale.ROOT).equals("debug");
+    }
+
+    private static final String TAG_EXTRACTIONS = "extractions";
+
     public ItemCreativeUnlocker(Properties properties) {
         super(properties);
     }
@@ -52,7 +67,45 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
     @Override
     public int withdrawMana(ItemStack stack, int cost, boolean simulate) {
+        if (!simulate && isDebug(stack)) {
+            int[] arr = NBTHelper.getIntArray(stack, TAG_EXTRACTIONS);
+            if (arr == null)
+                arr = new int[0];
+            int[] newArr = Arrays.copyOf(arr, arr.length + 1);
+            newArr[newArr.length - 1] = cost;
+            NBTHelper.putIntArray(stack, TAG_EXTRACTIONS, newArr);
+        }
+
         return cost < 0 ? 1 : cost;
+    }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return super.isFoil(stack) || isDebug(stack);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        if (isDebug(stack) && !level.isClientSide) {
+            int[] arr = NBTHelper.getIntArray(stack, TAG_EXTRACTIONS);
+            if (arr != null) {
+                NBTHelper.remove(stack, TAG_EXTRACTIONS);
+                for (int i : arr) {
+                    if (i < 0) {
+                        entity.sendMessage(new TranslatableComponent("hexcasting.debug.mana_withdrawn",
+                            stack.getDisplayName(),
+                            new TranslatableComponent("hexcasting.debug.all_mana").withStyle(ChatFormatting.GRAY))
+                            .withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+                    } else {
+                        entity.sendMessage(new TranslatableComponent("hexcasting.debug.mana_withdrawn.with_dust",
+                            stack.getDisplayName(),
+                            new TextComponent("" + i).withStyle(ChatFormatting.WHITE),
+                            new TextComponent(String.format("%.2f", i * 1.0 / ManaConstants.DUST_UNIT)).withStyle(ChatFormatting.WHITE))
+                            .withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+                    }
+                }
+            }
+        }
     }
 
     @Override

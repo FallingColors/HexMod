@@ -115,7 +115,9 @@ fun CompoundTag.getList(key: String, objType: Byte): ListTag = getList(key, objT
 
 // Get-or-create
 
-fun CompoundTag.getOrCreateCompound(key: String) = getCompound(key) ?: CompoundTag().also { putCompound(key, this) }
+fun CompoundTag.getOrCreateCompound(key: String): CompoundTag = getCompound(key) ?: CompoundTag().also { putCompound(key, it) }
+fun CompoundTag.getOrCreateList(key: String, objType: Byte) = getOrCreateList(key, objType.toInt())
+fun CompoundTag.getOrCreateList(key: String, objType: Int): ListTag = if (hasList(key, objType)) getList(key, objType) else ListTag().also { putList(key, it) }
 
 // ================================================================================================================ Tag
 
@@ -267,3 +269,5 @@ fun ItemStack.getTag(key: String) = tag.get(key)
 // Get-or-create
 
 fun ItemStack.getOrCreateCompound(key: String): CompoundTag = getOrCreateTagElement(key)
+fun ItemStack.getOrCreateList(key: String, objType: Byte) = orCreateTag.getOrCreateList(key, objType)
+fun ItemStack.getOrCreateList(key: String, objType: Int) = orCreateTag.getOrCreateList(key, objType)

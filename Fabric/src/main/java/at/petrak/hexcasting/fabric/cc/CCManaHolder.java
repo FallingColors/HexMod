@@ -57,6 +57,11 @@ public abstract class CCManaHolder extends ItemComponent implements ManaHolder {
         public boolean canConstructBattery() {
             return false;
         }
+
+        @Override
+        public int withdrawMana(int cost, boolean simulate) {
+            return this.manaHolder.withdrawMana(this.stack, cost, simulate);
+        }
     }
 
     public static class Static extends CCManaHolder {
@@ -68,7 +73,7 @@ public abstract class CCManaHolder extends ItemComponent implements ManaHolder {
             this.baseWorth = baseWorth;
             this.consumptionPriority = consumptionPriority;
         }
-        
+
         @Override
         public int getMana() {
             return baseWorth.get() * stack.getCount();

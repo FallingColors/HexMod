@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.*
+import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -350,10 +351,15 @@ class CastingHarness private constructor(
      */
     fun withdrawMana(manaCost: Int, allowOvercast: Boolean): Int {
         // prevent poor impls from gaining you mana
-        if (this.ctx.caster.isCreative || manaCost <= 0) return 0
+        if (manaCost <= 0) return 0
         var costLeft = manaCost
 
+        val fake = this.ctx.caster.isCreative
+
         if (this.ctx.spellCircle != null) {
+            if (fake)
+                return 0
+
             val tile = this.ctx.world.getBlockEntity(this.ctx.spellCircle.impetusPos)
             if (tile is BlockEntityAbstractImpetus) {
                 val manaAvailable = tile.mana
@@ -365,23 +371,23 @@ class CastingHarness private constructor(
             val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
             val casterManaHolder = IXplatAbstractions.INSTANCE.findManaHolder(casterStack)
             val casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack)
-            val ipsCanDrawFromInv = if (casterHexHolder != null) {
+            val hexHolderDrawsFromInventory = if (casterHexHolder != null) {
                 if (casterManaHolder != null) {
                     val manaAvailable = casterManaHolder.mana
                     val manaToTake = min(costLeft, manaAvailable)
-                    casterManaHolder.mana = manaAvailable - manaToTake
+                    if (!fake) casterManaHolder.mana = manaAvailable - manaToTake
                     costLeft -= manaToTake
                 }
                 casterHexHolder.canDrawManaFromInventory()
             } else {
                 false
             }
-            if (casterStack.`is`(HexItemTags.WANDS) || ipsCanDrawFromInv) {
+            if (casterStack.`is`(HexItemTags.WANDS) || hexHolderDrawsFromInventory) {
                 val manableItems = this.ctx.caster.inventory.items
                     .filter(::isManaItem)
                     .sortedWith(Comparator(::compareManaItem).reversed())
                 for (stack in manableItems) {
-                    costLeft -= extractMana(stack, costLeft)
+                    costLeft -= extractMana(stack, costLeft, simulate = fake && !ItemCreativeUnlocker.isDebug(stack))
                     if (costLeft <= 0)
                         break
                 }
@@ -393,24 +399,28 @@ class CastingHarness private constructor(
                     val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
 
                     val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
-                    HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
-                    this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
+                    if (!fake) {
+                        HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
+                        this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
 
-                    Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthtoRemove.toFloat())
+                        Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthtoRemove.toFloat())
+                    }
                     costLeft -= manaToActuallyPayFor
                 }
             }
         }
 
-        // this might be more than the mana cost! for example if we waste a lot of mana from an item
-        this.ctx.caster.awardStat(HexStatistics.MANA_USED, manaCost - costLeft)
-        HexAdvancementTriggers.SPEND_MANA_TRIGGER.trigger(
-            this.ctx.caster,
-            manaCost - costLeft,
-            if (costLeft < 0) -costLeft else 0
-        )
+        if (!fake) {
+            // this might be more than the mana cost! for example if we waste a lot of mana from an item
+            this.ctx.caster.awardStat(HexStatistics.MANA_USED, manaCost - costLeft)
+            HexAdvancementTriggers.SPEND_MANA_TRIGGER.trigger(
+                this.ctx.caster,
+                manaCost - costLeft,
+                if (costLeft < 0) -costLeft else 0
+            )
+        }
 
-        return costLeft
+        return if (fake) 0 else costLeft
     }
 
     fun getColorizer(): FrozenColorizer {
