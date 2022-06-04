@@ -9,9 +9,9 @@ import at.petrak.hexcasting.mixin.accessor.AccessorPoiType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.emi.api.EmiRender;
+import dev.emi.emi.api.EmiTooltipComponents;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.screen.tooltip.RemainderTooltipComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -144,7 +144,7 @@ public class VillagerEmiStack extends EmiStack {
 		List<ClientTooltipComponent> list = getTooltipText().stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create)
 				.collect(Collectors.toList());
 		if (!getRemainder().isEmpty()) {
-			list.add(new RemainderTooltipComponent(this));
+			list.add(EmiTooltipComponents.getRemainderTooltipComponent(this));
 		}
 		return list;
 	}
