@@ -186,14 +186,17 @@ def do_format(root_data, obj, *names):
 def identity(x): return x
 
 pattern_pat = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?')
+pattern_stubs = [(None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"), (None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"), ("Fabric", "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java")]
 def fetch_patterns(root_data):
-    filename = f"{root_data['resource_dir']}/../java/at/petrak/hexcasting/common/casting/RegisterPatterns.java"
     registry = {}
-    with open(filename, "r") as fh:
-        pattern_data = fh.read()
-        for mobj in re.finditer(pattern_pat, pattern_data):
-            string, start_angle, name, is_per_world = mobj.groups()
-            registry[root_data["modid"] + ":" + name] = (string, start_angle, bool(is_per_world))
+    for loader, stub in pattern_stubs:
+        filename = f"{root_data['resource_dir']}/../java/{stub}"
+        if loader: filename = filename.replace("Common", loader)
+        with open(filename, "r") as fh:
+            pattern_data = fh.read()
+            for mobj in re.finditer(pattern_pat, pattern_data):
+                string, start_angle, name, is_per_world = mobj.groups()
+                registry[root_data["modid"] + ":" + name] = (string, start_angle, bool(is_per_world))
     return registry
 
 def resolve_pattern(root_data, page):
@@ -253,7 +256,11 @@ def walk_dir(root_dir, prefix):
 def parse_entry(root_data, entry_path, ent_name):
     data = slurp(f"{entry_path}")
     do_localize(root_data, data, "name")
-    for page in data["pages"]:
+    for i, page in enumerate(data["pages"]):
+        if isinstance(page, str):
+            page = {"type": "patchouli:text", "text": page}
+            data["pages"][i] = page
+            
         do_localize(root_data, page, "title", "header")
         do_format(root_data, page, "text")
         if page["type"] in page_types:
