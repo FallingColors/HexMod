@@ -4,5 +4,11 @@
   "category": "hexcasting:lore",
   "advancement": "hexcasting:lore/terabithia5",
   "sortnum": 4,
-  "pages": []
+  "pages": [
+    "hexcasting.page.lore.terabithia5.1",
+    "hexcasting.page.lore.terabithia5.2",
+    "hexcasting.page.lore.terabithia5.3",
+    "hexcasting.page.lore.terabithia5.4",
+    "hexcasting.page.lore.terabithia5.5"
+  ]
 }

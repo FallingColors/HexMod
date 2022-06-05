@@ -4,5 +4,10 @@
   "category": "hexcasting:lore",
   "advancement": "hexcasting:lore/experiment2",
   "sortnum": 6,
-  "pages": []
+  "pages": [
+    "hexcasting.page.lore.experiment2.1",
+    "hexcasting.page.lore.experiment2.2",
+    "hexcasting.page.lore.experiment2.3",
+    "hexcasting.page.lore.experiment2.4"
+  ]
 }
