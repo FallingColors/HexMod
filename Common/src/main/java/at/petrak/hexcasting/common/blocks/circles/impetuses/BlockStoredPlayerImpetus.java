@@ -23,6 +23,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
+
 public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
@@ -55,7 +57,7 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
                         var entity = (Entity) stored.getPayload();
                         if (entity instanceof Player) {
                             // phew, we got something
-                            tile.setPlayer(entity.getUUID());
+                            tile.setPlayer(entity.getScoreboardName(), entity.getUUID());
                             level.sendBlockUpdated(pPos, pState, pState, Block.UPDATE_CLIENTS);
 
                             pLevel.playSound(null, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING, SoundSource.BLOCKS,
@@ -68,6 +70,14 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
         }
 
         return InteractionResult.PASS;
+    }
+
+    @Override
+    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+        super.tick(pState, pLevel, pPos, pRandom);
+        if (pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
+            tile.updatePlayerName();
+        }
     }
 
     @Override

@@ -24,7 +24,9 @@ import java.util.UUID;
 
 public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     public static final String TAG_STORED_PLAYER = "stored_player";
+    public static final String TAG_STORED_PLAYER_NAME = "stored_player_name";
 
+    private String storedPlayerName = null;
     private UUID storedPlayer = null;
 
     public BlockEntityStoredPlayerImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -37,19 +39,38 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     @Override
-    protected @Nullable
-    Player getPlayer() {
+    protected @Nullable Player getPlayer() {
         return this.storedPlayer == null ? null : this.level.getPlayerByUUID(this.storedPlayer);
     }
 
-    public void setPlayer(UUID player) {
+    protected @Nullable String getPlayerName() {
+        Player player = getStoredPlayer();
+        if (player != null) {
+            return player.getScoreboardName();
+        }
+
+        return this.storedPlayerName;
+    }
+
+    public void setPlayer(String name, UUID player) {
+        this.storedPlayerName = name;
         this.storedPlayer = player;
         this.setChanged();
     }
 
+    public void updatePlayerName() {
+        Player player = getStoredPlayer();
+        if (player != null) {
+            String newName = player.getScoreboardName();
+            if (!newName.equals(this.storedPlayerName)) {
+                this.storedPlayerName = newName;
+                this.setChanged();
+            }
+        }
+    }
+
     // just feels wrong to use the protected method
-    public @Nullable
-    Player getStoredPlayer() {
+    public @Nullable Player getStoredPlayer() {
         return this.getPlayer();
     }
 
@@ -59,9 +80,8 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         Direction hitFace, InteractionHand lensHand) {
         super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace, lensHand);
 
-        var bound = this.getPlayer();
-        if (bound != null) {
-            String name = bound.getScoreboardName();
+        var name = this.getPlayerName();
+        if (name != null) {
             var head = new ItemStack(Items.PLAYER_HEAD);
             NBTHelper.putString(head, "SkullOwner", name);
             lines.add(
@@ -77,6 +97,7 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         super.saveModData(tag);
         if (this.storedPlayer != null) {
             tag.putUUID(TAG_STORED_PLAYER, this.storedPlayer);
+            tag.putUUID(TAG_STORED_PLAYER_NAME, this.storedPlayer);
         }
     }
 
@@ -85,6 +106,11 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         super.loadModData(tag);
         if (tag.contains(TAG_STORED_PLAYER, Tag.TAG_INT_ARRAY)) {
             this.storedPlayer = tag.getUUID(TAG_STORED_PLAYER);
+        } else {
+            this.storedPlayer = null;
+        }
+        if (tag.contains(TAG_STORED_PLAYER_NAME, Tag.TAG_STRING)) {
+            this.storedPlayerName = tag.getString(TAG_STORED_PLAYER_NAME);
         } else {
             this.storedPlayer = null;
         }
