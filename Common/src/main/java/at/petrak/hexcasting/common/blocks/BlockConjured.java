@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.blocks;
 
+import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
 import at.petrak.hexcasting.xplat.IForgeLikeBlock;
@@ -110,9 +111,16 @@ public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock
         // NO-OP
     }
 
-    @Override
+
+    @SoftImplement("forge")
     public boolean addLandingEffects(BlockState state1, ServerLevel worldserver, BlockPos pos, BlockState state2,
-        LivingEntity entity, int numberOfParticles) {
+                                     LivingEntity entity, int numberOfParticles) {
+        return addLandingEffects(state1, worldserver, pos, entity, numberOfParticles);
+    }
+
+    @Override
+    public boolean addLandingEffects(BlockState state, ServerLevel worldserver, BlockPos pos,
+                                     LivingEntity entity, int numberOfParticles) {
         BlockEntity tile = worldserver.getBlockEntity(pos);
         if (tile instanceof BlockEntityConjured bec) {
             bec.landParticle(entity, numberOfParticles);

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
+import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.items.ItemScroll;
@@ -115,9 +116,14 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
         return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
-    @Override
+    @SoftImplement("forge")
     public float getEnchantPowerBonus(BlockState state, LevelReader level, BlockPos pos) {
-        return 1;
+        return hasEnchantPowerBonus(state, level, pos) ? 1 : 0;
+    }
+
+    @Override
+    public boolean hasEnchantPowerBonus(BlockState state, LevelReader level, BlockPos pos) {
+        return true;
     }
 
     @Override

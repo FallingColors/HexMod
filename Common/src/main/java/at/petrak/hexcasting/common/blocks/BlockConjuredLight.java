@@ -87,7 +87,7 @@ public class BlockConjuredLight extends BlockConjured implements SimpleWaterlogg
     }
 
     @Override
-    public boolean addLandingEffects(BlockState state1, ServerLevel worldserver, BlockPos pos, BlockState state2,
+    public boolean addLandingEffects(BlockState state, ServerLevel worldserver, BlockPos pos,
         LivingEntity entity, int numberOfParticles) {
         return true;
     }

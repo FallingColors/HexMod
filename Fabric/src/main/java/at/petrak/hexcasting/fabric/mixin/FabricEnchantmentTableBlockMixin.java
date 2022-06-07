@@ -17,7 +17,7 @@ public class FabricEnchantmentTableBlockMixin {
         BlockState state = level.getBlockState(blockPos.offset(blockPos2));
         if (state.getBlock() instanceof IForgeLikeBlock forgeLike) {
             boolean emptyBetween = level.isEmptyBlock(blockPos.offset(blockPos2.getX() / 2, blockPos2.getY(), blockPos2.getZ() / 2));
-            cir.setReturnValue(emptyBetween && forgeLike.getEnchantPowerBonus(state, level, blockPos) > 0);
+            cir.setReturnValue(emptyBetween && forgeLike.hasEnchantPowerBonus(state, level, blockPos));
         }
     }
 }
