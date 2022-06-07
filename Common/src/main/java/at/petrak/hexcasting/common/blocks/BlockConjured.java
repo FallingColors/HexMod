@@ -1,15 +1,14 @@
 package at.petrak.hexcasting.common.blocks;
 
-import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
+import at.petrak.hexcasting.xplat.IForgeLikeBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -20,14 +19,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockConjured extends Block implements EntityBlock {
+public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock {
 
     public BlockConjured(Properties properties) {
         super(properties);
@@ -112,9 +110,7 @@ public class BlockConjured extends Block implements EntityBlock {
         // NO-OP
     }
 
-    // TODO figure out how to impl these in fabric
-
-    @SoftImplement("forge")
+    @Override
     public boolean addLandingEffects(BlockState state1, ServerLevel worldserver, BlockPos pos, BlockState state2,
         LivingEntity entity, int numberOfParticles) {
         BlockEntity tile = worldserver.getBlockEntity(pos);
@@ -122,12 +118,6 @@ public class BlockConjured extends Block implements EntityBlock {
             bec.landParticle(entity, numberOfParticles);
         }
         return true;
-    }
-
-    @SoftImplement("forge")
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos,
-        Player player) {
-        return ItemStack.EMPTY;
     }
 }
 

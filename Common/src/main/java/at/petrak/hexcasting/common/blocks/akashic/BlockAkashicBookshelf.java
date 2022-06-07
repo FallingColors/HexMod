@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
-import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.hexcasting.xplat.IForgeLikeBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements EntityBlock {
+public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements EntityBlock, IForgeLikeBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<DatumType> DATUM_TYPE = EnumProperty.create("datum_type", DatumType.class);
 
@@ -115,8 +115,7 @@ public class BlockAkashicBookshelf extends BlockAkashicFloodfiller implements En
         return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
-    // TODO: fabric
-    @SoftImplement("Forge")
+    @Override
     public float getEnchantPowerBonus(BlockState state, LevelReader level, BlockPos pos) {
         return 1;
     }
