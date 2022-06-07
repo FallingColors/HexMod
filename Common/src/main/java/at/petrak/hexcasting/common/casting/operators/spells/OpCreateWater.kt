@@ -2,11 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -49,7 +45,7 @@ object OpCreateWater : SpellOperator {
                     Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3),
                     3
                 )
-            else if (IXplatAbstractions.INSTANCE.tryPlaceFluid(
+            else if (!IXplatAbstractions.INSTANCE.tryPlaceFluid(
                     ctx.world,
                     ctx.castingHand,
                     pos,
