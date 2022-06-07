@@ -1,10 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import net.minecraft.world.effect.MobEffect
@@ -33,7 +29,7 @@ class OpPotionEffect(
         val duration = max(args.getChecked(1, argc), 0.0)
         ctx.assertEntityInRange(target)
         val potency = if (this.allowPotency)
-            max(args.getChecked(2, argc), 1.0)
+            args.getChecked<Double>(2, argc).coerceIn(1.0, 128.0)
         else 1.0
 
         val cost = this.baseCost * duration * if (potencyCubic) {
