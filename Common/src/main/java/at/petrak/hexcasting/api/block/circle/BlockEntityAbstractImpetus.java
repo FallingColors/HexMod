@@ -68,6 +68,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     @Nullable
     private Component lastMishap = null;
 
+    private static final int MAX_CAPACITY = 2_000_000_000;
+
     private int mana = 0;
 
     public BlockEntityAbstractImpetus(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -519,11 +521,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     @Override
     public void setItem(int index, ItemStack stack) {
-        var manamount = ManaHelper.extractMana(stack, -1, true, false);
-        if (manamount > 0) {
-            this.mana += manamount;
-            this.sync();
-        }
+        insertMana(stack);
     }
 
     @Override
@@ -533,7 +531,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        var manamount = ManaHelper.extractMana(stack, -1, true, true);
+        var manamount = extractMana(stack, true);
         return manamount > 0;
     }
 
@@ -542,5 +540,21 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         this.mana = 0;
         this.stopCasting();
         this.sync();
+    }
+
+    public int extractMana(ItemStack stack, boolean simulate) {
+        return ManaHelper.extractMana(stack, remainingManaCapacity(), true, false);
+    }
+
+    public void insertMana(ItemStack stack) {
+        var manamount = extractMana(stack, false);
+        if (manamount > 0) {
+            this.mana += manamount;
+            this.sync();
+        }
+    }
+
+    public int remainingManaCapacity() {
+        return MAX_CAPACITY - this.mana;
     }
 }

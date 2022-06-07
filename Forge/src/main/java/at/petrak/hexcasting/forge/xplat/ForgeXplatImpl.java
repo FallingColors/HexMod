@@ -27,6 +27,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -63,10 +64,10 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.loot.CanToolPerformAction;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
@@ -76,6 +77,7 @@ import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class ForgeXplatImpl implements IXplatAbstractions {
@@ -305,8 +307,13 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, ItemStack stack, Fluid fluid) {
+        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
+        if (handler.isPresent() &&
+            FluidUtil.tryEmptyContainer(stack, handler.get(), FluidAttributes.BUCKET_VOLUME, null, true).isSuccess()) {
+            return true;
+        }
         return FluidUtil.tryPlaceFluid(null, level, hand, pos, stack, new FluidStack(
-            fluid, FluidAttributes.BUCKET_VOLUME)) != FluidActionResult.FAILURE;
+            fluid, FluidAttributes.BUCKET_VOLUME)).isSuccess();
     }
 
     @Override

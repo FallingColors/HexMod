@@ -35,6 +35,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
@@ -202,6 +203,7 @@ public class ForgeHexInitializer {
         // Caps are cardinal components on farbc
         modBus.addListener(ForgeCapabilityHandler::registerCaps);
         evBus.addGenericListener(ItemStack.class, ForgeCapabilityHandler::attachItemCaps);
+        evBus.addGenericListener(BlockEntity.class, ForgeCapabilityHandler::attachBlockEntityCaps);
 
         modBus.register(HexForgeDataGenerators.class);
         modBus.register(ForgeCapabilityHandler.class);

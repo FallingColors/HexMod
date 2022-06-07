@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.addldata.Colorizer;
 import at.petrak.hexcasting.api.addldata.DataHolder;
 import at.petrak.hexcasting.api.addldata.HexHolder;
 import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
@@ -17,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -24,11 +26,13 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -39,6 +43,8 @@ public class ForgeCapabilityHandler {
     private static final ResourceLocation MANA_ITEM_CAPABILITY = new ResourceLocation("hexcasting", "mana_item");
     private static final ResourceLocation SPELL_HOLDER_CAPABILITY = new ResourceLocation("hexcasting", "spell_item");
     private static final ResourceLocation COLORIZER_CAPABILITY = new ResourceLocation("hexcasting", "colorizer");
+
+    private static final ResourceLocation IMPETUS_HANDLER = new ResourceLocation("hexcasting", "impetus_items");
 
     public static void registerCaps(RegisterCapabilitiesEvent evt) {
         evt.register(ManaHolder.class);
@@ -78,18 +84,32 @@ public class ForgeCapabilityHandler {
                     () -> new ItemBasedColorizer(colorizer, stack)));
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
-        return new SimpleProvider<>(stack, capability, LazyOptional.of(supplier));
+    public static void attachBlockEntityCaps(AttachCapabilitiesEvent<BlockEntity> evt) {
+        if (evt.getObject() instanceof BlockEntityAbstractImpetus impetus)
+            evt.addCapability(IMPETUS_HANDLER, provide(impetus, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+                    () -> new ForgeImpetusCapability(impetus)));
     }
 
-    private record SimpleProvider<CAP>(ItemStack stack,
+    private static <CAP> SimpleProvider<CAP> provide(BlockEntity be, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
+        return provide(be::isRemoved, capability, supplier);
+    }
+
+    private static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
+        return provide(stack::isEmpty, capability, supplier);
+    }
+
+    private static <CAP> SimpleProvider<CAP> provide(BooleanSupplier invalidated, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
+        return new SimpleProvider<>(invalidated, capability, LazyOptional.of(supplier));
+    }
+
+    private record SimpleProvider<CAP>(BooleanSupplier invalidated,
                                        Capability<CAP> capability,
                                        LazyOptional<CAP> instance) implements ICapabilityProvider {
 
         @NotNull
         @Override
         public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-            if (stack.isEmpty())
+            if (invalidated.getAsBoolean())
                 return LazyOptional.empty();
 
             return cap == capability ? instance.cast() : LazyOptional.empty();

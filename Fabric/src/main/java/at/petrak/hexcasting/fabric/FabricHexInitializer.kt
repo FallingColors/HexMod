@@ -17,6 +17,7 @@ import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient
+import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
 import at.petrak.hexcasting.interop.HexInterop
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer
 import net.fabricmc.api.ModInitializer
@@ -51,6 +52,7 @@ object FabricHexInitializer : ModInitializer {
         HexAdvancementTriggers.registerTriggers()
         HexComposting.setup()
         HexStrippables.init()
+        FabricImpetusStorage.registerStorage()
 
         HexInterop.init()
     }
