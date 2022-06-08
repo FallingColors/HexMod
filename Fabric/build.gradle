@@ -34,7 +34,6 @@ loom {
 
 repositories {
     mavenCentral()
-    mavenLocal()
     maven { url "https://maven.shedaniel.me/" }
     maven {
         url 'https://ladysnake.jfrog.io/artifactory/mods'
@@ -44,6 +43,10 @@ repositories {
         url "https://maven.jamieswhiteshirt.com/libs-release/"
     }
     maven { url "https://mvn.devos.one/snapshots/" }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
 }
 
 dependencies {
@@ -82,7 +85,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    modImplementation "dev.emi:emi:1.0.0-beta"
+    modImplementation "dev.emi:emi:${emiVersion}"
 
     modImplementation "maven.modrinth:fusions-gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
