@@ -33,13 +33,11 @@ public class ConjureParticle extends TextureSheetParticle {
         this.quadSize *= light ? 0.9f : 0.75f;
         this.setParticleSpeed(dx, dy, dz);
 
-        var lightness = light ? 0.3f : 1.0f;
         var r = FastColor.ARGB32.red(color);
         var g = FastColor.ARGB32.green(color);
         var b = FastColor.ARGB32.blue(color);
-        var a = FastColor.ARGB32.alpha(color);
-        this.setColor(r / 255f * lightness, g / 255f * lightness, b / 255f * lightness);
-        this.setAlpha(a / 255f * lightness);
+        this.setColor(r / 255f, g / 255f, b / 255f);
+        this.setAlpha(light ? 0.3f : 1.0f);
 
         this.friction = 0.96F;
         this.gravity = light && dy != 0 && dx != 0 && dz != 0 ? -0.01F : 0F;
@@ -63,6 +61,7 @@ public class ConjureParticle extends TextureSheetParticle {
         this.setSpriteFromAge(this.sprites);
         this.alpha = 1.0f - ((float) this.age / (float) this.lifetime);
         if (light) {
+            this.alpha *= 0.3f;
             this.quadSize *= 0.96f;
         }
     }
