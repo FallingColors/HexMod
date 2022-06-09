@@ -159,7 +159,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     SpellDatum(SpellList.fromNBT(nbt.getList(key, Tag.TAG_COMPOUND), world))
                 }
                 TAG_WIDGET -> {
-                    SpellDatum(Widget.valueOf(nbt.getString(key)))
+                    SpellDatum(Widget.fromString(nbt.getString(key)))
                 }
                 TAG_PATTERN -> {
                     SpellDatum(HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN)))
@@ -214,7 +214,8 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     out += "]".white
                 }
                 TAG_WIDGET -> {
-                    val widget = Widget.valueOf(nbt.getString(key))
+                    val widget = Widget.fromString(nbt.getString(key))
+
                     out += if (widget == Widget.GARBAGE)
                         "arimfexendrapuse".darkGray.obfuscated
                     else
