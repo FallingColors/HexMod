@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidSpellDatumType
 import at.petrak.hexcasting.api.utils.*
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
@@ -30,19 +31,47 @@ import java.util.*
 class SpellDatum<T : Any> private constructor(val payload: T) {
     val clazz: Class<T> = payload.javaClass
 
-    fun serializeToNBT() = NBTBuilder {
-        when (val pl = payload) {
-            is Entity -> TAG_ENTITY %= compound {
-                TAG_ENTITY_UUID %= NbtUtils.createUUID(pl.uuid)
-                TAG_ENTITY_NAME_CHEATY %= Component.Serializer.toJson(pl.displayName)
+    fun serializeToNBT(): CompoundTag = this.serializeToNBTWithDepthCheck(0, 0)?.first
+        ?: NBTBuilder { TAG_WIDGET %= Widget.GARBAGE.name }
+
+
+    // The second int returned is the number of datums contained in this one.
+    fun serializeToNBTWithDepthCheck(depth: Int, total: Int): Pair<CompoundTag, Int>? {
+        if (total > MAX_SERIALIZATION_TOTAL)
+            return null
+
+        val tag = NBTBuilder {
+            when (val pl = payload) {
+                is SpellList -> {
+                    // handle it specially!
+                    if (depth + 1 > MAX_SERIALIZATION_DEPTH) {
+                        return null
+                    }
+
+                    val outList = ListTag()
+                    var total1 = total + 1 // make mutable and include the list itself
+                    for (elt in pl) {
+                        val (t, subtotal) = elt.serializeToNBTWithDepthCheck(depth + 1, total1) ?: return null
+                        total1 += subtotal
+                        outList.add(t)
+                    }
+                    return Pair(
+                        NBTBuilder { TAG_LIST %= outList },
+                        total1
+                    )
+                }
+                is Entity -> TAG_ENTITY %= compound {
+                    TAG_ENTITY_UUID %= NbtUtils.createUUID(pl.uuid)
+                    TAG_ENTITY_NAME_CHEATY %= Component.Serializer.toJson(pl.displayName)
+                }
+                is Double -> TAG_DOUBLE %= pl
+                is Vec3 -> TAG_VEC3 %= pl.serializeToNBT()
+                is Widget -> TAG_WIDGET %= pl.name
+                is HexPattern -> TAG_PATTERN %= pl.serializeToNBT()
+                else -> throw RuntimeException("cannot serialize $pl because it is of type ${pl.javaClass.canonicalName} which is not serializable")
             }
-            is Double -> TAG_DOUBLE %= pl
-            is Vec3 -> TAG_VEC3 %= pl.serializeToNBT()
-            is SpellList -> TAG_LIST %= pl.serializeToNBT()
-            is Widget -> TAG_WIDGET %= pl.name
-            is HexPattern -> TAG_PATTERN %= pl.serializeToNBT()
-            else -> throw RuntimeException("cannot serialize $pl because it is of type ${pl.javaClass.canonicalName} which is not serializable")
         }
+        return Pair(tag, 1)
     }
 
     override fun toString(): String =
@@ -77,6 +106,9 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         }
 
     companion object {
+        const val MAX_SERIALIZATION_DEPTH = 256
+        const val MAX_SERIALIZATION_TOTAL = 1024
+
         @JvmStatic
         @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
         fun make(payload: Any): SpellDatum<*> =
@@ -162,10 +194,10 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     val vec = vecFromNBT(nbt.getLongArray(key))
                     // the focus color is really more red, but we don't want to show an error-y color
                     out += String.format(
-                            "(%.2f, %.2f, %.2f)",
-                            vec.x,
-                            vec.y,
-                            vec.z
+                        "(%.2f, %.2f, %.2f)",
+                        vec.x,
+                        vec.y,
+                        vec.z
                     ).lightPurple
                 }
                 TAG_LIST -> {
@@ -200,7 +232,8 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     val subtag = nbt.getCompound(TAG_ENTITY)
                     val json = subtag.getString(TAG_ENTITY_NAME_CHEATY)
                     // handle pre-0.5.0 foci not having the tag
-                    out += Component.Serializer.fromJson(json)?.aqua ?: "hexcasting.spelldata.entity.whoknows".asTranslatedComponent.white
+                    out += Component.Serializer.fromJson(json)?.aqua
+                        ?: "hexcasting.spelldata.entity.whoknows".asTranslatedComponent.white
                 }
                 else -> throw IllegalArgumentException("Unknown key $key: $nbt")
             }

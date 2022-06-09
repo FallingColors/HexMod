@@ -1,12 +1,15 @@
 @file:JvmName("HexUtils")
+
 package at.petrak.hexcasting.api.utils
 
 import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.math.HexCoord
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.LongArrayTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.*
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
@@ -179,14 +182,18 @@ interface WeakValue<T> {
 private class WeakReferencedValue<T>(var reference: WeakReference<T>?) : WeakValue<T> {
     override var value: T?
         get() = reference?.get()
-        set(value) { reference = value?.let { WeakReference(it) } }
+        set(value) {
+            reference = value?.let { WeakReference(it) }
+        }
 }
 
 private class WeakMappedValue<K, T>(val keyGen: (T) -> K) : WeakValue<T> {
     val reference = WeakHashMap<K, T>()
     override var value: T?
         get() = reference.values.firstOrNull()
-        set(value) { if (value != null) reference[keyGen(value)] = value else reference.clear() }
+        set(value) {
+            if (value != null) reference[keyGen(value)] = value else reference.clear()
+        }
 }
 
 fun <T> weakReference(value: T? = null): WeakValue<T> = WeakReferencedValue(value?.let { WeakReference(it) })
@@ -197,13 +204,19 @@ fun <T, K> weakMapped(keyGen: (T) -> K): WeakValue<T> = WeakMappedValue(keyGen)
 inline operator fun <T> WeakValue<T>.getValue(thisRef: Any?, property: KProperty<*>): T? = value
 
 @Suppress("NOTHING_TO_INLINE")
-inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty<*>, value: T?) { this.value = value }
+inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
+    this.value = value
+}
 
+/**
+ * Returns an empty list if it's too complicated.
+ */
 fun Iterable<SpellDatum<*>>.serializeToNBT(): ListTag {
-    val tag = ListTag()
-    for (elt in this)
-        tag.add(elt.serializeToNBT())
-    return tag
+    val out = SpellDatum.make(SpellList.LList(0, this.toList())).serializeToNBT()
+    return if (out.contains(SpellDatum.TAG_WIDGET))
+        ListTag()
+    else
+        out.getList(SpellDatum.TAG_LIST, Tag.TAG_COMPOUND)
 }
 
 // Copy the impl from forge

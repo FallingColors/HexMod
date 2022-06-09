@@ -9,17 +9,17 @@ import net.minecraft.server.level.ServerLevel
  *
  * ...Surely this won't have any performance implications.
  */
-sealed class SpellList: Iterable<SpellDatum<*>> {
+sealed class SpellList : Iterable<SpellDatum<*>> {
 
     abstract val nonEmpty: Boolean
     abstract val car: SpellDatum<*>
     abstract val cdr: SpellList
 
-    class LPair(override val car: SpellDatum<*>, override val cdr: SpellList): SpellList() {
+    class LPair(override val car: SpellDatum<*>, override val cdr: SpellList) : SpellList() {
         override val nonEmpty = true
     }
 
-    class LList(val idx: Int, val list: List<SpellDatum<*>>): SpellList() {
+    class LList(val idx: Int, val list: List<SpellDatum<*>>) : SpellList() {
         override val nonEmpty: Boolean
             get() = idx < list.size
         override val car: SpellDatum<*>
@@ -69,7 +69,7 @@ sealed class SpellList: Iterable<SpellDatum<*>> {
 
     override fun iterator() = SpellListIterator(this)
 
-    class SpellListIterator(var list: SpellList): Iterator<SpellDatum<*>> {
+    class SpellListIterator(var list: SpellList) : Iterator<SpellDatum<*>> {
         override fun hasNext() = list.nonEmpty
         override operator fun next(): SpellDatum<*> {
             val car = list.car
