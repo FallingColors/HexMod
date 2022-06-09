@@ -139,7 +139,7 @@
   "hexcasting.spelldata.akashic.nopos": "The owning record does not know of any iota here (this is a bug)",
 
   "gui.hexcasting.spellcasting": "Hex Grid",
-  "tag.hexcasting.wands": "Hex Wands",
+  "tag.hexcasting.wands": "Hex Staves",
   "tag.hexcasting.akashic_logs": "Edified Logs",
   "tag.hexcasting.akashic_planks": "Edified Planks",
   "tag.hexcasting.phial_base": "Empty Phials",
@@ -989,10 +989,10 @@
   "hexcasting.page.interop.gravity.get": "Get the main direction gravity pulls the given entity in, as a unit vector. For most entities, this will be down: [0, -1, 0].",
   "hexcasting.page.interop.gravity.set": "Set the main direction gravity pulls the given entity in. The given vector will be coerced into the nearest axis, as per $(l:patterns/math#hexcasting:coerce_axial)$(action)Axial Purification/$. Costs about 1 $(item)Charged Amethyst Crystal/$.",
 
- "hexcasting.entry.interop.pehkui": "Pehkui",
- "hexcasting.page.interop.pehkui.1": "I have discovered methods of changing the size of entities, and querying how much larger or smaller they are than normal.",
+  "hexcasting.entry.interop.pehkui": "Pehkui",
+  "hexcasting.page.interop.pehkui.1": "I have discovered methods of changing the size of entities, and querying how much larger or smaller they are than normal.",
   "hexcasting.page.interop.pehkui.get": "Get the scale of the entity, as a proportion of their normal size. For most entities, this will be 1.",
   "hexcasting.page.interop.pehkui.set": "Set the scale of the entity, passing in a proportion of their normal size. Costs about 1 $(item)Amethyst Shard/$.",
 
-  "":""
+  "": ""
 }
