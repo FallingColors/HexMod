@@ -164,7 +164,7 @@ public class VillagerEmiStack extends EmiStack {
 
 				RenderSystem.enableBlend();
 				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-				renderEntity(poseStack, villager, level, x + 8, y + 16, ClientTickCounter.total, 8, 0,
+				renderEntity(poseStack, villager, level, x + 8, y + 16, ClientTickCounter.getTotal(), 8, 0,
 						mindless ? (it) -> new FakeBufferSource(it, HexRenderTypes::getGrayscaleLayer) : it -> it);
 			}
 		}

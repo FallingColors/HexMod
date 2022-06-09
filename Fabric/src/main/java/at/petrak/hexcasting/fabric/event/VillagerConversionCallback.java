@@ -3,7 +3,6 @@ package at.petrak.hexcasting.fabric.event;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.npc.Villager;
 
 // https://fabricmc.net/wiki/tutorial:events
 
@@ -20,5 +19,5 @@ public interface VillagerConversionCallback {
             }
         });
 
-    void interact(Villager original, LivingEntity outcome);
+    void interact(LivingEntity original, LivingEntity outcome);
 }

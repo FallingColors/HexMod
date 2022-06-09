@@ -60,7 +60,7 @@ public class HexAdditionalRenderers {
             sentinel.position().y - playerPos.y,
             sentinel.position().z - playerPos.z);
 
-        var time = ClientTickCounter.total / 2;
+        var time = ClientTickCounter.getTotal() / 2;
         var bobSpeed = 1f / 20;
         var magnitude = 0.1f;
         ps.translate(0, Mth.sin(bobSpeed * time) * magnitude, 0);

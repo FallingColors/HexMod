@@ -185,7 +185,7 @@ fun makeZappy(points: List<Vec2>, hops: Int, variance: Float, speed: Float, flow
         return emptyList()
     }
     val scaleVariance = { it: Double -> 1.0.coerceAtMost(8 * (0.5 - abs(0.5 - it))) }
-    val zSeed = ClientTickCounter.total.toDouble() * speed
+    val zSeed = ClientTickCounter.getTotal().toDouble() * speed
     // Create our output list of zap points
     val zappyPts = mutableListOf(points[0])
     // For each segment in the original...

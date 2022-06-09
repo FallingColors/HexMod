@@ -38,7 +38,7 @@ public class VillagerWidget extends Widget {
 
 			RenderSystem.enableBlend();
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			renderEntity(poseStack, displayVillager, level, 50 + x, 62.5f + y, ClientTickCounter.total, 20, 0);
+			renderEntity(poseStack, displayVillager, level, 50 + x, 62.5f + y, ClientTickCounter.getTotal(), 20, 0);
 		}
 
 		if (isMouseOver(mouseX, mouseY))

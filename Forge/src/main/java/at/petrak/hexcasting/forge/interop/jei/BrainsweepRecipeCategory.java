@@ -82,7 +82,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
 
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            renderEntity(stack, villager, level, 50, 62.5f, ClientTickCounter.total, 20, 0);
+            renderEntity(stack, villager, level, 50, 62.5f, ClientTickCounter.getTotal(), 20, 0);
         }
     }
 
