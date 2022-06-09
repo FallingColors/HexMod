@@ -411,6 +411,7 @@
   "hexcasting.mishap.bad_item.eraseable": "an eraseable item",
   "hexcasting.mishap.bad_item.bottle": "a glass bottle",
   "hexcasting.mishap.bad_item.rechargable": "a rechargable item",
+  "hexcasting.mishap.bad_item.colorizer": "a pigment",
   "hexcasting.mishap.bad_block": "Expected %s at %s, but got %s",
   "hexcasting.mishap.bad_block.sapling": "a sapling",
   "hexcasting.mishap.bad_block.replaceable": "somewhere to place a block",

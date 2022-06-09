@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client.particles;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -16,7 +17,6 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.FastColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
@@ -99,15 +99,15 @@ public class ConjureParticle extends TextureSheetParticle {
         @Override
         public void begin(BufferBuilder buf, TextureManager texMan) {
             Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
-            RenderSystem.enableDepthTest();
             RenderSystem.depthMask(false);
             RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
             var tex = texMan.getTexture(TextureAtlas.LOCATION_PARTICLES);
             IClientXplatAbstractions.INSTANCE.setFilterSave(tex, this.light, false);
             buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+            RenderSystem.enableDepthTest();
         }
 
         @Override
