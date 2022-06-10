@@ -14,8 +14,8 @@ object OpSetScale : SpellOperator {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Entity>(0)
-        val scale = Mth.clamp(args.getChecked<Double>(1), 1.0 / 32.0, 5.0)
-        
+        val scale = Mth.clamp(args.getChecked<Double>(1), 1.0 / 32.0, 8.0)
+
         return Triple(
             Spell(target, scale),
             50_000,
