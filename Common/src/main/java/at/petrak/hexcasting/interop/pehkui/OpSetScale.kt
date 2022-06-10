@@ -3,6 +3,7 @@ package at.petrak.hexcasting.interop.pehkui
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 
 object OpSetScale : SpellOperator {
@@ -13,8 +14,8 @@ object OpSetScale : SpellOperator {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Entity>(0)
-        val scale = args.getChecked<Double>(1)
-
+        val scale = Mth.clamp(args.getChecked<Double>(1), 1.0 / 32.0, 5.0)
+        
         return Triple(
             Spell(target, scale),
             50_000,
