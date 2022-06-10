@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.api.spell.math
 
+import java.util.*
+
 enum class HexDir {
     NORTH_EAST, EAST, SOUTH_EAST, SOUTH_WEST, WEST, NORTH_WEST;
 
@@ -22,4 +24,12 @@ enum class HexDir {
             WEST -> HexCoord(-1, 0)
             NORTH_WEST -> HexCoord(0, -1)
         }
+
+    companion object {
+        @JvmStatic
+        fun fromString(key: String): HexDir {
+            val lowercaseKey = key.lowercase(Locale.ROOT)
+            return values().firstOrNull { it.name.lowercase(Locale.ROOT) == lowercaseKey } ?: WEST
+        }
+    }
 }

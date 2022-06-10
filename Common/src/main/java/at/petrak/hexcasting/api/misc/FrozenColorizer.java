@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.api.misc;
 
 import at.petrak.hexcasting.api.addldata.Colorizer;
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -45,7 +44,7 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
 
     public CompoundTag serializeToNBT() {
         var out = new CompoundTag();
-        out.put(TAG_STACK, HexUtils.serializeToNBT(this.item));
+        out.put(TAG_STACK, this.item.save(new CompoundTag()));
         out.putUUID(TAG_OWNER, this.owner);
         return out;
     }

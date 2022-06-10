@@ -73,18 +73,16 @@ public class BlockEntityConjured extends HexBlockEntity {
     }
 
     public void landParticle(Entity entity, int number) {
-        if (getBlockState().getBlock() instanceof BlockConjuredLight) {
-            for (int i = 0; i < number * 2; i++) {
-                int color = this.colorizer.getColor(entity.tickCount, entity.position()
-                    .add(new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
-                        RANDOM.nextFloat() * 3)));
-                assert level != null;
-                level.addParticle(new ConjureParticleOptions(color, false),
-                    entity.getX() + (RANDOM.nextFloat() * 0.8D) - 0.2D,
-                    getBlockPos().getY() + (RANDOM.nextFloat() * 0.05D) + 0.95D,
-                    entity.getZ() + (RANDOM.nextFloat() * 0.8D) - 0.2D,
-                    0.0, 0.0, 0.0);
-            }
+        for (int i = 0; i < number * 2; i++) {
+            int color = this.colorizer.getColor(entity.tickCount, entity.position()
+                .add(new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
+                    RANDOM.nextFloat() * 3)));
+            assert level != null;
+            level.addParticle(new ConjureParticleOptions(color, false),
+                entity.getX() + (RANDOM.nextFloat() * 0.8D) - 0.2D,
+                getBlockPos().getY() + (RANDOM.nextFloat() * 0.05D) + 0.95D,
+                entity.getZ() + (RANDOM.nextFloat() * 0.8D) - 0.2D,
+                0.0, 0.0, 0.0);
         }
     }
 

@@ -34,8 +34,6 @@ public class ForgeHexClientInitializer {
         evBus.addListener((TickEvent.RenderTickEvent e) -> {
             if (e.phase == TickEvent.Phase.START) {
                 ClientTickCounter.renderTickStart(e.renderTickTime);
-            } else {
-                ClientTickCounter.renderTickEnd();
             }
         });
 

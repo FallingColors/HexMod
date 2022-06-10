@@ -20,11 +20,7 @@ data class ResolvedPattern(val pattern: HexPattern, val origin: HexCoord, var ty
         fun fromNBT(tag: CompoundTag): ResolvedPattern {
             val pattern = HexPattern.fromNBT(tag.getCompound("Pattern"))
             val origin = HexCoord(tag.getInt("OriginQ"), tag.getInt("OriginR"))
-            val valid = try {
-                ResolvedPatternType.valueOf(tag.getString("Valid").uppercase(Locale.ROOT))
-            } catch (e: IllegalArgumentException) {
-                ResolvedPatternType.UNRESOLVED
-            }
+            val valid = ResolvedPatternType.fromString(tag.getString("Valid"))
             return ResolvedPattern(pattern, origin, valid)
         }
     }
