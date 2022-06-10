@@ -10,8 +10,6 @@ import net.minecraft.world.phys.Vec3
 object OpImpetusPos : ConstManaOperator {
     override val argc = 0
 
-    override val isGreat = true
-
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
         if (ctx.spellCircle == null)
             throw MishapNoSpellCircle()
