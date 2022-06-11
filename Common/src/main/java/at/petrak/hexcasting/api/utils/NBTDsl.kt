@@ -14,13 +14,13 @@ object NBTBuilder {
     inline operator fun invoke(tag: CompoundTag, block: NbtCompoundBuilder.() -> Unit) = use(tag, block)
 
     inline fun use(tag: CompoundTag, block: NbtCompoundBuilder.() -> Unit): CompoundTag =
-        NbtCompoundBuilder(tag).also(block).tag
+        NbtCompoundBuilder(tag).apply(block).tag
 
     inline fun compound(block: NbtCompoundBuilder.() -> Unit): CompoundTag =
-        NbtCompoundBuilder(CompoundTag()).also(block).tag
+        NbtCompoundBuilder(CompoundTag()).apply(block).tag
 
     inline fun list(block: NbtListBuilder.() -> Unit): ListTag =
-        NbtListBuilder(ListTag()).also(block).tag
+        NbtListBuilder(ListTag()).apply(block).tag
 
     inline fun list(vararg elements: Tag, block: NbtListBuilder.() -> Unit): ListTag =
         NbtListBuilder(ListTag()).also {
@@ -85,10 +85,10 @@ value class NbtCompoundBuilder(val tag: CompoundTag) {
     // creating new tags
 
     inline fun compound(block: NbtCompoundBuilder.() -> Unit): CompoundTag =
-        NbtCompoundBuilder(CompoundTag()).also { it.block() }.tag
+        NbtCompoundBuilder(CompoundTag()).apply(block).tag
 
     inline fun list(block: NbtListBuilder.() -> Unit): ListTag =
-        NbtListBuilder(ListTag()).also { it.block() }.tag
+        NbtListBuilder(ListTag()).apply(block).tag
 
     inline fun list(vararg elements: Tag, block: NbtListBuilder.() -> Unit): ListTag =
         NbtListBuilder(ListTag()).also {
@@ -141,7 +141,7 @@ value class NbtListBuilder(val tag: ListTag) {
     }
 
     /**
-     * Add the given  tag to this list. This is explicitly defined for [ListTag] because otherwise there is overload
+     * Add the given tag to this list. This is explicitly defined for [ListTag] because otherwise there is overload
      * ambiguity between the [Tag] and [Collection]<Tag> methods.
      */
     inline operator fun ListTag.unaryPlus() {
@@ -159,10 +159,10 @@ value class NbtListBuilder(val tag: ListTag) {
     // creating new tags
 
     inline fun compound(block: NbtCompoundBuilder.() -> Unit): CompoundTag =
-        NbtCompoundBuilder(CompoundTag()).also { it.block() }.tag
+        NbtCompoundBuilder(CompoundTag()).apply(block).tag
 
     inline fun list(block: NbtListBuilder.() -> Unit): ListTag =
-        NbtListBuilder(ListTag()).also { it.block() }.tag
+        NbtListBuilder(ListTag()).apply(block).tag
 
     inline fun list(vararg elements: Tag, block: NbtListBuilder.() -> Unit): ListTag =
         NbtListBuilder(ListTag()).also {

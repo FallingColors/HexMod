@@ -295,7 +295,7 @@ fun transferMsToGl(ms: PoseStack, toRun: Runnable) {
     RenderSystem.applyModelViewMatrix()
 }
 
-private var villager: Villager? by weakMapped { it.level }
+private var villager: Villager? by weakMapped(Villager::level)
 
 fun prepareVillagerForRendering(ingredient: VillagerIngredient, level: Level): Villager {
     val minLevel: Int = ingredient.minLevel()

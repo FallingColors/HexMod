@@ -174,32 +174,55 @@ val String.asTranslatedComponent get() = TranslatableComponent(this)
 
 fun String.asTranslatedComponent(vararg args: Any) = TranslatableComponent(this, *args)
 
-
+/**
+ * Represents a value that the garbage collector is still allowed to collect.
+ * To create an instance of a [WeakValue], use [weakReference] or [weakMapped].
+ */
 interface WeakValue<T> {
     var value: T?
 }
 
+/**
+ * A weakly referenced value that relies directly on a [WeakReference].
+ *
+ * This means that if there are no other places where the contained object is referenced,
+ * the reference will expire, and value contained within this reference will become null.
+ */
 private class WeakReferencedValue<T>(var reference: WeakReference<T>?) : WeakValue<T> {
     override var value: T?
         get() = reference?.get()
         set(value) {
-            reference = value?.let { WeakReference(it) }
+            reference = value?.let(::WeakReference)
         }
 }
 
+/**
+ * A weakly referenced value that relies on a [WeakHashMap].
+ *
+ * Unlike [WeakReferencedValue], it relies on the continued existence of something else (obtained by [keyGen]).
+ * For example, this can be used to hold an entity, and have the reference expire when the world it's in is unloaded.
+ */
 private class WeakMappedValue<K, T>(val keyGen: (T) -> K) : WeakValue<T> {
     val reference = WeakHashMap<K, T>()
     override var value: T?
         get() = reference.values.firstOrNull()
         set(value) {
-            if (value != null) reference[keyGen(value)] = value else reference.clear()
+            reference.clear()
+            if (value != null) reference[keyGen(value)] = value
         }
 }
 
+/**
+ * Creates a [WeakReferencedValue], the contents of which will expire when nothing else is referencing them.
+ */
 fun <T> weakReference(value: T? = null): WeakValue<T> = WeakReferencedValue(value?.let { WeakReference(it) })
+
+/**
+ * Creates a [WeakMappedValue], the contents of which will expire when nothing else is referencing the value returned by [keyGen].
+ */
 fun <T, K> weakMapped(keyGen: (T) -> K): WeakValue<T> = WeakMappedValue(keyGen)
 
-
+// kt boilerplate for making WeakValues work as delegates (using the keyword `by`)
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun <T> WeakValue<T>.getValue(thisRef: Any?, property: KProperty<*>): T? = value
 
