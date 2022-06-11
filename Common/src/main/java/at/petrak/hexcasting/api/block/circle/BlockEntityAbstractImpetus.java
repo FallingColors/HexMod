@@ -516,7 +516,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     @Override
     public ItemStack removeItemNoUpdate(int index) {
         return ItemStack.EMPTY.copy();
-
     }
 
     @Override
@@ -543,7 +542,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     public int extractMana(ItemStack stack, boolean simulate) {
-        return ManaHelper.extractMana(stack, remainingManaCapacity(), true, false);
+        return ManaHelper.extractMana(stack, remainingManaCapacity(), true, simulate);
     }
 
     public void insertMana(ItemStack stack) {
