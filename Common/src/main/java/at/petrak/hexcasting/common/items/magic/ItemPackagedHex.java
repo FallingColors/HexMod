@@ -127,9 +127,11 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
         player.awardStat(stat);
 
         sPlayer.getCooldowns().addCooldown(this, 5);
-        sPlayer.level.playSound(null, sPlayer.getX(), sPlayer.getY(), sPlayer.getZ(),
-            HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
-            1f + ((float) Math.random() - 0.5f) * 0.2f);
+        if (info.getMakesCastSound()) {
+            sPlayer.level.playSound(null, sPlayer.getX(), sPlayer.getY(), sPlayer.getZ(),
+                HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
+                1f + ((float) Math.random() - 0.5f) * 0.2f);
+        }
 
         if (broken) {
             stack.shrink(1);
