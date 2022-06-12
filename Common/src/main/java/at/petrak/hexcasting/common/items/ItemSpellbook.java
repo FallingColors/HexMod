@@ -10,6 +10,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,6 +35,8 @@ public class ItemSpellbook extends Item implements DataHolderItem {
     // it is 1-indexed, and the 0-case for TAG_PAGES will be treated as 1
     public static String TAG_SEALED = "sealed_pages";
 
+    public static final int MAX_PAGES = 64;
+
     public ItemSpellbook(Properties properties) {
         super(properties);
     }
@@ -47,17 +50,18 @@ public class ItemSpellbook extends Item implements DataHolderItem {
             var pageIdx = NBTHelper.getInt(stack, TAG_SELECTED_PAGE);
             int highest = HighestPage(stack);
             if (highest != 0) {
-                if (sealed)
+                if (sealed) {
                     tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page.sealed",
                         new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
                         new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE),
                         new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
                         .withStyle(ChatFormatting.GRAY));
-                else
+                } else {
                     tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page",
                         new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
                         new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
                         .withStyle(ChatFormatting.GRAY));
+                }
             } else {
                 empty = true;
             }
@@ -69,14 +73,17 @@ public class ItemSpellbook extends Item implements DataHolderItem {
             boolean overridden = NBTHelper.hasString(stack, TAG_OVERRIDE_VISUALLY);
             if (sealed) {
                 if (overridden) {
-                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
+                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(
+                        ChatFormatting.GOLD));
                 } else {
                     tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty.sealed",
                         new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
                         .withStyle(ChatFormatting.GRAY));
                 }
-            } else if (!overridden)
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
+            } else if (!overridden) {
+                tooltip.add(
+                    new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
+            }
         }
 
         DataHolderItem.appendHoverText(this, stack, tooltip, isAdvanced);
@@ -128,8 +135,9 @@ public class ItemSpellbook extends Item implements DataHolderItem {
 
     @Override
     public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
-        if (datum != null && IsSealed(stack))
+        if (datum != null && IsSealed(stack)) {
             return;
+        }
 
         int idx = GetPage(stack, 1);
         var key = String.valueOf(idx);
@@ -138,11 +146,13 @@ public class ItemSpellbook extends Item implements DataHolderItem {
             if (datum == null) {
                 pages.remove(key);
                 NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
-            } else
+            } else {
                 pages.put(key, datum.serializeToNBT());
+            }
 
-            if (pages.isEmpty())
+            if (pages.isEmpty()) {
                 NBTHelper.remove(stack, TAG_PAGES);
+            }
         } else if (datum != null) {
             NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, datum.serializeToNBT());
         } else {
@@ -151,11 +161,13 @@ public class ItemSpellbook extends Item implements DataHolderItem {
     }
 
     public static int GetPage(ItemStack stack, int ifEmpty) {
-        if (ArePagesEmpty(stack))
+        if (ArePagesEmpty(stack)) {
             return ifEmpty;
-        else if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
+        } else if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
             int index = NBTHelper.getInt(stack, TAG_SELECTED_PAGE);
-            if (index == 0) index = 1;
+            if (index == 0) {
+                index = 1;
+            }
             return index;
         } else {
             return 1;
@@ -168,15 +180,17 @@ public class ItemSpellbook extends Item implements DataHolderItem {
         String nameKey = String.valueOf(index);
         CompoundTag names = NBTHelper.getOrCreateCompound(stack, TAG_SEALED);
 
-        if (!sealed)
+        if (!sealed) {
             names.remove(nameKey);
-        else
+        } else {
             names.putBoolean(nameKey, true);
+        }
 
-        if (names.isEmpty())
+        if (names.isEmpty()) {
             NBTHelper.remove(stack, TAG_SEALED);
-        else
+        } else {
             NBTHelper.putCompound(stack, TAG_SEALED, names);
+        }
 
     }
 
@@ -190,8 +204,9 @@ public class ItemSpellbook extends Item implements DataHolderItem {
 
     public static int HighestPage(ItemStack stack) {
         CompoundTag tag = NBTHelper.getCompound(stack, TAG_PAGES);
-        if (tag == null)
+        if (tag == null) {
             return 0;
+        }
         return tag.getAllKeys().stream().flatMap(s -> {
             try {
                 return Stream.of(Integer.parseInt(s));
@@ -207,6 +222,7 @@ public class ItemSpellbook extends Item implements DataHolderItem {
             idx += increase ? 1 : -1;
             idx = Math.max(1, idx);
         }
+        idx = Mth.clamp(idx, 0, MAX_PAGES);
         NBTHelper.putInt(stack, TAG_SELECTED_PAGE, idx);
 
         CompoundTag names = NBTHelper.getCompound(stack, TAG_PAGE_NAMES);
