@@ -30,8 +30,9 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
     public static boolean isDebug(ItemStack stack) {
-        return stack.is(HexItems.CREATIVE_UNLOCKER) &&
-            stack.getHoverName().getString().toLowerCase(Locale.ROOT).equals("debug");
+        return stack.is(HexItems.CREATIVE_UNLOCKER)
+            && stack.hasCustomHoverName()
+            && stack.getHoverName().getString().toLowerCase(Locale.ROOT).equals("debug");
     }
 
     private static final String TAG_EXTRACTIONS = "extractions";
@@ -69,8 +70,9 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     public int withdrawMana(ItemStack stack, int cost, boolean simulate) {
         if (!simulate && isDebug(stack)) {
             int[] arr = NBTHelper.getIntArray(stack, TAG_EXTRACTIONS);
-            if (arr == null)
+            if (arr == null) {
                 arr = new int[0];
+            }
             int[] newArr = Arrays.copyOf(arr, arr.length + 1);
             newArr[newArr.length - 1] = cost;
             NBTHelper.putIntArray(stack, TAG_EXTRACTIONS, newArr);
@@ -100,7 +102,8 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
                         entity.sendMessage(new TranslatableComponent("hexcasting.debug.mana_withdrawn.with_dust",
                             stack.getDisplayName(),
                             new TextComponent("" + i).withStyle(ChatFormatting.WHITE),
-                            new TextComponent(String.format("%.2f", i * 1.0 / ManaConstants.DUST_UNIT)).withStyle(ChatFormatting.WHITE))
+                            new TextComponent(String.format("%.2f", i * 1.0 / ManaConstants.DUST_UNIT)).withStyle(
+                                ChatFormatting.WHITE))
                             .withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
                     }
                 }
@@ -143,7 +146,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
         }
 
         return component.withStyle((s) -> s.withColor(
-                TextColor.fromRgb(Mth.hsvToRgb((level.getGameTime() + shift) * 2 % 360 / 360F, 1F, 1F))));
+            TextColor.fromRgb(Mth.hsvToRgb((level.getGameTime() + shift) * 2 % 360 / 360F, 1F, 1F))));
     }
 
     @Override
@@ -157,9 +160,11 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
             emphasized.append(rainbow(new TextComponent("" + emphasis.charAt(i)), i, level));
         }
 
-        MutableComponent modName = new TranslatableComponent(prefix + "mod_name").withStyle((s) -> s.withColor(HEX_COLOR));
+        MutableComponent modName = new TranslatableComponent(prefix + "mod_name").withStyle(
+            (s) -> s.withColor(HEX_COLOR));
 
-        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.0", emphasized).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(
+            new TranslatableComponent(prefix + "tooltip.0", emphasized).withStyle(ChatFormatting.GRAY));
         tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.1", modName).withStyle(ChatFormatting.GRAY));
     }
 
