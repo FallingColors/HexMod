@@ -55,9 +55,9 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
                     var stored = datumContainer.readDatum(level);
                     if (stored != null && stored.getType() == DatumType.ENTITY) {
                         var entity = (Entity) stored.getPayload();
-                        if (entity instanceof Player) {
+                        if (entity instanceof Player player) {
                             // phew, we got something
-                            tile.setPlayer(entity.getScoreboardName(), entity.getUUID());
+                            tile.setPlayer(player.getGameProfile(), entity.getUUID());
                             level.sendBlockUpdated(pPos, pState, pState, Block.UPDATE_CLIENTS);
 
                             pLevel.playSound(null, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING, SoundSource.BLOCKS,
@@ -76,7 +76,7 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
-            tile.updatePlayerName();
+            tile.updatePlayerProfile();
         }
     }
 

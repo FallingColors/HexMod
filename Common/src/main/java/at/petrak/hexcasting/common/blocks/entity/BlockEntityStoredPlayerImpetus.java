@@ -3,12 +3,14 @@ package at.petrak.hexcasting.common.blocks.entity;
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
+import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -24,9 +26,9 @@ import java.util.UUID;
 
 public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     public static final String TAG_STORED_PLAYER = "stored_player";
-    public static final String TAG_STORED_PLAYER_NAME = "stored_player_name";
+    public static final String TAG_STORED_PLAYER_PROFILE = "stored_player_profile";
 
-    private String storedPlayerName = null;
+    private GameProfile storedPlayerProfile = null;
     private UUID storedPlayer = null;
 
     public BlockEntityStoredPlayerImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -43,27 +45,27 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         return this.storedPlayer == null ? null : this.level.getPlayerByUUID(this.storedPlayer);
     }
 
-    protected @Nullable String getPlayerName() {
+    protected @Nullable GameProfile getPlayerName() {
         Player player = getStoredPlayer();
         if (player != null) {
-            return player.getScoreboardName();
+            return player.getGameProfile();
         }
 
-        return this.storedPlayerName;
+        return this.storedPlayerProfile;
     }
 
-    public void setPlayer(String name, UUID player) {
-        this.storedPlayerName = name;
+    public void setPlayer(GameProfile profile, UUID player) {
+        this.storedPlayerProfile = profile;
         this.storedPlayer = player;
         this.setChanged();
     }
 
-    public void updatePlayerName() {
+    public void updatePlayerProfile() {
         Player player = getStoredPlayer();
         if (player != null) {
-            String newName = player.getScoreboardName();
-            if (!newName.equals(this.storedPlayerName)) {
-                this.storedPlayerName = newName;
+            GameProfile newProfile = player.getGameProfile();
+            if (!newProfile.equals(this.storedPlayerProfile)) {
+                this.storedPlayerProfile = newProfile;
                 this.setChanged();
             }
         }
@@ -83,7 +85,7 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         var name = this.getPlayerName();
         if (name != null) {
             var head = new ItemStack(Items.PLAYER_HEAD);
-            NBTHelper.putString(head, "SkullOwner", name);
+            NBTHelper.put(head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), storedPlayerProfile));
             lines.add(
                 new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
         } else {
@@ -98,8 +100,8 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         if (this.storedPlayer != null) {
             tag.putUUID(TAG_STORED_PLAYER, this.storedPlayer);
         }
-        if (this.storedPlayerName != null) {
-            tag.putString(TAG_STORED_PLAYER_NAME, this.storedPlayerName);
+        if (this.storedPlayerProfile != null) {
+            tag.put(TAG_STORED_PLAYER_PROFILE, NbtUtils.writeGameProfile(new CompoundTag(), storedPlayerProfile));
         }
     }
 
@@ -111,10 +113,10 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         } else {
             this.storedPlayer = null;
         }
-        if (tag.contains(TAG_STORED_PLAYER_NAME, Tag.TAG_STRING)) {
-            this.storedPlayerName = tag.getString(TAG_STORED_PLAYER_NAME);
+        if (tag.contains(TAG_STORED_PLAYER_PROFILE, Tag.TAG_COMPOUND)) {
+            this.storedPlayerProfile = NbtUtils.readGameProfile(tag.getCompound(TAG_STORED_PLAYER_PROFILE));
         } else {
-            this.storedPlayer = null;
+            this.storedPlayerProfile = null;
         }
     }
 }
