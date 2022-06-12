@@ -48,7 +48,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
     @Override
     public int getMaxMana(ItemStack stack) {
-        return Integer.MAX_VALUE;
+        return Integer.MAX_VALUE - 1;
     }
 
     @Override

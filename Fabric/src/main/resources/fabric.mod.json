@@ -50,7 +50,7 @@
     "java": ">=17",
     "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
     "patchouli": ">=1.18.2-69",
-    "paucal": ">=0.4.4"
+    "paucal": "~0.4.6"
   },
   "suggests": {
     "gravitychanger": "0.7.7+fabric",
