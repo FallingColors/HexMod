@@ -13,9 +13,14 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object OpFisherman : Operator {
-    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
-        if (stack.isEmpty())
-            throw MishapNotEnoughArgs(1, 0)
+    override fun operate(
+        continuation: SpellContinuation,
+        stack: MutableList<SpellDatum<*>>,
+        local: SpellDatum<*>,
+        ctx: CastingContext
+    ): OperationResult {
+        if (stack.size < 2)
+            throw MishapNotEnoughArgs(2, 0)
         val arg = stack.getChecked<Double>(stack.lastIndex)
         val datum = stack[stack.lastIndex]
         val distance = stack.size - (arg + 1) // because getChecked<Int> just gives me a double for some reason
