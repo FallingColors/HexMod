@@ -27,7 +27,7 @@ object OpExtinguish : SpellOperator {
 
         return Triple(
             Spell(target),
-            ManaConstants.CRYSTAL_UNIT,
+            ManaConstants.DUST_UNIT * 6,
             listOf(ParticleSpray.burst(target, 1.0))
         )
     }

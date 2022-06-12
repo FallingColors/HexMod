@@ -2,11 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -26,7 +22,7 @@ object OpBreakBlock : SpellOperator {
         val centered = Vec3.atCenterOf(BlockPos(pos))
         return Triple(
             Spell(pos),
-            ManaConstants.DUST_UNIT * 2,
+            (ManaConstants.DUST_UNIT * 1.125).toInt(),
             listOf(ParticleSpray.burst(centered, 1.0))
         )
     }

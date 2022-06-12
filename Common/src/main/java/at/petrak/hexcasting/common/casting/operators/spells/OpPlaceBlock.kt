@@ -44,7 +44,7 @@ object OpPlaceBlock : SpellOperator {
 
         return Triple(
             Spell(target),
-            ManaConstants.DUST_UNIT,
+            ManaConstants.DUST_UNIT / 8,
             listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
         )
     }

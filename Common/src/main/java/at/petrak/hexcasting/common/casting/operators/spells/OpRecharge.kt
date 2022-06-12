@@ -1,12 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
@@ -48,8 +43,11 @@ object OpRecharge : SpellOperator {
         if (mana.mana >= mana.maxMana)
             return null
 
-        return Triple(Spell(entity),
-            ManaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.burst(entity.position(), 0.5)))
+        return Triple(
+            Spell(entity),
+            ManaConstants.SHARD_UNIT,
+            listOf(ParticleSpray.burst(entity.position(), 0.5))
+        )
     }
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {

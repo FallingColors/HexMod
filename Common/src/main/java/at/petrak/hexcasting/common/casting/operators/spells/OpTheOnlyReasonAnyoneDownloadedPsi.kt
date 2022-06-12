@@ -1,11 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -28,7 +24,7 @@ object OpTheOnlyReasonAnyoneDownloadedPsi : SpellOperator {
 
         return Triple(
             Spell(target),
-            ManaConstants.DUST_UNIT,
+            (ManaConstants.DUST_UNIT + 1.125).toInt(),
             listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
         )
     }

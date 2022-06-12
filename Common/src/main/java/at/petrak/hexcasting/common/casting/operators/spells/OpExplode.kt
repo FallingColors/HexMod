@@ -19,10 +19,12 @@ class OpExplode(val fire: Boolean) : SpellOperator {
         val pos = args.getChecked<Vec3>(0, argc)
         val strength = args.getChecked<Double>(1, argc)
         ctx.assertVecInRange(pos)
+        val clampedStrength = Mth.clamp(strength, 0.0, 10.0)
+        val cost = ManaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 0.125 else 1.0)
         return Triple(
-            Spell(pos, strength, this.fire),
-            ((1 + Mth.clamp(strength.toFloat(), 0f, 10f) + if (this.fire) 2 else 0) * ManaConstants.SHARD_UNIT).toInt(),
-            listOf(ParticleSpray.burst(pos, strength, 50))
+            Spell(pos, clampedStrength, this.fire),
+            cost.toInt(),
+            listOf(ParticleSpray.burst(pos, clampedStrength, 50))
         )
     }
 
@@ -36,7 +38,7 @@ class OpExplode(val fire: Boolean) : SpellOperator {
                 pos.x,
                 pos.y,
                 pos.z,
-                Mth.clamp(strength.toFloat(), 0f, 10f),
+                strength.toFloat(),
                 this.fire,
                 Explosion.BlockInteraction.BREAK
             )
