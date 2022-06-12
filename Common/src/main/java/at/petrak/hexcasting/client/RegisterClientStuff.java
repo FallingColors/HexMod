@@ -289,6 +289,9 @@ public class RegisterClientStuff {
     private static void registerWandOverrides(ItemWand item) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemWand.FUNNY_LEVEL_PREDICATE,
             (stack, level, holder, holderID) -> {
+                if (!stack.hasCustomHoverName()) {
+                    return 0;
+                }
                 var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
                 if (name.contains("old")) {
                     return 1f;
