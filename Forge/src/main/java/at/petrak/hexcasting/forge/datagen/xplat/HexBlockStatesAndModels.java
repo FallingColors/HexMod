@@ -191,10 +191,10 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         axisBlock(HexBlocks.AKASHIC_LOG, modLoc("block/akashic/log"), modLoc("block/akashic/log_end"));
         axisBlock(HexBlocks.AKASHIC_LOG_STRIPPED, modLoc("block/akashic/log_stripped"),
             modLoc("block/akashic/log_end_stripped"));
+        axisBlock(HexBlocks.AKASHIC_WOOD, modLoc("block/akashic/log"), modLoc("block/akashic/log"));
+        axisBlock(HexBlocks.AKASHIC_WOOD_STRIPPED, modLoc("block/akashic/log_stripped"),
+            modLoc("block/akashic/log_stripped"));
 
-        blockAndItem(HexBlocks.AKASHIC_WOOD, models().cubeAll("akashic_wood", modLoc("block/akashic/log")));
-        blockAndItem(HexBlocks.AKASHIC_WOOD_STRIPPED,
-            models().cubeAll("akashic_wood_stripped", modLoc("block/akashic/log_stripped")));
         blockAndItem(HexBlocks.AKASHIC_PANEL, models().cubeAll("akashic_panel", modLoc("block/akashic/panel")));
         blockAndItem(HexBlocks.AKASHIC_TILE, models().cubeAll("akashic_tile", modLoc("block/akashic/tile")));
 

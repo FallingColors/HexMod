@@ -5,7 +5,9 @@ import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.common.blocks.BlockConjured;
 import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
 import at.petrak.hexcasting.common.blocks.BlockFlammable;
-import at.petrak.hexcasting.common.blocks.akashic.*;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicFloodfiller;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockEmptyDirectrix;
@@ -167,14 +169,14 @@ public class HexBlocks {
             .strength(1f)
             .lightLevel($ -> 15)));
 
-    public static final BlockAxis AKASHIC_LOG = blockItem("akashic_log",
+    public static final BlockAkashicLog AKASHIC_LOG = blockItem("akashic_log",
         new BlockAkashicLog(akashicWoody()));
-    public static final BlockAxis AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
+    public static final BlockAkashicLog AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
         new BlockAkashicLog(akashicWoody()));
-    public static final Block AKASHIC_WOOD = blockItem("akashic_wood",
-        new BlockFlammable(akashicWoody(), 5, 5));
-    public static final Block AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
-        new BlockFlammable(akashicWoody(), 5, 5));
+    public static final BlockAkashicLog AKASHIC_WOOD = blockItem("akashic_wood",
+        new BlockAkashicLog(akashicWoody()));
+    public static final BlockAkashicLog AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
+        new BlockAkashicLog(akashicWoody()));
     public static final Block AKASHIC_PLANKS = blockItem("akashic_planks",
         new BlockFlammable(akashicWoody(), 20, 5));
     public static final Block AKASHIC_PANEL = blockItem("akashic_panel",

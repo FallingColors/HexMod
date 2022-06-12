@@ -162,6 +162,10 @@ public class HexItemModels extends PaucalItemModelProvider {
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_log")));
         getBuilder(HexBlocks.AKASHIC_LOG_STRIPPED.getRegistryName().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_log_stripped")));
+        getBuilder(HexBlocks.AKASHIC_WOOD.getRegistryName().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/akashic_wood")));
+        getBuilder(HexBlocks.AKASHIC_WOOD_STRIPPED.getRegistryName().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/akashic_wood_stripped")));
         getBuilder(HexBlocks.AKASHIC_STAIRS.getRegistryName().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_stairs")));
         getBuilder(HexBlocks.AKASHIC_SLAB.getRegistryName().getPath()).parent(
