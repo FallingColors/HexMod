@@ -32,7 +32,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     public static boolean isDebug(ItemStack stack) {
         return stack.is(HexItems.CREATIVE_UNLOCKER)
             && stack.hasCustomHoverName()
-            && stack.getHoverName().getString().toLowerCase(Locale.ROOT).equals("debug");
+            && stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains("debug");
     }
 
     private static final String TAG_EXTRACTIONS = "extractions";
