@@ -46,7 +46,7 @@
   "depends": {
     "fabricloader": ">=0.13",
     "fabric": ">=0.50",
-    "minecraft": ">=1.18.2",
+    "minecraft": "=1.18.2",
     "java": ">=17",
     "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
     "patchouli": ">=1.18.2-69",
