@@ -5,6 +5,7 @@ import at.petrak.hexcasting.client.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.shader.HexShaders;
+import net.minecraft.client.color.item.ItemColors;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -16,9 +17,18 @@ import java.io.IOException;
 
 // This is Java because I can't kotlin-fu some of the consumers
 public class ForgeHexClientInitializer {
+    // We copy Fabric's example; it mixes in on the return of the initializer and sticks it in a global variable.
+    // So here's our global.
+    public static ItemColors GLOBAL_ITEM_COLORS;
+
     @SubscribeEvent
     public static void clientInit(FMLClientSetupEvent evt) {
-        evt.enqueueWork(RegisterClientStuff::init);
+        evt.enqueueWork(() -> {
+            RegisterClientStuff.init();
+            RegisterClientStuff.registerColorProviders((colorizer, item) -> {
+                GLOBAL_ITEM_COLORS.register(colorizer, item);
+            });
+        });
 
         var evBus = MinecraftForge.EVENT_BUS;
 

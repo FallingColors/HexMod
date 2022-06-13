@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
-import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.spell.iota.NullIota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,22 +40,22 @@ public class ItemFocus extends Item implements IotaHolderItem {
     }
 
     @Override
-    public @Nullable LegacySpellDatum<?> emptyIota(ItemStack stack) {
-        return LegacySpellDatum.make(Widget.NULL);
+    public @Nullable Iota emptyIota(ItemStack stack) {
+        return new NullIota();
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, LegacySpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, Iota datum) {
         return datum == null || !NBTHelper.getBoolean(stack, TAG_SEALED);
     }
 
     @Override
-    public void writeDatum(ItemStack stack, LegacySpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, Iota datum) {
         if (datum == null) {
             stack.removeTagKey(TAG_DATA);
             stack.removeTagKey(TAG_SEALED);
-        } else if (!NBTHelper.getBoolean(stack, TAG_SEALED)) {
-            NBTHelper.put(stack, TAG_DATA, datum.serializeToNBT());
+        } else if (!isSealed(stack)) {
+            NBTHelper.put(stack, TAG_DATA, HexIotaTypes.serialize(datum));
         }
     }
 
@@ -62,5 +63,9 @@ public class ItemFocus extends Item implements IotaHolderItem {
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
         IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
+    }
+
+    public static boolean isSealed(ItemStack stack) {
+        return NBTHelper.getBoolean(stack, TAG_SEALED);
     }
 }

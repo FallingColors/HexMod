@@ -22,7 +22,7 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
 
     private static ItemStack getSealedStack() {
         ItemStack output = new ItemStack(HexItems.SPELLBOOK);
-        ItemSpellbook.SetSealed(output, true);
+        ItemSpellbook.setSealed(output, true);
         NBTHelper.putString(output, IotaHolderItem.TAG_OVERRIDE_VISUALLY, "any");
         return output;
     }
@@ -51,7 +51,7 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
         }
 
         if (!out.isEmpty()) {
-            ItemSpellbook.SetSealed(out, true);
+            ItemSpellbook.setSealed(out, true);
             out.setCount(1);
         }
 

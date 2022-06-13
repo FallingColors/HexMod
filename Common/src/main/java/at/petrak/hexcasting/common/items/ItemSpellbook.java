@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
-import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.spell.iota.NullIota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -44,11 +45,11 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
         TooltipFlag isAdvanced) {
-        boolean sealed = IsSealed(stack);
+        boolean sealed = isSealed(stack);
         boolean empty = false;
         if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
             var pageIdx = NBTHelper.getInt(stack, TAG_SELECTED_PAGE);
-            int highest = HighestPage(stack);
+            int highest = highestPage(stack);
             if (highest != 0) {
                 if (sealed) {
                     tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page.sealed",
@@ -93,7 +94,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        int index = GetPage(stack, 0);
+        int index = getPage(stack, 0);
         NBTHelper.putInt(stack, TAG_SELECTED_PAGE, index);
 
         int shiftedIdx = Math.max(1, index);
@@ -106,14 +107,14 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
         }
     }
 
-    public static boolean ArePagesEmpty(ItemStack stack) {
+    public static boolean arePagesEmpty(ItemStack stack) {
         CompoundTag tag = NBTHelper.getCompound(stack, TAG_PAGES);
         return tag == null || tag.isEmpty();
     }
 
     @Override
     public @Nullable CompoundTag readIotaTag(ItemStack stack) {
-        int idx = GetPage(stack, 1);
+        int idx = getPage(stack, 1);
         var key = String.valueOf(idx);
         var tag = NBTHelper.getCompound(stack, TAG_PAGES);
         if (tag != null && tag.contains(key, Tag.TAG_COMPOUND)) {
@@ -124,22 +125,22 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
     }
 
     @Override
-    public @Nullable LegacySpellDatum<?> emptyIota(ItemStack stack) {
-        return LegacySpellDatum.make(Widget.NULL);
+    public @Nullable Iota emptyIota(ItemStack stack) {
+        return new NullIota();
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, LegacySpellDatum<?> datum) {
-        return datum == null || !IsSealed(stack);
+    public boolean canWrite(ItemStack stack, Iota datum) {
+        return datum == null || !isSealed(stack);
     }
 
     @Override
-    public void writeDatum(ItemStack stack, LegacySpellDatum<?> datum) {
-        if (datum != null && IsSealed(stack)) {
+    public void writeDatum(ItemStack stack, Iota datum) {
+        if (datum != null && isSealed(stack)) {
             return;
         }
 
-        int idx = GetPage(stack, 1);
+        int idx = getPage(stack, 1);
         var key = String.valueOf(idx);
         CompoundTag pages = NBTHelper.getCompound(stack, TAG_PAGES);
         if (pages != null) {
@@ -147,21 +148,21 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
                 pages.remove(key);
                 NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
             } else {
-                pages.put(key, datum.serializeToNBT());
+                pages.put(key, HexIotaTypes.serialize(datum));
             }
 
             if (pages.isEmpty()) {
                 NBTHelper.remove(stack, TAG_PAGES);
             }
         } else if (datum != null) {
-            NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, datum.serializeToNBT());
+            NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, HexIotaTypes.serialize(datum));
         } else {
             NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
         }
     }
 
-    public static int GetPage(ItemStack stack, int ifEmpty) {
-        if (ArePagesEmpty(stack)) {
+    public static int getPage(ItemStack stack, int ifEmpty) {
+        if (arePagesEmpty(stack)) {
             return ifEmpty;
         } else if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
             int index = NBTHelper.getInt(stack, TAG_SELECTED_PAGE);
@@ -174,8 +175,8 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
         }
     }
 
-    public static void SetSealed(ItemStack stack, boolean sealed) {
-        int index = GetPage(stack, 1);
+    public static void setSealed(ItemStack stack, boolean sealed) {
+        int index = getPage(stack, 1);
 
         String nameKey = String.valueOf(index);
         CompoundTag names = NBTHelper.getOrCreateCompound(stack, TAG_SEALED);
@@ -194,15 +195,15 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
 
     }
 
-    public static boolean IsSealed(ItemStack stack) {
-        int index = GetPage(stack, 1);
+    public static boolean isSealed(ItemStack stack) {
+        int index = getPage(stack, 1);
 
         String nameKey = String.valueOf(index);
         CompoundTag names = NBTHelper.getCompound(stack, TAG_SEALED);
         return NBTHelper.getBoolean(names, nameKey);
     }
 
-    public static int HighestPage(ItemStack stack) {
+    public static int highestPage(ItemStack stack) {
         CompoundTag tag = NBTHelper.getCompound(stack, TAG_PAGES);
         if (tag == null) {
             return 0;
@@ -216,8 +217,8 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
         }).max(Integer::compare).orElse(0);
     }
 
-    public static int RotatePageIdx(ItemStack stack, boolean increase) {
-        int idx = GetPage(stack, 0);
+    public static int rotatePageIdx(ItemStack stack, boolean increase) {
+        int idx = getPage(stack, 0);
         if (idx != 0) {
             idx += increase ? 1 : -1;
             idx = Math.max(1, idx);

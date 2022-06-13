@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.api.spell.DatumType;
+import at.petrak.hexcasting.api.spell.iota.EntityIota;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityStoredPlayerImpetus;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -53,15 +52,15 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
             if (datumContainer != null) {
                 if (pLevel instanceof ServerLevel level) {
                     var stored = datumContainer.readIota(level);
-                    if (stored != null && stored.getType() == DatumType.ENTITY) {
-                        var entity = (Entity) stored.getPayload();
+                    if (stored instanceof EntityIota eieio) {
+                        var entity = eieio.getEntity();
                         if (entity instanceof Player player) {
                             // phew, we got something
                             tile.setPlayer(player.getGameProfile(), entity.getUUID());
                             level.sendBlockUpdated(pPos, pState, pState, Block.UPDATE_CLIENTS);
 
-                            pLevel.playSound(null, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING, SoundSource.BLOCKS,
-                                1f, 1f);
+                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING,
+                                SoundSource.BLOCKS, 1f, 1f);
                         }
                     }
                 }

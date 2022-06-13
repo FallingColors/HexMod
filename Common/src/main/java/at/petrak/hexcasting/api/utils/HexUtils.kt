@@ -2,9 +2,11 @@
 
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.ListIota
 import at.petrak.hexcasting.api.spell.math.HexCoord
+import at.petrak.hexcasting.common.lib.HexIotaTypes
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.*
@@ -85,7 +87,7 @@ fun pxToCoord(px: Vec2, size: Float, offset: Vec2): HexCoord {
     else
         HexCoord(q, r + (rf + 0.5 * qf).roundToInt())
 }
-s
+
 fun String.withStyle(op: (Style) -> Style): MutableComponent = asTextComponent.withStyle(op)
 fun String.withStyle(style: Style): MutableComponent = asTextComponent.withStyle(style)
 fun String.withStyle(formatting: ChatFormatting): MutableComponent = asTextComponent.withStyle(formatting)
@@ -231,13 +233,11 @@ inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty
 /**
  * Returns an empty list if it's too complicated.
  */
-fun Iterable<LegacySpellDatum<*>>.serializeToNBT(): ListTag {
-    val out = LegacySpellDatum.make(SpellList.LList(0, this.toList())).serializeToNBT()
-    return if (out.contains(LegacySpellDatum.TAG_WIDGET))
+fun Iterable<Iota>.serializeToNBT() =
+    if (HexIotaTypes.isTooLargeToSerialize(this))
         ListTag()
     else
-        out.getList(LegacySpellDatum.TAG_LIST, Tag.TAG_COMPOUND)
-}
+        ListIota(SpellList.LList(this.toList())).serialize()
 
 // Copy the impl from forge
 fun ItemStack.serializeToNBT(): CompoundTag {
@@ -247,7 +247,7 @@ fun ItemStack.serializeToNBT(): CompoundTag {
 }
 
 @Throws(IllegalArgumentException::class)
-fun <T : Tag> Tag.downcast(type: TagType<T>) : T {
+fun <T : Tag> Tag.downcast(type: TagType<T>): T {
     if (this.type == type) {
         return this as T
     } else {
@@ -256,3 +256,5 @@ fun <T : Tag> Tag.downcast(type: TagType<T>) : T {
         )
     }
 }
+
+const val ERROR_COLOR = 0xff_f800f8.toInt()

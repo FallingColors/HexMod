@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.item;
 
 import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.ChatFormatting;
@@ -23,6 +24,12 @@ import java.util.List;
  * and the appropriate cap/CC will be attached.
  */
 public interface IotaHolderItem {
+    /**
+     * If this key is set on the item, we ignore the rest of the item and render this as if it were of the
+     * {@link at.petrak.hexcasting.api.spell.iota.IotaType IotaType} given by the resource location.
+     * <p>
+     * This is not useful to the player at all.
+     */
     String TAG_OVERRIDE_VISUALLY = "VisualOverride";
 
     @Nullable CompoundTag readIotaTag(ItemStack stack);
@@ -45,6 +52,15 @@ public interface IotaHolderItem {
     @Nullable
     default Iota emptyIota(ItemStack stack) {
         return null;
+    }
+
+    default int getColor(ItemStack stack) {
+        var tag = stack.getTag();
+        if (tag == null) {
+            return HexUtils.ERROR_COLOR;
+        }
+
+        return HexIotaTypes.getColor(tag);
     }
 
     boolean canWrite(ItemStack stack, @Nullable Iota iota);

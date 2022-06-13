@@ -9,6 +9,7 @@ import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
@@ -47,5 +48,8 @@ object FabricHexClientInitializer : ClientModInitializer {
                 BlockEntityRendererRegistry.register(type, berp)
             }
         })
+        RegisterClientStuff.registerColorProviders { colorizer, item ->
+            ColorProviderRegistry.ITEM.register(colorizer, item)
+        }
     }
 }

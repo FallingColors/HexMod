@@ -2,10 +2,9 @@ package at.petrak.hexcasting.forge.recipe;
 
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
-import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.spell.iota.NullIota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -19,18 +18,16 @@ import net.minecraftforge.common.crafting.NBTIngredient;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class ForgeUnsealedIngredient extends AbstractIngredient {
     private final ItemStack stack;
 
     protected ForgeUnsealedIngredient(ItemStack stack) {
-        super(Arrays.stream(DatumType.values())
-            .filter((it) -> it != DatumType.EMPTY && it != DatumType.OTHER)
-            .map((type) -> {
+        super(HexIotaTypes.REGISTRY.keySet().stream()
+            .map(it -> {
                 ItemStack newStack = stack.copy();
-                NBTHelper.putString(newStack, IotaHolderItem.TAG_OVERRIDE_VISUALLY, LegacySpellDatum.tagForType(type));
+                NBTHelper.putString(newStack, IotaHolderItem.TAG_OVERRIDE_VISUALLY, it.toString());
                 return new Ingredient.ItemValue(newStack);
             }));
         this.stack = stack;
@@ -51,7 +48,7 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
         if (this.stack.getItem() == input.getItem() && this.stack.getDamageValue() == input.getDamageValue()) {
             ADIotaHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(this.stack);
             if (holder != null) {
-                return holder.readIotaTag() != null && holder.writeIota(LegacySpellDatum.make(Widget.NULL), true);
+                return holder.readIotaTag() != null && holder.writeIota(new NullIota(), true);
             }
         }
 
