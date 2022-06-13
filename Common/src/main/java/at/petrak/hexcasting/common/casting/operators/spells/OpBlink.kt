@@ -37,7 +37,7 @@ object OpBlink : SpellOperator {
 
         return Triple(
             Spell(target, delta),
-            ManaConstants.SHARD_UNIT * (delta * 0.5).roundToInt(),
+            (ManaConstants.SHARD_UNIT * delta * 0.5).roundToInt(),
             listOf(
                 ParticleSpray.cloud(targetMiddlePos, 2.0, 50),
                 ParticleSpray.burst(targetMiddlePos.add(dvec), 2.0, 100)
