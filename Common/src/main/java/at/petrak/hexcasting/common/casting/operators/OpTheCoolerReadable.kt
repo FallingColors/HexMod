@@ -22,7 +22,7 @@ object OpTheCoolerReadable : ConstManaOperator {
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack)
             ?: return false.asSpellResult
 
-        if (datumHolder.readDatum(ctx.world) == null && datumHolder.emptyDatum() == null)
+        if (datumHolder.readIota(ctx.world) == null && datumHolder.emptyIota() == null)
             return false.asSpellResult
 
         return true.asSpellResult

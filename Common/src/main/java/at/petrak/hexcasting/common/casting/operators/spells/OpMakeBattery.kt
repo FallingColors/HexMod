@@ -2,17 +2,13 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.mod.HexItemTags
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.utils.extractMana
 import at.petrak.hexcasting.api.utils.isManaItem
-import at.petrak.hexcasting.common.items.magic.ItemManaHolder
+import at.petrak.hexcasting.common.items.magic.ItemMediaHolder
 import at.petrak.hexcasting.common.lib.HexItems
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
@@ -59,8 +55,10 @@ object OpMakeBattery : SpellOperator {
             )
         }
 
-        return Triple(Spell(entity),
-            ManaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.burst(entity.position(), 0.5)))
+        return Triple(
+            Spell(entity),
+            ManaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.burst(entity.position(), 0.5))
+        )
     }
 
     private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
@@ -72,7 +70,7 @@ object OpMakeBattery : SpellOperator {
                 if (manaAmt > 0) {
                     ctx.caster.setItemInHand(
                         hand,
-                        ItemManaHolder.withMana(ItemStack(HexItems.BATTERY), manaAmt, manaAmt)
+                        ItemMediaHolder.withMana(ItemStack(HexItems.BATTERY), manaAmt, manaAmt)
                     )
                 }
 

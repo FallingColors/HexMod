@@ -16,12 +16,12 @@ object OpWritable : ConstManaOperator {
         val (handStack) = ctx.getHeldItemToOperateOn {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-            datumHolder != null && datumHolder.writeDatum(datum, true)
+            datumHolder != null && datumHolder.writeIota(datum, true)
         }
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack) ?: return false.asSpellResult
 
-        if (!datumHolder.writeDatum(datum, true))
+        if (!datumHolder.writeIota(datum, true))
             return false.asSpellResult
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)

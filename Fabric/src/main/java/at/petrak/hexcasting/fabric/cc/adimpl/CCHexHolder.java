@@ -1,8 +1,9 @@
-package at.petrak.hexcasting.fabric.cc;
+package at.petrak.hexcasting.fabric.cc.adimpl;
 
-import at.petrak.hexcasting.api.addldata.HexHolder;
+import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class CCHexHolder extends ItemComponent implements HexHolder {
+public abstract class CCHexHolder extends ItemComponent implements ADHexHolder {
     public CCHexHolder(ItemStack stack) {
         super(stack, HexCardinalComponents.HEX_HOLDER);
     }

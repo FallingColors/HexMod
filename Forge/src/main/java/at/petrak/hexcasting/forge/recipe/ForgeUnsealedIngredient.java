@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.recipe;
 
-import at.petrak.hexcasting.api.addldata.DataHolder;
-import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
@@ -30,7 +30,7 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
             .filter((it) -> it != DatumType.EMPTY && it != DatumType.OTHER)
             .map((type) -> {
                 ItemStack newStack = stack.copy();
-                NBTHelper.putString(newStack, DataHolderItem.TAG_OVERRIDE_VISUALLY, LegacySpellDatum.tagForType(type));
+                NBTHelper.putString(newStack, IotaHolderItem.TAG_OVERRIDE_VISUALLY, LegacySpellDatum.tagForType(type));
                 return new Ingredient.ItemValue(newStack);
             }));
         this.stack = stack;
@@ -45,13 +45,13 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
 
     @Override
     public boolean test(@Nullable ItemStack input) {
-		if (input == null) {
-			return false;
-		}
+        if (input == null) {
+            return false;
+        }
         if (this.stack.getItem() == input.getItem() && this.stack.getDamageValue() == input.getDamageValue()) {
-            DataHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(this.stack);
+            ADIotaHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(this.stack);
             if (holder != null) {
-                return holder.readRawDatum() != null && holder.writeDatum(LegacySpellDatum.make(Widget.NULL), true);
+                return holder.readIotaTag() != null && holder.writeIota(LegacySpellDatum.make(Widget.NULL), true);
             }
         }
 

@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.fabric.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.addldata.DataHolder;
-import at.petrak.hexcasting.api.addldata.HexHolder;
-import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.addldata.ADHexHolder;
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexItemTags;
@@ -213,21 +213,21 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public @Nullable
-    ManaHolder findManaHolder(ItemStack stack) {
-        var cc = HexCardinalComponents.MANA_HOLDER.maybeGet(stack);
+    ADMediaHolder findManaHolder(ItemStack stack) {
+        var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(stack);
         return cc.orElse(null);
     }
 
     @Override
     public @Nullable
-    DataHolder findDataHolder(ItemStack stack) {
+    ADIotaHolder findDataHolder(ItemStack stack) {
         var cc = HexCardinalComponents.DATA_HOLDER.maybeGet(stack);
         return cc.orElse(null);
     }
 
     @Override
     public @Nullable
-    HexHolder findHexHolder(ItemStack stack) {
+    ADHexHolder findHexHolder(ItemStack stack) {
         var cc = HexCardinalComponents.HEX_HOLDER.maybeGet(stack);
         return cc.orElse(null);
     }

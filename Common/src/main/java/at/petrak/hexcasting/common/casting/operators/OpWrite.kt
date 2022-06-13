@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.casting.operators
 
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
@@ -21,13 +21,13 @@ object OpWrite : SpellOperator {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-            datumHolder != null && datumHolder.writeDatum(datum, true)
+            datumHolder != null && datumHolder.writeIota(datum, true)
         }
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
 
-        if (!datumHolder.writeDatum(datum, true))
+        if (!datumHolder.writeIota(datum, true))
             throw MishapBadOffhandItem.of(handStack, hand, "iota.readonly", datum.display())
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
@@ -46,11 +46,11 @@ object OpWrite : SpellOperator {
             val (handStack) = ctx.getHeldItemToOperateOn {
                 val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-                datumHolder != null && datumHolder.writeDatum(datum, true)
+                datumHolder != null && datumHolder.writeIota(datum, true)
             }
 
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
-            datumHolder?.writeDatum(datum, false)
+            datumHolder?.writeIota(datum, false)
         }
     }
 }

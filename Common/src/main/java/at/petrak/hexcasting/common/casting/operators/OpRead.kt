@@ -12,14 +12,14 @@ object OpRead : ConstManaOperator {
     override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val dataHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
-            dataHolder != null && (dataHolder.readDatum(ctx.world) != null || dataHolder.emptyDatum() != null)
+            dataHolder != null && (dataHolder.readIota(ctx.world) != null || dataHolder.emptyIota() != null)
         }
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.read")
 
-        val datum = datumHolder.readDatum(ctx.world)
-            ?: datumHolder.emptyDatum()
+        val datum = datumHolder.readIota(ctx.world)
+            ?: datumHolder.emptyIota()
             ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.read")
 
         return listOf(datum)

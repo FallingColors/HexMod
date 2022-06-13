@@ -6,6 +6,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.ApiStatus;
@@ -25,6 +26,21 @@ public class HexIotaTypes {
     public static final String
         KEY_TYPE = HexAPI.MOD_ID + ":type",
         KEY_DATA = HexAPI.MOD_ID + ":data";
+
+    public static CompoundTag serialize(Iota iota) {
+        var type = iota.getType();
+        var typeId = REGISTRY.getKey(type);
+        if (typeId == null) {
+            throw new IllegalStateException(
+                "Tried to serialize an unregistered iota type. Iota: " + iota
+                    + " ; Type" + type.getClass().getTypeName());
+        }
+        var dataTag = iota.serialize();
+        var out = new CompoundTag();
+        out.putString(KEY_TYPE, typeId.toString());
+        out.put(KEY_DATA, dataTag);
+        return out;
+    }
 
     /**
      * This method attempts to find the type from the {@code type} key.
@@ -67,6 +83,19 @@ public class HexIotaTypes {
             return null;
         }
         return type.deserialize(tag, world);
+    }
+
+    @Nullable
+    public static Component getDisplay(CompoundTag tag) {
+        var type = getTypeFromTag(tag);
+        if (type == null) {
+            return null;
+        }
+        var dataKey = tag.get(KEY_DATA);
+        if (dataKey == null) {
+            return null;
+        }
+        return type.display(tag);
     }
 
     @ApiStatus.Internal

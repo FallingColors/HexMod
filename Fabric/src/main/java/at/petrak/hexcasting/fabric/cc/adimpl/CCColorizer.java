@@ -1,7 +1,8 @@
-package at.petrak.hexcasting.fabric.cc;
+package at.petrak.hexcasting.fabric.cc.adimpl;
 
-import at.petrak.hexcasting.api.addldata.Colorizer;
+import at.petrak.hexcasting.api.addldata.ADColorizer;
 import at.petrak.hexcasting.api.item.ColorizerItem;
+import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -11,7 +12,7 @@ import java.util.UUID;
 /**
  * The colorizer itself
  */
-public abstract class CCColorizer extends ItemComponent implements Colorizer {
+public abstract class CCColorizer extends ItemComponent implements ADColorizer {
     public CCColorizer(ItemStack stack) {
         super(stack, HexCardinalComponents.COLORIZER);
     }

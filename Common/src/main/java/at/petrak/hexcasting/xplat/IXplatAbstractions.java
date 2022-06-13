@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.addldata.DataHolder;
-import at.petrak.hexcasting.api.addldata.HexHolder;
-import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.addldata.ADHexHolder;
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
@@ -96,13 +96,13 @@ public interface IXplatAbstractions {
     void clearCastingData(ServerPlayer player);
 
     @Nullable
-    ManaHolder findManaHolder(ItemStack stack);
+    ADMediaHolder findManaHolder(ItemStack stack);
 
     @Nullable
-    DataHolder findDataHolder(ItemStack stack);
+    ADIotaHolder findDataHolder(ItemStack stack);
 
     @Nullable
-    HexHolder findHexHolder(ItemStack stack);
+    ADHexHolder findHexHolder(ItemStack stack);
 
     // coooollooorrrs
 

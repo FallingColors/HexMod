@@ -2,12 +2,12 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -27,7 +27,7 @@ import java.util.Optional;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class ItemSlate extends BlockItem implements DataHolderItem {
+public class ItemSlate extends BlockItem implements IotaHolderItem {
     public static final ResourceLocation WRITTEN_PRED = modLoc("written");
 
     public ItemSlate(Block pBlock, Properties pProperties) {
@@ -51,19 +51,21 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
 
     @SoftImplement("IForgeItem")
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!hasPattern(stack))
+        if (!hasPattern(stack)) {
             NBTHelper.remove(stack, "BlockEntityTag");
+        }
         return false;
     }
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        if (!hasPattern(pStack))
+        if (!hasPattern(pStack)) {
             NBTHelper.remove(pStack, "BlockEntityTag");
+        }
     }
 
     @Override
-    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
+    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
         var bet = NBTHelper.getCompound(stack, "BlockEntityTag");
 
         if (bet == null || !bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND)) {
@@ -90,8 +92,9 @@ public class ItemSlate extends BlockItem implements DataHolderItem {
             if (datum == null) {
                 var beTag = NBTHelper.getOrCreateCompound(stack, "BlockEntityTag");
                 beTag.remove(BlockEntitySlate.TAG_PATTERN);
-                if (beTag.isEmpty())
+                if (beTag.isEmpty()) {
                     NBTHelper.remove(stack, "BlockEntityTag");
+                }
             } else if (datum.getPayload() instanceof HexPattern pat) {
                 var beTag = NBTHelper.getOrCreateCompound(stack, "BlockEntityTag");
                 beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());

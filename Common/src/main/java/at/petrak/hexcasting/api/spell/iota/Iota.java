@@ -30,6 +30,11 @@ public abstract class Iota {
      */
     abstract public boolean toleratesOther(Iota that);
 
+    /**
+     * Serialize this under the {@code data} tag.
+     * <p>
+     * You probably don't want to call this directly; use {@link HexIotaTypes#serialize}.
+     */
     abstract public @NotNull Tag serialize();
 
     /**

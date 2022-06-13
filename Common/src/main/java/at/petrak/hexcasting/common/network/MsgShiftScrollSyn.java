@@ -121,7 +121,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
             HexSounds.ABACUS, SoundSource.PLAYERS, 0.5f, pitch);
 
-        var datumTag = HexItems.ABACUS.readDatumTag(stack);
+        var datumTag = HexItems.ABACUS.readIotaTag(stack);
         if (datumTag != null) {
             var popup = LegacySpellDatum.displayFromNBT(datumTag);
             sender.displayClientMessage(

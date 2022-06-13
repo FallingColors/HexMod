@@ -9,16 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class ItemManaBattery extends ItemManaHolder {
+public class ItemMediaBattery extends ItemMediaHolder {
     public static final ResourceLocation MANA_PREDICATE = modLoc("mana");
     public static final ResourceLocation MAX_MANA_PREDICATE = modLoc("max_mana");
 
-    public ItemManaBattery(Properties pProperties) {
+    public ItemMediaBattery(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
-    public boolean manaProvider(ItemStack stack) {
+    public boolean canProvideMedia(ItemStack stack) {
         return true;
     }
 
@@ -40,7 +40,7 @@ public class ItemManaBattery extends ItemManaHolder {
             };
             for (int manamount : manamounts) {
                 var stack = new ItemStack(this);
-                items.add(ItemManaHolder.withMana(stack, manamount, manamount));
+                items.add(ItemMediaHolder.withMana(stack, manamount, manamount));
             }
         }
     }

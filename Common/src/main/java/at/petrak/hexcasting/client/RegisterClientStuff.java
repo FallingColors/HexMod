@@ -3,8 +3,8 @@ package at.petrak.hexcasting.client;
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
-import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
@@ -20,7 +20,7 @@ import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.common.items.ItemWand;
-import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
+import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexBlocks;
@@ -61,15 +61,15 @@ public class RegisterClientStuff {
         registerPackagedSpellOverrides(HexItems.ARTIFACT);
 
         var x = IClientXplatAbstractions.INSTANCE;
-        x.registerItemProperty(HexItems.BATTERY, ItemManaBattery.MANA_PREDICATE,
+        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MANA_PREDICATE,
             (stack, level, holder, holderID) -> {
-                var item = (ManaHolderItem) stack.getItem();
+                var item = (MediaHolderItem) stack.getItem();
                 return item.getManaFullness(stack);
             });
-        x.registerItemProperty(HexItems.BATTERY, ItemManaBattery.MAX_MANA_PREDICATE,
+        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MAX_MANA_PREDICATE,
             (stack, level, holder, holderID) -> {
-                var item = (ItemManaBattery) stack.getItem();
-                var max = item.getMaxMana(stack);
+                var item = (ItemMediaBattery) stack.getItem();
+                var max = item.getMaxMedia(stack);
                 return (float) Math.sqrt((float) max / ManaConstants.CRYSTAL_UNIT / 10);
             });
 
@@ -253,11 +253,11 @@ public class RegisterClientStuff {
             (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
     }
 
-    private static void registerDataHolderOverrides(DataHolderItem item) {
+    private static void registerDataHolderOverrides(IotaHolderItem item) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.DATATYPE_PRED,
             (stack, level, holder, holderID) -> {
-                var datum = item.readDatumTag(stack);
-                String override = NBTHelper.getString(stack, DataHolderItem.TAG_OVERRIDE_VISUALLY);
+                var datum = item.readIotaTag(stack);
+                String override = NBTHelper.getString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY);
                 String typename = null;
                 if (override != null) {
                     typename = override;

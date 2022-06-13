@@ -1,4 +1,5 @@
 @file:JvmName("ManaHelper")
+
 package at.petrak.hexcasting.api.utils
 
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -10,7 +11,7 @@ fun isManaItem(stack: ItemStack): Boolean {
     val manaHolder = IXplatAbstractions.INSTANCE.findManaHolder(stack) ?: return false
     if (!manaHolder.canProvide())
         return false
-    return manaHolder.withdrawMana(-1, true) > 0
+    return manaHolder.withdrawMedia(-1, true) > 0
 }
 
 /**
@@ -33,7 +34,7 @@ fun extractMana(
     if (drainForBatteries && !manaHolder.canConstructBattery())
         return 0
 
-    return manaHolder.withdrawMana(cost, simulate)
+    return manaHolder.withdrawMedia(cost, simulate)
 }
 
 /**
@@ -46,7 +47,7 @@ fun compareManaItem(astack: ItemStack, bstack: ItemStack): Int {
     return if (astack.item != bstack.item) {
         (aMana?.consumptionPriority ?: 0) - (bMana?.consumptionPriority ?: 0)
     } else if (aMana != null && bMana != null) {
-        aMana.mana - bMana.mana
+        aMana.media - bMana.media
     } else {
         astack.count - bstack.count
     }

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.misc;
 
-import at.petrak.hexcasting.api.addldata.Colorizer;
+import at.petrak.hexcasting.api.addldata.ADColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -31,7 +31,8 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
         0xFF200000, 0xFF202000, 0xFF002000, 0xFF002020, 0xFF000020, 0xFF200020
     };
 
-    private static final Map<String, Supplier<Item>> OLD_PRIDE_COLORIZERS = Arrays.stream(ItemPrideColorizer.Type.values())
+    private static final Map<String, Supplier<Item>> OLD_PRIDE_COLORIZERS = Arrays.stream(
+            ItemPrideColorizer.Type.values())
         .collect(Collectors.<ItemPrideColorizer.Type, String, Supplier<Item>>toMap(
             (type) -> modLoc("pride_colorizer_" + type.ordinal()).toString(),
             (type) -> (() -> HexItems.PRIDE_COLORIZERS.get(type))));
@@ -85,7 +86,7 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
         double luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 0xFF; // Standard relative luminance calculation
 
         if (luminance < 0.05) {
-            int rawMod = Colorizer.morphBetweenColors(MINIMUM_LUMINANCE_COLOR_WHEEL, new Vec3(0.1, 0.1, 0.1),
+            int rawMod = ADColorizer.morphBetweenColors(MINIMUM_LUMINANCE_COLOR_WHEEL, new Vec3(0.1, 0.1, 0.1),
                 time / 20 / 20, position);
 
             r += FastColor.ARGB32.red(rawMod);

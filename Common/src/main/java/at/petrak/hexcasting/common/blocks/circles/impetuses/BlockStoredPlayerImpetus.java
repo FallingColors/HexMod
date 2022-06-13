@@ -52,7 +52,7 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
             var datumContainer = IXplatAbstractions.INSTANCE.findDataHolder(usedStack);
             if (datumContainer != null) {
                 if (pLevel instanceof ServerLevel level) {
-                    var stored = datumContainer.readDatum(level);
+                    var stored = datumContainer.readIota(level);
                     if (stored != null && stored.getType() == DatumType.ENTITY) {
                         var entity = (Entity) stored.getPayload();
                         if (entity instanceof Player player) {
@@ -61,7 +61,7 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
                             level.sendBlockUpdated(pPos, pState, pState, Block.UPDATE_CLIENTS);
 
                             pLevel.playSound(null, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING, SoundSource.BLOCKS,
-                                    1f, 1f);
+                                1f, 1f);
                         }
                     }
                 }

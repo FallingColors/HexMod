@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -27,7 +27,7 @@ import java.util.Locale;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
+public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
 
     public static boolean isDebug(ItemStack stack) {
         return stack.is(HexItems.CREATIVE_UNLOCKER)
@@ -42,22 +42,22 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     }
 
     @Override
-    public int getMana(ItemStack stack) {
+    public int getMedia(ItemStack stack) {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    public int getMaxMana(ItemStack stack) {
+    public int getMaxMedia(ItemStack stack) {
         return Integer.MAX_VALUE - 1;
     }
 
     @Override
-    public void setMana(ItemStack stack, int mana) {
+    public void setMedia(ItemStack stack, int media) {
         // NO-OP
     }
 
     @Override
-    public boolean manaProvider(ItemStack stack) {
+    public boolean canProvideMedia(ItemStack stack) {
         return true;
     }
 

@@ -64,8 +64,8 @@ public class HexItems {
 
     public static final ItemSlate SLATE = make("slate", new ItemSlate(HexBlocks.SLATE, props()));
 
-    public static final ItemManaBattery BATTERY = make("battery",
-        new ItemManaBattery(new Item.Properties().stacksTo(1)));
+    public static final ItemMediaBattery BATTERY = make("battery",
+        new ItemMediaBattery(new Item.Properties().stacksTo(1)));
 
     public static final EnumMap<DyeColor, ItemDyeColorizer> DYE_COLORIZERS = Util.make(() -> {
         var out = new EnumMap<DyeColor, ItemDyeColorizer>(DyeColor.class);

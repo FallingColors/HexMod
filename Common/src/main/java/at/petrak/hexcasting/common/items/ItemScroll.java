@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
@@ -36,7 +36,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * <br>
  * TAG_OP_ID: invalid
  */
-public class ItemScroll extends Item implements DataHolderItem {
+public class ItemScroll extends Item implements IotaHolderItem {
     public static final String TAG_OP_ID = "op_id";
     public static final String TAG_PATTERN = "pattern";
     public static final ResourceLocation ANCIENT_PREDICATE = modLoc("ancient");
@@ -49,7 +49,7 @@ public class ItemScroll extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
+    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
         CompoundTag pattern = NBTHelper.getCompound(stack, TAG_PATTERN);
         if (pattern == null) {
             return null;

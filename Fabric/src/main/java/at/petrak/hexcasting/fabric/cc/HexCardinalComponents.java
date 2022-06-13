@@ -1,12 +1,17 @@
 package at.petrak.hexcasting.fabric.cc;
 
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.item.ColorizerItem;
-import at.petrak.hexcasting.api.item.DataHolderItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.fabric.cc.adimpl.CCColorizer;
+import at.petrak.hexcasting.fabric.cc.adimpl.CCHexHolder;
+import at.petrak.hexcasting.fabric.cc.adimpl.CCIotaHolder;
+import at.petrak.hexcasting.fabric.cc.adimpl.CCMediaHolder;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
@@ -37,10 +42,10 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
 
     public static final ComponentKey<CCColorizer> COLORIZER = ComponentRegistry.getOrCreate(modLoc("colorizer"),
         CCColorizer.class);
-    public static final ComponentKey<CCDataHolder> DATA_HOLDER = ComponentRegistry.getOrCreate(modLoc("data_holder"),
-        CCDataHolder.class);
-    public static final ComponentKey<CCManaHolder> MANA_HOLDER = ComponentRegistry.getOrCreate(modLoc("mana_holder"),
-        CCManaHolder.class);
+    public static final ComponentKey<CCIotaHolder> DATA_HOLDER = ComponentRegistry.getOrCreate(modLoc("data_holder"),
+        CCIotaHolder.class);
+    public static final ComponentKey<CCMediaHolder> MEDIA_HOLDER = ComponentRegistry.getOrCreate(modLoc("mana_holder"),
+        CCMediaHolder.class);
     public static final ComponentKey<CCHexHolder> HEX_HOLDER = ComponentRegistry.getOrCreate(modLoc("hex_holder"),
         CCHexHolder.class);
 
@@ -59,21 +64,21 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
         registry.register(i -> i instanceof ColorizerItem, COLORIZER, CCColorizer.ItemBased::new);
 
-        registry.register(i -> i instanceof DataHolderItem, DATA_HOLDER, CCDataHolder.ItemBased::new);
+        registry.register(i -> i instanceof IotaHolderItem, DATA_HOLDER, CCIotaHolder.ItemBased::new);
         // oh havoc, you think you're so funny
         // the worst part is you're /right/
-        registry.register(Items.PUMPKIN_PIE, DATA_HOLDER, stack -> new CCDataHolder.Static(stack,
-            s -> LegacySpellDatum.make(Math.PI * s.getCount())));
+        registry.register(Items.PUMPKIN_PIE, DATA_HOLDER, stack ->
+            new CCIotaHolder.Static(stack, s -> new DoubleIota(Math.PI * s.getCount())));
 
-        registry.register(i -> i instanceof ManaHolderItem, MANA_HOLDER, CCManaHolder.ItemBased::new);
-        registry.register(HexItems.AMETHYST_DUST, MANA_HOLDER, s -> new CCManaHolder.Static(
-            () -> HexConfig.common().dustManaAmount(), 30, s
+        registry.register(i -> i instanceof MediaHolderItem, MEDIA_HOLDER, CCMediaHolder.ItemBased::new);
+        registry.register(HexItems.AMETHYST_DUST, MEDIA_HOLDER, s -> new CCMediaHolder.Static(
+            () -> HexConfig.common().dustManaAmount(), ADMediaHolder.AMETHYST_DUST_PRIORITY, s
         ));
-        registry.register(Items.AMETHYST_SHARD, MANA_HOLDER, s -> new CCManaHolder.Static(
-            () -> HexConfig.common().shardManaAmount(), 20, s
+        registry.register(Items.AMETHYST_SHARD, MEDIA_HOLDER, s -> new CCMediaHolder.Static(
+            () -> HexConfig.common().shardManaAmount(), ADMediaHolder.AMETHYST_SHARD_PRIORITY, s
         ));
-        registry.register(HexItems.CHARGED_AMETHYST, MANA_HOLDER, s -> new CCManaHolder.Static(
-            () -> HexConfig.common().chargedCrystalManaAmount(), 10, s
+        registry.register(HexItems.CHARGED_AMETHYST, MEDIA_HOLDER, s -> new CCMediaHolder.Static(
+            () -> HexConfig.common().chargedCrystalManaAmount(), ADMediaHolder.CHARGED_AMETHYST_PRIORITY, s
         ));
 
         registry.register(i -> i instanceof HexHolderItem, HEX_HOLDER, CCHexHolder.ItemBased::new);

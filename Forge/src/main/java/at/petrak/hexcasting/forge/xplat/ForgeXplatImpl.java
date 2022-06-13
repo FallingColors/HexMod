@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.addldata.Colorizer;
-import at.petrak.hexcasting.api.addldata.DataHolder;
-import at.petrak.hexcasting.api.addldata.HexHolder;
-import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.addldata.ADColorizer;
+import at.petrak.hexcasting.api.addldata.ADHexHolder;
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
@@ -253,21 +253,21 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public @Nullable
-    ManaHolder findManaHolder(ItemStack stack) {
+    ADMediaHolder findManaHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.MANA).resolve();
         return maybeCap.orElse(null);
     }
 
     @Override
     public @Nullable
-    DataHolder findDataHolder(ItemStack stack) {
+    ADIotaHolder findDataHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.DATUM).resolve();
         return maybeCap.orElse(null);
     }
 
     @Override
     public @Nullable
-    HexHolder findHexHolder(ItemStack stack) {
+    ADHexHolder findHexHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.STORED_HEX).resolve();
         return maybeCap.orElse(null);
     }
@@ -281,7 +281,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public int getRawColor(FrozenColorizer colorizer, float time, Vec3 position) {
         var maybeColorizer = colorizer.item().getCapability(HexCapabilities.COLOR).resolve();
         if (maybeColorizer.isPresent()) {
-            Colorizer col = maybeColorizer.get();
+            ADColorizer col = maybeColorizer.get();
             return col.color(colorizer.owner(), time, position);
         }
 

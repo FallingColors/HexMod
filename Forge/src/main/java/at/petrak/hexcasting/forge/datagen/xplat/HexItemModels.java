@@ -6,7 +6,7 @@ import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.common.items.ItemWand;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
-import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
+import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -122,8 +122,8 @@ public class HexItemModels extends PaucalItemModelProvider {
 
                 float fillProp = (float) fill / maxFill;
                 getBuilder(HexItems.BATTERY.getRegistryName().getPath()).override()
-                    .predicate(ItemManaBattery.MANA_PREDICATE, fillProp)
-                    .predicate(ItemManaBattery.MAX_MANA_PREDICATE, size)
+                    .predicate(ItemMediaBattery.MANA_PREDICATE, fillProp)
+                    .predicate(ItemMediaBattery.MAX_MANA_PREDICATE, size)
                     .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
                     .end();
             }

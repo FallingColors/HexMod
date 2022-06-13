@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
@@ -21,13 +21,13 @@ class OpErase : SpellOperator {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
             (hexHolder?.hasHex() == true) ||
-                    (datumHolder?.writeDatum(null, true) == true)
+                    (datumHolder?.writeIota(null, true) == true)
         }
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
 
         if ((hexHolder?.hasHex() != true) &&
-            (datumHolder?.writeDatum(null, true) != true)
+            (datumHolder?.writeIota(null, true) != true)
         ) {
             throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
         }
@@ -45,7 +45,7 @@ class OpErase : SpellOperator {
                 val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
                 (hexHolder?.hasHex() == true) ||
-                        (datumHolder?.writeDatum(null, true) == true)
+                        (datumHolder?.writeIota(null, true) == true)
             }
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
@@ -53,8 +53,8 @@ class OpErase : SpellOperator {
             if (hexHolder?.hasHex() == true)
                 hexHolder.clearHex()
 
-            if (datumHolder != null && datumHolder.writeDatum(null, true))
-                datumHolder.writeDatum(null, false)
+            if (datumHolder != null && datumHolder.writeIota(null, true))
+                datumHolder.writeIota(null, false)
         }
     }
 }

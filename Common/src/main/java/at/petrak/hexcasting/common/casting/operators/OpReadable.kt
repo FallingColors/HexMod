@@ -17,8 +17,8 @@ object OpReadable : ConstManaOperator {
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             ?: return false.asSpellResult
 
-        datumHolder.readDatum(ctx.world)
-            ?: datumHolder.emptyDatum()
+        datumHolder.readIota(ctx.world)
+            ?: datumHolder.emptyIota()
             ?: return false.asSpellResult
 
         return true.asSpellResult

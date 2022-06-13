@@ -32,7 +32,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Item that holds a list of patterns in it ready to be cast
  */
-public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolderItem {
+public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHolderItem {
     public static final String TAG_PATTERNS = "patterns";
     public static final ResourceLocation HAS_PATTERNS_PRED = modLoc("has_patterns");
 
@@ -48,7 +48,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     }
 
     @Override
-    public boolean manaProvider(ItemStack stack) {
+    public boolean canProvideMedia(ItemStack stack) {
         return false;
     }
 
@@ -116,7 +116,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
         var harness = new CastingHarness(ctx);
         var info = harness.executeIotas(instrs, sPlayer.getLevel());
 
-        boolean broken = breakAfterDepletion() && getMana(stack) == 0;
+        boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 
         Stat<?> stat;
         if (broken) {

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.recipe;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -30,7 +30,7 @@ public class FabricUnsealedIngredient extends BaseCustomIngredient {
             .filter((it) -> it != DatumType.EMPTY && it != DatumType.OTHER)
             .map((type) -> {
                 ItemStack newStack = stack.copy();
-                NBTHelper.putString(newStack, DataHolderItem.TAG_OVERRIDE_VISUALLY, SpellDatum.tagForType(type));
+                NBTHelper.putString(newStack, IotaHolderItem.TAG_OVERRIDE_VISUALLY, SpellDatum.tagForType(type));
                 return new Ingredient.ItemValue(newStack);
             }));
         this.stack = stack;

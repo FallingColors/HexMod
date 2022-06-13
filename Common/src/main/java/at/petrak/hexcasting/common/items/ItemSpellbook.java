@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ItemSpellbook extends Item implements DataHolderItem {
+public class ItemSpellbook extends Item implements IotaHolderItem {
     public static String TAG_SELECTED_PAGE = "page_idx";
     // this is a CompoundTag of string numerical keys to SpellData
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
@@ -86,7 +86,7 @@ public class ItemSpellbook extends Item implements DataHolderItem {
             }
         }
 
-        DataHolderItem.appendHoverText(this, stack, tooltip, isAdvanced);
+        IotaHolderItem.appendHoverText(this, stack, tooltip, isAdvanced);
 
         super.appendHoverText(stack, level, tooltip, isAdvanced);
     }
@@ -112,7 +112,7 @@ public class ItemSpellbook extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
+    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
         int idx = GetPage(stack, 1);
         var key = String.valueOf(idx);
         var tag = NBTHelper.getCompound(stack, TAG_PAGES);
@@ -124,7 +124,7 @@ public class ItemSpellbook extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable LegacySpellDatum<?> emptyDatum(ItemStack stack) {
+    public @Nullable LegacySpellDatum<?> emptyIota(ItemStack stack) {
         return LegacySpellDatum.make(Widget.NULL);
     }
 

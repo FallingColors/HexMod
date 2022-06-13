@@ -6,7 +6,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-public interface Colorizer {
+public interface ADColorizer {
     int color(UUID owner, float time, Vec3 position);
 
     static int morphBetweenColors(int[] colors, Vec3 gradientDir, float time, Vec3 position) {

@@ -1,56 +1,57 @@
-package at.petrak.hexcasting.fabric.cc;
+package at.petrak.hexcasting.fabric.cc.adimpl;
 
-import at.petrak.hexcasting.api.addldata.ManaHolder;
-import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
 
-public abstract class CCManaHolder extends ItemComponent implements ManaHolder {
-    public CCManaHolder(ItemStack stack) {
-        super(stack, HexCardinalComponents.MANA_HOLDER);
+public abstract class CCMediaHolder extends ItemComponent implements ADMediaHolder {
+    public CCMediaHolder(ItemStack stack) {
+        super(stack, HexCardinalComponents.MEDIA_HOLDER);
     }
 
-    public static class ItemBased extends CCManaHolder {
-        private final ManaHolderItem manaHolder;
+    public static class ItemBased extends CCMediaHolder {
+        private final MediaHolderItem mediaHolder;
 
         public ItemBased(ItemStack stack) {
             super(stack);
-            if (!(stack.getItem() instanceof ManaHolderItem mana)) {
-                throw new IllegalStateException("item is not a mana holder: " + stack);
+            if (!(stack.getItem() instanceof MediaHolderItem mana)) {
+                throw new IllegalStateException("item is not a media holder: " + stack);
             }
-            this.manaHolder = mana;
+            this.mediaHolder = mana;
         }
 
         @Override
-        public int getMana() {
-            return this.manaHolder.getMana(this.stack);
+        public int getMedia() {
+            return this.mediaHolder.getMedia(this.stack);
         }
 
         @Override
-        public int getMaxMana() {
-            return this.manaHolder.getMaxMana(this.stack);
+        public int getMaxMedia() {
+            return this.mediaHolder.getMaxMedia(this.stack);
         }
 
         @Override
-        public void setMana(int mana) {
-            this.manaHolder.setMana(this.stack, mana);
+        public void setMedia(int media) {
+            this.mediaHolder.setMedia(this.stack, media);
         }
 
         @Override
         public boolean canRecharge() {
-            return this.manaHolder.canRecharge(this.stack);
+            return this.mediaHolder.canRecharge(this.stack);
         }
 
         @Override
         public boolean canProvide() {
-            return this.manaHolder.manaProvider(this.stack);
+            return this.mediaHolder.canProvideMedia(this.stack);
         }
 
         @Override
         public int getConsumptionPriority() {
-            return 40;
+            return ADMediaHolder.BATTERY_PRIORITY;
         }
 
         @Override
@@ -59,12 +60,12 @@ public abstract class CCManaHolder extends ItemComponent implements ManaHolder {
         }
 
         @Override
-        public int withdrawMana(int cost, boolean simulate) {
-            return this.manaHolder.withdrawMana(this.stack, cost, simulate);
+        public int withdrawMedia(int cost, boolean simulate) {
+            return this.mediaHolder.withdrawMana(this.stack, cost, simulate);
         }
     }
 
-    public static class Static extends CCManaHolder {
+    public static class Static extends CCMediaHolder {
         private final Supplier<Integer> baseWorth;
         private final int consumptionPriority;
 
@@ -75,17 +76,17 @@ public abstract class CCManaHolder extends ItemComponent implements ManaHolder {
         }
 
         @Override
-        public int getMana() {
+        public int getMedia() {
             return baseWorth.get() * stack.getCount();
         }
 
         @Override
-        public int getMaxMana() {
-            return getMana();
+        public int getMaxMedia() {
+            return getMedia();
         }
 
         @Override
-        public void setMana(int mana) {
+        public void setMedia(int media) {
             // NO-OP
         }
 
@@ -110,7 +111,7 @@ public abstract class CCManaHolder extends ItemComponent implements ManaHolder {
         }
 
         @Override
-        public int withdrawMana(int cost, boolean simulate) {
+        public int withdrawMedia(int cost, boolean simulate) {
             int worth = baseWorth.get();
             if (cost < 0) {
                 cost = worth * stack.getCount();

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.spell.LegacySpellDatum;
 import at.petrak.hexcasting.api.spell.Widget;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -17,7 +17,7 @@ import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class ItemFocus extends Item implements DataHolderItem {
+public class ItemFocus extends Item implements IotaHolderItem {
     public static final ResourceLocation DATATYPE_PRED = modLoc("datatype");
     public static final ResourceLocation SEALED_PRED = modLoc("sealed");
 
@@ -29,7 +29,7 @@ public class ItemFocus extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
+    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
         return NBTHelper.getCompound(stack, TAG_DATA);
     }
 
@@ -39,7 +39,7 @@ public class ItemFocus extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable LegacySpellDatum<?> emptyDatum(ItemStack stack) {
+    public @Nullable LegacySpellDatum<?> emptyIota(ItemStack stack) {
         return LegacySpellDatum.make(Widget.NULL);
     }
 
@@ -61,6 +61,6 @@ public class ItemFocus extends Item implements DataHolderItem {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
-        DataHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
+        IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }
 }

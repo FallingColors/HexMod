@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -23,7 +23,7 @@ public class SealFocusRecipe extends ShapelessRecipe {
     private static ItemStack getSealedStack() {
         ItemStack output = new ItemStack(HexItems.FOCUS);
         NBTHelper.putBoolean(output, ItemFocus.TAG_SEALED, true);
-        NBTHelper.putString(output, DataHolderItem.TAG_OVERRIDE_VISUALLY, "any");
+        NBTHelper.putString(output, IotaHolderItem.TAG_OVERRIDE_VISUALLY, "any");
         return output;
     }
 
