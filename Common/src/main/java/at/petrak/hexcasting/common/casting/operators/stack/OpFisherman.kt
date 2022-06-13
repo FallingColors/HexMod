@@ -20,7 +20,7 @@ object OpFisherman : Operator {
         ctx: CastingContext
     ): OperationResult {
         if (stack.size < 2)
-            throw MishapNotEnoughArgs(2, 0)
+            throw MishapNotEnoughArgs(2, stack.size)
         val arg = stack.getChecked<Double>(stack.lastIndex)
         val datum = stack[stack.lastIndex]
         val distance = stack.size - (arg + 1) // because getChecked<Int> just gives me a double for some reason

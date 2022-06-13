@@ -135,12 +135,13 @@ class CastingHarness private constructor(
     fun updateWithPattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
         var operatorIdPair: Pair<Operator, ResourceLocation>? = null
         try {
-
             // Don't catch this one
             operatorIdPair = PatternRegistry.matchPatternAndID(newPat, world)
-            if (!HexConfig.server().isActionAllowed(operatorIdPair.second)) {
+            if (this.ctx.spellCircle == null && !HexConfig.server().isActionAllowed(operatorIdPair.second)) {
                 throw MishapDisallowedSpell()
-            } else if (this.ctx.spellCircle != null && !HexConfig.server().isActionAllowedInCircles(operatorIdPair.second)) {
+            } else if (this.ctx.spellCircle != null
+                && !HexConfig.server().isActionAllowedInCircles(operatorIdPair.second)
+            ) {
                 throw MishapDisallowedSpell("disallowed_circle")
             }
 
