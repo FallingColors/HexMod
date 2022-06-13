@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.spell.datum;
+package at.petrak.hexcasting.api.spell.iota;
 
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -18,16 +18,16 @@ public abstract class IotaType<T extends Iota> {
      * Throwing an exception raises a mishap.
      */
     @Nullable
-    abstract T deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException;
+    public abstract T deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException;
 
     /**
      * Get a display of this datum from the tag, <i>without</i> the world.
      * This is for use on the client.
      */
-    abstract Component display(Tag tag);
+    public abstract Component display(Tag tag);
 
     /**
      * Get the color associated with this datum type.
      */
-    abstract int color();
+    public abstract int color();
 }

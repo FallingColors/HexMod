@@ -1,6 +1,8 @@
-package at.petrak.hexcasting.api.spell.datum;
+package at.petrak.hexcasting.api.spell.iota;
 
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -8,9 +10,9 @@ import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DatumEntity extends Iota {
-    protected DatumEntity(@NotNull Entity e) {
-        super(e);
+public class EntityIota extends Iota {
+    protected EntityIota(@NotNull Entity e) {
+        super(HexIotaTypes.ENTITY, e);
     }
 
     public Entity getEntity() {
@@ -19,7 +21,9 @@ public class DatumEntity extends Iota {
 
     @Override
     public boolean toleratesOther(Iota that) {
-        return that instanceof DatumEntity dent && this.getEntity() == dent.getEntity();
+        return typesMatch(this, that)
+            && that instanceof EntityIota dent
+            && this.getEntity() == dent.getEntity();
     }
 
     @Override
@@ -30,12 +34,16 @@ public class DatumEntity extends Iota {
         return out;
     }
 
-    public static IotaType<DatumEntity> TYPE = new IotaType<>() {
-
+    public static IotaType<EntityIota> TYPE = new IotaType<>() {
         @Nullable
         @Override
-        public DatumEntity deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return null;
+        public EntityIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
+            var uuid = NbtUtils.loadUUID(tag);
+            var entity = world.getEntity(uuid);
+            if (entity == null) {
+                return null;
+            }
+            return new EntityIota(entity);
         }
 
         @Override
@@ -48,3 +56,4 @@ public class DatumEntity extends Iota {
             return 0;
         }
     };
+}

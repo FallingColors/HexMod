@@ -6,10 +6,7 @@ import at.petrak.hexcasting.api.spell.LegacySpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.math.HexCoord
 import net.minecraft.ChatFormatting
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.LongArrayTag
-import net.minecraft.nbt.Tag
+import net.minecraft.nbt.*
 import net.minecraft.network.chat.*
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
@@ -247,4 +244,15 @@ fun ItemStack.serializeToNBT(): CompoundTag {
     val out = CompoundTag()
     this.save(out)
     return out
+}
+
+@Throws(IllegalArgumentException::class)
+fun <T : Tag> Tag.downcast(type: TagType<T>) : T {
+    if (this.type == type) {
+        return this as T
+    } else {
+        throw IllegalArgumentException(
+            "Expected this tag to be of type ${type.name}, but found ${this.type.name}."
+        )
+    }
 }

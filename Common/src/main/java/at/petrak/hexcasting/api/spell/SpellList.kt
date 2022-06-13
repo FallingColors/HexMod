@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.spell
 
-import at.petrak.hexcasting.api.spell.datum.Iota
+import at.petrak.hexcasting.api.spell.iota.Iota
 
 /**
  * Restricted interface for functional lists.

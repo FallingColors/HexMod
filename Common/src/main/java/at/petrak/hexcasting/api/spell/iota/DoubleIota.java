@@ -1,5 +1,7 @@
-package at.petrak.hexcasting.api.spell.datum;
+package at.petrak.hexcasting.api.spell.iota;
 
+import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -7,20 +9,22 @@ import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DatumDouble extends Iota {
+public class DoubleIota extends Iota {
     public static final double TOLERANCE = 0.0001;
 
-    public DatumDouble(double d) {
-        super(d);
+    public DoubleIota(double d) {
+        super(HexIotaTypes.DOUBLE, d);
     }
 
     public double getDouble() {
-        return (Double) this.payload;
+        return HexUtils.fixNAN((Double) this.payload);
     }
 
     @Override
     public boolean toleratesOther(Iota that) {
-        return that instanceof DatumDouble dd && Math.abs(this.getDouble() - dd.getDouble()) < TOLERANCE;
+        return typesMatch(this, that)
+            && that instanceof DoubleIota dd
+            && Math.abs(this.getDouble() - dd.getDouble()) < TOLERANCE;
     }
 
     @Override
@@ -28,12 +32,12 @@ public class DatumDouble extends Iota {
         return DoubleTag.valueOf(this.getDouble());
     }
 
-    public static IotaType<DatumDouble> TYPE = new IotaType<>() {
+    public static IotaType<DoubleIota> TYPE = new IotaType<>() {
         @Nullable
         @Override
-        public DatumDouble deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            var dtag = (DoubleTag) tag;
-            return new DatumDouble(dtag.getAsDouble());
+        public DoubleIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
+            var dtag = HexUtils.downcast(tag, DoubleTag.TYPE);
+            return new DoubleIota(dtag.getAsDouble());
         }
 
         @Override
