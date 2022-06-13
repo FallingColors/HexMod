@@ -2,16 +2,17 @@ package at.petrak.hexcasting.common.casting.operators.eval
 
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
-import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 
 object OpHalt : Operator {
-    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(
+        continuation: SpellContinuation,
+        stack: MutableList<SpellDatum<*>>,
+        local: SpellDatum<*>,
+        ctx: CastingContext
+    ): OperationResult {
         var newStack = stack.toList()
         var done = false
         var newCont = continuation
