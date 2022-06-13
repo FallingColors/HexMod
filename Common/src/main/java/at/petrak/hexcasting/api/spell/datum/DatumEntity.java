@@ -8,17 +8,17 @@ import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DatumEntity extends SpellDatum {
+public class DatumEntity extends Iota {
     protected DatumEntity(@NotNull Entity e) {
         super(e);
     }
 
     public Entity getEntity() {
-        return (Entity) this.datum;
+        return (Entity) this.payload;
     }
 
     @Override
-    public boolean equalsOther(SpellDatum that) {
+    public boolean toleratesOther(Iota that) {
         return that instanceof DatumEntity dent && this.getEntity() == dent.getEntity();
     }
 
@@ -30,7 +30,7 @@ public class DatumEntity extends SpellDatum {
         return out;
     }
 
-    public static SpellDatum.Type<DatumEntity> TYPE = new Type<>() {
+    public static IotaType<DatumEntity> TYPE = new IotaType<>() {
 
         @Nullable
         @Override

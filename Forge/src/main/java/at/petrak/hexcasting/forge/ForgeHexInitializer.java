@@ -101,6 +101,8 @@ public class ForgeHexInitializer {
 
         bind(ForgeRegistries.PARTICLE_TYPES, HexParticles::registerParticles);
 
+        HexIotaTypes.registerTypes();
+
         ArgumentTypes.register(HexAPI.MOD_ID + ":pattern", PatternResLocArgument.class,
             new EmptyArgumentSerializer<>(PatternResLocArgument::id));
         HexAdvancementTriggers.registerTriggers();

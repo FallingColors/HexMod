@@ -8,17 +8,17 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Similar to {@link DatumWidget}, this is a <i>wrapper</i> for {@link SpellList}.
  */
-public class DatumList extends SpellDatum {
+public class DatumList extends Iota {
     public DatumList(@NotNull SpellList list) {
         super(list);
     }
 
     public SpellList getList() {
-        return (SpellList) this.datum;
+        return (SpellList) this.payload;
     }
 
     @Override
-    public boolean equalsOther(SpellDatum that) {
+    public boolean toleratesOther(Iota that) {
         var a = this.getList();
         if (!(that instanceof DatumList list)) {
             return false;
@@ -35,7 +35,7 @@ public class DatumList extends SpellDatum {
                 // one remains full before the other
                 return false;
             }
-            SpellDatum x = aIter.next(), y = bIter.next();
+            Iota x = aIter.next(), y = bIter.next();
             if (!SpellDatums.equalsWithTolerance(x, y)) {
                 return false;
             }

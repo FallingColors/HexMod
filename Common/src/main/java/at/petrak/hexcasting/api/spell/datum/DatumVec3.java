@@ -4,13 +4,13 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
-public class DatumVec3 extends SpellDatum {
+public class DatumVec3 extends Iota {
     public DatumVec3(@NotNull Vec3 datum) {
         super(datum);
     }
 
     public Vec3 getVec3() {
-        return (Vec3) this.datum;
+        return (Vec3) this.payload;
     }
 
     @Override

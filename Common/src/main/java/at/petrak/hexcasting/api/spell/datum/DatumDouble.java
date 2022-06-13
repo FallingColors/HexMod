@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DatumDouble extends SpellDatum {
+public class DatumDouble extends Iota {
     public static final double TOLERANCE = 0.0001;
 
     public DatumDouble(double d) {
@@ -15,11 +15,11 @@ public class DatumDouble extends SpellDatum {
     }
 
     public double getDouble() {
-        return (Double) this.datum;
+        return (Double) this.payload;
     }
 
     @Override
-    public boolean equalsOther(SpellDatum that) {
+    public boolean toleratesOther(Iota that) {
         return that instanceof DatumDouble dd && Math.abs(this.getDouble() - dd.getDouble()) < TOLERANCE;
     }
 
@@ -28,7 +28,7 @@ public class DatumDouble extends SpellDatum {
         return DoubleTag.valueOf(this.getDouble());
     }
 
-    public static SpellDatum.Type<DatumDouble> TYPE = new Type<>() {
+    public static IotaType<DatumDouble> TYPE = new IotaType<>() {
         @Nullable
         @Override
         public DatumDouble deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {

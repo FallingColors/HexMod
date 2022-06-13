@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.fabric.xplat;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.DataHolder;
 import at.petrak.hexcasting.api.addldata.HexHolder;
 import at.petrak.hexcasting.api.addldata.ManaHolder;
@@ -10,6 +11,7 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.datum.IotaType;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
@@ -22,8 +24,10 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
+import com.mojang.serialization.Lifecycle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -38,9 +42,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -355,6 +361,19 @@ public class FabricXplatImpl implements IXplatAbstractions {
             return container.get().getMetadata().getName();
         }
         return namespace;
+    }
+
+    private static Registry<IotaType<?>> IOTA_TYPE_REGISTRY = null;
+
+    @Override
+    public Registry<IotaType<?>> getIotaTypeRegistry() {
+        if (IOTA_TYPE_REGISTRY == null) {
+            IOTA_TYPE_REGISTRY = FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
+                    HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
+                    Lifecycle.stable(), null))
+                .buildAndRegister();
+        }
+        return IOTA_TYPE_REGISTRY;
     }
 
     private static PehkuiInterop.ApiAbstraction PEHKUI_API = null;

@@ -9,9 +9,11 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.datum.IotaType;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -142,6 +144,8 @@ public interface IXplatAbstractions {
     LootItemCondition.Builder isShearsCondition();
 
     String getModName(String namespace);
+
+    Registry<IotaType<?>> getIotaTypeRegistry();
 
     // interop
 

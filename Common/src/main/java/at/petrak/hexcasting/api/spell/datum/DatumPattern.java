@@ -4,13 +4,13 @@ import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.nbt.Tag;
 import org.jetbrains.annotations.NotNull;
 
-public class DatumPattern extends SpellDatum {
+public class DatumPattern extends Iota {
     public DatumPattern(@NotNull HexPattern pattern) {
         super(pattern);
     }
 
     public HexPattern getPattern() {
-        return (HexPattern) this.datum;
+        return (HexPattern) this.payload;
     }
 
     @Override

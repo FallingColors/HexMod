@@ -12,11 +12,14 @@ import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.datum.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
+import at.petrak.hexcasting.forge.mixin.ForgeAccessorRegistry;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
@@ -67,8 +70,8 @@ import net.minecraftforge.common.loot.CanToolPerformAction;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
@@ -80,6 +83,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
@@ -400,6 +405,18 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             return container.get().getModInfo().getDisplayName();
         }
         return namespace;
+    }
+
+    private static Registry<IotaType<?>> IOTA_TYPE_REGISTRY = null;
+
+    @Override
+    public Registry<IotaType<?>> getIotaTypeRegistry() {
+        if (IOTA_TYPE_REGISTRY == null) {
+            IOTA_TYPE_REGISTRY = ForgeAccessorRegistry.hex$registerDefaulted(
+                ResourceKey.createRegistryKey(modLoc("iota_type")),
+                HexAPI.MOD_ID + ":null", registry -> HexIotaTypes.NULL);
+        }
+        return IOTA_TYPE_REGISTRY;
     }
 
     // it's literally the EXACT SAME on fabric aaa

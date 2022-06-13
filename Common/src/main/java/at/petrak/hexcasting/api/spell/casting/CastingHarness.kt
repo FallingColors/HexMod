@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.datum.SpellDatum
+import at.petrak.hexcasting.api.spell.datum.Iota
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
@@ -238,7 +238,7 @@ class CastingHarness private constructor(
         }
     }
 
-    fun generateDescs() = stack.map(SpellDatum::display)
+    fun generateDescs() = stack.map(Iota::display)
 
     /**
      * Return the functional update represented by the current state (for use with `copy`)

@@ -15,13 +15,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SpellDatums {
-    private static final Map<ResourceLocation, SpellDatum.Type<?>> controllers = new ConcurrentHashMap<>();
+    private static final Map<ResourceLocation, IotaType<?>> controllers = new ConcurrentHashMap<>();
 
     public static final String
         TAG_TYPE = HexAPI.MOD_ID + ":type",
         TAG_DATA = HexAPI.MOD_ID + ":data";
 
-    public static SpellDatum deserializeFromRootTag(CompoundTag tag,
+    public static Iota deserializeFromRootTag(CompoundTag tag,
         ServerLevel world) throws IllegalArgumentException {
         if (tag.contains(TAG_TYPE, Tag.TAG_STRING) && tag.contains(TAG_DATA)) {
             var typeKey = new ResourceLocation(tag.getString(TAG_TYPE));
@@ -47,11 +47,11 @@ public class SpellDatums {
         throw new IllegalArgumentException("could not deserialize this tag: " + tag);
     }
 
-    public static boolean equalsWithTolerance(SpellDatum a, SpellDatum b) {
-        return a == b || a.equalsOther(b) || b.equalsOther(a);
+    public static boolean equalsWithTolerance(Iota a, Iota b) {
+        return a == b || a.toleratesOther(b) || b.toleratesOther(a);
     }
 
-    private static SpellDatum legacyDeserialize(String key, Tag inner,
+    private static Iota legacyDeserialize(String key, Tag inner,
         ServerLevel world) throws IllegalArgumentException {
         return switch (key) {
             case "entity" -> {
@@ -66,7 +66,7 @@ public class SpellDatums {
             case "vec3" -> new DatumVec3(HexUtils.vecFromNBT(((LongArrayTag) inner).getAsLongArray()));
             case "list" -> {
                 var listTag = (ListTag) inner;
-                var out = new ArrayList<SpellDatum>();
+                var out = new ArrayList<Iota>();
                 for (var subtag : listTag) {
                     var subdatum = deserializeFromRootTag((CompoundTag) subtag, world);
                     out.add(subdatum);

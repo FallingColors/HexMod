@@ -7,13 +7,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Note this is different than the widget itself; this is a widget wrapper.
  */
-public class DatumWidget extends SpellDatum {
+public class DatumWidget extends Iota {
     public DatumWidget(@NotNull Widget widget) {
         super(widget);
     }
 
     public Widget getWidget() {
-        return (Widget) this.datum;
+        return (Widget) this.payload;
     }
 
     @Override

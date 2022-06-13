@@ -88,7 +88,11 @@ object FabricHexInitializer : ModInitializer {
         HexBlocks.registerBlockItems(bind(Registry.ITEM))
         HexBlockEntities.registerTiles(bind(Registry.BLOCK_ENTITY_TYPE))
         HexItems.registerItems(bind(Registry.ITEM))
-        Registry.register(IngredientDeserializer.REGISTRY, modLoc("unsealed"), FabricUnsealedIngredient.Deserializer.INSTANCE)
+        Registry.register(
+            IngredientDeserializer.REGISTRY,
+            modLoc("unsealed"),
+            FabricUnsealedIngredient.Deserializer.INSTANCE
+        )
 
         HexEntities.registerEntities(bind(Registry.ENTITY_TYPE))
 
@@ -96,6 +100,9 @@ object FabricHexInitializer : ModInitializer {
         HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
 
         HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
+
+        HexIotaTypes.registerTypes()
+
 
         // Done with soft implements in forge
         val flameOn = FlammableBlockRegistry.getDefaultInstance()
