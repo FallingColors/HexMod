@@ -143,7 +143,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         fun fromNBT(nbt: CompoundTag, world: ServerLevel): SpellDatum<*> {
             val keys = nbt.allKeys
             if (keys.size != 1)
-                throw IllegalArgumentException("Expected exactly one kv pair: $nbt")
+                return SpellDatum(Widget.GARBAGE) // Invalid iota format
 
             return when (val key = keys.iterator().next()) {
                 TAG_ENTITY -> {
@@ -164,7 +164,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 TAG_PATTERN -> {
                     SpellDatum(HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN)))
                 }
-                else -> throw IllegalArgumentException("Unknown key $key: $nbt")
+                else -> SpellDatum(Widget.GARBAGE) // Invalid iota type
             }
         }
 
@@ -181,62 +181,66 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
         @JvmStatic
         fun displayFromNBT(nbt: CompoundTag): Component {
             val keys = nbt.allKeys
-            if (keys.size != 1)
-                throw IllegalArgumentException("Expected exactly one kv pair: $nbt")
-
             val out = "".asTextComponent
-            when (val key = keys.iterator().next()) {
-                TAG_DOUBLE -> out += String.format(
-                    "%.4f",
-                    nbt.getDouble(TAG_DOUBLE)
-                ).green
-                TAG_VEC3 -> {
-                    val vec = vecFromNBT(nbt.getLongArray(key))
-                    // the focus color is really more red, but we don't want to show an error-y color
-                    out += String.format(
-                        "(%.2f, %.2f, %.2f)",
-                        vec.x,
-                        vec.y,
-                        vec.z
-                    ).lightPurple
-                }
-                TAG_LIST -> {
-                    out += "[".white
 
-                    val arr = nbt.getList(key, Tag.TAG_COMPOUND)
-                    for ((i, subtag) in arr.withIndex()) {
-                        out += displayFromNBT(subtag.asCompound)
-                        if (i != arr.lastIndex) {
-                            out += ", ".white
-                        }
+            if (keys.size != 1)
+                out += "hexcasting.spelldata.unknown".asTranslatedComponent.white
+            else {
+                when (val key = keys.iterator().next()) {
+                    TAG_DOUBLE -> out += String.format(
+                        "%.4f",
+                        nbt.getDouble(TAG_DOUBLE)
+                    ).green
+                    TAG_VEC3 -> {
+                        val vec = vecFromNBT(nbt.getLongArray(key))
+                        // the focus color is really more red, but we don't want to show an error-y color
+                        out += String.format(
+                            "(%.2f, %.2f, %.2f)",
+                            vec.x,
+                            vec.y,
+                            vec.z
+                        ).lightPurple
                     }
+                    TAG_LIST -> {
+                        out += "[".white
 
-                    out += "]".white
-                }
-                TAG_WIDGET -> {
-                    val widget = Widget.fromString(nbt.getString(key))
+                        val arr = nbt.getList(key, Tag.TAG_COMPOUND)
+                        for ((i, subtag) in arr.withIndex()) {
+                            out += displayFromNBT(subtag.asCompound)
+                            if (i != arr.lastIndex) {
+                                out += ", ".white
+                            }
+                        }
 
-                    out += if (widget == Widget.GARBAGE)
-                        "arimfexendrapuse".darkGray.obfuscated
-                    else
-                        widget.toString().darkPurple
+                        out += "]".white
+                    }
+                    TAG_WIDGET -> {
+                        val widget = Widget.fromString(nbt.getString(key))
+
+                        out += if (widget == Widget.GARBAGE)
+                            "arimfexendrapuse".darkGray.obfuscated
+                        else
+                            widget.toString().darkPurple
+                    }
+                    TAG_PATTERN -> {
+                        val pat = HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN))
+                        var angleDesc = pat.anglesSignature()
+                        if (angleDesc.isNotBlank()) angleDesc = " $angleDesc";
+                        out += "HexPattern(".gold
+                        out += "${pat.startDir}$angleDesc".white
+                        out += ")".gold
+                    }
+                    TAG_ENTITY -> {
+                        val subtag = nbt.getCompound(TAG_ENTITY)
+                        val json = subtag.getString(TAG_ENTITY_NAME_CHEATY)
+                        // handle pre-0.5.0 foci not having the tag
+                        out += Component.Serializer.fromJson(json)?.aqua
+                            ?: "hexcasting.spelldata.entity.whoknows".asTranslatedComponent.white
+                    }
+                    else -> {
+                        out += "hexcasting.spelldata.unknown".asTranslatedComponent.white
+                    }
                 }
-                TAG_PATTERN -> {
-                    val pat = HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN))
-                    var angleDesc = pat.anglesSignature()
-                    if (angleDesc.isNotBlank()) angleDesc = " $angleDesc";
-                    out += "HexPattern(".gold
-                    out += "${pat.startDir}$angleDesc".white
-                    out += ")".gold
-                }
-                TAG_ENTITY -> {
-                    val subtag = nbt.getCompound(TAG_ENTITY)
-                    val json = subtag.getString(TAG_ENTITY_NAME_CHEATY)
-                    // handle pre-0.5.0 foci not having the tag
-                    out += Component.Serializer.fromJson(json)?.aqua
-                        ?: "hexcasting.spelldata.entity.whoknows".asTranslatedComponent.white
-                }
-                else -> throw IllegalArgumentException("Unknown key $key: $nbt")
             }
             return out
         }

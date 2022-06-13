@@ -135,6 +135,7 @@
   "hexcasting.tooltip.brainsweep.product": "Mindless Body",
   "hexcasting.spelldata.onitem": "Contains: %s",
   "hexcasting.spelldata.anything": "Anything",
+  "hexcasting.spelldata.unknown": "Unknown data (this is a bug)",
   "hexcasting.spelldata.entity.whoknows": "An Entity (this should only show up if this was stored before the 0.5.0 update, use Scribe's Reflection, Scribe's Gambit to fix)",
   "hexcasting.spelldata.akashic.nopos": "The owning record does not know of any iota here (this is a bug)",
 
