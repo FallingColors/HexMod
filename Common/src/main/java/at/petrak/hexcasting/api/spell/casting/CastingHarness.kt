@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.NullIota
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
@@ -28,10 +29,10 @@ import kotlin.math.min
  * It's stored as NBT on the wand.
  */
 class CastingHarness private constructor(
-    var stack: MutableList<LegacySpellDatum<*>>,
-    var localIota: LegacySpellDatum<*>,
+    var stack: MutableList<Iota>,
+    var ravenmind: Iota,
     var parenCount: Int,
-    var parenthesized: List<LegacySpellDatum<*>>,
+    var parenthesized: List<Iota>,
     var escapeNext: Boolean,
     val ctx: CastingContext,
     val prepackagedColorizer: FrozenColorizer? // for trinkets with colorizers
@@ -41,17 +42,17 @@ class CastingHarness private constructor(
     constructor(
         ctx: CastingContext,
         prepackagedColorizer: FrozenColorizer? = null
-    ) : this(mutableListOf(), LegacySpellDatum.make(Widget.NULL), 0, mutableListOf(), false, ctx, prepackagedColorizer)
+    ) : this(mutableListOf(), NullIota(), 0, mutableListOf(), false, ctx, prepackagedColorizer)
 
     /**
      * Execute a single iota.
      */
-    fun executeIota(iota: LegacySpellDatum<*>, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
+    fun executeIota(iota: Iota, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
 
     /**
      * Given a list of iotas, execute them in sequence.
      */
-    fun executeIotas(iotas: List<LegacySpellDatum<*>>, world: ServerLevel): ControllerInfo {
+    fun executeIotas(iotas: List<Iota>, world: ServerLevel): ControllerInfo {
         // Initialize the continuation stack to a single top-level eval for all iotas.
         var continuation = SpellContinuation.Done.pushFrame(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
         // Begin aggregating info
@@ -80,7 +81,7 @@ class CastingHarness private constructor(
         )
     }
 
-    fun getUpdate(iota: LegacySpellDatum<*>, world: ServerLevel, continuation: SpellContinuation): CastResult {
+    fun getUpdate(iota: Iota, world: ServerLevel, continuation: SpellContinuation): CastResult {
         try {
             this.handleParentheses(iota)?.let { (data, resolutionType) ->
                 return@getUpdate CastResult(continuation, data, resolutionType, listOf())
@@ -151,19 +152,19 @@ class CastingHarness private constructor(
             val unenlightened = pattern.isGreat && !ctx.isCasterEnlightened
 
             val sideEffects = mutableListOf<OperatorSideEffect>()
-            var stack2: List<LegacySpellDatum<*>>? = null
+            var stack2: List<Iota>? = null
             var cont2 = continuation
 
             if (!unenlightened || pattern.alwaysProcessGreatSpell) {
                 val result = pattern.operate(
                     continuation,
                     this.stack.toMutableList(),
-                    this.localIota,
+                    this.ravenmind,
                     this.ctx
                 )
                 cont2 = result.newContinuation
                 stack2 = result.newStack
-                this.localIota = result.newLocalIota
+                this.ravenmind = result.newLocalIota
                 sideEffects.addAll(result.sideEffects)
             }
 
@@ -265,7 +266,7 @@ class CastingHarness private constructor(
      * Return a non-null value if we handled this in some sort of parenthesey way,
      * either escaping it onto the stack or changing the parenthese-handling state.
      */
-    private fun handleParentheses(iota: LegacySpellDatum<*>): Pair<FunctionalData, ResolvedPatternType>? {
+    private fun handleParentheses(iota: Iota): Pair<FunctionalData, ResolvedPatternType>? {
         val operator = (iota.payload as? HexPattern)?.let {
             try {
                 PatternRegistry.matchPattern(it, this.ctx.world)
@@ -436,7 +437,7 @@ class CastingHarness private constructor(
     fun serializeToNBT() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()
 
-        TAG_LOCAL %= localIota.serializeToNBT()
+        TAG_LOCAL %= ravenmind.serializeToNBT()
         TAG_PAREN_COUNT %= parenCount
         TAG_ESCAPE_NEXT %= escapeNext
 
@@ -458,7 +459,7 @@ class CastingHarness private constructor(
         @JvmStatic
         fun fromNBT(nbt: CompoundTag, ctx: CastingContext): CastingHarness {
             return try {
-                val stack = mutableListOf<LegacySpellDatum<*>>()
+                val stack = mutableListOf<Iota>()
                 val stackTag = nbt.getList(TAG_STACK, Tag.TAG_COMPOUND)
                 for (subtag in stackTag) {
                     val datum = LegacySpellDatum.fromNBT(subtag.asCompound, ctx.world)
@@ -471,7 +472,7 @@ class CastingHarness private constructor(
                         Widget.NULL
                     )
 
-                val parenthesized = mutableListOf<LegacySpellDatum<*>>()
+                val parenthesized = mutableListOf<Iota>()
                 val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND)
                 for (subtag in parenTag) {
                     if (subtag.asCompound.size() != 1)
