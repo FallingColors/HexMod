@@ -25,12 +25,13 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
         tag(xtags.gems()).add(HexItems.CHARGED_AMETHYST);
         tag(xtags.amethystDust()).add(HexItems.AMETHYST_DUST);
 
+        tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(HexItems.JEWELER_HAMMER);
+
         tag(HexItemTags.WANDS).add(HexItems.WAND_AKASHIC,
                 HexItems.WAND_OAK, HexItems.WAND_SPRUCE, HexItems.WAND_BIRCH,
                 HexItems.WAND_JUNGLE, HexItems.WAND_ACACIA, HexItems.WAND_DARK_OAK,
                 HexItems.WAND_CRIMSON, HexItems.WAND_WARPED);
         tag(HexItemTags.PHIAL_BASE).add(Items.GLASS_BOTTLE);
-        tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(HexItems.JEWELER_HAMMER);
 
         this.copy(HexBlockTags.AKASHIC_LOGS, HexItemTags.AKASHIC_LOGS);
         this.copy(HexBlockTags.AKASHIC_PLANKS, HexItemTags.AKASHIC_PLANKS);
