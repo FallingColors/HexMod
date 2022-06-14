@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemAbacus;
 import at.petrak.hexcasting.common.items.ItemSpellbook;

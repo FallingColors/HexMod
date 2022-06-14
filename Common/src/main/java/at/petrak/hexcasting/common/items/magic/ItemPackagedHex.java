@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
@@ -58,14 +58,14 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public @Nullable List<LegacySpellDatum<?>> getHex(ItemStack stack, ServerLevel level) {
+    public @Nullable List<Iota> getHex(ItemStack stack, ServerLevel level) {
         var patsTag = NBTHelper.getList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
 
         if (patsTag == null) {
             return null;
         }
 
-        var out = new ArrayList<LegacySpellDatum<?>>();
+        var out = new ArrayList<Iota>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
             if (tag.size() != 1) {
@@ -78,9 +78,9 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<LegacySpellDatum<?>> patterns, int mana) {
+    public void writeHex(ItemStack stack, List<Iota> patterns, int mana) {
         ListTag patsTag = new ListTag();
-        for (LegacySpellDatum<?> pat : patterns) {
+        for (Iota pat : patterns) {
             patsTag.add(pat.serializeToNBT());
         }
 
@@ -107,7 +107,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
             return InteractionResultHolder.success(stack);
         }
 
-        List<LegacySpellDatum<?>> instrs = getHex(stack, (ServerLevel) world);
+        List<Iota> instrs = getHex(stack, (ServerLevel) world);
         if (instrs == null) {
             return InteractionResultHolder.fail(stack);
         }

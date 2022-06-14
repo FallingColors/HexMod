@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexSounds;

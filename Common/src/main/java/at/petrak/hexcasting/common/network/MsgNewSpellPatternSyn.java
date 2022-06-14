@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.api.mod.HexStatistics;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType;

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
@@ -32,12 +32,12 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, LegacySpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, Iota datum) {
         return false;
     }
 
     @Override
-    public void writeDatum(ItemStack stack, LegacySpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, Iota datum) {
         // nope
     }
 

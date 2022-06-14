@@ -2,7 +2,7 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -40,12 +40,12 @@ public abstract class CCHexHolder extends ItemComponent implements ADHexHolder {
         }
 
         @Override
-        public @Nullable List<LegacySpellDatum<?>> getHex(ServerLevel level) {
+        public @Nullable List<Iota> getHex(ServerLevel level) {
             return this.hexHolder.getHex(this.stack, level);
         }
 
         @Override
-        public void writeHex(List<LegacySpellDatum<?>> patterns, int mana) {
+        public void writeHex(List<Iota> patterns, int mana) {
             this.hexHolder.writeHex(this.stack, patterns, mana);
         }
 

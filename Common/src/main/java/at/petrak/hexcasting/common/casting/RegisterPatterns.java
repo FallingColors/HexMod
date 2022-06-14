@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.Operator;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.Widget;
 import at.petrak.hexcasting.api.spell.math.HexAngle;
 import at.petrak.hexcasting.api.spell.math.HexDir;

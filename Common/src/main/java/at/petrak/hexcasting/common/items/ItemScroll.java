@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.api.spell.LegacySpellDatum;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
@@ -60,12 +60,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, LegacySpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, Iota datum) {
         return datum != null && datum.getType() == DatumType.PATTERN && !NBTHelper.hasCompound(stack, TAG_PATTERN);
     }
 
     @Override
-    public void writeDatum(ItemStack stack, LegacySpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, Iota datum) {
         if (this.canWrite(stack, datum) && datum.getPayload() instanceof HexPattern pat) {
             NBTHelper.putCompound(stack, TAG_PATTERN, pat.serializeToNBT());
         }
