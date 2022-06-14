@@ -8,8 +8,12 @@ import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.SpellList
+import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.ListIota
 import at.petrak.hexcasting.api.spell.iota.NullIota
 import at.petrak.hexcasting.api.spell.iota.PatternIota
 import at.petrak.hexcasting.api.spell.math.HexDir
@@ -17,6 +21,7 @@ import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker
+import at.petrak.hexcasting.common.lib.HexIotaTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -240,7 +245,7 @@ class CastingHarness private constructor(
         }
     }
 
-    fun generateDescs() = stack.map { it.type.display(it) }
+    fun generateDescs() = stack.map(Iota::display)
 
     /**
      * Return the functional update represented by the current state (for use with `copy`)
@@ -300,7 +305,7 @@ class CastingHarness private constructor(
                 val newParenCount = this.parenCount - 1
                 if (newParenCount == 0) {
                     val newStack = this.stack.toMutableList()
-                    newStack.add(LegacySpellDatum.make(this.parenthesized.toList()))
+                    newStack.add(ListIota(this.parenthesized.toList()))
                     this.getFunctionalData().copy(
                         stack = newStack,
                         parenCount = newParenCount,
@@ -438,7 +443,7 @@ class CastingHarness private constructor(
     fun serializeToNBT() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()
 
-        TAG_LOCAL %= ravenmind.serializeToNBT()
+        TAG_LOCAL %= HexIotaTypes.serialize(ravenmind)
         TAG_PAREN_COUNT %= parenCount
         TAG_ESCAPE_NEXT %= escapeNext
 
@@ -463,23 +468,16 @@ class CastingHarness private constructor(
                 val stack = mutableListOf<Iota>()
                 val stackTag = nbt.getList(TAG_STACK, Tag.TAG_COMPOUND)
                 for (subtag in stackTag) {
-                    val datum = LegacySpellDatum.fromNBT(subtag.asCompound, ctx.world)
+                    val datum = HexIotaTypes.deserialize(subtag.asCompound, ctx.world)
                     stack.add(datum)
                 }
 
-                val localTag = nbt.getCompound(TAG_LOCAL)
-                val localIota =
-                    if (localTag.size() == 1) LegacySpellDatum.fromNBT(localTag, ctx.world) else LegacySpellDatum.make(
-                        Widget.NULL
-                    )
+                val localIota = HexIotaTypes.deserialize(nbt.getCompound(TAG_LOCAL), ctx.world)
 
                 val parenthesized = mutableListOf<Iota>()
                 val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND)
                 for (subtag in parenTag) {
-                    if (subtag.asCompound.size() != 1)
-                        parenthesized.add(LegacySpellDatum.make(HexPattern.fromNBT(subtag.asCompound)))
-                    else
-                        parenthesized.add(LegacySpellDatum.fromNBT(subtag.asCompound, ctx.world))
+                    parenthesized.add(HexIotaTypes.deserialize(nbt.getCompound(TAG_LOCAL), ctx.world))
                 }
 
                 val parenCount = nbt.getInt(TAG_PAREN_COUNT)

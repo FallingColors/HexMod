@@ -14,10 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -112,7 +109,6 @@ public class HexIotaTypes {
      * }
      * </code>
      */
-    @Nullable
     public static Iota deserialize(CompoundTag tag, ServerLevel world) {
         var type = getTypeFromTag(tag);
         if (type == null) {
@@ -122,10 +118,16 @@ public class HexIotaTypes {
         if (dataKey == null) {
             return null;
         }
-        return type.deserialize(tag, world);
+        Iota deserialized;
+        try {
+            deserialized = Objects.requireNonNullElse(type.deserialize(tag, world), NullIota.INSTANCE);
+        } catch (IllegalArgumentException exn) {
+            HexAPI.LOGGER.warn("Caught an exception deserializing an iota", exn);
+            deserialized = GarbageIota.INSTANCE;
+        }
+        return deserialized;
     }
 
-    @Nullable
     public static Component getDisplay(CompoundTag tag) {
         var type = getTypeFromTag(tag);
         if (type == null) {

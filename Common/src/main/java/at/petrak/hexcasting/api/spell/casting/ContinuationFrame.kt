@@ -127,7 +127,7 @@ sealed interface ContinuationFrame {
         override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
             val newStack = baseStack?.toMutableList() ?: mutableListOf()
             acc.addAll(stack)
-            newStack.add(ListIota(SpellList.LList(acc)))
+            newStack.add(ListIota(acc))
             return true to newStack
         }
 
@@ -157,7 +157,7 @@ sealed interface ContinuationFrame {
                     .pushFrame(Evaluate(code))
             } else {
                 // Else, dump our final list onto the stack.
-                ListIota(SpellList.LList(acc)) to continuation
+                ListIota(acc) to continuation
             }
             val tStack = stack.toMutableList()
             tStack.add(stackTop)

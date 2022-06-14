@@ -25,7 +25,7 @@ class OpPotionEffect(
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<LivingEntity>(0, argc)
         if (target is ArmorStand)
-            throw MishapInvalidIota.ofClass(LegacySpellDatum.make(target), 0, LivingEntity::class.java)
+            throw MishapInvalidIota.ofType(LegacySpellDatum.make(target), 0, LivingEntity::class.java)
         val duration = max(args.getChecked(1, argc), 0.0)
         ctx.assertEntityInRange(target)
         val potency = if (this.allowPotency)

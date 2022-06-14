@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityIota extends Iota {
-    protected EntityIota(@NotNull Entity e) {
+    public EntityIota(@NotNull Entity e) {
         super(HexIotaTypes.ENTITY, e);
     }
 
@@ -34,6 +34,11 @@ public class EntityIota extends Iota {
         out.putUUID("uuid", this.getEntity().getUUID());
         out.putString("name", Component.Serializer.toJson(this.getEntity().getName()));
         return out;
+    }
+
+    @Override
+    public Component display() {
+        return this.getEntity().getName();
     }
 
     public static IotaType<EntityIota> TYPE = new IotaType<>() {
@@ -63,11 +68,6 @@ public class EntityIota extends Iota {
             }
             var nameJson = ctag.getString("name");
             return Component.Serializer.fromJsonLenient(nameJson);
-        }
-
-        @Override
-        public Component display(EntityIota iota) {
-            return iota.getEntity().getName();
         }
 
         @Override

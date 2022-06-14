@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is a <i>wrapper</i> for {@link SpellList}.
@@ -19,6 +20,10 @@ import java.util.ArrayList;
 public class ListIota extends Iota {
     public ListIota(@NotNull SpellList list) {
         super(HexIotaTypes.LIST, list);
+    }
+
+    public ListIota(@NotNull List<Iota> list) {
+        this(new SpellList.LList(list));
     }
 
     public SpellList getList() {
@@ -78,7 +83,7 @@ public class ListIota extends Iota {
                 out.add(subiota);
             }
 
-            return new ListIota(new SpellList.LList(out));
+            return new ListIota(out);
         }
 
         @Override

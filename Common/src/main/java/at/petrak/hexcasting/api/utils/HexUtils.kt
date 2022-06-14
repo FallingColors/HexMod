@@ -2,7 +2,6 @@
 
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.ListIota
 import at.petrak.hexcasting.api.spell.math.HexCoord
@@ -237,7 +236,7 @@ fun Iterable<Iota>.serializeToNBT() =
     if (HexIotaTypes.isTooLargeToSerialize(this))
         ListTag()
     else
-        ListIota(SpellList.LList(this.toList())).serialize()
+        ListIota(this.toList()).serialize()
 
 // Copy the impl from forge
 fun ItemStack.serializeToNBT(): CompoundTag {

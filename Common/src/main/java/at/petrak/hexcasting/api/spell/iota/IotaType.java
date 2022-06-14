@@ -26,10 +26,6 @@ public abstract class IotaType<T extends Iota> {
      */
     public abstract Component display(Tag tag);
 
-    public Component display(T iota) {
-        return this.display(iota.serialize());
-    }
-
     /**
      * Get the color associated with this datum type.
      */

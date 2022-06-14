@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class GarbageIota extends Iota {
     private static final Object NULL_SUBSTITUTE = new Object();
 
+    public static final GarbageIota INSTANCE = new GarbageIota();
 
     public GarbageIota() {
         // We have to pass *something* here, but there's nothing that actually needs to go there,

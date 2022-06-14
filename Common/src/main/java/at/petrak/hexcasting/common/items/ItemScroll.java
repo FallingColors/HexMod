@@ -1,12 +1,13 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.spell.iota.PatternIota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -54,14 +55,16 @@ public class ItemScroll extends Item implements IotaHolderItem {
         if (pattern == null) {
             return null;
         }
+        // We store only the data part of the iota; pretend the rest of it's there
         var out = new CompoundTag();
-        out.put(LegacySpellDatum.TAG_PATTERN, pattern);
+        out.putString(HexIotaTypes.KEY_TYPE, "hexcasting:pattern");
+        out.put(HexIotaTypes.KEY_DATA, pattern);
         return out;
     }
 
     @Override
     public boolean canWrite(ItemStack stack, Iota datum) {
-        return datum != null && datum.getType() == DatumType.PATTERN && !NBTHelper.hasCompound(stack, TAG_PATTERN);
+        return datum instanceof PatternIota && !NBTHelper.hasCompound(stack, TAG_PATTERN);
     }
 
     @Override

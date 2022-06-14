@@ -2,13 +2,14 @@ package at.petrak.hexcasting.api.spell.iota;
 
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Iota {
     @NotNull
     protected final Object payload;
     @NotNull
-    private final IotaType<?> type;
+    protected final IotaType<?> type;
 
     protected Iota(@NotNull IotaType<?> type, @NotNull Object payload) {
         this.type = type;
@@ -36,6 +37,10 @@ public abstract class Iota {
      * You probably don't want to call this directly; use {@link HexIotaTypes#serialize}.
      */
     abstract public @NotNull Tag serialize();
+
+    public Component display() {
+        return this.type.display(this.serialize());
+    }
 
     /**
      * Helper method to see if two iotas have the same type.

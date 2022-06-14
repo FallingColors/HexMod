@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 public class NullIota extends Iota {
     private static final Object NULL_SUBSTITUTE = new Object();
 
+    public static final NullIota INSTANCE = new NullIota();
+
     public NullIota() {
         // We have to pass *something* here, but there's nothing that actually needs to go there,
         // so we just do this i guess
