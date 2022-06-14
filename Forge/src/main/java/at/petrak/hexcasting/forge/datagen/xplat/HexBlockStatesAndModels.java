@@ -126,7 +126,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         var akashicRecordModel = models().getExistingFile(modLoc("block/akashic_record"));
         simpleBlock(HexBlocks.AKASHIC_RECORD, akashicRecordModel);
         simpleBlockItem(HexBlocks.AKASHIC_RECORD, akashicRecordModel);
-        blockAndItem(HexBlocks.AKASHIC_CONNECTOR,
+        blockAndItem(HexBlocks.AKASHIC_LIGATURE,
             models().cubeAll("akashic_connector", modLoc("block/akashic/connector")));
 
         getVariantBuilder(HexBlocks.AKASHIC_BOOKSHELF).forAllStates(bs -> {

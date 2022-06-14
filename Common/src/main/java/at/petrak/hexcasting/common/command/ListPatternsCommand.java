@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.command;
 
 import at.petrak.hexcasting.api.PatternRegistry;
-import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.spell.iota.PatternIota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -30,10 +30,10 @@ public class ListPatternsCommand {
 
                 ctx.getSource().sendSuccess(new TranslatableComponent("command.hexcasting.pats.listing"), false);
                 for (var pair : listing) {
+                    HexPattern hexPattern = HexPattern.fromAngles(pair.getKey(), pair.getValue().getSecond());
                     ctx.getSource().sendSuccess(new TextComponent(pair.getValue().getFirst().toString())
                         .append(": ")
-                        .append(LegacySpellDatum.make(HexPattern.fromAngles(pair.getKey(), pair.getValue().getSecond()))
-                            .display()), false);
+                        .append(PatternIota.display(hexPattern)), false);
                 }
 
 

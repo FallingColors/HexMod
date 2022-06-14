@@ -69,8 +69,8 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public void writeDatum(ItemStack stack, Iota datum) {
-        if (this.canWrite(stack, datum) && datum.getPayload() instanceof HexPattern pat) {
-            NBTHelper.putCompound(stack, TAG_PATTERN, pat.serializeToNBT());
+        if (this.canWrite(stack, datum) && datum instanceof PatternIota pat) {
+            NBTHelper.putCompound(stack, TAG_PATTERN, pat.getPattern().serializeToNBT());
         }
     }
 

@@ -3,12 +3,13 @@ package at.petrak.hexcasting.common.items;
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.spell.iota.PatternIota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -77,13 +78,14 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
             return null;
         }
         var out = new CompoundTag();
-        out.put(LegacySpellDatum.TAG_PATTERN, patTag);
+        out.putString(HexIotaTypes.KEY_TYPE, "hexcasting:pattern");
+        out.put(HexIotaTypes.KEY_DATA, patTag);
         return out;
     }
 
     @Override
     public boolean canWrite(ItemStack stack, Iota datum) {
-        return datum == null || datum.getType() == DatumType.PATTERN;
+        return datum instanceof PatternIota && !NBTHelper.hasCompound(stack, BlockEntitySlate.TAG_PATTERN);
     }
 
     @Override
@@ -95,9 +97,9 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
                 if (beTag.isEmpty()) {
                     NBTHelper.remove(stack, "BlockEntityTag");
                 }
-            } else if (datum.getPayload() instanceof HexPattern pat) {
+            } else if (datum instanceof PatternIota pat) {
                 var beTag = NBTHelper.getOrCreateCompound(stack, "BlockEntityTag");
-                beTag.put(BlockEntitySlate.TAG_PATTERN, pat.serializeToNBT());
+                beTag.put(BlockEntitySlate.TAG_PATTERN, pat.getPattern().serializeToNBT());
             }
         }
     }

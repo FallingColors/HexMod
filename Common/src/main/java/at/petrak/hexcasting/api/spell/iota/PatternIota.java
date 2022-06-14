@@ -6,6 +6,8 @@ import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,23 +33,43 @@ public class PatternIota extends Iota {
         return this.getPattern().serializeToNBT();
     }
 
+
     public static IotaType<PatternIota> TYPE = new IotaType<>() {
         @Nullable
         @Override
         public PatternIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            var patTag = HexUtils.downcast(tag, CompoundTag.TYPE);
-            HexPattern pat = HexPattern.fromNBT(patTag);
-            return new PatternIota(pat);
+            return PatternIota.deserialize(tag);
         }
 
         @Override
         public Component display(Tag tag) {
-            return null;
+            return PatternIota.display(PatternIota.deserialize(tag).getPattern());
         }
 
         @Override
         public int color() {
-            return 0;
+            return 0xff_ffaa00;
         }
     };
+
+    public static PatternIota deserialize(Tag tag) throws IllegalArgumentException {
+        var patTag = HexUtils.downcast(tag, CompoundTag.TYPE);
+        HexPattern pat = HexPattern.fromNBT(patTag);
+        return new PatternIota(pat);
+    }
+
+    public static Component display(HexPattern pat) {
+        var out = new TextComponent("HexPattern")
+            .withStyle(Style.EMPTY.withColor(HexIotaTypes.PATTERN.color()));
+        out.append("(");
+        out.append(pat.getStartDir().toString());
+
+        var sig = pat.anglesSignature();
+        if (!sig.isEmpty()) {
+            out.append(" ");
+            out.append(sig);
+        }
+        out.append(")");
+        return out;
+    }
 }

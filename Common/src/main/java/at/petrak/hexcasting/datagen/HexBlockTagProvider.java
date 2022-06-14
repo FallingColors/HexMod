@@ -28,7 +28,7 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
             .add(HexBlocks.AMETHYST_DUST_BLOCK);
 
         tag(BlockTags.MINEABLE_WITH_AXE)
-            .add(HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_CONNECTOR,
+            .add(HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_LIGATURE,
                 HexBlocks.AKASHIC_LOG, HexBlocks.AKASHIC_LOG_STRIPPED,
                 HexBlocks.AKASHIC_WOOD, HexBlocks.AKASHIC_WOOD_STRIPPED,
                 HexBlocks.AKASHIC_PLANKS, HexBlocks.AKASHIC_PANEL, HexBlocks.AKASHIC_TILE,

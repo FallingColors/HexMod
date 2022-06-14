@@ -315,7 +315,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("CCC")
             .pattern("LPL")
             .unlockedBy("enlightenment", enlightenment).save(recipes);
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_CONNECTOR)
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_LIGATURE)
             .define('L', HexItemTags.AKASHIC_LOGS)
             .define('P', HexItemTags.AKASHIC_PLANKS)
             .define('C', HexItems.CHARGED_AMETHYST)
@@ -352,7 +352,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/directrix_redstone"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.AKASHIC_CONNECTOR),
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.AKASHIC_LIGATURE),
             new VillagerIngredient(new ResourceLocation("librarian"), null, 5),
             HexBlocks.AKASHIC_RECORD.defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)

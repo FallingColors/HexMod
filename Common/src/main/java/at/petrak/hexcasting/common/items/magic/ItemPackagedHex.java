@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -33,7 +33,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * Item that holds a list of patterns in it ready to be cast
  */
 public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHolderItem {
-    public static final String TAG_PATTERNS = "patterns";
+    public static final String TAG_PROGRAM = "patterns";
     public static final ResourceLocation HAS_PATTERNS_PRED = modLoc("has_patterns");
 
     public ItemPackagedHex(Properties pProperties) {
@@ -54,12 +54,12 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     @Override
     public boolean hasHex(ItemStack stack) {
-        return NBTHelper.hasList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
+        return NBTHelper.hasList(stack, TAG_PROGRAM, Tag.TAG_COMPOUND);
     }
 
     @Override
     public @Nullable List<Iota> getHex(ItemStack stack, ServerLevel level) {
-        var patsTag = NBTHelper.getList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
+        var patsTag = NBTHelper.getList(stack, TAG_PROGRAM, Tag.TAG_COMPOUND);
 
         if (patsTag == null) {
             return null;
@@ -68,30 +68,26 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var out = new ArrayList<Iota>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
-            if (tag.size() != 1) {
-                out.add(LegacySpellDatum.make(HexPattern.fromNBT(tag)));
-            } else {
-                out.add(LegacySpellDatum.fromNBT(tag, level));
-            }
+            out.add(HexIotaTypes.deserialize(tag, level));
         }
         return out;
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<Iota> patterns, int mana) {
+    public void writeHex(ItemStack stack, List<Iota> program, int mana) {
         ListTag patsTag = new ListTag();
-        for (Iota pat : patterns) {
-            patsTag.add(pat.serializeToNBT());
+        for (Iota pat : program) {
+            patsTag.add(HexIotaTypes.serialize(pat));
         }
 
-        NBTHelper.putList(stack, TAG_PATTERNS, patsTag);
+        NBTHelper.putList(stack, TAG_PROGRAM, patsTag);
 
         withMana(stack, mana, mana);
     }
 
     @Override
     public void clearHex(ItemStack stack) {
-        NBTHelper.remove(stack, ItemPackagedHex.TAG_PATTERNS);
+        NBTHelper.remove(stack, ItemPackagedHex.TAG_PROGRAM);
         NBTHelper.remove(stack, TAG_MANA);
         NBTHelper.remove(stack, TAG_MAX_MANA);
     }

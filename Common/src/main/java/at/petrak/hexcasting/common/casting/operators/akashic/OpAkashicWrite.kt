@@ -7,8 +7,9 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapNoAkashicRecord
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
-import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
 import at.petrak.hexcasting.common.lib.HexSounds
+import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundSource
 
 object OpAkashicWrite : SpellAction {
@@ -28,8 +29,8 @@ object OpAkashicWrite : SpellAction {
 
         ctx.assertVecInRange(pos)
 
-        val tile = ctx.world.getBlockEntity(pos)
-        if (tile !is BlockEntityAkashicRecord) {
+        val record = ctx.world.getBlockState(pos).block
+        if (record !is BlockAkashicRecord) {
             throw MishapNoAkashicRecord(pos)
         }
 
@@ -38,19 +39,24 @@ object OpAkashicWrite : SpellAction {
             throw MishapOthersName(trueName)
 
         return Triple(
-            Spell(tile, key, datum),
+            Spell(record, pos, key, datum),
             ManaConstants.DUST_UNIT,
             listOf()
         )
     }
 
-    private data class Spell(val record: BlockEntityAkashicRecord, val key: HexPattern, val datum: Iota) :
+    private data class Spell(
+        val record: BlockAkashicRecord,
+        val recordPos: BlockPos,
+        val key: HexPattern,
+        val datum: Iota
+    ) :
         RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            record.addNewDatum(key, datum)
+            record.addNewDatum(recordPos, ctx.world, key, datum)
 
             ctx.world.playSound(
-                null, record.blockPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
+                null, recordPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
                 1f, 0.8f
             )
 

@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemAbacus;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
@@ -123,7 +123,7 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
         var datumTag = HexItems.ABACUS.readIotaTag(stack);
         if (datumTag != null) {
-            var popup = LegacySpellDatum.displayFromNBT(datumTag);
+            var popup = HexIotaTypes.getDisplay(datumTag);
             sender.displayClientMessage(
                 new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
         }
