@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
@@ -23,25 +24,23 @@ object OpDestroyWater : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Vec3>(0, argc)
+        val target = args.getBlockPos(0, argc)
         ctx.assertVecInRange(target)
 
         return Triple(
             Spell(target),
             2 * ManaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.burst(target, 3.0))
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(target), 3.0))
         )
     }
 
     const val MAX_DESTROY_COUNT = 1024
 
-    private data class Spell(val target: Vec3) : RenderedSpell {
-
+    private data class Spell(val basePos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             // SpongeBlock.java
             val todo = ArrayDeque<BlockPos>()
             val seen = HashSet<BlockPos>()
-            val basePos = BlockPos(target)
 
             // a little extra range on the initial cast to make it feel more intuitive
             for (xShift in -2..2) for (yShift in -2..2) for (zShift in -2..2) {
@@ -53,7 +52,10 @@ object OpDestroyWater : SpellAction {
                 val here = todo.removeFirst()
                 val distFromFocus =
                     ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
-                if (distFromFocus < Action.MAX_DISTANCE * Action.MAX_DISTANCE && seen.add(here) && ctx.world.mayInteract(ctx.caster, here)) {
+                if (distFromFocus < Action.MAX_DISTANCE * Action.MAX_DISTANCE
+                    && seen.add(here)
+                    && ctx.world.mayInteract(ctx.caster, here)
+                ) {
                     // never seen this pos in my life
                     val fluid = ctx.world.getFluidState(here)
                     if (fluid != Fluids.EMPTY.defaultFluidState()) {
@@ -104,9 +106,9 @@ object OpDestroyWater : SpellAction {
             if (successes > 0) {
                 ctx.world.playSound(
                     null,
-                    target.x,
-                    target.y,
-                    target.z,
+                    basePos.x.toDouble(),
+                    basePos.y.toDouble(),
+                    basePos.z.toDouble(),
                     SoundEvents.FIRE_EXTINGUISH,
                     SoundSource.BLOCKS,
                     1.0f,

@@ -9,7 +9,7 @@ object OpModifyInPlace : ConstManaAction {
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val list = args.getList(0, argc)
         val index = args.getPositiveIntUnder(1, list.size(), argc)
-        val iota = args.getIota(2)
+        val iota = args[2]
         return list.modifyAt(index) { SpellList.LPair(iota, it.cdr) }.asActionResult
     }
 }

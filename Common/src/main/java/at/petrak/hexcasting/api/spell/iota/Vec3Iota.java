@@ -5,6 +5,8 @@ import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +54,16 @@ public class Vec3Iota extends Iota {
 
         @Override
         public int color() {
-            return 0;
+            return 0xff_ff55ff;
         }
     };
+
+    public static Component display(double x, double y, double z) {
+        return new TextComponent(String.format("(%.2f, %.2f, %.2f)", x, y, z))
+            .withStyle(Style.EMPTY.withColor(HexIotaTypes.VEC3.color()));
+    }
+
+    public static Component display(Vec3 v) {
+        return display(v.x, v.y, v.z);
+    }
 }

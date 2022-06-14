@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.network.MsgBlinkAck
@@ -11,6 +12,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
+// TODO while we're making breaking changes I *really* want to have the vector in the entity's local space
+// WRT its look vector
 object OpTeleport : SpellAction {
     override val argc = 2
     override val isGreat = true
@@ -18,8 +21,8 @@ object OpTeleport : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val teleportee = args.getChecked<Entity>(0, argc)
-        val delta = args.getChecked<Vec3>(1, argc)
+        val teleportee = args.getEntity(0, argc)
+        val delta = args.getVec3(1, argc)
         ctx.assertEntityInRange(teleportee)
 
         if (!teleportee.canChangeDimensions())
@@ -44,6 +47,7 @@ object OpTeleport : SpellAction {
         override fun cast(ctx: CastingContext) {
             val distance = delta.length()
 
+            // TODO make this not a magic number (config?)
             if (distance < 32768.0) {
                 teleportee.setPos(teleportee.position().add(delta))
                 if (teleportee is ServerPlayer) {

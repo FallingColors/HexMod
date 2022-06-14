@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapAlreadyBrainswept
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadBrainsweep
 import at.petrak.hexcasting.common.misc.Brainsweeping
@@ -22,30 +23,32 @@ object OpBrainsweep : SpellAction {
 
     override val isGreat = true
 
+    // this way you can hear the villager dying more : )
+    override fun hasCastingSound(ctx: CastingContext) = false
+
     override fun execute(
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val sacrifice = args.getChecked<Villager>(0, argc)
-        val pos = args.getChecked<Vec3>(1, argc)
+        val sacrifice = args.getVillager(0, argc)
+        val pos = args.getBlockPos(1, argc)
         ctx.assertVecInRange(pos)
         ctx.assertEntityInRange(sacrifice)
 
         if (Brainsweeping.isBrainswept(sacrifice))
             throw MishapAlreadyBrainswept(sacrifice)
 
-        val bpos = BlockPos(pos)
-        val state = ctx.world.getBlockState(bpos)
+        val state = ctx.world.getBlockState(pos)
 
         val recman = ctx.world.recipeManager
         val recipes = recman.getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE)
         val recipe = recipes.find { it.matches(state, sacrifice) }
-            ?: throw MishapBadBrainsweep(sacrifice, bpos)
+            ?: throw MishapBadBrainsweep(sacrifice, pos)
 
         return Triple(
-            Spell(bpos, state, sacrifice, recipe),
+            Spell(pos, state, sacrifice, recipe),
             10 * ManaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.cloud(sacrifice.position(), 1.0), ParticleSpray.burst(Vec3.atCenterOf(bpos), 0.3, 100))
+            listOf(ParticleSpray.cloud(sacrifice.position(), 1.0), ParticleSpray.burst(Vec3.atCenterOf(pos), 0.3, 100))
         )
     }
 

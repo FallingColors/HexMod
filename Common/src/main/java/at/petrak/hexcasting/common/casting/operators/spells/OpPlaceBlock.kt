@@ -1,8 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadBlock
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
@@ -23,10 +27,8 @@ object OpPlaceBlock : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
-        val target = args.getChecked<Vec3>(0, argc)
-        ctx.assertVecInRange(target)
-
-        val pos = BlockPos(target)
+        val pos = args.getBlockPos(0, argc)
+        ctx.assertVecInRange(pos)
 
         if (!ctx.world.mayInteract(ctx.caster, pos))
             return null
@@ -43,16 +45,14 @@ object OpPlaceBlock : SpellAction {
             throw MishapBadBlock.of(pos, "replaceable")
 
         return Triple(
-            Spell(target),
+            Spell(pos),
             ManaConstants.DUST_UNIT / 8,
             listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
         )
     }
 
-    private data class Spell(val vec: Vec3) : RenderedSpell {
+    private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val pos = BlockPos(vec)
-
             if (!ctx.world.mayInteract(ctx.caster, pos))
                 return
 
@@ -86,11 +86,15 @@ object OpPlaceBlock : SpellAction {
 
                                 ctx.world.playSound(
                                     ctx.caster,
-                                    vec.x, vec.y, vec.z, bstate.soundType.placeSound, SoundSource.BLOCKS, 1.0f,
+                                    pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
+                                    bstate.soundType.placeSound, SoundSource.BLOCKS, 1.0f,
                                     1.0f + (Math.random() * 0.5 - 0.25).toFloat()
                                 )
                                 val particle = BlockParticleOption(ParticleTypes.BLOCK, bstate)
-                                ctx.world.sendParticles(particle, vec.x, vec.y, vec.z, 4, 0.1, 0.2, 0.1, 0.1)
+                                ctx.world.sendParticles(
+                                    particle, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
+                                    4, 0.1, 0.2, 0.1, 0.1
+                                )
                             }
                         }
                     }

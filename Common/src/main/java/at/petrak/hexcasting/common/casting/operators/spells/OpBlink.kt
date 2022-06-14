@@ -3,13 +3,13 @@ package at.petrak.hexcasting.common.casting.operators.spells
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
-import kotlin.math.max
 import kotlin.math.roundToInt
 
 object OpBlink : SpellAction {
@@ -18,8 +18,8 @@ object OpBlink : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Entity>(0, argc)
-        val delta = max(0.0, args.getChecked(1, argc))
+        val target = args.getEntity(0, argc)
+        val delta = args.getDouble(1, argc)
         ctx.assertEntityInRange(target)
 
         if (!target.canChangeDimensions())

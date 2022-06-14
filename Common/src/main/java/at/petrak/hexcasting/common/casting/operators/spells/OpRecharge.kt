@@ -1,8 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getItemEntity
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.utils.extractMana
@@ -16,6 +20,8 @@ object OpRecharge : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+        val entity = args.getItemEntity(0, argc)
+
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val mana = IXplatAbstractions.INSTANCE.findManaHolder(it)
             mana != null && mana.canRecharge() && mana.media /* doo doo da do doo */ < mana.maxMedia
@@ -30,7 +36,6 @@ object OpRecharge : SpellAction {
                 "rechargable"
             )
 
-        val entity = args.getChecked<ItemEntity>(0, argc)
         ctx.assertEntityInRange(entity)
 
         if (!isManaItem(entity.item)) {

@@ -14,6 +14,10 @@ import org.jetbrains.annotations.Nullable;
 public class NullIota extends Iota {
     private static final Object NULL_SUBSTITUTE = new Object();
 
+    /**
+     * There's no <i>reason</i> you can't make your own new {@link NullIota}; it should work just fine.
+     * But having a canonical one saves allocations.
+     */
     public static final NullIota INSTANCE = new NullIota();
 
     public NullIota() {

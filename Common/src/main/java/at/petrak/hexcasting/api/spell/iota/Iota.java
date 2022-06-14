@@ -17,11 +17,6 @@ public abstract class Iota {
     }
 
     public @NotNull
-    Object getPayload() {
-        return payload;
-    }
-
-    public @NotNull
     IotaType<?> getType() {
         return this.type;
     }

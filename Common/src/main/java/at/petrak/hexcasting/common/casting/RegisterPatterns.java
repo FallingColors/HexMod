@@ -3,7 +3,9 @@ package at.petrak.hexcasting.common.casting;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.Action;
-import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.spell.iota.DoubleIota;
+import at.petrak.hexcasting.api.spell.iota.NullIota;
+import at.petrak.hexcasting.api.spell.iota.Vec3Iota;
 import at.petrak.hexcasting.api.spell.math.HexAngle;
 import at.petrak.hexcasting.api.spell.math.HexDir;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
@@ -209,9 +211,9 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), modLoc("extinguish"),
                 OpExtinguish.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqa", HexDir.NORTH_EAST), modLoc("conjure_block"),
-                new OpConjure(false));
+                new OpConjureBlock(false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqd", HexDir.NORTH_EAST), modLoc("conjure_light"),
-                new OpConjure(true));
+                new OpConjureBlock(true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("wqaqwawqaqw", HexDir.NORTH_EAST), modLoc("bonemeal"),
                 OpTheOnlyReasonAnyoneDownloadedPsi.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqwaeaeaeaeaea", HexDir.NORTH_WEST),
@@ -315,11 +317,9 @@ public class RegisterPatterns {
 
             // == Meta stuff ==
 
-            PatternRegistry.mapPattern(HexPattern.fromAngles("qqq", HexDir.WEST), modLoc("open_paren"),
-                Widget.OPEN_PAREN);
-            PatternRegistry.mapPattern(HexPattern.fromAngles("eee", HexDir.EAST), modLoc("close_paren"),
-                Widget.CLOSE_PAREN);
-            PatternRegistry.mapPattern(HexPattern.fromAngles("qqqaw", HexDir.WEST), modLoc("escape"), Widget.ESCAPE);
+            // Intro/Retro/Consideration are now special-form-likes and aren't even ops.
+            // TODO should there be a registry for these too
+
             // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
             // eval being a space filling curve feels apt doesn't it
             PatternRegistry.mapPattern(HexPattern.fromAngles("deaqq", HexDir.SOUTH_EAST), modLoc("eval"),
@@ -348,32 +348,33 @@ public class RegisterPatterns {
 
             // == Consts ==
 
-            PatternRegistry.mapPattern(HexPattern.fromAngles("d", HexDir.EAST), modLoc("const/null"), Widget.NULL);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("d", HexDir.EAST), modLoc("const/null"),
+                Action.makeConstantOp(NullIota.INSTANCE));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqea", HexDir.NORTH_WEST), modLoc("const/vec/px"),
-                Action.makeConstantOp(LegacySpellDatum.make(new Vec3(1.0, 0.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(1.0, 0.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqew", HexDir.NORTH_WEST), modLoc("const/vec/py"),
-                Action.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, 1.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 1.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqed", HexDir.NORTH_WEST), modLoc("const/vec/pz"),
-                Action.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, 0.0, 1.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 0.0, 1.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeeqa", HexDir.SOUTH_WEST), modLoc("const/vec/nx"),
-                Action.makeConstantOp(LegacySpellDatum.make(new Vec3(-1.0, 0.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(-1.0, 0.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeeqw", HexDir.SOUTH_WEST), modLoc("const/vec/ny"),
-                Action.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, -1.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, -1.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeeqd", HexDir.SOUTH_WEST), modLoc("const/vec/nz"),
-                Action.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, 0.0, -1.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 0.0, -1.0))));
             // Yep, this is what I spend the "plain hexagon" pattern on.
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqq", HexDir.NORTH_WEST), modLoc("const/vec/0"),
-                Action.makeConstantOp(LegacySpellDatum.make(new Vec3(0.0, 0.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 0.0, 0.0))));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qdwdq", HexDir.NORTH_EAST), modLoc("const/double/pi"),
-                Action.makeConstantOp(LegacySpellDatum.make(Math.PI)));
+                Action.makeConstantOp(new DoubleIota(Math.PI)));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eawae", HexDir.NORTH_WEST), modLoc("const/double/tau"),
-                Action.makeConstantOp(LegacySpellDatum.make(HexUtils.TAU)));
+                Action.makeConstantOp(new DoubleIota(HexUtils.TAU)));
 
             // e
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaq", HexDir.EAST), modLoc("const/double/e"),
-                Action.makeConstantOp(LegacySpellDatum.make(Math.E)));
+                Action.makeConstantOp(new DoubleIota(Math.E)));
 
             // == Entities ==
 
@@ -489,7 +490,7 @@ public class RegisterPatterns {
                 if (negate) {
                     accumulator = -accumulator;
                 }
-                return Action.makeConstantOp(LegacySpellDatum.make(accumulator));
+                return Action.makeConstantOp(new DoubleIota(accumulator));
             } else {
                 return null;
             }

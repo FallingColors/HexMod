@@ -1,8 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadBlock
 import at.petrak.hexcasting.common.blocks.BlockConjured
 import at.petrak.hexcasting.common.lib.HexBlocks
@@ -13,16 +17,14 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.phys.Vec3
 
-class OpConjure(val light: Boolean) : SpellAction {
+class OpConjureBlock(val light: Boolean) : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
-        val target = args.getChecked<Vec3>(0, argc)
-        ctx.assertVecInRange(target)
-
-        val pos = BlockPos(target)
+        val pos = args.getBlockPos(0, argc)
+        ctx.assertVecInRange(pos)
 
         if (!ctx.world.mayInteract(ctx.caster, pos))
             return null
@@ -34,16 +36,14 @@ class OpConjure(val light: Boolean) : SpellAction {
             throw MishapBadBlock.of(pos, "replaceable")
 
         return Triple(
-            Spell(target, light),
+            Spell(pos, light),
             ManaConstants.DUST_UNIT,
             listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
         )
     }
 
-    private data class Spell(val target: Vec3, val light: Boolean) : RenderedSpell {
+    private data class Spell(val pos: BlockPos, val light: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val pos = BlockPos(target)
-
             if (!ctx.world.mayInteract(ctx.caster, pos))
                 return
 

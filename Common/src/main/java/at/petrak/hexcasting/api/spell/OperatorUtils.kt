@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.phys.Vec3
@@ -98,11 +99,11 @@ fun List<Iota>.getVillager(idx: Int, argc: Int = 0): Villager {
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.villager")
 }
 
-fun List<Iota>.getLivingEntity(idx: Int, argc: Int = 0): LivingEntity {
+fun List<Iota>.getLivingEntityButNotArmorStand(idx: Int, argc: Int = 0): LivingEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
-        if (e is LivingEntity)
+        if (e is LivingEntity && e !is ArmorStand)
             return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.living")
@@ -117,6 +118,17 @@ fun List<Iota>.getPositiveDouble(idx: Int, argc: Int = 0): Double {
         }
     }
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive")
+}
+
+fun List<Iota>.getPositiveDoubleUnder(idx: Int, max: Double, argc: Int = 0): Double {
+    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+    if (x is DoubleIota) {
+        val double = x.double
+        if (double in 0.0..max) {
+            return double
+        }
+    }
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive.lessthan", max)
 }
 
 fun List<Iota>.getDoubleBetween(idx: Int, min: Double, max: Double, argc: Int = 0): Double {

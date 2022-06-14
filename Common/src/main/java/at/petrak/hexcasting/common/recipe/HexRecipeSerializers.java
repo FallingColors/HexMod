@@ -21,6 +21,7 @@ public class HexRecipeSerializers {
 
     private static final Map<ResourceLocation, RecipeSerializer<?>> SERIALIZERS = new LinkedHashMap<>();
 
+    // TODO: custom costs in brainsweeping. also custom entities but we'll getting there
     public static final RecipeSerializer<?> BRAINSWEEP = register("brainsweep", new BrainsweepRecipe.Serializer());
     public static RecipeType<BrainsweepRecipe> BRAINSWEEP_TYPE;
     public static final RecipeSerializer<SealFocusRecipe> SEAL_FOCUS = register("seal_focus",

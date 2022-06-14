@@ -4,11 +4,11 @@ import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.player.FlightAbility
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.Vec3
-import kotlin.math.max
 import kotlin.math.roundToInt
 
 object OpFlight : SpellAction {
@@ -18,9 +18,9 @@ object OpFlight : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<ServerPlayer>(0, argc)
-        val timeRaw = max(args.getChecked(1, argc), 0.0)
-        val radiusRaw = max(args.getChecked(2, argc), 0.0)
+        val target = args.getPlayer(0, argc)
+        val timeRaw = args.getPositiveDouble(1, argc)
+        val radiusRaw = args.getPositiveDouble(2, argc)
         ctx.assertEntityInRange(target)
 
         // Convert to ticks

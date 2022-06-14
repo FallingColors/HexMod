@@ -3,8 +3,8 @@ package at.petrak.hexcasting.common.casting.operators.spells
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.core.BlockPos
-import net.minecraft.util.Mth
 import net.minecraft.world.level.Explosion
 import net.minecraft.world.phys.Vec3
 
@@ -16,15 +16,14 @@ class OpExplode(val fire: Boolean) : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val pos = args.getChecked<Vec3>(0, argc)
-        val strength = args.getChecked<Double>(1, argc)
+        val pos = args.getVec3(0, argc)
+        val strength = args.getPositiveDoubleUnder(1, 10.0, argc)
         ctx.assertVecInRange(pos)
-        val clampedStrength = Mth.clamp(strength, 0.0, 10.0)
-        val cost = ManaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 0.125 else 1.0)
+        val cost = ManaConstants.DUST_UNIT * (3 * strength + if (fire) 0.125 else 1.0)
         return Triple(
-            Spell(pos, clampedStrength, this.fire),
+            Spell(pos, strength, this.fire),
             cost.toInt(),
-            listOf(ParticleSpray.burst(pos, clampedStrength, 50))
+            listOf(ParticleSpray.burst(pos, strength, 50))
         )
     }
 

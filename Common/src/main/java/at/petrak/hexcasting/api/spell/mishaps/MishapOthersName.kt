@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.EntityIota
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.ListIota
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.player.Player
@@ -23,22 +24,20 @@ class MishapOthersName(val other: Player) : Mishap() {
     companion object {
         @JvmStatic
         fun getTrueNameFromDatum(datum: Iota, caster: Player): Player? {
-            if (datum.payload is Player && datum.payload != caster)
-                return datum.payload
-            else if (datum.payload !is SpellList)
+            if (datum is EntityIota && datum.entity is Player && datum != caster)
+                return datum.entity as Player
+            if (datum !is ListIota)
                 return null
 
-            val poolToSearch: MutableList<Iota> =
-                datum.payload.filterIsInstance<Iota>().toMutableList()
+            val poolToSearch = ArrayDeque<Iota>()
+            poolToSearch.addLast(datum)
 
             while (poolToSearch.isNotEmpty()) {
-                val datumToCheck = poolToSearch[0]
-                poolToSearch.removeAt(0)
-
-                if (datumToCheck.payload is Player && datumToCheck.payload != caster)
-                    return datumToCheck.payload
-                else if (datumToCheck.payload is SpellList)
-                    poolToSearch.addAll(datumToCheck.payload.filterIsInstance<Iota>())
+                val datumToCheck = poolToSearch.removeFirst()
+                if (datumToCheck is EntityIota && datumToCheck.entity is Player && datumToCheck.entity != caster)
+                    return datumToCheck.entity as Player
+                if (datumToCheck is ListIota)
+                    poolToSearch.addAll(datumToCheck.list)
             }
 
             return null

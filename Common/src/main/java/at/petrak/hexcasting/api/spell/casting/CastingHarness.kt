@@ -11,7 +11,6 @@ import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellList
-import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.ListIota
 import at.petrak.hexcasting.api.spell.iota.NullIota
@@ -116,7 +115,7 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         mishap,
-                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)
+                        Mishap.Context((iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST), null)
                     )
                 ),
             )
@@ -129,7 +128,7 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         MishapError(exception),
-                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)
+                        Mishap.Context((iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST), null)
                     )
                 )
             )
@@ -273,82 +272,95 @@ class CastingHarness private constructor(
      * either escaping it onto the stack or changing the parenthese-handling state.
      */
     private fun handleParentheses(iota: Iota): Pair<FunctionalData, ResolvedPatternType>? {
-        val operator = (iota.payload as? HexPattern)?.let {
-            try {
-                PatternRegistry.matchPattern(it, this.ctx.world)
-            } catch (mishap: Mishap) {
-                null
-            }
+        if (iota !is PatternIota) {
+            throw IllegalStateException()
         }
+        val sig = iota.pattern.anglesSignature()
 
-        return if (this.parenCount > 0) {
+        if (this.parenCount > 0) {
             if (this.escapeNext) {
                 val newParens = this.parenthesized.toMutableList()
                 newParens.add(iota)
-                this.getFunctionalData().copy(
+                return this.getFunctionalData().copy(
                     escapeNext = false,
                     parenthesized = newParens
                 ) to ResolvedPatternType.ESCAPED
-            } else if (operator == Widget.ESCAPE) {
-                this.getFunctionalData().copy(
-                    escapeNext = true,
-                ) to ResolvedPatternType.EVALUATED
-            } else if (operator == Widget.OPEN_PAREN) {
-                // we have escaped the parens onto the stack; we just also record our count.
-                val newParens = this.parenthesized.toMutableList()
-                newParens.add(iota)
-                this.getFunctionalData().copy(
-                    parenthesized = newParens,
-                    parenCount = this.parenCount + 1
-                ) to if (this.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
-            } else if (operator == Widget.CLOSE_PAREN) {
-                val newParenCount = this.parenCount - 1
-                if (newParenCount == 0) {
-                    val newStack = this.stack.toMutableList()
-                    newStack.add(ListIota(this.parenthesized.toList()))
+            }
+
+            return when (sig) {
+                SpecialPatterns.CONSIDERATION.anglesSignature() -> {
                     this.getFunctionalData().copy(
-                        stack = newStack,
-                        parenCount = newParenCount,
-                        parenthesized = listOf()
+                        escapeNext = true,
                     ) to ResolvedPatternType.EVALUATED
-                } else if (newParenCount < 0) {
-                    throw MishapTooManyCloseParens()
-                } else {
-                    // we have this situation: "(()"
-                    // we need to add the close paren
+                }
+                SpecialPatterns.INTROSPECTION.anglesSignature() -> {
+                    // we have escaped the parens onto the stack; we just also record our count.
                     val newParens = this.parenthesized.toMutableList()
                     newParens.add(iota)
                     this.getFunctionalData().copy(
-                        parenCount = newParenCount,
+                        parenthesized = newParens,
+                        parenCount = this.parenCount + 1
+                    ) to if (this.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
+                }
+                SpecialPatterns.RETROSPECTION.anglesSignature() -> {
+                    val newParenCount = this.parenCount - 1
+                    if (newParenCount == 0) {
+                        val newStack = this.stack.toMutableList()
+                        newStack.add(ListIota(this.parenthesized.toList()))
+                        this.getFunctionalData().copy(
+                            stack = newStack,
+                            parenCount = newParenCount,
+                            parenthesized = listOf()
+                        ) to ResolvedPatternType.EVALUATED
+                    } else if (newParenCount < 0) {
+                        throw MishapTooManyCloseParens()
+                    } else {
+                        // we have this situation: "(()"
+                        // we need to add the close paren
+                        val newParens = this.parenthesized.toMutableList()
+                        newParens.add(iota)
+                        this.getFunctionalData().copy(
+                            parenCount = newParenCount,
+                            parenthesized = newParens
+                        ) to ResolvedPatternType.ESCAPED
+                    }
+                }
+                else -> {
+                    val newParens = this.parenthesized.toMutableList()
+                    newParens.add(iota)
+                    this.getFunctionalData().copy(
                         parenthesized = newParens
                     ) to ResolvedPatternType.ESCAPED
                 }
-            } else {
-                val newParens = this.parenthesized.toMutableList()
-                newParens.add(iota)
-                this.getFunctionalData().copy(
-                    parenthesized = newParens
-                ) to ResolvedPatternType.ESCAPED
             }
-        } else if (this.escapeNext) {
+        }
+
+        if (this.escapeNext) {
             val newStack = this.stack.toMutableList()
             newStack.add(iota)
-            this.getFunctionalData().copy(
+            return this.getFunctionalData().copy(
                 stack = newStack,
                 escapeNext = false,
             ) to ResolvedPatternType.ESCAPED
-        } else if (operator == Widget.ESCAPE) {
-            this.getFunctionalData().copy(
-                escapeNext = true
-            ) to ResolvedPatternType.EVALUATED
-        } else if (operator == Widget.OPEN_PAREN) {
-            this.getFunctionalData().copy(
-                parenCount = this.parenCount + 1
-            ) to ResolvedPatternType.EVALUATED
-        } else if (operator == Widget.CLOSE_PAREN) {
-            throw MishapTooManyCloseParens()
-        } else {
-            null
+        }
+
+        return when (sig) {
+            SpecialPatterns.CONSIDERATION.anglesSignature() -> {
+                this.getFunctionalData().copy(
+                    escapeNext = true
+                ) to ResolvedPatternType.EVALUATED
+            }
+            SpecialPatterns.INTROSPECTION.anglesSignature() -> {
+                this.getFunctionalData().copy(
+                    parenCount = this.parenCount + 1
+                ) to ResolvedPatternType.EVALUATED
+            }
+            SpecialPatterns.RETROSPECTION.anglesSignature() -> {
+                throw MishapTooManyCloseParens()
+            }
+            else -> {
+                null
+            }
         }
     }
 

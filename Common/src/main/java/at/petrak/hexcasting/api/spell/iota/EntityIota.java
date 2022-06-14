@@ -72,7 +72,7 @@ public class EntityIota extends Iota {
 
         @Override
         public int color() {
-            return 0;
+            return 0xff_55ffff;
         }
     };
 }

@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.Widget
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
+import at.petrak.hexcasting.api.spell.iota.GarbageIota
+import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.world.item.DyeColor
 
 class MishapInvalidPattern : Mishap() {
@@ -14,7 +14,7 @@ class MishapInvalidPattern : Mishap() {
     override fun resolutionType(ctx: CastingContext) = ResolvedPatternType.INVALID
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
-        stack.add(LegacySpellDatum.make(Widget.GARBAGE))
+        stack.add(GarbageIota.INSTANCE)
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context) =

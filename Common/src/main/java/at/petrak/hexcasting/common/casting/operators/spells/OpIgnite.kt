@@ -2,8 +2,12 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.ktxt.UseOnContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -20,7 +24,7 @@ object OpIgnite : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Vec3>(0, argc)
+        val target = args.getBlockPos(0, argc)
         ctx.assertVecInRange(target)
 
         return Triple(
@@ -30,9 +34,9 @@ object OpIgnite : SpellAction {
         )
     }
 
-    private data class Spell(val target: Vec3) : RenderedSpell {
+    private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val pos = BlockPos(target)
+            // TODO should we do these checks in the action part of the spell
             if (!ctx.world.mayInteract(ctx.caster, pos))
                 return
 
@@ -46,7 +50,7 @@ object OpIgnite : SpellAction {
                         null,
                         InteractionHand.MAIN_HAND,
                         ItemStack(maxwell.asItem()),
-                        BlockHitResult(target, Direction.UP, pos, false)
+                        BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)
                     )
                 )
             } else {
