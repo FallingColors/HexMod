@@ -13,7 +13,7 @@ class OpExplode(val fire: Boolean) : SpellOperator {
         get() = 2
 
     override fun execute(
-        args: List<LegacySpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getChecked<Vec3>(0, argc)

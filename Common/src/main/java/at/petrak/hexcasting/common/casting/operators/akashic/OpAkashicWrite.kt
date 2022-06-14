@@ -20,7 +20,7 @@ object OpAkashicWrite : SpellOperator {
     override val causesBlindDiversion = false
 
     override fun execute(
-        args: List<LegacySpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getChecked<Vec3>(0, argc)
@@ -46,7 +46,7 @@ object OpAkashicWrite : SpellOperator {
         )
     }
 
-    private data class Spell(val record: BlockEntityAkashicRecord, val key: HexPattern, val datum: LegacySpellDatum<*>) :
+    private data class Spell(val record: BlockEntityAkashicRecord, val key: HexPattern, val datum: Iota) :
         RenderedSpell {
         override fun cast(ctx: CastingContext) {
             record.addNewDatum(key, datum)

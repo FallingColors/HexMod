@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getChecked
@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3
 object OpGetSentinelWayfind : ConstManaOperator {
     override val argc = 1
     override val manaCost = ManaConstants.DUST_UNIT / 10
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val from = args.getChecked<Vec3>(0, argc)
 
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster)

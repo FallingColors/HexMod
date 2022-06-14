@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
@@ -9,8 +9,8 @@ import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 object OpHalt : Operator {
     override fun operate(
         continuation: SpellContinuation,
-        stack: MutableList<LegacySpellDatum<*>>,
-        local: LegacySpellDatum<*>,
+        stack: MutableList<Iota>,
+        local: Iota,
         ctx: CastingContext
     ): OperationResult {
         var newStack = stack.toList()

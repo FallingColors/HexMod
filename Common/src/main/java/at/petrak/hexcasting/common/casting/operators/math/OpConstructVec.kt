@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getChecked
@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3
 
 object OpConstructVec : ConstManaOperator {
     override val argc = 3
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val x = args.getChecked<Double>(0, argc)
         val y = args.getChecked<Double>(1, argc)
         val z = args.getChecked<Double>(2, argc)

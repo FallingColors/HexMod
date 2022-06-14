@@ -7,7 +7,7 @@ object OpIndexOf : ConstManaOperator {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val list = args.getChecked<SpellList>(0, argc).toMutableList()
         val value = args[1]
         return list.indexOfFirst(value::tolerantEquals).asSpellResult

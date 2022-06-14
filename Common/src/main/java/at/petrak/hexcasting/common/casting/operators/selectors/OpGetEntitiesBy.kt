@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.selectors
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.Operator.Companion.MAX_DISTANCE
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.spellListOf
@@ -20,7 +20,7 @@ import java.util.function.Predicate
 
 class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : ConstManaOperator {
     override val argc = 2
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val pos = args.getChecked<Vec3>(0, argc)
         val maybeRadius = args.getChecked<Double>(1, argc)
         ctx.assertVecInRange(pos)

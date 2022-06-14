@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3
 object OpCreateWater : SpellOperator {
     override val argc = 1
     override fun execute(
-        args: List<LegacySpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getChecked<Vec3>(0, argc)

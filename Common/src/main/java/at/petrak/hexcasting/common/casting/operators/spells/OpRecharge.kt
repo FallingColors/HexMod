@@ -13,7 +13,7 @@ import net.minecraft.world.entity.item.ItemEntity
 object OpRecharge : SpellOperator {
     override val argc = 1
     override fun execute(
-        args: List<LegacySpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {

@@ -23,7 +23,7 @@ object OpBrainsweep : SpellOperator {
     override val isGreat = true
 
     override fun execute(
-        args: List<LegacySpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val sacrifice = args.getChecked<Villager>(0, argc)

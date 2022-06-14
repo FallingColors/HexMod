@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.world.item.DyeColor
 
@@ -9,12 +9,12 @@ import net.minecraft.world.item.DyeColor
  * The value was a naked iota without being Considered or Retrospected.
  */
 class MishapUnescapedValue(
-    val perpetrator: LegacySpellDatum<*>
+    val perpetrator: Iota
 ) : Mishap() {
     override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.GRAY)
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<LegacySpellDatum<*>>) {
+    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
         // TODO
         /*
         val idx = stack.indexOfLast { it.getType() == DatumType.LIST }

@@ -15,7 +15,7 @@ object OpTeleport : SpellOperator {
     override val argc = 2
     override val isGreat = true
     override fun execute(
-        args: List<LegacySpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val teleportee = args.getChecked<Entity>(0, argc)

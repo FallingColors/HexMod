@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.local
 
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
@@ -10,8 +10,8 @@ import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 object OpPushLocal : Operator {
     override fun operate(
         continuation: SpellContinuation,
-        stack: MutableList<LegacySpellDatum<*>>,
-        local: LegacySpellDatum<*>,
+        stack: MutableList<Iota>,
+        local: Iota,
         ctx: CastingContext
     ): OperationResult {
         if (stack.isEmpty())

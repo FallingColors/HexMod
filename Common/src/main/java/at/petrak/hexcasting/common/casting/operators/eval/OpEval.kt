@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 
 object OpEval : Operator {
-    override fun operate(continuation: SpellContinuation, stack: MutableList<LegacySpellDatum<*>>, local: LegacySpellDatum<*>, ctx: CastingContext): OperationResult {
+    override fun operate(continuation: SpellContinuation, stack: MutableList<Iota>, local: Iota, ctx: CastingContext): OperationResult {
         val instrs: SpellList = stack.getChecked(stack.lastIndex)
         stack.removeLastOrNull()
 

@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3
 object OpEntityRaycast : ConstManaOperator {
     override val argc = 2
     override val manaCost = ManaConstants.DUST_UNIT / 100
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val origin: Vec3 = args.getChecked(0, argc)
         val look: Vec3 = args.getChecked(1, argc)
         val endp = Operator.raycastEnd(origin, look)

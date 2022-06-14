@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 object OpBoolIdentityKindOf : ConstManaOperator {
     override val argc = 1
 
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val payload = args[0].payload
 
         if (payload == Widget.NULL)

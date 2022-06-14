@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math.trig
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getChecked
@@ -13,7 +13,7 @@ object OpArcSin : ConstManaOperator {
     override val argc: Int
         get() = 1
 
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val value = args.getChecked<Double>(0, argc)
         if (value < -1 || value > 1)
             throw MishapInvalidIota(

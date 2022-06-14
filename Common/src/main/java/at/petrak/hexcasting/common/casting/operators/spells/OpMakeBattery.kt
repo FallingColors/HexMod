@@ -19,7 +19,7 @@ object OpMakeBattery : SpellOperator {
     override val isGreat = true
 
     override fun execute(
-        args: List<LegacySpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getChecked<ItemEntity>(0, argc)

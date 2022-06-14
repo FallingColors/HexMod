@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 
 object OpAppend : ConstManaOperator {
     override val argc = 2
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val list = args.getChecked<SpellList>(0, argc).toMutableList()
         val datum = args[1]
         list.add(datum)

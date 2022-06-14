@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 
 object OpCons : ConstManaOperator {
     override val argc = 2
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val bottom = args.getChecked<SpellList>(0, argc)
         val top = args[1]
         return SpellList.LPair(top, bottom).asSpellResult

@@ -9,8 +9,8 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 object OpForEach : Operator {
     override fun operate(
         continuation: SpellContinuation,
-        stack: MutableList<LegacySpellDatum<*>>,
-        local: LegacySpellDatum<*>,
+        stack: MutableList<Iota>,
+        local: Iota,
         ctx: CastingContext
     ): OperationResult {
         if (stack.size < 2)

@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.math
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
 import at.petrak.hexcasting.api.spell.numOrVec
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.spellListOf
 
@@ -10,7 +10,7 @@ object OpAdd : ConstManaOperator {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val lhs = numOrVec(args[0], 1)
         val rhs = numOrVec(args[1], 0)
 

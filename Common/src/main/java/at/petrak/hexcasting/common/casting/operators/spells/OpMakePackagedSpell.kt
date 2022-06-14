@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.LegacySpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
@@ -19,7 +19,7 @@ import net.minecraft.world.entity.item.ItemEntity
 class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) : SpellOperator {
     override val argc = 2
     override fun execute(
-        args: List<LegacySpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getChecked<ItemEntity>(0, argc)
@@ -56,7 +56,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
-    private inner class Spell(val itemEntity: ItemEntity, val patterns: List<LegacySpellDatum<*>>) : RenderedSpell {
+    private inner class Spell(val itemEntity: ItemEntity, val patterns: List<Iota>) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)

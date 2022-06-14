@@ -7,7 +7,7 @@ import kotlin.math.roundToInt
 object OpXor : ConstManaOperator {
     override val argc = 2
 
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val firstParam = numOrList(args[0], 0)
 
         if (firstParam.right().isPresent) {

@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
 
-fun numOrVec(datum: LegacySpellDatum<*>, reverseIdx: Int): Either<Double, Vec3> =
+fun numOrVec(datum: Iota, reverseIdx: Int): Either<Double, Vec3> =
     when (datum.payload) {
         is Double -> Either.left(datum.payload)
         is Vec3 -> Either.right(datum.payload)
@@ -24,7 +24,7 @@ fun numOrVec(datum: LegacySpellDatum<*>, reverseIdx: Int): Either<Double, Vec3> 
         )
     }
 
-fun numOrList(datum: LegacySpellDatum<*>, reverseIdx: Int): Either<Double, SpellList> =
+fun numOrList(datum: Iota, reverseIdx: Int): Either<Double, SpellList> =
     when (datum.payload) {
         is Double -> Either.left(datum.payload)
         is SpellList -> Either.right(datum.payload)
@@ -35,15 +35,15 @@ fun numOrList(datum: LegacySpellDatum<*>, reverseIdx: Int): Either<Double, Spell
         )
     }
 
-fun spellListOf(vararg vs: Any): List<LegacySpellDatum<*>> {
-    val out = ArrayList<LegacySpellDatum<*>>(vs.size)
+fun spellListOf(vararg vs: Any): List<Iota> {
+    val out = ArrayList<Iota>(vs.size)
     for (v in vs) {
         out.add(LegacySpellDatum.make(v))
     }
     return out
 }
 
-inline fun <reified T : Any> List<LegacySpellDatum<*>>.getChecked(idx: Int, argc: Int = 0): T {
+inline fun <reified T : Any> List<Iota>.getChecked(idx: Int, argc: Int = 0): T {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x.payload is T)
         return x.payload
@@ -57,7 +57,7 @@ inline val Double.asSpellResult get() = spellListOf(this)
 inline val Number.asSpellResult get() = spellListOf(this.toDouble())
 
 inline val SpellList.asSpellResult get() = spellListOf(this)
-inline val List<LegacySpellDatum<*>>.asSpellResult get() = spellListOf(this)
+inline val List<Iota>.asSpellResult get() = spellListOf(this)
 
 inline val Widget.asSpellResult get() = spellListOf(this)
 
@@ -74,9 +74,9 @@ fun Any.tolerantEquals(other: Any) = tolerantEquals(other, 64)
 
 private fun Any.tolerantEquals(other: Any, recursionsLeft: Int): Boolean {
     return when {
-        this is LegacySpellDatum<*> && other is LegacySpellDatum<*> -> this.payload.tolerantEquals(other.payload, recursionsLeft)
-        this is LegacySpellDatum<*> -> this.payload.tolerantEquals(other, recursionsLeft)
-        other is LegacySpellDatum<*> -> this.tolerantEquals(other.payload, recursionsLeft)
+        this is Iota && other is Iota -> this.payload.tolerantEquals(other.payload, recursionsLeft)
+        this is Iota -> this.payload.tolerantEquals(other, recursionsLeft)
+        other is Iota -> this.tolerantEquals(other.payload, recursionsLeft)
 
         this is HexPattern && other is HexPattern -> this.angles == other.angles
         this is Double && other is Double -> abs(this - other) < TOLERANCE

@@ -9,13 +9,13 @@ import kotlin.math.roundToInt
 
 object OpSlice : ConstManaOperator {
     override val argc = 3
-    override fun execute(args: List<LegacySpellDatum<*>>, ctx: CastingContext): List<LegacySpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val list = args.getChecked<SpellList>(0, argc).toList()
         val index1 = Mth.clamp(args.getChecked<Double>(1, argc).roundToInt(), 0, list.size)
         val index2 = Mth.clamp(args.getChecked<Double>(2, argc).roundToInt(), 0, list.size)
 
         if (index1 == index2)
-            return emptyList<LegacySpellDatum<*>>().asSpellResult
+            return emptyList<Iota>().asSpellResult
 
         return list.subList(min(index1, index2), max(index1, index2)).asSpellResult
     }
