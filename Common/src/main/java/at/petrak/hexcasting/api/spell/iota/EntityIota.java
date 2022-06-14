@@ -66,6 +66,11 @@ public class EntityIota extends Iota {
         }
 
         @Override
+        public Component display(EntityIota iota) {
+            return iota.getEntity().getName();
+        }
+
+        @Override
         public int color() {
             return 0;
         }

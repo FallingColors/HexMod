@@ -21,10 +21,14 @@ public abstract class IotaType<T extends Iota> {
     public abstract T deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException;
 
     /**
-     * Get a display of this datum from the tag, <i>without</i> the world.
+     * Get a display of this datum from the {@code data} tag, <i>without</i> the world.
      * This is for use on the client.
      */
     public abstract Component display(Tag tag);
+
+    public Component display(T iota) {
+        return this.display(iota.serialize());
+    }
 
     /**
      * Get the color associated with this datum type.

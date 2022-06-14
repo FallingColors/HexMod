@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.NullIota
+import at.petrak.hexcasting.api.spell.iota.PatternIota
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
@@ -87,8 +88,8 @@ class CastingHarness private constructor(
                 return@getUpdate CastResult(continuation, data, resolutionType, listOf())
             }
 
-            return if (iota.getType() == DatumType.PATTERN) {
-                updateWithPattern(iota.payload as HexPattern, world, continuation)
+            return if (iota is PatternIota) {
+                updateWithPattern(iota.pattern, world, continuation)
             } else {
                 CastResult(
                     continuation,
@@ -239,7 +240,7 @@ class CastingHarness private constructor(
         }
     }
 
-    fun generateDescs() = stack.map(Iota::display)
+    fun generateDescs() = stack.map { it.type.display(it) }
 
     /**
      * Return the functional update represented by the current state (for use with `copy`)
