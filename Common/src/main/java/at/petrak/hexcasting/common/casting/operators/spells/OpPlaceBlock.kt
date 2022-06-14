@@ -59,25 +59,25 @@ object OpPlaceBlock : SpellOperator {
             val blockHit = BlockHitResult(
                 Vec3.ZERO, ctx.caster.direction, pos, false
             )
-            val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
-            val placeContext = BlockPlaceContext(itemUseCtx)
 
             val bstate = ctx.world.getBlockState(pos)
-            if (bstate.canBeReplaced(placeContext)) {
-                val placeeSlot = ctx.getOperativeSlot { it.item is BlockItem }
-                if (placeeSlot != null) {
-                    val placeeStack = ctx.caster.inventory.getItem(placeeSlot).copy()
-                    if (!placeeStack.isEmpty) {
+            val placeeSlot = ctx.getOperativeSlot { it.item is BlockItem }
+            if (placeeSlot != null) {
+                val placeeStack = ctx.caster.inventory.getItem(placeeSlot).copy()
+                if (!placeeStack.isEmpty) {
+                    // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143
+                    val oldStack = ctx.caster.getItemInHand(ctx.castingHand)
+                    val spoofedStack = placeeStack.copy()
+
+                    // we temporarily give the player the stack, place it using mc code, then give them the old stack back.
+                    spoofedStack.count = 1
+                    ctx.caster.setItemInHand(ctx.castingHand, spoofedStack)
+
+                    val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
+                    val placeContext = BlockPlaceContext(itemUseCtx)
+                    if (bstate.canBeReplaced(placeContext)) {
                         val placee = placeeStack.item as BlockItem
                         if (ctx.withdrawItem(placee, 1, false)) {
-                            // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143
-
-                            // we temporarily give the player the stack, place it using mc code, then give them the old stack back.
-                            val oldStack = ctx.caster.getItemInHand(ctx.castingHand)
-                            val spoofedStack = placeeStack.copy()
-                            spoofedStack.count = 1
-                            ctx.caster.setItemInHand(ctx.castingHand, spoofedStack)
-
                             val res = spoofedStack.useOn(placeContext)
 
                             ctx.caster.setItemInHand(ctx.castingHand, oldStack)
@@ -92,7 +92,11 @@ object OpPlaceBlock : SpellOperator {
                                 val particle = BlockParticleOption(ParticleTypes.BLOCK, bstate)
                                 ctx.world.sendParticles(particle, vec.x, vec.y, vec.z, 4, 0.1, 0.2, 0.1, 0.1)
                             }
+                        } else {
+                            ctx.caster.setItemInHand(ctx.castingHand, oldStack)
                         }
+                    } else {
+                        ctx.caster.setItemInHand(ctx.castingHand, oldStack)
                     }
                 }
             }
