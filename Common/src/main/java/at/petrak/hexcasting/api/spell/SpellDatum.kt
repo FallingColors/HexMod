@@ -52,7 +52,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     var total1 = total + 1 // make mutable and include the list itself
                     for (elt in pl) {
                         val (t, subtotal) = elt.serializeToNBTWithDepthCheck(depth + 1, total1) ?: return null
-                        total1 += subtotal
+                        total1 = subtotal
                         outList.add(t)
                     }
                     return Pair(
@@ -71,7 +71,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                 else -> throw RuntimeException("cannot serialize $pl because it is of type ${pl.javaClass.canonicalName} which is not serializable")
             }
         }
-        return Pair(tag, 1)
+        return Pair(tag, total + 1)
     }
 
     override fun toString(): String =
