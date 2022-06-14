@@ -242,6 +242,7 @@ b8b58bbaf1ddca3514896af14db83f304e415305 data/minecraft/tags/blocks/trapdoors.js
 48e782ce4fbd486dd0d6ceb9fdcb94d0e0c727d4 data/minecraft/tags/blocks/wooden_slabs.json
 b8b58bbaf1ddca3514896af14db83f304e415305 data/minecraft/tags/blocks/wooden_trapdoors.json
 5f3e3813757d8300acad523d45ac7c4d85728399 data/minecraft/tags/items/buttons.json
+115534970df0123519d4a0073e803007f3a6d21f data/minecraft/tags/items/cluster_max_harvestables.json
 556d2e6068965e90c307a435b372ae761cd1c606 data/minecraft/tags/items/doors.json
 c25784941d6416744fb2ca2d43a3203e5c3e7c8a data/minecraft/tags/items/leaves.json
 f3c6b6917e504e1c3d5d8875f7cce6f311e791d2 data/minecraft/tags/items/logs.json
