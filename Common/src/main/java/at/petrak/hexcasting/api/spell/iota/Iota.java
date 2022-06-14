@@ -16,12 +16,18 @@ public abstract class Iota {
         this.payload = payload;
     }
 
-    public @NotNull Object getPayload() {
+    public @NotNull
+    Object getPayload() {
         return payload;
     }
 
-    public @NotNull IotaType<?> getType() {
+    public @NotNull
+    IotaType<?> getType() {
         return this.type;
+    }
+
+    public boolean isTruthy() {
+        return true;
     }
 
     /**
@@ -36,7 +42,8 @@ public abstract class Iota {
      * <p>
      * You probably don't want to call this directly; use {@link HexIotaTypes#serialize}.
      */
-    abstract public @NotNull Tag serialize();
+    abstract public @NotNull
+    Tag serialize();
 
     public Component display() {
         return this.type.display(this.serialize());

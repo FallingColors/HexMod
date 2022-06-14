@@ -8,11 +8,11 @@ import net.minecraft.world.phys.Vec3
 /**
  * Manipulates the stack in some way, usually by popping some number of values off the stack
  * and pushing one new value.
- * For a more "traditional" pop arguments, push return experience, see [ConstManaOperator].
+ * For a more "traditional" pop arguments, push return experience, see [ConstManaAction].
  *
  * Implementors MUST NOT mutate the context.
  */
-interface Operator {
+interface Action {
     /**
      * Operate on the stack. Return the new stack and any side effects of the cast.
      *
@@ -39,12 +39,12 @@ interface Operator {
      *
      * The pattern itself may modify its effects based on whether the user is enlightened or not, regardless of what this value is.
      */
-    val alwaysProcessGreatSpell: Boolean get() = this is SpellOperator
+    val alwaysProcessGreatSpell: Boolean get() = this is SpellAction
 
     /**
      * Can this Great Pattern give you Blind Diversion?
      */
-    val causesBlindDiversion: Boolean get() = this is SpellOperator
+    val causesBlindDiversion: Boolean get() = this is SpellAction
 
     companion object {
         // I see why vzakii did this: you can't raycast out to infinity!
@@ -56,7 +56,7 @@ interface Operator {
             origin.add(look.normalize().scale(MAX_DISTANCE))
 
         @JvmStatic
-        fun makeConstantOp(x: Iota): Operator = object : ConstManaOperator {
+        fun makeConstantOp(x: Iota): Action = object : ConstManaAction {
             override val argc: Int
                 get() = 0
 

@@ -14,7 +14,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
-object OpIgnite : SpellOperator {
+object OpIgnite : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,

@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 
-interface SpellOperator : Operator {
+interface SpellAction : Action {
     val argc: Int
 
     fun hasCastingSound(ctx: CastingContext): Boolean = true

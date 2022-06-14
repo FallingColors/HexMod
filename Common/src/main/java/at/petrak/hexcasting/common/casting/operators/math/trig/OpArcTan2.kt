@@ -5,14 +5,15 @@ import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getDouble
 import at.petrak.hexcasting.api.spell.iota.Iota
-import kotlin.math.atan
+import kotlin.math.atan2
 
-object OpArcTan : ConstManaAction {
+object OpArcTan2 : ConstManaAction {
     override val argc: Int
-        get() = 1
+        get() = 2
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
-        val value = args.getDouble(0, argc)
-        return atan(value).asActionResult
+        val y = args.getDouble(0, argc)
+        val x = args.getDouble(1, argc)
+        return atan2(y, x).asActionResult
     }
 }

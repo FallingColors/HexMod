@@ -8,7 +8,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
 
-object OpBreakBlock : SpellOperator {
+object OpBreakBlock : SpellAction {
     override val argc: Int
         get() = 1
 

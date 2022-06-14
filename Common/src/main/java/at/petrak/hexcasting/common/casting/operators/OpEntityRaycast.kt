@@ -1,19 +1,23 @@
 package at.petrak.hexcasting.common.casting.operators
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.Action
+import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getVec3
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.NullIota
 import net.minecraft.world.entity.projectile.ProjectileUtil
 import net.minecraft.world.phys.AABB
-import net.minecraft.world.phys.Vec3
 
-object OpEntityRaycast : ConstManaOperator {
+object OpEntityRaycast : ConstManaAction {
     override val argc = 2
     override val manaCost = ManaConstants.DUST_UNIT / 100
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
-        val origin: Vec3 = args.getChecked(0, argc)
-        val look: Vec3 = args.getChecked(1, argc)
-        val endp = Operator.raycastEnd(origin, look)
+        val origin = args.getVec3(0, argc)
+        val look = args.getVec3(1, argc)
+        val endp = Action.raycastEnd(origin, look)
 
         val entityHitResult = ProjectileUtil.getEntityHitResult(
             ctx.caster,
@@ -25,9 +29,9 @@ object OpEntityRaycast : ConstManaOperator {
         )
 
         return if (entityHitResult != null && ctx.isEntityInRange(entityHitResult.entity)) {
-            entityHitResult.entity.asSpellResult
+            entityHitResult.entity.asActionResult
         } else {
-            null.asSpellResult
+            listOf(NullIota.INSTANCE)
         }
     }
 }

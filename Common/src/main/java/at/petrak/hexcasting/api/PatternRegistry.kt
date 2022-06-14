@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api
 
-import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.math.EulerPathFinder
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentMap
  * operator (the diamond) are `"qaq"` and `"ede"`.
  */
 object PatternRegistry {
-    private val operatorLookup = ConcurrentHashMap<ResourceLocation, Operator>()
+    private val actionLookup = ConcurrentHashMap<ResourceLocation, Action>()
     private val specialHandlers: ConcurrentLinkedDeque<SpecialHandlerEntry> = ConcurrentLinkedDeque()
 
     // Map signatures to the "preferred" direction they start in and their operator ID.
@@ -41,12 +41,12 @@ object PatternRegistry {
     @JvmStatic
     @JvmOverloads
     @Throws(RegisterPatternException::class)
-    fun mapPattern(pattern: HexPattern, id: ResourceLocation, operator: Operator, isPerWorld: Boolean = false) {
-        this.operatorLookup[id]?.let {
+    fun mapPattern(pattern: HexPattern, id: ResourceLocation, action: Action, isPerWorld: Boolean = false) {
+        this.actionLookup[id]?.let {
             throw RegisterPatternException("The operator with id `$id` was already registered to: $it")
         }
 
-        this.operatorLookup[id] = operator
+        this.actionLookup[id] = action
         if (isPerWorld) {
             this.perWorldPatternLookup[id] = PerWorldEntry(pattern, id)
         } else {
@@ -73,14 +73,14 @@ object PatternRegistry {
      * Internal use only.
      */
     @JvmStatic
-    fun matchPattern(pat: HexPattern, overworld: ServerLevel): Operator =
+    fun matchPattern(pat: HexPattern, overworld: ServerLevel): Action =
         matchPatternAndID(pat, overworld).first
 
     /**
      * Internal use only.
      */
     @JvmStatic
-    fun matchPatternAndID(pat: HexPattern, overworld: ServerLevel): Pair<Operator, ResourceLocation> {
+    fun matchPatternAndID(pat: HexPattern, overworld: ServerLevel): Pair<Action, ResourceLocation> {
         // Pipeline:
         // patterns are registered here every time the game boots
         // when we try to look
@@ -92,7 +92,7 @@ object PatternRegistry {
         // Is it global?
         val sig = pat.anglesSignature()
         this.regularPatternLookup[sig]?.let {
-            val op = this.operatorLookup[it.opId] ?: throw MishapInvalidPattern()
+            val op = this.actionLookup[it.opId] ?: throw MishapInvalidPattern()
             return op to it.opId
         }
 
@@ -101,7 +101,7 @@ object PatternRegistry {
         val perWorldPatterns: Save =
             ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
         perWorldPatterns.lookup[sig]?.let {
-            val op = this.operatorLookup[it.first]!!
+            val op = this.actionLookup[it.first]!!
             return op to it.first
         }
 
@@ -125,12 +125,12 @@ object PatternRegistry {
     @JvmStatic
     fun lookupPattern(opId: ResourceLocation): PatternEntry {
         this.perWorldPatternLookup[opId]?.let {
-            return PatternEntry(it.prototype, this.operatorLookup[it.opId]!!, true)
+            return PatternEntry(it.prototype, this.actionLookup[it.opId]!!, true)
         }
         for ((sig, entry) in this.regularPatternLookup) {
             if (entry.opId == opId) {
                 val pattern = HexPattern.fromAngles(sig, entry.preferredStart)
-                return PatternEntry(pattern, this.operatorLookup[entry.opId]!!, false)
+                return PatternEntry(pattern, this.actionLookup[entry.opId]!!, false)
             }
         }
 
@@ -153,7 +153,7 @@ object PatternRegistry {
      * In the base mod, this is used for number patterns.
      */
     fun interface SpecialHandler {
-        fun handlePattern(pattern: HexPattern): Operator?
+        fun handlePattern(pattern: HexPattern): Action?
     }
 
     data class SpecialHandlerEntry(val id: ResourceLocation, val handler: SpecialHandler)
@@ -164,7 +164,7 @@ object PatternRegistry {
     private data class PerWorldEntry(val prototype: HexPattern, val opId: ResourceLocation)
 
     // Fake class we pretend to use internally
-    data class PatternEntry(val prototype: HexPattern, val operator: Operator, val isPerWorld: Boolean)
+    data class PatternEntry(val prototype: HexPattern, val action: Action, val isPerWorld: Boolean)
 
     /**
      * Maps angle sigs to resource locations and their preferred start dir so we can look them up in the main registry

@@ -17,7 +17,7 @@ import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.material.Material
 import net.minecraft.world.phys.Vec3
 
-object OpDestroyWater : SpellOperator {
+object OpDestroyWater : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,
@@ -53,7 +53,7 @@ object OpDestroyWater : SpellOperator {
                 val here = todo.removeFirst()
                 val distFromFocus =
                     ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
-                if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && ctx.world.mayInteract(ctx.caster, here)) {
+                if (distFromFocus < Action.MAX_DISTANCE * Action.MAX_DISTANCE && seen.add(here) && ctx.world.mayInteract(ctx.caster, here)) {
                     // never seen this pos in my life
                     val fluid = ctx.world.getFluidState(here)
                     if (fluid != Fluids.EMPTY.defaultFluidState()) {

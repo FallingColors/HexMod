@@ -21,10 +21,19 @@ public class DoubleIota extends Iota {
     }
 
     @Override
+    public boolean isTruthy() {
+        return this.getDouble() != 0.0;
+    }
+
+    @Override
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
             && that instanceof DoubleIota dd
-            && Math.abs(this.getDouble() - dd.getDouble()) < TOLERANCE;
+            && tolerates(this.getDouble(), dd.getDouble());
+    }
+
+    public static boolean tolerates(double a, double b) {
+        return Math.abs(a - b) < TOLERANCE;
     }
 
     @Override

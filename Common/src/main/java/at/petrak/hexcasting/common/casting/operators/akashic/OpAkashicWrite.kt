@@ -3,16 +3,15 @@ package at.petrak.hexcasting.common.casting.operators.akashic
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapNoAkashicRecord
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord
 import at.petrak.hexcasting.common.lib.HexSounds
-import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundSource
-import net.minecraft.world.phys.Vec3
 
-object OpAkashicWrite : SpellOperator {
+object OpAkashicWrite : SpellAction {
     override val argc = 3
 
     override val isGreat = true
@@ -23,16 +22,15 @@ object OpAkashicWrite : SpellOperator {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val pos = args.getChecked<Vec3>(0, argc)
-        val key = args.getChecked<HexPattern>(1, argc)
-        val datum = args[2]
+        val pos = args.getBlockPos(0, argc)
+        val key = args.getPattern(1, argc)
+        val datum = args.get(2)
 
         ctx.assertVecInRange(pos)
 
-        val bpos = BlockPos(pos)
-        val tile = ctx.world.getBlockEntity(bpos)
+        val tile = ctx.world.getBlockEntity(pos)
         if (tile !is BlockEntityAkashicRecord) {
-            throw MishapNoAkashicRecord(bpos)
+            throw MishapNoAkashicRecord(pos)
         }
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)

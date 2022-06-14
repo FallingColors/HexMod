@@ -7,12 +7,12 @@ import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.phys.Vec3
 
-class OpCreateSentinel(val extendsRange: Boolean) : SpellOperator {
+class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
     override val argc = 1
     override val isGreat = this.extendsRange
 

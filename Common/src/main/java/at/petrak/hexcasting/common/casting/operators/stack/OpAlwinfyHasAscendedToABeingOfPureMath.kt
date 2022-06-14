@@ -1,23 +1,16 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.OperationResult
-import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.spell.getPositiveInt
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
-import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import it.unimi.dsi.fastutil.ints.IntArrayList
-import kotlin.math.abs
-import kotlin.math.ln
-import kotlin.math.roundToInt
 
 // "lehmer code"
-object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
+object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
@@ -27,15 +20,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
 
-        val codeDouble = stack.getChecked<Double>(stack.lastIndex)
-        if (abs(codeDouble.roundToInt() - codeDouble) >= 0.05f)
-            throw MishapInvalidIota(
-                stack.last(),
-                0,
-                "hexcasting.mishap.invalid_value.int".asTranslatedComponent(0)
-            )
-        stack.removeLast()
-        val code = codeDouble.roundToInt()
+        val code = stack.getPositiveInt(stack.lastIndex)
 
         val strides = IntArrayList()
         for (f in FactorialIter()) {
@@ -58,13 +43,13 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
             editTarget = editTarget.subList(1, editTarget.size)
         }
 
-        val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * ManaConstants.DUST_UNIT).toInt()
+        // val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * ManaConstants.DUST_UNIT).toInt()
 
         return OperationResult(
             continuation,
             stack,
             local,
-            listOf(OperatorSideEffect.ConsumeMana(cost))
+            listOf()
         )
     }
 

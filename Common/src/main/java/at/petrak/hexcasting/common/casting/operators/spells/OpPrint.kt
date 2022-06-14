@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.spell.OperationResult
-import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
@@ -10,7 +10,7 @@ import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import net.minecraft.Util
 
-object OpPrint : Operator {
+object OpPrint : Action {
     override fun operate(continuation: SpellContinuation, stack: MutableList<Iota>, local: Iota, ctx: CastingContext): OperationResult {
         if (stack.isEmpty()) {
             throw MishapNotEnoughArgs(1, 0)

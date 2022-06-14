@@ -12,7 +12,7 @@ import net.minecraft.world.entity.Entity
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-object OpBlink : SpellOperator {
+object OpBlink : SpellAction {
     override val argc = 2
     override fun execute(
         args: List<Iota>,

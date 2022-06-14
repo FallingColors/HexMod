@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 /**
  * A SimpleOperator that always costs the same amount of mana.
  */
-interface ConstManaOperator : Operator {
+interface ConstManaAction : Action {
     val argc: Int
     val manaCost: Int
         get() = 0
@@ -25,7 +25,7 @@ interface ConstManaOperator : Operator {
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
-        for (_i in 0 until this.argc) stack.removeLast()
+        repeat(this.argc) { stack.removeLast() }
         val newData = this.execute(args, ctx)
         stack.addAll(newData)
 

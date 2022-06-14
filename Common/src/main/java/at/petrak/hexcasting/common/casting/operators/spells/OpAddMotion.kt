@@ -5,12 +5,12 @@ import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
-object OpAddMotion : SpellOperator {
+object OpAddMotion : SpellAction {
     override val argc: Int
         get() = 2
 

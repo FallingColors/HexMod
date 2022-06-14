@@ -69,6 +69,19 @@ sealed class SpellList : Iterable<Iota> {
 
     override fun iterator() = SpellListIterator(this)
 
+    /**
+     * Note this is O(n), probably.
+     */
+    fun size(): Int {
+        var size = 0
+        var ptr = this
+        while (ptr.nonEmpty) {
+            ptr = ptr.cdr
+            size++
+        }
+        return size
+    }
+
     class SpellListIterator(var list: SpellList) : Iterator<Iota> {
         override fun hasNext() = list.nonEmpty
         override operator fun next(): Iota {

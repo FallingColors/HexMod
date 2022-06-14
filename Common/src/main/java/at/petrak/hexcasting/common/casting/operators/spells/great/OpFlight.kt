@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-object OpFlight : SpellOperator {
+object OpFlight : SpellAction {
     override val argc = 3
     override val isGreat = true
     override fun execute(

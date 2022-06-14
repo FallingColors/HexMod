@@ -1,32 +1,29 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.Widget
+import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.getPattern
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.NullIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNoAkashicRecord
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord
-import net.minecraft.core.BlockPos
-import net.minecraft.world.phys.Vec3
 
-object OpAkashicRead : ConstManaOperator {
+object OpAkashicRead : ConstManaAction {
     override val argc = 2
     override val manaCost = ManaConstants.DUST_UNIT
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
-        val pos = args.getChecked<Vec3>(0, argc)
-        val key = args.getChecked<HexPattern>(1, argc)
+        val pos = args.getBlockPos(0, argc)
+        val key = args.getPattern(1, argc)
 
-        val bpos = BlockPos(pos)
-        val tile = ctx.world.getBlockEntity(bpos)
+        val tile = ctx.world.getBlockEntity(pos)
         if (tile !is BlockEntityAkashicRecord) {
-            throw MishapNoAkashicRecord(bpos)
+            throw MishapNoAkashicRecord(pos)
         }
 
         val datum = tile.lookupPattern(key, ctx.world)
-        return listOf(datum ?: LegacySpellDatum.make(Widget.NULL))
+        return listOf(datum ?: NullIota.INSTANCE)
     }
 }

@@ -31,6 +31,11 @@ public class ListIota extends Iota {
     }
 
     @Override
+    public boolean isTruthy() {
+        return this.getList().getNonEmpty();
+    }
+
+    @Override
     public boolean toleratesOther(Iota that) {
         if (!typesMatch(this, that)) {
             return false;

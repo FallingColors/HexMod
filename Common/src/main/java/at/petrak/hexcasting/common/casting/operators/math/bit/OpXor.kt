@@ -2,23 +2,32 @@ package at.petrak.hexcasting.common.casting.operators.math.bit
 
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import kotlin.math.roundToInt
+import at.petrak.hexcasting.api.spell.iota.Iota
 
-object OpXor : ConstManaOperator {
+object OpXor : ConstManaAction {
     override val argc = 2
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
-        val firstParam = numOrList(args[0], 0)
+        val firstParam = args.getLongOrList(0, argc)
 
-        if (firstParam.right().isPresent) {
-            val list1 = firstParam.right().get()
-            val list2 = args.getChecked<SpellList>(1, argc)
-            val out = list1.filter { x1 -> list2.none(x1::tolerantEquals) } + list2.filter { x2 -> list1.none(x2::tolerantEquals) }
-            return out.asSpellResult
-        }
-
-        val num1 = firstParam.left().get().roundToInt()
-        val num2 = args.getChecked<Double>(1, argc).roundToInt()
-        return (num1 xor num2).asSpellResult
+        return firstParam.map(
+            { num1 ->
+                val num2 = args.getLong(1, argc)
+                (num1 xor num2).asActionResult
+            },
+            { list1 ->
+                val list2 = args.getList(1, argc)
+                val out =
+                    list1.filter { x1 ->
+                        list2.none {
+                            Iota.tolerates(
+                                x1,
+                                it
+                            )
+                        }
+                    } + list2.filter { x2 -> list1.none { Iota.tolerates(x2, it) } }
+                out.asActionResult
+            }
+        )
     }
 }

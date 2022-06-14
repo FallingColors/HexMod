@@ -6,7 +6,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 
-object OpSetScale : SpellOperator {
+object OpSetScale : SpellAction {
     override val argc = 2
 
     override fun execute(

@@ -6,12 +6,12 @@ import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
-object OpDestroySentinel : SpellOperator {
+object OpDestroySentinel : SpellAction {
     override val argc = 0
     override fun execute(
         args: List<Iota>,

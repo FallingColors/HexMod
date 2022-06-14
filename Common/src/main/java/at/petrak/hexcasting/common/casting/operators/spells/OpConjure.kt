@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.phys.Vec3
 
-class OpConjure(val light: Boolean) : SpellOperator {
+class OpConjure(val light: Boolean) : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,

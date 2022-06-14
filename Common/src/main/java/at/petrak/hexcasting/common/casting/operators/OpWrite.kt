@@ -1,16 +1,16 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
-object OpWrite : SpellOperator {
+object OpWrite : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,

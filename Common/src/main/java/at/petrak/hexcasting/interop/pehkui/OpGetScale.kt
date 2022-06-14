@@ -1,14 +1,13 @@
 package at.petrak.hexcasting.interop.pehkui
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
+import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.Entity
 
-object OpGetScale : ConstManaOperator {
+object OpGetScale : ConstManaAction {
     override val argc = 1
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {

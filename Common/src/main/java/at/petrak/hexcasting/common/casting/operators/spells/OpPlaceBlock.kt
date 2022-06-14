@@ -15,7 +15,7 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
-object OpPlaceBlock : SpellOperator {
+object OpPlaceBlock : SpellAction {
     override val argc: Int
         get() = 1
 

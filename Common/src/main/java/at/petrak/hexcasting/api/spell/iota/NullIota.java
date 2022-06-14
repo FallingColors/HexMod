@@ -23,6 +23,11 @@ public class NullIota extends Iota {
     }
 
     @Override
+    public boolean isTruthy() {
+        return false;
+    }
+
+    @Override
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that);
     }

@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.LayeredCauldronBlock
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.Vec3
 
-object OpCreateWater : SpellOperator {
+object OpCreateWater : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,

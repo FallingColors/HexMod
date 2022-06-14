@@ -1,29 +1,30 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.numOrVec
-import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.spellListOf
+import at.petrak.hexcasting.api.spell.getNumOrVec
+import at.petrak.hexcasting.api.spell.iota.Iota
 
-object OpAdd : ConstManaOperator {
+object OpAdd : ConstManaAction {
     override val argc: Int
         get() = 2
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
-        val lhs = numOrVec(args[0], 1)
-        val rhs = numOrVec(args[1], 0)
+        val lhs = args.getNumOrVec(0, argc)
+        val rhs = args.getNumOrVec(1, argc)
 
-        return spellListOf(
-            lhs.map({ lnum ->
+        return lhs.map(
+            { lnum ->
                 rhs.map(
-                    { rnum -> lnum + rnum }, { rvec -> rvec.add(lnum, lnum, lnum) }
+                    { rnum -> (lnum + rnum).asActionResult }, { rvec -> rvec.add(lnum, lnum, lnum).asActionResult }
                 )
-            }, { lvec ->
+            },
+            { lvec ->
                 rhs.map(
-                    { rnum -> lvec.add(rnum, rnum, rnum) }, { rvec -> lvec.add(rvec) }
+                    { rnum -> lvec.add(rnum, rnum, rnum).asActionResult }, { rvec -> lvec.add(rvec).asActionResult }
                 )
-            })
+            }
         )
     }
 }

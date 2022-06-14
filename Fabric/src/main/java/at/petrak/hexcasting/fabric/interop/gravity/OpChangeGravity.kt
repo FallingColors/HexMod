@@ -7,7 +7,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
-object OpChangeGravity : SpellOperator {
+object OpChangeGravity : SpellAction {
     override val argc = 2
 
     override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext):

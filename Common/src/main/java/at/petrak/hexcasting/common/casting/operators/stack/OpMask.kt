@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
+import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import it.unimi.dsi.fastutil.booleans.BooleanList
 
-class OpMask(val mask: BooleanList) : ConstManaOperator {
+class OpMask(val mask: BooleanList) : ConstManaAction {
     override val argc: Int
         get() = mask.size
 

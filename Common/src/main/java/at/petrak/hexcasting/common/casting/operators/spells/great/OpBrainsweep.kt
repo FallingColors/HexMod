@@ -17,7 +17,7 @@ import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 
-object OpBrainsweep : SpellOperator {
+object OpBrainsweep : SpellAction {
     override val argc = 2
 
     override val isGreat = true

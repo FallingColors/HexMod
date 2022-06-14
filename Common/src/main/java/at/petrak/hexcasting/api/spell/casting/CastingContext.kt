@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.spell.casting
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.api.spell.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
@@ -76,6 +76,10 @@ data class CastingContext(
         assertVecInWorld(vec)
     }
 
+    fun assertVecInRange(pos: BlockPos) {
+        assertVecInRange(Vec3.atCenterOf(pos))
+    }
+
     /**
      * Check to make sure an entity is in range. Will not mishap for players.
      */
@@ -94,7 +98,7 @@ data class CastingContext(
         if (sentinel.hasSentinel
             && sentinel.extendsRange
             && world.dimension() == sentinel.dimension
-            && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
+            && vec.distanceToSqr(sentinel.position) < Action.MAX_DISTANCE_FROM_SENTINEL * Action.MAX_DISTANCE_FROM_SENTINEL
         )
             return true
 
@@ -107,7 +111,7 @@ data class CastingContext(
             return this.spellCircle.aabb.contains(vec)
         }
 
-        if (vec.distanceToSqr(this.caster.position()) < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
+        if (vec.distanceToSqr(this.caster.position()) < Action.MAX_DISTANCE * Action.MAX_DISTANCE)
             return true
 
         return false

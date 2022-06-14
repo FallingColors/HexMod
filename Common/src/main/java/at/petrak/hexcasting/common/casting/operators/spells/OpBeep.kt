@@ -5,14 +5,14 @@ import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.common.network.MsgBeepAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.phys.Vec3
 
-object OpBeep : SpellOperator {
+object OpBeep : SpellAction {
     override val argc = 3
 
     override fun execute(

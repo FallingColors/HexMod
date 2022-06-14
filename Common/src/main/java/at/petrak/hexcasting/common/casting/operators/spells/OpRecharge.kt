@@ -10,7 +10,7 @@ import at.petrak.hexcasting.api.utils.isManaItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
 
-object OpRecharge : SpellOperator {
+object OpRecharge : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,

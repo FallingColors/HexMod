@@ -1,34 +1,18 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
-import at.petrak.hexcasting.api.utils.asTranslatedComponent
-import kotlin.math.abs
-import kotlin.math.roundToInt
+import at.petrak.hexcasting.api.spell.getPositiveInt
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.ListIota
 
-object OpDuplicateN : ConstManaOperator {
+object OpDuplicateN : ConstManaAction {
     override val argc: Int
         get() = 2
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
-        val countDouble = args.getChecked<Double>(1, argc)
+        val count = args.getPositiveInt(1, argc)
 
-        if (abs(countDouble.roundToInt() - countDouble) >= 0.05f)
-            throw MishapInvalidIota(
-                args[1],
-                0,
-                "hexcasting.mishap.invalid_value.int.between".asTranslatedComponent(0, args.size)
-            )
-
-        val count = countDouble.roundToInt()
-        // there's gotta be a better way to do this
-        val out = mutableListOf<Iota>()
-        for (n in 0 until count)
-            out.add(args[0])
-
-        return out
+        return listOf(ListIota(List(count) { args[0] }))
     }
 }

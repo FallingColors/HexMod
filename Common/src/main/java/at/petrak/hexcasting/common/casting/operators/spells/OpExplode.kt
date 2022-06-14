@@ -8,7 +8,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.level.Explosion
 import net.minecraft.world.phys.Vec3
 
-class OpExplode(val fire: Boolean) : SpellOperator {
+class OpExplode(val fire: Boolean) : SpellAction {
     override val argc: Int
         get() = 2
 

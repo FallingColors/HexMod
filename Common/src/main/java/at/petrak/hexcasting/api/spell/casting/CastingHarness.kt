@@ -8,7 +8,7 @@ import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
-import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.Widget
@@ -141,19 +141,19 @@ class CastingHarness private constructor(
      * handle it functionally.
      */
     fun updateWithPattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
-        var operatorIdPair: Pair<Operator, ResourceLocation>? = null
+        var actionIdPair: Pair<Action, ResourceLocation>? = null
         try {
             // Don't catch this one
-            operatorIdPair = PatternRegistry.matchPatternAndID(newPat, world)
-            if (this.ctx.spellCircle == null && !HexConfig.server().isActionAllowed(operatorIdPair.second)) {
+            actionIdPair = PatternRegistry.matchPatternAndID(newPat, world)
+            if (this.ctx.spellCircle == null && !HexConfig.server().isActionAllowed(actionIdPair.second)) {
                 throw MishapDisallowedSpell()
             } else if (this.ctx.spellCircle != null
-                && !HexConfig.server().isActionAllowedInCircles(operatorIdPair.second)
+                && !HexConfig.server().isActionAllowedInCircles(actionIdPair.second)
             ) {
                 throw MishapDisallowedSpell("disallowed_circle")
             }
 
-            val pattern = operatorIdPair.first
+            val pattern = actionIdPair.first
 
             val unenlightened = pattern.isGreat && !ctx.isCasterEnlightened
 
@@ -208,7 +208,7 @@ class CastingHarness private constructor(
                 continuation,
                 null,
                 mishap.resolutionType(ctx),
-                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.second))),
+                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, actionIdPair?.second))),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
@@ -219,7 +219,7 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         MishapError(exception),
-                        Mishap.Context(newPat, operatorIdPair?.second)
+                        Mishap.Context(newPat, actionIdPair?.second)
                     )
                 )
             )

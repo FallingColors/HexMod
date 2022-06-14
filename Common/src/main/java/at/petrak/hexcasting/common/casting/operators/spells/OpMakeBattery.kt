@@ -13,7 +13,7 @@ import at.petrak.hexcasting.common.lib.HexItems
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
-object OpMakeBattery : SpellOperator {
+object OpMakeBattery : SpellAction {
     override val argc = 1
 
     override val isGreat = true

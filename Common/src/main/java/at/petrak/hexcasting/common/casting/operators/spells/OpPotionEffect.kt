@@ -15,7 +15,7 @@ class OpPotionEffect(
     val allowPotency: Boolean,
     val potencyCubic: Boolean,
     override val isGreat: Boolean,
-) : SpellOperator {
+) : SpellAction {
     override val argc: Int
         get() = if (this.allowPotency) 3 else 2
 

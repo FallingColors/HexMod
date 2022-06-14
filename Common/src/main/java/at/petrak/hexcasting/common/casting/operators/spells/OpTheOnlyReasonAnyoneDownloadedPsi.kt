@@ -13,7 +13,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
 
-object OpTheOnlyReasonAnyoneDownloadedPsi : SpellOperator {
+object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,

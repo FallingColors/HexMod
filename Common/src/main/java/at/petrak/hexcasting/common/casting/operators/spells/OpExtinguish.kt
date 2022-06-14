@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.*
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
-object OpExtinguish : SpellOperator {
+object OpExtinguish : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,
@@ -49,7 +49,7 @@ object OpExtinguish : SpellOperator {
                     ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
                 val distFromTarget =
                     target.distanceTo(Vec3.atCenterOf(here)) // max distance to prevent runaway shenanigans
-                if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && distFromTarget < 10 && ctx.world.mayInteract(
+                if (distFromFocus < Action.MAX_DISTANCE * Action.MAX_DISTANCE && seen.add(here) && distFromTarget < 10 && ctx.world.mayInteract(
                         ctx.caster,
                         here
                     )

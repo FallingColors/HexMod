@@ -1,15 +1,19 @@
 package at.petrak.hexcasting.common.casting.operators.lists
 
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getList
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.ListIota
+import at.petrak.hexcasting.api.spell.iota.NullIota
 
-object OpUnCons : ConstManaOperator {
+object OpUnCons : ConstManaAction {
     override val argc = 1
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
-        val list = args.getChecked<SpellList>(0, argc)
+        val list = args.getList(0, argc)
         if (list.nonEmpty) {
-            return spellListOf(list.cdr, list.car)
+            return listOf(ListIota(list.cdr), list.car)
         }
-        return spellListOf(list, Widget.NULL)
+        return listOf(args[0], NullIota.INSTANCE)
     }
 }

@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
-object OpTeleport : SpellOperator {
+object OpTeleport : SpellAction {
     override val argc = 2
     override val isGreat = true
     override fun execute(
