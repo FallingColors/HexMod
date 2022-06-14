@@ -53,7 +53,7 @@ public class FabricUnsealedIngredient extends BaseCustomIngredient {
 		if (input == null)
 			return false;
 		if(this.stack.getItem() == input.getItem() && this.stack.getDamageValue() == input.getDamageValue()) {
-			DataHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(this.stack);
+			DataHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(input);
 			if (holder != null) {
 				return holder.readRawDatum() != null && holder.writeDatum(SpellDatum.make(Widget.NULL), true);
 			}
