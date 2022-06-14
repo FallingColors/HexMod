@@ -70,19 +70,18 @@ inline val HexPattern.asSpellResult get() = spellListOf(this)
 
 private const val TOLERANCE = 0.0001
 
-fun Any.tolerantEquals(other: Any) = tolerantEquals(other, 64)
+fun Any.tolerantEquals(that: Any) = tolerantEquals(that, 64)
 
-private fun Any.tolerantEquals(other: Any, recursionsLeft: Int): Boolean {
+private fun Any.tolerantEquals(that: Any, recursionsLeft: Int): Boolean {
+    val self = if (this is SpellDatum<*>) this.payload else this
+    val other = if (that is SpellDatum<*>) that.payload else that
+
     return when {
-        this is SpellDatum<*> && other is SpellDatum<*> -> this.payload.tolerantEquals(other.payload, recursionsLeft)
-        this is SpellDatum<*> -> this.payload.tolerantEquals(other, recursionsLeft)
-        other is SpellDatum<*> -> this.tolerantEquals(other.payload, recursionsLeft)
-
-        this is HexPattern && other is HexPattern -> this.angles == other.angles
-        this is Double && other is Double -> abs(this - other) < TOLERANCE
-        this is Vec3 && other is Vec3 -> this.subtract(other).lengthSqr() < TOLERANCE * TOLERANCE
-        this is SpellList && other is SpellList -> {
-            val castA = this.toList()
+        self is HexPattern && other is HexPattern -> self.angles == other.angles
+        self is Double && other is Double -> abs(self - other) < TOLERANCE
+        self is Vec3 && other is Vec3 -> self.subtract(other).lengthSqr() < TOLERANCE * TOLERANCE
+        self is SpellList && other is SpellList -> {
+            val castA = self.toList()
             val castB = other.toList()
             if (castA.size != castB.size || recursionsLeft == 0)
                 return false
@@ -91,7 +90,7 @@ private fun Any.tolerantEquals(other: Any, recursionsLeft: Int): Boolean {
                     return false
             true
         }
-        this is Entity && other is Entity -> this.uuid == other.uuid
-        else -> this == other
+        self is Entity && other is Entity -> self.uuid == other.uuid
+        else -> self == other
     }
 }
