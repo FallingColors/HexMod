@@ -71,6 +71,10 @@ class CastingHarness private constructor(
             info.earlyExit = info.earlyExit || !lastResolutionType.success
         }
 
+        if (continuation is SpellContinuation.NotDone) {
+            lastResolutionType = if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
+        }
+
         return ControllerInfo(
             info.playSound,
             this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
