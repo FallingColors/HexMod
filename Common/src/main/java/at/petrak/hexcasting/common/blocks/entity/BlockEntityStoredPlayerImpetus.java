@@ -85,9 +85,9 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         var name = this.getPlayerName();
         if (name != null) {
             var head = new ItemStack(Items.PLAYER_HEAD);
-            NBTHelper.put(head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), storedPlayerProfile));
+            NBTHelper.put(head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), name));
             lines.add(
-                new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name)));
+                new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name.getName())));
         } else {
             lines.add(new Pair<>(new ItemStack(Items.BARRIER),
                 new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer.none")));
