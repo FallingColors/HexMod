@@ -31,7 +31,7 @@ object OpEntityRaycast : ConstManaAction {
         return if (entityHitResult != null && ctx.isEntityInRange(entityHitResult.entity)) {
             entityHitResult.entity.asActionResult
         } else {
-            listOf(NullIota.INSTANCE)
+            listOf(NullIota())
         }
     }
 }

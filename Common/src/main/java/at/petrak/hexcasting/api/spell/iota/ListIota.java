@@ -3,10 +3,12 @@ package at.petrak.hexcasting.api.spell.iota;
 import at.petrak.hexcasting.api.spell.SpellList;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,7 +69,7 @@ public class ListIota extends Iota {
     public @NotNull Tag serialize() {
         var out = new ListTag();
         for (var subdatum : this.getList()) {
-            out.add(subdatum.serialize());
+            out.add(HexIotaTypes.serialize(subdatum));
         }
         return out;
     }
@@ -93,12 +95,25 @@ public class ListIota extends Iota {
 
         @Override
         public Component display(Tag tag) {
-            return null;
+            var out = new TextComponent("[").withStyle(ChatFormatting.DARK_PURPLE);
+            var list = HexUtils.downcast(tag, ListTag.TYPE);
+            for (int i = 0; i < list.size(); i++) {
+                Tag sub = list.get(i);
+                var csub = HexUtils.downcast(sub, CompoundTag.TYPE);
+
+                out.append(HexIotaTypes.getDisplay(csub));
+
+                if (i < list.size() - 1) {
+                    out.append(",");
+                }
+            }
+            out.append(new TextComponent("]").withStyle(ChatFormatting.DARK_PURPLE));
+            return out;
         }
 
         @Override
         public int color() {
-            return 0;
+            return 0xff_aa00aa;
         }
     };
 }

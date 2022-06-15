@@ -1,12 +1,17 @@
 package at.petrak.hexcasting.api.spell.iota;
 
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.FastColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 /**
  * this is LITERALLY a copy of NullIota but I can't see how to do it any better, i hate java generics
@@ -14,7 +19,10 @@ import org.jetbrains.annotations.Nullable;
 public class GarbageIota extends Iota {
     private static final Object NULL_SUBSTITUTE = new Object();
 
-    public static final GarbageIota INSTANCE = new GarbageIota();
+    public static final Component DISPLAY = new TextComponent("arimfexendrapuse")
+        .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.OBFUSCATED);
+
+    private static final Random RANDOM = new Random();
 
     public GarbageIota() {
         // We have to pass *something* here, but there's nothing that actually needs to go there,
@@ -46,12 +54,13 @@ public class GarbageIota extends Iota {
 
         @Override
         public Component display(Tag tag) {
-            return null;
+            return DISPLAY;
         }
 
         @Override
         public int color() {
-            return 0;
+            var lum = RANDOM.nextInt(0x40, 0x60);
+            return FastColor.ARGB32.color(0xff, lum, lum, lum);
         }
     };
 }

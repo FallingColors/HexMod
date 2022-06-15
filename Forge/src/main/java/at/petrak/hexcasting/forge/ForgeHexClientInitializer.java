@@ -5,6 +5,7 @@ import at.petrak.hexcasting.client.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.shader.HexShaders;
+import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,14 +21,15 @@ public class ForgeHexClientInitializer {
     // We copy Fabric's example; it mixes in on the return of the initializer and sticks it in a global variable.
     // So here's our global.
     public static ItemColors GLOBAL_ITEM_COLORS;
+    public static BlockColors GLOBAL_BLOCK_COLORS;
 
     @SubscribeEvent
     public static void clientInit(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
             RegisterClientStuff.init();
-            RegisterClientStuff.registerColorProviders((colorizer, item) -> {
-                GLOBAL_ITEM_COLORS.register(colorizer, item);
-            });
+            RegisterClientStuff.registerColorProviders(
+                (colorizer, item) -> GLOBAL_ITEM_COLORS.register(colorizer, item),
+                (colorizer, block) -> GLOBAL_BLOCK_COLORS.register(colorizer, block));
         });
 
         var evBus = MinecraftForge.EVENT_BUS;
@@ -36,8 +38,9 @@ public class ForgeHexClientInitializer {
             HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick()));
 
         evBus.addListener((RenderGameOverlayEvent.Post e) -> {
-            if (e.getType() == RenderGameOverlayEvent.ElementType.ALL)
+            if (e.getType() == RenderGameOverlayEvent.ElementType.ALL) {
                 HexAdditionalRenderers.overlayGui(e.getMatrixStack(), e.getPartialTicks());
+            }
         });
 
 

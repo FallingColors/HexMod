@@ -2,6 +2,7 @@ package at.petrak.hexcasting.fabric.recipe;
 
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.tropheusj.serialization_hooks.ingredient.BaseCustomIngredient;
@@ -15,7 +16,6 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Objects;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -26,11 +26,10 @@ public class FabricUnsealedIngredient extends BaseCustomIngredient {
     private final ItemStack stack;
 
     protected FabricUnsealedIngredient(ItemStack stack) {
-        super(Arrays.stream(DatumType.values())
-            .filter((it) -> it != DatumType.EMPTY && it != DatumType.OTHER)
-            .map((type) -> {
+        super(HexIotaTypes.REGISTRY.keySet().stream()
+            .map(it -> {
                 ItemStack newStack = stack.copy();
-                NBTHelper.putString(newStack, IotaHolderItem.TAG_OVERRIDE_VISUALLY, SpellDatum.tagForType(type));
+                NBTHelper.putString(newStack, IotaHolderItem.TAG_OVERRIDE_VISUALLY, it.toString());
                 return new Ingredient.ItemValue(newStack);
             }));
         this.stack = stack;

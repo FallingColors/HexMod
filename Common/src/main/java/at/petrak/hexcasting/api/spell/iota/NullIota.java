@@ -1,9 +1,11 @@
 package at.petrak.hexcasting.api.spell.iota;
 
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,11 +16,8 @@ import org.jetbrains.annotations.Nullable;
 public class NullIota extends Iota {
     private static final Object NULL_SUBSTITUTE = new Object();
 
-    /**
-     * There's no <i>reason</i> you can't make your own new {@link NullIota}; it should work just fine.
-     * But having a canonical one saves allocations.
-     */
-    public static final NullIota INSTANCE = new NullIota();
+    public static final Component DISPLAY = new TextComponent("NULL")
+        .withStyle(ChatFormatting.GRAY);
 
     public NullIota() {
         // We have to pass *something* here, but there's nothing that actually needs to go there,
@@ -50,12 +49,12 @@ public class NullIota extends Iota {
 
         @Override
         public Component display(Tag tag) {
-            return null;
+            return DISPLAY;
         }
 
         @Override
         public int color() {
-            return 0;
+            return 0xff_aaaaaa;
         }
     };
 }

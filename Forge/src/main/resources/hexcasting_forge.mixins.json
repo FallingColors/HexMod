@@ -4,5 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.forge.mixin",
-  "mixins": ["ForgeAccessorRegistry", "ForgeMixinCursedRecipeSerializerBase"], "client": ["ForgeMixinItemColors"]
+  "mixins": ["ForgeAccessorRegistry", "ForgeMixinCursedRecipeSerializerBase"], "client": [
+  "ForgeMixinBlockColors", "ForgeMixinItemColors"
+]
 }

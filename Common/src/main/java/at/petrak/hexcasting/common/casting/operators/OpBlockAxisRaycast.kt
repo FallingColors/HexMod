@@ -31,7 +31,7 @@ object OpBlockAxisRaycast : ConstManaAction {
         return if (blockHitResult.type == HitResult.Type.BLOCK) {
             blockHitResult.direction.step().asActionResult
         } else {
-            listOf(NullIota.INSTANCE)
+            listOf(NullIota())
         }
     }
 }

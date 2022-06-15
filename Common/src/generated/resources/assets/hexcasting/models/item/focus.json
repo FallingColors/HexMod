@@ -1,102 +1,26 @@
 {
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hexcasting:item/focus"
+  },
   "overrides": [
     {
       "predicate": {
-        "hexcasting:datatype": 0.0,
-        "hexcasting:sealed": 0.0
+        "hexcasting:overlay_layer": 0.0
       },
-      "model": "hexcasting:item/focus_empty"
+      "model": "hexcasting:item/focus"
     },
     {
       "predicate": {
-        "hexcasting:datatype": 1.0,
-        "hexcasting:sealed": 0.0
+        "hexcasting:overlay_layer": 1.0
       },
-      "model": "hexcasting:item/focus_entity"
+      "model": "hexcasting:item/focus_filled"
     },
     {
       "predicate": {
-        "hexcasting:datatype": 2.0,
-        "hexcasting:sealed": 0.0
+        "hexcasting:overlay_layer": 2.0
       },
-      "model": "hexcasting:item/focus_double"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 3.0,
-        "hexcasting:sealed": 0.0
-      },
-      "model": "hexcasting:item/focus_vec3"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 4.0,
-        "hexcasting:sealed": 0.0
-      },
-      "model": "hexcasting:item/focus_widget"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 5.0,
-        "hexcasting:sealed": 0.0
-      },
-      "model": "hexcasting:item/focus_list"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 6.0,
-        "hexcasting:sealed": 0.0
-      },
-      "model": "hexcasting:item/focus_pattern"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 0.0,
-        "hexcasting:sealed": 1.0
-      },
-      "model": "hexcasting:item/focus_empty_sealed"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 1.0,
-        "hexcasting:sealed": 1.0
-      },
-      "model": "hexcasting:item/focus_entity_sealed"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 2.0,
-        "hexcasting:sealed": 1.0
-      },
-      "model": "hexcasting:item/focus_double_sealed"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 3.0,
-        "hexcasting:sealed": 1.0
-      },
-      "model": "hexcasting:item/focus_vec3_sealed"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 4.0,
-        "hexcasting:sealed": 1.0
-      },
-      "model": "hexcasting:item/focus_widget_sealed"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 5.0,
-        "hexcasting:sealed": 1.0
-      },
-      "model": "hexcasting:item/focus_list_sealed"
-    },
-    {
-      "predicate": {
-        "hexcasting:datatype": 6.0,
-        "hexcasting:sealed": 1.0
-      },
-      "model": "hexcasting:item/focus_pattern_sealed"
+      "model": "hexcasting:item/focus_sealed"
     }
   ]
 }

@@ -18,7 +18,7 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         dyeColor(DyeColor.RED)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
-        stack.add(GarbageIota.INSTANCE)
+        stack.add(GarbageIota())
         trulyHurt(ctx.caster, HexDamageSources.OVERCAST, ctx.caster.health / 2)
     }
 

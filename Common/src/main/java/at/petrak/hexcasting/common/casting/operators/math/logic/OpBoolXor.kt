@@ -18,7 +18,7 @@ object OpBoolXor : ConstManaAction {
             else if (!a.isTruthy && b.isTruthy)
                 b
             else
-                NullIota.INSTANCE
+                NullIota()
         )
     }
 }

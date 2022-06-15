@@ -11,7 +11,7 @@ class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
         dyeColor(DyeColor.LIGHT_GRAY)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
-        repeat(expected - got) { stack.add(NullIota.INSTANCE) }
+        repeat(expected - got) { stack.add(NullIota()) }
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context) =

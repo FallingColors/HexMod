@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.fabric
 
-import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.HexAdditionalRenderers
 import at.petrak.hexcasting.client.RegisterClientStuff
@@ -49,10 +48,8 @@ object FabricHexClientInitializer : ClientModInitializer {
                 BlockEntityRendererRegistry.register(type, berp)
             }
         })
-        RegisterClientStuff.registerColorProviders { colorizer, item ->
-            ColorProviderRegistry.ITEM.register(colorizer, item)
-        }
-
-        HexStatistics.register()
+        RegisterClientStuff.registerColorProviders(
+            { colorizer, item -> ColorProviderRegistry.ITEM.register(colorizer, item) },
+            { colorizer, block -> ColorProviderRegistry.BLOCK.register(colorizer, block) })
     }
 }

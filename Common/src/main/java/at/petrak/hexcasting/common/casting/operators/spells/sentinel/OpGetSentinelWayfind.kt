@@ -24,7 +24,7 @@ object OpGetSentinelWayfind : ConstManaAction {
             throw MishapLocationInWrongDimension(sentinel.dimension.location())
 
         return if (!sentinel.hasSentinel)
-            listOf(NullIota.INSTANCE)
+            listOf(NullIota())
         else
             sentinel.position.subtract(from).normalize().asActionResult
     }

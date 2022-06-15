@@ -19,6 +19,6 @@ object OpGetSentinelPos : ConstManaAction {
         return if (sentinel.hasSentinel)
             sentinel.position.asActionResult
         else
-            listOf(NullIota.INSTANCE)
+            listOf(NullIota())
     }
 }

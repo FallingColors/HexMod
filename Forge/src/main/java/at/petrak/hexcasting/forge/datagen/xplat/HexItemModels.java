@@ -24,7 +24,6 @@ public class HexItemModels extends PaucalItemModelProvider {
         super(generator, HexAPI.MOD_ID, existingFileHelper);
     }
 
-    private static final String[] DATUM_TYPES = {"empty", "entity", "double", "vec3", "widget", "list", "pattern"};
     private static final String[] PHIAL_SIZES = {"small", "medium", "large"};
 
     @Override
@@ -77,35 +76,8 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         simpleItem(modLoc("patchouli_book"));
 
-        // For stupid bad reasons we need to do this in ascending order.
-        for (int sealedIdx = 0; sealedIdx <= 1; sealedIdx++) {
-            var sealed = sealedIdx == 1;
-            for (int i = 0, stringsLength = DATUM_TYPES.length; i < stringsLength; i++) {
-                var type = DATUM_TYPES[i];
-
-                var suffix = type + (sealed ? "_sealed" : "");
-
-                var focusName = "focus_" + suffix;
-                singleTexture(focusName, new ResourceLocation("item/generated"),
-                    "layer0", modLoc("item/focus/" + suffix));
-                getBuilder(HexItems.FOCUS.getRegistryName().getPath())
-                    .override()
-                    .predicate(ItemFocus.DATATYPE_PRED, i)
-                    .predicate(ItemFocus.SEALED_PRED, sealed ? 1f : 0f)
-                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + focusName)))
-                    .end();
-
-                var spellbookName = "spellbook_" + type + (sealed ? "_sealed" : "");
-                singleTexture(spellbookName, new ResourceLocation("item/generated"),
-                    "layer0", modLoc("item/spellbook/" + suffix));
-                getBuilder(HexItems.SPELLBOOK.getRegistryName().getPath())
-                    .override()
-                    .predicate(ItemFocus.DATATYPE_PRED, i)
-                    .predicate(ItemFocus.SEALED_PRED, sealed ? 1f : 0f)
-                    .model(new ModelFile.UncheckedModelFile(modLoc("item/" + spellbookName)))
-                    .end();
-            }
-        }
+        buildSealableIotaHolder(HexItems.FOCUS, "focus");
+        buildSealableIotaHolder(HexItems.SPELLBOOK, "spellbook");
 
         buildPackagedSpell(HexItems.CYPHER, "cypher");
         buildPackagedSpell(HexItems.TRINKET, "trinket");
@@ -175,6 +147,25 @@ public class HexItemModels extends PaucalItemModelProvider {
             .texture("texture", modLoc("block/akashic/planks1"));
         getBuilder(HexBlocks.AKASHIC_PRESSURE_PLATE.getRegistryName().getPath())
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/akashic_pressure_plate")));
+    }
+
+    private void buildSealableIotaHolder(Item item, String stub) {
+        var name = item.getRegistryName().getPath();
+        var plain = singleTexture(name, new ResourceLocation("item/generated"),
+            "layer0", modLoc("item/" + stub));
+        var unsealed = withExistingParent(name + "_filled", new ResourceLocation("item/generated"))
+            .texture("layer0", modLoc("item/" + stub))
+            .texture("layer1", modLoc("item/" + stub) + "_overlay");
+        var sealed = withExistingParent(name + "_sealed", new ResourceLocation("item/generated"))
+            .texture("layer0", modLoc("item/" + stub))
+            .texture("layer1", modLoc("item/" + stub) + "_overlay_sealed");
+        getBuilder(name)
+            .override().predicate(ItemFocus.OVERLAY_PRED, 0f)
+            .model(plain).end()
+            .override().predicate(ItemFocus.OVERLAY_PRED, 1f)
+            .model(unsealed).end()
+            .override().predicate(ItemFocus.OVERLAY_PRED, 2f)
+            .model(sealed).end();
     }
 
     private void buildScroll(Item item, String size) {

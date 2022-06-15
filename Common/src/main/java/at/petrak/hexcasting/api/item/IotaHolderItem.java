@@ -55,7 +55,7 @@ public interface IotaHolderItem {
     }
 
     default int getColor(ItemStack stack) {
-        var tag = stack.getTag();
+        var tag = this.readIotaTag(stack);
         if (tag == null) {
             return HexUtils.ERROR_COLOR;
         }

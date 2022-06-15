@@ -3,10 +3,10 @@ package at.petrak.hexcasting.api.spell.iota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
@@ -59,17 +59,15 @@ public class PatternIota extends Iota {
     }
 
     public static Component display(HexPattern pat) {
-        var out = new TextComponent("HexPattern")
-            .withStyle(Style.EMPTY.withColor(HexIotaTypes.PATTERN.color()));
-        out.append("(");
-        out.append(pat.getStartDir().toString());
+        var bob = new StringBuilder("HexPattern(");
+        bob.append(pat.getStartDir());
 
         var sig = pat.anglesSignature();
         if (!sig.isEmpty()) {
-            out.append(" ");
-            out.append(sig);
+            bob.append(" ");
+            bob.append(sig);
         }
-        out.append(")");
-        return out;
+        bob.append(")");
+        return new TextComponent(bob.toString()).withStyle(ChatFormatting.GOLD);
     }
 }

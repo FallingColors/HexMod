@@ -1,0 +1,32 @@
+{
+  "credit": "Made with Blockbench",
+  "textures": {
+    "front": "hexcasting:block/akashic/bookshelf",
+    "side": "hexcasting:block/akashic/bookshelf_horiz",
+    "particle": "hexcasting:block/akashic/bookshelf_vert",
+    "top_bottom": "hexcasting:block/akashic/bookshelf_vert"
+  },
+  "elements": [
+    {
+      "name": "body",
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#front", "cullface": "north"},
+        "east": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "east"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "south"},
+        "west": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "west"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#top_bottom", "cullface": "up"},
+        "down": {"uv": [0, 0, 16, 16], "texture": "#top_bottom", "cullface": "down"}
+      }
+    },
+    {
+      "name": "overlay",
+      "from": [0, 0, 0],
+      "to": [16, 16, 0],
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#overlay", "cullface": "north", "tintindex": 0}
+      }
+    }
+  ]
+}

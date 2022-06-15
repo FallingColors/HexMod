@@ -2,7 +2,6 @@ package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
-import at.petrak.hexcasting.api.spell.DatumType;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
@@ -130,41 +129,38 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             models().cubeAll("akashic_connector", modLoc("block/akashic/connector")));
 
         getVariantBuilder(HexBlocks.AKASHIC_BOOKSHELF).forAllStates(bs -> {
-            var type = bs.getValue(BlockAkashicBookshelf.DATUM_TYPE);
-
-            var side = modLoc("block/akashic/bookshelf/side");
-            var end = modLoc("block/akashic/bookshelf/end");
-
-            String[] fronts;
-            if (type == DatumType.EMPTY) {
-                fronts = new String[]{"empty"};
-            } else {
-                fronts = new String[4];
-                for (int i = 0; i < 4; i++) {
-                    fronts[i] = type.getSerializedName() + (i + 1);
-                }
-            }
+            Direction dir = bs.getValue(BlockAkashicBookshelf.FACING);
 
             var builder = ConfiguredModel.builder();
 
-            for (int i = 0; i < fronts.length; i++) {
-                var front = fronts[i];
-                var model = models().orientable("akashic_bookshelf_" + type.getSerializedName() + i,
-                    side, modLoc("block/akashic/bookshelf/" + front), end);
+            if (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS)) {
+                for (int i = 1; i <= 4; i++) {
+                    var model = models().withExistingParent("akashic_bookshelf_" + i,
+                            modLoc("block/akashic_bookshelf"))
+                        .texture("overlay", modLoc("block/akashic/bookshelf_overlay_" + i));
 
-                Direction dir = bs.getValue(BlockAkashicBookshelf.FACING);
-                if (dir == Direction.NORTH && type == DatumType.EMPTY) {
+                    builder.modelFile(model)
+                        .rotationY(dir.getOpposite().get2DDataValue() * 90)
+                        .uvLock(true);
+                    if (i < 4) {
+                        builder = builder.nextModel();
+                    }
+                }
+            } else {
+                var model = models().orientable("akashic_bookshelf_empty",
+                    modLoc("block/akashic/bookshelf_horiz"),
+                    modLoc("block/akashic/bookshelf"),
+                    modLoc("block/akashic/bookshelf_vert"));
+
+                if (dir == Direction.NORTH) {
                     simpleBlockItem(HexBlocks.AKASHIC_BOOKSHELF, model);
                 }
 
                 builder.modelFile(model)
                     .rotationY(dir.getOpposite().get2DDataValue() * 90)
                     .uvLock(true);
-                if (i < fronts.length - 1) {
-                    builder.nextModel();
-                }
             }
-
+            
             return builder.build();
         });
 

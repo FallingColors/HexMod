@@ -9,6 +9,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.ApiStatus;
@@ -114,16 +115,16 @@ public class HexIotaTypes {
         if (type == null) {
             return null;
         }
-        var dataKey = tag.get(KEY_DATA);
-        if (dataKey == null) {
+        var data = tag.get(KEY_DATA);
+        if (data == null) {
             return null;
         }
         Iota deserialized;
         try {
-            deserialized = Objects.requireNonNullElse(type.deserialize(tag, world), NullIota.INSTANCE);
+            deserialized = Objects.requireNonNullElse(type.deserialize(data, world), new NullIota());
         } catch (IllegalArgumentException exn) {
             HexAPI.LOGGER.warn("Caught an exception deserializing an iota", exn);
-            deserialized = GarbageIota.INSTANCE;
+            deserialized = new GarbageIota();
         }
         return deserialized;
     }
@@ -131,13 +132,13 @@ public class HexIotaTypes {
     public static Component getDisplay(CompoundTag tag) {
         var type = getTypeFromTag(tag);
         if (type == null) {
-            return null;
+            return TextComponent.EMPTY;
         }
-        var dataKey = tag.get(KEY_DATA);
-        if (dataKey == null) {
-            return null;
+        var data = tag.get(KEY_DATA);
+        if (data == null) {
+            return TextComponent.EMPTY;
         }
-        return type.display(tag);
+        return type.display(data);
     }
 
     public static int getColor(CompoundTag tag) {

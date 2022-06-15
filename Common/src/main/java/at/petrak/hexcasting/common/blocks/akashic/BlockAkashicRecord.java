@@ -31,7 +31,7 @@ public class BlockAkashicRecord extends Block {
             return null;
         }
 
-        var openPos = AkashicFloodfiller.floodFillFor(herePos, level, 0.5f,
+        var openPos = AkashicFloodfiller.floodFillFor(herePos, level, 0.9f,
             (pos, bs, world) ->
                 world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
                     && tile.getPattern() == null);

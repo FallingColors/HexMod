@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.spell.iota;
 
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -38,7 +39,7 @@ public class EntityIota extends Iota {
 
     @Override
     public Component display() {
-        return this.getEntity().getName();
+        return this.getEntity().getName().copy().withStyle(ChatFormatting.AQUA);
     }
 
     public static IotaType<EntityIota> TYPE = new IotaType<>() {
@@ -67,7 +68,7 @@ public class EntityIota extends Iota {
                 return new TranslatableComponent("hexcasting.spelldata.entity.whoknows");
             }
             var nameJson = ctag.getString("name");
-            return Component.Serializer.fromJsonLenient(nameJson);
+            return Component.Serializer.fromJsonLenient(nameJson).withStyle(ChatFormatting.AQUA);
         }
 
         @Override

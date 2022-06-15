@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client;
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -10,19 +11,17 @@ import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
-import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
-import at.petrak.hexcasting.common.lib.HexBlockEntities;
-import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.lib.HexParticles;
+import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -30,7 +29,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -51,6 +49,13 @@ import java.util.function.UnaryOperator;
 
 public class RegisterClientStuff {
     public static void init() {
+        registerDataHolderOverrides(HexItems.FOCUS,
+            stack -> HexItems.FOCUS.readIotaTag(stack) != null,
+            ItemFocus::isSealed);
+        registerDataHolderOverrides(HexItems.SPELLBOOK,
+            stack -> HexItems.SPELLBOOK.readIotaTag(stack) != null,
+            ItemSpellbook::isSealed);
+
         registerPackagedSpellOverrides(HexItems.CYPHER);
         registerPackagedSpellOverrides(HexItems.TRINKET);
         registerPackagedSpellOverrides(HexItems.ARTIFACT);
@@ -68,9 +73,9 @@ public class RegisterClientStuff {
                 return (float) Math.sqrt((float) max / ManaConstants.CRYSTAL_UNIT / 10);
             });
 
-        registerScollOverrides(HexItems.SCROLL_SMOL);
-        registerScollOverrides(HexItems.SCROLL_MEDIUM);
-        registerScollOverrides(HexItems.SCROLL_LARGE);
+        registerScrollOverrides(HexItems.SCROLL_SMOL);
+        registerScrollOverrides(HexItems.SCROLL_MEDIUM);
+        registerScrollOverrides(HexItems.SCROLL_LARGE);
 
         x.registerItemProperty(HexItems.SLATE, ItemSlate.WRITTEN_PRED,
             (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
@@ -102,17 +107,26 @@ public class RegisterClientStuff {
         addScryingLensStuff();
     }
 
-    public static void registerColorProviders(BiConsumer<ItemColor, Item> colorProviderRegistry) {
-        colorProviderRegistry.accept(makeIotaStorageColorer(
-                stack -> HexItems.FOCUS.readIotaTag(stack) != null,
-                ItemFocus::isSealed,
-                HexItems.FOCUS::getColor),
-            HexItems.FOCUS);
-        colorProviderRegistry.accept(makeIotaStorageColorer(
-                stack -> HexItems.SPELLBOOK.readIotaTag(stack) != null,
-                ItemSpellbook::isSealed,
-                HexItems.SPELLBOOK::getColor),
-            HexItems.SPELLBOOK);
+    public static void registerColorProviders(BiConsumer<ItemColor, Item> itemColorRegistry,
+        BiConsumer<BlockColor, Block> blockColorRegistry) {
+        itemColorRegistry.accept(makeIotaStorageColorer(HexItems.FOCUS::getColor), HexItems.FOCUS);
+        itemColorRegistry.accept(makeIotaStorageColorer(HexItems.SPELLBOOK::getColor), HexItems.SPELLBOOK);
+
+        blockColorRegistry.accept((bs, level, pos, idx) -> {
+            if (!bs.getValue(BlockAkashicBookshelf.HAS_BOOKS) || level == null || pos == null) {
+                return 0xff_ffffff;
+            }
+            var tile = level.getBlockEntity(pos);
+            if (!(tile instanceof BlockEntityAkashicBookshelf beas)) {
+                // this gets called for particles for some irritating reason
+                return 0xff_ffffff;
+            }
+            var iotaTag = beas.getIotaTag();
+            if (iotaTag == null) {
+                return 0xff_ffffff;
+            }
+            return HexIotaTypes.getColor(iotaTag);
+        }, HexBlocks.AKASHIC_BOOKSHELF);
     }
 
     /**
@@ -120,22 +134,12 @@ public class RegisterClientStuff {
      * <br>
      * 0 = base; 1 = unsealed overlay; 2 = sealed overlay.
      */
-    public static ItemColor makeIotaStorageColorer(Predicate<ItemStack> hasIota, Predicate<ItemStack> isSealed,
-        ToIntFunction<ItemStack> getColor) {
+    public static ItemColor makeIotaStorageColorer(ToIntFunction<ItemStack> getColor) {
         return (stack, idx) -> {
             if (idx == 0) {
-                return 0xff_000000;
+                return 0xff_ffffff;
             }
-            if (!hasIota.test(stack)) {
-                return 0; // no higher overlays
-            }
-
-            var sealed = isSealed.test(stack);
-            if (!sealed && idx == 1 || sealed && idx == 2) {
-                return getColor.applyAsInt(stack);
-            } else {
-                return 0; // this layer is invisible
-            }
+            return getColor.applyAsInt(stack);
         };
     }
 
@@ -173,29 +177,11 @@ public class RegisterClientStuff {
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF,
             (lines, state, pos, observer, world, direction, lensHand) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
-                    var recordPos = tile.getRecordPos();
-                    var pattern = tile.getPattern();
-                    if (recordPos != null && pattern != null) {
-                        lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_RECORD), new TranslatableComponent(
-                            "hexcasting.tooltip.lens.akashic.bookshelf.location",
-                            recordPos.toShortString()
-                        )));
-                        if (world.getBlockEntity(recordPos) instanceof BlockEntityAkashicRecord record) {
-                            lines.add(new Pair<>(new ItemStack(Items.BOOK), record.getDisplayAt(pattern)));
-                        }
+                    var iotaTag = tile.getIotaTag();
+                    if (iotaTag != null) {
+                        var display = HexIotaTypes.getDisplay(iotaTag);
+                        lines.add(new Pair<>(new ItemStack(Items.BOOK), display));
                     }
-                }
-            });
-
-        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_RECORD,
-            (lines, state, pos, observer, world, direction, lensHand) -> {
-                if (world.getBlockEntity(pos) instanceof BlockEntityAkashicRecord tile) {
-                    int count = tile.getCount();
-
-                    lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_BOOKSHELF), new TranslatableComponent(
-                        "hexcasting.tooltip.lens.akashic.record.count" + (count == 1 ? ".single" : ""),
-                        count
-                    )));
                 }
             });
 
@@ -280,7 +266,21 @@ public class RegisterClientStuff {
         };
     }
 
-    private static void registerScollOverrides(ItemScroll scroll) {
+    private static void registerDataHolderOverrides(IotaHolderItem item, Predicate<ItemStack> hasIota,
+        Predicate<ItemStack> isSealed) {
+        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.OVERLAY_PRED,
+            (stack, level, holder, holderID) -> {
+                if (!hasIota.test(stack)) {
+                    return 0;
+                }
+                if (!isSealed.test(stack)) {
+                    return 1;
+                }
+                return 2;
+            });
+    }
+
+    private static void registerScrollOverrides(ItemScroll scroll) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(scroll, ItemScroll.ANCIENT_PREDICATE,
             (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
     }

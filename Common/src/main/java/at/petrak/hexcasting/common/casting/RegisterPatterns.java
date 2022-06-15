@@ -349,7 +349,7 @@ public class RegisterPatterns {
             // == Consts ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("d", HexDir.EAST), modLoc("const/null"),
-                Action.makeConstantOp(NullIota.INSTANCE));
+                Action.makeConstantOp(new NullIota()));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqea", HexDir.NORTH_WEST), modLoc("const/vec/px"),
                 Action.makeConstantOp(new Vec3Iota(new Vec3(1.0, 0.0, 0.0))));

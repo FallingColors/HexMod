@@ -2,10 +2,10 @@ package at.petrak.hexcasting.api.spell.iota;
 
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
@@ -42,14 +42,12 @@ public class Vec3Iota extends Iota {
         @Nullable
         @Override
         public Vec3Iota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            var lat = HexUtils.downcast(tag, LongArrayTag.TYPE);
-            var vec = HexUtils.vecFromNBT(lat.getAsLongArray());
-            return new Vec3Iota(vec);
+            return Vec3Iota.deserialize(tag);
         }
 
         @Override
         public Component display(Tag tag) {
-            return null;
+            return Vec3Iota.display(Vec3Iota.deserialize(tag).getVec3());
         }
 
         @Override
@@ -58,9 +56,15 @@ public class Vec3Iota extends Iota {
         }
     };
 
+    public static Vec3Iota deserialize(Tag tag) throws IllegalArgumentException {
+        var lat = HexUtils.downcast(tag, LongArrayTag.TYPE);
+        var vec = HexUtils.vecFromNBT(lat.getAsLongArray());
+        return new Vec3Iota(vec);
+    }
+
     public static Component display(double x, double y, double z) {
         return new TextComponent(String.format("(%.2f, %.2f, %.2f)", x, y, z))
-            .withStyle(Style.EMPTY.withColor(HexIotaTypes.VEC3.color()));
+            .withStyle(ChatFormatting.LIGHT_PURPLE);
     }
 
     public static Component display(Vec3 v) {

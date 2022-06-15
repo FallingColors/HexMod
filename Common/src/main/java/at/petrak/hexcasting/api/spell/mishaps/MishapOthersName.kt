@@ -24,11 +24,6 @@ class MishapOthersName(val other: Player) : Mishap() {
     companion object {
         @JvmStatic
         fun getTrueNameFromDatum(datum: Iota, caster: Player): Player? {
-            if (datum is EntityIota && datum.entity is Player && datum != caster)
-                return datum.entity as Player
-            if (datum !is ListIota)
-                return null
-
             val poolToSearch = ArrayDeque<Iota>()
             poolToSearch.addLast(datum)
 

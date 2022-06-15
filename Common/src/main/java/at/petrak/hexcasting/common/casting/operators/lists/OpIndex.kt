@@ -13,7 +13,7 @@ object OpIndex : ConstManaAction {
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val list = args.getList(0, argc).toMutableList()
         val index = args.getDouble(1, argc)
-        val x = list.getOrElse(index.roundToInt()) { NullIota.INSTANCE }
+        val x = list.getOrElse(index.roundToInt()) { NullIota() }
         return listOf(x)
     }
 }

@@ -19,8 +19,10 @@ import java.util.List;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ItemFocus extends Item implements IotaHolderItem {
-    public static final ResourceLocation DATATYPE_PRED = modLoc("datatype");
-    public static final ResourceLocation SEALED_PRED = modLoc("sealed");
+    // 0 = no overlay
+    // 1 = unsealed
+    // 2 = sealed
+    public static final ResourceLocation OVERLAY_PRED = modLoc("overlay_layer");
 
     public static final String TAG_DATA = "data";
     public static final String TAG_SEALED = "sealed";

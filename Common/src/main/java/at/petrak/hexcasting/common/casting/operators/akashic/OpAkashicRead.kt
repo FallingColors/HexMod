@@ -24,6 +24,6 @@ object OpAkashicRead : ConstManaAction {
         }
 
         val datum = record.lookupPattern(pos, key, ctx.world)
-        return listOf(datum ?: NullIota.INSTANCE)
+        return listOf(datum ?: NullIota())
     }
 }

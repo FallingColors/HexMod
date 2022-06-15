@@ -36,12 +36,13 @@ public interface AkashicFloodfiller {
                 if (seenBlocks.add(neighbor)) {
                     var bs = world.getBlockState(neighbor);
                     if (isTarget.test(neighbor, bs, world)) {
-                        if (world.random.nextFloat() < skipChance) {
+                        if (world.random.nextFloat() > skipChance) {
                             return neighbor;
                         } else {
                             skippedBlocks.add(neighbor);
                         }
-                    } else if (canItBeFloodedThrough(neighbor, bs, world)) {
+                    }
+                    if (canItBeFloodedThrough(neighbor, bs, world)) {
                         todo.add(neighbor);
                     }
                 }
