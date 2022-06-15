@@ -1,0 +1,21 @@
+{
+  "name": "hexcasting.entry.lore.terabithia3",
+  "icon": "hexcasting:lore_fragment",
+  "category": "hexcasting:lore",
+  "advancement": "hexcasting:lore/terabithia3",
+  "sortnum": 2,
+  "pages": [
+    "hexcasting.page.lore.terabithia3.1",
+    "hexcasting.page.lore.terabithia3.2",
+    "hexcasting.page.lore.terabithia3.3",
+    "hexcasting.page.lore.terabithia3.4",
+    "hexcasting.page.lore.terabithia3.5",
+    "hexcasting.page.lore.terabithia3.6",
+    "hexcasting.page.lore.terabithia3.7",
+    "hexcasting.page.lore.terabithia3.8",
+    "hexcasting.page.lore.terabithia3.9",
+    "hexcasting.page.lore.terabithia3.10",
+    "hexcasting.page.lore.terabithia3.11",
+    "hexcasting.page.lore.terabithia3.12"
+  ]
+}

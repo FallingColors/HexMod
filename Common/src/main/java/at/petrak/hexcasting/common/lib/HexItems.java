@@ -52,8 +52,8 @@ public class HexItems {
     public static final ItemSpellbook SPELLBOOK = make("spellbook", new ItemSpellbook(unstackable()));
 
     public static final ItemCypher CYPHER = make("cypher", new ItemCypher(unstackable()));
-    public static final ItemTrinket TRINKET = make("trinket", new ItemTrinket(unstackable()));
-    public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable()));
+    public static final ItemTrinket TRINKET = make("trinket", new ItemTrinket(unstackable().rarity(Rarity.UNCOMMON)));
+    public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable().rarity(Rarity.RARE)));
 
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
         new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1).defaultDurability(Tiers.DIAMOND.getUses())));
@@ -88,6 +88,10 @@ public class HexItems {
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
         new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
+
+    public static final ItemLoreFragment LORE_FRAGMENT = make("lore_fragment",
+        new ItemLoreFragment(unstackable()
+            .rarity(Rarity.RARE)));
 
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
         new ItemCreativeUnlocker(unstackable()

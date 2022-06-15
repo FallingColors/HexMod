@@ -1,0 +1,28 @@
+{
+  "parent": "hexcasting:lore",
+  "display": {
+    "icon": {
+      "item": "hexcasting:lore_fragment"
+    },
+    "title": {
+      "translate": "advancement.hexcasting:lore/terabithia5"
+    },
+    "description": {
+      "text": ""
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "grant": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "grant"
+    ]
+  ]
+}

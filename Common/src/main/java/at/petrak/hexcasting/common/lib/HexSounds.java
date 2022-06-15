@@ -38,6 +38,8 @@ public class HexSounds {
     public static final SoundEvent IMPETUS_LOOK_TICK = sound("impetus.fletcher.tick");
     public static final SoundEvent IMPETUS_STOREDPLAYER_DING = sound("impetus.cleric.register");
 
+    public static final SoundEvent READ_LORE_FRAGMENT = sound("lore_fragment.read");
+
     private static SoundEvent sound(String name) {
         var id = modLoc(name);
         var sound = new SoundEvent(id);
