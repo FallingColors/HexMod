@@ -23,7 +23,7 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 
-sealed class Mishap : Throwable() {
+abstract class Mishap : Throwable() {
     /** Mishaps spray half-red, half-this-color. */
     abstract fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer
 
