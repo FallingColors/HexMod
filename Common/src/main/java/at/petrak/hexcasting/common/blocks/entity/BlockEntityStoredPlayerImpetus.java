@@ -31,6 +31,9 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     private GameProfile storedPlayerProfile = null;
     private UUID storedPlayer = null;
 
+    private GameProfile cachedDisplayProfile = null;
+    private ItemStack cachedDisplayStack = null;
+
     public BlockEntityStoredPlayerImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlockEntities.IMPETUS_STOREDPLAYER_TILE, pWorldPosition, pBlockState);
     }
@@ -84,10 +87,15 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
 
         var name = this.getPlayerName();
         if (name != null) {
-            var head = new ItemStack(Items.PLAYER_HEAD);
-            NBTHelper.put(head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), name));
-            lines.add(
-                new Pair<>(head, new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name.getName())));
+            if (!name.equals(cachedDisplayProfile) || cachedDisplayStack == null) {
+                cachedDisplayProfile = name;
+                var head = new ItemStack(Items.PLAYER_HEAD);
+                NBTHelper.put(head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), name));
+                head.getItem().verifyTagAfterLoad(head.getOrCreateTag());
+                cachedDisplayStack = head;
+            }
+            lines.add(new Pair<>(cachedDisplayStack,
+                 new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name.getName())));
         } else {
             lines.add(new Pair<>(new ItemStack(Items.BARRIER),
                 new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer.none")));
