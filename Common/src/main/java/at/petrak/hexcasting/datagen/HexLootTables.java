@@ -84,20 +84,36 @@ public class HexLootTables extends PaucalLootTableProvider {
         var goodAtAmethystingCond = MatchTool.toolMatches(
             ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES)
         );
-        var dustPool = LootPool.lootPool()
+
+        var dustPoolWhenGood = LootPool.lootPool()
             .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST))
             .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4)))
             .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
             .when(noSilkTouchCond).when(goodAtAmethystingCond);
+
+        var dustPoolWhenBad = LootPool.lootPool()
+            .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST))
+            .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2)))
+            .when(noSilkTouchCond).when(goodAtAmethystingCond.invert());
+
         var isThatAnMFingBrandonSandersonReference = LootPool.lootPool()
             .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond)
             .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
-                0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
+                 0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
+
+        var isThatAnMFingBadBrandonSandersonReference = LootPool.lootPool()
+             .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
+             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
+             .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
+             .when(LootItemRandomChanceCondition.randomChance(0.125f));
+
         lootTables.put(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER, LootTable.lootTable()
-            .withPool(dustPool)
-            .withPool(isThatAnMFingBrandonSandersonReference));
+             .withPool(dustPoolWhenGood)
+             .withPool(dustPoolWhenBad)
+             .withPool(isThatAnMFingBrandonSandersonReference)
+             .withPool(isThatAnMFingBadBrandonSandersonReference));
 
         String[] rarities = new String[]{
             "few",
