@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 public abstract class CCIotaHolder extends ItemComponent implements ADIotaHolder {
     public CCIotaHolder(ItemStack stack) {
-        super(stack, HexCardinalComponents.DATA_HOLDER);
+        super(stack, HexCardinalComponents.IOTA_HOLDER);
     }
 
     public static class ItemBased extends CCIotaHolder {
