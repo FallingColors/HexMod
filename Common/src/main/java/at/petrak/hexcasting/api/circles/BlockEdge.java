@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.misc;
+package at.petrak.hexcasting.api.circles;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
