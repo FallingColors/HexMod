@@ -14,7 +14,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         if (stack.isEmpty())
@@ -48,7 +48,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
         return OperationResult(
             continuation,
             stack,
-            local,
+            ravenmind,
             listOf()
         )
     }

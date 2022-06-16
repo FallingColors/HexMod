@@ -13,7 +13,7 @@ object OpForEach : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         if (stack.size < 2)
@@ -29,7 +29,7 @@ object OpForEach : Action {
         return OperationResult(
             continuation.pushFrame(frame),
             stack,
-            local,
+            ravenmind,
             listOf()
         )
     }

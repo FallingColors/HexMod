@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.iota.*;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.gui.Font;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -12,9 +13,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -23,6 +26,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Stores the registry for iota types, some utility methods, and all the types Hexcasting itself defines.
  */
+@ParametersAreNonnullByDefault
 public class HexIotaTypes {
     public static final Registry<IotaType<?>> REGISTRY = IXplatAbstractions.INSTANCE.getIotaTypeRegistry();
     public static final String
@@ -139,6 +143,18 @@ public class HexIotaTypes {
             return TextComponent.EMPTY;
         }
         return type.display(data);
+    }
+
+    public static List<FormattedCharSequence> getDisplayWithMaxWidth(CompoundTag tag, int maxWidth, Font font) {
+        var type = getTypeFromTag(tag);
+        if (type == null) {
+            return List.of();
+        }
+        var data = tag.get(KEY_DATA);
+        if (data == null) {
+            return List.of();
+        }
+        return type.displayWithWidth(data, maxWidth, font);
     }
 
     public static int getColor(CompoundTag tag) {

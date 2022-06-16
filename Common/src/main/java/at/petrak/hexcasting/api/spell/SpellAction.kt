@@ -21,14 +21,14 @@ interface SpellAction : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
-        val executeResult = this.execute(args, ctx) ?: return OperationResult(continuation, stack, local, listOf())
+        val executeResult = this.execute(args, ctx) ?: return OperationResult(continuation, stack, ravenmind, listOf())
         val (spell, mana, particles) = executeResult
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
@@ -49,7 +49,7 @@ interface SpellAction : Action {
         for (spray in particles)
             sideEffects.add(OperatorSideEffect.Particles(spray))
 
-        return OperationResult(continuation, stack, local, sideEffects)
+        return OperationResult(continuation, stack, ravenmind, sideEffects)
     }
 
 }

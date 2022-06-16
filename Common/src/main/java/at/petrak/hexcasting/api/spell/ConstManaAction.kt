@@ -19,7 +19,7 @@ interface ConstManaAction : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         if (this.argc > stack.size)
@@ -31,6 +31,6 @@ interface ConstManaAction : Action {
 
         val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMana(this.manaCost))
 
-        return OperationResult(continuation, stack, local, sideEffects)
+        return OperationResult(continuation, stack, ravenmind, sideEffects)
     }
 }

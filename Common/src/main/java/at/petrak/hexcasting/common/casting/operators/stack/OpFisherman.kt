@@ -12,7 +12,7 @@ object OpFisherman : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         if (stack.size < 2)
@@ -23,6 +23,6 @@ object OpFisherman : Action {
         val fish = stack.removeAt(stack.size - 1 - depth)
         stack.add(fish)
 
-        return OperationResult(continuation, stack, local, listOf())
+        return OperationResult(continuation, stack, ravenmind, listOf())
     }
 }

@@ -15,7 +15,7 @@ object OpPrint : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         if (stack.isEmpty()) {
@@ -23,7 +23,7 @@ object OpPrint : Action {
         }
         val datum = stack[stack.lastIndex]
         return OperationResult(
-            continuation, stack, local, listOf(
+            continuation, stack, ravenmind, listOf(
                 OperatorSideEffect.AttemptSpell(Spell(datum), hasCastingSound = false, awardStat = false)
             )
         )

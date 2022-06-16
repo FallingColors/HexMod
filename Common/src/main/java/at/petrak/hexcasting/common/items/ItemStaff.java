@@ -35,9 +35,11 @@ public class ItemStaff extends Item {
         if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             var harness = IXplatAbstractions.INSTANCE.getHarness(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatterns(serverPlayer);
+            var descs = harness.generateDescs();
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
-                new MsgOpenSpellGuiAck(hand, patterns, harness.generateDescs()));
+                new MsgOpenSpellGuiAck(hand, patterns, descs.getFirst(), descs.getSecond(), descs.getThird(),
+                    harness.getParenCount()));
         }
 
         player.awardStat(Stats.ITEM_USED.get(this));

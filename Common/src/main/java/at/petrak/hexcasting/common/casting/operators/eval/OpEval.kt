@@ -12,7 +12,7 @@ object OpEval : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         val instrs = stack.getList(stack.lastIndex)
@@ -29,6 +29,6 @@ object OpEval : Action {
             }
 
         val frame = ContinuationFrame.Evaluate(instrs)
-        return OperationResult(newCont.pushFrame(frame), stack, local, listOf())
+        return OperationResult(newCont.pushFrame(frame), stack, ravenmind, listOf())
     }
 }

@@ -25,7 +25,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * Sent client->server when the player finishes drawing a pattern.
- * Server will send back a MsgNewSpellPatternAck packet
+ * Server will send back a {@link MsgNewSpellPatternAck} packet
  */
 public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern,
                                     List<ResolvedPattern> resolvedPatterns)
@@ -40,12 +40,12 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
     public static MsgNewSpellPatternSyn deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var hand = buf.readEnum(InteractionHand.class);
-        var pattern = HexPattern.fromNBT(buf.readAnySizeNbt());
+        var pattern = HexPattern.fromNBT(buf.readNbt());
 
         var resolvedPatternsLen = buf.readInt();
         var resolvedPatterns = new ArrayList<ResolvedPattern>(resolvedPatternsLen);
         for (int i = 0; i < resolvedPatternsLen; i++) {
-            resolvedPatterns.add(ResolvedPattern.fromNBT(buf.readAnySizeNbt()));
+            resolvedPatterns.add(ResolvedPattern.fromNBT(buf.readNbt()));
         }
         return new MsgNewSpellPatternSyn(hand, pattern, resolvedPatterns);
     }
@@ -86,8 +86,9 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
 
                 ControllerInfo clientInfo;
                 if (autoFail) {
+                    var descs = harness.generateDescs();
                     clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
-                        harness.generateDescs());
+                        descs.getFirst(), descs.getSecond(), descs.getThird(), harness.getParenCount());
                 } else {
                     clientInfo = harness.executeIota(new PatternIota(this.pattern), sender.getLevel());
 

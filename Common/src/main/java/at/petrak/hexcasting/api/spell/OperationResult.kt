@@ -10,6 +10,6 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 data class OperationResult(
     val newContinuation: SpellContinuation,
     val newStack: List<Iota>,
-    val newLocalIota: Iota,
+    val newLocalIota: Iota?,
     val sideEffects: List<OperatorSideEffect>
 )

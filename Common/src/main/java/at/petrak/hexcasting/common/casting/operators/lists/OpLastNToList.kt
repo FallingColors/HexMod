@@ -13,7 +13,7 @@ object OpLastNToList : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         if (stack.isEmpty())
@@ -28,6 +28,6 @@ object OpLastNToList : Action {
         }
         stack.addAll(output.asActionResult)
 
-        return OperationResult(continuation, stack, local, listOf())
+        return OperationResult(continuation, stack, ravenmind, listOf())
     }
 }

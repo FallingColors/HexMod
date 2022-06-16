@@ -13,7 +13,6 @@ import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.ListIota
-import at.petrak.hexcasting.api.spell.iota.NullIota
 import at.petrak.hexcasting.api.spell.iota.PatternIota
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
@@ -35,7 +34,7 @@ import kotlin.math.min
  */
 class CastingHarness private constructor(
     var stack: MutableList<Iota>,
-    var ravenmind: Iota,
+    var ravenmind: Iota?,
     var parenCount: Int,
     var parenthesized: List<Iota>,
     var escapeNext: Boolean,
@@ -47,7 +46,7 @@ class CastingHarness private constructor(
     constructor(
         ctx: CastingContext,
         prepackagedColorizer: FrozenColorizer? = null
-    ) : this(mutableListOf(), NullIota(), 0, mutableListOf(), false, ctx, prepackagedColorizer)
+    ) : this(mutableListOf(), null, 0, mutableListOf(), false, ctx, prepackagedColorizer)
 
     /**
      * Execute a single iota.
@@ -79,14 +78,20 @@ class CastingHarness private constructor(
         }
 
         if (continuation is SpellContinuation.NotDone) {
-            lastResolutionType = if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
+            lastResolutionType =
+                if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
         }
+
+        val (stackDescs, parenDescs, ravenmind) = generateDescs()
 
         return ControllerInfo(
             info.playSound,
             this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
             lastResolutionType,
-            generateDescs()
+            stackDescs,
+            parenDescs,
+            ravenmind,
+            this.parenCount
         )
     }
 
@@ -248,7 +253,11 @@ class CastingHarness private constructor(
         }
     }
 
-    fun generateDescs() = stack.map(Iota::display)
+    fun generateDescs() = Triple(
+        stack.map(HexIotaTypes::serialize),
+        parenthesized.map(HexIotaTypes::serialize),
+        ravenmind?.let(HexIotaTypes::serialize)
+    )
 
     /**
      * Return the functional update represented by the current state (for use with `copy`)
@@ -459,7 +468,8 @@ class CastingHarness private constructor(
     fun serializeToNBT() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()
 
-        TAG_LOCAL %= HexIotaTypes.serialize(ravenmind)
+        if (ravenmind != null)
+            TAG_LOCAL %= HexIotaTypes.serialize(ravenmind!!)
         TAG_PAREN_COUNT %= parenCount
         TAG_ESCAPE_NEXT %= escapeNext
 
@@ -488,12 +498,15 @@ class CastingHarness private constructor(
                     stack.add(datum)
                 }
 
-                val localIota = HexIotaTypes.deserialize(nbt.getCompound(TAG_LOCAL), ctx.world)
+                val ravenmind = if (nbt.contains(TAG_LOCAL))
+                    HexIotaTypes.deserialize(nbt.getCompound(TAG_LOCAL), ctx.world)
+                else
+                    null
 
                 val parenthesized = mutableListOf<Iota>()
                 val parenTag = nbt.getList(TAG_PARENTHESIZED, Tag.TAG_COMPOUND)
                 for (subtag in parenTag) {
-                    parenthesized.add(HexIotaTypes.deserialize(nbt.getCompound(TAG_LOCAL), ctx.world))
+                    parenthesized.add(HexIotaTypes.deserialize(subtag.downcast(CompoundTag.TYPE), ctx.world))
                 }
 
                 val parenCount = nbt.getInt(TAG_PAREN_COUNT)
@@ -505,7 +518,7 @@ class CastingHarness private constructor(
                     null
                 }
 
-                CastingHarness(stack, localIota, parenCount, parenthesized, escapeNext, ctx, colorizer)
+                CastingHarness(stack, ravenmind, parenCount, parenthesized, escapeNext, ctx, colorizer)
             } catch (exn: Exception) {
                 CastingHarness(ctx)
             }

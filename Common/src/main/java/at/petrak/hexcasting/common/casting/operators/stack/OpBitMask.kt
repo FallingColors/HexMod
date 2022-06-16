@@ -14,7 +14,7 @@ object OpBitMask : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         if (stack.size < 1)
@@ -38,6 +38,6 @@ object OpBitMask : Action {
             }
         }
 
-        return OperationResult(continuation, out.asReversed(), local, listOf())
+        return OperationResult(continuation, out.asReversed(), ravenmind, listOf())
     }
 }

@@ -11,10 +11,10 @@ object OpStackSize : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
-        local: Iota,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
         stack.add(DoubleIota(stack.size.toDouble()))
-        return OperationResult(continuation, stack, local, listOf())
+        return OperationResult(continuation, stack, ravenmind, listOf())
     }
 }

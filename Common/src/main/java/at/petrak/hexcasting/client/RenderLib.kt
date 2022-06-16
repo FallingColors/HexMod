@@ -1,4 +1,5 @@
 @file:JvmName("RenderLib")
+
 package at.petrak.hexcasting.client
 
 import at.petrak.hexcasting.api.mod.HexConfig
@@ -205,8 +206,16 @@ fun makeZappy(points: List<Vec2>, hops: Int, variance: Float, speed: Float, flow
             // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
             // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
             val minorPerturb = NOISE.getValue(i.toDouble(), j.toDouble(), sin(zSeed)) * flowIrregular
-            val theta = (3 * NOISE.getValue(i.toDouble() + j.toDouble() / (hops + 1) + minorPerturb - zSeed, 1337.0, 0.0) * TAU).toFloat()
-            val r = (NOISE.getValue(i.toDouble() + j.toDouble() / (hops + 1) - zSeed, 69420.0, 0.0) * maxVariance * scaleVariance(progress)).toFloat()
+            val theta = (3 * NOISE.getValue(
+                i.toDouble() + j.toDouble() / (hops + 1) + minorPerturb - zSeed,
+                1337.0,
+                0.0
+            ) * TAU).toFloat()
+            val r = (NOISE.getValue(
+                i.toDouble() + j.toDouble() / (hops + 1) - zSeed,
+                69420.0,
+                0.0
+            ) * maxVariance * scaleVariance(progress)).toFloat()
             val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
             // Then record the new location.
             zappyPts.add(pos.add(randomHop))
@@ -338,4 +347,29 @@ fun renderEntity(
     erd.setRenderShadow(true)
     immediate.endBatch()
     ms.popPose()
+}
+
+/**
+ * Make sure you have the `PositionColorShader` set
+ */
+fun renderQuad(
+    ps: PoseStack, x: Float, y: Float, w: Float, h: Float, color: Int
+) {
+    val mat = ps.last().pose()
+    val tess = Tesselator.getInstance()
+    val buf = tess.builder
+    buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
+    buf.vertex(mat, x, y, 0f)
+        .color(color)
+        .endVertex()
+    buf.vertex(mat, x, y + h, 0f)
+        .color(color)
+        .endVertex()
+    buf.vertex(mat, x + w, y + h, 0f)
+        .color(color)
+        .endVertex()
+    buf.vertex(mat, x + w, y, 0f)
+        .color(color)
+        .endVertex()
+    tess.end()
 }

@@ -242,6 +242,8 @@ fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, SpellList> {
     )
 }
 
+fun Iota?.orNull() = this ?: NullIota()
+
 // TODO do we make this work on lists
 // there should probably be some way to abstract function application over lists, vecs, and numbers,
 // and i bet it's fucking monads
