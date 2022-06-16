@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.entities;
 
+import at.petrak.hexcasting.api.HexAPI;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -23,7 +24,7 @@ public class HexEntities {
     public static final EntityType<EntityWallScroll> WALL_SCROLL = register("wall_scroll",
         EntityType.Builder.<EntityWallScroll>of(EntityWallScroll::new, MobCategory.MISC)
             .sized(0.5f, 0.5f).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE)
-            .build("wall_scroll"));
+            .build(HexAPI.MOD_ID + ":wall_scroll"));
 
     private static <T extends Entity> EntityType<T> register(String id, EntityType<T> type) {
         var old = ENTITIES.put(modLoc(id), type);
