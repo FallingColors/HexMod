@@ -96,7 +96,7 @@ sealed interface ContinuationFrame {
         ): CastResult {
             return CastResult(
                 continuation,
-                FunctionalData(harness.stack.toList(), 0, listOf(), false),
+                FunctionalData(harness.stack.toList(), 0, listOf(), false, harness.ravenmind),
                 ResolvedPatternType.EVALUATED,
                 listOf()
             )
@@ -163,7 +163,7 @@ sealed interface ContinuationFrame {
             tStack.add(stackTop)
             return CastResult(
                 newCont,
-                FunctionalData(tStack, 0, listOf(), false),
+                FunctionalData(tStack, 0, listOf(), false, harness.ravenmind),
                 ResolvedPatternType.EVALUATED,
                 listOf()
             )

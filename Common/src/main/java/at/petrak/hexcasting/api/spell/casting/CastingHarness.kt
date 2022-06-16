@@ -168,6 +168,8 @@ class CastingHarness private constructor(
             val sideEffects = mutableListOf<OperatorSideEffect>()
             var stack2: List<Iota>? = null
             var cont2 = continuation
+            var ravenmind2: Iota? = null
+            var ravenmindChanged = false
 
             if (!unenlightened || pattern.alwaysProcessGreatSpell) {
                 val result = pattern.operate(
@@ -178,7 +180,9 @@ class CastingHarness private constructor(
                 )
                 cont2 = result.newContinuation
                 stack2 = result.newStack
-                this.ravenmind = result.newLocalIota
+                ravenmind2 = result.newRavenmind
+                ravenmindChanged = true
+                // TODO parens also break prescience
                 sideEffects.addAll(result.sideEffects)
             }
 
@@ -198,10 +202,14 @@ class CastingHarness private constructor(
                     )
                 )
 
-            val fd = stack2?.let {
-                this.getFunctionalData().copy(
-                    stack = it,
+            val hereFd = this.getFunctionalData()
+            val fd = if (stack2 != null || ravenmindChanged) {
+                hereFd.copy(
+                    stack = stack2 ?: hereFd.stack,
+                    ravenmind = if (ravenmindChanged) ravenmind2 else hereFd.ravenmind
                 )
+            } else {
+                hereFd
             }
 
             return CastResult(
@@ -267,6 +275,7 @@ class CastingHarness private constructor(
         this.parenCount,
         this.parenthesized.toList(),
         this.escapeNext,
+        this.ravenmind,
     )
 
     /**
@@ -278,6 +287,7 @@ class CastingHarness private constructor(
         this.parenCount = data.parenCount
         this.parenthesized = data.parenthesized
         this.escapeNext = data.escapeNext
+        this.ravenmind = data.ravenmind
     }
 
     /**
