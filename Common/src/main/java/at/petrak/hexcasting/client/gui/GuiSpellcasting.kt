@@ -87,7 +87,7 @@ class GuiSpellcasting(
         val player = minecraft.player
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
-            if (heldItem.isEmpty || !heldItem.`is`(HexItemTags.WANDS))
+            if (heldItem.isEmpty || !heldItem.`is`(HexItemTags.STAVES))
                 onClose()
         }
     }
@@ -294,10 +294,17 @@ class GuiSpellcasting(
         RenderSystem.defaultBlendFunc()
 
         for ((pat, origin, valid) in this.patterns) {
-            drawPatternFromPoints(mat, pat.toLines(
-                this.hexSize(),
-                this.coordToPx(origin)
-            ), true, valid.color or (0xC8 shl 24), valid.fadeColor or (0xC8 shl 24), if (valid.success) 0.2f else 0.9f)
+            drawPatternFromPoints(
+                mat,
+                pat.toLines(
+                    this.hexSize(),
+                    this.coordToPx(origin)
+                ),
+                true,
+                valid.color or (0xC8 shl 24),
+                valid.fadeColor or (0xC8 shl 24),
+                if (valid.success) 0.2f else 0.9f
+            )
         }
 
         // Now draw the currently WIP pattern
@@ -351,6 +358,7 @@ class GuiSpellcasting(
 
     fun coordToPx(coord: HexCoord) =
         at.petrak.hexcasting.api.utils.coordToPx(coord, this.hexSize(), this.coordsOffset())
+
     fun pxToCoord(px: Vec2) = at.petrak.hexcasting.api.utils.pxToCoord(px, this.hexSize(), this.coordsOffset())
 
 

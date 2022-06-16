@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column_horizontal",
-  "textures": {
-    "side": "hexcasting:block/akashic/log",
-    "end": "hexcasting:block/akashic/log_end"
-  }
-}

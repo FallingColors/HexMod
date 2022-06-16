@@ -403,7 +403,7 @@ class CastingHarness private constructor(
             } else {
                 false
             }
-            if (casterStack.`is`(HexItemTags.WANDS) || hexHolderDrawsFromInventory) {
+            if (casterStack.`is`(HexItemTags.STAVES) || hexHolderDrawsFromInventory) {
                 val manableItems = this.ctx.caster.inventory.items
                     .filter(::isManaItem)
                     .sortedWith(Comparator(::compareManaItem).reversed())

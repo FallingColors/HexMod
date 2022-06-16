@@ -80,25 +80,25 @@ public class RegisterClientStuff {
         x.registerItemProperty(HexItems.SLATE, ItemSlate.WRITTEN_PRED,
             (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
-        registerWandOverrides(HexItems.WAND_OAK);
-        registerWandOverrides(HexItems.WAND_BIRCH);
-        registerWandOverrides(HexItems.WAND_SPRUCE);
-        registerWandOverrides(HexItems.WAND_JUNGLE);
-        registerWandOverrides(HexItems.WAND_DARK_OAK);
-        registerWandOverrides(HexItems.WAND_ACACIA);
-        registerWandOverrides(HexItems.WAND_AKASHIC);
+        registerWandOverrides(HexItems.STAFF_OAK);
+        registerWandOverrides(HexItems.STAFF_BIRCH);
+        registerWandOverrides(HexItems.STAFF_SPRUCE);
+        registerWandOverrides(HexItems.STAFF_JUNGLE);
+        registerWandOverrides(HexItems.STAFF_DARK_OAK);
+        registerWandOverrides(HexItems.STAFF_ACACIA);
+        registerWandOverrides(HexItems.STAFF_EDIFIED);
 
         HexTooltips.init();
 
         x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
         x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
-        x.setRenderLayer(HexBlocks.AKASHIC_DOOR, RenderType.cutout());
-        x.setRenderLayer(HexBlocks.AKASHIC_TRAPDOOR, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.EDIFIED_DOOR, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.EDIFIED_TRAPDOOR, RenderType.cutout());
         x.setRenderLayer(HexBlocks.SCONCE, RenderType.cutout());
 
-        x.setRenderLayer(HexBlocks.AKASHIC_LEAVES1, RenderType.cutoutMipped());
-        x.setRenderLayer(HexBlocks.AKASHIC_LEAVES2, RenderType.cutoutMipped());
-        x.setRenderLayer(HexBlocks.AKASHIC_LEAVES3, RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.AMETHYST_EDIFIED_LEAVES, RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.AVENTURINE_EDIFIED_LEAVES, RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.CITRINE_EDIFIED_LEAVES, RenderType.cutoutMipped());
 
         x.setRenderLayer(HexBlocks.AKASHIC_RECORD, RenderType.translucent());
 
@@ -292,8 +292,8 @@ public class RegisterClientStuff {
         );
     }
 
-    private static void registerWandOverrides(ItemWand item) {
-        IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemWand.FUNNY_LEVEL_PREDICATE,
+    private static void registerWandOverrides(ItemStaff item) {
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemStaff.FUNNY_LEVEL_PREDICATE,
             (stack, level, holder, holderID) -> {
                 if (!stack.hasCustomHoverName()) {
                     return 0;

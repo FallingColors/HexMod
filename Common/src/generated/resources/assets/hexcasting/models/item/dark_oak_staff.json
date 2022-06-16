@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/handheld_rod",
+  "textures": {
+    "layer0": "hexcasting:item/staves/dark_oak"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "hexcasting:funny_level": 0.0
+      },
+      "model": "hexcasting:item/dark_oak_staff"
+    },
+    {
+      "predicate": {
+        "hexcasting:funny_level": 1.0
+      },
+      "model": "hexcasting:item/old_staff"
+    },
+    {
+      "predicate": {
+        "hexcasting:funny_level": 2.0
+      },
+      "model": "hexcasting:item/bosnia_staff"
+    }
+  ]
+}

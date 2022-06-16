@@ -4,16 +4,16 @@
     "hexcasting:akashic_record",
     "hexcasting:akashic_bookshelf",
     "hexcasting:akashic_connector",
-    "hexcasting:akashic_log",
-    "hexcasting:akashic_log_stripped",
-    "hexcasting:akashic_wood",
-    "hexcasting:akashic_wood_stripped",
-    "hexcasting:akashic_planks",
-    "hexcasting:akashic_panel",
-    "hexcasting:akashic_tile",
-    "hexcasting:akashic_door",
-    "hexcasting:akashic_trapdoor",
-    "hexcasting:akashic_slab",
-    "hexcasting:akashic_button"
+    "hexcasting:edified_log",
+    "hexcasting:stripped_edified_log",
+    "hexcasting:edified_wood",
+    "hexcasting:stripped_edified_wood",
+    "hexcasting:edified_planks",
+    "hexcasting:edified_panel",
+    "hexcasting:edified_tile",
+    "hexcasting:edified_door",
+    "hexcasting:edified_trapdoor",
+    "hexcasting:edified_slab",
+    "hexcasting:edified_button"
   ]
 }

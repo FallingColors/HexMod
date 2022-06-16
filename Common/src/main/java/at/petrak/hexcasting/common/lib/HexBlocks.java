@@ -71,7 +71,7 @@ public class HexBlocks {
             .strength(3f, 4f);
     }
 
-    private static BlockBehaviour.Properties akashicWoody() {
+    private static BlockBehaviour.Properties edifiedWoody() {
         return woody(MaterialColor.COLOR_PURPLE);
     }
 
@@ -168,37 +168,37 @@ public class HexBlocks {
             .strength(1f)
             .lightLevel($ -> 15)));
 
-    public static final BlockAkashicLog AKASHIC_LOG = blockItem("akashic_log",
-        new BlockAkashicLog(akashicWoody()));
-    public static final BlockAkashicLog AKASHIC_LOG_STRIPPED = blockItem("akashic_log_stripped",
-        new BlockAkashicLog(akashicWoody()));
-    public static final BlockAkashicLog AKASHIC_WOOD = blockItem("akashic_wood",
-        new BlockAkashicLog(akashicWoody()));
-    public static final BlockAkashicLog AKASHIC_WOOD_STRIPPED = blockItem("akashic_wood_stripped",
-        new BlockAkashicLog(akashicWoody()));
-    public static final Block AKASHIC_PLANKS = blockItem("akashic_planks",
-        new BlockFlammable(akashicWoody(), 20, 5));
-    public static final Block AKASHIC_PANEL = blockItem("akashic_panel",
-        new BlockFlammable(akashicWoody(), 20, 5));
-    public static final Block AKASHIC_TILE = blockItem("akashic_tile",
-        new BlockFlammable(akashicWoody(), 20, 5));
-    public static final DoorBlock AKASHIC_DOOR = blockItem("akashic_door",
-        new BlockHexDoor(akashicWoody().noOcclusion()));
-    public static final TrapDoorBlock AKASHIC_TRAPDOOR = blockItem("akashic_trapdoor",
-        new BlockHexTrapdoor(akashicWoody().noOcclusion()));
-    public static final StairBlock AKASHIC_STAIRS = blockItem("akashic_stairs",
-        new BlockHexStairs(AKASHIC_PLANKS.defaultBlockState(), akashicWoody().noOcclusion()));
-    public static final SlabBlock AKASHIC_SLAB = blockItem("akashic_slab",
-        new BlockHexSlab(akashicWoody().noOcclusion()));
-    public static final WoodButtonBlock AKASHIC_BUTTON = blockItem("akashic_button",
-        new BlockHexWoodButton(akashicWoody().noOcclusion()));
-    public static final PressurePlateBlock AKASHIC_PRESSURE_PLATE = blockItem("akashic_pressure_plate",
-        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, akashicWoody().noOcclusion()));
-    public static final BlockAkashicLeaves AKASHIC_LEAVES1 = blockItem("akashic_leaves1",
+    public static final BlockAkashicLog EDIFIED_LOG = blockItem("edified_log",
+        new BlockAkashicLog(edifiedWoody()));
+    public static final BlockAkashicLog STRIPPED_EDIFIED_LOG = blockItem("stripped_edified_log",
+        new BlockAkashicLog(edifiedWoody()));
+    public static final BlockAkashicLog EDIFIED_WOOD = blockItem("edified_wood",
+        new BlockAkashicLog(edifiedWoody()));
+    public static final BlockAkashicLog STRIPPED_EDIFIED_WOOD = blockItem("stripped_edified_wood",
+        new BlockAkashicLog(edifiedWoody()));
+    public static final Block EDIFIED_PLANKS = blockItem("edified_planks",
+        new BlockFlammable(edifiedWoody(), 20, 5));
+    public static final Block EDIFIED_PANEL = blockItem("edified_panel",
+        new BlockFlammable(edifiedWoody(), 20, 5));
+    public static final Block EDIFIED_TILE = blockItem("edified_tile",
+        new BlockFlammable(edifiedWoody(), 20, 5));
+    public static final DoorBlock EDIFIED_DOOR = blockItem("edified_door",
+        new BlockHexDoor(edifiedWoody().noOcclusion()));
+    public static final TrapDoorBlock EDIFIED_TRAPDOOR = blockItem("edified_trapdoor",
+        new BlockHexTrapdoor(edifiedWoody().noOcclusion()));
+    public static final StairBlock EDIFIED_STAIRS = blockItem("edified_stairs",
+        new BlockHexStairs(EDIFIED_PLANKS.defaultBlockState(), edifiedWoody().noOcclusion()));
+    public static final SlabBlock EDIFIED_SLAB = blockItem("edified_slab",
+        new BlockHexSlab(edifiedWoody().noOcclusion()));
+    public static final WoodButtonBlock EDIFIED_BUTTON = blockItem("edified_button",
+        new BlockHexWoodButton(edifiedWoody().noOcclusion()));
+    public static final PressurePlateBlock EDIFIED_PRESSURE_PLATE = blockItem("edified_pressure_plate",
+        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, edifiedWoody().noOcclusion()));
+    public static final BlockAkashicLeaves AMETHYST_EDIFIED_LEAVES = blockItem("amethyst_edified_leaves",
         new BlockAkashicLeaves(leaves(MaterialColor.COLOR_PURPLE)));
-    public static final BlockAkashicLeaves AKASHIC_LEAVES2 = blockItem("akashic_leaves2",
+    public static final BlockAkashicLeaves AVENTURINE_EDIFIED_LEAVES = blockItem("aventurine_edified_leaves",
         new BlockAkashicLeaves(leaves(MaterialColor.COLOR_BLUE)));
-    public static final BlockAkashicLeaves AKASHIC_LEAVES3 = blockItem("akashic_leaves3",
+    public static final BlockAkashicLeaves CITRINE_EDIFIED_LEAVES = blockItem("citrine_edified_leaves",
         new BlockAkashicLeaves(leaves(MaterialColor.COLOR_YELLOW)));
 
     private static boolean never(Object... args) {

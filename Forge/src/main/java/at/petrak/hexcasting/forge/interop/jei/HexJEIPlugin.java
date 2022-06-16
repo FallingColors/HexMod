@@ -48,14 +48,14 @@ public class HexJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_OAK), BRAINSWEEPING);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_SPRUCE), BRAINSWEEPING);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_BIRCH), BRAINSWEEPING);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_JUNGLE), BRAINSWEEPING);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_ACACIA), BRAINSWEEPING);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_DARK_OAK), BRAINSWEEPING);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_CRIMSON), BRAINSWEEPING);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_WARPED), BRAINSWEEPING);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_AKASHIC), BRAINSWEEPING);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_OAK), BRAINSWEEPING);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_SPRUCE), BRAINSWEEPING);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_BIRCH), BRAINSWEEPING);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_JUNGLE), BRAINSWEEPING);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_ACACIA), BRAINSWEEPING);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_DARK_OAK), BRAINSWEEPING);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_CRIMSON), BRAINSWEEPING);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_WARPED), BRAINSWEEPING);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_EDIFIED), BRAINSWEEPING);
     }
 }

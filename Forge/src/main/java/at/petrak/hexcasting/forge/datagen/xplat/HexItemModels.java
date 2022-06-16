@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.items.ItemFocus;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.items.ItemSlate;
-import at.petrak.hexcasting.common.items.ItemWand;
+import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
@@ -60,20 +60,20 @@ public class HexItemModels extends PaucalItemModelProvider {
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);
 
-        singleTexture("wand_old", new ResourceLocation("item/handheld_rod"),
-            "layer0", modLoc("item/wands/old"));
-        singleTexture("wand_bosnia", new ResourceLocation("item/handheld_rod"),
-            "layer0", modLoc("item/wands/bosnia"));
+        singleTexture("old_staff", new ResourceLocation("item/handheld_rod"),
+            "layer0", modLoc("item/staves/old"));
+        singleTexture("bosnia_staff", new ResourceLocation("item/handheld_rod"),
+            "layer0", modLoc("item/staves/bosnia"));
 
-        buildWand(HexItems.WAND_OAK, "oak");
-        buildWand(HexItems.WAND_BIRCH, "birch");
-        buildWand(HexItems.WAND_SPRUCE, "spruce");
-        buildWand(HexItems.WAND_JUNGLE, "jungle");
-        buildWand(HexItems.WAND_DARK_OAK, "dark_oak");
-        buildWand(HexItems.WAND_ACACIA, "acacia");
-        buildWand(HexItems.WAND_CRIMSON, "crimson");
-        buildWand(HexItems.WAND_WARPED, "warped");
-        buildWand(HexItems.WAND_AKASHIC, "akashic");
+        buildStaff(HexItems.STAFF_OAK, "oak");
+        buildStaff(HexItems.STAFF_BIRCH, "birch");
+        buildStaff(HexItems.STAFF_SPRUCE, "spruce");
+        buildStaff(HexItems.STAFF_JUNGLE, "jungle");
+        buildStaff(HexItems.STAFF_DARK_OAK, "dark_oak");
+        buildStaff(HexItems.STAFF_ACACIA, "acacia");
+        buildStaff(HexItems.STAFF_CRIMSON, "crimson");
+        buildStaff(HexItems.STAFF_WARPED, "warped");
+        buildStaff(HexItems.STAFF_EDIFIED, "edified");
 
         simpleItem(modLoc("patchouli_book"));
 
@@ -128,26 +128,26 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         getBuilder(HexBlocks.AKASHIC_RECORD.getRegistryName().getPath()).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_record")));
-        simpleItem(modLoc("akashic_door"));
-        getBuilder(HexBlocks.AKASHIC_TRAPDOOR.getRegistryName().getPath()).parent(
-            new ModelFile.UncheckedModelFile(modLoc("block/akashic_trapdoor_bottom")));
-        getBuilder(HexBlocks.AKASHIC_LOG.getRegistryName().getPath()).parent(
-            new ModelFile.UncheckedModelFile(modLoc("block/akashic_log")));
-        getBuilder(HexBlocks.AKASHIC_LOG_STRIPPED.getRegistryName().getPath()).parent(
-            new ModelFile.UncheckedModelFile(modLoc("block/akashic_log_stripped")));
-        getBuilder(HexBlocks.AKASHIC_WOOD.getRegistryName().getPath()).parent(
-            new ModelFile.UncheckedModelFile(modLoc("block/akashic_wood")));
-        getBuilder(HexBlocks.AKASHIC_WOOD_STRIPPED.getRegistryName().getPath()).parent(
-            new ModelFile.UncheckedModelFile(modLoc("block/akashic_wood_stripped")));
-        getBuilder(HexBlocks.AKASHIC_STAIRS.getRegistryName().getPath()).parent(
-            new ModelFile.UncheckedModelFile(modLoc("block/akashic_stairs")));
-        getBuilder(HexBlocks.AKASHIC_SLAB.getRegistryName().getPath()).parent(
-            new ModelFile.UncheckedModelFile(modLoc("block/akashic_slab")));
-        getBuilder(HexBlocks.AKASHIC_BUTTON.getRegistryName().getPath()).parent(
+        simpleItem(modLoc("edified_door"));
+        getBuilder(HexBlocks.EDIFIED_TRAPDOOR.getRegistryName().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/edified_trapdoor_bottom")));
+        getBuilder(HexBlocks.EDIFIED_LOG.getRegistryName().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/edified_log")));
+        getBuilder(HexBlocks.STRIPPED_EDIFIED_LOG.getRegistryName().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_log")));
+        getBuilder(HexBlocks.EDIFIED_WOOD.getRegistryName().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/edified_wood")));
+        getBuilder(HexBlocks.STRIPPED_EDIFIED_WOOD.getRegistryName().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_wood")));
+        getBuilder(HexBlocks.EDIFIED_STAIRS.getRegistryName().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/edified_stairs")));
+        getBuilder(HexBlocks.EDIFIED_SLAB.getRegistryName().getPath()).parent(
+            new ModelFile.UncheckedModelFile(modLoc("block/edified_slab")));
+        getBuilder(HexBlocks.EDIFIED_BUTTON.getRegistryName().getPath()).parent(
                 new ModelFile.UncheckedModelFile(new ResourceLocation("block/button_inventory")))
-            .texture("texture", modLoc("block/akashic/planks1"));
-        getBuilder(HexBlocks.AKASHIC_PRESSURE_PLATE.getRegistryName().getPath())
-            .parent(new ModelFile.UncheckedModelFile(modLoc("block/akashic_pressure_plate")));
+            .texture("texture", modLoc("block/edified_planks"));
+        getBuilder(HexBlocks.EDIFIED_PRESSURE_PLATE.getRegistryName().getPath())
+            .parent(new ModelFile.UncheckedModelFile(modLoc("block/edified_pressure_plate")));
     }
 
     private void buildSealableIotaHolder(Item item, String stub) {
@@ -179,19 +179,19 @@ public class HexItemModels extends PaucalItemModelProvider {
             .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_ancient_" + size))).end();
     }
 
-    private void buildWand(Item item, String name) {
+    private void buildStaff(Item item, String name) {
         singleTexture(item.getRegistryName().getPath(), new ResourceLocation("item/handheld_rod"),
-            "layer0", modLoc("item/wands/" + name));
+            "layer0", modLoc("item/staves/" + name));
         getBuilder(item.getRegistryName().getPath())
             .override()
-            .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 0)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_" + name)))
+            .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 0)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name + "_staff")))
             .end().override()
-            .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 1)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_old")))
+            .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 1)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/old_staff")))
             .end().override()
-            .predicate(ItemWand.FUNNY_LEVEL_PREDICATE, 2)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/wand_bosnia")))
+            .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 2)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/bosnia_staff")))
             .end();
     }
 

@@ -92,7 +92,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
             .save(consumer, prefix("enlightenment"));
 
         var loreRoot = Advancement.Builder.advancement()
-            .display(simpleDisplayWithBackground(HexBlocks.AKASHIC_CONNECTOR, "lore", FrameType.GOAL,
+            .display(simpleDisplayWithBackground(HexBlocks.AKASHIC_LIGATURE, "lore", FrameType.GOAL,
                 modLoc("textures/block/slate.png")))
             .addCriterion("used_item", new ConsumeItemTrigger.TriggerInstance(EntityPredicate.Composite.ANY,
                 ItemPredicate.Builder.item().of(HexItems.LORE_FRAGMENT).build()))

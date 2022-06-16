@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "hexcasting:block/aventurine_edified_leaves"
+  }
+}

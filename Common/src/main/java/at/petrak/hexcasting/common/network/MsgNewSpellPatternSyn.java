@@ -63,7 +63,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
     public void handle(MinecraftServer server, ServerPlayer sender) {
         server.execute(() -> {
             var held = sender.getItemInHand(this.handUsed);
-            if (held.is(HexItemTags.WANDS)) {
+            if (held.is(HexItemTags.STAVES)) {
                 boolean autoFail = false;
 
                 if (!resolvedPatterns.isEmpty()) {

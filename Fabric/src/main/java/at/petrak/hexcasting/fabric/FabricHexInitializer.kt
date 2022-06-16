@@ -107,25 +107,25 @@ object FabricHexInitializer : ModInitializer {
         // Done with soft implements in forge
         val flameOn = FlammableBlockRegistry.getDefaultInstance()
         for (log in listOf(
-            HexBlocks.AKASHIC_LOG,
-            HexBlocks.AKASHIC_LOG_STRIPPED,
-            HexBlocks.AKASHIC_WOOD,
-            HexBlocks.AKASHIC_LOG_STRIPPED,
+            HexBlocks.EDIFIED_LOG,
+            HexBlocks.STRIPPED_EDIFIED_LOG,
+            HexBlocks.EDIFIED_WOOD,
+            HexBlocks.STRIPPED_EDIFIED_LOG,
         )) {
             flameOn.add(log, 5, 5)
         }
         for (wood in listOf(
-            HexBlocks.AKASHIC_PLANKS,
-            HexBlocks.AKASHIC_PANEL,
-            HexBlocks.AKASHIC_TILE,
-            HexBlocks.AKASHIC_DOOR,
-            HexBlocks.AKASHIC_TRAPDOOR,
-            HexBlocks.AKASHIC_STAIRS,
-            HexBlocks.AKASHIC_SLAB,
-            HexBlocks.AKASHIC_STAIRS,
-            HexBlocks.AKASHIC_SLAB,
-            HexBlocks.AKASHIC_BUTTON,
-            HexBlocks.AKASHIC_PRESSURE_PLATE,
+            HexBlocks.EDIFIED_PLANKS,
+            HexBlocks.EDIFIED_PANEL,
+            HexBlocks.EDIFIED_TILE,
+            HexBlocks.EDIFIED_DOOR,
+            HexBlocks.EDIFIED_TRAPDOOR,
+            HexBlocks.EDIFIED_STAIRS,
+            HexBlocks.EDIFIED_SLAB,
+            HexBlocks.EDIFIED_STAIRS,
+            HexBlocks.EDIFIED_SLAB,
+            HexBlocks.EDIFIED_BUTTON,
+            HexBlocks.EDIFIED_PRESSURE_PLATE,
         )) {
             flameOn.add(wood, 20, 5)
         }
@@ -139,9 +139,9 @@ object FabricHexInitializer : ModInitializer {
             flameOn.add(papery, 100, 60)
         }
         for (leaves in listOf(
-            HexBlocks.AKASHIC_LEAVES1,
-            HexBlocks.AKASHIC_LEAVES2,
-            HexBlocks.AKASHIC_LEAVES3,
+            HexBlocks.AMETHYST_EDIFIED_LEAVES,
+            HexBlocks.AVENTURINE_EDIFIED_LEAVES,
+            HexBlocks.CITRINE_EDIFIED_LEAVES,
         )) {
             flameOn.add(leaves, 60, 30)
         }

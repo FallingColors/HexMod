@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WW",
+    "WW"
+  ],
+  "key": {
+    "W": {
+      "item": "hexcasting:edified_log"
+    }
+  },
+  "result": {
+    "item": "hexcasting:edified_wood",
+    "count": 3
+  }
+}

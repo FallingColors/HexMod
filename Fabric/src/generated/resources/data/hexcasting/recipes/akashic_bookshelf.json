@@ -7,10 +7,10 @@
   ],
   "key": {
     "L": {
-      "tag": "hexcasting:akashic_logs"
+      "tag": "hexcasting:edified_logs"
     },
     "P": {
-      "tag": "hexcasting:akashic_planks"
+      "tag": "hexcasting:edified_planks"
     },
     "C": {
       "item": "minecraft:book"

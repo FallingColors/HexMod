@@ -27,15 +27,15 @@ public class AkashicTreeGrower extends AbstractTreeGrower {
     public static final List<Holder<ConfiguredFeature<TreeConfiguration, ?>>> GROWERS = Lists.newArrayList();
 
     static {
-        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES1, "1"));
-        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES2, "2"));
-        GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES3, "3"));
+        GROWERS.add(buildTreeFeature(HexBlocks.AMETHYST_EDIFIED_LEAVES, "1"));
+        GROWERS.add(buildTreeFeature(HexBlocks.AVENTURINE_EDIFIED_LEAVES, "2"));
+        GROWERS.add(buildTreeFeature(HexBlocks.CITRINE_EDIFIED_LEAVES, "3"));
     }
 
     private static Holder<ConfiguredFeature<TreeConfiguration, ?>> buildTreeFeature(Block leaves, String name) {
         return FeatureUtils.register(HexAPI.MOD_ID + ":akashic_tree" + name, Feature.TREE,
             new TreeConfiguration.TreeConfigurationBuilder(
-                BlockStateProvider.simple(HexBlocks.AKASHIC_LOG),
+                BlockStateProvider.simple(HexBlocks.EDIFIED_LOG),
                 // baseHeight, heightRandA, heightRandB
                 new FancyTrunkPlacer(5, 5, 3),
                 BlockStateProvider.simple(leaves),

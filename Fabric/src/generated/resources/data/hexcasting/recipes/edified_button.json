@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "hexcasting:edified_planks"
+    }
+  ],
+  "result": {
+    "item": "hexcasting:edified_button"
+  }
+}

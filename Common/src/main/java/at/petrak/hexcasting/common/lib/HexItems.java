@@ -32,15 +32,15 @@ public class HexItems {
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
     public static final Item CHARGED_AMETHYST = make("charged_amethyst", new Item(props()));
 
-    public static final ItemWand WAND_OAK = make("wand_oak", new ItemWand(unstackable()));
-    public static final ItemWand WAND_SPRUCE = make("wand_spruce", new ItemWand(unstackable()));
-    public static final ItemWand WAND_BIRCH = make("wand_birch", new ItemWand(unstackable()));
-    public static final ItemWand WAND_JUNGLE = make("wand_jungle", new ItemWand(unstackable()));
-    public static final ItemWand WAND_ACACIA = make("wand_acacia", new ItemWand(unstackable()));
-    public static final ItemWand WAND_DARK_OAK = make("wand_dark_oak", new ItemWand(unstackable()));
-    public static final ItemWand WAND_CRIMSON = make("wand_crimson", new ItemWand(unstackable()));
-    public static final ItemWand WAND_WARPED = make("wand_warped", new ItemWand(unstackable()));
-    public static final ItemWand WAND_AKASHIC = make("wand_akashic", new ItemWand(unstackable()));
+    public static final ItemStaff STAFF_OAK = make("oak_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_SPRUCE = make("spruce_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_BIRCH = make("birch_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_JUNGLE = make("jungle_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_ACACIA = make("acacia_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_DARK_OAK = make("dark_oak_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_CRIMSON = make("crimson_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_WARPED = make("warped_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_EDIFIED = make("edified_staff", new ItemStaff(unstackable()));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
         IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)

@@ -60,7 +60,7 @@ abstract class Mishap : Throwable() {
         // Knock the player's items out of their hands
         val items = mutableListOf<ItemStack>()
         for (hand in InteractionHand.values()) {
-            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).`is`(HexItemTags.WANDS)) {
+            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).`is`(HexItemTags.STAVES)) {
                 items.add(ctx.caster.getItemInHand(hand).copy())
                 ctx.caster.setItemInHand(hand, ItemStack.EMPTY)
             }
