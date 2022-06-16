@@ -67,8 +67,8 @@
       "hexcasting:patterns",
 
       "hexcasting:colorizer",
-      "hexcasting:data_holder",
-      "hexcasting:mana_holder",
+      "hexcasting:iota_holder",
+      "hexcasting:media_holder",
       "hexcasting:hex_holder"
     ]
   }

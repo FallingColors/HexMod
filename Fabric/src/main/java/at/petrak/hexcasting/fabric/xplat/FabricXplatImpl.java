@@ -221,7 +221,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public @Nullable
     ADIotaHolder findDataHolder(ItemStack stack) {
-        var cc = HexCardinalComponents.DATA_HOLDER.maybeGet(stack);
+        var cc = HexCardinalComponents.IOTA_HOLDER.maybeGet(stack);
         return cc.orElse(null);
     }
 

@@ -42,9 +42,9 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
 
     public static final ComponentKey<CCColorizer> COLORIZER = ComponentRegistry.getOrCreate(modLoc("colorizer"),
         CCColorizer.class);
-    public static final ComponentKey<CCIotaHolder> DATA_HOLDER = ComponentRegistry.getOrCreate(modLoc("data_holder"),
+    public static final ComponentKey<CCIotaHolder> IOTA_HOLDER = ComponentRegistry.getOrCreate(modLoc("iota_holder"),
         CCIotaHolder.class);
-    public static final ComponentKey<CCMediaHolder> MEDIA_HOLDER = ComponentRegistry.getOrCreate(modLoc("mana_holder"),
+    public static final ComponentKey<CCMediaHolder> MEDIA_HOLDER = ComponentRegistry.getOrCreate(modLoc("media_holder"),
         CCMediaHolder.class);
     public static final ComponentKey<CCHexHolder> HEX_HOLDER = ComponentRegistry.getOrCreate(modLoc("hex_holder"),
         CCHexHolder.class);
@@ -64,10 +64,10 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
         registry.register(i -> i instanceof ColorizerItem, COLORIZER, CCColorizer.ItemBased::new);
 
-        registry.register(i -> i instanceof IotaHolderItem, DATA_HOLDER, CCIotaHolder.ItemBased::new);
+        registry.register(i -> i instanceof IotaHolderItem, IOTA_HOLDER, CCIotaHolder.ItemBased::new);
         // oh havoc, you think you're so funny
         // the worst part is you're /right/
-        registry.register(Items.PUMPKIN_PIE, DATA_HOLDER, stack ->
+        registry.register(Items.PUMPKIN_PIE, IOTA_HOLDER, stack ->
             new CCIotaHolder.Static(stack, s -> new DoubleIota(Math.PI * s.getCount())));
 
         registry.register(i -> i instanceof MediaHolderItem, MEDIA_HOLDER, CCMediaHolder.ItemBased::new);
