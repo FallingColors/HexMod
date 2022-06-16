@@ -294,10 +294,17 @@ class GuiSpellcasting(
         RenderSystem.defaultBlendFunc()
 
         for ((pat, origin, valid) in this.patterns) {
-            drawPatternFromPoints(mat, pat.toLines(
-                this.hexSize(),
-                this.coordToPx(origin)
-            ), true, valid.color or (0xC8 shl 24), valid.fadeColor or (0xC8 shl 24), if (valid.success) 0.2f else 0.9f)
+            drawPatternFromPoints(
+                mat,
+                pat.toLines(
+                    this.hexSize(),
+                    this.coordToPx(origin)
+                ),
+                true,
+                valid.color or (0xC8 shl 24),
+                valid.fadeColor or (0xC8 shl 24),
+                if (valid.success) 0.2f else 0.9f
+            )
         }
 
         // Now draw the currently WIP pattern
@@ -323,14 +330,11 @@ class GuiSpellcasting(
         RenderSystem.enableDepthTest()
 
         val mc = Minecraft.getInstance()
-//        if (mc.player?.getItemInHand(HexUtils.OtherHand(handOpenedWith))?.`is`(HexItems.SCRYING_LENS.get()) == true) {
-
         val font = mc.font
         for ((i, s) in this.stackDescs.withIndex()) {
             val offsetIdx = this.stackDescs.size - i - 1
             font.draw(poseStack, s, 10f, 10f + 9f * offsetIdx, -1)
         }
-//        }
     }
 
     // why the hell is this default true
@@ -351,6 +355,7 @@ class GuiSpellcasting(
 
     fun coordToPx(coord: HexCoord) =
         at.petrak.hexcasting.api.utils.coordToPx(coord, this.hexSize(), this.coordsOffset())
+
     fun pxToCoord(px: Vec2) = at.petrak.hexcasting.api.utils.pxToCoord(px, this.hexSize(), this.coordsOffset())
 
 
