@@ -1,13 +1,19 @@
 package at.petrak.hexcasting.api.circles;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Edges are named after their <i>normal vectors</i>. For example, {@code XP_YP} is the top-east
  * corner of the block (positive x, positive y).
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public enum BlockEdge {
     XP_YP(Direction.EAST, Direction.UP),
     ZP_YP(Direction.UP, Direction.SOUTH),
@@ -27,6 +33,20 @@ public enum BlockEdge {
     BlockEdge(Direction norm1, Direction norm2) {
         this.norm1 = norm1;
         this.norm2 = norm2;
+    }
+
+    /**
+     * Get the edge from two normals. You can provide them in any order.
+     */
+    public static BlockEdge fromNormals(Direction norm1, Direction norm2) {
+        for (var edge : values()) {
+            if (edge.norm1 == norm1 && edge.norm2 == norm2
+                || edge.norm1 == norm2 && edge.norm2 == edge.norm1) {
+                return edge;
+            }
+        }
+
+        throw new IllegalStateException("Couldn't find " + norm1 + " & " + norm2);
     }
 
     /**
@@ -82,16 +102,16 @@ public enum BlockEdge {
     }
 
     /**
-     * Get the edge from two normals.
+     * Get if the given direction is one of this block's normals, and if so, return the other normal.
      */
-    public static BlockEdge fromNormals(Direction norm1, Direction norm2) {
-        for (var edge : values()) {
-            if (edge.norm1 == norm1 && edge.norm2 == norm2
-                || edge.norm1 == norm2 && edge.norm2 == edge.norm1) {
-                return edge;
-            }
+    @Nullable
+    public Direction getOtherNormal(Direction norm) {
+        if (this.norm1 == norm) {
+            return this.norm2;
+        } else if (this.norm2 == norm) {
+            return this.norm1;
+        } else {
+            return null;
         }
-
-        throw new IllegalStateException("Couldn't find " + norm1 + " & " + norm2);
     }
 }

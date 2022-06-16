@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.circles.ICircleState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -18,10 +19,10 @@ public interface ADCircleComponent {
     /**
      * Whether this block accepts flow from the given edge.
      * <p>
-     * This should be immutably based on the block's state. A single state would output {@code true} for
+     * This should be immutably based on the block's state. A single slate would output {@code true} for
      * all the edges it is connected to, for example.
      */
-    boolean acceptsFlow(BlockEdge edge, BlockPos pos, BlockState bs, ICircleState state);
+    boolean acceptsFlow(BlockEdge edge, BlockPos pos, BlockState bs, Level world);
 
     /**
      * Directions this block <i>can</i> disperse flow to.
@@ -33,7 +34,12 @@ public interface ADCircleComponent {
 
     /**
      * What this block should do upon receiving the flow.
+     * <p>
+     * Returning {@code null} signals there was a problem somehow, like if it got an input from an edge it didn't
+     * expect. In that case the circle will throw a {@link at.petrak.hexcasting.api.spell.mishaps.MishapMessedUpSpellCircle
+     * MishapMessedUpSpellCircle}
      */
+    @Nullable
     FlowUpdate onReceiveFlow(BlockEdge inputEdge, BlockPos herePos, BlockState bs, BlockPos senderPos,
         BlockState senderBs, ICircleState state);
 }
