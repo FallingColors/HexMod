@@ -1,11 +1,12 @@
 package at.petrak.hexcasting.api.circles;
 
+import at.petrak.hexcasting.api.block.circle.BlockEntitySidedCircleWidget;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A helper for {@link at.petrak.hexcasting.api.block.circle.BlockSidedCircleComponent BlockSidedCircleComponent}:
+ * A helper for {@link BlockEntitySidedCircleWidget BlockSidedCircleComponent}:
  * an abstraction over direction to only the 4 edges relevant to it.
  * <p>
  * When the normal dir is horizontal, {@code TOP} corresponds to {@code Direction.UP}, and {@code LEFT} and

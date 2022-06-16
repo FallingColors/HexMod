@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.circles;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 
 import java.util.Set;
 
@@ -31,9 +30,4 @@ public interface ICircleState {
     default boolean isPosValid(BlockPos pos) {
         return allScannedPositions().contains(pos);
     }
-
-    /**
-     * A reference to the level, cause it's handy.
-     */
-    ServerLevel getLevel();
 }

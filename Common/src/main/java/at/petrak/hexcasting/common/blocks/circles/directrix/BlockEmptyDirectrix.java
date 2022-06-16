@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles.directrix;
 
-import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.block.circle.BlockEntityCircleWidget;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-public class BlockEmptyDirectrix extends BlockCircleComponent {
+public class BlockEmptyDirectrix extends BlockEntityCircleWidget {
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
     public BlockEmptyDirectrix(Properties p_49795_) {

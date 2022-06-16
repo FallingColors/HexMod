@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
-import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.block.circle.BlockEntityCircleWidget;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 // As it turns out, not actually an impetus
-public class BlockEmptyImpetus extends BlockCircleComponent {
+public class BlockEmptyImpetus extends BlockEntityCircleWidget {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public BlockEmptyImpetus(Properties p_49795_) {

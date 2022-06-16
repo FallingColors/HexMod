@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.entity;
 
-import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.block.circle.BlockEntityCircleWidget;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
@@ -34,7 +34,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
 
     // https://github.com/VazkiiMods/Botania/blob/2607bcd31c4eaeb617f7d1b3ec1c1db08f59add4/Common/src/main/java/vazkii/botania/common/block/tile/TileEnderEye.java#L27
     public static void serverTick(Level level, BlockPos pos, BlockState bs, BlockEntityLookingImpetus self) {
-        if (bs.getValue(BlockCircleComponent.ENERGIZED)) {
+        if (bs.getValue(BlockEntityCircleWidget.ENERGIZED)) {
             return;
         }
 

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
-import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.block.circle.BlockEntityCircleWidget;
 import at.petrak.hexcasting.api.spell.iota.PatternIota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -36,7 +36,7 @@ import java.util.EnumSet;
 // When on the floor or ceiling FACING is the direction the *bottom* of the pattern points
 // (or which way is "down").
 // When on the wall FACING is the direction of the *front* of the block
-public class BlockSlate extends BlockCircleComponent implements EntityBlock, SimpleWaterloggedBlock {
+public class BlockSlate extends BlockEntityCircleWidget implements EntityBlock, SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<AttachFace> ATTACH_FACE = BlockStateProperties.ATTACH_FACE;

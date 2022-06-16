@@ -69,7 +69,8 @@
       "hexcasting:colorizer",
       "hexcasting:iota_holder",
       "hexcasting:media_holder",
-      "hexcasting:hex_holder"
+      "hexcasting:hex_holder",
+      "hexcasting:circle_widget"
     ]
   }
 }

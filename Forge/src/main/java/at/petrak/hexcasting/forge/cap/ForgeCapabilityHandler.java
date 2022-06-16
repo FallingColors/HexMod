@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.forge.cap;
 
-import at.petrak.hexcasting.api.addldata.ADColorizer;
-import at.petrak.hexcasting.api.addldata.ADHexHolder;
-import at.petrak.hexcasting.api.addldata.ADIotaHolder;
-import at.petrak.hexcasting.api.addldata.ADMediaHolder;
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.addldata.*;
+import at.petrak.hexcasting.api.block.circle.BlockEntitySidedCircleWidget;
+import at.petrak.hexcasting.api.circles.BlockEdge;
+import at.petrak.hexcasting.api.circles.FlowUpdate;
+import at.petrak.hexcasting.api.circles.ICircleState;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
@@ -28,10 +28,10 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
@@ -65,6 +65,10 @@ public class ForgeCapabilityHandler {
      * Items that work as pigments.
      */
     public static final ResourceLocation PIGMENT_CAP = modLoc("colorizer");
+    /**
+     * Block entities that work as circle widgets.
+     */
+    public static final ResourceLocation CIRCLE_WIDGET_CAP = modLoc("circle_widget");
 
     private static final ResourceLocation IMPETUS_HANDLER = modLoc("impetus_items");
 
@@ -114,9 +118,18 @@ public class ForgeCapabilityHandler {
     }
 
     public static void attachBlockEntityCaps(AttachCapabilitiesEvent<BlockEntity> evt) {
+        // TODO
+        /*
         if (evt.getObject() instanceof BlockEntityAbstractImpetus impetus) {
             evt.addCapability(IMPETUS_HANDLER, provide(impetus, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
                 () -> new ForgeImpetusCapability(impetus)));
+        }
+         */
+
+        var be = evt.getObject();
+        if (be instanceof BlockEntitySidedCircleWidget bescw) {
+            evt.addCapability(CIRCLE_WIDGET_CAP,
+                provide(be, HexCapabilities.CIRCLE_WIDGET, () -> new BESidedCircleWidgetBased(bescw, be)));
         }
     }
 
@@ -336,6 +349,37 @@ public class ForgeCapabilityHandler {
         @Override
         public int color(UUID owner, float time, Vec3 position) {
             return holder.color(stack, owner, time, position);
+        }
+    }
+
+    // TODO can we *please* stop putting all of these records in this god object please
+    private record BESidedCircleWidgetBased(BlockEntitySidedCircleWidget inner,
+                                            BlockEntity be) implements ADCircleWidget {
+        @Override
+        public boolean acceptsFlow(BlockEdge edge) {
+            var margin = inner.getMargin(edge);
+            if (margin == null) {
+                return false;
+            }
+            return inner.acceptsFlow(margin);
+        }
+
+        @Override
+        public EnumSet<BlockEdge> possibleExitDirs(BlockEdge inputEdge) {
+            var margin = inner.getMargin(inputEdge);
+            if (margin == null) {
+                return EnumSet.noneOf(BlockEdge.class);
+            }
+            return inner.possibleExitDirs(margin);
+        }
+
+        @Override
+        public @Nullable FlowUpdate onReceiveFlow(BlockEdge inputEdge, BlockEntity sender, ICircleState state) {
+            var margin = inner.getMargin(inputEdge);
+            if (margin == null) {
+                return null;
+            }
+            return inner.onReceiveFlow(margin, sender, state);
         }
     }
 }

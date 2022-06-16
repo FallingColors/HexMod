@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.block.circle.BlockEntitySidedCircleWidget;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
@@ -8,10 +9,9 @@ import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.fabric.cc.adimpl.CCColorizer;
-import at.petrak.hexcasting.fabric.cc.adimpl.CCHexHolder;
-import at.petrak.hexcasting.fabric.cc.adimpl.CCIotaHolder;
-import at.petrak.hexcasting.fabric.cc.adimpl.CCMediaHolder;
+import at.petrak.hexcasting.fabric.cc.adimpl.*;
+import dev.onyxstudios.cca.api.v3.block.BlockComponentFactoryRegistry;
+import dev.onyxstudios.cca.api.v3.block.BlockComponentInitializer;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
@@ -25,7 +25,7 @@ import net.minecraft.world.item.Items;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class HexCardinalComponents implements EntityComponentInitializer, ItemComponentInitializer {
+public class HexCardinalComponents implements EntityComponentInitializer, ItemComponentInitializer, BlockComponentInitializer {
     // entities
     public static final ComponentKey<CCBrainswept> BRAINSWEPT = ComponentRegistry.getOrCreate(modLoc("brainswept"),
         CCBrainswept.class);
@@ -48,6 +48,9 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         CCMediaHolder.class);
     public static final ComponentKey<CCHexHolder> HEX_HOLDER = ComponentRegistry.getOrCreate(modLoc("hex_holder"),
         CCHexHolder.class);
+    public static final ComponentKey<CCCircleWidget> CIRCLE_WIDGET = ComponentRegistry.getOrCreate(
+        modLoc("circle_widget"),
+        CCCircleWidget.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -82,5 +85,12 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         ));
 
         registry.register(i -> i instanceof HexHolderItem, HEX_HOLDER, CCHexHolder.ItemBased::new);
+    }
+
+    @Override
+    public void registerBlockComponentFactories(BlockComponentFactoryRegistry registry) {
+        registry.registerFor(BlockEntitySidedCircleWidget.class, CIRCLE_WIDGET,
+            CCCircleWidget.SidedCircleWidgetBased::new);
+
     }
 }

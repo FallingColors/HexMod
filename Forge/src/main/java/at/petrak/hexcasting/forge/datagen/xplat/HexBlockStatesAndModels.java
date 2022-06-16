@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.block.circle.BlockEntityCircleWidget;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
@@ -58,7 +58,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
         // auugh
         getVariantBuilder(HexBlocks.DIRECTRIX_REDSTONE).forAllStates(bs -> {
-            var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
+            var isLit = bs.getValue(BlockEntityCircleWidget.ENERGIZED);
             var litness = isLit ? "lit" : "dim";
             var isPowered = bs.getValue(BlockRedstoneDirectrix.REDSTONE_POWERED);
             var poweredness = isPowered ? "powered" : "unpowered";
@@ -84,7 +84,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         });
         getVariantBuilder(HexBlocks.EMPTY_DIRECTRIX).forAllStates(bs -> {
-            var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
+            var isLit = bs.getValue(BlockEntityCircleWidget.ENERGIZED);
             var litness = isLit ? "lit" : "dim";
             var axis = bs.getValue(BlockStateProperties.AXIS);
 
@@ -250,7 +250,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
     private void arrowCircleBlock(Block block, String name, ResourceLocation particle, String frontStub,
         String backStub, String upStub, String downStub, String leftStub, String rightStub) {
         getVariantBuilder(block).forAllStates(bs -> {
-            var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
+            var isLit = bs.getValue(BlockEntityCircleWidget.ENERGIZED);
             var litness = isLit ? "lit" : "dim";
             var dir = bs.getValue(BlockStateProperties.FACING);
 

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles.directrix;
 
-import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.block.circle.BlockEntityCircleWidget;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.Random;
 
-public class BlockRedstoneDirectrix extends BlockCircleComponent {
+public class BlockRedstoneDirectrix extends BlockEntityCircleWidget {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty REDSTONE_POWERED = BlockStateProperties.POWERED;
 
