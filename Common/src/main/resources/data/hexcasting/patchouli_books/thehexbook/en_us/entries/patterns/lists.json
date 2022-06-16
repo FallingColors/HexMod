@@ -27,7 +27,7 @@
       "op_id": "hexcasting:append",
       "anchor": "hexcasting:append",
       "input": "list, any",
-      "output": "any",
+      "output": "list",
       "text": "hexcasting.page.lists.append"
     },
     {

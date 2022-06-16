@@ -120,9 +120,13 @@ c521621c409275e219f72abf5c6089d60408e646 data/hexcasting/loot_tables/blocks/impe
 bceac44311dc2771c3744c0cda299f03fb957350 data/hexcasting/loot_tables/blocks/scroll_paper_lantern.json
 49b6ea97ddc55ef3d7fa47582f268a07a35cadde data/hexcasting/loot_tables/blocks/slate.json
 584bd8806ef8df5f0e623ed727d6e54a61e60dea data/hexcasting/loot_tables/blocks/slate_block.json
+<<<<<<< HEAD
 fcf76d7c1978953a331bb6f81db9029d1df60969 data/hexcasting/loot_tables/blocks/stripped_edified_log.json
 603bcdf0bce6f1db81b0c816426c9ebdb0bd6415 data/hexcasting/loot_tables/blocks/stripped_edified_wood.json
 7742f3f42dd2d9354c4963e401c5ea04764d1698 data/hexcasting/loot_tables/inject/amethyst_cluster.json
+=======
+c26bbff5a4aaaa4b5c26f61e8177fc382425149b data/hexcasting/loot_tables/inject/amethyst_cluster.json
+>>>>>>> main
 3147422bed290cb47ea3763dbdc6f0e96eed5c2a data/hexcasting/loot_tables/inject/scroll_loot_few.json
 35a9b4beac7c6eddb990464eaeaebec2a9ab9951 data/hexcasting/loot_tables/inject/scroll_loot_many.json
 64aef53a076a34dbaaca0d3df8c671476729bec4 data/hexcasting/loot_tables/inject/scroll_loot_some.json
@@ -232,6 +236,7 @@ fe9fde77881dc63ea9fe1b595e03ad0c71f9775e data/minecraft/tags/blocks/logs_that_bu
 a81d1fb94d833dcc01bd73b502ab5e69a7a36514 data/minecraft/tags/blocks/mineable/hoe.json
 eb4bfbd7fc7632a5c16aa1d50d6090a1f466069b data/minecraft/tags/blocks/mineable/pickaxe.json
 f55afc2c05d93b5a44bc9fd73c5e81e71b183965 data/minecraft/tags/blocks/mineable/shovel.json
+<<<<<<< HEAD
 f3638ae23ee4a74fbb0f50c9cbc39e05e14d4340 data/minecraft/tags/blocks/planks.json
 30b1ba88e0429e21587e6c1fa2c9383a398f19a3 data/minecraft/tags/blocks/pressure_plates.json
 c67ec88d4d78c14922825c6ad7f79530260e30a3 data/minecraft/tags/blocks/slabs.json
@@ -254,3 +259,28 @@ d266f13878ba1e3de27e41c60fa86a999af2db3d data/minecraft/tags/items/wooden_doors.
 30b1ba88e0429e21587e6c1fa2c9383a398f19a3 data/minecraft/tags/items/wooden_pressure_plates.json
 c67ec88d4d78c14922825c6ad7f79530260e30a3 data/minecraft/tags/items/wooden_slabs.json
 a584c013b337affb96c572493a6ca2b2fb957052 data/minecraft/tags/items/wooden_trapdoors.json
+=======
+b596d96eebb4f7bad5930f4eebc589f292b59c98 data/minecraft/tags/blocks/planks.json
+2d79a41ba8697f9e1fa26b1bff48f33c824d3823 data/minecraft/tags/blocks/pressure_plates.json
+48e782ce4fbd486dd0d6ceb9fdcb94d0e0c727d4 data/minecraft/tags/blocks/slabs.json
+b8b58bbaf1ddca3514896af14db83f304e415305 data/minecraft/tags/blocks/trapdoors.json
+5f3e3813757d8300acad523d45ac7c4d85728399 data/minecraft/tags/blocks/wooden_buttons.json
+556d2e6068965e90c307a435b372ae761cd1c606 data/minecraft/tags/blocks/wooden_doors.json
+2d79a41ba8697f9e1fa26b1bff48f33c824d3823 data/minecraft/tags/blocks/wooden_pressure_plates.json
+48e782ce4fbd486dd0d6ceb9fdcb94d0e0c727d4 data/minecraft/tags/blocks/wooden_slabs.json
+b8b58bbaf1ddca3514896af14db83f304e415305 data/minecraft/tags/blocks/wooden_trapdoors.json
+5f3e3813757d8300acad523d45ac7c4d85728399 data/minecraft/tags/items/buttons.json
+115534970df0123519d4a0073e803007f3a6d21f data/minecraft/tags/items/cluster_max_harvestables.json
+556d2e6068965e90c307a435b372ae761cd1c606 data/minecraft/tags/items/doors.json
+c25784941d6416744fb2ca2d43a3203e5c3e7c8a data/minecraft/tags/items/leaves.json
+f3c6b6917e504e1c3d5d8875f7cce6f311e791d2 data/minecraft/tags/items/logs.json
+f3c6b6917e504e1c3d5d8875f7cce6f311e791d2 data/minecraft/tags/items/logs_that_burn.json
+b596d96eebb4f7bad5930f4eebc589f292b59c98 data/minecraft/tags/items/planks.json
+48e782ce4fbd486dd0d6ceb9fdcb94d0e0c727d4 data/minecraft/tags/items/slabs.json
+b8b58bbaf1ddca3514896af14db83f304e415305 data/minecraft/tags/items/trapdoors.json
+5f3e3813757d8300acad523d45ac7c4d85728399 data/minecraft/tags/items/wooden_buttons.json
+556d2e6068965e90c307a435b372ae761cd1c606 data/minecraft/tags/items/wooden_doors.json
+2d79a41ba8697f9e1fa26b1bff48f33c824d3823 data/minecraft/tags/items/wooden_pressure_plates.json
+48e782ce4fbd486dd0d6ceb9fdcb94d0e0c727d4 data/minecraft/tags/items/wooden_slabs.json
+b8b58bbaf1ddca3514896af14db83f304e415305 data/minecraft/tags/items/wooden_trapdoors.json
+>>>>>>> main

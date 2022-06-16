@@ -150,7 +150,7 @@ subprojects {
     java.withJavadocJar()
 
     processResources {
-        duplicatesStrategy 'exclude'
+        exclude '.cache'
     }
     sourcesJar {
         duplicatesStrategy 'exclude'

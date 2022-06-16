@@ -330,14 +330,11 @@ class GuiSpellcasting(
         RenderSystem.enableDepthTest()
 
         val mc = Minecraft.getInstance()
-//        if (mc.player?.getItemInHand(HexUtils.OtherHand(handOpenedWith))?.`is`(HexItems.SCRYING_LENS.get()) == true) {
-
         val font = mc.font
         for ((i, s) in this.stackDescs.withIndex()) {
             val offsetIdx = this.stackDescs.size - i - 1
             font.draw(poseStack, s, 10f, 10f + 9f * offsetIdx, -1)
         }
-//        }
     }
 
     // why the hell is this default true

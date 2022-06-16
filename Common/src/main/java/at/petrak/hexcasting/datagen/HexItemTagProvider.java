@@ -24,11 +24,14 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
     protected void addTags() {
         tag(xtags.gems()).add(HexItems.CHARGED_AMETHYST);
         tag(xtags.amethystDust()).add(HexItems.AMETHYST_DUST);
-
+        
         tag(HexItemTags.STAVES).add(HexItems.STAFF_EDIFIED,
             HexItems.STAFF_OAK, HexItems.STAFF_SPRUCE, HexItems.STAFF_BIRCH,
             HexItems.STAFF_JUNGLE, HexItems.STAFF_ACACIA, HexItems.STAFF_DARK_OAK,
             HexItems.STAFF_CRIMSON, HexItems.STAFF_WARPED);
+
+        tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(HexItems.JEWELER_HAMMER);
+
         tag(HexItemTags.PHIAL_BASE).add(Items.GLASS_BOTTLE);
 
         this.copy(HexBlockTags.EDIFIED_LOGS, HexItemTags.EDIFIED_LOGS);
