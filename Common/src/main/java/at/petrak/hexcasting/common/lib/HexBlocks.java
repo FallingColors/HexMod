@@ -1,19 +1,11 @@
 package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.BlockConjured;
 import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
 import at.petrak.hexcasting.common.blocks.BlockFlammable;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicLigature;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
-import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
-import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
-import at.petrak.hexcasting.common.blocks.circles.directrix.BlockEmptyDirectrix;
-import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockLookingImpetus;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockStoredPlayerImpetus;
 import at.petrak.hexcasting.common.blocks.decoration.*;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
@@ -118,6 +110,7 @@ public class HexBlocks {
                 .isViewBlocking(HexBlocks::never)),
         new Item.Properties());
 
+    /*
     // "no" item because we add it manually
     public static final BlockSlate SLATE = blockNoItem("slate", new BlockSlate(slateish()));
 
@@ -137,6 +130,7 @@ public class HexBlocks {
         new BlockEmptyDirectrix(slateish()));
     public static final BlockRedstoneDirectrix DIRECTRIX_REDSTONE = blockItem("directrix_redstone",
         new BlockRedstoneDirectrix(slateish()));
+     */
 
     public static final BlockAkashicRecord AKASHIC_RECORD = blockItem("akashic_record",
         new BlockAkashicRecord(akashicWoodyHard().lightLevel(bs -> 15)));
