@@ -2,9 +2,11 @@ package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.circle.BlockSidedCircleWidget;
+import at.petrak.hexcasting.api.circles.Margin;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.paucal.api.forge.datagen.PaucalBlockStateAndModelProvider;
+import it.unimi.dsi.fastutil.booleans.Boolean2ObjectFunction;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -142,11 +144,53 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         // so there's gonna be a *lot* of model files.
         // Each block needs a body + 4 connector models, for unenergized and energized versions, for non-margin
         // and margin versions. ("Margin" = the overlay model we stick on top, so some of the model rotates and some doesn't.)
+        // Due to the third dimension being a mistake, we *also* need a version of the model that points up and one that points sideways.
+        // This is because minecraft only accepts N quarters around the X axis and N quarters around the Y axis, and this doesn't
+        // let us get all the 24 rotations we need.
         //
         // To avoid the generated folder becoming incredibly thicc and to save resource pack makers we put everything in a folder.
         //
         // Files are named {blockpath}/{part}['_' margin]['_' energized].
         // So, `toolsmith_impetus/body_energized` for the large chunk in the middle when active,
         // `farmer_locus/north_margin` for the north connector when rendering the overlay, etc.
+        var cursor = getMultipartBuilder(widget);
+        var parts = new String[]{
+            "body", "north", "south", "east", "west"
+        };
+        for (var part : parts) {
+            for (boolean energized : BlockSidedCircleWidget.ENERGIZED.getPossibleValues()) {
+                String energizedStr = energized ? "" : "_energized";
+                Boolean2ObjectFunction<BlockModelBuilder> modelMaker = (margin) -> {
+                    String marginStr = margin ? "" : "_margin";
+                    return models().withExistingParent(widget.getRegistryName().getPath() + "/" + part
+                                + marginStr + energizedStr,
+                            modLoc("template_sided_circle_widget_" + part))
+                        .texture("common", modLoc("block/circle/" + commonName + energizedStr))
+                        .texture("core", modLoc("block/circle/" + coreName + marginStr + energizedStr));
+
+                };
+                var unmarginModel = modelMaker.apply(false);
+                var marginModel = modelMaker.apply(true);
+
+                for (var normal : Direction.values()) {
+                    // For each normal dir we add the base model, THEN the margin-textured model on top of it.
+                    // Phew.
+                    int xRot = normal == Direction.DOWN ? 180 : normal.getAxis().isHorizontal() ? 90 : 0;
+                    int yRot = normal.getAxis().isVertical() ? 0 : (int) normal.toYRot();
+                    cursor.part()
+                        .modelFile(unmarginModel)
+                        .rotationX(xRot)
+                        .rotationY(yRot)
+                        .nextModel();
+                    // Additionally rotate the margin model by the margin amount, about the normal vector ...
+                    // but we need to transform that into a sequence of X and Y rotations.
+                    // Uegh.
+                    for (var margin : Margin.values()) {
+
+                    }
+                }
+            }
+        }
+
     }
 }
