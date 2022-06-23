@@ -535,7 +535,7 @@
   "hexcasting.page.mishaps.incorrect_item.title": "Incorrect Item",
   "hexcasting.page.mishaps.incorrect_item": "The action requires some sort of item, but the item I supplied was not suitable.$(br2)Causes brown sparks. If the offending item was in my hand, it will be flung to the floor. If it was in entity form, it will be flung in the air.",
   "hexcasting.page.mishaps.incorrect_block.title": "Incorrect Block",
-  "hexcasting.page.mishaps.incorrect_block": "The action requires some sort of block at a target location, but the block supplied was not suitable.$(br2)Causes bright green sparks, and causes an ephemeral explosion at the given location; it will harm me and others, but will not destroy any blocks.",
+  "hexcasting.page.mishaps.incorrect_block": "The action requires some sort of block at a target location, but the block supplied was not suitable.$(br2)Causes bright green sparks, and causes an ephemeral explosion at the given location. The explosion doesn't seem to harm me, the world, or anything else though; it's just startling.",
   "hexcasting.page.mishaps.retrospection.title": "Hasty Retrospection",
   "hexcasting.page.mishaps.retrospection": "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern for $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ to the stack as a pattern iota.",
   "hexcasting.page.mishaps.too_deep.title": "Delve Too Deep",
