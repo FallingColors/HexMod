@@ -35,6 +35,17 @@ fun numOrList(datum: SpellDatum<*>, reverseIdx: Int): Either<Double, SpellList> 
         )
     }
 
+fun evaluatable(datum: SpellDatum<*>, reverseIdx: Int): Either<HexPattern, SpellList> =
+    when (datum.payload) {
+        is HexPattern -> Either.left(datum.payload)
+        is SpellList -> Either.right(datum.payload)
+        else -> throw MishapInvalidIota(
+            datum,
+            reverseIdx,
+            "hexcasting.mishap.invalid_value.evaluatable".asTranslatedComponent
+        )
+    }
+
 fun spellListOf(vararg vs: Any): List<SpellDatum<*>> {
     val out = ArrayList<SpellDatum<*>>(vs.size)
     for (v in vs) {
