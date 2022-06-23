@@ -128,6 +128,8 @@ public class FabricHexConfig {
         private final PropertyMirror<Double> patternPointSpeedMultiplier = PropertyMirror.create(
             ConfigTypes.DOUBLE.withMinimum(0d));
         private final PropertyMirror<Boolean> ctrlTogglesOffStrokeOrder = PropertyMirror.create(ConfigTypes.BOOLEAN);
+        private final PropertyMirror<Double> gridSnapThreshold = PropertyMirror.create(
+            ConfigTypes.DOUBLE.withMinimum(0.5).withMaximum(1.0));
 
         public ConfigTree configure(ConfigTreeBuilder bob) {
             bob
@@ -137,7 +139,14 @@ public class FabricHexConfig {
 
                 .beginValue("ctrlTogglesOffStrokeOrder", ConfigTypes.BOOLEAN, DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER)
                 .withComment("Whether the ctrl key will instead turn *off* the color gradient on patterns")
-                .finishValue(ctrlTogglesOffStrokeOrder::mirror);
+                .finishValue(ctrlTogglesOffStrokeOrder::mirror)
+
+                .beginValue("gridSnapThreshold", ConfigTypes.DOUBLE, DEFAULT_GRID_SNAP_THRESHOLD)
+                .withComment(
+                    "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way.")
+                .finishValue(gridSnapThreshold::mirror)
+
+            ;
 
             return bob.build();
         }
@@ -151,6 +160,11 @@ public class FabricHexConfig {
         public boolean ctrlTogglesOffStrokeOrder() {
             return ctrlTogglesOffStrokeOrder.getValue();
         }
+
+        @Override
+        public double gridSnapThreshold() {
+            return gridSnapThreshold.getValue();
+        }
     }
 
     private static final class Server implements HexConfig.ServerConfigAccess {
@@ -162,9 +176,9 @@ public class FabricHexConfig {
         private final PropertyMirror<List<String>> actionDenyList = PropertyMirror.create(
             ConfigTypes.makeList(ConfigTypes.STRING));
         private final PropertyMirror<List<String>> circleActionDenyList = PropertyMirror.create(
-                ConfigTypes.makeList(ConfigTypes.STRING));
+            ConfigTypes.makeList(ConfigTypes.STRING));
         private final PropertyMirror<Boolean> villagersOffendedByMindMurder = PropertyMirror.create(
-                ConfigTypes.BOOLEAN);
+            ConfigTypes.BOOLEAN);
         private final PropertyMirror<List<String>> fewScrollTables = PropertyMirror.create(
             ConfigTypes.makeList(ConfigTypes.STRING));
         private final PropertyMirror<List<String>> someScrollTables = PropertyMirror.create(
@@ -190,12 +204,14 @@ public class FabricHexConfig {
                 .finishValue(maxSpellCircleLength::mirror)
 
                 .beginValue("circleActionDenyList", ConfigTypes.makeList(ConfigTypes.STRING), List.of())
-                .withComment("Resource locations of disallowed actions within circles. Trying to cast one of these in a circle will result in a mishap.")
+                .withComment(
+                    "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle will result in a mishap.")
                 .finishValue(circleActionDenyList::mirror)
                 .finishBranch()
 
                 .beginValue("actionDenyList", ConfigTypes.makeList(ConfigTypes.STRING), List.of())
-                .withComment("Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
+                .withComment(
+                    "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
                 .finishValue(actionDenyList::mirror)
 
                 .beginValue("villagersOffendedByMindMurder", ConfigTypes.BOOLEAN, true)
@@ -251,12 +267,13 @@ public class FabricHexConfig {
 
         @Override
         public ScrollQuantity scrollsForLootTable(ResourceLocation lootTable) {
-            if (anyMatch(fewScrollTables.getValue(), lootTable))
+            if (anyMatch(fewScrollTables.getValue(), lootTable)) {
                 return ScrollQuantity.FEW;
-            else if (anyMatch(someScrollTables.getValue(), lootTable))
+            } else if (anyMatch(someScrollTables.getValue(), lootTable)) {
                 return ScrollQuantity.SOME;
-            else if (anyMatch(manyScrollTables.getValue(), lootTable))
+            } else if (anyMatch(manyScrollTables.getValue(), lootTable)) {
                 return ScrollQuantity.MANY;
+            }
             return ScrollQuantity.NONE;
         }
     }
