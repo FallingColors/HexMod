@@ -87,7 +87,7 @@ dependencies {
 
     modImplementation "dev.emi:emi:${emiVersion}"
 
-    modImplementation "maven.modrinth:fusions-gravity-api:$gravityApiVersion"
+    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
         exclude group: "net.fabricmc.fabric-api"
     })
