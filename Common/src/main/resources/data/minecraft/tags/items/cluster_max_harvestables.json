@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "hexcasting:jeweler_hammer"
     {
       "id": "#ae2:quartz_pickaxe",
       "required": false
