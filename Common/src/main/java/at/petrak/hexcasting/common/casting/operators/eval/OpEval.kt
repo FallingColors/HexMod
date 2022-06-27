@@ -16,7 +16,9 @@ object OpEval : Operator {
         val datum = stack.removeLast()
         val instrs = evaluatable(datum, 0)
 
-        ctx.incDepth()
+        instrs.ifRight {
+            ctx.incDepth()
+        }
 
         // if not installed already...
         // also, never make a break boundary when evaluating just one pattern
