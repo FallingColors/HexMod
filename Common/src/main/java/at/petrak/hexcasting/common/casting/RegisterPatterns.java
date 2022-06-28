@@ -13,7 +13,7 @@ import at.petrak.hexcasting.common.casting.operators.entityinfo.OpEntityPos;
 import at.petrak.hexcasting.common.casting.operators.entityinfo.OpEntityVelocity;
 import at.petrak.hexcasting.common.casting.operators.entityinfo.OpEntityLook;
 import at.petrak.hexcasting.common.casting.operators.entityinfo.OpEntityHeight;
-import at.petrak.hexcasting.common.casting.operators.entityinfo.OpEntityRaycast;
+import at.petrak.hexcasting.common.casting.operators.raycast.OpEntityRaycast;
 import at.petrak.hexcasting.common.casting.operators.raycast.OpBlockRaycast;
 import at.petrak.hexcasting.common.casting.operators.raycast.OpBlockAxisRaycast;
 import at.petrak.hexcasting.common.casting.operators.readwrite.OpRead;
