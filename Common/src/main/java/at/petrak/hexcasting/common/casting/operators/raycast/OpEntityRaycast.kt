@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.operators.entityinfo
+package at.petrak.hexcasting.common.casting.operators.raycast
 
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
