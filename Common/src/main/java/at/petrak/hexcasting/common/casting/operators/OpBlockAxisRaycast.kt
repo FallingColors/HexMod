@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.NullIota
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.Vec3
 
 object OpBlockAxisRaycast : ConstManaAction {
     override val argc = 2
@@ -28,7 +29,7 @@ object OpBlockAxisRaycast : ConstManaAction {
             )
         )
 
-        return if (blockHitResult.type == HitResult.Type.BLOCK) {
+        return if (blockHitResult.type == HitResult.Type.BLOCK && ctx.isVecInRange(Vec3.atCenterOf(blockHitResult.blockPos))) {
             blockHitResult.direction.step().asActionResult
         } else {
             listOf(NullIota())
