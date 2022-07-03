@@ -32,8 +32,14 @@ public class HexConfig {
 
         boolean ctrlTogglesOffStrokeOrder();
 
+        boolean invertSpellbookScrollDirection();
+
+        boolean invertAbacusScrollDirection();
+
         double DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER = 1;
         boolean DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER = false;
+        boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
+        boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
     }
 
     public interface ServerConfigAccess {

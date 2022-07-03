@@ -128,6 +128,8 @@ public class FabricHexConfig {
         private final PropertyMirror<Double> patternPointSpeedMultiplier = PropertyMirror.create(
             ConfigTypes.DOUBLE.withMinimum(0d));
         private final PropertyMirror<Boolean> ctrlTogglesOffStrokeOrder = PropertyMirror.create(ConfigTypes.BOOLEAN);
+        private final PropertyMirror<Boolean> invertSpellbookScrollDirection = PropertyMirror.create(ConfigTypes.BOOLEAN);
+        private final PropertyMirror<Boolean> invertAbacusScrollDirection = PropertyMirror.create(ConfigTypes.BOOLEAN);
 
         public ConfigTree configure(ConfigTreeBuilder bob) {
             bob
@@ -137,7 +139,16 @@ public class FabricHexConfig {
 
                 .beginValue("ctrlTogglesOffStrokeOrder", ConfigTypes.BOOLEAN, DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER)
                 .withComment("Whether the ctrl key will instead turn *off* the color gradient on patterns")
-                .finishValue(ctrlTogglesOffStrokeOrder::mirror);
+                .finishValue(ctrlTogglesOffStrokeOrder::mirror)
+
+                .beginValue("invertSpellbookScrollDirection", ConfigTypes.BOOLEAN, DEFAULT_INVERT_SPELLBOOK_SCROLL)
+                .withComment("Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and vice versa")
+                .finishValue(invertSpellbookScrollDirection::mirror)
+
+                .beginValue("invertAbacusScrollDirection", ConfigTypes.BOOLEAN, DEFAULT_INVERT_ABACUS_SCROLL)
+                .withComment("Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
+                .finishValue(invertAbacusScrollDirection::mirror);
+
 
             return bob.build();
         }
@@ -150,6 +161,16 @@ public class FabricHexConfig {
         @Override
         public boolean ctrlTogglesOffStrokeOrder() {
             return ctrlTogglesOffStrokeOrder.getValue();
+        }
+
+        @Override
+        public boolean invertSpellbookScrollDirection() {
+            return invertSpellbookScrollDirection.getValue();
+        }
+
+        @Override
+        public boolean invertAbacusScrollDirection() {
+            return invertAbacusScrollDirection.getValue();
         }
     }
 

@@ -5,13 +5,23 @@
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
-    "MixinAbstractVillager", "MixinMob", "MixinRaider", "MixinReloadableServerResources", "MixinVillager", "MixinWitch",
-    "accessor.AccessorLivingEntity", "accessor.AccessorLootTable", "accessor.AccessorPoiType",
-    "accessor.AccessorUseOnContext", "accessor.AccessorVillager", "accessor.CriteriaTriggersAccessor"
+    "MixinAbstractVillager",
+    "MixinMob",
+    "MixinRaider",
+    "MixinReloadableServerResources",
+    "MixinVillager",
+    "MixinWitch",
+    "accessor.AccessorLivingEntity",
+    "accessor.AccessorLootTable",
+    "accessor.AccessorPoiType",
+    "accessor.AccessorUseOnContext",
+    "accessor.AccessorVillager",
+    "accessor.CriteriaTriggersAccessor"
   ],
   "client": [
     "accessor.client.AccessorCompositeRenderType",
     "accessor.client.AccessorEmptyTextureStateShard",
+    "accessor.client.AccessorMouseHandler",
     "accessor.client.AccessorRenderStateShard",
     "accessor.client.AccessorRenderType",
     "client.MixinClientLevel"

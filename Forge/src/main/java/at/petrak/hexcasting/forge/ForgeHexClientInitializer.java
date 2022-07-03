@@ -53,11 +53,12 @@ public class ForgeHexClientInitializer {
         evBus.addListener((TickEvent.ClientTickEvent e) -> {
             if (e.phase == TickEvent.Phase.END) {
                 ClientTickCounter.clientTickEnd();
+                ShiftScrollListener.clientTickEnd();
             }
         });
 
         evBus.addListener((InputEvent.MouseScrollEvent e) -> {
-            var cancel = ShiftScrollListener.onScroll(e.getScrollDelta());
+            var cancel = ShiftScrollListener.onScrollInGameplay(e.getScrollDelta());
             e.setCanceled(cancel);
         });
     }

@@ -52,6 +52,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     public static class Client implements HexConfig.ClientConfigAccess {
         private static ForgeConfigSpec.DoubleValue patternPointSpeedMultiplier;
         private static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
+        private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
+        private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
 
         public Client(ForgeConfigSpec.Builder builder) {
             patternPointSpeedMultiplier = builder.comment(
@@ -61,6 +63,12 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
                 .define("ctrlTogglesOffStrokeOrder", DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER);
+            invertSpellbookScrollDirection = builder.comment(
+                    "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and vice versa")
+                .define("invertSpellbookScrollDirection", DEFAULT_INVERT_SPELLBOOK_SCROLL);
+            invertAbacusScrollDirection = builder.comment(
+                    "Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
+                .define("invertAbacusScrollDirection", DEFAULT_INVERT_ABACUS_SCROLL);
         }
 
         @Override
@@ -71,6 +79,16 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean ctrlTogglesOffStrokeOrder() {
             return ctrlTogglesOffStrokeOrder.get();
+        }
+
+        @Override
+        public boolean invertSpellbookScrollDirection() {
+            return invertSpellbookScrollDirection.get();
+        }
+
+        @Override
+        public boolean invertAbacusScrollDirection() {
+            return invertAbacusScrollDirection.get();
         }
     }
 
