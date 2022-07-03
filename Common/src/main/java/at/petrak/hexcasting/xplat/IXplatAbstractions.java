@@ -147,6 +147,10 @@ public interface IXplatAbstractions {
 
     Registry<IotaType<?>> getIotaTypeRegistry();
 
+    boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player);
+
+    boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player);
+
     // interop
 
     PehkuiInterop.ApiAbstraction getPehkuiApi();

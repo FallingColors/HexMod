@@ -37,7 +37,7 @@ object OpCreateLava : SpellAction {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            if (!ctx.world.mayInteract(ctx.caster, pos))
+            if (!ctx.world.mayInteract(ctx.caster, pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(Items.LAVA_BUCKET), ctx.caster))
                 return
 
             val state = ctx.world.getBlockState(pos)
