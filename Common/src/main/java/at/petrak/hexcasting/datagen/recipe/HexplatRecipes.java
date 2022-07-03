@@ -119,12 +119,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         for (var dye : DyeColor.values()) {
             var item = HexItems.DYE_COLORIZERS.get(dye);
             ShapedRecipeBuilder.shaped(item)
-                .define('B', Items.BOWL)
                 .define('D', HexItems.AMETHYST_DUST)
                 .define('C', DyeItem.byColor(dye))
-                .pattern(" C ")
                 .pattern(" D ")
-                .pattern(" B ")
+                .pattern("DCD")
+                .pattern(" D ")
                 .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
         }
 
@@ -374,12 +373,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     private void gayRecipe(Consumer<FinishedRecipe> recipes, ItemPrideColorizer.Type type, Item material) {
         var colorizer = HexItems.PRIDE_COLORIZERS.get(type);
         ShapedRecipeBuilder.shaped(colorizer)
-            .define('B', Items.BOWL)
             .define('D', HexItems.AMETHYST_DUST)
             .define('C', material)
-            .pattern(" C ")
             .pattern(" D ")
-            .pattern(" B ")
+            .pattern("DCD")
+            .pattern(" D ")
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
     }
 
