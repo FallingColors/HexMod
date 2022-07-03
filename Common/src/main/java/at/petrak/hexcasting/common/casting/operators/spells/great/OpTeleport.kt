@@ -55,7 +55,7 @@ object OpTeleport : SpellAction {
                 }
             }
 
-            if (teleportee is ServerPlayer) {
+            if (teleportee is ServerPlayer && teleportee == ctx.caster) {
                 // Drop items conditionally, based on distance teleported.
                 // MOST IMPORTANT: Never drop main hand item, since if it's a trinket, it will get duplicated later.
 
