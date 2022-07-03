@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.iota.*
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import com.mojang.datafixers.util.Either
 import com.mojang.math.Vector3f
 import net.minecraft.core.BlockPos
@@ -241,6 +242,17 @@ fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, SpellList> {
         "numlist"
     )
 }
+
+fun evaluatable(datum: Iota, reverseIdx: Int): Either<HexPattern, SpellList> =
+    when (datum) {
+        is PatternIota -> Either.left(datum.pattern)
+        is ListIota -> Either.right(datum.list)
+        else -> throw MishapInvalidIota(
+            datum,
+            reverseIdx,
+            "hexcasting.mishap.invalid_value.evaluatable".asTranslatedComponent
+        )
+    }
 
 fun Iota?.orNull() = this ?: NullIota()
 

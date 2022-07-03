@@ -54,6 +54,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
         private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
         private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
+        private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
 
         public Client(ForgeConfigSpec.Builder builder) {
             patternPointSpeedMultiplier = builder.comment(
@@ -69,6 +70,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             invertAbacusScrollDirection = builder.comment(
                     "Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
                 .define("invertAbacusScrollDirection", DEFAULT_INVERT_ABACUS_SCROLL);
+            gridSnapThreshold = builder.comment(
+                    "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way.")
+                .defineInRange("gridSnapThreshold", DEFAULT_GRID_SNAP_THRESHOLD, 0.5, 1.0);
         }
 
         @Override
@@ -89,6 +93,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean invertAbacusScrollDirection() {
             return invertAbacusScrollDirection.get();
+        }
+
+        @Override
+        public double gridSnapThreshold() {
+            return gridSnapThreshold.get();
         }
     }
 
@@ -122,9 +131,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineInRange("maxSpellCircleLength", DEFAULT_MAX_SPELL_CIRCLE_LENGTH, 4, Integer.MAX_VALUE);
 
             circleActionDenyList = builder.comment(
-                            "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle will result in a mishap.")
-                    .defineList("circleActionDenyList", List.of(),
-                            obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
+                    "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle will result in a mishap.")
+                .defineList("circleActionDenyList", List.of(),
+                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
             builder.pop();
 
             actionDenyList = builder.comment(
@@ -134,7 +143,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             villagersOffendedByMindMurder = builder.comment(
                     "Should villagers take offense when you flay the mind of their fellow villagers?")
-                    .define("villagersOffendedByMindMurder", true);
+                .define("villagersOffendedByMindMurder", true);
 
             builder.push("Scrolls in Loot");
 
@@ -184,12 +193,13 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         @Override
         public ScrollQuantity scrollsForLootTable(ResourceLocation lootTable) {
-            if (anyMatch(fewScrollTables.get(), lootTable))
+            if (anyMatch(fewScrollTables.get(), lootTable)) {
                 return ScrollQuantity.FEW;
-            else if (anyMatch(someScrollTables.get(), lootTable))
+            } else if (anyMatch(someScrollTables.get(), lootTable)) {
                 return ScrollQuantity.SOME;
-            else if (anyMatch(manyScrollTables.get(), lootTable))
+            } else if (anyMatch(manyScrollTables.get(), lootTable)) {
                 return ScrollQuantity.MANY;
+            }
             return ScrollQuantity.NONE;
         }
     }
