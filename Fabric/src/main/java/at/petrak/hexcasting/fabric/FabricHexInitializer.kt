@@ -11,6 +11,7 @@ import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.loot.HexLootHandler
+import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
@@ -96,6 +97,8 @@ object FabricHexInitializer : ModInitializer {
         HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
 
         HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
+
+        AkashicTreeGrower.INSTANCE
 
         // Done with soft implements in forge
         val flameOn = FlammableBlockRegistry.getDefaultInstance()
