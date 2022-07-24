@@ -51,9 +51,9 @@ class GuiSpellcasting(
         }
     }
 
-    fun recvServerUpdate(info: ControllerInfo) {
+    fun recvServerUpdate(info: ControllerInfo, index: Int) {
         this.stackDescs = info.stackDesc
-        this.patterns.lastOrNull()?.let {
+        this.patterns.getOrNull(index)?.let {
             it.type = info.resolutionType
         }
 

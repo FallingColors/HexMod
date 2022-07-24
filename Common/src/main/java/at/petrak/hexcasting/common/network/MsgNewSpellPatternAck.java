@@ -17,7 +17,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client when the player finishes casting a spell.
  */
-public record MsgNewSpellPatternAck(ControllerInfo info) implements IMessage {
+public record MsgNewSpellPatternAck(ControllerInfo info, int index) implements IMessage {
     public static final ResourceLocation ID = modLoc("pat_sc");
 
     @Override
@@ -31,6 +31,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info) implements IMessage {
         var wasSpellCast = buf.readBoolean();
         var isStackEmpty = buf.readBoolean();
         var resolutionType = buf.readEnum(ResolvedPatternType.class);
+        var index = buf.readInt();
         var descsLen = buf.readInt();
         var desc = new ArrayList<Component>(descsLen);
         for (int i = 0; i < descsLen; i++) {
@@ -38,7 +39,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info) implements IMessage {
         }
 
         return new MsgNewSpellPatternAck(
-            new ControllerInfo(wasSpellCast, isStackEmpty, resolutionType, desc)
+            new ControllerInfo(wasSpellCast, isStackEmpty, resolutionType, desc), index
         );
     }
 
@@ -47,6 +48,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info) implements IMessage {
         buf.writeBoolean(this.info.getMakesCastSound());
         buf.writeBoolean(this.info.isStackClear());
         buf.writeEnum(this.info.getResolutionType());
+        buf.writeInt(this.index);
         buf.writeInt(this.info.getStackDesc().size());
         for (var desc : this.info.getStackDesc()) {
             buf.writeComponent(desc);
@@ -67,7 +69,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info) implements IMessage {
                     if (self.info().isStackClear()) {
                         mc.setScreen(null);
                     } else {
-                        spellGui.recvServerUpdate(self.info());
+                        spellGui.recvServerUpdate(self.info(), self.index());
                     }
                 }
             }
