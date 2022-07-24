@@ -12,7 +12,7 @@ object OpBoolIdentityKindOf : ConstManaOperator {
         if (payload == Widget.NULL)
             return 0.asSpellResult
 
-        if (payload.tolerantEquals(0.0) || payload.tolerantEquals(1.0))
+        if (payload.tolerantEquals(0.0))
             return null.asSpellResult
 
         if (payload is SpellList)
