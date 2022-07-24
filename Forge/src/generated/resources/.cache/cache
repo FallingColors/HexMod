@@ -1,3 +1,5 @@
+cfda8a0bb9051f9f876cd5b9afcd8a7f6a1e4290 data/create/recipes/crushing/amethyst_block.json
+59e0c3893a64d84b5fde52291067b3601c43ffc9 data/create/recipes/crushing/amethyst_cluster.json
 4d4caaea035ae4ee878843dd2455042b299b4e5e data/forge/tags/items/dusts/amethyst.json
 05e86742a71afd740f47639be62f93bc9898fcde data/forge/tags/items/gems.json
 cf0ad981bebbb79414d955fb40fbf537fe88b89d data/hexcasting/advancements/recipes/brainsweep/brainsweep/akashic_record.json
@@ -154,6 +156,7 @@ d7f85ce9d46aacc7ec89dc7aa0f88a331ccfbae7 data/hexcasting/recipes/brainsweep/akas
 5861845c3cd84021c7c19ac4f5b3bcc8e1bd3916 data/hexcasting/recipes/brainsweep/impetus_look.json
 ab5d271371323d93ff6eed18179ee4f7fd8c939c data/hexcasting/recipes/brainsweep/impetus_rightclick.json
 d5c6f9a31a8310ec440fc8c14da8988f0d166586 data/hexcasting/recipes/brainsweep/impetus_storedplayer.json
+ad85e0162a7c68d431fd700700906ccbcadf91ce data/hexcasting/recipes/compat/create/crushing/amethyst_shard.json
 bc140b6c5d999b4bc5d12c302297f56bde3b161c data/hexcasting/recipes/cypher.json
 33fed8fb8e34df026e1eea0df8161c7f842a8648 data/hexcasting/recipes/dye_colorizer_black.json
 c36caf44a941a4abc44a15141eba8fe634c76fb8 data/hexcasting/recipes/dye_colorizer_blue.json
@@ -242,7 +245,6 @@ b8b58bbaf1ddca3514896af14db83f304e415305 data/minecraft/tags/blocks/trapdoors.js
 48e782ce4fbd486dd0d6ceb9fdcb94d0e0c727d4 data/minecraft/tags/blocks/wooden_slabs.json
 b8b58bbaf1ddca3514896af14db83f304e415305 data/minecraft/tags/blocks/wooden_trapdoors.json
 5f3e3813757d8300acad523d45ac7c4d85728399 data/minecraft/tags/items/buttons.json
-115534970df0123519d4a0073e803007f3a6d21f data/minecraft/tags/items/cluster_max_harvestables.json
 556d2e6068965e90c307a435b372ae761cd1c606 data/minecraft/tags/items/doors.json
 c25784941d6416744fb2ca2d43a3203e5c3e7c8a data/minecraft/tags/items/leaves.json
 f3c6b6917e504e1c3d5d8875f7cce6f311e791d2 data/minecraft/tags/items/logs.json

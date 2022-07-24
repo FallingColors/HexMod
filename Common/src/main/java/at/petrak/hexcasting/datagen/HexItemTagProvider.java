@@ -25,8 +25,6 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
         tag(xtags.gems()).add(HexItems.CHARGED_AMETHYST);
         tag(xtags.amethystDust()).add(HexItems.AMETHYST_DUST);
 
-        tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(HexItems.JEWELER_HAMMER);
-
         tag(HexItemTags.WANDS).add(HexItems.WAND_AKASHIC,
                 HexItems.WAND_OAK, HexItems.WAND_SPRUCE, HexItems.WAND_BIRCH,
                 HexItems.WAND_JUNGLE, HexItems.WAND_ACACIA, HexItems.WAND_DARK_OAK,

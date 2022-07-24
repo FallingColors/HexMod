@@ -3,6 +3,7 @@ package at.petrak.hexcasting.forge.datagen;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.datagen.*;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
+import at.petrak.hexcasting.forge.datagen.builders.ForgeCreateCrushingRecipeBuilder;
 import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -54,7 +55,7 @@ public class HexForgeDataGenerators {
         ExistingFileHelper efh = ev.getExistingFileHelper();
         if (ev.includeServer()) {
             gen.addProvider(new HexLootTables(gen));
-            gen.addProvider(new HexplatRecipes(gen, INGREDIENTS));
+            gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, ForgeCreateCrushingRecipeBuilder::new));
 
             var xtags = IXplatAbstractions.INSTANCE.tags();
             var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
