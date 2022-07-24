@@ -61,15 +61,15 @@ object OpChangeGravity : SpellOperator {
         {
             infiniteDuration = true
             time = -1.0
-            manaCost = ManaConstants.CRYSTAL_UNIT * 10
+            manaCost = ManaConstants.CRYSTAL_UNIT * 1
         }
         else // if casting on anything else, use the three-arg version.
         // Shouldn't be possible to get less than two-args here, but I'm paranoid.
         {
-            val timeRaw = if(args.count() >= 3) {
+            val timeRaw = if(args.count() >= this.maxArgc) {
                 args.getChecked<Double>(2)
             } else {
-                throw MishapNotEnoughArgs(this.argc + 1, 2)
+                throw MishapNotEnoughArgs(this.maxArgc, args.count())
             }
             //We'll 'charge' for duration even if Direction.DOWN, but treat it as an infinite duration anyway; as if it 'finished' to normal gravity.
             infiniteDuration = snapped == Direction.DOWN
