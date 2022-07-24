@@ -27,7 +27,7 @@ object OpFlight : SpellOperator {
         val time = (timeRaw * 20.0).roundToInt()
         return Triple(
             Spell(target, time, radiusRaw, ctx.position),
-            ManaConstants.DUST_UNIT * (0.25 * (timeRaw * radiusRaw + 1.0)).roundToInt(),
+            (ManaConstants.DUST_UNIT * 0.25 * (timeRaw * radiusRaw + 1.0)).roundToInt(),
             listOf(ParticleSpray(target.position(), Vec3(0.0, 2.0, 0.0), 0.0, 0.1))
         )
     }
