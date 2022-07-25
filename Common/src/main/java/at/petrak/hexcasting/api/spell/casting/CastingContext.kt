@@ -83,7 +83,7 @@ data class CastingContext(
         return entitiesGivenMotion.contains(target)
     }
 
-    fun isVecInWorld(vec: Vec3) = world.isInWorldBounds(BlockPos(vec)) && world.worldBorder.isWithinBounds(vec.x, vec.z)
+    fun isVecInWorld(vec: Vec3) = world.isInWorldBounds(BlockPos(vec)) && world.worldBorder.isWithinBounds(vec.x, vec.z, 0.5)
 
     fun isVecInRange(vec: Vec3): Boolean {
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(caster)
