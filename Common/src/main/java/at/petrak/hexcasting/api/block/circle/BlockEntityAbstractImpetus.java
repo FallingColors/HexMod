@@ -116,7 +116,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
         BlockState state, BlockPos pos,
         LocalPlayer observer, ClientLevel world,
-        Direction hitFace, InteractionHand lensHand) {
+        Direction hitFace) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
             if (beai.getMana() < 0) {
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
@@ -531,6 +531,11 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     @Override
     public boolean stillValid(Player player) {
         return false;
+    }
+
+    @Override
+    public void clearContent() {
+        // NO-OP
     }
 
     @Override

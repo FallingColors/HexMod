@@ -6,6 +6,7 @@ import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.fabric.event.MouseScrollCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
+import at.petrak.hexcasting.interop.HexInterop
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
@@ -50,5 +51,7 @@ object FabricHexClientInitializer : ClientModInitializer {
                 BlockEntityRendererRegistry.register(type, berp)
             }
         })
+
+        HexInterop.clientInit()
     }
 }

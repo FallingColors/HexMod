@@ -109,15 +109,15 @@ public class RegisterClientStuff {
 
     private static void addScryingLensStuff() {
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction, lensHand) -> state.getBlock() instanceof BlockAbstractImpetus,
-            (lines, state, pos, observer, world, direction, lensHand) -> {
+            (state, pos, observer, world, direction) -> state.getBlock() instanceof BlockAbstractImpetus,
+            (lines, state, pos, observer, world, direction) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-                    beai.applyScryingLensOverlay(lines, state, pos, observer, world, direction, lensHand);
+                    beai.applyScryingLensOverlay(lines, state, pos, observer, world, direction);
                 }
             });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.NOTE_BLOCK,
-            (lines, state, pos, observer, world, direction, lensHand) -> {
+            (lines, state, pos, observer, world, direction) -> {
                 int note = state.getValue(NoteBlock.NOTE);
 
                 float rCol = Math.max(0.0F, Mth.sin((note / 24F + 0.0F) * Mth.TWO_PI) * 0.65F + 0.35F);
@@ -139,7 +139,7 @@ public class RegisterClientStuff {
             });
 
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF,
-            (lines, state, pos, observer, world, direction, lensHand) -> {
+            (lines, state, pos, observer, world, direction) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
                     var recordPos = tile.getRecordPos();
                     var pattern = tile.getPattern();
@@ -156,7 +156,7 @@ public class RegisterClientStuff {
             });
 
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_RECORD,
-            (lines, state, pos, observer, world, direction, lensHand) -> {
+            (lines, state, pos, observer, world, direction) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAkashicRecord tile) {
                     int count = tile.getCount();
 
@@ -168,7 +168,7 @@ public class RegisterClientStuff {
             });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.COMPARATOR,
-            (lines, state, pos, observer, world, direction, lensHand) -> {
+            (lines, state, pos, observer, world, direction) -> {
                 int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(true);
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE),
@@ -185,15 +185,15 @@ public class RegisterClientStuff {
             });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
-            (lines, state, pos, observer, world, direction, lensHand) -> lines.add(new Pair<>(
+            (lines, state, pos, observer, world, direction) -> lines.add(new Pair<>(
                 new ItemStack(Items.CLOCK),
                 new TextComponent(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
                     .withStyle(ChatFormatting.YELLOW))));
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction, lensHand) -> state.isSignalSource() && !state.is(
+            (state, pos, observer, world, direction) -> state.isSignalSource() && !state.is(
                 Blocks.COMPARATOR),
-            (lines, state, pos, observer, world, direction, lensHand) -> {
+            (lines, state, pos, observer, world, direction) -> {
                 int signalStrength = 0;
                 if (state.getBlock() instanceof RedStoneWireBlock) {
                     signalStrength = state.getValue(RedStoneWireBlock.POWER);
@@ -210,8 +210,8 @@ public class RegisterClientStuff {
             });
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction, lensHand) -> state.hasAnalogOutputSignal(),
-            (lines, state, pos, observer, world, direction, lensHand) -> {
+            (state, pos, observer, world, direction) -> state.hasAnalogOutputSignal(),
+            (lines, state, pos, observer, world, direction) -> {
                 int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(false);
                 lines.add(
                     new Pair<>(

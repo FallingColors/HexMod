@@ -2,7 +2,10 @@ package at.petrak.hexcasting.fabric.xplat;
 
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.client.ExtendedTexture;
+import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
+import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -41,6 +44,13 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public void setRenderLayer(Block block, RenderType type) {
         BlockRenderLayerMap.INSTANCE.putBlock(block, type);
+    }
+
+    @Override
+    public void initPlatformSpecific() {
+        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
+            TrinketsApiInterop.clientInit();
+        }
     }
 
     @Override

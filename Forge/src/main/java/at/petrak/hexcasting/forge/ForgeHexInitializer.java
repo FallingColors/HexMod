@@ -12,6 +12,7 @@ import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hexcasting.common.command.PatternResLocArgument;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
+import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
@@ -20,6 +21,8 @@ import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
 import at.petrak.hexcasting.forge.datagen.HexForgeDataGenerators;
+import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
+import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
@@ -37,6 +40,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
@@ -51,6 +55,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -160,6 +166,7 @@ public class ForgeHexInitializer {
 
         evBus.addListener((LivingEvent.LivingUpdateEvent evt) -> {
             OpFlight.INSTANCE.tickDownFlight(evt.getEntityLiving());
+            ItemLens.tickLens(evt.getEntityLiving());
         });
 
         evBus.addListener((TickEvent.WorldTickEvent evt) -> {
@@ -208,6 +215,12 @@ public class ForgeHexInitializer {
         modBus.register(HexForgeDataGenerators.class);
         modBus.register(ForgeCapabilityHandler.class);
         evBus.register(CapSyncers.class);
+
+        if (ModList.get().isLoaded(HexInterop.Forge.CURIOS_API_ID)) {
+            modBus.addListener(CuriosApiInterop::onInterModEnqueue);
+            modBus.addListener(CuriosApiInterop::onClientSetup);
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modBus.addListener(CuriosRenderers::onLayerRegister));
+        }
     }
 
     // aaaauughhg

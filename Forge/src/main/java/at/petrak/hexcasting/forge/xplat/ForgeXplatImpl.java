@@ -17,6 +17,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
+import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
@@ -99,7 +100,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        // NO-OP
+        if (this.isModPresent(HexInterop.Forge.CURIOS_API_ID)) {
+            CuriosApiInterop.init();
+        }
     }
 
     @Override

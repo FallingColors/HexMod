@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
+import at.petrak.hexcasting.common.items.ItemLens
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.loot.HexLootHandler
 import at.petrak.hexcasting.common.misc.Brainsweeping
@@ -72,6 +73,7 @@ object FabricHexInitializer : ModInitializer {
         }
 
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
+        ServerTickEvents.END_WORLD_TICK.register(ItemLens::tickAllPlayers)
 
         CommandRegistrationCallback.EVENT.register { dp, _ -> HexCommands.register(dp) }
 
