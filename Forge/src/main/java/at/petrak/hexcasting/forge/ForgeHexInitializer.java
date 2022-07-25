@@ -115,7 +115,7 @@ public class ForgeHexInitializer {
         // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric and Quilt.
         // However, all launcher panic if the same resource is registered twice.  Explicitly calling here avoids potential
         // confusion, or reliance on tricks that may fail under compiler optimization.
-        AkashicTreeGrower.INSTANCE.RegisterTreeGrowers();
+        AkashicTreeGrower.init();
     }
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java

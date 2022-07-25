@@ -26,8 +26,7 @@ public class AkashicTreeGrower extends AbstractTreeGrower {
 
     public static final List<Holder<ConfiguredFeature<TreeConfiguration, ?>>> GROWERS = Lists.newArrayList();
 
-    public void RegisterTreeGrowers()
-    {
+    public static void init() {
         GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES1, "1"));
         GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES2, "2"));
         GROWERS.add(buildTreeFeature(HexBlocks.AKASHIC_LEAVES3, "3"));

@@ -105,7 +105,7 @@ object FabricHexInitializer : ModInitializer {
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
         // any calls that will eventually touch FeatureUtils.register(), as the growers here do,
         // unless the class is called in this initialization step.
-        AkashicTreeGrower.INSTANCE.RegisterTreeGrowers()
+        AkashicTreeGrower.init()
 
         // Done with soft implements in forge
         val flameOn = FlammableBlockRegistry.getDefaultInstance()
