@@ -111,11 +111,6 @@ public class ForgeHexInitializer {
         ArgumentTypes.register(HexAPI.MOD_ID + ":pattern", PatternResLocArgument.class,
             new EmptyArgumentSerializer<>(PatternResLocArgument::id));
         HexAdvancementTriggers.registerTriggers();
-
-        // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric and Quilt.
-        // However, all launcher panic if the same resource is registered twice.  Explicitly calling here avoids potential
-        // confusion, or reliance on tricks that may fail under compiler optimization.
-        AkashicTreeGrower.init();
     }
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
@@ -143,6 +138,10 @@ public class ForgeHexInitializer {
                 HexComposting.setup();
                 HexStrippables.init();
                 RegisterPatterns.registerPatterns();
+                // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric and Quilt.
+                // However, all launcher panic if the same resource is registered twice.  But do need blocks and items to be completely initialized.
+                // Explicitly calling here avoids potential confusion, or reliance on tricks that may fail under compiler optimization.
+                AkashicTreeGrower.init();
 
                 HexInterop.init();
             }));
