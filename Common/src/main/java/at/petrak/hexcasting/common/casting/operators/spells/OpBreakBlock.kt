@@ -35,6 +35,9 @@ object OpBreakBlock : SpellOperator {
                 return
 
             val blockstate = ctx.world.getBlockState(pos)
+            if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, pos, blockstate, ctx.caster))
+                return
+
             val tier =
                 HexConfig.server().opBreakHarvestLevel()
 

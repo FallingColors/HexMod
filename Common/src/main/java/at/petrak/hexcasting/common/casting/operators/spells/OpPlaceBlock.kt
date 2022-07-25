@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadBlock
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
@@ -64,6 +65,9 @@ object OpPlaceBlock : SpellOperator {
             val placeeSlot = ctx.getOperativeSlot { it.item is BlockItem }
             if (placeeSlot != null) {
                 val placeeStack = ctx.caster.inventory.getItem(placeeSlot).copy()
+                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, placeeStack, ctx.caster))
+                    return
+
                 if (!placeeStack.isEmpty) {
                     // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143
                     val oldStack = ctx.caster.getItemInHand(ctx.castingHand)

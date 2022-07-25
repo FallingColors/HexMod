@@ -2,11 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -39,7 +35,7 @@ object OpCreateLava : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(target)
 
-            if (!ctx.world.mayInteract(ctx.caster, pos))
+            if (!ctx.world.mayInteract(ctx.caster, pos)|| !IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(Items.LAVA_BUCKET), ctx.caster))
                 return
 
             val state = ctx.world.getBlockState(pos)

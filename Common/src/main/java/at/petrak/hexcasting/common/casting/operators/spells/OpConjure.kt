@@ -52,6 +52,9 @@ class OpConjure(val light: Boolean) : SpellOperator {
             val worldState = ctx.world.getBlockState(pos)
             if (worldState.canBeReplaced(placeContext)) {
                 val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
+                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(block), ctx.caster))
+                    return
+
                 val state = block.getStateForPlacement(placeContext)
                 if (state != null) {
                     ctx.world.setBlock(pos, state, 5)
