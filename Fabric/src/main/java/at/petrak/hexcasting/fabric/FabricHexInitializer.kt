@@ -100,7 +100,10 @@ object FabricHexInitializer : ModInitializer {
 
         HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
 
-        AkashicTreeGrower.INSTANCE
+        // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
+        // any calls that will eventually touch FeatureUtils.register(), as the growers here do,
+        // unless the class is called in this initialization step.
+        AkashicTreeGrower.INSTANCE.RegisterTreeGrowers()
 
         // Done with soft implements in forge
         val flameOn = FlammableBlockRegistry.getDefaultInstance()

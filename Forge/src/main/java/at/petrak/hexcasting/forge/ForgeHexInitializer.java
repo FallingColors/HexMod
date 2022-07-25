@@ -14,6 +14,7 @@ import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
+import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
@@ -104,6 +105,11 @@ public class ForgeHexInitializer {
         ArgumentTypes.register(HexAPI.MOD_ID + ":pattern", PatternResLocArgument.class,
             new EmptyArgumentSerializer<>(PatternResLocArgument::id));
         HexAdvancementTriggers.registerTriggers();
+
+        // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric and Quilt.
+        // However, all launcher panic if the same resource is registered twice.  Explicitly calling here avoids potential
+        // confusion, or reliance on tricks that may fail under compiler optimization.
+        AkashicTreeGrower.INSTANCE.RegisterTreeGrowers();
     }
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
