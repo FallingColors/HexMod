@@ -1,35 +1,52 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.MsgShiftScrollSyn;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 
 public class ShiftScrollListener {
-    public static boolean onScroll(double delta) {
+    private static double mainHandDelta = 0;
+    private static double offHandDelta = 0;
+
+    public static boolean onScrollInGameplay(double delta) {
+        if (Minecraft.getInstance().screen != null) {
+            return false;
+        }
+
+        return onScroll(delta, true);
+    }
+
+    public static boolean onScroll(double delta, boolean needsSneaking) {
         LocalPlayer player = Minecraft.getInstance().player;
         // not .isCrouching! that fails for players who are not on the ground
         // yes, this does work if you remap your sneak key
-        if (player.isShiftKeyDown()) {
-            InteractionHand hand = null;
+        if (player != null && (player.isShiftKeyDown() || !needsSneaking)) {
             if (IsScrollableItem(player.getMainHandItem().getItem())) {
-                hand = InteractionHand.MAIN_HAND;
+                mainHandDelta += delta;
+                return true;
             } else if (IsScrollableItem(player.getOffhandItem().getItem())) {
-                hand = InteractionHand.OFF_HAND;
-            }
-
-            if (hand != null) {
-                IClientXplatAbstractions.INSTANCE.sendPacketToServer(
-                    new MsgShiftScrollSyn(hand, delta, Screen.hasControlDown()));
+                offHandDelta += delta;
                 return true;
             }
         }
 
         return false;
+    }
+
+    public static void clientTickEnd() {
+        if (mainHandDelta != 0 || offHandDelta != 0) {
+            IClientXplatAbstractions.INSTANCE.sendPacketToServer(
+                new MsgShiftScrollSyn(mainHandDelta, offHandDelta, Screen.hasControlDown(),
+                    HexConfig.client().invertSpellbookScrollDirection(),
+                    HexConfig.client().invertAbacusScrollDirection()));
+            mainHandDelta = 0;
+            offHandDelta = 0;
+        }
     }
 
     private static boolean IsScrollableItem(Item item) {

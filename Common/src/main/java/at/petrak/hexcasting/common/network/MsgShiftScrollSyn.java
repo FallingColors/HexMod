@@ -25,7 +25,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * Sent client->server when the client shift+scrolls with a shift-scrollable item
  * or scrolls in the spellcasting UI.
  */
-public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolean isCtrl) implements IMessage {
+public record MsgShiftScrollSyn(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook, boolean invertAbacus) implements IMessage {
     public static final ResourceLocation ID = modLoc("scroll");
 
     @Override
@@ -35,32 +35,47 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
 
     public static MsgShiftScrollSyn deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
-        var hand = buf.readEnum(InteractionHand.class);
-        var scrollDelta = buf.readDouble();
+        var mainHandDelta = buf.readDouble();
+        var offHandDelta = buf.readDouble();
         var isCtrl = buf.readBoolean();
-        return new MsgShiftScrollSyn(hand, scrollDelta, isCtrl);
+        var invertSpellbook = buf.readBoolean();
+        var invertAbacus = buf.readBoolean();
+        return new MsgShiftScrollSyn(mainHandDelta, offHandDelta, isCtrl, invertSpellbook, invertAbacus);
     }
 
     public void serialize(FriendlyByteBuf buf) {
-        buf.writeEnum(this.hand);
-        buf.writeDouble(this.scrollDelta);
+        buf.writeDouble(this.mainHandDelta);
+        buf.writeDouble(this.offHandDelta);
         buf.writeBoolean(this.isCtrl);
+        buf.writeBoolean(this.invertSpellbook);
+        buf.writeBoolean(this.invertAbacus);
     }
 
     public void handle(MinecraftServer server, ServerPlayer sender) {
         server.execute(() -> {
-            var stack = sender.getItemInHand(hand);
-
-            if (stack.getItem() == HexItems.SPELLBOOK) {
-                spellbook(sender, stack);
-            } else if (stack.getItem() == HexItems.ABACUS) {
-                abacus(sender, stack);
-            }
+            handleForHand(sender, InteractionHand.MAIN_HAND, mainHandDelta);
+            handleForHand(sender, InteractionHand.OFF_HAND, offHandDelta);
         });
     }
 
-    private void spellbook(ServerPlayer sender, ItemStack stack) {
-        var newIdx = ItemSpellbook.RotatePageIdx(stack, this.scrollDelta < 0.0);
+    private void handleForHand(ServerPlayer sender, InteractionHand hand, double delta) {
+        if (delta != 0) {
+            var stack = sender.getItemInHand(hand);
+
+            if (stack.getItem() == HexItems.SPELLBOOK) {
+                spellbook(sender, hand, stack, delta);
+            } else if (stack.getItem() == HexItems.ABACUS) {
+                abacus(sender, hand, stack, delta);
+            }
+        };
+    }
+
+    private void spellbook(ServerPlayer sender, InteractionHand hand, ItemStack stack, double delta) {
+        if (invertSpellbook) {
+            delta = -delta;
+        }
+
+        var newIdx = ItemSpellbook.RotatePageIdx(stack, delta < 0.0);
 
         var len = ItemSpellbook.HighestPage(stack);
 
@@ -99,21 +114,25 @@ public record MsgShiftScrollSyn(InteractionHand hand, double scrollDelta, boolea
         sender.displayClientMessage(component.withStyle(ChatFormatting.GRAY), true);
     }
 
-    private void abacus(ServerPlayer sender, ItemStack stack) {
-        var increase = this.scrollDelta < 0;
+    private void abacus(ServerPlayer sender, InteractionHand hand, ItemStack stack, double delta) {
+        if (invertAbacus) {
+            delta = -delta;
+        }
+
+        var increase = delta < 0;
         double num = NBTHelper.getDouble(stack, ItemAbacus.TAG_VALUE);
 
-        double delta;
+        double shiftDelta;
         float pitch;
-        if (this.hand == InteractionHand.MAIN_HAND) {
-            delta = this.isCtrl ? 10 : 1;
+        if (hand == InteractionHand.MAIN_HAND) {
+            shiftDelta = this.isCtrl ? 10 : 1;
             pitch = this.isCtrl ? 0.7f : 0.9f;
         } else {
-            delta = this.isCtrl ? 0.01 : 0.1;
+            shiftDelta = this.isCtrl ? 0.01 : 0.1;
             pitch = this.isCtrl ? 1.3f : 1.0f;
         }
 
-        num += delta * (increase ? 1 : -1);
+        num += shiftDelta * (increase ? 1 : -1);
         NBTHelper.putDouble(stack, ItemAbacus.TAG_VALUE, num);
 
         pitch *= (increase ? 1.05f : 0.95f);

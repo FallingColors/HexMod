@@ -130,6 +130,8 @@ public class FabricHexConfig {
         private final PropertyMirror<Boolean> ctrlTogglesOffStrokeOrder = PropertyMirror.create(ConfigTypes.BOOLEAN);
         private final PropertyMirror<Double> gridSnapThreshold = PropertyMirror.create(
             ConfigTypes.DOUBLE.withMinimum(0.5).withMaximum(1.0));
+        private final PropertyMirror<Boolean> invertSpellbookScrollDirection = PropertyMirror.create(ConfigTypes.BOOLEAN);
+        private final PropertyMirror<Boolean> invertAbacusScrollDirection = PropertyMirror.create(ConfigTypes.BOOLEAN);
 
         public ConfigTree configure(ConfigTreeBuilder bob) {
             bob
@@ -146,6 +148,14 @@ public class FabricHexConfig {
                     "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way.")
                 .finishValue(gridSnapThreshold::mirror)
 
+                .beginValue("invertSpellbookScrollDirection", ConfigTypes.BOOLEAN, DEFAULT_INVERT_SPELLBOOK_SCROLL)
+                .withComment("Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and vice versa")
+                .finishValue(invertSpellbookScrollDirection::mirror)
+
+                .beginValue("invertAbacusScrollDirection", ConfigTypes.BOOLEAN, DEFAULT_INVERT_ABACUS_SCROLL)
+                .withComment("Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
+                .finishValue(invertAbacusScrollDirection::mirror)
+
             ;
 
             return bob.build();
@@ -159,6 +169,16 @@ public class FabricHexConfig {
         @Override
         public boolean ctrlTogglesOffStrokeOrder() {
             return ctrlTogglesOffStrokeOrder.getValue();
+        }
+
+        @Override
+        public boolean invertSpellbookScrollDirection() {
+            return invertSpellbookScrollDirection.getValue();
+        }
+
+        @Override
+        public boolean invertAbacusScrollDirection() {
+            return invertAbacusScrollDirection.getValue();
         }
 
         @Override

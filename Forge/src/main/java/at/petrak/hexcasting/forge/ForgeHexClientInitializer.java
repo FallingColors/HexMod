@@ -44,7 +44,7 @@ public class ForgeHexClientInitializer {
         });
 
         evBus.addListener((InputEvent.MouseScrollEvent e) -> {
-            var cancel = ShiftScrollListener.onScroll(e.getScrollDelta());
+            var cancel = ShiftScrollListener.onScrollInGameplay(e.getScrollDelta());
             e.setCanceled(cancel);
         });
     }
