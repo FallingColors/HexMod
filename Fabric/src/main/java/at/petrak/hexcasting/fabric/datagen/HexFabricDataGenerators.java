@@ -6,6 +6,7 @@ import at.petrak.hexcasting.datagen.HexItemTagProvider;
 import at.petrak.hexcasting.datagen.HexLootTables;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
+import at.petrak.hexcasting.fabric.datagen.builders.FabricCreateCrushingRecipeBuilder;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -23,7 +24,7 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator gen) {
         HexAPI.LOGGER.info("Starting Fabric-specific datagen");
 
-        gen.addProvider(new HexplatRecipes(gen, INGREDIENTS));
+        gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, FabricCreateCrushingRecipeBuilder::new));
 
         var xtags = IXplatAbstractions.INSTANCE.tags();
         var blockTagProvider = new HexBlockTagProvider(gen, xtags);

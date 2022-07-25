@@ -1,27 +1,24 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.MsgUpdateComparatorVisualsAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Wearable;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -30,10 +27,33 @@ import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.function.Predicate;
 
 public class ItemLens extends Item implements Wearable {
+
+    private static final List<Predicate<Player>> HAS_HUD_PREDICATE = new ArrayList<>();
+    static {
+        addLensHUDPredicate(player -> player.getItemBySlot(EquipmentSlot.MAINHAND).is(HexItems.SCRYING_LENS));
+        addLensHUDPredicate(player -> player.getItemBySlot(EquipmentSlot.OFFHAND).is(HexItems.SCRYING_LENS));
+        addLensHUDPredicate(player -> player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS));
+    }
+
+    public static boolean hasLensHUD(Player player) {
+        for (Predicate<Player> predicate : HAS_HUD_PREDICATE) {
+            if (predicate.test(player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void addLensHUDPredicate(Predicate<Player> predicate) {
+        HAS_HUD_PREDICATE.add(predicate);
+    }
 
     public ItemLens(Properties pProperties) {
         super(pProperties);
@@ -53,38 +73,21 @@ public class ItemLens extends Item implements Wearable {
         return EquipmentSlot.HEAD;
     }
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(itemstack);
-        ItemStack stack = player.getItemBySlot(equipmentslot);
-        if (stack.isEmpty()) {
-            player.setItemSlot(equipmentslot, itemstack.copy());
-            if (!world.isClientSide()) {
-                player.awardStat(Stats.ITEM_USED.get(this));
-            }
-
-            itemstack.setCount(0);
-            return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
-        } else {
-            return InteractionResultHolder.fail(itemstack);
+    public static void tickAllPlayers(ServerLevel world) {
+        for (ServerPlayer player : world.players()) {
+            tickLens(player);
         }
     }
 
-    @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        if (!pLevel.isClientSide() && pEntity instanceof ServerPlayer player) {
-            if (pStack == player.getItemBySlot(EquipmentSlot.HEAD) ||
-                pStack == player.getItemBySlot(EquipmentSlot.MAINHAND) ||
-                pStack == player.getItemBySlot(EquipmentSlot.OFFHAND)) {
-                sendComparatorDataToClient(player);
-            }
+    public static void tickLens(Entity pEntity) {
+        if (!pEntity.getLevel().isClientSide() && pEntity instanceof ServerPlayer player && hasLensHUD(player)) {
+            sendComparatorDataToClient(player);
         }
     }
 
     private static final Map<ServerPlayer, Pair<BlockPos, Integer>> comparatorDataMap = new WeakHashMap<>();
 
-    private void sendComparatorDataToClient(ServerPlayer player) {
+    private static void sendComparatorDataToClient(ServerPlayer player) {
         double reachAttribute = IXplatAbstractions.INSTANCE.getReachDistance(player);
         double distance = player.isCreative() ? reachAttribute : reachAttribute - 0.5;
         var hitResult = player.pick(distance, 0, false);
@@ -104,7 +107,7 @@ public class ItemLens extends Item implements Wearable {
         }
     }
 
-    private void syncComparatorValue(ServerPlayer player, BlockPos pos, int value) {
+    private static void syncComparatorValue(ServerPlayer player, BlockPos pos, int value) {
         var previous = comparatorDataMap.get(player);
         if (value == -1) {
             if (previous != null) {

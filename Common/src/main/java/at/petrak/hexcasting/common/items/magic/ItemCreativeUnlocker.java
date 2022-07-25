@@ -35,6 +35,18 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
             && stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains("debug");
     }
 
+    public static Component infiniteMedia(Level level) {
+        String prefix = "item.hexcasting.creative_unlocker.";
+
+        String emphasis = Language.getInstance().getOrDefault(prefix + "for_emphasis");
+        MutableComponent emphasized = new TextComponent("");
+        for (int i = 0; i < emphasis.length(); i++) {
+            emphasized.append(rainbow(new TextComponent("" + emphasis.charAt(i)), i, level));
+        }
+
+        return emphasized;
+    }
+
     private static final String TAG_EXTRACTIONS = "extractions";
 
     public ItemCreativeUnlocker(Properties properties) {
@@ -154,11 +166,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
         TooltipFlag isAdvanced) {
         String prefix = "item.hexcasting.creative_unlocker.";
 
-        String emphasis = Language.getInstance().getOrDefault(prefix + "for_emphasis");
-        MutableComponent emphasized = new TextComponent("");
-        for (int i = 0; i < emphasis.length(); i++) {
-            emphasized.append(rainbow(new TextComponent("" + emphasis.charAt(i)), i, level));
-        }
+        Component emphasized = infiniteMedia(level);
 
         MutableComponent modName = new TranslatableComponent(prefix + "mod_name").withStyle(
             (s) -> s.withColor(HEX_COLOR));

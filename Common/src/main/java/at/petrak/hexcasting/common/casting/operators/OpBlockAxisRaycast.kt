@@ -24,7 +24,7 @@ object OpBlockAxisRaycast : ConstManaOperator {
             )
         )
 
-        return if (blockHitResult.type == HitResult.Type.BLOCK) {
+        return if (blockHitResult.type == HitResult.Type.BLOCK && ctx.isVecInRange(Vec3.atCenterOf(blockHitResult.blockPos))) {
             blockHitResult.direction.step().asSpellResult
         } else {
             null.asSpellResult

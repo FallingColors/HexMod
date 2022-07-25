@@ -192,9 +192,9 @@ public class HexBlocks {
     public static final SlabBlock AKASHIC_SLAB = blockItem("akashic_slab",
         new BlockHexSlab(akashicWoody().noOcclusion()));
     public static final WoodButtonBlock AKASHIC_BUTTON = blockItem("akashic_button",
-        new BlockHexWoodButton(akashicWoody().noOcclusion()));
+        new BlockHexWoodButton(akashicWoody().noCollission()));
     public static final PressurePlateBlock AKASHIC_PRESSURE_PLATE = blockItem("akashic_pressure_plate",
-        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, akashicWoody().noOcclusion()));
+        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, akashicWoody().noCollission()));
     public static final BlockAkashicLeaves AKASHIC_LEAVES1 = blockItem("akashic_leaves1",
         new BlockAkashicLeaves(leaves(MaterialColor.COLOR_PURPLE)));
     public static final BlockAkashicLeaves AKASHIC_LEAVES2 = blockItem("akashic_leaves2",

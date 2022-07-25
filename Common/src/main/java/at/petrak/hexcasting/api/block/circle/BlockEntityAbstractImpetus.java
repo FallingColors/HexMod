@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.SpellCircleContext;
 import at.petrak.hexcasting.api.utils.ManaHelper;
+import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -115,12 +116,16 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
         BlockState state, BlockPos pos,
         LocalPlayer observer, ClientLevel world,
-        Direction hitFace, InteractionHand lensHand) {
+        Direction hitFace) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-            var dustCount = (float) beai.getMana() / (float) ManaConstants.DUST_UNIT;
-            var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
-                String.format("%.2f", dustCount));
-            lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
+            if (beai.getMana() < 0) {
+                lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
+            } else {
+                var dustCount = (float) beai.getMana() / (float) ManaConstants.DUST_UNIT;
+                var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
+                    String.format("%.2f", dustCount));
+                lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
+            }
 
             var mishap = this.getLastMishap();
             if (mishap != null) {
@@ -529,31 +534,43 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     @Override
-    public boolean canPlaceItem(int index, ItemStack stack) {
-        var manamount = extractMana(stack, true);
-        return manamount > 0;
+    public void clearContent() {
+        // NO-OP
     }
 
     @Override
-    public void clearContent() {
-        this.mana = 0;
-        this.stopCasting();
-        this.sync();
+    public boolean canPlaceItem(int index, ItemStack stack) {
+        var manamount = extractManaFromItem(stack, true);
+        return manamount > 0;
     }
 
-    public int extractMana(ItemStack stack, boolean simulate) {
+    public int extractManaFromItem(ItemStack stack, boolean simulate) {
+        if (this.mana < 0)
+            return 0;
         return ManaHelper.extractMana(stack, remainingManaCapacity(), true, simulate);
     }
 
     public void insertMana(ItemStack stack) {
-        var manamount = extractMana(stack, false);
-        if (manamount > 0) {
-            this.mana += manamount;
-            this.sync();
+        if (getMana() >= 0 && !stack.isEmpty() && stack.getItem() == HexItems.CREATIVE_UNLOCKER) {
+            setInfiniteMana();
+            stack.shrink(1);
+        } else {
+            var manamount = extractManaFromItem(stack, false);
+            if (manamount > 0) {
+                this.mana += manamount;
+                this.sync();
+            }
         }
     }
 
+    public void setInfiniteMana() {
+        this.mana = -1;
+        this.sync();
+    }
+
     public int remainingManaCapacity() {
+        if (this.mana < 0)
+            return 0;
         return MAX_CAPACITY - this.mana;
     }
 }

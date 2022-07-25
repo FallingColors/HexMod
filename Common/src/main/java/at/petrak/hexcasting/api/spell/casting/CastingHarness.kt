@@ -368,6 +368,9 @@ class CastingHarness private constructor(
             val tile = this.ctx.world.getBlockEntity(this.ctx.spellCircle.impetusPos)
             if (tile is BlockEntityAbstractImpetus) {
                 val manaAvailable = tile.mana
+                if (manaAvailable < 0)
+                    return 0
+
                 val manaToTake = min(costLeft, manaAvailable)
                 costLeft -= manaToTake
                 tile.mana = manaAvailable - manaToTake

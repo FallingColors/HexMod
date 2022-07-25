@@ -39,10 +39,6 @@ data class CastingContext(
     private val entitiesGivenMotion = mutableSetOf<Entity>()
 
     inline fun getHeldItemToOperateOn(acceptItemIf: (ItemStack) -> Boolean): Pair<ItemStack, InteractionHand> {
-        if (this.spellCircle == null) {
-            return caster.getItemInHand(otherHand) to otherHand
-        }
-
         val handItem = caster.getItemInHand(castingHand)
         if (!acceptItemIf(handItem))
             return caster.getItemInHand(otherHand) to otherHand
@@ -87,7 +83,7 @@ data class CastingContext(
         return entitiesGivenMotion.contains(target)
     }
 
-    fun isVecInWorld(vec: Vec3) = world.isInWorldBounds(BlockPos(vec)) && world.worldBorder.isWithinBounds(vec.x, vec.z)
+    fun isVecInWorld(vec: Vec3) = world.isInWorldBounds(BlockPos(vec)) && world.worldBorder.isWithinBounds(vec.x, vec.z, 0.5)
 
     fun isVecInRange(vec: Vec3): Boolean {
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(caster)

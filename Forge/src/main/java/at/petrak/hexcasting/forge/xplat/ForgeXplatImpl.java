@@ -17,6 +17,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
+import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
@@ -58,17 +59,17 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.TierSortingRegistry;
-import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.common.*;
 import net.minecraftforge.common.loot.CanToolPerformAction;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
@@ -99,7 +100,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        // NO-OP
+        if (this.isModPresent(HexInterop.Forge.CURIOS_API_ID)) {
+            CuriosApiInterop.init();
+        }
     }
 
     @Override
@@ -400,6 +403,20 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             return container.get().getModInfo().getDisplayName();
         }
         return namespace;
+    }
+
+    @Override
+    public boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player) {
+        return !MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player));
+    }
+
+    @Override
+    public boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player) {
+        ItemStack cached = player.getMainHandItem();
+        player.setItemInHand(InteractionHand.MAIN_HAND, blockStack.copy());
+        var evt = ForgeHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos, new BlockHitResult(Vec3.atCenterOf(pos), Direction.DOWN, pos, true));
+        player.setItemInHand(InteractionHand.MAIN_HAND, cached);
+        return !evt.isCanceled();
     }
 
     // it's literally the EXACT SAME on fabric aaa

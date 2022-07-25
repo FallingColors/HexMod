@@ -29,7 +29,7 @@ public record ForgeImpetusCapability(BlockEntityAbstractImpetus impetus) impleme
 		if (!simulate) {
 			impetus.insertMana(stack);
 		} else {
-			impetus.extractMana(stack, false); // Mana goes nowhere, since nothing is actually being done
+			impetus.extractManaFromItem(stack, false); // Mana goes nowhere, since nothing is actually being done
 		}
 
 		return stack;

@@ -119,6 +119,10 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        //location of the maven for curios api
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 dependencies {
@@ -138,6 +142,9 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion:api")
     runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion")
 
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion")
+
     // aughh
     testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
     testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
@@ -155,10 +162,10 @@ tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
 compileKotlin {
-    source(project(":Common").sourceSets.main.allSource)
+    source(project(":Common").sourceSets.main.kotlin)
 }
 compileTestKotlin {
-    source(project(":Common").sourceSets.main.allSource)
+    source(project(":Common").sourceSets.main.kotlin)
 }
 
 

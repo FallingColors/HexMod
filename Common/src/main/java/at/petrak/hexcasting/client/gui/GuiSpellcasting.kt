@@ -11,14 +11,14 @@ import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.otherHand
+import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.drawPatternFromPoints
 import at.petrak.hexcasting.client.drawSpot
+import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.sound.GridSoundInstance
-import at.petrak.hexcasting.common.items.ItemSpellbook
 import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
-import at.petrak.hexcasting.common.network.MsgShiftScrollSyn
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
@@ -33,6 +33,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
 import kotlin.math.atan2
 import kotlin.math.roundToInt
+import kotlin.math.sign
 import kotlin.math.sqrt
 
 class GuiSpellcasting(
@@ -51,9 +52,9 @@ class GuiSpellcasting(
         }
     }
 
-    fun recvServerUpdate(info: ControllerInfo) {
+    fun recvServerUpdate(info: ControllerInfo, index: Int) {
         this.stackDescs = info.stackDesc
-        this.patterns.lastOrNull()?.let {
+        this.patterns.getOrNull(index)?.let {
             it.type = info.resolutionType
         }
 
@@ -235,15 +236,21 @@ class GuiSpellcasting(
     override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pDelta: Double): Boolean {
         super.mouseScrolled(pMouseX, pMouseY, pDelta)
 
-        val otherHand = otherHand(this.handOpenedWith)
-        if (Minecraft.getInstance().player!!.getItemInHand(otherHand).item is ItemSpellbook)
-            IClientXplatAbstractions.INSTANCE.sendPacketToServer(
-                MsgShiftScrollSyn(
-                    otherHand,
-                    pDelta,
-                    hasControlDown()
-                )
-            )
+        val mouseHandler = Minecraft.getInstance().mouseHandler
+
+        if (mouseHandler.accumulatedScroll != 0.0 && sign(pDelta) != sign(mouseHandler.accumulatedScroll)) {
+            mouseHandler.accumulatedScroll = 0.0
+        }
+
+        mouseHandler.accumulatedScroll += pDelta
+        val accumulation: Int = mouseHandler.accumulatedScroll.toInt()
+        if (accumulation == 0) {
+            return true
+        }
+
+        mouseHandler.accumulatedScroll -= accumulation.toDouble()
+
+        ShiftScrollListener.onScroll(pDelta, false)
 
         return true
     }

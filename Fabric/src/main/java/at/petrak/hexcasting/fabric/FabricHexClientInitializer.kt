@@ -6,6 +6,7 @@ import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.fabric.event.MouseScrollCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
+import at.petrak.hexcasting.interop.HexInterop
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
@@ -31,9 +32,12 @@ object FabricHexClientInitializer : ClientModInitializer {
         }
         HudRenderCallback.EVENT.register(HexAdditionalRenderers::overlayGui)
         WorldRenderEvents.START.register { ClientTickCounter.renderTickStart(it.tickDelta()) }
-        ClientTickEvents.END_CLIENT_TICK.register { ClientTickCounter.clientTickEnd() }
+        ClientTickEvents.END_CLIENT_TICK.register {
+            ClientTickCounter.clientTickEnd()
+            ShiftScrollListener.clientTickEnd()
+        }
 
-        MouseScrollCallback.EVENT.register(ShiftScrollListener::onScroll)
+        MouseScrollCallback.EVENT.register(ShiftScrollListener::onScrollInGameplay)
 
         RegisterClientStuff.init()
         RegisterClientStuff.registerParticles()
@@ -47,5 +51,7 @@ object FabricHexClientInitializer : ClientModInitializer {
                 BlockEntityRendererRegistry.register(type, berp)
             }
         })
+
+        HexInterop.clientInit()
     }
 }

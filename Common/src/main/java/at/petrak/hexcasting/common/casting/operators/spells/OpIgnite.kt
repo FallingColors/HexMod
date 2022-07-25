@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.ktxt.UseOnContext
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
@@ -33,11 +34,13 @@ object OpIgnite : SpellOperator {
     private data class Spell(val target: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(target)
-            if (!ctx.world.mayInteract(ctx.caster, pos))
-                return
 
             // steal petra code that steals bucket code
             val maxwell = Items.FIRE_CHARGE
+
+            if (!ctx.world.mayInteract(ctx.caster, pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(maxwell), ctx.caster))
+                return
+
             if (maxwell is FireChargeItem) {
                 // help
                 maxwell.useOn(
@@ -45,7 +48,7 @@ object OpIgnite : SpellOperator {
                         ctx.world,
                         null,
                         InteractionHand.MAIN_HAND,
-                        ItemStack(maxwell.asItem()),
+                        ItemStack(maxwell),
                         BlockHitResult(target, Direction.UP, pos, false)
                     )
                 )

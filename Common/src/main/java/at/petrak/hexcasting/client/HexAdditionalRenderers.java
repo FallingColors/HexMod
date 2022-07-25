@@ -2,7 +2,7 @@ package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -22,8 +22,6 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -157,22 +155,8 @@ public class HexAdditionalRenderers {
             return;
         }
 
-        boolean foundLens = false;
-        InteractionHand lensHand = null;
-        for (var hand : InteractionHand.values()) {
-            if (player.getItemInHand(hand).is(HexItems.SCRYING_LENS)) {
-                lensHand = hand;
-                foundLens = true;
-                break;
-            }
-        }
-        if (!foundLens && player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS)) {
-            foundLens = true;
-        }
-
-        if (!foundLens) {
+        if (!ItemLens.hasLensHUD(player))
             return;
-        }
 
         var hitRes = mc.hitResult;
         if (hitRes != null && hitRes.getType() == HitResult.Type.BLOCK) {
@@ -180,7 +164,7 @@ public class HexAdditionalRenderers {
             var pos = bhr.getBlockPos();
             var bs = level.getBlockState(pos);
 
-            var lines = ScryingLensOverlayRegistry.getLines(bs, pos, player, level, bhr.getDirection(), lensHand);
+            var lines = ScryingLensOverlayRegistry.getLines(bs, pos, player, level, bhr.getDirection());
 
             int totalHeight = 8;
             List<Pair<ItemStack, List<FormattedText>>> actualLines = Lists.newArrayList();

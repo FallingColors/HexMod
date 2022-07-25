@@ -5,6 +5,7 @@ import at.petrak.hexcasting.client.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.shader.HexShaders;
+import at.petrak.hexcasting.interop.HexInterop;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -44,9 +45,11 @@ public class ForgeHexClientInitializer {
         });
 
         evBus.addListener((InputEvent.MouseScrollEvent e) -> {
-            var cancel = ShiftScrollListener.onScroll(e.getScrollDelta());
+            var cancel = ShiftScrollListener.onScrollInGameplay(e.getScrollDelta());
             e.setCanceled(cancel);
         });
+
+        HexInterop.clientInit();
     }
 
     @SubscribeEvent

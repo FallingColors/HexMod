@@ -235,7 +235,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         simpleBlock(HexBlocks.SCONCE, sconceModel);
         simpleBlockItem(HexBlocks.SCONCE, sconceModel);
 
-        var conjuredModel = models().getExistingFile(modLoc("conjured"));
+        var conjuredModel = models().getBuilder("conjured").texture("particle", mcLoc("block/amethyst_block"));
         simpleBlock(HexBlocks.CONJURED_BLOCK, conjuredModel);
         simpleBlock(HexBlocks.CONJURED_LIGHT, conjuredModel);
     }

@@ -109,7 +109,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
                 }
 
-                IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender, new MsgNewSpellPatternAck(clientInfo));
+                IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender, new MsgNewSpellPatternAck(clientInfo, resolvedPatterns.size() - 1));
             }
         });
     }

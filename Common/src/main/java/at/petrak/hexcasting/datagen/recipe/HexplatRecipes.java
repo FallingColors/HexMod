@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder;
+import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
 import at.petrak.paucal.api.datagen.PaucalRecipeProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -30,16 +31,19 @@ import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 
 public class HexplatRecipes extends PaucalRecipeProvider {
     public DataGenerator generator;
     public IXplatIngredients ingredients;
+    public Supplier<CreateCrushingRecipeBuilder> createCrushing;
 
-    public HexplatRecipes(DataGenerator pGenerator, IXplatIngredients ingredients) {
+    public HexplatRecipes(DataGenerator pGenerator, IXplatIngredients ingredients, Supplier<CreateCrushingRecipeBuilder> createCrushing) {
         super(pGenerator, HexAPI.MOD_ID);
         this.generator = pGenerator;
         this.ingredients = ingredients;
+        this.createCrushing = createCrushing;
     }
 
     protected void makeRecipes(Consumer<FinishedRecipe> recipes) {
@@ -119,12 +123,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         for (var dye : DyeColor.values()) {
             var item = HexItems.DYE_COLORIZERS.get(dye);
             ShapedRecipeBuilder.shaped(item)
-                .define('B', Items.BOWL)
                 .define('D', HexItems.AMETHYST_DUST)
                 .define('C', DyeItem.byColor(dye))
-                .pattern(" C ")
                 .pattern(" D ")
-                .pattern(" B ")
+                .pattern("DCD")
+                .pattern(" D ")
                 .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
         }
 
@@ -357,6 +360,30 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             HexBlocks.AKASHIC_RECORD.defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/akashic_record"));
+
+        // Create compat
+
+        createCrushing.get()
+            .withInput(Blocks.AMETHYST_CLUSTER)
+            .duration(150)
+            .withOutput(Items.AMETHYST_SHARD, 7)
+            .withOutput(HexItems.AMETHYST_DUST, 5)
+            .withOutput(0.25f, HexItems.CHARGED_AMETHYST)
+            .save(recipes, new ResourceLocation("create", "crushing/amethyst_cluster"));
+
+        createCrushing.get()
+            .withInput(Blocks.AMETHYST_BLOCK)
+            .duration(150)
+            .withOutput(Items.AMETHYST_SHARD, 3)
+            .withOutput(0.5f, HexItems.AMETHYST_DUST, 4)
+            .save(recipes, new ResourceLocation("create", "crushing/amethyst_block"));
+
+        createCrushing.get()
+            .withInput(Items.AMETHYST_SHARD)
+            .duration(150)
+            .withOutput(HexItems.AMETHYST_DUST, 4)
+            .withOutput(0.5f, HexItems.AMETHYST_DUST)
+            .save(recipes, modLoc("compat/create/crushing/amethyst_shard"));
     }
 
     private void wandRecipe(Consumer<FinishedRecipe> recipes, ItemWand wand, Item plank) {
@@ -374,12 +401,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     private void gayRecipe(Consumer<FinishedRecipe> recipes, ItemPrideColorizer.Type type, Item material) {
         var colorizer = HexItems.PRIDE_COLORIZERS.get(type);
         ShapedRecipeBuilder.shaped(colorizer)
-            .define('B', Items.BOWL)
             .define('D', HexItems.AMETHYST_DUST)
             .define('C', material)
-            .pattern(" C ")
             .pattern(" D ")
-            .pattern(" B ")
+            .pattern("DCD")
+            .pattern(" D ")
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
     }
 
