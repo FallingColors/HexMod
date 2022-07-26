@@ -26,11 +26,15 @@ class OpPotionEffect(
         val target = args.getChecked<LivingEntity>(0, argc)
         if (target is ArmorStand)
             throw MishapInvalidIota.ofClass(SpellDatum.make(target), 0, LivingEntity::class.java)
+
         val duration = max(args.getChecked(1, argc), 0.0)
-        ctx.assertEntityInRange(target)
+
         val potency = if (this.allowPotency)
             args.getChecked<Double>(2, argc).coerceIn(1.0, 128.0)
-        else 1.0
+        else
+            1.0
+
+        ctx.assertEntityInRange(target)
 
         val cost = this.baseCost * duration * if (potencyCubic) {
             potency * potency * potency
@@ -47,8 +51,10 @@ class OpPotionEffect(
     private class Spell(val effect: MobEffect, val target: LivingEntity, val duration: Double, val potency: Double) :
         RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt() - 1)
-            target.addEffect(effectInst)
+            if (duration > 1.0 / 20.0) {
+                val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt() - 1)
+                target.addEffect(effectInst)
+            }
         }
     }
 }
