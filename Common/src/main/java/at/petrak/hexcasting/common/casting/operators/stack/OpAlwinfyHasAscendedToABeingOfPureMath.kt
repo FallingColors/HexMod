@@ -1,11 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
-import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
@@ -13,7 +11,6 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import kotlin.math.abs
-import kotlin.math.ln
 import kotlin.math.roundToInt
 
 // "lehmer code"
@@ -58,13 +55,13 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Operator {
             editTarget = editTarget.subList(1, editTarget.size)
         }
 
-        val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * ManaConstants.DUST_UNIT).toInt()
+//        val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * ManaConstants.DUST_UNIT).toInt()
 
         return OperationResult(
             continuation,
             stack,
             local,
-            listOf(OperatorSideEffect.ConsumeMana(cost))
+            listOf() // OperatorSideEffect.ConsumeMana(cost)
         )
     }
 
