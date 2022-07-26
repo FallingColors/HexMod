@@ -30,7 +30,8 @@ class OpExplode(val fire: Boolean) : SpellOperator {
 
     private data class Spell(val pos: Vec3, val strength: Double, val fire: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            if (!ctx.world.mayInteract(ctx.caster, BlockPos(pos)))
+            // TODO: you can use this to explode things *outside* of the worldborder?
+            if (!ctx.canEditBlockAt(BlockPos(pos)))
                 return
 
             ctx.world.explode(

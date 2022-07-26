@@ -31,7 +31,7 @@ object OpBreakBlock : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(v)
 
-            if (!ctx.world.mayInteract(ctx.caster, pos))
+            if (!ctx.canEditBlockAt(pos))
                 return
 
             val blockstate = ctx.world.getBlockState(pos)

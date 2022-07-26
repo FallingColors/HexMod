@@ -54,7 +54,7 @@ object OpDestroyWater : SpellOperator {
                 val here = todo.removeFirst()
                 val distFromFocus =
                     ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
-                if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && ctx.world.mayInteract(ctx.caster, here)) {
+                if (ctx.canEditBlockAt(here) && seen.add(here)) {
                     // never seen this pos in my life
                     val fluid = ctx.world.getFluidState(here)
                     if (fluid != Fluids.EMPTY.defaultFluidState()) {
@@ -88,24 +88,24 @@ object OpDestroyWater : SpellOperator {
                                     false
                                 }
 
-                        if (success) {
-                            ctx.world.sendParticles(
-                                ParticleTypes.SMOKE,
-                                here.x + 0.5 + Math.random() * 0.4 - 0.2,
-                                here.y + 0.5 + Math.random() * 0.4 - 0.2,
-                                here.z + 0.5 + Math.random() * 0.4 - 0.2,
-                                2,
-                                0.0,
-                                0.05,
-                                0.0,
-                                0.0
-                            )
-                            successes++
-                            for (dir in Direction.values()) {
-                                todo.add(here.relative(dir))
+                            if (success) {
+                                ctx.world.sendParticles(
+                                    ParticleTypes.SMOKE,
+                                    here.x + 0.5 + Math.random() * 0.4 - 0.2,
+                                    here.y + 0.5 + Math.random() * 0.4 - 0.2,
+                                    here.z + 0.5 + Math.random() * 0.4 - 0.2,
+                                    2,
+                                    0.0,
+                                    0.05,
+                                    0.0,
+                                    0.0
+                                )
+                                successes++
+                                for (dir in Direction.values()) {
+                                    todo.add(here.relative(dir))
+                                }
                             }
                         }
-                    }
                     }
                 }
             }

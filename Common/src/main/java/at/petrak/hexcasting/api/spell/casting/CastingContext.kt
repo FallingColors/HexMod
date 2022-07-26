@@ -16,6 +16,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.GameType
 import net.minecraft.world.phys.Vec3
 import java.util.function.Predicate
 import kotlin.math.min
@@ -83,7 +84,8 @@ data class CastingContext(
         return entitiesGivenMotion.contains(target)
     }
 
-    fun isVecInWorld(vec: Vec3) = world.isInWorldBounds(BlockPos(vec)) && world.worldBorder.isWithinBounds(vec.x, vec.z, 0.5)
+    fun isVecInWorld(vec: Vec3) =
+        world.isInWorldBounds(BlockPos(vec)) && world.worldBorder.isWithinBounds(vec.x, vec.z, 0.5)
 
     fun isVecInRange(vec: Vec3): Boolean {
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(caster)
@@ -115,6 +117,12 @@ data class CastingContext(
         if (this.spellCircle != null && this.spellCircle.activatorAlwaysInRange && this.caster == entity)
             return true
         return isVecInRange(entity.position())
+    }
+
+    fun canEditBlockAt(pos: BlockPos): Boolean {
+        return this.isVecInRange(Vec3.atCenterOf(pos))
+                && this.caster.gameMode.gameModeForPlayer != GameType.ADVENTURE
+                && this.world.mayInteract(this.caster, pos)
     }
 
     /**

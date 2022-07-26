@@ -29,7 +29,8 @@ object OpPlaceBlock : SpellOperator {
 
         val pos = BlockPos(target)
 
-        if (!ctx.world.mayInteract(ctx.caster, pos))
+        // TODO: does this even work?? why are we returning null?? what does that *do*?
+        if (!ctx.canEditBlockAt(pos))
             return null
 
 
@@ -54,7 +55,7 @@ object OpPlaceBlock : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(vec)
 
-            if (!ctx.world.mayInteract(ctx.caster, pos))
+            if (!ctx.canEditBlockAt(pos))
                 return
 
             val blockHit = BlockHitResult(

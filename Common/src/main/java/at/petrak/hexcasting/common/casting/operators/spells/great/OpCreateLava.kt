@@ -35,7 +35,13 @@ object OpCreateLava : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(target)
 
-            if (!ctx.world.mayInteract(ctx.caster, pos)|| !IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(Items.LAVA_BUCKET), ctx.caster))
+            if (!ctx.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
+                    ctx.world,
+                    pos,
+                    ItemStack(Items.LAVA_BUCKET),
+                    ctx.caster
+                )
+            )
                 return
 
             val state = ctx.world.getBlockState(pos)

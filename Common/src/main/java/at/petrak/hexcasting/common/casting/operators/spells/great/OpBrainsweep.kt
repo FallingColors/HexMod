@@ -49,9 +49,16 @@ object OpBrainsweep : SpellOperator {
         )
     }
 
-    private data class Spell(val pos: BlockPos, val state: BlockState, val sacrifice: Villager, val recipe: BrainsweepRecipe) : RenderedSpell {
+    private data class Spell(
+        val pos: BlockPos,
+        val state: BlockState,
+        val sacrifice: Villager,
+        val recipe: BrainsweepRecipe
+    ) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
+            if (ctx.canEditBlockAt(pos)) {
+                ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
+            }
             Brainsweeping.brainsweep(sacrifice)
             if (HexConfig.server().doVillagersTakeOffenseAtMindMurder()) {
                 sacrifice.tellWitnessesThatIWasMurdered(ctx.caster)

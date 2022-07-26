@@ -44,7 +44,7 @@ class OpConjure(val light: Boolean) : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(target)
 
-            if (!ctx.world.mayInteract(ctx.caster, pos))
+            if (!ctx.canEditBlockAt(pos))
                 return
 
             val placeContext = DirectionalPlaceContext(ctx.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)

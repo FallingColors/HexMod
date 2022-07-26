@@ -38,7 +38,13 @@ object OpIgnite : SpellOperator {
             // steal petra code that steals bucket code
             val maxwell = Items.FIRE_CHARGE
 
-            if (!ctx.world.mayInteract(ctx.caster, pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(maxwell), ctx.caster))
+            if (!ctx.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
+                    ctx.world,
+                    pos,
+                    ItemStack(maxwell),
+                    ctx.caster
+                )
+            )
                 return
 
             if (maxwell is FireChargeItem) {
