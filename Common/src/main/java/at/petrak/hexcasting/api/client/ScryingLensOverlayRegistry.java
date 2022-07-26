@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,14 +38,21 @@ public final class ScryingLensOverlayRegistry {
 
     // implemented as a map to allow for weak dereferencing
     private static final Map<LocalPlayer, Pair<BlockPos, Integer>> comparatorData = new WeakHashMap<>();
+    private static final Map<LocalPlayer, Pair<BlockPos, Integer>> beeData = new WeakHashMap<>();
 
-    public static void receiveComparatorValue(BlockPos pos, int value) {
+    public static void receiveComparatorAndBeeValue(BlockPos pos, int comparator, int bee) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            if (pos == null || value == -1) {
+            if (pos == null || comparator == -1) {
                 comparatorData.remove(player);
             } else {
-                comparatorData.put(player, new Pair<>(pos, value));
+                comparatorData.put(player, new Pair<>(pos, comparator));
+            }
+
+            if (pos == null || bee == -1) {
+                beeData.remove(player);
+            } else {
+                beeData.put(player, new Pair<>(pos, bee));
             }
         }
     }
@@ -76,6 +84,34 @@ public final class ScryingLensOverlayRegistry {
         }
 
         return comparatorValue.getSecond();
+    }
+
+    public static int getBeeValue() {
+        var mc = Minecraft.getInstance();
+        var player = mc.player;
+        var level = mc.level;
+        var result = mc.hitResult;
+
+        if (player == null || level == null || result == null || result.getType() != HitResult.Type.BLOCK) {
+            return -1;
+        }
+
+        var beeValue = beeData.get(player);
+        if (beeValue == null) {
+            return -1;
+        }
+
+        var pos = ((BlockHitResult) result).getBlockPos();
+        if (!pos.equals(beeValue.getFirst())) {
+            return -1;
+        }
+
+        var state = mc.level.getBlockState(pos);
+        if (!(state.getBlock() instanceof BeehiveBlock)) {
+            return -1;
+        }
+
+        return beeValue.getSecond();
     }
 
     /**

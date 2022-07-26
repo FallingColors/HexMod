@@ -19,8 +19,10 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Wearable;
+import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -86,6 +88,7 @@ public class ItemLens extends Item implements Wearable {
     }
 
     private static final Map<ServerPlayer, Pair<BlockPos, Integer>> comparatorDataMap = new WeakHashMap<>();
+    private static final Map<ServerPlayer, Pair<BlockPos, Integer>> beeDataMap = new WeakHashMap<>();
 
     private static void sendComparatorDataToClient(ServerPlayer player) {
         double reachAttribute = IXplatAbstractions.INSTANCE.getReachDistance(player);
@@ -94,29 +97,40 @@ public class ItemLens extends Item implements Wearable {
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             var pos = ((BlockHitResult) hitResult).getBlockPos();
             var state = player.level.getBlockState(pos);
+
+            int bee = -1;
+
+            if (state.getBlock() instanceof BeehiveBlock && player.level.getBlockEntity(pos) instanceof BeehiveBlockEntity bees) {
+                bee = bees.getOccupantCount();
+            }
+
             if (state.is(Blocks.COMPARATOR)) {
                 syncComparatorValue(player, pos,
-                    state.getDirectSignal(player.level, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING)));
+                    state.getDirectSignal(player.level, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING)), bee);
             } else if (state.hasAnalogOutputSignal()) {
-                syncComparatorValue(player, pos, state.getAnalogOutputSignal(player.level, pos));
+                syncComparatorValue(player, pos, state.getAnalogOutputSignal(player.level, pos), bee);
             } else {
-                syncComparatorValue(player, null, -1);
+                syncComparatorValue(player, null, -1, bee);
             }
         } else {
-            syncComparatorValue(player, null, -1);
+            syncComparatorValue(player, null, -1, -1);
         }
     }
 
-    private static void syncComparatorValue(ServerPlayer player, BlockPos pos, int value) {
-        var previous = comparatorDataMap.get(player);
-        if (value == -1) {
-            if (previous != null) {
+    private static void syncComparatorValue(ServerPlayer player, BlockPos pos, int comparator, int bee) {
+        var previousComparator = comparatorDataMap.get(player);
+        var previousBee = beeDataMap.get(player);
+        if (comparator == -1 && bee == -1) {
+            if (previousComparator != null || previousBee != null) {
                 comparatorDataMap.remove(player);
-                IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(null, -1));
+                beeDataMap.remove(player);
+                IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(null, -1, -1));
             }
-        } else if (previous == null || (!pos.equals(previous.getFirst()) || value != previous.getSecond())) {
-            comparatorDataMap.put(player, new Pair<>(pos, value));
-            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(pos, value));
+        } else if (previousComparator == null || !pos.equals(previousComparator.getFirst()) || comparator != previousComparator.getSecond() ||
+            previousBee == null || !pos.equals(previousBee.getFirst()) || bee != previousBee.getSecond()) {
+            comparatorDataMap.put(player, new Pair<>(pos, comparator));
+            beeDataMap.put(player, new Pair<>(pos, bee));
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(pos, comparator, bee));
         }
     }
 

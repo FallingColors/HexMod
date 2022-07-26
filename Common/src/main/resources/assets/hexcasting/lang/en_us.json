@@ -130,6 +130,8 @@
   "hexcasting.tooltip.lens.akashic.bookshelf.location": "Record at %s",
   "hexcasting.tooltip.lens.akashic.record.count": "%s iotas stored",
   "hexcasting.tooltip.lens.akashic.record.count.single": "%s iota stored",
+  "hexcasting.tooltip.lens.bee": "%s bees",
+  "hexcasting.tooltip.lens.bee.single": "%s bee",
   "hexcasting.tooltip.brainsweep.min_level": "Level %s or higher",
   "hexcasting.tooltip.brainsweep.level": "Level %s",
   "hexcasting.tooltip.brainsweep.product": "Mindless Body",

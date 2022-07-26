@@ -191,6 +191,17 @@ public class RegisterClientStuff {
                     .withStyle(ChatFormatting.YELLOW))));
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
+            (state, pos, observer, world, direction) -> state.getBlock() instanceof BeehiveBlock,
+            (lines, state, pos, observer, world, direction) -> {
+                int count = ScryingLensOverlayRegistry.getBeeValue();
+                lines.add(new Pair<>(new ItemStack(Items.BEE_NEST), count == -1 ? new TextComponent("") :
+                    new TranslatableComponent(
+                        "hexcasting.tooltip.lens.bee" + (count == 1 ? ".single" : ""),
+                        count
+                    )));
+            });
+
+        ScryingLensOverlayRegistry.addPredicateDisplayer(
             (state, pos, observer, world, direction) -> state.isSignalSource() && !state.is(
                 Blocks.COMPARATOR),
             (lines, state, pos, observer, world, direction) -> {
