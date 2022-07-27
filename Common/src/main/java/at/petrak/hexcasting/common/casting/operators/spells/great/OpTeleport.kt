@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
+import at.petrak.hexcasting.common.lib.HexEntityTags
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
@@ -43,12 +44,8 @@ object OpTeleport : SpellOperator {
     private data class Spell(val teleportee: Entity, val delta: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val distance = delta.length()
-
             if (distance < 32768.0) {
-                teleportee.setPos(teleportee.position().add(delta))
-                if (teleportee is ServerPlayer) {
-                    IXplatAbstractions.INSTANCE.sendPacketToPlayer(teleportee, MsgBlinkAck(delta))
-                }
+                OpTeleport.teleportRespectSticky(teleportee, delta)
             }
 
             if (teleportee is ServerPlayer && teleportee == ctx.caster) {
@@ -79,6 +76,36 @@ object OpTeleport : SpellOperator {
                 // we also don't drop the offhand just to be nice
             }
         }
+    }
 
+    fun teleportRespectSticky(teleportee: Entity, delta: Vec3) {
+        var stickyTeleport = false
+        // roll our own for loop
+        // this really would be more readable as a c-style for loop, waugh
+        var cursor = teleportee.vehicle
+        var base: Entity? = null
+        while (cursor != null) {
+            if (cursor.type.`is`(HexEntityTags.STICKY_TELEPORTERS))
+                stickyTeleport = true
+            base = cursor
+            cursor = cursor.vehicle
+        }
+
+        if (stickyTeleport) {
+            // this handles teleporting the passengers
+            val target = base!!.position().add(delta)
+            base.teleportTo(target.x, target.y, target.z)
+        } else {
+            // Break it into two stacks
+            teleportee.stopRiding()
+            teleportee.firstPassenger?.stopRiding()
+            teleportee.setPos(teleportee.position().add(delta))
+        }
+
+        teleportee.setPos(teleportee.position().add(delta))
+        if (teleportee is ServerPlayer) {
+            teleportee.connection.resetPosition()
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(teleportee, MsgBlinkAck(delta))
+        }
     }
 }

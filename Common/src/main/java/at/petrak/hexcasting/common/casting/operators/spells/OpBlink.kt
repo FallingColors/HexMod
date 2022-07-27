@@ -5,9 +5,7 @@ import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
-import at.petrak.hexcasting.common.network.MsgBlinkAck
-import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.server.level.ServerPlayer
+import at.petrak.hexcasting.common.casting.operators.spells.great.OpTeleport
 import net.minecraft.world.entity.Entity
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -47,12 +45,8 @@ object OpBlink : SpellOperator {
 
     private data class Spell(val target: Entity, val delta: Double) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val dvec = target.lookAngle.scale(delta)
-            target.setPos(target.position().add(dvec))
-            if (target is ServerPlayer) {
-                target.connection.resetPosition()
-                IXplatAbstractions.INSTANCE.sendPacketToPlayer(target, MsgBlinkAck(dvec))
-            }
+            val delta = target.lookAngle.scale(delta)
+            OpTeleport.teleportRespectSticky(target, delta)
         }
     }
 }
