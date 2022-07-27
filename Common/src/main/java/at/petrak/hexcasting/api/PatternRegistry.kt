@@ -81,14 +81,6 @@ object PatternRegistry {
      */
     @JvmStatic
     fun matchPatternAndID(pat: HexPattern, overworld: ServerLevel): Pair<Operator, ResourceLocation> {
-        // Pipeline:
-        // patterns are registered here every time the game boots
-        // when we try to look
-        for (handler in specialHandlers) {
-            val op = handler.handler.handlePattern(pat)
-            if (op != null) return op to handler.id
-        }
-
         // Is it global?
         val sig = pat.anglesSignature()
         this.regularPatternLookup[sig]?.let {
@@ -103,6 +95,14 @@ object PatternRegistry {
         perWorldPatterns.lookup[sig]?.let {
             val op = this.operatorLookup[it.first]!!
             return op to it.first
+        }
+
+        // Lookup a special handler
+        // Do this last to prevent conflicts with great spells; this has happened a few times with
+        // create phial hahaha
+        for (handler in specialHandlers) {
+            val op = handler.handler.handlePattern(pat)
+            if (op != null) return op to handler.id
         }
 
         throw MishapInvalidPattern()
