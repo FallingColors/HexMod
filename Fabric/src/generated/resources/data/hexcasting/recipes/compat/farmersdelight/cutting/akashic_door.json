@@ -1,0 +1,17 @@
+{
+  "type": "farmersdelight:cutting",
+  "ingredients": [
+    {
+      "item": "hexcasting:akashic_door"
+    }
+  ],
+  "tool": {
+    "type": "farmersdelight:tool",
+    "tag": "fabric:tools/axes"
+  },
+  "result": [
+    {
+      "item": "hexcasting:akashic_planks"
+    }
+  ]
+}

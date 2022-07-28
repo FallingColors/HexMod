@@ -14,6 +14,7 @@ import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder;
 import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
+import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightCuttingRecipeBuilder;
 import at.petrak.paucal.api.datagen.PaucalRecipeProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -21,6 +22,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -384,6 +386,36 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .withOutput(HexItems.AMETHYST_DUST, 4)
             .withOutput(0.5f, HexItems.AMETHYST_DUST)
             .save(recipes, modLoc("compat/create/crushing/amethyst_shard"));
+
+        // FD compat
+
+        new FarmersDelightCuttingRecipeBuilder()
+            .withInput(HexBlocks.AKASHIC_LOG)
+            .withTool(ingredients.axeStrip())
+            .withOutput(HexBlocks.AKASHIC_LOG_STRIPPED)
+            .withOutput("farmersdelight:tree_bark")
+            .withSound(SoundEvents.AXE_STRIP)
+            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_log"));
+
+        new FarmersDelightCuttingRecipeBuilder()
+            .withInput(HexBlocks.AKASHIC_WOOD)
+            .withTool(ingredients.axeStrip())
+            .withOutput(HexBlocks.AKASHIC_WOOD_STRIPPED)
+            .withOutput("farmersdelight:tree_bark")
+            .withSound(SoundEvents.AXE_STRIP)
+            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_wood"));
+
+        new FarmersDelightCuttingRecipeBuilder()
+            .withInput(HexBlocks.AKASHIC_TRAPDOOR)
+            .withTool(ingredients.axeDig())
+            .withOutput(HexBlocks.AKASHIC_PLANKS)
+            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_trapdoor"));
+
+        new FarmersDelightCuttingRecipeBuilder()
+            .withInput(HexBlocks.AKASHIC_DOOR)
+            .withTool(ingredients.axeDig())
+            .withOutput(HexBlocks.AKASHIC_PLANKS)
+            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_door"));
     }
 
     private void wandRecipe(Consumer<FinishedRecipe> recipes, ItemWand wand, Item plank) {
