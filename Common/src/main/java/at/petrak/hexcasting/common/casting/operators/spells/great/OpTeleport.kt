@@ -91,21 +91,29 @@ object OpTeleport : SpellOperator {
             cursor = cursor.vehicle
         }
 
+        val playersToUpdate = mutableListOf<ServerPlayer>()
+
         if (stickyTeleport) {
             // this handles teleporting the passengers
             val target = base!!.position().add(delta)
             base.teleportTo(target.x, target.y, target.z)
+            base.indirectPassengers
+                .filterIsInstance<ServerPlayer>()
+                .forEach(playersToUpdate::add)
         } else {
             // Break it into two stacks
             teleportee.stopRiding()
-            teleportee.firstPassenger?.stopRiding()
+            teleportee.passengers.forEach(Entity::stopRiding)
             teleportee.setPos(teleportee.position().add(delta))
+            if (teleportee is ServerPlayer) {
+                playersToUpdate.add(teleportee)
+            }
         }
 
         teleportee.setPos(teleportee.position().add(delta))
-        if (teleportee is ServerPlayer) {
-            teleportee.connection.resetPosition()
-            IXplatAbstractions.INSTANCE.sendPacketToPlayer(teleportee, MsgBlinkAck(delta))
+        for (player in playersToUpdate) {
+            player.connection.resetPosition()
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, MsgBlinkAck(delta))
         }
     }
 }
