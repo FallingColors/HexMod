@@ -110,7 +110,6 @@ object OpTeleport : SpellOperator {
             }
         }
 
-        teleportee.setPos(teleportee.position().add(delta))
         for (player in playersToUpdate) {
             player.connection.resetPosition()
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, MsgBlinkAck(delta))
