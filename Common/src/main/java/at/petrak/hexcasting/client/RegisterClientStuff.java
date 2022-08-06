@@ -31,6 +31,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -40,11 +41,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ComparatorMode;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.MaterialColor;
 import org.jetbrains.annotations.NotNull;
 
@@ -184,6 +188,15 @@ public class RegisterClientStuff {
                         .withStyle(redstoneColor(compare ? 0 : 15))));
             });
 
+        ScryingLensOverlayRegistry.addDisplayer(Blocks.POWERED_RAIL,
+            (lines, state, pos, observer, world, direction) -> {
+                int power = getPoweredRailStrength(world, pos, state);
+                lines.add(new Pair<>(
+                    new ItemStack(Items.POWERED_RAIL),
+                    new TextComponent(String.valueOf(power))
+                        .withStyle(redstoneColor(power, 9))));
+            });
+
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
             (lines, state, pos, observer, world, direction) -> lines.add(new Pair<>(
                 new ItemStack(Items.CLOCK),
@@ -237,7 +250,11 @@ public class RegisterClientStuff {
     }
 
     private static UnaryOperator<Style> redstoneColor(int power) {
-        return color(RedStoneWireBlock.getColorForPower(Mth.clamp(power, 0, 15)));
+        return redstoneColor(power, 15);
+    }
+
+    private static UnaryOperator<Style> redstoneColor(int power, int max) {
+        return color(RedStoneWireBlock.getColorForPower(Mth.clamp((power * max) / 15, 0, 15)));
     }
 
     private static int instrumentColor(NoteBlockInstrument instrument) {
@@ -257,6 +274,114 @@ public class RegisterClientStuff {
             case BANJO -> MaterialColor.COLOR_YELLOW.col;
             default -> -1;
         };
+    }
+
+    private static int getPoweredRailStrength(Level level, BlockPos pos, BlockState state) {
+        if (level.hasNeighborSignal(pos))
+            return 9;
+        int positiveValue = findPoweredRailSignal(level, pos, state, true, 0);
+        int negativeValue = findPoweredRailSignal(level, pos, state, false, 0);
+        return Math.max(positiveValue, negativeValue);
+    }
+
+    // Copypasta from PoweredRailBlock.class
+    private static int findPoweredRailSignal(Level level, BlockPos pos, BlockState state, boolean travelPositive, int depth) {
+        if (depth >= 8) {
+            return 0;
+        } else {
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
+            boolean descending = true;
+            RailShape shape = state.getValue(PoweredRailBlock.SHAPE);
+            switch(shape) {
+                case NORTH_SOUTH:
+                    if (travelPositive) {
+                        ++z;
+                    } else {
+                        --z;
+                    }
+                    break;
+                case EAST_WEST:
+                    if (travelPositive) {
+                        --x;
+                    } else {
+                        ++x;
+                    }
+                    break;
+                case ASCENDING_EAST:
+                    if (travelPositive) {
+                        --x;
+                    } else {
+                        ++x;
+                        ++y;
+                        descending = false;
+                    }
+
+                    shape = RailShape.EAST_WEST;
+                    break;
+                case ASCENDING_WEST:
+                    if (travelPositive) {
+                        --x;
+                        ++y;
+                        descending = false;
+                    } else {
+                        ++x;
+                    }
+
+                    shape = RailShape.EAST_WEST;
+                    break;
+                case ASCENDING_NORTH:
+                    if (travelPositive) {
+                        ++z;
+                    } else {
+                        --z;
+                        ++y;
+                        descending = false;
+                    }
+
+                    shape = RailShape.NORTH_SOUTH;
+                    break;
+                case ASCENDING_SOUTH:
+                    if (travelPositive) {
+                        ++z;
+                        ++y;
+                        descending = false;
+                    } else {
+                        --z;
+                    }
+
+                    shape = RailShape.NORTH_SOUTH;
+            }
+
+            int power = getPowerFromRail(level, new BlockPos(x, y, z), travelPositive, depth, shape);
+
+            if (power > 0) {
+                return power;
+            } else if (descending) {
+                return getPowerFromRail(level, new BlockPos(x, y - 1, z), travelPositive, depth, shape);
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    private static int getPowerFromRail(Level level, BlockPos pos, boolean travelPositive, int depth, RailShape shape) {
+        BlockState otherState = level.getBlockState(pos);
+        if (!otherState.is(Blocks.POWERED_RAIL)) {
+            return 0;
+        } else {
+            RailShape otherShape = otherState.getValue(PoweredRailBlock.SHAPE);
+            if (shape == RailShape.EAST_WEST && (otherShape == RailShape.NORTH_SOUTH || otherShape == RailShape.ASCENDING_NORTH || otherShape == RailShape.ASCENDING_SOUTH)) {
+                return 0;
+            } else if (shape == RailShape.NORTH_SOUTH && (otherShape == RailShape.EAST_WEST || otherShape == RailShape.ASCENDING_EAST || otherShape == RailShape.ASCENDING_WEST)) {
+                return 0;
+            } else if (otherState.getValue(PoweredRailBlock.POWERED)) {
+                return level.hasNeighborSignal(pos) ? 8 - depth : findPoweredRailSignal(level, pos, otherState, travelPositive, depth + 1);
+            } else {
+                return 0;
+            }
+        }
     }
 
     private static void registerScollOverrides(ItemScroll scroll) {
