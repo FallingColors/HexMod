@@ -6,10 +6,12 @@ import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +33,15 @@ public class HexJEIPlugin implements IModPlugin {
         return UID;
     }
 
+    @Override
+    public void registerItemSubtypes(@NotNull ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(HexItems.BATTERY, (itemStack, ctx) -> {
+            if (!itemStack.hasTag()) {
+                return IIngredientSubtypeInterpreter.NONE;
+            }
+            return String.valueOf(HexItems.BATTERY.getMaxMana(itemStack));
+        });
+    }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
