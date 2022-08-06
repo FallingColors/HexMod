@@ -59,7 +59,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         public Client(ForgeConfigSpec.Builder builder) {
             patternPointSpeedMultiplier = builder.comment(
                     "How fast the point showing you the stroke order on patterns moves")
-                .defineInRange("manaToHealthRate", DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER, 0.0,
+                .defineInRange("patternPointSpeedMultiplier", DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER, 0.0,
                     Double.POSITIVE_INFINITY);
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
