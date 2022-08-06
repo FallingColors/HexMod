@@ -4,9 +4,9 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.datagen.*;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
 import at.petrak.hexcasting.datagen.recipe.builders.ToolIngredient;
-import at.petrak.hexcasting.forge.datagen.builders.ForgeCreateCrushingRecipeBuilder;
 import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
+import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.paucal.api.forge.datagen.PaucalForgeDatagenWrappers;
 import com.google.gson.JsonObject;
@@ -58,7 +58,7 @@ public class HexForgeDataGenerators {
         ExistingFileHelper efh = ev.getExistingFileHelper();
         if (ev.includeServer()) {
             gen.addProvider(new HexLootTables(gen));
-            gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, ForgeCreateCrushingRecipeBuilder::new));
+            gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, HexForgeConditionsBuilder::new));
 
             var xtags = IXplatAbstractions.INSTANCE.tags();
             var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
@@ -70,7 +70,7 @@ public class HexForgeDataGenerators {
         }
     }
 
-    private static IXplatIngredients INGREDIENTS = new IXplatIngredients() {
+    private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {
         @Override
         public Ingredient glowstoneDust() {
             return Ingredient.of(Tags.Items.DUSTS_GLOWSTONE);
@@ -121,6 +121,11 @@ public class HexForgeDataGenerators {
                 new Ingredient.ItemValue(new ItemStack(Items.STICK)),
                 new Ingredient.TagValue(ItemTags.create(new ResourceLocation("forge", "rods/wooden")))
             ));
+        }
+
+        @Override
+        public Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient) {
+            return ForgeModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
         }
 
         @Override

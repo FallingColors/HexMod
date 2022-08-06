@@ -16,5 +16,13 @@
       "chance": 0.5
     }
   ],
-  "processingTime": 150
+  "processingTime": 150,
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "create"
+      ]
+    }
+  ]
 }

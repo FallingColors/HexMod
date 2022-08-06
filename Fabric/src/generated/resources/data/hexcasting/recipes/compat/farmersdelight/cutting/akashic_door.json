@@ -13,5 +13,13 @@
     {
       "item": "hexcasting:akashic_planks"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "farmersdelight"
+      ]
+    }
   ]
 }

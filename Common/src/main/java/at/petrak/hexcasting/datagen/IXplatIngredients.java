@@ -25,6 +25,8 @@ public interface IXplatIngredients {
 
     Ingredient stick();
 
+    Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient);
+
     ToolIngredient axeStrip();
 
     ToolIngredient axeDig();

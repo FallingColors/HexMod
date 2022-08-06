@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 // https://github.com/Creators-of-Create/Create/blob/82be76d8934af03b4e52cad6a9f74a4175ba7b05/src/main/java/com/simibubi/create/foundation/data/recipe/ProcessingRecipeGen.java
 // https://github.com/Creators-of-Create/Create/blob/82be76d8934af03b4e52cad6a9f74a4175ba7b05/src/main/java/com/simibubi/create/content/contraptions/processing/ProcessingRecipeBuilder.java
 // https://github.com/Creators-of-Create/Create/blob/82be76d8934af03b4e52cad6a9f74a4175ba7b05/src/main/java/com/simibubi/create/content/contraptions/processing/ProcessingRecipeSerializer.java
-public abstract class CreateCrushingRecipeBuilder implements RecipeBuilder {
+public class CreateCrushingRecipeBuilder implements RecipeBuilder {
 	private String group = "";
 	private Ingredient input;
 	private final List<ProcessingOutput> results = new ArrayList<>();
@@ -107,12 +107,6 @@ public abstract class CreateCrushingRecipeBuilder implements RecipeBuilder {
 		consumer.accept(new CrushingRecipe(resourceLocation));
 	}
 
-	public abstract void serializeConditions(JsonObject object);
-
-	public abstract CreateCrushingRecipeBuilder whenModLoaded(String modid);
-
-	public abstract CreateCrushingRecipeBuilder whenModMissing(String modid);
-
 	public class CrushingRecipe implements FinishedRecipe {
 
 		private final ResourceLocation id;
@@ -143,8 +137,6 @@ public abstract class CreateCrushingRecipeBuilder implements RecipeBuilder {
 			if (processingDuration > 0) {
 				json.addProperty("processingTime", processingDuration);
 			}
-
-			serializeConditions(json);
 		}
 
 		@Override
