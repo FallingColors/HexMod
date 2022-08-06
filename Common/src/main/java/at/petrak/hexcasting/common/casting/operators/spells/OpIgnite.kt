@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
@@ -9,7 +8,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.item.FireChargeItem
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.phys.BlockHitResult
@@ -35,32 +34,26 @@ object OpIgnite : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(target)
 
-            // steal petra code that steals bucket code
-            val maxwell = Items.FIRE_CHARGE
-
-            if (!ctx.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
-                    ctx.world,
-                    pos,
-                    ItemStack(maxwell),
-                    ctx.caster
-                )
-            )
+            if (!ctx.canEditBlockAt(pos))
                 return
 
-            if (maxwell is FireChargeItem) {
-                // help
-                maxwell.useOn(
-                    UseOnContext(
-                        ctx.world,
-                        null,
-                        InteractionHand.MAIN_HAND,
-                        ItemStack(maxwell),
-                        BlockHitResult(target, Direction.UP, pos, false)
-                    )
-                )
-            } else {
-                HexAPI.LOGGER.warn("Items.FIRE_CHARGE wasn't a FireChargeItem?")
+            // help
+            if (!tryToClick(ctx, pos, Items.FIRE_CHARGE)) {
+                tryToClick(ctx, pos, Items.FLINT_AND_STEEL)
             }
+        }
+
+        fun tryToClick(ctx: CastingContext, pos: BlockPos, item: Item): Boolean {
+            return IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(item), ctx.caster) &&
+                    item.useOn(
+                        UseOnContext(
+                            ctx.world,
+                            null,
+                            InteractionHand.MAIN_HAND,
+                            ItemStack(item),
+                            BlockHitResult(target, Direction.UP, pos, false)
+                        )
+                    ).consumesAction()
         }
     }
 }
