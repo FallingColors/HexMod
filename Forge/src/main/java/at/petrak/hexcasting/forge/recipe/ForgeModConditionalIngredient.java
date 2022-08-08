@@ -73,10 +73,14 @@ public class ForgeModConditionalIngredient extends AbstractIngredient {
 
 	public static Ingredient fromJson(JsonObject object) {
 		if (object.has("type") && object.getAsJsonPrimitive("type").getAsString().equals(ID.toString())) {
-			if (object.has("modid") && IXplatAbstractions.INSTANCE.isModPresent(object.getAsJsonPrimitive("modid").getAsString()))
-				return Ingredient.fromJson(object.get("if_loaded"));
-			else
-				return Ingredient.fromJson(object.get("default"));
+			if (object.has("modid") && IXplatAbstractions.INSTANCE.isModPresent(object.getAsJsonPrimitive("modid").getAsString())) {
+				Ingredient ingredient = Ingredient.fromJson(object.get("if_loaded"));
+				if (!ingredient.isEmpty()) {
+					return ingredient;
+				}
+			}
+
+			return Ingredient.fromJson(object.get("default"));
 		}
 
 		return Ingredient.of();
