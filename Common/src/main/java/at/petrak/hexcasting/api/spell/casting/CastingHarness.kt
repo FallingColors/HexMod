@@ -60,7 +60,21 @@ class CastingHarness private constructor(
             // Take the top of the continuation stack...
             val next = continuation.frame
             // ...and execute it.
-            val result = next.evaluate(continuation.next, world, this)
+            val result = try {
+                next.evaluate(continuation.next, world, this)
+            } catch (mishap: Mishap) {
+                CastResult(
+                    continuation,
+                    null,
+                    mishap.resolutionType(ctx),
+                    listOf(
+                        OperatorSideEffect.DoMishap(
+                            mishap,
+                            Mishap.Context(HexPattern(HexDir.WEST), null)
+                        )
+                    )
+                )
+            }
             // Then write all pertinent data back to the harness for the next iteration.
             if (result.newData != null) {
                 this.applyFunctionalData(result.newData)
