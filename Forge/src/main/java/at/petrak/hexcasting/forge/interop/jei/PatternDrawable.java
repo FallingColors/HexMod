@@ -19,7 +19,7 @@ public class PatternDrawable implements IDrawable {
     private final int width;
     private final int height;
 
-    private final boolean strokeOrder;
+    private boolean strokeOrder;
 
     private final List<PatternEntry> patterns;
     private final List<Vec2> pathfinderDots;
@@ -42,6 +42,11 @@ public class PatternDrawable implements IDrawable {
     @Override
     public int getHeight() {
         return height;
+    }
+
+    public PatternDrawable strokeOrder(boolean order) {
+        strokeOrder = order;
+        return this;
     }
 
     @Override

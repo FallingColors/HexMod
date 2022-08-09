@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
+import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
 import at.petrak.hexcasting.mixin.accessor.AccessorPoiType;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
@@ -28,6 +29,8 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexEMIPlugin implements EmiPlugin {
 	private static final ResourceLocation BRAINSWEEP_ID = modLoc("brainsweep");
+	public static final ResourceLocation PHIAL_ID = modLoc("craft/battery");
+	public static final ResourceLocation EDIFY_ID = modLoc("edify");
 	private static final ResourceLocation VILLAGER_LEVELING_ID = modLoc("villager_leveling");
 	private static final ResourceLocation VILLAGER_PROFESSION_ID = modLoc("villager_profession");
 
@@ -38,6 +41,14 @@ public class HexEMIPlugin implements EmiPlugin {
 	public static final EmiRecipeCategory BRAINSWEEP = new EmiRecipeCategory(BRAINSWEEP_ID,
 		new PatternRendererEMI(BRAINSWEEP_ID, 16, 16),
 		new EmiTexture(SIMPLIFIED_ICON_BRAINSWEEP, 0, 0, 16, 16, 16, 16, 16, 16));
+
+	public static final EmiRecipeCategory PHIAL = new EmiRecipeCategory(PHIAL_ID,
+		new PatternRendererEMI(PHIAL_ID, 12, 12).shift(2, 2),
+		new EmiTexture(SIMPLIFIED_ICON_BRAINSWEEP, 0, 0, 16, 16, 16, 16, 16, 16)); // temp
+
+	public static final EmiRecipeCategory EDIFY = new EmiRecipeCategory(EDIFY_ID,
+		new PatternRendererEMI(EDIFY_ID, 16, 16).strokeOrder(false),
+		new EmiTexture(SIMPLIFIED_ICON_BRAINSWEEP, 0, 0, 16, 16, 16, 16, 16, 16)); // temp
 
 	public static final EmiRecipeCategory VILLAGER_LEVELING = new EmiRecipeCategory(VILLAGER_LEVELING_ID,
 		EmiStack.of(Items.EMERALD),
@@ -50,9 +61,13 @@ public class HexEMIPlugin implements EmiPlugin {
 	@Override
 	public void register(EmiRegistry registry) {
 		registry.addCategory(BRAINSWEEP);
+		registry.addCategory(PHIAL);
+		registry.addCategory(EDIFY);
 		registry.addCategory(VILLAGER_LEVELING);
 		registry.addCategory(VILLAGER_PROFESSION);
 		registry.addWorkstation(BRAINSWEEP, EmiIngredient.of(HexItemTags.WANDS));
+		registry.addWorkstation(PHIAL, EmiIngredient.of(HexItemTags.WANDS));
+		registry.addWorkstation(EDIFY, EmiIngredient.of(HexItemTags.WANDS));
 
 		for (BrainsweepRecipe recipe : registry.getRecipeManager().getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE)) {
 			var inputs = EmiIngredient.of(recipe.blockIn().getDisplayedStacks().stream()
@@ -61,6 +76,12 @@ public class HexEMIPlugin implements EmiPlugin {
 			var output = EmiStack.of(recipe.result().getBlock());
 			registry.addRecipe(new EmiBrainsweepRecipe(inputs, villagerInput, output, recipe.getId()));
 		}
+
+		if (PhialRecipeStackBuilder.shouldAddRecipe()) {
+			registry.addRecipe(new EmiPhialRecipe());
+		}
+
+		registry.addRecipe(new EmiEdifyRecipe());
 
 		var basicVillager = new VillagerIngredient(null, null, 1);
 

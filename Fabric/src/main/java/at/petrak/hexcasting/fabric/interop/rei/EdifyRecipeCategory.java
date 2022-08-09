@@ -19,17 +19,17 @@ import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class BrainsweepRecipeCategory implements DisplayCategory<BrainsweepRecipeDisplay> {
-    public static final ResourceLocation UID = modLoc("brainsweep");
-    private final ResourceLocation OVERLAY = modLoc("textures/gui/brainsweep.png");
+public class EdifyRecipeCategory implements DisplayCategory<EdifyRecipeDisplay> {
+    public static final ResourceLocation UID = modLoc("edify");
+
+    private final ResourceLocation OVERLAY = modLoc("textures/gui/edify.png");
 
     private final Renderer icon;
     private final Component localizedName;
 
-    public BrainsweepRecipeCategory() {
-        var brainsweep = modLoc("brainsweep");
-        localizedName = new TranslatableComponent("hexcasting.spell." + brainsweep);
-        icon = new PatternRendererREI(brainsweep, 16, 16);
+    public EdifyRecipeCategory() {
+        localizedName = new TranslatableComponent("hexcasting.spell." + UID);
+        icon = new PatternRendererREI(UID, 16, 16).strokeOrder(false);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class BrainsweepRecipeCategory implements DisplayCategory<BrainsweepRecip
     }
 
     @Override
-    public List<Widget> setupDisplay(BrainsweepRecipeDisplay display, Rectangle bounds) {
+    public List<Widget> setupDisplay(EdifyRecipeDisplay display, Rectangle bounds) {
         List<Widget> widgets = new ArrayList<>();
         widgets.add(Widgets.createRecipeBase(bounds));
         widgets.add(Widgets.createDrawableWidget(((helper, matrices, mouseX, mouseY, delta) -> {
@@ -52,25 +52,25 @@ public class BrainsweepRecipeCategory implements DisplayCategory<BrainsweepRecip
             GuiComponent.blit(matrices, bounds.getMinX(), bounds.getMinY(), 0, 0, getDisplayWidth(display), getDisplayHeight(), 128, 128);
             RenderSystem.disableBlend();
         })));
-        widgets.add(new VillagerWidget(display.recipe.villagerIn(), bounds.getMinX(), bounds.getMinY()));
-        widgets.add(Widgets.createSlot(new Point(bounds.getMinX() + 12, bounds.getMinY() + 35)).entries(display.getInputEntries().get(0)).disableBackground());
-        widgets.add(Widgets.createSlot(new Point(bounds.getMinX() + 87, bounds.getMinY() + 35)).entries(display.getOutputEntries().get(0)).disableBackground());
+        widgets.add(Widgets.createSlot(new Point(bounds.getMinX() + 12, bounds.getMinY() + 22)).entries(display.getInputEntries().get(0)).disableBackground());
+        widgets.add(Widgets.createSlot(new Point(bounds.getMinX() + 51, bounds.getMinY() + 10)).entries(display.getOutputEntries().get(0)).disableBackground());
+        widgets.add(Widgets.createSlot(new Point(bounds.getMinX() + 51, bounds.getMinY() + 35)).entries(display.getOutputEntries().get(1)).disableBackground());
 
         return widgets;
     }
 
     @Override
-    public CategoryIdentifier<? extends BrainsweepRecipeDisplay> getCategoryIdentifier() {
-        return HexREIPlugin.BRAINSWEEP;
+    public CategoryIdentifier<? extends EdifyRecipeDisplay> getCategoryIdentifier() {
+        return HexREIPlugin.EDIFY;
     }
 
     @Override
     public int getDisplayHeight() {
-        return 85;
+        return 61;
     }
 
     @Override
-    public int getDisplayWidth(BrainsweepRecipeDisplay display) {
-        return 118;
+    public int getDisplayWidth(EdifyRecipeDisplay display) {
+        return 79;
     }
 }

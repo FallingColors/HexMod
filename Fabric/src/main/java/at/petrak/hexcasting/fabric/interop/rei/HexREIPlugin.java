@@ -2,26 +2,25 @@ package at.petrak.hexcasting.fabric.interop.rei;
 
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
+import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
 import com.google.common.collect.ImmutableSet;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.Set;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class HexREIPlugin implements REIClientPlugin {
-	public static final ResourceLocation UID = modLoc("brainsweep");
-	public static final CategoryIdentifier<BrainsweepRecipeDisplay> BRAINSWEEP = CategoryIdentifier.of(UID);
+	public static final CategoryIdentifier<BrainsweepRecipeDisplay> BRAINSWEEP = CategoryIdentifier.of(BrainsweepRecipeCategory.UID);
+	public static final CategoryIdentifier<PhialRecipeDisplay> PHIAL = CategoryIdentifier.of(PhialRecipeCategory.UID);
+	public static final CategoryIdentifier<EdifyRecipeDisplay> EDIFY = CategoryIdentifier.of(EdifyRecipeCategory.UID);
 
 	@Override
 	public void registerCategories(CategoryRegistry registry) {
-		registry.add(new BrainsweepRecipeCategory());
+		registry.add(new BrainsweepRecipeCategory(), new PhialRecipeCategory(), new EdifyRecipeCategory());
 		Set<ItemLike> wands = ImmutableSet.of(
 				HexItems.WAND_OAK,
 				HexItems.WAND_SPRUCE,
@@ -34,13 +33,21 @@ public class HexREIPlugin implements REIClientPlugin {
 				HexItems.WAND_AKASHIC);
 		for (ItemLike wand : wands) {
 			registry.addWorkstations(BRAINSWEEP, EntryStacks.of(wand));
+			registry.addWorkstations(PHIAL, EntryStacks.of(wand));
+			registry.addWorkstations(EDIFY, EntryStacks.of(wand));
 		}
 
 		registry.removePlusButton(BRAINSWEEP);
+		registry.removePlusButton(PHIAL);
+		registry.removePlusButton(EDIFY);
 	}
 
 	@Override
 	public void registerDisplays(DisplayRegistry helper) {
 		helper.registerFiller(BrainsweepRecipe.class, BrainsweepRecipeDisplay::new);
+		if (PhialRecipeStackBuilder.shouldAddRecipe()) {
+			helper.add(new PhialRecipeDisplay());
+		}
+		helper.add(new EdifyRecipeDisplay());
 	}
 }
