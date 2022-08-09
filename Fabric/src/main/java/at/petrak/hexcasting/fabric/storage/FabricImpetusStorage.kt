@@ -26,9 +26,10 @@ class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlot
 
         fun insertStack(stack: ItemStack, transaction: TransactionContext) {
             val copied = stack.copy()
+            val size = stack.count
             val extractable = impetus.extractManaFromItem(stack, false)
             manaToTake -= extractable
-            val taken = 64 - stack.count
+            val taken = size - stack.count
             itemsConsumed += taken.toLong()
             copied.count = taken
 
