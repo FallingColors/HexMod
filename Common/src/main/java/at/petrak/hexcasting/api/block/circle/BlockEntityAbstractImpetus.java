@@ -539,8 +539,12 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
+        if (remainingManaCapacity() == 0)
+            return false;
+
         if (stack.is(HexItems.CREATIVE_UNLOCKER))
             return true;
+
         var manamount = extractManaFromItem(stack, true);
         return manamount > 0;
     }
@@ -558,7 +562,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         } else {
             var manamount = extractManaFromItem(stack, false);
             if (manamount > 0) {
-                this.mana += manamount;
+                this.mana = Math.min(manamount + mana, MAX_CAPACITY);
                 this.sync();
             }
         }
@@ -572,6 +576,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     public int remainingManaCapacity() {
         if (this.mana < 0)
             return 0;
-        return MAX_CAPACITY - this.mana;
+        return Math.max(0, MAX_CAPACITY - this.mana);
     }
 }
