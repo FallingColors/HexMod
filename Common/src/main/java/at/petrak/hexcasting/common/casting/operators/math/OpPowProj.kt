@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
 import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.numOrVec
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapDivideByZero
+import at.petrak.hexcasting.api.spell.numOrVec
 import at.petrak.hexcasting.api.spell.spellListOf
 import net.minecraft.world.phys.Vec3
 import kotlin.math.pow
@@ -40,7 +40,7 @@ object OpPowProj : ConstManaOperator {
                     { rvec ->
                         if (lvec == Vec3.ZERO)
                             throw MishapDivideByZero.of(lvec, rvec, "project")
-                        rvec.scale(rvec.dot(lvec) / lvec.dot(lvec))
+                        lvec.scale(rvec.dot(lvec) / lvec.dot(lvec))
                     }
                 )
             })
