@@ -35,6 +35,8 @@ public class HexEMIPlugin implements EmiPlugin {
 	private static final ResourceLocation VILLAGER_PROFESSION_ID = modLoc("villager_profession");
 
 	private static final ResourceLocation SIMPLIFIED_ICON_BRAINSWEEP = modLoc("textures/gui/brainsweep_emi.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_PHIAL = modLoc("textures/gui/phial_emi.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_EDIFY = modLoc("textures/gui/edify_emi.png");
 	private static final ResourceLocation SIMPLIFIED_ICON_LEVELING = modLoc("textures/gui/villager_leveling.png");
 	private static final ResourceLocation SIMPLIFIED_ICON_PROFESSION = modLoc("textures/gui/villager_profession.png");
 
@@ -44,11 +46,11 @@ public class HexEMIPlugin implements EmiPlugin {
 
 	public static final EmiRecipeCategory PHIAL = new EmiRecipeCategory(PHIAL_ID,
 		new PatternRendererEMI(PHIAL_ID, 12, 12).shift(2, 2),
-		new EmiTexture(SIMPLIFIED_ICON_BRAINSWEEP, 0, 0, 16, 16, 16, 16, 16, 16)); // temp
+		new EmiTexture(SIMPLIFIED_ICON_PHIAL, 0, 0, 16, 16, 16, 16, 16, 16));
 
 	public static final EmiRecipeCategory EDIFY = new EmiRecipeCategory(EDIFY_ID,
 		new PatternRendererEMI(EDIFY_ID, 16, 16).strokeOrder(false),
-		new EmiTexture(SIMPLIFIED_ICON_BRAINSWEEP, 0, 0, 16, 16, 16, 16, 16, 16)); // temp
+		new EmiTexture(SIMPLIFIED_ICON_EDIFY, 0, 0, 16, 16, 16, 16, 16, 16));
 
 	public static final EmiRecipeCategory VILLAGER_LEVELING = new EmiRecipeCategory(VILLAGER_LEVELING_ID,
 		EmiStack.of(Items.EMERALD),
