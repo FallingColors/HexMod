@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.network.MsgBlinkAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.phys.Vec3
 
 object OpTeleport : SpellOperator {
@@ -58,6 +59,9 @@ object OpTeleport : SpellOperator {
                 // having to rearrange those. Also it makes sense for LORE REASONS probably, since the caster is more
                 // aware of items they use often.
                 for (armorItem in teleportee.inventory.armor) {
+                    if (EnchantmentHelper.hasBindingCurse(armorItem))
+                        continue
+
                     if (Math.random() < baseDropChance * 0.25) {
                         teleportee.drop(armorItem.copy(), true, false)
                         armorItem.shrink(armorItem.count)
