@@ -522,9 +522,9 @@ def write_category(out, book, category):
 def write_toc(out, book):
     with out.pair_tag("h2", id="table-of-contents", clazz="page-header"):
         out.text("Table of Contents")
-        with out.pair_tag("a", href="javascript:void(0)", clazz="toggle-link small", data_target="toc-category"):
-            out.text("(toggle all)")
         permalink(out, "#table-of-contents")
+        with out.pair_tag("a", href="javascript:void(0)", clazz="permalink toggle-link small", data_target="toc-category", title="Toggle all"):
+            out.empty_pair_tag("i", clazz="bi bi-list-nested")
     for category in book["categories"]:
         with out.pair_tag("details", clazz="toc-category"):
             with out.pair_tag("summary"):
