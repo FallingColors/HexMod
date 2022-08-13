@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.math.EulerPathFinder
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidPattern
+import at.petrak.hexcasting.api.utils.getSafe
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -175,7 +176,7 @@ object PatternRegistry {
                 val (id, startDir) = rhs
                 val entry = CompoundTag()
                 entry.putString(TAG_OP_ID, id.toString())
-                entry.putInt(TAG_START_DIR, startDir.ordinal)
+                entry.putByte(TAG_START_DIR, startDir.ordinal.toByte())
                 tag.put(sig, entry)
             }
             return tag
@@ -186,8 +187,8 @@ object PatternRegistry {
                 val map = HashMap<String, Pair<ResourceLocation, HexDir>>()
                 for (sig in tag.allKeys) {
                     val entry = tag.getCompound(sig)
-                    val opId = ResourceLocation.tryParse(entry.getString(TAG_OP_ID))!!
-                    val startDir = HexDir.values()[entry.getInt(TAG_START_DIR)]
+                    val opId = ResourceLocation.tryParse(entry.getString(TAG_OP_ID)) ?: continue
+                    val startDir = HexDir.values().getSafe(entry.getByte(TAG_START_DIR))
                     map[sig] = opId to startDir
                 }
                 return Save(map)

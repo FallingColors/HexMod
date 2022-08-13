@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.spell.math
 import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.coordToPx
 import at.petrak.hexcasting.api.utils.findCenter
+import at.petrak.hexcasting.api.utils.getSafe
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.world.phys.Vec2
@@ -134,8 +135,8 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
 
         @JvmStatic
         fun fromNBT(tag: CompoundTag): HexPattern {
-            val startDir = HexDir.values()[tag.getByte(TAG_START_DIR).toInt()]
-            val angles = tag.getByteArray(TAG_ANGLES).map { HexAngle.values()[it.toInt()] }
+            val startDir = HexDir.values().getSafe(tag.getByte(TAG_START_DIR))
+            val angles = tag.getByteArray(TAG_ANGLES).map(HexAngle.values()::getSafe)
             return HexPattern(startDir, angles.toMutableList())
         }
 

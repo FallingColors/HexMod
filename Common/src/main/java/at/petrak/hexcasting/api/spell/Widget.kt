@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.spell
 
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import java.util.*
+import at.petrak.hexcasting.api.utils.getSafe
 
 /**
  * Miscellaneous spell datums used as markers, etc.
@@ -22,8 +22,7 @@ enum class Widget : ConstManaOperator {
     companion object {
         @JvmStatic
         fun fromString(key: String): Widget {
-            val lowercaseKey = key.lowercase(Locale.ROOT)
-            return values().firstOrNull { it.name.lowercase(Locale.ROOT) == lowercaseKey } ?: GARBAGE
+            return values().getSafe(key, GARBAGE)
         }
     }
 }
