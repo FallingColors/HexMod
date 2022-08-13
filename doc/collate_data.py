@@ -410,7 +410,7 @@ def write_block(out, block):
 
 def anchor_toc(out):
     with out.pair_tag("a", href="#table-of-contents", clazz="permalink small", title="Jump to top"):
-        out.empty_pair_tag("i", clazz="bi bi-list-ul")
+        out.empty_pair_tag("i", clazz="bi bi-box-arrow-up")
 
 def permalink(out, link):
     with out.pair_tag("a", href=link, clazz="permalink small", title="Permalink"):
@@ -502,8 +502,8 @@ def write_entry(out, book, entry):
         with out.pair_tag_if(entry_spoilered(book, entry), "div", clazz="spoilered"):
             with out.pair_tag("h3", clazz="entry-title page-header"):
                 write_block(out, entry["name"])
-                permalink(out, "#" + entry["id"])
                 anchor_toc(out)
+                permalink(out, "#" + entry["id"])
             for page in entry["pages"]:
                 write_page(out, entry["id"], page)
 
@@ -512,8 +512,8 @@ def write_category(out, book, category):
         with out.pair_tag_if(category_spoilered(book, category), "div", clazz="spoilered"):
             with out.pair_tag("h2", clazz="category-title page-header"):
                 write_block(out, category["name"])
-                permalink(out, "#" + category["id"])
                 anchor_toc(out)
+                permalink(out, "#" + category["id"])
             write_block(out, category["description"])
         for entry in category["entries"]:
             if entry["id"] not in book["blacklist"]:
@@ -522,9 +522,9 @@ def write_category(out, book, category):
 def write_toc(out, book):
     with out.pair_tag("h2", id="table-of-contents", clazz="page-header"):
         out.text("Table of Contents")
-        permalink(out, "#table-of-contents")
         with out.pair_tag("a", href="javascript:void(0)", clazz="permalink toggle-link small", data_target="toc-category", title="Toggle all"):
             out.empty_pair_tag("i", clazz="bi bi-list-nested")
+        permalink(out, "#table-of-contents")
     for category in book["categories"]:
         with out.pair_tag("details", clazz="toc-category"):
             with out.pair_tag("summary"):
