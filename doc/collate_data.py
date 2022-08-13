@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from sys import argv, stdout
 from collections import namedtuple
+from html import escape
 import json # codec
 import re # parsing
 import os # listdir
@@ -321,7 +322,7 @@ def parse_book(root, mod_name, book_name):
     return root_info
 
 def tag_args(kwargs):
-    return "".join(f" {'class' if key == 'clazz' else key.replace('_', '-')}={repr(value)}" for key, value in kwargs.items())
+    return "".join(f" {'class' if key == 'clazz' else key.replace('_', '-')}={repr(escape(str(value)))}" for key, value in kwargs.items())
 
 class PairTag:
     __slots__ = ["stream", "name", "kwargs"]
@@ -359,7 +360,7 @@ class Stream:
         with self.pair_tag(name, **kwargs): pass
 
     def text(self, txt):
-        print(txt, file=self.stream, end="")
+        print(escape(txt), file=self.stream, end="")
         return self
 
 def get_format(out, ty, value):
