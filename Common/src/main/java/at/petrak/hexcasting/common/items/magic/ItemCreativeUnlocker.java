@@ -36,22 +36,25 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
             if (!player.isCreative())
                 return List.of();
 
-            for (ItemStack item : player.inventoryMenu.getItems()) {
+            for (ItemStack item : player.getInventory().items) {
                 if (isDebug(item)) {
                     return List.of(new DebugUnlockerHolder(item));
                 }
             }
 
             // Technically possible with commands!
-            for (ItemStack item : player.getArmorSlots()) {
+            for (ItemStack item : player.getInventory().armor) {
                 if (isDebug(item)) {
                     return List.of(new DebugUnlockerHolder(item));
                 }
             }
 
-            if (isDebug(player.getOffhandItem())) {
-                return List.of(new DebugUnlockerHolder(player.getOffhandItem()));
+            for (ItemStack item : player.getInventory().offhand) {
+                if (isDebug(item)) {
+                    return List.of(new DebugUnlockerHolder(item));
+                }
             }
+
 
             return List.of();
         });

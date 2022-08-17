@@ -38,6 +38,9 @@ public class ItemLens extends Item implements Wearable {
         DiscoveryHandlers.addLensPredicate(player -> player.getItemBySlot(EquipmentSlot.MAINHAND).is(HexItems.SCRYING_LENS));
         DiscoveryHandlers.addLensPredicate(player -> player.getItemBySlot(EquipmentSlot.OFFHAND).is(HexItems.SCRYING_LENS));
         DiscoveryHandlers.addLensPredicate(player -> player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS));
+
+        DiscoveryHandlers.addGridScaleModifier(player -> player.getItemBySlot(EquipmentSlot.MAINHAND).is(HexItems.SCRYING_LENS) ? 0.75f : 1);
+        DiscoveryHandlers.addGridScaleModifier(player -> player.getItemBySlot(EquipmentSlot.OFFHAND).is(HexItems.SCRYING_LENS) ? 0.75f : 1);
     }
 
     public ItemLens(Properties pProperties) {

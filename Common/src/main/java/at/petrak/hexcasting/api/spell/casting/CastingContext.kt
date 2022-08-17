@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.spell.casting
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.mishaps.MishapEntityTooFarAway
@@ -133,6 +134,7 @@ data class CastingContext(
     // for what purpose i cannot imagine
     // http://redditpublic.com/images/b/b2/Items_slot_number.png looks right
     // and offhand is 150 Inventory.java:464
+    // todo discovery?
     fun getOperativeSlot(stackOK: Predicate<ItemStack>): Int? {
         val otherHandStack = this.caster.getItemInHand(this.otherHand)
         if (stackOK.test(otherHandStack)) {
@@ -214,4 +216,16 @@ data class CastingContext(
             val advs = this.caster.advancements
             return advs.getOrStartProgress(adv!!).isDone
         }
+
+    companion object {
+        init {
+            DiscoveryHandlers.addItemSlotDiscoverer {
+                val inv = it.caster.inventory
+                inv.items.toMutableList().apply { removeAt(inv.selected) }.asReversed().toMutableList().apply {
+                    addAll(inv.offhand)
+                    add(inv.getSelected())
+                }
+            }
+        }
+    }
 }

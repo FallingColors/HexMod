@@ -486,12 +486,12 @@ class CastingHarness private constructor(
                     .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
             }
             DiscoveryHandlers.addManaHolderDiscoverer {
-                it.ctx.caster.armorSlots
+                it.ctx.caster.inventory.armor
                     .filter(::isManaItem)
                     .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
             }
             DiscoveryHandlers.addManaHolderDiscoverer {
-                listOf(it.ctx.caster.offhandItem)
+                it.ctx.caster.inventory.offhand
                     .filter(::isManaItem)
                     .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
             }
