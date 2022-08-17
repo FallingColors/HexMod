@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.MsgUpdateComparatorVisualsAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -14,7 +15,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,32 +29,15 @@ import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.function.Predicate;
 
 public class ItemLens extends Item implements Wearable {
 
-    private static final List<Predicate<Player>> HAS_HUD_PREDICATE = new ArrayList<>();
     static {
-        addLensHUDPredicate(player -> player.getItemBySlot(EquipmentSlot.MAINHAND).is(HexItems.SCRYING_LENS));
-        addLensHUDPredicate(player -> player.getItemBySlot(EquipmentSlot.OFFHAND).is(HexItems.SCRYING_LENS));
-        addLensHUDPredicate(player -> player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS));
-    }
-
-    public static boolean hasLensHUD(Player player) {
-        for (Predicate<Player> predicate : HAS_HUD_PREDICATE) {
-            if (predicate.test(player)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void addLensHUDPredicate(Predicate<Player> predicate) {
-        HAS_HUD_PREDICATE.add(predicate);
+        DiscoveryHandlers.addLensPredicate(player -> player.getItemBySlot(EquipmentSlot.MAINHAND).is(HexItems.SCRYING_LENS));
+        DiscoveryHandlers.addLensPredicate(player -> player.getItemBySlot(EquipmentSlot.OFFHAND).is(HexItems.SCRYING_LENS));
+        DiscoveryHandlers.addLensPredicate(player -> player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS));
     }
 
     public ItemLens(Properties pProperties) {
@@ -82,7 +65,7 @@ public class ItemLens extends Item implements Wearable {
     }
 
     public static void tickLens(Entity pEntity) {
-        if (!pEntity.getLevel().isClientSide() && pEntity instanceof ServerPlayer player && hasLensHUD(player)) {
+        if (!pEntity.getLevel().isClientSide() && pEntity instanceof ServerPlayer player && DiscoveryHandlers.hasLens(player)) {
             sendComparatorDataToClient(player);
         }
     }

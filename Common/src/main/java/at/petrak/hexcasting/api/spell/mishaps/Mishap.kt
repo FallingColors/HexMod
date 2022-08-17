@@ -10,7 +10,7 @@ import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import at.petrak.hexcasting.common.lib.HexItems
-import at.petrak.hexcasting.ktxt.lastHurt
+import at.petrak.hexcasting.ktxt.*
 import net.minecraft.Util
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
@@ -109,7 +109,25 @@ sealed class Mishap : Throwable() {
                 else
                     entity.lastHurt -= amount
             }
-            entity.hurt(source, amount)
+            if (!entity.hurt(source, amount)) {
+                // Ok, if you REALLY don't want to play nice...
+                entity.health -= amount
+                entity.markHurt()
+
+                if (entity.isDeadOrDying) {
+                    if (!entity.checkTotemDeathProtection(source)) {
+                        val sound = entity.deathSoundAccessor
+                        if (sound != null) {
+                            entity.playSound(sound, entity.soundVolumeAccessor, entity.voicePitch)
+                        }
+                        entity.die(source)
+                    }
+                } else {
+                    entity.playHurtSound(source)
+                }
+
+                entity.setHurtWithStamp(source, entity.level.gameTime)
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -29,6 +30,33 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
+    static {
+        DiscoveryHandlers.addManaHolderDiscoverer(harness -> {
+            var player = harness.getCtx().getCaster();
+            if (!player.isCreative())
+                return List.of();
+
+            for (ItemStack item : player.inventoryMenu.getItems()) {
+                if (isDebug(item)) {
+                    return List.of(new DebugUnlockerHolder(item));
+                }
+            }
+
+            // Technically possible with commands!
+            for (ItemStack item : player.getArmorSlots()) {
+                if (isDebug(item)) {
+                    return List.of(new DebugUnlockerHolder(item));
+                }
+            }
+
+            if (isDebug(player.getOffhandItem())) {
+                return List.of(new DebugUnlockerHolder(player.getOffhandItem()));
+            }
+
+            return List.of();
+        });
+    }
+
     public static boolean isDebug(ItemStack stack) {
         return stack.is(HexItems.CREATIVE_UNLOCKER)
             && stack.hasCustomHoverName()
@@ -47,7 +75,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
         return emphasized;
     }
 
-    private static final String TAG_EXTRACTIONS = "extractions";
+    public static final String TAG_EXTRACTIONS = "extractions";
 
     public ItemCreativeUnlocker(Properties properties) {
         super(properties);
@@ -80,6 +108,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
     @Override
     public int withdrawMana(ItemStack stack, int cost, boolean simulate) {
+        // In case it's withdrawn through other means
         if (!simulate && isDebug(stack)) {
             int[] arr = NBTHelper.getIntArray(stack, TAG_EXTRACTIONS);
             if (arr == null) {

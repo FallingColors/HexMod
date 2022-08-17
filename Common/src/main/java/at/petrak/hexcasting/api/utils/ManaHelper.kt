@@ -1,6 +1,7 @@
 @file:JvmName("ManaHelper")
 package at.petrak.hexcasting.api.utils
 
+import at.petrak.hexcasting.api.addldata.ManaHolder
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
@@ -30,26 +31,38 @@ fun extractMana(
 ): Int {
     val manaHolder = IXplatAbstractions.INSTANCE.findManaHolder(stack) ?: return 0
 
-    if (drainForBatteries && !manaHolder.canConstructBattery())
+    return extractMana(manaHolder, cost, drainForBatteries, simulate)
+}
+
+/**
+ * Extract [cost] mana from [holder]. If [cost] is less than zero, extract all mana instead.
+ * This may mutate the stack underlying [holder] (and may consume it) unless [simulate] is set.
+ *
+ * If [drainForBatteries] is false, this will only consider forms of mana that can be used to make new batteries.
+ *
+ * Return the amount of mana extracted. This may be over [cost] if mana is wasted.
+ */
+fun extractMana(
+    holder: ManaHolder,
+    cost: Int = -1,
+    drainForBatteries: Boolean = false,
+    simulate: Boolean = false
+): Int {
+    if (drainForBatteries && !holder.canConstructBattery())
         return 0
 
-    return manaHolder.withdrawMana(cost, simulate)
+    return holder.withdrawMana(cost, simulate)
 }
 
 /**
  * Sorted from least important to most important
  */
-fun compareManaItem(astack: ItemStack, bstack: ItemStack): Int {
-    val aMana = IXplatAbstractions.INSTANCE.findManaHolder(astack)
-    val bMana = IXplatAbstractions.INSTANCE.findManaHolder(bstack)
+fun compareManaItem(aMana: ManaHolder, bMana: ManaHolder): Int {
+    val priority = aMana.consumptionPriority - bMana.consumptionPriority
+    if (priority != 0)
+        return priority
 
-    return if (astack.item != bstack.item) {
-        (aMana?.consumptionPriority ?: 0) - (bMana?.consumptionPriority ?: 0)
-    } else if (aMana != null && bMana != null) {
-        aMana.mana - bMana.mana
-    } else {
-        astack.count - bstack.count
-    }
+    return aMana.mana - bMana.mana
 }
 
 fun manaBarColor(mana: Int, maxMana: Int): Int {
