@@ -18,6 +18,7 @@ public class DiscoveryHandlers {
 	private static final List<Function<CastingHarness, List<ManaHolder>>> MANA_HOLDER_DISCOVERY = new ArrayList<>();
 	private static final List<ToFloatFunction<Player>> GRID_SCALE_MODIFIERS = new ArrayList<>();
 	private static final List<Function<CastingContext, List<ItemStack>>> ITEM_SLOT_DISCOVERER = new ArrayList<>();
+	private static final List<Function<CastingContext, List<ItemStack>>> OPERATIVE_SLOT_DISCOVERER = new ArrayList<>();
 
 	public static boolean hasLens(Player player) {
 		for (var predicate : HAS_LENS_PREDICATE) {
@@ -52,6 +53,14 @@ public class DiscoveryHandlers {
 		return stacks;
 	}
 
+	public static List<ItemStack> collectOperableSlots(CastingContext ctx) {
+		List<ItemStack> stacks = Lists.newArrayList();
+		for (var discoverer : OPERATIVE_SLOT_DISCOVERER) {
+			stacks.addAll(discoverer.apply(ctx));
+		}
+		return stacks;
+	}
+
 	public static void addLensPredicate(Predicate<Player> predicate) {
 		HAS_LENS_PREDICATE.add(predicate);
 	}
@@ -66,5 +75,9 @@ public class DiscoveryHandlers {
 
 	public static void addItemSlotDiscoverer(Function<CastingContext, List<ItemStack>> discoverer) {
 		ITEM_SLOT_DISCOVERER.add(discoverer);
+	}
+
+	public static void addOperativeSlotDiscoverer(Function<CastingContext, List<ItemStack>> discoverer) {
+		OPERATIVE_SLOT_DISCOVERER.add(discoverer);
 	}
 }

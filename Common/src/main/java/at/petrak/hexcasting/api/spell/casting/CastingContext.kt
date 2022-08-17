@@ -134,26 +134,12 @@ data class CastingContext(
     // for what purpose i cannot imagine
     // http://redditpublic.com/images/b/b2/Items_slot_number.png looks right
     // and offhand is 150 Inventory.java:464
-    // todo discovery?
-    fun getOperativeSlot(stackOK: Predicate<ItemStack>): Int? {
-        val otherHandStack = this.caster.getItemInHand(this.otherHand)
-        if (stackOK.test(otherHandStack)) {
-            return when (this.otherHand) {
-                InteractionHand.MAIN_HAND -> this.caster.inventory.selected
-                InteractionHand.OFF_HAND -> 150
-            }
-        }
-        val anchorSlot = when (this.castingHand) {
-            // slot to the right of the wand
-            InteractionHand.MAIN_HAND -> (this.caster.inventory.selected + 1) % 9
-            // first hotbar slot
-            InteractionHand.OFF_HAND -> 0
-        }
-        for (delta in 0 until 9) {
-            val slot = (anchorSlot + delta) % 9
-            val stack = this.caster.inventory.getItem(slot)
+    fun getOperativeSlot(stackOK: Predicate<ItemStack>): ItemStack? {
+        val operable = DiscoveryHandlers.collectOperableSlots(this)
+
+        for (stack in operable) {
             if (stackOK.test(stack)) {
-                return slot
+                return stack
             }
         }
         return null
@@ -167,11 +153,8 @@ data class CastingContext(
     fun withdrawItem(item: Item, count: Int, actuallyRemove: Boolean): Boolean {
         if (this.caster.isCreative) return true
 
-        val inv = this.caster.inventory
         // TODO: withdraw from ender chest given a specific ender charm?
-        val stacksToExamine = inv.items.toMutableList().apply { removeAt(inv.selected) }.asReversed().toMutableList()
-        stacksToExamine.addAll(inv.offhand)
-        stacksToExamine.add(inv.getSelected())
+        val stacksToExamine = DiscoveryHandlers.collectItemSlots(this)
 
         fun matches(stack: ItemStack): Boolean =
             !stack.isEmpty && stack.`is`(item)
@@ -225,6 +208,18 @@ data class CastingContext(
                     addAll(inv.offhand)
                     add(inv.getSelected())
                 }
+            }
+
+            DiscoveryHandlers.addOperativeSlotDiscoverer {
+                val slots = mutableListOf<ItemStack>()
+                val anchorSlot = if (it.castingHand == InteractionHand.MAIN_HAND) (it.caster.inventory.selected + 1) % 9 else 0
+
+                slots.add(it.caster.getItemInHand(it.otherHand))
+                for (delta in 0 until 9) {
+                    val slot = (anchorSlot + delta) % 9
+                    slots.add(it.caster.inventory.getItem(slot))
+                }
+                slots
             }
         }
     }
