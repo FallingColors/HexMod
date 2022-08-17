@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.ktxt.*
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.Util
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
@@ -75,6 +76,8 @@ sealed class Mishap : Throwable() {
 
     protected fun yeetHeldItem(ctx: CastingContext, hand: InteractionHand) {
         val item = ctx.caster.getItemInHand(hand).copy()
+        if (hand == ctx.castingHand && IXplatAbstractions.INSTANCE.findHexHolder(item) != null)
+            return
         ctx.caster.setItemInHand(hand, ItemStack.EMPTY)
 
         val delta = ctx.caster.lookAngle.scale(0.5)
