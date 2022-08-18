@@ -1,10 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.addldata.ManaHolder;
-import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.Arrays;
 
 public record DebugUnlockerHolder(ItemStack creativeUnlocker) implements ManaHolder {
 	@Override
@@ -24,7 +21,7 @@ public record DebugUnlockerHolder(ItemStack creativeUnlocker) implements ManaHol
 
 	@Override
 	public boolean canRecharge() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -44,14 +41,15 @@ public record DebugUnlockerHolder(ItemStack creativeUnlocker) implements ManaHol
 
 	@Override
 	public int withdrawMana(int cost, boolean simulate) {
-		int[] arr = NBTHelper.getIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_EXTRACTIONS);
-		if (arr == null) {
-			arr = new int[0];
-		}
-		int[] newArr = Arrays.copyOf(arr, arr.length + 1);
-		newArr[newArr.length - 1] = cost;
-		NBTHelper.putIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_EXTRACTIONS, newArr);
+		ItemCreativeUnlocker.addToIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_EXTRACTIONS, cost);
 
-		return cost < 0 ? 1 : cost;
+		return cost < 0 ? getMana() : cost;
+	}
+
+	@Override
+	public int insertMana(int amount, boolean simulate) {
+		ItemCreativeUnlocker.addToIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_INSERTIONS, amount);
+
+		return amount;
 	}
 }

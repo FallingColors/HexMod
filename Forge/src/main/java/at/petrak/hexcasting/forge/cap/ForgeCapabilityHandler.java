@@ -211,6 +211,11 @@ public class ForgeCapabilityHandler {
         public int withdrawMana(int cost, boolean simulate) {
             return holder.withdrawMana(stack, cost, simulate);
         }
+
+        @Override
+        public int insertMana(int amount, boolean simulate) {
+            return holder.insertMana(stack, amount, simulate);
+        }
     }
 
     private record StaticDatumHolder(Function<ItemStack, SpellDatum<?>> provider,

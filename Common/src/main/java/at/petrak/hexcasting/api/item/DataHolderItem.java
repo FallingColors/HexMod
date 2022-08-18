@@ -11,10 +11,12 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@ApiStatus.OverrideOnly
 public interface DataHolderItem {
     String TAG_OVERRIDE_VISUALLY = "VisualOverride";
 

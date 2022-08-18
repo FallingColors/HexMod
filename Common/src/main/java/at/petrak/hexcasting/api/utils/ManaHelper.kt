@@ -62,7 +62,7 @@ fun compareManaItem(aMana: ManaHolder, bMana: ManaHolder): Int {
     if (priority != 0)
         return priority
 
-    return aMana.mana - bMana.mana
+    return aMana.withdrawMana(-1, true) - bMana.withdrawMana(-1, true)
 }
 
 fun manaBarColor(mana: Int, maxMana: Int): Int {

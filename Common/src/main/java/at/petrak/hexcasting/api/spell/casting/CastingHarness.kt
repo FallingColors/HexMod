@@ -395,9 +395,9 @@ class CastingHarness private constructor(
             val casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack)
             val hexHolderDrawsFromInventory = if (casterHexHolder != null) {
                 if (casterManaHolder != null) {
-                    val manaAvailable = casterManaHolder.mana
+                    val manaAvailable = casterManaHolder.withdrawMana(-1, true)
                     val manaToTake = min(costLeft, manaAvailable)
-                    if (!fake) casterManaHolder.mana = manaAvailable - manaToTake
+                    if (!fake) casterManaHolder.withdrawMana(manaToTake, false)
                     costLeft -= manaToTake
                 }
                 casterHexHolder.canDrawManaFromInventory()
