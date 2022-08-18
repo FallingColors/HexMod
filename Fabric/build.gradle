@@ -57,6 +57,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricVersion}"
 
     // Reqs
+    compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
+    testCompileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
     compileOnly "com.demonwav.mcdev:annotations:1.0"
 
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
