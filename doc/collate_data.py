@@ -79,7 +79,7 @@ Style = namedtuple("Style", ["type", "value"])
 
 def parse_style(sty):
     if sty == "br":
-        return "<br />", None
+        return "\n", None
     if sty == "br2":
         return "", Style("para", {})
     if sty == "li":
@@ -397,7 +397,12 @@ def category_spoilered(root_info, category):
 
 def write_block(out, block):
     if isinstance(block, str):
-        out.text(block)
+        first = False
+        for line in block.split("\n"):
+            if first:
+                out.tag("br")
+            first = True
+            out.text(line)
         return
     sty_type = block.style.type
     if sty_type == "base":
