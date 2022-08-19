@@ -84,6 +84,7 @@
       }
       canvas.spell-viz {
         --dot-color: #777f;
+        --dot-color: #777f;
         --start-dot-color: #f009;
         --moving-dot-color: #0fa9;
 
@@ -94,6 +95,23 @@
         --moving-dot-scale: 0.125;
         --line-scale: 0.08333;
         --pausetext-scale: 0.5;
+        --dark-mode: 0;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #201a20;
+          color: #ddd;
+        }
+
+        .jumbotron {
+          background-color: #323;
+        }
+        
+        canvas.spell-viz {
+          /* hack */
+          --dark-mode: 1;
+        }
       }
 
     </style>
@@ -203,6 +221,8 @@
           const dotRadius = scale * +getProp("--dot-scale");
           const movDotRadius = scale * +getProp("--moving-dot-scale");
           const pauseScale = scale * +getProp("--pausetext-scale");
+          const bodyBg = scale * +getProp("--pausetext-scale");
+          const darkMode = +getProp("--dark-mode");
 
 
           if (!perWorld) {
@@ -259,7 +279,7 @@
             context.fill();
           }
           if (fadeColor) {
-            context.fillStyle = `rgba(255, 255, 255, ${fadeColor})`;
+            context.fillStyle = darkMode ? `rgba(32, 26, 32, ${fadeColor})` : `rgba(255, 255, 255, ${fadeColor})`;
             context.fillRect(0, 0, canvas.width, canvas.height);
           }
           if (scrollTimeout <= 2000) {
