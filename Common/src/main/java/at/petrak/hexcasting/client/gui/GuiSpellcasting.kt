@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client.gui
 
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo
@@ -10,13 +11,11 @@ import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
-import at.petrak.hexcasting.api.utils.otherHand
 import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.drawPatternFromPoints
 import at.petrak.hexcasting.client.drawSpot
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.sound.GridSoundInstance
-import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
@@ -352,13 +351,12 @@ class GuiSpellcasting(
 
     /** Distance between adjacent hex centers */
     fun hexSize(): Float {
-        val hasLens = Minecraft.getInstance().player!!
-            .getItemInHand(otherHand(this.handOpenedWith)).`is`(HexItems.SCRYING_LENS)
+        val scaleModifier = DiscoveryHandlers.gridScaleModifier(Minecraft.getInstance().player)
 
         // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like 500-odd area.
         // Let's be generous and give them 512.
         val baseScale = sqrt(this.width.toDouble() * this.height / 512.0)
-        return baseScale.toFloat() * if (hasLens) 0.75f else 1f
+        return baseScale.toFloat() * scaleModifier
     }
 
     fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)

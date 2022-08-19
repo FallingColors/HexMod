@@ -63,9 +63,8 @@ object OpPlaceBlock : SpellOperator {
             )
 
             val bstate = ctx.world.getBlockState(pos)
-            val placeeSlot = ctx.getOperativeSlot { it.item is BlockItem }
-            if (placeeSlot != null) {
-                val placeeStack = ctx.caster.inventory.getItem(placeeSlot).copy()
+            val placeeStack = ctx.getOperativeSlot { it.item is BlockItem }?.copy()
+            if (placeeStack != null) {
                 if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, placeeStack, ctx.caster))
                     return
 

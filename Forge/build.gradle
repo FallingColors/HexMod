@@ -132,6 +132,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
     compileOnly project(":Common")
 
+    compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
+    testCompileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     compileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")

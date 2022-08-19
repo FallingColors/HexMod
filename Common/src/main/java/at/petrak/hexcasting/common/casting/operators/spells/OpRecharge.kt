@@ -18,7 +18,7 @@ object OpRecharge : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val mana = IXplatAbstractions.INSTANCE.findManaHolder(it)
-            mana != null && mana.canRecharge() && mana.mana /* doo doo da do doo */ < mana.maxMana
+            mana != null && mana.canRecharge() && mana.insertMana(-1, true) != 0
         }
 
         val mana = IXplatAbstractions.INSTANCE.findManaHolder(handStack)
@@ -40,7 +40,7 @@ object OpRecharge : SpellOperator {
             )
         }
 
-        if (mana.mana >= mana.maxMana)
+        if (mana.insertMana(-1, true) == 0)
             return null
 
         return Triple(
@@ -54,19 +54,18 @@ object OpRecharge : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val (handStack) = ctx.getHeldItemToOperateOn {
                 val mana = IXplatAbstractions.INSTANCE.findManaHolder(it)
-                mana != null && mana.canRecharge() && mana.mana < mana.maxMana
+                mana != null && mana.canRecharge() && mana.insertMana(-1, true) != 0
             }
             val mana = IXplatAbstractions.INSTANCE.findManaHolder(handStack)
 
             if (mana != null && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
 
-                val maxMana = mana.maxMana
-                val existingMana = mana.mana
+                val emptySpace = mana.insertMana(-1, true)
 
-                val manaAmt = extractMana(entityStack, maxMana - existingMana)
+                val manaAmt = extractMana(entityStack, emptySpace)
 
-                mana.mana = manaAmt + existingMana
+                mana.insertMana(manaAmt, false)
 
                 itemEntity.item = entityStack
                 if (entityStack.isEmpty)

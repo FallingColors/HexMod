@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -155,7 +155,7 @@ public class HexAdditionalRenderers {
             return;
         }
 
-        if (!ItemLens.hasLensHUD(player))
+        if (!DiscoveryHandlers.hasLens(player))
             return;
 
         var hitRes = mc.hitResult;

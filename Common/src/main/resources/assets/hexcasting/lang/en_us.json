@@ -182,7 +182,10 @@
   "hexcasting.pattern.unknown": "Unknown pattern resource location %s",
   "hexcasting.debug.mana_withdrawn": "%s - Mana withdrawn: %s",
   "hexcasting.debug.mana_withdrawn.with_dust": "%s - Mana withdrawn: %s (%s in dust)",
+  "hexcasting.debug.mana_inserted": "%s - Mana inserted: %s",
+  "hexcasting.debug.mana_inserted.with_dust": "%s - Mana inserted: %s (%s in dust)",
   "hexcasting.debug.all_mana": "Entire contents",
+  "hexcasting.debug.infinite_mana": "Infinite",
 
   "hexcasting.message.cant_overcast": "That Hex needed more media than I had... I should double-check my math.",
   "hexcasting.message.cant_great_spell": "The spell failed, somehow... am I not skilled enough?",
