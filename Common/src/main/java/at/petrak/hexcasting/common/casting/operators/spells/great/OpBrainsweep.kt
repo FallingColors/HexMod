@@ -25,7 +25,7 @@ object OpBrainsweep : SpellOperator {
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val sacrifice = args.getChecked<Villager>(0, argc)
         val pos = args.getChecked<Vec3>(1, argc)
         ctx.assertVecInRange(pos)
@@ -35,6 +35,10 @@ object OpBrainsweep : SpellOperator {
             throw MishapAlreadyBrainswept(sacrifice)
 
         val bpos = BlockPos(pos)
+
+        if (!ctx.canEditBlockAt(bpos))
+            return null
+
         val state = ctx.world.getBlockState(bpos)
 
         val recman = ctx.world.recipeManager
@@ -56,9 +60,8 @@ object OpBrainsweep : SpellOperator {
         val recipe: BrainsweepRecipe
     ) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            if (ctx.canEditBlockAt(pos)) {
-                ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
-            }
+            ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
+
             Brainsweeping.brainsweep(sacrifice)
             if (HexConfig.server().doVillagersTakeOffenseAtMindMurder()) {
                 sacrifice.tellWitnessesThatIWasMurdered(ctx.caster)

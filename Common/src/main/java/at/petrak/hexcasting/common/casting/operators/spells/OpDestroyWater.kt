@@ -52,8 +52,6 @@ object OpDestroyWater : SpellOperator {
             var successes = 0
             while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
                 val here = todo.removeFirst()
-                val distFromFocus =
-                    ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
                 if (ctx.canEditBlockAt(here) && seen.add(here)) {
                     // never seen this pos in my life
                     val fluid = ctx.world.getFluidState(here)

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.world.item.ItemStack
 
 class OpErase : SpellOperator {
     override val argc = 0
@@ -33,22 +34,15 @@ class OpErase : SpellOperator {
         }
 
         return Triple(
-            Spell,
+            Spell(handStack),
             ManaConstants.DUST_UNIT, listOf()
         )
     }
 
-    private object Spell : RenderedSpell {
+    private data class Spell(val stack: ItemStack) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val (handStack) = ctx.getHeldItemToOperateOn {
-                val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
-                val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
-
-                (hexHolder?.hasHex() == true) ||
-                        (datumHolder?.writeDatum(null, true) == true)
-            }
-            val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
-            val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
+            val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(stack)
+            val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack)
 
             if (hexHolder?.hasHex() == true)
                 hexHolder.clearHex()

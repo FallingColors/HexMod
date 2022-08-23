@@ -46,7 +46,7 @@ object OpTeleport : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val distance = delta.length()
             if (distance < 32768.0) {
-                OpTeleport.teleportRespectSticky(teleportee, delta)
+                teleportRespectSticky(teleportee, delta)
             }
 
             if (teleportee is ServerPlayer && teleportee == ctx.caster) {

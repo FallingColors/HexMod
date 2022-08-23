@@ -15,22 +15,21 @@ object OpBreakBlock : SpellOperator {
     override fun execute(
         args: List<SpellDatum<*>>,
         ctx: CastingContext
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val pos = args.getChecked<Vec3>(0, argc)
         ctx.assertVecInRange(pos)
 
-        val centered = Vec3.atCenterOf(BlockPos(pos))
+        val bpos = BlockPos(pos)
+        val centered = Vec3.atCenterOf(bpos)
         return Triple(
-            Spell(pos),
+            Spell(bpos),
             (ManaConstants.DUST_UNIT * 1.125).toInt(),
             listOf(ParticleSpray.burst(centered, 1.0))
         )
     }
 
-    private data class Spell(val v: Vec3) : RenderedSpell {
+    private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val pos = BlockPos(v)
-
             if (!ctx.canEditBlockAt(pos))
                 return
 

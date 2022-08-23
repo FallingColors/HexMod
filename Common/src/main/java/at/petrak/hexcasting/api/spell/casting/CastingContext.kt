@@ -14,8 +14,8 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.GameType
 import net.minecraft.world.phys.Vec3
@@ -150,14 +150,14 @@ data class CastingContext(
      * Return whether the withdrawal was successful.
      */
     // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143
-    fun withdrawItem(item: Item, count: Int, actuallyRemove: Boolean): Boolean {
+    fun withdrawItem(item: ItemStack, count: Int, actuallyRemove: Boolean): Boolean {
         if (this.caster.isCreative) return true
 
         // TODO: withdraw from ender chest given a specific ender charm?
         val stacksToExamine = DiscoveryHandlers.collectItemSlots(this)
 
         fun matches(stack: ItemStack): Boolean =
-            !stack.isEmpty && stack.`is`(item)
+            !stack.isEmpty && ItemEntity.areMergable(stack, item)
 
         val presentCount = stacksToExamine.fold(0) { acc, stack ->
             acc + if (matches(stack)) stack.count else 0

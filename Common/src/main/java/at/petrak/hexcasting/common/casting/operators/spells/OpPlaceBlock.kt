@@ -29,13 +29,8 @@ object OpPlaceBlock : SpellOperator {
 
         val pos = BlockPos(target)
 
-        // TODO: does this even work?? why are we returning null?? what does that *do*?
-        if (!ctx.canEditBlockAt(pos))
-            return null
-
-
         val blockHit = BlockHitResult(
-            Vec3.ZERO, ctx.caster.direction, pos, false
+            target, ctx.caster.direction, pos, false
         )
         val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
         val placeContext = BlockPlaceContext(itemUseCtx)
@@ -59,7 +54,7 @@ object OpPlaceBlock : SpellOperator {
                 return
 
             val blockHit = BlockHitResult(
-                Vec3.ZERO, ctx.caster.direction, pos, false
+                vec, ctx.caster.direction, pos, false
             )
 
             val bstate = ctx.world.getBlockState(pos)
@@ -80,13 +75,12 @@ object OpPlaceBlock : SpellOperator {
                     val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
                     val placeContext = BlockPlaceContext(itemUseCtx)
                     if (bstate.canBeReplaced(placeContext)) {
-                        val placee = placeeStack.item as BlockItem
-                        if (ctx.withdrawItem(placee, 1, false)) {
+                        if (ctx.withdrawItem(placeeStack, 1, false)) {
                             val res = spoofedStack.useOn(placeContext)
 
                             ctx.caster.setItemInHand(ctx.castingHand, oldStack)
                             if (res != InteractionResult.FAIL) {
-                                ctx.withdrawItem(placee, 1, true)
+                                ctx.withdrawItem(placeeStack, 1, true)
 
                                 ctx.world.playSound(
                                     ctx.caster,
