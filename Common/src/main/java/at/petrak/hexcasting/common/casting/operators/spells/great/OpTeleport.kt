@@ -83,23 +83,14 @@ object OpTeleport : SpellOperator {
     }
 
     fun teleportRespectSticky(teleportee: Entity, delta: Vec3) {
-        var stickyTeleport = false
-        // roll our own for loop
-        // this really would be more readable as a c-style for loop, waugh
-        var cursor = teleportee.vehicle
-        var base: Entity? = null
-        while (cursor != null) {
-            if (cursor.type.`is`(HexEntityTags.STICKY_TELEPORTERS))
-                stickyTeleport = true
-            base = cursor
-            cursor = cursor.vehicle
-        }
+
+        val base = teleportee.rootVehicle
 
         val playersToUpdate = mutableListOf<ServerPlayer>()
 
-        if (stickyTeleport) {
+        if (base.indirectPassengers.any { it.type.`is`(HexEntityTags.STICKY_TELEPORTERS) }) {
             // this handles teleporting the passengers
-            val target = base!!.position().add(delta)
+            val target = base.position().add(delta)
             base.teleportTo(target.x, target.y, target.z)
             base.indirectPassengers
                 .filterIsInstance<ServerPlayer>()

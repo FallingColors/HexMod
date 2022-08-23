@@ -19,6 +19,12 @@
     },
     "minecraft:pig",
     "minecraft:strider",
-    "minecraft:horse"
+    "minecraft:horse",
+    "minecraft:skeleton_horse",
+    "minecraft:zombie_horse",
+    "minecraft:mule",
+    "minecraft:donkey",
+    "minecraft:llama",
+    "minecraft:trader_llama"
   ]
 }
