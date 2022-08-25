@@ -3,6 +3,7 @@ package at.petrak.hexcasting.forge.recipe;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -74,9 +75,13 @@ public class ForgeModConditionalIngredient extends AbstractIngredient {
 	public static Ingredient fromJson(JsonObject object) {
 		if (object.has("type") && object.getAsJsonPrimitive("type").getAsString().equals(ID.toString())) {
 			if (object.has("modid") && IXplatAbstractions.INSTANCE.isModPresent(object.getAsJsonPrimitive("modid").getAsString())) {
-				Ingredient ingredient = Ingredient.fromJson(object.get("if_loaded"));
-				if (!ingredient.isEmpty()) {
-					return ingredient;
+				try {
+					Ingredient ingredient = Ingredient.fromJson(object.get("if_loaded"));
+					if (!ingredient.isEmpty()) {
+						return ingredient;
+					}
+				} catch (JsonParseException e) {
+					// NO-OP
 				}
 			}
 
