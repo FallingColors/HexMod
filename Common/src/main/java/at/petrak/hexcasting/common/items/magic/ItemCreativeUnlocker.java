@@ -219,8 +219,6 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
         return copy;
     }
 
-    private static final TextColor HEX_COLOR = TextColor.fromRgb(0xb38ef3);
-
     private static MutableComponent rainbow(MutableComponent component, int shift, Level level) {
         if (level == null) {
             return component.withStyle(ChatFormatting.WHITE);
@@ -233,16 +231,14 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
         TooltipFlag isAdvanced) {
-        String prefix = "item.hexcasting.creative_unlocker.";
-
         Component emphasized = infiniteMedia(level);
 
-        MutableComponent modName = new TranslatableComponent(prefix + "mod_name").withStyle(
-            (s) -> s.withColor(HEX_COLOR));
+        MutableComponent modName = new TranslatableComponent("item.hexcasting.creative_unlocker.mod_name").withStyle(
+            (s) -> s.withColor(ItemManaHolder.HEX_COLOR));
 
         tooltipComponents.add(
-            new TranslatableComponent(prefix + "tooltip.0", emphasized).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.1", modName).withStyle(ChatFormatting.GRAY));
+            new TranslatableComponent("hexcasting.spelldata.onitem", emphasized).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(new TranslatableComponent("item.hexcasting.creative_unlocker.tooltip", modName).withStyle(ChatFormatting.GRAY));
     }
 
     private static void addChildren(Advancement root, List<Advancement> out) {

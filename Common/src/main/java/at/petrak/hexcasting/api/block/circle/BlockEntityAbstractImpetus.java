@@ -43,6 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implements WorldlyContainer {
@@ -54,6 +55,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         TAG_FOUND_ALL = "found_all",
         TAG_MANA = "mana",
         TAG_LAST_MISHAP = "last_mishap";
+
+    private static final DecimalFormat DUST_AMOUNT = new DecimalFormat("###,###.##");
 
     @Nullable
     private UUID activator = null;
@@ -120,9 +123,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             if (beai.getMana() < 0) {
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
             } else {
-                var dustCount = (float) beai.getMana() / (float) ManaConstants.DUST_UNIT;
-                var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
-                    String.format("%.2f", dustCount));
+                var dustCmp = new TranslatableComponent("hexcasting.tooltip.mana",
+                    DUST_AMOUNT.format(beai.getMana() / (float) ManaConstants.DUST_UNIT));
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
             }
 
