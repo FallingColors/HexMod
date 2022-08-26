@@ -9,16 +9,13 @@ import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.BucketPickup
-import net.minecraft.world.level.block.LiquidBlock
+import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.material.Material
 import net.minecraft.world.phys.Vec3
 
-object OpDestroyWater : SpellOperator {
+object OpDestroyFluid : SpellOperator {
     override val argc = 1
     override fun execute(
         args: List<SpellDatum<*>>,
@@ -39,10 +36,24 @@ object OpDestroyWater : SpellOperator {
     private data class Spell(val target: Vec3) : RenderedSpell {
 
         override fun cast(ctx: CastingContext) {
+            val basePos = BlockPos(target)
+
+            // Try draining from fluid handlers first, and if so, don't do the normal behavior
+            if (ctx.canEditBlockAt(basePos)) {
+                if (IXplatAbstractions.INSTANCE.drainAllFluid(ctx.world, basePos)) {
+                    return
+                } else {
+                    val state = ctx.world.getBlockState(basePos)
+                    if (state.block is AbstractCauldronBlock && state.block != Blocks.CAULDRON) {
+                        ctx.world.setBlock(basePos, Blocks.CAULDRON.defaultBlockState(), 3)
+                        return
+                    }
+                }
+            }
+
             // SpongeBlock.java
             val todo = ArrayDeque<BlockPos>()
             val seen = HashSet<BlockPos>()
-            val basePos = BlockPos(target)
 
             // a little extra range on the initial cast to make it feel more intuitive
             for (xShift in -2..2) for (yShift in -2..2) for (zShift in -2..2) {

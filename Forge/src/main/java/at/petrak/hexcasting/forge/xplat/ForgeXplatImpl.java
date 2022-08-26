@@ -82,6 +82,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+
 public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public Platform platform() {
@@ -310,14 +312,26 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, ItemStack stack, Fluid fluid) {
+    public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid) {
         Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
-        if (handler.isPresent() &&
-            FluidUtil.tryEmptyContainer(stack, handler.get(), FluidAttributes.BUCKET_VOLUME, null, true).isSuccess()) {
-            return true;
+        return handler.isPresent() &&
+            handler.get().fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), EXECUTE) > 0;
+    }
+
+    @Override
+    public boolean drainAllFluid(Level level, BlockPos pos) {
+        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
+        if (handler.isPresent()) {
+            boolean any = false;
+            IFluidHandler pool = handler.get();
+            for (int i = 0; i < pool.getTanks(); i++) {
+                if (!pool.drain(pool.getFluidInTank(i), EXECUTE).isEmpty()) {
+                    any = true;
+                }
+            }
+            return any;
         }
-        return FluidUtil.tryPlaceFluid(null, level, hand, pos, stack, new FluidStack(
-            fluid, FluidAttributes.BUCKET_VOLUME)).isSuccess();
+        return false;
     }
 
     @Override
