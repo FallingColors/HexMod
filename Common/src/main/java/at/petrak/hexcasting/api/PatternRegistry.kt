@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentMap
  */
 object PatternRegistry {
     private val operatorLookup = ConcurrentHashMap<ResourceLocation, Operator>()
+    private val keyLookup = ConcurrentHashMap<Operator, ResourceLocation>()
     private val specialHandlers: ConcurrentLinkedDeque<SpecialHandlerEntry> = ConcurrentLinkedDeque()
 
     // Map signatures to the "preferred" direction they start in and their operator ID.
@@ -48,6 +49,7 @@ object PatternRegistry {
         }
 
         this.operatorLookup[id] = operator
+        this.keyLookup[operator] = id
         if (isPerWorld) {
             this.perWorldPatternLookup[id] = PerWorldEntry(pattern, id)
         } else {
@@ -119,6 +121,12 @@ object PatternRegistry {
             ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
         return perWorldPatterns.lookup
     }
+
+    /**
+     * Internal use only.
+     */
+    @JvmStatic
+    fun lookupPattern(op: Operator): ResourceLocation? = this.keyLookup[op]
 
     /**
      * Internal use only.

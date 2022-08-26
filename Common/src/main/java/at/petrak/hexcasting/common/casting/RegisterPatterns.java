@@ -500,7 +500,7 @@ public class RegisterPatterns {
                 if (negate) {
                     accumulator = -accumulator;
                 }
-                return Operator.makeConstantOp(SpellDatum.make(accumulator));
+                return Operator.makeConstantOp(accumulator, modLoc("number"));
             } else {
                 return null;
             }
@@ -536,7 +536,7 @@ public class RegisterPatterns {
                 return null;
             }
 
-            return new OpMask(mask);
+            return new OpMask(mask, modLoc("mask"));
         });
     }
 }

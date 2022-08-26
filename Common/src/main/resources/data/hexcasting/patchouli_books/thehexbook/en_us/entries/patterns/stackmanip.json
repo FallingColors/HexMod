@@ -68,8 +68,8 @@
     },
     {
       "type": "hexcasting:manual_pattern",
-      "header": "hexcasting.page.stackmanip.mask.header",
-      "anchor": "Numbers",
+      "op_id": "hexcasting:mask",
+      "anchor": "hexcasting:mask",
       "input": "many",
       "output": "many",
       "text": "hexcasting.page.stackmanip.mask.1",

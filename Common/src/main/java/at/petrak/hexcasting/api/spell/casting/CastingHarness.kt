@@ -47,6 +47,24 @@ class CastingHarness private constructor(
      */
     fun executeIota(iota: SpellDatum<*>, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
 
+    private fun getOperatorForPattern(iota: SpellDatum<*>, world: ServerLevel): Operator? {
+        if (iota.getType() == DatumType.PATTERN)
+            return PatternRegistry.matchPattern(iota.payload as HexPattern, world)
+        return null
+    }
+
+    private fun getPatternForFrame(frame: ContinuationFrame): HexPattern? {
+        if (frame !is ContinuationFrame.Evaluate) return null
+
+        return frame.list.car.payload as? HexPattern
+    }
+
+    private fun getOperatorForFrame(frame: ContinuationFrame, world: ServerLevel): Operator? {
+        if (frame !is ContinuationFrame.Evaluate) return null
+
+        return getOperatorForPattern(frame.list.car, world)
+    }
+
     /**
      * Given a list of iotas, execute them in sequence.
      */
@@ -63,6 +81,8 @@ class CastingHarness private constructor(
             val result = try {
                 next.evaluate(continuation.next, world, this)
             } catch (mishap: Mishap) {
+                val pattern = getPatternForFrame(next)
+                val operator = getOperatorForFrame(next, world)
                 CastResult(
                     continuation,
                     null,
@@ -70,7 +90,7 @@ class CastingHarness private constructor(
                     listOf(
                         OperatorSideEffect.DoMishap(
                             mishap,
-                            Mishap.Context(HexPattern(HexDir.WEST), null)
+                            Mishap.Context(pattern ?: HexPattern(HexDir.WEST), operator)
                         )
                     )
                 )
@@ -126,7 +146,7 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         mishap,
-                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)
+                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), getOperatorForPattern(iota, world))
                     )
                 ),
             )
@@ -139,7 +159,7 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         MishapError(exception),
-                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)
+                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), getOperatorForPattern(iota, world))
                     )
                 )
             )
@@ -218,7 +238,7 @@ class CastingHarness private constructor(
                 continuation,
                 null,
                 mishap.resolutionType(ctx),
-                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.second))),
+                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.first))),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
@@ -229,7 +249,7 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         MishapError(exception),
-                        Mishap.Context(newPat, operatorIdPair?.second)
+                        Mishap.Context(newPat, operatorIdPair?.first)
                     )
                 )
             )

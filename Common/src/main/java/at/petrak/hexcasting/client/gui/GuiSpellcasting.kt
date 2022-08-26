@@ -207,10 +207,6 @@ class GuiSpellcasting(
             is PatternDrawState.JustStarted -> {
                 // Well, we never managed to get anything on the stack this go-around.
                 this.drawState = PatternDrawState.BetweenPatterns
-                if (this.patterns.isEmpty()) {
-                    Minecraft.getInstance().setScreen(null)
-                    Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
-                }
             }
             is PatternDrawState.Drawing -> {
                 val (start, _, pat) = this.drawState as PatternDrawState.Drawing

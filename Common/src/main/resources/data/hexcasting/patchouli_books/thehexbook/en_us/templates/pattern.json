@@ -1,8 +1,9 @@
 {
+  "processor": "at.petrak.hexcasting.interop.patchouli.PatternProcessor",
   "components": [
     {
       "type": "patchouli:header",
-      "text": "hexcasting.spell.#op_id#",
+      "text": "#translation_key",
       "x": -1,
       "y": -1
     },

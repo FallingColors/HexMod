@@ -104,15 +104,15 @@ def parse_style(sty):
         return "", Style("base", None)
     if sty in types:
         return "", Style(types[sty], True)
-    if sty in colors:   
+    if sty in colors:
         return "", Style("color", colors[sty])
     if sty.startswith("#") and len(sty) in [4, 7]:
         return "", Style("color", sty[1:])
     # TODO more style parse
     raise ValueError("Unknown style: " + sty)
 
-def localize(i18n, string):
-    return i18n.get(string, string) if i18n else string
+def localize(i18n, string, default=None):
+    return i18n.get(string, default if default else string) if i18n else string
 
 format_re = re.compile(r"\$\(([^)]*)\)")
 def format_string(root_data, string):
@@ -144,7 +144,7 @@ def format_string(root_data, string):
     text_nodes.append(extra_text + string[last_end:])
     first_node, *text_nodes = text_nodes
 
-    # parse 
+    # parse
     style_stack = [FormatTree(Style("base", True), []), FormatTree(Style("para", {}), [first_node])]
     for style, text in zip(styles, text_nodes):
         tmp_stylestack = []
@@ -173,6 +173,11 @@ def format_string(root_data, string):
 
 test_root = {"i18n": {}, "macros": default_macros, "resource_dir": "Common/src/main/resources", "modid": "hexcasting"}
 test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
+
+def localize_pattern(root_data, op_id):
+    return localize(root_data["i18n"], "hexcasting.spell.book." + op_id,
+                    localize(root_data["i18n"], "hexcasting.spell." + op_id))
+
 
 def do_localize(root_data, obj, *names):
     for name in names:
@@ -204,10 +209,12 @@ def resolve_pattern(root_data, page):
     if "pattern_reg" not in root_data:
         root_data["pattern_reg"] = fetch_patterns(root_data)
     page["op"] = [root_data["pattern_reg"][page["op_id"]]]
-    page["name"] = localize(root_data["i18n"], "hexcasting.spell." + page["op_id"])
+    page["name"] = localize_pattern(root_data, page["op_id"])
 
 def fixup_pattern(do_sig, root_data, page):
     patterns = page["patterns"]
+    if "op_id" in page:
+        page["header"] = localize_pattern(root_data, page["op_id"])
     if not isinstance(patterns, list): patterns = [patterns]
     if do_sig:
         inp = page.get("input", None) or ""
@@ -261,7 +268,7 @@ def parse_entry(root_data, entry_path, ent_name):
         if isinstance(page, str):
             page = {"type": "patchouli:text", "text": page}
             data["pages"][i] = page
-            
+
         do_localize(root_data, page, "title", "header")
         do_format(root_data, page, "text")
         if page["type"] in page_types:
@@ -473,7 +480,7 @@ def write_page(out, pageid, page):
                     with out.pair_tag("code"): out.text(i)
                 out.text(".")
             if "text" in page: write_block(out, page["text"])
-        elif ty == "hexcasting:brainsweep": 
+        elif ty == "hexcasting:brainsweep":
             with out.pair_tag("blockquote", clazz="crafting-info"):
                 out.text(f"Depicted in the book: A mind-flaying recipe producing the ")
                 with out.pair_tag("code"): out.text(page["output_name"])
