@@ -11,6 +11,8 @@
   "macros": {
     "$(thing)": "$(#8d6acc)",
     "$(action)": "$(#fc77be)",
+    "$(media)": "$(#74b3f2)",
+    "$(hex)": "$(#b38ef3)",
     "_Media": "$(#74b3f2)Media/$",
     "_media": "$(#74b3f2)media/$",
     "_Hexcasters": "$(#b38ef3)Hexcasters/$",
