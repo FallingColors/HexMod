@@ -156,7 +156,7 @@ data class CastingContext(
         val stacksToExamine = DiscoveryHandlers.collectItemSlots(this)
 
         fun matches(stack: ItemStack): Boolean =
-            !stack.isEmpty && ItemStack.matches(item, stack)
+            !stack.isEmpty && ItemStack.isSameItemSameTags(item, stack)
 
         val presentCount = stacksToExamine.fold(0) { acc, stack ->
             acc + if (matches(stack)) stack.count else 0
