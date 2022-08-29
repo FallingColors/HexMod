@@ -12,6 +12,7 @@ public class HexItemTags {
     public static final TagKey<Item> AKASHIC_PLANKS = create("akashic_planks");
     public static final TagKey<Item> WANDS = create("wands");
     public static final TagKey<Item> PHIAL_BASE = create("phial_base");
+    public static final TagKey<Item> GRANTS_ROOT_ADVANCEMENT = create("grants_root_advancement");
 
     public static TagKey<Item> create(String name) {
         return create(modLoc(name));

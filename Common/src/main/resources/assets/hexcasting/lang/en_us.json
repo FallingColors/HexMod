@@ -154,9 +154,9 @@
   "emi.category.hexcasting.villager_profession": "Villager Profession",
 
   "advancement.hexcasting:root": "Hexcasting Research",
-  "advancement.hexcasting:root.desc": "Find a concentrated form of media growing deep beneath the earth.",
+  "advancement.hexcasting:root.desc": "Find and mine a concentrated form of media growing deep beneath the earth.",
   "advancement.hexcasting:enlightenment": "Achieve Enlightenment",
-  "advancement.hexcasting:enlightenment.desc": "Go nearly insane from casting a hex using almost all of your health.",
+  "advancement.hexcasting:enlightenment.desc": "Shatter a barrier by casting a hex using almost all of your health.",
   "advancement.hexcasting:wasteful_cast": "Waste Not...",
   "advancement.hexcasting:wasteful_cast.desc": "Waste a large amount of media when casting a hex.",
   "advancement.hexcasting:big_cast": "... Want Not",
@@ -164,7 +164,7 @@
   "advancement.hexcasting:y_u_no_cast_angy": "Blind Diversion",
   "advancement.hexcasting:y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
   "advancement.hexcasting:opened_eyes": "Opened Eyes",
-  "advancement.hexcasting:opened_eyes.desc": "Have nature take a piece of your mind in payment for a hex.",
+  "advancement.hexcasting:opened_eyes.desc": "Have nature take a piece of your mind in payment for a hex. What might happen if you let it have more?",
 
   "stat.hexcasting.mana_used": "Media Consumed (in dust)",
   "stat.hexcasting.mana_overcasted": "Media Overcast (in dust)",

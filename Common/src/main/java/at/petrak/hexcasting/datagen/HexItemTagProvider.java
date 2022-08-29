@@ -26,10 +26,12 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
         tag(xtags.amethystDust()).add(HexItems.AMETHYST_DUST);
 
         tag(HexItemTags.WANDS).add(HexItems.WAND_AKASHIC,
-                HexItems.WAND_OAK, HexItems.WAND_SPRUCE, HexItems.WAND_BIRCH,
-                HexItems.WAND_JUNGLE, HexItems.WAND_ACACIA, HexItems.WAND_DARK_OAK,
-                HexItems.WAND_CRIMSON, HexItems.WAND_WARPED);
+            HexItems.WAND_OAK, HexItems.WAND_SPRUCE, HexItems.WAND_BIRCH,
+            HexItems.WAND_JUNGLE, HexItems.WAND_ACACIA, HexItems.WAND_DARK_OAK,
+            HexItems.WAND_CRIMSON, HexItems.WAND_WARPED);
         tag(HexItemTags.PHIAL_BASE).add(Items.GLASS_BOTTLE);
+        tag(HexItemTags.GRANTS_ROOT_ADVANCEMENT).add(HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD,
+            HexItems.CHARGED_AMETHYST);
 
         this.copy(HexBlockTags.AKASHIC_LOGS, HexItemTags.AKASHIC_LOGS);
         this.copy(HexBlockTags.AKASHIC_PLANKS, HexItemTags.AKASHIC_PLANKS);
