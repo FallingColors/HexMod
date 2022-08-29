@@ -46,8 +46,6 @@ object OpExtinguish : SpellOperator {
             var successes = 0
             while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
                 val here = todo.removeFirst()
-                val distFromFocus =
-                    ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
                 val distFromTarget =
                     target.distanceTo(Vec3.atCenterOf(here)) // max distance to prevent runaway shenanigans
                 if (ctx.canEditBlockAt(here) && distFromTarget < 10 && seen.add(here)) {
