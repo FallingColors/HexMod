@@ -2,9 +2,7 @@ package at.petrak.hexcasting.datagen.recipe.builders;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +24,7 @@ import java.util.function.Consumer;
 // https://github.com/Creators-of-Create/Create/blob/82be76d8934af03b4e52cad6a9f74a4175ba7b05/src/main/java/com/simibubi/create/foundation/data/recipe/ProcessingRecipeGen.java
 // https://github.com/Creators-of-Create/Create/blob/82be76d8934af03b4e52cad6a9f74a4175ba7b05/src/main/java/com/simibubi/create/content/contraptions/processing/ProcessingRecipeBuilder.java
 // https://github.com/Creators-of-Create/Create/blob/82be76d8934af03b4e52cad6a9f74a4175ba7b05/src/main/java/com/simibubi/create/content/contraptions/processing/ProcessingRecipeSerializer.java
-public abstract class CreateCrushingRecipeBuilder implements RecipeBuilder {
+public class CreateCrushingRecipeBuilder implements RecipeBuilder {
 	private String group = "";
 	private Ingredient input;
 	private final List<ProcessingOutput> results = new ArrayList<>();
@@ -78,7 +76,24 @@ public abstract class CreateCrushingRecipeBuilder implements RecipeBuilder {
 	}
 
 	public CreateCrushingRecipeBuilder withOutput(ItemStack output, float chance) {
-		this.results.add(new ProcessingOutput(output, chance));
+		this.results.add(new ItemProcessingOutput(output, chance));
+		return this;
+	}
+
+	public CreateCrushingRecipeBuilder withOutput(String name) {
+		return withOutput(1f, name, 1);
+	}
+
+	public CreateCrushingRecipeBuilder withOutput(String name, int count) {
+		return withOutput(1f, name, count);
+	}
+
+	public CreateCrushingRecipeBuilder withOutput(float chance, String name) {
+		return withOutput(chance, name, 1);
+	}
+
+	public CreateCrushingRecipeBuilder withOutput(float chance, String name, int count) {
+		this.results.add(new CompatProcessingOutput(name, count, chance));
 		return this;
 	}
 
@@ -91,12 +106,6 @@ public abstract class CreateCrushingRecipeBuilder implements RecipeBuilder {
 	public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation resourceLocation) {
 		consumer.accept(new CrushingRecipe(resourceLocation));
 	}
-
-	public abstract void serializeConditions(JsonObject object);
-
-	public abstract CreateCrushingRecipeBuilder whenModLoaded(String modid);
-
-	public abstract CreateCrushingRecipeBuilder whenModMissing(String modid);
 
 	public class CrushingRecipe implements FinishedRecipe {
 
@@ -128,8 +137,6 @@ public abstract class CreateCrushingRecipeBuilder implements RecipeBuilder {
 			if (processingDuration > 0) {
 				json.addProperty("processingTime", processingDuration);
 			}
-
-			serializeConditions(json);
 		}
 
 		@Override
@@ -153,22 +160,4 @@ public abstract class CreateCrushingRecipeBuilder implements RecipeBuilder {
 		}
 	}
 
-	private record ProcessingOutput(ItemStack stack, float chance) {
-		private JsonObject serialize() {
-			JsonObject json = new JsonObject();
-			ResourceLocation resourceLocation = Registry.ITEM.getKey(stack.getItem());
-			json.addProperty("item", resourceLocation.toString());
-			int count = stack.getCount();
-			if (count != 1) {
-				json.addProperty("count", count);
-			}
-			if (stack.hasTag()) {
-				json.add("nbt", JsonParser.parseString(stack.getTag().toString()));
-			}
-			if (chance != 1) {
-				json.addProperty("chance", chance);
-			}
-			return json;
-		}
-	}
 }

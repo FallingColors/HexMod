@@ -8,7 +8,7 @@
   "pages": [
     {
       "type": "hexcasting:manual_pattern",
-      "header": "hexcasting.spell.hexcasting:const/vec/x",
+      "op_id": "hexcasting:const/vec/x",
       "anchor": "hexcasting:const/vec/x",
       "input": "",
       "output": "vector",
@@ -28,7 +28,7 @@
     },
     {
       "type": "hexcasting:manual_pattern",
-      "header": "hexcasting.spell.hexcasting:const/vec/y",
+      "op_id": "hexcasting:const/vec/y",
       "anchor": "hexcasting:const/vec/y",
       "input": "",
       "output": "vector",
@@ -48,7 +48,7 @@
     },
     {
       "type": "hexcasting:manual_pattern",
-      "header": "hexcasting.spell.hexcasting:const/vec/z",
+      "op_id": "hexcasting:const/vec/z",
       "anchor": "hexcasting:const/vec/z",
       "input": "",
       "output": "vector",

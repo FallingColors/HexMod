@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.spell.casting
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.mod.HexConfig
@@ -13,7 +14,6 @@ import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.*
-import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -47,6 +47,24 @@ class CastingHarness private constructor(
      */
     fun executeIota(iota: SpellDatum<*>, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
 
+    private fun getOperatorForPattern(iota: SpellDatum<*>, world: ServerLevel): Operator? {
+        if (iota.getType() == DatumType.PATTERN)
+            return PatternRegistry.matchPattern(iota.payload as HexPattern, world)
+        return null
+    }
+
+    private fun getPatternForFrame(frame: ContinuationFrame): HexPattern? {
+        if (frame !is ContinuationFrame.Evaluate) return null
+
+        return frame.list.car.payload as? HexPattern
+    }
+
+    private fun getOperatorForFrame(frame: ContinuationFrame, world: ServerLevel): Operator? {
+        if (frame !is ContinuationFrame.Evaluate) return null
+
+        return getOperatorForPattern(frame.list.car, world)
+    }
+
     /**
      * Given a list of iotas, execute them in sequence.
      */
@@ -60,7 +78,23 @@ class CastingHarness private constructor(
             // Take the top of the continuation stack...
             val next = continuation.frame
             // ...and execute it.
-            val result = next.evaluate(continuation.next, world, this)
+            val result = try {
+                next.evaluate(continuation.next, world, this)
+            } catch (mishap: Mishap) {
+                val pattern = getPatternForFrame(next)
+                val operator = getOperatorForFrame(next, world)
+                CastResult(
+                    continuation,
+                    null,
+                    mishap.resolutionType(ctx),
+                    listOf(
+                        OperatorSideEffect.DoMishap(
+                            mishap,
+                            Mishap.Context(pattern ?: HexPattern(HexDir.WEST), operator)
+                        )
+                    )
+                )
+            }
             // Then write all pertinent data back to the harness for the next iteration.
             if (result.newData != null) {
                 this.applyFunctionalData(result.newData)
@@ -112,7 +146,7 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         mishap,
-                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)
+                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), getOperatorForPattern(iota, world))
                     )
                 ),
             )
@@ -125,7 +159,7 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         MishapError(exception),
-                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), null)
+                        Mishap.Context(iota.payload as? HexPattern ?: HexPattern(HexDir.WEST), getOperatorForPattern(iota, world))
                     )
                 )
             )
@@ -204,7 +238,7 @@ class CastingHarness private constructor(
                 continuation,
                 null,
                 mishap.resolutionType(ctx),
-                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.second))),
+                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, operatorIdPair?.first))),
             )
         } catch (exception: Exception) {
             exception.printStackTrace()
@@ -215,7 +249,7 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         MishapError(exception),
-                        Mishap.Context(newPat, operatorIdPair?.second)
+                        Mishap.Context(newPat, operatorIdPair?.first)
                     )
                 )
             )
@@ -381,21 +415,21 @@ class CastingHarness private constructor(
             val casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack)
             val hexHolderDrawsFromInventory = if (casterHexHolder != null) {
                 if (casterManaHolder != null) {
-                    val manaAvailable = casterManaHolder.mana
+                    val manaAvailable = casterManaHolder.withdrawMana(-1, true)
                     val manaToTake = min(costLeft, manaAvailable)
-                    if (!fake) casterManaHolder.mana = manaAvailable - manaToTake
+                    if (!fake) casterManaHolder.withdrawMana(manaToTake, false)
                     costLeft -= manaToTake
                 }
                 casterHexHolder.canDrawManaFromInventory()
             } else {
                 false
             }
+
             if (casterStack.`is`(HexItemTags.WANDS) || hexHolderDrawsFromInventory) {
-                val manableItems = this.ctx.caster.inventory.items
-                    .filter(::isManaItem)
+                val manaSources = DiscoveryHandlers.collectManaHolders(this)
                     .sortedWith(Comparator(::compareManaItem).reversed())
-                for (stack in manableItems) {
-                    costLeft -= extractMana(stack, costLeft, simulate = fake && !ItemCreativeUnlocker.isDebug(stack))
+                for (source in manaSources) {
+                    costLeft -= extractMana(source, costLeft, simulate = fake)
                     if (costLeft <= 0)
                         break
                 }
@@ -407,13 +441,17 @@ class CastingHarness private constructor(
                     val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
 
                     val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
-                    if (!fake) {
-                        HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, manaToActuallyPayFor)
-                        this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
-
+                    costLeft -= if (!fake) {
                         Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthtoRemove.toFloat())
+
+                        val actuallyTaken = (manaAbleToCastFromHP - (this.ctx.caster.health * manaToHealth)).toInt()
+
+                        HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, actuallyTaken)
+                        this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
+                        actuallyTaken
+                    } else {
+                        manaToActuallyPayFor
                     }
-                    costLeft -= manaToActuallyPayFor
                 }
             }
         }
@@ -460,6 +498,24 @@ class CastingHarness private constructor(
         const val TAG_PARENTHESIZED = "parenthesized"
         const val TAG_ESCAPE_NEXT = "escape_next"
         const val TAG_PREPACKAGED_COLORIZER = "prepackaged_colorizer"
+
+        init {
+            DiscoveryHandlers.addManaHolderDiscoverer {
+                it.ctx.caster.inventory.items
+                    .filter(::isManaItem)
+                    .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
+            }
+            DiscoveryHandlers.addManaHolderDiscoverer {
+                it.ctx.caster.inventory.armor
+                    .filter(::isManaItem)
+                    .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
+            }
+            DiscoveryHandlers.addManaHolderDiscoverer {
+                it.ctx.caster.inventory.offhand
+                    .filter(::isManaItem)
+                    .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
+            }
+        }
 
         @JvmStatic
         fun fromNBT(nbt: CompoundTag, ctx: CastingContext): CastingHarness {

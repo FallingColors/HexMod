@@ -4,13 +4,14 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,15 +37,22 @@ public final class ScryingLensOverlayRegistry {
     private static final List<Pair<OverlayPredicate, OverlayBuilder>> PREDICATE_LOOKUP = new Vector<>();
 
     // implemented as a map to allow for weak dereferencing
-    private static final Map<LocalPlayer, Pair<BlockPos, Integer>> comparatorData = new WeakHashMap<>();
+    private static final Map<Player, Pair<BlockPos, Integer>> comparatorData = new WeakHashMap<>();
+    private static final Map<Player, Pair<BlockPos, Integer>> beeData = new WeakHashMap<>();
 
-    public static void receiveComparatorValue(BlockPos pos, int value) {
-        LocalPlayer player = Minecraft.getInstance().player;
+    public static void receiveComparatorAndBeeValue(BlockPos pos, int comparator, int bee) {
+        Player player = Minecraft.getInstance().player;
         if (player != null) {
-            if (pos == null || value == -1) {
+            if (pos == null || comparator == -1) {
                 comparatorData.remove(player);
             } else {
-                comparatorData.put(player, new Pair<>(pos, value));
+                comparatorData.put(player, new Pair<>(pos, comparator));
+            }
+
+            if (pos == null || bee == -1) {
+                beeData.remove(player);
+            } else {
+                beeData.put(player, new Pair<>(pos, bee));
             }
         }
     }
@@ -76,6 +84,34 @@ public final class ScryingLensOverlayRegistry {
         }
 
         return comparatorValue.getSecond();
+    }
+
+    public static int getBeeValue() {
+        var mc = Minecraft.getInstance();
+        var player = mc.player;
+        var level = mc.level;
+        var result = mc.hitResult;
+
+        if (player == null || level == null || result == null || result.getType() != HitResult.Type.BLOCK) {
+            return -1;
+        }
+
+        var beeValue = beeData.get(player);
+        if (beeValue == null) {
+            return -1;
+        }
+
+        var pos = ((BlockHitResult) result).getBlockPos();
+        if (!pos.equals(beeValue.getFirst())) {
+            return -1;
+        }
+
+        var state = mc.level.getBlockState(pos);
+        if (!(state.getBlock() instanceof BeehiveBlock)) {
+            return -1;
+        }
+
+        return beeValue.getSecond();
     }
 
     /**
@@ -113,7 +149,7 @@ public final class ScryingLensOverlayRegistry {
      * Internal use only.
      */
     public static @NotNull List<Pair<ItemStack, Component>> getLines(BlockState state, BlockPos pos,
-        LocalPlayer observer, ClientLevel world,
+        Player observer, Level world,
         Direction hitFace) {
         List<Pair<ItemStack, Component>> lines = Lists.newArrayList();
         var idLookedup = ID_LOOKUP.get(IXplatAbstractions.INSTANCE.getID(state.getBlock()));
@@ -138,8 +174,8 @@ public final class ScryingLensOverlayRegistry {
     @FunctionalInterface
     public interface OverlayBuilder {
         void addLines(List<Pair<ItemStack, Component>> lines,
-            BlockState state, BlockPos pos, LocalPlayer observer,
-            ClientLevel world,
+            BlockState state, BlockPos pos, Player observer,
+            Level world,
             Direction hitFace);
     }
 
@@ -148,8 +184,8 @@ public final class ScryingLensOverlayRegistry {
      */
     @FunctionalInterface
     public interface OverlayPredicate {
-        boolean test(BlockState state, BlockPos pos, LocalPlayer observer,
-            ClientLevel world,
+        boolean test(BlockState state, BlockPos pos, Player observer,
+            Level world,
             Direction hitFace);
     }
 }

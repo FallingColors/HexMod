@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexItemTags
+import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
@@ -10,11 +11,11 @@ import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import at.petrak.hexcasting.common.lib.HexItems
-import at.petrak.hexcasting.ktxt.lastHurt
+import at.petrak.hexcasting.ktxt.*
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.Util
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
@@ -53,8 +54,8 @@ sealed class Mishap : Throwable() {
     protected fun error(stub: String, vararg args: Any): Component =
         "hexcasting.mishap.$stub".asTranslatedComponent(*args)
 
-    protected fun actionName(action: ResourceLocation?): Component =
-        "hexcasting.spell.${action ?: "unknown"}".asTranslatedComponent.lightPurple
+    protected fun actionName(action: Operator?): Component =
+        action?.displayName ?: "hexcasting.spell.null".asTranslatedComponent.lightPurple
 
     protected fun yeetHeldItemsTowards(ctx: CastingContext, targetPos: Vec3) {
         // Knock the player's items out of their hands
@@ -75,6 +76,8 @@ sealed class Mishap : Throwable() {
 
     protected fun yeetHeldItem(ctx: CastingContext, hand: InteractionHand) {
         val item = ctx.caster.getItemInHand(hand).copy()
+        if (hand == ctx.castingHand && IXplatAbstractions.INSTANCE.findHexHolder(item) != null)
+            return
         ctx.caster.setItemInHand(hand, ItemStack.EMPTY)
 
         val delta = ctx.caster.lookAngle.scale(0.5)
@@ -98,10 +101,11 @@ sealed class Mishap : Throwable() {
         return ctx.world.getBlockState(pos).block.name
     }
 
-    data class Context(val pattern: HexPattern, val action: ResourceLocation?)
+    data class Context(val pattern: HexPattern, val action: Operator?)
 
     companion object {
         fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
+            val targetHealth = entity.health - amount
             if (entity.invulnerableTime > 10) {
                 val lastHurt = entity.lastHurt
                 if (lastHurt < amount)
@@ -109,7 +113,25 @@ sealed class Mishap : Throwable() {
                 else
                     entity.lastHurt -= amount
             }
-            entity.hurt(source, amount)
+            if (!entity.hurt(source, amount)) {
+                // Ok, if you REALLY don't want to play nice...
+                entity.health = targetHealth
+                entity.markHurt()
+
+                if (entity.isDeadOrDying) {
+                    if (!entity.checkTotemDeathProtection(source)) {
+                        val sound = entity.deathSoundAccessor
+                        if (sound != null) {
+                            entity.playSound(sound, entity.soundVolumeAccessor, entity.voicePitch)
+                        }
+                        entity.die(source)
+                    }
+                } else {
+                    entity.playHurtSound(source)
+                }
+
+                entity.setHurtWithStamp(source, entity.level.gameTime)
+            }
         }
     }
 }

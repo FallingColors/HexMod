@@ -225,7 +225,7 @@ class SpellDatum<T : Any> private constructor(val payload: T) {
                     TAG_PATTERN -> {
                         val pat = HexPattern.fromNBT(nbt.getCompound(TAG_PATTERN))
                         var angleDesc = pat.anglesSignature()
-                        if (angleDesc.isNotBlank()) angleDesc = " $angleDesc";
+                        if (angleDesc.isNotBlank()) angleDesc = " $angleDesc"
                         out += "HexPattern(".gold
                         out += "${pat.startDir}$angleDesc".white
                         out += ")".gold

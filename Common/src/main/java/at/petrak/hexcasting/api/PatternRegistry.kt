@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.math.EulerPathFinder
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidPattern
+import at.petrak.hexcasting.api.utils.getSafe
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -26,6 +27,7 @@ import java.util.concurrent.ConcurrentMap
  */
 object PatternRegistry {
     private val operatorLookup = ConcurrentHashMap<ResourceLocation, Operator>()
+    private val keyLookup = ConcurrentHashMap<Operator, ResourceLocation>()
     private val specialHandlers: ConcurrentLinkedDeque<SpecialHandlerEntry> = ConcurrentLinkedDeque()
 
     // Map signatures to the "preferred" direction they start in and their operator ID.
@@ -47,6 +49,7 @@ object PatternRegistry {
         }
 
         this.operatorLookup[id] = operator
+        this.keyLookup[operator] = id
         if (isPerWorld) {
             this.perWorldPatternLookup[id] = PerWorldEntry(pattern, id)
         } else {
@@ -81,14 +84,6 @@ object PatternRegistry {
      */
     @JvmStatic
     fun matchPatternAndID(pat: HexPattern, overworld: ServerLevel): Pair<Operator, ResourceLocation> {
-        // Pipeline:
-        // patterns are registered here every time the game boots
-        // when we try to look
-        for (handler in specialHandlers) {
-            val op = handler.handler.handlePattern(pat)
-            if (op != null) return op to handler.id
-        }
-
         // Is it global?
         val sig = pat.anglesSignature()
         this.regularPatternLookup[sig]?.let {
@@ -105,6 +100,14 @@ object PatternRegistry {
             return op to it.first
         }
 
+        // Lookup a special handler
+        // Do this last to prevent conflicts with great spells; this has happened a few times with
+        // create phial hahaha
+        for (handler in specialHandlers) {
+            val op = handler.handler.handlePattern(pat)
+            if (op != null) return op to handler.id
+        }
+
         throw MishapInvalidPattern()
     }
 
@@ -118,6 +121,12 @@ object PatternRegistry {
             ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
         return perWorldPatterns.lookup
     }
+
+    /**
+     * Internal use only.
+     */
+    @JvmStatic
+    fun lookupPattern(op: Operator): ResourceLocation? = this.keyLookup[op]
 
     /**
      * Internal use only.
@@ -175,7 +184,7 @@ object PatternRegistry {
                 val (id, startDir) = rhs
                 val entry = CompoundTag()
                 entry.putString(TAG_OP_ID, id.toString())
-                entry.putInt(TAG_START_DIR, startDir.ordinal)
+                entry.putByte(TAG_START_DIR, startDir.ordinal.toByte())
                 tag.put(sig, entry)
             }
             return tag
@@ -186,8 +195,8 @@ object PatternRegistry {
                 val map = HashMap<String, Pair<ResourceLocation, HexDir>>()
                 for (sig in tag.allKeys) {
                     val entry = tag.getCompound(sig)
-                    val opId = ResourceLocation.tryParse(entry.getString(TAG_OP_ID))!!
-                    val startDir = HexDir.values()[entry.getInt(TAG_START_DIR)]
+                    val opId = ResourceLocation.tryParse(entry.getString(TAG_OP_ID)) ?: continue
+                    val startDir = HexDir.values().getSafe(entry.getByte(TAG_START_DIR))
                     map[sig] = opId to startDir
                 }
                 return Save(map)

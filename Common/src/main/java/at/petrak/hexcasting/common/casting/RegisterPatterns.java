@@ -38,6 +38,10 @@ import at.petrak.hexcasting.common.casting.operators.stack.*;
 import at.petrak.hexcasting.common.lib.HexItems;
 import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -201,10 +205,13 @@ public class RegisterPatterns {
                 modLoc("colorize"),
                 OpColorize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqawqadaq", HexDir.SOUTH_EAST), modLoc("create_water"),
-                OpCreateWater.INSTANCE);
+                new OpCreateFluid(false, ManaConstants.DUST_UNIT,
+                    Items.WATER_BUCKET,
+                    Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL),
+                    Fluids.WATER));
             PatternRegistry.mapPattern(HexPattern.fromAngles("dedwedade", HexDir.SOUTH_WEST),
                 modLoc("destroy_water"),
-                OpDestroyWater.INSTANCE);
+                OpDestroyFluid.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaqawawa", HexDir.SOUTH_EAST), modLoc("ignite"),
                 OpIgnite.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), modLoc("extinguish"),
@@ -292,7 +299,10 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.fromAngles("eawwaeawawaa", HexDir.NORTH_WEST),
                 modLoc("flight"), OpFlight.INSTANCE, true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eaqawqadaqd", HexDir.EAST),
-                modLoc("create_lava"), OpCreateLava.INSTANCE, true);
+                modLoc("create_lava"), new OpCreateFluid(true, ManaConstants.CRYSTAL_UNIT,
+                    Items.LAVA_BUCKET,
+                    Blocks.LAVA_CAULDRON.defaultBlockState(),
+                    Fluids.LAVA), true);
             PatternRegistry.mapPattern(
                 HexPattern.fromAngles("wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq", HexDir.EAST),
                 modLoc("teleport"), OpTeleport.INSTANCE, true);
@@ -490,7 +500,7 @@ public class RegisterPatterns {
                 if (negate) {
                     accumulator = -accumulator;
                 }
-                return Operator.makeConstantOp(SpellDatum.make(accumulator));
+                return Operator.makeConstantOp(accumulator, modLoc("number"));
             } else {
                 return null;
             }
@@ -526,7 +536,7 @@ public class RegisterPatterns {
                 return null;
             }
 
-            return new OpMask(mask);
+            return new OpMask(mask, modLoc("mask"));
         });
     }
 }

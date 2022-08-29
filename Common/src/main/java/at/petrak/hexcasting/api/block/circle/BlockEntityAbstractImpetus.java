@@ -15,8 +15,6 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -36,6 +34,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,6 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implements WorldlyContainer {
@@ -55,6 +55,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         TAG_FOUND_ALL = "found_all",
         TAG_MANA = "mana",
         TAG_LAST_MISHAP = "last_mishap";
+
+    private static final DecimalFormat DUST_AMOUNT = new DecimalFormat("###,###.##");
 
     @Nullable
     private UUID activator = null;
@@ -114,16 +116,15 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-        BlockState state, BlockPos pos,
-        LocalPlayer observer, ClientLevel world,
-        Direction hitFace) {
+                                        BlockState state, BlockPos pos,
+                                        Player observer, Level world,
+                                        Direction hitFace) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
             if (beai.getMana() < 0) {
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
             } else {
-                var dustCount = (float) beai.getMana() / (float) ManaConstants.DUST_UNIT;
-                var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
-                    String.format("%.2f", dustCount));
+                var dustCmp = new TranslatableComponent("hexcasting.tooltip.mana",
+                    DUST_AMOUNT.format(beai.getMana() / (float) ManaConstants.DUST_UNIT));
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
             }
 
@@ -540,6 +541,12 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
+        if (remainingManaCapacity() == 0)
+            return false;
+
+        if (stack.is(HexItems.CREATIVE_UNLOCKER))
+            return true;
+
         var manamount = extractManaFromItem(stack, true);
         return manamount > 0;
     }
@@ -557,7 +564,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         } else {
             var manamount = extractManaFromItem(stack, false);
             if (manamount > 0) {
-                this.mana += manamount;
+                this.mana = Math.min(manamount + mana, MAX_CAPACITY);
                 this.sync();
             }
         }
@@ -571,6 +578,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     public int remainingManaCapacity() {
         if (this.mana < 0)
             return 0;
-        return MAX_CAPACITY - this.mana;
+        return Math.max(0, MAX_CAPACITY - this.mana);
     }
 }

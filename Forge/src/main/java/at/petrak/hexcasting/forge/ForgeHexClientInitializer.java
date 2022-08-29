@@ -41,6 +41,7 @@ public class ForgeHexClientInitializer {
         evBus.addListener((TickEvent.ClientTickEvent e) -> {
             if (e.phase == TickEvent.Phase.END) {
                 ClientTickCounter.clientTickEnd();
+                ShiftScrollListener.clientTickEnd();
             }
         });
 

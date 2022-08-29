@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.spell.SpellOperator
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.world.item.ItemStack
 
 object OpColorize : SpellOperator {
     override val argc = 0
@@ -26,22 +27,19 @@ object OpColorize : SpellOperator {
             )
         }
         return Triple(
-            Spell,
+            Spell(handStack),
             ManaConstants.DUST_UNIT,
             listOf()
         )
     }
 
-    private object Spell : RenderedSpell {
+    private data class Spell(val stack: ItemStack) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val handStack = ctx.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isColorizer).first.copy()
-            if (IXplatAbstractions.INSTANCE.isColorizer(handStack)) {
-                if (ctx.withdrawItem(handStack.item, 1, true)) {
-                    IXplatAbstractions.INSTANCE.setColorizer(
-                        ctx.caster,
-                        FrozenColorizer(handStack, ctx.caster.uuid)
-                    )
-                }
+            if (ctx.withdrawItem(stack, 1, true)) {
+                IXplatAbstractions.INSTANCE.setColorizer(
+                    ctx.caster,
+                    FrozenColorizer(stack, ctx.caster.uuid)
+                )
             }
         }
     }

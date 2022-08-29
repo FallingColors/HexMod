@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.spell.casting
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.Operator
 import at.petrak.hexcasting.api.spell.mishaps.MishapEntityTooFarAway
@@ -14,8 +15,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.GameType
 import net.minecraft.world.phys.Vec3
 import java.util.function.Predicate
 import kotlin.math.min
@@ -39,10 +40,14 @@ data class CastingContext(
     private val entitiesGivenMotion = mutableSetOf<Entity>()
 
     inline fun getHeldItemToOperateOn(acceptItemIf: (ItemStack) -> Boolean): Pair<ItemStack, InteractionHand> {
-        val handItem = caster.getItemInHand(castingHand)
-        if (!acceptItemIf(handItem))
-            return caster.getItemInHand(otherHand) to otherHand
-        return handItem to castingHand
+        val handItem = caster.getItemInHand(otherHand)
+        if (!acceptItemIf(handItem)) {
+            val castingItem = caster.getItemInHand(castingHand)
+            if (acceptItemIf(castingItem)) {
+                return castingItem to castingHand
+            }
+        }
+        return handItem to otherHand
     }
 
     /**
@@ -83,7 +88,8 @@ data class CastingContext(
         return entitiesGivenMotion.contains(target)
     }
 
-    fun isVecInWorld(vec: Vec3) = world.isInWorldBounds(BlockPos(vec)) && world.worldBorder.isWithinBounds(vec.x, vec.z, 0.5)
+    fun isVecInWorld(vec: Vec3) =
+        world.isInWorldBounds(BlockPos(vec)) && world.worldBorder.isWithinBounds(vec.x, vec.z, 0.5)
 
     fun isVecInRange(vec: Vec3): Boolean {
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(caster)
@@ -117,6 +123,12 @@ data class CastingContext(
         return isVecInRange(entity.position())
     }
 
+    fun canEditBlockAt(pos: BlockPos): Boolean {
+        return this.isVecInRange(Vec3.atCenterOf(pos))
+                && this.caster.gameMode.gameModeForPlayer != GameType.ADVENTURE
+                && this.world.mayInteract(this.caster, pos)
+    }
+
     /**
      * Return the slot from which to take blocks and items.
      */
@@ -125,25 +137,12 @@ data class CastingContext(
     // for what purpose i cannot imagine
     // http://redditpublic.com/images/b/b2/Items_slot_number.png looks right
     // and offhand is 150 Inventory.java:464
-    fun getOperativeSlot(stackOK: Predicate<ItemStack>): Int? {
-        val otherHandStack = this.caster.getItemInHand(this.otherHand)
-        if (stackOK.test(otherHandStack)) {
-            return when (this.otherHand) {
-                InteractionHand.MAIN_HAND -> this.caster.inventory.selected
-                InteractionHand.OFF_HAND -> 150
-            }
-        }
-        val anchorSlot = when (this.castingHand) {
-            // slot to the right of the wand
-            InteractionHand.MAIN_HAND -> (this.caster.inventory.selected + 1) % 9
-            // first hotbar slot
-            InteractionHand.OFF_HAND -> 0
-        }
-        for (delta in 0 until 9) {
-            val slot = (anchorSlot + delta) % 9
-            val stack = this.caster.inventory.getItem(slot)
+    fun getOperativeSlot(stackOK: Predicate<ItemStack>): ItemStack? {
+        val operable = DiscoveryHandlers.collectOperableSlots(this)
+
+        for (stack in operable) {
             if (stackOK.test(stack)) {
-                return slot
+                return stack
             }
         }
         return null
@@ -154,17 +153,14 @@ data class CastingContext(
      * Return whether the withdrawal was successful.
      */
     // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143
-    fun withdrawItem(item: Item, count: Int, actuallyRemove: Boolean): Boolean {
+    fun withdrawItem(item: ItemStack, count: Int, actuallyRemove: Boolean): Boolean {
         if (this.caster.isCreative) return true
 
-        val inv = this.caster.inventory
         // TODO: withdraw from ender chest given a specific ender charm?
-        val stacksToExamine = inv.items.toMutableList().apply { removeAt(inv.selected) }.asReversed().toMutableList()
-        stacksToExamine.addAll(inv.offhand)
-        stacksToExamine.add(inv.getSelected())
+        val stacksToExamine = DiscoveryHandlers.collectItemSlots(this)
 
         fun matches(stack: ItemStack): Boolean =
-            !stack.isEmpty && stack.`is`(item)
+            !stack.isEmpty && ItemStack.isSameItemSameTags(item, stack)
 
         val presentCount = stacksToExamine.fold(0) { acc, stack ->
             acc + if (matches(stack)) stack.count else 0
@@ -206,4 +202,28 @@ data class CastingContext(
             val advs = this.caster.advancements
             return advs.getOrStartProgress(adv!!).isDone
         }
+
+    companion object {
+        init {
+            DiscoveryHandlers.addItemSlotDiscoverer {
+                val inv = it.caster.inventory
+                inv.items.toMutableList().apply { removeAt(inv.selected) }.asReversed().toMutableList().apply {
+                    addAll(inv.offhand)
+                    add(inv.getSelected())
+                }
+            }
+
+            DiscoveryHandlers.addOperativeSlotDiscoverer {
+                val slots = mutableListOf<ItemStack>()
+                val anchorSlot = if (it.castingHand == InteractionHand.MAIN_HAND) (it.caster.inventory.selected + 1) % 9 else 0
+
+                slots.add(it.caster.getItemInHand(it.otherHand))
+                for (delta in 0 until 9) {
+                    val slot = (anchorSlot + delta) % 9
+                    slots.add(it.caster.inventory.getItem(slot))
+                }
+                slots
+            }
+        }
+    }
 }

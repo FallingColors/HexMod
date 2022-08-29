@@ -29,12 +29,8 @@ object OpPlaceBlock : SpellOperator {
 
         val pos = BlockPos(target)
 
-        if (!ctx.world.mayInteract(ctx.caster, pos))
-            return null
-
-
         val blockHit = BlockHitResult(
-            Vec3.ZERO, ctx.caster.direction, pos, false
+            target, ctx.caster.direction, pos, false
         )
         val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
         val placeContext = BlockPlaceContext(itemUseCtx)
@@ -54,17 +50,16 @@ object OpPlaceBlock : SpellOperator {
         override fun cast(ctx: CastingContext) {
             val pos = BlockPos(vec)
 
-            if (!ctx.world.mayInteract(ctx.caster, pos))
+            if (!ctx.canEditBlockAt(pos))
                 return
 
             val blockHit = BlockHitResult(
-                Vec3.ZERO, ctx.caster.direction, pos, false
+                vec, ctx.caster.direction, pos, false
             )
 
             val bstate = ctx.world.getBlockState(pos)
-            val placeeSlot = ctx.getOperativeSlot { it.item is BlockItem }
-            if (placeeSlot != null) {
-                val placeeStack = ctx.caster.inventory.getItem(placeeSlot).copy()
+            val placeeStack = ctx.getOperativeSlot { it.item is BlockItem }?.copy()
+            if (placeeStack != null) {
                 if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, placeeStack, ctx.caster))
                     return
 
@@ -80,13 +75,12 @@ object OpPlaceBlock : SpellOperator {
                     val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
                     val placeContext = BlockPlaceContext(itemUseCtx)
                     if (bstate.canBeReplaced(placeContext)) {
-                        val placee = placeeStack.item as BlockItem
-                        if (ctx.withdrawItem(placee, 1, false)) {
+                        if (ctx.withdrawItem(placeeStack, 1, false)) {
                             val res = spoofedStack.useOn(placeContext)
 
                             ctx.caster.setItemInHand(ctx.castingHand, oldStack)
                             if (res != InteractionResult.FAIL) {
-                                ctx.withdrawItem(placee, 1, true)
+                                ctx.withdrawItem(placeeStack, 1, true)
 
                                 ctx.world.playSound(
                                     ctx.caster,

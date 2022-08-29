@@ -6,8 +6,10 @@ import at.petrak.hexcasting.datagen.HexItemTagProvider;
 import at.petrak.hexcasting.datagen.HexLootTables;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
-import at.petrak.hexcasting.fabric.datagen.builders.FabricCreateCrushingRecipeBuilder;
+import at.petrak.hexcasting.datagen.recipe.builders.ToolIngredient;
+import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.Registry;
@@ -24,7 +26,7 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator gen) {
         HexAPI.LOGGER.info("Starting Fabric-specific datagen");
 
-        gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, FabricCreateCrushingRecipeBuilder::new));
+        gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, HexFabricConditionsBuilder::new));
 
         var xtags = IXplatAbstractions.INSTANCE.tags();
         var blockTagProvider = new HexBlockTagProvider(gen, xtags);
@@ -112,6 +114,28 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
                 new Ingredient.ItemValue(new ItemStack(Items.STICK)),
                 new Ingredient.TagValue(tag("wood_sticks"))
             ));
+        }
+
+        @Override
+        public Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient) {
+            return FabricModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
+        }
+
+        private final ToolIngredient AXE_INGREDIENT = () -> {
+            JsonObject object = new JsonObject();
+            object.addProperty("type", "farmersdelight:tool");
+            object.addProperty("tag", "fabric:tools/axes");
+            return object;
+        };
+
+        @Override
+        public ToolIngredient axeStrip() {
+            return AXE_INGREDIENT;
+        }
+
+        @Override
+        public ToolIngredient axeDig() {
+            return AXE_INGREDIENT;
         }
     };
 

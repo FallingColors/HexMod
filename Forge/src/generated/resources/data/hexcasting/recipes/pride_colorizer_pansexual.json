@@ -10,7 +10,14 @@
       "item": "hexcasting:amethyst_dust"
     },
     "C": {
-      "item": "minecraft:carrot"
+      "type": "hexcasting:mod_conditional",
+      "default": {
+        "item": "minecraft:carrot"
+      },
+      "modid": "farmersdelight",
+      "if_loaded": {
+        "item": "farmersdelight:skillet"
+      }
     }
   },
   "result": {

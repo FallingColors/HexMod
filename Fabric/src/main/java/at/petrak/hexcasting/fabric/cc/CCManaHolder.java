@@ -62,6 +62,11 @@ public abstract class CCManaHolder extends ItemComponent implements ManaHolder {
         public int withdrawMana(int cost, boolean simulate) {
             return this.manaHolder.withdrawMana(this.stack, cost, simulate);
         }
+
+        @Override
+        public int insertMana(int amount, boolean simulate) {
+            return this.manaHolder.insertMana(this.stack, amount, simulate);
+        }
     }
 
     public static class Static extends CCManaHolder {

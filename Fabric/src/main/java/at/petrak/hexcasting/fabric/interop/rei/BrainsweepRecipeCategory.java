@@ -20,6 +20,7 @@ import java.util.List;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class BrainsweepRecipeCategory implements DisplayCategory<BrainsweepRecipeDisplay> {
+    public static final ResourceLocation UID = modLoc("brainsweep");
     private final ResourceLocation OVERLAY = modLoc("textures/gui/brainsweep.png");
 
     private final Renderer icon;
@@ -48,7 +49,7 @@ public class BrainsweepRecipeCategory implements DisplayCategory<BrainsweepRecip
         widgets.add(Widgets.createDrawableWidget(((helper, matrices, mouseX, mouseY, delta) -> {
             RenderSystem.enableBlend();
             RenderSystem.setShaderTexture(0, OVERLAY);
-            GuiComponent.blit(matrices, bounds.getMinX(), bounds.getMinY(), 0, 0, 118, 85, 128, 128);
+            GuiComponent.blit(matrices, bounds.getMinX(), bounds.getMinY(), 0, 0, getDisplayWidth(display), getDisplayHeight(), 128, 128);
             RenderSystem.disableBlend();
         })));
         widgets.add(new VillagerWidget(display.recipe.villagerIn(), bounds.getMinX(), bounds.getMinY()));

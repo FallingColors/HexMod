@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.utils.extractMana
 import at.petrak.hexcasting.api.utils.isManaItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
 
 object OpRecharge : SpellOperator {
     override val argc = 1
@@ -18,7 +19,7 @@ object OpRecharge : SpellOperator {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val mana = IXplatAbstractions.INSTANCE.findManaHolder(it)
-            mana != null && mana.canRecharge() && mana.mana /* doo doo da do doo */ < mana.maxMana
+            mana != null && mana.canRecharge() && mana.insertMana(-1, true) != 0
         }
 
         val mana = IXplatAbstractions.INSTANCE.findManaHolder(handStack)
@@ -40,33 +41,28 @@ object OpRecharge : SpellOperator {
             )
         }
 
-        if (mana.mana >= mana.maxMana)
+        if (mana.insertMana(-1, true) == 0)
             return null
 
         return Triple(
-            Spell(entity),
+            Spell(entity, handStack),
             ManaConstants.SHARD_UNIT,
             listOf(ParticleSpray.burst(entity.position(), 0.5))
         )
     }
 
-    private data class Spell(val itemEntity: ItemEntity) : RenderedSpell {
+    private data class Spell(val itemEntity: ItemEntity, val stack: ItemStack) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val (handStack) = ctx.getHeldItemToOperateOn {
-                val mana = IXplatAbstractions.INSTANCE.findManaHolder(it)
-                mana != null && mana.canRecharge() && mana.mana < mana.maxMana
-            }
-            val mana = IXplatAbstractions.INSTANCE.findManaHolder(handStack)
+            val mana = IXplatAbstractions.INSTANCE.findManaHolder(stack)
 
             if (mana != null && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
 
-                val maxMana = mana.maxMana
-                val existingMana = mana.mana
+                val emptySpace = mana.insertMana(-1, true)
 
-                val manaAmt = extractMana(entityStack, maxMana - existingMana)
+                val manaAmt = extractMana(entityStack, emptySpace)
 
-                mana.mana = manaAmt + existingMana
+                mana.insertMana(manaAmt, false)
 
                 itemEntity.item = entityStack
                 if (entityStack.isEmpty)

@@ -26,7 +26,7 @@ import java.util.Objects;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class FabricUnsealedIngredient extends BaseCustomIngredient {
-	private static final ResourceLocation ID = modLoc("unsealed");
+	public static final ResourceLocation ID = modLoc("unsealed");
 
 	private final ItemStack stack;
 
@@ -94,6 +94,7 @@ public class FabricUnsealedIngredient extends BaseCustomIngredient {
 
 	@Override
 	public void toNetwork(FriendlyByteBuf friendlyByteBuf) {
+		friendlyByteBuf.writeResourceLocation(ID);
 		friendlyByteBuf.writeItem(stack);
 	}
 

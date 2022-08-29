@@ -5,10 +5,12 @@ import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
+import at.petrak.hexcasting.common.lib.HexEntityTags
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.phys.Vec3
 
 object OpTeleport : SpellOperator {
@@ -43,12 +45,8 @@ object OpTeleport : SpellOperator {
     private data class Spell(val teleportee: Entity, val delta: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val distance = delta.length()
-
             if (distance < 32768.0) {
-                teleportee.setPos(teleportee.position().add(delta))
-                if (teleportee is ServerPlayer) {
-                    IXplatAbstractions.INSTANCE.sendPacketToPlayer(teleportee, MsgBlinkAck(delta))
-                }
+                teleportRespectSticky(teleportee, delta)
             }
 
             if (teleportee is ServerPlayer && teleportee == ctx.caster) {
@@ -61,6 +59,9 @@ object OpTeleport : SpellOperator {
                 // having to rearrange those. Also it makes sense for LORE REASONS probably, since the caster is more
                 // aware of items they use often.
                 for (armorItem in teleportee.inventory.armor) {
+                    if (EnchantmentHelper.hasBindingCurse(armorItem))
+                        continue
+
                     if (Math.random() < baseDropChance * 0.25) {
                         teleportee.drop(armorItem.copy(), true, false)
                         armorItem.shrink(armorItem.count)
@@ -79,6 +80,34 @@ object OpTeleport : SpellOperator {
                 // we also don't drop the offhand just to be nice
             }
         }
+    }
 
+    fun teleportRespectSticky(teleportee: Entity, delta: Vec3) {
+
+        val base = teleportee.rootVehicle
+
+        val playersToUpdate = mutableListOf<ServerPlayer>()
+
+        if (base.indirectPassengers.any { it.type.`is`(HexEntityTags.STICKY_TELEPORTERS) }) {
+            // this handles teleporting the passengers
+            val target = base.position().add(delta)
+            base.teleportTo(target.x, target.y, target.z)
+            base.indirectPassengers
+                .filterIsInstance<ServerPlayer>()
+                .forEach(playersToUpdate::add)
+        } else {
+            // Break it into two stacks
+            teleportee.stopRiding()
+            teleportee.passengers.forEach(Entity::stopRiding)
+            teleportee.setPos(teleportee.position().add(delta))
+            if (teleportee is ServerPlayer) {
+                playersToUpdate.add(teleportee)
+            }
+        }
+
+        for (player in playersToUpdate) {
+            player.connection.resetPosition()
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, MsgBlinkAck(delta))
+        }
     }
 }

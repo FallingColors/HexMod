@@ -35,8 +35,9 @@ object OpEdifySapling : SpellOperator {
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val blockstate = ctx.world.getBlockState(pos)
-            if (!ctx.world.mayInteract(ctx.caster, pos) ||
-                !IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, pos, blockstate, ctx.caster))
+            if (!ctx.canEditBlockAt(pos) ||
+                !IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, pos, blockstate, ctx.caster)
+            )
                 return
 
             val bs = ctx.world.getBlockState(pos)

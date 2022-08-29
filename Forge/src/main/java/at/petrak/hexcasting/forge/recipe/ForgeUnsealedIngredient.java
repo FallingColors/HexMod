@@ -10,6 +10,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.AbstractIngredient;
@@ -22,7 +23,11 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 public class ForgeUnsealedIngredient extends AbstractIngredient {
+	public static final ResourceLocation ID = modLoc("unsealed");
+
 	private final ItemStack stack;
 
 	protected ForgeUnsealedIngredient(ItemStack stack) {

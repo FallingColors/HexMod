@@ -37,10 +37,9 @@ public class BlockAkashicFloodfiller extends Block {
         return true;
     }
 
-
-    public static @Nullable
-    BlockPos floodFillFor(BlockPos start, Level world,
-        TriPredicate<BlockPos, BlockState, Level> isValid, TriPredicate<BlockPos, BlockState, Level> isTarget) {
+    @Nullable
+    public static BlockPos floodFillFor(BlockPos start, Level world,
+        TriPredicate<BlockPos, BlockState, Level> isValid, TriPredicate<BlockPos, BlockState, Level> isTarget, int maxRange) {
         var seenBlocks = new HashSet<BlockPos>();
         var todo = new ArrayDeque<BlockPos>();
         todo.add(start);
@@ -50,6 +49,10 @@ public class BlockAkashicFloodfiller extends Block {
 
             for (var dir : Direction.values()) {
                 var neighbor = here.relative(dir);
+
+                if (neighbor.distSqr(start) > maxRange * maxRange)
+                    continue;
+
                 if (seenBlocks.add(neighbor)) {
                     var bs = world.getBlockState(neighbor);
                     if (isTarget.test(neighbor, bs, world)) {
@@ -64,10 +67,10 @@ public class BlockAkashicFloodfiller extends Block {
         return null;
     }
 
-    public static @Nullable
-    BlockPos floodFillFor(BlockPos start, Level world,
+    @Nullable
+    public static BlockPos floodFillFor(BlockPos start, Level world,
         TriPredicate<BlockPos, BlockState, Level> isTarget) {
-        return floodFillFor(start, world, BlockAkashicFloodfiller::canItBeFloodedThrough, isTarget);
+        return floodFillFor(start, world, BlockAkashicFloodfiller::canItBeFloodedThrough, isTarget, 32);
     }
 
     public static boolean canItBeFloodedThrough(BlockPos pos, BlockState state, Level world) {

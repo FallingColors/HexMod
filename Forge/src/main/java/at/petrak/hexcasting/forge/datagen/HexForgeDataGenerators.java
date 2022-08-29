@@ -3,11 +3,13 @@ package at.petrak.hexcasting.forge.datagen;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.datagen.*;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
-import at.petrak.hexcasting.forge.datagen.builders.ForgeCreateCrushingRecipeBuilder;
+import at.petrak.hexcasting.datagen.recipe.builders.ToolIngredient;
 import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
+import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.paucal.api.forge.datagen.PaucalForgeDatagenWrappers;
+import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -16,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
@@ -55,7 +58,7 @@ public class HexForgeDataGenerators {
         ExistingFileHelper efh = ev.getExistingFileHelper();
         if (ev.includeServer()) {
             gen.addProvider(new HexLootTables(gen));
-            gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, ForgeCreateCrushingRecipeBuilder::new));
+            gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, HexForgeConditionsBuilder::new));
 
             var xtags = IXplatAbstractions.INSTANCE.tags();
             var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
@@ -67,7 +70,7 @@ public class HexForgeDataGenerators {
         }
     }
 
-    private static IXplatIngredients INGREDIENTS = new IXplatIngredients() {
+    private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {
         @Override
         public Ingredient glowstoneDust() {
             return Ingredient.of(Tags.Items.DUSTS_GLOWSTONE);
@@ -118,6 +121,31 @@ public class HexForgeDataGenerators {
                 new Ingredient.ItemValue(new ItemStack(Items.STICK)),
                 new Ingredient.TagValue(ItemTags.create(new ResourceLocation("forge", "rods/wooden")))
             ));
+        }
+
+        @Override
+        public Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient) {
+            return ForgeModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
+        }
+
+        @Override
+        public ToolIngredient axeStrip() {
+            return () -> {
+                JsonObject object = new JsonObject();
+                object.addProperty("type", "farmersdelight:tool_action");
+                object.addProperty("action", ToolActions.AXE_STRIP.name());
+                return object;
+            };
+        }
+
+        @Override
+        public ToolIngredient axeDig() {
+            return () -> {
+                JsonObject object = new JsonObject();
+                object.addProperty("type", "farmersdelight:tool_action");
+                object.addProperty("action", ToolActions.AXE_DIG.name());
+                return object;
+            };
         }
     };
 }

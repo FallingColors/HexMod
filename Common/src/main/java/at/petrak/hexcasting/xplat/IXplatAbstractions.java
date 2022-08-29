@@ -120,8 +120,9 @@ public interface IXplatAbstractions {
     <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
         Block... blocks);
 
-    boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, ItemStack stack, Fluid fluid);
+    boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid);
 
+    boolean drainAllFluid(Level level, BlockPos pos);
 
     // misc
 

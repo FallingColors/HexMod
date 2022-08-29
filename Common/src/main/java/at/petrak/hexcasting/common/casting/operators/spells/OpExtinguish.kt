@@ -50,11 +50,7 @@ object OpExtinguish : SpellOperator {
                     ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
                 val distFromTarget =
                     target.distanceTo(Vec3.atCenterOf(here)) // max distance to prevent runaway shenanigans
-                if (distFromFocus < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE && seen.add(here) && distFromTarget < 10 && ctx.world.mayInteract(
-                        ctx.caster,
-                        here
-                    )
-                ) {
+                if (ctx.canEditBlockAt(here) && distFromTarget < 10 && seen.add(here)) {
                     // never seen this pos in my life
                     val blockstate = ctx.world.getBlockState(here)
                     if (IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, here, blockstate, ctx.caster)) {

@@ -50,7 +50,7 @@ public record EmiBrainsweepRecipe(EmiIngredient blockInput,
 
 	@Override
 	public void addWidgets(WidgetHolder widgets) {
-		widgets.addTexture(OVERLAY, 0, 0, 118, 85, 0, 0, 118, 85, 128, 128);
+		widgets.addTexture(OVERLAY, 0, 0, getDisplayWidth(), getDisplayHeight(), 0, 0, getDisplayWidth(), getDisplayHeight(), 128, 128);
 		widgets.addSlot(blockInput, 11, 34).drawBack(false).custom(null, 0, 0, 19, 19);
 
 		widgets.add(new TheCoolerSlotWidget(villagerInput, 37, 19, 2.75f).useOffset(false).customShift(-8.5f, 2.485f))

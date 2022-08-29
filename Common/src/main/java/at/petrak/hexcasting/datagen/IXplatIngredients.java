@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.datagen;
 
+import at.petrak.hexcasting.datagen.recipe.builders.ToolIngredient;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -23,4 +24,10 @@ public interface IXplatIngredients {
     EnumMap<DyeColor, Ingredient> dyes();
 
     Ingredient stick();
+
+    Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient);
+
+    ToolIngredient axeStrip();
+
+    ToolIngredient axeDig();
 }

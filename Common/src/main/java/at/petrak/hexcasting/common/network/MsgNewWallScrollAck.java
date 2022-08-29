@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.network;
 
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -34,7 +35,7 @@ public record MsgNewWallScrollAck(ClientboundAddEntityPacket inner, BlockPos pos
     public static MsgNewWallScrollAck deserialize(FriendlyByteBuf buf) {
         var inner = new ClientboundAddEntityPacket(buf);
         var pos = buf.readBlockPos();
-        var dir = Direction.values()[buf.readByte()];
+        var dir = HexUtils.getSafe(Direction.values(), buf.readByte());
         var scroll = buf.readItem();
         var strokeOrder = buf.readBoolean();
         var blockSize = buf.readVarInt();

@@ -26,6 +26,7 @@ import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
+import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -71,8 +72,6 @@ import thedarkcolour.kotlinforforge.KotlinModLoadingContext;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 @Mod(HexAPI.MOD_ID)
 public class ForgeHexInitializer {
@@ -149,7 +148,8 @@ public class ForgeHexInitializer {
         // We have to do these at some point when the registries are still open
         modBus.addGenericListener(Item.class, (RegistryEvent<Item> evt) -> {
             HexRecipeSerializers.registerTypes();
-            CraftingHelper.register(modLoc("unsealed"), ForgeUnsealedIngredient.Serializer.INSTANCE);
+            CraftingHelper.register(ForgeUnsealedIngredient.ID, ForgeUnsealedIngredient.Serializer.INSTANCE);
+            CraftingHelper.register(ForgeModConditionalIngredient.ID, ForgeModConditionalIngredient.Serializer.INSTANCE);
             HexStatistics.register();
             HexLootFunctions.registerSerializers((lift, id) ->
                 Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));

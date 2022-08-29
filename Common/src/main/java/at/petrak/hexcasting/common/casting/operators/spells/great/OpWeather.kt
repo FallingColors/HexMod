@@ -30,6 +30,12 @@ class OpWeather(val rain: Boolean) : SpellOperator {
             val w = ctx.world
             if (w.isRaining != rain) {
                 w.levelData.isRaining = rain // i hex the rains down in minecraftia
+
+                if (rain) {
+                    w.setWeatherParameters(0, 6000, true, w.random.nextDouble() < 0.05)
+                } else {
+                    w.setWeatherParameters(6000, 0, false, false)
+                }
             }
         }
     }

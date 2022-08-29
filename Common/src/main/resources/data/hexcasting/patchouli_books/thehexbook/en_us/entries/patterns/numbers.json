@@ -8,7 +8,7 @@
   "pages": [
     {
       "type": "hexcasting:manual_pattern",
-      "header": "hexcasting.page.numbers.1.header",
+      "op_id": "hexcasting:number",
       "anchor": "Numbers",
       "input": "",
       "output": "number",

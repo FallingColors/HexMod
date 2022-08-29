@@ -11,7 +11,7 @@ object OpRemove : ConstManaOperator {
         val list = args.getChecked<SpellList>(0, argc).toMutableList()
         val index = args.getChecked<Double>(1, argc).toInt()
         if (index < 0 || index >= list.size)
-            return list
+            return list.asSpellResult
         list.removeAt(index)
         return list.asSpellResult
     }
