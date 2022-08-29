@@ -105,6 +105,7 @@ sealed class Mishap : Throwable() {
 
     companion object {
         fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
+            val targetHealth = entity.health - amount
             if (entity.invulnerableTime > 10) {
                 val lastHurt = entity.lastHurt
                 if (lastHurt < amount)
@@ -114,7 +115,7 @@ sealed class Mishap : Throwable() {
             }
             if (!entity.hurt(source, amount)) {
                 // Ok, if you REALLY don't want to play nice...
-                entity.health -= amount
+                entity.health = targetHealth
                 entity.markHurt()
 
                 if (entity.isDeadOrDying) {

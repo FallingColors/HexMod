@@ -41,8 +41,12 @@ data class CastingContext(
 
     inline fun getHeldItemToOperateOn(acceptItemIf: (ItemStack) -> Boolean): Pair<ItemStack, InteractionHand> {
         val handItem = caster.getItemInHand(otherHand)
-        if (!acceptItemIf(handItem))
-            return caster.getItemInHand(castingHand) to castingHand
+        if (!acceptItemIf(handItem)) {
+            val castingItem = caster.getItemInHand(castingHand)
+            if (acceptItemIf(castingItem)) {
+                return castingItem to castingHand
+            }
+        }
         return handItem to otherHand
     }
 
@@ -156,7 +160,7 @@ data class CastingContext(
         val stacksToExamine = DiscoveryHandlers.collectItemSlots(this)
 
         fun matches(stack: ItemStack): Boolean =
-            !stack.isEmpty && ItemStack.matches(item, stack)
+            !stack.isEmpty && ItemStack.isSameItemSameTags(item, stack)
 
         val presentCount = stacksToExamine.fold(0) { acc, stack ->
             acc + if (matches(stack)) stack.count else 0
