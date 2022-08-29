@@ -183,13 +183,15 @@ sourceSets {
 // > Gradle task execution avoidance breaks it that way
 // > At one point i got it to work reliably bu forcing some specific task to always run i just don't remember the syntax and which task it was
 // > It might have been compileJava
-jar {
-    println "Forcing re-compile of Java to include refmap"
-    tasks.withType(JavaCompile) {
-        outputs.upToDateWhen { false }
-    }
-    compileKotlin {
-        outputs.upToDateWhen { false }
+build {
+    doFirst {
+        println "Forcing re-compile of Java to include refmap"
+        tasks.withType(JavaCompile) {
+            outputs.upToDateWhen { false }
+        }
+        compileKotlin {
+            outputs.upToDateWhen { false }
+        }
     }
 }
 
