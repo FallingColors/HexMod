@@ -952,7 +952,7 @@
   "hexcasting.page.blockworks.bonemeal": "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
   "hexcasting.page.blockworks.edify": "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(l:items/edified)$(thing)Edified Tree/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
   "hexcasting.page.blockworks.ignite": "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
-  "hexcasting.page.blockworks.extinguish": "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$.",
+  "hexcasting.page.blockworks.extinguish": "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$s.",
 
   "hexcasting.entry.nadirs": "Nadirs",
   "hexcasting.page.nadirs.1": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, multiplied by the potency squared.",
