@@ -934,9 +934,9 @@
 
   "hexcasting.entry.basic_spell": "Basic Spells",
   "hexcasting.page.basic_spell.explode.1": "Remove a number and vector from the stack, then create an explosion at the given location with the given power.",
-  "hexcasting.page.basic_spell.explode.2": "A power of 3 is about as much as a Creeper's blast; 4 is about as much as a TNT blast. Nature refuses to give me a blast of more than 10 power, though.$(br2)Strangely, this explosion doesn't seem to harm me. Perhaps it's because $(italic)I/$ am the one exploding?$(br2)Costs a negligible amount at power 0, plus 3 extra $(l:items/amethyst)$(item)Amethyst Dust/$s per point of explosion power.",
+  "hexcasting.page.basic_spell.explode.2": "A power of 3 is about as much as a Creeper's blast; 4 is about as much as a TNT blast. Nature refuses to give me a blast of more than 10 power, though.$(br2)Strangely, this explosion doesn't seem to harm me. Perhaps it's because $(italic)I/$ am the one exploding?$(br2)Costs a negligible amount at power 0, plus 3 extra $(l:items/amethyst)$(item)Amethyst Dust/$ per point of explosion power.",
   "hexcasting.page.basic_spell.explode.fire.1": "Remove a number and vector from the stack, then create a fiery explosion at the given location with the given power.",
-  "hexcasting.page.basic_spell.explode.fire.2": "Costs one $(l:items/amethyst)$(item)Amethyst Dust/$, plus about 3 extra $(l:items/amethyst)$(item)Amethyst Dust/$s per point of explosion power. Otherwise, the same as $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$, except with fire.",
+  "hexcasting.page.basic_spell.explode.fire.2": "Costs one $(l:items/amethyst)$(item)Amethyst Dust/$, plus about 3 extra $(l:items/amethyst)$(item)Amethyst Dust/$ per point of explosion power. Otherwise, the same as $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$, except with fire.",
   "hexcasting.page.basic_spell.add_motion": "Remove an entity and direction from the stack, then give a shove to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(l:items/amethyst)$(item)Amethyst Dust/$ equal to the square of the length of the vector.",
   "hexcasting.page.basic_spell.blink": "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about one $(l:items/amethyst)$(item)Amethyst Shard/$ per two blocks travelled.",
   "hexcasting.page.basic_spell.beep.1": "Remove a vector and two numbers from the stack. Plays an $(thing)instrument/$ defined by the first number at the given location, with a $(thing)note/$ defined by the second number. Costs a negligible amount of _media.",
@@ -952,7 +952,7 @@
   "hexcasting.page.blockworks.bonemeal": "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
   "hexcasting.page.blockworks.edify": "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(l:items/edified)$(thing)Edified Tree/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
   "hexcasting.page.blockworks.ignite": "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
-  "hexcasting.page.blockworks.extinguish": "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$s.",
+  "hexcasting.page.blockworks.extinguish": "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$.",
 
   "hexcasting.entry.nadirs": "Nadirs",
   "hexcasting.page.nadirs.1": "This family of spells all impart a negative potion effect upon an entity. They all take an entity, the recipient, and one or two numbers, the first being the duration and the second, if present, being the potency (starting at 1).$(br2)Each one has a \"base cost;\" the actual cost is equal to that base cost, multiplied by the potency squared.",
