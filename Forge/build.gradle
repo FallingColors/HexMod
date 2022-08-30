@@ -185,6 +185,7 @@ tasks.withType(JavaCompile) {
 
 compileKotlin {
     source(project(":Common").sourceSets.main.kotlin)
+    shouldRunAfter(invalidateJavaForRefmap)
 }
 
 compileTestKotlin {
