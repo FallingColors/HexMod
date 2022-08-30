@@ -1022,12 +1022,12 @@
   "hexcasting.entry.interop.gravity": "Gravity Changer",
   "hexcasting.page.interop.gravity.1": "我发现了获取与改变实体所受引力的操作。挺有趣，也挺让人头晕。$(br2)有趣的是，虽然$(l:patterns/great_spells/flight)$(action)飞行/$是一种卓越法术，且也能操控引力，但这些法术似乎不是这样操控的。我不能理解……也许模组制作者们只是想让玩家们玩得开心。",
   "hexcasting.page.interop.gravity.get": "获取所给实体的所受引力的主方向上的单位向量。对大多数实体而言，此向量会是向下的：<0, -1, 0>。",
-  "hexcasting.page.interop.gravity.set": "设置所给实体所受引力的主方向。所给向量会被转换为与其夹角最小的轴向单位向量，如同$(l:patterns/math#hexcasting:coerce_axial)$(action)轴向之纯化/$那样。消耗大约 1 个$(item)充能紫水晶/$。",
+  "hexcasting.page.interop.gravity.set": "设置所给实体所受引力的主方向。所给向量会被转换为与其夹角最小的轴向单位向量，如同$(l:patterns/math#hexcasting:coerce_axial)$(action)轴向之纯化/$那样。消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
 
   "hexcasting.entry.interop.pehkui": "Pehkui",
   "hexcasting.page.interop.pehkui.1": "我发现了改变实体大小，和得知它们相较原本究竟变了多少的方法。",
   "hexcasting.page.interop.pehkui.get": "获取实体的大小倍数，也即当前大小和原本大小的比值。对大多数实体而言，此值为 1。",
-  "hexcasting.page.interop.pehkui.set": "设置实体的大小倍数，需传入一个与其原本大小的比值。消耗大约 1 个$(item)紫水晶碎片/$。",
+  "hexcasting.page.interop.pehkui.set": "设置实体的大小倍数，需传入一个与其原本大小的比值。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶碎片/$。",
 
   "": ""
 }
