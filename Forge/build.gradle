@@ -161,12 +161,32 @@ mixin {
     config "hexcasting_forge.mixins.json"
 }
 
+// https://discord.com/channels/313125603924639766/733055378371117127/980968358658838540
+// > It wint generate a refmap if there are jo changes source files
+// > Since the last build
+// > Gradle task execution avoidance breaks it that way
+// > At one point i got it to work reliably bu forcing some specific task to always run i just don't remember the syntax and which task it was
+// > It might have been compileJava
+task invalidateJavaForRefmap {
+    doFirst {
+        tasks.withType(JavaCompile) {
+            outputs.upToDateWhen { false }
+        }
+        compileKotlin {
+            outputs.upToDateWhen { false }
+        }
+    }
+}
+
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
+    shouldRunAfter(invalidateJavaForRefmap)
 }
+
 compileKotlin {
     source(project(":Common").sourceSets.main.kotlin)
 }
+
 compileTestKotlin {
     source(project(":Common").sourceSets.main.kotlin)
 }
@@ -177,22 +197,8 @@ sourceSets {
     test.kotlin.srcDirs += 'src/main/java'
 }
 
-// https://discord.com/channels/313125603924639766/733055378371117127/980968358658838540
-// > It wint generate a refmap if there are jo changes source files
-// > Since the last build
-// > Gradle task execution avoidance breaks it that way
-// > At one point i got it to work reliably bu forcing some specific task to always run i just don't remember the syntax and which task it was
-// > It might have been compileJava
 build {
-    doFirst {
-        println "Forcing re-compile of Java to include refmap"
-        tasks.withType(JavaCompile) {
-            outputs.upToDateWhen { false }
-        }
-        compileKotlin {
-            outputs.upToDateWhen { false }
-        }
-    }
+    dependsOn(invalidateJavaForRefmap)
 }
 
 processResources {
