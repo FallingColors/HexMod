@@ -198,7 +198,7 @@ sourceSets {
     test.kotlin.srcDirs += 'src/main/java'
 }
 
-build {
+jar {
     dependsOn(invalidateJavaForRefmap)
 }
 
