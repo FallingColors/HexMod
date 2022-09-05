@@ -185,6 +185,7 @@ tasks.withType(JavaCompile) {
 
 compileKotlin {
     source(project(":Common").sourceSets.main.kotlin)
+    shouldRunAfter(invalidateJavaForRefmap)
 }
 
 compileTestKotlin {
@@ -197,7 +198,7 @@ sourceSets {
     test.kotlin.srcDirs += 'src/main/java'
 }
 
-build {
+jar {
     dependsOn(invalidateJavaForRefmap)
 }
 
