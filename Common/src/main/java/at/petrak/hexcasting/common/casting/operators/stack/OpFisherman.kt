@@ -23,18 +23,24 @@ object OpFisherman : Operator {
             throw MishapNotEnoughArgs(2, stack.size)
         val arg = stack.getChecked<Double>(stack.lastIndex)
         val datum = stack[stack.lastIndex]
-        val distance = stack.size - (arg + 1) // because getChecked<Int> just gives me a double for some reason
         stack.removeLast()
-        if (distance >= 0 && distance < stack.size && abs(distance.roundToInt() - distance) < 0.05f) {
-            val fish = stack[distance.roundToInt()]
-            stack.removeAt(distance.roundToInt())
-            stack.add(stack.size, fish)
-        } else {
+
+        if (arg.roundToInt() == 0 || abs(arg) > stack.size || abs(arg.roundToInt() - arg) > 0.05f) {
             throw MishapInvalidIota(
                 datum,
                 0,
-                "hexcasting.mishap.invalid_value.int.between".asTranslatedComponent(1, stack.size)
+                "hexcasting.mishap.invalid_value.int.nonzero.between".asTranslatedComponent(-stack.size, stack.size)
             )
+        }
+        else if (arg > 0) {
+            val distance = (stack.size - arg).roundToInt()
+            val fish = stack.removeAt(distance)
+            stack.add(stack.size, fish)
+        }
+        else /* if (arg < 0) */ {
+            val depth = (stack.size + arg).roundToInt()
+            val lure = stack.removeLast()
+            stack.add(depth, lure)
         }
 
         return OperationResult(continuation, stack, local, listOf())
