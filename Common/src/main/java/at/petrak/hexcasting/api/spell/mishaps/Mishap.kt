@@ -24,7 +24,7 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 
-sealed class Mishap : Throwable() {
+abstract class Mishap : Throwable() {
     /** Mishaps spray half-red, half-this-color. */
     abstract fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer
 
@@ -113,7 +113,11 @@ sealed class Mishap : Throwable() {
                 else
                     entity.lastHurt -= amount
             }
-            if (!entity.hurt(source, amount)) {
+            if (!entity.hurt(source, amount) &&
+                !entity.isInvulnerableTo(source) &&
+                !entity.level.isClientSide &&
+                !entity.isDeadOrDying) {
+
                 // Ok, if you REALLY don't want to play nice...
                 entity.health = targetHealth
                 entity.markHurt()
