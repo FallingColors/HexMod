@@ -7,7 +7,7 @@
   ],
   "tool": {
     "type": "farmersdelight:tool",
-    "tag": "fabric:tools/axes"
+    "tag": "c:tools/axes"
   },
   "result": [
     {

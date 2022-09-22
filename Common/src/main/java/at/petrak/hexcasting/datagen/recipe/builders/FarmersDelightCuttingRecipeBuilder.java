@@ -22,144 +22,144 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class FarmersDelightCuttingRecipeBuilder implements RecipeBuilder {
-	private String group = "";
-	private final List<ProcessingOutput> outputs = Lists.newArrayList();
-	private Ingredient input;
-	private ToolIngredient toolAction;
-	private SoundEvent sound;
+    private String group = "";
+    private final List<ProcessingOutput> outputs = Lists.newArrayList();
+    private Ingredient input;
+    private FarmersDelightToolIngredient toolAction;
+    private SoundEvent sound;
 
-	@Override
-	public FarmersDelightCuttingRecipeBuilder unlockedBy(String s, CriterionTriggerInstance criterionTriggerInstance) {
-		return this;
-	}
+    @Override
+    public FarmersDelightCuttingRecipeBuilder unlockedBy(String s, CriterionTriggerInstance criterionTriggerInstance) {
+        return this;
+    }
 
-	@Override
-	public @NotNull FarmersDelightCuttingRecipeBuilder group(@Nullable String name) {
-		group = name;
-		return this;
-	}
+    @Override
+    public @NotNull FarmersDelightCuttingRecipeBuilder group(@Nullable String name) {
+        group = name;
+        return this;
+    }
 
-	@Override
-	public Item getResult() {
-		return Items.AIR; // Irrelevant, we implement serialization ourselves
-	}
+    @Override
+    public Item getResult() {
+        return Items.AIR; // Irrelevant, we implement serialization ourselves
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withInput(ItemLike item) {
-		return withInput(Ingredient.of(item));
-	}
+    public FarmersDelightCuttingRecipeBuilder withInput(ItemLike item) {
+        return withInput(Ingredient.of(item));
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withInput(ItemStack stack) {
-		return withInput(Ingredient.of(stack));
-	}
+    public FarmersDelightCuttingRecipeBuilder withInput(ItemStack stack) {
+        return withInput(Ingredient.of(stack));
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withInput(Ingredient ingredient) {
-		this.input = ingredient;
-		return this;
-	}
+    public FarmersDelightCuttingRecipeBuilder withInput(Ingredient ingredient) {
+        this.input = ingredient;
+        return this;
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withOutput(ItemLike output) {
-		return withOutput(1f, output, 1);
-	}
+    public FarmersDelightCuttingRecipeBuilder withOutput(ItemLike output) {
+        return withOutput(1f, output, 1);
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withOutput(float chance, ItemLike output) {
-		return withOutput(chance, output, 1);
-	}
+    public FarmersDelightCuttingRecipeBuilder withOutput(float chance, ItemLike output) {
+        return withOutput(chance, output, 1);
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withOutput(ItemLike output, int count) {
-		return withOutput(1f, output, count);
-	}
+    public FarmersDelightCuttingRecipeBuilder withOutput(ItemLike output, int count) {
+        return withOutput(1f, output, count);
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withOutput(float chance, ItemLike output, int count) {
-		return withOutput(new ItemStack(output, count), chance);
-	}
+    public FarmersDelightCuttingRecipeBuilder withOutput(float chance, ItemLike output, int count) {
+        return withOutput(new ItemStack(output, count), chance);
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withOutput(ItemStack output, float chance) {
-		this.outputs.add(new ItemProcessingOutput(output, chance));
-		return this;
-	}
+    public FarmersDelightCuttingRecipeBuilder withOutput(ItemStack output, float chance) {
+        this.outputs.add(new ItemProcessingOutput(output, chance));
+        return this;
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withOutput(String name) {
-		return withOutput(1f, name, 1);
-	}
+    public FarmersDelightCuttingRecipeBuilder withOutput(String name) {
+        return withOutput(1f, name, 1);
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withOutput(String name, int count) {
-		return withOutput(1f, name, count);
-	}
+    public FarmersDelightCuttingRecipeBuilder withOutput(String name, int count) {
+        return withOutput(1f, name, count);
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withOutput(float chance, String name) {
-		return withOutput(chance, name, 1);
-	}
+    public FarmersDelightCuttingRecipeBuilder withOutput(float chance, String name) {
+        return withOutput(chance, name, 1);
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withOutput(float chance, String name, int count) {
-		this.outputs.add(new CompatProcessingOutput(name, count, chance));
-		return this;
-	}
+    public FarmersDelightCuttingRecipeBuilder withOutput(float chance, String name, int count) {
+        this.outputs.add(new CompatProcessingOutput(name, count, chance));
+        return this;
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withTool(ToolIngredient ingredient) {
-		this.toolAction = ingredient;
-		return this;
-	}
+    public FarmersDelightCuttingRecipeBuilder withTool(FarmersDelightToolIngredient ingredient) {
+        this.toolAction = ingredient;
+        return this;
+    }
 
-	public FarmersDelightCuttingRecipeBuilder withSound(SoundEvent sound) {
-		this.sound = sound;
-		return this;
-	}
+    public FarmersDelightCuttingRecipeBuilder withSound(SoundEvent sound) {
+        this.sound = sound;
+        return this;
+    }
 
-	@Override
-	public void save(Consumer<FinishedRecipe> consumer, ResourceLocation resourceLocation) {
-		consumer.accept(new CuttingRecipe(resourceLocation));
-	}
+    @Override
+    public void save(Consumer<FinishedRecipe> consumer, ResourceLocation resourceLocation) {
+        consumer.accept(new CuttingRecipe(resourceLocation));
+    }
 
-	public class CuttingRecipe implements FinishedRecipe {
+    public class CuttingRecipe implements FinishedRecipe {
 
-		private final ResourceLocation id;
+        private final ResourceLocation id;
 
-		public CuttingRecipe(ResourceLocation id) {
-			this.id = id;
-		}
+        public CuttingRecipe(ResourceLocation id) {
+            this.id = id;
+        }
 
-		@Override
-		public void serializeRecipeData(@NotNull JsonObject json) {
-			json.addProperty("type", "farmersdelight:cutting");
+        @Override
+        public void serializeRecipeData(@NotNull JsonObject json) {
+            json.addProperty("type", "farmersdelight:cutting");
 
-			if (!group.isEmpty()) {
-				json.addProperty("group", group);
-			}
+            if (!group.isEmpty()) {
+                json.addProperty("group", group);
+            }
 
-			JsonArray jsonIngredients = new JsonArray();
-			JsonArray jsonOutputs = new JsonArray();
+            JsonArray jsonIngredients = new JsonArray();
+            JsonArray jsonOutputs = new JsonArray();
 
-			jsonIngredients.add(input.toJson());
+            jsonIngredients.add(input.toJson());
 
-			outputs.forEach(o -> jsonOutputs.add(o.serialize()));
+            outputs.forEach(o -> jsonOutputs.add(o.serialize()));
 
-			json.add("ingredients", jsonIngredients);
-			json.add("tool", toolAction.serialize());
-			json.add("result", jsonOutputs);
+            json.add("ingredients", jsonIngredients);
+            json.add("tool", toolAction.serialize());
+            json.add("result", jsonOutputs);
 
-			if (sound != null) {
-				json.addProperty("sound", Registry.SOUND_EVENT.getKey(sound).toString());
-			}
-		}
+            if (sound != null) {
+                json.addProperty("sound", Registry.SOUND_EVENT.getKey(sound).toString());
+            }
+        }
 
-		@Override
-		public @NotNull ResourceLocation getId() {
-			return id;
-		}
+        @Override
+        public @NotNull ResourceLocation getId() {
+            return id;
+        }
 
-		@Override
-		public @NotNull RecipeSerializer<?> getType() {
-			return RecipeSerializer.SHAPELESS_RECIPE; // Irrelevant, we implement serialization ourselves
-		}
+        @Override
+        public @NotNull RecipeSerializer<?> getType() {
+            return RecipeSerializer.SHAPELESS_RECIPE; // Irrelevant, we implement serialization ourselves
+        }
 
-		@Override
-		public JsonObject serializeAdvancement() {
-			return null;
-		}
+        @Override
+        public JsonObject serializeAdvancement() {
+            return null;
+        }
 
-		@Override
-		public ResourceLocation getAdvancementId() {
-			return null;
-		}
-	}
+        @Override
+        public ResourceLocation getAdvancementId() {
+            return null;
+        }
+    }
 }

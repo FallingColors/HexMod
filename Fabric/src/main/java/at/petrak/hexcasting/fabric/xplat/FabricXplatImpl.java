@@ -253,8 +253,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @SuppressWarnings("UnstableApiUsage")
     public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid) {
         Storage<FluidVariant> target = FluidStorage.SIDED.find(level, pos, Direction.UP);
-        if (target == null)
+        if (target == null) {
             return false;
+        }
         try (Transaction transaction = Transaction.openOuter()) {
             long insertedAmount = target.insert(FluidVariant.of(fluid), FluidConstants.BUCKET, transaction);
             if (insertedAmount > 0) {
@@ -269,8 +270,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @SuppressWarnings("UnstableApiUsage")
     public boolean drainAllFluid(Level level, BlockPos pos) {
         Storage<FluidVariant> target = FluidStorage.SIDED.find(level, pos, Direction.UP);
-        if (target == null)
+        if (target == null) {
             return false;
+        }
         try (Transaction transaction = Transaction.openOuter()) {
             boolean any = false;
             for (var view : target.iterable(transaction)) {
@@ -396,7 +398,8 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player) {
-        return PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(world, player, pos, state, world.getBlockEntity(pos));
+        return PlayerBlockBreakEvents.BEFORE.invoker()
+            .beforeBlockBreak(world, player, pos, state, world.getBlockEntity(pos));
     }
 
     @Override
@@ -431,4 +434,5 @@ public class FabricXplatImpl implements IXplatAbstractions {
         }
         return PEHKUI_API;
     }
+
 }

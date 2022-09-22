@@ -3,7 +3,7 @@ package at.petrak.hexcasting.forge.datagen;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.datagen.*;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
-import at.petrak.hexcasting.datagen.recipe.builders.ToolIngredient;
+import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient;
 import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
 import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
@@ -128,8 +128,9 @@ public class HexForgeDataGenerators {
             return ForgeModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
         }
 
+        // https://github.com/vectorwing/FarmersDelight/blob/1.18.2/src/generated/resources/data/farmersdelight/recipes/cutting/amethyst_block.json
         @Override
-        public ToolIngredient axeStrip() {
+        public FarmersDelightToolIngredient axeStrip() {
             return () -> {
                 JsonObject object = new JsonObject();
                 object.addProperty("type", "farmersdelight:tool_action");
@@ -139,7 +140,7 @@ public class HexForgeDataGenerators {
         }
 
         @Override
-        public ToolIngredient axeDig() {
+        public FarmersDelightToolIngredient axeDig() {
             return () -> {
                 JsonObject object = new JsonObject();
                 object.addProperty("type", "farmersdelight:tool_action");

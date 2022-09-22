@@ -2,6 +2,6 @@ package at.petrak.hexcasting.datagen.recipe.builders;
 
 import com.google.gson.JsonObject;
 
-public interface ToolIngredient {
+public interface FarmersDelightToolIngredient {
 	JsonObject serialize();
 }
