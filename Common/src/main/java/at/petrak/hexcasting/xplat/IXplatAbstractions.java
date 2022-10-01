@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -98,6 +99,9 @@ public interface IXplatAbstractions {
 
     @Nullable
     DataHolder findDataHolder(ItemStack stack);
+
+    @Nullable
+    DataHolder findDataHolder(Entity entity);
 
     @Nullable
     HexHolder findHexHolder(ItemStack stack);

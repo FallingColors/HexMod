@@ -227,6 +227,13 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public @Nullable
+    DataHolder findDataHolder(Entity entity) {
+        var cc = HexCardinalComponents.DATA_HOLDER.maybeGet(entity);
+        return cc.orElse(null);
+    }
+
+    @Override
+    public @Nullable
     HexHolder findHexHolder(ItemStack stack) {
         var cc = HexCardinalComponents.HEX_HOLDER.maybeGet(stack);
         return cc.orElse(null);

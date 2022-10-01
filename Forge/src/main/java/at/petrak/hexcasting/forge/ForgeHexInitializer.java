@@ -216,6 +216,7 @@ public class ForgeHexInitializer {
         modBus.addListener(ForgeCapabilityHandler::registerCaps);
         evBus.addGenericListener(ItemStack.class, ForgeCapabilityHandler::attachItemCaps);
         evBus.addGenericListener(BlockEntity.class, ForgeCapabilityHandler::attachBlockEntityCaps);
+        evBus.addGenericListener(Entity.class, ForgeCapabilityHandler::attachEntityCaps);
 
         modBus.register(HexForgeDataGenerators.class);
         modBus.register(ForgeCapabilityHandler.class);

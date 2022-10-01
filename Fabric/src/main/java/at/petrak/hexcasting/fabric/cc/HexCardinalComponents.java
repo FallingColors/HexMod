@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.ManaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
@@ -16,6 +17,8 @@ import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentInitializer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Items;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -53,16 +56,20 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         registry.registerFor(ServerPlayer.class, FLIGHT, CCFlight::new);
         registry.registerFor(ServerPlayer.class, HARNESS, CCHarness::new);
         registry.registerFor(ServerPlayer.class, PATTERNS, CCPatterns::new);
+
+        registry.registerFor(ItemEntity.class, DATA_HOLDER, CCEntityDataHolder.EntityItemDelegating::new);
+        registry.registerFor(ItemFrame.class, DATA_HOLDER, CCEntityDataHolder.ItemFrameDelegating::new);
+        registry.registerFor(EntityWallScroll.class, DATA_HOLDER, CCEntityDataHolder.ScrollDelegating::new);
     }
 
     @Override
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
         registry.register(i -> i instanceof ColorizerItem, COLORIZER, CCColorizer.ItemBased::new);
 
-        registry.register(i -> i instanceof DataHolderItem, DATA_HOLDER, CCDataHolder.ItemBased::new);
+        registry.register(i -> i instanceof DataHolderItem, DATA_HOLDER, CCItemDataHolder.ItemBased::new);
         // oh havoc, you think you're so funny
         // the worst part is you're /right/
-        registry.register(Items.PUMPKIN_PIE, DATA_HOLDER, stack -> new CCDataHolder.Static(stack,
+        registry.register(Items.PUMPKIN_PIE, DATA_HOLDER, stack -> new CCItemDataHolder.Static(stack,
             s -> SpellDatum.make(Math.PI * s.getCount())));
 
         registry.register(i -> i instanceof ManaHolderItem, MANA_HOLDER, CCManaHolder.ItemBased::new);

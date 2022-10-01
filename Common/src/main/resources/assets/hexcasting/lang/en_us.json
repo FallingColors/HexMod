@@ -69,6 +69,7 @@
   "item.hexcasting.creative_unlocker.tooltip": "Consume to unlock all %s knowledge.",
   "item.hexcasting.creative_unlocker.mod_name": "Hexcasting",
 
+  "entity.hexcasting.wall_scroll": "Hanging Scroll",
 
   "block.hexcasting.conjured": "Conjured Block",
   "block.hexcasting.slate.blank": "Blank Slate",
@@ -437,6 +438,7 @@
   "hexcasting.mishap.eval_too_deep": "Recursively evaluated too deep",
   "hexcasting.mishap.no_item": "%s needs %s but got nothing",
   "hexcasting.mishap.no_item.offhand": "%s needs %s in the other hand but got nothing",
+  "hexcasting.mishap.bad_entity": "%s needs %s but got %s",
   "hexcasting.mishap.bad_item": "%s needs %s but got %dx %s",
   "hexcasting.mishap.bad_item.offhand": "%s needs %s in the other hand but got %dx %s",
   "hexcasting.mishap.bad_item.iota": "a place to store iotas",

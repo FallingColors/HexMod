@@ -266,6 +266,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public @Nullable DataHolder findDataHolder(Entity entity) {
+        var maybeCap = entity.getCapability(HexCapabilities.DATUM).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
     public @Nullable
     HexHolder findHexHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.STORED_HEX).resolve();
