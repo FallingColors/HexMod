@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.spell.asSpellResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getChecked
 import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.Entity
 
 object OpTheCoolerReadable : ConstManaOperator {
     override val argc = 1
@@ -15,15 +15,15 @@ object OpTheCoolerReadable : ConstManaOperator {
         args: List<SpellDatum<*>>,
         ctx: CastingContext
     ): List<SpellDatum<*>> {
-        val target = args.getChecked<ItemEntity>(0, argc)
+        val target = args.getChecked<Entity>(0, OpTheCoolerRead.argc)
         ctx.assertEntityInRange(target)
 
-        val stack = target.item
-        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack)
+        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
             ?: return false.asSpellResult
 
-        if (datumHolder.readDatum(ctx.world) == null && datumHolder.emptyDatum() == null)
-            return false.asSpellResult
+        datumHolder.readDatum(ctx.world)
+            ?: datumHolder.emptyDatum()
+            ?: return false.asSpellResult
 
         return true.asSpellResult
     }
