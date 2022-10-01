@@ -15,6 +15,8 @@ object OpEntityRaycast : ConstManaOperator {
         val look: Vec3 = args.getChecked(1, argc)
         val endp = Operator.raycastEnd(origin, look)
 
+        ctx.assertVecInRange(origin)
+
         val entityHitResult = ProjectileUtil.getEntityHitResult(
             ctx.caster,
             origin,

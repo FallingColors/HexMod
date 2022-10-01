@@ -14,6 +14,8 @@ object OpBlockAxisRaycast : ConstManaOperator {
         val origin: Vec3 = args.getChecked(0, argc)
         val look: Vec3 = args.getChecked(1, argc)
 
+        ctx.assertVecInRange(origin)
+
         val blockHitResult = ctx.world.clip(
             ClipContext(
                 origin,
