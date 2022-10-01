@@ -30,6 +30,7 @@
     "minecraft:ender_dragon",
     "minecraft:item_frame",
     "minecraft:painting",
-    "minecraft:leash_knot"
+    "minecraft:leash_knot",
+    "minecraft:marker"
   ]
 }
