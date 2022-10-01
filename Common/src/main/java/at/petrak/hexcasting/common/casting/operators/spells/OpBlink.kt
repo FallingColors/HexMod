@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpTeleport
+import at.petrak.hexcasting.common.lib.HexEntityTags
 import net.minecraft.world.entity.Entity
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -20,7 +21,7 @@ object OpBlink : SpellOperator {
         val delta = max(0.0, args.getChecked(1, argc))
         ctx.assertEntityInRange(target)
 
-        if (!target.canChangeDimensions())
+        if (!target.canChangeDimensions() || target.type.`is`(HexEntityTags.CANNOT_TELEPORT))
             throw MishapImmuneEntity(target)
 
         val dvec = target.lookAngle.scale(delta)

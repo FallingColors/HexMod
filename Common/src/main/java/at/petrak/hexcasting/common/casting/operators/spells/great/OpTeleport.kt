@@ -24,7 +24,7 @@ object OpTeleport : SpellOperator {
         val delta = args.getChecked<Vec3>(1, argc)
         ctx.assertEntityInRange(teleportee)
 
-        if (!teleportee.canChangeDimensions())
+        if (!teleportee.canChangeDimensions() || teleportee.type.`is`(HexEntityTags.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
 
         val targetPos = teleportee.position().add(delta)
@@ -83,16 +83,21 @@ object OpTeleport : SpellOperator {
     }
 
     fun teleportRespectSticky(teleportee: Entity, delta: Vec3) {
-
         val base = teleportee.rootVehicle
 
         val playersToUpdate = mutableListOf<ServerPlayer>()
+        val indirect = base.indirectPassengers
 
-        if (base.indirectPassengers.any { it.type.`is`(HexEntityTags.STICKY_TELEPORTERS) }) {
+        val sticky = indirect.any { it.type.`is`(HexEntityTags.STICKY_TELEPORTERS) }
+        val cannotSticky = indirect.none { it.type.`is`(HexEntityTags.CANNOT_TELEPORT) }
+        if (sticky && cannotSticky)
+            return
+
+        if (sticky) {
             // this handles teleporting the passengers
             val target = base.position().add(delta)
             base.teleportTo(target.x, target.y, target.z)
-            base.indirectPassengers
+            indirect
                 .filterIsInstance<ServerPlayer>()
                 .forEach(playersToUpdate::add)
         } else {
