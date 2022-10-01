@@ -109,10 +109,7 @@ data class CastingContext(
             return this.spellCircle.aabb.contains(vec)
         }
 
-        if (vec.distanceToSqr(this.caster.position()) <= Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
-            return true
-
-        return false
+        return vec.distanceToSqr(this.caster.eyePosition) <= Operator.MAX_DISTANCE * Operator.MAX_DISTANCE
     }
 
     fun isEntityInWorld(entity: Entity) = isVecInWorld(entity.position())
