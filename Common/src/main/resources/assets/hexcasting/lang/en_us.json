@@ -426,6 +426,7 @@
   "hexcasting.mishap.invalid_value.int.between": "an integer between %d and %d",
   "hexcasting.mishap.invalid_value.evaluatable": "something evaluatable",
   "hexcasting.mishap.not_enough_args": "%s expected %s or more arguments but the stack was only %s tall",
+  "hexcasting.mishap.no_args": "%s expected %s or more arguments but the stack was empty",
   "hexcasting.mishap.too_many_close_parens": "Used Retrospection without first using Introspection",
   "hexcasting.mishap.location_too_far": "%s is out of range for %s",
   "hexcasting.mishap.location_out_of_world": "%s is not within the world",
