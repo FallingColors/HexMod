@@ -95,6 +95,7 @@ object PatternRegistry {
         val ds = overworld.dataStorage
         val perWorldPatterns: Save =
             ds.computeIfAbsent(Save.Companion::load, { Save.create(overworld.seed) }, TAG_SAVED_DATA)
+        perWorldPatterns.fillMissingEntries(overworld.seed)
         perWorldPatterns.lookup[sig]?.let {
             val op = this.operatorLookup[it.first]!!
             return op to it.first
@@ -178,7 +179,10 @@ object PatternRegistry {
     /**
      * Maps angle sigs to resource locations and their preferred start dir so we can look them up in the main registry
      */
-    class Save(val lookup: MutableMap<String, Pair<ResourceLocation, HexDir>>) : SavedData() {
+
+    class Save(val lookup: MutableMap<String, Pair<ResourceLocation, HexDir>>, var missingEntries: Boolean) : SavedData() {
+        constructor(lookup: MutableMap<String, Pair<ResourceLocation, HexDir>>) : this(lookup, missingAny(lookup))
+
         override fun save(tag: CompoundTag): CompoundTag {
             for ((sig, rhs) in this.lookup) {
                 val (id, startDir) = rhs
@@ -190,25 +194,60 @@ object PatternRegistry {
             return tag
         }
 
+        fun fillMissingEntries(seed: Long) {
+            if (missingEntries) {
+                var doneAny = false
+
+                val allIds = lookup.values.map { it.first }
+                for ((prototype, opId) in perWorldPatternLookup.values) {
+                    if (opId !in allIds) {
+                        scrungle(lookup, prototype, opId, seed)
+                        doneAny = true
+                    }
+                }
+
+                if (doneAny) {
+                    setDirty()
+                    missingEntries = false
+                }
+            }
+        }
+
         companion object {
+            fun missingAny(lookup: MutableMap<String, Pair<ResourceLocation, HexDir>>): Boolean {
+                val allIds = lookup.values.map { it.first }
+                return perWorldPatternLookup.values.any { it.opId !in allIds }
+            }
+
             fun load(tag: CompoundTag): Save {
                 val map = HashMap<String, Pair<ResourceLocation, HexDir>>()
+                val allIds = mutableSetOf<ResourceLocation>()
                 for (sig in tag.allKeys) {
                     val entry = tag.getCompound(sig)
                     val opId = ResourceLocation.tryParse(entry.getString(TAG_OP_ID)) ?: continue
+                    allIds.add(opId)
                     val startDir = HexDir.values().getSafe(entry.getByte(TAG_START_DIR))
                     map[sig] = opId to startDir
                 }
-                return Save(map)
+                val missingEntries = perWorldPatternLookup.values.any { it.opId !in allIds }
+                return Save(map, missingEntries)
+            }
+
+            fun scrungle(lookup: MutableMap<String, Pair<ResourceLocation, HexDir>>, prototype: HexPattern, opId: ResourceLocation, seed: Long) {
+                val scrungled = EulerPathFinder.findAltDrawing(prototype, seed) {
+                    val sig = it.anglesSignature()
+                    !lookup.contains(sig) &&
+                            !regularPatternLookup.contains(sig)
+                            && specialHandlers.none { handler -> handler.handler.handlePattern(it) != null }
+                }
+                lookup[scrungled.anglesSignature()] = opId to scrungled.startDir
             }
 
             @JvmStatic
             fun create(seed: Long): Save {
                 val map = mutableMapOf<String, Pair<ResourceLocation, HexDir>>()
-                for ((opId, entry) in PatternRegistry.perWorldPatternLookup) {
-                    // waugh why doesn't kotlin recursively destructure things
-                    val scrungled = EulerPathFinder.findAltDrawing(entry.prototype, seed)
-                    map[scrungled.anglesSignature()] = opId to scrungled.startDir
+                for ((prototype, opId) in perWorldPatternLookup.values) {
+                    scrungle(map, prototype, opId, seed)
                 }
                 val save = Save(map)
                 save.setDirty()

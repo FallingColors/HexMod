@@ -293,7 +293,6 @@ public class RegisterPatterns {
                 modLoc("sentinel/wayfind"),
                 OpGetSentinelWayfind.INSTANCE);
 
-
             PatternRegistry.mapPattern(HexPattern.fromAngles("waadwawdaaweewq", HexDir.EAST),
                 modLoc("lightning"), OpLightning.INSTANCE, true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eawwaeawawaa", HexDir.NORTH_WEST),

@@ -175,8 +175,8 @@
   "death.attack.hexcasting.overcast": "%s's mind was subsumed into energy",
 
   "command.hexcasting.pats.listing": "Patterns in this world:",
-  "command.hexcasting.pats.all": "Gave you all %d scrolls",
-  "command.hexcasting.pats.specific.success": "Gave you %s with id %s",
+  "command.hexcasting.pats.all": "Gave all %d scrolls to %s",
+  "command.hexcasting.pats.specific.success": "Gave %s with id %s to %s",
   "command.hexcasting.recalc": "Recalculated patterns",
   "command.hexcasting.brainsweep": "Brainswept %s",
   "command.hexcasting.brainsweep.fail.badtype": "%s is not a villager",
