@@ -3,12 +3,12 @@ package at.petrak.hexcasting.forge.interop.curios;
 import at.petrak.hexcasting.api.addldata.ManaHolder;
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.utils.ManaHelper;
-import at.petrak.hexcasting.common.items.magic.DebugUnlockerHolder;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -19,6 +19,7 @@ import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CuriosApiInterop {
 
@@ -61,22 +62,21 @@ public class CuriosApiInterop {
 			return holders;
 		});
 
-
-		DiscoveryHandlers.addManaHolderDiscoverer(harness -> {
-			List<ManaHolder> holders = Lists.newArrayList();
-			harness.getCtx().getCaster().getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
+		DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
+			AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
+			player.getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
 				for (var stacksHandler : handler.getCurios().values()) {
 					var stacks = stacksHandler.getStacks();
 					for (int i = 0; i < stacks.getSlots(); i++) {
 						var stack = stacks.getStackInSlot(i);
-						if (ItemCreativeUnlocker.isDebug(stack)) {
-							holders.add(new DebugUnlockerHolder(stack));
+						if (ItemCreativeUnlocker.isDebug(stack, type)) {
+							result.set(stack);
 							return;
 						}
 					}
 				}
 			});
-			return holders;
+			return result.get();
 		});
 	}
 

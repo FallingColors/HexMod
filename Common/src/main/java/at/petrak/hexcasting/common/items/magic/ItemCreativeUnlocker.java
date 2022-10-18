@@ -36,40 +36,58 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
-    static {
-        DiscoveryHandlers.addManaHolderDiscoverer(harness -> {
-            var player = harness.getCtx().getCaster();
-            if (!player.isCreative())
-                return List.of();
+    public static final String DISPLAY_MEDIA = "media";
+    public static final String DISPLAY_PATTERNS = "patterns";
 
+    static {
+        DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
             for (ItemStack item : player.getInventory().items) {
-                if (isDebug(item)) {
-                    return List.of(new DebugUnlockerHolder(item));
+                if (isDebug(item, type)) {
+                    return item;
                 }
             }
 
             // Technically possible with commands!
             for (ItemStack item : player.getInventory().armor) {
-                if (isDebug(item)) {
-                    return List.of(new DebugUnlockerHolder(item));
+                if (isDebug(item, type)) {
+                    return item;
                 }
             }
 
             for (ItemStack item : player.getInventory().offhand) {
-                if (isDebug(item)) {
-                    return List.of(new DebugUnlockerHolder(item));
+                if (isDebug(item, type)) {
+                    return item;
                 }
             }
+            return ItemStack.EMPTY;
+        });
 
+        DiscoveryHandlers.addManaHolderDiscoverer(harness -> {
+            var player = harness.getCtx().getCaster();
+            if (!player.isCreative())
+                return List.of();
+
+            ItemStack stack = DiscoveryHandlers.findDebugItem(player, DISPLAY_MEDIA);
+            if (!stack.isEmpty())
+                return List.of(new DebugUnlockerHolder(stack));
 
             return List.of();
         });
     }
 
     public static boolean isDebug(ItemStack stack) {
-        return stack.is(HexItems.CREATIVE_UNLOCKER)
-            && stack.hasCustomHoverName()
-            && stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains("debug");
+        return isDebug(stack, null);
+    }
+
+    public static boolean isDebug(ItemStack stack, String flag) {
+        if (!stack.is(HexItems.CREATIVE_UNLOCKER) || !stack.hasCustomHoverName()) {
+            return false;
+        }
+        var keywords = Arrays.asList(stack.getHoverName().getString().toLowerCase(Locale.ROOT).split(" "));
+        if (!keywords.contains("debug")) {
+            return false;
+        }
+        return flag == null || keywords.contains(flag);
     }
 
     public static Component infiniteMedia(Level level) {
@@ -129,7 +147,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     @Override
     public int withdrawMana(ItemStack stack, int cost, boolean simulate) {
         // In case it's withdrawn through other means
-        if (!simulate && isDebug(stack)) {
+        if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
             addToIntArray(stack, TAG_EXTRACTIONS, cost);
         }
 
@@ -139,7 +157,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     @Override
     public int insertMana(ItemStack stack, int amount, boolean simulate) {
         // In case it's inserted through other means
-        if (!simulate && isDebug(stack)) {
+        if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
             addToIntArray(stack, TAG_INSERTIONS, amount);
         }
 
@@ -153,7 +171,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (isDebug(stack) && !level.isClientSide) {
+        if (isDebug(stack, DISPLAY_MEDIA) && !level.isClientSide) {
             debugDisplay(stack, TAG_EXTRACTIONS, "withdrawn", "all_mana", entity);
             debugDisplay(stack, TAG_INSERTIONS, "inserted", "infinite_mana", entity);
         }

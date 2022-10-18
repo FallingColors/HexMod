@@ -15,6 +15,7 @@ import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.Util
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
@@ -46,6 +47,12 @@ class CastingHarness private constructor(
      * Execute a single iota.
      */
     fun executeIota(iota: SpellDatum<*>, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
+
+    private fun displayPattern(pattern: Operator?, iota: SpellDatum<*>) {
+        if (this.ctx.debugPatterns) {
+            this.ctx.caster.sendMessage(pattern?.displayName ?: iota.display(), Util.NIL_UUID)
+        }
+    }
 
     private fun getOperatorForPattern(iota: SpellDatum<*>, world: ServerLevel): Operator? {
         if (iota.getType() == DatumType.PATTERN)
@@ -192,6 +199,7 @@ class CastingHarness private constructor(
             var cont2 = continuation
 
             if (!unenlightened || pattern.alwaysProcessGreatSpell) {
+                displayPattern(pattern, SpellDatum.make(newPat))
                 val result = pattern.operate(
                     continuation,
                     this.stack.toMutableList(),
@@ -311,7 +319,7 @@ class CastingHarness private constructor(
             }
         }
 
-        return if (this.parenCount > 0) {
+        val out = if (this.parenCount > 0) {
             if (this.escapeNext) {
                 val newParens = this.parenthesized.toMutableList()
                 newParens.add(iota)
@@ -380,6 +388,11 @@ class CastingHarness private constructor(
         } else {
             null
         }
+
+        if (out != null) {
+            displayPattern(operator, iota)
+        }
+        return out
     }
 
     /**

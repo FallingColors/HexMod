@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.api.spell.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.api.utils.otherHand
+import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -199,6 +200,10 @@ data class CastingContext(
             val advs = this.caster.advancements
             return advs.getOrStartProgress(adv!!).isDone
         }
+
+    val debugPatterns: Boolean by lazy {
+        !DiscoveryHandlers.findDebugItem(this.caster, ItemCreativeUnlocker.DISPLAY_PATTERNS).isEmpty
+    }
 
     companion object {
         init {

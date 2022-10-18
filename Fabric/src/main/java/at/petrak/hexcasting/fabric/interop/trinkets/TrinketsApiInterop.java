@@ -2,7 +2,6 @@ package at.petrak.hexcasting.fabric.interop.trinkets;
 
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.utils.ManaHelper;
-import at.petrak.hexcasting.common.items.magic.DebugUnlockerHolder;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -12,6 +11,7 @@ import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.Objects;
@@ -41,16 +41,16 @@ public class TrinketsApiInterop {
 			return List.of();
 		});
 
-		DiscoveryHandlers.addManaHolderDiscoverer(harness -> {
-			Optional<TrinketComponent> optional = TrinketsApi.getTrinketComponent(harness.getCtx().getCaster());
+		DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
+			Optional<TrinketComponent> optional = TrinketsApi.getTrinketComponent(player);
 			if (optional.isPresent()) {
 				TrinketComponent component = optional.get();
-				var equipped = component.getEquipped(ItemCreativeUnlocker::isDebug);
+				var equipped = component.getEquipped(stack -> ItemCreativeUnlocker.isDebug(stack, type));
 				if (!equipped.isEmpty()) {
-					return List.of(new DebugUnlockerHolder(equipped.get(0).getB()));
+					return equipped.get(0).getB();
 				}
 			}
-			return List.of();
+			return ItemStack.EMPTY;
 		});
 	}
 
