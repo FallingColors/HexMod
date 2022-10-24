@@ -154,11 +154,13 @@ data class CastingContext(
     fun withdrawItem(item: ItemStack, count: Int, actuallyRemove: Boolean): Boolean {
         if (this.caster.isCreative) return true
 
+        val operativeItem = item.copy()
+
         // TODO: withdraw from ender chest given a specific ender charm?
         val stacksToExamine = DiscoveryHandlers.collectItemSlots(this)
 
         fun matches(stack: ItemStack): Boolean =
-            !stack.isEmpty && ItemStack.isSameItemSameTags(item, stack)
+            !stack.isEmpty && ItemStack.isSameItemSameTags(operativeItem, stack)
 
         val presentCount = stacksToExamine.fold(0) { acc, stack ->
             acc + if (matches(stack)) stack.count else 0
