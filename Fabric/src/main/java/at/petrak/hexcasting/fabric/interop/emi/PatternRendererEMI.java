@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
-import at.petrak.hexcasting.api.PatternRegistry;
+import at.petrak.hexcasting.api.PatternRegistryBak;
 import at.petrak.hexcasting.api.spell.math.HexCoord;
 import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
 import at.petrak.hexcasting.interop.utils.PatternEntry;
@@ -25,7 +25,7 @@ public class PatternRendererEMI implements EmiRenderable {
     private final List<Vec2> pathfinderDots;
 
     public PatternRendererEMI(ResourceLocation pattern, int w, int h) {
-        var entry = PatternRegistry.lookupPattern(pattern);
+        var entry = PatternRegistryBak.lookupPattern(pattern);
         this.strokeOrder = !entry.isPerWorld();
         var data = PatternDrawingUtil.loadPatterns(List.of(new Pair<>(entry.getPrototype(), HexCoord.getOrigin())));
         this.patterns = data.patterns();

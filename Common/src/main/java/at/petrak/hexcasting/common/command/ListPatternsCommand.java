@@ -80,8 +80,8 @@ public class ListPatternsCommand {
                     var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
 
                     lookup.forEach((pattern, entry) -> {
-                        var opId = entry.component1();
-                        var startDir = entry.component2();
+                        var opId = entry.getFirst();
+                        var startDir = entry.getSecond();
 
                         var tag = new CompoundTag();
                         tag.putString(ItemScroll.TAG_OP_ID, opId.toString());

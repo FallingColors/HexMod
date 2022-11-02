@@ -152,7 +152,9 @@ class CastingHarness private constructor(
         var actionIdPair: Pair<Action, ResourceLocation>? = null
         try {
             // Don't catch this one
-            actionIdPair = PatternRegistry.matchPatternAndID(newPat, world)
+            val mojangPair = PatternRegistry.matchPatternAndID(newPat, world)
+            actionIdPair = mojangPair.first to mojangPair.second
+
             if (this.ctx.spellCircle == null && !HexConfig.server().isActionAllowed(actionIdPair.second)) {
                 throw MishapDisallowedSpell()
             } else if (this.ctx.spellCircle != null

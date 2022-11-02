@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.PatternRegistry;
+import at.petrak.hexcasting.api.PatternRegistryBak;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
@@ -147,7 +147,7 @@ public class ForgeHexInitializer {
         });
 
         modBus.addListener((FMLLoadCompleteEvent evt) ->
-            HexAPI.LOGGER.info(PatternRegistry.getPatternCountInfo()));
+            HexAPI.LOGGER.info(PatternRegistryBak.getPatternCountInfo()));
 
         evBus.addListener((PlayerInteractEvent.EntityInteract evt) -> {
             var res = Brainsweeping.tradeWithVillager(

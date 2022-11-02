@@ -27,7 +27,8 @@ public class PatternResLocArgument extends ResourceLocationArgument {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(PatternRegistry.getAllPerWorldPatternNames().stream().map(Object::toString), builder);
+        return SharedSuggestionProvider.suggest(
+            PatternRegistry.getAllPerWorldPatternNames().stream().map(Object::toString), builder);
     }
 
     public static HexPattern getPattern(
