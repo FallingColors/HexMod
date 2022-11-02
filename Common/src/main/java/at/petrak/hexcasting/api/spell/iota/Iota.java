@@ -16,8 +16,7 @@ public abstract class Iota {
         this.payload = payload;
     }
 
-    public @NotNull
-    IotaType<?> getType() {
+    public @NotNull IotaType<?> getType() {
         return this.type;
     }
 
@@ -27,18 +26,15 @@ public abstract class Iota {
 
     /**
      * Compare this to another object, within a tolerance.
-     * <p>
-     * Don't call this directly; use the {@link Iota#tolerates} static method.
      */
-    abstract public boolean toleratesOther(Iota that);
+    abstract protected boolean toleratesOther(Iota that);
 
     /**
      * Serialize this under the {@code data} tag.
      * <p>
      * You probably don't want to call this directly; use {@link HexIotaTypes#serialize}.
      */
-    abstract public @NotNull
-    Tag serialize();
+    abstract public @NotNull Tag serialize();
 
     public Component display() {
         return this.type.display(this.serialize());
