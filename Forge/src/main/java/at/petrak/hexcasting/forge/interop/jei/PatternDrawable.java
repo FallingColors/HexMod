@@ -13,7 +13,6 @@ import net.minecraft.world.phys.Vec2;
 import java.util.List;
 
 public class PatternDrawable implements IDrawable {
-
     private final long startTime = System.currentTimeMillis();
 
     private final int width;
