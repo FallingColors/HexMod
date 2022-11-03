@@ -141,9 +141,9 @@ dependencies {
 
     // Optional interop
 
-    // For some reason this isn't working so for now it will be commented out
-//    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-1.19.2-forge-api:$jeiVersion")
-//    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-1.19.2-forge:$jeiVersion")
+    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")
+    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion")
+    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion")
 
     api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-${minecraftVersion}-forge")
 }
