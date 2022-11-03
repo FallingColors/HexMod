@@ -24,10 +24,7 @@ sealed class OperatorSideEffect {
 
     data class RequiredEnlightenment(val awardStat: Boolean) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
-            harness.ctx.caster.sendMessage(
-                "hexcasting.message.cant_great_spell".asTranslatedComponent,
-                Util.NIL_UUID
-            )
+            harness.ctx.caster.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
 
             if (awardStat)
                 HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.ctx.caster)
@@ -37,7 +34,11 @@ sealed class OperatorSideEffect {
     }
 
     /** Try to cast a spell  */
-    data class AttemptSpell(val spell: RenderedSpell, val hasCastingSound: Boolean = true, val awardStat: Boolean = true) :
+    data class AttemptSpell(
+        val spell: RenderedSpell,
+        val hasCastingSound: Boolean = true,
+        val awardStat: Boolean = true
+    ) :
         OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
             this.spell.cast(harness.ctx)
@@ -52,10 +53,7 @@ sealed class OperatorSideEffect {
             val overcastOk = harness.ctx.canOvercast
             val leftoverMana = harness.withdrawMana(this.amount, overcastOk)
             if (leftoverMana > 0 && !overcastOk) {
-                harness.ctx.caster.sendMessage(
-                    "hexcasting.message.cant_overcast".asTranslatedComponent,
-                    Util.NIL_UUID
-                )
+                harness.ctx.caster.sendSystemMessage("hexcasting.message.cant_overcast".asTranslatedComponent)
             }
             return leftoverMana > 0
         }
@@ -80,7 +78,7 @@ sealed class OperatorSideEffect {
                 }
             } else {
                 // for now
-                harness.ctx.caster.sendMessage(msg, Util.NIL_UUID)
+                harness.ctx.caster.sendSystemMessage(msg)
             }
 
             val spray = mishap.particleSpray(harness.ctx)

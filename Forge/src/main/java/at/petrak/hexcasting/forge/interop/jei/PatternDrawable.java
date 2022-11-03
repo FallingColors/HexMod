@@ -1,17 +1,7 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
-import at.petrak.hexcasting.api.PatternRegistryBak;
-import at.petrak.hexcasting.api.spell.math.HexCoord;
-import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
-import at.petrak.hexcasting.interop.utils.PatternEntry;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
+/*
 import mezz.jei.api.gui.drawable.IDrawable;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.Vec2;
-
-import java.util.List;
-
 public class PatternDrawable implements IDrawable {
 
     private final long startTime = System.currentTimeMillis();
@@ -25,7 +15,7 @@ public class PatternDrawable implements IDrawable {
     private final List<Vec2> pathfinderDots;
 
     public PatternDrawable(ResourceLocation pattern, int w, int h) {
-        var entry = PatternRegistryBak.lookupPattern(pattern);
+        var entry = PatternRegistry.lookupPattern(pattern);
         this.strokeOrder = !entry.isPerWorld();
         var data = PatternDrawingUtil.loadPatterns(List.of(new Pair<>(entry.getPrototype(), HexCoord.getOrigin())));
         this.patterns = data.patterns();
@@ -55,3 +45,4 @@ public class PatternDrawable implements IDrawable {
         poseStack.popPose();
     }
 }
+*/

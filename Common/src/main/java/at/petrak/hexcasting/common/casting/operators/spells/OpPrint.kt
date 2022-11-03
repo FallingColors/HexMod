@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
-import net.minecraft.Util
 
 // TODO should this dump the whole stack
 object OpPrint : Action {
@@ -31,10 +30,7 @@ object OpPrint : Action {
 
     private data class Spell(val datum: Iota) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            ctx.caster.sendMessage(
-                datum.display(),
-                Util.NIL_UUID
-            )
+            ctx.caster.sendSystemMessage(datum.display())
         }
     }
 }

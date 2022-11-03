@@ -9,9 +9,8 @@ import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,7 +24,8 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * Sent client->server when the client shift+scrolls with a shift-scrollable item
  * or scrolls in the spellcasting UI.
  */
-public record MsgShiftScrollSyn(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook, boolean invertAbacus) implements IMessage {
+public record MsgShiftScrollSyn(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook,
+                                boolean invertAbacus) implements IMessage {
     public static final ResourceLocation ID = modLoc("scroll");
 
     @Override
@@ -84,30 +84,30 @@ public record MsgShiftScrollSyn(double mainHandDelta, double offHandDelta, boole
         MutableComponent component;
         if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
             if (sealed) {
-                component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name.sealed",
-                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
-                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    new TextComponent("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name.sealed",
+                    Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                    Component.literal("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
                         .append(stack.getHoverName()),
-                    new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
+                    Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
             } else {
-                component = new TranslatableComponent("hexcasting.tooltip.spellbook.page_with_name",
-                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
-                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    new TextComponent("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name",
+                    Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                    Component.literal("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
                         .append(stack.getHoverName()));
             }
 
         } else {
             if (sealed) {
-                component = new TranslatableComponent("hexcasting.tooltip.spellbook.page.sealed",
-                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
-                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
+                component = Component.translatable("hexcasting.tooltip.spellbook.page.sealed",
+                    Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                    Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
             } else {
-                component = new TranslatableComponent("hexcasting.tooltip.spellbook.page",
-                    new TextComponent(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
-                    new TextComponent(String.valueOf(len)).withStyle(ChatFormatting.WHITE));
+                component = Component.translatable("hexcasting.tooltip.spellbook.page",
+                    Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                    Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE));
             }
         }
 
@@ -146,7 +146,7 @@ public record MsgShiftScrollSyn(double mainHandDelta, double offHandDelta, boole
         if (datumTag != null) {
             var popup = HexIotaTypes.getDisplay(datumTag);
             sender.displayClientMessage(
-                new TranslatableComponent("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
+                Component.translatable("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
         }
     }
 }

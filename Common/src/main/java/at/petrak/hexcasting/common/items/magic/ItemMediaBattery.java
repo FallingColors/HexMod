@@ -30,7 +30,7 @@ public class ItemMediaBattery extends ItemMediaHolder {
     @Override
     public void fillItemCategory(@NotNull CreativeModeTab tab, @NotNull NonNullList<ItemStack> items) {
         // who was drunk at the wheel when they named this
-        if (allowdedIn(tab)) {
+        if (allowedIn(tab)) {
             var manamounts = new int[]{
                 ManaConstants.CRYSTAL_UNIT,
                 20 * ManaConstants.CRYSTAL_UNIT,

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.loot;
 
-import at.petrak.hexcasting.api.PatternRegistryBak;
+import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;
@@ -22,14 +22,14 @@ public class PatternScrollFunc extends LootItemConditionalFunction {
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
         var rand = ctx.getRandom();
-        var worldLookup = PatternRegistryBak.getPerWorldPatterns(ctx.getLevel());
+        var worldLookup = PatternRegistry.getPerWorldPatterns(ctx.getLevel());
 
         var keys = worldLookup.keySet().stream().toList();
         var sig = keys.get(rand.nextInt(keys.size()));
 
         var entry = worldLookup.get(sig);
-        var opId = entry.component1();
-        var startDir = entry.component2();
+        var opId = entry.getFirst();
+        var startDir = entry.getSecond();
         var tag = new CompoundTag();
         tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
         tag.put(ItemScroll.TAG_PATTERN, HexPattern.fromAngles(sig, startDir).serializeToNBT());

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.client.gui;
 
-import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RenderLib;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -102,10 +102,7 @@ public class PatternTooltipGreeble implements ClientTooltipComponent, TooltipCom
         buffer.vertex(neo, 0, SIZE, 0.0F).uv(0.0F, 1.0f).endVertex();
         buffer.vertex(neo, SIZE, SIZE, 0.0F).uv(1.0F, 1.0f).endVertex();
         buffer.vertex(neo, SIZE, 0, 0.0F).uv(1.0F, 0.0F).endVertex();
-        buffer.end();
-        BufferUploader.end(buffer);
-
-
+        BufferUploader.draw(buffer.end());
     }
 
     @Override

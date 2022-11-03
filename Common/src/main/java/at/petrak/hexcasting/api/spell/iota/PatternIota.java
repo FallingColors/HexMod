@@ -7,7 +7,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,6 +67,6 @@ public class PatternIota extends Iota {
             bob.append(sig);
         }
         bob.append(")");
-        return new TextComponent(bob.toString()).withStyle(ChatFormatting.GOLD);
+        return Component.literal(bob.toString()).withStyle(ChatFormatting.GOLD);
     }
 }

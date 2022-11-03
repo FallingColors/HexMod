@@ -10,7 +10,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
@@ -98,7 +97,7 @@ public class ListIota extends Iota {
 
         @Override
         public Component display(Tag tag) {
-            var out = new TextComponent("[").withStyle(ChatFormatting.DARK_PURPLE);
+            var out = Component.literal("[").withStyle(ChatFormatting.DARK_PURPLE);
             var list = HexUtils.downcast(tag, ListTag.TYPE);
             for (int i = 0; i < list.size(); i++) {
                 Tag sub = list.get(i);
@@ -110,7 +109,7 @@ public class ListIota extends Iota {
                     out.append(",");
                 }
             }
-            out.append(new TextComponent("]").withStyle(ChatFormatting.DARK_PURPLE));
+            out.append(Component.literal("]").withStyle(ChatFormatting.DARK_PURPLE));
             return out;
         }
 

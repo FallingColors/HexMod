@@ -1,11 +1,9 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.common.lib.HexSounds;
-import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -67,8 +65,7 @@ public class ItemLoreFragment extends Item {
         }
 
         if (unfoundLore == null) {
-            splayer.sendMessage(new TranslatableComponent("item.hexcasting.lore_fragment.all"), ChatType.GAME_INFO,
-                Util.NIL_UUID);
+            splayer.displayClientMessage(Component.translatable("item.hexcasting.lore_fragment.all"), true);
             splayer.giveExperiencePoints(20);
             level.playSound(null, player.position().x, player.position().y, player.position().z,
                 HexSounds.READ_LORE_FRAGMENT, SoundSource.PLAYERS, 1f, 1f);

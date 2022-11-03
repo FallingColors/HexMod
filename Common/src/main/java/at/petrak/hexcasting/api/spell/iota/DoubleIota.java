@@ -6,7 +6,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,6 +66,6 @@ public class DoubleIota extends Iota {
     }
 
     public static Component display(double d) {
-        return new TextComponent(String.format("%.2f", d)).withStyle(ChatFormatting.GREEN);
+        return Component.literal(String.format("%.2f", d)).withStyle(ChatFormatting.GREEN);
     }
 }

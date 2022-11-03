@@ -5,7 +5,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class NullIota extends Iota {
     private static final Object NULL_SUBSTITUTE = new Object();
 
-    public static final Component DISPLAY = new TextComponent("NULL")
+    public static final Component DISPLAY = Component.literal("NULL")
         .withStyle(ChatFormatting.GRAY);
 
     public NullIota() {

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.interop.patchouli;
 
-import at.petrak.hexcasting.api.PatternRegistryBak;
+import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.math.HexCoord;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import com.google.gson.annotations.SerializedName;
@@ -23,9 +23,9 @@ public class LookupPatternComponent extends AbstractPatternComponent {
 
     @Override
     public List<Pair<HexPattern, HexCoord>> getPatterns(UnaryOperator<IVariable> lookup) {
-        var entry = PatternRegistryBak.lookupPattern(this.opName);
+        var entry = PatternRegistry.lookupPattern(this.opName);
         this.strokeOrder = !entry.isPerWorld();
-        return List.of(new Pair<>(entry.getPrototype(), HexCoord.getOrigin()));
+        return List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin()));
     }
 
     @Override

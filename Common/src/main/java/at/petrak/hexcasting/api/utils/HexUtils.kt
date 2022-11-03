@@ -167,10 +167,10 @@ operator fun MutableComponent.plusAssign(component: Component) {
     append(component)
 }
 
-val String.asTextComponent get() = TextComponent(this)
-val String.asTranslatedComponent get() = TranslatableComponent(this)
+val String.asTextComponent: MutableComponent get() = Component.literal(this)
+val String.asTranslatedComponent: MutableComponent get() = Component.translatable(this)
 
-fun String.asTranslatedComponent(vararg args: Any) = TranslatableComponent(this, *args)
+fun String.asTranslatedComponent(vararg args: Any): MutableComponent = Component.translatable(this, *args)
 
 /**
  * Represents a value that the garbage collector is still allowed to collect.

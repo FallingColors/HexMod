@@ -21,14 +21,14 @@ import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
 import at.petrak.hexcasting.interop.HexInterop
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer
 import net.fabricmc.api.ModInitializer
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
-import net.minecraft.commands.synchronization.ArgumentTypes
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer
+import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
@@ -43,10 +43,10 @@ object FabricHexInitializer : ModInitializer {
 
         initRegistries()
 
-        ArgumentTypes.register(
-            "hexcasting:pattern",
+        ArgumentTypeRegistry.registerArgumentType(
+            modLoc("pattern"),
             PatternResLocArgument::class.java,
-            EmptyArgumentSerializer { PatternResLocArgument.id() }
+            SingletonArgumentInfo.contextFree { PatternResLocArgument.id() }
         )
         RegisterPatterns.registerPatterns()
         HexAdvancementTriggers.registerTriggers()
@@ -73,12 +73,10 @@ object FabricHexInitializer : ModInitializer {
 
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
 
-        CommandRegistrationCallback.EVENT.register { dp, _ -> HexCommands.register(dp) }
+        CommandRegistrationCallback.EVENT.register { dp, _, _ -> HexCommands.register(dp) }
 
-        LootTableLoadingCallback.EVENT.register { _, _, id, supplier, _ ->
-            HexLootHandler.lootLoad(
-                id,
-            ) { supplier.withPool(it) }
+        LootTableEvents.MODIFY.register { _, _, id, supplier, _ ->
+            HexLootHandler.lootLoad(id, supplier::withPool)
         }
     }
 

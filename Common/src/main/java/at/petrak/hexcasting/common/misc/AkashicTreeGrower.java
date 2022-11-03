@@ -5,6 +5,7 @@ import at.petrak.hexcasting.common.lib.HexBlocks;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
@@ -19,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.OptionalInt;
-import java.util.Random;
 
 public class AkashicTreeGrower extends AbstractTreeGrower {
     public static final AkashicTreeGrower INSTANCE = new AkashicTreeGrower();
@@ -48,7 +48,7 @@ public class AkashicTreeGrower extends AbstractTreeGrower {
 
     @Nullable
     @Override
-    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random pRandom, boolean pLargeHive) {
+    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource pRandom, boolean pLargeHive) {
         return GROWERS.get(pRandom.nextInt(GROWERS.size()));
     }
 }

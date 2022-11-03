@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -67,7 +66,7 @@ public class StateIngredientBlockState implements StateIngredient {
             @SuppressWarnings({"unchecked", "rawtypes"})
             String name = ((Property) key).getName(entry.getValue());
 
-            tooltip.add(new TextComponent(key.getName() + " = " + name).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.literal(key.getName() + " = " + name).withStyle(ChatFormatting.GRAY));
         }
         return tooltip;
     }

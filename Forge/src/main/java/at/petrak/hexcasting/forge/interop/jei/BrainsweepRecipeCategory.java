@@ -17,7 +17,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
@@ -42,28 +41,32 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         ResourceLocation location = modLoc("textures/gui/brainsweep_jei.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 118, 86).setTextureSize(128, 128).build();
         var brainsweep = modLoc("brainsweep");
-        localizedName = new TranslatableComponent("hexcasting.spell." + brainsweep);
+        localizedName = Component.translatable( "hexcasting.spell." + brainsweep);
         icon = new PatternDrawable(brainsweep, 16, 16);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public @NotNull Component getTitle() {
+    public @NotNull
+    Component getTitle() {
         return localizedName;
     }
 
     @Override
-    public @NotNull IDrawable getBackground() {
+    public @NotNull
+    IDrawable getBackground() {
         return background;
     }
 
     @Override
-    public @NotNull IDrawable getIcon() {
+    public @NotNull
+    IDrawable getIcon() {
         return icon;
     }
 
     @Override
-    public @NotNull List<Component> getTooltipStrings(@NotNull BrainsweepRecipe recipe,
+    public @NotNull
+    List<Component> getTooltipStrings(@NotNull BrainsweepRecipe recipe,
         @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
             Minecraft mc = Minecraft.getInstance();
@@ -96,19 +99,22 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     }
 
     @Override
-    public @NotNull RecipeType<BrainsweepRecipe> getRecipeType() {
+    public @NotNull
+    RecipeType<BrainsweepRecipe> getRecipeType() {
         return HexJEIPlugin.BRAINSWEEPING;
     }
 
     @Override
     @SuppressWarnings("removal")
-    public @NotNull ResourceLocation getUid() {
+    public @NotNull
+    ResourceLocation getUid() {
         return UID;
     }
 
     @Override
     @SuppressWarnings("removal")
-    public @NotNull Class<? extends BrainsweepRecipe> getRecipeClass() {
+    public @NotNull
+    Class<? extends BrainsweepRecipe> getRecipeClass() {
         return BrainsweepRecipe.class;
     }
 }

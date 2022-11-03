@@ -3,7 +3,7 @@ package at.petrak.hexcasting.fabric.interop.gravity
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
-import me.andrew.gravitychanger.api.GravityChangerAPI
+import com.fusionflux.gravity_api.api.GravityChangerAPI
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3

@@ -5,7 +5,6 @@ import at.petrak.hexcasting.api.utils.ManaHelper;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -77,10 +76,10 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
         TooltipFlag pIsAdvanced) {
         if (pIsAdvanced.isAdvanced() && getMaxMedia(pStack) > 0) {
             pTooltipComponents.add(
-                new TranslatableComponent("item.hexcasting.manaholder.amount",
-                    String.format("%,d", getMedia(pStack)),
-                    String.format("%,d", getMaxMedia(pStack)),
-                    100f * getManaFullness(pStack)).withStyle(ChatFormatting.GRAY));
+                Component.translatable("item.hexcasting.manaholder.amount",
+                String.format("%,d", getMedia(pStack)),
+                String.format("%,d", getMaxMedia(pStack)),
+                100f * getManaFullness(pStack)).withStyle(ChatFormatting.GRAY));
         }
 
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);

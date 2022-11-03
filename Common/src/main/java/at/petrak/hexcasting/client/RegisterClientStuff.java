@@ -26,9 +26,9 @@ import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -166,11 +166,11 @@ public class RegisterClientStuff {
 
                 lines.add(new Pair<>(
                     new ItemStack(Items.MUSIC_DISC_CHIRP),
-                    new TextComponent(String.valueOf(instrument.ordinal()))
+                    Component.literal(String.valueOf(instrument.ordinal()))
                         .withStyle(color(instrumentColor(instrument)))));
                 lines.add(new Pair<>(
                     new ItemStack(Items.NOTE_BLOCK),
-                    new TextComponent(String.valueOf(note))
+                    Component.literal(String.valueOf(note))
                         .withStyle(color(noteColor))));
             });
 
@@ -190,22 +190,21 @@ public class RegisterClientStuff {
                 int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(true);
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE),
-                    new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
+                    Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
                         .withStyle(redstoneColor(comparatorValue))));
 
                 boolean compare = state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE;
 
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE_TORCH),
-                    new TextComponent(
-                        compare ? ">=" : "-")
+                    Component.literal(compare ? ">=" : "-")
                         .withStyle(redstoneColor(compare ? 0 : 15))));
             });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
             (lines, state, pos, observer, world, direction, lensHand) -> lines.add(new Pair<>(
                 new ItemStack(Items.CLOCK),
-                new TextComponent(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
+                Component.literal(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
                     .withStyle(ChatFormatting.YELLOW))));
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
@@ -223,7 +222,7 @@ public class RegisterClientStuff {
 
                 lines.add(0, new Pair<>(
                     new ItemStack(Items.REDSTONE),
-                    new TextComponent(String.valueOf(signalStrength))
+                    Component.literal(String.valueOf(signalStrength))
                         .withStyle(redstoneColor(signalStrength))));
             });
 
@@ -234,7 +233,7 @@ public class RegisterClientStuff {
                 lines.add(
                     new Pair<>(
                         new ItemStack(Items.COMPARATOR),
-                        new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
+                        Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
                             .withStyle(redstoneColor(comparatorValue))));
             });
     }

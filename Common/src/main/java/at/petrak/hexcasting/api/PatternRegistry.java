@@ -158,7 +158,7 @@ public class PatternRegistry {
      * In the base mod, this is used for number patterns and Bookkeeper's Gambit.
      */
     @FunctionalInterface
-    interface SpecialHandler {
+    public interface SpecialHandler {
         @Nullable Action handlePattern(HexPattern pattern);
     }
 

@@ -12,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -50,7 +49,8 @@ public class ItemScroll extends Item implements IotaHolderItem {
     }
 
     @Override
-    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
+    public @Nullable
+    CompoundTag readIotaTag(ItemStack stack) {
         CompoundTag pattern = NBTHelper.getCompound(stack, TAG_PATTERN);
         if (pattern == null) {
             return null;
@@ -119,12 +119,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
         var descID = this.getDescriptionId(pStack);
         var ancientId = NBTHelper.getString(pStack, TAG_OP_ID);
         if (ancientId != null) {
-            return new TranslatableComponent(descID + ".of",
-                new TranslatableComponent("hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
+            return Component.translatable(descID + ".of",
+            Component.translatable( "hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
         } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
-            return new TranslatableComponent(descID);
+            return Component.translatable(descID);
         } else {
-            return new TranslatableComponent(descID + ".empty");
+            return Component.translatable(descID + ".empty");
         }
     }
 

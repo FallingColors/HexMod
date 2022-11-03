@@ -8,7 +8,6 @@ import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -28,7 +27,8 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
-    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
+    public @Nullable
+    CompoundTag readIotaTag(ItemStack stack) {
         var datum = new DoubleIota(NBTHelper.getDouble(stack, TAG_VALUE));
         return HexIotaTypes.serialize(datum);
     }
@@ -56,7 +56,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
             if (oldNum == 69) {
                 key += ".nice";
             }
-            player.displayClientMessage(new TranslatableComponent(key), true);
+            player.displayClientMessage(Component.translatable(key), true);
 
             return InteractionResultHolder.sidedSuccess(stack, world.isClientSide);
         } else {

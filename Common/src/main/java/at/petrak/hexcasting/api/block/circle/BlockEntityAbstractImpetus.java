@@ -24,7 +24,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -122,7 +121,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
             } else {
                 var dustCount = (float) beai.getMana() / (float) ManaConstants.DUST_UNIT;
-                var dustCmp = new TranslatableComponent("hexcasting.tooltip.lens.impetus.mana",
+                var dustCmp = Component.translatable("hexcasting.tooltip.lens.impetus.mana",
                     String.format("%.2f", dustCount));
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
             }
@@ -547,8 +546,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     public int extractManaFromItem(ItemStack stack, boolean simulate) {
-        if (this.mana < 0)
+        if (this.mana < 0) {
             return 0;
+        }
         return ManaHelper.extractMana(stack, remainingManaCapacity(), true, simulate);
     }
 
@@ -571,8 +571,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     public int remainingManaCapacity() {
-        if (this.mana < 0)
+        if (this.mana < 0) {
             return 0;
+        }
         return MAX_CAPACITY - this.mana;
     }
 }

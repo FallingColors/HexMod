@@ -5,10 +5,11 @@ import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.locale.Language;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -39,9 +40,9 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         String prefix = "item.hexcasting.creative_unlocker.";
 
         String emphasis = Language.getInstance().getOrDefault(prefix + "for_emphasis");
-        MutableComponent emphasized = new TextComponent("");
+        MutableComponent emphasized = Component.literal("");
         for (int i = 0; i < emphasis.length(); i++) {
-            emphasized.append(rainbow(new TextComponent("" + emphasis.charAt(i)), i, level));
+            emphasized.append(rainbow(Component.literal("" + emphasis.charAt(i)), i, level));
         }
 
         return emphasized;
@@ -106,17 +107,17 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
                 NBTHelper.remove(stack, TAG_EXTRACTIONS);
                 for (int i : arr) {
                     if (i < 0) {
-                        entity.sendMessage(new TranslatableComponent("hexcasting.debug.mana_withdrawn",
-                            stack.getDisplayName(),
-                            new TranslatableComponent("hexcasting.debug.all_mana").withStyle(ChatFormatting.GRAY))
-                            .withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+                        entity.sendSystemMessage(Component.translatable("hexcasting.debug.mana_withdrawn",
+                                stack.getDisplayName(),
+                                Component.translatable("hexcasting.debug.all_mana").withStyle(ChatFormatting.GRAY))
+                            .withStyle(ChatFormatting.LIGHT_PURPLE));
                     } else {
-                        entity.sendMessage(new TranslatableComponent("hexcasting.debug.mana_withdrawn.with_dust",
-                            stack.getDisplayName(),
-                            new TextComponent("" + i).withStyle(ChatFormatting.WHITE),
-                            new TextComponent(String.format("%.2f", i * 1.0 / ManaConstants.DUST_UNIT)).withStyle(
-                                ChatFormatting.WHITE))
-                            .withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+                        entity.sendSystemMessage(Component.translatable("hexcasting.debug.mana_withdrawn.with_dust",
+                                stack.getDisplayName(),
+                                Component.literal("" + i).withStyle(ChatFormatting.WHITE),
+                                Component.literal(String.format("%.2f", i * 1.0 / ManaConstants.DUST_UNIT)).withStyle(
+                                    ChatFormatting.WHITE))
+                            .withStyle(ChatFormatting.LIGHT_PURPLE));
                     }
                 }
             }
@@ -168,12 +169,12 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
 
         Component emphasized = infiniteMedia(level);
 
-        MutableComponent modName = new TranslatableComponent(prefix + "mod_name").withStyle(
+        MutableComponent modName = Component.translatable(prefix + "mod_name").withStyle(
             (s) -> s.withColor(HEX_COLOR));
 
         tooltipComponents.add(
-            new TranslatableComponent(prefix + "tooltip.0", emphasized).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(new TranslatableComponent(prefix + "tooltip.1", modName).withStyle(ChatFormatting.GRAY));
+            Component.translatable(prefix + "tooltip.0", emphasized).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.translatable(prefix + "tooltip.1", modName).withStyle(ChatFormatting.GRAY));
     }
 
     private static void addChildren(Advancement root, List<Advancement> out) {

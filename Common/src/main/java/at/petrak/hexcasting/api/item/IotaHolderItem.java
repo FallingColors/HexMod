@@ -8,8 +8,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -32,7 +30,8 @@ public interface IotaHolderItem {
      */
     String TAG_OVERRIDE_VISUALLY = "VisualOverride";
 
-    @Nullable CompoundTag readIotaTag(ItemStack stack);
+    @Nullable
+    CompoundTag readIotaTag(ItemStack stack);
 
     @Nullable
     default Iota readIota(ItemStack stack, ServerLevel world) {
@@ -72,14 +71,14 @@ public interface IotaHolderItem {
         var datumTag = self.readIotaTag(stack);
         if (datumTag != null) {
             var cmp = HexIotaTypes.getDisplay(datumTag);
-            components.add(new TranslatableComponent("hexcasting.spelldata.onitem", cmp));
+            components.add(Component.translatable("hexcasting.spelldata.onitem", cmp));
 
             if (flag.isAdvanced()) {
-                components.add(new TextComponent("").append(NbtUtils.toPrettyComponent(datumTag)));
+                components.add(Component.literal("").append(NbtUtils.toPrettyComponent(datumTag)));
             }
         } else if (NBTHelper.hasString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY)) {
-            components.add(new TranslatableComponent("hexcasting.spelldata.onitem",
-                new TranslatableComponent("hexcasting.spelldata.anything").withStyle(ChatFormatting.LIGHT_PURPLE)));
+            components.add(Component.translatable("hexcasting.spelldata.onitem",
+                Component.translatable("hexcasting.spelldata.anything").withStyle(ChatFormatting.LIGHT_PURPLE)));
         }
     }
 }

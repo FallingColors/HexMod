@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.FormattedCharSequence
@@ -51,6 +52,8 @@ class GuiSpellcasting constructor(
 
     private var ambianceSoundInstance: GridSoundInstance? = null
 
+    private val randSrc = SoundInstance.createUnseededRandom()
+
     init {
         for ((pattern, origin) in patterns) {
             this.usedSpots.addAll(pattern.positions(origin))
@@ -71,6 +74,7 @@ class GuiSpellcasting constructor(
                     SoundSource.PLAYERS,
                     0.5f,
                     1f + (Math.random().toFloat() - 0.5f) * 0.1f,
+                    randSrc,
                     this.ambianceSoundInstance!!.x,
                     this.ambianceSoundInstance!!.y,
                     this.ambianceSoundInstance!!.z,
@@ -147,6 +151,7 @@ class GuiSpellcasting constructor(
                         SoundSource.PLAYERS,
                         0.25f,
                         1f,
+                        randSrc,
                         this.ambianceSoundInstance!!.x,
                         this.ambianceSoundInstance!!.y,
                         this.ambianceSoundInstance!!.z,
@@ -222,6 +227,7 @@ class GuiSpellcasting constructor(
                             SoundSource.PLAYERS,
                             0.25f,
                             1f + (Math.random().toFloat() - 0.5f) * 0.1f,
+                            randSrc,
                             this.ambianceSoundInstance!!.x,
                             this.ambianceSoundInstance!!.y,
                             this.ambianceSoundInstance!!.z,

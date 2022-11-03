@@ -5,20 +5,19 @@ import at.petrak.hexcasting.api.spell.iota.PatternIota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
-import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 public class ListPatternsCommand {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("hexcasting:patterns")
+    public static void add(LiteralArgumentBuilder<CommandSourceStack> cmd) {
+        cmd.then(Commands.literal("patterns")
             .requires(dp -> dp.hasPermission(Commands.LEVEL_ADMINS))
             .then(Commands.literal("list").executes(ctx -> {
 
@@ -28,10 +27,10 @@ public class ListPatternsCommand {
                     .sorted((a, b) -> compareResLoc(a.getValue().getFirst(), b.getValue().getFirst()))
                     .toList();
 
-                ctx.getSource().sendSuccess(new TranslatableComponent("command.hexcasting.pats.listing"), false);
+                ctx.getSource().sendSuccess(Component.translatable("command.hexcasting.pats.listing"), false);
                 for (var pair : listing) {
                     HexPattern hexPattern = HexPattern.fromAngles(pair.getKey(), pair.getValue().getSecond());
-                    ctx.getSource().sendSuccess(new TextComponent(pair.getValue().getFirst().toString())
+                    ctx.getSource().sendSuccess(Component.literal(pair.getValue().getFirst().toString())
                         .append(": ")
                         .append(PatternIota.display(hexPattern)), false);
                 }
@@ -56,7 +55,7 @@ public class ListPatternsCommand {
                             stack.setTag(tag);
 
                             ctx.getSource().sendSuccess(
-                                new TranslatableComponent(
+                                Component.translatable(
                                     "command.hexcasting.pats.specific.success",
                                     stack.getDisplayName(),
                                     targetId),
@@ -99,7 +98,7 @@ public class ListPatternsCommand {
                     });
 
                     ctx.getSource().sendSuccess(
-                        new TranslatableComponent("command.hexcasting.pats.all", lookup.size()), true);
+                        Component.translatable("command.hexcasting.pats.all", lookup.size()), true);
                     return lookup.size();
                 } else {
                     return 0;

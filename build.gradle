@@ -8,14 +8,19 @@ buildscript {
     }
 }
 
-import com.diluv.schoomp.Webhook
-import com.diluv.schoomp.message.Message
-
 plugins {
     id 'java'
     id "org.jetbrains.kotlin.jvm"
     id 'idea'
+    // This needs to be in the root
+    // https://github.com/FabricMC/fabric-loom/issues/612#issuecomment-1198444120
+    // Also it looks like property lookups don't work this early
+    id 'fabric-loom' version '1.0-SNAPSHOT' apply false
 }
+
+import com.diluv.schoomp.Webhook
+import com.diluv.schoomp.message.Message
+
 
 def isRelease() {
     try {

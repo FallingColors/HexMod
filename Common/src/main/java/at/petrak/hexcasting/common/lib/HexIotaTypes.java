@@ -10,7 +10,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
@@ -136,11 +135,11 @@ public class HexIotaTypes {
     public static Component getDisplay(CompoundTag tag) {
         var type = getTypeFromTag(tag);
         if (type == null) {
-            return TextComponent.EMPTY;
+            return Component.empty();
         }
         var data = tag.get(KEY_DATA);
         if (data == null) {
-            return TextComponent.EMPTY;
+            return Component.empty();
         }
         return type.display(data);
     }

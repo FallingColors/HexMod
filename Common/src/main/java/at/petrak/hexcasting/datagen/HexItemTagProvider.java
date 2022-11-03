@@ -49,9 +49,4 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
         this.copy(BlockTags.BUTTONS, ItemTags.BUTTONS);
         this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
     }
-
-    @Override
-    public String getName() {
-        return "Hexcasting Item Tags";
-    }
 }

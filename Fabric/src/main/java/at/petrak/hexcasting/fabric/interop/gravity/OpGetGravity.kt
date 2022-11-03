@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getEntity
 import at.petrak.hexcasting.api.spell.iota.Iota
-import me.andrew.gravitychanger.api.GravityChangerAPI
+import com.fusionflux.gravity_api.api.GravityChangerAPI
 import net.minecraft.world.phys.Vec3
 
 object OpGetGravity : ConstManaAction {

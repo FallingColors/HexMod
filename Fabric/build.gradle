@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version "$loomVersion"
+    id 'fabric-loom' // version "1.0-SNAPSHOT"
 }
 
 archivesBaseName = getArtifactID("fabric")
@@ -74,9 +74,9 @@ dependencies {
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
     include "com.jamieswhiteshirt:reach-entity-attributes:2.1.1"
 
-    // TODO(yrsegal): do whatever it is you did with this on 1.18, on 1.19
-//    modImplementation "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
-//    include "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
+    // apparently the 1.18 version Just Works on 1.19
+    modImplementation "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
+    include "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
 
     // Optional integrations
 

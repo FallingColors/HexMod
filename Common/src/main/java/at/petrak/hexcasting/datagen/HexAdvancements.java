@@ -14,8 +14,7 @@ import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -33,8 +32,8 @@ public class HexAdvancements extends PaucalAdvancementProvider {
             // what an ergonomic design decision
             // i am so happy that data generators are the future
             .display(new DisplayInfo(new ItemStack(Items.BUDDING_AMETHYST),
-                new TranslatableComponent("advancement.hexcasting:root"),
-                new TranslatableComponent("advancement.hexcasting:root.desc"),
+                Component.translatable("advancement.hexcasting:root"),
+                Component.translatable("advancement.hexcasting:root.desc"),
                 new ResourceLocation("minecraft", "textures/block/calcite.png"),
                 FrameType.TASK, true, true, true))
             // the only thing making this vaguely tolerable is the knowledge the json files are worse somehow
@@ -78,8 +77,8 @@ public class HexAdvancements extends PaucalAdvancementProvider {
 
         Advancement.Builder.advancement()
             .display(new DisplayInfo(new ItemStack(Items.MUSIC_DISC_11),
-                new TranslatableComponent("advancement.hexcasting:enlightenment"),
-                new TranslatableComponent("advancement.hexcasting:enlightenment.desc"),
+                Component.translatable("advancement.hexcasting:enlightenment"),
+                Component.translatable("advancement.hexcasting:enlightenment.desc"),
                 null,
                 FrameType.CHALLENGE, true, true, true))
             .parent(opened_eyes)
@@ -101,7 +100,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
         for (var advId : ItemLoreFragment.NAMES) {
             Advancement.Builder.advancement()
                 .display(new DisplayInfo(new ItemStack(HexItems.LORE_FRAGMENT),
-                    new TranslatableComponent("advancement." + advId), TextComponent.EMPTY,
+                    Component.translatable("advancement." + advId), Component.empty(),
                     null, FrameType.TASK, true, true, true))
                 .parent(loreRoot)
                 .addCriterion(ItemLoreFragment.CRITEREON_KEY, new ImpossibleTrigger.TriggerInstance())
