@@ -13,7 +13,7 @@ import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.loot.HexLootHandler
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient
@@ -94,7 +94,9 @@ object FabricHexInitializer : ModInitializer {
 
         HexEntities.registerEntities(bind(Registry.ENTITY_TYPE))
 
-        HexRecipeSerializers.registerSerializers(bind(Registry.RECIPE_SERIALIZER))
+        HexRecipeStuffRegistry.registerSerializers(bind(Registry.RECIPE_SERIALIZER))
+        HexRecipeStuffRegistry.registerTypes(bind(Registry.RECIPE_TYPE))
+
         HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
 
         HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
@@ -144,7 +146,6 @@ object FabricHexInitializer : ModInitializer {
             flameOn.add(leaves, 60, 30)
         }
 
-        HexRecipeSerializers.registerTypes()
         HexStatistics.register()
     }
 

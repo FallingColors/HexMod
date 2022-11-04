@@ -2,21 +2,14 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "hexcasting:aventurine_edified_leaves"
-        }
-      ],
       "conditions": [
         {
           "condition": "minecraft:alternative",
           "terms": [
             {
-              "condition": "forge:can_tool_perform_action",
-              "action": "shears_dig"
+              "action": "shears_dig",
+              "condition": "forge:can_tool_perform_action"
             },
             {
               "condition": "minecraft:match_tool",
@@ -33,7 +26,14 @@
             }
           ]
         }
-      ]
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "hexcasting:aventurine_edified_leaves"
+        }
+      ],
+      "rolls": 1.0
     }
   ]
 }

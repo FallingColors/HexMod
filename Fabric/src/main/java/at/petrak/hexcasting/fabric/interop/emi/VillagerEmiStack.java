@@ -5,7 +5,6 @@ import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.client.shader.FakeBufferSource;
 import at.petrak.hexcasting.client.shader.HexRenderTypes;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
-import at.petrak.hexcasting.mixin.accessor.AccessorPoiType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.emi.api.render.EmiRender;
@@ -59,7 +58,8 @@ public class VillagerEmiStack extends EmiStack {
     public static EmiIngredient atLevelOrHigher(VillagerIngredient ingredient, boolean remainder) {
         if (ingredient.profession() == null) {
             return EmiIngredient.of(Registry.VILLAGER_PROFESSION.stream()
-                .filter(it -> !((AccessorPoiType) it.getJobPoiType()).hex$matchingStates().isEmpty())
+                // TODO(yrsegal): what is this for? the PoiType is now a predicate so this won't work
+//                .filter(it -> !((AccessorPoiType) it.heldJobSite()).hex$matchingStates().isEmpty())
                 .map(it -> atLevelOrHigher(new VillagerIngredient(Registry.VILLAGER_PROFESSION.getKey(it),
                     ingredient.biome(), ingredient.minLevel()), true))
                 .toList());

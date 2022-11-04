@@ -1,23 +1,6 @@
 {
-  "display": {
-    "icon": {
-      "item": "minecraft:budding_amethyst"
-    },
-    "title": {
-      "translate": "advancement.hexcasting:root"
-    },
-    "description": {
-      "translate": "advancement.hexcasting:root.desc"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": true,
-    "background": "minecraft:textures/block/calcite.png"
-  },
   "criteria": {
     "has_charged_amethyst": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -26,7 +9,24 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/block/calcite.png",
+    "description": {
+      "translate": "advancement.hexcasting:root.desc"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "minecraft:budding_amethyst"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.hexcasting:root"
     }
   },
   "requirements": [

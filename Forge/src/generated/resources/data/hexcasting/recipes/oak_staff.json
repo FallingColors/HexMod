@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "hexcasting:charged_amethyst"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "item": "minecraft:oak_planks"
+    }
+  },
   "pattern": [
     " SA",
     " WS",
     "S  "
   ],
-  "key": {
-    "W": {
-      "item": "minecraft:oak_planks"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    },
-    "A": {
-      "item": "hexcasting:charged_amethyst"
-    }
-  },
   "result": {
     "item": "hexcasting:oak_staff"
   }

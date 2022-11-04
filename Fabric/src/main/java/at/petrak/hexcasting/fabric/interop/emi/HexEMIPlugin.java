@@ -2,27 +2,17 @@ package at.petrak.hexcasting.fabric.interop.emi;
 
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
-import at.petrak.hexcasting.mixin.accessor.AccessorPoiType;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.List;
-import java.util.Set;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -55,7 +45,7 @@ public class HexEMIPlugin implements EmiPlugin {
         registry.addWorkstation(BRAINSWEEP, EmiIngredient.of(HexItemTags.STAVES));
 
         for (BrainsweepRecipe recipe : registry.getRecipeManager()
-            .getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE)) {
+            .getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)) {
             var inputs = EmiIngredient.of(recipe.blockIn().getDisplayedStacks().stream()
                 .map(EmiStack::of).toList());
             var villagerInput = VillagerEmiStack.atLevelOrHigher(recipe.villagerIn(), true);
@@ -65,6 +55,8 @@ public class HexEMIPlugin implements EmiPlugin {
 
         var basicVillager = new VillagerIngredient(null, null, 1);
 
+        // TODO(yrsegal): villager POI problemos
+        /*
         for (VillagerProfession profession : Registry.VILLAGER_PROFESSION) {
             ResourceLocation id = Registry.VILLAGER_PROFESSION.getKey(profession);
             ResourceLocation poiRecipeId = modLoc("villager/poi/" + id.getNamespace() + "/" + id.getPath());
@@ -100,6 +92,6 @@ public class HexEMIPlugin implements EmiPlugin {
                 }
             }
         }
+         */
     }
-
 }

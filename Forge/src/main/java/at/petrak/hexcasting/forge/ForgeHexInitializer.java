@@ -15,7 +15,7 @@ import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
 import at.petrak.hexcasting.forge.datagen.HexForgeDataGenerators;
@@ -89,7 +89,8 @@ public class ForgeHexInitializer {
         bind(Registry.BLOCK_ENTITY_TYPE_REGISTRY, HexBlockEntities::registerTiles);
         bind(Registry.ITEM_REGISTRY, HexItems::registerItems);
 
-        bind(Registry.RECIPE_SERIALIZER_REGISTRY, HexRecipeSerializers::registerSerializers);
+        bind(Registry.RECIPE_SERIALIZER_REGISTRY, HexRecipeStuffRegistry::registerSerializers);
+        bind(Registry.RECIPE_TYPE_REGISTRY, HexRecipeStuffRegistry::registerTypes);
 
         bind(Registry.ENTITY_TYPE_REGISTRY, HexEntities::registerEntities);
 
@@ -131,7 +132,6 @@ public class ForgeHexInitializer {
         // We have to do these at some point when the registries are still open
         modBus.addListener((RegisterEvent evt) -> {
             if (evt.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
-                HexRecipeSerializers.registerTypes();
                 CraftingHelper.register(modLoc("unsealed"), ForgeUnsealedIngredient.Serializer.INSTANCE);
                 HexStatistics.register();
                 HexLootFunctions.registerSerializers((lift, id) ->
@@ -165,12 +165,20 @@ public class ForgeHexInitializer {
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
 
-        evBus.addListener((PlayerEvent.BreakSpeed evt) ->
-            evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getEntity(), evt.getState(), evt.getPos())));
+        evBus.addListener((PlayerEvent.BreakSpeed evt) -> {
+            var pos = evt.getPosition();
+            // tracing the dataflow, this is only empty if someone is calling a deprecated function for the
+            // break speed. This will probably not ever hapen, but hey! i will never complain about correctness
+            // enforced at the type level.
+            if (pos.isEmpty()) {
+                return;
+            }
+            evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getEntity(), evt.getState(), pos.get()));
+        });
 
         evBus.addListener((LootTableLoadEvent evt) -> HexLootHandler.lootLoad(
             evt.getName(),
-            evt.getTable()::addPool));
+            builder -> evt.getTable().addPool(builder.build())));
 
         // === Events implemented in other ways on Fabric
 

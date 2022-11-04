@@ -4,16 +4,16 @@
     "type": "block",
     "block": "hexcasting:empty_directrix"
   },
-  "villagerIn": {
-    "profession": "minecraft:mason",
-    "minLevel": 1
-  },
   "result": {
     "name": "hexcasting:directrix_redstone",
     "properties": {
-      "powered": "false",
+      "energized": "false",
       "facing": "north",
-      "energized": "false"
+      "powered": "false"
     }
+  },
+  "villagerIn": {
+    "minLevel": 1,
+    "profession": "minecraft:mason"
   }
 }

@@ -4,11 +4,11 @@
     "type": "block",
     "block": "hexcasting:akashic_connector"
   },
-  "villagerIn": {
-    "profession": "minecraft:librarian",
-    "minLevel": 5
-  },
   "result": {
     "name": "hexcasting:akashic_record"
+  },
+  "villagerIn": {
+    "minLevel": 5,
+    "profession": "minecraft:librarian"
   }
 }

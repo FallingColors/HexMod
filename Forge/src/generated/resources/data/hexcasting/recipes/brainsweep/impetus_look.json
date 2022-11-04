@@ -4,15 +4,15 @@
     "type": "block",
     "block": "hexcasting:empty_impetus"
   },
-  "villagerIn": {
-    "profession": "minecraft:fletcher",
-    "minLevel": 2
-  },
   "result": {
     "name": "hexcasting:impetus_look",
     "properties": {
-      "facing": "north",
-      "energized": "false"
+      "energized": "false",
+      "facing": "north"
     }
+  },
+  "villagerIn": {
+    "minLevel": 2,
+    "profession": "minecraft:fletcher"
   }
 }

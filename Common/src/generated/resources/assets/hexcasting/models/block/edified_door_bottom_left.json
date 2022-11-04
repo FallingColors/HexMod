@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/door_bottom",
+  "parent": "minecraft:block/door_bottom_left",
   "textures": {
     "bottom": "hexcasting:block/edified_door_lower",
     "top": "hexcasting:block/edified_door_upper"

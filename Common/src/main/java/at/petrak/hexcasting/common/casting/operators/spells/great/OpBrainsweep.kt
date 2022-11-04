@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapAlreadyBrainswept
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadBrainsweep
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.ktxt.tellWitnessesThatIWasMurdered
 import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundEvents
@@ -41,7 +41,7 @@ object OpBrainsweep : SpellAction {
         val state = ctx.world.getBlockState(pos)
 
         val recman = ctx.world.recipeManager
-        val recipes = recman.getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE)
+        val recipes = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)
         val recipe = recipes.find { it.matches(state, sacrifice) }
             ?: throw MishapBadBrainsweep(sacrifice, pos)
 

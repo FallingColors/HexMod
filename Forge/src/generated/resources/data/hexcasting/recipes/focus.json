@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "DCD",
-    "CIC",
-    "DCD"
-  ],
   "key": {
     "C": {
       "tag": "forge:dusts/glowstone"
@@ -16,6 +11,11 @@
       "item": "hexcasting:charged_amethyst"
     }
   },
+  "pattern": [
+    "DCD",
+    "CIC",
+    "DCD"
+  ],
   "result": {
     "item": "hexcasting:focus"
   }

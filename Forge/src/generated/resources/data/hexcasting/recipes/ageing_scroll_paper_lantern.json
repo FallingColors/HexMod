@@ -30,7 +30,7 @@
     }
   ],
   "result": {
-    "item": "hexcasting:ancient_scroll_paper_lantern",
-    "count": 8
+    "count": 8,
+    "item": "hexcasting:ancient_scroll_paper_lantern"
   }
 }

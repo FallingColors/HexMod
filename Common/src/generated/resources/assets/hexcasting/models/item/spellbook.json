@@ -1,26 +1,26 @@
 {
   "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "hexcasting:item/spellbook"
-  },
   "overrides": [
     {
+      "model": "hexcasting:item/spellbook",
       "predicate": {
         "hexcasting:overlay_layer": 0.0
-      },
-      "model": "hexcasting:item/spellbook"
+      }
     },
     {
+      "model": "hexcasting:item/spellbook_filled",
       "predicate": {
         "hexcasting:overlay_layer": 1.0
-      },
-      "model": "hexcasting:item/spellbook_filled"
+      }
     },
     {
+      "model": "hexcasting:item/spellbook_sealed",
       "predicate": {
         "hexcasting:overlay_layer": 2.0
-      },
-      "model": "hexcasting:item/spellbook_sealed"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "hexcasting:item/spellbook"
+  }
 }

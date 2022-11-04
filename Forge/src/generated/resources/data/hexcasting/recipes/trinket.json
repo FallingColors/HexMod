@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " C ",
-    "CIC",
-    " C "
-  ],
   "key": {
     "C": {
       "tag": "forge:ingots/iron"
@@ -13,6 +8,11 @@
       "item": "minecraft:amethyst_shard"
     }
   },
+  "pattern": [
+    " C ",
+    "CIC",
+    " C "
+  ],
   "result": {
     "item": "hexcasting:trinket"
   }

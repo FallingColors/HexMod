@@ -3,7 +3,7 @@ package at.petrak.hexcasting.forge.interop.jei;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.RecipeType;
@@ -42,7 +42,7 @@ public class HexJEIPlugin implements IModPlugin {
         Level level = Minecraft.getInstance().level;
         if (level != null) {
             registration.addRecipes(BRAINSWEEPING,
-                level.getRecipeManager().getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE));
+                level.getRecipeManager().getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE));
         }
     }
 

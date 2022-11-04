@@ -1,28 +1,23 @@
 {
   "parent": "minecraft:recipes/root",
-  "rewards": {
-    "recipes": [
-      "hexcasting:akashic_bookshelf"
-    ]
-  },
   "criteria": {
     "enlightenment": {
-      "trigger": "hexcasting:overcast",
       "conditions": {
         "health_used": {
           "min": 0.8
         },
         "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion": {
-          "min": 0.1,
-          "max": 2.05
+          "max": 2.05,
+          "min": 0.1
         }
-      }
+      },
+      "trigger": "hexcasting:overcast"
     },
     "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
       "conditions": {
         "recipe": "hexcasting:akashic_bookshelf"
-      }
+      },
+      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
@@ -30,5 +25,10 @@
       "enlightenment",
       "has_the_recipe"
     ]
-  ]
+  ],
+  "rewards": {
+    "recipes": [
+      "hexcasting:akashic_bookshelf"
+    ]
+  }
 }

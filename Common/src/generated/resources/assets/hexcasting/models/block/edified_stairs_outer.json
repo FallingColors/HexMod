@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/outer_stairs",
   "textures": {
-    "side": "hexcasting:block/edified_planks",
     "bottom": "hexcasting:block/edified_planks",
+    "side": "hexcasting:block/edified_planks",
     "top": "hexcasting:block/edified_planks"
   }
 }

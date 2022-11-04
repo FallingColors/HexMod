@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.interop.patchouli;
 
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +19,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
         var id = new ResourceLocation(vars.get("recipe").asString());
 
         var recman = Minecraft.getInstance().level.getRecipeManager();
-        var brainsweepings = recman.getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE);
+        var brainsweepings = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE);
         for (var poisonApples : brainsweepings) {
             if (poisonApples.getId().equals(id)) {
                 this.recipe = poisonApples;
@@ -59,7 +59,11 @@ public class BrainsweepProcessor implements IComponentProcessor {
             }
             case "entityTooltip" -> {
                 Minecraft mc = Minecraft.getInstance();
-                return IVariable.wrapList(this.recipe.villagerIn().getTooltip(mc.options.advancedItemTooltips).stream().map(IVariable::from).toList());
+                return IVariable.wrapList(this.recipe.villagerIn()
+                    .getTooltip(mc.options.advancedItemTooltips)
+                    .stream()
+                    .map(IVariable::from)
+                    .toList());
             }
             default -> {
                 return null;

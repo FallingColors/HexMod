@@ -4,16 +4,16 @@
     "type": "block",
     "block": "hexcasting:empty_impetus"
   },
-  "villagerIn": {
-    "profession": "minecraft:cleric",
-    "minLevel": 2
-  },
   "result": {
     "name": "hexcasting:impetus_storedplayer",
     "properties": {
-      "powered": "true",
+      "energized": "false",
       "facing": "north",
-      "energized": "false"
+      "powered": "true"
     }
+  },
+  "villagerIn": {
+    "minLevel": 2,
+    "profession": "minecraft:cleric"
   }
 }
