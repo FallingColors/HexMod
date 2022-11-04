@@ -47,7 +47,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -66,9 +65,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.*;
 import net.minecraftforge.common.loot.CanToolPerformAction;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.ModContainer;
@@ -315,26 +314,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, ItemStack stack, Fluid fluid) {
         Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
         if (handler.isPresent() &&
-            FluidUtil.tryEmptyContainer(stack, handler.get(), FluidAttributes.BUCKET_VOLUME, null, true).isSuccess()) {
+            FluidUtil.tryEmptyContainer(stack, handler.get(), FluidType.BUCKET_VOLUME, null, true).isSuccess()) {
             return true;
         }
         return FluidUtil.tryPlaceFluid(null, level, hand, pos, stack, new FluidStack(
-            fluid, FluidAttributes.BUCKET_VOLUME)).isSuccess();
-    }
-
-    @Override
-    public ResourceLocation getID(Block block) {
-        return block.getRegistryName();
-    }
-
-    @Override
-    public ResourceLocation getID(Item item) {
-        return item.getRegistryName();
-    }
-
-    @Override
-    public ResourceLocation getID(VillagerProfession profession) {
-        return profession.getRegistryName();
+            fluid, FluidType.BUCKET_VOLUME)).isSuccess();
     }
 
     @Override
@@ -428,7 +412,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player) {
         ItemStack cached = player.getMainHandItem();
         player.setItemInHand(InteractionHand.MAIN_HAND, blockStack.copy());
-        var evt = ForgeHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos, new BlockHitResult(Vec3.atCenterOf(pos), Direction.DOWN, pos, true));
+        var evt = ForgeHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos,
+            new BlockHitResult(Vec3.atCenterOf(pos), Direction.DOWN, pos, true));
         player.setItemInHand(InteractionHand.MAIN_HAND, cached);
         return !evt.isCanceled();
     }

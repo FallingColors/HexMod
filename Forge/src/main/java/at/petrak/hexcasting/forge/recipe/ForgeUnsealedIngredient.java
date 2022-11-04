@@ -8,13 +8,14 @@ import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.AbstractIngredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -68,8 +69,9 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
     @Override
     public @NotNull JsonElement toJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("type", Objects.toString(CraftingHelper.getID(NBTIngredient.Serializer.INSTANCE)));
-        json.addProperty("item", Objects.toString(stack.getItem().getRegistryName()));
+        // TODO: should this be Partial or Strict
+        json.addProperty("type", Objects.toString(CraftingHelper.getID(PartialNBTIngredient.Serializer.INSTANCE)));
+        json.addProperty("item", Objects.toString(Registry.ITEM.getKey(stack.getItem())));
         return json;
     }
 

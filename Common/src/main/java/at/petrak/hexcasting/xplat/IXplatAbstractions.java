@@ -131,11 +131,18 @@ public interface IXplatAbstractions {
 
     boolean isCorrectTierForDrops(Tier tier, BlockState bs);
 
-    ResourceLocation getID(Block block);
+    // These don't need to be xplat anymore, but it does save refactoring if they're still defined here
+    default ResourceLocation getID(Block block) {
+        return Registry.BLOCK.getKey(block);
+    }
 
-    ResourceLocation getID(Item item);
+    default ResourceLocation getID(Item item) {
+        return Registry.ITEM.getKey(item);
+    }
 
-    ResourceLocation getID(VillagerProfession profession);
+    default ResourceLocation getID(VillagerProfession profession) {
+        return Registry.VILLAGER_PROFESSION.getKey(profession);
+    }
 
     Ingredient getUnsealedIngredient(ItemStack stack);
 

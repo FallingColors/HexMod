@@ -16,8 +16,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 import java.util.EnumMap;
 import java.util.stream.Stream;
@@ -38,13 +38,10 @@ public class HexForgeDataGenerators {
 
         DataGenerator gen = ev.getGenerator();
         ExistingFileHelper efh = ev.getExistingFileHelper();
-        if (ev.includeClient()) {
-            gen.addProvider(new HexItemModels(gen, efh));
-            gen.addProvider(new HexBlockStatesAndModels(gen, efh));
-        }
-        if (ev.includeServer()) {
-            gen.addProvider(PaucalForgeDatagenWrappers.addEFHToAdvancements(new HexAdvancements(gen), efh));
-        }
+        gen.addProvider(ev.includeClient(), new HexItemModels(gen, efh));
+        gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(gen, efh));
+        gen.addProvider(ev.includeServer(),
+            PaucalForgeDatagenWrappers.addEFHToAdvancements(new HexAdvancements(gen), efh));
     }
 
     private static void configureForgeDatagen(GatherDataEvent ev) {
@@ -52,18 +49,16 @@ public class HexForgeDataGenerators {
 
         DataGenerator gen = ev.getGenerator();
         ExistingFileHelper efh = ev.getExistingFileHelper();
-        if (ev.includeServer()) {
-            gen.addProvider(new HexLootTables(gen));
-            gen.addProvider(new HexplatRecipes(gen, INGREDIENTS));
+        gen.addProvider(ev.includeServer(), new HexLootTables(gen));
+        gen.addProvider(ev.includeServer(), new HexplatRecipes(gen, INGREDIENTS));
 
-            var xtags = IXplatAbstractions.INSTANCE.tags();
-            var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
-                new HexBlockTagProvider(gen, xtags), efh);
-            gen.addProvider(blockTagProvider);
-            var itemTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
-                new HexItemTagProvider(gen, blockTagProvider, IXplatAbstractions.INSTANCE.tags()), efh);
-            gen.addProvider(itemTagProvider);
-        }
+        var xtags = IXplatAbstractions.INSTANCE.tags();
+        var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
+            new HexBlockTagProvider(gen, xtags), efh);
+        gen.addProvider(ev.includeServer(), blockTagProvider);
+        var itemTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
+            new HexItemTagProvider(gen, blockTagProvider, IXplatAbstractions.INSTANCE.tags()), efh);
+        gen.addProvider(ev.includeServer(), itemTagProvider);
     }
 
     private static IXplatIngredients INGREDIENTS = new IXplatIngredients() {

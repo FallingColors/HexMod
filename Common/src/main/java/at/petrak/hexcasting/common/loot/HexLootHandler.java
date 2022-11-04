@@ -19,7 +19,7 @@ public class HexLootHandler {
 
     public static final ResourceLocation TABLE_INJECT_AMETHYST_CLUSTER = modLoc("inject/amethyst_cluster");
 
-    public static void lootLoad(ResourceLocation id, Consumer<LootPool.Builder> addPool) {
+    public static void lootLoad(ResourceLocation id, Consumer<LootPool> addPool) {
         if (id.equals(Blocks.AMETHYST_CLUSTER.getLootTable())) {
             addPool.accept(getInjectPool(TABLE_INJECT_AMETHYST_CLUSTER));
         } else {
@@ -31,10 +31,11 @@ public class HexLootHandler {
         }
     }
 
-    public static LootPool.Builder getInjectPool(ResourceLocation entry) {
+    public static LootPool getInjectPool(ResourceLocation entry) {
         return LootPool.lootPool()
             .add(getInjectEntry(entry, 1))
-            .setBonusRolls(UniformGenerator.between(0, 1));
+            .setBonusRolls(UniformGenerator.between(0, 1))
+            .build();
     }
 
     private static LootPoolEntryContainer.Builder<?> getInjectEntry(ResourceLocation table, int weight) {

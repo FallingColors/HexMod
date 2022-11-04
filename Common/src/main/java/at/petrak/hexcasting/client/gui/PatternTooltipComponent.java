@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client.gui;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RenderLib;
+import at.petrak.hexcasting.common.misc.PatternTooltip;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -14,13 +15,14 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.phys.Vec2;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-// https://github.com/VazkiiMods/Quark/blob/master/src/main/java/vazkii/quark/content/client/tooltip/MapTooltips.java
+// https://github.com/VazkiiMods/Botania/blob/95bd2d3fbc857b7c102687554e1d1b112f8af436/Xplat/src/main/java/vazkii/botania/client/gui/ManaBarTooltipComponent.java
 // yoink
-public class PatternTooltipGreeble implements ClientTooltipComponent, TooltipComponent {
+public class PatternTooltipComponent implements ClientTooltipComponent {
     public static final ResourceLocation PRISTINE_BG = new ResourceLocation(
         "hexcasting:textures/gui/scroll.png");
     public static final ResourceLocation ANCIENT_BG = new ResourceLocation(
@@ -36,15 +38,23 @@ public class PatternTooltipGreeble implements ClientTooltipComponent, TooltipCom
     private final float scale;
     private final ResourceLocation background;
 
-    public PatternTooltipGreeble(HexPattern pattern, ResourceLocation background) {
-        this.pattern = pattern;
-        this.background = background;
+    public PatternTooltipComponent(PatternTooltip tt) {
+        this.pattern = tt.pattern();
+        this.background = tt.background();
 
         var pair = RenderLib.getCenteredPattern(pattern, SIZE, SIZE, 8f);
         this.scale = pair.getFirst();
         var dots = pair.getSecond();
         this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f, 0f);
         this.pathfinderDots = dots.stream().distinct().collect(Collectors.toList());
+    }
+
+    @Nullable
+    public static ClientTooltipComponent tryConvert(TooltipComponent cmp) {
+        if (cmp instanceof PatternTooltip ptt) {
+            return new PatternTooltipComponent(ptt);
+        }
+        return null;
     }
 
     @Override

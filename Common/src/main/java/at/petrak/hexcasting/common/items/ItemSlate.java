@@ -7,9 +7,10 @@ import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.iota.PatternIota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
+import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.misc.PatternTooltip;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -112,9 +113,7 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
             var patTag = bet.getCompound(BlockEntitySlate.TAG_PATTERN);
             if (!patTag.isEmpty()) {
                 var pattern = HexPattern.fromNBT(patTag);
-                return Optional.of(new PatternTooltipGreeble(
-                    pattern,
-                    PatternTooltipGreeble.SLATE_BG));
+                return Optional.of(new PatternTooltip(pattern, PatternTooltipComponent.SLATE_BG));
             }
         }
         return Optional.empty();

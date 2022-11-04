@@ -4,14 +4,12 @@ import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.HexAdditionalRenderers
 import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.client.ShiftScrollListener
+import at.petrak.hexcasting.client.gui.PatternTooltipComponent
 import at.petrak.hexcasting.fabric.event.MouseScrollCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
+import net.fabricmc.fabric.api.client.rendering.v1.*
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -36,6 +34,7 @@ object FabricHexClientInitializer : ClientModInitializer {
             ClientTickCounter.clientTickEnd()
             ShiftScrollListener.clientTickEnd()
         }
+        TooltipComponentCallback.EVENT.register(PatternTooltipComponent::tryConvert)
 
         MouseScrollCallback.EVENT.register(ShiftScrollListener::onScrollInGameplay)
 

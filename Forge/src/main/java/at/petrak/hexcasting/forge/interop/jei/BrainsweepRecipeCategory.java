@@ -41,7 +41,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         ResourceLocation location = modLoc("textures/gui/brainsweep_jei.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 118, 86).setTextureSize(128, 128).build();
         var brainsweep = modLoc("brainsweep");
-        localizedName = Component.translatable( "hexcasting.spell." + brainsweep);
+        localizedName = Component.translatable("hexcasting.spell." + brainsweep);
         icon = new PatternDrawable(brainsweep, 16, 16);
     }
 
@@ -102,19 +102,5 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     public @NotNull
     RecipeType<BrainsweepRecipe> getRecipeType() {
         return HexJEIPlugin.BRAINSWEEPING;
-    }
-
-    @Override
-    @SuppressWarnings("removal")
-    public @NotNull
-    ResourceLocation getUid() {
-        return UID;
-    }
-
-    @Override
-    @SuppressWarnings("removal")
-    public @NotNull
-    Class<? extends BrainsweepRecipe> getRecipeClass() {
-        return BrainsweepRecipe.class;
     }
 }

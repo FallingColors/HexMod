@@ -88,8 +88,6 @@ public class RegisterClientStuff {
         registerWandOverrides(HexItems.STAFF_ACACIA);
         registerWandOverrides(HexItems.STAFF_EDIFIED);
 
-        HexTooltips.init();
-
         x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
         x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
         x.setRenderLayer(HexBlocks.EDIFIED_DOOR, RenderType.cutout());
