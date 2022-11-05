@@ -68,6 +68,15 @@ fun List<Iota>.getVec3(idx: Int, argc: Int = 0): Vec3 {
     }
 }
 
+fun List<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
+    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+    if (x is BooleanIota) {
+        return x.bool
+    } else {
+        throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "boolean")
+    }
+}
+
 // Helpers
 
 fun List<Iota>.getItemEntity(idx: Int, argc: Int = 0): ItemEntity {
@@ -265,7 +274,7 @@ fun aplKinnie(operatee: Either<Double, Vec3>, fn: DoubleUnaryOperator): Iota =
         { vec -> Vec3Iota(Vec3(fn.applyAsDouble(vec.x), fn.applyAsDouble(vec.y), fn.applyAsDouble(vec.z))) }
     )
 
-inline val Boolean.asActionResult get() = listOf(DoubleIota(if (this) 1.0 else 0.0))
+inline val Boolean.asActionResult get() = listOf(BooleanIota(this))
 inline val Double.asActionResult get() = listOf(DoubleIota(this))
 inline val Number.asActionResult get() = listOf(DoubleIota(this.toDouble()))
 

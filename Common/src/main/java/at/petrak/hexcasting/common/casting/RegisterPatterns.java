@@ -148,8 +148,10 @@ public class RegisterPatterns {
                 new OpEquality(true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("dw", HexDir.NORTH_WEST), modLoc("not"),
                 OpBoolNot.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), modLoc("identity"),
-                OpBoolIdentityKindOf.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), modLoc("bool_coerce"),
+                OpCoerceToBool.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("awdd", HexDir.SOUTH_EAST), modLoc("if"),
+                OpBoolIf.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("eqqq", HexDir.NORTH_WEST), modLoc("random"),
                 OpRandom.INSTANCE);

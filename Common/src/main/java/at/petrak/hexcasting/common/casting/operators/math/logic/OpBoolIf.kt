@@ -1,15 +1,17 @@
 package at.petrak.hexcasting.common.casting.operators.math.logic
 
 import at.petrak.hexcasting.api.spell.ConstManaAction
-import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBool
 import at.petrak.hexcasting.api.spell.iota.Iota
 
-// TODO we need a whole-ass cleanup of our truthiness
-object OpBoolIdentityKindOf : ConstManaAction {
-    override val argc = 1
+object OpBoolIf : ConstManaAction {
+    override val argc = 3
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
-        return (args[0].isTruthy).asActionResult
+        val cond = args.getBool(0, argc)
+        val t = args[1]
+        val f = args[2]
+        return listOf(if (cond) t else f)
     }
 }
