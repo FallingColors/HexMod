@@ -358,7 +358,7 @@ public class RegisterPatterns {
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqae", HexDir.SOUTH_EAST), modLoc("const/true"),
                 Action.makeConstantOp(new BooleanIota(true)));
-            PatternRegistry.mapPattern(HexPattern.fromAngles("dedq", HexDir.SOUTH_EAST), modLoc("const/false"),
+            PatternRegistry.mapPattern(HexPattern.fromAngles("dedq", HexDir.NORTH_EAST), modLoc("const/false"),
                 Action.makeConstantOp(new BooleanIota(false)));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqea", HexDir.NORTH_WEST), modLoc("const/vec/px"),
