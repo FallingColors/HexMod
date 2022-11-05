@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.spell.iota.*;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -116,11 +117,11 @@ public class HexIotaTypes {
     public static Iota deserialize(CompoundTag tag, ServerLevel world) {
         var type = getTypeFromTag(tag);
         if (type == null) {
-            return null;
+            return new GarbageIota();
         }
         var data = tag.get(KEY_DATA);
         if (data == null) {
-            return null;
+            return new GarbageIota();
         }
         Iota deserialized;
         try {
@@ -132,14 +133,19 @@ public class HexIotaTypes {
         return deserialized;
     }
 
+    private static Component brokenIota() {
+        return Component.translatable("hexcasting.spelldata.unknown")
+            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+    }
+
     public static Component getDisplay(CompoundTag tag) {
         var type = getTypeFromTag(tag);
         if (type == null) {
-            return Component.empty();
+            return brokenIota();
         }
         var data = tag.get(KEY_DATA);
         if (data == null) {
-            return Component.empty();
+            return brokenIota();
         }
         return type.display(data);
     }
@@ -147,11 +153,11 @@ public class HexIotaTypes {
     public static List<FormattedCharSequence> getDisplayWithMaxWidth(CompoundTag tag, int maxWidth, Font font) {
         var type = getTypeFromTag(tag);
         if (type == null) {
-            return List.of();
+            return font.split(brokenIota(), maxWidth);
         }
         var data = tag.get(KEY_DATA);
         if (data == null) {
-            return List.of();
+            return font.split(brokenIota(), maxWidth);
         }
         return type.displayWithWidth(data, maxWidth, font);
     }

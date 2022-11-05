@@ -136,8 +136,8 @@
   "hexcasting.tooltip.brainsweep.product": "Mindless Body",
   "hexcasting.spelldata.onitem": "Contains: %s",
   "hexcasting.spelldata.anything": "Anything",
-  "hexcasting.spelldata.unknown": "Unknown data (this is a bug)",
-  "hexcasting.spelldata.entity.whoknows": "An Unknown Entity",
+  "hexcasting.spelldata.unknown": "A broken iota",
+  "hexcasting.spelldata.entity.whoknows": "An unknown entity",
   "hexcasting.spelldata.akashic.nopos": "The owning record does not know of any iota here (this is a bug)",
 
   "gui.hexcasting.spellcasting": "Hex Grid",
