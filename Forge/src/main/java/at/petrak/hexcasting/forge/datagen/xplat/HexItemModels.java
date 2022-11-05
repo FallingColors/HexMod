@@ -12,13 +12,16 @@ import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Objects;
 
 public class HexItemModels extends PaucalItemModelProvider {
     public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
@@ -26,6 +29,14 @@ public class HexItemModels extends PaucalItemModelProvider {
     }
 
     private static final String[] PHIAL_SIZES = {"small", "medium", "large"};
+
+    private static String getPath(Item item) {
+        return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).getPath();
+    }
+
+    private static String getPath(Block block) {
+        return Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath();
+    }
 
     @Override
     protected void registerModels() {
@@ -37,10 +48,10 @@ public class HexItemModels extends PaucalItemModelProvider {
         simpleItem(HexItems.CREATIVE_UNLOCKER);
         simpleItem(HexItems.LORE_FRAGMENT);
 
-        singleTexture(Registry.BLOCK.getKey(HexBlocks.CONJURED_BLOCK).getPath(),
+        singleTexture(getPath(HexBlocks.CONJURED_BLOCK),
             new ResourceLocation("item/generated"),
             "layer0", new ResourceLocation("item/amethyst_shard"));
-        singleTexture(Registry.BLOCK.getKey(HexBlocks.CONJURED_LIGHT).getPath(),
+        singleTexture(getPath(HexBlocks.CONJURED_LIGHT),
             new ResourceLocation("item/generated"),
             "layer0", new ResourceLocation("item/amethyst_shard"));
 
@@ -54,7 +65,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildScroll(HexItems.SCROLL_LARGE, "large");
 
         simpleItem(HexItems.SCRYING_LENS);
-        getBuilder(Registry.ITEM.getKey(HexItems.SCRYING_LENS).getPath())
+        getBuilder(getPath(HexItems.SCRYING_LENS))
             .transforms()
             .transform(ItemTransforms.TransformType.HEAD)
             .rotation(0f, 0f, 0f)
@@ -95,7 +106,7 @@ public class HexItemModels extends PaucalItemModelProvider {
                     "layer0", modLoc("item/phial/" + name));
 
                 float fillProp = (float) fill / maxFill;
-                getBuilder(Registry.ITEM.getKey(HexItems.BATTERY).getPath()).override()
+                getBuilder(getPath(HexItems.BATTERY)).override()
                     .predicate(ItemMediaBattery.MANA_PREDICATE, fillProp)
                     .predicate(ItemMediaBattery.MAX_MANA_PREDICATE, size)
                     .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
@@ -104,21 +115,21 @@ public class HexItemModels extends PaucalItemModelProvider {
         }
 
         for (var dye : DyeColor.values()) {
-            singleTexture(Registry.ITEM.getKey(HexItems.DYE_COLORIZERS.get(dye)).getPath(),
+            singleTexture(getPath(HexItems.DYE_COLORIZERS.get(dye)),
                 new ResourceLocation("item/generated"),
                 "layer0", modLoc("item/colorizer/dye_" + dye.getName()));
         }
         for (var type : ItemPrideColorizer.Type.values()) {
-            singleTexture(Registry.ITEM.getKey(HexItems.PRIDE_COLORIZERS.get(type)).getPath(),
+            singleTexture(getPath(HexItems.PRIDE_COLORIZERS.get(type)),
                 new ResourceLocation("item/generated"),
                 "layer0", modLoc("item/colorizer/pride_" + type.getName()));
         }
-        singleTexture(Registry.ITEM.getKey(HexItems.UUID_COLORIZER).getPath(), new ResourceLocation("item/generated"),
+        singleTexture(getPath(HexItems.UUID_COLORIZER), new ResourceLocation("item/generated"),
             "layer0", modLoc("item/colorizer/uuid"));
 
         simpleItem(modLoc("slate_blank"));
         simpleItem(modLoc("slate_written"));
-        getBuilder(Registry.ITEM.getKey(HexItems.SLATE).getPath()).override()
+        getBuilder(getPath(HexItems.SLATE)).override()
             .predicate(ItemSlate.WRITTEN_PRED, 0)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_blank")))
             .end()
@@ -127,39 +138,39 @@ public class HexItemModels extends PaucalItemModelProvider {
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_written")))
             .end();
 
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.AKASHIC_RECORD).getPath()).parent(
+        getBuilder(getPath(HexBlocks.AKASHIC_RECORD)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_record")));
         simpleItem(modLoc("edified_door"));
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.EDIFIED_TRAPDOOR).getPath()).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_TRAPDOOR)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_trapdoor_bottom")));
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.EDIFIED_LOG).getPath()).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_log")));
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.STRIPPED_EDIFIED_LOG).getPath()).parent(
+        getBuilder(getPath(HexBlocks.STRIPPED_EDIFIED_LOG)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_log")));
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.EDIFIED_WOOD).getPath()).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_WOOD)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_wood")));
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.STRIPPED_EDIFIED_WOOD).getPath()).parent(
+        getBuilder(getPath(HexBlocks.STRIPPED_EDIFIED_WOOD)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_wood")));
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.EDIFIED_STAIRS).getPath()).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_STAIRS)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_stairs")));
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.EDIFIED_SLAB).getPath()).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_SLAB)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_slab")));
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.EDIFIED_BUTTON).getPath()).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_BUTTON)).parent(
                 new ModelFile.UncheckedModelFile(new ResourceLocation("block/button_inventory")))
             .texture("texture", modLoc("block/edified_planks"));
-        getBuilder(Registry.BLOCK.getKey(HexBlocks.EDIFIED_PRESSURE_PLATE).getPath())
+        getBuilder(getPath(HexBlocks.EDIFIED_PRESSURE_PLATE))
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/edified_pressure_plate")));
     }
 
     private void buildSealableIotaHolder(Item item, String stub) {
-        var name = Registry.ITEM.getKey(item).getPath();
+        var name = getPath(item);
         var plain = singleTexture(name, new ResourceLocation("item/generated"),
-            "layer0", modLoc("item/" + stub));
+            "layer0", modLoc("item/" + stub + "_empty"));
         var unsealed = withExistingParent(name + "_filled", new ResourceLocation("item/generated"))
-            .texture("layer0", modLoc("item/" + stub))
+            .texture("layer0", modLoc("item/" + stub + "_base"))
             .texture("layer1", modLoc("item/" + stub) + "_overlay");
         var sealed = withExistingParent(name + "_sealed", new ResourceLocation("item/generated"))
-            .texture("layer0", modLoc("item/" + stub))
+            .texture("layer0", modLoc("item/" + stub + "_base_sealed"))
             .texture("layer1", modLoc("item/" + stub) + "_overlay_sealed");
         getBuilder(name)
             .override().predicate(ItemFocus.OVERLAY_PRED, 0f)
@@ -171,7 +182,7 @@ public class HexItemModels extends PaucalItemModelProvider {
     }
 
     private void buildScroll(Item item, String size) {
-        getBuilder(Registry.ITEM.getKey(item).getPath())
+        getBuilder(getPath(item))
             .override()
             .predicate(ItemScroll.ANCIENT_PREDICATE, 0f)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/scroll_pristine_" + size))).end()
@@ -181,9 +192,9 @@ public class HexItemModels extends PaucalItemModelProvider {
     }
 
     private void buildStaff(Item item, String name) {
-        singleTexture(Registry.ITEM.getKey(item).getPath(), new ResourceLocation("item/handheld_rod"),
+        singleTexture(getPath(item), new ResourceLocation("item/handheld_rod"),
             "layer0", modLoc("item/staves/" + name));
-        getBuilder(Registry.ITEM.getKey(item).getPath())
+        getBuilder(getPath(item))
             .override()
             .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 0)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name + "_staff")))
@@ -199,7 +210,7 @@ public class HexItemModels extends PaucalItemModelProvider {
     private void buildPackagedSpell(Item item, String name) {
         simpleItem(modLoc(name));
         simpleItem(modLoc(name + "_filled"));
-        getBuilder(Registry.ITEM.getKey(item).getPath())
+        getBuilder(getPath(item))
             .override()
             .predicate(ItemPackagedHex.HAS_PATTERNS_PRED, -0.01f)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))

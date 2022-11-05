@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
@@ -122,11 +123,40 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         });
 
-        var akashicRecordModel = models().getExistingFile(modLoc("block/akashic_record"));
+        var akashicRecordModel = models().withExistingParent("akashic_record", "block/block")
+            .renderType("translucent")
+            .texture("inner", modLoc("block/akashic_ligature"))
+            .texture("outer", modLoc("block/akashic_record"))
+            .texture("particle", modLoc("block/akashic_ligature"))
+            .element()
+            .cube("#outer")
+            .end()
+            .element()
+            .from(15.75f, 15.75f, 15.75f)
+            .to(0.25f, 0.25f, 0.25f)
+            .allFaces((dir, builder) -> builder.texture("#inner").rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN))
+            .end();
+
         simpleBlock(HexBlocks.AKASHIC_RECORD, akashicRecordModel);
         simpleBlockItem(HexBlocks.AKASHIC_RECORD, akashicRecordModel);
         blockAndItem(HexBlocks.AKASHIC_LIGATURE,
             models().cubeAll("akashic_ligature", modLoc("block/akashic_ligature")));
+
+        models().getBuilder("akashic_bookshelf")
+            .renderType("cutout")
+            .texture("front", modLoc("block/akashic_bookshelf"))
+            .texture("side", modLoc("block/akashic_bookshelf_horiz"))
+            .texture("top_bottom", modLoc("block/akashic_bookshelf_vert"))
+            .texture("particle", modLoc("block/akashic_bookshelf_vert"))
+            .element()
+            .allFaces((dir, builder) -> builder.texture(switch (dir) {
+                case DOWN, UP -> "#top_bottom";
+                case EAST, SOUTH, WEST -> "#side";
+                default -> "#front";
+            }).cullface(dir))
+            .end()
+            .element()
+            .face(Direction.NORTH).texture("#overlay").cullface(Direction.NORTH).tintindex(0);
 
         getVariantBuilder(HexBlocks.AKASHIC_BOOKSHELF).forAllStates(bs -> {
             Direction dir = bs.getValue(BlockAkashicBookshelf.FACING);
@@ -197,17 +227,20 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         ResourceLocation leavesParent = new ResourceLocation("block/leaves");
         blockAndItem(HexBlocks.AMETHYST_EDIFIED_LEAVES,
             models().withExistingParent("amethyst_edified_leaves", leavesParent)
-                .texture("all", modLoc("block/amethyst_edified_leaves")));
+                .texture("all", modLoc("block/amethyst_edified_leaves"))
+                .renderType("cutout_mipped"));
         blockAndItem(HexBlocks.AVENTURINE_EDIFIED_LEAVES,
             models().withExistingParent("aventurine_edified_leaves", leavesParent)
-                .texture("all", modLoc("block/aventurine_edified_leaves")));
+                .texture("all", modLoc("block/aventurine_edified_leaves"))
+                .renderType("cutout_mipped"));
         blockAndItem(HexBlocks.CITRINE_EDIFIED_LEAVES,
             models().withExistingParent("citrine_edified_leaves", leavesParent)
-                .texture("all", modLoc("block/citrine_edified_leaves")));
+                .texture("all", modLoc("block/citrine_edified_leaves"))
+                .renderType("cutout_mipped"));
 
-        doorBlock(HexBlocks.EDIFIED_DOOR, modLoc("block/edified_door_lower"), modLoc("block/edified_door_upper"));
+        doorBlockWithRenderType(HexBlocks.EDIFIED_DOOR, modLoc("block/edified_door_lower"), modLoc("block/edified_door_upper"), "cutout");
         // door model via the given texture
-        trapdoorBlock(HexBlocks.EDIFIED_TRAPDOOR, modLoc("block/edified_trapdoor"), true);
+        trapdoorBlockWithRenderType(HexBlocks.EDIFIED_TRAPDOOR, modLoc("block/edified_trapdoor"), true, "cutout");
 
         ResourceLocation planks1 = modLoc("block/edified_planks");
         BlockModelBuilder planksModel = models().cubeAll("edified_planks", planks1);
@@ -231,7 +264,8 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         simpleBlock(HexBlocks.SCONCE, sconceModel);
         simpleBlockItem(HexBlocks.SCONCE, sconceModel);
 
-        var conjuredModel = models().getBuilder("conjured").texture("particle", mcLoc("block/amethyst_block"));
+        var conjuredModel = models().getBuilder("conjured").texture("particle", mcLoc("block/amethyst_block"))
+            .renderType("cutout");
         simpleBlock(HexBlocks.CONJURED_BLOCK, conjuredModel);
         simpleBlock(HexBlocks.CONJURED_LIGHT, conjuredModel);
     }

@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/leaves",
+  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "all": "hexcasting:block/aventurine_edified_leaves"
   }

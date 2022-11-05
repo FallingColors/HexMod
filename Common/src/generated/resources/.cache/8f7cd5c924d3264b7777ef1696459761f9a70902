@@ -1,4 +1,4 @@
-// 1.19.2	2022-11-04T11:49:15.7613829	Item Models: hexcasting
+// 1.19.2	2022-11-05T14:56:40.628663	Item Models: hexcasting
 f2156b3a7041cf99891b528393db64c6b9ca1a4f assets/hexcasting/models/item/abacus.json
 783d8454d6b74f926be0d3e02d87c6505e9d76d0 assets/hexcasting/models/item/acacia_staff.json
 19730853397b109cfedd0c3bbda83d5de6cd15b9 assets/hexcasting/models/item/akashic_record.json
@@ -41,9 +41,9 @@ c9faada6299f388afc2d2798843d2b45159950d1 assets/hexcasting/models/item/edified_d
 2584421c2e9e1cdf22a703018b54cf449613d7d9 assets/hexcasting/models/item/edified_stairs.json
 ae58c5b7c304d33cbde60caf44a4c4ee4ec1a633 assets/hexcasting/models/item/edified_trapdoor.json
 084183e4351973c8165f6f459c0f0dba2463d957 assets/hexcasting/models/item/edified_wood.json
-65fe891f55bc2284690cb1e294cf92dc86dacc7f assets/hexcasting/models/item/focus.json
-19b3474a96fa5631ed2a36c6f72cd8853ae4b3cc assets/hexcasting/models/item/focus_filled.json
-f7f67f4dce21cdd309ae3dae665e4fb141bded30 assets/hexcasting/models/item/focus_sealed.json
+7659d7b7bf93deba4c55405c29b8fa6b8b810ac1 assets/hexcasting/models/item/focus.json
+947d1539d88f9d6fd0afcdf831f4327356d19baf assets/hexcasting/models/item/focus_filled.json
+cb2d973af25a2ec07e6094ecc106c896a06918dc assets/hexcasting/models/item/focus_sealed.json
 6ec61fea7d8c49cc0c45b64857fd926451b4845f assets/hexcasting/models/item/jeweler_hammer.json
 e8ce683966f007b56cc551b3137c77f0a1fe2d9a assets/hexcasting/models/item/jungle_staff.json
 abfc028c974a02780aed3d7a5859352503bbd920 assets/hexcasting/models/item/lens.json
@@ -94,9 +94,9 @@ c809785d09b2545dac68d4a10b1e576454dd51e7 assets/hexcasting/models/item/scroll_sm
 9b82beea7667a8f9de3d1e8df136bb2034ed51a8 assets/hexcasting/models/item/slate.json
 612d4c65fb907c75975659edf00c7d92bf1b43d8 assets/hexcasting/models/item/slate_blank.json
 e6452f95b60240e0067769d7f32a0b9fa7718a1b assets/hexcasting/models/item/slate_written.json
-a36727102e1debfd1839a8f9e4e9107b8470658e assets/hexcasting/models/item/spellbook.json
-162687ccff4ea2a140883fc708b8bb5c781a4791 assets/hexcasting/models/item/spellbook_filled.json
-af553b3d434c3db667329338735393912c7866d7 assets/hexcasting/models/item/spellbook_sealed.json
+986674763b45e0f9381f9f34a708082e5230652a assets/hexcasting/models/item/spellbook.json
+f962c13ab9e299885387cee35b16006651821e81 assets/hexcasting/models/item/spellbook_filled.json
+c29e6e7b2168eeeb13b1fc3e93ffc3e0c9bd11ce assets/hexcasting/models/item/spellbook_sealed.json
 7f03c6ea7a07cfedc7d580bb9ba5fcdc54cccb86 assets/hexcasting/models/item/spruce_staff.json
 d6ebc87cb0fa6f86bee3a4eade7329ebb0cf2d38 assets/hexcasting/models/item/stripped_edified_log.json
 ea3f18f75776022127f3a108119e3f7a5c211c0f assets/hexcasting/models/item/stripped_edified_wood.json
