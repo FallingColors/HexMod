@@ -191,14 +191,27 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             return villagersOffendedByMindMurder.get();
         }
 
+        // TODO: on Forge, this value isn't loaded when creating a new world yet because config is per-world.
+        // For now I'm hardcoding this, but for correctness we should probably switch the table
+        // injects to be loaded from datapack instead of config.
+        // (Without hardcoding loading a new world is *incredibly* laggy because it throws every single time it tries to
+        // load *any* loot table)
         @Override
         public ScrollQuantity scrollsForLootTable(ResourceLocation lootTable) {
-            if (anyMatch(fewScrollTables.get(), lootTable)) {
-                return ScrollQuantity.FEW;
-            } else if (anyMatch(someScrollTables.get(), lootTable)) {
-                return ScrollQuantity.SOME;
-            } else if (anyMatch(manyScrollTables.get(), lootTable)) {
-                return ScrollQuantity.MANY;
+            try {
+                if (anyMatch(HexConfig.ServerConfigAccess.DEFAULT_FEW_SCROLL_TABLES, lootTable)) {
+                    return ScrollQuantity.FEW;
+                } else if (anyMatch(HexConfig.ServerConfigAccess.DEFAULT_SOME_SCROLL_TABLES, lootTable)) {
+                    return ScrollQuantity.SOME;
+                } else if (anyMatch(HexConfig.ServerConfigAccess.DEFAULT_MANY_SCROLL_TABLES, lootTable)) {
+                    return ScrollQuantity.MANY;
+                }
+            } catch (IllegalStateException ignored) {
+                // then we are in develop env AND this is being called in the new world screen (it loads datapacks for
+                // world generation options)
+                // config values don't exist yet because config is per-world on Forge, and in dev it throws an exn
+                // (in release it just silently returns default, which is expected behavior here, but the comment suggests
+                // it will start throwing at some point soon.)
             }
             return ScrollQuantity.NONE;
         }
