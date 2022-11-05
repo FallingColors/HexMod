@@ -44,27 +44,27 @@ public class ForgeCapabilityHandler {
     /**
      * Items that store an iota to their tag.
      */
-    public static final ResourceLocation IOTA_STORAGE_CAP = modLoc("data_holder");
+    public static final ResourceLocation IOTA_STORAGE_CAP = modLoc("iota_holder");
     /**
      * Items that intrinsically store an iota.
      */
-    public static final ResourceLocation IOTA_STATIC_CAP = modLoc("data_item");
+    public static final ResourceLocation IOTA_STATIC_CAP = modLoc("iota_item");
     /**
      * Items that store a variable amount of media to their tag.
      */
-    public static final ResourceLocation MEDIA_STORAGE_CAP = modLoc("mana_holder");
+    public static final ResourceLocation MEDIA_STORAGE_CAP = modLoc("media_holder");
     /**
      * Items that statically provide media.
      */
-    public static final ResourceLocation MEDIA_STATIC_CAP = modLoc("mana_item");
+    public static final ResourceLocation MEDIA_STATIC_CAP = modLoc("media_item");
     /**
      * Items that store a packaged Hex.
      */
-    public static final ResourceLocation HEX_HOLDER_CAP = modLoc("spell_item");
+    public static final ResourceLocation HEX_HOLDER_CAP = modLoc("hex_item");
     /**
      * Items that work as pigments.
      */
-    public static final ResourceLocation PIGMENT_CAP = modLoc("colorizer");
+    public static final ResourceLocation PIGMENT_CAP = modLoc("pigment");
 
     private static final ResourceLocation IMPETUS_HANDLER = modLoc("impetus_items");
 
@@ -80,26 +80,27 @@ public class ForgeCapabilityHandler {
 
         if (stack.getItem() instanceof MediaHolderItem holder) {
             evt.addCapability(MEDIA_STORAGE_CAP,
-                provide(stack, HexCapabilities.MANA, () -> new ItemBasedManaHolder(holder, stack)));
+                provide(stack, HexCapabilities.MANA, () -> new ItemBasedMediaHolder(holder, stack)));
         } else if (stack.is(HexItems.AMETHYST_DUST)) {
             evt.addCapability(MEDIA_STATIC_CAP, provide(stack, HexCapabilities.MANA, () ->
-                new StaticManaHolder(HexConfig.common()::dustManaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack)));
+                new StaticMediaHolder(HexConfig.common()::dustManaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY,
+                    stack)));
         } else if (stack.is(Items.AMETHYST_SHARD)) {
-            evt.addCapability(MEDIA_STATIC_CAP, provide(stack, HexCapabilities.MANA, () -> new StaticManaHolder(
+            evt.addCapability(MEDIA_STATIC_CAP, provide(stack, HexCapabilities.MANA, () -> new StaticMediaHolder(
                 HexConfig.common()::shardManaAmount, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack)));
         } else if (stack.is(HexItems.CHARGED_AMETHYST)) {
             evt.addCapability(MEDIA_STATIC_CAP,
-                provide(stack, HexCapabilities.MANA, () -> new StaticManaHolder(
+                provide(stack, HexCapabilities.MANA, () -> new StaticMediaHolder(
                     HexConfig.common()::chargedCrystalManaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)));
         }
 
         if (stack.getItem() instanceof IotaHolderItem holder) {
             evt.addCapability(IOTA_STORAGE_CAP,
-                provide(stack, HexCapabilities.DATUM, () -> new ItemBasedDataHolder(holder, stack)));
+                provide(stack, HexCapabilities.DATUM, () -> new ItemBasedIotaHolder(holder, stack)));
         } else if (stack.is(Items.PUMPKIN_PIE)) {
             // haha yes
             evt.addCapability(IOTA_STATIC_CAP, provide(stack, HexCapabilities.DATUM, () ->
-                new StaticDatumHolder((s) -> new DoubleIota(Math.PI * s.getCount()), stack)));
+                new StaticIotaHolder((s) -> new DoubleIota(Math.PI * s.getCount()), stack)));
         }
 
         if (stack.getItem() instanceof HexHolderItem holder) {
@@ -150,9 +151,9 @@ public class ForgeCapabilityHandler {
         }
     }
 
-    private record StaticManaHolder(Supplier<Integer> baseWorth,
-                                    int consumptionPriority,
-                                    ItemStack stack) implements ADMediaHolder {
+    private record StaticMediaHolder(Supplier<Integer> baseWorth,
+                                     int consumptionPriority,
+                                     ItemStack stack) implements ADMediaHolder {
         @Override
         public int getMedia() {
             return baseWorth.get() * stack.getCount();
@@ -203,8 +204,8 @@ public class ForgeCapabilityHandler {
         }
     }
 
-    private record ItemBasedManaHolder(MediaHolderItem holder,
-                                       ItemStack stack) implements ADMediaHolder {
+    private record ItemBasedMediaHolder(MediaHolderItem holder,
+                                        ItemStack stack) implements ADMediaHolder {
 
         @Override
         public int getMedia() {
@@ -247,8 +248,8 @@ public class ForgeCapabilityHandler {
         }
     }
 
-    private record StaticDatumHolder(Function<ItemStack, Iota> provider,
-                                     ItemStack stack) implements ADIotaHolder {
+    private record StaticIotaHolder(Function<ItemStack, Iota> provider,
+                                    ItemStack stack) implements ADIotaHolder {
 
         @Override
         public @Nullable
@@ -269,7 +270,7 @@ public class ForgeCapabilityHandler {
         }
     }
 
-    private record ItemBasedDataHolder(IotaHolderItem holder,
+    private record ItemBasedIotaHolder(IotaHolderItem holder,
                                        ItemStack stack) implements ADIotaHolder {
 
         @Override
