@@ -21,10 +21,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -55,11 +58,17 @@ public class VillagerEmiStack extends EmiStack {
             .replace(':', '-'));
     }
 
+    public static Set<BlockState> matchingStatesForProfession(VillagerProfession profession) {
+        return Registry.POINT_OF_INTEREST_TYPE.holders()
+            .filter(profession.heldJobSite())
+            .flatMap(it -> it.value().matchingStates().stream())
+            .collect(Collectors.toSet());
+    }
+
     public static EmiIngredient atLevelOrHigher(VillagerIngredient ingredient, boolean remainder) {
         if (ingredient.profession() == null) {
             return EmiIngredient.of(Registry.VILLAGER_PROFESSION.stream()
-                // TODO(yrsegal): what is this for? the PoiType is now a predicate so this won't work
-//                .filter(it -> !((AccessorPoiType) it.heldJobSite()).hex$matchingStates().isEmpty())
+                .filter(it -> matchingStatesForProfession(it).isEmpty())
                 .map(it -> atLevelOrHigher(new VillagerIngredient(Registry.VILLAGER_PROFESSION.getKey(it),
                     ingredient.biome(), ingredient.minLevel()), true))
                 .toList());
