@@ -118,7 +118,7 @@ public class ListIota extends Iota {
             // We aim to not break one iota between lines
             var listTag = HexUtils.downcast(tag, ListTag.TYPE);
 
-            var start = FormattedCharSequence.forward("[", Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE));
+            var start = FormattedCharSequence.forward(listTag.isEmpty() ? "[]" : "[", Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE));
             var cursor = font.width(start);
             var currentLine = new ArrayList<>(List.of(start));
             var out = new ArrayList<FormattedCharSequence>();

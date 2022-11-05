@@ -6,7 +6,6 @@ import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -31,7 +30,8 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public void setRenderLayer(Block block, RenderType type) {
-        ItemBlockRenderTypes.setRenderLayer(block, type);
+        // For forge, handled in block models
+//        ItemBlockRenderTypes.setRenderLayer(block, type);
     }
 
     @Override

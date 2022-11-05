@@ -8,7 +8,9 @@ import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.common.lib.HexIotaTypes
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.*
-import net.minecraft.network.chat.*
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
@@ -245,6 +247,7 @@ fun ItemStack.serializeToNBT(): CompoundTag {
     return out
 }
 
+@Suppress("UNCHECKED_CAST")
 @Throws(IllegalArgumentException::class)
 fun <T : Tag> Tag.downcast(type: TagType<T>): T {
     if (this.type == type) {
