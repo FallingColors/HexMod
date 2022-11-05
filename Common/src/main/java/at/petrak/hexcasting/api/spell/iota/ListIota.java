@@ -106,7 +106,7 @@ public class ListIota extends Iota {
                 out.append(HexIotaTypes.getDisplay(csub));
 
                 if (i < list.size() - 1) {
-                    out.append(",");
+                    out.append(", ");
                 }
             }
             out.append(Component.literal("]").withStyle(ChatFormatting.DARK_PURPLE));

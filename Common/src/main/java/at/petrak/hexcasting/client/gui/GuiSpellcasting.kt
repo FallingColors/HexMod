@@ -392,7 +392,7 @@ class GuiSpellcasting constructor(
             drawBox(ps, 0f, 0f, (this.width * LHS_IOTAS_ALLOCATION + 5).toFloat(), boxHeight, 7.5f)
             ps.translate(0.0, 0.0, 1.0)
 
-            val time = ClientTickCounter.getTotal() * 0.8f
+            val time = ClientTickCounter.getTotal() * 0.16f
             val opacity = (Mth.map(cos(time), -1f, 1f, 200f, 255f)).toInt()
             val color = 0x00_ffffff or (opacity shl 24)
             RenderSystem.setShader { prevShader }
