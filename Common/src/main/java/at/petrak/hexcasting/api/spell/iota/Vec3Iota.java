@@ -57,7 +57,7 @@ public class Vec3Iota extends Iota {
 
         @Override
         public int color() {
-            return 0xff_ff5555;
+            return 0xff_ff3030;
         }
     };
 

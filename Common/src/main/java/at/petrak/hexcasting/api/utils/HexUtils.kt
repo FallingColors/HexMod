@@ -48,7 +48,7 @@ fun vec2FromNBT(tag: LongArray): Vec2 = if (tag.size != 2) Vec2.ZERO else
 fun otherHand(hand: InteractionHand) =
     if (hand == InteractionHand.MAIN_HAND) InteractionHand.OFF_HAND else InteractionHand.MAIN_HAND
 
-fun fixNAN(x: Double): Double = if (x.isFinite()) x else 0.0
+fun fixNAN(n: Double): Double = if (n.isFinite()) n else 0.0
 
 fun findCenter(points: List<Vec2>): Vec2 {
     var minX = Float.POSITIVE_INFINITY
