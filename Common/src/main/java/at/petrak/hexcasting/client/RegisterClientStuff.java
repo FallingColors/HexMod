@@ -92,6 +92,7 @@ public class RegisterClientStuff {
         x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
         x.setRenderLayer(HexBlocks.EDIFIED_DOOR, RenderType.cutout());
         x.setRenderLayer(HexBlocks.EDIFIED_TRAPDOOR, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.AKASHIC_BOOKSHELF, RenderType.cutout());
         x.setRenderLayer(HexBlocks.SCONCE, RenderType.cutout());
 
         x.setRenderLayer(HexBlocks.AMETHYST_EDIFIED_LEAVES, RenderType.cutoutMipped());

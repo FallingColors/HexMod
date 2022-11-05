@@ -1,10 +1,10 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "front": "hexcasting:block/akashic/bookshelf",
-    "side": "hexcasting:block/akashic/bookshelf_horiz",
-    "particle": "hexcasting:block/akashic/bookshelf_vert",
-    "top_bottom": "hexcasting:block/akashic/bookshelf_vert"
+    "front": "hexcasting:block/akashic_bookshelf",
+    "side": "hexcasting:block/akashic_bookshelf_horiz",
+    "particle": "hexcasting:block/akashic_bookshelf_vert",
+    "top_bottom": "hexcasting:block/akashic_bookshelf_vert"
   },
   "elements": [
     {

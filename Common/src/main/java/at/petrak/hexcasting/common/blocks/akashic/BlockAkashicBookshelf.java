@@ -85,12 +85,12 @@ public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, 
 
     @Override
     public boolean hasAnalogOutputSignal(BlockState pState) {
-        return pState.getValue(HAS_BOOKS);
+        return true;
     }
 
     @Override
     public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
-        return pState.getValue(HAS_BOOKS) ? 15 : 0;
+        return pState.getValue(HAS_BOOKS) ? 15 : 0; // TODO have an iota -> comparator value mapping?
     }
 
     @Nullable
