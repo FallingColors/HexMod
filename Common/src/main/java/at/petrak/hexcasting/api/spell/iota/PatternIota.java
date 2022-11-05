@@ -67,7 +67,8 @@ public class PatternIota extends Iota {
     }
 
     public static Component display(HexPattern pat) {
-        var bob = new StringBuilder("HexPattern(");
+        var component = Component.literal("HexPattern(").withStyle(ChatFormatting.GOLD);
+        var bob = new StringBuilder();
         bob.append(pat.getStartDir());
 
         var sig = pat.anglesSignature();
@@ -75,7 +76,8 @@ public class PatternIota extends Iota {
             bob.append(" ");
             bob.append(sig);
         }
-        bob.append(")");
-        return Component.literal(bob.toString()).withStyle(ChatFormatting.GOLD);
+        component.append(Component.literal(bob.toString()).withStyle(ChatFormatting.WHITE));
+        component.append(Component.literal(")").withStyle(ChatFormatting.GOLD));
+        return component;
     }
 }

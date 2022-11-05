@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
-import at.petrak.hexcasting.api.spell.getPositiveIntUnder
+import at.petrak.hexcasting.api.spell.getIntBetween
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 
@@ -18,7 +18,7 @@ object OpLastNToList : Action {
     ): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
-        val yoinkCount = stack.takeLast(1).getPositiveIntUnder(0, stack.size - 1)
+        val yoinkCount = stack.takeLast(1).getIntBetween(0, 0, stack.size - 1)
         stack.removeLast()
         val output = mutableListOf<Iota>()
         output.addAll(stack.takeLast(yoinkCount))

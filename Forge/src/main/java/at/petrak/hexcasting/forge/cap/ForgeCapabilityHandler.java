@@ -23,12 +23,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -116,7 +116,7 @@ public class ForgeCapabilityHandler {
 
     public static void attachBlockEntityCaps(AttachCapabilitiesEvent<BlockEntity> evt) {
         if (evt.getObject() instanceof BlockEntityAbstractImpetus impetus) {
-            evt.addCapability(IMPETUS_HANDLER, provide(impetus, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+            evt.addCapability(IMPETUS_HANDLER, provide(impetus, ForgeCapabilities.ITEM_HANDLER,
                 () -> new ForgeImpetusCapability(impetus)));
         }
     }
