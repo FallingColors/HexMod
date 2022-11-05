@@ -6,7 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.FastColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,8 +57,7 @@ public class GarbageIota extends Iota {
 
         @Override
         public int color() {
-            var lum = RANDOM.nextInt(0x40, 0x60);
-            return FastColor.ARGB32.color(0xff, lum, lum, lum);
+            return 0xff_505050;
         }
     };
 }

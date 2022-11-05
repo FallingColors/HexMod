@@ -57,7 +57,7 @@ public class Vec3Iota extends Iota {
 
         @Override
         public int color() {
-            return 0xff_ff55ff;
+            return 0xff_ff5555;
         }
     };
 
@@ -69,7 +69,7 @@ public class Vec3Iota extends Iota {
 
     public static Component display(double x, double y, double z) {
         return Component.literal(String.format("(%.2f, %.2f, %.2f)", x, y, z))
-            .withStyle(ChatFormatting.LIGHT_PURPLE);
+            .withStyle(ChatFormatting.RED);
     }
 
     public static Component display(Vec3 v) {
