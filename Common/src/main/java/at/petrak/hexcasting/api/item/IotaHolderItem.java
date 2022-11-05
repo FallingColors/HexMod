@@ -3,12 +3,15 @@ package at.petrak.hexcasting.api.item;
 import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +57,19 @@ public interface IotaHolderItem {
     }
 
     default int getColor(ItemStack stack) {
+        if (NBTHelper.hasString(stack, TAG_OVERRIDE_VISUALLY)) {
+            var override = NBTHelper.getString(stack, TAG_OVERRIDE_VISUALLY);
+
+            if (override != null && ResourceLocation.isValidResourceLocation(override)) {
+                var iotaType = HexIotaTypes.REGISTRY.get(new ResourceLocation(override));
+                if (iotaType != null) {
+                    return iotaType.color();
+                }
+            }
+
+            return 0xFF000000 | Mth.hsvToRgb(ClientTickCounter.getTotal() * 2 % 360 / 360F, 0.75F, 1F);
+        }
+
         var tag = this.readIotaTag(stack);
         if (tag == null) {
             return HexUtils.ERROR_COLOR;

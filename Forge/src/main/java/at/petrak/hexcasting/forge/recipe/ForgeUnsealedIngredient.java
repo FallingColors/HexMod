@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.spell.iota.NullIota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,17 +19,19 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class ForgeUnsealedIngredient extends AbstractIngredient {
     private final ItemStack stack;
 
+    private static ItemStack createStack(ItemStack base) {
+        ItemStack newStack = base.copy();
+        NBTHelper.putString(newStack, IotaHolderItem.TAG_OVERRIDE_VISUALLY, "any");
+        return newStack;
+    }
+
     protected ForgeUnsealedIngredient(ItemStack stack) {
-        super(HexIotaTypes.REGISTRY.keySet().stream()
-            .map(it -> {
-                ItemStack newStack = stack.copy();
-                NBTHelper.putString(newStack, IotaHolderItem.TAG_OVERRIDE_VISUALLY, it.toString());
-                return new Ingredient.ItemValue(newStack);
-            }));
+        super(Stream.of(new Ingredient.ItemValue(createStack(stack))));
         this.stack = stack;
     }
 

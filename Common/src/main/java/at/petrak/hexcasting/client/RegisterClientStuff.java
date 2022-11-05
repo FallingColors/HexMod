@@ -108,8 +108,8 @@ public class RegisterClientStuff {
 
     public static void registerColorProviders(BiConsumer<ItemColor, Item> itemColorRegistry,
         BiConsumer<BlockColor, Block> blockColorRegistry) {
-        itemColorRegistry.accept(makeIotaStorageColorer(HexItems.FOCUS::getColor), HexItems.FOCUS);
-        itemColorRegistry.accept(makeIotaStorageColorer(HexItems.SPELLBOOK::getColor), HexItems.SPELLBOOK);
+        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.FOCUS::getColor), HexItems.FOCUS);
+        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.SPELLBOOK::getColor), HexItems.SPELLBOOK);
 
         blockColorRegistry.accept((bs, level, pos, idx) -> {
             if (!bs.getValue(BlockAkashicBookshelf.HAS_BOOKS) || level == null || pos == null) {
@@ -131,14 +131,14 @@ public class RegisterClientStuff {
     /**
      * Helper function to colorize the layers of an item that stores an iota, in the manner of foci and spellbooks.
      * <br>
-     * 0 = base; 1 = unsealed overlay; 2 = sealed overlay.
+     * 0 = base; 1 = overlay
      */
-    public static ItemColor makeIotaStorageColorer(ToIntFunction<ItemStack> getColor) {
+    public static ItemColor makeIotaStorageColorizer(ToIntFunction<ItemStack> getColor) {
         return (stack, idx) -> {
-            if (idx == 0) {
-                return 0xff_ffffff;
+            if (idx == 1) {
+                return getColor.applyAsInt(stack);
             }
-            return getColor.applyAsInt(stack);
+            return 0xff_ffffff;
         };
     }
 
@@ -268,7 +268,7 @@ public class RegisterClientStuff {
         Predicate<ItemStack> isSealed) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.OVERLAY_PRED,
             (stack, level, holder, holderID) -> {
-                if (!hasIota.test(stack)) {
+                if (!hasIota.test(stack) && !NBTHelper.hasString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY)) {
                     return 0;
                 }
                 if (!isSealed.test(stack)) {

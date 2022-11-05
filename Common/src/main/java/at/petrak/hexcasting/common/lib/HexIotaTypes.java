@@ -85,7 +85,7 @@ public class HexIotaTypes {
 
     /**
      * This method attempts to find the type from the {@code type} key.
-     * See {@link HexIotaTypes#getTypeFromTag} for the storage format.
+     * See {@link HexIotaTypes#serialize(Iota)} for the storage format.
      *
      * @return {@code null} if it cannot get the type.
      */
