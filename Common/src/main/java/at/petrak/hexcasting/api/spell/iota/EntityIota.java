@@ -29,6 +29,11 @@ public class EntityIota extends Iota {
     }
 
     @Override
+    public boolean isTruthy() {
+        return true;
+    }
+
+    @Override
     public @NotNull
     Tag serialize() {
         var out = new CompoundTag();

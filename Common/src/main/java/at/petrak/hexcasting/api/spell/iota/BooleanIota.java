@@ -3,69 +3,65 @@ package at.petrak.hexcasting.api.spell.iota;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DoubleIota extends Iota {
-    public static final double TOLERANCE = 0.0001;
-
-    public DoubleIota(double d) {
+public class BooleanIota extends Iota {
+    public BooleanIota(boolean d) {
         super(HexIotaTypes.DOUBLE, d);
     }
 
-    public double getDouble() {
-        return HexUtils.fixNAN((Double) this.payload);
+    public boolean getBool() {
+        return (boolean) this.payload;
     }
 
     @Override
     public boolean isTruthy() {
-        return this.getDouble() != 0.0;
+        return this.getBool();
     }
 
     @Override
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
-            && that instanceof DoubleIota dd
-            && tolerates(this.getDouble(), dd.getDouble());
-    }
-
-    public static boolean tolerates(double a, double b) {
-        return Math.abs(a - b) < TOLERANCE;
+            && that instanceof BooleanIota b
+            && this.getBool() == b.getBool();
     }
 
     @Override
     public @NotNull Tag serialize() {
-        return DoubleTag.valueOf(this.getDouble());
+        // there is no boolean tag :(
+        return ByteTag.valueOf(this.getBool());
     }
 
-    public static IotaType<DoubleIota> TYPE = new IotaType<>() {
+    public static IotaType<BooleanIota> TYPE = new IotaType<>() {
         @Nullable
         @Override
-        public DoubleIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return DoubleIota.deserialize(tag);
+        public BooleanIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
+            return BooleanIota.deserialize(tag);
         }
 
         @Override
         public Component display(Tag tag) {
-            return DoubleIota.display(DoubleIota.deserialize(tag).getDouble());
+            return BooleanIota.display(BooleanIota.deserialize(tag).getBool());
         }
 
         @Override
         public int color() {
-            return 0xff_55ff55;
+            // We can't set red or green ... so do yellow, I guess
+            return 0xff_ffff55;
         }
     };
 
-    public static DoubleIota deserialize(Tag tag) throws IllegalArgumentException {
-        var dtag = HexUtils.downcast(tag, DoubleTag.TYPE);
-        return new DoubleIota(dtag.getAsDouble());
+    public static BooleanIota deserialize(Tag tag) throws IllegalArgumentException {
+        var dtag = HexUtils.downcast(tag, ByteTag.TYPE);
+        return new BooleanIota(dtag.getAsByte() != 0);
     }
 
-    public static Component display(double d) {
-        return Component.literal(String.format("%.2f", d)).withStyle(ChatFormatting.GREEN);
+    public static Component display(boolean b) {
+        return Component.literal(String.valueOf(b)).withStyle(b ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_RED);
     }
 }

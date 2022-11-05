@@ -20,9 +20,7 @@ public abstract class Iota {
         return this.type;
     }
 
-    public boolean isTruthy() {
-        return true;
-    }
+    abstract public boolean isTruthy();
 
     /**
      * Compare this to another object, within a tolerance.

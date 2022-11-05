@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.casting;
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.spell.Action;
+import at.petrak.hexcasting.api.spell.iota.BooleanIota;
 import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.api.spell.iota.NullIota;
 import at.petrak.hexcasting.api.spell.iota.Vec3Iota;
@@ -83,13 +84,17 @@ public class RegisterPatterns {
 
             // == Modify Stack ==
 
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aawdd", HexDir.EAST), modLoc("swap"), OpSwap.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aaeaa", HexDir.EAST), modLoc("rotate"),
+                OpRotate.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aadaa", HexDir.EAST), modLoc("duplicate"),
                 OpDuplicate.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aadaadaa", HexDir.EAST), modLoc("duplicate_n"),
                 OpDuplicateN.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aaedd", HexDir.EAST), modLoc("over"),
+                OpOver.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qwaeawqaeaqa", HexDir.NORTH_WEST), modLoc("stack_len"),
                 OpStackSize.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.fromAngles("aawdd", HexDir.EAST), modLoc("swap"), OpSwap.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddad", HexDir.WEST), modLoc("fisherman"),
                 OpFisherman.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaawdde", HexDir.SOUTH_EAST), modLoc("swizzle"),
@@ -350,6 +355,11 @@ public class RegisterPatterns {
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("d", HexDir.EAST), modLoc("const/null"),
                 Action.makeConstantOp(new NullIota()));
+
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aqae", HexDir.SOUTH_EAST), modLoc("const/true"),
+                Action.makeConstantOp(new BooleanIota(true)));
+            PatternRegistry.mapPattern(HexPattern.fromAngles("dedq", HexDir.SOUTH_EAST), modLoc("const/false"),
+                Action.makeConstantOp(new BooleanIota(false)));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqea", HexDir.NORTH_WEST), modLoc("const/vec/px"),
                 Action.makeConstantOp(new Vec3Iota(new Vec3(1.0, 0.0, 0.0))));

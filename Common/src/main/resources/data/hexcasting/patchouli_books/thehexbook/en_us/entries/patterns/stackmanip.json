@@ -7,8 +7,28 @@
   "read_by_default": true,
   "pages": [
     {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.stackmanip.stack"
+      "type": "hexcasting:manual_pattern",
+      "header": "hexcasting.page.stackmanip.pseudo-novice.title",
+      "anchor": "hexcasting:pseudo-novice",
+      "input": "any",
+      "output": "",
+      "text": "hexcasting.page.stackmanip.pseudo-novice",
+      "patterns": [
+        {
+          "startdir": "EAST",
+          "signature": "a",
+          "q": 0,
+          "r": 0
+        }
+      ]
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:duplicate",
+      "anchor": "hexcasting:duplicate",
+      "input": "any",
+      "output": "any, any",
+      "text": "hexcasting.page.stackmanip.duplicate"
     },
     {
       "type": "hexcasting:pattern",
@@ -17,6 +37,30 @@
       "input": "any, any",
       "output": "any, any",
       "text": "hexcasting.page.stackmanip.swap"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:rotate",
+      "anchor": "hexcasting:rotate",
+      "input": "any, any, any",
+      "output": "any, any, any",
+      "text": "hexcasting.page.stackmanip.rotate"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:over",
+      "anchor": "hexcasting:over",
+      "input": "any, any",
+      "output": "any, any, any",
+      "text": "hexcasting.page.stackmanip.over"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:duplicate_n",
+      "anchor": "hexcasting:duplicate_n",
+      "input": "any, number",
+      "output": "many",
+      "text": "hexcasting.page.stackmanip.duplicate_n"
     },
     {
       "type": "hexcasting:pattern",
@@ -33,38 +77,6 @@
       "input": "",
       "output": "num",
       "text": "hexcasting.page.stackmanip.stack_len"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:last_n_list",
-      "anchor": "hexcasting:last_n_list",
-      "input": "many, num",
-      "output": "list",
-      "text": "hexcasting.page.stackmanip.last_n_list"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:splat",
-      "anchor": "hexcasting:splat",
-      "input": "list",
-      "output": "many",
-      "text": "hexcasting.page.stackmanip.splat"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:duplicate",
-      "anchor": "hexcasting:duplicate",
-      "input": "any",
-      "output": "any, any",
-      "text": "hexcasting.page.stackmanip.duplicate"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:duplicate_n",
-      "anchor": "hexcasting:duplicate_n",
-      "input": "any, number",
-      "output": "many",
-      "text": "hexcasting.page.stackmanip.duplicate_n"
     },
     {
       "type": "hexcasting:manual_pattern",

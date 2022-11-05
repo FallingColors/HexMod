@@ -176,6 +176,7 @@ public class HexIotaTypes {
 
     public static final IotaType<NullIota> NULL = type("null", NullIota.TYPE);
     public static final IotaType<DoubleIota> DOUBLE = type("double", DoubleIota.TYPE);
+    public static final IotaType<BooleanIota> BOOLEAN = type("boolean", BooleanIota.TYPE);
     public static final IotaType<EntityIota> ENTITY = type("entity", EntityIota.TYPE);
     public static final IotaType<ListIota> LIST = type("list", ListIota.TYPE);
     public static final IotaType<PatternIota> PATTERN = type("pattern", PatternIota.TYPE);

@@ -20,6 +20,15 @@ public class PatternIota extends Iota {
         return (HexPattern) this.payload;
     }
 
+    protected PatternIota(@NotNull IotaType<?> type, @NotNull Object payload) {
+        super(type, payload);
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return true;
+    }
+
     @Override
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
