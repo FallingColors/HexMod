@@ -64,33 +64,41 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:identity",
-      "anchor": "hexcasting:identity",
+      "op_id": "hexcasting:bool_coerce",
+      "anchor": "hexcasting:bool_coerce",
       "input": "any",
-      "output": "any",
-      "text": "hexcasting.page.logic.identity"
+      "output": "bool",
+      "text": "hexcasting.page.logic.bool_coerce"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:or",
       "anchor": "hexcasting:or",
-      "input": "any, any",
-      "output": "any",
+      "input": "bool, bool",
+      "output": "bool",
       "text": "hexcasting.page.logic.or"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:and",
       "anchor": "hexcasting:and",
-      "input": "any, any",
-      "output": "any",
+      "input": "bool, bool",
+      "output": "bool",
       "text": "hexcasting.page.logic.and"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:xor",
       "anchor": "hexcasting:xor",
-      "input": "any, any",
+      "input": "bool, bool",
+      "output": "bool",
+      "text": "hexcasting.page.logic.xor"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:if",
+      "anchor": "hexcasting:if",
+      "input": "bool, any, any",
       "output": "any",
       "text": "hexcasting.page.logic.xor"
     }
