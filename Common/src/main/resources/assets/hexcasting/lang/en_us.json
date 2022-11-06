@@ -257,6 +257,7 @@
   "hexcasting.spell.book.hexcasting:number": "Numerical Reflection",
   "hexcasting.spell.book.hexcasting:mask": "Bookkeeper's Gambit",
 
+  "hexcasting.spell.hexcasting:const/null": "Nullary Reflection",
   "hexcasting.spell.hexcasting:const/vec/px": "Vector Reflection +X",
   "hexcasting.spell.hexcasting:const/vec/py": "Vector Reflection +Y",
   "hexcasting.spell.hexcasting:const/vec/pz": "Vector Reflection +Z",
@@ -318,7 +319,6 @@
   "hexcasting.spell.hexcasting:zone_entity/not_player": "Zone Distillation: Non-Player",
   "hexcasting.spell.hexcasting:zone_entity/not_living": "Zone Distillation: Non-Living",
 
-  "hexcasting.spell.hexcasting:const/null": "Nullary Reflection",
   "hexcasting.spell.hexcasting:duplicate": "Gemini Decomposition",
   "hexcasting.spell.hexcasting:duplicate_n": "Gemini Gambit",
   "hexcasting.spell.hexcasting:over": "Dioscuri's Gambit",
@@ -860,6 +860,8 @@
 
   "hexcasting.entry.consts": "Constants",
   "hexcasting.page.consts.const/null": "Adds the $(l:casting/influences)$(thing)Null/$ influence to the top of the stack.",
+  "hexcasting.page.consts.const/true": "Adds $(thing)True/$ to the top of the stack.",
+  "hexcasting.page.consts.const/false": "Adds $(thing)False/$ to the top of the stack.",
   "hexcasting.page.consts.const/vec/x": "The left-hand counter-clockwise pattern adds [1, 0, 0] to the stack; the right-hand clockwise pattern adds [-1, 0, 0].",
   "hexcasting.page.consts.const/vec/y": "The left-hand counter-clockwise pattern adds [0, 1, 0] to the stack; the right-hand clockwise pattern adds [0, -1, 0].",
   "hexcasting.page.consts.const/vec/z": "The left-hand counter-clockwise pattern adds [0, 0, 1]; the right-hand clockwise pattern adds [0, 0, -1].",
