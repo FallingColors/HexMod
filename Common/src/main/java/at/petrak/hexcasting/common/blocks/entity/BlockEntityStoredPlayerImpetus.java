@@ -5,18 +5,18 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
@@ -82,10 +82,10 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-        BlockState state, BlockPos pos, LocalPlayer observer,
-        ClientLevel world,
-        Direction hitFace, InteractionHand lensHand) {
-        super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace, lensHand);
+										BlockState state, BlockPos pos, Player observer,
+										Level world,
+										Direction hitFace) {
+        super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace);
 
         var name = this.getPlayerName();
         if (name != null) {

@@ -1,29 +1,28 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.MsgUpdateComparatorVisualsAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Wearable;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -34,6 +33,15 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public class ItemLens extends Item implements Wearable {
+
+    static {
+        DiscoveryHandlers.addLensPredicate(player -> player.getItemBySlot(EquipmentSlot.MAINHAND).is(HexItems.SCRYING_LENS));
+        DiscoveryHandlers.addLensPredicate(player -> player.getItemBySlot(EquipmentSlot.OFFHAND).is(HexItems.SCRYING_LENS));
+        DiscoveryHandlers.addLensPredicate(player -> player.getItemBySlot(EquipmentSlot.HEAD).is(HexItems.SCRYING_LENS));
+
+        DiscoveryHandlers.addGridScaleModifier(player -> player.getItemBySlot(EquipmentSlot.MAINHAND).is(HexItems.SCRYING_LENS) ? 0.75f : 1);
+        DiscoveryHandlers.addGridScaleModifier(player -> player.getItemBySlot(EquipmentSlot.OFFHAND).is(HexItems.SCRYING_LENS) ? 0.75f : 1);
+    }
 
     public ItemLens(Properties pProperties) {
         super(pProperties);
@@ -53,67 +61,62 @@ public class ItemLens extends Item implements Wearable {
         return EquipmentSlot.HEAD;
     }
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(itemstack);
-        ItemStack stack = player.getItemBySlot(equipmentslot);
-        if (stack.isEmpty()) {
-            player.setItemSlot(equipmentslot, itemstack.copy());
-            if (!world.isClientSide()) {
-                player.awardStat(Stats.ITEM_USED.get(this));
-            }
-
-            itemstack.setCount(0);
-            return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
-        } else {
-            return InteractionResultHolder.fail(itemstack);
+    public static void tickAllPlayers(ServerLevel world) {
+        for (ServerPlayer player : world.players()) {
+            tickLens(player);
         }
     }
 
-    @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        if (!pLevel.isClientSide() && pEntity instanceof ServerPlayer player) {
-            if (pStack == player.getItemBySlot(EquipmentSlot.HEAD) ||
-                pStack == player.getItemBySlot(EquipmentSlot.MAINHAND) ||
-                pStack == player.getItemBySlot(EquipmentSlot.OFFHAND)) {
-                sendComparatorDataToClient(player);
-            }
+    public static void tickLens(Entity pEntity) {
+        if (!pEntity.getLevel().isClientSide() && pEntity instanceof ServerPlayer player && DiscoveryHandlers.hasLens(player)) {
+            sendComparatorDataToClient(player);
         }
     }
 
     private static final Map<ServerPlayer, Pair<BlockPos, Integer>> comparatorDataMap = new WeakHashMap<>();
+    private static final Map<ServerPlayer, Pair<BlockPos, Integer>> beeDataMap = new WeakHashMap<>();
 
-    private void sendComparatorDataToClient(ServerPlayer player) {
+    private static void sendComparatorDataToClient(ServerPlayer player) {
         double reachAttribute = IXplatAbstractions.INSTANCE.getReachDistance(player);
         double distance = player.isCreative() ? reachAttribute : reachAttribute - 0.5;
         var hitResult = player.pick(distance, 0, false);
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             var pos = ((BlockHitResult) hitResult).getBlockPos();
             var state = player.level.getBlockState(pos);
+
+            int bee = -1;
+
+            if (state.getBlock() instanceof BeehiveBlock && player.level.getBlockEntity(pos) instanceof BeehiveBlockEntity bees) {
+                bee = bees.getOccupantCount();
+            }
+
             if (state.is(Blocks.COMPARATOR)) {
                 syncComparatorValue(player, pos,
-                    state.getDirectSignal(player.level, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING)));
+                    state.getDirectSignal(player.level, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING)), bee);
             } else if (state.hasAnalogOutputSignal()) {
-                syncComparatorValue(player, pos, state.getAnalogOutputSignal(player.level, pos));
+                syncComparatorValue(player, pos, state.getAnalogOutputSignal(player.level, pos), bee);
             } else {
-                syncComparatorValue(player, null, -1);
+                syncComparatorValue(player, null, -1, bee);
             }
         } else {
-            syncComparatorValue(player, null, -1);
+            syncComparatorValue(player, null, -1, -1);
         }
     }
 
-    private void syncComparatorValue(ServerPlayer player, BlockPos pos, int value) {
-        var previous = comparatorDataMap.get(player);
-        if (value == -1) {
-            if (previous != null) {
+    private static void syncComparatorValue(ServerPlayer player, BlockPos pos, int comparator, int bee) {
+        var previousComparator = comparatorDataMap.get(player);
+        var previousBee = beeDataMap.get(player);
+        if (comparator == -1 && bee == -1) {
+            if (previousComparator != null || previousBee != null) {
                 comparatorDataMap.remove(player);
-                IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(null, -1));
+                beeDataMap.remove(player);
+                IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(null, -1, -1));
             }
-        } else if (previous == null || (!pos.equals(previous.getFirst()) || value != previous.getSecond())) {
-            comparatorDataMap.put(player, new Pair<>(pos, value));
-            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(pos, value));
+        } else if (previousComparator == null || !pos.equals(previousComparator.getFirst()) || comparator != previousComparator.getSecond() ||
+            previousBee == null || !pos.equals(previousBee.getFirst()) || bee != previousBee.getSecond()) {
+            comparatorDataMap.put(player, new Pair<>(pos, comparator));
+            beeDataMap.put(player, new Pair<>(pos, bee));
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(pos, comparator, bee));
         }
     }
 

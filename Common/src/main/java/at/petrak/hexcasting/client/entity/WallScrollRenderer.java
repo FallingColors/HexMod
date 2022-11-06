@@ -125,7 +125,7 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             if (wallScroll.getShowsStrokeOrder()) {
                 var spotFrac = 0.8f * wallScroll.blockSize;
 
-                var animTime = wallScroll.tickCount;
+                var animTime = wallScroll.tickCount + partialTicks;
                 var pointCircuit =
                     (animTime * HexConfig.client().patternPointSpeedMultiplier()) % (points.size() + 10);
                 if (pointCircuit < points.size() - 1) {

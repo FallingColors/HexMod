@@ -44,8 +44,10 @@ class OpPotionEffect(
     private class Spell(val effect: MobEffect, val target: LivingEntity, val duration: Double, val potency: Double) :
         RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt() - 1)
-            target.addEffect(effectInst)
+            if (duration > 1.0 / 20.0) {
+                val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt() - 1)
+                target.addEffect(effectInst)
+            }
         }
     }
 }

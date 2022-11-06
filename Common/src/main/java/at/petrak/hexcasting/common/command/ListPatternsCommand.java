@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,96 +16,130 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Collection;
+import java.util.List;
+
 public class ListPatternsCommand {
-    public static void add(LiteralArgumentBuilder<CommandSourceStack> cmd) {
+    public static void register(LiteralArgumentBuilder<CommandSourceStack> cmd) {
         cmd.then(Commands.literal("patterns")
-            .requires(dp -> dp.hasPermission(Commands.LEVEL_ADMINS))
-            .then(Commands.literal("list").executes(ctx -> {
+                .requires(dp -> dp.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                .then(Commands.literal("list")
+                    .executes(ctx -> list(ctx.getSource())))
+                .then(Commands.literal("give")
+                    .then(Commands.argument("patternName", PatternResLocArgument.id())
+                        .executes(ctx ->
+                            giveOne(ctx.getSource(),
+                                getDefaultTarget(ctx.getSource()),
+                                ResourceLocationArgument.getId(ctx, "patternName"),
+                                PatternResLocArgument.getPattern(ctx, "patternName")))
+                        .then(Commands.argument("targets", EntityArgument.players())
+                            .executes(ctx ->
+                                giveOne(ctx.getSource(),
+                                    EntityArgument.getPlayers(ctx, "targets"),
+                                    ResourceLocationArgument.getId(ctx, "patternName"),
+                                    PatternResLocArgument.getPattern(ctx, "patternName"))))))
+                .then(Commands.literal("giveAll")
+                    .executes(ctx ->
+                        giveAll(ctx.getSource(),
+                            getDefaultTarget(ctx.getSource())))
+                    .then(Commands.argument("targets", EntityArgument.players())
+                        .executes(ctx ->
+                            giveAll(ctx.getSource(),
+                                EntityArgument.getPlayers(ctx, "targets")))))
+            );
+    }
+    private static Collection<ServerPlayer> getDefaultTarget(CommandSourceStack source) {
+        if (source.getEntity() instanceof ServerPlayer player) {
+            return List.of(player);
+        }
+        return List.of();
+    }
 
-                var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
-                var listing = lookup.entrySet()
-                    .stream()
-                    .sorted((a, b) -> compareResLoc(a.getValue().getFirst(), b.getValue().getFirst()))
-                    .toList();
+    private static int list(CommandSourceStack source) {
+        var lookup = PatternRegistry.getPerWorldPatterns(source.getLevel());
+        var listing = lookup.entrySet()
+            .stream()
+            .sorted((a, b) -> compareResLoc(a.getValue().getFirst(), b.getValue().getFirst()))
+            .toList();
 
-                ctx.getSource().sendSuccess(Component.translatable("command.hexcasting.pats.listing"), false);
-                for (var pair : listing) {
-                    HexPattern hexPattern = HexPattern.fromAngles(pair.getKey(), pair.getValue().getSecond());
-                    ctx.getSource().sendSuccess(Component.literal(pair.getValue().getFirst().toString())
-                        .append(": ")
-                        .append(PatternIota.display(hexPattern)), false);
-                }
-
-
-                return lookup.size();
-            }))
-            .then(Commands.literal("give")
-                .then(Commands.argument("patternName", PatternResLocArgument.id()).executes(ctx -> {
-                        var sender = ctx.getSource().getEntity();
-                        if (sender instanceof ServerPlayer player) {
-                            var targetId = ResourceLocationArgument.getId(ctx, "patternName");
-                            var pat = PatternResLocArgument.getPattern(ctx, "patternName");
+        source.sendSuccess(new TranslatableComponent("command.hexcasting.pats.listing"), false);
+        for (var pair : listing) {
+            source.sendSuccess(new TextComponent(pair.getValue().getFirst().toString())
+                .append(": ")
+                .append(SpellDatum.make(HexPattern.fromAngles(pair.getKey(), pair.getValue().getSecond()))
+                    .display()), false);
+        }
 
 
-                            var tag = new CompoundTag();
-                            tag.putString(ItemScroll.TAG_OP_ID, targetId.toString());
-                            tag.put(ItemScroll.TAG_PATTERN,
-                                pat.serializeToNBT());
+        return lookup.size();
+    }
 
-                            var stack = new ItemStack(HexItems.SCROLL_LARGE);
-                            stack.setTag(tag);
+    private static int giveAll(CommandSourceStack source, Collection<ServerPlayer> targets) {
+        if (!targets.isEmpty()) {
+            var lookup = PatternRegistry.getPerWorldPatterns(source.getLevel());
 
-                            ctx.getSource().sendSuccess(
-                                Component.translatable(
-                                    "command.hexcasting.pats.specific.success",
-                                    stack.getDisplayName(),
-                                    targetId),
-                                true);
+            lookup.forEach((pattern, entry) -> {
+                var opId = entry.component1();
+                var startDir = entry.component2();
 
-                            var stackEntity = player.drop(stack, false);
-                            if (stackEntity != null) {
-                                stackEntity.setNoPickUpDelay();
-                                stackEntity.setOwner(player.getUUID());
-                            }
+                var tag = new CompoundTag();
+                tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
+                tag.put(ItemScroll.TAG_PATTERN,
+                    HexPattern.fromAngles(pattern, startDir).serializeToNBT());
 
-                            return 1;
-                        } else {
-                            return 0;
-                        }
+                var stack = new ItemStack(HexItems.SCROLL_LARGE);
+                stack.setTag(tag);
+
+                for (var player : targets) {
+                    var stackEntity = player.drop(stack, false);
+                    if (stackEntity != null) {
+                        stackEntity.setNoPickUpDelay();
+                        stackEntity.setOwner(player.getUUID());
                     }
-                )))
-            .then(Commands.literal("giveAll").executes(ctx -> {
-                var sender = ctx.getSource().getEntity();
-                if (sender instanceof ServerPlayer player) {
-                    var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
-
-                    lookup.forEach((pattern, entry) -> {
-                        var opId = entry.getFirst();
-                        var startDir = entry.getSecond();
-
-                        var tag = new CompoundTag();
-                        tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
-                        tag.put(ItemScroll.TAG_PATTERN,
-                            HexPattern.fromAngles(pattern, startDir).serializeToNBT());
-
-                        var stack = new ItemStack(HexItems.SCROLL_LARGE);
-                        stack.setTag(tag);
-
-                        var stackEntity = player.drop(stack, false);
-                        if (stackEntity != null) {
-                            stackEntity.setNoPickUpDelay();
-                            stackEntity.setOwner(player.getUUID());
-                        }
-                    });
-
-                    ctx.getSource().sendSuccess(
-                        Component.translatable("command.hexcasting.pats.all", lookup.size()), true);
-                    return lookup.size();
-                } else {
-                    return 0;
                 }
-            }))
-        );
+            });
+
+            source.sendSuccess(
+                new TranslatableComponent("command.hexcasting.pats.all",
+                    lookup.size(),
+                    targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
+                true);
+            return lookup.size();
+        } else {
+            return 0;
+        }
+    }
+
+    private static int giveOne(CommandSourceStack source, Collection<ServerPlayer> targets, ResourceLocation patternName, HexPattern pat) {
+        if (!targets.isEmpty()) {
+            var tag = new CompoundTag();
+            tag.putString(ItemScroll.TAG_OP_ID, patternName.toString());
+            tag.put(ItemScroll.TAG_PATTERN,
+                pat.serializeToNBT());
+
+            var stack = new ItemStack(HexItems.SCROLL_LARGE);
+            stack.setTag(tag);
+
+            source.sendSuccess(
+                new TranslatableComponent(
+                    "command.hexcasting.pats.specific.success",
+                    stack.getDisplayName(),
+                    patternName,
+                    targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
+                true);
+
+            for (var player : targets) {
+                var stackEntity = player.drop(stack, false);
+                if (stackEntity != null) {
+                    stackEntity.setNoPickUpDelay();
+                    stackEntity.setOwner(player.getUUID());
+                }
+            }
+
+            return targets.size();
+        } else {
+            return 0;
+        }
     }
 
     private static int compareResLoc(ResourceLocation a, ResourceLocation b) {

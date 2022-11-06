@@ -43,6 +43,8 @@ public class HexConfig {
         boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
         double DEFAULT_GRID_SNAP_THRESHOLD = 0.5;
+        boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
+        boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
     }
 
     public interface ServerConfigAccess {

@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "modid": "farmersdelight",
+          "type": "forge:mod_loaded"
+        }
+      ],
+      "recipe": {
+        "type": "farmersdelight:cutting",
+        "ingredients": [
+          {
+            "item": "hexcasting:akashic_log"
+          }
+        ],
+        "tool": {
+          "type": "farmersdelight:tool_action",
+          "action": "axe_strip"
+        },
+        "result": [
+          {
+            "item": "hexcasting:akashic_log_stripped"
+          },
+          {
+            "item": "farmersdelight:tree_bark"
+          }
+        ],
+        "sound": "minecraft:item.axe.strip"
+      }
+    }
+  ]
+}

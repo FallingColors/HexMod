@@ -20,13 +20,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.OptionalInt;
+import java.util.Random;
 
 public class AkashicTreeGrower extends AbstractTreeGrower {
     public static final AkashicTreeGrower INSTANCE = new AkashicTreeGrower();
 
     public static final List<Holder<ConfiguredFeature<TreeConfiguration, ?>>> GROWERS = Lists.newArrayList();
 
-    static {
+    public static void init() {
         GROWERS.add(buildTreeFeature(HexBlocks.AMETHYST_EDIFIED_LEAVES, "1"));
         GROWERS.add(buildTreeFeature(HexBlocks.AVENTURINE_EDIFIED_LEAVES, "2"));
         GROWERS.add(buildTreeFeature(HexBlocks.CITRINE_EDIFIED_LEAVES, "3"));

@@ -7,6 +7,7 @@ import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent
 import at.petrak.hexcasting.fabric.event.MouseScrollCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
+import at.petrak.hexcasting.interop.HexInterop
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.rendering.v1.*
@@ -18,15 +19,8 @@ object FabricHexClientInitializer : ClientModInitializer {
     override fun onInitializeClient() {
         FabricPacketHandler.initClient()
 
-        WorldRenderEvents.LAST.register { ctx ->
-            // https://www.3dgep.com/understanding-quaternions/
-            val quat = ctx.camera().rotation().copy()
-            quat.mul(-1f) // this should invert it?
-            ctx.matrixStack().pushPose()
-            ctx.matrixStack().mulPose(quat)
-            ctx.matrixStack().scale(-1f, 1f, -1f)
+        WorldRenderEvents.AFTER_TRANSLUCENT.register { ctx ->
             HexAdditionalRenderers.overlayLevel(ctx.matrixStack(), ctx.tickDelta())
-            ctx.matrixStack().popPose()
         }
         HudRenderCallback.EVENT.register(HexAdditionalRenderers::overlayGui)
         WorldRenderEvents.START.register { ClientTickCounter.renderTickStart(it.tickDelta()) }
@@ -50,6 +44,8 @@ object FabricHexClientInitializer : ClientModInitializer {
                 BlockEntityRendererRegistry.register(type, berp)
             }
         })
+
+        HexInterop.clientInit()
         RegisterClientStuff.registerColorProviders(
             { colorizer, item -> ColorProviderRegistry.ITEM.register(colorizer, item) },
             { colorizer, block -> ColorProviderRegistry.BLOCK.register(colorizer, block) })

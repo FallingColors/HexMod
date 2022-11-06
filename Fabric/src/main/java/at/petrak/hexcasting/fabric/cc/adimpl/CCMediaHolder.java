@@ -63,6 +63,11 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
         public int withdrawMedia(int cost, boolean simulate) {
             return this.mediaHolder.withdrawMana(this.stack, cost, simulate);
         }
+
+        @Override
+        public int insertMana(int amount, boolean simulate) {
+            return this.manaHolder.insertMana(this.stack, amount, simulate);
+        }
     }
 
     public static class Static extends CCMediaHolder {

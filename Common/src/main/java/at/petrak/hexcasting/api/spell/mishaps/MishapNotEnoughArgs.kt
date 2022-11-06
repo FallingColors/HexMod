@@ -1,6 +1,10 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.Widget
+import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.NullIota
@@ -15,5 +19,8 @@ class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
-        error("not_enough_args", actionName(errorCtx.action), expected, got)
+        if (got == 0)
+            error("no_args", actionName(errorCtx.action), expected)
+        else
+            error("not_enough_args", actionName(errorCtx.action), expected, got)
 }

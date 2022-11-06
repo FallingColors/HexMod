@@ -24,7 +24,7 @@ object OpBreakBlock : SpellAction {
         ctx.assertVecInRange(pos)
 
         return Triple(
-            Spell(pos),
+            Spell(bpos),
             (ManaConstants.DUST_UNIT * 1.125).toInt(),
             listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
         )
@@ -32,7 +32,7 @@ object OpBreakBlock : SpellAction {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            if (!ctx.world.mayInteract(ctx.caster, pos))
+            if (!ctx.canEditBlockAt(pos))
                 return
 
             val blockstate = ctx.world.getBlockState(pos)

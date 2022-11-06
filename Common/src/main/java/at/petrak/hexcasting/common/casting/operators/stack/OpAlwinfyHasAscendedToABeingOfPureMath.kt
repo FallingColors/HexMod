@@ -8,6 +8,8 @@ import at.petrak.hexcasting.api.spell.getPositiveInt
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import it.unimi.dsi.fastutil.ints.IntArrayList
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 // "lehmer code"
 object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
@@ -42,8 +44,6 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
             // i hope this isn't O(n)
             editTarget = editTarget.subList(1, editTarget.size)
         }
-
-        // val cost = (ln((strides.lastOrNull() ?: 0).toFloat()) * ManaConstants.DUST_UNIT).toInt()
 
         return OperationResult(
             continuation,

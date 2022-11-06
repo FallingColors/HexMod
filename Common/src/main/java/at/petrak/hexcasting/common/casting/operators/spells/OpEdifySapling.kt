@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.misc.ManaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellAction
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getBlockPos
 import at.petrak.hexcasting.api.spell.iota.Iota
@@ -36,8 +37,9 @@ object OpEdifySapling : SpellAction {
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val blockstate = ctx.world.getBlockState(pos)
-            if (!ctx.world.mayInteract(ctx.caster, pos) ||
-                !IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, pos, blockstate, ctx.caster))
+            if (!ctx.canEditBlockAt(pos) ||
+                !IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, pos, blockstate, ctx.caster)
+            )
                 return
 
             val bs = ctx.world.getBlockState(pos)

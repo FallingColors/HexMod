@@ -19,7 +19,10 @@ public class PatternRendererEMI implements EmiRenderable {
     private final int width;
     private final int height;
 
-    private final boolean strokeOrder;
+    private int xOffset = 0;
+    private int yOffset = 0;
+
+    private boolean strokeOrder;
 
     private final List<PatternEntry> patterns;
     private final List<Vec2> pathfinderDots;
@@ -34,11 +37,22 @@ public class PatternRendererEMI implements EmiRenderable {
         this.height = h;
     }
 
+    public PatternRendererEMI shift(int x, int y) {
+        xOffset += x;
+        yOffset += y;
+        return this;
+    }
+
+    public PatternRendererEMI strokeOrder(boolean order) {
+        strokeOrder = order;
+        return this;
+    }
+
     @Override
     public void render(PoseStack poseStack, int x, int y, float delta) {
         long time = (System.currentTimeMillis() - startTime) / 50;
         poseStack.pushPose();
-        poseStack.translate(x - 0.5f + width / 2f, y + 1 + height / 2f, 0);
+        poseStack.translate(xOffset + x - 0.5f + width / 2f, yOffset + y + 1 + height / 2f, 0);
         poseStack.scale(width / 64f, height / 64f, 1f);
         PatternDrawingUtil.drawPattern(poseStack, 0, 0, this.patterns, this.pathfinderDots, this.strokeOrder, time,
             0xff_333030, 0xff_191818, 0xc8_0c0a0c, 0x80_666363);

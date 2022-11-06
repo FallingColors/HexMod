@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.Vec3
@@ -27,7 +28,7 @@ object OpFlight : SpellAction {
         val time = (timeRaw * 20.0).roundToInt()
         return Triple(
             Spell(target, time, radiusRaw, ctx.position),
-            ManaConstants.DUST_UNIT * (0.25 * (timeRaw * radiusRaw + 1.0)).roundToInt(),
+            (ManaConstants.DUST_UNIT * 0.25 * (timeRaw * radiusRaw + 1.0)).roundToInt(),
             listOf(ParticleSpray(target.position(), Vec3(0.0, 2.0, 0.0), 0.0, 0.1))
         )
     }
@@ -96,5 +97,11 @@ object OpFlight : SpellAction {
             }
         }
 
+    }
+
+    fun tickAllPlayers(world: ServerLevel) {
+        for (player in world.players()) {
+            tickDownFlight(player)
+        }
     }
 }

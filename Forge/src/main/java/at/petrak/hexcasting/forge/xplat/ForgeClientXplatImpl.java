@@ -35,6 +35,11 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     }
 
     @Override
+    public void initPlatformSpecific() {
+        // NO-OP
+    }
+
+    @Override
     public <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type,
         EntityRendererProvider<T> renderer) {
         EntityRenderers.register(type, renderer);

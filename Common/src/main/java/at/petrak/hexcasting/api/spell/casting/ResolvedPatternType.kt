@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.spell.casting
 
-import java.util.*
+import at.petrak.hexcasting.api.utils.getSafe
 
 enum class ResolvedPatternType(val color: Int, val fadeColor: Int, val success: Boolean) {
     UNRESOLVED(0x7f7f7f, 0xcccccc, false),
@@ -12,8 +12,7 @@ enum class ResolvedPatternType(val color: Int, val fadeColor: Int, val success: 
     companion object {
         @JvmStatic
         fun fromString(key: String): ResolvedPatternType {
-            val lowercaseKey = key.lowercase(Locale.ROOT)
-            return values().firstOrNull { it.name.lowercase(Locale.ROOT) == lowercaseKey } ?: UNRESOLVED
+            return values().getSafe(key)
         }
     }
 }

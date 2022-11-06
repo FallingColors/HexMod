@@ -7,12 +7,17 @@ import at.petrak.hexcasting.api.advancements.SpendManaTrigger;
 import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexBlocks;
+import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.datagen.PaucalAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -37,8 +42,8 @@ public class HexAdvancements extends PaucalAdvancementProvider {
                 new ResourceLocation("minecraft", "textures/block/calcite.png"),
                 FrameType.TASK, true, true, true))
             // the only thing making this vaguely tolerable is the knowledge the json files are worse somehow
-            .addCriterion("has_charged_amethyst",
-                InventoryChangeTrigger.TriggerInstance.hasItems(HexItems.CHARGED_AMETHYST))
+            .addCriterion("has_charged_amethyst", InventoryChangeTrigger.TriggerInstance.hasItems(
+                ItemPredicate.Builder.item().of(HexItemTags.GRANTS_ROOT_ADVANCEMENT).build()))
             .save(consumer, prefix("root")); // how the hell does one even read this
 
         // weird names so we have alphabetical parity

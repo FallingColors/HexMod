@@ -55,11 +55,13 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
         private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
+        private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
+        private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
 
         public Client(ForgeConfigSpec.Builder builder) {
             patternPointSpeedMultiplier = builder.comment(
                     "How fast the point showing you the stroke order on patterns moves")
-                .defineInRange("manaToHealthRate", DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER, 0.0,
+                .defineInRange("patternPointSpeedMultiplier", DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER, 0.0,
                     Double.POSITIVE_INFINITY);
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
@@ -71,8 +73,24 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                     "Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
                 .define("invertAbacusScrollDirection", DEFAULT_INVERT_ABACUS_SCROLL);
             gridSnapThreshold = builder.comment(
-                    "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way.")
+                "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way.")
                 .defineInRange("gridSnapThreshold", DEFAULT_GRID_SNAP_THRESHOLD, 0.5, 1.0);
+            invertSpellbookScrollDirection = builder.comment(
+                    "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and vice versa")
+                .define("invertSpellbookScrollDirection", DEFAULT_INVERT_SPELLBOOK_SCROLL);
+            invertAbacusScrollDirection = builder.comment(
+                    "Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
+                .define("invertAbacusScrollDirection", DEFAULT_INVERT_ABACUS_SCROLL);
+        }
+
+        @Override
+        public boolean invertSpellbookScrollDirection() {
+            return invertSpellbookScrollDirection.get();
+        }
+
+        @Override
+        public boolean invertAbacusScrollDirection() {
+            return invertAbacusScrollDirection.get();
         }
 
         @Override

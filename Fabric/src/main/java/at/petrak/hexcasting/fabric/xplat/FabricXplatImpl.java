@@ -16,6 +16,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop;
+import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
@@ -29,17 +30,18 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -103,6 +105,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     public void initPlatformSpecific() {
         if (this.isModPresent(HexInterop.Fabric.GRAVITY_CHANGER_API_ID)) {
             GravityApiInterop.init();
+        }
+        if (this.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
+            TrinketsApiInterop.init();
         }
     }
 
@@ -230,6 +235,13 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public @Nullable
+    DataHolder findDataHolder(Entity entity) {
+        var cc = HexCardinalComponents.DATA_HOLDER.maybeGet(entity);
+        return cc.orElse(null);
+    }
+
+    @Override
+    public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
         var cc = HexCardinalComponents.HEX_HOLDER.maybeGet(stack);
         return cc.orElse(null);
@@ -254,10 +266,43 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     @SuppressWarnings("UnstableApiUsage")
-    public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, ItemStack stack, Fluid fluid) {
+    public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid) {
         Storage<FluidVariant> target = FluidStorage.SIDED.find(level, pos, Direction.UP);
-        Storage<FluidVariant> emptyFrom = FluidStorage.ITEM.find(stack, ContainerItemContext.withInitial(stack));
-        return StorageUtil.move(emptyFrom, target, (f) -> true, FluidConstants.BUCKET, null) > 0;
+        if (target == null) {
+            return false;
+        }
+        try (Transaction transaction = Transaction.openOuter()) {
+            long insertedAmount = target.insert(FluidVariant.of(fluid), FluidConstants.BUCKET, transaction);
+            if (insertedAmount > 0) {
+                transaction.commit();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("UnstableApiUsage")
+    public boolean drainAllFluid(Level level, BlockPos pos) {
+        Storage<FluidVariant> target = FluidStorage.SIDED.find(level, pos, Direction.UP);
+        if (target == null) {
+            return false;
+        }
+        try (Transaction transaction = Transaction.openOuter()) {
+            boolean any = false;
+            for (var view : target.iterable(transaction)) {
+                long extracted = view.extract(view.getResource(), view.getAmount(), transaction);
+                if (extracted > 0) {
+                    any = true;
+                }
+            }
+
+            if (any) {
+                transaction.commit();
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -416,4 +461,5 @@ public class FabricXplatImpl implements IXplatAbstractions {
         }
         return PEHKUI_API;
     }
+
 }

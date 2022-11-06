@@ -19,6 +19,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
+import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.mixin.ForgeAccessorRegistry;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
@@ -65,6 +66,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.*;
 import net.minecraftforge.common.loot.CanToolPerformAction;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
@@ -82,6 +85,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+
+import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -103,7 +108,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        // NO-OP
+        if (this.isModPresent(HexInterop.Forge.CURIOS_API_ID)) {
+            CuriosApiInterop.init();
+        }
     }
 
     @Override
@@ -265,6 +272,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public @Nullable DataHolder findDataHolder(Entity entity) {
+        var maybeCap = entity.getCapability(HexCapabilities.DATUM).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
     public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.STORED_HEX).resolve();
@@ -311,14 +324,41 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, ItemStack stack, Fluid fluid) {
+    public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid) {
         Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
-        if (handler.isPresent() &&
-            FluidUtil.tryEmptyContainer(stack, handler.get(), FluidType.BUCKET_VOLUME, null, true).isSuccess()) {
-            return true;
+        return handler.isPresent() &&
+            handler.get().fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), EXECUTE) > 0;
+    }
+
+    @Override
+    public boolean drainAllFluid(Level level, BlockPos pos) {
+        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
+        if (handler.isPresent()) {
+            boolean any = false;
+            IFluidHandler pool = handler.get();
+            for (int i = 0; i < pool.getTanks(); i++) {
+                if (!pool.drain(pool.getFluidInTank(i), EXECUTE).isEmpty()) {
+                    any = true;
+                }
+            }
+            return any;
         }
-        return FluidUtil.tryPlaceFluid(null, level, hand, pos, stack, new FluidStack(
-            fluid, FluidType.BUCKET_VOLUME)).isSuccess();
+        return false;
+    }
+
+    @Override
+    public ResourceLocation getID(Block block) {
+        return block.getRegistryName();
+    }
+
+    @Override
+    public ResourceLocation getID(Item item) {
+        return item.getRegistryName();
+    }
+
+    @Override
+    public ResourceLocation getID(VillagerProfession profession) {
+        return profession.getRegistryName();
     }
 
     @Override

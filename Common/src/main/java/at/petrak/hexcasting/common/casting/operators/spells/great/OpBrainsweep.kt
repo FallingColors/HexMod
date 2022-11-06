@@ -40,6 +40,9 @@ object OpBrainsweep : SpellAction {
 
         val state = ctx.world.getBlockState(pos)
 
+        if (!ctx.canEditBlockAt(pos))
+            return null
+
         val recman = ctx.world.recipeManager
         val recipes = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)
         val recipe = recipes.find { it.matches(state, sacrifice) }
@@ -60,6 +63,7 @@ object OpBrainsweep : SpellAction {
     ) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
+
             Brainsweeping.brainsweep(sacrifice)
             if (HexConfig.server().doVillagersTakeOffenseAtMindMurder()) {
                 sacrifice.tellWitnessesThatIWasMurdered(ctx.caster)

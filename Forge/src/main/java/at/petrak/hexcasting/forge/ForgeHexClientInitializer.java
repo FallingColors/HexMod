@@ -6,6 +6,7 @@ import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.client.shader.HexShaders;
+import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
@@ -64,6 +65,8 @@ public class ForgeHexClientInitializer {
             var cancel = ShiftScrollListener.onScrollInGameplay(e.getScrollDelta());
             e.setCanceled(cancel);
         });
+
+        HexInterop.clientInit();
     }
 
     @SubscribeEvent

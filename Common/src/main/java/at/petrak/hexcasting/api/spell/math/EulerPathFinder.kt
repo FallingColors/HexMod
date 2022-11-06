@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.spell.math
 
+import at.petrak.hexcasting.api.HexAPI
 import java.util.*
 import kotlin.random.Random
 
@@ -8,11 +9,31 @@ object EulerPathFinder {
      * Find an alternative way to draw the given pattern, based on a random seed.
      */
     @JvmStatic
-    fun findAltDrawing(original: HexPattern, seed: Long): HexPattern {
+    @JvmOverloads
+    fun findAltDrawing(original: HexPattern, seed: Long, rule: (HexPattern) -> Boolean = { true }): HexPattern {
         // http://www.graph-magics.com/articles/euler.php
 
         val rand = Random(seed)
 
+        // Don't try for too long, in case all paths are exhausted.
+        // Unlikely to ever actually reach this limit, and can only happen if the same pattern
+        // is registered both as a Great Pattern and as a special handler or regular pattern,
+        // or if the random seed has some sort of strange repeating property to it.
+        var iterationsLeft = 100
+        var path: HexPattern
+        while (iterationsLeft > 0) {
+            iterationsLeft--
+            path = walkPath(original, rand)
+            if (rule(path)) {
+                return path
+            }
+        }
+
+        HexAPI.LOGGER.warn("Didn't find alternate path for {} in time", original)
+        return original
+    }
+
+    private fun walkPath(original: HexPattern, rand: Random): HexPattern {
         val graph = toGraph(original)
         val oddNodes = graph.filter { (_, dirs) -> dirs.size % 2 == 1 }
         var current: HexCoord = when (oddNodes.size) {

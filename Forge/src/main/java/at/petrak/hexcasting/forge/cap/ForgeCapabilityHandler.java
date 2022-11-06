@@ -10,6 +10,8 @@ import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
@@ -18,6 +20,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -114,6 +119,16 @@ public class ForgeCapabilityHandler {
         }
     }
 
+    public static void attachEntityCaps(AttachCapabilitiesEvent<Entity> evt) {
+        if (evt.getObject() instanceof ItemEntity item) {
+            evt.addCapability(DATA_HOLDER_CAPABILITY, delegateTo(item::getItem)); // Delegate to the item
+        } else if (evt.getObject() instanceof ItemFrame frame) {
+            evt.addCapability(DATA_HOLDER_CAPABILITY, delegateTo(frame::getItem));
+        } else if (evt.getObject() instanceof EntityWallScroll scroll) {
+            evt.addCapability(DATA_HOLDER_CAPABILITY, delegateTo(() -> scroll.scroll));
+        }
+    }
+
     public static void attachBlockEntityCaps(AttachCapabilitiesEvent<BlockEntity> evt) {
         if (evt.getObject() instanceof BlockEntityAbstractImpetus impetus) {
             evt.addCapability(IMPETUS_HANDLER, provide(impetus, ForgeCapabilities.ITEM_HANDLER,
@@ -121,8 +136,22 @@ public class ForgeCapabilityHandler {
         }
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(BlockEntity be, Capability<CAP> capability,
-        NonNullSupplier<CAP> supplier) {
+    private static ICapabilityProvider delegateTo(Supplier<ICapabilityProvider> provider) {
+        return new ICapabilityProvider() {
+            @NotNull
+            @Override
+            public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+                var providerInst = provider.get();
+                return providerInst == null ? LazyOptional.empty() : providerInst.getCapability(cap, side);
+            }
+        };
+    }
+
+    private static <CAP> SimpleProvider<CAP> provide(Entity entity, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
+        return provide(entity::isRemoved, capability, supplier);
+    }
+
+    private static <CAP> SimpleProvider<CAP> provide(BlockEntity be, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
         return provide(be::isRemoved, capability, supplier);
     }
 
@@ -245,6 +274,11 @@ public class ForgeCapabilityHandler {
         @Override
         public int withdrawMedia(int cost, boolean simulate) {
             return holder.withdrawMana(stack, cost, simulate);
+        }
+
+        @Override
+        public int insertMana(int amount, boolean simulate) {
+            return holder.insertMana(stack, amount, simulate);
         }
     }
 

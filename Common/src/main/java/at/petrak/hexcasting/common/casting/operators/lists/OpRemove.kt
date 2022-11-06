@@ -13,7 +13,9 @@ object OpRemove : ConstManaAction {
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val list = args.getList(0, argc).toMutableList()
-        val index = args.getPositiveIntUnder(1, list.size, argc)
+        val index = args.getInt(1, argc)
+        if (index < 0 || index >= list.size)
+            return list.asActionResult
         list.removeAt(index)
         return list.asActionResult
     }

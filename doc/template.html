@@ -46,9 +46,6 @@
       blockquote.crafting-info {
         font-size: inherit;
       }
-      a.toggle-link {
-        margin-left: 0.5em;
-      }
       a.permalink {
         margin-left: 0.5em;
       }
@@ -87,6 +84,7 @@
       }
       canvas.spell-viz {
         --dot-color: #777f;
+        --dot-color: #777f;
         --start-dot-color: #f009;
         --moving-dot-color: #0fa9;
 
@@ -97,6 +95,23 @@
         --moving-dot-scale: 0.125;
         --line-scale: 0.08333;
         --pausetext-scale: 0.5;
+        --dark-mode: 0;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #201a20;
+          color: #ddd;
+        }
+
+        .jumbotron {
+          background-color: #323;
+        }
+        
+        canvas.spell-viz {
+          /* hack */
+          --dark-mode: 1;
+        }
       }
 
     </style>
@@ -114,6 +129,17 @@
       const speeds = [0, 0.25, 0.5, 1, 2, 4];
       const scrollThreshold = 100;
       const rfaQueue = [];
+      const colorCache = new Map();
+      function getColorRGB(ctx, str) {
+        if (!colorCache.has(str)) {
+          ctx.fillStyle = str;
+          ctx.clearRect(0, 0, 1, 1);
+          ctx.fillRect(0, 0, 1, 1);
+          const imgData = ctx.getImageData(0, 0, 1, 1);
+          colorCache.set(str, imgData.data);
+        }
+        return colorCache.get(str);
+      }
       function startAngle(str) {
         switch (str) {
           case "east": return 0;
@@ -206,6 +232,9 @@
           const dotRadius = scale * +getProp("--dot-scale");
           const movDotRadius = scale * +getProp("--moving-dot-scale");
           const pauseScale = scale * +getProp("--pausetext-scale");
+          const bodyBg = scale * +getProp("--pausetext-scale");
+          const darkMode = +getProp("--dark-mode");
+          const bgColors = getColorRGB(context, getComputedStyle(document.body).backgroundColor);
 
 
           if (!perWorld) {
@@ -262,7 +291,7 @@
             context.fill();
           }
           if (fadeColor) {
-            context.fillStyle = `rgba(255, 255, 255, ${fadeColor})`;
+            context.fillStyle = `rgba(${bgColors[0]}, ${bgColors[1]}, ${bgColors[2]}, ${fadeColor})`;
             context.fillRect(0, 0, canvas.width, canvas.height);
           }
           if (scrollTimeout <= 2000) {

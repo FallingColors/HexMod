@@ -3,10 +3,13 @@ package at.petrak.hexcasting.forge.datagen;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.datagen.*;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
+import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient;
 import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
+import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.paucal.api.forge.datagen.PaucalForgeDatagenWrappers;
+import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -15,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -61,7 +65,7 @@ public class HexForgeDataGenerators {
         gen.addProvider(ev.includeServer(), itemTagProvider);
     }
 
-    private static IXplatIngredients INGREDIENTS = new IXplatIngredients() {
+    private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {
         @Override
         public Ingredient glowstoneDust() {
             return Ingredient.of(Tags.Items.DUSTS_GLOWSTONE);
@@ -112,6 +116,32 @@ public class HexForgeDataGenerators {
                 new Ingredient.ItemValue(new ItemStack(Items.STICK)),
                 new Ingredient.TagValue(ItemTags.create(new ResourceLocation("forge", "rods/wooden")))
             ));
+        }
+
+        @Override
+        public Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient) {
+            return ForgeModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
+        }
+
+        // https://github.com/vectorwing/FarmersDelight/blob/1.18.2/src/generated/resources/data/farmersdelight/recipes/cutting/amethyst_block.json
+        @Override
+        public FarmersDelightToolIngredient axeStrip() {
+            return () -> {
+                JsonObject object = new JsonObject();
+                object.addProperty("type", "farmersdelight:tool_action");
+                object.addProperty("action", ToolActions.AXE_STRIP.name());
+                return object;
+            };
+        }
+
+        @Override
+        public FarmersDelightToolIngredient axeDig() {
+            return () -> {
+                JsonObject object = new JsonObject();
+                object.addProperty("type", "farmersdelight:tool_action");
+                object.addProperty("action", ToolActions.AXE_DIG.name());
+                return object;
+            };
         }
     };
 }

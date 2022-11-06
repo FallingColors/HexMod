@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -102,6 +103,9 @@ public interface IXplatAbstractions {
     ADIotaHolder findDataHolder(ItemStack stack);
 
     @Nullable
+    DataHolder findDataHolder(Entity entity);
+
+    @Nullable
     ADHexHolder findHexHolder(ItemStack stack);
 
     // coooollooorrrs
@@ -122,8 +126,9 @@ public interface IXplatAbstractions {
     <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
         Block... blocks);
 
-    boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, ItemStack stack, Fluid fluid);
+    boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid);
 
+    boolean drainAllFluid(Level level, BlockPos pos);
 
     // misc
 

@@ -89,6 +89,18 @@ fun pxToCoord(px: Vec2, size: Float, offset: Vec2): HexCoord {
         HexCoord(q, r + (rf + 0.5 * qf).roundToInt())
 }
 
+@JvmOverloads
+fun <T : Enum<T>> Array<T>.getSafe(key: String, default: T = this[0]): T {
+    val lowercaseKey = key.lowercase(Locale.ROOT)
+    return firstOrNull { it.name.lowercase(Locale.ROOT) == lowercaseKey } ?: default
+}
+
+@JvmOverloads
+fun <T : Enum<T>> Array<T>.getSafe(index: Byte, default: T = this[0]) = getSafe(index.toInt(), default)
+
+@JvmOverloads
+fun <T : Enum<T>> Array<T>.getSafe(index: Int, default: T = this[0]) = if (index in indices) this[index] else default
+
 fun String.withStyle(op: (Style) -> Style): MutableComponent = asTextComponent.withStyle(op)
 fun String.withStyle(style: Style): MutableComponent = asTextComponent.withStyle(style)
 fun String.withStyle(formatting: ChatFormatting): MutableComponent = asTextComponent.withStyle(formatting)

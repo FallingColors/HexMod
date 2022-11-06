@@ -19,7 +19,8 @@ class OpExplode(val fire: Boolean) : SpellAction {
         val pos = args.getVec3(0, argc)
         val strength = args.getPositiveDoubleUnder(1, 10.0, argc)
         ctx.assertVecInRange(pos)
-        val cost = ManaConstants.DUST_UNIT * (3 * strength + if (fire) 0.125 else 1.0)
+        val clampedStrength = Mth.clamp(strength, 0.0, 10.0)
+        val cost = ManaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 1.0 else 0.125)
         return Triple(
             Spell(pos, strength, this.fire),
             cost.toInt(),
@@ -29,7 +30,8 @@ class OpExplode(val fire: Boolean) : SpellAction {
 
     private data class Spell(val pos: Vec3, val strength: Double, val fire: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            if (!ctx.world.mayInteract(ctx.caster, BlockPos(pos)))
+            // TODO: you can use this to explode things *outside* of the worldborder?
+            if (!ctx.canEditBlockAt(BlockPos(pos)))
                 return
 
             ctx.world.explode(

@@ -19,6 +19,8 @@ object OpBlockRaycast : ConstManaAction {
         val origin = args.getVec3(0, argc)
         val look = args.getVec3(1, argc)
 
+        ctx.assertVecInRange(origin)
+
         val blockHitResult = ctx.world.clip(
             ClipContext(
                 origin,

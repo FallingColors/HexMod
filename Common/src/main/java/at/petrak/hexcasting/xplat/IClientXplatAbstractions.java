@@ -25,6 +25,8 @@ public interface IClientXplatAbstractions {
 
     void setRenderLayer(Block block, RenderType type);
 
+    void initPlatformSpecific();
+
     <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type, EntityRendererProvider<T> renderer);
 
     <T extends ParticleOptions> void registerParticleType(ParticleType<T> type,

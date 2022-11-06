@@ -14,15 +14,15 @@ object OpTheCoolerReadable : ConstManaAction {
         args: List<Iota>,
         ctx: CastingContext
     ): List<Iota> {
-        val target = args.getItemEntity(0, argc)
+        val target = args.getEntity(0, argc)
         ctx.assertEntityInRange(target)
 
-        val stack = target.item
-        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack)
-            ?: return false.asActionResult
+        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
+            ?: return false.asSpellResult
 
-        if (datumHolder.readIota(ctx.world) == null && datumHolder.emptyIota() == null)
-            return false.asActionResult
+        datumHolder.readDatum(ctx.world)
+            ?: datumHolder.emptyDatum()
+            ?: return false.asSpellResult
 
         return true.asActionResult
     }

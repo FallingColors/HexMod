@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators
 
+import at.petrak.hexcasting.api.addldata.DataHolder
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellAction
@@ -35,22 +36,15 @@ object OpWrite : SpellAction {
             throw MishapOthersName(trueName)
 
         return Triple(
-            Spell(datum),
+            Spell(datum, datumHolder),
             0,
             listOf()
         )
     }
 
-    private data class Spell(val datum: Iota) : RenderedSpell {
+    private data class Spell(val datum: Iota, val datumHolder: DataHolder) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val (handStack) = ctx.getHeldItemToOperateOn {
-                val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
-
-                datumHolder != null && datumHolder.writeIota(datum, true)
-            }
-
-            val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
-            datumHolder?.writeIota(datum, false)
+            datumHolder.writeDatum(datum, false)
         }
     }
 }

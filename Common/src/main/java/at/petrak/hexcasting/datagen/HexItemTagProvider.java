@@ -31,6 +31,8 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
             HexItems.STAFF_CRIMSON, HexItems.STAFF_WARPED);
 
         tag(HexItemTags.PHIAL_BASE).add(Items.GLASS_BOTTLE);
+        tag(HexItemTags.GRANTS_ROOT_ADVANCEMENT).add(HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD,
+            HexItems.CHARGED_AMETHYST);
 
         this.copy(HexBlockTags.EDIFIED_LOGS, HexItemTags.EDIFIED_LOGS);
         this.copy(HexBlockTags.EDIFIED_PLANKS, HexItemTags.EDIFIED_PLANKS);

@@ -28,7 +28,7 @@ object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
         return Triple(
             Spell(target),
             (ManaConstants.DUST_UNIT * 1.125).toInt(),
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(target), 1.0))
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
         )
     }
 

@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.utils.isManaItem
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
 
 class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) : SpellAction {
     override val argc = 2
@@ -49,13 +50,12 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         if (trueName != null)
             throw MishapOthersName(trueName)
 
-        return Triple(Spell(entity, patterns), cost, listOf(ParticleSpray.burst(entity.position(), 0.5)))
+        return Triple(Spell(entity, patterns, handStack), cost, listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
-    private inner class Spell(val itemEntity: ItemEntity, val patterns: List<Iota>) : RenderedSpell {
+    private inner class Spell(val itemEntity: ItemEntity, val patterns: List<Iota>, val stack: ItemStack) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val (handStack) = ctx.getHeldItemToOperateOn { it.`is`(itemType) }
-            val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
+            val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(stack)
             if (hexHolder != null
                 && !hexHolder.hasHex()
                 && itemEntity.isAlive

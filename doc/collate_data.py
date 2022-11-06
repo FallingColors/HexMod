@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from sys import argv, stdout
 from collections import namedtuple
+from html import escape
 import json # codec
 import re # parsing
 import os # listdir
@@ -78,7 +79,7 @@ Style = namedtuple("Style", ["type", "value"])
 
 def parse_style(sty):
     if sty == "br":
-        return "<br />", None
+        return "\n", None
     if sty == "br2":
         return "", Style("para", {})
     if sty == "li":
@@ -103,15 +104,15 @@ def parse_style(sty):
         return "", Style("base", None)
     if sty in types:
         return "", Style(types[sty], True)
-    if sty in colors:   
+    if sty in colors:
         return "", Style("color", colors[sty])
     if sty.startswith("#") and len(sty) in [4, 7]:
         return "", Style("color", sty[1:])
     # TODO more style parse
     raise ValueError("Unknown style: " + sty)
 
-def localize(i18n, string):
-    return i18n.get(string, string) if i18n else string
+def localize(i18n, string, default=None):
+    return (i18n.get(string, default if default else string) if i18n else string).replace("%%", "%")
 
 format_re = re.compile(r"\$\(([^)]*)\)")
 def format_string(root_data, string):
@@ -143,7 +144,7 @@ def format_string(root_data, string):
     text_nodes.append(extra_text + string[last_end:])
     first_node, *text_nodes = text_nodes
 
-    # parse 
+    # parse
     style_stack = [FormatTree(Style("base", True), []), FormatTree(Style("para", {}), [first_node])]
     for style, text in zip(styles, text_nodes):
         tmp_stylestack = []
@@ -172,6 +173,11 @@ def format_string(root_data, string):
 
 test_root = {"i18n": {}, "macros": default_macros, "resource_dir": "Common/src/main/resources", "modid": "hexcasting"}
 test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
+
+def localize_pattern(root_data, op_id):
+    return localize(root_data["i18n"], "hexcasting.spell.book." + op_id,
+                    localize(root_data["i18n"], "hexcasting.spell." + op_id))
+
 
 def do_localize(root_data, obj, *names):
     for name in names:
@@ -203,10 +209,12 @@ def resolve_pattern(root_data, page):
     if "pattern_reg" not in root_data:
         root_data["pattern_reg"] = fetch_patterns(root_data)
     page["op"] = [root_data["pattern_reg"][page["op_id"]]]
-    page["name"] = localize(root_data["i18n"], "hexcasting.spell." + page["op_id"])
+    page["name"] = localize_pattern(root_data, page["op_id"])
 
 def fixup_pattern(do_sig, root_data, page):
     patterns = page["patterns"]
+    if "op_id" in page:
+        page["header"] = localize_pattern(root_data, page["op_id"])
     if not isinstance(patterns, list): patterns = [patterns]
     if do_sig:
         inp = page.get("input", None) or ""
@@ -260,7 +268,7 @@ def parse_entry(root_data, entry_path, ent_name):
         if isinstance(page, str):
             page = {"type": "patchouli:text", "text": page}
             data["pages"][i] = page
-            
+
         do_localize(root_data, page, "title", "header")
         do_format(root_data, page, "text")
         if page["type"] in page_types:
@@ -321,7 +329,7 @@ def parse_book(root, mod_name, book_name):
     return root_info
 
 def tag_args(kwargs):
-    return "".join(f" {'class' if key == 'clazz' else key.replace('_', '-')}={repr(value)}" for key, value in kwargs.items())
+    return "".join(f" {'class' if key == 'clazz' else key.replace('_', '-')}={repr(escape(str(value)))}" for key, value in kwargs.items())
 
 class PairTag:
     __slots__ = ["stream", "name", "kwargs"]
@@ -359,7 +367,7 @@ class Stream:
         with self.pair_tag(name, **kwargs): pass
 
     def text(self, txt):
-        print(txt, file=self.stream, end="")
+        print(escape(txt), file=self.stream, end="")
         return self
 
 def get_format(out, ty, value):
@@ -396,7 +404,12 @@ def category_spoilered(root_info, category):
 
 def write_block(out, block):
     if isinstance(block, str):
-        out.text(block)
+        first = False
+        for line in block.split("\n"):
+            if first:
+                out.tag("br")
+            first = True
+            out.text(line)
         return
     sty_type = block.style.type
     if sty_type == "base":
@@ -406,6 +419,14 @@ def write_block(out, block):
     with tag:
         for child in block.children:
             write_block(out, child)
+
+def anchor_toc(out):
+    with out.pair_tag("a", href="#table-of-contents", clazz="permalink small", title="Jump to top"):
+        out.empty_pair_tag("i", clazz="bi bi-box-arrow-up")
+
+def permalink(out, link):
+    with out.pair_tag("a", href=link, clazz="permalink small", title="Permalink"):
+        out.empty_pair_tag("i", clazz="bi bi-link-45deg")
 
 # TODO modularize
 def write_page(out, pageid, page):
@@ -418,8 +439,7 @@ def write_page(out, pageid, page):
             with out.pair_tag("h4"):
                 out.text(page.get("header", page.get("title", None)))
                 if anchor_id:
-                    with out.pair_tag("a", href="#" + anchor_id, clazz="permalink small"):
-                        out.empty_pair_tag("i", clazz="bi bi-link-45deg")
+                    permalink(out, "#" + anchor_id)
 
         ty = page["type"]
         if ty == "patchouli:text":
@@ -460,7 +480,7 @@ def write_page(out, pageid, page):
                     with out.pair_tag("code"): out.text(i)
                 out.text(".")
             if "text" in page: write_block(out, page["text"])
-        elif ty == "hexcasting:brainsweep": 
+        elif ty == "hexcasting:brainsweep":
             with out.pair_tag("blockquote", clazz="crafting-info"):
                 out.text(f"Depicted in the book: A mind-flaying recipe producing the ")
                 with out.pair_tag("code"): out.text(page["output_name"])
@@ -475,8 +495,7 @@ def write_page(out, pageid, page):
                     suffix = f" ({pipe})" if inp or oup else ""
                     out.text(f"{page['name']}{suffix}")
                     if anchor_id:
-                        with out.pair_tag("a", href="#" + anchor_id, clazz="permalink small"):
-                            out.empty_pair_tag("i", clazz="bi bi-link-45deg")
+                        permalink(out, "#" + anchor_id)
             with out.pair_tag("details", clazz="spell-collapsible"):
                 out.empty_pair_tag("summary", clazz="collapse-spell")
                 for string, start_angle, per_world in page["op"]:
@@ -495,8 +514,8 @@ def write_entry(out, book, entry):
         with out.pair_tag_if(entry_spoilered(book, entry), "div", clazz="spoilered"):
             with out.pair_tag("h3", clazz="entry-title page-header"):
                 write_block(out, entry["name"])
-                with out.pair_tag("a", href="#" + entry["id"], clazz="permalink small"):
-                    out.empty_pair_tag("i", clazz="bi bi-link-45deg")
+                anchor_toc(out)
+                permalink(out, "#" + entry["id"])
             for page in entry["pages"]:
                 write_page(out, entry["id"], page)
 
@@ -505,8 +524,8 @@ def write_category(out, book, category):
         with out.pair_tag_if(category_spoilered(book, category), "div", clazz="spoilered"):
             with out.pair_tag("h2", clazz="category-title page-header"):
                 write_block(out, category["name"])
-                with out.pair_tag("a", href="#" + category["id"], clazz="permalink small"):
-                    out.empty_pair_tag("i", clazz="bi bi-link-45deg")
+                anchor_toc(out)
+                permalink(out, "#" + category["id"])
             write_block(out, category["description"])
         for entry in category["entries"]:
             if entry["id"] not in book["blacklist"]:
@@ -515,10 +534,9 @@ def write_category(out, book, category):
 def write_toc(out, book):
     with out.pair_tag("h2", id="table-of-contents", clazz="page-header"):
         out.text("Table of Contents")
-        with out.pair_tag("a", href="javascript:void(0)", clazz="toggle-link small", data_target="toc-category"):
-            out.text("(toggle all)")
-        with out.pair_tag("a", href="#table-of-contents", clazz="permalink small"):
-            out.empty_pair_tag("i", clazz="bi bi-link-45deg")
+        with out.pair_tag("a", href="javascript:void(0)", clazz="permalink toggle-link small", data_target="toc-category", title="Toggle all"):
+            out.empty_pair_tag("i", clazz="bi bi-list-nested")
+        permalink(out, "#table-of-contents")
     for category in book["categories"]:
         with out.pair_tag("details", clazz="toc-category"):
             with out.pair_tag("summary"):

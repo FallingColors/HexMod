@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.interop;
 
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
+import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
 import vazkii.patchouli.api.PatchouliAPI;
@@ -13,10 +14,12 @@ public class HexInterop {
     public static final String PEHKUI_ID = "pehkui";
 
     public static final class Forge {
+        public static final String CURIOS_API_ID = "curios";
     }
 
     public static final class Fabric {
         public static final String GRAVITY_CHANGER_API_ID = "gravitychanger";
+        public static final String TRINKETS_API_ID = "trinkets";
     }
 
     public static void init() {
@@ -28,6 +31,10 @@ public class HexInterop {
         }
 
         xplat.initPlatformSpecific();
+    }
+
+    public static void clientInit() {
+        IClientXplatAbstractions.INSTANCE.initPlatformSpecific();
     }
 
     private static void initPatchouli() {
