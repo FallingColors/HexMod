@@ -1,14 +1,11 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.api.item.ManaHolderItem;
-import at.petrak.hexcasting.api.misc.ManaConstants;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
-import at.petrak.hexcasting.api.utils.ManaHelper;
+import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,7 +35,7 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
         super(pProperties);
     }
 
-    public static ItemStack withMana(ItemStack stack, int mana, int maxMana) {
+    public static ItemStack withMedia(ItemStack stack, int mana, int maxMana) {
         Item item = stack.getItem();
         if (item instanceof ItemMediaHolder) {
             NBTHelper.putInt(stack, TAG_MANA, mana);
@@ -72,14 +69,14 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
     public int getBarColor(ItemStack pStack) {
         var mana = getMedia(pStack);
         var maxMana = getMaxMedia(pStack);
-        return ManaHelper.manaBarColor(mana, maxMana);
+        return MediaHelper.mediaBarColor(mana, maxMana);
     }
 
     @Override
     public int getBarWidth(ItemStack pStack) {
         var mana = getMedia(pStack);
         var maxMana = getMaxMedia(pStack);
-        return ManaHelper.manaBarWidth(mana, maxMana);
+        return MediaHelper.mediaBarWidth(mana, maxMana);
     }
 
     @Override
@@ -90,23 +87,23 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
-        var maxMana = getMaxMana(pStack);
+        var maxMana = getMaxMedia(pStack);
         if (maxMana > 0) {
-            var mana = getMana(pStack);
-            var fullness = getManaFullness(pStack);
+            var mana = getMedia(pStack);
+            var fullness = getMediaFullness(pStack);
 
-            var color = TextColor.fromRgb(ManaHelper.manaBarColor(mana, maxMana));
+            var color = TextColor.fromRgb(MediaHelper.mediaBarColor(mana, maxMana));
 
-            var manaAmount = new TextComponent(DUST_AMOUNT.format(mana / (float) ManaConstants.DUST_UNIT));
-            var percentFull = new TextComponent(PERCENTAGE.format(100f * fullness) + "%");
-            var maxCapacity = new TranslatableComponent("hexcasting.tooltip.mana", DUST_AMOUNT.format(maxMana / (float) ManaConstants.DUST_UNIT));
+            var manaAmount = Component.literal(DUST_AMOUNT.format(mana / (float) MediaConstants.DUST_UNIT));
+            var percentFull = Component.literal(PERCENTAGE.format(100f * fullness) + "%");
+            var maxCapacity = Component.translatable("hexcasting.tooltip.mana", DUST_AMOUNT.format(maxMana / (float) MediaConstants.DUST_UNIT));
 
             manaAmount.withStyle(style -> style.withColor(HEX_COLOR));
             maxCapacity.withStyle(style -> style.withColor(HEX_COLOR));
             percentFull.withStyle(style -> style.withColor(color));
 
             pTooltipComponents.add(
-                new TranslatableComponent("hexcasting.tooltip.mana_amount.advanced",
+                Component.translatable("hexcasting.tooltip.mana_amount.advanced",
                     manaAmount, maxCapacity, percentFull));
         }
 

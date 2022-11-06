@@ -30,8 +30,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -235,8 +233,8 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public @Nullable
-    DataHolder findDataHolder(Entity entity) {
-        var cc = HexCardinalComponents.DATA_HOLDER.maybeGet(entity);
+    ADIotaHolder findDataHolder(Entity entity) {
+        var cc = HexCardinalComponents.IOTA_HOLDER.maybeGet(entity);
         return cc.orElse(null);
     }
 
@@ -290,7 +288,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
         }
         try (Transaction transaction = Transaction.openOuter()) {
             boolean any = false;
-            for (var view : target.iterable(transaction)) {
+            for (var view : target) {
                 long extracted = view.extract(view.getResource(), view.getAmount(), transaction);
                 if (extracted > 0) {
                     any = true;

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellAction
@@ -29,7 +29,7 @@ object OpIgnite : SpellAction {
 
         return Triple(
             Spell(target),
-            ManaConstants.DUST_UNIT,
+            MediaConstants.DUST_UNIT,
             listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
         )
     }
@@ -53,7 +53,7 @@ object OpIgnite : SpellAction {
                             null,
                             InteractionHand.MAIN_HAND,
                             ItemStack(item),
-                            BlockHitResult(target, Direction.UP, pos, false)
+                            BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)
                         )
                     ).consumesAction()
         }

@@ -66,8 +66,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.*;
 import net.minecraftforge.common.loot.CanToolPerformAction;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
@@ -86,9 +84,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
-
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
@@ -272,7 +269,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public @Nullable DataHolder findDataHolder(Entity entity) {
+    public @Nullable ADIotaHolder findDataHolder(Entity entity) {
         var maybeCap = entity.getCapability(HexCapabilities.DATUM).resolve();
         return maybeCap.orElse(null);
     }
@@ -327,7 +324,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid) {
         Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
         return handler.isPresent() &&
-            handler.get().fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), EXECUTE) > 0;
+            handler.get().fill(new FluidStack(fluid, FluidType.BUCKET_VOLUME), EXECUTE) > 0;
     }
 
     @Override
@@ -344,21 +341,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             return any;
         }
         return false;
-    }
-
-    @Override
-    public ResourceLocation getID(Block block) {
-        return block.getRegistryName();
-    }
-
-    @Override
-    public ResourceLocation getID(Item item) {
-        return item.getRegistryName();
-    }
-
-    @Override
-    public ResourceLocation getID(VillagerProfession profession) {
-        return profession.getRegistryName();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
@@ -24,7 +24,7 @@ object OpAddMotion : SpellAction {
         ctx.markEntityAsMotionAdded(target)
         return Triple(
             Spell(target, motion),
-            (motionForCost * ManaConstants.DUST_UNIT).toInt(),
+            (motionForCost * MediaConstants.DUST_UNIT).toInt(),
             listOf(
                 ParticleSpray(
                     target.position().add(0.0, target.eyeHeight / 2.0, 0.0),

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
@@ -40,7 +40,7 @@ object OpAkashicWrite : SpellAction {
 
         return Triple(
             Spell(record, pos, key, datum),
-            ManaConstants.DUST_UNIT,
+            MediaConstants.DUST_UNIT,
             listOf()
         )
     }

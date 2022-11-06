@@ -1,10 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.core.BlockPos
+import net.minecraft.util.Mth
 import net.minecraft.world.level.Explosion
 import net.minecraft.world.phys.Vec3
 
@@ -20,7 +21,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
         val strength = args.getPositiveDoubleUnder(1, 10.0, argc)
         ctx.assertVecInRange(pos)
         val clampedStrength = Mth.clamp(strength, 0.0, 10.0)
-        val cost = ManaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 1.0 else 0.125)
+        val cost = MediaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 1.0 else 0.125)
         return Triple(
             Spell(pos, strength, this.fire),
             cost.toInt(),

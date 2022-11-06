@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
@@ -40,7 +40,7 @@ object OpTeleport : SpellAction {
 
         return Triple(
             Spell(teleportee, delta),
-            10 * ManaConstants.CRYSTAL_UNIT,
+            10 * MediaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray.cloud(targetMiddlePos, 2.0), ParticleSpray.burst(targetMiddlePos.add(delta), 2.0))
         )
     }

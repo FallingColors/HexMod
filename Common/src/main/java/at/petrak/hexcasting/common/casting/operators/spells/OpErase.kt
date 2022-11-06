@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -35,7 +35,7 @@ class OpErase : SpellAction {
 
         return Triple(
             Spell(handStack),
-            ManaConstants.DUST_UNIT, listOf()
+            MediaConstants.DUST_UNIT, listOf()
         )
     }
 

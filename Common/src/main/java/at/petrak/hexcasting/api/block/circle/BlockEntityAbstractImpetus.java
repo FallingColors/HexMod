@@ -2,14 +2,14 @@ package at.petrak.hexcasting.api.block.circle;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
-import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.SpellCircleContext;
 import at.petrak.hexcasting.api.spell.iota.PatternIota;
-import at.petrak.hexcasting.api.utils.ManaHelper;
+import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
@@ -122,7 +122,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             if (beai.getMana() < 0) {
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
             } else {
-                var dustCount = (float) beai.getMana() / (float) ManaConstants.DUST_UNIT;
+                var dustCount = (float) beai.getMana() / (float) MediaConstants.DUST_UNIT;
                 var dustCmp = Component.translatable("hexcasting.tooltip.lens.impetus.mana",
                     String.format("%.2f", dustCount));
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
@@ -554,7 +554,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     public int extractManaFromItem(ItemStack stack, boolean simulate) {
         if (this.mana < 0)
             return 0;
-        return ManaHelper.extractMana(stack, remainingManaCapacity(), true, simulate);
+        return MediaHelper.extractMedia(stack, remainingManaCapacity(), true, simulate);
     }
 
     public void insertMana(ItemStack stack) {

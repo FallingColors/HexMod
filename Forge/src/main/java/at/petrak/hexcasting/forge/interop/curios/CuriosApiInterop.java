@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.forge.interop.curios;
 
-import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
-import at.petrak.hexcasting.api.utils.ManaHelper;
+import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -23,68 +23,68 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class CuriosApiInterop {
 
-	public static void init() {
-		DiscoveryHandlers.addLensPredicate(player -> {
-			AtomicBoolean hasLens = new AtomicBoolean(false);
-			player.getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
-				ICurioStacksHandler stacksHandler = handler.getCurios().get("head");
-				if(stacksHandler != null) {
-					var stacks = stacksHandler.getStacks();
-					for (int i = 0; i < stacks.getSlots(); i++) {
-						if (stacks.getStackInSlot(i).is(HexItems.SCRYING_LENS)) {
-							hasLens.set(true);
-							break;
-						}
-					}
-				}
-			});
-			return hasLens.get();
-		});
+    public static void init() {
+        DiscoveryHandlers.addLensPredicate(player -> {
+            AtomicBoolean hasLens = new AtomicBoolean(false);
+            player.getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
+                ICurioStacksHandler stacksHandler = handler.getCurios().get("head");
+                if(stacksHandler != null) {
+                    var stacks = stacksHandler.getStacks();
+                    for (int i = 0; i < stacks.getSlots(); i++) {
+                        if (stacks.getStackInSlot(i).is(HexItems.SCRYING_LENS)) {
+                            hasLens.set(true);
+                            break;
+                        }
+                    }
+                }
+            });
+            return hasLens.get();
+        });
 
 
-		DiscoveryHandlers.addManaHolderDiscoverer(harness -> {
-			List<ManaHolder> holders = Lists.newArrayList();
-			harness.getCtx().getCaster().getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
-				for (var stacksHandler : handler.getCurios().values()) {
-					var stacks = stacksHandler.getStacks();
-					for (int i = 0; i < stacks.getSlots(); i++) {
-						var stack = stacks.getStackInSlot(i);
-						if (ManaHelper.isManaItem(stack)) {
-							var holder = IXplatAbstractions.INSTANCE.findManaHolder(stack);
-							if (holder != null) {
-								holders.add(holder);
-							}
-						}
-					}
-				}
-			});
+        DiscoveryHandlers.addMediaHolderDiscoverer(harness -> {
+            List<ADMediaHolder> holders = Lists.newArrayList();
+            harness.getCtx().getCaster().getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
+                for (var stacksHandler : handler.getCurios().values()) {
+                    var stacks = stacksHandler.getStacks();
+                    for (int i = 0; i < stacks.getSlots(); i++) {
+                        var stack = stacks.getStackInSlot(i);
+                        if (MediaHelper.isMediaItem(stack)) {
+                            var holder = IXplatAbstractions.INSTANCE.findManaHolder(stack);
+                            if (holder != null) {
+                                holders.add(holder);
+                            }
+                        }
+                    }
+                }
+            });
 
-			return holders;
-		});
+            return holders;
+        });
 
-		DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
-			AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
-			player.getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
-				for (var stacksHandler : handler.getCurios().values()) {
-					var stacks = stacksHandler.getStacks();
-					for (int i = 0; i < stacks.getSlots(); i++) {
-						var stack = stacks.getStackInSlot(i);
-						if (ItemCreativeUnlocker.isDebug(stack, type)) {
-							result.set(stack);
-							return;
-						}
-					}
-				}
-			});
-			return result.get();
-		});
-	}
+        DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
+            AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
+            player.getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
+                for (var stacksHandler : handler.getCurios().values()) {
+                    var stacks = stacksHandler.getStacks();
+                    for (int i = 0; i < stacks.getSlots(); i++) {
+                        var stack = stacks.getStackInSlot(i);
+                        if (ItemCreativeUnlocker.isDebug(stack, type)) {
+                            result.set(stack);
+                            return;
+                        }
+                    }
+                }
+            });
+            return result.get();
+        });
+    }
 
-	public static void onInterModEnqueue(final InterModEnqueueEvent event) {
-		InterModComms.sendTo(HexInterop.Forge.CURIOS_API_ID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HEAD.getMessageBuilder().build());
-	}
+    public static void onInterModEnqueue(final InterModEnqueueEvent event) {
+        InterModComms.sendTo(HexInterop.Forge.CURIOS_API_ID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HEAD.getMessageBuilder().build());
+    }
 
-	public static void onClientSetup(final FMLClientSetupEvent event) {
-		CuriosRenderers.register();
-	}
+    public static void onClientSetup(final FMLClientSetupEvent event) {
+        CuriosRenderers.register();
+    }
 }

@@ -20,17 +20,17 @@ public interface ManaHolderItem {
 
     default float getManaFullness(ItemStack stack) {
         int max = getMaxMana(stack);
-		if (max == 0) {
-			return 0;
-		}
+        if (max == 0) {
+            return 0;
+        }
         return (float) getMana(stack) / (float) max;
     }
 
     default int withdrawMana(ItemStack stack, int cost, boolean simulate) {
         var manaHere = getMana(stack);
-		if (cost < 0) {
-			cost = manaHere;
-		}
+        if (cost < 0) {
+            cost = manaHere;
+        }
         if (!simulate) {
             var manaLeft = manaHere - cost;
             setMana(stack, manaLeft);
@@ -38,22 +38,22 @@ public interface ManaHolderItem {
         return Math.min(cost, manaHere);
     }
 
-	default int insertMana(ItemStack stack, int amount, boolean simulate) {
-		var manaHere = getMana(stack);
-		int emptySpace = getMaxMana(stack) - manaHere;
-		if (emptySpace <= 0) {
-			return 0;
-		}
-		if (amount < 0) {
-			amount = emptySpace;
-		}
+    default int insertMana(ItemStack stack, int amount, boolean simulate) {
+        var manaHere = getMana(stack);
+        int emptySpace = getMaxMana(stack) - manaHere;
+        if (emptySpace <= 0) {
+            return 0;
+        }
+        if (amount < 0) {
+            amount = emptySpace;
+        }
 
-		int inserting = Math.min(amount, emptySpace);
+        int inserting = Math.min(amount, emptySpace);
 
-		if (!simulate) {
-			var newMana = manaHere + inserting;
-			setMana(stack, newMana);
-		}
-		return inserting;
-	}
+        if (!simulate) {
+            var newMana = manaHere + inserting;
+            setMana(stack, newMana);
+        }
+        return inserting;
+    }
 }

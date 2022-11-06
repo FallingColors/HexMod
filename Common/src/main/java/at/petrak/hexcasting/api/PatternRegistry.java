@@ -13,14 +13,17 @@ import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 public class PatternRegistry {
     private static final ConcurrentMap<ResourceLocation, Action> actionLookup = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Action, ResourceLocation> keyLookup = new ConcurrentHashMap<>();
     private static final ConcurrentLinkedDeque<SpecialHandlerEntry> specialHandlers = new ConcurrentLinkedDeque<>();
 
     // Map signatures to the "preferred" direction they start in and their operator ID.
@@ -46,6 +49,7 @@ public class PatternRegistry {
         }
 
         actionLookup.put(id, action);
+        keyLookup.put(action, id);
         if (isPerWorld) {
             perWorldPatternLookup.put(id, new PerWorldEntry(pattern, id));
         } else {
@@ -105,6 +109,7 @@ public class PatternRegistry {
         var ds = overworld.getDataStorage();
         Save perWorldPatterns =
             ds.computeIfAbsent(Save::load, () -> Save.create(overworld.getSeed()), TAG_SAVED_DATA);
+        perWorldPatterns.fillMissingEntries(overworld.getSeed());
         if (perWorldPatterns.lookup.containsKey(sig)) {
             var it = perWorldPatterns.lookup.get(sig);
             return new Pair<>(actionLookup.get(it.getFirst()), it.getFirst());
@@ -121,6 +126,10 @@ public class PatternRegistry {
         Save perWorldPatterns =
             ds.computeIfAbsent(Save::load, () -> Save.create(overworld.getSeed()), TAG_SAVED_DATA);
         return perWorldPatterns.lookup;
+    }
+
+    public static ResourceLocation lookupPattern(Action action) {
+        return keyLookup.get(action);
     }
 
     /**
@@ -191,10 +200,39 @@ public class PatternRegistry {
         // TODO: this is slightly weird that we save it *on* the world
         // might it be better to recalculate it every time the world loads?
         private Map<String, Pair<ResourceLocation, HexDir>> lookup;
+        private boolean missingEntries;
 
-        public Save(
-            Map<String, Pair<ResourceLocation, HexDir>> lookup) {
+        public Save(Map<String, Pair<ResourceLocation, HexDir>> lookup, boolean missingEntries) {
             this.lookup = lookup;
+            this.missingEntries = missingEntries;
+        }
+
+        public Save(Map<String, Pair<ResourceLocation, HexDir>> lookup) {
+            this(lookup, missingEntries(lookup));
+        }
+
+        private static boolean missingEntries(Map<String, Pair<ResourceLocation, HexDir>> lookup) {
+            var allIds = lookup.values().stream().map(Pair::getFirst).collect(Collectors.toSet());
+            return perWorldPatternLookup.values().stream().anyMatch(it -> allIds.contains(it.opId));
+        }
+
+        private void fillMissingEntries(long seed) {
+            if (missingEntries) {
+                var doneAny = false;
+
+                var allIds = lookup.values().stream().map(Pair::getFirst).collect(Collectors.toSet());
+                for (var entry : perWorldPatternLookup.values()) {
+                    if (!allIds.contains(entry.opId)) {
+                        scrungle(lookup, entry.prototype, entry.opId, seed);
+                        doneAny = true;
+                    }
+                }
+
+                if (doneAny) {
+                    setDirty();
+                    missingEntries = false;
+                }
+            }
         }
 
         @Override
@@ -208,23 +246,34 @@ public class PatternRegistry {
             return tag;
         }
 
-        static Save load(CompoundTag tag) {
+        private static Save load(CompoundTag tag) {
             var map = new HashMap<String, Pair<ResourceLocation, HexDir>>();
+            var allIds = new HashSet<ResourceLocation>();
             for (var sig : tag.getAllKeys()) {
                 var entry = tag.getCompound(sig);
                 var opId = ResourceLocation.tryParse(entry.getString(TAG_OP_ID));
+                allIds.add(opId);
                 var startDir = HexDir.values()[entry.getInt(TAG_START_DIR)];
                 map.put(sig, new Pair<>(opId, startDir));
             }
-            return new Save(map);
+            var missingEntries = perWorldPatternLookup.values().stream().anyMatch(it -> allIds.contains(it.opId));
+
+            return new Save(map, missingEntries);
+        }
+
+        private static void scrungle(Map<String, Pair<ResourceLocation, HexDir>> lookup, HexPattern prototype, ResourceLocation opId, long seed) {
+            var scrungled = EulerPathFinder.findAltDrawing(prototype, seed, it -> {
+                var sig = it.anglesSignature();
+                return !lookup.containsKey(sig) &&
+                    !regularPatternLookup.containsKey(sig)
+                    && specialHandlers.stream().noneMatch(handler -> handler.handler.handlePattern(it) != null);
+            });
+            lookup.put(scrungled.anglesSignature(), new Pair<>(opId, scrungled.getStartDir()));
         }
 
         public static Save create(long seed) {
             var map = new HashMap<String, Pair<ResourceLocation, HexDir>>();
-            PatternRegistry.perWorldPatternLookup.forEach((opId, entry) -> {
-                var scrungled = EulerPathFinder.findAltDrawing(entry.prototype, seed);
-                map.put(scrungled.anglesSignature(), new Pair<>(opId, scrungled.getStartDir()));
-            });
+            PatternRegistry.perWorldPatternLookup.values().forEach(it -> scrungle(map, it.prototype, it.opId, seed));
             var save = new Save(map);
             save.setDirty();
             return save;

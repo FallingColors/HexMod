@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
@@ -24,8 +24,8 @@ object OpBreakBlock : SpellAction {
         ctx.assertVecInRange(pos)
 
         return Triple(
-            Spell(bpos),
-            (ManaConstants.DUST_UNIT * 1.125).toInt(),
+            Spell(pos),
+            (MediaConstants.DUST_UNIT * 1.125).toInt(),
             listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
         )
     }

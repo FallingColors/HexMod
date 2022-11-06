@@ -1,8 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.ktxt.UseOnContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -29,7 +32,7 @@ object OpExtinguish : SpellAction {
 
         return Triple(
             Spell(target),
-            ManaConstants.DUST_UNIT * 6,
+            MediaConstants.DUST_UNIT * 6,
             listOf(ParticleSpray.burst(Vec3.atCenterOf(target), 1.0))
         )
     }
@@ -47,8 +50,8 @@ object OpExtinguish : SpellAction {
             while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
                 val here = todo.removeFirst()
                 val distFromTarget =
-                    target.distanceTo(Vec3.atCenterOf(here)) // max distance to prevent runaway shenanigans
-                if (ctx.canEditBlockAt(here) && distFromTarget < 10 && seen.add(here)) {
+                    target.distSqr(here) // max distance to prevent runaway shenanigans
+                if (ctx.canEditBlockAt(here) && distFromTarget < 10 * 10 && seen.add(here)) {
                     // never seen this pos in my life
                     val blockstate = ctx.world.getBlockState(here)
                     if (IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, here, blockstate, ctx.caster)) {

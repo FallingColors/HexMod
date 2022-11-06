@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellAction
@@ -32,7 +32,7 @@ object OpPlaceBlock : SpellAction {
         ctx.assertVecInRange(pos)
 
         val blockHit = BlockHitResult(
-            target, ctx.caster.direction, pos, false
+            Vec3.atCenterOf(pos), ctx.caster.direction, pos, false
         )
         val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
         val placeContext = BlockPlaceContext(itemUseCtx)
@@ -43,7 +43,7 @@ object OpPlaceBlock : SpellAction {
 
         return Triple(
             Spell(pos),
-            ManaConstants.DUST_UNIT / 8,
+            MediaConstants.DUST_UNIT / 8,
             listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
         )
     }
@@ -54,7 +54,7 @@ object OpPlaceBlock : SpellAction {
                 return
 
             val blockHit = BlockHitResult(
-                vec, ctx.caster.direction, pos, false
+                Vec3.atCenterOf(pos), ctx.caster.direction, pos, false
             )
 
             val bstate = ctx.world.getBlockState(pos)

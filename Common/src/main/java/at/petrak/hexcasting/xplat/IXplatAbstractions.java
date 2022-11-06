@@ -103,7 +103,7 @@ public interface IXplatAbstractions {
     ADIotaHolder findDataHolder(ItemStack stack);
 
     @Nullable
-    DataHolder findDataHolder(Entity entity);
+    ADIotaHolder findDataHolder(Entity entity);
 
     @Nullable
     ADHexHolder findHexHolder(ItemStack stack);

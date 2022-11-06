@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
@@ -22,7 +22,7 @@ class MishapNoSpellCircle : Mishap() {
         }
     }
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
+    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
         dropAll(ctx.caster, ctx.caster.inventory.items)
         dropAll(ctx.caster, ctx.caster.inventory.offhand)
         dropAll(ctx.caster, ctx.caster.inventory.armor) {

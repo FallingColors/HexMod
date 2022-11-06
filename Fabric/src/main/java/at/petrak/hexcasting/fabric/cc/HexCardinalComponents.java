@@ -7,13 +7,9 @@ import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.iota.DoubleIota;
-import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.fabric.cc.adimpl.CCColorizer;
-import at.petrak.hexcasting.fabric.cc.adimpl.CCHexHolder;
-import at.petrak.hexcasting.fabric.cc.adimpl.CCIotaHolder;
-import at.petrak.hexcasting.fabric.cc.adimpl.CCMediaHolder;
+import at.petrak.hexcasting.fabric.cc.adimpl.*;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
@@ -63,30 +59,30 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         registry.registerFor(ServerPlayer.class, HARNESS, CCHarness::new);
         registry.registerFor(ServerPlayer.class, PATTERNS, CCPatterns::new);
 
-        registry.registerFor(ItemEntity.class, DATA_HOLDER, CCEntityDataHolder.EntityItemDelegating::new);
-        registry.registerFor(ItemFrame.class, DATA_HOLDER, CCEntityDataHolder.ItemFrameDelegating::new);
-        registry.registerFor(EntityWallScroll.class, DATA_HOLDER, CCEntityDataHolder.ScrollDelegating::new);
+        registry.registerFor(ItemEntity.class, IOTA_HOLDER, CCEntityIotaHolder.EntityItemDelegating::new);
+        registry.registerFor(ItemFrame.class, IOTA_HOLDER, CCEntityIotaHolder.ItemFrameDelegating::new);
+        registry.registerFor(EntityWallScroll.class, IOTA_HOLDER, CCEntityIotaHolder.ScrollDelegating::new);
     }
 
     @Override
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
         registry.register(i -> i instanceof ColorizerItem, COLORIZER, CCColorizer.ItemBased::new);
 
-        registry.register(i -> i instanceof DataHolderItem, DATA_HOLDER, CCItemDataHolder.ItemBased::new);
+        registry.register(i -> i instanceof IotaHolderItem, IOTA_HOLDER, CCItemIotaHolder.ItemBased::new);
         // oh havoc, you think you're so funny
         // the worst part is you're /right/
-        registry.register(Items.PUMPKIN_PIE, DATA_HOLDER, stack -> new CCItemDataHolder.Static(stack,
-            s -> SpellDatum.make(Math.PI * s.getCount())));
+        registry.register(Items.PUMPKIN_PIE, IOTA_HOLDER, stack -> new CCItemIotaHolder.Static(stack,
+            s -> new DoubleIota(Math.PI * s.getCount())));
 
         registry.register(i -> i instanceof MediaHolderItem, MEDIA_HOLDER, CCMediaHolder.ItemBased::new);
         registry.register(HexItems.AMETHYST_DUST, MEDIA_HOLDER, s -> new CCMediaHolder.Static(
-            () -> HexConfig.common().dustManaAmount(), ADMediaHolder.AMETHYST_DUST_PRIORITY, s
+            () -> HexConfig.common().dustMediaAmount(), ADMediaHolder.AMETHYST_DUST_PRIORITY, s
         ));
         registry.register(Items.AMETHYST_SHARD, MEDIA_HOLDER, s -> new CCMediaHolder.Static(
-            () -> HexConfig.common().shardManaAmount(), ADMediaHolder.AMETHYST_SHARD_PRIORITY, s
+            () -> HexConfig.common().shardMediaAmount(), ADMediaHolder.AMETHYST_SHARD_PRIORITY, s
         ));
         registry.register(HexItems.CHARGED_AMETHYST, MEDIA_HOLDER, s -> new CCMediaHolder.Static(
-            () -> HexConfig.common().chargedCrystalManaAmount(), ADMediaHolder.CHARGED_AMETHYST_PRIORITY, s
+            () -> HexConfig.common().chargedCrystalMediaAmount(), ADMediaHolder.CHARGED_AMETHYST_PRIORITY, s
         ));
 
         registry.register(i -> i instanceof HexHolderItem, HEX_HOLDER, CCHexHolder.ItemBased::new);

@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class FabricUnsealedIngredient extends BaseCustomIngredient {
-	public static final ResourceLocation ID = modLoc("unsealed");
+    public static final ResourceLocation ID = modLoc("unsealed");
 
     private final ItemStack stack;
 
@@ -83,11 +83,11 @@ public class FabricUnsealedIngredient extends BaseCustomIngredient {
         return null;
     }
 
-	@Override
-	public void toNetwork(FriendlyByteBuf friendlyByteBuf) {
-		friendlyByteBuf.writeResourceLocation(ID);
-		friendlyByteBuf.writeItem(stack);
-	}
+    @Override
+    public void toNetwork(FriendlyByteBuf friendlyByteBuf) {
+        friendlyByteBuf.writeResourceLocation(ID);
+        friendlyByteBuf.writeItem(stack);
+    }
 
     public static class Deserializer implements IngredientDeserializer {
         public static final Deserializer INSTANCE = new Deserializer();

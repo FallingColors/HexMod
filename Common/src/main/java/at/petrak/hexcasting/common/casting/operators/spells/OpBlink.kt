@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
@@ -36,7 +36,7 @@ object OpBlink : SpellAction {
 
         return Triple(
             Spell(target, delta),
-            (ManaConstants.SHARD_UNIT * delta * 0.5).roundToInt(),
+            (MediaConstants.SHARD_UNIT * delta * 0.5).roundToInt(),
             listOf(
                 ParticleSpray.cloud(targetMiddlePos, 2.0, 50),
                 ParticleSpray.burst(targetMiddlePos.add(dvec), 2.0, 100)

@@ -11,42 +11,42 @@ import static at.petrak.hexcasting.api.mod.HexConfig.anyMatch;
 import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
 public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
-    private static ForgeConfigSpec.IntValue dustManaAmount;
-    private static ForgeConfigSpec.IntValue shardManaAmount;
-    private static ForgeConfigSpec.IntValue chargedCrystalManaAmount;
-    private static ForgeConfigSpec.DoubleValue manaToHealthRate;
+    private static ForgeConfigSpec.IntValue dustMediaAmount;
+    private static ForgeConfigSpec.IntValue shardMediaAmount;
+    private static ForgeConfigSpec.IntValue chargedCrystalMediaAmount;
+    private static ForgeConfigSpec.DoubleValue mediaToHealthRate;
 
     public ForgeHexConfig(ForgeConfigSpec.Builder builder) {
-        builder.push("Mana Amounts");
-        dustManaAmount = builder.comment("How much mana a single Amethyst Dust item is worth")
-            .defineInRange("dustManaAmount", DEFAULT_DUST_MANA_AMOUNT, 0, Integer.MAX_VALUE);
-        shardManaAmount = builder.comment("How much mana a single Amethyst Shard item is worth")
-            .defineInRange("shardManaAmount", DEFAULT_SHARD_MANA_AMOUNT, 0, Integer.MAX_VALUE);
-        chargedCrystalManaAmount = builder.comment("How much mana a single Charged Amethyst Crystal item is worth")
-            .defineInRange("chargedCrystalManaAmount", DEFAULT_CHARGED_MANA_AMOUNT, 0, Integer.MAX_VALUE);
-        manaToHealthRate = builder.comment("How many points of mana a half-heart is worth when casting from HP")
-            .defineInRange("manaToHealthRate", DEFAULT_MANA_TO_HEALTH_RATE, 0.0, Double.POSITIVE_INFINITY);
+        builder.push("Media Amounts");
+        dustMediaAmount = builder.comment("How much media a single Amethyst Dust item is worth")
+            .defineInRange("dustMediaAmount", DEFAULT_DUST_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
+        shardMediaAmount = builder.comment("How much media a single Amethyst Shard item is worth")
+            .defineInRange("shardMediaAmount", DEFAULT_SHARD_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
+        chargedCrystalMediaAmount = builder.comment("How much media a single Charged Amethyst Crystal item is worth")
+            .defineInRange("chargedCrystalMediaAmount", DEFAULT_CHARGED_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
+        mediaToHealthRate = builder.comment("How many points of media a half-heart is worth when casting from HP")
+            .defineInRange("mediaToHealthRate", DEFAULT_MANA_TO_HEALTH_RATE, 0.0, Double.POSITIVE_INFINITY);
         builder.pop();
     }
 
     @Override
-    public int dustManaAmount() {
-        return dustManaAmount.get();
+    public int dustMediaAmount() {
+        return dustMediaAmount.get();
     }
 
     @Override
-    public int shardManaAmount() {
-        return shardManaAmount.get();
+    public int shardMediaAmount() {
+        return shardMediaAmount.get();
     }
 
     @Override
-    public int chargedCrystalManaAmount() {
-        return chargedCrystalManaAmount.get();
+    public int chargedCrystalMediaAmount() {
+        return chargedCrystalMediaAmount.get();
     }
 
     @Override
-    public double manaToHealthRate() {
-        return manaToHealthRate.get();
+    public double mediaToHealthRate() {
+        return mediaToHealthRate.get();
     }
 
     public static class Client implements HexConfig.ClientConfigAccess {
@@ -55,8 +55,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
         private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
-        private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
-        private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
 
         public Client(ForgeConfigSpec.Builder builder) {
             patternPointSpeedMultiplier = builder.comment(
@@ -75,12 +73,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             gridSnapThreshold = builder.comment(
                 "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way.")
                 .defineInRange("gridSnapThreshold", DEFAULT_GRID_SNAP_THRESHOLD, 0.5, 1.0);
-            invertSpellbookScrollDirection = builder.comment(
-                    "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and vice versa")
-                .define("invertSpellbookScrollDirection", DEFAULT_INVERT_SPELLBOOK_SCROLL);
-            invertAbacusScrollDirection = builder.comment(
-                    "Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
-                .define("invertAbacusScrollDirection", DEFAULT_INVERT_ABACUS_SCROLL);
         }
 
         @Override
@@ -101,16 +93,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean ctrlTogglesOffStrokeOrder() {
             return ctrlTogglesOffStrokeOrder.get();
-        }
-
-        @Override
-        public boolean invertSpellbookScrollDirection() {
-            return invertSpellbookScrollDirection.get();
-        }
-
-        @Override
-        public boolean invertAbacusScrollDirection() {
-            return invertAbacusScrollDirection.get();
         }
 
         @Override

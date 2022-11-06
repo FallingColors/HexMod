@@ -6,9 +6,9 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(MouseHandler.class)
 public interface AccessorMouseHandler {
-	@Accessor("accumulatedScroll")
-	double hex$getAccumulatedScroll();
+    @Accessor("accumulatedScroll")
+    double hex$getAccumulatedScroll();
 
-	@Accessor("accumulatedScroll")
-	void hex$setAccumulatedScroll(double scroll);
+    @Accessor("accumulatedScroll")
+    void hex$setAccumulatedScroll(double scroll);
 }

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.addldata.DataHolder
+import at.petrak.hexcasting.api.addldata.ADIotaHolder
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellAction
@@ -42,9 +42,9 @@ object OpWrite : SpellAction {
         )
     }
 
-    private data class Spell(val datum: Iota, val datumHolder: DataHolder) : RenderedSpell {
+    private data class Spell(val datum: Iota, val datumHolder: ADIotaHolder) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            datumHolder.writeDatum(datum, false)
+            datumHolder.writeIota(datum, false)
         }
     }
 }

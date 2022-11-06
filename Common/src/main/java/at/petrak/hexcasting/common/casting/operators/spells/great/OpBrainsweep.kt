@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
@@ -29,7 +29,7 @@ object OpBrainsweep : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingContext
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val sacrifice = args.getVillager(0, argc)
         val pos = args.getBlockPos(1, argc)
         ctx.assertVecInRange(pos)
@@ -50,7 +50,7 @@ object OpBrainsweep : SpellAction {
 
         return Triple(
             Spell(pos, state, sacrifice, recipe),
-            10 * ManaConstants.CRYSTAL_UNIT,
+            10 * MediaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray.cloud(sacrifice.position(), 1.0), ParticleSpray.burst(Vec3.atCenterOf(pos), 0.3, 100))
         )
     }

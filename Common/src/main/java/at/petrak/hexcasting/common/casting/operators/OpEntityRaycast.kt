@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.asActionResult
@@ -13,7 +13,7 @@ import net.minecraft.world.phys.AABB
 
 object OpEntityRaycast : ConstManaAction {
     override val argc = 2
-    override val manaCost = ManaConstants.DUST_UNIT / 100
+    override val manaCost = MediaConstants.DUST_UNIT / 100
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val origin = args.getVec3(0, argc)
         val look = args.getVec3(1, argc)

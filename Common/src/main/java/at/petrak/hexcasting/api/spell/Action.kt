@@ -3,11 +3,11 @@ package at.petrak.hexcasting.api.spell
 import at.petrak.hexcasting.api.PatternRegistry
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.world.phys.Vec3
 import java.text.DecimalFormat
 
@@ -78,12 +78,12 @@ interface Action {
         private val DOUBLE_FORMATTER = DecimalFormat("####.####")
 
         @JvmStatic
-        fun makeConstantOp(x: Double, key: ResourceLocation): Operator = object : ConstManaOperator {
+        fun makeConstantOp(x: Double, key: ResourceLocation): Action = object : ConstManaAction {
             override val argc: Int
                 get() = 0
 
-            override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> =
-                x.asSpellResult
+            override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> =
+                x.asActionResult
 
             override val displayName: Component
                 get() = "hexcasting.spell.$key".asTranslatedComponent(DOUBLE_FORMATTER.format(x)).lightPurple

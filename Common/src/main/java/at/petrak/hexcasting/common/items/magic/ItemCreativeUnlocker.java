@@ -1,10 +1,9 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
-import at.petrak.hexcasting.api.item.ManaHolderItem;
-import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
-import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
@@ -64,7 +63,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
             return ItemStack.EMPTY;
         });
 
-        DiscoveryHandlers.addManaHolderDiscoverer(harness -> {
+        DiscoveryHandlers.addMediaHolderDiscoverer(harness -> {
             var player = harness.getCtx().getCaster();
             if (!player.isCreative())
                 return List.of();
@@ -96,9 +95,9 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         String prefix = "item.hexcasting.creative_unlocker.";
 
         String emphasis = Language.getInstance().getOrDefault(prefix + "for_emphasis");
-        MutableComponent emphasized = new TextComponent("");
+        MutableComponent emphasized = Component.empty();
         for (int i = 0; i < emphasis.length(); i++) {
-            emphasized.append(rainbow(new TextComponent("" + emphasis.charAt(i)), i, level));
+            emphasized.append(rainbow(Component.literal("" + emphasis.charAt(i)), i, level));
         }
 
         return emphasized;
@@ -147,23 +146,23 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     @Override
-    public int withdrawMana(ItemStack stack, int cost, boolean simulate) {
+    public int withdrawMedia(ItemStack stack, int cost, boolean simulate) {
         // In case it's withdrawn through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
             addToIntArray(stack, TAG_EXTRACTIONS, cost);
         }
 
-        return cost < 0 ? getMana(stack) : cost;
+        return cost < 0 ? getMedia(stack) : cost;
     }
 
     @Override
-    public int insertMana(ItemStack stack, int amount, boolean simulate) {
+    public int insertMedia(ItemStack stack, int amount, boolean simulate) {
         // In case it's inserted through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
             addToIntArray(stack, TAG_INSERTIONS, amount);
         }
 
-        return amount < 0 ? getMaxMana(stack) : amount;
+        return amount < 0 ? getMaxMedia(stack) : amount;
     }
 
     @Override
@@ -185,17 +184,17 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
             NBTHelper.remove(stack, tag);
             for (int i : arr) {
                 if (i < 0) {
-                    entity.sendMessage(new TranslatableComponent("hexcasting.debug.mana_" + langKey,
+                    entity.sendSystemMessage(Component.translatable("hexcasting.debug.mana_" + langKey,
                         stack.getDisplayName(),
-                        new TranslatableComponent("hexcasting.debug." + allKey).withStyle(ChatFormatting.GRAY))
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+                        Component.translatable("hexcasting.debug." + allKey).withStyle(ChatFormatting.GRAY))
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 } else {
-                    entity.sendMessage(new TranslatableComponent("hexcasting.debug.mana_" + langKey + ".with_dust",
+                    entity.sendSystemMessage(Component.translatable("hexcasting.debug.mana_" + langKey + ".with_dust",
                         stack.getDisplayName(),
-                        new TextComponent("" + i).withStyle(ChatFormatting.WHITE),
-                        new TextComponent(String.format("%.2f", i * 1.0 / ManaConstants.DUST_UNIT)).withStyle(
+                        Component.literal("" + i).withStyle(ChatFormatting.WHITE),
+                        Component.literal(String.format("%.2f", i * 1.0 / MediaConstants.DUST_UNIT)).withStyle(
                             ChatFormatting.WHITE))
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
             }
         }
@@ -253,12 +252,12 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         TooltipFlag isAdvanced) {
         Component emphasized = infiniteMedia(level);
 
-        MutableComponent modName = new TranslatableComponent("item.hexcasting.creative_unlocker.mod_name").withStyle(
-            (s) -> s.withColor(ItemManaHolder.HEX_COLOR));
+        MutableComponent modName = Component.translatable("item.hexcasting.creative_unlocker.mod_name").withStyle(
+            (s) -> s.withColor(ItemMediaHolder.HEX_COLOR));
 
         tooltipComponents.add(
-            new TranslatableComponent("hexcasting.spelldata.onitem", emphasized).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(new TranslatableComponent("item.hexcasting.creative_unlocker.tooltip", modName).withStyle(ChatFormatting.GRAY));
+            Component.translatable("hexcasting.spelldata.onitem", emphasized).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.translatable("item.hexcasting.creative_unlocker.tooltip", modName).withStyle(ChatFormatting.GRAY));
     }
 
     private static void addChildren(Advancement root, List<Advancement> out) {

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
@@ -23,7 +23,7 @@ object OpBeep : SpellAction {
 
         return Triple(
             Spell(target, note, NoteBlockInstrument.values()[instrument]),
-            ManaConstants.DUST_UNIT / 10,
+            MediaConstants.DUST_UNIT / 10,
             listOf(ParticleSpray.cloud(target, 1.0))
         )
     }

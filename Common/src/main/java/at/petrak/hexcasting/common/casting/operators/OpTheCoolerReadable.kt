@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting.operators
 import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.getItemEntity
+import at.petrak.hexcasting.api.spell.getEntity
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
@@ -18,11 +18,11 @@ object OpTheCoolerReadable : ConstManaAction {
         ctx.assertEntityInRange(target)
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
-            ?: return false.asSpellResult
+            ?: return false.asActionResult
 
-        datumHolder.readDatum(ctx.world)
-            ?: datumHolder.emptyDatum()
-            ?: return false.asSpellResult
+        datumHolder.readIota(ctx.world)
+            ?: datumHolder.emptyIota()
+            ?: return false.asActionResult
 
         return true.asActionResult
     }

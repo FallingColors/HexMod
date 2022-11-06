@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
-import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
@@ -68,13 +68,13 @@ public class RegisterClientStuff {
         x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MANA_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var item = (MediaHolderItem) stack.getItem();
-                return item.getManaFullness(stack);
+                return item.getMediaFullness(stack);
             });
         x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MAX_MANA_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var item = (ItemMediaBattery) stack.getItem();
                 var max = item.getMaxMedia(stack);
-                return (float) Math.sqrt((float) max / ManaConstants.CRYSTAL_UNIT / 10);
+                return (float) Math.sqrt((float) max / MediaConstants.CRYSTAL_UNIT / 10);
             });
 
         registerScrollOverrides(HexItems.SCROLL_SMOL);
@@ -188,18 +188,6 @@ public class RegisterClientStuff {
                 }
             });
 
-        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_RECORD,
-            (lines, state, pos, observer, world, direction) -> {
-                if (world.getBlockEntity(pos) instanceof BlockEntityAkashicRecord tile) {
-                    int count = tile.getCount();
-
-                    lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_BOOKSHELF), new TranslatableComponent(
-                        "hexcasting.tooltip.lens.akashic.record.count" + (count == 1 ? ".single" : ""),
-                        count
-                    )));
-                }
-            });
-
         ScryingLensOverlayRegistry.addDisplayer(Blocks.COMPARATOR,
             (lines, state, pos, observer, world, direction) -> {
                 int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(true);
@@ -221,7 +209,7 @@ public class RegisterClientStuff {
                 int power = getPoweredRailStrength(world, pos, state);
                 lines.add(new Pair<>(
                     new ItemStack(Items.POWERED_RAIL),
-                    new TextComponent(String.valueOf(power))
+                    Component.literal(String.valueOf(power))
                         .withStyle(redstoneColor(power, 9))));
             });
 
@@ -235,8 +223,8 @@ public class RegisterClientStuff {
             (state, pos, observer, world, direction) -> state.getBlock() instanceof BeehiveBlock,
             (lines, state, pos, observer, world, direction) -> {
                 int count = ScryingLensOverlayRegistry.getBeeValue();
-                lines.add(new Pair<>(new ItemStack(Items.BEE_NEST), count == -1 ? new TextComponent("") :
-                    new TranslatableComponent(
+                lines.add(new Pair<>(new ItemStack(Items.BEE_NEST), count == -1 ? Component.empty() :
+                    Component.translatable(
                         "hexcasting.tooltip.lens.bee" + (count == 1 ? ".single" : ""),
                         count
                     )));

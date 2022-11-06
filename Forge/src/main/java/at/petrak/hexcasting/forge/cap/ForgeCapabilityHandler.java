@@ -10,10 +10,9 @@ import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.Direction;
@@ -88,15 +87,15 @@ public class ForgeCapabilityHandler {
                 provide(stack, HexCapabilities.MANA, () -> new ItemBasedMediaHolder(holder, stack)));
         } else if (stack.is(HexItems.AMETHYST_DUST)) {
             evt.addCapability(MEDIA_STATIC_CAP, provide(stack, HexCapabilities.MANA, () ->
-                new StaticMediaHolder(HexConfig.common()::dustManaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY,
+                new StaticMediaHolder(HexConfig.common()::dustMediaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY,
                     stack)));
         } else if (stack.is(Items.AMETHYST_SHARD)) {
             evt.addCapability(MEDIA_STATIC_CAP, provide(stack, HexCapabilities.MANA, () -> new StaticMediaHolder(
-                HexConfig.common()::shardManaAmount, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack)));
+                HexConfig.common()::shardMediaAmount, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack)));
         } else if (stack.is(HexItems.CHARGED_AMETHYST)) {
             evt.addCapability(MEDIA_STATIC_CAP,
                 provide(stack, HexCapabilities.MANA, () -> new StaticMediaHolder(
-                    HexConfig.common()::chargedCrystalManaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)));
+                    HexConfig.common()::chargedCrystalMediaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)));
         }
 
         if (stack.getItem() instanceof IotaHolderItem holder) {
@@ -121,11 +120,11 @@ public class ForgeCapabilityHandler {
 
     public static void attachEntityCaps(AttachCapabilitiesEvent<Entity> evt) {
         if (evt.getObject() instanceof ItemEntity item) {
-            evt.addCapability(DATA_HOLDER_CAPABILITY, delegateTo(item::getItem)); // Delegate to the item
+            evt.addCapability(IOTA_STORAGE_CAP, delegateTo(item::getItem)); // Delegate to the item
         } else if (evt.getObject() instanceof ItemFrame frame) {
-            evt.addCapability(DATA_HOLDER_CAPABILITY, delegateTo(frame::getItem));
+            evt.addCapability(IOTA_STORAGE_CAP, delegateTo(frame::getItem));
         } else if (evt.getObject() instanceof EntityWallScroll scroll) {
-            evt.addCapability(DATA_HOLDER_CAPABILITY, delegateTo(() -> scroll.scroll));
+            evt.addCapability(IOTA_STORAGE_CAP, delegateTo(() -> scroll.scroll));
         }
     }
 
@@ -273,12 +272,12 @@ public class ForgeCapabilityHandler {
 
         @Override
         public int withdrawMedia(int cost, boolean simulate) {
-            return holder.withdrawMana(stack, cost, simulate);
+            return holder.withdrawMedia(stack, cost, simulate);
         }
 
         @Override
-        public int insertMana(int amount, boolean simulate) {
-            return holder.insertMana(stack, amount, simulate);
+        public int insertMedia(int amount, boolean simulate) {
+            return holder.insertMedia(stack, amount, simulate);
         }
     }
 

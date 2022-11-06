@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
@@ -14,7 +14,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 // TODO standardize "a negligible amount" of media to be 1/8 a dust
 object OpGetSentinelWayfind : ConstManaAction {
     override val argc = 1
-    override val manaCost = ManaConstants.DUST_UNIT / 10
+    override val manaCost = MediaConstants.DUST_UNIT / 10
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val from = args.getVec3(0, argc)
 

@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexItemTags
-import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
@@ -54,7 +54,7 @@ abstract class Mishap : Throwable() {
     protected fun error(stub: String, vararg args: Any): Component =
         "hexcasting.mishap.$stub".asTranslatedComponent(*args)
 
-    protected fun actionName(action: Operator?): Component =
+    protected fun actionName(action: Action?): Component =
         action?.displayName ?: "hexcasting.spell.null".asTranslatedComponent.lightPurple
 
     protected fun yeetHeldItemsTowards(ctx: CastingContext, targetPos: Vec3) {
@@ -101,7 +101,7 @@ abstract class Mishap : Throwable() {
         return ctx.world.getBlockState(pos).block.name
     }
 
-    data class Context(val pattern: HexPattern, val action: Operator?)
+    data class Context(val pattern: HexPattern, val action: Action?)
 
     companion object {
         fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 
 import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.api.spell.ParticleSpray
@@ -26,7 +26,7 @@ object OpDestroySentinel : SpellAction {
 
         return Triple(
             Spell,
-            ManaConstants.DUST_UNIT / 10,
+            MediaConstants.DUST_UNIT / 10,
             particles
         )
     }

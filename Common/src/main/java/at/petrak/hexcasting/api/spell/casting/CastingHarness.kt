@@ -19,8 +19,8 @@ import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.*
+import at.petrak.hexcasting.common.lib.HexIotaTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.Util
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
@@ -53,25 +53,25 @@ class CastingHarness private constructor(
      */
     fun executeIota(iota: Iota, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
 
-    private fun displayPattern(pattern: Operator?, iota: SpellDatum<*>) {
+    private fun displayPattern(pattern: Action?, iota: Iota) {
         if (this.ctx.debugPatterns) {
-            this.ctx.caster.sendMessage(pattern?.displayName ?: iota.display(), Util.NIL_UUID)
+            this.ctx.caster.sendSystemMessage(pattern?.displayName ?: iota.display())
         }
     }
 
-    private fun getOperatorForPattern(iota: SpellDatum<*>, world: ServerLevel): Operator? {
-        if (iota.getType() == DatumType.PATTERN)
-            return PatternRegistry.matchPattern(iota.payload as HexPattern, world)
+    private fun getOperatorForPattern(iota: Iota, world: ServerLevel): Action? {
+        if (iota is PatternIota)
+            return PatternRegistry.matchPattern(iota.pattern, world)
         return null
     }
 
     private fun getPatternForFrame(frame: ContinuationFrame): HexPattern? {
         if (frame !is ContinuationFrame.Evaluate) return null
 
-        return frame.list.car.payload as? HexPattern
+        return (frame.list.car as? PatternIota)?.pattern
     }
 
-    private fun getOperatorForFrame(frame: ContinuationFrame, world: ServerLevel): Operator? {
+    private fun getOperatorForFrame(frame: ContinuationFrame, world: ServerLevel): Action? {
         if (frame !is ContinuationFrame.Evaluate) return null
 
         return getOperatorForPattern(frame.list.car, world)
@@ -214,7 +214,7 @@ class CastingHarness private constructor(
             var ravenmindChanged = false
 
             if (!unenlightened || pattern.alwaysProcessGreatSpell) {
-                displayPattern(pattern, SpellDatum.make(newPat))
+                displayPattern(pattern, PatternIota(newPat))
                 val result = pattern.operate(
                     continuation,
                     this.stack.toMutableList(),
@@ -338,94 +338,98 @@ class CastingHarness private constructor(
      * either escaping it onto the stack or changing the parenthese-handling state.
      */
     private fun handleParentheses(iota: Iota): Pair<FunctionalData, ResolvedPatternType>? {
-        if (iota !is PatternIota) {
-            throw IllegalStateException()
+        val operator = (iota as? PatternIota)?.pattern?.let {
+            try {
+                PatternRegistry.matchPattern(it, this.ctx.world)
+            } catch (mishap: Mishap) {
+                null
+            }
         }
-        val sig = iota.pattern.anglesSignature()
+
+        val sig = (iota as? PatternIota)?.pattern?.anglesSignature()
 
         val out = if (this.parenCount > 0) {
             if (this.escapeNext) {
                 val newParens = this.parenthesized.toMutableList()
                 newParens.add(iota)
-                return this.getFunctionalData().copy(
+                this.getFunctionalData().copy(
                     escapeNext = false,
                     parenthesized = newParens
                 ) to ResolvedPatternType.ESCAPED
-            }
+            } else {
 
-            return when (sig) {
-                SpecialPatterns.CONSIDERATION.anglesSignature() -> {
-                    this.getFunctionalData().copy(
-                        escapeNext = true,
-                    ) to ResolvedPatternType.EVALUATED
-                }
-                SpecialPatterns.INTROSPECTION.anglesSignature() -> {
-                    // we have escaped the parens onto the stack; we just also record our count.
-                    val newParens = this.parenthesized.toMutableList()
-                    newParens.add(iota)
-                    this.getFunctionalData().copy(
-                        parenthesized = newParens,
-                        parenCount = this.parenCount + 1
-                    ) to if (this.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
-                }
-                SpecialPatterns.RETROSPECTION.anglesSignature() -> {
-                    val newParenCount = this.parenCount - 1
-                    if (newParenCount == 0) {
-                        val newStack = this.stack.toMutableList()
-                        newStack.add(ListIota(this.parenthesized.toList()))
+                when (sig) {
+                    SpecialPatterns.CONSIDERATION.anglesSignature() -> {
                         this.getFunctionalData().copy(
-                            stack = newStack,
-                            parenCount = newParenCount,
-                            parenthesized = listOf()
+                            escapeNext = true,
                         ) to ResolvedPatternType.EVALUATED
-                    } else if (newParenCount < 0) {
-                        throw MishapTooManyCloseParens()
-                    } else {
-                        // we have this situation: "(()"
-                        // we need to add the close paren
+                    }
+                    SpecialPatterns.INTROSPECTION.anglesSignature() -> {
+                        // we have escaped the parens onto the stack; we just also record our count.
                         val newParens = this.parenthesized.toMutableList()
                         newParens.add(iota)
                         this.getFunctionalData().copy(
-                            parenCount = newParenCount,
+                            parenthesized = newParens,
+                            parenCount = this.parenCount + 1
+                        ) to if (this.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
+                    }
+                    SpecialPatterns.RETROSPECTION.anglesSignature() -> {
+                        val newParenCount = this.parenCount - 1
+                        if (newParenCount == 0) {
+                            val newStack = this.stack.toMutableList()
+                            newStack.add(ListIota(this.parenthesized.toList()))
+                            this.getFunctionalData().copy(
+                                stack = newStack,
+                                parenCount = newParenCount,
+                                parenthesized = listOf()
+                            ) to ResolvedPatternType.EVALUATED
+                        } else if (newParenCount < 0) {
+                            throw MishapTooManyCloseParens()
+                        } else {
+                            // we have this situation: "(()"
+                            // we need to add the close paren
+                            val newParens = this.parenthesized.toMutableList()
+                            newParens.add(iota)
+                            this.getFunctionalData().copy(
+                                parenCount = newParenCount,
+                                parenthesized = newParens
+                            ) to ResolvedPatternType.ESCAPED
+                        }
+                    }
+                    else -> {
+                        val newParens = this.parenthesized.toMutableList()
+                        newParens.add(iota)
+                        this.getFunctionalData().copy(
                             parenthesized = newParens
                         ) to ResolvedPatternType.ESCAPED
                     }
                 }
-                else -> {
-                    val newParens = this.parenthesized.toMutableList()
-                    newParens.add(iota)
-                    this.getFunctionalData().copy(
-                        parenthesized = newParens
-                    ) to ResolvedPatternType.ESCAPED
-                }
             }
-        }
-
-        if (this.escapeNext) {
+        } else if (this.escapeNext) {
             val newStack = this.stack.toMutableList()
             newStack.add(iota)
-            return this.getFunctionalData().copy(
+            this.getFunctionalData().copy(
                 stack = newStack,
                 escapeNext = false,
             ) to ResolvedPatternType.ESCAPED
-        }
-
-        return when (sig) {
-            SpecialPatterns.CONSIDERATION.anglesSignature() -> {
-                this.getFunctionalData().copy(
-                    escapeNext = true
-                ) to ResolvedPatternType.EVALUATED
-            }
-            SpecialPatterns.INTROSPECTION.anglesSignature() -> {
-                this.getFunctionalData().copy(
-                    parenCount = this.parenCount + 1
-                ) to ResolvedPatternType.EVALUATED
-            }
-            SpecialPatterns.RETROSPECTION.anglesSignature() -> {
-                throw MishapTooManyCloseParens()
-            }
-            else -> {
-                null
+        } else {
+            when (sig) {
+                SpecialPatterns.CONSIDERATION.anglesSignature() -> {
+                    this.getFunctionalData().copy(
+                        escapeNext = true
+                    ) to ResolvedPatternType.EVALUATED
+                }
+                SpecialPatterns.INTROSPECTION.anglesSignature() -> {
+                    this.getFunctionalData().copy(
+                        parenCount = this.parenCount + 1
+                    ) to ResolvedPatternType.EVALUATED
+                }
+                SpecialPatterns.RETROSPECTION.anglesSignature() -> {
+                    throw MishapTooManyCloseParens()
+                }
+                else -> {
+                    null
+                }
             }
         }
 
@@ -468,9 +472,9 @@ class CastingHarness private constructor(
             val casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack)
             val hexHolderDrawsFromInventory = if (casterHexHolder != null) {
                 if (casterManaHolder != null) {
-                    val manaAvailable = casterManaHolder.withdrawMana(-1, true)
+                    val manaAvailable = casterManaHolder.withdrawMedia(-1, true)
                     val manaToTake = min(costLeft, manaAvailable)
-                    if (!fake) casterManaHolder.withdrawMana(manaToTake, false)
+                    if (!fake) casterManaHolder.withdrawMedia(manaToTake, false)
                     costLeft -= manaToTake
                 }
                 casterHexHolder.canDrawManaFromInventory()
@@ -478,18 +482,18 @@ class CastingHarness private constructor(
                 false
             }
 
-            if (casterStack.`is`(HexItemTags.WANDS) || hexHolderDrawsFromInventory) {
-                val manaSources = DiscoveryHandlers.collectManaHolders(this)
-                    .sortedWith(Comparator(::compareManaItem).reversed())
+            if (casterStack.`is`(HexItemTags.STAVES) || hexHolderDrawsFromInventory) {
+                val manaSources = DiscoveryHandlers.collectMediaHolders(this)
+                    .sortedWith(Comparator(::compareMediaItem).reversed())
                 for (source in manaSources) {
-                    costLeft -= extractMana(source, costLeft, simulate = fake)
+                    costLeft -= extractMedia(source, costLeft, simulate = fake)
                     if (costLeft <= 0)
                         break
                 }
 
                 if (allowOvercast && costLeft > 0) {
                     // Cast from HP!
-                    val manaToHealth = HexConfig.common().manaToHealthRate()
+                    val manaToHealth = HexConfig.common().mediaToHealthRate()
                     val healthtoRemove = costLeft.toDouble() / manaToHealth
                     val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
 
@@ -554,19 +558,19 @@ class CastingHarness private constructor(
         const val TAG_PREPACKAGED_COLORIZER = "prepackaged_colorizer"
 
         init {
-            DiscoveryHandlers.addManaHolderDiscoverer {
+            DiscoveryHandlers.addMediaHolderDiscoverer {
                 it.ctx.caster.inventory.items
-                    .filter(::isManaItem)
+                    .filter(::isMediaItem)
                     .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
             }
-            DiscoveryHandlers.addManaHolderDiscoverer {
+            DiscoveryHandlers.addMediaHolderDiscoverer {
                 it.ctx.caster.inventory.armor
-                    .filter(::isManaItem)
+                    .filter(::isMediaItem)
                     .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
             }
-            DiscoveryHandlers.addManaHolderDiscoverer {
+            DiscoveryHandlers.addMediaHolderDiscoverer {
                 it.ctx.caster.inventory.offhand
-                    .filter(::isManaItem)
+                    .filter(::isMediaItem)
                     .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
             }
         }

@@ -82,7 +82,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
         NBTHelper.putList(stack, TAG_PROGRAM, patsTag);
 
-        withMana(stack, mana, mana);
+        withMedia(stack, mana, mana);
     }
 
     @Override

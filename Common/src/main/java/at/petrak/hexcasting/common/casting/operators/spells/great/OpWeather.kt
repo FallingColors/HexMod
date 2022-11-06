@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.iota.Iota
@@ -20,7 +20,7 @@ class OpWeather(val rain: Boolean) : SpellAction {
 
         return Triple(
             Spell(rain),
-            if (this.rain) ManaConstants.CRYSTAL_UNIT else ManaConstants.SHARD_UNIT,
+            if (this.rain) MediaConstants.CRYSTAL_UNIT else MediaConstants.SHARD_UNIT,
             listOf()
         )
     }

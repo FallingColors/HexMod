@@ -6,8 +6,8 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
-import at.petrak.hexcasting.api.utils.extractMana
-import at.petrak.hexcasting.api.utils.isManaItem
+import at.petrak.hexcasting.api.utils.extractMedia
+import at.petrak.hexcasting.api.utils.isMediaItem
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
@@ -34,7 +34,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         }
 
         ctx.assertEntityInRange(entity)
-        if (!isManaItem(entity.item) || extractMana(
+        if (!isMediaItem(entity.item) || extractMedia(
                 entity.item,
                 drainForBatteries = true,
                 simulate = true
@@ -61,7 +61,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = extractMana(entityStack, drainForBatteries = true)
+                val manaAmt = extractMedia(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
                     hexHolder.writeHex(patterns, manaAmt)
                 }

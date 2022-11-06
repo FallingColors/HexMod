@@ -1,14 +1,14 @@
-@file:JvmName("ManaHelper")
+@file:JvmName("MediaHelper")
 
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.api.addldata.ManaHolder
+import at.petrak.hexcasting.api.addldata.ADMediaHolder
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 import kotlin.math.roundToInt
 
-fun isManaItem(stack: ItemStack): Boolean {
+fun isMediaItem(stack: ItemStack): Boolean {
     val manaHolder = IXplatAbstractions.INSTANCE.findManaHolder(stack) ?: return false
     if (!manaHolder.canProvide())
         return false
@@ -24,7 +24,7 @@ fun isManaItem(stack: ItemStack): Boolean {
  * Return the amount of mana extracted. This may be over [cost] if mana is wasted.
  */
 @JvmOverloads
-fun extractMana(
+fun extractMedia(
     stack: ItemStack,
     cost: Int = -1,
     drainForBatteries: Boolean = false,
@@ -32,7 +32,7 @@ fun extractMana(
 ): Int {
     val manaHolder = IXplatAbstractions.INSTANCE.findManaHolder(stack) ?: return 0
 
-    return extractMana(manaHolder, cost, drainForBatteries, simulate)
+    return extractMedia(manaHolder, cost, drainForBatteries, simulate)
 }
 
 /**
@@ -43,8 +43,8 @@ fun extractMana(
  *
  * Return the amount of mana extracted. This may be over [cost] if mana is wasted.
  */
-fun extractMana(
-    holder: ManaHolder,
+fun extractMedia(
+    holder: ADMediaHolder,
     cost: Int = -1,
     drainForBatteries: Boolean = false,
     simulate: Boolean = false
@@ -52,21 +52,21 @@ fun extractMana(
     if (drainForBatteries && !holder.canConstructBattery())
         return 0
 
-    return holder.withdrawMana(cost, simulate)
+    return holder.withdrawMedia(cost, simulate)
 }
 
 /**
  * Sorted from least important to most important
  */
-fun compareManaItem(aMana: ManaHolder, bMana: ManaHolder): Int {
+fun compareMediaItem(aMana: ADMediaHolder, bMana: ADMediaHolder): Int {
     val priority = aMana.consumptionPriority - bMana.consumptionPriority
     if (priority != 0)
         return priority
 
-    return aMana.withdrawMana(-1, true) - bMana.withdrawMana(-1, true)
+    return aMana.withdrawMedia(-1, true) - bMana.withdrawMedia(-1, true)
 }
 
-fun manaBarColor(mana: Int, maxMana: Int): Int {
+fun mediaBarColor(mana: Int, maxMana: Int): Int {
     val amt = if (maxMana == 0) {
         0f
     } else {
@@ -79,7 +79,7 @@ fun manaBarColor(mana: Int, maxMana: Int): Int {
     return Mth.color(r / 255f, g / 255f, b / 255f)
 }
 
-fun manaBarWidth(mana: Int, maxMana: Int): Int {
+fun mediaBarWidth(mana: Int, maxMana: Int): Int {
     val amt = if (maxMana == 0) {
         0f
     } else {

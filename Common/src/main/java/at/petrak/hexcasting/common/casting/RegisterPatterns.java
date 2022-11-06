@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting;
 
 import at.petrak.hexcasting.api.PatternRegistry;
-import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.spell.Action;
 import at.petrak.hexcasting.api.spell.iota.BooleanIota;
 import at.petrak.hexcasting.api.spell.iota.DoubleIota;
@@ -215,7 +215,7 @@ public class RegisterPatterns {
                 modLoc("colorize"),
                 OpColorize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqawqadaq", HexDir.SOUTH_EAST), modLoc("create_water"),
-                new OpCreateFluid(false, ManaConstants.DUST_UNIT,
+                new OpCreateFluid(false, MediaConstants.DUST_UNIT,
                     Items.WATER_BUCKET,
                     Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL),
                     Fluids.WATER));
@@ -244,14 +244,14 @@ public class RegisterPatterns {
                 OpBeep.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("waqqqqq", HexDir.EAST), modLoc("craft/cypher"),
-                new OpMakePackagedSpell<>(HexItems.CYPHER, ManaConstants.CRYSTAL_UNIT));
+                new OpMakePackagedSpell<>(HexItems.CYPHER, MediaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(HexPattern.fromAngles("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
                 modLoc("craft/trinket"),
-                new OpMakePackagedSpell<>(HexItems.TRINKET, 5 * ManaConstants.CRYSTAL_UNIT));
+                new OpMakePackagedSpell<>(HexItems.TRINKET, 5 * MediaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(
                 HexPattern.fromAngles("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
                 modLoc("craft/artifact"),
-                new OpMakePackagedSpell<>(HexItems.ARTIFACT, 10 * ManaConstants.CRYSTAL_UNIT));
+                new OpMakePackagedSpell<>(HexItems.ARTIFACT, 10 * MediaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(
                 HexPattern.fromAngles("aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", HexDir.SOUTH_WEST),
                 modLoc("craft/battery"),
@@ -260,35 +260,35 @@ public class RegisterPatterns {
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqaqwawaw", HexDir.NORTH_WEST),
                 modLoc("potion/weakness"),
-                new OpPotionEffect(MobEffects.WEAKNESS, ManaConstants.DUST_UNIT / 10, true, false, false));
+                new OpPotionEffect(MobEffects.WEAKNESS, MediaConstants.DUST_UNIT / 10, true, false, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqawwawawd", HexDir.WEST),
                 modLoc("potion/levitation"),
-                new OpPotionEffect(MobEffects.LEVITATION, ManaConstants.DUST_UNIT / 5, false, false, false));
+                new OpPotionEffect(MobEffects.LEVITATION, MediaConstants.DUST_UNIT / 5, false, false, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqaewawawe", HexDir.SOUTH_WEST),
                 modLoc("potion/wither"),
-                new OpPotionEffect(MobEffects.WITHER, ManaConstants.DUST_UNIT, true, false, false));
+                new OpPotionEffect(MobEffects.WITHER, MediaConstants.DUST_UNIT, true, false, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqadwawaww", HexDir.SOUTH_EAST),
                 modLoc("potion/poison"),
-                new OpPotionEffect(MobEffects.POISON, ManaConstants.DUST_UNIT / 3, true, false, false));
+                new OpPotionEffect(MobEffects.POISON, MediaConstants.DUST_UNIT / 3, true, false, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqadwawaw", HexDir.SOUTH_EAST),
                 modLoc("potion/slowness"),
-                new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, ManaConstants.DUST_UNIT / 3, true, false, false));
+                new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, MediaConstants.DUST_UNIT / 3, true, false, false));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqaawawaedd", HexDir.NORTH_WEST),
                 modLoc("potion/regeneration"),
-                new OpPotionEffect(MobEffects.REGENERATION, ManaConstants.DUST_UNIT, true, true, true), true);
+                new OpPotionEffect(MobEffects.REGENERATION, MediaConstants.DUST_UNIT, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqaawawaeqdd", HexDir.WEST),
                 modLoc("potion/night_vision"),
-                new OpPotionEffect(MobEffects.NIGHT_VISION, ManaConstants.DUST_UNIT / 5, false, true, true), true);
+                new OpPotionEffect(MobEffects.NIGHT_VISION, MediaConstants.DUST_UNIT / 5, false, true, true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqaawawaeqqdd", HexDir.SOUTH_WEST),
                 modLoc("potion/absorption"),
-                new OpPotionEffect(MobEffects.ABSORPTION, ManaConstants.DUST_UNIT, true, true, true), true);
+                new OpPotionEffect(MobEffects.ABSORPTION, MediaConstants.DUST_UNIT, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaawawaeqqqdd", HexDir.SOUTH_EAST),
                 modLoc("potion/haste"),
-                new OpPotionEffect(MobEffects.DIG_SPEED, ManaConstants.DUST_UNIT / 3, true, true, true), true);
+                new OpPotionEffect(MobEffects.DIG_SPEED, MediaConstants.DUST_UNIT / 3, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aawawaeqqqqdd", HexDir.EAST),
                 modLoc("potion/strength"),
-                new OpPotionEffect(MobEffects.DAMAGE_BOOST, ManaConstants.DUST_UNIT / 3, true, true, true), true);
+                new OpPotionEffect(MobEffects.DAMAGE_BOOST, MediaConstants.DUST_UNIT / 3, true, true, true), true);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("waeawae", HexDir.EAST),
                 modLoc("sentinel/create"),
@@ -308,7 +308,7 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.fromAngles("eawwaeawawaa", HexDir.NORTH_WEST),
                 modLoc("flight"), OpFlight.INSTANCE, true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eaqawqadaqd", HexDir.EAST),
-                modLoc("create_lava"), new OpCreateFluid(true, ManaConstants.CRYSTAL_UNIT,
+                modLoc("create_lava"), new OpCreateFluid(true, MediaConstants.CRYSTAL_UNIT,
                     Items.LAVA_BUCKET,
                     Blocks.LAVA_CAULDRON.defaultBlockState(),
                     Fluids.LAVA), true);
@@ -514,7 +514,7 @@ public class RegisterPatterns {
                 if (negate) {
                     accumulator = -accumulator;
                 }
-                return Operator.makeConstantOp(new DoubleIota(accumulator), modLoc("number"));
+                return Action.makeConstantOp(accumulator, modLoc("number"));
             } else {
                 return null;
             }

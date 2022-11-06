@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.iota.Iota
@@ -28,7 +28,7 @@ object OpColorize : SpellAction {
         }
         return Triple(
             Spell(handStack),
-            ManaConstants.DUST_UNIT,
+            MediaConstants.DUST_UNIT,
             listOf()
         )
     }

@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class ListPatternsCommand {
-    public static void register(LiteralArgumentBuilder<CommandSourceStack> cmd) {
+    public static void add(LiteralArgumentBuilder<CommandSourceStack> cmd) {
         cmd.then(Commands.literal("patterns")
                 .requires(dp -> dp.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("list")
@@ -62,11 +62,11 @@ public class ListPatternsCommand {
             .sorted((a, b) -> compareResLoc(a.getValue().getFirst(), b.getValue().getFirst()))
             .toList();
 
-        source.sendSuccess(new TranslatableComponent("command.hexcasting.pats.listing"), false);
+        source.sendSuccess(Component.translatable("command.hexcasting.pats.listing"), false);
         for (var pair : listing) {
-            source.sendSuccess(new TextComponent(pair.getValue().getFirst().toString())
+            source.sendSuccess(Component.literal(pair.getValue().getFirst().toString())
                 .append(": ")
-                .append(SpellDatum.make(HexPattern.fromAngles(pair.getKey(), pair.getValue().getSecond()))
+                .append(new PatternIota(HexPattern.fromAngles(pair.getKey(), pair.getValue().getSecond()))
                     .display()), false);
         }
 
@@ -79,8 +79,8 @@ public class ListPatternsCommand {
             var lookup = PatternRegistry.getPerWorldPatterns(source.getLevel());
 
             lookup.forEach((pattern, entry) -> {
-                var opId = entry.component1();
-                var startDir = entry.component2();
+                var opId = entry.getFirst();
+                var startDir = entry.getSecond();
 
                 var tag = new CompoundTag();
                 tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
@@ -100,7 +100,7 @@ public class ListPatternsCommand {
             });
 
             source.sendSuccess(
-                new TranslatableComponent("command.hexcasting.pats.all",
+                Component.translatable("command.hexcasting.pats.all",
                     lookup.size(),
                     targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
                 true);
@@ -121,7 +121,7 @@ public class ListPatternsCommand {
             stack.setTag(tag);
 
             source.sendSuccess(
-                new TranslatableComponent(
+                Component.translatable(
                     "command.hexcasting.pats.specific.success",
                     stack.getDisplayName(),
                     patternName,

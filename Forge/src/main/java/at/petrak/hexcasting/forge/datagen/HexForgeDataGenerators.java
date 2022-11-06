@@ -54,7 +54,7 @@ public class HexForgeDataGenerators {
         DataGenerator gen = ev.getGenerator();
         ExistingFileHelper efh = ev.getExistingFileHelper();
         gen.addProvider(ev.includeServer(), new HexLootTables(gen));
-        gen.addProvider(ev.includeServer(), new HexplatRecipes(gen, INGREDIENTS));
+        gen.addProvider(ev.includeServer(), new HexplatRecipes(gen, INGREDIENTS, HexForgeConditionsBuilder::new));
 
         var xtags = IXplatAbstractions.INSTANCE.tags();
         var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(

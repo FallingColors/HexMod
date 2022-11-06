@@ -1,55 +1,55 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import net.minecraft.world.item.ItemStack;
 
-public record DebugUnlockerHolder(ItemStack creativeUnlocker) implements ManaHolder {
-	@Override
-	public int getMana() {
-		return Integer.MAX_VALUE;
-	}
+public record DebugUnlockerHolder(ItemStack creativeUnlocker) implements ADMediaHolder {
+    @Override
+    public int getMedia() {
+        return Integer.MAX_VALUE;
+    }
 
-	@Override
-	public int getMaxMana() {
-		return Integer.MAX_VALUE - 1;
-	}
+    @Override
+    public int getMaxMedia() {
+        return Integer.MAX_VALUE - 1;
+    }
 
-	@Override
-	public void setMana(int mana) {
-		// NO-OP
-	}
+    @Override
+    public void setMedia(int media) {
+        // NO-OP
+    }
 
-	@Override
-	public boolean canRecharge() {
-		return true;
-	}
+    @Override
+    public boolean canRecharge() {
+        return true;
+    }
 
-	@Override
-	public boolean canProvide() {
-		return true;
-	}
+    @Override
+    public boolean canProvide() {
+        return true;
+    }
 
-	@Override
-	public int getConsumptionPriority() {
-		return 1000;
-	}
+    @Override
+    public int getConsumptionPriority() {
+        return 1000;
+    }
 
-	@Override
-	public boolean canConstructBattery() {
-		return false;
-	}
+    @Override
+    public boolean canConstructBattery() {
+        return false;
+    }
 
-	@Override
-	public int withdrawMana(int cost, boolean simulate) {
-		ItemCreativeUnlocker.addToIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_EXTRACTIONS, cost);
+    @Override
+    public int withdrawMedia(int cost, boolean simulate) {
+        ItemCreativeUnlocker.addToIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_EXTRACTIONS, cost);
 
-		return cost < 0 ? getMana() : cost;
-	}
+        return cost < 0 ? getMedia() : cost;
+    }
 
-	@Override
-	public int insertMana(int amount, boolean simulate) {
-		ItemCreativeUnlocker.addToIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_INSERTIONS, amount);
+    @Override
+    public int insertMedia(int amount, boolean simulate) {
+        ItemCreativeUnlocker.addToIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_INSERTIONS, amount);
 
-		return amount;
-	}
+        return amount;
+    }
 }

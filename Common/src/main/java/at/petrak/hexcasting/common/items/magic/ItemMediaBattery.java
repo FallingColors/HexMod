@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -32,15 +32,15 @@ public class ItemMediaBattery extends ItemMediaHolder {
         // who was drunk at the wheel when they named this
         if (allowedIn(tab)) {
             var manamounts = new int[]{
-                ManaConstants.CRYSTAL_UNIT,
-                20 * ManaConstants.CRYSTAL_UNIT,
-                64 * ManaConstants.CRYSTAL_UNIT,
-                640 * ManaConstants.CRYSTAL_UNIT,
-                6400 * ManaConstants.CRYSTAL_UNIT,
+                MediaConstants.CRYSTAL_UNIT,
+                20 * MediaConstants.CRYSTAL_UNIT,
+                64 * MediaConstants.CRYSTAL_UNIT,
+                640 * MediaConstants.CRYSTAL_UNIT,
+                6400 * MediaConstants.CRYSTAL_UNIT,
             };
             for (int manamount : manamounts) {
                 var stack = new ItemStack(this);
-                items.add(ItemMediaHolder.withMana(stack, manamount, manamount));
+                items.add(ItemMediaHolder.withMedia(stack, manamount, manamount));
             }
         }
     }

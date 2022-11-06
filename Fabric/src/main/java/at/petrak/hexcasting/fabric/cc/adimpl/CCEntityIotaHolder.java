@@ -1,7 +1,6 @@
-package at.petrak.hexcasting.fabric.cc;
+package at.petrak.hexcasting.fabric.cc.adimpl;
 
-import at.petrak.hexcasting.api.addldata.DataHolder;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public abstract class CCEntityDataHolder implements CCDataHolder {
+public abstract class CCEntityIotaHolder implements CCIotaHolder {
     @Override
     public void writeToNbt(@NotNull CompoundTag tag) {
         // NO-OP
@@ -25,7 +24,7 @@ public abstract class CCEntityDataHolder implements CCDataHolder {
         // NO-OP
     }
 
-    public static class ItemDelegating extends CCEntityDataHolder {
+    public static class ItemDelegating extends CCEntityIotaHolder {
         private final Supplier<ItemStack> item;
 
         public ItemDelegating(Supplier<ItemStack> stackSupplier) {
@@ -33,27 +32,27 @@ public abstract class CCEntityDataHolder implements CCDataHolder {
         }
 
         @Override
-        public @Nullable CompoundTag readRawDatum() {
-            DataHolder delegate = IXplatAbstractions.INSTANCE.findDataHolder(item.get());
-            return delegate == null ? null : delegate.readRawDatum();
+        public @Nullable CompoundTag readIotaTag() {
+            var delegate = IXplatAbstractions.INSTANCE.findDataHolder(item.get());
+            return delegate == null ? null : delegate.readIotaTag();
         }
 
         @Override
-        public boolean writeDatum(@Nullable SpellDatum<?> datum, boolean simulate) {
-            DataHolder delegate = IXplatAbstractions.INSTANCE.findDataHolder(item.get());
-            return delegate != null && delegate.writeDatum(datum, simulate);
+        public boolean writeIota(@Nullable Iota datum, boolean simulate) {
+            var delegate = IXplatAbstractions.INSTANCE.findDataHolder(item.get());
+            return delegate != null && delegate.writeIota(datum, simulate);
         }
 
         @Override
-        public @Nullable SpellDatum<?> readDatum(ServerLevel world) {
-            DataHolder delegate = IXplatAbstractions.INSTANCE.findDataHolder(item.get());
-            return delegate == null ? null : delegate.readDatum(world);
+        public @Nullable Iota readIota(ServerLevel world) {
+            var delegate = IXplatAbstractions.INSTANCE.findDataHolder(item.get());
+            return delegate == null ? null : delegate.readIota(world);
         }
 
         @Override
-        public @Nullable SpellDatum<?> emptyDatum() {
-            DataHolder delegate = IXplatAbstractions.INSTANCE.findDataHolder(item.get());
-            return delegate == null ? null : delegate.emptyDatum();
+        public @Nullable Iota emptyIota() {
+            var delegate = IXplatAbstractions.INSTANCE.findDataHolder(item.get());
+            return delegate == null ? null : delegate.emptyIota();
         }
     }
 
@@ -75,7 +74,7 @@ public abstract class CCEntityDataHolder implements CCDataHolder {
         }
 
         @Override
-        public boolean writeDatum(@Nullable SpellDatum<?> datum, boolean simulate) {
+        public boolean writeIota(@Nullable Iota datum, boolean simulate) {
             return false;
         }
     }

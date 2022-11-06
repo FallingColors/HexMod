@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.mod;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
@@ -12,18 +12,18 @@ import java.util.List;
 public class HexConfig {
     public interface CommonConfigAccess {
 
-        int dustManaAmount();
+        int dustMediaAmount();
 
-        int shardManaAmount();
+        int shardMediaAmount();
 
-        int chargedCrystalManaAmount();
+        int chargedCrystalMediaAmount();
 
-        double manaToHealthRate();
+        double mediaToHealthRate();
 
-        int DEFAULT_DUST_MANA_AMOUNT = ManaConstants.DUST_UNIT;
-        int DEFAULT_SHARD_MANA_AMOUNT = ManaConstants.SHARD_UNIT;
-        int DEFAULT_CHARGED_MANA_AMOUNT = ManaConstants.CRYSTAL_UNIT;
-        double DEFAULT_MANA_TO_HEALTH_RATE = 2 * ManaConstants.CRYSTAL_UNIT / 20.0;
+        int DEFAULT_DUST_MEDIA_AMOUNT = MediaConstants.DUST_UNIT;
+        int DEFAULT_SHARD_MEDIA_AMOUNT = MediaConstants.SHARD_UNIT;
+        int DEFAULT_CHARGED_MEDIA_AMOUNT = MediaConstants.CRYSTAL_UNIT;
+        double DEFAULT_MANA_TO_HEALTH_RATE = 2 * MediaConstants.CRYSTAL_UNIT / 20.0;
 
     }
 
@@ -43,8 +43,6 @@ public class HexConfig {
         boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
         double DEFAULT_GRID_SNAP_THRESHOLD = 0.5;
-        boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
-        boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
     }
 
     public interface ServerConfigAccess {

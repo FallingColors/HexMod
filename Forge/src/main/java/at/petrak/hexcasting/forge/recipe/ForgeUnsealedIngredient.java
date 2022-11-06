@@ -25,9 +25,9 @@ import java.util.stream.Stream;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ForgeUnsealedIngredient extends AbstractIngredient {
-	public static final ResourceLocation ID = modLoc("unsealed");
+    public static final ResourceLocation ID = modLoc("unsealed");
 
-	private final ItemStack stack;
+    private final ItemStack stack;
 
     private static ItemStack createStack(ItemStack base) {
         ItemStack newStack = base.copy();
