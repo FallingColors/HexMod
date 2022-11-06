@@ -217,7 +217,8 @@ public class RegisterPatterns {
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqawqadaq", HexDir.SOUTH_EAST), modLoc("create_water"),
                 new OpCreateFluid(false, MediaConstants.DUST_UNIT,
                     Items.WATER_BUCKET,
-                    Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL),
+                    Blocks.WATER_CAULDRON.defaultBlockState()
+                        .setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL),
                     Fluids.WATER));
             PatternRegistry.mapPattern(HexPattern.fromAngles("dedwedade", HexDir.SOUTH_WEST),
                 modLoc("destroy_water"),
@@ -344,20 +345,26 @@ public class RegisterPatterns {
                 OpEval.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqdee", HexDir.SOUTH_WEST), modLoc("halt"),
                 OpHalt.INSTANCE);
+
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqqqqq", HexDir.EAST), modLoc("read"),
                 OpRead.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.fromAngles("deeeee", HexDir.EAST), modLoc("write"),
-                OpWrite.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.fromAngles("aqqqqqe", HexDir.EAST), modLoc("readable"),
-                OpReadable.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.fromAngles("deeeeeq", HexDir.EAST), modLoc("writable"),
-                OpWritable.INSTANCE);
-
-            // lorge boyes
             PatternRegistry.mapPattern(HexPattern.fromAngles("wawqwqwqwqwqw", HexDir.EAST),
                 modLoc("read/entity"), OpTheCoolerRead.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("deeeee", HexDir.EAST), modLoc("write"),
+                OpWrite.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("wdwewewewewew", HexDir.EAST),
+                modLoc("write/entity"), OpTheCoolerWrite.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aqqqqqe", HexDir.EAST), modLoc("readable"),
+                OpReadable.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wawqwqwqwqwqwew", HexDir.EAST),
                 modLoc("readable/entity"), OpTheCoolerReadable.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("deeeeeq", HexDir.EAST), modLoc("writable"),
+                OpWritable.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("wdwewewewewewqw", HexDir.EAST),
+                modLoc("writable/entity"), OpTheCoolerWritable.INSTANCE);
+
+            // lorge boyes
+
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qeewdweddw", HexDir.NORTH_EAST),
                 modLoc("read/local"), OpPeekLocal.INSTANCE);

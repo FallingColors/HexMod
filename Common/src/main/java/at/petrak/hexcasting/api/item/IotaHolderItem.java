@@ -51,6 +51,11 @@ public interface IotaHolderItem {
         }
     }
 
+    /**
+     * What is this considered to contain when nothing can be read?
+     * <p>
+     * TODO i'm not sure what this exists for
+     */
     @Nullable
     default Iota emptyIota(ItemStack stack) {
         return null;
