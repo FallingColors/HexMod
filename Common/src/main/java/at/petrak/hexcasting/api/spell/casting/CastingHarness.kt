@@ -23,6 +23,7 @@ import at.petrak.hexcasting.common.lib.HexIotaTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
@@ -53,9 +54,14 @@ class CastingHarness private constructor(
      */
     fun executeIota(iota: Iota, world: ServerLevel): ControllerInfo = executeIotas(listOf(iota), world)
 
-    private fun displayPattern(pattern: Action?, iota: Iota) {
+    private fun displayPattern(escapeNext: Boolean, parenCount: Int, iotaRepresentation: Component) {
         if (this.ctx.debugPatterns) {
-            this.ctx.caster.sendSystemMessage(pattern?.displayName ?: iota.display())
+            val display = "  ".repeat(parenCount).asTextComponent
+            if (escapeNext)
+                display.append("\\ ".asTextComponent.gold)
+            display.append(iotaRepresentation)
+
+            this.ctx.caster.sendSystemMessage(display)
         }
     }
 
@@ -211,10 +217,9 @@ class CastingHarness private constructor(
             var stack2: List<Iota>? = null
             var cont2 = continuation
             var ravenmind2: Iota? = null
-            var ravenmindChanged = false
 
             if (!unenlightened || pattern.alwaysProcessGreatSpell) {
-                displayPattern(pattern, PatternIota(newPat))
+                displayPattern(false, 0, pattern.displayName)
                 val result = pattern.operate(
                     continuation,
                     this.stack.toMutableList(),
@@ -224,7 +229,6 @@ class CastingHarness private constructor(
                 cont2 = result.newContinuation
                 stack2 = result.newStack
                 ravenmind2 = result.newRavenmind
-                ravenmindChanged = true
                 // TODO parens also break prescience
                 sideEffects.addAll(result.sideEffects)
             }
@@ -246,10 +250,10 @@ class CastingHarness private constructor(
                 )
 
             val hereFd = this.getFunctionalData()
-            val fd = if (stack2 != null || ravenmindChanged) {
+            val fd = if (stack2 != null) {
                 hereFd.copy(
-                    stack = stack2 ?: hereFd.stack,
-                    ravenmind = if (ravenmindChanged) ravenmind2 else hereFd.ravenmind
+                    stack = stack2,
+                    ravenmind = ravenmind2
                 )
             } else {
                 hereFd
@@ -338,15 +342,9 @@ class CastingHarness private constructor(
      * either escaping it onto the stack or changing the parenthese-handling state.
      */
     private fun handleParentheses(iota: Iota): Pair<FunctionalData, ResolvedPatternType>? {
-        val operator = (iota as? PatternIota)?.pattern?.let {
-            try {
-                PatternRegistry.matchPattern(it, this.ctx.world)
-            } catch (mishap: Mishap) {
-                null
-            }
-        }
-
         val sig = (iota as? PatternIota)?.pattern?.anglesSignature()
+
+        var displayDepth = this.parenCount
 
         val out = if (this.parenCount > 0) {
             if (this.escapeNext) {
@@ -375,6 +373,7 @@ class CastingHarness private constructor(
                     }
                     SpecialPatterns.RETROSPECTION.anglesSignature() -> {
                         val newParenCount = this.parenCount - 1
+                        displayDepth--
                         if (newParenCount == 0) {
                             val newStack = this.stack.toMutableList()
                             newStack.add(ListIota(this.parenthesized.toList()))
@@ -434,7 +433,8 @@ class CastingHarness private constructor(
         }
 
         if (out != null) {
-            displayPattern(operator, iota)
+            val display = if (iota is PatternIota) PatternNameHelper.representationForPattern(iota.pattern) else iota.display()
+            displayPattern(this.escapeNext, displayDepth, display)
         }
         return out
     }

@@ -121,6 +121,46 @@ public class PatternRegistry {
     /**
      * Internal use only.
      */
+    @Nullable
+    public static Action lookupPatternByShape(HexPattern pat) {
+        // Pipeline:
+        // patterns are registered here every time the game boots
+        // when we try to look
+        for (var handler : specialHandlers) {
+            var op = handler.handler.handlePattern(pat);
+            if (op != null) {
+                return op;
+            }
+        }
+
+        // Is it global?
+        var sig = pat.anglesSignature();
+        if (regularPatternLookup.containsKey(sig)) {
+            var it = regularPatternLookup.get(sig);
+            if (!actionLookup.containsKey(it.opId)) {
+                return null;
+            }
+            return actionLookup.get(it.opId);
+        }
+
+        // Currently, there's no way to look up the name of a Great Spell, as the client is unaware of the correct mapping.
+        // TODO: add code to match any pattern in the shape of a Great Spell to its operator.
+
+        // var ds = overworld.getDataStorage();
+        // Save perWorldPatterns =
+        //     ds.computeIfAbsent(Save::load, () -> Save.create(overworld.getSeed()), TAG_SAVED_DATA);
+        // perWorldPatterns.fillMissingEntries(overworld.getSeed());
+        // if (perWorldPatterns.lookup.containsKey(sig)) {
+        //     var it = perWorldPatterns.lookup.get(sig);
+        //     return new Pair<>(actionLookup.get(it.getFirst()), it.getFirst());
+        // }
+
+        return null;
+    }
+
+    /**
+     * Internal use only.
+     */
     public static Map<String, Pair<ResourceLocation, HexDir>> getPerWorldPatterns(ServerLevel overworld) {
         var ds = overworld.getDataStorage();
         Save perWorldPatterns =
