@@ -134,11 +134,22 @@ fun List<Iota>.getPositiveDoubleUnder(idx: Int, max: Double, argc: Int = 0): Dou
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
+        if (0.0 <= double && double < max) {
+            return double
+        }
+    }
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive.less", max)
+}
+
+fun List<Iota>.getPositiveDoubleUnderInclusive(idx: Int, max: Double, argc: Int = 0): Double {
+    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+    if (x is DoubleIota) {
+        val double = x.double
         if (double in 0.0..max) {
             return double
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive.lessthan", max)
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive.less.equal", max)
 }
 
 fun List<Iota>.getDoubleBetween(idx: Int, min: Double, max: Double, argc: Int = 0): Double {
@@ -197,7 +208,19 @@ fun List<Iota>.getPositiveIntUnder(idx: Int, max: Int, argc: Int = 0): Int {
             return rounded
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.lessthan", max)
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less", max)
+}
+
+fun List<Iota>.getPositiveIntUnderInclusive(idx: Int, max: Int, argc: Int = 0): Int {
+    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+    if (x is DoubleIota) {
+        val double = x.double
+        val rounded = double.roundToInt()
+        if (abs(double - rounded) <= DoubleIota.TOLERANCE && rounded in 0 .. max) {
+            return rounded
+        }
+    }
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
 }
 
 fun List<Iota>.getIntBetween(idx: Int, min: Int, max: Int, argc: Int = 0): Int {

@@ -17,8 +17,8 @@ object OpBeep : SpellAction {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getVec3(0, argc)
-        val instrument = args.getPositiveIntUnder(1, NoteBlockInstrument.values().size, argc)
-        val note = args.getPositiveIntUnder(2, 24, argc) // mojang don't have magic numbers challenge
+        val instrument = args.getPositiveIntUnderInclusive(1, NoteBlockInstrument.values().size, argc)
+        val note = args.getPositiveIntUnderInclusive(2, 24, argc) // mojang don't have magic numbers challenge
         ctx.assertVecInRange(target)
 
         return Triple(

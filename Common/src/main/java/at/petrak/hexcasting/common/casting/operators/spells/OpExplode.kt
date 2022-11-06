@@ -18,7 +18,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getVec3(0, argc)
-        val strength = args.getPositiveDoubleUnder(1, 10.0, argc)
+        val strength = args.getPositiveDoubleUnderInclusive(1, 10.0, argc)
         ctx.assertVecInRange(pos)
         val clampedStrength = Mth.clamp(strength, 0.0, 10.0)
         val cost = MediaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 1.0 else 0.125)
