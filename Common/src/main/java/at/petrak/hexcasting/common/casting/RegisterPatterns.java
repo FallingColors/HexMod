@@ -61,7 +61,7 @@ public class RegisterPatterns {
                 OpGetCaster.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aa", HexDir.EAST), modLoc("entity_pos/eye"),
                 new OpEntityPos(false));
-            PatternRegistry.mapPattern(HexPattern.fromAngles("dd", HexDir.NORTH_WEST), modLoc("entity_pos/foot"),
+            PatternRegistry.mapPattern(HexPattern.fromAngles("dd", HexDir.NORTH_EAST), modLoc("entity_pos/foot"),
                 new OpEntityPos(true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("wa", HexDir.EAST), modLoc("get_entity_look"),
                 OpEntityLook.INSTANCE);

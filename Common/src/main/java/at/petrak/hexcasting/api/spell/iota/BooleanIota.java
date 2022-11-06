@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BooleanIota extends Iota {
     public BooleanIota(boolean d) {
-        super(HexIotaTypes.DOUBLE, d);
+        super(HexIotaTypes.BOOLEAN, d);
     }
 
     public boolean getBool() {

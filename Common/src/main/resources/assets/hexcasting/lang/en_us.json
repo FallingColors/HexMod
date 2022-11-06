@@ -792,7 +792,7 @@
   "hexcasting.entry.basics_pattern": "Basic Patterns",
   "hexcasting.page.basics_pattern.get_caster": "Adds me, the caster, to the stack.",
   "hexcasting.page.basics_pattern.entity_pos/eye": "Transforms an entity on the stack into the position of its eyes. I should probably use this on myself.",
-  "hexcasting.page.basics_pattern.entity_pos/feet": "Transforms an entity on the stack into the position it is standing. I should probably use this on other entities.",
+  "hexcasting.page.basics_pattern.entity_pos/foot": "Transforms an entity on the stack into the position it is standing. I should probably use this on other entities.",
   "hexcasting.page.basics_pattern.get_entity_look": "Transforms an entity on the stack into the direction it's looking in, as a unit vector.",
   "hexcasting.page.basics_pattern.print": "Displays the top iota of the stack to me.",
   "hexcasting.page.basics_pattern.raycast.1": "Combines two vectors (a position and a direction) into the answer to the question: If I stood at the position and looked in the direction, what block would I be looking at? Costs a negligible amount of _media.",

@@ -40,14 +40,6 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:print",
-      "anchor": "hexcasting:print",
-      "input": "any",
-      "output": "any",
-      "text": "hexcasting.page.basics_pattern.print"
-    },
-    {
-      "type": "hexcasting:pattern",
       "op_id": "hexcasting:raycast",
       "anchor": "hexcasting:raycast",
       "input": "vector, vector",
@@ -77,6 +69,14 @@
       "input": "vector, vector",
       "output": "entity",
       "text": "hexcasting.page.basics_pattern.raycast/entity"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:print",
+      "anchor": "hexcasting:print",
+      "input": "any",
+      "output": "any",
+      "text": "hexcasting.page.basics_pattern.print"
     },
     {
       "type": "hexcasting:pattern",
