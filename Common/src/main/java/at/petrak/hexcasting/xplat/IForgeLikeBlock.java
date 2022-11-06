@@ -11,11 +11,11 @@ import net.minecraft.world.level.block.state.BlockState;
  * Fabric implementation will use mixins to achieve the same effects.
  */
 public interface IForgeLikeBlock {
-	default boolean addLandingEffects(BlockState state, ServerLevel level, BlockPos pos, LivingEntity entity, int numberOfParticles) {
-		return false;
-	}
+    default boolean addLandingEffects(BlockState state, ServerLevel level, BlockPos pos, LivingEntity entity, int numberOfParticles) {
+        return false;
+    }
 
-	default boolean hasEnchantPowerBonus(BlockState state, LevelReader level, BlockPos pos) {
-		return false;
-	}
+    default boolean hasEnchantPowerBonus(BlockState state, LevelReader level, BlockPos pos) {
+        return false;
+    }
 }

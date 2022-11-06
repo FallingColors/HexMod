@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(RenderType.CompositeRenderType.class)
 public interface AccessorCompositeRenderType {
-	@Invoker("state")
-	RenderType.CompositeState hex$state();
+    @Invoker("state")
+    RenderType.CompositeState hex$state();
 }
