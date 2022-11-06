@@ -92,6 +92,11 @@ dependencies {
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
         exclude group: "net.fabricmc.fabric-api"
     })
+
+    // *Something* is including an old version of modmenu with a broken mixin
+    // We can't figure out what it is
+    // so i'm just including a fresher version
+    modImplementation("com.terraformersmc:modmenu:4.1.0")
 }
 
 tasks.withType(JavaCompile) {

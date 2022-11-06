@@ -62,6 +62,7 @@ public class BooleanIota extends Iota {
     }
 
     public static Component display(boolean b) {
-        return Component.literal(String.valueOf(b)).withStyle(b ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_RED);
+        return Component.literal(b ? "True" : "False")
+            .withStyle(b ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_RED);
     }
 }

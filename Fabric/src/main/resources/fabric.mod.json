@@ -30,9 +30,6 @@
     "cardinal-components": [
       "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"
     ],
-    "rei_plugins_v0": [
-      "at.petrak.hexcasting.fabric.interop.rei.HexREIPlugin"
-    ],
     "emi": [
       "at.petrak.hexcasting.fabric.interop.emi.HexEMIPlugin"
     ]
