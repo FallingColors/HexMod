@@ -21,6 +21,7 @@ import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.lib.HexIotaTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
@@ -433,7 +434,11 @@ class CastingHarness private constructor(
         }
 
         if (out != null) {
-            val display = if (iota is PatternIota) PatternNameHelper.representationForPattern(iota.pattern) else iota.display()
+            val display = if (iota is PatternIota) {
+                PatternNameHelper.representationForPattern(iota.pattern)
+                    .copy()
+                    .withStyle(if (out.second == ResolvedPatternType.ESCAPED) ChatFormatting.YELLOW else ChatFormatting.AQUA)
+            } else iota.display()
             displayPattern(this.escapeNext, displayDepth, display)
         }
         return out
