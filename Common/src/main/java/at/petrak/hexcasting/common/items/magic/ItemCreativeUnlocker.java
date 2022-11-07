@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.ChatFormatting;
@@ -214,19 +215,23 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity consumer) {
         if (level instanceof ServerLevel slevel && consumer instanceof ServerPlayer player) {
-            var rootAdv = slevel.getServer().getAdvancements().getAdvancement(modLoc("root"));
-            if (rootAdv != null) {
-                var children = new ArrayList<Advancement>();
-                children.add(rootAdv);
-                addChildren(rootAdv, children);
+            var names = new ArrayList<>(ItemLoreFragment.NAMES);
+            names.add(0, modLoc("root"));
+            for (var name : names) {
+                var rootAdv = slevel.getServer().getAdvancements().getAdvancement(name);
+                if (rootAdv != null) {
+                    var children = new ArrayList<Advancement>();
+                    children.add(rootAdv);
+                    addChildren(rootAdv, children);
 
-                var adman = player.getAdvancements();
+                    var adman = player.getAdvancements();
 
-                for (var kid : children) {
-                    var progress = adman.getOrStartProgress(kid);
-                    if (!progress.isDone()) {
-                        for (String crit : progress.getRemainingCriteria()) {
-                            adman.award(kid, crit);
+                    for (var kid : children) {
+                        var progress = adman.getOrStartProgress(kid);
+                        if (!progress.isDone()) {
+                            for (String crit : progress.getRemainingCriteria()) {
+                                adman.award(kid, crit);
+                            }
                         }
                     }
                 }
