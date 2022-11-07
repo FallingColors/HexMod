@@ -215,7 +215,8 @@ fun makeZappy(
  * @param speed: rate at which the lightning effect should move/shake/etc
  */
 fun makeZappy(
-    barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float,
+    barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float,
+    speed: Float, flowIrregular: Float,
     readabilityOffset: Float
 ): List<Vec2> {
     // Nothing in, nothing out
@@ -269,7 +270,7 @@ fun makeZappy(
     return if (dupIndices != null) {
         for ((i, pair) in barePoints.zipWithNext().withIndex()) {
             val (head, tail) = pair
-            val tangent = tail.add(head.negated()).scale(READABILITY_OFFSET)
+            val tangent = tail.add(head.negated()).scale(readabilityOffset)
             if (i != 0 && dupIndices.contains(i)) {
                 daisyChain.add(head.add(tangent))
             } else {
