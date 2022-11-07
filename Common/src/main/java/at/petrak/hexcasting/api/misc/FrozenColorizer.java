@@ -1,26 +1,17 @@
 package at.petrak.hexcasting.api.misc;
 
 import at.petrak.hexcasting.api.addldata.ADColorizer;
-import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.Util;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * A colorizer item and the player who owned it at the time of making the color.
@@ -30,12 +21,6 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
     private static final int[] MINIMUM_LUMINANCE_COLOR_WHEEL = {
         0xFF200000, 0xFF202000, 0xFF002000, 0xFF002020, 0xFF000020, 0xFF200020
     };
-
-    private static final Map<String, Supplier<Item>> OLD_PRIDE_COLORIZERS = Arrays.stream(
-            ItemPrideColorizer.Type.values())
-        .collect(Collectors.<ItemPrideColorizer.Type, String, Supplier<Item>>toMap(
-            (type) -> modLoc("pride_colorizer_" + type.ordinal()).toString(),
-            (type) -> (() -> HexItems.PRIDE_COLORIZERS.get(type))));
 
     public static final String TAG_STACK = "stack";
     public static final String TAG_OWNER = "owner";
@@ -56,12 +41,6 @@ public record FrozenColorizer(ItemStack item, UUID owner) {
         }
         try {
             CompoundTag stackTag = tag.getCompound(TAG_STACK);
-            if (stackTag.contains("id", Tag.TAG_STRING)) {
-                String id = stackTag.getString("id");
-                if (OLD_PRIDE_COLORIZERS.containsKey(id)) {
-                    stackTag.putString("id", Registry.ITEM.getKey(OLD_PRIDE_COLORIZERS.get(id).get()).toString());
-                }
-            }
             var stack = ItemStack.of(stackTag);
             var uuid = tag.getUUID(TAG_OWNER);
             return new FrozenColorizer(stack, uuid);
