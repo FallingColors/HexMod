@@ -298,6 +298,7 @@ class GuiSpellcasting constructor(
         super.onClose()
     }
 
+
     override fun render(ps: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(ps, pMouseX, pMouseY, pPartialTick)
 
@@ -347,6 +348,7 @@ class GuiSpellcasting constructor(
                     this.hexSize(),
                     this.coordToPx(origin)
                 ),
+                findDupIndices(pat.positions()),
                 true,
                 valid.color or (0xC8 shl 24),
                 valid.fadeColor or (0xC8 shl 24),
@@ -357,12 +359,14 @@ class GuiSpellcasting constructor(
         // Now draw the currently WIP pattern
         if (this.drawState !is PatternDrawState.BetweenPatterns) {
             val points = mutableListOf<Vec2>()
+            var dupIndices: Set<Int>? = null
 
             if (this.drawState is PatternDrawState.JustStarted) {
                 val ds = this.drawState as PatternDrawState.JustStarted
                 points.add(this.coordToPx(ds.start))
             } else if (this.drawState is PatternDrawState.Drawing) {
                 val ds = this.drawState as PatternDrawState.Drawing
+                dupIndices = findDupIndices(ds.wipPattern.positions())
                 for (pos in ds.wipPattern.positions()) {
                     val pix = this.coordToPx(pos + ds.start)
                     points.add(pix)
@@ -370,7 +374,7 @@ class GuiSpellcasting constructor(
             }
 
             points.add(mousePos)
-            drawPatternFromPoints(mat, points, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt(), 0.1f)
+            drawPatternFromPoints(mat, points, dupIndices, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt(), 0.1f)
         }
 
         RenderSystem.enableDepthTest()

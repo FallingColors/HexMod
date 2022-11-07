@@ -71,7 +71,7 @@ public class EntityWallScroll extends HangingEntity {
                 var pair = RenderLib.getCenteredPattern(pattern, 128f / 3 * blockSize, 128f / 3 * blockSize,
                     16f / 3 * blockSize);
                 var dots = pair.getSecond();
-                this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f, 0f);
+                this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10f, 0.8f, 0f, 0f);
             }
 
             this.isAncient = NBTHelper.hasString(scroll, ItemScroll.TAG_OP_ID);

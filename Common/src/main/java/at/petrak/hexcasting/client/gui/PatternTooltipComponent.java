@@ -45,7 +45,7 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         var pair = RenderLib.getCenteredPattern(pattern, SIZE, SIZE, 8f);
         this.scale = pair.getFirst();
         var dots = pair.getSecond();
-        this.zappyPoints = RenderLib.makeZappy(dots, 10f, 0.8f, 0f, 0f);
+        this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10f, 0.8f, 0f, 0f);
         this.pathfinderDots = dots.stream().distinct().collect(Collectors.toList());
     }
 
