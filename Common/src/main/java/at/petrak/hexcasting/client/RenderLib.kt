@@ -44,6 +44,8 @@ import kotlin.math.sin
  */
 val NOISE: PerlinNoise = PerlinNoise.create(XoroshiroRandomSource(9001L), listOf(0, 1, 2, 3, 4))
 
+val CAP_THETA: Float = 18f
+
 /**
  * Draw a sequence of linePoints spanning the given points.
  *
@@ -77,38 +79,84 @@ fun drawLineSeq(
     val tess = Tesselator.getInstance()
     val buf = tess.builder
 
-    // We use one single TRIANGLE_STRIP
-    // in order to connect adjacent segments together and not get the weird hinge effect.
-    // There's still some artifacting but this is passable, at least.
-    buf.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR)
-
     val n = points.size
+    val joinAngles = FloatArray(n)
+    val joinOffsets = FloatArray(n)
+    for (i in 2..n-1) {
+        val p0 = points[i - 2];
+        val p1 = points[i - 1];
+        val p2 = points[i];
+        val prev = p1.add(p0.negated())
+        val next = p2.add(p1.negated())
+        val angle = Mth.atan2((prev.x * next.y - prev.y * next.x).toDouble(), (prev.x * next.x + prev.y * next.y).toDouble()).toFloat()
+        joinAngles[i - 1] = angle
+        val clamp = Math.min(prev.length(), next.length()) / (width * 0.5f);
+        joinOffsets[i - 1] = Mth.clamp(Mth.sin(angle) / (1 + Mth.cos(angle)), -clamp, clamp)
+    }
+
+    fun vertex(color: BlockPos, pos: Vec2) = buf.vertex(mat, pos.x, pos.y, z).color(color.x, color.y, color.z, a).endVertex()
     for ((i, pair) in points.zipWithNext().withIndex()) {
         val (p1, p2) = pair
         // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
         // GuiComponent::innerFill line 52
         // fedor have useful variable names challenge (99% can't beat)
-        val dx = p2.x - p1.x
-        val dy = p2.y - p1.y
-        // normal x and y, presumably?
-        val nx = -dy
-        val ny = dx
-        // thickness?
-        val tlen = Mth.sqrt(nx * nx + ny * ny) / (width * 0.5f)
-        val tx = nx / tlen
-        val ty = ny / tlen
+        val tangent = p2.add(p1.negated()).normalized().scale(width * 0.5f)
+        val normal = Vec2(-tangent.y, tangent.x)
 
         fun color(time: Float): BlockPos =
             BlockPos(Mth.lerp(time, r1, r2).toInt(), Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
 
         val color1 = color(i.toFloat() / n)
         val color2 = color((i + 1f) / n)
-        buf.vertex(mat, p1.x + tx, p1.y + ty, z).color(color1.x, color1.y, color1.z, a).endVertex()
-        buf.vertex(mat, p1.x - tx, p1.y - ty, z).color(color1.x, color1.y, color1.z, a).endVertex()
-        buf.vertex(mat, p2.x + tx, p2.y + ty, z).color(color2.x, color2.y, color2.z, a).endVertex()
-        buf.vertex(mat, p2.x - tx, p2.y - ty, z).color(color2.x, color2.y, color2.z, a).endVertex()
+        val jlow = joinOffsets[i]
+        val jhigh = joinOffsets[i + 1]
+        buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR)
+        vertex(color1, p1.add(tangent.scale(Math.max(0f, jlow))).add(normal))
+        vertex(color1, p1)
+        vertex(color1, p1.add(tangent.scale(Math.max(0f, -jlow))).add(normal.negated()))
+        vertex(color2, p2.add(tangent.scale(Math.max(0f, -jhigh)).negated()).add(normal.negated()))
+        vertex(color2, p2)
+        vertex(color2, p2.add(tangent.scale(Math.max(0f, jhigh)).negated()).add(normal))
+        tess.end()
+
+        if (i > 0) {
+            val sangle = joinAngles[i]
+            val angle = Math.abs(sangle)
+            val rnormal = normal.negated()
+            val joinSteps = Mth.ceil(angle * 180 / (CAP_THETA * Mth.PI))
+            if (joinSteps < 1) {
+                continue
+            }
+            buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR)
+            buf.vertex(mat, p1.x, p1.y, z).color(color1.x, color1.y, color1.z, a).endVertex()
+            if (sangle < 0) {
+                for (j in 0..joinSteps) {
+                    val fan = rotate(rnormal, -sangle * (j.toFloat() / joinSteps))
+                    buf.vertex(mat, p1.x - fan.x, p1.y - fan.y, z).color(color1.x, color1.y, color1.z, a).endVertex()
+                }
+            } else {
+                for (j in joinSteps downTo 0) {
+                    val fan = rotate(normal, -sangle * (j.toFloat() / joinSteps))
+                    buf.vertex(mat, p1.x - fan.x, p1.y - fan.y, z).color(color1.x, color1.y, color1.z, a).endVertex()
+                }
+            }
+            tess.end()
+        }
     }
-    tess.end()
+    fun drawCaps(color: BlockPos, point: Vec2, prev: Vec2) {
+        val tangent = point.add(prev.negated()).normalized().scale(0.5f * width)
+        val normal = Vec2(-tangent.y, tangent.x)
+        val joinSteps = Mth.ceil(180f / CAP_THETA)
+        buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR)
+        vertex(color, point)
+        for (j in joinSteps downTo 0) {
+            val fan = rotate(normal, -Mth.PI * (j.toFloat() / joinSteps))
+            buf.vertex(mat, point.x + fan.x, point.y + fan.y, z).color(color.x, color.y, color.z, a).endVertex()
+        }
+        tess.end()
+    }
+    drawCaps(BlockPos(r1.toInt(), g1.toInt(), b1.toInt()), points[0], points[1])
+    drawCaps(BlockPos(r2.toInt(), g2.toInt(), b2.toInt()), points[n - 1], points[n - 2])
 
     if (animTime != null) {
         val pointCircuit =
@@ -135,6 +183,12 @@ fun drawLineSeq(
             )
         }
     }
+}
+
+fun rotate(vec: Vec2, theta: Float): Vec2 {
+    val cos = Mth.cos(theta)
+    val sin = Mth.sin(theta)
+    return Vec2(vec.x * cos - vec.y * sin, vec.y * cos + vec.x * sin)
 }
 
 /**
