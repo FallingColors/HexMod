@@ -269,7 +269,7 @@ fun makeZappy(
     return if (dupIndices != null) {
         for ((i, pair) in barePoints.zipWithNext().withIndex()) {
             val (head, tail) = pair
-            val tangent = tail.add(head.negated()).scale(readabilityOffset)
+            val tangent = tail.add(head.negated()).scale(READABILITY_OFFSET)
             if (i != 0 && dupIndices.contains(i)) {
                 daisyChain.add(head.add(tangent))
             } else {
