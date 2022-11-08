@@ -23,7 +23,11 @@ Other branches are old detritus from potential features.
 
 ## For Developers
 
-We publish artifacts on Maven at [https://maven.blamejared.com/at/petra-k/hexcasting/].
+We publish artifacts on Maven at [https://maven.blamejared.com/at/petra-k/hexcasting/]. The modern coordinates are at:
+
+> `hexcasting-[PLATFORM]-[MC VERSION]/[MOD VERSION]`
+
+There are some other folders in the `hexcasting` folder from old CI configurations; ignore those, they're stale.
 
 Please only use things in the `at.petrak.hexcasting.api` package. (We do try to keep the API fairly stable, but we don't
 do a very good job.) If you find you need something not in there yell at me on Discord.
