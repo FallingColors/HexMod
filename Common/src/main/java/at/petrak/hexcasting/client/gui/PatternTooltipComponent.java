@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.client.gui;
 
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -84,10 +83,9 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         var innerLight = 0xc8_aba2a2;
         var innerDark = 0xc8_322b33;
         RenderLib.drawLineSeq(mat, this.zappyPoints, 5f, 0,
-            outer, outer, null);
+            outer, outer);
         RenderLib.drawLineSeq(mat, this.zappyPoints, 2f, 0,
-            innerDark, innerLight,
-            ClientTickCounter.getTotal() / 40f);
+            innerDark, innerLight);
         RenderLib.drawSpot(mat, this.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
 
         for (var dot : this.pathfinderDots) {

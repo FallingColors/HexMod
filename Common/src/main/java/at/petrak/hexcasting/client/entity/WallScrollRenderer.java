@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.client.entity;
 
-import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -122,36 +121,8 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             ps.translate(0, 0, 0.01);
             theCoolerDrawLineSeq(mat, norm, light, verts, points, wallScroll.blockSize * 2f / 3f, inner);
 
-            if (wallScroll.getShowsStrokeOrder()) {
+            if (wallScroll.getShowsStartPos()) {
                 var spotFrac = 0.8f * wallScroll.blockSize;
-
-                var animTime = wallScroll.tickCount + partialTicks;
-                var pointCircuit =
-                    (animTime * HexConfig.client().patternPointSpeedMultiplier()) % (points.size() + 10);
-                if (pointCircuit < points.size() - 1) {
-                    var pointMacro = Mth.floor(pointCircuit);
-                    var pointMicro = pointCircuit - pointMacro;
-
-                    var p1 = points.get(pointMacro);
-                    var p2 = points.get((pointMacro + 1) % points.size());
-                    var drawPos = new Vec2(
-                        (float) (p1.x + (p2.x - p1.x) * pointMicro),
-                        (float) (p1.y + (p2.y - p1.y) * pointMicro)
-                    );
-
-                    ps.translate(0, 0, 0.01);
-                    theCoolerDrawSpot(mat, norm, light, verts, drawPos, 2.6666f / 3f * spotFrac,
-                        0xff_cfa0f3);
-                    ps.translate(0, 0, 0.01);
-                    theCoolerDrawSpot(mat, norm, light, verts, drawPos, 2f / 3f * spotFrac,
-                        0xff_8d6acc);
-                } else {
-                    ps.translate(0, 0, 0.02);
-                }
-
-                ps.translate(0, 0, 0.01);
-                theCoolerDrawSpot(mat, norm, light, verts, points.get(0), spotFrac, 0xff_4946d3);
-                ps.translate(0, 0, 0.01);
                 theCoolerDrawSpot(mat, norm, light, verts, points.get(0), 2f / 3f * spotFrac,
                     0xff_5b7bd7);
             }

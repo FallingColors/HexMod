@@ -35,7 +35,6 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource
 import net.minecraft.world.level.levelgen.synth.PerlinNoise
 import net.minecraft.world.phys.Vec2
 import kotlin.math.abs
-import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.sin
 
@@ -45,14 +44,12 @@ import kotlin.math.sin
 val NOISE: PerlinNoise = PerlinNoise.create(XoroshiroRandomSource(9001L), listOf(0, 1, 2, 3, 4))
 
 val CAP_THETA: Float = 18f
-val READABILITY_OFFSET: Float = 0.2f
 
 /**
  * Draw a sequence of linePoints spanning the given points.
  *
  * Please make sure to enable the right asinine shaders; see [GuiSpellcasting]
  */
-@JvmOverloads
 fun drawLineSeq(
     mat: Matrix4f,
     points: List<Vec2>,
@@ -60,7 +57,6 @@ fun drawLineSeq(
     z: Float,
     tail: Int,
     head: Int,
-    animTime: Float? = null,
 ) {
     if (points.size <= 1) return
 
@@ -83,19 +79,22 @@ fun drawLineSeq(
     val n = points.size
     val joinAngles = FloatArray(n)
     val joinOffsets = FloatArray(n)
-    for (i in 2..n-1) {
+    for (i in 2..n - 1) {
         val p0 = points[i - 2];
         val p1 = points[i - 1];
         val p2 = points[i];
         val prev = p1.add(p0.negated())
         val next = p2.add(p1.negated())
-        val angle = Mth.atan2((prev.x * next.y - prev.y * next.x).toDouble(), (prev.x * next.x + prev.y * next.y).toDouble()).toFloat()
+        val angle =
+            Mth.atan2((prev.x * next.y - prev.y * next.x).toDouble(), (prev.x * next.x + prev.y * next.y).toDouble())
+                .toFloat()
         joinAngles[i - 1] = angle
         val clamp = Math.min(prev.length(), next.length()) / (width * 0.5f);
         joinOffsets[i - 1] = Mth.clamp(Mth.sin(angle) / (1 + Mth.cos(angle)), -clamp, clamp)
     }
 
-    fun vertex(color: BlockPos, pos: Vec2) = buf.vertex(mat, pos.x, pos.y, z).color(color.x, color.y, color.z, a).endVertex()
+    fun vertex(color: BlockPos, pos: Vec2) =
+        buf.vertex(mat, pos.x, pos.y, z).color(color.x, color.y, color.z, a).endVertex()
     for ((i, pair) in points.zipWithNext().withIndex()) {
         val (p1, p2) = pair
         // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
@@ -158,32 +157,6 @@ fun drawLineSeq(
     }
     drawCaps(BlockPos(r1.toInt(), g1.toInt(), b1.toInt()), points[0], points[1])
     drawCaps(BlockPos(r2.toInt(), g2.toInt(), b2.toInt()), points[n - 1], points[n - 2])
-
-    if (animTime != null) {
-        val pointCircuit =
-            (animTime * 30f * HexConfig.client().patternPointSpeedMultiplier().toFloat()) % (points.size + 10)
-        // subtract 1 to avoid the point appearing between the end and start for 1 frame
-        if (pointCircuit < points.size - 1) {
-            val pointMacro = floor(pointCircuit).toInt()
-            val pointMicro = pointCircuit - pointMacro
-
-            val p1 = points[pointMacro]
-            val p2 = points[(pointMacro + 1) % points.size]
-            val drawPos = Vec2(
-                p1.x + (p2.x - p1.x) * pointMicro,
-                p1.y + (p2.y - p1.y) * pointMicro,
-            )
-            drawSpot(
-                mat,
-                drawPos,
-                2f,
-                (r1 + 255) / 2f / 255f,
-                (g1 + 255) / 2f / 255f,
-                (b1 + 255) / 2f / 255f,
-                a / 1.2f / 255f
-            )
-        }
-    }
 }
 
 fun rotate(vec: Vec2, theta: Float): Vec2 {
@@ -196,7 +169,6 @@ fun rotate(vec: Vec2, theta: Float): Vec2 {
  *  * Draw a hex pattern from the given list of non-zappy points (as in, do the *style* of drawing it,
  *   * you have to do the conversion yourself.)
  *    */
-@JvmOverloads
 fun drawPatternFromPoints(
     mat: Matrix4f,
     points: List<Vec2>,
@@ -205,7 +177,6 @@ fun drawPatternFromPoints(
     tail: Int,
     head: Int,
     flowIrregular: Float,
-    animTime: Float? = null
 ) {
     val zappyPts = makeZappy(points, dupIndices, 10f, 2.5f, 0.1f, flowIrregular)
     val nodes = if (drawLast) {
@@ -213,8 +184,8 @@ fun drawPatternFromPoints(
     } else {
         points.dropLast(1)
     }
-    drawLineSeq(mat, zappyPts, 5f, 0f, tail, head, null)
-    drawLineSeq(mat, zappyPts, 2f, 1f, screenCol(tail), screenCol(head), animTime)
+    drawLineSeq(mat, zappyPts, 5f, 0f, tail, head)
+    drawLineSeq(mat, zappyPts, 2f, 1f, screenCol(tail), screenCol(head))
     for (node in nodes) {
         drawSpot(
             mat,
@@ -228,15 +199,25 @@ fun drawPatternFromPoints(
     }
 }
 
-fun makeZappy(points: List<Vec2>, dupIndices: Set<Int>?, hops: Float, variance: Float, speed: Float, flowIrregular: Float) =
-    makeZappy(points, dupIndices, hops.toInt(), variance, speed, flowIrregular)
+fun makeZappy(
+    points: List<Vec2>,
+    dupIndices: Set<Int>?,
+    hops: Float,
+    variance: Float,
+    speed: Float,
+    flowIrregular: Float
+) =
+    makeZappy(points, dupIndices, hops.toInt(), variance, speed, flowIrregular, 0.2f)
 
 /**
  * Split up a sequence of linePoints with a lightning effect
  * @param hops: rough number of points to subdivide each segment into
  * @param speed: rate at which the lightning effect should move/shake/etc
  */
-fun makeZappy(barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float): List<Vec2> {
+fun makeZappy(
+    barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float,
+    readabilityOffset: Float
+): List<Vec2> {
     // Nothing in, nothing out
     if (barePoints.isEmpty()) {
         return emptyList()
@@ -282,12 +263,13 @@ fun makeZappy(barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance
         }
         return zappyPts
     }
+
     val points = mutableListOf<Vec2>()
     val daisyChain = mutableListOf<Vec2>()
     return if (dupIndices != null) {
         for ((i, pair) in barePoints.zipWithNext().withIndex()) {
             val (head, tail) = pair
-            val tangent = tail.add(head.negated()).scale(READABILITY_OFFSET)
+            val tangent = tail.add(head.negated()).scale(readabilityOffset)
             if (i != 0 && dupIndices.contains(i)) {
                 daisyChain.add(head.add(tangent))
             } else {
@@ -308,7 +290,7 @@ fun makeZappy(barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance
     }
 }
 
-fun<T> findDupIndices(pts: Iterable<T>): Set<Int> {
+fun <T> findDupIndices(pts: Iterable<T>): Set<Int> {
     val dedup = HashMap<T, Int>()
     val found = HashSet<Int>()
     for ((i, pt) in pts.withIndex()) {
