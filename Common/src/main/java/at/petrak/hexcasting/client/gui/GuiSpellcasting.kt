@@ -137,9 +137,9 @@ class GuiSpellcasting(
         if (anchorCoord != null) {
             val anchor = this.coordToPx(anchorCoord)
             val mouse = Vec2(mx.toFloat(), my.toFloat())
-            if (anchor.distanceToSqr(mouse) >=
-                this.hexSize() * this.hexSize() * 2.0 * HexConfig.client().gridSnapThreshold()
-            ) {
+            val snapDist =
+                this.hexSize() * this.hexSize() * 2.0 * Mth.clamp(HexConfig.client().gridSnapThreshold(), 0.5, 1.0)
+            if (anchor.distanceToSqr(mouse) >= snapDist) {
                 val delta = mouse.add(anchor.negated())
                 val angle = atan2(delta.y, delta.x)
                 // 0 is right, increases clockwise(?)
