@@ -33,11 +33,9 @@ public final class PatternDrawingUtil {
 //        RenderLib.drawSpot(mat, Vec2.ZERO, 0f, 0f, 0f, 1f);
 
         for (var pat : patterns) {
-            RenderLib.drawLineSeq(mat, pat.zappyPoints(), 5f, 0, outer, outer, null);
+            RenderLib.drawLineSeq(mat, pat.zappyPoints(), 5f, 0, outer, outer);
             RenderLib.drawLineSeq(mat, pat.zappyPoints(), 2f, 0,
-                strokeOrder ? innerDark : innerLight,
-                innerLight,
-                strokeOrder ? animTicks / 20f : null);
+                strokeOrder ? innerDark : innerLight, innerLight);
 
             if (strokeOrder) {
                 RenderLib.drawSpot(mat, pat.zappyPoints().get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
@@ -108,7 +106,9 @@ public final class PatternDrawingUtil {
         for (var pat : patternEntries) {
             var localOrigin = HexUtils.coordToPx(pat.origin(), hexSize, realCom.negated());
             var points = pat.pattern().toLines(hexSize, localOrigin);
-            pat.zappyPoints().addAll(RenderLib.makeZappy(points, RenderLib.findDupIndices(pat.pattern().positions()), 10f, 0.8f, 0f, 0f));
+            pat.zappyPoints()
+                .addAll(RenderLib.makeZappy(points, RenderLib.findDupIndices(pat.pattern().positions()), 10f, 0.8f, 0f,
+                    0f));
         }
 
         var pathfinderDots = seenCoords.stream()
