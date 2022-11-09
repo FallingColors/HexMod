@@ -6,7 +6,7 @@
   "nameplate_color": "00072b",
   "creative_tab": "hexcasting",
   "model": "hexcasting:patchouli_book",
-  "book_texture": "hexcasting:textures/gui/book.png",
+  "book_texture": "hexcasting:textures/gui/patchi_book.png",
   "filler_texture": "hexcasting:textures/gui/patchi_filler.png",
   "i18n": true,
   "macros": {
