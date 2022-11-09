@@ -1,8 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.ktxt.UseOnContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -14,26 +18,24 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
-object OpIgnite : SpellOperator {
+object OpIgnite : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Vec3>(0, argc)
+        val target = args.getBlockPos(0, argc)
         ctx.assertVecInRange(target)
 
         return Triple(
             Spell(target),
-            ManaConstants.DUST_UNIT,
+            MediaConstants.DUST_UNIT,
             listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
         )
     }
 
-    private data class Spell(val target: Vec3) : RenderedSpell {
+    private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val pos = BlockPos(target)
-
             if (!ctx.canEditBlockAt(pos))
                 return
 
@@ -51,7 +53,7 @@ object OpIgnite : SpellOperator {
                             null,
                             InteractionHand.MAIN_HAND,
                             ItemStack(item),
-                            BlockHitResult(target, Direction.UP, pos, false)
+                            BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)
                         )
                     ).consumesAction()
         }

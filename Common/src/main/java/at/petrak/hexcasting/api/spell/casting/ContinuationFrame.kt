@@ -1,16 +1,19 @@
 package at.petrak.hexcasting.api.spell.casting
 
-import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingHarness.CastResult
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.ListIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.getList
 import at.petrak.hexcasting.api.utils.hasList
 import at.petrak.hexcasting.api.utils.serializeToNBT
+import at.petrak.hexcasting.common.lib.HexIotaTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
+// TODO this should probably be a registry too
 /**
  * A single frame of evaluation during the execution of a spell.
  *
@@ -36,7 +39,7 @@ sealed interface ContinuationFrame {
      * In other words, we should consume Evaluate frames until we hit a FinishEval or Thoth frame.
      * @return whether the break should stop here, alongside the new stack state (e.g. for finalizing a Thoth)
      */
-    fun breakDownwards(stack: List<SpellDatum<*>>): Pair<Boolean, List<SpellDatum<*>>>
+    fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>>
 
     /**
      * Serializes this frame. Used for things like delays, where we pause execution.
@@ -49,7 +52,7 @@ sealed interface ContinuationFrame {
      */
     data class Evaluate(val list: SpellList) : ContinuationFrame {
         // Discard this frame and keep discarding frames.
-        override fun breakDownwards(stack: List<SpellDatum<*>>) = false to stack
+        override fun breakDownwards(stack: List<Iota>) = false to stack
 
         // Step the list of patterns, evaluating a single one.
         override fun evaluate(
@@ -83,7 +86,7 @@ sealed interface ContinuationFrame {
      */
     object FinishEval : ContinuationFrame {
         // Don't do anything else to the stack, just finish the halt statement.
-        override fun breakDownwards(stack: List<SpellDatum<*>>) = true to stack
+        override fun breakDownwards(stack: List<Iota>) = true to stack
 
         // Evaluating it does nothing; it's only a boundary condition.
         override fun evaluate(
@@ -93,7 +96,7 @@ sealed interface ContinuationFrame {
         ): CastResult {
             return CastResult(
                 continuation,
-                FunctionalData(harness.stack.toList(), 0, listOf(), false),
+                FunctionalData(harness.stack.toList(), 0, listOf(), false, harness.ravenmind),
                 ResolvedPatternType.EVALUATED,
                 listOf()
             )
@@ -116,15 +119,15 @@ sealed interface ContinuationFrame {
     data class ForEach(
         val data: SpellList,
         val code: SpellList,
-        val baseStack: List<SpellDatum<*>>?,
-        val acc: MutableList<SpellDatum<*>>
+        val baseStack: List<Iota>?,
+        val acc: MutableList<Iota>
     ) : ContinuationFrame {
 
         /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
-        override fun breakDownwards(stack: List<SpellDatum<*>>): Pair<Boolean, List<SpellDatum<*>>> {
+        override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
             val newStack = baseStack?.toMutableList() ?: mutableListOf()
             acc.addAll(stack)
-            newStack.add(SpellDatum.make(acc))
+            newStack.add(ListIota(acc))
             return true to newStack
         }
 
@@ -156,13 +159,13 @@ sealed interface ContinuationFrame {
                     .pushFrame(Evaluate(code))
             } else {
                 // Else, dump our final list onto the stack.
-                SpellDatum.make(acc) to continuation
+                ListIota(acc) to continuation
             }
             val tStack = stack.toMutableList()
             tStack.add(stackTop)
             return CastResult(
                 newCont,
-                FunctionalData(tStack, 0, listOf(), false),
+                FunctionalData(tStack, 0, listOf(), false, harness.ravenmind),
                 ResolvedPatternType.EVALUATED,
                 listOf()
             )
@@ -182,15 +185,26 @@ sealed interface ContinuationFrame {
         @JvmStatic
         fun fromNBT(tag: CompoundTag, world: ServerLevel): ContinuationFrame {
             return when (tag.getString("type")) {
-                "eval" -> Evaluate(SpellList.fromNBT(tag.getList("patterns", Tag.TAG_COMPOUND), world))
+                "eval" -> Evaluate(
+                    HexIotaTypes.LIST.deserialize(
+                        tag.getList("patterns", Tag.TAG_COMPOUND),
+                        world
+                    )!!.list
+                )
                 "end" -> FinishEval
                 "foreach" -> ForEach(
-                    SpellList.fromNBT(tag.getList("data", Tag.TAG_COMPOUND), world),
-                    SpellList.fromNBT(tag.getList("code", Tag.TAG_COMPOUND), world),
-                    if (tag.hasList("base", Tag.TAG_COMPOUND)) SpellList.fromNBT(tag.getList("base", Tag.TAG_COMPOUND), world).toList() else null,
-                    SpellList.fromNBT(tag.getList("accumulator", Tag.TAG_COMPOUND), world).toMutableList()
+                    HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
+                    HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
+                    if (tag.hasList("base", Tag.TAG_COMPOUND))
+                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
+                    else
+                        null,
+                    HexIotaTypes.LIST.deserialize(
+                        tag.getList("accumulator", Tag.TAG_COMPOUND),
+                        world
+                    )!!.list.toMutableList()
                 )
-                else -> Evaluate(SpellList.LList(0, listOf()));
+                else -> Evaluate(SpellList.LList(0, listOf()))
             }
         }
     }

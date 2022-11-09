@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -32,8 +32,8 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Item that holds a list of patterns in it ready to be cast
  */
-public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolderItem {
-    public static final String TAG_PATTERNS = "patterns";
+public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHolderItem {
+    public static final String TAG_PROGRAM = "patterns";
     public static final ResourceLocation HAS_PATTERNS_PRED = modLoc("has_patterns");
 
     public ItemPackagedHex(Properties pProperties) {
@@ -48,50 +48,46 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
     }
 
     @Override
-    public boolean manaProvider(ItemStack stack) {
+    public boolean canProvideMedia(ItemStack stack) {
         return false;
     }
 
     @Override
     public boolean hasHex(ItemStack stack) {
-        return NBTHelper.hasList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
+        return NBTHelper.hasList(stack, TAG_PROGRAM, Tag.TAG_COMPOUND);
     }
 
     @Override
-    public @Nullable List<SpellDatum<?>> getHex(ItemStack stack, ServerLevel level) {
-        var patsTag = NBTHelper.getList(stack, TAG_PATTERNS, Tag.TAG_COMPOUND);
+    public @Nullable List<Iota> getHex(ItemStack stack, ServerLevel level) {
+        var patsTag = NBTHelper.getList(stack, TAG_PROGRAM, Tag.TAG_COMPOUND);
 
         if (patsTag == null) {
             return null;
         }
 
-        var out = new ArrayList<SpellDatum<?>>();
+        var out = new ArrayList<Iota>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
-            if (tag.size() != 1) {
-                out.add(SpellDatum.make(HexPattern.fromNBT(tag)));
-            } else {
-                out.add(SpellDatum.fromNBT(tag, level));
-            }
+            out.add(HexIotaTypes.deserialize(tag, level));
         }
         return out;
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<SpellDatum<?>> patterns, int mana) {
+    public void writeHex(ItemStack stack, List<Iota> program, int mana) {
         ListTag patsTag = new ListTag();
-        for (SpellDatum<?> pat : patterns) {
-            patsTag.add(pat.serializeToNBT());
+        for (Iota pat : program) {
+            patsTag.add(HexIotaTypes.serialize(pat));
         }
 
-        NBTHelper.putList(stack, TAG_PATTERNS, patsTag);
+        NBTHelper.putList(stack, TAG_PROGRAM, patsTag);
 
-        withMana(stack, mana, mana);
+        withMedia(stack, mana, mana);
     }
 
     @Override
     public void clearHex(ItemStack stack) {
-        NBTHelper.remove(stack, ItemPackagedHex.TAG_PATTERNS);
+        NBTHelper.remove(stack, ItemPackagedHex.TAG_PROGRAM);
         NBTHelper.remove(stack, TAG_MANA);
         NBTHelper.remove(stack, TAG_MAX_MANA);
     }
@@ -107,7 +103,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
             return InteractionResultHolder.success(stack);
         }
 
-        List<SpellDatum<?>> instrs = getHex(stack, (ServerLevel) world);
+        List<Iota> instrs = getHex(stack, (ServerLevel) world);
         if (instrs == null) {
             return InteractionResultHolder.fail(stack);
         }
@@ -116,7 +112,7 @@ public abstract class ItemPackagedHex extends ItemManaHolder implements HexHolde
         var harness = new CastingHarness(ctx);
         var info = harness.executeIotas(instrs, sPlayer.getLevel());
 
-        boolean broken = breakAfterDepletion() && getMana(stack) == 0;
+        boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 
         Stat<?> stat;
         if (broken) {

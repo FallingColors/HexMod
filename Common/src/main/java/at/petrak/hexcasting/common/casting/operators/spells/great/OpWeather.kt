@@ -1,18 +1,18 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 
-class OpWeather(val rain: Boolean) : SpellOperator {
+class OpWeather(val rain: Boolean) : SpellAction {
     override val argc = 0
     override val isGreat = true
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         if (ctx.world.isRaining == rain)
@@ -20,7 +20,7 @@ class OpWeather(val rain: Boolean) : SpellOperator {
 
         return Triple(
             Spell(rain),
-            if (this.rain) ManaConstants.CRYSTAL_UNIT else ManaConstants.SHARD_UNIT,
+            if (this.rain) MediaConstants.CRYSTAL_UNIT else MediaConstants.SHARD_UNIT,
             listOf()
         )
     }

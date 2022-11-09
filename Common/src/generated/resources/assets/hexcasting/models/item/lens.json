@@ -2,15 +2,15 @@
   "parent": "minecraft:item/generated",
   "display": {
     "head": {
-      "translation": [
-        -2.5,
-        0,
-        -8
-      ],
       "scale": [
         0.4,
         0.4,
         0.4
+      ],
+      "translation": [
+        -2.5,
+        0,
+        -8
       ]
     }
   },

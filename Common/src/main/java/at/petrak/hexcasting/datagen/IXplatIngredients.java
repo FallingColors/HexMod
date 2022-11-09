@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.datagen;
 
-import at.petrak.hexcasting.datagen.recipe.builders.ToolIngredient;
+import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -27,7 +27,7 @@ public interface IXplatIngredients {
 
     Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient);
 
-    ToolIngredient axeStrip();
+    FarmersDelightToolIngredient axeStrip();
 
-    ToolIngredient axeDig();
+    FarmersDelightToolIngredient axeDig();
 }

@@ -1,8 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadBlock
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -10,25 +14,22 @@ import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.phys.Vec3
 
-object OpEdifySapling : SpellOperator {
+object OpEdifySapling : SpellAction {
     override val argc = 1
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val pos = args.getChecked<Vec3>(0, argc)
-        ctx.assertVecInRange(pos)
-
-        val bpos = BlockPos(pos)
-        val bs = ctx.world.getBlockState(bpos)
+        val pos = args.getBlockPos(0, argc)
+        val bs = ctx.world.getBlockState(pos)
         if (!bs.`is`(BlockTags.SAPLINGS))
-            throw MishapBadBlock.of(bpos, "sapling")
+            throw MishapBadBlock.of(pos, "sapling")
 
         return Triple(
-            Spell(bpos),
-            ManaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray(Vec3.atCenterOf(bpos), Vec3(0.0, 2.0, 0.0), 0.1, Math.PI / 4, 100))
+            Spell(pos),
+            MediaConstants.CRYSTAL_UNIT,
+            listOf(ParticleSpray(Vec3.atCenterOf(pos), Vec3(0.0, 2.0, 0.0), 0.1, Math.PI / 4, 100))
         )
     }
 

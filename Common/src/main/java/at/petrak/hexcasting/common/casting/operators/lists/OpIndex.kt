@@ -1,19 +1,19 @@
 package at.petrak.hexcasting.common.casting.operators.lists
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellList
+import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.Widget
+import at.petrak.hexcasting.api.spell.getDouble
+import at.petrak.hexcasting.api.spell.getList
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.NullIota
 import kotlin.math.roundToInt
 
-object OpIndex : ConstManaOperator {
+object OpIndex : ConstManaAction {
     override val argc = 2
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val list = args.getChecked<SpellList>(0, argc).toMutableList()
-        val index = args.getChecked<Double>(1, argc)
-        val x = list.getOrElse(index.roundToInt()) { SpellDatum.make(Widget.NULL) }
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+        val list = args.getList(0, argc).toMutableList()
+        val index = args.getDouble(1, argc)
+        val x = list.getOrElse(index.roundToInt()) { NullIota() }
         return listOf(x)
     }
 }

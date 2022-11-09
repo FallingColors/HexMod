@@ -15,16 +15,16 @@ import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 @OnlyIn(Dist.CLIENT)
 public class CuriosRenderers {
-	public static void register() {
-		CuriosRendererRegistry.register(HexItems.SCRYING_LENS, () -> new LensCurioRenderer(Minecraft.getInstance().getEntityModels().bakeLayer(LensCurioRenderer.LAYER)));
-	}
+    public static void register() {
+        CuriosRendererRegistry.register(HexItems.SCRYING_LENS, () -> new LensCurioRenderer(Minecraft.getInstance().getEntityModels().bakeLayer(LensCurioRenderer.LAYER)));
+    }
 
-	public static void onLayerRegister(final EntityRenderersEvent.RegisterLayerDefinitions event) {
-		event.registerLayerDefinition(LensCurioRenderer.LAYER, () -> {
-			CubeListBuilder builder = new CubeListBuilder();
-			MeshDefinition mesh = HumanoidModel.createMesh(CubeDeformation.NONE, 0);
-			mesh.getRoot().addOrReplaceChild("head", builder, PartPose.ZERO);
-			return LayerDefinition.create(mesh, 1, 1);
-		});
-	}
+    public static void onLayerRegister(final EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(LensCurioRenderer.LAYER, () -> {
+            CubeListBuilder builder = new CubeListBuilder();
+            MeshDefinition mesh = HumanoidModel.createMesh(CubeDeformation.NONE, 0);
+            mesh.getRoot().addOrReplaceChild("head", builder, PartPose.ZERO);
+            return LayerDefinition.create(mesh, 1, 1);
+        });
+    }
 }

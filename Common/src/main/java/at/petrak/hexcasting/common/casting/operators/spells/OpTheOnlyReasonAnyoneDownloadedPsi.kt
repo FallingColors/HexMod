@@ -1,8 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
@@ -13,27 +17,24 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
 
-object OpTheOnlyReasonAnyoneDownloadedPsi : SpellOperator {
+object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Vec3>(0, argc)
-        ctx.assertVecInRange(target)
+        val target = args.getBlockPos(0, argc)
 
         return Triple(
             Spell(target),
-            (ManaConstants.DUST_UNIT * 1.125).toInt(),
+            (MediaConstants.DUST_UNIT * 1.125).toInt(),
             listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
         )
     }
 
-    private data class Spell(val target: Vec3) : RenderedSpell {
+    private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/PieceTrickOvergrow.java
-            val pos = BlockPos(target)
-
             if (!ctx.world.mayInteract(ctx.caster, pos))
                 return
 

@@ -1,29 +1,33 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexItemTags
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getItemEntity
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
-import at.petrak.hexcasting.api.utils.extractMana
-import at.petrak.hexcasting.api.utils.isManaItem
-import at.petrak.hexcasting.common.items.magic.ItemManaHolder
+import at.petrak.hexcasting.api.utils.extractMedia
+import at.petrak.hexcasting.api.utils.isMediaItem
+import at.petrak.hexcasting.common.items.magic.ItemMediaHolder
 import at.petrak.hexcasting.common.lib.HexItems
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
-object OpMakeBattery : SpellOperator {
+object OpMakeBattery : SpellAction {
     override val argc = 1
 
     override val isGreat = true
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val entity = args.getChecked<ItemEntity>(0, argc)
+        val entity = args.getItemEntity(0, argc)
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexItemTags.PHIAL_BASE) }
 
@@ -44,7 +48,7 @@ object OpMakeBattery : SpellOperator {
 
         ctx.assertEntityInRange(entity)
 
-        if (!isManaItem(entity.item) || extractMana(
+        if (!isMediaItem(entity.item) || extractMedia(
                 entity.item,
                 drainForBatteries = true,
                 simulate = true
@@ -57,18 +61,18 @@ object OpMakeBattery : SpellOperator {
         }
 
         return Triple(Spell(entity, hand),
-            ManaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.burst(entity.position(), 0.5)))
+            MediaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
     private data class Spell(val itemEntity: ItemEntity, val hand: InteractionHand) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             if (itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = extractMana(entityStack, drainForBatteries = true)
+                val manaAmt = extractMedia(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
                     ctx.caster.setItemInHand(
                         hand,
-                        ItemManaHolder.withMana(ItemStack(HexItems.BATTERY), manaAmt, manaAmt)
+                        ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY), manaAmt, manaAmt)
                     )
                 }
 

@@ -14,7 +14,6 @@
     "accessor.AccessorEntity",
     "accessor.AccessorLivingEntity",
     "accessor.AccessorLootTable",
-    "accessor.AccessorPoiType",
     "accessor.AccessorUseOnContext",
     "accessor.AccessorVillager",
     "accessor.CriteriaTriggersAccessor"

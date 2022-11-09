@@ -3,11 +3,12 @@ package at.petrak.hexcasting.api.spell.casting
 import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.api.spell.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.api.utils.otherHand
+import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -77,6 +78,10 @@ data class CastingContext(
         assertVecInWorld(vec)
     }
 
+    fun assertVecInRange(pos: BlockPos) {
+        assertVecInRange(Vec3.atCenterOf(pos))
+    }
+
     /**
      * Check to make sure an entity is in range. Will not mishap for players.
      */
@@ -96,7 +101,7 @@ data class CastingContext(
         if (sentinel.hasSentinel
             && sentinel.extendsRange
             && world.dimension() == sentinel.dimension
-            && vec.distanceToSqr(sentinel.position) < Operator.MAX_DISTANCE_FROM_SENTINEL * Operator.MAX_DISTANCE_FROM_SENTINEL
+            && vec.distanceToSqr(sentinel.position) < Action.MAX_DISTANCE_FROM_SENTINEL * Action.MAX_DISTANCE_FROM_SENTINEL
         )
             return true
 
@@ -104,15 +109,12 @@ data class CastingContext(
         if (this.spellCircle != null) {
             // we use the eye position cause thats where the caster gets their "position" from
             val range = this.caster.bbHeight
-            if (this.spellCircle.activatorAlwaysInRange && vec.distanceToSqr(this.caster.eyePosition) < range * range)
+            if (this.spellCircle.activatorAlwaysInRange && vec.distanceToSqr(this.caster.eyePosition) <= range * range)
                 return true
             return this.spellCircle.aabb.contains(vec)
         }
 
-        if (vec.distanceToSqr(this.caster.position()) < Operator.MAX_DISTANCE * Operator.MAX_DISTANCE)
-            return true
-
-        return false
+        return vec.distanceToSqr(this.caster.eyePosition) <= Action.MAX_DISTANCE * Action.MAX_DISTANCE
     }
 
     fun isEntityInWorld(entity: Entity) = isVecInWorld(entity.position())
@@ -156,11 +158,13 @@ data class CastingContext(
     fun withdrawItem(item: ItemStack, count: Int, actuallyRemove: Boolean): Boolean {
         if (this.caster.isCreative) return true
 
+        val operativeItem = item.copy()
+
         // TODO: withdraw from ender chest given a specific ender charm?
         val stacksToExamine = DiscoveryHandlers.collectItemSlots(this)
 
         fun matches(stack: ItemStack): Boolean =
-            !stack.isEmpty && ItemStack.isSameItemSameTags(item, stack)
+            !stack.isEmpty && ItemStack.isSameItemSameTags(operativeItem, stack)
 
         val presentCount = stacksToExamine.fold(0) { acc, stack ->
             acc + if (matches(stack)) stack.count else 0
@@ -202,6 +206,10 @@ data class CastingContext(
             val advs = this.caster.advancements
             return advs.getOrStartProgress(adv!!).isDone
         }
+
+    val debugPatterns: Boolean by lazy {
+        !DiscoveryHandlers.findDebugItem(this.caster, ItemCreativeUnlocker.DISPLAY_PATTERNS).isEmpty
+    }
 
     companion object {
         init {

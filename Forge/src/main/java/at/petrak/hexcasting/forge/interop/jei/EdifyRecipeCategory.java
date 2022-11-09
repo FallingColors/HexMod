@@ -11,7 +11,6 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
@@ -33,7 +32,7 @@ public class EdifyRecipeCategory implements IRecipeCategory<OpEdifySapling> {
         ResourceLocation location = modLoc("textures/gui/edify_jei.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 79, 61).setTextureSize(128, 128).build();
         var edify = modLoc("edify");
-        localizedName = new TranslatableComponent("hexcasting.spell." + edify);
+        localizedName = Component.translatable("hexcasting.spell." + edify);
         icon = new PatternDrawable(edify, 16, 16).strokeOrder(false);
     }
 
@@ -60,28 +59,16 @@ public class EdifyRecipeCategory implements IRecipeCategory<OpEdifySapling> {
             .addIngredients(Ingredient.of(ItemTags.SAPLINGS));
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 51, 10)
-            .addItemStack(new ItemStack(HexBlocks.AKASHIC_LEAVES1))
-            .addItemStack(new ItemStack(HexBlocks.AKASHIC_LEAVES2))
-            .addItemStack(new ItemStack(HexBlocks.AKASHIC_LEAVES3));
+            .addItemStack(new ItemStack(HexBlocks.AMETHYST_EDIFIED_LEAVES))
+            .addItemStack(new ItemStack(HexBlocks.AVENTURINE_EDIFIED_LEAVES))
+            .addItemStack(new ItemStack(HexBlocks.CITRINE_EDIFIED_LEAVES));
         builder.addSlot(RecipeIngredientRole.OUTPUT, 51, 35)
-            .addItemStack(new ItemStack(HexBlocks.AKASHIC_LOG));
+            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG));
 
     }
 
     @Override
     public @NotNull RecipeType<OpEdifySapling> getRecipeType() {
         return HexJEIPlugin.EDIFY;
-    }
-
-    @Override
-    @SuppressWarnings("removal")
-    public @NotNull ResourceLocation getUid() {
-        return UID;
-    }
-
-    @Override
-    @SuppressWarnings("removal")
-    public @NotNull Class<? extends OpEdifySapling> getRecipeClass() {
-        return OpEdifySapling.class;
     }
 }

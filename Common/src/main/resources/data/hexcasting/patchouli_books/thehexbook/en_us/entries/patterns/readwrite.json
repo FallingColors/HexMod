@@ -6,6 +6,8 @@
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [
+    "hexcasting.page.readwrite.1",
+    "hexcasting.page.readwrite.2",
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:read",
@@ -16,11 +18,11 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:readable",
-      "anchor": "hexcasting:readable",
-      "input": "",
-      "output": "num",
-      "text": "hexcasting.page.readwrite.readable"
+      "op_id": "hexcasting:write",
+      "anchor": "hexcasting:write",
+      "input": "any",
+      "output": "",
+      "text": "hexcasting.page.readwrite.write"
     },
     {
       "type": "hexcasting:pattern",
@@ -32,31 +34,43 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:readable/entity",
-      "anchor": "hexcasting:readable/entity",
-      "input": "entity",
-      "output": "num",
-      "text": "hexcasting.page.readwrite.readable/entity"
+      "op_id": "hexcasting:write/entity",
+      "anchor": "hexcasting:write/entity",
+      "input": "any, entity",
+      "output": "",
+      "text": "hexcasting.page.readwrite.write/entity"
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:write",
-      "anchor": "hexcasting:write",
-      "input": "any",
-      "output": "",
-      "text": "hexcasting.page.readwrite.write.1"
+      "op_id": "hexcasting:readable",
+      "anchor": "hexcasting:readable",
+      "input": "",
+      "output": "bool",
+      "text": "hexcasting.page.readwrite.readable"
     },
     {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.readwrite.write.2"
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:readable/entity",
+      "anchor": "hexcasting:readable/entity",
+      "input": "entity",
+      "output": "bool",
+      "text": "hexcasting.page.readwrite.readable/entity"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:writable",
       "anchor": "hexcasting:writable",
-      "input": "any",
-      "output": "num",
+      "input": "",
+      "output": "bool",
       "text": "hexcasting.page.readwrite.writable"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:writable/entity",
+      "anchor": "hexcasting:writable/entity",
+      "input": "entity",
+      "output": "bool",
+      "text": "hexcasting.page.readwrite.writable/entity"
     },
     {
       "type": "patchouli:text",

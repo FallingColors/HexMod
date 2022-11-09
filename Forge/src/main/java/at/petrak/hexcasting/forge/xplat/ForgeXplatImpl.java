@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.addldata.Colorizer;
-import at.petrak.hexcasting.api.addldata.DataHolder;
-import at.petrak.hexcasting.api.addldata.HexHolder;
-import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.addldata.ADColorizer;
+import at.petrak.hexcasting.api.addldata.ADHexHolder;
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
@@ -12,12 +12,15 @@ import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
+import at.petrak.hexcasting.forge.mixin.ForgeAccessorRegistry;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
@@ -45,7 +48,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -64,9 +66,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.*;
 import net.minecraftforge.common.loot.CanToolPerformAction;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.ModContainer;
@@ -82,6 +84,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class ForgeXplatImpl implements IXplatAbstractions {
@@ -253,21 +256,27 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public @Nullable
-    ManaHolder findManaHolder(ItemStack stack) {
+    ADMediaHolder findManaHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.MANA).resolve();
         return maybeCap.orElse(null);
     }
 
     @Override
     public @Nullable
-    DataHolder findDataHolder(ItemStack stack) {
+    ADIotaHolder findDataHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.DATUM).resolve();
         return maybeCap.orElse(null);
     }
 
     @Override
+    public @Nullable ADIotaHolder findDataHolder(Entity entity) {
+        var maybeCap = entity.getCapability(HexCapabilities.DATUM).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
     public @Nullable
-    HexHolder findHexHolder(ItemStack stack) {
+    ADHexHolder findHexHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.STORED_HEX).resolve();
         return maybeCap.orElse(null);
     }
@@ -281,7 +290,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public int getRawColor(FrozenColorizer colorizer, float time, Vec3 position) {
         var maybeColorizer = colorizer.item().getCapability(HexCapabilities.COLOR).resolve();
         if (maybeColorizer.isPresent()) {
-            Colorizer col = maybeColorizer.get();
+            ADColorizer col = maybeColorizer.get();
             return col.color(colorizer.owner(), time, position);
         }
 
@@ -315,7 +324,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid) {
         Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
         return handler.isPresent() &&
-            handler.get().fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), EXECUTE) > 0;
+            handler.get().fill(new FluidStack(fluid, FluidType.BUCKET_VOLUME), EXECUTE) > 0;
     }
 
     @Override
@@ -332,21 +341,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             return any;
         }
         return false;
-    }
-
-    @Override
-    public ResourceLocation getID(Block block) {
-        return block.getRegistryName();
-    }
-
-    @Override
-    public ResourceLocation getID(Item item) {
-        return item.getRegistryName();
-    }
-
-    @Override
-    public ResourceLocation getID(VillagerProfession profession) {
-        return profession.getRegistryName();
     }
 
     @Override
@@ -419,6 +413,18 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
+    private static Registry<IotaType<?>> IOTA_TYPE_REGISTRY = null;
+
+    @Override
+    public Registry<IotaType<?>> getIotaTypeRegistry() {
+        if (IOTA_TYPE_REGISTRY == null) {
+            IOTA_TYPE_REGISTRY = ForgeAccessorRegistry.hex$registerDefaulted(
+                ResourceKey.createRegistryKey(modLoc("iota_type")),
+                HexAPI.MOD_ID + ":null", registry -> HexIotaTypes.NULL);
+        }
+        return IOTA_TYPE_REGISTRY;
+    }
+
     @Override
     public boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player) {
         return !MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player));
@@ -428,7 +434,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player) {
         ItemStack cached = player.getMainHandItem();
         player.setItemInHand(InteractionHand.MAIN_HAND, blockStack.copy());
-        var evt = ForgeHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos, new BlockHitResult(Vec3.atCenterOf(pos), Direction.DOWN, pos, true));
+        var evt = ForgeHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos,
+            new BlockHitResult(Vec3.atCenterOf(pos), Direction.DOWN, pos, true));
         player.setItemInHand(InteractionHand.MAIN_HAND, cached);
         return !evt.isCanceled();
     }

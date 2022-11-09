@@ -13,7 +13,6 @@ import net.minecraft.world.phys.Vec2;
 import java.util.List;
 
 public class PatternDrawable implements IDrawable {
-
     private final long startTime = System.currentTimeMillis();
 
     private final int width;
@@ -27,7 +26,7 @@ public class PatternDrawable implements IDrawable {
     public PatternDrawable(ResourceLocation pattern, int w, int h) {
         var entry = PatternRegistry.lookupPattern(pattern);
         this.strokeOrder = !entry.isPerWorld();
-        var data = PatternDrawingUtil.loadPatterns(List.of(new Pair<>(entry.getPrototype(), HexCoord.getOrigin())));
+        var data = PatternDrawingUtil.loadPatterns(List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin())));
         this.patterns = data.patterns();
         this.pathfinderDots = data.pathfinderDots();
         this.width = w;

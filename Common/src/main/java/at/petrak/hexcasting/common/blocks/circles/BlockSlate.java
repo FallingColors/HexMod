@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.spell.iota.PatternIota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.BlockPos;
@@ -102,7 +102,7 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
         if (be instanceof BlockEntitySlate slate) {
             ItemStack stack = new ItemStack(HexItems.SLATE);
             if (slate.pattern != null) {
-                HexItems.SLATE.writeDatum(stack, SpellDatum.make(slate.pattern));
+                HexItems.SLATE.writeDatum(stack, new PatternIota(slate.pattern));
             }
             return stack;
         }

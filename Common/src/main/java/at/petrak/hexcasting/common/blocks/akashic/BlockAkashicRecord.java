@@ -1,66 +1,64 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
-import at.petrak.hexcasting.api.spell.DatumType;
+import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayDeque;
-import java.util.HashSet;
-
-public class BlockAkashicRecord extends Block implements EntityBlock {
+public class BlockAkashicRecord extends Block {
     public BlockAkashicRecord(Properties p_49795_) {
         super(p_49795_);
     }
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new BlockEntityAkashicRecord(pPos, pState);
-    }
 
-    @Override
-    public boolean hasAnalogOutputSignal(BlockState pState) {
-        return true;
-    }
+    /**
+     * @return the block position of the place it gets stored, or null if there was no room.
+     * <p>
+     * Will never clobber anything.
+     */
+    public @Nullable
+    BlockPos addNewDatum(BlockPos herePos, Level level, HexPattern key, Iota datum) {
+        var clobbereePos = AkashicFloodfiller.floodFillFor(herePos, level,
+            (pos, bs, world) ->
+                world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
+                    && tile.getPattern() != null && tile.getPattern().sigsEqual(key));
 
-    @Override
-    public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
-        BlockEntity be = pLevel.getBlockEntity(pPos);
-        if (be instanceof BlockEntityAkashicRecord record) {
-            return Math.min(15, record.getCount());
+        if (clobbereePos != null) {
+            return null;
         }
-        return 0;
-    }
 
-    @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        var seen = new HashSet<BlockPos>();
-        var todo = new ArrayDeque<BlockPos>();
-        todo.add(pPos);
-        // we do NOT add this position to the valid positions, because the record
-        // isn't flood-fillable through.
-        while (!todo.isEmpty()) {
-            var here = todo.remove();
+        var openPos = AkashicFloodfiller.floodFillFor(herePos, level, 0.9f,
+            (pos, bs, world) ->
+                world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
+                    && tile.getPattern() == null, 128);
+        if (openPos != null) {
+            var tile = (BlockEntityAkashicBookshelf) level.getBlockEntity(openPos);
+            tile.setNewMapping(key, datum);
 
-            for (var dir : Direction.values()) {
-                var neighbor = here.relative(dir);
-                if (seen.add(neighbor)) {
-                    var bs = pLevel.getBlockState(neighbor);
-                    if (BlockAkashicFloodfiller.canItBeFloodedThrough(neighbor, bs, pLevel)) {
-                        todo.add(neighbor);
-                    }
-                    if (pLevel.getBlockEntity(neighbor) instanceof BlockEntityAkashicBookshelf shelf) {
-                        shelf.setNewData(null, null, DatumType.EMPTY);
-                    }
-                }
-            }
+            return openPos;
+        } else {
+            return null;
         }
-        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
+
+    public @Nullable
+    Iota lookupPattern(BlockPos herePos, HexPattern key, ServerLevel slevel) {
+        var foundPos = AkashicFloodfiller.floodFillFor(herePos, slevel,
+            (pos, bs, world) ->
+                world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
+                    && tile.getPattern() != null && tile.getPattern().sigsEqual(key));
+        if (foundPos == null) {
+            return null;
+        }
+
+        var tile = (BlockEntityAkashicBookshelf) slevel.getBlockEntity(foundPos);
+        var tag = tile.getIotaTag();
+        return tag == null ? null : HexIotaTypes.deserialize(tag, slevel);
+    }
+
+    // TODO get comparators working again and also cache the number of iotas somehow?
 }

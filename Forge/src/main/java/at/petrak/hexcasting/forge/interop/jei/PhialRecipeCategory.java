@@ -12,7 +12,6 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,7 +31,7 @@ public class PhialRecipeCategory implements IRecipeCategory<OpMakeBattery> {
         ResourceLocation location = modLoc("textures/gui/phial_jei.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 113, 40).setTextureSize(128, 128).build();
         var craftPhial = modLoc("craft/battery");
-        localizedName = new TranslatableComponent("hexcasting.spell." + craftPhial);
+        localizedName = Component.translatable("hexcasting.spell." + craftPhial);
         icon = new PatternDrawable(craftPhial, 12, 12);
     }
 
@@ -71,17 +70,5 @@ public class PhialRecipeCategory implements IRecipeCategory<OpMakeBattery> {
     @Override
     public @NotNull RecipeType<OpMakeBattery> getRecipeType() {
         return HexJEIPlugin.PHIAL;
-    }
-
-    @Override
-    @SuppressWarnings("removal")
-    public @NotNull ResourceLocation getUid() {
-        return UID;
-    }
-
-    @Override
-    @SuppressWarnings("removal")
-    public @NotNull Class<? extends OpMakeBattery> getRecipeClass() {
-        return OpMakeBattery.class;
     }
 }

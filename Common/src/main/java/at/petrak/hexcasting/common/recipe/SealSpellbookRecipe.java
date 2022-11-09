@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -22,8 +22,8 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
 
     private static ItemStack getSealedStack() {
         ItemStack output = new ItemStack(HexItems.SPELLBOOK);
-        ItemSpellbook.SetSealed(output, true);
-        NBTHelper.putString(output, DataHolderItem.TAG_OVERRIDE_VISUALLY, "any");
+        ItemSpellbook.setSealed(output, true);
+        NBTHelper.putString(output, IotaHolderItem.TAG_OVERRIDE_VISUALLY, "any");
         return output;
     }
 
@@ -51,7 +51,7 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
         }
 
         if (!out.isEmpty()) {
-            ItemSpellbook.SetSealed(out, true);
+            ItemSpellbook.setSealed(out, true);
             out.setCount(1);
         }
 

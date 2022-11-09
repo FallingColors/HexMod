@@ -2,24 +2,25 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
-import at.petrak.hexcasting.api.utils.extractMana
-import at.petrak.hexcasting.api.utils.isManaItem
+import at.petrak.hexcasting.api.utils.extractMedia
+import at.petrak.hexcasting.api.utils.isMediaItem
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
-class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) : SpellOperator {
+class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) : SpellAction {
     override val argc = 2
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val entity = args.getChecked<ItemEntity>(0, argc)
-        val patterns = args.getChecked<SpellList>(1, argc).toList()
+        val entity = args.getItemEntity(0, argc)
+        val patterns = args.getList(1, argc).toList()
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
@@ -33,7 +34,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         }
 
         ctx.assertEntityInRange(entity)
-        if (!isManaItem(entity.item) || extractMana(
+        if (!isMediaItem(entity.item) || extractMedia(
                 entity.item,
                 drainForBatteries = true,
                 simulate = true
@@ -52,7 +53,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         return Triple(Spell(entity, patterns, handStack), cost, listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
-    private inner class Spell(val itemEntity: ItemEntity, val patterns: List<SpellDatum<*>>, val stack: ItemStack) : RenderedSpell {
+    private inner class Spell(val itemEntity: ItemEntity, val patterns: List<Iota>, val stack: ItemStack) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(stack)
             if (hexHolder != null
@@ -60,7 +61,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = extractMana(entityStack, drainForBatteries = true)
+                val manaAmt = extractMedia(entityStack, drainForBatteries = true)
                 if (manaAmt > 0) {
                     hexHolder.writeHex(patterns, manaAmt)
                 }

@@ -2,12 +2,10 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.decoration.ArmorStand
-import kotlin.math.max
 
 class OpPotionEffect(
     val effect: MobEffect,
@@ -15,26 +13,21 @@ class OpPotionEffect(
     val allowPotency: Boolean,
     val potencyCubic: Boolean,
     override val isGreat: Boolean,
-) : SpellOperator {
+) : SpellAction {
     override val argc: Int
         get() = if (this.allowPotency) 3 else 2
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<LivingEntity>(0, argc)
-        if (target is ArmorStand)
-            throw MishapInvalidIota.ofClass(SpellDatum.make(target), 0, LivingEntity::class.java)
-
-        val duration = max(args.getChecked(1, argc), 0.0)
-
+        val target = args.getLivingEntityButNotArmorStand(0, argc)
+        val duration = args.getPositiveDouble(1, argc)
         val potency = if (this.allowPotency)
-            args.getChecked<Double>(2, argc).coerceIn(1.0, 128.0)
-        else
-            1.0
-
+            args.getPositiveDoubleUnderInclusive(2, 127.0, argc)
+        else 1.0
         ctx.assertEntityInRange(target)
+
 
         val cost = this.baseCost * duration * if (potencyCubic) {
             potency * potency * potency

@@ -30,9 +30,6 @@
     "cardinal-components": [
       "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"
     ],
-    "rei_plugins_v0": [
-      "at.petrak.hexcasting.fabric.interop.rei.HexREIPlugin"
-    ],
     "emi": [
       "at.petrak.hexcasting.fabric.interop.emi.HexEMIPlugin"
     ]
@@ -44,19 +41,19 @@
   "accessWidener": "fabricasting.accesswidener",
 
   "depends": {
-    "fabricloader": ">=0.13",
-    "fabric": ">=0.50",
-    "minecraft": "=1.18.2",
+    "minecraft": "=1.19.2",
     "java": ">=17",
+
+    "fabricloader": ">=0.14",
+    "fabric": ">=0.64",
     "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
-    "cardinal-components": ">=4.1.4",
-    "patchouli": ">=1.18.2-69",
-    "paucal": "~0.4.6"
+
+    "patchouli": ">=1.19.2-77",
+    "paucal": "0.5.x"
   },
   "suggests": {
-    "gravitychanger": "0.7.7+fabric",
-    "pehkui": "3.3.2+1.14.4-1.19",
-    "trinkets": "3.3.1"
+    "gravitychanger": "0.7.21+fabric",
+    "pehkui": "3.6.0+1.14.4-1.19"
   },
 
   "custom": {
@@ -69,8 +66,8 @@
       "hexcasting:patterns",
 
       "hexcasting:colorizer",
-      "hexcasting:data_holder",
-      "hexcasting:mana_holder",
+      "hexcasting:iota_holder",
+      "hexcasting:media_holder",
       "hexcasting:hex_holder"
     ]
   }

@@ -7,8 +7,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
@@ -40,35 +38,37 @@ public record VillagerIngredient(
     }
 
     public Component name() {
-        MutableComponent component = new TextComponent("");
+        MutableComponent component = Component.literal("");
 
         boolean addedAny = false;
 
         if (minLevel >= 5) {
-            component.append(new TranslatableComponent("merchant.level.5"));
+            component.append(Component.translatable("merchant.level.5"));
             addedAny = true;
         } else if (minLevel > 1) {
-            component.append(new TranslatableComponent("merchant.level." + minLevel));
+            component.append(Component.translatable("merchant.level." + minLevel));
             addedAny = true;
         } else if (profession != null) {
-            component.append(new TranslatableComponent("merchant.level.1"));
+            component.append(Component.translatable("merchant.level.1"));
             addedAny = true;
         }
 
         if (biome != null) {
-            if (addedAny)
+            if (addedAny) {
                 component.append(" ");
-            component.append(new TranslatableComponent("biome.minecraft." + biome.getPath()));
+            }
+            component.append(Component.translatable("biome.minecraft." + biome.getPath()));
             addedAny = true;
         }
 
         if (profession != null) {
             // We've for sure added something
             component.append(" ");
-            component.append(new TranslatableComponent("entity.minecraft.villager." + profession.getPath()));
+            component.append(Component.translatable("entity.minecraft.villager." + profession.getPath()));
         } else {
-            if (addedAny)
+            if (addedAny) {
                 component.append(" ");
+            }
             component.append(EntityType.VILLAGER.getDescription());
         }
 
@@ -86,20 +86,24 @@ public record VillagerIngredient(
         if (advanced) {
             if (orHigher) {
                 if (minLevel >= 5) {
-                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level", 5).withStyle(ChatFormatting.DARK_GRAY));
+                    tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.level", 5)
+                        .withStyle(ChatFormatting.DARK_GRAY));
                 } else if (minLevel > 1) {
-                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.min_level", minLevel).withStyle(ChatFormatting.DARK_GRAY));
+                    tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.min_level", minLevel)
+                        .withStyle(ChatFormatting.DARK_GRAY));
                 }
             } else if (profession != null || minLevel > 1) {
-                tooltip.add(new TranslatableComponent("hexcasting.tooltip.brainsweep.level", Mth.clamp(minLevel, 1, 5)).withStyle(ChatFormatting.DARK_GRAY));
+                tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.level", Mth.clamp(minLevel, 1, 5))
+                    .withStyle(ChatFormatting.DARK_GRAY));
             }
 
             if (biome != null) {
-                tooltip.add(new TextComponent(biome.toString()).withStyle(ChatFormatting.DARK_GRAY));
+                tooltip.add(Component.literal(biome.toString()).withStyle(ChatFormatting.DARK_GRAY));
             }
 
-            ResourceLocation displayId = Objects.requireNonNullElseGet(profession, () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
-            tooltip.add(new TextComponent(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
+            ResourceLocation displayId = Objects.requireNonNullElseGet(profession,
+                () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
+            tooltip.add(Component.literal(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         tooltip.add(getModNameComponent());
@@ -110,7 +114,7 @@ public record VillagerIngredient(
     public Component getModNameComponent() {
         String namespace = profession == null ? "minecraft" : profession.getNamespace();
         String mod = IXplatAbstractions.INSTANCE.getModName(namespace);
-        return new TextComponent(mod).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
+        return Component.literal(mod).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
     }
 
     public JsonObject serialize() {

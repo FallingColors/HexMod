@@ -1,8 +1,7 @@
 {
-  "replace": false,
   "values": [
-    "hexcasting:akashic_planks",
-    "hexcasting:akashic_panel",
-    "hexcasting:akashic_tile"
+    "hexcasting:edified_planks",
+    "hexcasting:edified_panel",
+    "hexcasting:edified_tile"
   ]
 }

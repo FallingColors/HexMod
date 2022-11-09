@@ -1,22 +1,25 @@
 package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.addldata.DataHolder;
-import at.petrak.hexcasting.api.addldata.HexHolder;
-import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.addldata.ADHexHolder;
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -94,13 +97,16 @@ public interface IXplatAbstractions {
     void clearCastingData(ServerPlayer player);
 
     @Nullable
-    ManaHolder findManaHolder(ItemStack stack);
+    ADMediaHolder findManaHolder(ItemStack stack);
 
     @Nullable
-    DataHolder findDataHolder(ItemStack stack);
+    ADIotaHolder findDataHolder(ItemStack stack);
 
     @Nullable
-    HexHolder findHexHolder(ItemStack stack);
+    ADIotaHolder findDataHolder(Entity entity);
+
+    @Nullable
+    ADHexHolder findHexHolder(ItemStack stack);
 
     // coooollooorrrs
 
@@ -130,11 +136,18 @@ public interface IXplatAbstractions {
 
     boolean isCorrectTierForDrops(Tier tier, BlockState bs);
 
-    ResourceLocation getID(Block block);
+    // These don't need to be xplat anymore, but it does save refactoring if they're still defined here
+    default ResourceLocation getID(Block block) {
+        return Registry.BLOCK.getKey(block);
+    }
 
-    ResourceLocation getID(Item item);
+    default ResourceLocation getID(Item item) {
+        return Registry.ITEM.getKey(item);
+    }
 
-    ResourceLocation getID(VillagerProfession profession);
+    default ResourceLocation getID(VillagerProfession profession) {
+        return Registry.VILLAGER_PROFESSION.getKey(profession);
+    }
 
     Ingredient getUnsealedIngredient(ItemStack stack);
 
@@ -143,6 +156,8 @@ public interface IXplatAbstractions {
     LootItemCondition.Builder isShearsCondition();
 
     String getModName(String namespace);
+
+    Registry<IotaType<?>> getIotaTypeRegistry();
 
     boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player);
 

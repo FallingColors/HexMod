@@ -1,15 +1,15 @@
 package at.petrak.hexcasting.common.casting.operators.selectors
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.asSpellResult
+import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 
-object OpGetCaster : ConstManaOperator {
+object OpGetCaster : ConstManaAction {
     override val argc = 0
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         ctx.assertEntityInRange(ctx.caster)
-        return ctx.caster.asSpellResult
+        return ctx.caster.asActionResult
     }
 }

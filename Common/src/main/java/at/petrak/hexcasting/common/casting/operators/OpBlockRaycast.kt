@@ -1,23 +1,30 @@
 package at.petrak.hexcasting.common.casting.operators
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.spell.Action
+import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getVec3
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.NullIota
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 
-object OpBlockRaycast : ConstManaOperator {
+object OpBlockRaycast : ConstManaAction {
     override val argc = 2
-    override val manaCost = ManaConstants.DUST_UNIT / 100
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val origin: Vec3 = args.getChecked(0, argc)
-        val look: Vec3 = args.getChecked(1, argc)
+    override val manaCost = MediaConstants.DUST_UNIT / 100
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+        val origin = args.getVec3(0, argc)
+        val look = args.getVec3(1, argc)
+
+        ctx.assertVecInRange(origin)
 
         val blockHitResult = ctx.world.clip(
             ClipContext(
                 origin,
-                Operator.raycastEnd(origin, look),
+                Action.raycastEnd(origin, look),
                 ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
                 ctx.caster
@@ -28,9 +35,10 @@ object OpBlockRaycast : ConstManaOperator {
             // the position on the bhr is the position of the specific *hit point*, which is actually on the outside of the block
             // this is weird (for example, casting OpBreakBlock at this position will not break the block we're looking at)
             // so we return the block pos instead
-            blockHitResult.blockPos.asSpellResult
+            // TODO some action that has the "weird" version?
+            blockHitResult.blockPos.asActionResult
         } else {
-            Widget.NULL.asSpellResult
+            listOf(NullIota())
         }
     }
 }

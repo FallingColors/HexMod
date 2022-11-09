@@ -1,45 +1,42 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.numOrVec
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getNumOrVec
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapDivideByZero
-import at.petrak.hexcasting.api.spell.spellListOf
 import net.minecraft.world.phys.Vec3
 
-object OpDivCross : ConstManaOperator {
+object OpDivCross : ConstManaAction {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val lhs = numOrVec(args[0], 1)
-        val rhs = numOrVec(args[1], 0)
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+        val lhs = args.getNumOrVec(0, argc)
+        val rhs = args.getNumOrVec(1, argc)
+        val theMishap = MishapDivideByZero.of(args[0], args[1])
 
-        return spellListOf(
-            lhs.map({ lnum ->
+        return lhs.map(
+            { lnum ->
                 rhs.map(
                     { rnum ->
-                        if (rnum == 0.0)
-                            throw MishapDivideByZero.of(lnum, rnum)
-                        lnum / rnum
+                        if (rnum == 0.0) throw theMishap // throw theMishap throw theMishap badumbadum
+                        (lnum / rnum).asActionResult
                     },
                     { rvec ->
-                        if (rvec.x == 0.0 || rvec.y == 0.0 || rvec.z == 0.0)
-                            throw MishapDivideByZero.of(lnum, rvec)
-                        Vec3(lnum / rvec.x, lnum / rvec.y, lnum / rvec.z)
+                        if (rvec.x == 0.0 || rvec.y == 0.0 || rvec.z == 0.0) throw theMishap
+                        Vec3(lnum / rvec.x, lnum / rvec.y, lnum / rvec.z).asActionResult
                     }
                 )
             }, { lvec ->
                 rhs.map(
                     { rnum ->
-                        if (lvec == Vec3.ZERO)
-                            throw MishapDivideByZero.of(lvec, rnum)
-                        lvec.scale(1.0 / rnum)
+                        if (lvec == Vec3.ZERO) throw theMishap
+                        lvec.scale(1.0 / rnum).asActionResult
                     },
-                    { rvec -> lvec.cross(rvec) }
+                    { rvec -> lvec.cross(rvec).asActionResult }
                 )
             })
-        )
     }
 }

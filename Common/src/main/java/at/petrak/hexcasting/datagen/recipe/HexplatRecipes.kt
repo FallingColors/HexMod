@@ -3,7 +3,7 @@ package at.petrak.hexcasting.datagen.recipe
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.advancements.OvercastTrigger
 import at.petrak.hexcasting.api.mod.HexItemTags
-import at.petrak.hexcasting.common.items.ItemWand
+import at.petrak.hexcasting.common.items.ItemStaff
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer
 import at.petrak.hexcasting.common.lib.HexBlocks
 import at.petrak.hexcasting.common.lib.HexItems
@@ -45,21 +45,21 @@ class HexplatRecipes(
         specialRecipe(recipes, SealFocusRecipe.SERIALIZER)
         specialRecipe(recipes, SealSpellbookRecipe.SERIALIZER)
 
-        wandRecipe(recipes, HexItems.WAND_OAK, Items.OAK_PLANKS)
-        wandRecipe(recipes, HexItems.WAND_BIRCH, Items.BIRCH_PLANKS)
-        wandRecipe(recipes, HexItems.WAND_SPRUCE, Items.SPRUCE_PLANKS)
-        wandRecipe(recipes, HexItems.WAND_JUNGLE, Items.JUNGLE_PLANKS)
-        wandRecipe(recipes, HexItems.WAND_DARK_OAK, Items.DARK_OAK_PLANKS)
-        wandRecipe(recipes, HexItems.WAND_ACACIA, Items.ACACIA_PLANKS)
-        wandRecipe(recipes, HexItems.WAND_CRIMSON, Items.CRIMSON_PLANKS)
-        wandRecipe(recipes, HexItems.WAND_WARPED, Items.WARPED_PLANKS)
-        wandRecipe(recipes, HexItems.WAND_AKASHIC, HexBlocks.AKASHIC_PLANKS.asItem())
+        wandRecipe(recipes, HexItems.STAFF_OAK, Items.OAK_PLANKS)
+        wandRecipe(recipes, HexItems.STAFF_BIRCH, Items.BIRCH_PLANKS)
+        wandRecipe(recipes, HexItems.STAFF_SPRUCE, Items.SPRUCE_PLANKS)
+        wandRecipe(recipes, HexItems.STAFF_JUNGLE, Items.JUNGLE_PLANKS)
+        wandRecipe(recipes, HexItems.STAFF_DARK_OAK, Items.DARK_OAK_PLANKS)
+        wandRecipe(recipes, HexItems.STAFF_ACACIA, Items.ACACIA_PLANKS)
+        wandRecipe(recipes, HexItems.STAFF_CRIMSON, Items.CRIMSON_PLANKS)
+        wandRecipe(recipes, HexItems.STAFF_WARPED, Items.WARPED_PLANKS)
+        wandRecipe(recipes, HexItems.STAFF_EDIFIED, HexBlocks.EDIFIED_PLANKS.asItem())
 
         ringCornered(HexItems.FOCUS, 1,
             ingredients.glowstoneDust(),
             ingredients.leather(),
             Ingredient.of(HexItems.CHARGED_AMETHYST))
-            .unlockedBy("has_item", hasItem(HexItemTags.WANDS))
+            .unlockedBy("has_item", hasItem(HexItemTags.STAVES))
             .save(recipes)
 
         ShapedRecipeBuilder.shaped(HexItems.SPELLBOOK)
@@ -78,13 +78,13 @@ class HexplatRecipes(
             HexItems.CYPHER, 1,
             ingredients.copperIngot(),
             Ingredient.of(HexItems.AMETHYST_DUST))
-            .unlockedBy("has_item", hasItem(HexItemTags.WANDS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.STAVES)).save(recipes)
 
         ringCornerless(
             HexItems.TRINKET, 1,
             ingredients.ironIngot(),
             Ingredient.of(Items.AMETHYST_SHARD))
-            .unlockedBy("has_item", hasItem(HexItemTags.WANDS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.STAVES)).save(recipes)
 
         ShapedRecipeBuilder.shaped(HexItems.ARTIFACT)
             .define('F', ingredients.goldIngot())
@@ -94,10 +94,10 @@ class HexplatRecipes(
             .pattern(" F ")
             .pattern("FAF")
             .pattern(" D ")
-            .unlockedBy("has_item", hasItem(HexItemTags.WANDS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.STAVES)).save(recipes)
 
         ringCornerless(HexItems.SCRYING_LENS, 1, Items.GLASS, HexItems.AMETHYST_DUST)
-            .unlockedBy("has_item", hasItem(HexItemTags.WANDS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.STAVES)).save(recipes)
 
         ShapedRecipeBuilder.shaped(HexItems.ABACUS)
             .define('S', Items.STICK)
@@ -106,7 +106,7 @@ class HexplatRecipes(
             .pattern("WAW")
             .pattern("SAS")
             .pattern("WAW")
-            .unlockedBy("has_item", hasItem(HexItemTags.WANDS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.STAVES)).save(recipes)
 
         // Why am I like this
         ShapedRecipeBuilder.shaped(HexItems.SUBMARINE_SANDWICH)
@@ -245,66 +245,66 @@ class HexplatRecipes(
             ingredients.copperIngot())
             .unlockedBy("has_item", hasItem(HexItems.CHARGED_AMETHYST)).save(recipes)
 
-        ShapelessRecipeBuilder.shapeless(HexBlocks.AKASHIC_PLANKS, 4)
-            .requires(HexItemTags.AKASHIC_LOGS)
-            .unlockedBy("has_item", hasItem(HexItemTags.AKASHIC_LOGS)).save(recipes)
+        ShapelessRecipeBuilder.shapeless(HexBlocks.EDIFIED_PLANKS, 4)
+            .requires(HexItemTags.EDIFIED_LOGS)
+            .unlockedBy("has_item", hasItem(HexItemTags.EDIFIED_LOGS)).save(recipes)
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_WOOD, 3)
-            .define('W', HexBlocks.AKASHIC_LOG)
+        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_WOOD, 3)
+            .define('W', HexBlocks.EDIFIED_LOG)
             .pattern("WW")
             .pattern("WW")
-            .unlockedBy("has_item", hasItem(HexBlocks.AKASHIC_LOG)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexBlocks.EDIFIED_LOG)).save(recipes)
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_WOOD_STRIPPED, 3)
-            .define('W', HexBlocks.AKASHIC_LOG_STRIPPED)
+        ShapedRecipeBuilder.shaped(HexBlocks.STRIPPED_EDIFIED_WOOD, 3)
+            .define('W', HexBlocks.STRIPPED_EDIFIED_LOG)
             .pattern("WW")
             .pattern("WW")
-            .unlockedBy("has_item", hasItem(HexBlocks.AKASHIC_LOG_STRIPPED)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexBlocks.STRIPPED_EDIFIED_LOG)).save(recipes)
 
-        ring(HexBlocks.AKASHIC_PANEL, 8,
-            HexItemTags.AKASHIC_PLANKS, null)
-            .unlockedBy("has_item", hasItem(HexItemTags.AKASHIC_PLANKS)).save(recipes)
+        ring(HexBlocks.EDIFIED_PANEL, 8,
+            HexItemTags.EDIFIED_PLANKS, null)
+            .unlockedBy("has_item", hasItem(HexItemTags.EDIFIED_PLANKS)).save(recipes)
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_TILE, 6)
-            .define('W', HexItemTags.AKASHIC_PLANKS)
+        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_TILE, 6)
+            .define('W', HexItemTags.EDIFIED_PLANKS)
             .pattern("WW ")
             .pattern("W W")
             .pattern(" WW")
-            .unlockedBy("has_item", hasItem(HexItemTags.AKASHIC_PLANKS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.EDIFIED_PLANKS)).save(recipes)
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_DOOR, 3)
-            .define('W', HexItemTags.AKASHIC_PLANKS)
+        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_DOOR, 3)
+            .define('W', HexItemTags.EDIFIED_PLANKS)
             .pattern("WW")
             .pattern("WW")
             .pattern("WW")
-            .unlockedBy("has_item", hasItem(HexItemTags.AKASHIC_PLANKS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.EDIFIED_PLANKS)).save(recipes)
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_TRAPDOOR, 2)
-            .define('W', HexItemTags.AKASHIC_PLANKS)
+        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_TRAPDOOR, 2)
+            .define('W', HexItemTags.EDIFIED_PLANKS)
             .pattern("WWW")
             .pattern("WWW")
-            .unlockedBy("has_item", hasItem(HexItemTags.AKASHIC_PLANKS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.EDIFIED_PLANKS)).save(recipes)
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_STAIRS, 4)
-            .define('W', HexItemTags.AKASHIC_PLANKS)
+        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_STAIRS, 4)
+            .define('W', HexItemTags.EDIFIED_PLANKS)
             .pattern("W  ")
             .pattern("WW ")
             .pattern("WWW")
-            .unlockedBy("has_item", hasItem(HexItemTags.AKASHIC_PLANKS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.EDIFIED_PLANKS)).save(recipes)
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_SLAB, 6)
-            .define('W', HexItemTags.AKASHIC_PLANKS)
+        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_SLAB, 6)
+            .define('W', HexItemTags.EDIFIED_PLANKS)
             .pattern("WWW")
-            .unlockedBy("has_item", hasItem(HexItemTags.AKASHIC_PLANKS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.EDIFIED_PLANKS)).save(recipes)
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_PRESSURE_PLATE, 1)
-            .define('W', HexItemTags.AKASHIC_PLANKS)
+        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_PRESSURE_PLATE, 1)
+            .define('W', HexItemTags.EDIFIED_PLANKS)
             .pattern("WW")
-            .unlockedBy("has_item", hasItem(HexItemTags.AKASHIC_PLANKS)).save(recipes)
+            .unlockedBy("has_item", hasItem(HexItemTags.EDIFIED_PLANKS)).save(recipes)
 
-        ShapelessRecipeBuilder.shapeless(HexBlocks.AKASHIC_BUTTON)
-            .requires(HexItemTags.AKASHIC_PLANKS)
-            .unlockedBy("has_item", hasItem(HexItemTags.AKASHIC_PLANKS)).save(recipes)
+        ShapelessRecipeBuilder.shapeless(HexBlocks.EDIFIED_BUTTON)
+            .requires(HexItemTags.EDIFIED_PLANKS)
+            .unlockedBy("has_item", hasItem(HexItemTags.EDIFIED_PLANKS)).save(recipes)
 
         val enlightenment = OvercastTrigger.Instance(
             EntityPredicate.Composite.ANY,
@@ -333,17 +333,17 @@ class HexplatRecipes(
             .unlockedBy("enlightenment", enlightenment).save(recipes)
 
         ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_BOOKSHELF)
-            .define('L', HexItemTags.AKASHIC_LOGS)
-            .define('P', HexItemTags.AKASHIC_PLANKS)
+            .define('L', HexItemTags.EDIFIED_LOGS)
+            .define('P', HexItemTags.EDIFIED_PLANKS)
             .define('C', Items.BOOK)
             /*this is the*/ .pattern("LPL") // and what i have for you today is
             .pattern("CCC")
             .pattern("LPL")
             .unlockedBy("enlightenment", enlightenment).save(recipes)
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_CONNECTOR)
-            .define('L', HexItemTags.AKASHIC_LOGS)
-            .define('P', HexItemTags.AKASHIC_PLANKS)
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_LIGATURE)
+            .define('L', HexItemTags.EDIFIED_LOGS)
+            .define('P', HexItemTags.EDIFIED_PLANKS)
             .define('C', HexItems.CHARGED_AMETHYST)
             .pattern("LPL")
             .pattern("CCC")
@@ -380,7 +380,7 @@ class HexplatRecipes(
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/directrix_redstone"))
 
-        BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.AKASHIC_CONNECTOR),
+        BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.AKASHIC_LIGATURE),
             VillagerIngredient(ResourceLocation("librarian"), null, 5),
             HexBlocks.AKASHIC_RECORD.defaultBlockState())
             .unlockedBy("enlightenment", enlightenment)
@@ -417,9 +417,9 @@ class HexplatRecipes(
 
         // FD compat
         FarmersDelightCuttingRecipeBuilder()
-            .withInput(HexBlocks.AKASHIC_LOG)
+            .withInput(HexBlocks.EDIFIED_LOG)
             .withTool(ingredients.axeStrip())
-            .withOutput(HexBlocks.AKASHIC_LOG_STRIPPED)
+            .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
             .withOutput("farmersdelight:tree_bark")
             .withSound(SoundEvents.AXE_STRIP)
             .withConditions()
@@ -427,9 +427,9 @@ class HexplatRecipes(
             .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_log"))
 
         FarmersDelightCuttingRecipeBuilder()
-            .withInput(HexBlocks.AKASHIC_WOOD)
+            .withInput(HexBlocks.EDIFIED_WOOD)
             .withTool(ingredients.axeStrip())
-            .withOutput(HexBlocks.AKASHIC_WOOD_STRIPPED)
+            .withOutput(HexBlocks.STRIPPED_EDIFIED_WOOD)
             .withOutput("farmersdelight:tree_bark")
             .withSound(SoundEvents.AXE_STRIP)
             .withConditions()
@@ -437,23 +437,23 @@ class HexplatRecipes(
             .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_wood"))
 
         FarmersDelightCuttingRecipeBuilder()
-            .withInput(HexBlocks.AKASHIC_TRAPDOOR)
+            .withInput(HexBlocks.EDIFIED_TRAPDOOR)
             .withTool(ingredients.axeDig())
-            .withOutput(HexBlocks.AKASHIC_PLANKS)
+            .withOutput(HexBlocks.EDIFIED_PLANKS)
             .withConditions()
             .whenModLoaded("farmersdelight")
             .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_trapdoor"))
 
         FarmersDelightCuttingRecipeBuilder()
-            .withInput(HexBlocks.AKASHIC_DOOR)
+            .withInput(HexBlocks.EDIFIED_DOOR)
             .withTool(ingredients.axeDig())
-            .withOutput(HexBlocks.AKASHIC_PLANKS)
+            .withOutput(HexBlocks.EDIFIED_PLANKS)
             .withConditions()
             .whenModLoaded("farmersdelight")
             .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_door"))
     }
 
-    private fun wandRecipe(recipes: Consumer<FinishedRecipe>, wand: ItemWand, plank: Item) {
+    private fun wandRecipe(recipes: Consumer<FinishedRecipe>, wand: ItemStaff, plank: Item) {
         ShapedRecipeBuilder.shaped(wand)
             .define('W', plank)
             .define('S', Items.STICK)

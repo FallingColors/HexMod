@@ -1,24 +1,26 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.OperationResult
-import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
-import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
-import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
+import at.petrak.hexcasting.api.spell.getList
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 
-object OpForEach : Operator {
-    override fun operate(continuation: SpellContinuation, stack: MutableList<SpellDatum<*>>, local: SpellDatum<*>, ctx: CastingContext): OperationResult {
+object OpForEach : Action {
+    override fun operate(
+        continuation: SpellContinuation,
+        stack: MutableList<Iota>,
+        ravenmind: Iota?,
+        ctx: CastingContext
+    ): OperationResult {
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)
 
-        val instrs: SpellList = stack.getChecked(stack.lastIndex - 1)
-        val datums: SpellList = stack.getChecked(stack.lastIndex)
+        val instrs = stack.getList(stack.lastIndex - 1)
+        val datums = stack.getList(stack.lastIndex)
         stack.removeLastOrNull()
         stack.removeLastOrNull()
 
@@ -27,7 +29,7 @@ object OpForEach : Operator {
         return OperationResult(
             continuation.pushFrame(frame),
             stack,
-            local,
+            ravenmind,
             listOf()
         )
     }

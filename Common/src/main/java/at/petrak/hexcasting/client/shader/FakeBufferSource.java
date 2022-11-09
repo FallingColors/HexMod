@@ -15,18 +15,18 @@ import java.util.function.Function;
 
 public record FakeBufferSource(MultiBufferSource parent, Function<ResourceLocation, RenderType> mapper) implements MultiBufferSource {
 
-	@Override
-	@SuppressWarnings("ConstantConditions")
-	public @NotNull VertexConsumer getBuffer(@NotNull RenderType renderType) {
-		if (((AccessorRenderStateShard) renderType).hex$name().equals("entity_cutout_no_cull")
-				&& renderType instanceof RenderType.CompositeRenderType) {
-			RenderType.CompositeState state = ((AccessorCompositeRenderType) renderType).hex$state();
-			RenderStateShard.EmptyTextureStateShard shard = state.textureState;
-			Optional<ResourceLocation> texture = ((AccessorEmptyTextureStateShard) shard).hex$cutoutTexture();
-			if (texture.isPresent()) {
-				return parent.getBuffer(mapper.apply(texture.get()));
-			}
-		}
-		return parent.getBuffer(renderType);
-	}
+    @Override
+    @SuppressWarnings("ConstantConditions")
+    public @NotNull VertexConsumer getBuffer(@NotNull RenderType renderType) {
+        if (((AccessorRenderStateShard) renderType).hex$name().equals("entity_cutout_no_cull")
+                && renderType instanceof RenderType.CompositeRenderType) {
+            RenderType.CompositeState state = ((AccessorCompositeRenderType) renderType).hex$state();
+            RenderStateShard.EmptyTextureStateShard shard = state.textureState;
+            Optional<ResourceLocation> texture = ((AccessorEmptyTextureStateShard) shard).hex$cutoutTexture();
+            if (texture.isPresent()) {
+                return parent.getBuffer(mapper.apply(texture.get()));
+            }
+        }
+        return parent.getBuffer(renderType);
+    }
 }

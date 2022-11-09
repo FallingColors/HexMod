@@ -1,18 +1,22 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.Action
+import at.petrak.hexcasting.api.spell.OperationResult
+import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
+import at.petrak.hexcasting.api.spell.evaluatable
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.PatternIota
 
-object OpEval : Operator {
+object OpEval : Action {
     override fun operate(
         continuation: SpellContinuation,
-        stack: MutableList<SpellDatum<*>>,
-        local: SpellDatum<*>,
+        stack: MutableList<Iota>,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
-        stack.getChecked<Any>(stack.lastIndex) // existence check
         val datum = stack.removeLast()
         val instrs = evaluatable(datum, 0)
 
@@ -29,8 +33,8 @@ object OpEval : Operator {
                 continuation.pushFrame(ContinuationFrame.FinishEval) // install a break-boundary after eval
             }
 
-        val instrsList = instrs.map({ SpellList.LList(0, spellListOf(it)) }, { it!! })
+        val instrsList = instrs.map({ SpellList.LList(0, listOf(PatternIota(it))) }, { it })
         val frame = ContinuationFrame.Evaluate(instrsList)
-        return OperationResult(newCont.pushFrame(frame), stack, local, listOf())
+        return OperationResult(newCont.pushFrame(frame), stack, ravenmind, listOf())
     }
 }

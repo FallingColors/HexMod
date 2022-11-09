@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import net.minecraft.network.chat.Component
+import at.petrak.hexcasting.api.spell.iota.EntityIota
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.ListIota
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.player.Player
@@ -14,7 +14,7 @@ class MishapOthersName(val other: Player) : Mishap() {
     override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.BLACK)
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
+    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
         ctx.caster.addEffect(MobEffectInstance(MobEffects.BLINDNESS, 20 * 60))
     }
 
@@ -23,30 +23,23 @@ class MishapOthersName(val other: Player) : Mishap() {
 
     companion object {
         @JvmStatic
-        fun getTrueNameFromDatum(datum: SpellDatum<*>, caster: Player): Player? {
-            if (datum.payload is Player && datum.payload != caster)
-                return datum.payload
-            else if (datum.payload !is SpellList)
-                return null
-
-            val poolToSearch: MutableList<SpellDatum<*>> =
-                datum.payload.filterIsInstance<SpellDatum<*>>().toMutableList()
+        fun getTrueNameFromDatum(datum: Iota, caster: Player): Player? {
+            val poolToSearch = ArrayDeque<Iota>()
+            poolToSearch.addLast(datum)
 
             while (poolToSearch.isNotEmpty()) {
-                val datumToCheck = poolToSearch[0]
-                poolToSearch.removeAt(0)
-
-                if (datumToCheck.payload is Player && datumToCheck.payload != caster)
-                    return datumToCheck.payload
-                else if (datumToCheck.payload is SpellList)
-                    poolToSearch.addAll(datumToCheck.payload.filterIsInstance<SpellDatum<*>>())
+                val datumToCheck = poolToSearch.removeFirst()
+                if (datumToCheck is EntityIota && datumToCheck.entity is Player && datumToCheck.entity != caster)
+                    return datumToCheck.entity as Player
+                if (datumToCheck is ListIota)
+                    poolToSearch.addAll(datumToCheck.list)
             }
 
             return null
         }
 
         @JvmStatic
-        fun getTrueNameFromArgs(datums: List<SpellDatum<*>>, caster: Player): Player? {
+        fun getTrueNameFromArgs(datums: List<Iota>, caster: Player): Player? {
             return datums.firstNotNullOfOrNull { getTrueNameFromDatum(it, caster) }
         }
     }

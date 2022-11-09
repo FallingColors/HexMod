@@ -25,7 +25,7 @@ public class ManualPatternComponent extends AbstractPatternComponent {
     protected transient boolean strokeOrder;
 
     @Override
-	public List<Pair<HexPattern, HexCoord>> getPatterns(UnaryOperator<IVariable> lookup) {
+    public List<Pair<HexPattern, HexCoord>> getPatterns(UnaryOperator<IVariable> lookup) {
         this.strokeOrder = lookup.apply(IVariable.wrap(this.strokeOrderRaw)).asBoolean(true);
         var patsRaw = lookup.apply(IVariable.wrap(patternsRaw)).asListOrSingleton();
 

@@ -1,20 +1,20 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 
 import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
-object OpDestroySentinel : SpellOperator {
+object OpDestroySentinel : SpellAction {
     override val argc = 0
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val particles = mutableListOf<ParticleSpray>()
@@ -26,7 +26,7 @@ object OpDestroySentinel : SpellOperator {
 
         return Triple(
             Spell,
-            ManaConstants.DUST_UNIT / 10,
+            MediaConstants.DUST_UNIT / 10,
             particles
         )
     }

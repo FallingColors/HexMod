@@ -1,19 +1,20 @@
 package at.petrak.hexcasting.common.casting.operators.local
 
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.OperationResult
-import at.petrak.hexcasting.api.spell.Operator
-import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.orNull
 
-object OpPeekLocal : Operator {
+object OpPeekLocal : Action {
     override fun operate(
         continuation: SpellContinuation,
-        stack: MutableList<SpellDatum<*>>,
-        local: SpellDatum<*>,
+        stack: MutableList<Iota>,
+        ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
-        stack.add(local)
-        return OperationResult(continuation, stack, local, listOf())
+        stack.add(ravenmind.orNull())
+        return OperationResult(continuation, stack, ravenmind, listOf())
     }
 }

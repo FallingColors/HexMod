@@ -7,9 +7,9 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Villager.class)
 public interface AccessorVillager {
-	@Invoker("tellWitnessesThatIWasMurdered")
-	void hex$tellWitnessesThatIWasMurdered(Entity murderer);
+    @Invoker("tellWitnessesThatIWasMurdered")
+    void hex$tellWitnessesThatIWasMurdered(Entity murderer);
 
-	@Invoker("releaseAllPois")
-	void hex$releaseAllPois();
+    @Invoker("releaseAllPois")
+    void hex$releaseAllPois();
 }

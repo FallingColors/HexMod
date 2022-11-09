@@ -3,7 +3,7 @@ package at.petrak.hexcasting.forge.datagen;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.datagen.*;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
-import at.petrak.hexcasting.datagen.recipe.builders.ToolIngredient;
+import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient;
 import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
 import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
@@ -20,8 +20,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 import java.util.EnumMap;
 import java.util.stream.Stream;
@@ -42,13 +42,10 @@ public class HexForgeDataGenerators {
 
         DataGenerator gen = ev.getGenerator();
         ExistingFileHelper efh = ev.getExistingFileHelper();
-        if (ev.includeClient()) {
-            gen.addProvider(new HexItemModels(gen, efh));
-            gen.addProvider(new HexBlockStatesAndModels(gen, efh));
-        }
-        if (ev.includeServer()) {
-            gen.addProvider(PaucalForgeDatagenWrappers.addEFHToAdvancements(new HexAdvancements(gen), efh));
-        }
+        gen.addProvider(ev.includeClient(), new HexItemModels(gen, efh));
+        gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(gen, efh));
+        gen.addProvider(ev.includeServer(),
+            PaucalForgeDatagenWrappers.addEFHToAdvancements(new HexAdvancements(gen), efh));
     }
 
     private static void configureForgeDatagen(GatherDataEvent ev) {
@@ -56,18 +53,16 @@ public class HexForgeDataGenerators {
 
         DataGenerator gen = ev.getGenerator();
         ExistingFileHelper efh = ev.getExistingFileHelper();
-        if (ev.includeServer()) {
-            gen.addProvider(new HexLootTables(gen));
-            gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, HexForgeConditionsBuilder::new));
+        gen.addProvider(ev.includeServer(), new HexLootTables(gen));
+        gen.addProvider(ev.includeServer(), new HexplatRecipes(gen, INGREDIENTS, HexForgeConditionsBuilder::new));
 
-            var xtags = IXplatAbstractions.INSTANCE.tags();
-            var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
-                new HexBlockTagProvider(gen, xtags), efh);
-            gen.addProvider(blockTagProvider);
-            var itemTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
-                new HexItemTagProvider(gen, blockTagProvider, IXplatAbstractions.INSTANCE.tags()), efh);
-            gen.addProvider(itemTagProvider);
-        }
+        var xtags = IXplatAbstractions.INSTANCE.tags();
+        var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
+            new HexBlockTagProvider(gen, xtags), efh);
+        gen.addProvider(ev.includeServer(), blockTagProvider);
+        var itemTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
+            new HexItemTagProvider(gen, blockTagProvider, IXplatAbstractions.INSTANCE.tags()), efh);
+        gen.addProvider(ev.includeServer(), itemTagProvider);
     }
 
     private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {
@@ -128,8 +123,9 @@ public class HexForgeDataGenerators {
             return ForgeModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
         }
 
+        // https://github.com/vectorwing/FarmersDelight/blob/1.18.2/src/generated/resources/data/farmersdelight/recipes/cutting/amethyst_block.json
         @Override
-        public ToolIngredient axeStrip() {
+        public FarmersDelightToolIngredient axeStrip() {
             return () -> {
                 JsonObject object = new JsonObject();
                 object.addProperty("type", "farmersdelight:tool_action");
@@ -139,7 +135,7 @@ public class HexForgeDataGenerators {
         }
 
         @Override
-        public ToolIngredient axeDig() {
+        public FarmersDelightToolIngredient axeDig() {
             return () -> {
                 JsonObject object = new JsonObject();
                 object.addProperty("type", "farmersdelight:tool_action");

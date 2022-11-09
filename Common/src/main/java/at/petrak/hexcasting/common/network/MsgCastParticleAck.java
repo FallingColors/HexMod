@@ -76,7 +76,7 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer)
                     var color = msg.colorizer().getColor(RANDOM.nextFloat() * 256f, Vec3.ZERO);
 
                     var offset = randomInCircle(Mth.TWO_PI).normalize()
-                        .scale(RANDOM.nextFloat() * msg.spray().getSpread() / 2);
+                        .scale(RANDOM.nextFloat() * msg.spray().getFuzziness() / 2);
                     var pos = msg.spray().getPos().add(offset);
 
                     var phi = Math.acos(1.0 - RANDOM.nextDouble() * (1.0 - Math.cos(msg.spray().getSpread())));

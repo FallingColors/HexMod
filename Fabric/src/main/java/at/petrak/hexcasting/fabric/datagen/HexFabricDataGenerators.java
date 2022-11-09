@@ -6,7 +6,7 @@ import at.petrak.hexcasting.datagen.HexItemTagProvider;
 import at.petrak.hexcasting.datagen.HexLootTables;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
-import at.petrak.hexcasting.datagen.recipe.builders.ToolIngredient;
+import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient;
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
@@ -121,20 +121,20 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
             return FabricModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
         }
 
-        private final ToolIngredient AXE_INGREDIENT = () -> {
+        private final FarmersDelightToolIngredient AXE_INGREDIENT = () -> {
             JsonObject object = new JsonObject();
             object.addProperty("type", "farmersdelight:tool");
-            object.addProperty("tag", "fabric:tools/axes");
+            object.addProperty("tag", "c:tools/axes");
             return object;
         };
 
         @Override
-        public ToolIngredient axeStrip() {
+        public FarmersDelightToolIngredient axeStrip() {
             return AXE_INGREDIENT;
         }
 
         @Override
-        public ToolIngredient axeDig() {
+        public FarmersDelightToolIngredient axeDig() {
             return AXE_INGREDIENT;
         }
     };

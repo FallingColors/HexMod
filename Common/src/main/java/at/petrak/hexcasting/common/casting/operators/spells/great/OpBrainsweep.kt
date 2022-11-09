@@ -1,14 +1,15 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapAlreadyBrainswept
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadBrainsweep
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.ktxt.tellWitnessesThatIWasMurdered
 import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundEvents
@@ -17,39 +18,40 @@ import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 
-object OpBrainsweep : SpellOperator {
+object OpBrainsweep : SpellAction {
     override val argc = 2
 
     override val isGreat = true
 
+    // this way you can hear the villager dying more : )
+    override fun hasCastingSound(ctx: CastingContext) = false
+
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
-        val sacrifice = args.getChecked<Villager>(0, argc)
-        val pos = args.getChecked<Vec3>(1, argc)
+        val sacrifice = args.getVillager(0, argc)
+        val pos = args.getBlockPos(1, argc)
         ctx.assertVecInRange(pos)
         ctx.assertEntityInRange(sacrifice)
 
         if (Brainsweeping.isBrainswept(sacrifice))
             throw MishapAlreadyBrainswept(sacrifice)
 
-        val bpos = BlockPos(pos)
+        val state = ctx.world.getBlockState(pos)
 
-        if (!ctx.canEditBlockAt(bpos))
+        if (!ctx.canEditBlockAt(pos))
             return null
 
-        val state = ctx.world.getBlockState(bpos)
-
         val recman = ctx.world.recipeManager
-        val recipes = recman.getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE)
+        val recipes = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)
         val recipe = recipes.find { it.matches(state, sacrifice) }
-            ?: throw MishapBadBrainsweep(sacrifice, bpos)
+            ?: throw MishapBadBrainsweep(sacrifice, pos)
 
         return Triple(
-            Spell(bpos, state, sacrifice, recipe),
-            10 * ManaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.cloud(sacrifice.position(), 1.0), ParticleSpray.burst(Vec3.atCenterOf(bpos), 0.3, 100))
+            Spell(pos, state, sacrifice, recipe),
+            10 * MediaConstants.CRYSTAL_UNIT,
+            listOf(ParticleSpray.cloud(sacrifice.position(), 1.0), ParticleSpray.burst(Vec3.atCenterOf(pos), 0.3, 100))
         )
     }
 
@@ -71,6 +73,4 @@ object OpBrainsweep : SpellOperator {
             ctx.world.playSound(null, sacrifice, SoundEvents.PLAYER_LEVELUP, SoundSource.AMBIENT, 0.5f, 0.8f)
         }
     }
-
-
 }

@@ -11,7 +11,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -42,11 +41,13 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     @Override
-    protected @Nullable Player getPlayer() {
+    protected @Nullable
+    Player getPlayer() {
         return this.storedPlayer == null ? null : this.level.getPlayerByUUID(this.storedPlayer);
     }
 
-    protected @Nullable GameProfile getPlayerName() {
+    protected @Nullable
+    GameProfile getPlayerName() {
         Player player = getStoredPlayer();
         if (player != null) {
             return player.getGameProfile();
@@ -73,14 +74,15 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     // just feels wrong to use the protected method
-    public @Nullable Player getStoredPlayer() {
+    public @Nullable
+    Player getStoredPlayer() {
         return this.getPlayer();
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-										BlockState state, BlockPos pos, Player observer,
-										Level world,
-										Direction hitFace) {
+                                        BlockState state, BlockPos pos, Player observer,
+                                        Level world,
+                                        Direction hitFace) {
         super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace);
 
         var name = this.getPlayerName();
@@ -93,10 +95,10 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
                 cachedDisplayStack = head;
             }
             lines.add(new Pair<>(cachedDisplayStack,
-                 new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer", name.getName())));
+                Component.translatable("hexcasting.tooltip.lens.impetus.storedplayer", name.getName())));
         } else {
             lines.add(new Pair<>(new ItemStack(Items.BARRIER),
-                new TranslatableComponent("hexcasting.tooltip.lens.impetus.storedplayer.none")));
+                Component.translatable("hexcasting.tooltip.lens.impetus.storedplayer.none")));
         }
     }
 

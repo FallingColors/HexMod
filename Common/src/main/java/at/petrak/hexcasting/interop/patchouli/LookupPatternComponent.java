@@ -25,7 +25,7 @@ public class LookupPatternComponent extends AbstractPatternComponent {
     public List<Pair<HexPattern, HexCoord>> getPatterns(UnaryOperator<IVariable> lookup) {
         var entry = PatternRegistry.lookupPattern(this.opName);
         this.strokeOrder = !entry.isPerWorld();
-        return List.of(new Pair<>(entry.getPrototype(), HexCoord.getOrigin()));
+        return List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin()));
     }
 
     @Override

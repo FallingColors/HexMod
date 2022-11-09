@@ -1,12 +1,13 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.spell.iota.DoubleIota;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ItemAbacus extends Item implements DataHolderItem {
+public class ItemAbacus extends Item implements IotaHolderItem {
     public static final String TAG_VALUE = "value";
 
     public ItemAbacus(Properties pProperties) {
@@ -26,18 +27,19 @@ public class ItemAbacus extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
-        var datum = SpellDatum.make(NBTHelper.getDouble(stack, TAG_VALUE));
-        return datum.serializeToNBT();
+    public @Nullable
+    CompoundTag readIotaTag(ItemStack stack) {
+        var datum = new DoubleIota(NBTHelper.getDouble(stack, TAG_VALUE));
+        return HexIotaTypes.serialize(datum);
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, Iota datum) {
         return false;
     }
 
     @Override
-    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, Iota datum) {
         // nope
     }
 
@@ -54,7 +56,7 @@ public class ItemAbacus extends Item implements DataHolderItem {
             if (oldNum == 69) {
                 key += ".nice";
             }
-            player.displayClientMessage(new TranslatableComponent(key), true);
+            player.displayClientMessage(Component.translatable(key), true);
 
             return InteractionResultHolder.sidedSuccess(stack, world.isClientSide);
         } else {
@@ -65,6 +67,6 @@ public class ItemAbacus extends Item implements DataHolderItem {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
-        DataHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
+        IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }
 }

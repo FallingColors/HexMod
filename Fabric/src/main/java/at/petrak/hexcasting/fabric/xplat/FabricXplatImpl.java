@@ -1,8 +1,9 @@
 package at.petrak.hexcasting.fabric.xplat;
 
-import at.petrak.hexcasting.api.addldata.DataHolder;
-import at.petrak.hexcasting.api.addldata.HexHolder;
-import at.petrak.hexcasting.api.addldata.ManaHolder;
+import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.addldata.ADHexHolder;
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexItemTags;
@@ -10,6 +11,7 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
@@ -23,10 +25,12 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
+import com.mojang.serialization.Lifecycle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -40,9 +44,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -213,21 +219,28 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public @Nullable
-    ManaHolder findManaHolder(ItemStack stack) {
-        var cc = HexCardinalComponents.MANA_HOLDER.maybeGet(stack);
+    ADMediaHolder findManaHolder(ItemStack stack) {
+        var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(stack);
         return cc.orElse(null);
     }
 
     @Override
     public @Nullable
-    DataHolder findDataHolder(ItemStack stack) {
-        var cc = HexCardinalComponents.DATA_HOLDER.maybeGet(stack);
+    ADIotaHolder findDataHolder(ItemStack stack) {
+        var cc = HexCardinalComponents.IOTA_HOLDER.maybeGet(stack);
         return cc.orElse(null);
     }
 
     @Override
     public @Nullable
-    HexHolder findHexHolder(ItemStack stack) {
+    ADIotaHolder findDataHolder(Entity entity) {
+        var cc = HexCardinalComponents.IOTA_HOLDER.maybeGet(entity);
+        return cc.orElse(null);
+    }
+
+    @Override
+    public @Nullable
+    ADHexHolder findHexHolder(ItemStack stack) {
         var cc = HexCardinalComponents.HEX_HOLDER.maybeGet(stack);
         return cc.orElse(null);
     }
@@ -253,8 +266,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @SuppressWarnings("UnstableApiUsage")
     public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid) {
         Storage<FluidVariant> target = FluidStorage.SIDED.find(level, pos, Direction.UP);
-        if (target == null)
+        if (target == null) {
             return false;
+        }
         try (Transaction transaction = Transaction.openOuter()) {
             long insertedAmount = target.insert(FluidVariant.of(fluid), FluidConstants.BUCKET, transaction);
             if (insertedAmount > 0) {
@@ -269,11 +283,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @SuppressWarnings("UnstableApiUsage")
     public boolean drainAllFluid(Level level, BlockPos pos) {
         Storage<FluidVariant> target = FluidStorage.SIDED.find(level, pos, Direction.UP);
-        if (target == null)
+        if (target == null) {
             return false;
+        }
         try (Transaction transaction = Transaction.openOuter()) {
             boolean any = false;
-            for (var view : target.iterable(transaction)) {
+            for (var view : target) {
                 long extracted = view.extract(view.getResource(), view.getAmount(), transaction);
                 if (extracted > 0) {
                     any = true;
@@ -394,6 +409,19 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
+    private static Registry<IotaType<?>> IOTA_TYPE_REGISTRY = null;
+
+    @Override
+    public Registry<IotaType<?>> getIotaTypeRegistry() {
+        if (IOTA_TYPE_REGISTRY == null) {
+            IOTA_TYPE_REGISTRY = FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
+                    HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
+                    Lifecycle.stable(), null))
+                .buildAndRegister();
+        }
+        return IOTA_TYPE_REGISTRY;
+    }
+
     @Override
     public boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player) {
         return PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(world, player, pos, state, world.getBlockEntity(pos));
@@ -431,4 +459,5 @@ public class FabricXplatImpl implements IXplatAbstractions {
         }
         return PEHKUI_API;
     }
+
 }

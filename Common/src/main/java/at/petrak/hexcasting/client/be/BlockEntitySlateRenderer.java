@@ -84,7 +84,7 @@ public class BlockEntitySlateRenderer implements BlockEntityRenderer<BlockEntity
         }
 
         var isLit = bs.getValue(BlockSlate.ENERGIZED);
-        var zappy = RenderLib.makeZappy(lines2, 10f, isLit ? 2.5f : 0.5f, isLit ? 0.1f : 0f, 0.2f);
+        var zappy = RenderLib.makeZappy(lines2, RenderLib.findDupIndices(tile.pattern.positions()), 10f, isLit ? 2.5f : 0.5f, isLit ? 0.1f : 0f, 0.2f);
 
         int outer = isLit ? 0xff_64c8ff : 0xff_d2c8c8;
         int inner = isLit ? RenderLib.screenCol(outer) : 0xc8_322b33;

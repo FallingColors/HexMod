@@ -1,0 +1,22 @@
+{
+  "name": "hexcasting.entry.lore.inventory",
+  "icon": "hexcasting:lore_fragment",
+  "category": "hexcasting:lore",
+  "advancement": "hexcasting:lore/inventory",
+  "sortnum": 7,
+  "pages": [
+    "hexcasting.page.lore.inventory.1",
+    "hexcasting.page.lore.inventory.2",
+    "hexcasting.page.lore.inventory.3",
+    "hexcasting.page.lore.inventory.4",
+    "hexcasting.page.lore.inventory.5",
+    "hexcasting.page.lore.inventory.6",
+    "hexcasting.page.lore.inventory.7",
+    "hexcasting.page.lore.inventory.8",
+    "hexcasting.page.lore.inventory.9",
+    "hexcasting.page.lore.inventory.10",
+    "hexcasting.page.lore.inventory.11",
+    "hexcasting.page.lore.inventory.12",
+    "hexcasting.page.lore.inventory.13"
+  ]
+}

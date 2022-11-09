@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(RenderStateShard.class)
 public interface AccessorRenderStateShard {
-	@Accessor("name")
-	String hex$name();
+    @Accessor("name")
+    String hex$name();
 }

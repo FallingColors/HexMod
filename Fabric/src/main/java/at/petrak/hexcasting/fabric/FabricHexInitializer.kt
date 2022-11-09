@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.fabric
 
+import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
@@ -15,7 +16,7 @@ import at.petrak.hexcasting.common.loot.HexLootHandler
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.common.misc.Brainsweeping
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient
@@ -24,14 +25,14 @@ import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
 import at.petrak.hexcasting.interop.HexInterop
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer
 import net.fabricmc.api.ModInitializer
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
-import net.minecraft.commands.synchronization.ArgumentTypes
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer
+import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
@@ -46,10 +47,10 @@ object FabricHexInitializer : ModInitializer {
 
         initRegistries()
 
-        ArgumentTypes.register(
-            "hexcasting:pattern",
+        ArgumentTypeRegistry.registerArgumentType(
+            modLoc("pattern"),
             PatternResLocArgument::class.java,
-            EmptyArgumentSerializer { PatternResLocArgument.id() }
+            SingletonArgumentInfo.contextFree { PatternResLocArgument.id() }
         )
         RegisterPatterns.registerPatterns()
         HexAdvancementTriggers.registerTriggers()
@@ -78,12 +79,10 @@ object FabricHexInitializer : ModInitializer {
         ServerTickEvents.END_WORLD_TICK.register(ItemLens::tickAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(OpFlight::tickAllPlayers)
 
-        CommandRegistrationCallback.EVENT.register { dp, _ -> HexCommands.register(dp) }
+        CommandRegistrationCallback.EVENT.register { dp, _, _ -> HexCommands.register(dp) }
 
-        LootTableLoadingCallback.EVENT.register { _, _, id, supplier, _ ->
-            HexLootHandler.lootLoad(
-                id,
-            ) { supplier.withPool(it) }
+        LootTableEvents.MODIFY.register { _, _, id, supplier, _ ->
+            HexLootHandler.lootLoad(id, supplier::withPool)
         }
     }
 
@@ -98,10 +97,14 @@ object FabricHexInitializer : ModInitializer {
 
         HexEntities.registerEntities(bind(Registry.ENTITY_TYPE))
 
-        HexRecipeSerializers.registerSerializers(bind(Registry.RECIPE_SERIALIZER))
+        HexRecipeStuffRegistry.registerSerializers(bind(Registry.RECIPE_SERIALIZER))
+        HexRecipeStuffRegistry.registerTypes(bind(Registry.RECIPE_TYPE))
+
         HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
 
         HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
+
+        HexIotaTypes.registerTypes()
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
         // any calls that will eventually touch FeatureUtils.register(), as the growers here do,
@@ -111,25 +114,25 @@ object FabricHexInitializer : ModInitializer {
         // Done with soft implements in forge
         val flameOn = FlammableBlockRegistry.getDefaultInstance()
         for (log in listOf(
-            HexBlocks.AKASHIC_LOG,
-            HexBlocks.AKASHIC_LOG_STRIPPED,
-            HexBlocks.AKASHIC_WOOD,
-            HexBlocks.AKASHIC_LOG_STRIPPED,
+            HexBlocks.EDIFIED_LOG,
+            HexBlocks.STRIPPED_EDIFIED_LOG,
+            HexBlocks.EDIFIED_WOOD,
+            HexBlocks.STRIPPED_EDIFIED_LOG,
         )) {
             flameOn.add(log, 5, 5)
         }
         for (wood in listOf(
-            HexBlocks.AKASHIC_PLANKS,
-            HexBlocks.AKASHIC_PANEL,
-            HexBlocks.AKASHIC_TILE,
-            HexBlocks.AKASHIC_DOOR,
-            HexBlocks.AKASHIC_TRAPDOOR,
-            HexBlocks.AKASHIC_STAIRS,
-            HexBlocks.AKASHIC_SLAB,
-            HexBlocks.AKASHIC_STAIRS,
-            HexBlocks.AKASHIC_SLAB,
-            HexBlocks.AKASHIC_BUTTON,
-            HexBlocks.AKASHIC_PRESSURE_PLATE,
+            HexBlocks.EDIFIED_PLANKS,
+            HexBlocks.EDIFIED_PANEL,
+            HexBlocks.EDIFIED_TILE,
+            HexBlocks.EDIFIED_DOOR,
+            HexBlocks.EDIFIED_TRAPDOOR,
+            HexBlocks.EDIFIED_STAIRS,
+            HexBlocks.EDIFIED_SLAB,
+            HexBlocks.EDIFIED_STAIRS,
+            HexBlocks.EDIFIED_SLAB,
+            HexBlocks.EDIFIED_BUTTON,
+            HexBlocks.EDIFIED_PRESSURE_PLATE,
         )) {
             flameOn.add(wood, 20, 5)
         }
@@ -143,14 +146,13 @@ object FabricHexInitializer : ModInitializer {
             flameOn.add(papery, 100, 60)
         }
         for (leaves in listOf(
-            HexBlocks.AKASHIC_LEAVES1,
-            HexBlocks.AKASHIC_LEAVES2,
-            HexBlocks.AKASHIC_LEAVES3,
+            HexBlocks.AMETHYST_EDIFIED_LEAVES,
+            HexBlocks.AVENTURINE_EDIFIED_LEAVES,
+            HexBlocks.CITRINE_EDIFIED_LEAVES,
         )) {
             flameOn.add(leaves, 60, 30)
         }
 
-        HexRecipeSerializers.registerTypes()
         HexStatistics.register()
     }
 

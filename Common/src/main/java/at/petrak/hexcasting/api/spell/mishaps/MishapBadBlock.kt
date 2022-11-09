@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.core.BlockPos
@@ -15,7 +15,7 @@ class MishapBadBlock(val pos: BlockPos, val expected: Component) : Mishap() {
     override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.LIME)
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>) {
+    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
         ctx.world.explode(null, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 0.25f, Explosion.BlockInteraction.NONE)
     }
 

@@ -30,7 +30,7 @@ public class PatternRendererEMI implements EmiRenderable {
     public PatternRendererEMI(ResourceLocation pattern, int w, int h) {
         var entry = PatternRegistry.lookupPattern(pattern);
         this.strokeOrder = !entry.isPerWorld();
-        var data = PatternDrawingUtil.loadPatterns(List.of(new Pair<>(entry.getPrototype(), HexCoord.getOrigin())));
+        var data = PatternDrawingUtil.loadPatterns(List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin())));
         this.patterns = data.patterns();
         this.pathfinderDots = data.pathfinderDots();
         this.width = w;

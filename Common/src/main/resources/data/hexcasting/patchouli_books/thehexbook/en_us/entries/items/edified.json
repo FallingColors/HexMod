@@ -1,6 +1,6 @@
 {
   "name": "hexcasting.entry.edified",
-  "icon": "hexcasting:akashic_log",
+  "icon": "hexcasting:edified_log",
   "category": "hexcasting:items",
   "sortnum": 9,
   "advancement": "hexcasting:root",
@@ -15,28 +15,28 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:akashic_planks",
-      "recipe2": "hexcasting:akashic_wood"
+      "recipe": "hexcasting:edified_planks",
+      "recipe2": "hexcasting:edified_wood"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:akashic_stairs",
-      "recipe2": "hexcasting:akashic_slab"
+      "recipe": "hexcasting:edified_stairs",
+      "recipe2": "hexcasting:edified_slab"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:akashic_panel",
-      "recipe2": "hexcasting:akashic_tile"
+      "recipe": "hexcasting:edified_panel",
+      "recipe2": "hexcasting:edified_tile"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:akashic_door",
-      "recipe2": "hexcasting:akashic_trapdoor"
+      "recipe": "hexcasting:edified_door",
+      "recipe2": "hexcasting:edified_trapdoor"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:akashic_button",
-      "recipe2": "hexcasting:akashic_pressure_plate"
+      "recipe": "hexcasting:edified_button",
+      "recipe2": "hexcasting:edified_pressure_plate"
     },
     {
       "type": "patchouli:text",
@@ -44,12 +44,12 @@
     }
   ],
   "extra_recipe_mappings": {
-    "hexcasting:akashic_log": 0,
-    "hexcasting:akashic_log_stripped": 0,
-    "hexcasting:akashic_wood": 0,
-    "hexcasting:akashic_wood_stripped": 0,
-    "hexcasting:akashic_leaves1": 0,
-    "hexcasting:akashic_leaves2": 0,
-    "hexcasting:akashic_leaves3": 0
+    "hexcasting:edified_log": 0,
+    "hexcasting:stripped_edified_log": 0,
+    "hexcasting:edified_wood": 0,
+    "hexcasting:stripped_edified_wood": 0,
+    "hexcasting:amethyst_edified_leaves": 0,
+    "hexcasting:aventurine_edified_leaves": 0,
+    "hexcasting:citrine_edified_leaves": 0
   }
 }

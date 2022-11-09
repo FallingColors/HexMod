@@ -1,8 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.lib.HexEntityTags
@@ -13,18 +14,20 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.phys.Vec3
 
-object OpTeleport : SpellOperator {
+// TODO while we're making breaking changes I *really* want to have the vector in the entity's local space
+// WRT its look vector
+object OpTeleport : SpellAction {
     override val argc = 2
     override val isGreat = true
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val teleportee = args.getChecked<Entity>(0, argc)
-        val delta = args.getChecked<Vec3>(1, argc)
+        val teleportee = args.getEntity(0, argc)
+        val delta = args.getVec3(1, argc)
         ctx.assertEntityInRange(teleportee)
 
-        if (!teleportee.canChangeDimensions())
+        if (!teleportee.canChangeDimensions() || teleportee.type.`is`(HexEntityTags.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
 
         val targetPos = teleportee.position().add(delta)
@@ -37,7 +40,7 @@ object OpTeleport : SpellOperator {
 
         return Triple(
             Spell(teleportee, delta),
-            10 * ManaConstants.CRYSTAL_UNIT,
+            10 * MediaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray.cloud(targetMiddlePos, 2.0), ParticleSpray.burst(targetMiddlePos.add(delta), 2.0))
         )
     }
@@ -45,6 +48,8 @@ object OpTeleport : SpellOperator {
     private data class Spell(val teleportee: Entity, val delta: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val distance = delta.length()
+
+            // TODO make this not a magic number (config?)
             if (distance < 32768.0) {
                 teleportRespectSticky(teleportee, delta)
             }
@@ -83,16 +88,21 @@ object OpTeleport : SpellOperator {
     }
 
     fun teleportRespectSticky(teleportee: Entity, delta: Vec3) {
-
         val base = teleportee.rootVehicle
 
         val playersToUpdate = mutableListOf<ServerPlayer>()
+        val indirect = base.indirectPassengers
 
-        if (base.indirectPassengers.any { it.type.`is`(HexEntityTags.STICKY_TELEPORTERS) }) {
+        val sticky = indirect.any { it.type.`is`(HexEntityTags.STICKY_TELEPORTERS) }
+        val cannotSticky = indirect.none { it.type.`is`(HexEntityTags.CANNOT_TELEPORT) }
+        if (sticky && cannotSticky)
+            return
+
+        if (sticky) {
             // this handles teleporting the passengers
             val target = base.position().add(delta)
             base.teleportTo(target.x, target.y, target.z)
-            base.indirectPassengers
+            indirect
                 .filterIsInstance<ServerPlayer>()
                 .forEach(playersToUpdate::add)
         } else {

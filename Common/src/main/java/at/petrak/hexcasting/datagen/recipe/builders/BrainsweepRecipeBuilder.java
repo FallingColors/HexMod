@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.datagen.recipe.builders;
 
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
@@ -84,7 +84,7 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 
         @Override
         public RecipeSerializer<?> getType() {
-            return HexRecipeSerializers.BRAINSWEEP;
+            return HexRecipeStuffRegistry.BRAINSWEEP;
         }
 
         @Nullable

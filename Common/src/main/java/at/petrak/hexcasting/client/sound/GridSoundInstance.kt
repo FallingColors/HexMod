@@ -11,7 +11,11 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 
 class GridSoundInstance(val player: Player) :
-    AbstractTickableSoundInstance(HexSounds.CASTING_AMBIANCE, SoundSource.PLAYERS) {
+    AbstractTickableSoundInstance(
+        HexSounds.CASTING_AMBIANCE,
+        SoundSource.PLAYERS,
+        SoundInstance.createUnseededRandom()
+    ) {
     var mousePosX: Double = 0.5
     var mousePosY: Double = 0.5
 

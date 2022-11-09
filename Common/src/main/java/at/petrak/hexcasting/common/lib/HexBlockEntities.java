@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
-import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityLookingImpetus;
@@ -37,9 +36,6 @@ public class HexBlockEntities {
     public static final BlockEntityType<BlockEntityAkashicBookshelf> AKASHIC_BOOKSHELF_TILE = register(
         "akashic_bookshelf_tile",
         BlockEntityAkashicBookshelf::new, HexBlocks.AKASHIC_BOOKSHELF);
-    public static final BlockEntityType<BlockEntityAkashicRecord> AKASHIC_RECORD_TILE = register(
-        "akashic_record_tile",
-        BlockEntityAkashicRecord::new, HexBlocks.AKASHIC_RECORD);
 
     public static final BlockEntityType<BlockEntityStoredPlayerImpetus> IMPETUS_STOREDPLAYER_TILE = register(
         "impetus_storedplayer_tile",

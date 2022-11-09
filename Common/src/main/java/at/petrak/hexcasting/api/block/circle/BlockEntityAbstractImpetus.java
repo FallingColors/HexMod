@@ -2,14 +2,14 @@ package at.petrak.hexcasting.api.block.circle;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
-import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
-import at.petrak.hexcasting.api.spell.SpellDatum;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.SpellCircleContext;
-import at.petrak.hexcasting.api.utils.ManaHelper;
+import at.petrak.hexcasting.api.spell.iota.PatternIota;
+import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
@@ -22,7 +22,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -123,8 +122,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             if (beai.getMana() < 0) {
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
             } else {
-                var dustCmp = new TranslatableComponent("hexcasting.tooltip.mana",
-                    DUST_AMOUNT.format(beai.getMana() / (float) ManaConstants.DUST_UNIT));
+                var dustCount = (float) beai.getMana() / (float) MediaConstants.DUST_UNIT;
+                var dustCmp = Component.translatable("hexcasting.tooltip.lens.impetus.mana",
+                    String.format("%.2f", dustCount));
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
             }
 
@@ -293,7 +293,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 if (bs.getBlock() instanceof BlockCircleComponent cc) {
                     var newPattern = cc.getPattern(tracked, bs, this.level);
                     if (newPattern != null) {
-                        var info = harness.executeIota(SpellDatum.make(newPattern), splayer.getLevel());
+                        var info = harness.executeIota(new PatternIota(newPattern), splayer.getLevel());
                         if (info.getMakesCastSound()) {
                             makeSound = true;
                         }
@@ -554,7 +554,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     public int extractManaFromItem(ItemStack stack, boolean simulate) {
         if (this.mana < 0)
             return 0;
-        return ManaHelper.extractMana(stack, remainingManaCapacity(), true, simulate);
+        return MediaHelper.extractMedia(stack, remainingManaCapacity(), true, simulate);
     }
 
     public void insertMana(ItemStack stack) {

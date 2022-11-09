@@ -1,28 +1,28 @@
 {
   "parent": "hexcasting:root",
-  "display": {
-    "icon": {
-      "item": "minecraft:glistering_melon_slice"
-    },
-    "title": {
-      "translate": "advancement.hexcasting:wasteful_cast"
-    },
-    "description": {
-      "translate": "advancement.hexcasting:wasteful_cast.desc"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
     "waste_amt": {
-      "trigger": "hexcasting:spend_mana",
       "conditions": {
         "mana_wasted": {
           "min": 89000
         }
-      }
+      },
+      "trigger": "hexcasting:spend_mana"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.hexcasting:wasteful_cast.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.hexcasting:wasteful_cast"
     }
   },
   "requirements": [

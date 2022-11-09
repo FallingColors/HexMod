@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Mixin(RenderStateShard.EmptyTextureStateShard.class)
 public interface AccessorEmptyTextureStateShard {
-	@Invoker("cutoutTexture")
-	Optional<ResourceLocation> hex$cutoutTexture();
+    @Invoker("cutoutTexture")
+    Optional<ResourceLocation> hex$cutoutTexture();
 }

@@ -32,15 +32,15 @@ public class HexItems {
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
     public static final Item CHARGED_AMETHYST = make("charged_amethyst", new Item(props()));
 
-    public static final ItemWand WAND_OAK = make("wand_oak", new ItemWand(unstackable()));
-    public static final ItemWand WAND_SPRUCE = make("wand_spruce", new ItemWand(unstackable()));
-    public static final ItemWand WAND_BIRCH = make("wand_birch", new ItemWand(unstackable()));
-    public static final ItemWand WAND_JUNGLE = make("wand_jungle", new ItemWand(unstackable()));
-    public static final ItemWand WAND_ACACIA = make("wand_acacia", new ItemWand(unstackable()));
-    public static final ItemWand WAND_DARK_OAK = make("wand_dark_oak", new ItemWand(unstackable()));
-    public static final ItemWand WAND_CRIMSON = make("wand_crimson", new ItemWand(unstackable()));
-    public static final ItemWand WAND_WARPED = make("wand_warped", new ItemWand(unstackable()));
-    public static final ItemWand WAND_AKASHIC = make("wand_akashic", new ItemWand(unstackable()));
+    public static final ItemStaff STAFF_OAK = make("oak_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_SPRUCE = make("spruce_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_BIRCH = make("birch_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_JUNGLE = make("jungle_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_ACACIA = make("acacia_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_DARK_OAK = make("dark_oak_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_CRIMSON = make("crimson_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_WARPED = make("warped_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_EDIFIED = make("edified_staff", new ItemStaff(unstackable()));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
         IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
@@ -52,8 +52,8 @@ public class HexItems {
     public static final ItemSpellbook SPELLBOOK = make("spellbook", new ItemSpellbook(unstackable()));
 
     public static final ItemCypher CYPHER = make("cypher", new ItemCypher(unstackable()));
-    public static final ItemTrinket TRINKET = make("trinket", new ItemTrinket(unstackable()));
-    public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable()));
+    public static final ItemTrinket TRINKET = make("trinket", new ItemTrinket(unstackable().rarity(Rarity.UNCOMMON)));
+    public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable().rarity(Rarity.RARE)));
 
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
         new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1).defaultDurability(Tiers.DIAMOND.getUses())));
@@ -64,8 +64,8 @@ public class HexItems {
 
     public static final ItemSlate SLATE = make("slate", new ItemSlate(HexBlocks.SLATE, props()));
 
-    public static final ItemManaBattery BATTERY = make("battery",
-        new ItemManaBattery(unstackable()));
+    public static final ItemMediaBattery BATTERY = make("battery",
+        new ItemMediaBattery(unstackable()));
 
     public static final EnumMap<DyeColor, ItemDyeColorizer> DYE_COLORIZERS = Util.make(() -> {
         var out = new EnumMap<DyeColor, ItemDyeColorizer>(DyeColor.class);
@@ -88,6 +88,10 @@ public class HexItems {
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
         new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
+
+    public static final ItemLoreFragment LORE_FRAGMENT = make("lore_fragment",
+        new ItemLoreFragment(unstackable()
+            .rarity(Rarity.RARE)));
 
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
         new ItemCreativeUnlocker(unstackable()

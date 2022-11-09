@@ -1,6 +1,6 @@
 {
   "name": "hexcasting.entry.staff",
-  "icon": "hexcasting:wand_oak",
+  "icon": "hexcasting:oak_staff",
   "category": "hexcasting:items",
   "priority": true,
   "sortnum": 1,
@@ -15,15 +15,15 @@
       "heading": "hexcasting.page.staff.crafting.header",
       "text": "hexcasting.page.staff.crafting.desc",
       "recipes": [
-        "hexcasting:wand_oak",
-        "hexcasting:wand_spruce",
-        "hexcasting:wand_birch",
-        "hexcasting:wand_jungle",
-        "hexcasting:wand_acacia",
-        "hexcasting:wand_dark_oak",
-        "hexcasting:wand_crimson",
-        "hexcasting:wand_warped",
-        "hexcasting:wand_akashic"
+        "hexcasting:oak_staff",
+        "hexcasting:spruce_staff",
+        "hexcasting:birch_staff",
+        "hexcasting:jungle_staff",
+        "hexcasting:acacia_staff",
+        "hexcasting:dark_oak_staff",
+        "hexcasting:crimson_staff",
+        "hexcasting:warped_staff",
+        "hexcasting:edified_staff"
       ]
     }
   ]

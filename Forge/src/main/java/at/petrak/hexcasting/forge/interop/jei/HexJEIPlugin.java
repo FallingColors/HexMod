@@ -5,8 +5,8 @@ import at.petrak.hexcasting.common.casting.operators.spells.OpEdifySapling;
 import at.petrak.hexcasting.common.casting.operators.spells.OpMakeBattery;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.RecipeType;
@@ -56,7 +56,7 @@ public class HexJEIPlugin implements IModPlugin {
         Level level = Minecraft.getInstance().level;
         if (level != null) {
             registration.addRecipes(BRAINSWEEPING,
-                level.getRecipeManager().getAllRecipesFor(HexRecipeSerializers.BRAINSWEEP_TYPE));
+                level.getRecipeManager().getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE));
         }
 
         if (PhialRecipeStackBuilder.shouldAddRecipe()) {
@@ -68,14 +68,14 @@ public class HexJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_OAK), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_SPRUCE), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_BIRCH), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_JUNGLE), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_ACACIA), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_DARK_OAK), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_CRIMSON), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_WARPED), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.WAND_AKASHIC), BRAINSWEEPING, PHIAL, EDIFY);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_OAK), BRAINSWEEPING, PHIAL, EDIFY);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_SPRUCE), BRAINSWEEPING, PHIAL, EDIFY);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_BIRCH), BRAINSWEEPING, PHIAL, EDIFY);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_JUNGLE), BRAINSWEEPING, PHIAL, EDIFY);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_ACACIA), BRAINSWEEPING, PHIAL, EDIFY);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_DARK_OAK), BRAINSWEEPING, PHIAL, EDIFY);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_CRIMSON), BRAINSWEEPING, PHIAL, EDIFY);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_WARPED), BRAINSWEEPING, PHIAL, EDIFY);
+        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_EDIFIED), BRAINSWEEPING, PHIAL, EDIFY);
     }
 }

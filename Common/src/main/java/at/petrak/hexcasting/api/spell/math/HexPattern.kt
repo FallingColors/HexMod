@@ -113,6 +113,8 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
     fun toLines(hexSize: Float, origin: Vec2): List<Vec2> =
         this.positions().map { coordToPx(it, hexSize, origin) }
 
+    fun sigsEqual(that: HexPattern) = this.anglesSignature() == that.anglesSignature()
+
     override fun toString(): String = buildString {
         append("HexPattern[")
         append(this@HexPattern.startDir)

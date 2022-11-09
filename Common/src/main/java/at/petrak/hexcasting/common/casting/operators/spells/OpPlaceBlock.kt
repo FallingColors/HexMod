@@ -1,8 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadBlock
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -16,21 +20,19 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
-object OpPlaceBlock : SpellOperator {
+object OpPlaceBlock : SpellAction {
     override val argc: Int
         get() = 1
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
-        val target = args.getChecked<Vec3>(0, argc)
-        ctx.assertVecInRange(target)
-
-        val pos = BlockPos(target)
+        val pos = args.getBlockPos(0, argc)
+        ctx.assertVecInRange(pos)
 
         val blockHit = BlockHitResult(
-            target, ctx.caster.direction, pos, false
+            Vec3.atCenterOf(pos), ctx.caster.direction, pos, false
         )
         val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
         val placeContext = BlockPlaceContext(itemUseCtx)
@@ -40,21 +42,19 @@ object OpPlaceBlock : SpellOperator {
             throw MishapBadBlock.of(pos, "replaceable")
 
         return Triple(
-            Spell(target),
-            ManaConstants.DUST_UNIT / 8,
+            Spell(pos),
+            MediaConstants.DUST_UNIT / 8,
             listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
         )
     }
 
-    private data class Spell(val vec: Vec3) : RenderedSpell {
+    private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val pos = BlockPos(vec)
-
             if (!ctx.canEditBlockAt(pos))
                 return
 
             val blockHit = BlockHitResult(
-                vec, ctx.caster.direction, pos, false
+                Vec3.atCenterOf(pos), ctx.caster.direction, pos, false
             )
 
             val bstate = ctx.world.getBlockState(pos)
@@ -84,11 +84,15 @@ object OpPlaceBlock : SpellOperator {
 
                                 ctx.world.playSound(
                                     ctx.caster,
-                                    vec.x, vec.y, vec.z, bstate.soundType.placeSound, SoundSource.BLOCKS, 1.0f,
+                                    pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
+                                    bstate.soundType.placeSound, SoundSource.BLOCKS, 1.0f,
                                     1.0f + (Math.random() * 0.5 - 0.25).toFloat()
                                 )
                                 val particle = BlockParticleOption(ParticleTypes.BLOCK, bstate)
-                                ctx.world.sendParticles(particle, vec.x, vec.y, vec.z, 4, 0.1, 0.2, 0.1, 0.1)
+                                ctx.world.sendParticles(
+                                    particle, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
+                                    4, 0.1, 0.2, 0.1, 0.1
+                                )
                             }
                         } else {
                             ctx.caster.setItemInHand(ctx.castingHand, oldStack)

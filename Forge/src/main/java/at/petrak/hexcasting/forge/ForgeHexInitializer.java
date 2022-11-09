@@ -9,7 +9,6 @@ import at.petrak.hexcasting.common.blocks.behavior.HexComposting;
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables;
 import at.petrak.hexcasting.common.casting.RegisterPatterns;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
-import at.petrak.hexcasting.common.command.PatternResLocArgument;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
@@ -18,7 +17,7 @@ import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
-import at.petrak.hexcasting.common.recipe.HexRecipeSerializers;
+import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
 import at.petrak.hexcasting.forge.datagen.HexForgeDataGenerators;
@@ -30,15 +29,13 @@ import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,13 +46,12 @@ import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingConversionEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -65,9 +61,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegisterEvent;
 import thedarkcolour.kotlinforforge.KotlinModLoadingContext;
 
 import java.util.function.BiConsumer;
@@ -95,34 +89,34 @@ public class ForgeHexInitializer {
     }
 
     private static void initRegistry() {
-        bind(ForgeRegistries.SOUND_EVENTS, HexSounds::registerSounds);
-        bind(ForgeRegistries.BLOCKS, HexBlocks::registerBlocks);
-        bind(ForgeRegistries.ITEMS, HexBlocks::registerBlockItems);
-        bind(ForgeRegistries.BLOCK_ENTITIES, HexBlockEntities::registerTiles);
-        bind(ForgeRegistries.ITEMS, HexItems::registerItems);
+        bind(Registry.SOUND_EVENT_REGISTRY, HexSounds::registerSounds);
+        bind(Registry.BLOCK_REGISTRY, HexBlocks::registerBlocks);
+        bind(Registry.ITEM_REGISTRY, HexBlocks::registerBlockItems);
+        bind(Registry.BLOCK_ENTITY_TYPE_REGISTRY, HexBlockEntities::registerTiles);
+        bind(Registry.ITEM_REGISTRY, HexItems::registerItems);
 
-        bind(ForgeRegistries.RECIPE_SERIALIZERS, HexRecipeSerializers::registerSerializers);
+        bind(Registry.RECIPE_SERIALIZER_REGISTRY, HexRecipeStuffRegistry::registerSerializers);
+        bind(Registry.RECIPE_TYPE_REGISTRY, HexRecipeStuffRegistry::registerTypes);
 
-        bind(ForgeRegistries.ENTITIES, HexEntities::registerEntities);
+        bind(Registry.ENTITY_TYPE_REGISTRY, HexEntities::registerEntities);
 
-        bind(ForgeRegistries.PARTICLE_TYPES, HexParticles::registerParticles);
+        bind(Registry.PARTICLE_TYPE_REGISTRY, HexParticles::registerParticles);
 
-        ArgumentTypes.register(HexAPI.MOD_ID + ":pattern", PatternResLocArgument.class,
-            new EmptyArgumentSerializer<>(PatternResLocArgument::id));
+        ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
+
+        HexIotaTypes.registerTypes();
+
         HexAdvancementTriggers.registerTriggers();
     }
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
-    private static <T extends IForgeRegistryEntry<T>> void bind(IForgeRegistry<T> registry,
+    private static <T> void bind(ResourceKey<Registry<T>> registry,
         Consumer<BiConsumer<T, ResourceLocation>> source) {
-        getModEventBus().addGenericListener(registry.getRegistrySuperType(),
-            (RegistryEvent.Register<T> event) -> {
-                IForgeRegistry<T> forgeRegistry = event.getRegistry();
-                source.accept((t, rl) -> {
-                    t.setRegistryName(rl);
-                    forgeRegistry.register(t);
-                });
-            });
+        getModEventBus().addListener((RegisterEvent event) -> {
+            if (registry.equals(event.getRegistryKey())) {
+                source.accept((t, rl) -> event.register(registry, rl, () -> t));
+            }
+        });
     }
 
     private static void initListeners() {
@@ -146,13 +140,14 @@ public class ForgeHexInitializer {
             }));
 
         // We have to do these at some point when the registries are still open
-        modBus.addGenericListener(Item.class, (RegistryEvent<Item> evt) -> {
-            HexRecipeSerializers.registerTypes();
-            CraftingHelper.register(ForgeUnsealedIngredient.ID, ForgeUnsealedIngredient.Serializer.INSTANCE);
-            CraftingHelper.register(ForgeModConditionalIngredient.ID, ForgeModConditionalIngredient.Serializer.INSTANCE);
-            HexStatistics.register();
-            HexLootFunctions.registerSerializers((lift, id) ->
-                Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));
+        modBus.addListener((RegisterEvent evt) -> {
+            if (evt.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
+                CraftingHelper.register(ForgeUnsealedIngredient.ID, ForgeUnsealedIngredient.Serializer.INSTANCE);
+                CraftingHelper.register(ForgeModConditionalIngredient.ID, ForgeModConditionalIngredient.Serializer.INSTANCE);
+                HexStatistics.register();
+                HexLootFunctions.registerSerializers((lift, id) ->
+                    Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));
+            }
         });
 
         modBus.addListener((FMLLoadCompleteEvent evt) ->
@@ -160,41 +155,49 @@ public class ForgeHexInitializer {
 
         evBus.addListener((PlayerInteractEvent.EntityInteract evt) -> {
             var res = Brainsweeping.tradeWithVillager(
-                evt.getPlayer(), evt.getWorld(), evt.getHand(), evt.getTarget(), null);
+                evt.getEntity(), evt.getLevel(), evt.getHand(), evt.getTarget(), null);
             if (res.consumesAction()) {
                 evt.setCanceled(true);
                 evt.setCancellationResult(res);
             }
         });
         evBus.addListener((LivingConversionEvent.Post evt) ->
-            Brainsweeping.copyBrainsweepFromVillager(evt.getEntityLiving(), evt.getOutcome()));
+            Brainsweeping.copyBrainsweepFromVillager(evt.getEntity(), evt.getOutcome()));
 
-        evBus.addListener((LivingEvent.LivingUpdateEvent evt) -> {
-            OpFlight.INSTANCE.tickDownFlight(evt.getEntityLiving());
-            ItemLens.tickLens(evt.getEntityLiving());
+        evBus.addListener((LivingEvent.LivingTickEvent evt) -> {
+            OpFlight.INSTANCE.tickDownFlight(evt.getEntity());
+            ItemLens.tickLens(evt.getEntity());
         });
 
-        evBus.addListener((TickEvent.WorldTickEvent evt) -> {
-            if (evt.phase == TickEvent.Phase.END && evt.world instanceof ServerLevel world) {
+        evBus.addListener((TickEvent.LevelTickEvent evt) -> {
+            if (evt.phase == TickEvent.Phase.END && evt.level instanceof ServerLevel world) {
                 PlayerPositionRecorder.updateAllPlayers(world);
             }
         });
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
 
-        evBus.addListener((PlayerEvent.BreakSpeed evt) ->
-            evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getPlayer(), evt.getState(), evt.getPos())));
+        evBus.addListener((PlayerEvent.BreakSpeed evt) -> {
+            var pos = evt.getPosition();
+            // tracing the dataflow, this is only empty if someone is calling a deprecated function for the
+            // break speed. This will probably not ever hapen, but hey! i will never complain about correctness
+            // enforced at the type level.
+            if (pos.isEmpty()) {
+                return;
+            }
+            evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getEntity(), evt.getState(), pos.get()));
+        });
 
         evBus.addListener((LootTableLoadEvent evt) -> HexLootHandler.lootLoad(
             evt.getName(),
-            evt.getTable()::addPool));
+            builder -> evt.getTable().addPool(builder.build())));
 
         // === Events implemented in other ways on Fabric
 
         // On Fabric this should be auto-synced
         evBus.addListener((PlayerEvent.StartTracking evt) -> {
             Entity target = evt.getTarget();
-            if (evt.getPlayer() instanceof ServerPlayer serverPlayer &&
+            if (evt.getTarget() instanceof ServerPlayer serverPlayer &&
                 target instanceof Mob mob && IXplatAbstractions.INSTANCE.isBrainswept(mob)) {
                 ForgePacketHandler.getNetwork()
                     .send(PacketDistributor.PLAYER.with(() -> serverPlayer), MsgBrainsweepAck.of(mob));
@@ -216,6 +219,7 @@ public class ForgeHexInitializer {
         modBus.addListener(ForgeCapabilityHandler::registerCaps);
         evBus.addGenericListener(ItemStack.class, ForgeCapabilityHandler::attachItemCaps);
         evBus.addGenericListener(BlockEntity.class, ForgeCapabilityHandler::attachBlockEntityCaps);
+        evBus.addGenericListener(Entity.class, ForgeCapabilityHandler::attachEntityCaps);
 
         modBus.register(HexForgeDataGenerators.class);
         modBus.register(ForgeCapabilityHandler.class);

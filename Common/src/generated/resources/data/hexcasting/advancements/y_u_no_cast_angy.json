@@ -1,23 +1,23 @@
 {
   "parent": "hexcasting:root",
+  "criteria": {
+    "did_the_thing": {
+      "trigger": "hexcasting:fail_to_cast_great_spell"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:blaze_powder"
-    },
-    "title": {
-      "translate": "advancement.hexcasting:y_u_no_cast_angy"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancement.hexcasting:y_u_no_cast_angy.desc"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:blaze_powder"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "did_the_thing": {
-      "trigger": "hexcasting:fail_to_cast_great_spell"
+    "title": {
+      "translate": "advancement.hexcasting:y_u_no_cast_angy"
     }
   },
   "requirements": [

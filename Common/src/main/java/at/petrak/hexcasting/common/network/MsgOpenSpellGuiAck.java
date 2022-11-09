@@ -4,12 +4,11 @@ import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -17,7 +16,12 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client when the player opens the spell gui to request the server provide the current stack.
  */
-public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> patterns, List<Component> components)
+public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> patterns,
+                                 List<CompoundTag> stack,
+                                 List<CompoundTag> parenthesized,
+                                 CompoundTag ravenmind,
+                                 int parenCount
+)
     implements IMessage {
     public static final ResourceLocation ID = modLoc("cgui");
 
@@ -31,33 +35,27 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
 
         var hand = buf.readEnum(InteractionHand.class);
 
-        var patternsLen = buf.readInt();
-        var patterns = new ArrayList<ResolvedPattern>(patternsLen);
-        for (int i = 0; i < patternsLen; i++) {
-            patterns.add(ResolvedPattern.fromNBT(buf.readAnySizeNbt()));
-        }
+        var patterns = buf.readList(fbb -> ResolvedPattern.fromNBT(fbb.readAnySizeNbt()));
 
-        var descsLen = buf.readInt();
-        var desc = new ArrayList<Component>(descsLen);
-        for (int i = 0; i < descsLen; i++) {
-            desc.add(buf.readComponent());
-        }
+        var stack = buf.readList(FriendlyByteBuf::readNbt);
+        var parens = buf.readList(FriendlyByteBuf::readNbt);
+        var raven = buf.readAnySizeNbt();
 
-        return new MsgOpenSpellGuiAck(hand, patterns, desc);
+        var parenCount = buf.readVarInt();
+
+        return new MsgOpenSpellGuiAck(hand, patterns, stack, parens, raven, parenCount);
     }
 
     public void serialize(FriendlyByteBuf buf) {
         buf.writeEnum(this.hand);
 
-        buf.writeInt(this.patterns.size());
-        for (var pattern : this.patterns) {
-            buf.writeNbt(pattern.serializeToNBT());
-        }
+        buf.writeCollection(this.patterns, (fbb, pat) -> fbb.writeNbt(pat.serializeToNBT()));
 
-        buf.writeInt(this.components.size());
-        for (var desc : this.components) {
-            buf.writeComponent(desc);
-        }
+        buf.writeCollection(this.stack, FriendlyByteBuf::writeNbt);
+        buf.writeCollection(this.parenthesized, FriendlyByteBuf::writeNbt);
+        buf.writeNbt(this.ravenmind);
+
+        buf.writeVarInt(this.parenCount);
     }
 
     public static void handle(MsgOpenSpellGuiAck msg) {
@@ -65,7 +63,9 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
             @Override
             public void run() {
                 var mc = Minecraft.getInstance();
-                mc.setScreen(new GuiSpellcasting(msg.hand(), msg.patterns(), msg.components()));
+                mc.setScreen(
+                    new GuiSpellcasting(msg.hand(), msg.patterns(), msg.stack, msg.parenthesized, msg.ravenmind,
+                        msg.parenCount));
             }
         });
     }

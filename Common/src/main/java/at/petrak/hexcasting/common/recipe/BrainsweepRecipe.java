@@ -37,12 +37,12 @@ public record BrainsweepRecipe(
 
     @Override
     public RecipeType<?> getType() {
-        return HexRecipeSerializers.BRAINSWEEP_TYPE;
+        return HexRecipeStuffRegistry.BRAINSWEEP_TYPE;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return HexRecipeSerializers.BRAINSWEEP;
+        return HexRecipeStuffRegistry.BRAINSWEEP;
     }
 
     // in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards

@@ -47,21 +47,21 @@ public class HexLootTables extends PaucalLootTableProvider {
         dropSelf(blockTables, HexBlocks.EMPTY_IMPETUS,
             HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_STOREDPLAYER,
             HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.EMPTY_DIRECTRIX,
-            HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_CONNECTOR,
+            HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_LIGATURE,
             HexBlocks.SLATE_BLOCK, HexBlocks.AMETHYST_DUST_BLOCK, HexBlocks.AMETHYST_TILES, HexBlocks.SCROLL_PAPER,
             HexBlocks.ANCIENT_SCROLL_PAPER, HexBlocks.SCROLL_PAPER_LANTERN, HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN,
             HexBlocks.SCONCE,
-            HexBlocks.AKASHIC_LOG, HexBlocks.AKASHIC_LOG_STRIPPED, HexBlocks.AKASHIC_WOOD,
-            HexBlocks.AKASHIC_WOOD_STRIPPED,
-            HexBlocks.AKASHIC_PLANKS, HexBlocks.AKASHIC_TILE, HexBlocks.AKASHIC_PANEL,
-            HexBlocks.AKASHIC_TRAPDOOR, HexBlocks.AKASHIC_STAIRS, HexBlocks.AKASHIC_PRESSURE_PLATE,
-            HexBlocks.AKASHIC_BUTTON);
+            HexBlocks.EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_LOG, HexBlocks.EDIFIED_WOOD,
+            HexBlocks.STRIPPED_EDIFIED_WOOD,
+            HexBlocks.EDIFIED_PLANKS, HexBlocks.EDIFIED_TILE, HexBlocks.EDIFIED_PANEL,
+            HexBlocks.EDIFIED_TRAPDOOR, HexBlocks.EDIFIED_STAIRS, HexBlocks.EDIFIED_PRESSURE_PLATE,
+            HexBlocks.EDIFIED_BUTTON);
 
-        makeSlabTable(blockTables, HexBlocks.AKASHIC_SLAB);
+        makeSlabTable(blockTables, HexBlocks.EDIFIED_SLAB);
 
-        makeLeafTable(blockTables, HexBlocks.AKASHIC_LEAVES1);
-        makeLeafTable(blockTables, HexBlocks.AKASHIC_LEAVES2);
-        makeLeafTable(blockTables, HexBlocks.AKASHIC_LEAVES3);
+        makeLeafTable(blockTables, HexBlocks.AMETHYST_EDIFIED_LEAVES);
+        makeLeafTable(blockTables, HexBlocks.AVENTURINE_EDIFIED_LEAVES);
+        makeLeafTable(blockTables, HexBlocks.CITRINE_EDIFIED_LEAVES);
 
         var slatePool = LootPool.lootPool()
             .setRolls(ConstantValue.exactly(1))
@@ -70,11 +70,11 @@ public class HexLootTables extends PaucalLootTableProvider {
                     .copy(BlockEntitySlate.TAG_PATTERN, "BlockEntityTag." + BlockEntitySlate.TAG_PATTERN)));
         blockTables.put(HexBlocks.SLATE, LootTable.lootTable().withPool(slatePool));
 
-        var doorPool = dropThisPool(HexBlocks.AKASHIC_DOOR, 1)
-            .when(new LootItemBlockStatePropertyCondition.Builder(HexBlocks.AKASHIC_DOOR).setProperties(
+        var doorPool = dropThisPool(HexBlocks.EDIFIED_DOOR, 1)
+            .when(new LootItemBlockStatePropertyCondition.Builder(HexBlocks.EDIFIED_DOOR).setProperties(
                 StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER)
             ));
-        blockTables.put(HexBlocks.AKASHIC_DOOR, LootTable.lootTable().withPool(doorPool));
+        blockTables.put(HexBlocks.EDIFIED_DOOR, LootTable.lootTable().withPool(doorPool));
 
 
         var noSilkTouchCond = MatchTool.toolMatches(

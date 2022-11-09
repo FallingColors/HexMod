@@ -82,21 +82,21 @@ public class FabricHexConfig {
             ConfigTypes.DOUBLE.withMinimum(0d));
 
         public ConfigTree configure(ConfigTreeBuilder bob) {
-            bob.fork("Mana Amounts")
-                .beginValue("dustManaAmount", ConfigTypes.NATURAL, DEFAULT_DUST_MANA_AMOUNT)
-                .withComment("How much mana a single Amethyst Dust item is worth")
+            bob.fork("Media Amounts")
+                .beginValue("dustMediaAmount", ConfigTypes.NATURAL, DEFAULT_DUST_MEDIA_AMOUNT)
+                .withComment("How much media a single Amethyst Dust item is worth")
                 .finishValue(dustManaAmount::mirror)
 
-                .beginValue("shardManaAmount", ConfigTypes.NATURAL, DEFAULT_SHARD_MANA_AMOUNT)
-                .withComment("How much mana a single Amethyst Shard item is worth")
+                .beginValue("shardMediaAmount", ConfigTypes.NATURAL, DEFAULT_SHARD_MEDIA_AMOUNT)
+                .withComment("How much media a single Amethyst Shard item is worth")
                 .finishValue(shardManaAmount::mirror)
 
-                .beginValue("chargedCrystalManaAmount", ConfigTypes.NATURAL, DEFAULT_CHARGED_MANA_AMOUNT)
-                .withComment("How much mana a single Charged Amethyst Crystal item is worth")
+                .beginValue("chargedCrystalMediaAmount", ConfigTypes.NATURAL, DEFAULT_CHARGED_MEDIA_AMOUNT)
+                .withComment("How much media a single Charged Amethyst Crystal item is worth")
                 .finishValue(chargedCrystalManaAmount::mirror)
 
-                .beginValue("manaToHealthRate", ConfigTypes.DOUBLE, DEFAULT_MANA_TO_HEALTH_RATE)
-                .withComment("How many points of mana a half-heart is worth when casting from HP")
+                .beginValue("mediaToHealthRate", ConfigTypes.DOUBLE, DEFAULT_MANA_TO_HEALTH_RATE)
+                .withComment("How many points of media a half-heart is worth when casting from HP")
                 .finishValue(manaToHealthRate::mirror)
                 .finishBranch();
 
@@ -104,22 +104,22 @@ public class FabricHexConfig {
         }
 
         @Override
-        public int dustManaAmount() {
+        public int dustMediaAmount() {
             return dustManaAmount.getValue();
         }
 
         @Override
-        public int shardManaAmount() {
+        public int shardMediaAmount() {
             return shardManaAmount.getValue();
         }
 
         @Override
-        public int chargedCrystalManaAmount() {
+        public int chargedCrystalMediaAmount() {
             return chargedCrystalManaAmount.getValue();
         }
 
         @Override
-        public double manaToHealthRate() {
+        public double mediaToHealthRate() {
             return manaToHealthRate.getValue();
         }
     }
@@ -128,10 +128,10 @@ public class FabricHexConfig {
         private final PropertyMirror<Double> patternPointSpeedMultiplier = PropertyMirror.create(
             ConfigTypes.DOUBLE.withMinimum(0d));
         private final PropertyMirror<Boolean> ctrlTogglesOffStrokeOrder = PropertyMirror.create(ConfigTypes.BOOLEAN);
-        private final PropertyMirror<Double> gridSnapThreshold = PropertyMirror.create(
-            ConfigTypes.DOUBLE.withMinimum(0.5).withMaximum(1.0));
         private final PropertyMirror<Boolean> invertSpellbookScrollDirection = PropertyMirror.create(ConfigTypes.BOOLEAN);
         private final PropertyMirror<Boolean> invertAbacusScrollDirection = PropertyMirror.create(ConfigTypes.BOOLEAN);
+        private final PropertyMirror<Double> gridSnapThreshold = PropertyMirror.create(
+            ConfigTypes.DOUBLE.withMinimum(0.5).withMaximum(1.0));
 
         public ConfigTree configure(ConfigTreeBuilder bob) {
             bob
@@ -143,11 +143,6 @@ public class FabricHexConfig {
                 .withComment("Whether the ctrl key will instead turn *off* the color gradient on patterns")
                 .finishValue(ctrlTogglesOffStrokeOrder::mirror)
 
-                .beginValue("gridSnapThreshold", ConfigTypes.DOUBLE, DEFAULT_GRID_SNAP_THRESHOLD)
-                .withComment(
-                    "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way.  Valid range is 0.5 to 1.0, and may cause client crashes if set above or below those values.")
-                .finishValue(gridSnapThreshold::mirror)
-
                 .beginValue("invertSpellbookScrollDirection", ConfigTypes.BOOLEAN, DEFAULT_INVERT_SPELLBOOK_SCROLL)
                 .withComment("Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and vice versa")
                 .finishValue(invertSpellbookScrollDirection::mirror)
@@ -156,7 +151,10 @@ public class FabricHexConfig {
                 .withComment("Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
                 .finishValue(invertAbacusScrollDirection::mirror)
 
-            ;
+                .beginValue("gridSnapThreshold", ConfigTypes.DOUBLE, DEFAULT_GRID_SNAP_THRESHOLD)
+                .withComment(
+                    "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way.  Valid range is 0.5 to 1.0, and may cause client crashes if set above or below those values.")
+                .finishValue(gridSnapThreshold::mirror);
 
             return bob.build();
         }

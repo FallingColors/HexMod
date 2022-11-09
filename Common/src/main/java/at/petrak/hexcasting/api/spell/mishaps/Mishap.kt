@@ -2,11 +2,11 @@ package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexItemTags
-import at.petrak.hexcasting.api.spell.Operator
+import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.SpellDatum
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
@@ -24,7 +24,7 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 
-sealed class Mishap : Throwable() {
+abstract class Mishap : Throwable() {
     /** Mishaps spray half-red, half-this-color. */
     abstract fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer
 
@@ -39,7 +39,7 @@ sealed class Mishap : Throwable() {
      *
      * You can also mess up the stack with this.
      */
-    abstract fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<SpellDatum<*>>)
+    abstract fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>)
 
     abstract fun errorMessage(ctx: CastingContext, errorCtx: Context): Component
 
@@ -54,14 +54,14 @@ sealed class Mishap : Throwable() {
     protected fun error(stub: String, vararg args: Any): Component =
         "hexcasting.mishap.$stub".asTranslatedComponent(*args)
 
-    protected fun actionName(action: Operator?): Component =
+    protected fun actionName(action: Action?): Component =
         action?.displayName ?: "hexcasting.spell.null".asTranslatedComponent.lightPurple
 
     protected fun yeetHeldItemsTowards(ctx: CastingContext, targetPos: Vec3) {
         // Knock the player's items out of their hands
         val items = mutableListOf<ItemStack>()
         for (hand in InteractionHand.values()) {
-            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).`is`(HexItemTags.WANDS)) {
+            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).`is`(HexItemTags.STAVES)) {
                 items.add(ctx.caster.getItemInHand(hand).copy())
                 ctx.caster.setItemInHand(hand, ItemStack.EMPTY)
             }
@@ -101,7 +101,7 @@ sealed class Mishap : Throwable() {
         return ctx.world.getBlockState(pos).block.name
     }
 
-    data class Context(val pattern: HexPattern, val action: Operator?)
+    data class Context(val pattern: HexPattern, val action: Action?)
 
     companion object {
         fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
@@ -113,7 +113,11 @@ sealed class Mishap : Throwable() {
                 else
                     entity.lastHurt -= amount
             }
-            if (!entity.hurt(source, amount)) {
+            if (!entity.hurt(source, amount) &&
+                !entity.isInvulnerableTo(source) &&
+                !entity.level.isClientSide &&
+                !entity.isDeadOrDying) {
+
                 // Ok, if you REALLY don't want to play nice...
                 entity.health = targetHealth
                 entity.markHurt()

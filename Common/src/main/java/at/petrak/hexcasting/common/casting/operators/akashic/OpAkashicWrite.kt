@@ -1,18 +1,18 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.MishapNoAkashicRecord
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
-import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
 import at.petrak.hexcasting.common.lib.HexSounds
 import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundSource
-import net.minecraft.world.phys.Vec3
 
-object OpAkashicWrite : SpellOperator {
+object OpAkashicWrite : SpellAction {
     override val argc = 3
 
     override val isGreat = true
@@ -20,19 +20,18 @@ object OpAkashicWrite : SpellOperator {
     override val causesBlindDiversion = false
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val pos = args.getChecked<Vec3>(0, argc)
-        val key = args.getChecked<HexPattern>(1, argc)
-        val datum = args[2]
+        val pos = args.getBlockPos(0, argc)
+        val key = args.getPattern(1, argc)
+        val datum = args.get(2)
 
         ctx.assertVecInRange(pos)
 
-        val bpos = BlockPos(pos)
-        val tile = ctx.world.getBlockEntity(bpos)
-        if (tile !is BlockEntityAkashicRecord) {
-            throw MishapNoAkashicRecord(bpos)
+        val record = ctx.world.getBlockState(pos).block
+        if (record !is BlockAkashicRecord) {
+            throw MishapNoAkashicRecord(pos)
         }
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
@@ -40,19 +39,24 @@ object OpAkashicWrite : SpellOperator {
             throw MishapOthersName(trueName)
 
         return Triple(
-            Spell(tile, key, datum),
-            ManaConstants.DUST_UNIT,
+            Spell(record, pos, key, datum),
+            MediaConstants.DUST_UNIT,
             listOf()
         )
     }
 
-    private data class Spell(val record: BlockEntityAkashicRecord, val key: HexPattern, val datum: SpellDatum<*>) :
+    private data class Spell(
+        val record: BlockAkashicRecord,
+        val recordPos: BlockPos,
+        val key: HexPattern,
+        val datum: Iota
+    ) :
         RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            record.addNewDatum(key, datum)
+            record.addNewDatum(recordPos, ctx.world, key, datum)
 
             ctx.world.playSound(
-                null, record.blockPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
+                null, recordPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
                 1f, 0.8f
             )
 

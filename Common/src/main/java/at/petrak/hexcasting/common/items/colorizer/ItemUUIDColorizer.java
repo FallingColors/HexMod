@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items.colorizer;
 
-import at.petrak.hexcasting.api.addldata.Colorizer;
+import at.petrak.hexcasting.api.addldata.ADColorizer;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import at.petrak.paucal.api.PaucalAPI;
 import net.minecraft.world.item.Item;
@@ -35,7 +35,7 @@ public class ItemUUIDColorizer extends Item implements ColorizerItem {
                     }
                 }
                 if (ok) {
-                    return Colorizer.morphBetweenColors(colors, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
+                    return ADColorizer.morphBetweenColors(colors, new Vec3(0.1, 0.1, 0.1), time / 20 / 20, position);
                 }
             }
         }

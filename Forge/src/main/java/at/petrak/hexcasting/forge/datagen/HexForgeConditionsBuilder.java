@@ -17,47 +17,47 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class HexForgeConditionsBuilder implements IXplatConditionsBuilder, IConditionBuilder {
-	private final List<ICondition> conditions = new ArrayList<>();
-	private final RecipeBuilder parent;
+    private final List<ICondition> conditions = new ArrayList<>();
+    private final RecipeBuilder parent;
 
-	public HexForgeConditionsBuilder(RecipeBuilder parent) {
-		this.parent = parent;
-	}
+    public HexForgeConditionsBuilder(RecipeBuilder parent) {
+        this.parent = parent;
+    }
 
-	@Override
-	public IXplatConditionsBuilder whenModLoaded(String modid) {
-		conditions.add(modLoaded(modid));
-		return this;
-	}
+    @Override
+    public IXplatConditionsBuilder whenModLoaded(String modid) {
+        conditions.add(modLoaded(modid));
+        return this;
+    }
 
-	@Override
-	public IXplatConditionsBuilder whenModMissing(String modid) {
-		conditions.add(not(modLoaded(modid)));
-		return this;
-	}
+    @Override
+    public IXplatConditionsBuilder whenModMissing(String modid) {
+        conditions.add(not(modLoaded(modid)));
+        return this;
+    }
 
-	@Override
-	public @NotNull RecipeBuilder unlockedBy(@NotNull String string, @NotNull CriterionTriggerInstance criterionTriggerInstance) {
-		return parent.unlockedBy(string, criterionTriggerInstance);
-	}
+    @Override
+    public @NotNull RecipeBuilder unlockedBy(@NotNull String string, @NotNull CriterionTriggerInstance criterionTriggerInstance) {
+        return parent.unlockedBy(string, criterionTriggerInstance);
+    }
 
-	@Override
-	public @NotNull RecipeBuilder group(@Nullable String string) {
-		return parent.group(string);
-	}
+    @Override
+    public @NotNull RecipeBuilder group(@Nullable String string) {
+        return parent.group(string);
+    }
 
-	@Override
-	public @NotNull Item getResult() {
-		return parent.getResult();
-	}
+    @Override
+    public @NotNull Item getResult() {
+        return parent.getResult();
+    }
 
-	@Override
-	public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation resourceLocation) {
-		var conditionalBuilder = ConditionalRecipe.builder();
-		for (ICondition condition : conditions) {
-			conditionalBuilder.addCondition(condition);
-		}
-		conditionalBuilder.addRecipe(recipeConsumer -> parent.save(recipeConsumer, resourceLocation))
-			.build(consumer, resourceLocation);
-	}
+    @Override
+    public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation resourceLocation) {
+        var conditionalBuilder = ConditionalRecipe.builder();
+        for (ICondition condition : conditions) {
+            conditionalBuilder.addCondition(condition);
+        }
+        conditionalBuilder.addRecipe(recipeConsumer -> parent.save(recipeConsumer, resourceLocation))
+            .build(consumer, resourceLocation);
+    }
 }

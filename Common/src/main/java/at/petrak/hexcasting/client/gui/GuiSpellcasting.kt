@@ -11,11 +11,11 @@ import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
-import at.petrak.hexcasting.client.ShiftScrollListener
-import at.petrak.hexcasting.client.drawPatternFromPoints
-import at.petrak.hexcasting.client.drawSpot
+import at.petrak.hexcasting.api.utils.gold
+import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.sound.GridSoundInstance
+import at.petrak.hexcasting.common.lib.HexIotaTypes
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
@@ -25,51 +25,89 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
-import net.minecraft.network.chat.Component
+import net.minecraft.client.resources.sounds.SoundInstance
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.sounds.SoundSource
+import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
-import kotlin.math.atan2
-import kotlin.math.roundToInt
-import kotlin.math.sign
-import kotlin.math.sqrt
+import kotlin.math.*
 
-class GuiSpellcasting(
+class GuiSpellcasting constructor(
     private val handOpenedWith: InteractionHand,
     private var patterns: MutableList<ResolvedPattern>,
-    private var stackDescs: List<Component>
+    private var cachedStack: List<CompoundTag>,
+    private var cachedParens: List<CompoundTag>,
+    private var cachedRavenmind: CompoundTag?,
+    private var parenCount: Int,
 ) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
+    private var stackDescs: List<FormattedCharSequence> = listOf()
+    private var parenDescs: List<FormattedCharSequence> = listOf()
+    private var ravenmind: List<FormattedCharSequence>? = null
+
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
     private var ambianceSoundInstance: GridSoundInstance? = null
 
+    private val randSrc = SoundInstance.createUnseededRandom()
+
     init {
         for ((pattern, origin) in patterns) {
             this.usedSpots.addAll(pattern.positions(origin))
         }
+        this.calculateIotaDisplays()
     }
 
     fun recvServerUpdate(info: ControllerInfo, index: Int) {
-        this.stackDescs = info.stackDesc
         this.patterns.getOrNull(index)?.let {
             it.type = info.resolutionType
         }
 
+        val mc = Minecraft.getInstance()
         if (info.resolutionType.success) {
-            Minecraft.getInstance().soundManager.play(
+            mc.soundManager.play(
                 SimpleSoundInstance(
                     HexSounds.ADD_PATTERN,
                     SoundSource.PLAYERS,
                     0.5f,
                     1f + (Math.random().toFloat() - 0.5f) * 0.1f,
+                    randSrc,
                     this.ambianceSoundInstance!!.x,
                     this.ambianceSoundInstance!!.y,
                     this.ambianceSoundInstance!!.z,
                 )
             )
         }
+
+        this.cachedStack = info.stack
+        this.cachedParens = info.parenthesized
+        this.cachedRavenmind = info.ravenmind
+        this.parenCount = info.parenCount
+        this.calculateIotaDisplays()
+    }
+
+    fun calculateIotaDisplays() {
+        val mc = Minecraft.getInstance()
+        val width = (this.width * LHS_IOTAS_ALLOCATION).toInt()
+        this.stackDescs =
+            this.cachedStack.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font).asReversed() }
+                .asReversed()
+        this.parenDescs = if (this.cachedParens.isNotEmpty())
+            this.cachedParens.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
+        else if (this.parenCount > 0)
+            listOf("...".gold.visualOrderText)
+        else
+            emptyList()
+        this.ravenmind =
+            this.cachedRavenmind?.let {
+                HexIotaTypes.getDisplayWithMaxWidth(
+                    it,
+                    (this.width * RHS_IOTAS_ALLOCATION).toInt(),
+                    mc.font
+                )
+            }
     }
 
     override fun init() {
@@ -81,6 +119,8 @@ class GuiSpellcasting(
             this.ambianceSoundInstance = GridSoundInstance(player)
             soundManager.play(this.ambianceSoundInstance!!)
         }
+
+        this.calculateIotaDisplays()
     }
 
     override fun tick() {
@@ -88,7 +128,7 @@ class GuiSpellcasting(
         val player = minecraft.player
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
-            if (heldItem.isEmpty || !heldItem.`is`(HexItemTags.WANDS))
+            if (heldItem.isEmpty || !heldItem.`is`(HexItemTags.STAVES))
                 onClose()
         }
     }
@@ -110,6 +150,7 @@ class GuiSpellcasting(
                         SoundSource.PLAYERS,
                         0.25f,
                         1f,
+                        randSrc,
                         this.ambianceSoundInstance!!.x,
                         this.ambianceSoundInstance!!.y,
                         this.ambianceSoundInstance!!.z,
@@ -137,9 +178,9 @@ class GuiSpellcasting(
         if (anchorCoord != null) {
             val anchor = this.coordToPx(anchorCoord)
             val mouse = Vec2(mx.toFloat(), my.toFloat())
-            if (anchor.distanceToSqr(mouse) >=
-                this.hexSize() * this.hexSize() * 2.0 * HexConfig.client().gridSnapThreshold()
-            ) {
+            val snapDist =
+                this.hexSize() * this.hexSize() * 2.0 * Mth.clamp(HexConfig.client().gridSnapThreshold(), 0.5, 1.0)
+            if (anchor.distanceToSqr(mouse) >= snapDist) {
                 val delta = mouse.add(anchor.negated())
                 val angle = atan2(delta.y, delta.x)
                 // 0 is right, increases clockwise(?)
@@ -185,6 +226,7 @@ class GuiSpellcasting(
                             SoundSource.PLAYERS,
                             0.25f,
                             1f + (Math.random().toFloat() - 0.5f) * 0.1f,
+                            randSrc,
                             this.ambianceSoundInstance!!.x,
                             this.ambianceSoundInstance!!.y,
                             this.ambianceSoundInstance!!.z,
@@ -256,13 +298,14 @@ class GuiSpellcasting(
         super.onClose()
     }
 
-    override fun render(poseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        super.render(poseStack, pMouseX, pMouseY, pPartialTick)
+
+    override fun render(ps: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        super.render(ps, pMouseX, pMouseY, pPartialTick)
 
         this.ambianceSoundInstance?.mousePosX = pMouseX / this.width.toDouble()
         this.ambianceSoundInstance?.mousePosY = pMouseX / this.width.toDouble()
 
-        val mat = poseStack.last().pose()
+        val mat = ps.last().pose()
         val prevShader = RenderSystem.getShader()
         RenderSystem.setShader(GameRenderer::getPositionColorShader)
         RenderSystem.disableDepthTest()
@@ -305,6 +348,7 @@ class GuiSpellcasting(
                     this.hexSize(),
                     this.coordToPx(origin)
                 ),
+                findDupIndices(pat.positions()),
                 true,
                 valid.color or (0xC8 shl 24),
                 valid.fadeColor or (0xC8 shl 24),
@@ -315,12 +359,14 @@ class GuiSpellcasting(
         // Now draw the currently WIP pattern
         if (this.drawState !is PatternDrawState.BetweenPatterns) {
             val points = mutableListOf<Vec2>()
+            var dupIndices: Set<Int>? = null
 
             if (this.drawState is PatternDrawState.JustStarted) {
                 val ds = this.drawState as PatternDrawState.JustStarted
                 points.add(this.coordToPx(ds.start))
             } else if (this.drawState is PatternDrawState.Drawing) {
                 val ds = this.drawState as PatternDrawState.Drawing
+                dupIndices = findDupIndices(ds.wipPattern.positions())
                 for (pos in ds.wipPattern.positions()) {
                     val pix = this.coordToPx(pos + ds.start)
                     points.add(pix)
@@ -328,18 +374,76 @@ class GuiSpellcasting(
             }
 
             points.add(mousePos)
-            drawPatternFromPoints(mat, points, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt(), 0.1f)
+            drawPatternFromPoints(mat, points, dupIndices, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt(), 0.1f)
         }
 
-        RenderSystem.setShader { prevShader }
         RenderSystem.enableDepthTest()
 
         val mc = Minecraft.getInstance()
         val font = mc.font
-        for ((i, s) in this.stackDescs.withIndex()) {
-            val offsetIdx = this.stackDescs.size - i - 1
-            font.draw(poseStack, s, 10f, 10f + 9f * offsetIdx, -1)
+        ps.pushPose()
+        ps.translate(10.0, 10.0, 0.0)
+
+        if (this.parenCount > 0) {
+            val boxHeight = (this.parenDescs.size + 1f) * 10f
+            RenderSystem.setShader(GameRenderer::getPositionColorShader)
+            RenderSystem.defaultBlendFunc()
+            drawBox(ps, 0f, 0f, (this.width * LHS_IOTAS_ALLOCATION + 5).toFloat(), boxHeight, 7.5f)
+            ps.translate(0.0, 0.0, 1.0)
+
+            val time = ClientTickCounter.getTotal() * 0.16f
+            val opacity = (Mth.map(cos(time), -1f, 1f, 200f, 255f)).toInt()
+            val color = 0x00_ffffff or (opacity shl 24)
+            RenderSystem.setShader { prevShader }
+            for (desc in this.parenDescs) {
+                font.draw(ps, desc, 10f, 7f, color)
+                ps.translate(0.0, 10.0, 0.0)
+            }
+            ps.translate(0.0, 15.0, 0.0)
         }
+
+        if (this.stackDescs.isNotEmpty()) {
+            val boxHeight = (this.stackDescs.size + 1f) * 10f
+            RenderSystem.setShader(GameRenderer::getPositionColorShader)
+            RenderSystem.enableBlend()
+            drawBox(ps, 0f, 0f, (this.width * LHS_IOTAS_ALLOCATION + 5).toFloat(), boxHeight)
+            ps.translate(0.0, 0.0, 1.0)
+            RenderSystem.setShader { prevShader }
+            for (desc in this.stackDescs) {
+                font.draw(ps, desc, 5f, 7f, -1)
+                ps.translate(0.0, 10.0, 0.0)
+            }
+        }
+
+        ps.popPose()
+        if (!this.ravenmind.isNullOrEmpty()) {
+            val kotlinBad = this.ravenmind!!
+            ps.pushPose()
+            ps.translate(this.width * 0.8, 10.0, 0.0)
+            val boxHeight = (kotlinBad.size + 0.5f) * 10f
+            val addlScale = 1.5f
+            RenderSystem.setShader(GameRenderer::getPositionColorShader)
+            RenderSystem.enableBlend()
+            drawBox(
+                ps, 0f, 0f,
+                ((this.width * RHS_IOTAS_ALLOCATION + 5) * addlScale).toFloat(), boxHeight * addlScale,
+            )
+            ps.translate(5.0, 5.0, 1.0)
+            ps.scale(addlScale, addlScale, 1f)
+
+            val time = ClientTickCounter.getTotal() * 0.42f
+            val opacity = (Mth.map(sin(time), -1f, 1f, 150f, 255f)).toInt()
+            val color = 0x00_ffffff or (opacity shl 24)
+
+            RenderSystem.setShader { prevShader }
+            for (desc in kotlinBad) {
+                font.draw(ps, desc, 0f, 0f, color)
+                ps.translate(0.0, 10.0, 0.0)
+            }
+            ps.popPose()
+        }
+
+        RenderSystem.setShader { prevShader }
     }
 
     // why the hell is this default true
@@ -372,5 +476,17 @@ class GuiSpellcasting(
 
         /** We've started drawing a pattern for real. */
         data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) : PatternDrawState()
+    }
+
+    companion object {
+        const val LHS_IOTAS_ALLOCATION = 0.7
+        const val RHS_IOTAS_ALLOCATION = 0.1
+
+        fun drawBox(ps: PoseStack, x: Float, y: Float, w: Float, h: Float, leftMargin: Float = 2.5f) {
+            RenderSystem.setShader(GameRenderer::getPositionColorShader)
+            RenderSystem.enableBlend()
+            renderQuad(ps, x, y, w, h, 0x50_303030)
+            renderQuad(ps, x + leftMargin, y + 2.5f, w - leftMargin - 2.5f, h - 5f, 0x50_303030)
+        }
     }
 }

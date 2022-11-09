@@ -1,17 +1,18 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.spell.DatumType;
-import at.petrak.hexcasting.api.spell.SpellDatum;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.spell.iota.PatternIota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.client.gui.PatternTooltipGreeble;
+import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.misc.PatternTooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -36,7 +37,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * <br>
  * TAG_OP_ID: invalid
  */
-public class ItemScroll extends Item implements DataHolderItem {
+public class ItemScroll extends Item implements IotaHolderItem {
     public static final String TAG_OP_ID = "op_id";
     public static final String TAG_PATTERN = "pattern";
     public static final ResourceLocation ANCIENT_PREDICATE = modLoc("ancient");
@@ -49,25 +50,28 @@ public class ItemScroll extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
+    public @Nullable
+    CompoundTag readIotaTag(ItemStack stack) {
         CompoundTag pattern = NBTHelper.getCompound(stack, TAG_PATTERN);
         if (pattern == null) {
             return null;
         }
+        // We store only the data part of the iota; pretend the rest of it's there
         var out = new CompoundTag();
-        out.put(SpellDatum.TAG_PATTERN, pattern);
+        out.putString(HexIotaTypes.KEY_TYPE, "hexcasting:pattern");
+        out.put(HexIotaTypes.KEY_DATA, pattern);
         return out;
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
-        return datum != null && datum.getType() == DatumType.PATTERN && !NBTHelper.hasCompound(stack, TAG_PATTERN);
+    public boolean canWrite(ItemStack stack, Iota datum) {
+        return datum instanceof PatternIota && !NBTHelper.hasCompound(stack, TAG_PATTERN);
     }
 
     @Override
-    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
-        if (this.canWrite(stack, datum) && datum.getPayload() instanceof HexPattern pat) {
-            NBTHelper.putCompound(stack, TAG_PATTERN, pat.serializeToNBT());
+    public void writeDatum(ItemStack stack, Iota datum) {
+        if (this.canWrite(stack, datum) && datum instanceof PatternIota pat) {
+            NBTHelper.putCompound(stack, TAG_PATTERN, pat.getPattern().serializeToNBT());
         }
     }
 
@@ -116,12 +120,12 @@ public class ItemScroll extends Item implements DataHolderItem {
         var descID = this.getDescriptionId(pStack);
         var ancientId = NBTHelper.getString(pStack, TAG_OP_ID);
         if (ancientId != null) {
-            return new TranslatableComponent(descID + ".of",
-                new TranslatableComponent("hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
+            return Component.translatable(descID + ".of",
+                Component.translatable("hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
         } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
-            return new TranslatableComponent(descID);
+            return Component.translatable(descID);
         } else {
-            return new TranslatableComponent(descID + ".empty");
+            return Component.translatable(descID + ".empty");
         }
     }
 
@@ -132,10 +136,10 @@ public class ItemScroll extends Item implements DataHolderItem {
         var compound = NBTHelper.getCompound(stack, ItemScroll.TAG_PATTERN);
         if (compound != null) {
             var pattern = HexPattern.fromNBT(compound);
-            return Optional.of(new PatternTooltipGreeble(
+            return Optional.of(new PatternTooltip(
                 pattern,
                 NBTHelper.hasString(stack,
-                    ItemScroll.TAG_OP_ID) ? PatternTooltipGreeble.ANCIENT_BG : PatternTooltipGreeble.PRISTINE_BG));
+                    ItemScroll.TAG_OP_ID) ? PatternTooltipComponent.ANCIENT_BG : PatternTooltipComponent.PRISTINE_BG));
         }
 
         return Optional.empty();

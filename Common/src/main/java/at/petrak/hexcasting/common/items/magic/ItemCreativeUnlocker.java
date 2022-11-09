@@ -1,17 +1,19 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
-import at.petrak.hexcasting.api.item.ManaHolderItem;
+import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
-import at.petrak.hexcasting.api.misc.ManaConstants;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.locale.Language;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -34,51 +36,69 @@ import java.util.Locale;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
+public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
+
+    public static final String DISPLAY_MEDIA = "media";
+    public static final String DISPLAY_PATTERNS = "patterns";
 
     static {
-        DiscoveryHandlers.addManaHolderDiscoverer(harness -> {
-            var player = harness.getCtx().getCaster();
-            if (!player.isCreative())
-                return List.of();
-
+        DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
             for (ItemStack item : player.getInventory().items) {
-                if (isDebug(item)) {
-                    return List.of(new DebugUnlockerHolder(item));
+                if (isDebug(item, type)) {
+                    return item;
                 }
             }
 
             // Technically possible with commands!
             for (ItemStack item : player.getInventory().armor) {
-                if (isDebug(item)) {
-                    return List.of(new DebugUnlockerHolder(item));
+                if (isDebug(item, type)) {
+                    return item;
                 }
             }
 
             for (ItemStack item : player.getInventory().offhand) {
-                if (isDebug(item)) {
-                    return List.of(new DebugUnlockerHolder(item));
+                if (isDebug(item, type)) {
+                    return item;
                 }
             }
+            return ItemStack.EMPTY;
+        });
 
+        DiscoveryHandlers.addMediaHolderDiscoverer(harness -> {
+            var player = harness.getCtx().getCaster();
+            if (!player.isCreative())
+                return List.of();
+
+            ItemStack stack = DiscoveryHandlers.findDebugItem(player, DISPLAY_MEDIA);
+            if (!stack.isEmpty())
+                return List.of(new DebugUnlockerHolder(stack));
 
             return List.of();
         });
     }
 
     public static boolean isDebug(ItemStack stack) {
-        return stack.is(HexItems.CREATIVE_UNLOCKER)
-            && stack.hasCustomHoverName()
-            && stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains("debug");
+        return isDebug(stack, null);
+    }
+
+    public static boolean isDebug(ItemStack stack, String flag) {
+        if (!stack.is(HexItems.CREATIVE_UNLOCKER) || !stack.hasCustomHoverName()) {
+            return false;
+        }
+        var keywords = Arrays.asList(stack.getHoverName().getString().toLowerCase(Locale.ROOT).split(" "));
+        if (!keywords.contains("debug")) {
+            return false;
+        }
+        return flag == null || keywords.contains(flag);
     }
 
     public static Component infiniteMedia(Level level) {
         String prefix = "item.hexcasting.creative_unlocker.";
 
         String emphasis = Language.getInstance().getOrDefault(prefix + "for_emphasis");
-        MutableComponent emphasized = new TextComponent("");
+        MutableComponent emphasized = Component.empty();
         for (int i = 0; i < emphasis.length(); i++) {
-            emphasized.append(rainbow(new TextComponent("" + emphasis.charAt(i)), i, level));
+            emphasized.append(rainbow(Component.literal("" + emphasis.charAt(i)), i, level));
         }
 
         return emphasized;
@@ -92,22 +112,22 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     }
 
     @Override
-    public int getMana(ItemStack stack) {
+    public int getMedia(ItemStack stack) {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    public int getMaxMana(ItemStack stack) {
+    public int getMaxMedia(ItemStack stack) {
         return Integer.MAX_VALUE - 1;
     }
 
     @Override
-    public void setMana(ItemStack stack, int mana) {
+    public void setMedia(ItemStack stack, int media) {
         // NO-OP
     }
 
     @Override
-    public boolean manaProvider(ItemStack stack) {
+    public boolean canProvideMedia(ItemStack stack) {
         return true;
     }
 
@@ -127,23 +147,23 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     }
 
     @Override
-    public int withdrawMana(ItemStack stack, int cost, boolean simulate) {
+    public int withdrawMedia(ItemStack stack, int cost, boolean simulate) {
         // In case it's withdrawn through other means
-        if (!simulate && isDebug(stack)) {
+        if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
             addToIntArray(stack, TAG_EXTRACTIONS, cost);
         }
 
-        return cost < 0 ? getMana(stack) : cost;
+        return cost < 0 ? getMedia(stack) : cost;
     }
 
     @Override
-    public int insertMana(ItemStack stack, int amount, boolean simulate) {
+    public int insertMedia(ItemStack stack, int amount, boolean simulate) {
         // In case it's inserted through other means
-        if (!simulate && isDebug(stack)) {
+        if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
             addToIntArray(stack, TAG_INSERTIONS, amount);
         }
 
-        return amount < 0 ? getMaxMana(stack) : amount;
+        return amount < 0 ? getMaxMedia(stack) : amount;
     }
 
     @Override
@@ -153,7 +173,7 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (isDebug(stack) && !level.isClientSide) {
+        if (isDebug(stack, DISPLAY_MEDIA) && !level.isClientSide) {
             debugDisplay(stack, TAG_EXTRACTIONS, "withdrawn", "all_mana", entity);
             debugDisplay(stack, TAG_INSERTIONS, "inserted", "infinite_mana", entity);
         }
@@ -165,17 +185,17 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
             NBTHelper.remove(stack, tag);
             for (int i : arr) {
                 if (i < 0) {
-                    entity.sendMessage(new TranslatableComponent("hexcasting.debug.mana_" + langKey,
+                    entity.sendSystemMessage(Component.translatable("hexcasting.debug.mana_" + langKey,
                         stack.getDisplayName(),
-                        new TranslatableComponent("hexcasting.debug." + allKey).withStyle(ChatFormatting.GRAY))
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+                        Component.translatable("hexcasting.debug." + allKey).withStyle(ChatFormatting.GRAY))
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 } else {
-                    entity.sendMessage(new TranslatableComponent("hexcasting.debug.mana_" + langKey + ".with_dust",
+                    entity.sendSystemMessage(Component.translatable("hexcasting.debug.mana_" + langKey + ".with_dust",
                         stack.getDisplayName(),
-                        new TextComponent("" + i).withStyle(ChatFormatting.WHITE),
-                        new TextComponent(String.format("%.2f", i * 1.0 / ManaConstants.DUST_UNIT)).withStyle(
+                        Component.literal("" + i).withStyle(ChatFormatting.WHITE),
+                        Component.literal(String.format("%.2f", i * 1.0 / MediaConstants.DUST_UNIT)).withStyle(
                             ChatFormatting.WHITE))
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
             }
         }
@@ -195,19 +215,23 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity consumer) {
         if (level instanceof ServerLevel slevel && consumer instanceof ServerPlayer player) {
-            var rootAdv = slevel.getServer().getAdvancements().getAdvancement(modLoc("root"));
-            if (rootAdv != null) {
-                var children = new ArrayList<Advancement>();
-                children.add(rootAdv);
-                addChildren(rootAdv, children);
+            var names = new ArrayList<>(ItemLoreFragment.NAMES);
+            names.add(0, modLoc("root"));
+            for (var name : names) {
+                var rootAdv = slevel.getServer().getAdvancements().getAdvancement(name);
+                if (rootAdv != null) {
+                    var children = new ArrayList<Advancement>();
+                    children.add(rootAdv);
+                    addChildren(rootAdv, children);
 
-                var adman = player.getAdvancements();
+                    var adman = player.getAdvancements();
 
-                for (var kid : children) {
-                    var progress = adman.getOrStartProgress(kid);
-                    if (!progress.isDone()) {
-                        for (String crit : progress.getRemainingCriteria()) {
-                            adman.award(kid, crit);
+                    for (var kid : children) {
+                        var progress = adman.getOrStartProgress(kid);
+                        if (!progress.isDone()) {
+                            for (String crit : progress.getRemainingCriteria()) {
+                                adman.award(kid, crit);
+                            }
                         }
                     }
                 }
@@ -233,12 +257,12 @@ public class ItemCreativeUnlocker extends Item implements ManaHolderItem {
         TooltipFlag isAdvanced) {
         Component emphasized = infiniteMedia(level);
 
-        MutableComponent modName = new TranslatableComponent("item.hexcasting.creative_unlocker.mod_name").withStyle(
-            (s) -> s.withColor(ItemManaHolder.HEX_COLOR));
+        MutableComponent modName = Component.translatable("item.hexcasting.creative_unlocker.mod_name").withStyle(
+            (s) -> s.withColor(ItemMediaHolder.HEX_COLOR));
 
         tooltipComponents.add(
-            new TranslatableComponent("hexcasting.spelldata.onitem", emphasized).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(new TranslatableComponent("item.hexcasting.creative_unlocker.tooltip", modName).withStyle(ChatFormatting.GRAY));
+            Component.translatable("hexcasting.spelldata.onitem", emphasized).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.translatable("item.hexcasting.creative_unlocker.tooltip", modName).withStyle(ChatFormatting.GRAY));
     }
 
     private static void addChildren(Advancement root, List<Advancement> out) {

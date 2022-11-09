@@ -7,10 +7,9 @@ import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
+import java.util.Optional;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -32,14 +31,15 @@ public record MsgNewSpellPatternAck(ControllerInfo info, int index) implements I
         var isStackEmpty = buf.readBoolean();
         var resolutionType = buf.readEnum(ResolvedPatternType.class);
         var index = buf.readInt();
-        var descsLen = buf.readInt();
-        var desc = new ArrayList<Component>(descsLen);
-        for (int i = 0; i < descsLen; i++) {
-            desc.add(buf.readComponent());
-        }
+
+        var stack = buf.readList(FriendlyByteBuf::readNbt);
+        var parens = buf.readList(FriendlyByteBuf::readNbt);
+        var raven = buf.readOptional(FriendlyByteBuf::readNbt).orElse(null);
+
+        var parenCount = buf.readVarInt();
 
         return new MsgNewSpellPatternAck(
-            new ControllerInfo(wasSpellCast, isStackEmpty, resolutionType, desc), index
+            new ControllerInfo(wasSpellCast, isStackEmpty, resolutionType, stack, parens, raven, parenCount), index
         );
     }
 
@@ -49,10 +49,12 @@ public record MsgNewSpellPatternAck(ControllerInfo info, int index) implements I
         buf.writeBoolean(this.info.isStackClear());
         buf.writeEnum(this.info.getResolutionType());
         buf.writeInt(this.index);
-        buf.writeInt(this.info.getStackDesc().size());
-        for (var desc : this.info.getStackDesc()) {
-            buf.writeComponent(desc);
-        }
+
+        buf.writeCollection(this.info.getStack(), FriendlyByteBuf::writeNbt);
+        buf.writeCollection(this.info.getParenthesized(), FriendlyByteBuf::writeNbt);
+        buf.writeOptional(Optional.ofNullable(this.info.getRavenmind()), FriendlyByteBuf::writeNbt);
+
+        buf.writeVarInt(this.info.getParenCount());
     }
 
     public static void handle(MsgNewSpellPatternAck self) {

@@ -2,15 +2,15 @@
 
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellList
+import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.spell.iota.ListIota
 import at.petrak.hexcasting.api.spell.math.HexCoord
+import at.petrak.hexcasting.common.lib.HexIotaTypes
 import net.minecraft.ChatFormatting
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.LongArrayTag
-import net.minecraft.nbt.Tag
-import net.minecraft.network.chat.*
+import net.minecraft.nbt.*
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
@@ -48,7 +48,7 @@ fun vec2FromNBT(tag: LongArray): Vec2 = if (tag.size != 2) Vec2.ZERO else
 fun otherHand(hand: InteractionHand) =
     if (hand == InteractionHand.MAIN_HAND) InteractionHand.OFF_HAND else InteractionHand.MAIN_HAND
 
-fun fixNAN(x: Double): Double = if (x.isFinite()) x else 0.0
+fun fixNAN(n: Double): Double = if (n.isFinite()) n else 0.0
 
 fun findCenter(points: List<Vec2>): Vec2 {
     var minX = Float.POSITIVE_INFINITY
@@ -181,10 +181,10 @@ operator fun MutableComponent.plusAssign(component: Component) {
     append(component)
 }
 
-val String.asTextComponent get() = TextComponent(this)
-val String.asTranslatedComponent get() = TranslatableComponent(this)
+val String.asTextComponent: MutableComponent get() = Component.literal(this)
+val String.asTranslatedComponent: MutableComponent get() = Component.translatable(this)
 
-fun String.asTranslatedComponent(vararg args: Any) = TranslatableComponent(this, *args)
+fun String.asTranslatedComponent(vararg args: Any): MutableComponent = Component.translatable(this, *args)
 
 /**
  * Represents a value that the garbage collector is still allowed to collect.
@@ -246,13 +246,11 @@ inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty
 /**
  * Returns an empty list if it's too complicated.
  */
-fun Iterable<SpellDatum<*>>.serializeToNBT(): ListTag {
-    val out = SpellDatum.make(SpellList.LList(0, this.toList())).serializeToNBT()
-    return if (out.contains(SpellDatum.TAG_WIDGET))
+fun Iterable<Iota>.serializeToNBT() =
+    if (HexIotaTypes.isTooLargeToSerialize(this))
         ListTag()
     else
-        out.getList(SpellDatum.TAG_LIST, Tag.TAG_COMPOUND)
-}
+        ListIota(this.toList()).serialize()
 
 // Copy the impl from forge
 fun ItemStack.serializeToNBT(): CompoundTag {
@@ -260,3 +258,17 @@ fun ItemStack.serializeToNBT(): CompoundTag {
     this.save(out)
     return out
 }
+
+@Suppress("UNCHECKED_CAST")
+@Throws(IllegalArgumentException::class)
+fun <T : Tag> Tag.downcast(type: TagType<T>): T {
+    if (this.type == type) {
+        return this as T
+    } else {
+        throw IllegalArgumentException(
+            "Expected this tag to be of type ${type.name}, but found ${this.type.name}."
+        )
+    }
+}
+
+const val ERROR_COLOR = 0xff_f800f8.toInt()

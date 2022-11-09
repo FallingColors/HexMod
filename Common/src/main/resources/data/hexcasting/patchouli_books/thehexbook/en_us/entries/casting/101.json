@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.101",
   "category": "hexcasting:casting",
-  "icon": "hexcasting:wand_akashic",
+  "icon": "hexcasting:edified_staff",
   "advancement": "hexcasting:root",
   "priority": true,
   "pages": [

@@ -9,17 +9,17 @@ import net.minecraft.world.item.Items;
 import java.util.List;
 
 public class EmiLevelupRecipe extends EmiVillagerRecipe {
-	public EmiLevelupRecipe(EmiIngredient input, VillagerEmiStack result, ResourceLocation id) {
-		super(input, EmiStack.of(Items.EMERALD), result, id, false);
-	}
+    public EmiLevelupRecipe(EmiIngredient input, VillagerEmiStack result, ResourceLocation id) {
+        super(input, EmiStack.of(Items.EMERALD), result, id, false);
+    }
 
-	@Override
-	public List<EmiIngredient> getInputs() {
-		return List.of(input);
-	}
+    @Override
+    public List<EmiIngredient> getInputs() {
+        return List.of(input);
+    }
 
-	@Override
-	public EmiRecipeCategory getCategory() {
-		return HexEMIPlugin.VILLAGER_LEVELING;
-	}
+    @Override
+    public EmiRecipeCategory getCategory() {
+        return HexEMIPlugin.VILLAGER_LEVELING;
+    }
 }

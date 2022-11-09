@@ -11,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class CapSyncers {
     @SubscribeEvent
     public static void copyDataOnDeath(PlayerEvent.Clone evt) {
-        var eitherSidePlayer = evt.getPlayer();
+        var eitherSidePlayer = evt.getEntity();
         // this apparently defines it in outside scope. the more you know.
         if (!(eitherSidePlayer instanceof ServerPlayer player)) {
             return;
@@ -33,7 +33,7 @@ public class CapSyncers {
 
     @SubscribeEvent
     public static void syncDataOnLogin(PlayerEvent.PlayerLoggedInEvent evt) {
-        if (!(evt.getPlayer() instanceof ServerPlayer player)) {
+        if (!(evt.getEntity() instanceof ServerPlayer player)) {
             return;
         }
 
@@ -43,7 +43,7 @@ public class CapSyncers {
 
     @SubscribeEvent
     public static void syncDataOnRejoin(PlayerEvent.PlayerRespawnEvent evt) {
-        if (!(evt.getPlayer() instanceof ServerPlayer player)) {
+        if (!(evt.getEntity() instanceof ServerPlayer player)) {
             return;
         }
 

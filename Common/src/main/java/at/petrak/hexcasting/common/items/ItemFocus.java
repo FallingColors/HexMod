@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.spell.iota.NullIota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -17,9 +18,11 @@ import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class ItemFocus extends Item implements DataHolderItem {
-    public static final ResourceLocation DATATYPE_PRED = modLoc("datatype");
-    public static final ResourceLocation SEALED_PRED = modLoc("sealed");
+public class ItemFocus extends Item implements IotaHolderItem {
+    // 0 = no overlay
+    // 1 = unsealed
+    // 2 = sealed
+    public static final ResourceLocation OVERLAY_PRED = modLoc("overlay_layer");
 
     public static final String TAG_DATA = "data";
     public static final String TAG_SEALED = "sealed";
@@ -29,7 +32,7 @@ public class ItemFocus extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
+    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
         return NBTHelper.getCompound(stack, TAG_DATA);
     }
 
@@ -39,27 +42,32 @@ public class ItemFocus extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable SpellDatum<?> emptyDatum(ItemStack stack) {
-        return SpellDatum.make(Widget.NULL);
+    public @Nullable Iota emptyIota(ItemStack stack) {
+        return new NullIota();
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
+    public boolean canWrite(ItemStack stack, Iota datum) {
         return datum == null || !NBTHelper.getBoolean(stack, TAG_SEALED);
     }
 
     @Override
-    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
+    public void writeDatum(ItemStack stack, Iota datum) {
         if (datum == null) {
             stack.removeTagKey(TAG_DATA);
             stack.removeTagKey(TAG_SEALED);
-        } else if (!NBTHelper.getBoolean(stack, TAG_SEALED))
-            NBTHelper.put(stack, TAG_DATA, datum.serializeToNBT());
+        } else if (!isSealed(stack)) {
+            NBTHelper.put(stack, TAG_DATA, HexIotaTypes.serialize(datum));
+        }
     }
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
-        DataHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
+        IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
+    }
+
+    public static boolean isSealed(ItemStack stack) {
+        return NBTHelper.getBoolean(stack, TAG_SEALED);
     }
 }

@@ -1,25 +1,22 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
-object OpAddMotion : SpellOperator {
+object OpAddMotion : SpellAction {
     override val argc: Int
         get() = 2
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Entity>(0, argc)
-        val motion = args.getChecked<Vec3>(1, argc)
+        val target = args.getEntity(0, argc)
+        val motion = args.getVec3(1, argc)
         ctx.assertEntityInRange(target)
         var motionForCost = motion.lengthSqr()
         if (ctx.hasBeenGivenMotion(target))
@@ -27,7 +24,7 @@ object OpAddMotion : SpellOperator {
         ctx.markEntityAsMotionAdded(target)
         return Triple(
             Spell(target, motion),
-            (motionForCost * ManaConstants.DUST_UNIT).toInt(),
+            (motionForCost * MediaConstants.DUST_UNIT).toInt(),
             listOf(
                 ParticleSpray(
                     target.position().add(0.0, target.eyeHeight / 2.0, 0.0),

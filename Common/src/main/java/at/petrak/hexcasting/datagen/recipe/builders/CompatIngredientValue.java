@@ -10,24 +10,24 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 public class CompatIngredientValue implements Ingredient.Value {
-	public final String item;
+    public final String item;
 
-	public CompatIngredientValue(String name) {
-		this.item = name;
-	}
+    public CompatIngredientValue(String name) {
+        this.item = name;
+    }
 
-	public @NotNull Collection<ItemStack> getItems() {
-		return Collections.emptyList();
-	}
+    public @NotNull Collection<ItemStack> getItems() {
+        return Collections.emptyList();
+    }
 
-	public @NotNull JsonObject serialize() {
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("item", item);
-		return jsonObject;
-	}
+    public @NotNull JsonObject serialize() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("item", item);
+        return jsonObject;
+    }
 
-	public static Ingredient of(String itemName) {
-		return new Ingredient(Stream.of(new CompatIngredientValue(itemName)));
-	}
+    public static Ingredient of(String itemName) {
+        return new Ingredient(Stream.of(new CompatIngredientValue(itemName)));
+    }
 }
 

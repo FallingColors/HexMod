@@ -2,19 +2,19 @@ package at.petrak.hexcasting.interop.pehkui
 
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 
-object OpSetScale : SpellOperator {
+object OpSetScale : SpellAction {
     override val argc = 2
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Entity>(0)
-        val scale = Mth.clamp(args.getChecked<Double>(1), 1.0 / 32.0, 8.0)
+        val target = args.getEntity(0, argc)
+        val scale = args.getDoubleBetween(1, 1.0 / 32.0, 8.0, argc)
 
         return Triple(
             Spell(target, scale),

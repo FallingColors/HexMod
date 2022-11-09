@@ -1,32 +1,28 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
-import at.petrak.hexcasting.api.spell.DatumType;
+import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockEntityAkashicBookshelf extends HexBlockEntity {
-    public static final String TAG_RECORD_POS = "record_pos";
     public static final String TAG_PATTERN = "pattern";
+    public static final String TAG_IOTA = "iota";
 
-    // This might actually be inaccurate! It's a best-guess
-    private BlockPos recordPos = null;
     // This is only not null if this stores any data.
     private HexPattern pattern = null;
+    // When the world is first loading we can sometimes try to deser this from nbt without the world existing yet.
+    // We also need a way to display the iota to the client.
+    // For both these cases we save just the tag of the iota.
+    private CompoundTag iotaTag = null;
 
     public BlockEntityAkashicBookshelf(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlockEntities.AKASHIC_BOOKSHELF_TILE, pWorldPosition, pBlockState);
-    }
-
-    @Nullable
-    public BlockPos getRecordPos() {
-        return recordPos;
     }
 
     @Nullable
@@ -34,47 +30,56 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
         return pattern;
     }
 
+    @Nullable
+    public CompoundTag getIotaTag() {
+        return iotaTag;
+    }
 
-    public void setNewData(BlockPos recordPos, HexPattern pattern, DatumType type) {
-        this.recordPos = recordPos;
+    public void setNewMapping(HexPattern pattern, Iota iota) {
+        var previouslyEmpty = this.pattern == null;
         this.pattern = pattern;
+        this.iotaTag = HexIotaTypes.serialize(iota);
+
+        if (previouslyEmpty) {
+            var oldBs = this.getBlockState();
+            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, true);
+            this.level.setBlock(this.getBlockPos(), newBs, 3);
+            this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
+        } else {
+            this.setChanged();
+        }
+    }
+
+    public void clearIota() {
+        var previouslyEmpty = this.pattern == null;
+        this.pattern = null;
+        this.iotaTag = null;
 
         this.setChanged();
 
-        BlockState worldBs = this.level.getBlockState(this.getBlockPos());
-        var oldBs = this.getBlockState();
-
-        if (worldBs.getBlock() == oldBs.getBlock()) {
-            var newBs = oldBs.setValue(BlockAkashicBookshelf.DATUM_TYPE, type);
+        if (!previouslyEmpty) {
+            var oldBs = this.getBlockState();
+            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, false);
             this.level.setBlock(this.getBlockPos(), newBs, 3);
             this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
+        } else {
+            this.setChanged();
         }
     }
 
     @Override
     protected void saveModData(CompoundTag compoundTag) {
-        compoundTag.put(TAG_RECORD_POS,
-            this.recordPos == null ? new CompoundTag() : NbtUtils.writeBlockPos(this.recordPos));
-        compoundTag.put(TAG_PATTERN, this.pattern == null ? new CompoundTag() : this.pattern.serializeToNBT());
+        if (this.pattern != null && this.iotaTag != null) {
+            compoundTag.put(TAG_PATTERN, this.pattern.serializeToNBT());
+            compoundTag.put(TAG_IOTA, this.iotaTag);
+        }
     }
 
     @Override
-    protected void loadModData(CompoundTag compoundTag) {
-        CompoundTag recordPos = compoundTag.getCompound(TAG_RECORD_POS);
-        CompoundTag pattern = compoundTag.getCompound(TAG_PATTERN);
-
-        if (recordPos.contains("X", Tag.TAG_ANY_NUMERIC) &&
-            recordPos.contains("Y", Tag.TAG_ANY_NUMERIC) &&
-            recordPos.contains("Z", Tag.TAG_ANY_NUMERIC)) {
-            this.recordPos = NbtUtils.readBlockPos(recordPos);
-        } else {
-            this.recordPos = null;
-        }
-        if (HexPattern.isPattern(pattern)) {
-            this.pattern = HexPattern.fromNBT(pattern);
-        } else {
-            this.pattern = null;
+    protected void loadModData(CompoundTag tag) {
+        if (tag.contains(TAG_PATTERN) && tag.contains(TAG_IOTA)) {
+            this.pattern = HexPattern.fromNBT(tag.getCompound(TAG_PATTERN));
+            this.iotaTag = tag.getCompound(TAG_IOTA);
         }
     }
-
 }

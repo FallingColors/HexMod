@@ -112,7 +112,7 @@ def parse_style(sty):
     raise ValueError("Unknown style: " + sty)
 
 def localize(i18n, string, default=None):
-    return i18n.get(string, default if default else string) if i18n else string
+    return (i18n.get(string, default if default else string) if i18n else string).replace("%%", "%")
 
 format_re = re.compile(r"\$\(([^)]*)\)")
 def format_string(root_data, string):

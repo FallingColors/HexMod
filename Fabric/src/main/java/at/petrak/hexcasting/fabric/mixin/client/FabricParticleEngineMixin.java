@@ -16,15 +16,15 @@ import java.util.List;
 
 @Mixin(ParticleEngine.class)
 public class FabricParticleEngineMixin {
-	@Mutable
-	@Final
-	@Shadow
-	private static List<ParticleRenderType> RENDER_ORDER;
+    @Mutable
+    @Final
+    @Shadow
+    private static List<ParticleRenderType> RENDER_ORDER;
 
-	@Inject(at = @At("RETURN"), method = "<clinit>")
-	private static void addTypes(CallbackInfo ci) {
-		RENDER_ORDER = ImmutableList.<ParticleRenderType>builder().addAll(RENDER_ORDER)
-				.add(ConjureParticle.CONJURE_RENDER_TYPE, ConjureParticle.LIGHT_RENDER_TYPE)
-				.build();
-	}
+    @Inject(at = @At("RETURN"), method = "<clinit>")
+    private static void addTypes(CallbackInfo ci) {
+        RENDER_ORDER = ImmutableList.<ParticleRenderType>builder().addAll(RENDER_ORDER)
+                .add(ConjureParticle.CONJURE_RENDER_TYPE, ConjureParticle.LIGHT_RENDER_TYPE)
+                .build();
+    }
 }

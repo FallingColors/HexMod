@@ -1,30 +1,32 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
 
-object OpBreakBlock : SpellOperator {
+object OpBreakBlock : SpellAction {
     override val argc: Int
         get() = 1
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
-        val pos = args.getChecked<Vec3>(0, argc)
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+        val pos = args.getBlockPos(0, argc)
         ctx.assertVecInRange(pos)
 
-        val bpos = BlockPos(pos)
-        val centered = Vec3.atCenterOf(bpos)
         return Triple(
-            Spell(bpos),
-            (ManaConstants.DUST_UNIT * 1.125).toInt(),
-            listOf(ParticleSpray.burst(centered, 1.0))
+            Spell(pos),
+            (MediaConstants.DUST_UNIT * 1.125).toInt(),
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
         )
     }
 

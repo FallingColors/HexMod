@@ -20,7 +20,8 @@ archivesBaseName = getArtifactID("forge")
 
 // Adds KFF as dependency and Kotlin libs to the runtime classpath
 // If you already know how to add the Kotlin plugin to Gradle, this is the only line you need for KFF
-apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.3.2.gradle'
+apply from: "https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-" +
+        "${kotlinForForgeVersion}.gradle"
 
 minecraft {
     mappings channel: 'official', version: minecraftVersion
@@ -119,10 +120,6 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
-    maven {
-        //location of the maven for curios api
-        url = "https://maven.theillusivec4.top/"
-    }
 }
 
 dependencies {
@@ -132,9 +129,6 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
     compileOnly project(":Common")
 
-    compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
-    testCompileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
-
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     compileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
@@ -142,31 +136,56 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
 
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion:$jeiVersion")
-
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion")
-
     // aughh
     testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
     testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+
+    // Optional interop
+
+    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")
+    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion")
+    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion")
+
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion")
 
     api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-${minecraftVersion}-forge")
 }
 
 mixin {
-    add project(":Common").sourceSets.main, "hexcasting.mixins.refmap.json"
     add sourceSets.main, "hexcasting.mixins.refmap.json"
     config "hexplat.mixins.json"
     config "hexcasting_forge.mixins.json"
 }
 
-tasks.withType(JavaCompile) {
+// https://discord.com/channels/313125603924639766/733055378371117127/980968358658838540
+// > It wint generate a refmap if there are jo changes source files
+// > Since the last build
+// > Gradle task execution avoidance breaks it that way
+// > At one point i got it to work reliably bu forcing some specific task to always run i just don't remember the syntax and which task it was
+// > It might have been compileJava
+task invalidateJavaForRefmap {
+    doFirst {
+        compileJava {
+            if (!didWork) {
+                outputs.upToDateWhen { false }
+            }
+        }
+        compileKotlin {
+            if (!didWork) {
+                outputs.upToDateWhen { false }
+            }
+        }
+    }
+}
+
+compileJava {
     source(project(":Common").sourceSets.main.allSource)
+    shouldRunAfter(invalidateJavaForRefmap)
 }
 compileKotlin {
     source(project(":Common").sourceSets.main.kotlin)
+    shouldRunAfter(invalidateJavaForRefmap)
 }
 compileTestKotlin {
     source(project(":Common").sourceSets.main.kotlin)
@@ -176,6 +195,10 @@ sourceSets {
     main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
     main.kotlin.srcDirs += 'src/main/java'
     test.kotlin.srcDirs += 'src/main/java'
+}
+
+jar {
+    dependsOn(invalidateJavaForRefmap)
 }
 
 processResources {

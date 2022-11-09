@@ -1,7 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.BucketItem
@@ -12,13 +16,13 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.Vec3
 
-class OpCreateFluid(override val isGreat: Boolean, val cost: Int, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : SpellOperator {
+class OpCreateFluid(override val isGreat: Boolean, val cost: Int, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Vec3>(0, argc)
+        val target = args.getBlockPos(0, argc)
         ctx.assertVecInRange(target)
 
         return Triple(
@@ -28,10 +32,8 @@ class OpCreateFluid(override val isGreat: Boolean, val cost: Int, val bucket: It
         )
     }
 
-    private data class Spell(val target: Vec3, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : RenderedSpell {
+    private data class Spell(val pos: BlockPos, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val pos = BlockPos(target)
-
             if (!ctx.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
                     ctx.world,
                     pos,

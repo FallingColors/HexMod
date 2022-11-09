@@ -1,9 +1,8 @@
 {
-  "replace": false,
   "values": [
-    "hexcasting:akashic_log",
-    "hexcasting:akashic_log_stripped",
-    "hexcasting:akashic_wood",
-    "hexcasting:akashic_wood_stripped"
+    "hexcasting:edified_log",
+    "hexcasting:stripped_edified_log",
+    "hexcasting:edified_wood",
+    "hexcasting:stripped_edified_wood"
   ]
 }

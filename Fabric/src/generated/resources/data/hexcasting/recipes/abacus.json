@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "WAW",
-    "SAS",
-    "WAW"
-  ],
   "key": {
-    "S": {
-      "item": "minecraft:stick"
-    },
     "A": {
       "item": "minecraft:amethyst_shard"
+    },
+    "S": {
+      "item": "minecraft:stick"
     },
     "W": {
       "tag": "minecraft:planks"
     }
   },
+  "pattern": [
+    "WAW",
+    "SAS",
+    "WAW"
+  ],
   "result": {
     "item": "hexcasting:abacus"
   }

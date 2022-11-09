@@ -1,20 +1,20 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellDatum
-import at.petrak.hexcasting.api.spell.SpellOperator
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.item.ItemStack
 
-class OpErase : SpellOperator {
+class OpErase : SpellAction {
     override val argc = 0
 
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
@@ -22,20 +22,20 @@ class OpErase : SpellOperator {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
             (hexHolder?.hasHex() == true) ||
-                    (datumHolder?.writeDatum(null, true) == true)
+                    (datumHolder?.writeIota(null, true) == true)
         }
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
 
         if ((hexHolder?.hasHex() != true) &&
-            (datumHolder?.writeDatum(null, true) != true)
+            (datumHolder?.writeIota(null, true) != true)
         ) {
             throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
         }
 
         return Triple(
             Spell(handStack),
-            ManaConstants.DUST_UNIT, listOf()
+            MediaConstants.DUST_UNIT, listOf()
         )
     }
 
@@ -47,8 +47,8 @@ class OpErase : SpellOperator {
             if (hexHolder?.hasHex() == true)
                 hexHolder.clearHex()
 
-            if (datumHolder != null && datumHolder.writeDatum(null, true))
-                datumHolder.writeDatum(null, false)
+            if (datumHolder != null && datumHolder.writeIota(null, true))
+                datumHolder.writeIota(null, false)
         }
     }
 }

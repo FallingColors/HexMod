@@ -1,15 +1,14 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.spell.iota.NullIota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -21,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ItemSpellbook extends Item implements DataHolderItem {
+public class ItemSpellbook extends Item implements IotaHolderItem {
     public static String TAG_SELECTED_PAGE = "page_idx";
     // this is a CompoundTag of string numerical keys to SpellData
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
@@ -44,22 +43,22 @@ public class ItemSpellbook extends Item implements DataHolderItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
         TooltipFlag isAdvanced) {
-        boolean sealed = IsSealed(stack);
+        boolean sealed = isSealed(stack);
         boolean empty = false;
         if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
             var pageIdx = NBTHelper.getInt(stack, TAG_SELECTED_PAGE);
-            int highest = HighestPage(stack);
+            int highest = highestPage(stack);
             if (highest != 0) {
                 if (sealed) {
-                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page.sealed",
-                        new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
-                        new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE),
-                        new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
+                    tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.page.sealed",
+                        Component.literal(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
+                        Component.literal(String.valueOf(highest)).withStyle(ChatFormatting.WHITE),
+                        Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
                         .withStyle(ChatFormatting.GRAY));
                 } else {
-                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.page",
-                        new TextComponent(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
-                        new TextComponent(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
+                    tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.page",
+                            Component.literal(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
+                            Component.literal(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
                         .withStyle(ChatFormatting.GRAY));
                 }
             } else {
@@ -73,27 +72,27 @@ public class ItemSpellbook extends Item implements DataHolderItem {
             boolean overridden = NBTHelper.hasString(stack, TAG_OVERRIDE_VISUALLY);
             if (sealed) {
                 if (overridden) {
-                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(
+                    tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(
                         ChatFormatting.GOLD));
                 } else {
-                    tooltip.add(new TranslatableComponent("hexcasting.tooltip.spellbook.empty.sealed",
-                        new TranslatableComponent("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
+                    tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.empty.sealed",
+                        Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
                         .withStyle(ChatFormatting.GRAY));
                 }
             } else if (!overridden) {
                 tooltip.add(
-                    new TranslatableComponent("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
+                    Component.translatable("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
             }
         }
 
-        DataHolderItem.appendHoverText(this, stack, tooltip, isAdvanced);
+        IotaHolderItem.appendHoverText(this, stack, tooltip, isAdvanced);
 
         super.appendHoverText(stack, level, tooltip, isAdvanced);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        int index = GetPage(stack, 0);
+        int index = getPage(stack, 0);
         NBTHelper.putInt(stack, TAG_SELECTED_PAGE, index);
 
         int shiftedIdx = Math.max(1, index);
@@ -106,14 +105,15 @@ public class ItemSpellbook extends Item implements DataHolderItem {
         }
     }
 
-    public static boolean ArePagesEmpty(ItemStack stack) {
+    public static boolean arePagesEmpty(ItemStack stack) {
         CompoundTag tag = NBTHelper.getCompound(stack, TAG_PAGES);
         return tag == null || tag.isEmpty();
     }
 
     @Override
-    public @Nullable CompoundTag readDatumTag(ItemStack stack) {
-        int idx = GetPage(stack, 1);
+    public @Nullable
+    CompoundTag readIotaTag(ItemStack stack) {
+        int idx = getPage(stack, 1);
         var key = String.valueOf(idx);
         var tag = NBTHelper.getCompound(stack, TAG_PAGES);
         if (tag != null && tag.contains(key, Tag.TAG_COMPOUND)) {
@@ -124,22 +124,23 @@ public class ItemSpellbook extends Item implements DataHolderItem {
     }
 
     @Override
-    public @Nullable SpellDatum<?> emptyDatum(ItemStack stack) {
-        return SpellDatum.make(Widget.NULL);
+    public @Nullable
+    Iota emptyIota(ItemStack stack) {
+        return new NullIota();
     }
 
     @Override
-    public boolean canWrite(ItemStack stack, SpellDatum<?> datum) {
-        return datum == null || !IsSealed(stack);
+    public boolean canWrite(ItemStack stack, Iota datum) {
+        return datum == null || !isSealed(stack);
     }
 
     @Override
-    public void writeDatum(ItemStack stack, SpellDatum<?> datum) {
-        if (datum != null && IsSealed(stack)) {
+    public void writeDatum(ItemStack stack, Iota datum) {
+        if (datum != null && isSealed(stack)) {
             return;
         }
 
-        int idx = GetPage(stack, 1);
+        int idx = getPage(stack, 1);
         var key = String.valueOf(idx);
         CompoundTag pages = NBTHelper.getCompound(stack, TAG_PAGES);
         if (pages != null) {
@@ -147,21 +148,21 @@ public class ItemSpellbook extends Item implements DataHolderItem {
                 pages.remove(key);
                 NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
             } else {
-                pages.put(key, datum.serializeToNBT());
+                pages.put(key, HexIotaTypes.serialize(datum));
             }
 
             if (pages.isEmpty()) {
                 NBTHelper.remove(stack, TAG_PAGES);
             }
         } else if (datum != null) {
-            NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, datum.serializeToNBT());
+            NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, HexIotaTypes.serialize(datum));
         } else {
             NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
         }
     }
 
-    public static int GetPage(ItemStack stack, int ifEmpty) {
-        if (ArePagesEmpty(stack)) {
+    public static int getPage(ItemStack stack, int ifEmpty) {
+        if (arePagesEmpty(stack)) {
             return ifEmpty;
         } else if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
             int index = NBTHelper.getInt(stack, TAG_SELECTED_PAGE);
@@ -174,8 +175,8 @@ public class ItemSpellbook extends Item implements DataHolderItem {
         }
     }
 
-    public static void SetSealed(ItemStack stack, boolean sealed) {
-        int index = GetPage(stack, 1);
+    public static void setSealed(ItemStack stack, boolean sealed) {
+        int index = getPage(stack, 1);
 
         String nameKey = String.valueOf(index);
         CompoundTag names = NBTHelper.getOrCreateCompound(stack, TAG_SEALED);
@@ -194,15 +195,15 @@ public class ItemSpellbook extends Item implements DataHolderItem {
 
     }
 
-    public static boolean IsSealed(ItemStack stack) {
-        int index = GetPage(stack, 1);
+    public static boolean isSealed(ItemStack stack) {
+        int index = getPage(stack, 1);
 
         String nameKey = String.valueOf(index);
         CompoundTag names = NBTHelper.getCompound(stack, TAG_SEALED);
         return NBTHelper.getBoolean(names, nameKey);
     }
 
-    public static int HighestPage(ItemStack stack) {
+    public static int highestPage(ItemStack stack) {
         CompoundTag tag = NBTHelper.getCompound(stack, TAG_PAGES);
         if (tag == null) {
             return 0;
@@ -216,8 +217,8 @@ public class ItemSpellbook extends Item implements DataHolderItem {
         }).max(Integer::compare).orElse(0);
     }
 
-    public static int RotatePageIdx(ItemStack stack, boolean increase) {
-        int idx = GetPage(stack, 0);
+    public static int rotatePageIdx(ItemStack stack, boolean increase) {
+        int idx = getPage(stack, 0);
         if (idx != 0) {
             idx += increase ? 1 : -1;
             idx = Math.max(1, idx);

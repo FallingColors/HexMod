@@ -1,16 +1,15 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.spell.ConstManaOperator
-import at.petrak.hexcasting.api.spell.SpellDatum
+import at.petrak.hexcasting.api.spell.ConstManaAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.getChecked
-import at.petrak.hexcasting.api.spell.spellListOf
-import net.minecraft.world.phys.Vec3
+import at.petrak.hexcasting.api.spell.getVec3
+import at.petrak.hexcasting.api.spell.iota.DoubleIota
+import at.petrak.hexcasting.api.spell.iota.Iota
 
-object OpDeconstructVec : ConstManaOperator {
+object OpDeconstructVec : ConstManaAction {
     override val argc = 1
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val v = args.getChecked<Vec3>(0, argc)
-        return spellListOf(v.x, v.y, v.z)
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+        val v = args.getVec3(0, argc)
+        return listOf(DoubleIota(v.x), DoubleIota(v.y), DoubleIota(v.z))
     }
 }

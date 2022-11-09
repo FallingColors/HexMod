@@ -1,8 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.ManaConstants
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.spell.ParticleSpray
+import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getBlockPos
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.ktxt.UseOnContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -17,40 +21,37 @@ import net.minecraft.world.level.block.*
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
-object OpExtinguish : SpellOperator {
+object OpExtinguish : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<SpellDatum<*>>,
+        args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getChecked<Vec3>(0, argc)
+        val target = args.getBlockPos(0, argc)
         ctx.assertVecInRange(target)
 
         return Triple(
             Spell(target),
-            ManaConstants.DUST_UNIT * 6,
-            listOf(ParticleSpray.burst(target, 1.0))
+            MediaConstants.DUST_UNIT * 6,
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(target), 1.0))
         )
     }
 
     const val MAX_DESTROY_COUNT = 1024
 
-    private data class Spell(val target: Vec3) : RenderedSpell {
-
+    private data class Spell(val target: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             // how many levels of "borrowed" code are we on now
             val todo = ArrayDeque<BlockPos>()
             val seen = HashSet<BlockPos>()
-            todo.add(BlockPos(target))
+            todo.add(target)
 
             var successes = 0
             while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
                 val here = todo.removeFirst()
-                val distFromFocus =
-                    ctx.caster.position().distanceToSqr(Vec3.atCenterOf(here))
                 val distFromTarget =
-                    target.distanceTo(Vec3.atCenterOf(here)) // max distance to prevent runaway shenanigans
-                if (ctx.canEditBlockAt(here) && distFromTarget < 10 && seen.add(here)) {
+                    target.distSqr(here) // max distance to prevent runaway shenanigans
+                if (ctx.canEditBlockAt(here) && distFromTarget < 10 * 10 && seen.add(here)) {
                     // never seen this pos in my life
                     val blockstate = ctx.world.getBlockState(here)
                     if (IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, here, blockstate, ctx.caster)) {
@@ -110,9 +111,9 @@ object OpExtinguish : SpellOperator {
             if (successes > 0) {
                 ctx.world.playSound(
                     null,
-                    target.x,
-                    target.y,
-                    target.z,
+                    target.x.toDouble(),
+                    target.y.toDouble(),
+                    target.z.toDouble(),
                     SoundEvents.FIRE_EXTINGUISH,
                     SoundSource.BLOCKS,
                     1.0f,

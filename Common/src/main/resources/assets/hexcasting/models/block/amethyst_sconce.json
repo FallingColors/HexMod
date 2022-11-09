@@ -5,6 +5,7 @@
 		"3": "block/large_amethyst_bud",
 		"particle": "block/cut_copper"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "base",

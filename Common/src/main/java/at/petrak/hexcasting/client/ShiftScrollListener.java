@@ -26,6 +26,11 @@ public class ShiftScrollListener {
         // not .isCrouching! that fails for players who are not on the ground
         // yes, this does work if you remap your sneak key
         if (player != null && (player.isShiftKeyDown() || !needsSneaking)) {
+            // Spectators shouldn't interact with items!
+            if (player.isSpectator()) {
+                return false;
+            }
+
             if (IsScrollableItem(player.getMainHandItem().getItem())) {
                 mainHandDelta += delta;
                 return true;

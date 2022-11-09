@@ -1,18 +1,22 @@
 package at.petrak.hexcasting.common.casting.operators.lists
 
-import at.petrak.hexcasting.api.spell.*
+import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.getInt
+import at.petrak.hexcasting.api.spell.getList
+import at.petrak.hexcasting.api.spell.iota.Iota
 
-object OpRemove : ConstManaOperator {
+object OpRemove : ConstManaAction {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<SpellDatum<*>>, ctx: CastingContext): List<SpellDatum<*>> {
-        val list = args.getChecked<SpellList>(0, argc).toMutableList()
-        val index = args.getChecked<Double>(1, argc).toInt()
+    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+        val list = args.getList(0, argc).toMutableList()
+        val index = args.getInt(1, argc)
         if (index < 0 || index >= list.size)
-            return list.asSpellResult
+            return list.asActionResult
         list.removeAt(index)
-        return list.asSpellResult
+        return list.asActionResult
     }
 }

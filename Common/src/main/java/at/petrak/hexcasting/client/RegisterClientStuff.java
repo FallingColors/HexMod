@@ -3,40 +3,33 @@ package at.petrak.hexcasting.client;
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
-import at.petrak.hexcasting.api.item.DataHolderItem;
-import at.petrak.hexcasting.api.item.ManaHolderItem;
-import at.petrak.hexcasting.api.misc.ManaConstants;
-import at.petrak.hexcasting.api.spell.SpellDatum;
-import at.petrak.hexcasting.api.spell.Widget;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
-import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicRecord;
 import at.petrak.hexcasting.common.entities.HexEntities;
-import at.petrak.hexcasting.common.items.ItemFocus;
-import at.petrak.hexcasting.common.items.ItemScroll;
-import at.petrak.hexcasting.common.items.ItemSlate;
-import at.petrak.hexcasting.common.items.ItemWand;
-import at.petrak.hexcasting.common.items.magic.ItemManaBattery;
+import at.petrak.hexcasting.common.items.*;
+import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
-import at.petrak.hexcasting.common.lib.HexBlockEntities;
-import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.lib.HexParticles;
+import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -53,62 +46,104 @@ import net.minecraft.world.level.material.MaterialColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 
 public class RegisterClientStuff {
     public static void init() {
-        registerDataHolderOverrides(HexItems.FOCUS);
-        registerDataHolderOverrides(HexItems.SPELLBOOK);
+        registerDataHolderOverrides(HexItems.FOCUS,
+            stack -> HexItems.FOCUS.readIotaTag(stack) != null,
+            ItemFocus::isSealed);
+        registerDataHolderOverrides(HexItems.SPELLBOOK,
+            stack -> HexItems.SPELLBOOK.readIotaTag(stack) != null,
+            ItemSpellbook::isSealed);
 
         registerPackagedSpellOverrides(HexItems.CYPHER);
         registerPackagedSpellOverrides(HexItems.TRINKET);
         registerPackagedSpellOverrides(HexItems.ARTIFACT);
 
         var x = IClientXplatAbstractions.INSTANCE;
-        x.registerItemProperty(HexItems.BATTERY, ItemManaBattery.MANA_PREDICATE,
+        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MANA_PREDICATE,
             (stack, level, holder, holderID) -> {
-                var item = (ManaHolderItem) stack.getItem();
-                return item.getManaFullness(stack);
+                var item = (MediaHolderItem) stack.getItem();
+                return item.getMediaFullness(stack);
             });
-        x.registerItemProperty(HexItems.BATTERY, ItemManaBattery.MAX_MANA_PREDICATE,
+        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MAX_MANA_PREDICATE,
             (stack, level, holder, holderID) -> {
-                var item = (ItemManaBattery) stack.getItem();
-                var max = item.getMaxMana(stack);
-                return (float) Math.sqrt((float) max / ManaConstants.CRYSTAL_UNIT / 10);
+                var item = (ItemMediaBattery) stack.getItem();
+                var max = item.getMaxMedia(stack);
+                return (float) Math.sqrt((float) max / MediaConstants.CRYSTAL_UNIT / 10);
             });
 
-        registerScollOverrides(HexItems.SCROLL_SMOL);
-        registerScollOverrides(HexItems.SCROLL_MEDIUM);
-        registerScollOverrides(HexItems.SCROLL_LARGE);
+        registerScrollOverrides(HexItems.SCROLL_SMOL);
+        registerScrollOverrides(HexItems.SCROLL_MEDIUM);
+        registerScrollOverrides(HexItems.SCROLL_LARGE);
 
         x.registerItemProperty(HexItems.SLATE, ItemSlate.WRITTEN_PRED,
             (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
-        registerWandOverrides(HexItems.WAND_OAK);
-        registerWandOverrides(HexItems.WAND_BIRCH);
-        registerWandOverrides(HexItems.WAND_SPRUCE);
-        registerWandOverrides(HexItems.WAND_JUNGLE);
-        registerWandOverrides(HexItems.WAND_DARK_OAK);
-        registerWandOverrides(HexItems.WAND_ACACIA);
-        registerWandOverrides(HexItems.WAND_AKASHIC);
-
-        HexTooltips.init();
+        registerWandOverrides(HexItems.STAFF_OAK);
+        registerWandOverrides(HexItems.STAFF_BIRCH);
+        registerWandOverrides(HexItems.STAFF_SPRUCE);
+        registerWandOverrides(HexItems.STAFF_JUNGLE);
+        registerWandOverrides(HexItems.STAFF_DARK_OAK);
+        registerWandOverrides(HexItems.STAFF_ACACIA);
+        registerWandOverrides(HexItems.STAFF_EDIFIED);
 
         x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
         x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
-        x.setRenderLayer(HexBlocks.AKASHIC_DOOR, RenderType.cutout());
-        x.setRenderLayer(HexBlocks.AKASHIC_TRAPDOOR, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.EDIFIED_DOOR, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.EDIFIED_TRAPDOOR, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.AKASHIC_BOOKSHELF, RenderType.cutout());
         x.setRenderLayer(HexBlocks.SCONCE, RenderType.cutout());
 
-        x.setRenderLayer(HexBlocks.AKASHIC_LEAVES1, RenderType.cutoutMipped());
-        x.setRenderLayer(HexBlocks.AKASHIC_LEAVES2, RenderType.cutoutMipped());
-        x.setRenderLayer(HexBlocks.AKASHIC_LEAVES3, RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.AMETHYST_EDIFIED_LEAVES, RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.AVENTURINE_EDIFIED_LEAVES, RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.CITRINE_EDIFIED_LEAVES, RenderType.cutoutMipped());
 
         x.setRenderLayer(HexBlocks.AKASHIC_RECORD, RenderType.translucent());
 
         x.registerEntityRenderer(HexEntities.WALL_SCROLL, WallScrollRenderer::new);
 
         addScryingLensStuff();
+    }
+
+    public static void registerColorProviders(BiConsumer<ItemColor, Item> itemColorRegistry,
+        BiConsumer<BlockColor, Block> blockColorRegistry) {
+        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.FOCUS::getColor), HexItems.FOCUS);
+        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.SPELLBOOK::getColor), HexItems.SPELLBOOK);
+
+        blockColorRegistry.accept((bs, level, pos, idx) -> {
+            if (!bs.getValue(BlockAkashicBookshelf.HAS_BOOKS) || level == null || pos == null) {
+                return 0xff_ffffff;
+            }
+            var tile = level.getBlockEntity(pos);
+            if (!(tile instanceof BlockEntityAkashicBookshelf beas)) {
+                // this gets called for particles for some irritating reason
+                return 0xff_ffffff;
+            }
+            var iotaTag = beas.getIotaTag();
+            if (iotaTag == null) {
+                return 0xff_ffffff;
+            }
+            return HexIotaTypes.getColor(iotaTag);
+        }, HexBlocks.AKASHIC_BOOKSHELF);
+    }
+
+    /**
+     * Helper function to colorize the layers of an item that stores an iota, in the manner of foci and spellbooks.
+     * <br>
+     * 0 = base; 1 = overlay
+     */
+    public static ItemColor makeIotaStorageColorizer(ToIntFunction<ItemStack> getColor) {
+        return (stack, idx) -> {
+            if (idx == 1) {
+                return getColor.applyAsInt(stack);
+            }
+            return 0xff_ffffff;
+        };
     }
 
     private static void addScryingLensStuff() {
@@ -134,40 +169,22 @@ public class RegisterClientStuff {
 
                 lines.add(new Pair<>(
                     new ItemStack(Items.MUSIC_DISC_CHIRP),
-                    new TextComponent(String.valueOf(instrument.ordinal()))
+                    Component.literal(String.valueOf(instrument.ordinal()))
                         .withStyle(color(instrumentColor(instrument)))));
                 lines.add(new Pair<>(
                     new ItemStack(Items.NOTE_BLOCK),
-                    new TextComponent(String.valueOf(note))
+                    Component.literal(String.valueOf(note))
                         .withStyle(color(noteColor))));
             });
 
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF,
             (lines, state, pos, observer, world, direction) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
-                    var recordPos = tile.getRecordPos();
-                    var pattern = tile.getPattern();
-                    if (recordPos != null && pattern != null) {
-                        lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_RECORD), new TranslatableComponent(
-                            "hexcasting.tooltip.lens.akashic.bookshelf.location",
-                            recordPos.toShortString()
-                        )));
-                        if (world.getBlockEntity(recordPos) instanceof BlockEntityAkashicRecord record) {
-                            lines.add(new Pair<>(new ItemStack(Items.BOOK), record.getDisplayAt(pattern)));
-                        }
+                    var iotaTag = tile.getIotaTag();
+                    if (iotaTag != null) {
+                        var display = HexIotaTypes.getDisplay(iotaTag);
+                        lines.add(new Pair<>(new ItemStack(Items.BOOK), display));
                     }
-                }
-            });
-
-        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_RECORD,
-            (lines, state, pos, observer, world, direction) -> {
-                if (world.getBlockEntity(pos) instanceof BlockEntityAkashicRecord tile) {
-                    int count = tile.getCount();
-
-                    lines.add(new Pair<>(new ItemStack(HexBlocks.AKASHIC_BOOKSHELF), new TranslatableComponent(
-                        "hexcasting.tooltip.lens.akashic.record.count" + (count == 1 ? ".single" : ""),
-                        count
-                    )));
                 }
             });
 
@@ -176,15 +193,14 @@ public class RegisterClientStuff {
                 int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(true);
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE),
-                    new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
+                    Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
                         .withStyle(redstoneColor(comparatorValue))));
 
                 boolean compare = state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE;
 
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE_TORCH),
-                    new TextComponent(
-                        compare ? ">=" : "-")
+                    Component.literal(compare ? ">=" : "-")
                         .withStyle(redstoneColor(compare ? 0 : 15))));
             });
 
@@ -193,22 +209,22 @@ public class RegisterClientStuff {
                 int power = getPoweredRailStrength(world, pos, state);
                 lines.add(new Pair<>(
                     new ItemStack(Items.POWERED_RAIL),
-                    new TextComponent(String.valueOf(power))
+                    Component.literal(String.valueOf(power))
                         .withStyle(redstoneColor(power, 9))));
             });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
             (lines, state, pos, observer, world, direction) -> lines.add(new Pair<>(
                 new ItemStack(Items.CLOCK),
-                new TextComponent(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
+                Component.literal(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
                     .withStyle(ChatFormatting.YELLOW))));
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
             (state, pos, observer, world, direction) -> state.getBlock() instanceof BeehiveBlock,
             (lines, state, pos, observer, world, direction) -> {
                 int count = ScryingLensOverlayRegistry.getBeeValue();
-                lines.add(new Pair<>(new ItemStack(Items.BEE_NEST), count == -1 ? new TextComponent("") :
-                    new TranslatableComponent(
+                lines.add(new Pair<>(new ItemStack(Items.BEE_NEST), count == -1 ? Component.empty() :
+                    Component.translatable(
                         "hexcasting.tooltip.lens.bee" + (count == 1 ? ".single" : ""),
                         count
                     )));
@@ -229,7 +245,7 @@ public class RegisterClientStuff {
 
                 lines.add(0, new Pair<>(
                     new ItemStack(Items.REDSTONE),
-                    new TextComponent(String.valueOf(signalStrength))
+                    Component.literal(String.valueOf(signalStrength))
                         .withStyle(redstoneColor(signalStrength))));
             });
 
@@ -240,7 +256,7 @@ public class RegisterClientStuff {
                 lines.add(
                     new Pair<>(
                         new ItemStack(Items.COMPARATOR),
-                        new TextComponent(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
+                        Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
                             .withStyle(redstoneColor(comparatorValue))));
             });
     }
@@ -274,6 +290,20 @@ public class RegisterClientStuff {
             case BANJO -> MaterialColor.COLOR_YELLOW.col;
             default -> -1;
         };
+    }
+
+    private static void registerDataHolderOverrides(IotaHolderItem item, Predicate<ItemStack> hasIota,
+                                                    Predicate<ItemStack> isSealed) {
+        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.OVERLAY_PRED,
+            (stack, level, holder, holderID) -> {
+                if (!hasIota.test(stack) && !NBTHelper.hasString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY)) {
+                    return 0;
+                }
+                if (!isSealed.test(stack)) {
+                    return 1;
+                }
+                return 2;
+            });
     }
 
     private static int getPoweredRailStrength(Level level, BlockPos pos, BlockState state) {
@@ -384,35 +414,9 @@ public class RegisterClientStuff {
         }
     }
 
-    private static void registerScollOverrides(ItemScroll scroll) {
+    private static void registerScrollOverrides(ItemScroll scroll) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(scroll, ItemScroll.ANCIENT_PREDICATE,
             (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
-    }
-
-    private static void registerDataHolderOverrides(DataHolderItem item) {
-        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.DATATYPE_PRED,
-            (stack, level, holder, holderID) -> {
-                var datum = item.readDatumTag(stack);
-                String override = NBTHelper.getString(stack, DataHolderItem.TAG_OVERRIDE_VISUALLY);
-                String typename = null;
-                if (override != null) {
-                    typename = override;
-                } else if (datum != null) {
-                    typename = datum.getAllKeys().iterator().next();
-                }
-
-                return typename == null ? 0f : switch (typename) {
-                    case SpellDatum.TAG_ENTITY -> 1f;
-                    case SpellDatum.TAG_DOUBLE -> 2f;
-                    case SpellDatum.TAG_VEC3 -> 3f;
-                    case SpellDatum.TAG_WIDGET -> 4f;
-                    case SpellDatum.TAG_LIST -> 5f;
-                    case SpellDatum.TAG_PATTERN -> 6f;
-                    default -> 0f; // uh oh
-                };
-            });
-        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.SEALED_PRED,
-            (stack, level, holder, holderID) -> item.canWrite(stack, SpellDatum.make(Widget.NULL)) ? 0f : 1f);
     }
 
     private static void registerPackagedSpellOverrides(ItemPackagedHex item) {
@@ -422,8 +426,8 @@ public class RegisterClientStuff {
         );
     }
 
-    private static void registerWandOverrides(ItemWand item) {
-        IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemWand.FUNNY_LEVEL_PREDICATE,
+    private static void registerWandOverrides(ItemStaff item) {
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemStaff.FUNNY_LEVEL_PREDICATE,
             (stack, level, holder, holderID) -> {
                 if (!stack.hasCustomHoverName()) {
                     return 0;

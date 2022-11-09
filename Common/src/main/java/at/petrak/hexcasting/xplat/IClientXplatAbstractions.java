@@ -2,7 +2,6 @@ package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.network.IMessage;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.RenderType;
@@ -14,7 +13,6 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -33,8 +31,6 @@ public interface IClientXplatAbstractions {
 
     <T extends ParticleOptions> void registerParticleType(ParticleType<T> type,
         Function<SpriteSet, ParticleProvider<T>> factory);
-
-    <T extends ClientTooltipComponent & TooltipComponent> void registerIdentityTooltipMapping(Class<T> clazz);
 
     void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func);
 

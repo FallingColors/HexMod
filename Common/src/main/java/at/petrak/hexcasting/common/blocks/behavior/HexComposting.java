@@ -9,9 +9,9 @@ import net.minecraft.world.level.block.ComposterBlock;
 public final class HexComposting {
 
     public static void setup() {
-        compost(HexBlocks.AKASHIC_LEAVES1, 0.3F);
-        compost(HexBlocks.AKASHIC_LEAVES2, 0.3F);
-        compost(HexBlocks.AKASHIC_LEAVES3, 0.3F);
+        compost(HexBlocks.AMETHYST_EDIFIED_LEAVES, 0.3F);
+        compost(HexBlocks.AVENTURINE_EDIFIED_LEAVES, 0.3F);
+        compost(HexBlocks.CITRINE_EDIFIED_LEAVES, 0.3F);
     }
 
     private static void compost(ItemLike itemLike, float chance) {
