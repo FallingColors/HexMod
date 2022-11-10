@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
@@ -9,7 +9,7 @@ import it.unimi.dsi.fastutil.booleans.BooleanList
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class OpMask(val mask: BooleanList, val key: ResourceLocation) : ConstManaAction {
+class OpMask(val mask: BooleanList, val key: ResourceLocation) : ConstMediaAction {
     override val argc: Int
         get() = mask.size
 

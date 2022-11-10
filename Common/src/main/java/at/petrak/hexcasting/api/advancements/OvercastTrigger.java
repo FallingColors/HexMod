@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Instance> {
     private static final ResourceLocation ID = new ResourceLocation("hexcasting", "overcast");
 
-    private static final String TAG_MANA_GENERATED = "mana_generated";
+    private static final String TAG_MEDIA_GENERATED = "media_generated";
     private static final String TAG_HEALTH_USED = "health_used";
     // HEY KIDS DID YOYU KNOW THERE'S NOT A CRITERIA FOR HOW MUCH ***HEALTH*** AN ENTITY HAS
     private static final String TAG_HEALTH_LEFT = "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion";
@@ -26,29 +26,29 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
     protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate,
         DeserializationContext pContext) {
         return new Instance(predicate,
-            MinMaxBounds.Ints.fromJson(json.get(TAG_MANA_GENERATED)),
+            MinMaxBounds.Ints.fromJson(json.get(TAG_MEDIA_GENERATED)),
             MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_USED)),
             MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_LEFT)));
     }
 
-    public void trigger(ServerPlayer player, int manaGenerated) {
+    public void trigger(ServerPlayer player, int mediaGenerated) {
         super.trigger(player, inst -> {
-            var manaToHealth = HexConfig.common().mediaToHealthRate();
-            var healthUsed = manaGenerated / manaToHealth;
-            return inst.test(manaGenerated, healthUsed / player.getMaxHealth(), player.getHealth());
+            var mediaToHealth = HexConfig.common().mediaToHealthRate();
+            var healthUsed = mediaGenerated / mediaToHealth;
+            return inst.test(mediaGenerated, healthUsed / player.getMaxHealth(), player.getHealth());
         });
     }
 
     public static class Instance extends AbstractCriterionTriggerInstance {
-        protected final MinMaxBounds.Ints manaGenerated;
+        protected final MinMaxBounds.Ints mediaGenerated;
         protected final MinMaxBounds.Doubles healthUsed;
         // DID YOU KNOW THERES ONE TO CHECK THE WORLD TIME, BUT NOT THE HEALTH!?
         protected final MinMaxBounds.Doubles healthLeft;
 
-        public Instance(EntityPredicate.Composite predicate, MinMaxBounds.Ints manaGenerated,
+        public Instance(EntityPredicate.Composite predicate, MinMaxBounds.Ints mediaGenerated,
             MinMaxBounds.Doubles healthUsed, MinMaxBounds.Doubles healthLeft) {
             super(OvercastTrigger.ID, predicate);
-            this.manaGenerated = manaGenerated;
+            this.mediaGenerated = mediaGenerated;
             this.healthUsed = healthUsed;
             // DID YOU KNOW THERE'S ONE TO CHECK THE FUCKING C A T T Y P E BUT NOT THE HEALTH
             this.healthLeft = healthLeft;
@@ -62,8 +62,8 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
         @Override
         public JsonObject serializeToJson(SerializationContext ctx) {
             JsonObject json = super.serializeToJson(ctx);
-            if (!this.manaGenerated.isAny()) {
-                json.add(TAG_MANA_GENERATED, this.manaGenerated.serializeToJson());
+            if (!this.mediaGenerated.isAny()) {
+                json.add(TAG_MEDIA_GENERATED, this.mediaGenerated.serializeToJson());
             }
             if (!this.healthUsed.isAny()) {
                 json.add(TAG_HEALTH_USED, this.healthUsed.serializeToJson());
@@ -74,8 +74,8 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
             return json;
         }
 
-        private boolean test(int manaGeneratedIn, double healthUsedIn, float healthLeftIn) {
-            return this.manaGenerated.matches(manaGeneratedIn)
+        private boolean test(int mediaGeneratedIn, double healthUsedIn, float healthLeftIn) {
+            return this.mediaGenerated.matches(mediaGeneratedIn)
                 && this.healthUsed.matches(healthUsedIn)
                 // DID YOU KNOW ALL THE ENEITYT PREDICATES ARE HARD-CODED AND YOU CANT MAKE NEW ONES
                 && this.healthLeft.matches(healthLeftIn);

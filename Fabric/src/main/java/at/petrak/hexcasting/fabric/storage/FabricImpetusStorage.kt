@@ -21,14 +21,14 @@ class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlot
     override fun insert(resource: ItemVariant, maxAmount: Long, transaction: TransactionContext): Long {
         val stackCount = maxAmount / 64
         val remainder = (maxAmount % 64).toInt()
-        var manaToTake = impetus.remainingManaCapacity()
+        var mediaToTake = impetus.remainingMediaCapacity()
         var itemsConsumed = 0L
 
         fun insertStack(stack: ItemStack, transaction: TransactionContext) {
             val copied = stack.copy()
             val size = stack.count
-            val extractable = impetus.extractManaFromItem(stack, false)
-            manaToTake -= extractable
+            val extractable = impetus.extractMediaFromItem(stack, false)
+            mediaToTake -= extractable
             val taken = size - stack.count
             itemsConsumed += taken.toLong()
             copied.count = taken
@@ -36,7 +36,7 @@ class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlot
             if (taken > 0) {
                 transaction.addOuterCloseCallback {
                     if (it.wasCommitted()) {
-                        impetus.insertMana(copied)
+                        impetus.insertMedia(copied)
                     }
                 }
             }
@@ -44,7 +44,7 @@ class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlot
         for (i in 0 until stackCount) {
             val stack = resource.toStack(64)
             insertStack(stack, transaction)
-            if (manaToTake <= 0) {
+            if (mediaToTake <= 0) {
                 return itemsConsumed
             }
         }

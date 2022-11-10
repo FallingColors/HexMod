@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getBlockPos
 import at.petrak.hexcasting.api.spell.getPattern
@@ -10,9 +10,9 @@ import at.petrak.hexcasting.api.spell.iota.NullIota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNoAkashicRecord
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
 
-object OpAkashicRead : ConstManaAction {
+object OpAkashicRead : ConstMediaAction {
     override val argc = 2
-    override val manaCost = MediaConstants.DUST_UNIT
+    override val mediaCost = MediaConstants.DUST_UNIT
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val pos = args.getBlockPos(0, argc)

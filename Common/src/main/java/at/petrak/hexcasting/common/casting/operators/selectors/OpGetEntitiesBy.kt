@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.selectors
 
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getPositiveDouble
@@ -18,7 +18,7 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import java.util.function.Predicate
 
-class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : ConstManaAction {
+class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : ConstMediaAction {
     override val argc = 2
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val pos = args.getVec3(0, argc)

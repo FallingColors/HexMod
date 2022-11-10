@@ -4,30 +4,30 @@
     {
       "conditions": [
         {
-          "modid": "farmersdelight",
-          "type": "forge:mod_loaded"
+          "type": "forge:mod_loaded",
+          "modid": "farmersdelight"
         }
       ],
       "recipe": {
         "type": "farmersdelight:cutting",
         "ingredients": [
           {
-            "item": "hexcasting:akashic_log"
+            "item": "hexcasting:edified_log"
           }
         ],
-        "tool": {
-          "type": "farmersdelight:tool_action",
-          "action": "axe_strip"
-        },
         "result": [
           {
-            "item": "hexcasting:akashic_log_stripped"
+            "item": "hexcasting:stripped_edified_log"
           },
           {
             "item": "farmersdelight:tree_bark"
           }
         ],
-        "sound": "minecraft:item.axe.strip"
+        "sound": "minecraft:item.axe.strip",
+        "tool": {
+          "type": "farmersdelight:tool_action",
+          "action": "axe_strip"
+        }
       }
     }
   ]

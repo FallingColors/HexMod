@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.math.logic
 
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getBool
 import at.petrak.hexcasting.api.spell.iota.Iota
 
-object OpBoolIf : ConstManaAction {
+object OpBoolIf : ConstMediaAction {
     override val argc = 3
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {

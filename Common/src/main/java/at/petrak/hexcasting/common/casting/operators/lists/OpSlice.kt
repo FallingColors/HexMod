@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.lists
 
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getList
@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 import kotlin.math.max
 import kotlin.math.min
 
-object OpSlice : ConstManaAction {
+object OpSlice : ConstMediaAction {
     override val argc = 3
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val list = args.getList(0, argc).toList()

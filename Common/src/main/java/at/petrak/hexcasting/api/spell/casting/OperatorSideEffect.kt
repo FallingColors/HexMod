@@ -48,14 +48,14 @@ sealed class OperatorSideEffect {
         }
     }
 
-    data class ConsumeMana(val amount: Int) : OperatorSideEffect() {
+    data class ConsumeMedia(val amount: Int) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
             val overcastOk = harness.ctx.canOvercast
-            val leftoverMana = harness.withdrawMana(this.amount, overcastOk)
-            if (leftoverMana > 0 && !overcastOk) {
+            val leftoverMedia = harness.withdrawMedia(this.amount, overcastOk)
+            if (leftoverMedia > 0 && !overcastOk) {
                 harness.ctx.caster.sendSystemMessage("hexcasting.message.cant_overcast".asTranslatedComponent)
             }
-            return leftoverMana > 0
+            return leftoverMedia > 0
         }
     }
 

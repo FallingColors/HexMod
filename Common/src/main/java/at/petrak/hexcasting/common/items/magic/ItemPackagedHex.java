@@ -74,7 +74,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<Iota> program, int mana) {
+    public void writeHex(ItemStack stack, List<Iota> program, int media) {
         ListTag patsTag = new ListTag();
         for (Iota pat : program) {
             patsTag.add(HexIotaTypes.serialize(pat));
@@ -82,14 +82,14 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
         NBTHelper.putList(stack, TAG_PROGRAM, patsTag);
 
-        withMedia(stack, mana, mana);
+        withMedia(stack, media, media);
     }
 
     @Override
     public void clearHex(ItemStack stack) {
         NBTHelper.remove(stack, ItemPackagedHex.TAG_PROGRAM);
-        NBTHelper.remove(stack, TAG_MANA);
-        NBTHelper.remove(stack, TAG_MAX_MANA);
+        NBTHelper.remove(stack, TAG_MEDIA);
+        NBTHelper.remove(stack, TAG_MAX_MEDIA);
     }
 
     @Override

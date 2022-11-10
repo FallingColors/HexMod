@@ -1,6 +1,6 @@
-// 1.19.2	2022-11-04T11:49:15.7703822	Advancements
-17c1f596c096c05f510c3c03cef9281c9c6b8d47 data/hexcasting/advancements/aaa_wasteful_cast.json
-4da7c22a5a04dfe9652f4f4b5d59a537edf285f8 data/hexcasting/advancements/aab_big_cast.json
+// 1.19.2	2022-11-09T19:44:43.405259	Advancements
+b21f0b7f0cda29a7e84693df8139f2fecfeea960 data/hexcasting/advancements/aaa_wasteful_cast.json
+9d8b41dd8ddfccdf2cd19433d8d7d3cf934e64db data/hexcasting/advancements/aab_big_cast.json
 ef61c93d776c6f212820af20909a4c1d92822baf data/hexcasting/advancements/enlightenment.json
 8f97205fa79270eab688aa3019d6fe7dd8c8b0d3 data/hexcasting/advancements/lore.json
 2f5ad49936d58c7097ac7f8fbbf3f66f9f90fd2c data/hexcasting/advancements/lore/experiment1.json
@@ -12,5 +12,5 @@ ef06ae5bd79e2c52291fbfb3c69bc2f74a604477 data/hexcasting/advancements/lore/terab
 861374b7c144ccdbbd031a3f5042af6718ba42bf data/hexcasting/advancements/lore/terabithia4.json
 e26db8dfa825b7ac572d59a548b610db7c7bf736 data/hexcasting/advancements/lore/terabithia5.json
 2acbfb4efe2a72a1986c8dbe62ad8d93e9613e99 data/hexcasting/advancements/opened_eyes.json
-f85abe882fbcf05bb3dfbaf36c4ad5bcd8a888a4 data/hexcasting/advancements/root.json
+d19039a73324eb7532d035d08442f3b68bb13bcb data/hexcasting/advancements/root.json
 b1b82068d65d6872c258d905d4f78499e8227ccf data/hexcasting/advancements/y_u_no_cast_angy.json

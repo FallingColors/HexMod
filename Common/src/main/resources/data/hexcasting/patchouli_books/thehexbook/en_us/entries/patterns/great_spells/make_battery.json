@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.spell.hexcasting:craft/battery",
   "category": "hexcasting:patterns/great_spells",
-  "icon": "hexcasting:battery{mana:10000,max_mana:10000}",
+  "icon": "hexcasting:battery{media:10000,max_media:10000}",
   "sortnum": 6,
   "advancement": "hexcasting:root",
   "read_by_default": true,

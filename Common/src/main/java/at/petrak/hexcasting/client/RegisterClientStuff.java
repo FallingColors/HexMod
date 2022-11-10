@@ -65,12 +65,12 @@ public class RegisterClientStuff {
         registerPackagedSpellOverrides(HexItems.ARTIFACT);
 
         var x = IClientXplatAbstractions.INSTANCE;
-        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MANA_PREDICATE,
+        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MEDIA_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var item = (MediaHolderItem) stack.getItem();
                 return item.getMediaFullness(stack);
             });
-        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MAX_MANA_PREDICATE,
+        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MAX_MEDIA_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var item = (ItemMediaBattery) stack.getItem();
                 var max = item.getMaxMedia(stack);

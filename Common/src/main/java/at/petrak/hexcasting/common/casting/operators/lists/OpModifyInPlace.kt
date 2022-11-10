@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
 
-object OpModifyInPlace : ConstManaAction {
+object OpModifyInPlace : ConstMediaAction {
     override val argc = 3
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val list = args.getList(0, argc)
