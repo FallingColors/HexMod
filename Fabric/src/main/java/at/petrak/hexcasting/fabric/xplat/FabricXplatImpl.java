@@ -219,7 +219,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public @Nullable
-    ADMediaHolder findManaHolder(ItemStack stack) {
+    ADMediaHolder findMediaHolder(ItemStack stack) {
         var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(stack);
         return cc.orElse(null);
     }

@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getDouble
 import at.petrak.hexcasting.api.spell.iota.Iota
 import net.minecraft.world.phys.Vec3
 
-object OpConstructVec : ConstManaAction {
+object OpConstructVec : ConstMediaAction {
     override val argc = 3
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
         val x = args.getDouble(0, argc)

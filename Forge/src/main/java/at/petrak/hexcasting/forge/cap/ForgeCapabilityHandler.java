@@ -84,26 +84,26 @@ public class ForgeCapabilityHandler {
 
         if (stack.getItem() instanceof MediaHolderItem holder) {
             evt.addCapability(MEDIA_STORAGE_CAP,
-                provide(stack, HexCapabilities.MANA, () -> new ItemBasedMediaHolder(holder, stack)));
+                provide(stack, HexCapabilities.MEDIA, () -> new ItemBasedMediaHolder(holder, stack)));
         } else if (stack.is(HexItems.AMETHYST_DUST)) {
-            evt.addCapability(MEDIA_STATIC_CAP, provide(stack, HexCapabilities.MANA, () ->
+            evt.addCapability(MEDIA_STATIC_CAP, provide(stack, HexCapabilities.MEDIA, () ->
                 new StaticMediaHolder(HexConfig.common()::dustMediaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY,
                     stack)));
         } else if (stack.is(Items.AMETHYST_SHARD)) {
-            evt.addCapability(MEDIA_STATIC_CAP, provide(stack, HexCapabilities.MANA, () -> new StaticMediaHolder(
+            evt.addCapability(MEDIA_STATIC_CAP, provide(stack, HexCapabilities.MEDIA, () -> new StaticMediaHolder(
                 HexConfig.common()::shardMediaAmount, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack)));
         } else if (stack.is(HexItems.CHARGED_AMETHYST)) {
             evt.addCapability(MEDIA_STATIC_CAP,
-                provide(stack, HexCapabilities.MANA, () -> new StaticMediaHolder(
+                provide(stack, HexCapabilities.MEDIA, () -> new StaticMediaHolder(
                     HexConfig.common()::chargedCrystalMediaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)));
         }
 
         if (stack.getItem() instanceof IotaHolderItem holder) {
             evt.addCapability(IOTA_STORAGE_CAP,
-                provide(stack, HexCapabilities.DATUM, () -> new ItemBasedIotaHolder(holder, stack)));
+                provide(stack, HexCapabilities.IOTA, () -> new ItemBasedIotaHolder(holder, stack)));
         } else if (stack.is(Items.PUMPKIN_PIE)) {
             // haha yes
-            evt.addCapability(IOTA_STATIC_CAP, provide(stack, HexCapabilities.DATUM, () ->
+            evt.addCapability(IOTA_STATIC_CAP, provide(stack, HexCapabilities.IOTA, () ->
                 new StaticIotaHolder((s) -> new DoubleIota(Math.PI * s.getCount()), stack)));
         }
 
@@ -340,8 +340,8 @@ public class ForgeCapabilityHandler {
                                       ItemStack stack) implements ADHexHolder {
 
         @Override
-        public boolean canDrawManaFromInventory() {
-            return holder.canDrawManaFromInventory(stack);
+        public boolean canDrawMediaFromInventory() {
+            return holder.canDrawMediaFromInventory(stack);
         }
 
         @Override
@@ -355,8 +355,8 @@ public class ForgeCapabilityHandler {
         }
 
         @Override
-        public void writeHex(List<Iota> patterns, int mana) {
-            holder.writeHex(stack, patterns, mana);
+        public void writeHex(List<Iota> patterns, int media) {
+            holder.writeHex(stack, patterns, media);
         }
 
         @Override

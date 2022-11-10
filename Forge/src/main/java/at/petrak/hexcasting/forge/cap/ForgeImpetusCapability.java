@@ -27,9 +27,9 @@ public record ForgeImpetusCapability(BlockEntityAbstractImpetus impetus) impleme
         ItemStack stack = originalStack.copy();
 
         if (!simulate) {
-            impetus.insertMana(stack);
+            impetus.insertMedia(stack);
         } else {
-            impetus.extractManaFromItem(stack, false); // Mana goes nowhere, since nothing is actually being done
+            impetus.extractMediaFromItem(stack, false); // Media goes nowhere, since nothing is actually being done
         }
 
         return stack;

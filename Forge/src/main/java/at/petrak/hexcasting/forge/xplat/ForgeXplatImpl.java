@@ -256,21 +256,21 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public @Nullable
-    ADMediaHolder findManaHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.MANA).resolve();
+    ADMediaHolder findMediaHolder(ItemStack stack) {
+        var maybeCap = stack.getCapability(HexCapabilities.MEDIA).resolve();
         return maybeCap.orElse(null);
     }
 
     @Override
     public @Nullable
     ADIotaHolder findDataHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.DATUM).resolve();
+        var maybeCap = stack.getCapability(HexCapabilities.IOTA).resolve();
         return maybeCap.orElse(null);
     }
 
     @Override
     public @Nullable ADIotaHolder findDataHolder(Entity entity) {
-        var maybeCap = entity.getCapability(HexCapabilities.DATUM).resolve();
+        var maybeCap = entity.getCapability(HexCapabilities.IOTA).resolve();
         return maybeCap.orElse(null);
     }
 

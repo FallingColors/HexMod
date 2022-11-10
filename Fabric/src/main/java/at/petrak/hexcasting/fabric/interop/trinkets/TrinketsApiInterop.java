@@ -34,7 +34,7 @@ public class TrinketsApiInterop {
                 TrinketComponent component = optional.get();
                 return component.getEquipped(MediaHelper::isMediaItem).stream()
                     .map(Tuple::getB)
-                    .map(IXplatAbstractions.INSTANCE::findManaHolder)
+                    .map(IXplatAbstractions.INSTANCE::findMediaHolder)
                     .filter(Objects::nonNull)
                     .toList();
             }

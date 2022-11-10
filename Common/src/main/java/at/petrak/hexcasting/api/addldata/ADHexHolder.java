@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface ADHexHolder {
 
-    boolean canDrawManaFromInventory();
+    boolean canDrawMediaFromInventory();
 
     boolean hasHex();
 
     @Nullable
     List<Iota> getHex(ServerLevel level);
 
-    void writeHex(List<Iota> patterns, int mana);
+    void writeHex(List<Iota> patterns, int media);
 
     void clearHex();
 }

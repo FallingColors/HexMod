@@ -7,11 +7,11 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 
 /**
- * A SimpleOperator that always costs the same amount of mana.
+ * A SimpleOperator that always costs the same amount of media.
  */
-interface ConstManaAction : Action {
+interface ConstMediaAction : Action {
     val argc: Int
-    val manaCost: Int
+    val mediaCost: Int
         get() = 0
 
     fun execute(args: List<Iota>, ctx: CastingContext): List<Iota>
@@ -29,7 +29,7 @@ interface ConstManaAction : Action {
         val newData = this.execute(args, ctx)
         stack.addAll(newData)
 
-        val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMana(this.manaCost))
+        val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMedia(this.mediaCost))
 
         return OperationResult(continuation, stack, ravenmind, sideEffects)
     }

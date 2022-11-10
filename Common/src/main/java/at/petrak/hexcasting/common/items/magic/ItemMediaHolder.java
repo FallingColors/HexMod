@@ -18,8 +18,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
-    public static final String TAG_MANA = "hexcasting:mana";
-    public static final String TAG_MAX_MANA = "hexcasting:start_mana";
+    public static final String TAG_MEDIA = "hexcasting:media";
+    public static final String TAG_MAX_MEDIA = "hexcasting:start_media";
 
     public static final TextColor HEX_COLOR = TextColor.fromRgb(0xb38ef3);
 
@@ -35,11 +35,11 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
         super(pProperties);
     }
 
-    public static ItemStack withMedia(ItemStack stack, int mana, int maxMana) {
+    public static ItemStack withMedia(ItemStack stack, int media, int maxMedia) {
         Item item = stack.getItem();
         if (item instanceof ItemMediaHolder) {
-            NBTHelper.putInt(stack, TAG_MANA, mana);
-            NBTHelper.putInt(stack, TAG_MAX_MANA, maxMana);
+            NBTHelper.putInt(stack, TAG_MEDIA, media);
+            NBTHelper.putInt(stack, TAG_MAX_MEDIA, maxMedia);
         }
 
         return stack;
@@ -47,17 +47,17 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
 
     @Override
     public int getMedia(ItemStack stack) {
-        return NBTHelper.getInt(stack, TAG_MANA);
+        return NBTHelper.getInt(stack, TAG_MEDIA);
     }
 
     @Override
     public int getMaxMedia(ItemStack stack) {
-        return NBTHelper.getInt(stack, TAG_MAX_MANA);
+        return NBTHelper.getInt(stack, TAG_MAX_MEDIA);
     }
 
     @Override
     public void setMedia(ItemStack stack, int media) {
-        NBTHelper.putInt(stack, TAG_MANA, Mth.clamp(media, 0, getMaxMedia(stack)));
+        NBTHelper.putInt(stack, TAG_MEDIA, Mth.clamp(media, 0, getMaxMedia(stack)));
     }
 
     @Override
@@ -67,16 +67,16 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
 
     @Override
     public int getBarColor(ItemStack pStack) {
-        var mana = getMedia(pStack);
-        var maxMana = getMaxMedia(pStack);
-        return MediaHelper.mediaBarColor(mana, maxMana);
+        var media = getMedia(pStack);
+        var maxMedia = getMaxMedia(pStack);
+        return MediaHelper.mediaBarColor(media, maxMedia);
     }
 
     @Override
     public int getBarWidth(ItemStack pStack) {
-        var mana = getMedia(pStack);
-        var maxMana = getMaxMedia(pStack);
-        return MediaHelper.mediaBarWidth(mana, maxMana);
+        var media = getMedia(pStack);
+        var maxMedia = getMaxMedia(pStack);
+        return MediaHelper.mediaBarWidth(media, maxMedia);
     }
 
     @Override
@@ -87,24 +87,24 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
-        var maxMana = getMaxMedia(pStack);
-        if (maxMana > 0) {
-            var mana = getMedia(pStack);
+        var maxMedia = getMaxMedia(pStack);
+        if (maxMedia > 0) {
+            var media = getMedia(pStack);
             var fullness = getMediaFullness(pStack);
 
-            var color = TextColor.fromRgb(MediaHelper.mediaBarColor(mana, maxMana));
+            var color = TextColor.fromRgb(MediaHelper.mediaBarColor(media, maxMedia));
 
-            var manaAmount = Component.literal(DUST_AMOUNT.format(mana / (float) MediaConstants.DUST_UNIT));
+            var mediamount = Component.literal(DUST_AMOUNT.format(media / (float) MediaConstants.DUST_UNIT));
             var percentFull = Component.literal(PERCENTAGE.format(100f * fullness) + "%");
-            var maxCapacity = Component.translatable("hexcasting.tooltip.mana", DUST_AMOUNT.format(maxMana / (float) MediaConstants.DUST_UNIT));
+            var maxCapacity = Component.translatable("hexcasting.tooltip.media", DUST_AMOUNT.format(maxMedia / (float) MediaConstants.DUST_UNIT));
 
-            manaAmount.withStyle(style -> style.withColor(HEX_COLOR));
+            mediamount.withStyle(style -> style.withColor(HEX_COLOR));
             maxCapacity.withStyle(style -> style.withColor(HEX_COLOR));
             percentFull.withStyle(style -> style.withColor(color));
 
             pTooltipComponents.add(
-                Component.translatable("hexcasting.tooltip.mana_amount.advanced",
-                    manaAmount, maxCapacity, percentFull));
+                Component.translatable("hexcasting.tooltip.media_amount.advanced",
+                    mediamount, maxCapacity, percentFull));
         }
 
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);

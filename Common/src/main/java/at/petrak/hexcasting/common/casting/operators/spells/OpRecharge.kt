@@ -24,13 +24,13 @@ object OpRecharge : SpellAction {
         val entity = args.getItemEntity(0, argc)
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
-            val mana = IXplatAbstractions.INSTANCE.findManaHolder(it)
-            mana != null && mana.canRecharge() && mana.insertMedia(-1, true) != 0
+            val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)
+            media != null && media.canRecharge() && media.insertMedia(-1, true) != 0
         }
 
-        val mana = IXplatAbstractions.INSTANCE.findManaHolder(handStack)
+        val media = IXplatAbstractions.INSTANCE.findMediaHolder(handStack)
 
-        if (mana == null || !mana.canRecharge())
+        if (media == null || !media.canRecharge())
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,
@@ -42,11 +42,11 @@ object OpRecharge : SpellAction {
         if (!isMediaItem(entity.item)) {
             throw MishapBadItem.of(
                 entity,
-                "mana"
+                "media"
             )
         }
 
-        if (mana.insertMedia(-1, true) == 0)
+        if (media.insertMedia(-1, true) == 0)
             return null
 
         return Triple(
@@ -58,16 +58,16 @@ object OpRecharge : SpellAction {
 
     private data class Spell(val itemEntity: ItemEntity, val stack: ItemStack) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            val mana = IXplatAbstractions.INSTANCE.findManaHolder(stack)
+            val media = IXplatAbstractions.INSTANCE.findMediaHolder(stack)
 
-            if (mana != null && itemEntity.isAlive) {
+            if (media != null && itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
 
-                val emptySpace = mana.insertMedia(-1, true)
+                val emptySpace = media.insertMedia(-1, true)
 
-                val manaAmt = extractMedia(entityStack, emptySpace)
+                val mediaAmt = extractMedia(entityStack, emptySpace)
 
-                mana.insertMedia(manaAmt, false)
+                media.insertMedia(mediaAmt, false)
 
                 itemEntity.item = entityStack
                 if (entityStack.isEmpty)

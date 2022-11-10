@@ -17,14 +17,14 @@ import java.util.List;
 @ApiStatus.OverrideOnly
 public interface HexHolderItem extends MediaHolderItem {
 
-    boolean canDrawManaFromInventory(ItemStack stack);
+    boolean canDrawMediaFromInventory(ItemStack stack);
 
     boolean hasHex(ItemStack stack);
 
     @Nullable
     List<Iota> getHex(ItemStack stack, ServerLevel level);
 
-    void writeHex(ItemStack stack, List<Iota> program, int mana);
+    void writeHex(ItemStack stack, List<Iota> program, int media);
 
     void clearHex(ItemStack stack);
 }

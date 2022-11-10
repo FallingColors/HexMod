@@ -30,20 +30,20 @@ public interface MediaHolderItem {
     }
 
     default int withdrawMedia(ItemStack stack, int cost, boolean simulate) {
-        var manaHere = getMedia(stack);
+        var mediaHere = getMedia(stack);
         if (cost < 0) {
-            cost = manaHere;
+            cost = mediaHere;
         }
         if (!simulate) {
-            var manaLeft = manaHere - cost;
-            setMedia(stack, manaLeft);
+            var mediaLeft = mediaHere - cost;
+            setMedia(stack, mediaLeft);
         }
-        return Math.min(cost, manaHere);
+        return Math.min(cost, mediaHere);
     }
 
     default int insertMedia(ItemStack stack, int amount, boolean simulate) {
-        var manaHere = getMedia(stack);
-        int emptySpace = getMaxMedia(stack) - manaHere;
+        var mediaHere = getMedia(stack);
+        int emptySpace = getMaxMedia(stack) - mediaHere;
         if (emptySpace <= 0) {
             return 0;
         }
@@ -54,8 +54,8 @@ public interface MediaHolderItem {
         int inserting = Math.min(amount, emptySpace);
 
         if (!simulate) {
-            var newMana = manaHere + inserting;
-            setMedia(stack, newMana);
+            var newMedia = mediaHere + inserting;
+            setMedia(stack, newMedia);
         }
         return inserting;
     }

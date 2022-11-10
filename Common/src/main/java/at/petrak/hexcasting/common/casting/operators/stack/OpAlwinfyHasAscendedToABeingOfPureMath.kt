@@ -8,8 +8,6 @@ import at.petrak.hexcasting.api.spell.getPositiveInt
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 import it.unimi.dsi.fastutil.ints.IntArrayList
-import kotlin.math.abs
-import kotlin.math.roundToInt
 
 // "lehmer code"
 object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
@@ -23,6 +21,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
             throw MishapNotEnoughArgs(1, 0)
 
         val code = stack.getPositiveInt(stack.lastIndex)
+        stack.removeLast()
 
         val strides = IntArrayList()
         for (f in FactorialIter()) {

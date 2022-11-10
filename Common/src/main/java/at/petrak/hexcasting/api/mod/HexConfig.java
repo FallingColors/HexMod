@@ -23,7 +23,7 @@ public class HexConfig {
         int DEFAULT_DUST_MEDIA_AMOUNT = MediaConstants.DUST_UNIT;
         int DEFAULT_SHARD_MEDIA_AMOUNT = MediaConstants.SHARD_UNIT;
         int DEFAULT_CHARGED_MEDIA_AMOUNT = MediaConstants.CRYSTAL_UNIT;
-        double DEFAULT_MANA_TO_HEALTH_RATE = 2 * MediaConstants.CRYSTAL_UNIT / 20.0;
+        double DEFAULT_MEDIA_TO_HEALTH_RATE = 2 * MediaConstants.CRYSTAL_UNIT / 20.0;
 
     }
 

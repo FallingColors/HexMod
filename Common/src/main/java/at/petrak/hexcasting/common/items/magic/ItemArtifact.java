@@ -8,7 +8,7 @@ public class ItemArtifact extends ItemPackagedHex {
     }
 
     @Override
-    public boolean canDrawManaFromInventory(ItemStack stack) {
+    public boolean canDrawMediaFromInventory(ItemStack stack) {
         return true;
     }
 

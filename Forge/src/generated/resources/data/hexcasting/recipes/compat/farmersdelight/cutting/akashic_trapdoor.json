@@ -4,26 +4,26 @@
     {
       "conditions": [
         {
-          "modid": "farmersdelight",
-          "type": "forge:mod_loaded"
+          "type": "forge:mod_loaded",
+          "modid": "farmersdelight"
         }
       ],
       "recipe": {
         "type": "farmersdelight:cutting",
         "ingredients": [
           {
-            "item": "hexcasting:akashic_trapdoor"
+            "item": "hexcasting:edified_trapdoor"
+          }
+        ],
+        "result": [
+          {
+            "item": "hexcasting:edified_planks"
           }
         ],
         "tool": {
           "type": "farmersdelight:tool_action",
           "action": "axe_dig"
-        },
-        "result": [
-          {
-            "item": "hexcasting:akashic_planks"
-          }
-        ]
+        }
       }
     }
   ]

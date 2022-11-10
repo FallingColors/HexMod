@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getDouble
@@ -8,7 +8,7 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapDivideByZero
 import kotlin.math.log
 
-object OpLog : ConstManaAction {
+object OpLog : ConstMediaAction {
     override val argc: Int
         get() = 2
 

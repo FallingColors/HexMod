@@ -18,10 +18,10 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
 
         public ItemBased(ItemStack stack) {
             super(stack);
-            if (!(stack.getItem() instanceof MediaHolderItem mana)) {
+            if (!(stack.getItem() instanceof MediaHolderItem media)) {
                 throw new IllegalStateException("item is not a media holder: " + stack);
             }
-            this.mediaHolder = mana;
+            this.mediaHolder = media;
         }
 
         @Override

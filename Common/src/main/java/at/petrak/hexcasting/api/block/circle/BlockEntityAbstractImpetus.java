@@ -52,7 +52,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         TAG_NEXT_BLOCK = "next_block",
         TAG_TRACKED_BLOCKS = "tracked_blocks",
         TAG_FOUND_ALL = "found_all",
-        TAG_MANA = "mana",
+        TAG_MEDIA = "media",
         TAG_LAST_MISHAP = "last_mishap";
 
     private static final DecimalFormat DUST_AMOUNT = new DecimalFormat("###,###.##");
@@ -72,7 +72,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     private static final int MAX_CAPACITY = 2_000_000_000;
 
-    private int mana = 0;
+    private int media = 0;
 
     public BlockEntityAbstractImpetus(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
@@ -80,12 +80,12 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     abstract public boolean activatorAlwaysInRange();
 
-    public int getMana() {
-        return this.mana;
+    public int getMedia() {
+        return this.media;
     }
 
-    public void setMana(int mana) {
-        this.mana = mana;
+    public void setMedia(int media) {
+        this.media = media;
     }
 
     @Nullable
@@ -119,12 +119,12 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                                         Player observer, Level world,
                                         Direction hitFace) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-            if (beai.getMana() < 0) {
+            if (beai.getMedia() < 0) {
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
             } else {
-                var dustCount = (float) beai.getMana() / (float) MediaConstants.DUST_UNIT;
-                var dustCmp = Component.translatable("hexcasting.tooltip.lens.impetus.mana",
-                    String.format("%.2f", dustCount));
+                var dustCount = (float) beai.getMedia() / (float) MediaConstants.DUST_UNIT;
+                var dustCmp = Component.translatable("hexcasting.tooltip.media",
+                    DUST_AMOUNT.format(dustCount));
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
             }
 
@@ -150,7 +150,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             tag.put(TAG_TRACKED_BLOCKS, trackeds);
         }
 
-        tag.putInt(TAG_MANA, this.mana);
+        tag.putInt(TAG_MEDIA, this.media);
         if (this.lastMishap != null) {
             tag.putString(TAG_LAST_MISHAP, Component.Serializer.toJson(this.lastMishap));
         }
@@ -183,7 +183,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.knownBlocks = new HashSet<>();
         }
 
-        this.mana = tag.getInt(TAG_MANA);
+        this.media = tag.getInt(TAG_MEDIA);
         if (tag.contains(TAG_LAST_MISHAP, Tag.TAG_STRING)) {
             this.lastMishap = Component.Serializer.fromJson(tag.getString(TAG_LAST_MISHAP));
         } else {
@@ -526,7 +526,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     @Override
     public void setItem(int index, ItemStack stack) {
-        insertMana(stack);
+        insertMedia(stack);
     }
 
     @Override
@@ -541,43 +541,43 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        if (remainingManaCapacity() == 0)
+        if (remainingMediaCapacity() == 0)
             return false;
 
         if (stack.is(HexItems.CREATIVE_UNLOCKER))
             return true;
 
-        var manamount = extractManaFromItem(stack, true);
-        return manamount > 0;
+        var mediamount = extractMediaFromItem(stack, true);
+        return mediamount > 0;
     }
 
-    public int extractManaFromItem(ItemStack stack, boolean simulate) {
-        if (this.mana < 0)
+    public int extractMediaFromItem(ItemStack stack, boolean simulate) {
+        if (this.media < 0)
             return 0;
-        return MediaHelper.extractMedia(stack, remainingManaCapacity(), true, simulate);
+        return MediaHelper.extractMedia(stack, remainingMediaCapacity(), true, simulate);
     }
 
-    public void insertMana(ItemStack stack) {
-        if (getMana() >= 0 && !stack.isEmpty() && stack.getItem() == HexItems.CREATIVE_UNLOCKER) {
-            setInfiniteMana();
+    public void insertMedia(ItemStack stack) {
+        if (getMedia() >= 0 && !stack.isEmpty() && stack.getItem() == HexItems.CREATIVE_UNLOCKER) {
+            setInfiniteMedia();
             stack.shrink(1);
         } else {
-            var manamount = extractManaFromItem(stack, false);
-            if (manamount > 0) {
-                this.mana = Math.min(manamount + mana, MAX_CAPACITY);
+            var mediamount = extractMediaFromItem(stack, false);
+            if (mediamount > 0) {
+                this.media = Math.min(mediamount + media, MAX_CAPACITY);
                 this.sync();
             }
         }
     }
 
-    public void setInfiniteMana() {
-        this.mana = -1;
+    public void setInfiniteMedia() {
+        this.media = -1;
         this.sync();
     }
 
-    public int remainingManaCapacity() {
-        if (this.mana < 0)
+    public int remainingMediaCapacity() {
+        if (this.media < 0)
             return 0;
-        return Math.max(0, MAX_CAPACITY - this.mana);
+        return Math.max(0, MAX_CAPACITY - this.media);
     }
 }

@@ -107,8 +107,8 @@ public class HexItemModels extends PaucalItemModelProvider {
 
                 float fillProp = (float) fill / maxFill;
                 getBuilder(getPath(HexItems.BATTERY)).override()
-                    .predicate(ItemMediaBattery.MANA_PREDICATE, fillProp)
-                    .predicate(ItemMediaBattery.MAX_MANA_PREDICATE, size)
+                    .predicate(ItemMediaBattery.MEDIA_PREDICATE, fillProp)
+                    .predicate(ItemMediaBattery.MAX_MEDIA_PREDICATE, size)
                     .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
                     .end();
             }

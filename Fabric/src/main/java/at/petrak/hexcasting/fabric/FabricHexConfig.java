@@ -75,29 +75,29 @@ public class FabricHexConfig {
     }
 
     private static final class Common implements HexConfig.CommonConfigAccess {
-        private final PropertyMirror<Integer> dustManaAmount = PropertyMirror.create(ConfigTypes.NATURAL);
-        private final PropertyMirror<Integer> shardManaAmount = PropertyMirror.create(ConfigTypes.NATURAL);
-        private final PropertyMirror<Integer> chargedCrystalManaAmount = PropertyMirror.create(ConfigTypes.NATURAL);
-        private final PropertyMirror<Double> manaToHealthRate = PropertyMirror.create(
+        private final PropertyMirror<Integer> dustMediaAmount = PropertyMirror.create(ConfigTypes.NATURAL);
+        private final PropertyMirror<Integer> shardMediaAmount = PropertyMirror.create(ConfigTypes.NATURAL);
+        private final PropertyMirror<Integer> chargedCrystalMediaAmount = PropertyMirror.create(ConfigTypes.NATURAL);
+        private final PropertyMirror<Double> mediaToHealthRate = PropertyMirror.create(
             ConfigTypes.DOUBLE.withMinimum(0d));
 
         public ConfigTree configure(ConfigTreeBuilder bob) {
             bob.fork("Media Amounts")
                 .beginValue("dustMediaAmount", ConfigTypes.NATURAL, DEFAULT_DUST_MEDIA_AMOUNT)
                 .withComment("How much media a single Amethyst Dust item is worth")
-                .finishValue(dustManaAmount::mirror)
+                .finishValue(dustMediaAmount::mirror)
 
                 .beginValue("shardMediaAmount", ConfigTypes.NATURAL, DEFAULT_SHARD_MEDIA_AMOUNT)
                 .withComment("How much media a single Amethyst Shard item is worth")
-                .finishValue(shardManaAmount::mirror)
+                .finishValue(shardMediaAmount::mirror)
 
                 .beginValue("chargedCrystalMediaAmount", ConfigTypes.NATURAL, DEFAULT_CHARGED_MEDIA_AMOUNT)
                 .withComment("How much media a single Charged Amethyst Crystal item is worth")
-                .finishValue(chargedCrystalManaAmount::mirror)
+                .finishValue(chargedCrystalMediaAmount::mirror)
 
-                .beginValue("mediaToHealthRate", ConfigTypes.DOUBLE, DEFAULT_MANA_TO_HEALTH_RATE)
+                .beginValue("mediaToHealthRate", ConfigTypes.DOUBLE, DEFAULT_MEDIA_TO_HEALTH_RATE)
                 .withComment("How many points of media a half-heart is worth when casting from HP")
-                .finishValue(manaToHealthRate::mirror)
+                .finishValue(mediaToHealthRate::mirror)
                 .finishBranch();
 
             return bob.build();
@@ -105,22 +105,22 @@ public class FabricHexConfig {
 
         @Override
         public int dustMediaAmount() {
-            return dustManaAmount.getValue();
+            return dustMediaAmount.getValue();
         }
 
         @Override
         public int shardMediaAmount() {
-            return shardManaAmount.getValue();
+            return shardMediaAmount.getValue();
         }
 
         @Override
         public int chargedCrystalMediaAmount() {
-            return chargedCrystalManaAmount.getValue();
+            return chargedCrystalMediaAmount.getValue();
         }
 
         @Override
         public double mediaToHealthRate() {
-            return manaToHealthRate.getValue();
+            return mediaToHealthRate.getValue();
         }
     }
 
