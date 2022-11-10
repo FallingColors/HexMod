@@ -123,8 +123,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
             } else {
                 var dustCount = (float) beai.getMedia() / (float) MediaConstants.DUST_UNIT;
-                var dustCmp = Component.translatable("hexcasting.tooltip.lens.impetus.media",
-                    String.format("%.2f", dustCount));
+                var dustCmp = Component.translatable("hexcasting.tooltip.media",
+                    DUST_AMOUNT.format(dustCount));
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
             }
 
