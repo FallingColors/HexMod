@@ -97,7 +97,7 @@ public class ListIota extends Iota {
 
         @Override
         public Component display(Tag tag) {
-            var out = Component.literal("[").withStyle(ChatFormatting.DARK_PURPLE);
+            var out = Component.empty();
             var list = HexUtils.downcast(tag, ListTag.TYPE);
             for (int i = 0; i < list.size(); i++) {
                 Tag sub = list.get(i);
@@ -109,8 +109,7 @@ public class ListIota extends Iota {
                     out.append(", ");
                 }
             }
-            out.append(Component.literal("]").withStyle(ChatFormatting.DARK_PURPLE));
-            return out;
+            return Component.translatable("hexcasting.tooltip.list_contents", out).withStyle(ChatFormatting.DARK_PURPLE);
         }
 
         @Override

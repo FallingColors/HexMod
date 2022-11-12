@@ -146,6 +146,21 @@
   "hexcasting.tooltip.media_amount": "Contains: %s (%s)",
   "hexcasting.tooltip.media_amount.advanced": "Contains: %s/%s (%s)",
 
+  "hexcasting.tooltip.list_contents": "[%s]",
+  "hexcasting.tooltip.pattern_iota": "HexPattern(%s)",
+  "hexcasting.tooltip.null_iota": "NULL",
+  "hexcasting.tooltip.boolean_true": "True",
+  "hexcasting.tooltip.boolean_false": "False",
+
+  "hexcasting.iota.hexcasting:null": "Null",
+  "hexcasting.iota.hexcasting:double": "Number",
+  "hexcasting.iota.hexcasting:boolean": "Boolean",
+  "hexcasting.iota.hexcasting:entity": "Entity",
+  "hexcasting.iota.hexcasting:list": "List",
+  "hexcasting.iota.hexcasting:pattern": "Pattern",
+  "hexcasting.iota.hexcasting:garbage": "Garbage",
+  "hexcasting.iota.hexcasting:vec3": "Vector",
+
   "gui.hexcasting.spellcasting": "Hex Grid",
   "tag.hexcasting.staves": "Hex Staves",
   "tag.hexcasting.edified_logs": "Edified Logs",

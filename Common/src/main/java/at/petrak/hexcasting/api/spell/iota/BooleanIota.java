@@ -62,7 +62,7 @@ public class BooleanIota extends Iota {
     }
 
     public static Component display(boolean b) {
-        return Component.literal(b ? "True" : "False")
+        return Component.literal(b ? "hexcasting.tooltip.boolean_true" : "hexcasting.tooltip.boolean_false")
             .withStyle(b ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_RED);
     }
 }
