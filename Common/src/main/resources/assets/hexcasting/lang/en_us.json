@@ -206,6 +206,7 @@
   "stat.hexcasting.spells_cast": "Spells Cast",
 
   "death.attack.hexcasting.overcast": "%s's mind was subsumed into energy",
+  "death.attack.hexcasting.shame": "Shame on %s!",
 
   "command.hexcasting.pats.listing": "Patterns in this world:",
   "command.hexcasting.pats.all": "Gave all %d scrolls to %s",
@@ -533,9 +534,11 @@
   "hexcasting.mishap.disallowed_circle": "%s has been disallowed in spell circles by the server admins",
   "hexcasting.mishap.invalid_spell_datum_type": "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
   "hexcasting.mishap.unknown": "%s threw an exception (%s). This is a bug in the mod.",
+  "hexcasting.mishap.shame": "Shame on you!",
+
+  "_comment": "Patchi stuff",
 
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
-
 
   "hexcasting.entry.basics": "Getting Started",
   "hexcasting.entry.basics.desc": "The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)staff/$-- or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them. How might I do the same?",
