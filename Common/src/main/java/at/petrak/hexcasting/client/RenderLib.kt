@@ -215,8 +215,7 @@ fun makeZappy(
  * @param speed: rate at which the lightning effect should move/shake/etc
  */
 fun makeZappy(
-    barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float,
-    speed: Float, flowIrregular: Float,
+    barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float,
     readabilityOffset: Float
 ): List<Vec2> {
     // Nothing in, nothing out
