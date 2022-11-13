@@ -10,9 +10,8 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadEntity
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
-// we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpTheCoolerWrite : SpellAction {
-    override val argc = 1
+    override val argc = 2
     override fun execute(
         args: List<Iota>,
         ctx: CastingContext
