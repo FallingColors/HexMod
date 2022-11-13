@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getEntity
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadEntity
+import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 object OpTheCoolerWrite : SpellAction {
@@ -22,7 +23,11 @@ object OpTheCoolerWrite : SpellAction {
         ctx.assertEntityInRange(target)
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
-            ?: throw MishapBadEntity.of(target, "iota.read")
+            ?: throw MishapBadEntity.of(target, "iota.write")
+
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
+        if (trueName != null)
+            throw MishapOthersName(trueName)
 
         return Triple(
             Spell(datum, datumHolder),
