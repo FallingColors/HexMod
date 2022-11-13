@@ -207,7 +207,8 @@ task sendWebhook {
 
             def message = new Message()
             message.setUsername("Patreon Early Access")
-            message.setContent("New **$modName** release! Download it here: ${System.getenv("BUILD_URL")}\nChangelog:\n${getGitChangelog()}")
+            message.setContent("New **$modName** prerelease -- build ${System.getenv("BUILD_NUMBER")} for $minecraftVersion! \n" +
+                    "Download it here: ${System.getenv("BUILD_URL")}\nChangelog:\n${getGitChangelog()}")
 
             webhook.sendMessage(message)
         } catch (ignored) {
