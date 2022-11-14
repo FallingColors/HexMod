@@ -34,7 +34,7 @@ object OpTheCoolerWrite : SpellAction {
         return Triple(
             Spell(datum, datumHolder),
             0,
-            listOf()
+            listOf(ParticleSpray.burst(target.position(), 0.5))
         )
     }
 
