@@ -17,15 +17,17 @@ object OpTheCoolerWrite : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val datum = args[0]
-        val target = args.getEntity(1, argc)
+        val target = args.getEntity(0, argc)
+        val datum = args[1]
 
         ctx.assertEntityInRange(target)
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
             ?: throw MishapBadEntity.of(target, "iota.write")
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
+        // We pass null here so that even the own caster won't be allowed into a focus.
+        // Otherwise, you could sentinel scout to people and remotely write their names into things using a cleric circle.
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, null)
         if (trueName != null)
             throw MishapOthersName(trueName)
 
