@@ -12,7 +12,7 @@ object OpGetGravity : ConstMediaAction {
     override val argc = 1
 
     override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
-        val target = args.getEntity(1)
+        val target = args.getEntity(0)
         val grav = GravityChangerAPI.getGravityDirection(target)
         return Vec3.atLowerCornerOf(grav.normal).asActionResult
     }
