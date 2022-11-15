@@ -121,7 +121,8 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             ps.translate(0, 0, 0.01);
             theCoolerDrawLineSeq(mat, norm, light, verts, points, wallScroll.blockSize * 2f / 3f, inner);
 
-            if (wallScroll.getShowsStartPos()) {
+            if (wallScroll.getShowsStrokeOrder()) {
+                ps.translate(0, 0, 0.01);
                 var spotFrac = 0.8f * wallScroll.blockSize;
                 theCoolerDrawSpot(mat, norm, light, verts, points.get(0), 2f / 3f * spotFrac,
                     0xff_5b7bd7);

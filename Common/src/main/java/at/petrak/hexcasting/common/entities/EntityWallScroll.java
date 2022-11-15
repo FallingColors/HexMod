@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.network.MsgNewWallScrollAck;
+import at.petrak.hexcasting.common.network.MsgRecalcWallScrollDisplayAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,6 +18,7 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -35,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class EntityWallScroll extends HangingEntity {
-    private static final EntityDataAccessor<Boolean> SHOWS_START_POS = SynchedEntityData.defineId(
+    private static final EntityDataAccessor<Boolean> SHOWS_STROKE_ORDER = SynchedEntityData.defineId(
         EntityWallScroll.class,
         EntityDataSerializers.BOOLEAN);
 
@@ -55,15 +57,14 @@ public class EntityWallScroll extends HangingEntity {
         super(HexEntities.WALL_SCROLL, world, pos);
         this.setDirection(dir);
         this.blockSize = blockSize;
-        this.setShowsStartPos(showStrokeOrder);
 
-        this.loadDataFromScrollItem(scroll);
+        this.entityData.set(SHOWS_STROKE_ORDER, showStrokeOrder);
+        this.scroll = scroll;
+        this.recalculateDisplay();
         this.recalculateBoundingBox();
     }
 
-    private void loadDataFromScrollItem(ItemStack scroll) {
-        this.scroll = scroll;
-
+    public void recalculateDisplay() {
         CompoundTag patternTag = NBTHelper.getCompound(scroll, ItemScroll.TAG_PATTERN);
         if (patternTag != null) {
             this.pattern = HexPattern.fromNBT(patternTag);
@@ -71,8 +72,8 @@ public class EntityWallScroll extends HangingEntity {
                 var pair = RenderLib.getCenteredPattern(pattern, 128f / 3 * blockSize, 128f / 3 * blockSize,
                     16f / 3 * blockSize);
                 var dots = pair.getSecond();
-                this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10f, 0.8f,
-                    0f, 0f);
+                this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10, 0.4f,
+                    0f, 0f, this.getShowsStrokeOrder() ? 0.2f : 0f);
             }
 
             this.isAncient = NBTHelper.hasString(scroll, ItemScroll.TAG_OP_ID);
@@ -86,15 +87,15 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOWS_START_POS, false);
+        this.entityData.define(SHOWS_STROKE_ORDER, false);
     }
 
-    public boolean getShowsStartPos() {
-        return this.entityData.get(SHOWS_START_POS);
+    public boolean getShowsStrokeOrder() {
+        return this.entityData.get(SHOWS_STROKE_ORDER);
     }
 
-    public void setShowsStartPos(boolean b) {
-        this.entityData.set(SHOWS_START_POS, b);
+    public void setShowsStrokeOrder(boolean b) {
+        this.entityData.set(SHOWS_STROKE_ORDER, b);
     }
 
     @Override
@@ -124,13 +125,21 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public InteractionResult interactAt(Player pPlayer, Vec3 pVec, InteractionHand pHand) {
         var handStack = pPlayer.getItemInHand(pHand);
-        if (handStack.is(HexItems.AMETHYST_DUST) && !this.getShowsStartPos()) {
+        if (handStack.is(HexItems.AMETHYST_DUST) && !this.getShowsStrokeOrder()) {
             if (!pPlayer.getAbilities().instabuild) {
                 handStack.shrink(1);
             }
-            this.setShowsStartPos(true);
+            this.setShowsStrokeOrder(true);
 
             pPlayer.level.playSound(pPlayer, this, HexSounds.SCROLL_DUST, SoundSource.PLAYERS, 1f, 1f);
+
+            if (pPlayer.getLevel() instanceof ServerLevel slevel) {
+                IXplatAbstractions.INSTANCE.sendPacketNear(this.position(), 32.0, slevel,
+                    new MsgRecalcWallScrollDisplayAck(this.getId(), true));
+            } else {
+                // Beat the packet roundtrip to the punch to get a quicker visual
+                this.recalculateDisplay();
+            }
             return InteractionResult.SUCCESS;
         }
         return super.interactAt(pPlayer, pVec, pHand);
@@ -145,25 +154,27 @@ public class EntityWallScroll extends HangingEntity {
     public Packet<?> getAddEntityPacket() {
         return IXplatAbstractions.INSTANCE.toVanillaClientboundPacket(
             new MsgNewWallScrollAck(new ClientboundAddEntityPacket(this),
-                pos, direction, scroll, getShowsStartPos(), blockSize));
+                pos, direction, scroll, getShowsStrokeOrder(), blockSize));
     }
 
     public void readSpawnData(BlockPos pos, Direction dir, ItemStack scrollItem,
         boolean showsStrokeOrder, int blockSize) {
         this.pos = pos;
-        this.setDirection(dir);
-        this.setShowsStartPos(showsStrokeOrder);
+        this.scroll = scrollItem;
         this.blockSize = blockSize;
 
+        this.setDirection(dir);
+        this.setShowsStrokeOrder(showsStrokeOrder);
+
+        this.recalculateDisplay();
         this.recalculateBoundingBox();
-        this.loadDataFromScrollItem(scrollItem);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putByte("direction", (byte) this.direction.ordinal());
         tag.put("scroll", HexUtils.serializeToNBT(this.scroll));
-        tag.putBoolean("showsStrokeOrder", this.getShowsStartPos());
+        tag.putBoolean("showsStrokeOrder", this.getShowsStrokeOrder());
         tag.putInt("blockSize", this.blockSize);
         super.addAdditionalSaveData(tag);
     }
@@ -171,18 +182,16 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         this.direction = Direction.values()[tag.getByte("direction")];
-        var scroll = ItemStack.of(tag.getCompound("scroll"));
-        this.setShowsStartPos(tag.getBoolean("showsStrokeOrder"));
-        if (tag.contains("blockSize")) {
-            this.blockSize = tag.getInt("blockSize");
-        } else {
-            this.blockSize = 3;
-        }
+        this.scroll = ItemStack.of(tag.getCompound("scroll"));
+        this.blockSize = tag.getInt("blockSize");
+
+        this.setDirection(this.direction);
+        this.setShowsStrokeOrder(tag.getBoolean("showsStrokeOrder"));
+
+        this.recalculateDisplay();
+        this.recalculateBoundingBox();
 
         super.readAdditionalSaveData(tag);
-        this.setDirection(this.direction);
-        this.loadDataFromScrollItem(scroll);
-        this.recalculateBoundingBox();
     }
 
     @Override
