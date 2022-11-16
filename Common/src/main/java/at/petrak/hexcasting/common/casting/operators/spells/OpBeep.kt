@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.common.network.MsgBeepAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
 
 object OpBeep : SpellAction {
@@ -33,6 +34,7 @@ object OpBeep : SpellAction {
     private data class Spell(val target: Vec3, val note: Int, val instrument: NoteBlockInstrument) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             IXplatAbstractions.INSTANCE.sendPacketNear(target, 128.0, ctx.world, MsgBeepAck(target, note, instrument))
+            ctx.world.gameEvent(null, GameEvent.NOTE_BLOCK_PLAY, target)
         }
     }
 }

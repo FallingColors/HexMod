@@ -650,7 +650,7 @@
   "hexcasting.page.mishaps.disabled.title": "Disallowed Action",
   "hexcasting.page.mishaps.disabled": "I tried to cast an action that has been disallowed by a server administrator.$(br2)Causes black sparks.",
   "hexcasting.page.mishaps.other.title": "Catastrophic Failure",
-  "hexcasting.page.mishaps.other": "A bug in the mod caused an iota of an invalid type or otherwise caused the spell to crash. $(l:https://https://github.com/gamma-delta/HexMod/issues)Please open a bug report!/$$(br2)Causes black sparks.",
+  "hexcasting.page.mishaps.other": "A bug in the mod caused an iota of an invalid type or otherwise caused the spell to crash. $(l:https://github.com/gamma-delta/HexMod/issues)Please open a bug report!/$$(br2)Causes black sparks.",
 
   "hexcasting.entry.stack": "Stacks",
   "hexcasting.page.stack.1": "A $(thing)Stack/$, also known as a \"LIFO\", is a concept borrowed from computer science. In short, it's a collection of things designed so that you can only interact with the most recently used thing.$(br2)Think of a stack of plates, where new plates are added to the top: if you want to interact with a plate halfway down the stack, you have to remove the plates above it in order to get ahold of it.",
@@ -1171,9 +1171,9 @@
   "hexcasting.entry.lore.experiment1": "Wooleye Instance Notes",
   "hexcasting.page.lore.experiment1.1": "$(italic)I only managed to find these five entries from this log./$$(br2)Detonation #26$(li)Location: Carpenter's North$(li)Population: 174$(li)Nodes Formed: 3$(li)Node Distance from Epicenter: 55-80m vertical, 85-156m horizontal$(li)Media Generation: 1320 uθ/min",
   "hexcasting.page.lore.experiment1.2": "Detonation #27$(li)Location: Brackenfalls$(li)Population: 79$(li)Nodes Formed: 1$(li)Node Distance from Epicenter: 95m vertical, 67m horizontal$(li)Media Generation: 412 uθ/min",
-  "hexcasting.page.lore.experiment1.3": "Detonation #28$(li)Location: Greyston(li)Population: approx. 1000$(li)Nodes Formed: 18$(li)Node Distance from Epicenter: 47-110m vertical, 59-289m horizontal$(li)Media Generation: 8478 uθ/min",
+  "hexcasting.page.lore.experiment1.3": "Detonation #28$(li)Location: Greyston$(li)Population: approx. 1000$(li)Nodes Formed: 18$(li)Node Distance from Epicenter: 47-110m vertical, 59-289m horizontal$(li)Media Generation: 8478 uθ/min",
   "hexcasting.page.lore.experiment1.4": "Detonation #29$(li)Location: Unnamed; village two days west of Greyston$(li)Population: 35$(li)Nodes Formed: 0$(li)Node Distance from Epicenter: N/A$(li)Media Generation: N/A$(br2)Note: inhabitants still affected in the normal way",
-  "hexcasting.page.lore.experiment1.5": "Detonation #30$(li)Location: Boiling Brook(li)Population: 231$(li)Nodes Formed: 4$(li)Node Distance from Epicenter: 61-89m vertical, 78-191m horizontal$(li)Media Generation: 1862 uθ/min",
+  "hexcasting.page.lore.experiment1.5": "Detonation #30$(li)Location: Boiling Brook$(li)Population: 231$(li)Nodes Formed: 4$(li)Node Distance from Epicenter: 61-89m vertical, 78-191m horizontal$(li)Media Generation: 1862 uθ/min",
   "hexcasting.page.lore.experiment1.6": "Conclusion: approx 60 needed for one node. Too few consumes them but does not provide enough energy for node formation. Little correlation between input count and breadth/depth.$(br2)Effects on inhabitants still consistently more severe than with single-target testing, especially the physical effects.",
 
   "hexcasting.entry.lore.experiment2": "Wooleye Interview Logs",

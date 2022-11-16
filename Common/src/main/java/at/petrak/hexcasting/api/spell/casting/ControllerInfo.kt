@@ -6,7 +6,6 @@ import net.minecraft.nbt.CompoundTag
  * Information for the sake of the GUI.
  */
 data class ControllerInfo(
-    val makesCastSound: Boolean,
     val isStackClear: Boolean,
     val resolutionType: ResolvedPatternType,
     val stack: List<CompoundTag>,
@@ -14,3 +13,4 @@ data class ControllerInfo(
     val ravenmind: CompoundTag?,
     val parenCount: Int,
 )
+

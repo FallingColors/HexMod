@@ -8,14 +8,12 @@ import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType;
 import at.petrak.hexcasting.api.spell.iota.PatternIota;
 import at.petrak.hexcasting.api.spell.math.HexCoord;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 
 import java.util.ArrayList;
@@ -62,6 +60,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
 
     public void handle(MinecraftServer server, ServerPlayer sender) {
         server.execute(() -> {
+            // TODO: should we maybe not put tons of logic in a packet class
             var held = sender.getItemInHand(this.handUsed);
             if (held.is(HexItemTags.STAVES)) {
                 boolean autoFail = false;
@@ -87,16 +86,10 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                 ControllerInfo clientInfo;
                 if (autoFail) {
                     var descs = harness.generateDescs();
-                    clientInfo = new ControllerInfo(false, harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
+                    clientInfo = new ControllerInfo(harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
                         descs.getFirst(), descs.getSecond(), descs.getThird(), harness.getParenCount());
                 } else {
                     clientInfo = harness.executeIota(new PatternIota(this.pattern), sender.getLevel());
-
-                    if (clientInfo.getMakesCastSound()) {
-                        sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
-                            HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
-                            1f + ((float) Math.random() - 0.5f) * 0.2f);
-                    }
                 }
 
                 if (clientInfo.isStackClear()) {
@@ -110,7 +103,8 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
                     IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
                 }
 
-                IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender, new MsgNewSpellPatternAck(clientInfo, resolvedPatterns.size() - 1));
+                IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,
+                    new MsgNewSpellPatternAck(clientInfo, resolvedPatterns.size() - 1));
             }
         });
     }

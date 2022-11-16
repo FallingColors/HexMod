@@ -28,9 +28,18 @@ import kotlin.math.min
 data class CastingContext(
     val caster: ServerPlayer,
     val castingHand: InteractionHand,
+    val source: CastSource,
     val spellCircle: SpellCircleContext? = null
 ) {
-    constructor(caster: ServerPlayer, castingHand: InteractionHand) : this(caster, castingHand, null)
+    constructor(caster: ServerPlayer, castingHand: InteractionHand, source: CastSource) : this(
+        caster,
+        castingHand,
+        source,
+        null
+    )
+
+    constructor(caster: ServerPlayer, castingHand: InteractionHand, spellCircleContext: SpellCircleContext) :
+            this(caster, castingHand, CastSource.SPELL_CIRCLE, spellCircleContext)
 
     private var depth: Int = 0
 
@@ -223,7 +232,8 @@ data class CastingContext(
 
             DiscoveryHandlers.addOperativeSlotDiscoverer {
                 val slots = mutableListOf<ItemStack>()
-                val anchorSlot = if (it.castingHand == InteractionHand.MAIN_HAND) (it.caster.inventory.selected + 1) % 9 else 0
+                val anchorSlot =
+                    if (it.castingHand == InteractionHand.MAIN_HAND) (it.caster.inventory.selected + 1) % 9 else 0
 
                 slots.add(it.caster.getItemInHand(it.otherHand))
                 for (delta in 0 until 9) {
@@ -233,5 +243,11 @@ data class CastingContext(
                 slots
             }
         }
+    }
+
+    enum class CastSource {
+        STAFF,
+        PACKAGED_HEX,
+        SPELL_CIRCLE,
     }
 }

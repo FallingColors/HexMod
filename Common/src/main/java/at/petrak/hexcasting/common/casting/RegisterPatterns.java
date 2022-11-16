@@ -91,19 +91,29 @@ public class RegisterPatterns {
 
             // == Modify Stack ==
 
-            PatternRegistry.mapPattern(HexPattern.fromAngles("aawdd", HexDir.EAST), modLoc("swap"), OpSwap.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aawdd", HexDir.EAST), modLoc("swap"),
+                new OpTwiddling(2, new int[]{1, 0}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaeaa", HexDir.EAST), modLoc("rotate"),
-                OpRotate.INSTANCE);
+                new OpTwiddling(3, new int[]{1, 2, 0}));
+            PatternRegistry.mapPattern(HexPattern.fromAngles("ddqdd", HexDir.NORTH_EAST), modLoc("rotate-reverse"),
+                new OpTwiddling(3, new int[]{2, 0, 1}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aadaa", HexDir.EAST), modLoc("duplicate"),
-                OpDuplicate.INSTANCE);
-            PatternRegistry.mapPattern(HexPattern.fromAngles("aadaadaa", HexDir.EAST), modLoc("duplicate_n"),
-                OpDuplicateN.INSTANCE);
+                new OpTwiddling(1, new int[]{0, 0}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaedd", HexDir.EAST), modLoc("over"),
-                OpOver.INSTANCE);
+                new OpTwiddling(2, new int[]{0, 1, 0}));
+            PatternRegistry.mapPattern(HexPattern.fromAngles("ddqaa", HexDir.EAST), modLoc("tuck"),
+                new OpTwiddling(2, new int[]{1, 0, 1}));
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aadadaaw", HexDir.EAST), modLoc("2dup"),
+                new OpTwiddling(2, new int[]{0, 1, 0, 1}));
+
             PatternRegistry.mapPattern(HexPattern.fromAngles("qwaeawqaeaqa", HexDir.NORTH_WEST), modLoc("stack_len"),
                 OpStackSize.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aadaadaa", HexDir.EAST), modLoc("duplicate_n"),
+                OpDuplicateN.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddad", HexDir.WEST), modLoc("fisherman"),
                 OpFisherman.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aada", HexDir.EAST), modLoc("fisherman/copy"),
+                OpFishermanButItCopies.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaawdde", HexDir.SOUTH_EAST), modLoc("swizzle"),
                 OpAlwinfyHasAscendedToABeingOfPureMath.INSTANCE);
 
