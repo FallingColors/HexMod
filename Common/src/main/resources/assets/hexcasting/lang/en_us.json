@@ -149,6 +149,7 @@
   "hexcasting.tooltip.list_contents": "[%s]",
   "hexcasting.tooltip.pattern_iota": "HexPattern(%s)",
   "hexcasting.tooltip.null_iota": "NULL",
+  "hexcasting.tooltip.jump_iota": "[JUMP]",
   "hexcasting.tooltip.boolean_true": "True",
   "hexcasting.tooltip.boolean_false": "False",
 
@@ -448,6 +449,7 @@
   "hexcasting.spell.hexcasting:close_paren": "Retrospection",
   "hexcasting.spell.hexcasting:escape": "Consideration",
   "hexcasting.spell.hexcasting:eval": "Hermes' Gambit",
+  "hexcasting.spell.hexcasting:eval/cc": "Iris' Gambit",
   "hexcasting.spell.hexcasting:for_each": "Thoth's Gambit",
   "hexcasting.spell.hexcasting:halt": "Charon's Gambit",
   "hexcasting.spell.hexcasting:number": "Numerical Reflection: %s",
@@ -994,6 +996,8 @@
   "hexcasting.page.meta.for_each.2": "More specifically, for each element in the second list, it will:$(li)Create a new stack, with everything on the current stack plus that element$(li)Draw all the patterns in the first list$(li)Save all the iotas remaining on the stack to a list$(br)Then, after all is said and done, pushes the list of saved iotas onto the main stack.$(br2)No wonder all the practitioners of this art go mad.",
   "hexcasting.page.meta.halt.1": "This pattern forcibly halts a _Hex. This is mostly useless on its own, as I could simply just stop writing patterns, or put down my staff.",
   "hexcasting.page.meta.halt.2": "But when combined with $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ or $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambits/$, it becomes $(italics)far/$ more interesting. Those patterns serve to 'contain' that halting, and rather than ending the entire _Hex, those gambits end instead. This can be used to cause $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$ not to operate on every iota it's given. An escape from the madness, as it were.",
+  "hexcasting.page.meta.eval/cc.1": "Cast a pattern or list of patterns from the stack exactly like $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$, except that a unique \"Jump\" iota is pushed to the stack beforehand. ",
+  "hexcasting.page.meta.eval/cc.2": "When the \"Jump\"-iota is executed, it'll skip the rest of the patterns and jump directly to the end of the pattern list.$(p)While this may seem redundant given $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$ exists, this allows you to exit $(italic)nested/$ $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ invocations in a controlled way, where Charon only allows you to exit one.$(p)The \"Jump\" iota will apparently stay on the stack even after execution is finished... better not think about the implications of that.",
 
   "hexcasting.entry.circle_patterns": "Spell Circle Patterns",
   "hexcasting.page.circle_patterns.disclaimer": "These patterns must be cast from a $(l:greatwork/spellcircles)$(item)Spell Circle/$; trying to cast them through a $(l:items/staff)$(item)Staff/$ will fail rather spectacularly.",

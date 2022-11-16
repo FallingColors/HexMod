@@ -8,9 +8,9 @@ import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
 import at.petrak.hexcasting.api.spell.casting.SpellContinuation
 import at.petrak.hexcasting.api.spell.evaluatable
 import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.iota.PatternIota
+import at.petrak.hexcasting.api.spell.iota.ContinuationIota
 
-object OpEval : Action {
+object OpEvalBreakable : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
@@ -35,6 +35,7 @@ object OpEval : Action {
 
         val instrsList = instrs.map({ SpellList.LList(0, listOf(it)) }, { it })
         val frame = ContinuationFrame.Evaluate(instrsList)
+        stack.add(ContinuationIota(continuation))
         return OperationResult(newCont.pushFrame(frame), stack, ravenmind, listOf())
     }
 }

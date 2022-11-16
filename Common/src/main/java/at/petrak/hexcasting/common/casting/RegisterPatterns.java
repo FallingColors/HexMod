@@ -18,6 +18,7 @@ import at.petrak.hexcasting.common.casting.operators.circles.OpCircleBounds;
 import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusDir;
 import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusPos;
 import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
+import at.petrak.hexcasting.common.casting.operators.eval.OpEvalBreakable;
 import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
 import at.petrak.hexcasting.common.casting.operators.eval.OpHalt;
 import at.petrak.hexcasting.common.casting.operators.lists.*;
@@ -343,6 +344,8 @@ public class RegisterPatterns {
             // eval being a space filling curve feels apt doesn't it
             PatternRegistry.mapPattern(HexPattern.fromAngles("deaqq", HexDir.SOUTH_EAST), modLoc("eval"),
                 OpEval.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("deaqqdaa", HexDir.SOUTH_EAST), modLoc("eval/cc"),
+                OpEvalBreakable.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqdee", HexDir.SOUTH_WEST), modLoc("halt"),
                 OpHalt.INSTANCE);
 

@@ -15,6 +15,7 @@ import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.ListIota
 import at.petrak.hexcasting.api.spell.iota.PatternIota
+import at.petrak.hexcasting.api.spell.iota.ContinuationIota
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
@@ -150,6 +151,13 @@ class CastingHarness private constructor(
 
             return if (iota is PatternIota) {
                 updateWithPattern(iota.pattern, world, continuation)
+            } else if (iota is ContinuationIota) {
+                CastResult(
+                    iota.continuation,
+                    null,
+                    ResolvedPatternType.EVALUATED,
+                    listOf()
+                )
             } else {
                 CastResult(
                     continuation,

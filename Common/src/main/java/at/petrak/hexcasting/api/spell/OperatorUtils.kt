@@ -275,9 +275,10 @@ fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, SpellList> {
     )
 }
 
-fun evaluatable(datum: Iota, reverseIdx: Int): Either<HexPattern, SpellList> =
+fun evaluatable(datum: Iota, reverseIdx: Int): Either<Iota, SpellList> =
     when (datum) {
-        is PatternIota -> Either.left(datum.pattern)
+        is PatternIota -> Either.left(datum)
+        is ContinuationIota -> Either.left(datum)
         is ListIota -> Either.right(datum.list)
         else -> throw MishapInvalidIota(
             datum,
