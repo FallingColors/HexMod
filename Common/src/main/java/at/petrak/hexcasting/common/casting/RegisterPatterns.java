@@ -103,6 +103,8 @@ public class RegisterPatterns {
                 OpStackSize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddad", HexDir.WEST), modLoc("fisherman"),
                 OpFisherman.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("aada", HexDir.EAST), modLoc("fisherman/copy"),
+                OpFishermanButItCopies.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaawdde", HexDir.SOUTH_EAST), modLoc("swizzle"),
                 OpAlwinfyHasAscendedToABeingOfPureMath.INSTANCE);
 
