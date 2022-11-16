@@ -146,6 +146,21 @@
   "hexcasting.tooltip.media_amount": "含有：%s（%s）",
   "hexcasting.tooltip.media_amount.advanced": "含有：%s/%s（%s）",
 
+  "hexcasting.tooltip.list_contents": "[%s]",
+  "hexcasting.tooltip.pattern_iota": "HexPattern(%s)",
+  "hexcasting.tooltip.null_iota": "NULL",
+  "hexcasting.tooltip.boolean_true": "True",
+  "hexcasting.tooltip.boolean_false": "False",
+
+  "hexcasting.iota.hexcasting:null": "Null",
+  "hexcasting.iota.hexcasting:double": "数",
+  "hexcasting.iota.hexcasting:boolean": "布尔值",
+  "hexcasting.iota.hexcasting:entity": "实体",
+  "hexcasting.iota.hexcasting:list": "列表",
+  "hexcasting.iota.hexcasting:pattern": "图案",
+  "hexcasting.iota.hexcasting:garbage": "垃圾",
+  "hexcasting.iota.hexcasting:vec3": "向量",
+
   "gui.hexcasting.spellcasting": "咒术网格",
   "tag.hexcasting.staves": "咒术法杖",
   "tag.hexcasting.edified_logs": "启迪原木",
@@ -191,6 +206,7 @@
   "stat.hexcasting.spells_cast": "施放法术次数",
 
   "death.attack.hexcasting.overcast": "%s的意识消散为了能量",
+  "death.attack.hexcasting.shame": "%s真是可耻！",
 
   "command.hexcasting.pats.listing": "此世界特有的图案：",
   "command.hexcasting.pats.all": "给予%s所有%d张卷轴",
@@ -254,6 +270,7 @@
   "hexcasting.spell.book.hexcasting:const/vec/x": "向量之精思，+X/-X型",
   "hexcasting.spell.book.hexcasting:const/vec/y": "向量之精思，+Y/-Y型",
   "hexcasting.spell.book.hexcasting:const/vec/z": "向量之精思，+Z/-Z型",
+  "hexcasting.spell.book.hexcasting:write/entity": "编年史家之纯化",
   "hexcasting.spell.book.hexcasting:number": "数字之精思",
   "hexcasting.spell.book.hexcasting:mask": "簿记员之策略",
 
@@ -503,6 +520,7 @@
   "hexcasting.mishap.already_brainswept": "此村民已被使用",
   "hexcasting.mishap.no_spell_circle": "%s需在法术环上执行",
   "hexcasting.mishap.others_name": "试图侵犯%s的灵魂的隐私",
+  "hexcasting.mishap.others_name.self": "试图随意泄露我自己真名的秘密",
   "hexcasting.mishap.divide_by_zero.divide": "试图用%2$s除%1$s",
   "hexcasting.mishap.divide_by_zero.project": "试图将%s投影至%s",
   "hexcasting.mishap.divide_by_zero.exponent": "试图计算%s的%s",
@@ -518,6 +536,9 @@
   "hexcasting.mishap.disallowed_circle": "%s已被服务器管理员禁止使用法术环",
   "hexcasting.mishap.invalid_spell_datum_type": "尝试将某无效类型的值用作SpellDatum：%s（class %s）。这是模组中的bug。",
   "hexcasting.mishap.unknown": "%s抛出异常（%s）。这是模组中的bug。",
+  "hexcasting.mishap.shame": "你真是可耻！",
+
+  "_comment": "Patchi stuff",
 
   "hexcasting.landing": "我似乎发现了一种全新的魔法，一种在六边形网格上画各式奇诡图案的魔法。它深深地迷住了我。我决定着手撰写一本笔记，以此记述我的想法和研究成果。$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord 链接/$",
 
@@ -899,12 +920,12 @@
   "hexcasting.page.logic.and": "如果两个参数都是 True，返回 True。否则返回 False。",
   "hexcasting.page.logic.xor": "如果参数中仅一个是 True，返回 True。否则返回 False。",
   "hexcasting.page.logic.if": "如果第一个参数是 True，保留第二个参数并移除第三个。否则保留第三个参数并移除第二个。",
-  "hexcasting.page.logic.equals": "如果第一个参数等于第二个（允许较小误差），返回 1。否则返回 0。",
-  "hexcasting.page.logic.not_equals": "如果第一个参数不等于第二个（允许较小误差），返回 1。否则返回 0。",
-  "hexcasting.page.logic.greater": "如果第一个参数大于第二个，返回 1. 否则返回 0。",
-  "hexcasting.page.logic.less": "如果第一个参数小于第二个，返回 1。否则返回 0。",
-  "hexcasting.page.logic.greater_eq": "如果第一个参数大于或等于第二个，返回 1。否则返回 0。",
-  "hexcasting.page.logic.less_eq": "如果第一个参数小于或等于第二个，返回 1。否则返回 0。",
+  "hexcasting.page.logic.equals": "如果第一个参数等于第二个（允许较小误差），返回 True。否则返回 False。",
+  "hexcasting.page.logic.not_equals": "如果第一个参数不等于第二个（允许较小误差），返回 True。否则返回 False。",
+  "hexcasting.page.logic.greater": "如果第一个参数大于第二个，返回 True. 否则返回 False。",
+  "hexcasting.page.logic.less": "如果第一个参数小于第二个，返回 True。否则返回 False。",
+  "hexcasting.page.logic.greater_eq": "如果第一个参数大于或等于第二个，返回 True。否则返回 False。",
+  "hexcasting.page.logic.less_eq": "如果第一个参数小于或等于第二个，返回 True。否则返回 False。",
 
   "hexcasting.entry.entities": "实体",
   "hexcasting.page.entities.get_entity": "将栈顶位置向量变为该处实体（若无则返回 $(l:casting/influences)$(thing)Null/$）。",
@@ -957,7 +978,7 @@
   "hexcasting.page.readwrite.read": "复制另一只手所持物品中 iota，并将其压入栈顶。",
   "hexcasting.page.readwrite.write": "移除栈顶 iota，并将其写入另一只手中的物品中。",
   "hexcasting.page.readwrite.read/entity": "与$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$类似，但会将 iota 从某实体中读出，而非手中物品。",
-  "hexcasting.page.readwrite.write/entity": "与$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$类似，但会将 iota 写入某实体，而非手中物品。",
+  "hexcasting.page.readwrite.write/entity": "与$(l:patterns/readwrite#hexcasting:read)$(action)书吏之策略/$类似，但会将 iota 写入某实体，而非手中物品。$(br2)有意思的是，我似乎没法以这种手段写入我自己的真名。但我总感觉要是真这么做了我的安全就会受到严重威胁。",
   "hexcasting.page.readwrite.readable": "如果另一只手中物品存有可被读取的 iota，返回 True。否则返回 False。",
   "hexcasting.page.readwrite.readable/entity": "与$(l:patterns/readwrite#hexcasting:readable)$(action)审计员之精思/$类似，但会检测实体可读性，而非手中物品。",
   "hexcasting.page.readwrite.writable": "如果能将 iota 写入另一只手中的物品，返回 True。否则返回 False。",
