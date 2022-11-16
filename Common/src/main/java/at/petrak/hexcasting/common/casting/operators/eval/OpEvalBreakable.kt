@@ -17,7 +17,8 @@ object OpEvalBreakable : Action {
         ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
+        val datum = stack.removeLast()
         stack.add(ContinuationIota(continuation))
-        return OpEval.operate(continuation, stack, ravenmind, ctx)
+        return OpEval.exec(continuation, datum, stack, ravenmind, ctx)
     }
 }

@@ -18,6 +18,15 @@ object OpEval : Action {
         ctx: CastingContext
     ): OperationResult {
         val datum = stack.removeLast()
+        return exec(continuation, datum, stack, ravenmind, ctx)
+    }
+    fun exec(
+        continuation: SpellContinuation,
+        datum: Iota,
+        stack: MutableList<Iota>,
+        ravenmind: Iota?,
+        ctx: CastingContext
+    ): OperationResult {
         val instrs = evaluatable(datum, 0)
 
         instrs.ifRight {
