@@ -47,6 +47,17 @@ repositories {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/releases/"
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 dependencies {
@@ -97,6 +108,12 @@ dependencies {
     // We can't figure out what it is
     // so i'm just including a fresher version
     modImplementation("com.terraformersmc:modmenu:4.1.0")
+
+    // i am speed
+    // sodium is causing frustum mixin errors so don't use it
+//    modImplementation "maven.modrinth:sodium:${sodiumVersion}"
+    modImplementation "maven.modrinth:lithium:${lithiumVersion}"
+    modImplementation "maven.modrinth:phosphor:${phosphorVersion}"
 }
 
 tasks.withType(JavaCompile) {
