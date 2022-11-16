@@ -65,22 +65,6 @@ class GuiSpellcasting constructor(
             it.type = info.resolutionType
         }
 
-        val mc = Minecraft.getInstance()
-        if (info.resolutionType.success) {
-            mc.soundManager.play(
-                SimpleSoundInstance(
-                    HexSounds.ADD_PATTERN,
-                    SoundSource.PLAYERS,
-                    0.5f,
-                    1f + (Math.random().toFloat() - 0.5f) * 0.1f,
-                    randSrc,
-                    this.ambianceSoundInstance!!.x,
-                    this.ambianceSoundInstance!!.y,
-                    this.ambianceSoundInstance!!.z,
-                )
-            )
-        }
-
         this.cachedStack = info.stack
         this.cachedParens = info.parenthesized
         this.cachedRavenmind = info.ravenmind

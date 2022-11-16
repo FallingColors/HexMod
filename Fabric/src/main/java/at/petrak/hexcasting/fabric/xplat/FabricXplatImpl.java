@@ -424,7 +424,8 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player) {
-        return PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(world, player, pos, state, world.getBlockEntity(pos));
+        return PlayerBlockBreakEvents.BEFORE.invoker()
+            .beforeBlockBreak(world, player, pos, state, world.getBlockEntity(pos));
     }
 
     @Override

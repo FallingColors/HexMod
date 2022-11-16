@@ -9,9 +9,7 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.common.lib.HexItems
-import at.petrak.hexcasting.common.lib.HexSounds
 import net.minecraft.Util
-import net.minecraft.sounds.SoundSource
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 
@@ -44,6 +42,7 @@ sealed class OperatorSideEffect {
             this.spell.cast(harness.ctx)
             if (awardStat)
                 harness.ctx.caster.awardStat(HexStatistics.SPELLS_CAST)
+
             return false
         }
     }
@@ -90,11 +89,6 @@ sealed class OperatorSideEffect {
                     ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!),
                     Util.NIL_UUID
                 )
-            )
-
-            harness.ctx.world.playSound(
-                null, harness.ctx.position.x, harness.ctx.position.y, harness.ctx.position.z,
-                HexSounds.FAIL_PATTERN, SoundSource.PLAYERS, 1f, 1f
             )
 
             mishap.execute(harness.ctx, errorCtx, harness.stack)

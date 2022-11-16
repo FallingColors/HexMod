@@ -19,7 +19,7 @@ public class CCHarness implements Component {
     }
 
     public CastingHarness getHarness(InteractionHand hand) {
-        var ctx = new CastingContext(this.owner, hand);
+        var ctx = new CastingContext(this.owner, hand, CastingContext.CastSource.STAFF);
         if (this.lazyLoadedTag.isEmpty()) {
             return new CastingHarness(ctx);
         } else {

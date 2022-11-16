@@ -43,6 +43,7 @@ public class ItemStaff extends Item {
         }
 
         player.awardStat(Stats.ITEM_USED.get(this));
+//        player.gameEvent(GameEvent.ITEM_INTERACT_START);
 
         return InteractionResultHolder.success(player.getItemInHand(hand));
     }

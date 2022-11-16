@@ -6,14 +6,12 @@ import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexIotaTypes;
-import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -108,7 +106,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
             return InteractionResultHolder.fail(stack);
         }
         var sPlayer = (ServerPlayer) player;
-        var ctx = new CastingContext(sPlayer, usedHand);
+        var ctx = new CastingContext(sPlayer, usedHand, CastingContext.CastSource.PACKAGED_HEX);
         var harness = new CastingHarness(ctx);
         var info = harness.executeIotas(instrs, sPlayer.getLevel());
 
@@ -123,11 +121,6 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         player.awardStat(stat);
 
         sPlayer.getCooldowns().addCooldown(this, 5);
-        if (info.getMakesCastSound()) {
-            sPlayer.level.playSound(null, sPlayer.getX(), sPlayer.getY(), sPlayer.getZ(),
-                HexSounds.ACTUALLY_CAST, SoundSource.PLAYERS, 1f,
-                1f + ((float) Math.random() - 0.5f) * 0.2f);
-        }
 
         if (broken) {
             stack.shrink(1);

@@ -232,7 +232,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
-        var ctx = new CastingContext(player, hand);
+        // This is always from a staff because we don't need to load the harness when casting from item
+        var ctx = new CastingContext(player, hand, CastingContext.CastSource.STAFF);
         return CastingHarness.fromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
     }
 
