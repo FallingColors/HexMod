@@ -154,6 +154,7 @@ class CastingHarness private constructor(
             return if (iota is PatternIota) {
                 updateWithPattern(iota.pattern, world, continuation)
             } else if (iota is ContinuationIota) {
+                ctx.incDepth()
                 CastResult(
                     iota.continuation,
                     null,
