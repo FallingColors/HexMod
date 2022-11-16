@@ -27,6 +27,8 @@ import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundSource
+import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
 import kotlin.math.min
 
@@ -91,7 +93,7 @@ class CastingHarness private constructor(
         // Initialize the continuation stack to a single top-level eval for all iotas.
         var continuation = SpellContinuation.Done.pushFrame(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
         // Begin aggregating info
-        val info = TempControllerInfo(playSound = false, earlyExit = false)
+        val info = TempControllerInfo(earlyExit = false)
         var lastResolutionType = ResolvedPatternType.UNRESOLVED
         while (continuation is SpellContinuation.NotDone && !info.earlyExit) {
             // Take the top of the continuation stack...
@@ -111,7 +113,8 @@ class CastingHarness private constructor(
                             mishap,
                             Mishap.Context(pattern ?: HexPattern(HexDir.WEST), operator)
                         )
-                    )
+                    ),
+                    EvalSound.MISHAP,
                 )
             }
             // Then write all pertinent data back to the harness for the next iteration.
@@ -120,7 +123,7 @@ class CastingHarness private constructor(
             }
             continuation = result.continuation
             lastResolutionType = result.resolutionType
-            performSideEffects(info, result.sideEffects)
+            performSideEffects(info, result.sideEffects, result.sound)
             info.earlyExit = info.earlyExit || !lastResolutionType.success
         }
 
@@ -132,7 +135,6 @@ class CastingHarness private constructor(
         val (stackDescs, parenDescs, ravenmind) = generateDescs()
 
         return ControllerInfo(
-            info.playSound,
             this.stack.isEmpty() && this.parenCount == 0 && !this.escapeNext,
             lastResolutionType,
             stackDescs,
@@ -145,7 +147,7 @@ class CastingHarness private constructor(
     fun getUpdate(iota: Iota, world: ServerLevel, continuation: SpellContinuation): CastResult {
         try {
             this.handleParentheses(iota)?.let { (data, resolutionType) ->
-                return@getUpdate CastResult(continuation, data, resolutionType, listOf())
+                return@getUpdate CastResult(continuation, data, resolutionType, listOf(), EvalSound.GENERIC)
             }
 
             return if (iota is PatternIota) {
@@ -161,6 +163,7 @@ class CastingHarness private constructor(
                             Mishap.Context(HexPattern(HexDir.WEST), null)
                         )
                     ),
+                    EvalSound.MISHAP
                 )
             }
         } catch (mishap: Mishap) {
@@ -171,11 +174,16 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         mishap,
-                        Mishap.Context((iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST), getOperatorForPattern(iota, world))
+                        Mishap.Context(
+                            (iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST),
+                            getOperatorForPattern(iota, world)
+                        )
                     )
                 ),
+                EvalSound.MISHAP
             )
         } catch (exception: Exception) {
+            // This means something very bad has happened
             exception.printStackTrace()
             return CastResult(
                 continuation,
@@ -184,9 +192,13 @@ class CastingHarness private constructor(
                 listOf(
                     OperatorSideEffect.DoMishap(
                         MishapError(exception),
-                        Mishap.Context((iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST), getOperatorForPattern(iota, world))
+                        Mishap.Context(
+                            (iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST),
+                            getOperatorForPattern(iota, world)
+                        )
                     )
-                )
+                ),
+                EvalSound.MISHAP
             )
         }
     }
@@ -260,11 +272,28 @@ class CastingHarness private constructor(
                 hereFd
             }
 
+            var soundType =
+                if (this.ctx.source == CastingContext.CastSource.STAFF) EvalSound.GENERIC else EvalSound.NONE;
+            for (se in sideEffects) {
+                if (se is OperatorSideEffect.AttemptSpell) {
+                    if (se.hasCastingSound) {
+                        soundType = soundType.greaterOf(EvalSound.SPELL_BOINK)
+                    } else {
+                        // WITH CATLIKE TREAD
+                        // UPON OUR PREY WE STEAL
+                        soundType = EvalSound.NONE
+                        break
+                    }
+                } else if (se is OperatorSideEffect.DoMishap) {
+                    soundType = EvalSound.MISHAP
+                }
+            }
             return CastResult(
                 cont2,
                 fd,
                 ResolvedPatternType.EVALUATED,
                 sideEffects,
+                soundType,
             )
 
         } catch (mishap: Mishap) {
@@ -273,19 +302,7 @@ class CastingHarness private constructor(
                 null,
                 mishap.resolutionType(ctx),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, actionIdPair?.first))),
-            )
-        } catch (exception: Exception) {
-            exception.printStackTrace()
-            return CastResult(
-                continuation,
-                null,
-                ResolvedPatternType.ERRORED,
-                listOf(
-                    OperatorSideEffect.DoMishap(
-                        MishapError(exception),
-                        Mishap.Context(newPat, actionIdPair?.first)
-                    )
-                )
+                EvalSound.MISHAP
             )
         }
     }
@@ -293,19 +310,21 @@ class CastingHarness private constructor(
     /**
      * Execute the side effects of a pattern, updating our aggregated info.
      */
-    fun performSideEffects(info: TempControllerInfo, sideEffects: List<OperatorSideEffect>) {
+    fun performSideEffects(info: TempControllerInfo, sideEffects: List<OperatorSideEffect>, sound: EvalSound) {
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
             if (mustStop) {
                 info.earlyExit = true
                 break
             }
-
-            if (haskellProgrammersShakingandCryingRN is OperatorSideEffect.AttemptSpell &&
-                haskellProgrammersShakingandCryingRN.hasCastingSound
-            ) {
-                info.playSound = true
-            }
+        }
+        sound.soundEvent()?.let {
+            this.ctx.world.playSound(
+                null, this.ctx.position.x, this.ctx.position.y, this.ctx.position.z, it,
+                SoundSource.PLAYERS, 1f, 1f
+            )
+            // TODO: is it worth mixing in to the immut map and making our own game event with blackjack and hookers
+            this.ctx.world.gameEvent(this.ctx.caster, GameEvent.ITEM_INTERACT_FINISH, this.ctx.position)
         }
     }
 
@@ -618,7 +637,6 @@ class CastingHarness private constructor(
     }
 
     data class TempControllerInfo(
-        var playSound: Boolean,
         var earlyExit: Boolean,
     )
 
@@ -627,5 +645,6 @@ class CastingHarness private constructor(
         val newData: FunctionalData?,
         val resolutionType: ResolvedPatternType,
         val sideEffects: List<OperatorSideEffect>,
+        val sound: EvalSound,
     )
 }

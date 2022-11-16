@@ -27,7 +27,6 @@ public record MsgNewSpellPatternAck(ControllerInfo info, int index) implements I
     public static MsgNewSpellPatternAck deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
-        var wasSpellCast = buf.readBoolean();
         var isStackEmpty = buf.readBoolean();
         var resolutionType = buf.readEnum(ResolvedPatternType.class);
         var index = buf.readInt();
@@ -39,13 +38,12 @@ public record MsgNewSpellPatternAck(ControllerInfo info, int index) implements I
         var parenCount = buf.readVarInt();
 
         return new MsgNewSpellPatternAck(
-            new ControllerInfo(wasSpellCast, isStackEmpty, resolutionType, stack, parens, raven, parenCount), index
+            new ControllerInfo(isStackEmpty, resolutionType, stack, parens, raven, parenCount), index
         );
     }
 
     @Override
     public void serialize(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.info.getMakesCastSound());
         buf.writeBoolean(this.info.isStackClear());
         buf.writeEnum(this.info.getResolutionType());
         buf.writeInt(this.index);

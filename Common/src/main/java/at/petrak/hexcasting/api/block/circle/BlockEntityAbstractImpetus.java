@@ -115,9 +115,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-                                        BlockState state, BlockPos pos,
-                                        Player observer, Level world,
-                                        Direction hitFace) {
+        BlockState state, BlockPos pos,
+        Player observer, Level world,
+        Direction hitFace) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
             if (beai.getMedia() < 0) {
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
@@ -286,7 +286,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 new SpellCircleContext(this.getBlockPos(), bounds, this.activatorAlwaysInRange()));
             var harness = new CastingHarness(ctx);
 
-            var makeSound = false;
             BlockPos erroredPos = null;
             for (var tracked : this.trackedBlocks) {
                 var bs = this.level.getBlockState(tracked);
@@ -294,20 +293,12 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                     var newPattern = cc.getPattern(tracked, bs, this.level);
                     if (newPattern != null) {
                         var info = harness.executeIota(new PatternIota(newPattern), splayer.getLevel());
-                        if (info.getMakesCastSound()) {
-                            makeSound = true;
-                        }
                         if (!info.getResolutionType().getSuccess()) {
                             erroredPos = tracked;
                             break;
                         }
                     }
                 }
-            }
-
-            if (makeSound) {
-                this.level.playSound(null, this.getBlockPos(), HexSounds.SPELL_CIRCLE_CAST, SoundSource.BLOCKS,
-                    2f, 1f);
             }
 
             if (erroredPos != null) {
@@ -541,19 +532,22 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        if (remainingMediaCapacity() == 0)
+        if (remainingMediaCapacity() == 0) {
             return false;
+        }
 
-        if (stack.is(HexItems.CREATIVE_UNLOCKER))
+        if (stack.is(HexItems.CREATIVE_UNLOCKER)) {
             return true;
+        }
 
         var mediamount = extractMediaFromItem(stack, true);
         return mediamount > 0;
     }
 
     public int extractMediaFromItem(ItemStack stack, boolean simulate) {
-        if (this.media < 0)
+        if (this.media < 0) {
             return 0;
+        }
         return MediaHelper.extractMedia(stack, remainingMediaCapacity(), true, simulate);
     }
 
@@ -576,8 +570,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     public int remainingMediaCapacity() {
-        if (this.media < 0)
+        if (this.media < 0) {
             return 0;
+        }
         return Math.max(0, MAX_CAPACITY - this.media);
     }
 }

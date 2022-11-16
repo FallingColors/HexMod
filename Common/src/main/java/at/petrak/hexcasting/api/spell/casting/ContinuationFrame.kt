@@ -61,16 +61,16 @@ sealed interface ContinuationFrame {
             harness: CastingHarness
         ): CastResult {
             // If there are patterns left...
-            if (list.nonEmpty) {
+            return if (list.nonEmpty) {
                 val newCont = if (list.cdr.nonEmpty) { // yay TCO
                     // ...enqueue the evaluation of the rest of the patterns...
                     continuation.pushFrame(Evaluate(list.cdr))
                 } else continuation
                 // ...before evaluating the first one in the list.
-                return harness.getUpdate(list.car, level, newCont)
+                harness.getUpdate(list.car, level, newCont)
             } else {
                 // If there are no patterns (e.g. empty Hermes), just return OK.
-                return CastResult(continuation, null, ResolvedPatternType.EVALUATED, listOf())
+                CastResult(continuation, null, ResolvedPatternType.EVALUATED, listOf(), EvalSound.NONE)
             }
         }
 
@@ -98,7 +98,8 @@ sealed interface ContinuationFrame {
                 continuation,
                 FunctionalData(harness.stack.toList(), 0, listOf(), false, harness.ravenmind),
                 ResolvedPatternType.EVALUATED,
-                listOf()
+                listOf(),
+                EvalSound.NONE,
             )
         }
 
@@ -163,11 +164,13 @@ sealed interface ContinuationFrame {
             }
             val tStack = stack.toMutableList()
             tStack.add(stackTop)
+            // TODO: this means we could have Thoth casting do a different sound
             return CastResult(
                 newCont,
                 FunctionalData(tStack, 0, listOf(), false, harness.ravenmind),
                 ResolvedPatternType.EVALUATED,
-                listOf()
+                listOf(),
+                EvalSound.NONE,
             )
         }
 
