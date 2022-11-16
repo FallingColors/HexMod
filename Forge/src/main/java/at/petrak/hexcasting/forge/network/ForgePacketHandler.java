@@ -61,6 +61,9 @@ public class ForgePacketHandler {
             MsgNewWallScrollAck::serialize,
             MsgNewWallScrollAck::deserialize,
             makeClientBoundHandler(MsgNewWallScrollAck::handle));
+        NETWORK.registerMessage(messageIdx++, MsgRecalcWallScrollDisplayAck.class,
+            MsgRecalcWallScrollDisplayAck::serialize,
+            MsgRecalcWallScrollDisplayAck::deserialize, makeClientBoundHandler(MsgRecalcWallScrollDisplayAck::handle));
     }
 
     private static <T> BiConsumer<T, Supplier<NetworkEvent.Context>> makeServerBoundHandler(

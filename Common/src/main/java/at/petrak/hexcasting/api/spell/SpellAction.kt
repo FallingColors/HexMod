@@ -29,12 +29,12 @@ interface SpellAction : Action {
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
         val executeResult = this.execute(args, ctx) ?: return OperationResult(continuation, stack, ravenmind, listOf())
-        val (spell, mana, particles) = executeResult
+        val (spell, media, particles) = executeResult
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
-        if (mana > 0)
-            sideEffects.add(OperatorSideEffect.ConsumeMana(mana))
+        if (media > 0)
+            sideEffects.add(OperatorSideEffect.ConsumeMedia(media))
 
         // Don't have an effect if the caster isn't enlightened, even if processing other side effects
         if (!isGreat || ctx.isCasterEnlightened)

@@ -9,19 +9,19 @@ import net.minecraft.world.item.ItemStack
 import kotlin.math.roundToInt
 
 fun isMediaItem(stack: ItemStack): Boolean {
-    val manaHolder = IXplatAbstractions.INSTANCE.findManaHolder(stack) ?: return false
-    if (!manaHolder.canProvide())
+    val mediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(stack) ?: return false
+    if (!mediaHolder.canProvide())
         return false
-    return manaHolder.withdrawMedia(-1, true) > 0
+    return mediaHolder.withdrawMedia(-1, true) > 0
 }
 
 /**
- * Extract [cost] mana from [stack]. If [cost] is less than zero, extract all mana instead.
+ * Extract [cost] media from [stack]. If [cost] is less than zero, extract all media instead.
  * This may mutate [stack] (and may consume it) unless [simulate] is set.
  *
- * If [drainForBatteries] is false, this will only consider forms of mana that can be used to make new batteries.
+ * If [drainForBatteries] is false, this will only consider forms of media that can be used to make new batteries.
  *
- * Return the amount of mana extracted. This may be over [cost] if mana is wasted.
+ * Return the amount of media extracted. This may be over [cost] if media is wasted.
  */
 @JvmOverloads
 fun extractMedia(
@@ -30,18 +30,18 @@ fun extractMedia(
     drainForBatteries: Boolean = false,
     simulate: Boolean = false
 ): Int {
-    val manaHolder = IXplatAbstractions.INSTANCE.findManaHolder(stack) ?: return 0
+    val mediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(stack) ?: return 0
 
-    return extractMedia(manaHolder, cost, drainForBatteries, simulate)
+    return extractMedia(mediaHolder, cost, drainForBatteries, simulate)
 }
 
 /**
- * Extract [cost] mana from [holder]. If [cost] is less than zero, extract all mana instead.
+ * Extract [cost] media from [holder]. If [cost] is less than zero, extract all media instead.
  * This may mutate the stack underlying [holder] (and may consume it) unless [simulate] is set.
  *
- * If [drainForBatteries] is false, this will only consider forms of mana that can be used to make new batteries.
+ * If [drainForBatteries] is false, this will only consider forms of media that can be used to make new batteries.
  *
- * Return the amount of mana extracted. This may be over [cost] if mana is wasted.
+ * Return the amount of media extracted. This may be over [cost] if media is wasted.
  */
 fun extractMedia(
     holder: ADMediaHolder,
@@ -58,19 +58,19 @@ fun extractMedia(
 /**
  * Sorted from least important to most important
  */
-fun compareMediaItem(aMana: ADMediaHolder, bMana: ADMediaHolder): Int {
-    val priority = aMana.consumptionPriority - bMana.consumptionPriority
+fun compareMediaItem(aMedia: ADMediaHolder, bMedia: ADMediaHolder): Int {
+    val priority = aMedia.consumptionPriority - bMedia.consumptionPriority
     if (priority != 0)
         return priority
 
-    return aMana.withdrawMedia(-1, true) - bMana.withdrawMedia(-1, true)
+    return aMedia.withdrawMedia(-1, true) - bMedia.withdrawMedia(-1, true)
 }
 
-fun mediaBarColor(mana: Int, maxMana: Int): Int {
-    val amt = if (maxMana == 0) {
+fun mediaBarColor(media: Int, maxMedia: Int): Int {
+    val amt = if (maxMedia == 0) {
         0f
     } else {
-        mana.toFloat() / maxMana.toFloat()
+        media.toFloat() / maxMedia.toFloat()
     }
 
     val r = Mth.lerp(amt, 84f, 254f)
@@ -79,11 +79,11 @@ fun mediaBarColor(mana: Int, maxMana: Int): Int {
     return Mth.color(r / 255f, g / 255f, b / 255f)
 }
 
-fun mediaBarWidth(mana: Int, maxMana: Int): Int {
-    val amt = if (maxMana == 0) {
+fun mediaBarWidth(media: Int, maxMedia: Int): Int {
+    val amt = if (maxMedia == 0) {
         0f
     } else {
-        mana.toFloat() / maxMana.toFloat()
+        media.toFloat() / maxMedia.toFloat()
     }
     return (13f * amt).roundToInt()
 }

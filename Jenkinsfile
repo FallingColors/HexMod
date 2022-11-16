@@ -23,7 +23,10 @@ pipeline {
             }
         }
         stage('Publish') {
-            when { branch 'main' }
+            when { anyOf {
+             branch 'main'
+             branch '1.18'
+            } }
             steps {
                 echo 'Deploying to Maven'
                 sh './gradlew publish sendWebhook'

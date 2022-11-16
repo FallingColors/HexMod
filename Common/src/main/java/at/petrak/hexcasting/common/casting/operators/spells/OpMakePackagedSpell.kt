@@ -42,7 +42,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
         ) {
             throw MishapBadItem.of(
                 entity,
-                "mana_for_battery"
+                "media_for_battery"
             )
         }
 
@@ -61,9 +61,9 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
                 && itemEntity.isAlive
             ) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = extractMedia(entityStack, drainForBatteries = true)
-                if (manaAmt > 0) {
-                    hexHolder.writeHex(patterns, manaAmt)
+                val mediamount = extractMedia(entityStack, drainForBatteries = true)
+                if (mediamount > 0) {
+                    hexHolder.writeHex(patterns, mediamount)
                 }
 
                 itemEntity.item = entityStack

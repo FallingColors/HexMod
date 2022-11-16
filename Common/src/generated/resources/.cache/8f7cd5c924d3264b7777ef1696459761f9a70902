@@ -1,11 +1,11 @@
-// 1.19.2	2022-11-05T14:56:40.628663	Item Models: hexcasting
+// 1.19.2	2022-11-09T19:44:43.409223	Item Models: hexcasting
 f2156b3a7041cf99891b528393db64c6b9ca1a4f assets/hexcasting/models/item/abacus.json
 783d8454d6b74f926be0d3e02d87c6505e9d76d0 assets/hexcasting/models/item/acacia_staff.json
 19730853397b109cfedd0c3bbda83d5de6cd15b9 assets/hexcasting/models/item/akashic_record.json
 8c735feff09d46d00ed681311f46f61a50cfdc9b assets/hexcasting/models/item/amethyst_dust.json
 d1b0892de9d751e7bebc763e6407d5285363c851 assets/hexcasting/models/item/artifact.json
 7eb3eb776e70eb616c12ada500b9d1d6a3249a6a assets/hexcasting/models/item/artifact_filled.json
-f261669448bb990f55545c8e6288a1e75329c2ef assets/hexcasting/models/item/battery.json
+82e3be7bbdad92d2b4c728be54d9d2f2809a0ac2 assets/hexcasting/models/item/battery.json
 3dcc41ab5cbf7004f9c959d89be961aff0ce6032 assets/hexcasting/models/item/birch_staff.json
 f05937151873b1de302a011851edc62d0554e4db assets/hexcasting/models/item/bosnia_staff.json
 ec7c3a51882a432185fdbb6a449e66165b6a4c4c assets/hexcasting/models/item/charged_amethyst.json

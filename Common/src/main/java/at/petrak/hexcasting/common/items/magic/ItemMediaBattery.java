@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ItemMediaBattery extends ItemMediaHolder {
-    public static final ResourceLocation MANA_PREDICATE = modLoc("mana");
-    public static final ResourceLocation MAX_MANA_PREDICATE = modLoc("max_mana");
+    public static final ResourceLocation MEDIA_PREDICATE = modLoc("media");
+    public static final ResourceLocation MAX_MEDIA_PREDICATE = modLoc("max_media");
 
     public ItemMediaBattery(Properties pProperties) {
         super(pProperties);
@@ -31,16 +31,16 @@ public class ItemMediaBattery extends ItemMediaHolder {
     public void fillItemCategory(@NotNull CreativeModeTab tab, @NotNull NonNullList<ItemStack> items) {
         // who was drunk at the wheel when they named this
         if (allowedIn(tab)) {
-            var manamounts = new int[]{
+            var mediamounts = new int[]{
                 MediaConstants.CRYSTAL_UNIT,
                 20 * MediaConstants.CRYSTAL_UNIT,
                 64 * MediaConstants.CRYSTAL_UNIT,
                 640 * MediaConstants.CRYSTAL_UNIT,
                 6400 * MediaConstants.CRYSTAL_UNIT,
             };
-            for (int manamount : manamounts) {
+            for (int mediamount : mediamounts) {
                 var stack = new ItemStack(this);
-                items.add(ItemMediaHolder.withMedia(stack, manamount, manamount));
+                items.add(ItemMediaHolder.withMedia(stack, mediamount, mediamount));
             }
         }
     }

@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.api.spell.iota;
 
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import net.minecraft.client.gui.Font;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -42,4 +44,13 @@ public abstract class IotaType<T extends Iota> {
      * Get the color associated with this datum type.
      */
     public abstract int color();
+
+    /**
+     * Get a display component that's the name of this iota type.
+     */
+    public Component typeName() {
+        var key = HexIotaTypes.REGISTRY.getKey(this);
+        return Component.translatable("hexcasting.iota." + key)
+            .withStyle(style -> style.withColor(TextColor.fromRgb(color())));
+    }
 }

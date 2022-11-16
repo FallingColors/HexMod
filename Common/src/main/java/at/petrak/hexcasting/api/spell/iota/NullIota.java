@@ -15,8 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class NullIota extends Iota {
     private static final Object NULL_SUBSTITUTE = new Object();
 
-    public static final Component DISPLAY = Component.literal("NULL")
-        .withStyle(ChatFormatting.GRAY);
+    public static final Component DISPLAY = Component.translatable("hexcasting.tooltip.null_iota").withStyle(ChatFormatting.GRAY);
 
     public NullIota() {
         // We have to pass *something* here, but there's nothing that actually needs to go there,

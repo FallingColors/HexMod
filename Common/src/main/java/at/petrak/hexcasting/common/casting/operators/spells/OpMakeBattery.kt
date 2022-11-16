@@ -56,7 +56,7 @@ object OpMakeBattery : SpellAction {
         ) {
             throw MishapBadItem.of(
                 entity,
-                "mana_for_battery"
+                "media_for_battery"
             )
         }
 
@@ -68,11 +68,11 @@ object OpMakeBattery : SpellAction {
         override fun cast(ctx: CastingContext) {
             if (itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
-                val manaAmt = extractMedia(entityStack, drainForBatteries = true)
-                if (manaAmt > 0) {
+                val mediamount = extractMedia(entityStack, drainForBatteries = true)
+                if (mediamount > 0) {
                     ctx.caster.setItemInHand(
                         hand,
-                        ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY), manaAmt, manaAmt)
+                        ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY), mediamount, mediamount)
                     )
                 }
 

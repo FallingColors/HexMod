@@ -30,8 +30,8 @@ public abstract class CCHexHolder extends ItemComponent implements ADHexHolder {
 
 
         @Override
-        public boolean canDrawManaFromInventory() {
-            return this.hexHolder.canDrawManaFromInventory(this.stack);
+        public boolean canDrawMediaFromInventory() {
+            return this.hexHolder.canDrawMediaFromInventory(this.stack);
         }
 
         @Override
@@ -45,8 +45,8 @@ public abstract class CCHexHolder extends ItemComponent implements ADHexHolder {
         }
 
         @Override
-        public void writeHex(List<Iota> patterns, int mana) {
-            this.hexHolder.writeHex(this.stack, patterns, mana);
+        public void writeHex(List<Iota> patterns, int media) {
+            this.hexHolder.writeHex(this.stack, patterns, media);
         }
 
         @Override

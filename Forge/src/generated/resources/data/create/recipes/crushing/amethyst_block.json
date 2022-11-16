@@ -4,8 +4,8 @@
     {
       "conditions": [
         {
-          "modid": "create",
-          "type": "forge:mod_loaded"
+          "type": "forge:mod_loaded",
+          "modid": "create"
         }
       ],
       "recipe": {
@@ -15,18 +15,18 @@
             "item": "minecraft:amethyst_block"
           }
         ],
+        "processingTime": 150,
         "results": [
           {
-            "item": "minecraft:amethyst_shard",
-            "count": 3
+            "count": 3,
+            "item": "minecraft:amethyst_shard"
           },
           {
-            "item": "hexcasting:amethyst_dust",
+            "chance": 0.5,
             "count": 4,
-            "chance": 0.5
+            "item": "hexcasting:amethyst_dust"
           }
-        ],
-        "processingTime": 150
+        ]
       }
     }
   ]

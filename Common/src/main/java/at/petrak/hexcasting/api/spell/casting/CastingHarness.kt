@@ -446,14 +446,14 @@ class CastingHarness private constructor(
 
     /**
      * Might cast from hitpoints.
-     * Returns the mana cost still remaining after we deplete everything. It will be <= 0 if we could pay for it.
+     * Returns the media cost still remaining after we deplete everything. It will be <= 0 if we could pay for it.
      *
      * Also awards stats and achievements and such
      */
-    fun withdrawMana(manaCost: Int, allowOvercast: Boolean): Int {
-        // prevent poor impls from gaining you mana
-        if (manaCost <= 0) return 0
-        var costLeft = manaCost
+    fun withdrawMedia(mediaCost: Int, allowOvercast: Boolean): Int {
+        // prevent poor impls from gaining you media
+        if (mediaCost <= 0) return 0
+        var costLeft = mediaCost
 
         val fake = this.ctx.caster.isCreative
 
@@ -463,34 +463,34 @@ class CastingHarness private constructor(
 
             val tile = this.ctx.world.getBlockEntity(this.ctx.spellCircle.impetusPos)
             if (tile is BlockEntityAbstractImpetus) {
-                val manaAvailable = tile.mana
-                if (manaAvailable < 0)
+                val mediaAvailable = tile.media
+                if (mediaAvailable < 0)
                     return 0
 
-                val manaToTake = min(costLeft, manaAvailable)
-                costLeft -= manaToTake
-                tile.mana = manaAvailable - manaToTake
+                val mediaToTake = min(costLeft, mediaAvailable)
+                costLeft -= mediaToTake
+                tile.media = mediaAvailable - mediaToTake
             }
         } else {
             val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
-            val casterManaHolder = IXplatAbstractions.INSTANCE.findManaHolder(casterStack)
+            val casterMediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(casterStack)
             val casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack)
             val hexHolderDrawsFromInventory = if (casterHexHolder != null) {
-                if (casterManaHolder != null) {
-                    val manaAvailable = casterManaHolder.withdrawMedia(-1, true)
-                    val manaToTake = min(costLeft, manaAvailable)
-                    if (!fake) casterManaHolder.withdrawMedia(manaToTake, false)
-                    costLeft -= manaToTake
+                if (casterMediaHolder != null) {
+                    val mediaAvailable = casterMediaHolder.withdrawMedia(-1, true)
+                    val mediaToTake = min(costLeft, mediaAvailable)
+                    if (!fake) casterMediaHolder.withdrawMedia(mediaToTake, false)
+                    costLeft -= mediaToTake
                 }
-                casterHexHolder.canDrawManaFromInventory()
+                casterHexHolder.canDrawMediaFromInventory()
             } else {
                 false
             }
 
             if (casterStack.`is`(HexItemTags.STAVES) || hexHolderDrawsFromInventory) {
-                val manaSources = DiscoveryHandlers.collectMediaHolders(this)
+                val mediaSources = DiscoveryHandlers.collectMediaHolders(this)
                     .sortedWith(Comparator(::compareMediaItem).reversed())
-                for (source in manaSources) {
+                for (source in mediaSources) {
                     costLeft -= extractMedia(source, costLeft, simulate = fake)
                     if (costLeft <= 0)
                         break
@@ -498,32 +498,32 @@ class CastingHarness private constructor(
 
                 if (allowOvercast && costLeft > 0) {
                     // Cast from HP!
-                    val manaToHealth = HexConfig.common().mediaToHealthRate()
-                    val healthtoRemove = costLeft.toDouble() / manaToHealth
-                    val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
+                    val mediaToHealth = HexConfig.common().mediaToHealthRate()
+                    val healthtoRemove = costLeft.toDouble() / mediaToHealth
+                    val mediaAbleToCastFromHP = this.ctx.caster.health * mediaToHealth
 
-                    val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
+                    val mediaToActuallyPayFor = min(mediaAbleToCastFromHP.toInt(), costLeft)
                     costLeft -= if (!fake) {
                         Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthtoRemove.toFloat())
 
-                        val actuallyTaken = (manaAbleToCastFromHP - (this.ctx.caster.health * manaToHealth)).toInt()
+                        val actuallyTaken = (mediaAbleToCastFromHP - (this.ctx.caster.health * mediaToHealth)).toInt()
 
                         HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, actuallyTaken)
-                        this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
+                        this.ctx.caster.awardStat(HexStatistics.MEDIA_OVERCAST, mediaCost - costLeft)
                         actuallyTaken
                     } else {
-                        manaToActuallyPayFor
+                        mediaToActuallyPayFor
                     }
                 }
             }
         }
 
         if (!fake) {
-            // this might be more than the mana cost! for example if we waste a lot of mana from an item
-            this.ctx.caster.awardStat(HexStatistics.MANA_USED, manaCost - costLeft)
-            HexAdvancementTriggers.SPEND_MANA_TRIGGER.trigger(
+            // this might be more than the media cost! for example if we waste a lot of media from an item
+            this.ctx.caster.awardStat(HexStatistics.MEDIA_USED, mediaCost - costLeft)
+            HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.trigger(
                 this.ctx.caster,
-                manaCost - costLeft,
+                mediaCost - costLeft,
                 if (costLeft < 0) -costLeft else 0
             )
         }
@@ -566,17 +566,17 @@ class CastingHarness private constructor(
             DiscoveryHandlers.addMediaHolderDiscoverer {
                 it.ctx.caster.inventory.items
                     .filter(::isMediaItem)
-                    .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
+                    .mapNotNull(IXplatAbstractions.INSTANCE::findMediaHolder)
             }
             DiscoveryHandlers.addMediaHolderDiscoverer {
                 it.ctx.caster.inventory.armor
                     .filter(::isMediaItem)
-                    .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
+                    .mapNotNull(IXplatAbstractions.INSTANCE::findMediaHolder)
             }
             DiscoveryHandlers.addMediaHolderDiscoverer {
                 it.ctx.caster.inventory.offhand
                     .filter(::isMediaItem)
-                    .mapNotNull(IXplatAbstractions.INSTANCE::findManaHolder)
+                    .mapNotNull(IXplatAbstractions.INSTANCE::findMediaHolder)
             }
         }
 

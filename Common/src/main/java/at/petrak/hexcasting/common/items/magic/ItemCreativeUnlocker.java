@@ -174,8 +174,8 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (isDebug(stack, DISPLAY_MEDIA) && !level.isClientSide) {
-            debugDisplay(stack, TAG_EXTRACTIONS, "withdrawn", "all_mana", entity);
-            debugDisplay(stack, TAG_INSERTIONS, "inserted", "infinite_mana", entity);
+            debugDisplay(stack, TAG_EXTRACTIONS, "withdrawn", "all_media", entity);
+            debugDisplay(stack, TAG_INSERTIONS, "inserted", "infinite_media", entity);
         }
     }
 
@@ -185,12 +185,12 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
             NBTHelper.remove(stack, tag);
             for (int i : arr) {
                 if (i < 0) {
-                    entity.sendSystemMessage(Component.translatable("hexcasting.debug.mana_" + langKey,
+                    entity.sendSystemMessage(Component.translatable("hexcasting.debug.media_" + langKey,
                         stack.getDisplayName(),
                         Component.translatable("hexcasting.debug." + allKey).withStyle(ChatFormatting.GRAY))
                         .withStyle(ChatFormatting.LIGHT_PURPLE));
                 } else {
-                    entity.sendSystemMessage(Component.translatable("hexcasting.debug.mana_" + langKey + ".with_dust",
+                    entity.sendSystemMessage(Component.translatable("hexcasting.debug.media_" + langKey + ".with_dust",
                         stack.getDisplayName(),
                         Component.literal("" + i).withStyle(ChatFormatting.WHITE),
                         Component.literal(String.format("%.2f", i * 1.0 / MediaConstants.DUST_UNIT)).withStyle(
@@ -205,7 +205,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     public InteractionResult useOn(UseOnContext context) {
         BlockEntity be = context.getLevel().getBlockEntity(context.getClickedPos());
         if (be instanceof BlockEntityAbstractImpetus impetus) {
-            impetus.setInfiniteMana();
+            impetus.setInfiniteMedia();
             context.getLevel().playSound(null, context.getClickedPos(), HexSounds.SPELL_CIRCLE_FIND_BLOCK, SoundSource.PLAYERS, 1f, 1f);
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
         }

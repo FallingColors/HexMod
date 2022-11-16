@@ -10,20 +10,32 @@ import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 
-class MishapOthersName(val other: Player) : Mishap() {
+/**
+ * Also throwable for your *own* name, for cases like Chronicler's Gambit
+ */
+class MishapOthersName(val confidant: Player) : Mishap() {
     override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.BLACK)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.caster.addEffect(MobEffectInstance(MobEffects.BLINDNESS, 20 * 60))
+        val seconds = if (this.confidant == ctx.caster) 5 else 60;
+        ctx.caster.addEffect(MobEffectInstance(MobEffects.BLINDNESS, seconds * 20))
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
-        error("others_name", other.name)
+        if (this.confidant == ctx.caster)
+            error("others_name.self")
+        else
+            error("others_name", confidant.name)
 
     companion object {
+        /**
+         * Return any true names found in this iota.
+         *
+         * If `caster` is non-null, it will ignore that when checking.
+         */
         @JvmStatic
-        fun getTrueNameFromDatum(datum: Iota, caster: Player): Player? {
+        fun getTrueNameFromDatum(datum: Iota, caster: Player?): Player? {
             val poolToSearch = ArrayDeque<Iota>()
             poolToSearch.addLast(datum)
 

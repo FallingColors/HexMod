@@ -105,6 +105,8 @@ abstract class Mishap : Throwable() {
 
     companion object {
         fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
+            entity.setHurtWithStamp(source, entity.level.gameTime)
+
             val targetHealth = entity.health - amount
             if (entity.invulnerableTime > 10) {
                 val lastHurt = entity.lastHurt
@@ -116,7 +118,8 @@ abstract class Mishap : Throwable() {
             if (!entity.hurt(source, amount) &&
                 !entity.isInvulnerableTo(source) &&
                 !entity.level.isClientSide &&
-                !entity.isDeadOrDying) {
+                !entity.isDeadOrDying
+            ) {
 
                 // Ok, if you REALLY don't want to play nice...
                 entity.health = targetHealth
@@ -133,8 +136,6 @@ abstract class Mishap : Throwable() {
                 } else {
                     entity.playHurtSound(source)
                 }
-
-                entity.setHurtWithStamp(source, entity.level.gameTime)
             }
         }
     }

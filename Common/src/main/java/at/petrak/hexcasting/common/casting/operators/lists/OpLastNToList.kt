@@ -22,8 +22,7 @@ object OpLastNToList : Action {
         stack.removeLast()
         val output = mutableListOf<Iota>()
         output.addAll(stack.takeLast(yoinkCount))
-        val endSize = stack.size - output.toList().size
-        while (stack.size != endSize) {
+        for (i in 0 until yoinkCount) {
             stack.removeLast()
         }
         stack.addAll(output.asActionResult)

@@ -50,7 +50,7 @@ public class CuriosApiInterop {
                     for (int i = 0; i < stacks.getSlots(); i++) {
                         var stack = stacks.getStackInSlot(i);
                         if (MediaHelper.isMediaItem(stack)) {
-                            var holder = IXplatAbstractions.INSTANCE.findManaHolder(stack);
+                            var holder = IXplatAbstractions.INSTANCE.findMediaHolder(stack);
                             if (holder != null) {
                                 holders.add(holder);
                             }

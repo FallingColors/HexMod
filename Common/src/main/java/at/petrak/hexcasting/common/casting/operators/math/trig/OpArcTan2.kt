@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators.math.trig
 
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getDouble
 import at.petrak.hexcasting.api.spell.iota.Iota
 import kotlin.math.atan2
 
-object OpArcTan2 : ConstManaAction {
+object OpArcTan2 : ConstMediaAction {
     override val argc: Int
         get() = 2
 

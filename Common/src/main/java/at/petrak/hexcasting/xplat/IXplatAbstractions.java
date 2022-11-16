@@ -97,7 +97,7 @@ public interface IXplatAbstractions {
     void clearCastingData(ServerPlayer player);
 
     @Nullable
-    ADMediaHolder findManaHolder(ItemStack stack);
+    ADMediaHolder findMediaHolder(ItemStack stack);
 
     @Nullable
     ADIotaHolder findDataHolder(ItemStack stack);

@@ -2,8 +2,8 @@ package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.GarbageIota
 import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.iota.NullIota
 import net.minecraft.world.item.DyeColor
 
 class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
@@ -11,7 +11,7 @@ class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
         dyeColor(DyeColor.LIGHT_GRAY)
 
     override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
-        repeat(expected - got) { stack.add(NullIota()) }
+        repeat(expected - got) { stack.add(GarbageIota()) }
     }
 
     override fun errorMessage(ctx: CastingContext, errorCtx: Context) =

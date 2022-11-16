@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.asActionResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.getNumOrVec
 import at.petrak.hexcasting.api.spell.iota.Iota
 import kotlin.math.absoluteValue
 
-object OpAbsLen : ConstManaAction {
+object OpAbsLen : ConstMediaAction {
     override val argc: Int
         get() = 1
 

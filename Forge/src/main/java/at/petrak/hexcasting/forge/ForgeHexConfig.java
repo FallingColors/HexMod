@@ -25,7 +25,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         chargedCrystalMediaAmount = builder.comment("How much media a single Charged Amethyst Crystal item is worth")
             .defineInRange("chargedCrystalMediaAmount", DEFAULT_CHARGED_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
         mediaToHealthRate = builder.comment("How many points of media a half-heart is worth when casting from HP")
-            .defineInRange("mediaToHealthRate", DEFAULT_MANA_TO_HEALTH_RATE, 0.0, Double.POSITIVE_INFINITY);
+            .defineInRange("mediaToHealthRate", DEFAULT_MEDIA_TO_HEALTH_RATE, 0.0, Double.POSITIVE_INFINITY);
         builder.pop();
     }
 

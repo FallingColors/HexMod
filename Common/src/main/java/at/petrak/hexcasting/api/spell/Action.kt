@@ -14,7 +14,7 @@ import java.text.DecimalFormat
 /**
  * Manipulates the stack in some way, usually by popping some number of values off the stack
  * and pushing one new value.
- * For a more "traditional" pop arguments, push return experience, see [ConstManaAction].
+ * For a more "traditional" pop arguments, push return experience, see [ConstMediaAction].
  *
  * Implementors MUST NOT mutate the context.
  */
@@ -67,7 +67,7 @@ interface Action {
             origin.add(look.normalize().scale(MAX_DISTANCE))
 
         @JvmStatic
-        fun makeConstantOp(x: Iota): Action = object : ConstManaAction {
+        fun makeConstantOp(x: Iota): Action = object : ConstMediaAction {
             override val argc: Int
                 get() = 0
 
@@ -78,7 +78,7 @@ interface Action {
         private val DOUBLE_FORMATTER = DecimalFormat("####.####")
 
         @JvmStatic
-        fun makeConstantOp(x: Double, key: ResourceLocation): Action = object : ConstManaAction {
+        fun makeConstantOp(x: Double, key: ResourceLocation): Action = object : ConstMediaAction {
             override val argc: Int
                 get() = 0
 

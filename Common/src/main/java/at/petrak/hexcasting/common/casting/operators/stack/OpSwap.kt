@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
-import at.petrak.hexcasting.api.spell.ConstManaAction
+import at.petrak.hexcasting.api.spell.ConstMediaAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
 
-object OpSwap : ConstManaAction {
+object OpSwap : ConstMediaAction {
     override val argc: Int
         get() = 2
 
