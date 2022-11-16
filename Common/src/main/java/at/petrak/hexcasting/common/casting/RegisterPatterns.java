@@ -105,6 +105,8 @@ public class RegisterPatterns {
                 OpFisherman.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aada", HexDir.EAST), modLoc("fisherman/copy"),
                 OpFishermanButItCopies.INSTANCE);
+            PatternRegistry.mapPattern(HexPattern.fromAngles("wad", HexDir.EAST), modLoc("nip"),
+                OpNip.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaawdde", HexDir.SOUTH_EAST), modLoc("swizzle"),
                 OpAlwinfyHasAscendedToABeingOfPureMath.INSTANCE);
 
