@@ -159,7 +159,8 @@ class CastingHarness private constructor(
                     iota.continuation,
                     null,
                     ResolvedPatternType.EVALUATED,
-                    listOf()
+                    listOf(),
+                    EvalSound.GENERIC
                 )
             } else {
                 CastResult(
