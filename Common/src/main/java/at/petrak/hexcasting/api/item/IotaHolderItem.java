@@ -86,12 +86,18 @@ public interface IotaHolderItem {
         return HexIotaTypes.getColor(tag);
     }
 
+    /**
+     * Write {@code null} to indicate erasing
+     */
     boolean canWrite(ItemStack stack, @Nullable Iota iota);
 
+    /**
+     * Write {@code null} to indicate erasing
+     */
     void writeDatum(ItemStack stack, @Nullable Iota iota);
 
     static void appendHoverText(IotaHolderItem self, ItemStack stack, List<Component> components,
-        TooltipFlag flag) {
+                                TooltipFlag flag) {
         var datumTag = self.readIotaTag(stack);
         if (datumTag != null) {
             var cmp = HexIotaTypes.getDisplay(datumTag);
