@@ -1,5 +1,8 @@
 # Hex Casting
 
+[Curseforge](https://www.curseforge.com/minecraft/mc-mods/hexcasting) | [Modrinth](https://modrinth.com/mod/hex-casting)
+| [Source](https://github.com/gamma-delta/HexMod)
+
 A minecraft mod about casting Hexes, powerful and programmable magical effects, inspired by PSI.
 
 [Curseforge Link](https://www.curseforge.com/minecraft/mc-mods/hexcasting)
