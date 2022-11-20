@@ -10,7 +10,6 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
-import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.entities.HexEntities;
@@ -24,7 +23,6 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.RenderType;
@@ -34,7 +32,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -112,6 +109,14 @@ public class RegisterClientStuff {
 
         x.registerEntityRenderer(HexEntities.WALL_SCROLL, WallScrollRenderer::new);
 
+//        for (var tex : new ResourceLocation[]{
+//                PatternTooltipComponent.PRISTINE_BG,
+//                PatternTooltipComponent.ANCIENT_BG,
+//                PatternTooltipComponent.SLATE_BG
+//        }) {
+//            Minecraft.getInstance().getTextureManager().bindForSetup(tex);
+//        }
+
         addScryingLensStuff();
     }
 
@@ -135,14 +140,6 @@ public class RegisterClientStuff {
             }
             return HexIotaTypes.getColor(iotaTag);
         }, HexBlocks.AKASHIC_BOOKSHELF);
-
-        for (var tex : new ResourceLocation[]{
-                PatternTooltipComponent.PRISTINE_BG,
-                PatternTooltipComponent.ANCIENT_BG,
-                PatternTooltipComponent.SLATE_BG
-        }) {
-            Minecraft.getInstance().getTextureManager().bindForSetup(tex);
-        }
     }
 
     /**

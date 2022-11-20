@@ -24,14 +24,6 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:duplicate",
-      "anchor": "hexcasting:duplicate",
-      "input": "any",
-      "output": "any, any",
-      "text": "hexcasting.page.stackmanip.duplicate"
-    },
-    {
-      "type": "hexcasting:pattern",
       "op_id": "hexcasting:swap",
       "anchor": "hexcasting:swap",
       "input": "any, any",
@@ -48,11 +40,35 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:rotate_reverse",
+      "anchor": "hexcasting:rotate_reverse",
+      "input": "any, any, any",
+      "output": "any, any, any",
+      "text": "hexcasting.page.stackmanip.rotate_reverse"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:duplicate",
+      "anchor": "hexcasting:duplicate",
+      "input": "any",
+      "output": "any, any",
+      "text": "hexcasting.page.stackmanip.duplicate"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:over",
       "anchor": "hexcasting:over",
       "input": "any, any",
       "output": "any, any, any",
       "text": "hexcasting.page.stackmanip.over"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:tuck",
+      "anchor": "hexcasting:tuck",
+      "input": "any, any",
+      "output": "any, any, any",
+      "text": "hexcasting.page.stackmanip.tuck"
     },
     {
       "type": "hexcasting:pattern",
@@ -72,11 +88,11 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:stack_len",
-      "anchor": "hexcasting:stack_len",
-      "input": "",
-      "output": "num",
-      "text": "hexcasting.page.stackmanip.stack_len"
+      "op_id": "hexcasting:fisherman/copy",
+      "anchor": "hexcasting:fisherman/copy",
+      "input": "num",
+      "output": "any",
+      "text": "hexcasting.page.stackmanip.fisherman/copy"
     },
     {
       "type": "hexcasting:manual_pattern",
@@ -89,12 +105,14 @@
         {
           "startdir": "SOUTH_EAST",
           "signature": "aeea"
-        }, {
+        },
+        {
           "startdir": "EAST",
           "signature": "eada",
           "q": 1,
           "r": 2
-        }, {
+        },
+        {
           "startdir": "SOUTH_EAST",
           "signature": "ae",
           "q": 2,
@@ -119,6 +137,14 @@
       "text": "hexcasting.page.stackmanip.swizzle.2",
       "link_text": "hexcasting.page.stackmanip.swizzle.link",
       "url": "https://github.com/gamma-delta/HexMod/wiki/Table-of-Lehmer-Codes-for-Swindler's-Gambit"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:stack_len",
+      "anchor": "hexcasting:stack_len",
+      "input": "",
+      "output": "num",
+      "text": "hexcasting.page.stackmanip.stack_len"
     }
   ]
 }
