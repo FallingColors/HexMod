@@ -905,7 +905,7 @@
   "hexcasting.page.stackmanip.over": "将栈顶往下第二元素复制至栈顶。[0, 1] 变为 [0, 1, 0]。",
   "hexcasting.page.stackmanip.rotate": "将栈顶往下第三元素拉至栈顶。[0, 1, 2] 变为 [1, 2, 0]。",
   "hexcasting.page.stackmanip.rotate_reverse": "将栈顶元素沉至栈顶往下第三位处。[0, 1, 2] 变为 [2, 0, 1]。",
-  "hexcasting.page.stackmanip.over": "将栈底往上第二元素复制至栈顶。[0, 1] 变为 [0, 1, 0]。",
+  "hexcasting.page.stackmanip.over": "将栈顶往下第二元素复制至栈顶。[0, 1] 变为 [0, 1, 0]。",
   "hexcasting.page.stackmanip.tuck": "将栈底元素复制至栈顶往下第二元素下方。[0, 1] 变为 [1, 0, 1]。",
   "hexcasting.page.stackmanip.2dup": "复制栈顶的两个 iota。[0, 1] 变为 [0, 1, 0, 1]。",
   "hexcasting.page.stackmanip.duplicate_n": "移除栈顶的数，然后将现在的栈顶元素复制该数次。（若所给数为 2，则栈顶会有两个同一元素。）",
