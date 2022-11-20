@@ -10,14 +10,16 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
-import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
-import at.petrak.hexcasting.common.lib.*;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
+import at.petrak.hexcasting.common.lib.HexBlocks;
+import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
@@ -54,11 +56,11 @@ import java.util.function.UnaryOperator;
 public class RegisterClientStuff {
     public static void init() {
         registerDataHolderOverrides(HexItems.FOCUS,
-            stack -> HexItems.FOCUS.readIotaTag(stack) != null,
-            ItemFocus::isSealed);
+                stack -> HexItems.FOCUS.readIotaTag(stack) != null,
+                ItemFocus::isSealed);
         registerDataHolderOverrides(HexItems.SPELLBOOK,
-            stack -> HexItems.SPELLBOOK.readIotaTag(stack) != null,
-            ItemSpellbook::isSealed);
+                stack -> HexItems.SPELLBOOK.readIotaTag(stack) != null,
+                ItemSpellbook::isSealed);
 
         registerPackagedSpellOverrides(HexItems.CYPHER);
         registerPackagedSpellOverrides(HexItems.TRINKET);
@@ -66,23 +68,23 @@ public class RegisterClientStuff {
 
         var x = IClientXplatAbstractions.INSTANCE;
         x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MEDIA_PREDICATE,
-            (stack, level, holder, holderID) -> {
-                var item = (MediaHolderItem) stack.getItem();
-                return item.getMediaFullness(stack);
-            });
+                (stack, level, holder, holderID) -> {
+                    var item = (MediaHolderItem) stack.getItem();
+                    return item.getMediaFullness(stack);
+                });
         x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MAX_MEDIA_PREDICATE,
-            (stack, level, holder, holderID) -> {
-                var item = (ItemMediaBattery) stack.getItem();
-                var max = item.getMaxMedia(stack);
-                return (float) Math.sqrt((float) max / MediaConstants.CRYSTAL_UNIT / 10);
-            });
+                (stack, level, holder, holderID) -> {
+                    var item = (ItemMediaBattery) stack.getItem();
+                    var max = item.getMaxMedia(stack);
+                    return (float) Math.sqrt((float) max / MediaConstants.CRYSTAL_UNIT / 10);
+                });
 
         registerScrollOverrides(HexItems.SCROLL_SMOL);
         registerScrollOverrides(HexItems.SCROLL_MEDIUM);
         registerScrollOverrides(HexItems.SCROLL_LARGE);
 
         x.registerItemProperty(HexItems.SLATE, ItemSlate.WRITTEN_PRED,
-            (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
+                (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
         registerWandOverrides(HexItems.STAFF_OAK);
         registerWandOverrides(HexItems.STAFF_BIRCH);
@@ -111,7 +113,7 @@ public class RegisterClientStuff {
     }
 
     public static void registerColorProviders(BiConsumer<ItemColor, Item> itemColorRegistry,
-        BiConsumer<BlockColor, Block> blockColorRegistry) {
+                                              BiConsumer<BlockColor, Block> blockColorRegistry) {
         itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.FOCUS::getColor), HexItems.FOCUS);
         itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.SPELLBOOK::getColor), HexItems.SPELLBOOK);
 
@@ -148,117 +150,117 @@ public class RegisterClientStuff {
 
     private static void addScryingLensStuff() {
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction) -> state.getBlock() instanceof BlockAbstractImpetus,
-            (lines, state, pos, observer, world, direction) -> {
-                if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-                    beai.applyScryingLensOverlay(lines, state, pos, observer, world, direction);
-                }
-            });
+                (state, pos, observer, world, direction) -> state.getBlock() instanceof BlockAbstractImpetus,
+                (lines, state, pos, observer, world, direction) -> {
+                    if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
+                        beai.applyScryingLensOverlay(lines, state, pos, observer, world, direction);
+                    }
+                });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.NOTE_BLOCK,
-            (lines, state, pos, observer, world, direction) -> {
-                int note = state.getValue(NoteBlock.NOTE);
+                (lines, state, pos, observer, world, direction) -> {
+                    int note = state.getValue(NoteBlock.NOTE);
 
-                float rCol = Math.max(0.0F, Mth.sin((note / 24F + 0.0F) * Mth.TWO_PI) * 0.65F + 0.35F);
-                float gCol = Math.max(0.0F, Mth.sin((note / 24F + 0.33333334F) * Mth.TWO_PI) * 0.65F + 0.35F);
-                float bCol = Math.max(0.0F, Mth.sin((note / 24F + 0.6666667F) * Mth.TWO_PI) * 0.65F + 0.35F);
+                    float rCol = Math.max(0.0F, Mth.sin((note / 24F + 0.0F) * Mth.TWO_PI) * 0.65F + 0.35F);
+                    float gCol = Math.max(0.0F, Mth.sin((note / 24F + 0.33333334F) * Mth.TWO_PI) * 0.65F + 0.35F);
+                    float bCol = Math.max(0.0F, Mth.sin((note / 24F + 0.6666667F) * Mth.TWO_PI) * 0.65F + 0.35F);
 
-                int noteColor = 0xFF_000000 | Mth.color(rCol, gCol, bCol);
+                    int noteColor = 0xFF_000000 | Mth.color(rCol, gCol, bCol);
 
-                var instrument = state.getValue(NoteBlock.INSTRUMENT);
+                    var instrument = state.getValue(NoteBlock.INSTRUMENT);
 
-                lines.add(new Pair<>(
-                    new ItemStack(Items.MUSIC_DISC_CHIRP),
-                    Component.literal(String.valueOf(instrument.ordinal()))
-                        .withStyle(color(instrumentColor(instrument)))));
-                lines.add(new Pair<>(
-                    new ItemStack(Items.NOTE_BLOCK),
-                    Component.literal(String.valueOf(note))
-                        .withStyle(color(noteColor))));
-            });
+                    lines.add(new Pair<>(
+                            new ItemStack(Items.MUSIC_DISC_CHIRP),
+                            Component.literal(String.valueOf(instrument.ordinal()))
+                                    .withStyle(color(instrumentColor(instrument)))));
+                    lines.add(new Pair<>(
+                            new ItemStack(Items.NOTE_BLOCK),
+                            Component.literal(String.valueOf(note))
+                                    .withStyle(color(noteColor))));
+                });
 
         ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF,
-            (lines, state, pos, observer, world, direction) -> {
-                if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
-                    var iotaTag = tile.getIotaTag();
-                    if (iotaTag != null) {
-                        var display = HexIotaTypes.getDisplay(iotaTag);
-                        lines.add(new Pair<>(new ItemStack(Items.BOOK), display));
+                (lines, state, pos, observer, world, direction) -> {
+                    if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
+                        var iotaTag = tile.getIotaTag();
+                        if (iotaTag != null) {
+                            var display = HexIotaTypes.getDisplay(iotaTag);
+                            lines.add(new Pair<>(new ItemStack(Items.BOOK), display));
+                        }
                     }
-                }
-            });
+                });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.COMPARATOR,
-            (lines, state, pos, observer, world, direction) -> {
-                int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(true);
-                lines.add(new Pair<>(
-                    new ItemStack(Items.REDSTONE),
-                    Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
-                        .withStyle(redstoneColor(comparatorValue))));
+                (lines, state, pos, observer, world, direction) -> {
+                    int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(true);
+                    lines.add(new Pair<>(
+                            new ItemStack(Items.REDSTONE),
+                            Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
+                                    .withStyle(redstoneColor(comparatorValue))));
 
-                boolean compare = state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE;
+                    boolean compare = state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE;
 
-                lines.add(new Pair<>(
-                    new ItemStack(Items.REDSTONE_TORCH),
-                    Component.literal(compare ? ">=" : "-")
-                        .withStyle(redstoneColor(compare ? 0 : 15))));
-            });
+                    lines.add(new Pair<>(
+                            new ItemStack(Items.REDSTONE_TORCH),
+                            Component.literal(compare ? ">=" : "-")
+                                    .withStyle(redstoneColor(compare ? 0 : 15))));
+                });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.POWERED_RAIL,
-            (lines, state, pos, observer, world, direction) -> {
-                int power = getPoweredRailStrength(world, pos, state);
-                lines.add(new Pair<>(
-                    new ItemStack(Items.POWERED_RAIL),
-                    Component.literal(String.valueOf(power))
-                        .withStyle(redstoneColor(power, 9))));
-            });
+                (lines, state, pos, observer, world, direction) -> {
+                    int power = getPoweredRailStrength(world, pos, state);
+                    lines.add(new Pair<>(
+                            new ItemStack(Items.POWERED_RAIL),
+                            Component.literal(String.valueOf(power))
+                                    .withStyle(redstoneColor(power, 9))));
+                });
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
-            (lines, state, pos, observer, world, direction) -> lines.add(new Pair<>(
-                new ItemStack(Items.CLOCK),
-                Component.literal(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
-                    .withStyle(ChatFormatting.YELLOW))));
+                (lines, state, pos, observer, world, direction) -> lines.add(new Pair<>(
+                        new ItemStack(Items.CLOCK),
+                        Component.literal(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
+                                .withStyle(ChatFormatting.YELLOW))));
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction) -> state.getBlock() instanceof BeehiveBlock,
-            (lines, state, pos, observer, world, direction) -> {
-                int count = ScryingLensOverlayRegistry.getBeeValue();
-                lines.add(new Pair<>(new ItemStack(Items.BEE_NEST), count == -1 ? Component.empty() :
-                    Component.translatable(
-                        "hexcasting.tooltip.lens.bee" + (count == 1 ? ".single" : ""),
-                        count
-                    )));
-            });
+                (state, pos, observer, world, direction) -> state.getBlock() instanceof BeehiveBlock,
+                (lines, state, pos, observer, world, direction) -> {
+                    int count = ScryingLensOverlayRegistry.getBeeValue();
+                    lines.add(new Pair<>(new ItemStack(Items.BEE_NEST), count == -1 ? Component.empty() :
+                            Component.translatable(
+                                    "hexcasting.tooltip.lens.bee" + (count == 1 ? ".single" : ""),
+                                    count
+                            )));
+                });
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction) -> state.isSignalSource() && !state.is(
-                Blocks.COMPARATOR),
-            (lines, state, pos, observer, world, direction) -> {
-                int signalStrength = 0;
-                if (state.getBlock() instanceof RedStoneWireBlock) {
-                    signalStrength = state.getValue(RedStoneWireBlock.POWER);
-                } else {
-                    for (Direction dir : Direction.values()) {
-                        signalStrength = Math.max(signalStrength, state.getSignal(world, pos, dir));
+                (state, pos, observer, world, direction) -> state.isSignalSource() && !state.is(
+                        Blocks.COMPARATOR),
+                (lines, state, pos, observer, world, direction) -> {
+                    int signalStrength = 0;
+                    if (state.getBlock() instanceof RedStoneWireBlock) {
+                        signalStrength = state.getValue(RedStoneWireBlock.POWER);
+                    } else {
+                        for (Direction dir : Direction.values()) {
+                            signalStrength = Math.max(signalStrength, state.getSignal(world, pos, dir));
+                        }
                     }
-                }
 
-                lines.add(0, new Pair<>(
-                    new ItemStack(Items.REDSTONE),
-                    Component.literal(String.valueOf(signalStrength))
-                        .withStyle(redstoneColor(signalStrength))));
-            });
+                    lines.add(0, new Pair<>(
+                            new ItemStack(Items.REDSTONE),
+                            Component.literal(String.valueOf(signalStrength))
+                                    .withStyle(redstoneColor(signalStrength))));
+                });
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction) -> state.hasAnalogOutputSignal(),
-            (lines, state, pos, observer, world, direction) -> {
-                int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(false);
-                lines.add(
-                    new Pair<>(
-                        new ItemStack(Items.COMPARATOR),
-                        Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
-                            .withStyle(redstoneColor(comparatorValue))));
-            });
+                (state, pos, observer, world, direction) -> state.hasAnalogOutputSignal(),
+                (lines, state, pos, observer, world, direction) -> {
+                    int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(false);
+                    lines.add(
+                            new Pair<>(
+                                    new ItemStack(Items.COMPARATOR),
+                                    Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
+                                            .withStyle(redstoneColor(comparatorValue))));
+                });
     }
 
     private static UnaryOperator<Style> color(int color) {
@@ -295,15 +297,15 @@ public class RegisterClientStuff {
     private static void registerDataHolderOverrides(IotaHolderItem item, Predicate<ItemStack> hasIota,
                                                     Predicate<ItemStack> isSealed) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.OVERLAY_PRED,
-            (stack, level, holder, holderID) -> {
-                if (!hasIota.test(stack) && !NBTHelper.hasString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY)) {
-                    return 0;
-                }
-                if (!isSealed.test(stack)) {
-                    return 1;
-                }
-                return 2;
-            });
+                (stack, level, holder, holderID) -> {
+                    if (!hasIota.test(stack) && !NBTHelper.hasString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY)) {
+                        return 0;
+                    }
+                    if (!isSealed.test(stack)) {
+                        return 1;
+                    }
+                    return 2;
+                });
     }
 
     private static int getPoweredRailStrength(Level level, BlockPos pos, BlockState state) {
@@ -324,7 +326,7 @@ public class RegisterClientStuff {
             int z = pos.getZ();
             boolean descending = true;
             RailShape shape = state.getValue(PoweredRailBlock.SHAPE);
-            switch(shape) {
+            switch (shape) {
                 case NORTH_SOUTH:
                     if (travelPositive) {
                         ++z;
@@ -416,50 +418,42 @@ public class RegisterClientStuff {
 
     private static void registerScrollOverrides(ItemScroll scroll) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(scroll, ItemScroll.ANCIENT_PREDICATE,
-            (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
+                (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
     }
 
     private static void registerPackagedSpellOverrides(ItemPackagedHex item) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemPackagedHex.HAS_PATTERNS_PRED,
-            (stack, level, holder, holderID) ->
-                item.hasHex(stack) ? 1f : 0f
+                (stack, level, holder, holderID) ->
+                        item.hasHex(stack) ? 1f : 0f
         );
     }
 
     private static void registerWandOverrides(ItemStaff item) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemStaff.FUNNY_LEVEL_PREDICATE,
-            (stack, level, holder, holderID) -> {
-                if (!stack.hasCustomHoverName()) {
-                    return 0;
-                }
-                var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
-                if (name.contains("old")) {
-                    return 1f;
-                } else if (name.contains("wand of the forest")) {
-                    return 2f;
-                } else {
-                    return 0f;
-                }
-            });
-    }
-
-    public static void registerParticles() {
-        // rip particle man
-        IClientXplatAbstractions.INSTANCE.registerParticleType(HexParticles.LIGHT_PARTICLE,
-            ConjureParticle.Provider::new);
-        IClientXplatAbstractions.INSTANCE.registerParticleType(HexParticles.CONJURE_PARTICLE,
-            ConjureParticle.Provider::new);
+                (stack, level, holder, holderID) -> {
+                    if (!stack.hasCustomHoverName()) {
+                        return 0;
+                    }
+                    var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
+                    if (name.contains("old")) {
+                        return 1f;
+                    } else if (name.contains("wand of the forest")) {
+                        return 2f;
+                    } else {
+                        return 0f;
+                    }
+                });
     }
 
     public static void registerBlockEntityRenderers(@NotNull BlockEntityRendererRegisterererer registerer) {
         registerer.registerBlockEntityRenderer(HexBlockEntities.SLATE_TILE, BlockEntitySlateRenderer::new);
         registerer.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE,
-            BlockEntityAkashicBookshelfRenderer::new);
+                BlockEntityAkashicBookshelfRenderer::new);
     }
 
     @FunctionalInterface
     public interface BlockEntityRendererRegisterererer {
         <T extends BlockEntity> void registerBlockEntityRenderer(BlockEntityType<T> type,
-            BlockEntityRendererProvider<? super T> berp);
+                                                                 BlockEntityRendererProvider<? super T> berp);
     }
 }
