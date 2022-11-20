@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.recipe;
 
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
-import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepIngredient;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -21,10 +21,10 @@ import org.jetbrains.annotations.NotNull;
 
 // God I am a horrible person
 public record BrainsweepRecipe(
-    ResourceLocation id,
-    StateIngredient blockIn,
-    VillagerIngredient villagerIn,
-    BlockState result
+        ResourceLocation id,
+        StateIngredient blockIn,
+        BrainsweepIngredient villagerIn,
+        BlockState result
 ) implements Recipe<Container> {
     public boolean matches(BlockState blockIn, Villager villagerIn) {
         return this.blockIn.test(blockIn) && this.villagerIn.test(villagerIn);
@@ -84,7 +84,7 @@ public record BrainsweepRecipe(
         @Override
         public @NotNull BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
             var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));
-            var villagerIn = VillagerIngredient.deserialize(GsonHelper.getAsJsonObject(json, "villagerIn"));
+            var villagerIn = BrainsweepIngredient.deserialize(GsonHelper.getAsJsonObject(json, "villagerIn"));
             var result = StateIngredientHelper.readBlockState(GsonHelper.getAsJsonObject(json, "result"));
             return new BrainsweepRecipe(recipeID, blockIn, villagerIn, result);
         }
@@ -99,7 +99,7 @@ public record BrainsweepRecipe(
         @Override
         public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
             var blockIn = StateIngredientHelper.read(buf);
-            var villagerIn = VillagerIngredient.read(buf);
+            var villagerIn = BrainsweepIngredient.read(buf);
             var result = Block.stateById(buf.readVarInt());
             return new BrainsweepRecipe(recipeID, blockIn, villagerIn, result);
         }

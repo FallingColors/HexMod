@@ -30,12 +30,12 @@ public class HexRecipeStuffRegistry {
 
     // TODO: custom costs in brainsweeping. also custom entities but we'll getting there
     public static final RecipeSerializer<?> BRAINSWEEP = registerSerializer("brainsweep",
-        new BrainsweepRecipe.Serializer());
+            new BrainsweepRecipe.Serializer());
     public static final RecipeSerializer<SealFocusRecipe> SEAL_FOCUS = registerSerializer("seal_focus",
-        SealFocusRecipe.SERIALIZER);
+            SealFocusRecipe.SERIALIZER);
     public static final RecipeSerializer<SealSpellbookRecipe> SEAL_SPELLBOOK = registerSerializer(
-        "seal_spellbook",
-        SealSpellbookRecipe.SERIALIZER);
+            "seal_spellbook",
+            SealSpellbookRecipe.SERIALIZER);
 
     public static RecipeType<BrainsweepRecipe> BRAINSWEEP_TYPE = registerType("brainsweep");
 

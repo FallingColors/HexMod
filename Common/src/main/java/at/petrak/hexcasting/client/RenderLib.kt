@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.utils.getValue
 import at.petrak.hexcasting.api.utils.setValue
 import at.petrak.hexcasting.api.utils.weakMapped
 import at.petrak.hexcasting.client.gui.GuiSpellcasting
-import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepIngredient
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
@@ -51,12 +51,12 @@ val CAP_THETA: Float = 18f
  * Please make sure to enable the right asinine shaders; see [GuiSpellcasting]
  */
 fun drawLineSeq(
-    mat: Matrix4f,
-    points: List<Vec2>,
-    width: Float,
-    z: Float,
-    tail: Int,
-    head: Int,
+        mat: Matrix4f,
+        points: List<Vec2>,
+        width: Float,
+        z: Float,
+        tail: Int,
+        head: Int,
 ) {
     if (points.size <= 1) return
 
@@ -86,15 +86,15 @@ fun drawLineSeq(
         val prev = p1.add(p0.negated())
         val next = p2.add(p1.negated())
         val angle =
-            Mth.atan2((prev.x * next.y - prev.y * next.x).toDouble(), (prev.x * next.x + prev.y * next.y).toDouble())
-                .toFloat()
+                Mth.atan2((prev.x * next.y - prev.y * next.x).toDouble(), (prev.x * next.x + prev.y * next.y).toDouble())
+                        .toFloat()
         joinAngles[i - 1] = angle
         val clamp = Math.min(prev.length(), next.length()) / (width * 0.5f);
         joinOffsets[i - 1] = Mth.clamp(Mth.sin(angle) / (1 + Mth.cos(angle)), -clamp, clamp)
     }
 
     fun vertex(color: BlockPos, pos: Vec2) =
-        buf.vertex(mat, pos.x, pos.y, z).color(color.x, color.y, color.z, a).endVertex()
+            buf.vertex(mat, pos.x, pos.y, z).color(color.x, color.y, color.z, a).endVertex()
     for ((i, pair) in points.zipWithNext().withIndex()) {
         val (p1, p2) = pair
         // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
@@ -104,7 +104,7 @@ fun drawLineSeq(
         val normal = Vec2(-tangent.y, tangent.x)
 
         fun color(time: Float): BlockPos =
-            BlockPos(Mth.lerp(time, r1, r2).toInt(), Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
+                BlockPos(Mth.lerp(time, r1, r2).toInt(), Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
 
         val color1 = color(i.toFloat() / n)
         val color2 = color((i + 1f) / n)
@@ -170,13 +170,13 @@ fun rotate(vec: Vec2, theta: Float): Vec2 {
  *   * you have to do the conversion yourself.)
  *    */
 fun drawPatternFromPoints(
-    mat: Matrix4f,
-    points: List<Vec2>,
-    dupIndices: Set<Int>?,
-    drawLast: Boolean,
-    tail: Int,
-    head: Int,
-    flowIrregular: Float,
+        mat: Matrix4f,
+        points: List<Vec2>,
+        dupIndices: Set<Int>?,
+        drawLast: Boolean,
+        tail: Int,
+        head: Int,
+        flowIrregular: Float,
 ) {
     val zappyPts = makeZappy(points, dupIndices, 10f, 2.5f, 0.1f, flowIrregular)
     val nodes = if (drawLast) {
@@ -188,26 +188,26 @@ fun drawPatternFromPoints(
     drawLineSeq(mat, zappyPts, 2f, 1f, screenCol(tail), screenCol(head))
     for (node in nodes) {
         drawSpot(
-            mat,
-            node,
-            2f,
-            dodge(FastColor.ARGB32.red(head)) / 255f,
-            dodge(FastColor.ARGB32.green(head)) / 255f,
-            dodge(FastColor.ARGB32.blue(head)) / 255f,
-            FastColor.ARGB32.alpha(head) / 255f
+                mat,
+                node,
+                2f,
+                dodge(FastColor.ARGB32.red(head)) / 255f,
+                dodge(FastColor.ARGB32.green(head)) / 255f,
+                dodge(FastColor.ARGB32.blue(head)) / 255f,
+                FastColor.ARGB32.alpha(head) / 255f
         );
     }
 }
 
 fun makeZappy(
-    points: List<Vec2>,
-    dupIndices: Set<Int>?,
-    hops: Float,
-    variance: Float,
-    speed: Float,
-    flowIrregular: Float
+        points: List<Vec2>,
+        dupIndices: Set<Int>?,
+        hops: Float,
+        variance: Float,
+        speed: Float,
+        flowIrregular: Float
 ) =
-    makeZappy(points, dupIndices, hops.toInt(), variance, speed, flowIrregular, 0.2f)
+        makeZappy(points, dupIndices, hops.toInt(), variance, speed, flowIrregular, 0.2f)
 
 /**
  * Split up a sequence of linePoints with a lightning effect
@@ -215,8 +215,8 @@ fun makeZappy(
  * @param speed: rate at which the lightning effect should move/shake/etc
  */
 fun makeZappy(
-    barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float,
-    readabilityOffset: Float
+        barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float,
+        readabilityOffset: Float
 ): List<Vec2> {
     // Nothing in, nothing out
     if (barePoints.isEmpty()) {
@@ -245,14 +245,14 @@ fun makeZappy(
                 // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
                 val minorPerturb = NOISE.getValue(i.toDouble(), j.toDouble(), sin(zSeed)) * flowIrregular
                 val theta = (3 * NOISE.getValue(
-                    i.toDouble() + j.toDouble() / (hops + 1) + minorPerturb - zSeed,
-                    1337.0,
-                    0.0
+                        i.toDouble() + j.toDouble() / (hops + 1) + minorPerturb - zSeed,
+                        1337.0,
+                        0.0
                 ) * TAU).toFloat()
                 val r = (NOISE.getValue(
-                    i.toDouble() + j.toDouble() / (hops + 1) - zSeed,
-                    69420.0,
-                    0.0
+                        i.toDouble() + j.toDouble() / (hops + 1) - zSeed,
+                        69420.0,
+                        0.0
                 ) * maxVariance * scaleVariance(progress)).toFloat()
                 val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
                 // Then record the new location.
@@ -333,10 +333,10 @@ fun drawSpot(mat: Matrix4f, point: Vec2, radius: Float, r: Float, g: Float, b: F
 
 fun screenCol(n: Int): Int {
     return FastColor.ARGB32.color(
-        FastColor.ARGB32.alpha(n),
-        screen(FastColor.ARGB32.red(n)),
-        screen(FastColor.ARGB32.green(n)),
-        screen(FastColor.ARGB32.blue(n)),
+            FastColor.ARGB32.alpha(n),
+            screen(FastColor.ARGB32.red(n)),
+            screen(FastColor.ARGB32.green(n)),
+            screen(FastColor.ARGB32.blue(n)),
     )
 }
 
@@ -363,7 +363,7 @@ fun getCenteredPattern(pattern: HexPattern, width: Float, height: Float, minSize
         }
     }
     val scale =
-        min(minSize, min(width / 3f / maxDx, height / 3f / maxDy))
+            min(minSize, min(width / 3f / maxDx, height / 3f / maxDy))
     val com2: Vec2 = pattern.getCenter(scale)
     val lines2: List<Vec2> = pattern.toLines(scale, com2.negated())
     return scale to lines2
@@ -385,12 +385,12 @@ fun transferMsToGl(ms: PoseStack, toRun: Runnable) {
 
 private var villager: Villager? by weakMapped(Villager::level)
 
-fun prepareVillagerForRendering(ingredient: VillagerIngredient, level: Level): Villager {
+fun prepareVillagerForRendering(ingredient: BrainsweepIngredient, level: Level): Villager {
     val minLevel: Int = ingredient.minLevel()
     val profession: VillagerProfession = Registry.VILLAGER_PROFESSION.getOptional(ingredient.profession())
-        .orElse(VillagerProfession.NONE)
+            .orElse(VillagerProfession.NONE)
     val biome: VillagerType = Registry.VILLAGER_TYPE.getOptional(ingredient.biome())
-        .orElse(VillagerType.PLAINS)
+            .orElse(VillagerType.PLAINS)
 
     val instantiatedVillager = villager ?: run {
         val newVillager = Villager(EntityType.VILLAGER, level)
@@ -399,18 +399,18 @@ fun prepareVillagerForRendering(ingredient: VillagerIngredient, level: Level): V
     }
 
     instantiatedVillager.villagerData = instantiatedVillager.villagerData
-        .setProfession(profession)
-        .setType(biome)
-        .setLevel(minLevel)
+            .setProfession(profession)
+            .setType(biome)
+            .setLevel(minLevel)
 
     return instantiatedVillager
 }
 
 @JvmOverloads
 fun renderEntity(
-    ms: PoseStack, entity: Entity, world: Level, x: Float, y: Float, rotation: Float,
-    renderScale: Float, offset: Float,
-    bufferTransformer: (MultiBufferSource) -> MultiBufferSource = { it -> it }
+        ms: PoseStack, entity: Entity, world: Level, x: Float, y: Float, rotation: Float,
+        renderScale: Float, offset: Float,
+        bufferTransformer: (MultiBufferSource) -> MultiBufferSource = { it -> it }
 ) {
     entity.level = world
     ms.pushPose()
@@ -432,23 +432,23 @@ fun renderEntity(
  * Make sure you have the `PositionColorShader` set
  */
 fun renderQuad(
-    ps: PoseStack, x: Float, y: Float, w: Float, h: Float, color: Int
+        ps: PoseStack, x: Float, y: Float, w: Float, h: Float, color: Int
 ) {
     val mat = ps.last().pose()
     val tess = Tesselator.getInstance()
     val buf = tess.builder
     buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
     buf.vertex(mat, x, y, 0f)
-        .color(color)
-        .endVertex()
+            .color(color)
+            .endVertex()
     buf.vertex(mat, x, y + h, 0f)
-        .color(color)
-        .endVertex()
+            .color(color)
+            .endVertex()
     buf.vertex(mat, x + w, y + h, 0f)
-        .color(color)
-        .endVertex()
+            .color(color)
+            .endVertex()
     buf.vertex(mat, x + w, y, 0f)
-        .color(color)
-        .endVertex()
+            .color(color)
+            .endVertex()
     tess.end()
 }

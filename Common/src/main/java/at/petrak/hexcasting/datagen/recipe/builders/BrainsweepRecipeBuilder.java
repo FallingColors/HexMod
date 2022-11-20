@@ -3,7 +3,7 @@ package at.petrak.hexcasting.datagen.recipe.builders;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
-import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepIngredient;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
@@ -22,12 +22,12 @@ import java.util.function.Consumer;
 
 public class BrainsweepRecipeBuilder implements RecipeBuilder {
     private StateIngredient blockIn;
-    private VillagerIngredient villagerIn;
+    private BrainsweepIngredient villagerIn;
     private final BlockState result;
 
     private final Advancement.Builder advancement;
 
-    public BrainsweepRecipeBuilder(StateIngredient blockIn, VillagerIngredient villagerIn, BlockState result) {
+    public BrainsweepRecipeBuilder(StateIngredient blockIn, BrainsweepIngredient villagerIn, BlockState result) {
         this.blockIn = blockIn;
         this.villagerIn = villagerIn;
         this.result = result;
@@ -57,17 +57,17 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
         }
 
         this.advancement.parent(new ResourceLocation("recipes/root"))
-            .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeId))
-            .rewards(AdvancementRewards.Builder.recipe(pRecipeId))
-            .requirements(RequirementsStrategy.OR);
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeId))
+                .rewards(AdvancementRewards.Builder.recipe(pRecipeId))
+                .requirements(RequirementsStrategy.OR);
         pFinishedRecipeConsumer.accept(new Result(
-            pRecipeId,
-            this.blockIn, this.villagerIn, this.result,
-            this.advancement,
-            new ResourceLocation(pRecipeId.getNamespace(), "recipes/brainsweep/" + pRecipeId.getPath())));
+                pRecipeId,
+                this.blockIn, this.villagerIn, this.result,
+                this.advancement,
+                new ResourceLocation(pRecipeId.getNamespace(), "recipes/brainsweep/" + pRecipeId.getPath())));
     }
 
-    public record Result(ResourceLocation id, StateIngredient blockIn, VillagerIngredient villagerIn,
+    public record Result(ResourceLocation id, StateIngredient blockIn, BrainsweepIngredient villagerIn,
                          BlockState result, Advancement.Builder advancement,
                          ResourceLocation advancementId) implements FinishedRecipe {
         @Override

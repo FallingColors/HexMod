@@ -4,7 +4,7 @@ import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.client.shader.FakeBufferSource;
 import at.petrak.hexcasting.client.shader.HexRenderTypes;
-import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepIngredient;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.emi.api.render.EmiRender;
@@ -35,43 +35,43 @@ import static at.petrak.hexcasting.client.RenderLib.renderEntity;
 
 public class VillagerEmiStack extends EmiStack {
     private final VillagerEntry entry;
-    public final VillagerIngredient ingredient;
+    public final BrainsweepIngredient ingredient;
     public final boolean mindless;
 
     private final ResourceLocation id;
 
-    public VillagerEmiStack(VillagerIngredient villager) {
+    public VillagerEmiStack(BrainsweepIngredient villager) {
         this(villager, false);
     }
 
-    public VillagerEmiStack(VillagerIngredient villager, boolean mindless) {
+    public VillagerEmiStack(BrainsweepIngredient villager, boolean mindless) {
         this(villager, mindless, 1);
     }
 
-    public VillagerEmiStack(VillagerIngredient villager, boolean mindless, long amount) {
+    public VillagerEmiStack(BrainsweepIngredient villager, boolean mindless, long amount) {
         entry = new VillagerEntry(new VillagerVariant(villager, mindless));
         this.ingredient = villager;
         this.mindless = mindless;
         this.amount = amount;
         // This is so scuffed
         this.id = modLoc((Objects.toString(villager.profession()) + villager.minLevel() + mindless)
-            .replace(':', '-'));
+                .replace(':', '-'));
     }
 
     public static Set<BlockState> matchingStatesForProfession(VillagerProfession profession) {
         return Registry.POINT_OF_INTEREST_TYPE.holders()
-            .filter(profession.heldJobSite())
-            .flatMap(it -> it.value().matchingStates().stream())
-            .collect(Collectors.toSet());
+                .filter(profession.heldJobSite())
+                .flatMap(it -> it.value().matchingStates().stream())
+                .collect(Collectors.toSet());
     }
 
-    public static EmiIngredient atLevelOrHigher(VillagerIngredient ingredient, boolean remainder) {
+    public static EmiIngredient atLevelOrHigher(BrainsweepIngredient ingredient, boolean remainder) {
         if (ingredient.profession() == null) {
             return EmiIngredient.of(Registry.VILLAGER_PROFESSION.stream()
-                .filter(it -> matchingStatesForProfession(it).isEmpty())
-                .map(it -> atLevelOrHigher(new VillagerIngredient(Registry.VILLAGER_PROFESSION.getKey(it),
-                    ingredient.biome(), ingredient.minLevel()), true))
-                .toList());
+                    .filter(it -> matchingStatesForProfession(it).isEmpty())
+                    .map(it -> atLevelOrHigher(new BrainsweepIngredient(Registry.VILLAGER_PROFESSION.getKey(it),
+                            ingredient.biome(), ingredient.minLevel()), true))
+                    .toList());
         }
 
         VillagerEmiStack stack = new VillagerEmiStack(ingredient).orHigher(true);
@@ -136,7 +136,7 @@ public class VillagerEmiStack extends EmiStack {
                 }
 
                 ResourceLocation displayId = Objects.requireNonNullElseGet(ingredient.profession(),
-                    () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
+                        () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
                 tooltip.add(Component.literal(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
             }
 
@@ -150,9 +150,9 @@ public class VillagerEmiStack extends EmiStack {
     @Override
     public List<ClientTooltipComponent> getTooltip() {
         List<ClientTooltipComponent> list = getTooltipText().stream()
-            .map(Component::getVisualOrderText)
-            .map(ClientTooltipComponent::create)
-            .collect(Collectors.toList());
+                .map(Component::getVisualOrderText)
+                .map(ClientTooltipComponent::create)
+                .collect(Collectors.toList());
         if (!getRemainder().isEmpty()) {
             list.add(EmiTooltipComponents.getRemainderTooltipComponent(this));
         }
@@ -175,7 +175,7 @@ public class VillagerEmiStack extends EmiStack {
                 RenderSystem.enableBlend();
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 renderEntity(poseStack, villager, level, x + 8, y + 16, ClientTickCounter.getTotal(), 8, 0,
-                    mindless ? (it) -> new FakeBufferSource(it, HexRenderTypes::getGrayscaleLayer) : it -> it);
+                        mindless ? (it) -> new FakeBufferSource(it, HexRenderTypes::getGrayscaleLayer) : it -> it);
             }
         }
 

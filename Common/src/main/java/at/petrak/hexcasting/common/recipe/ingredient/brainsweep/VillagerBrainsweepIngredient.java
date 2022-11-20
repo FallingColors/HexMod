@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.recipe.ingredient;
+package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
 import org.jetbrains.annotations.Nullable;
@@ -17,24 +17,64 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
-// you ever step back and realize the thoughts that have coursed through your mind for so long
-// they've become second nature are in fact incredibly horrific?
-// jesus christ I'm making a class called `VillagerIngredient`
-public record VillagerIngredient(
-    @Nullable ResourceLocation profession,
-    @Nullable ResourceLocation biome,     // aka their "type"
-    int minLevel
-) implements Predicate<Villager> {
+/**
+ * Special case for villagers so we can have biome/profession/level reqs
+ */
+public class VillagerBrainsweepIngredient extends BrainsweepIngredient {
+    private final @Nullable ResourceLocation profession;
+    private final @Nullable ResourceLocation biome;
+    private final int minLevel;
+
+    protected VillagerBrainsweepIngredient(
+            @Nullable ResourceLocation profession,
+            @Nullable ResourceLocation biome,     // aka their "type"
+            int minLevel
+    ) {
+        super();
+        this.profession = profession;
+        this.biome = biome;
+        this.minLevel = minLevel;
+    }
+
     @Override
-    public boolean test(Villager villager) {
+    public boolean test(Entity entity) {
+        if (!(entity instanceof Villager villager)) return false;
+
         var data = villager.getVillagerData();
         ResourceLocation profID = IXplatAbstractions.INSTANCE.getID(data.getProfession());
 
         return (this.profession == null || this.profession.equals(profID))
-            && (this.biome == null || this.biome.equals(Registry.VILLAGER_TYPE.getKey(data.getType())))
-            && this.minLevel <= data.getLevel();
+                && (this.biome == null || this.biome.equals(Registry.VILLAGER_TYPE.getKey(data.getType())))
+                && this.minLevel <= data.getLevel();
+    }
+
+    @Override
+    public List<Component> getTooltip(boolean advanced) {
+        List<Component> tooltip = new ArrayList<>();
+        tooltip.add(name());
+
+        if (advanced) {
+            if (minLevel >= 5) {
+                tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.level", 5)
+                        .withStyle(ChatFormatting.DARK_GRAY));
+            } else if (minLevel > 1) {
+                tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.min_level", minLevel)
+                        .withStyle(ChatFormatting.DARK_GRAY));
+            }
+
+            if (biome != null) {
+                tooltip.add(Component.literal(biome.toString()).withStyle(ChatFormatting.DARK_GRAY));
+            }
+
+            ResourceLocation displayId = Objects.requireNonNullElseGet(profession,
+                    () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
+            tooltip.add(Component.literal(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
+        }
+
+        tooltip.add(getModNameComponent());
+
+        return tooltip;
     }
 
     public Component name() {
@@ -75,48 +115,13 @@ public record VillagerIngredient(
         return component;
     }
 
-    public List<Component> getTooltip(boolean advanced) {
-        return getTooltip(advanced, true);
-    }
-
-    public List<Component> getTooltip(boolean advanced, boolean orHigher) {
-        List<Component> tooltip = new ArrayList<>();
-        tooltip.add(name());
-
-        if (advanced) {
-            if (orHigher) {
-                if (minLevel >= 5) {
-                    tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.level", 5)
-                        .withStyle(ChatFormatting.DARK_GRAY));
-                } else if (minLevel > 1) {
-                    tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.min_level", minLevel)
-                        .withStyle(ChatFormatting.DARK_GRAY));
-                }
-            } else if (profession != null || minLevel > 1) {
-                tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.level", Mth.clamp(minLevel, 1, 5))
-                    .withStyle(ChatFormatting.DARK_GRAY));
-            }
-
-            if (biome != null) {
-                tooltip.add(Component.literal(biome.toString()).withStyle(ChatFormatting.DARK_GRAY));
-            }
-
-            ResourceLocation displayId = Objects.requireNonNullElseGet(profession,
-                () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
-            tooltip.add(Component.literal(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
-        }
-
-        tooltip.add(getModNameComponent());
-
-        return tooltip;
-    }
-
     public Component getModNameComponent() {
         String namespace = profession == null ? "minecraft" : profession.getNamespace();
         String mod = IXplatAbstractions.INSTANCE.getModName(namespace);
         return Component.literal(mod).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
     }
 
+    @Override
     public JsonObject serialize() {
         var obj = new JsonObject();
         if (this.profession != null) {
@@ -129,6 +134,7 @@ public record VillagerIngredient(
         return obj;
     }
 
+    @Override
     public void write(FriendlyByteBuf buf) {
         if (this.profession != null) {
             buf.writeVarInt(1);
@@ -145,7 +151,7 @@ public record VillagerIngredient(
         buf.writeInt(this.minLevel);
     }
 
-    public static VillagerIngredient deserialize(JsonObject json) {
+    public static VillagerBrainsweepIngredient deserialize(JsonObject json) {
         ResourceLocation profession = null;
         if (json.has("profession")) {
             profession = new ResourceLocation(GsonHelper.getAsString(json, "profession"));
@@ -155,10 +161,10 @@ public record VillagerIngredient(
             biome = new ResourceLocation(GsonHelper.getAsString(json, "biome"));
         }
         int minLevel = GsonHelper.getAsInt(json, "minLevel");
-        return new VillagerIngredient(profession, biome, minLevel);
+        return new VillagerBrainsweepIngredient(profession, biome, minLevel);
     }
 
-    public static VillagerIngredient read(FriendlyByteBuf buf) {
+    public static VillagerBrainsweepIngredient read(FriendlyByteBuf buf) {
         ResourceLocation profession = null;
         var hasProfession = buf.readVarInt();
         if (hasProfession != 0) {
@@ -170,6 +176,6 @@ public record VillagerIngredient(
             biome = buf.readResourceLocation();
         }
         int minLevel = buf.readInt();
-        return new VillagerIngredient(profession, biome, minLevel);
+        return new VillagerBrainsweepIngredient(profession, biome, minLevel);
     }
 }
