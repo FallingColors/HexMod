@@ -121,7 +121,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
         var ancientId = NBTHelper.getString(pStack, TAG_OP_ID);
         if (ancientId != null) {
             return Component.translatable(descID + ".of",
-                Component.translatable("hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
+                    Component.translatable("hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
         } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
             return Component.translatable(descID);
         } else {
@@ -137,9 +137,10 @@ public class ItemScroll extends Item implements IotaHolderItem {
         if (compound != null) {
             var pattern = HexPattern.fromNBT(compound);
             return Optional.of(new PatternTooltip(
-                pattern,
-                NBTHelper.hasString(stack,
-                    ItemScroll.TAG_OP_ID) ? PatternTooltipComponent.ANCIENT_BG : PatternTooltipComponent.PRISTINE_BG));
+                    pattern,
+                    NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID)
+                            ? PatternTooltipComponent.ANCIENT_BG
+                            : PatternTooltipComponent.PRISTINE_BG));
         }
 
         return Optional.empty();
