@@ -111,7 +111,7 @@ public class ForgeHexInitializer {
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
     private static <T> void bind(ResourceKey<Registry<T>> registry,
-        Consumer<BiConsumer<T, ResourceLocation>> source) {
+                                 Consumer<BiConsumer<T, ResourceLocation>> source) {
         getModEventBus().addListener((RegisterEvent event) -> {
             if (registry.equals(event.getRegistryKey())) {
                 source.accept((t, rl) -> event.register(registry, rl, () -> t));
@@ -123,7 +123,7 @@ public class ForgeHexInitializer {
         var modBus = getModEventBus();
         var evBus = MinecraftForge.EVENT_BUS;
 
-        modBus.register(ForgeHexClientInitializer.class);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modBus.register(ForgeHexClientInitializer.class));
 
         modBus.addListener((FMLCommonSetupEvent evt) ->
             evt.enqueueWork(() -> {
