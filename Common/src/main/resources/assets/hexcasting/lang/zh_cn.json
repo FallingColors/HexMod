@@ -270,7 +270,7 @@
   "hexcasting.spell.book.hexcasting:const/vec/x": "向量之精思，+X/-X型",
   "hexcasting.spell.book.hexcasting:const/vec/y": "向量之精思，+Y/-Y型",
   "hexcasting.spell.book.hexcasting:const/vec/z": "向量之精思，+Z/-Z型",
-  "hexcasting.spell.book.hexcasting:write/entity": "编年史家之策略",
+  "hexcasting.spell.book.hexcasting:read/entity": "编年史家之纯化",
   "hexcasting.spell.book.hexcasting:number": "数字之精思",
   "hexcasting.spell.book.hexcasting:mask": "簿记员之策略",
 
