@@ -31,19 +31,21 @@ import net.minecraft.world.entity.npc.VillagerProfession
 import net.minecraft.world.entity.npc.VillagerType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.levelgen.XoroshiroRandomSource
-import net.minecraft.world.level.levelgen.synth.PerlinNoise
+import net.minecraft.world.level.levelgen.SingleThreadedRandomSource
+import net.minecraft.world.level.levelgen.synth.SimplexNoise
 import net.minecraft.world.phys.Vec2
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sin
 
-/**
- * Source of perlin noise
- */
-val NOISE: PerlinNoise = PerlinNoise.create(XoroshiroRandomSource(9001L), listOf(0, 1, 2, 3, 4))
+val NOISE: SimplexNoise = SimplexNoise(SingleThreadedRandomSource(9001L))
 
-val CAP_THETA: Float = 18f
+// see the test; perlin noise seems to output almost exclusively between -0.5 and 0.5
+// i could probably impl this "properly" with some kind of exponent but it's faster and easier to divide
+fun getNoise(x: Double, y: Double, z: Double): Double =
+        NOISE.getValue(x * 0.6, y * 0.6, z * 0.6) / 2.0
+
+const val CAP_THETA: Float = 18f
 
 /**
  * Draw a sequence of linePoints spanning the given points.
@@ -209,8 +211,9 @@ fun drawPatternFromPoints(
         tail: Int,
         head: Int,
         flowIrregular: Float,
+        seed: Double
 ) {
-    val zappyPts = makeZappy(points, dupIndices, 10f, 2.5f, 0.1f, flowIrregular)
+    val zappyPts = makeZappy(points, dupIndices, 10f, 2.5f, 0.1f, flowIrregular, seed)
     val nodes = if (drawLast) {
         points
     } else {
@@ -237,9 +240,10 @@ fun makeZappy(
         hops: Float,
         variance: Float,
         speed: Float,
-        flowIrregular: Float
+        flowIrregular: Float,
+        seed: Double,
 ) =
-        makeZappy(points, dupIndices, hops.toInt(), variance, speed, flowIrregular, 0.2f)
+        makeZappy(points, dupIndices, hops.toInt(), variance, speed, flowIrregular, 0.2f, seed)
 
 /**
  * Split up a sequence of linePoints with a lightning effect
@@ -248,7 +252,7 @@ fun makeZappy(
  */
 fun makeZappy(
         barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float,
-        readabilityOffset: Float
+        readabilityOffset: Float, seed: Double
 ): List<Vec2> {
     // Nothing in, nothing out
     if (barePoints.isEmpty()) {
@@ -275,16 +279,16 @@ fun makeZappy(
                 // as well as some random variance...
                 // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
                 // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
-                val minorPerturb = NOISE.getValue(i.toDouble(), j.toDouble(), sin(zSeed)) * flowIrregular
-                val theta = (3 * NOISE.getValue(
-                        i.toDouble() + j.toDouble() / (hops + 1) + minorPerturb - zSeed,
+                val minorPerturb = getNoise(i.toDouble(), j.toDouble(), sin(zSeed)) * flowIrregular
+                val theta = (3 * getNoise(
+                        i + progress + minorPerturb - zSeed,
                         1337.0,
-                        0.0
+                        seed
                 ) * TAU).toFloat()
-                val r = (NOISE.getValue(
-                        i.toDouble() + j.toDouble() / (hops + 1) - zSeed,
+                val r = (getNoise(
+                        i + progress - zSeed,
                         69420.0,
-                        0.0
+                        seed
                 ) * maxVariance * scaleVariance(progress)).toFloat()
                 val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
                 // Then record the new location.

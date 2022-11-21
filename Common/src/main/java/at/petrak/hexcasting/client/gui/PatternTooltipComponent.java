@@ -48,7 +48,7 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         var pair = RenderLib.getCenteredPattern(pattern, RENDER_SIZE, RENDER_SIZE, 8f);
         this.scale = pair.getFirst();
         var dots = pair.getSecond();
-        this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10f, 0.8f, 0f, 0f);
+        this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10f, 0.8f, 0f, 0f, 0.0);
         this.pathfinderDots = dots.stream().distinct().collect(Collectors.toList());
     }
 
@@ -79,7 +79,7 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         RenderSystem.disableCull();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         ps.translate(width / 2f, height / 2f, 1);
 
         var mat = ps.last().pose();
@@ -87,9 +87,9 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         var innerLight = 0xc8_aba2a2;
         var innerDark = 0xc8_322b33;
         RenderLib.drawLineSeq(mat, this.zappyPoints, 5f, 0,
-                outer, outer);
+            outer, outer);
         RenderLib.drawLineSeq(mat, this.zappyPoints, 2f, 0,
-                innerDark, innerLight);
+            innerDark, innerLight);
         RenderLib.drawSpot(mat, this.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
 
         for (var dot : this.pathfinderDots) {
