@@ -26,7 +26,10 @@ public class PatternDrawable implements IDrawable {
     public PatternDrawable(ResourceLocation pattern, int w, int h) {
         var entry = PatternRegistry.lookupPattern(pattern);
         this.strokeOrder = !entry.isPerWorld();
-        var data = PatternDrawingUtil.loadPatterns(List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin())));
+        var data = PatternDrawingUtil.loadPatterns(
+            List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin())),
+            0f,
+            1f);
         this.patterns = data.patterns();
         this.pathfinderDots = data.pathfinderDots();
         this.width = w;
@@ -54,7 +57,7 @@ public class PatternDrawable implements IDrawable {
         poseStack.pushPose();
         poseStack.translate(xOffset - 0.5f + width / 2f, yOffset + height / 2f, 0);
         poseStack.scale(width / 64f, height / 64f, 1f);
-        PatternDrawingUtil.drawPattern(poseStack, 0, 0, this.patterns, this.pathfinderDots, this.strokeOrder, time,
+        PatternDrawingUtil.drawPattern(poseStack, 0, 0, this.patterns, this.pathfinderDots, this.strokeOrder,
             0xff_333030, 0xff_191818, 0xc8_0c0a0c, 0x80_666363);
         poseStack.popPose();
     }

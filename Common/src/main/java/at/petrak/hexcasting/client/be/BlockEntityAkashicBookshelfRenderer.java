@@ -22,7 +22,7 @@ public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<
 
     @Override
     public void render(BlockEntityAkashicBookshelf tile, float pPartialTick, PoseStack ps,
-        MultiBufferSource buffer, int light, int overlay) {
+                       MultiBufferSource buffer, int light, int overlay) {
         HexPattern pattern = tile.getPattern();
         if (pattern == null) {
             return;
@@ -73,7 +73,9 @@ public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<
             lines2.set(j, new Vec2(-v.x, v.y));
         }
 
-        var zappy = RenderLib.makeZappy(lines2, RenderLib.findDupIndices(pattern.positions()), 10f, 0.5f, 0f, 0f);
+        var stupidHash = tile.getBlockPos().hashCode();
+        var zappy = RenderLib.makeZappy(lines2, RenderLib.findDupIndices(pattern.positions()), 10, 0.5f, 0f, 0f, 0f,
+            1f, stupidHash);
 
         int outer = 0xff_d2c8c8;
         int inner = 0xc8_322b33;

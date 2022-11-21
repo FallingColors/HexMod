@@ -234,6 +234,7 @@ class GuiSpellcasting constructor(
                 // Well, we never managed to get anything on the stack this go-around.
                 this.drawState = PatternDrawState.BetweenPatterns
             }
+
             is PatternDrawState.Drawing -> {
                 val (start, _, pat) = this.drawState as PatternDrawState.Drawing
                 this.drawState = PatternDrawState.BetweenPatterns
@@ -325,7 +326,8 @@ class GuiSpellcasting constructor(
         }
         RenderSystem.defaultBlendFunc()
 
-        for ((pat, origin, valid) in this.patterns) {
+        for ((idx, elts) in this.patterns.withIndex()) {
+            val (pat, origin, valid) = elts
             drawPatternFromPoints(
                 mat,
                 pat.toLines(
@@ -336,7 +338,10 @@ class GuiSpellcasting constructor(
                 true,
                 valid.color or (0xC8 shl 24),
                 valid.fadeColor or (0xC8 shl 24),
-                if (valid.success) 0.2f else 0.9f
+                if (valid.success) 0.2f else 0.9f,
+                DEFAULT_READABILITY_OFFSET,
+                1f,
+                idx.toDouble()
             )
         }
 
@@ -358,7 +363,17 @@ class GuiSpellcasting constructor(
             }
 
             points.add(mousePos)
-            drawPatternFromPoints(mat, points, dupIndices, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt(), 0.1f)
+            // Use the size of the patterns as the seed so that way when this one is added the zappies don't jump
+            drawPatternFromPoints(mat,
+                points,
+                dupIndices,
+                false,
+                0xff_64c8ff_u.toInt(),
+                0xff_fecbe6_u.toInt(),
+                0.1f,
+                DEFAULT_READABILITY_OFFSET,
+                1f,
+                this.patterns.size.toDouble())
         }
 
         RenderSystem.enableDepthTest()

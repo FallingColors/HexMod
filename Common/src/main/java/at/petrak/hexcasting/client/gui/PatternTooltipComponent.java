@@ -32,8 +32,7 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
     public static final ResourceLocation ANCIENT_BG = modLoc("textures/gui/scroll_ancient.png");
     public static final ResourceLocation SLATE_BG = modLoc("textures/gui/slate.png");
 
-    private static final float RENDER_SIZE = 72f;
-    private static final float TEXTURE_SIZE = 48f;
+    private static final float RENDER_SIZE = 128f;
 
     private final HexPattern pattern;
     private final List<Vec2> zappyPoints;
@@ -45,10 +44,13 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         this.pattern = tt.pattern();
         this.background = tt.background();
 
-        var pair = RenderLib.getCenteredPattern(pattern, RENDER_SIZE, RENDER_SIZE, 8f);
+        var pair = RenderLib.getCenteredPattern(pattern, RENDER_SIZE, RENDER_SIZE, 16f);
         this.scale = pair.getFirst();
         var dots = pair.getSecond();
-        this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10f, 0.8f, 0f, 0f);
+        this.zappyPoints = RenderLib.makeZappy(
+            dots, RenderLib.findDupIndices(pattern.positions()),
+            10, 0.8f, 0f, 0f, RenderLib.DEFAULT_READABILITY_OFFSET, RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP,
+            0.0);
         this.pathfinderDots = dots.stream().distinct().collect(Collectors.toList());
     }
 
@@ -79,17 +81,17 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         RenderSystem.disableCull();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         ps.translate(width / 2f, height / 2f, 1);
 
         var mat = ps.last().pose();
         var outer = 0xff_d2c8c8;
         var innerLight = 0xc8_aba2a2;
         var innerDark = 0xc8_322b33;
-        RenderLib.drawLineSeq(mat, this.zappyPoints, 5f, 0,
-                outer, outer);
-        RenderLib.drawLineSeq(mat, this.zappyPoints, 2f, 0,
-                innerDark, innerLight);
+        RenderLib.drawLineSeq(mat, this.zappyPoints, 6f, 0,
+            outer, outer);
+        RenderLib.drawLineSeq(mat, this.zappyPoints, 6f * 0.4f, 0,
+            innerDark, innerLight);
         RenderLib.drawSpot(mat, this.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
 
         for (var dot : this.pathfinderDots) {
@@ -104,7 +106,8 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         RenderSystem.setShaderTexture(0, background);
         // x y blitoffset sw sh w h ... ?
         // parchment doesn't have this mapped
-        GuiComponent.blit(ps, 0, 0, blitOffset, 0f, 0f, (int) RENDER_SIZE, (int) RENDER_SIZE, (int) RENDER_SIZE, (int) RENDER_SIZE);
+        GuiComponent.blit(ps, 0, 0, blitOffset, 0f, 0f, (int) RENDER_SIZE, (int) RENDER_SIZE, (int) RENDER_SIZE,
+            (int) RENDER_SIZE);
     }
 
     @Override

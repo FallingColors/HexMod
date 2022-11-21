@@ -270,7 +270,7 @@
   "hexcasting.spell.book.hexcasting:const/vec/x": "Vector Rfln. +X/-X",
   "hexcasting.spell.book.hexcasting:const/vec/y": "Vector Rfln. +Y/-Y",
   "hexcasting.spell.book.hexcasting:const/vec/z": "Vector Rfln. +Z/-Z",
-  "hexcasting.spell.book.hexcasting:write/entity": "Chronicler's Prfn.",
+  "hexcasting.spell.book.hexcasting:read/entity": "Chronicler's Prfn.",
   "hexcasting.spell.book.hexcasting:number": "Numerical Reflection",
   "hexcasting.spell.book.hexcasting:mask": "Bookkeeper's Gambit",
 
@@ -340,7 +340,7 @@
   "hexcasting.spell.hexcasting:rotate": "Rotation Gambit",
   "hexcasting.spell.hexcasting:rotate_reverse": "Rotation Gambit II",
   "hexcasting.spell.hexcasting:duplicate": "Gemini Decomposition",
-  "hexcasting.spell.hexcasting:over": "Prospecter's Gambit",
+  "hexcasting.spell.hexcasting:over": "Prospector's Gambit",
   "hexcasting.spell.hexcasting:tuck": "Undertaker's Gambit",
   "hexcasting.spell.hexcasting:2dup": "Dioscuri Gambit",
   "hexcasting.spell.hexcasting:duplicate_n": "Gemini Gambit",
