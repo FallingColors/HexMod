@@ -53,7 +53,7 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll, boolean showStrokeOrder,
-        int blockSize) {
+                            int blockSize) {
         super(HexEntities.WALL_SCROLL, world, pos);
         this.setDirection(dir);
         this.blockSize = blockSize;
@@ -72,8 +72,10 @@ public class EntityWallScroll extends HangingEntity {
                 var pair = RenderLib.getCenteredPattern(pattern, 128f / 3 * blockSize, 128f / 3 * blockSize,
                     16f / 3 * blockSize);
                 var dots = pair.getSecond();
+                var readOffset = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_READABILITY_OFFSET : 0f;
+                var lastProp = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP : 1f;
                 this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10, 0.4f,
-                    0f, 0f, this.getShowsStrokeOrder() ? 0.2f : 0f);
+                    0f, 0f, readOffset, lastProp, this.getId());
             }
 
             this.isAncient = NBTHelper.hasString(scroll, ItemScroll.TAG_OP_ID);
@@ -158,7 +160,7 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     public void readSpawnData(BlockPos pos, Direction dir, ItemStack scrollItem,
-        boolean showsStrokeOrder, int blockSize) {
+                              boolean showsStrokeOrder, int blockSize) {
         this.pos = pos;
         this.scroll = scrollItem;
         this.blockSize = blockSize;
@@ -201,7 +203,7 @@ public class EntityWallScroll extends HangingEntity {
 
     @Override
     public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements,
-        boolean pTeleport) {
+                       boolean pTeleport) {
         BlockPos blockpos = this.pos.offset(pX - this.getX(), pY - this.getY(), pZ - this.getZ());
         this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
     }

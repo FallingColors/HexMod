@@ -74,7 +74,8 @@ public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<
         }
 
         var stupidHash = tile.getBlockPos().hashCode();
-        var zappy = RenderLib.makeZappy(lines2, RenderLib.findDupIndices(pattern.positions()), 10f, 0.5f, 0f, 0f, stupidHash);
+        var zappy = RenderLib.makeZappy(lines2, RenderLib.findDupIndices(pattern.positions()), 10, 0.5f, 0f, 0f, 0f,
+            1f, stupidHash);
 
         int outer = 0xff_d2c8c8;
         int inner = 0xc8_322b33;
