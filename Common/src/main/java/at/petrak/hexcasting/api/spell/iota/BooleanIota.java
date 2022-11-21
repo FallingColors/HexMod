@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.spell.iota;
 
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.Tag;

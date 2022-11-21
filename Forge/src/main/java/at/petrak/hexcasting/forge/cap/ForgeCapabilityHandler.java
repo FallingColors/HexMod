@@ -13,7 +13,7 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -146,21 +146,23 @@ public class ForgeCapabilityHandler {
         };
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(Entity entity, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
+    private static <CAP> SimpleProvider<CAP> provide(Entity entity, Capability<CAP> capability,
+                                                     NonNullSupplier<CAP> supplier) {
         return provide(entity::isRemoved, capability, supplier);
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(BlockEntity be, Capability<CAP> capability, NonNullSupplier<CAP> supplier) {
+    private static <CAP> SimpleProvider<CAP> provide(BlockEntity be, Capability<CAP> capability,
+                                                     NonNullSupplier<CAP> supplier) {
         return provide(be::isRemoved, capability, supplier);
     }
 
     private static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability,
-        NonNullSupplier<CAP> supplier) {
+                                                     NonNullSupplier<CAP> supplier) {
         return provide(stack::isEmpty, capability, supplier);
     }
 
     private static <CAP> SimpleProvider<CAP> provide(BooleanSupplier invalidated, Capability<CAP> capability,
-        NonNullSupplier<CAP> supplier) {
+                                                     NonNullSupplier<CAP> supplier) {
         return new SimpleProvider<>(invalidated, capability, LazyOptional.of(supplier));
     }
 

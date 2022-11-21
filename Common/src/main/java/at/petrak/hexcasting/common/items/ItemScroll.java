@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -121,7 +121,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
         var ancientId = NBTHelper.getString(pStack, TAG_OP_ID);
         if (ancientId != null) {
             return Component.translatable(descID + ".of",
-                    Component.translatable("hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
+                Component.translatable("hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
         } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
             return Component.translatable(descID);
         } else {
@@ -137,10 +137,10 @@ public class ItemScroll extends Item implements IotaHolderItem {
         if (compound != null) {
             var pattern = HexPattern.fromNBT(compound);
             return Optional.of(new PatternTooltip(
-                    pattern,
-                    NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID)
-                            ? PatternTooltipComponent.ANCIENT_BG
-                            : PatternTooltipComponent.PRISTINE_BG));
+                pattern,
+                NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID)
+                    ? PatternTooltipComponent.ANCIENT_BG
+                    : PatternTooltipComponent.PRISTINE_BG));
         }
 
         return Optional.empty();

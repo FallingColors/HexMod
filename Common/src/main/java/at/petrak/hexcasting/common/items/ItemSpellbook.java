@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.iota.NullIota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -42,7 +42,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
-        TooltipFlag isAdvanced) {
+                                TooltipFlag isAdvanced) {
         boolean sealed = isSealed(stack);
         boolean empty = false;
         if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
@@ -51,9 +51,9 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
             if (highest != 0) {
                 if (sealed) {
                     tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.page.sealed",
-                        Component.literal(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
-                        Component.literal(String.valueOf(highest)).withStyle(ChatFormatting.WHITE),
-                        Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
+                            Component.literal(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
+                            Component.literal(String.valueOf(highest)).withStyle(ChatFormatting.WHITE),
+                            Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
                         .withStyle(ChatFormatting.GRAY));
                 } else {
                     tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.page",
@@ -76,7 +76,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
                         ChatFormatting.GOLD));
                 } else {
                     tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.empty.sealed",
-                        Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
+                            Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
                         .withStyle(ChatFormatting.GRAY));
                 }
             } else if (!overridden) {

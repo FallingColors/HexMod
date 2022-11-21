@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellList
+import at.petrak.hexcasting.api.spell.casting.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.ListIota
 import at.petrak.hexcasting.api.spell.iota.PatternIota
@@ -19,7 +20,7 @@ import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.*
-import at.petrak.hexcasting.common.lib.HexIotaTypes
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
@@ -382,6 +383,7 @@ class CastingHarness private constructor(
                             escapeNext = true,
                         ) to ResolvedPatternType.EVALUATED
                     }
+
                     SpecialPatterns.INTROSPECTION.anglesSignature() -> {
                         // we have escaped the parens onto the stack; we just also record our count.
                         val newParens = this.parenthesized.toMutableList()
@@ -391,6 +393,7 @@ class CastingHarness private constructor(
                             parenCount = this.parenCount + 1
                         ) to if (this.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
                     }
+
                     SpecialPatterns.RETROSPECTION.anglesSignature() -> {
                         val newParenCount = this.parenCount - 1
                         displayDepth--
@@ -415,6 +418,7 @@ class CastingHarness private constructor(
                             ) to ResolvedPatternType.ESCAPED
                         }
                     }
+
                     else -> {
                         val newParens = this.parenthesized.toMutableList()
                         newParens.add(iota)
@@ -438,14 +442,17 @@ class CastingHarness private constructor(
                         escapeNext = true
                     ) to ResolvedPatternType.EVALUATED
                 }
+
                 SpecialPatterns.INTROSPECTION.anglesSignature() -> {
                     this.getFunctionalData().copy(
                         parenCount = this.parenCount + 1
                     ) to ResolvedPatternType.EVALUATED
                 }
+
                 SpecialPatterns.RETROSPECTION.anglesSignature() -> {
                     throw MishapTooManyCloseParens()
                 }
+
                 else -> {
                     null
                 }

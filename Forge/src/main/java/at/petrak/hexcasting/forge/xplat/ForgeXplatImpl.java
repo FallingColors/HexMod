@@ -14,7 +14,7 @@ import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
@@ -317,7 +317,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-        Block... blocks) {
+                                                                            Block... blocks) {
         return BlockEntityType.Builder.of(func::apply, blocks).build(null);
     }
 

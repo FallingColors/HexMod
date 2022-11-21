@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
@@ -124,7 +125,7 @@ public interface IXplatAbstractions {
     // Blocks
 
     <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-        Block... blocks);
+                                                                     Block... blocks);
 
     boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid);
 
@@ -158,6 +159,8 @@ public interface IXplatAbstractions {
     String getModName(String namespace);
 
     Registry<IotaType<?>> getIotaTypeRegistry();
+
+    Registry<EvalSound> getEvalSoundRegistry();
 
     boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player);
 

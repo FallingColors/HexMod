@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.spell.iota;
 
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.client.gui.Font;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;

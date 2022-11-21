@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.spell.iota;
 
 import at.petrak.hexcasting.api.spell.SpellList;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.nbt.CompoundTag;
@@ -117,7 +117,8 @@ public class ListIota extends Iota {
             // We aim to not break one iota between lines
             var listTag = HexUtils.downcast(tag, ListTag.TYPE);
 
-            var start = FormattedCharSequence.forward(listTag.isEmpty() ? "[]" : "[", Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE));
+            var start = FormattedCharSequence.forward(listTag.isEmpty() ? "[]" : "[",
+                Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE));
             var cursor = font.width(start);
             var currentLine = new ArrayList<>(List.of(start));
             var out = new ArrayList<FormattedCharSequence>();

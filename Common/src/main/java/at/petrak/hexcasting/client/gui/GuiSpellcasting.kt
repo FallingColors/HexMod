@@ -15,7 +15,7 @@ import at.petrak.hexcasting.api.utils.gold
 import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.sound.GridSoundInstance
-import at.petrak.hexcasting.common.lib.HexIotaTypes
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions

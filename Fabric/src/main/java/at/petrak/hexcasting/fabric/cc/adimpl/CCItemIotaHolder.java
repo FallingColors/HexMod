@@ -2,7 +2,7 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.spell.iota.Iota;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.nbt.CompoundTag;

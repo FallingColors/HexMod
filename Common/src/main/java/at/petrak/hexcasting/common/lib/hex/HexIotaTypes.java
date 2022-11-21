@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.lib;
+package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.spell.iota.*;
