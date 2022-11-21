@@ -46,7 +46,7 @@ fun getNoise(x: Double, y: Double, z: Double): Double =
     NOISE.getValue(x * 0.6, y * 0.6, z * 0.6) / 2.0
 
 // how many degrees are between each triangle on the smooth caps of the lines
-const val CAP_THETA = 180f / 5f
+const val CAP_THETA = 180f / 10f
 const val DEFAULT_READABILITY_OFFSET = 0.2f
 const val DEFAULT_LAST_SEGMENT_LEN_PROP = 0.8f
 
@@ -121,24 +121,24 @@ fun drawLineSeq(
         // Draw the line segment as a hexagon, sort of
         // I can't imagine what the hell alwinfy is up to but this is implementing what TRIANGLE_FAN does
         // using normal triangles so we can send the entire segment to the buffer at once
-        val p1Up = p1.add(tangent.scale(Math.max(0f, jlow))).add(normal)
-        val p1Down = p1.add(tangent.scale(Math.max(0f, -jlow))).add(normal.negated())
+        val p1Down = p1.add(tangent.scale(Math.max(0f, jlow))).add(normal)
+        val p1Up = p1.add(tangent.scale(Math.max(0f, -jlow))).add(normal.negated())
         val p2Down = p2.add(tangent.scale(Math.max(0f, jhigh)).negated()).add(normal)
         val p2Up = p2.add(tangent.scale(Math.max(0f, -jhigh)).negated()).add(normal.negated())
 
-        vertex(color1, p1Up)
+        vertex(color1, p1Down)
         vertex(color1, p1)
-        vertex(color1, p1Down)
-
         vertex(color1, p1Up)
+
         vertex(color1, p1Down)
+        vertex(color1, p1Up)
         vertex(color2, p2Up)
 
-        vertex(color1, p1Up)
+        vertex(color1, p1Down)
         vertex(color2, p2Up)
         vertex(color2, p2)
 
-        vertex(color1, p1Up)
+        vertex(color1, p1Down)
         vertex(color2, p2)
         vertex(color2, p2Down)
 
