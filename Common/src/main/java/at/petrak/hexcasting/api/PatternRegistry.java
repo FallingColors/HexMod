@@ -34,7 +34,7 @@ public class PatternRegistry {
         new ConcurrentHashMap<>();
 
     public static void mapPattern(HexPattern pattern, ResourceLocation id,
-        Action action) throws RegisterPatternException {
+                                  Action action) throws RegisterPatternException {
         mapPattern(pattern, id, action, false);
     }
 
@@ -42,7 +42,7 @@ public class PatternRegistry {
      * Associate a given angle signature with a SpellOperator.
      */
     public static void mapPattern(HexPattern pattern, ResourceLocation id, Action action,
-        boolean isPerWorld) throws RegisterPatternException {
+                                  boolean isPerWorld) throws RegisterPatternException {
         if (actionLookup.containsKey(id)) {
             throw new RegisterPatternException("The operator with id `%s` was already registered to: %s", id,
                 actionLookup.get(id));
@@ -83,7 +83,7 @@ public class PatternRegistry {
      * Internal use only.
      */
     public static Pair<Action, ResourceLocation> matchPatternAndID(HexPattern pat,
-        ServerLevel overworld) throws MishapInvalidPattern {
+                                                                   ServerLevel overworld) throws MishapInvalidPattern {
         // Pipeline:
         // patterns are registered here every time the game boots
         // when we try to look
@@ -232,13 +232,13 @@ public class PatternRegistry {
 
     /**
      * Maps angle sigs to resource locations and their preferred start dir so we can look them up in the main registry
+     * Save this on the world in case the random algorithm changes.
      */
     public static class Save extends SavedData {
         private static final String TAG_OP_ID = "op_id";
         private static final String TAG_START_DIR = "start_dir";
 
-        // TODO: this is slightly weird that we save it *on* the world
-        // might it be better to recalculate it every time the world loads?
+        // Maps hex signatures to (op ids, canonical start dir)
         private Map<String, Pair<ResourceLocation, HexDir>> lookup;
         private boolean missingEntries;
 
@@ -279,7 +279,7 @@ public class PatternRegistry {
         public CompoundTag save(CompoundTag tag) {
             this.lookup.forEach((sig, rhs) -> {
                 var entry = new CompoundTag();
-                entry.putString(TAG_OP_ID, sig.toString());
+                entry.putString(TAG_OP_ID, rhs.getFirst().toString());
                 entry.putInt(TAG_START_DIR, rhs.getSecond().ordinal());
                 tag.put(sig, entry);
             });
