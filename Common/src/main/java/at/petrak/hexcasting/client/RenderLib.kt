@@ -79,7 +79,7 @@ fun drawLineSeq(
     val n = points.size
     val joinAngles = FloatArray(n)
     val joinOffsets = FloatArray(n)
-    for (i in 2..n - 1) {
+    for (i in 2 until n) {
         val p0 = points[i - 2];
         val p1 = points[i - 1];
         val p2 = points[i];
@@ -95,9 +95,11 @@ fun drawLineSeq(
 
     fun vertex(color: BlockPos, pos: Vec2) =
             buf.vertex(mat, pos.x, pos.y, z).color(color.x, color.y, color.z, a).endVertex()
+
     buf.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR)
-    for ((i, pair) in points.zipWithNext().withIndex()) {
-        val (p1, p2) = pair
+    for (i in 0 until points.size - 1) {
+        val p1 = points[i]
+        val p2 = points[i + 1]
         // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
         // GuiComponent::innerFill line 52
         // fedor have useful variable names challenge (99% can't beat)
