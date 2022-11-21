@@ -205,7 +205,7 @@
   "text.autoconfig.hexcasting.option.server.maxRecurseDepth.@Tooltip": "How many times an action can recursively cast other actions",
   "text.autoconfig.hexcasting.option.server.maxSpellCircleLength.@Tooltip": "The maximum number of slates in a spell circle",
   "text.autoconfig.hexcasting.option.server.actionDenyList.@Tooltip": "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.",
-  "text.autoconfig.hexcasting.option.server.circleActionDenyList.@Tooltip": "Resource locations of disallowed actions withhin circles. Trying to cast one of these from a circle will result in a mishap.",
+  "text.autoconfig.hexcasting.option.server.circleActionDenyList.@Tooltip": "Resource locations of disallowed actions within circles. Trying to cast one of these from a circle will result in a mishap.",
   "text.autoconfig.hexcasting.option.server.villagersOffendedByMindMurder.@Tooltip": "Whether villagers should be angry at the player when other villagers are mindflayed",
   "text.autoconfig.hexcasting.option.server.fewScrollTables.@Tooltip": "Loot tables that a small number of Ancient Scrolls are injected into",
   "text.autoconfig.hexcasting.option.server.someScrollTables.@Tooltip": "Loot tables that a decent number of Ancient Scrolls are injected into",
