@@ -18,7 +18,7 @@ object OpFishermanButItCopies : Action {
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)
 
-        val depth = stack.getPositiveIntUnderInclusive(stack.lastIndex, stack.size - 1)
+        val depth = stack.getPositiveIntUnderInclusive(stack.lastIndex, stack.size - 2)
         stack.removeLast()
         val fish = stack.get(stack.size - 1 - depth)
         stack.add(fish)
