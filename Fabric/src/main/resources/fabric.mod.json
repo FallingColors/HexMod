@@ -52,7 +52,8 @@
     "fabric": ">=0.64",
     "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
     "patchouli": ">=1.19.2-77",
-    "paucal": "0.5.x"
+    "paucal": "0.5.x",
+    "cloth-config": "8.2.x"
   },
   "suggests": {
     "gravitychanger": "0.7.21+fabric",
