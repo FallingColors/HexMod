@@ -2,6 +2,7 @@ package at.petrak.hexcasting.interop.patchouli;
 
 import at.petrak.hexcasting.api.spell.math.HexCoord;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
 import at.petrak.hexcasting.interop.utils.PatternEntry;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -22,7 +23,7 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
     protected transient float hexSize;
 
     private transient List<PatternEntry> patterns;
-    private transient List<Vec2> pathfinderDots;
+    private transient List<Vec2> zappyPoints;
 
     /**
      * Pass -1, -1 to center it.
@@ -39,17 +40,21 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
 
     @Override
     public void render(PoseStack poseStack, IComponentRenderContext ctx, float partialTicks, int mouseX, int mouseY) {
-        PatternDrawingUtil.drawPattern(poseStack, this.x, this.y, this.patterns, this.pathfinderDots,
-            this.showStrokeOrder(), ctx.getTicksInBook(),
+        PatternDrawingUtil.drawPattern(poseStack, this.x, this.y, this.patterns, this.zappyPoints,
+            this.showStrokeOrder(),
             0xff_d2c8c8, 0xc8_aba2a2, 0xc8_322b33, 0x80_d1cccc);
     }
 
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
-        var data = PatternDrawingUtil.loadPatterns(this.getPatterns(lookup));
+        var patterns = this.getPatterns(lookup);
+        var data = PatternDrawingUtil.loadPatterns(
+            patterns,
+            this.showStrokeOrder() ? RenderLib.DEFAULT_READABILITY_OFFSET : 0f,
+            this.showStrokeOrder() ? RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP : 1f);
         this.hexSize = data.hexSize();
         this.patterns = data.patterns();
-        this.pathfinderDots = data.pathfinderDots();
+        this.zappyPoints = data.pathfinderDots();
     }
 
     protected static class RawPattern {

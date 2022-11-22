@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;

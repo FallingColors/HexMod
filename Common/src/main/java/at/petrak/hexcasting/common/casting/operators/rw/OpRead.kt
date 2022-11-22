@@ -1,8 +1,8 @@
-package at.petrak.hexcasting.common.casting.operators
+package at.petrak.hexcasting.common.casting.operators.rw
 
 import at.petrak.hexcasting.api.spell.ConstMediaAction
-import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.casting.CastingContext
+import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 

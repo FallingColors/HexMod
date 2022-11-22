@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.lib.*;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
 import at.petrak.hexcasting.common.misc.Brainsweeping;
@@ -111,7 +112,7 @@ public class ForgeHexInitializer {
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
     private static <T> void bind(ResourceKey<Registry<T>> registry,
-        Consumer<BiConsumer<T, ResourceLocation>> source) {
+                                 Consumer<BiConsumer<T, ResourceLocation>> source) {
         getModEventBus().addListener((RegisterEvent event) -> {
             if (registry.equals(event.getRegistryKey())) {
                 source.accept((t, rl) -> event.register(registry, rl, () -> t));
@@ -123,7 +124,7 @@ public class ForgeHexInitializer {
         var modBus = getModEventBus();
         var evBus = MinecraftForge.EVENT_BUS;
 
-        modBus.register(ForgeHexClientInitializer.class);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modBus.register(ForgeHexClientInitializer.class));
 
         modBus.addListener((FMLCommonSetupEvent evt) ->
             evt.enqueueWork(() -> {
@@ -131,9 +132,12 @@ public class ForgeHexInitializer {
                 HexComposting.setup();
                 HexStrippables.init();
                 RegisterPatterns.registerPatterns();
-                // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric and Quilt.
-                // However, all launcher panic if the same resource is registered twice.  But do need blocks and items to be completely initialized.
-                // Explicitly calling here avoids potential confusion, or reliance on tricks that may fail under compiler optimization.
+                // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric
+                // and Quilt.
+                // However, all launcher panic if the same resource is registered twice.  But do need blocks and
+                // items to be completely initialized.
+                // Explicitly calling here avoids potential confusion, or reliance on tricks that may fail under
+                // compiler optimization.
                 AkashicTreeGrower.init();
 
                 HexInterop.init();
@@ -143,7 +147,8 @@ public class ForgeHexInitializer {
         modBus.addListener((RegisterEvent evt) -> {
             if (evt.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
                 CraftingHelper.register(ForgeUnsealedIngredient.ID, ForgeUnsealedIngredient.Serializer.INSTANCE);
-                CraftingHelper.register(ForgeModConditionalIngredient.ID, ForgeModConditionalIngredient.Serializer.INSTANCE);
+                CraftingHelper.register(ForgeModConditionalIngredient.ID,
+                    ForgeModConditionalIngredient.Serializer.INSTANCE);
                 HexStatistics.register();
                 HexLootFunctions.registerSerializers((lift, id) ->
                     Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));

@@ -28,6 +28,7 @@ import at.petrak.hexcasting.common.casting.operators.math.*;
 import at.petrak.hexcasting.common.casting.operators.math.bit.*;
 import at.petrak.hexcasting.common.casting.operators.math.logic.*;
 import at.petrak.hexcasting.common.casting.operators.math.trig.*;
+import at.petrak.hexcasting.common.casting.operators.rw.*;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
@@ -95,7 +96,7 @@ public class RegisterPatterns {
                 new OpTwiddling(2, new int[]{1, 0}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaeaa", HexDir.EAST), modLoc("rotate"),
                 new OpTwiddling(3, new int[]{1, 2, 0}));
-            PatternRegistry.mapPattern(HexPattern.fromAngles("ddqdd", HexDir.NORTH_EAST), modLoc("rotate-reverse"),
+            PatternRegistry.mapPattern(HexPattern.fromAngles("ddqdd", HexDir.NORTH_EAST), modLoc("rotate_reverse"),
                 new OpTwiddling(3, new int[]{2, 0, 1}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aadaa", HexDir.EAST), modLoc("duplicate"),
                 new OpTwiddling(1, new int[]{0, 0}));

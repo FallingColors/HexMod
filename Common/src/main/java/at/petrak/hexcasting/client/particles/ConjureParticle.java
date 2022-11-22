@@ -27,7 +27,7 @@ public class ConjureParticle extends TextureSheetParticle {
     private final boolean light;
 
     ConjureParticle(ClientLevel pLevel, double x, double y, double z, double dx, double dy, double dz,
-        SpriteSet pSprites, int color, boolean light) {
+                    SpriteSet pSprites, int color, boolean light) {
         super(pLevel, x, y, z, dx, dy, dz);
         this.light = light;
         this.quadSize *= light ? 0.9f : 0.75f;
@@ -86,10 +86,10 @@ public class ConjureParticle extends TextureSheetParticle {
         @Nullable
         @Override
         public Particle createParticle(ConjureParticleOptions type, ClientLevel level,
-            double pX, double pY, double pZ,
-            double pXSpeed, double pYSpeed, double pZSpeed) {
+                                       double pX, double pY, double pZ,
+                                       double pXSpeed, double pYSpeed, double pZSpeed) {
             return new ConjureParticle(level, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprite, type.color(),
-                type.isLight());
+                    type.isLight());
         }
     }
 
@@ -113,7 +113,7 @@ public class ConjureParticle extends TextureSheetParticle {
         public void end(Tesselator tess) {
             tess.end();
             IClientXplatAbstractions.INSTANCE.restoreLastFilter(
-                Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES)
+                    Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES)
             );
             RenderSystem.disableBlend();
             RenderSystem.depthMask(true);

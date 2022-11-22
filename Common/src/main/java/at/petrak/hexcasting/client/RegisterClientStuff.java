@@ -10,14 +10,16 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
-import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.*;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
-import at.petrak.hexcasting.common.lib.*;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
+import at.petrak.hexcasting.common.lib.HexBlocks;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
@@ -107,11 +109,19 @@ public class RegisterClientStuff {
 
         x.registerEntityRenderer(HexEntities.WALL_SCROLL, WallScrollRenderer::new);
 
+//        for (var tex : new ResourceLocation[]{
+//                PatternTooltipComponent.PRISTINE_BG,
+//                PatternTooltipComponent.ANCIENT_BG,
+//                PatternTooltipComponent.SLATE_BG
+//        }) {
+//            Minecraft.getInstance().getTextureManager().bindForSetup(tex);
+//        }
+
         addScryingLensStuff();
     }
 
     public static void registerColorProviders(BiConsumer<ItemColor, Item> itemColorRegistry,
-        BiConsumer<BlockColor, Block> blockColorRegistry) {
+                                              BiConsumer<BlockColor, Block> blockColorRegistry) {
         itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.FOCUS::getColor), HexItems.FOCUS);
         itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.SPELLBOOK::getColor), HexItems.SPELLBOOK);
 
@@ -315,7 +325,8 @@ public class RegisterClientStuff {
     }
 
     // Copypasta from PoweredRailBlock.class
-    private static int findPoweredRailSignal(Level level, BlockPos pos, BlockState state, boolean travelPositive, int depth) {
+    private static int findPoweredRailSignal(Level level, BlockPos pos, BlockState state, boolean travelPositive,
+                                             int depth) {
         if (depth >= 8) {
             return 0;
         } else {
@@ -324,7 +335,7 @@ public class RegisterClientStuff {
             int z = pos.getZ();
             boolean descending = true;
             RailShape shape = state.getValue(PoweredRailBlock.SHAPE);
-            switch(shape) {
+            switch (shape) {
                 case NORTH_SOUTH:
                     if (travelPositive) {
                         ++z;
@@ -407,7 +418,8 @@ public class RegisterClientStuff {
             } else if (shape == RailShape.NORTH_SOUTH && (otherShape == RailShape.EAST_WEST || otherShape == RailShape.ASCENDING_EAST || otherShape == RailShape.ASCENDING_WEST)) {
                 return 0;
             } else if (otherState.getValue(PoweredRailBlock.POWERED)) {
-                return level.hasNeighborSignal(pos) ? 8 - depth : findPoweredRailSignal(level, pos, otherState, travelPositive, depth + 1);
+                return level.hasNeighborSignal(pos) ? 8 - depth : findPoweredRailSignal(level, pos, otherState,
+                    travelPositive, depth + 1);
             } else {
                 return 0;
             }
@@ -443,14 +455,6 @@ public class RegisterClientStuff {
             });
     }
 
-    public static void registerParticles() {
-        // rip particle man
-        IClientXplatAbstractions.INSTANCE.registerParticleType(HexParticles.LIGHT_PARTICLE,
-            ConjureParticle.Provider::new);
-        IClientXplatAbstractions.INSTANCE.registerParticleType(HexParticles.CONJURE_PARTICLE,
-            ConjureParticle.Provider::new);
-    }
-
     public static void registerBlockEntityRenderers(@NotNull BlockEntityRendererRegisterererer registerer) {
         registerer.registerBlockEntityRenderer(HexBlockEntities.SLATE_TILE, BlockEntitySlateRenderer::new);
         registerer.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE,
@@ -460,6 +464,6 @@ public class RegisterClientStuff {
     @FunctionalInterface
     public interface BlockEntityRendererRegisterererer {
         <T extends BlockEntity> void registerBlockEntityRenderer(BlockEntityType<T> type,
-            BlockEntityRendererProvider<? super T> berp);
+                                                                 BlockEntityRendererProvider<? super T> berp);
     }
 }

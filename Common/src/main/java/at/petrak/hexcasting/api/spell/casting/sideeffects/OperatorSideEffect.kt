@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.spell.casting
+package at.petrak.hexcasting.api.spell.casting.sideeffects
 
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
+import at.petrak.hexcasting.api.spell.casting.CastingHarness
 import at.petrak.hexcasting.api.spell.mishaps.Mishap
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.common.lib.HexItems

@@ -17,7 +17,7 @@ object OpOr : ConstMediaAction {
             },
             { list1 ->
                 val list2 = args.getList(1, argc)
-                list1 + list2.filter { x -> list1.none { Iota.tolerates(x, it) } }.asActionResult
+                (list1 + list2.filter { x -> list1.none { Iota.tolerates(x, it) } }).asActionResult
             }
         )
     }

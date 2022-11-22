@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
@@ -10,6 +11,7 @@ import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.fabric.cc.adimpl.*;
+import dev.onyxstudios.cca.api.v3.component.ComponentFactory;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
@@ -18,10 +20,13 @@ import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentInitializer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Items;
+
+import java.util.function.Function;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -59,9 +64,12 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         registry.registerFor(ServerPlayer.class, HARNESS, CCHarness::new);
         registry.registerFor(ServerPlayer.class, PATTERNS, CCPatterns::new);
 
-        registry.registerFor(ItemEntity.class, IOTA_HOLDER, CCEntityIotaHolder.EntityItemDelegating::new);
-        registry.registerFor(ItemFrame.class, IOTA_HOLDER, CCEntityIotaHolder.ItemFrameDelegating::new);
-        registry.registerFor(EntityWallScroll.class, IOTA_HOLDER, CCEntityIotaHolder.ScrollDelegating::new);
+        registry.registerFor(ItemEntity.class, IOTA_HOLDER, wrapItemEntityDelegate(
+            ItemDelegatingEntityIotaHolder.ToItemEntity::new));
+        registry.registerFor(ItemFrame.class, IOTA_HOLDER, wrapItemEntityDelegate(
+            ItemDelegatingEntityIotaHolder.ToItemFrame::new));
+        registry.registerFor(EntityWallScroll.class, IOTA_HOLDER,
+            wrapItemEntityDelegate(ItemDelegatingEntityIotaHolder.ToWallScroll::new));
     }
 
     @Override
@@ -86,5 +94,10 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         ));
 
         registry.register(i -> i instanceof HexHolderItem, HEX_HOLDER, CCHexHolder.ItemBased::new);
+    }
+
+    private <E extends Entity> ComponentFactory<E, CCEntityIotaHolder.Wrapper> wrapItemEntityDelegate(Function<E,
+        ItemDelegatingEntityIotaHolder> make) {
+        return e -> new CCEntityIotaHolder.Wrapper(make.apply(e));
     }
 }

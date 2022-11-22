@@ -12,6 +12,7 @@ import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.items.ItemLens
 import at.petrak.hexcasting.common.lib.*
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.common.loot.HexLootHandler
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.common.misc.Brainsweeping

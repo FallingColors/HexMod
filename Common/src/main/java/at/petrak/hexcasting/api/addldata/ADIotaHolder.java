@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.addldata;
 
 import at.petrak.hexcasting.api.spell.iota.Iota;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;

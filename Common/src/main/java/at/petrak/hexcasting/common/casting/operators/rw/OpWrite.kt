@@ -1,40 +1,44 @@
-package at.petrak.hexcasting.common.casting.operators
+package at.petrak.hexcasting.common.casting.operators.rw
 
 import at.petrak.hexcasting.api.addldata.ADIotaHolder
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.getEntity
 import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.mishaps.MishapBadEntity
+import at.petrak.hexcasting.api.spell.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
-object OpTheCoolerWrite : SpellAction {
-    override val argc = 2
+// we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
+object OpWrite : SpellAction {
+    override val argc = 1
     override fun execute(
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getEntity(0, argc)
-        val datum = args[1]
+        val datum = args[0]
 
-        ctx.assertEntityInRange(target)
+        val (handStack, hand) = ctx.getHeldItemToOperateOn {
+            val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
-            ?: throw MishapBadEntity.of(target, "iota.write")
+            datumHolder != null && datumHolder.writeIota(datum, true)
+        }
 
-        // We pass null here so that even the own caster won't be allowed into a focus.
-        // Otherwise, you could sentinel scout to people and remotely write their names into things using a cleric circle.
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, null)
+        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
+            ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
+
+        if (!datumHolder.writeIota(datum, true))
+            throw MishapBadOffhandItem.of(handStack, hand, "iota.readonly", datum.display())
+
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
         if (trueName != null)
             throw MishapOthersName(trueName)
 
         return Triple(
             Spell(datum, datumHolder),
             0,
-            listOf(ParticleSpray.burst(target.position(), 0.5))
+            listOf()
         )
     }
 

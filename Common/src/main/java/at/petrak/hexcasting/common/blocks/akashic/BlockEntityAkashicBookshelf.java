@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;

@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.eval
 import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.SpellContinuation
+import at.petrak.hexcasting.api.spell.casting.eval.SpellContinuation
 import at.petrak.hexcasting.api.spell.iota.Iota
 
 object OpEvalDelay : Action {

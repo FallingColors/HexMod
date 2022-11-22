@@ -19,7 +19,8 @@ import java.util.List;
 
 public final class PatternDrawingUtil {
     public static void drawPattern(PoseStack poseStack, int x, int y, List<PatternEntry> patterns, List<Vec2> dots,
-        boolean strokeOrder, long animTicks, int outer, int innerLight, int innerDark, int dotColor) {
+                                   boolean strokeOrder, int outer, int innerLight, int innerDark,
+                                   int dotColor) {
         poseStack.pushPose();
         poseStack.translate(x, y, 1);
         var mat = poseStack.last().pose();
@@ -59,7 +60,8 @@ public final class PatternDrawingUtil {
         poseStack.popPose();
     }
 
-    public static PatternRenderingData loadPatterns(List<Pair<HexPattern, HexCoord>> patterns) {
+    public static PatternRenderingData loadPatterns(List<Pair<HexPattern, HexCoord>> patterns,
+                                                    float readabilityOffset, float lastLineLenProp) {
         var patternEntries = new ArrayList<PatternEntry>(patterns.size());
 
         var fakeScale = 1;
@@ -103,12 +105,13 @@ public final class PatternDrawingUtil {
         var realCom = HexUtils.findCenter(seenRealPoints);
 
         // and NOW for real!
-        for (var pat : patternEntries) {
+        for (int i = 0; i < patternEntries.size(); i++) {
+            PatternEntry pat = patternEntries.get(i);
             var localOrigin = HexUtils.coordToPx(pat.origin(), hexSize, realCom.negated());
             var points = pat.pattern().toLines(hexSize, localOrigin);
             pat.zappyPoints()
-                .addAll(RenderLib.makeZappy(points, RenderLib.findDupIndices(pat.pattern().positions()), 10f, 0.8f, 0f,
-                    0f));
+                .addAll(RenderLib.makeZappy(points, RenderLib.findDupIndices(pat.pattern().positions()), 10, 0.8f, 0f,
+                    0f, readabilityOffset, lastLineLenProp, i));
         }
 
         var pathfinderDots = seenCoords.stream()

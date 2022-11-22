@@ -4,8 +4,8 @@ import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.SpellList
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
-import at.petrak.hexcasting.api.spell.casting.SpellContinuation
+import at.petrak.hexcasting.api.spell.casting.eval.ContinuationFrame
+import at.petrak.hexcasting.api.spell.casting.eval.SpellContinuation
 import at.petrak.hexcasting.api.spell.evaluatable
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.ContinuationIota

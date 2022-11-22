@@ -3,8 +3,8 @@ package at.petrak.hexcasting.common.casting.operators.eval
 import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.OperationResult
 import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.ContinuationFrame
-import at.petrak.hexcasting.api.spell.casting.SpellContinuation
+import at.petrak.hexcasting.api.spell.casting.eval.FrameForEach
+import at.petrak.hexcasting.api.spell.casting.eval.SpellContinuation
 import at.petrak.hexcasting.api.spell.getList
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
@@ -24,7 +24,7 @@ object OpForEach : Action {
         stack.removeLastOrNull()
         stack.removeLastOrNull()
 
-        val frame = ContinuationFrame.ForEach(datums, instrs, null, mutableListOf())
+        val frame = FrameForEach(datums, instrs, null, mutableListOf())
 
         return OperationResult(
             continuation.pushFrame(frame),

@@ -11,12 +11,11 @@ import at.petrak.hexcasting.api.spell.math.HexCoord
 import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
-import at.petrak.hexcasting.api.utils.gold
 import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.sound.GridSoundInstance
-import at.petrak.hexcasting.common.lib.HexIotaTypes
 import at.petrak.hexcasting.common.lib.HexSounds
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
@@ -44,7 +43,7 @@ class GuiSpellcasting constructor(
 ) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
     private var stackDescs: List<FormattedCharSequence> = listOf()
     private var parenDescs: List<FormattedCharSequence> = listOf()
-    private var ravenmind: List<FormattedCharSequence>? = null
+    private var ravenmind: FormattedCharSequence? = null
 
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
@@ -76,14 +75,15 @@ class GuiSpellcasting constructor(
         val mc = Minecraft.getInstance()
         val width = (this.width * LHS_IOTAS_ALLOCATION).toInt()
         this.stackDescs =
-            this.cachedStack.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font).asReversed() }
+            this.cachedStack.map { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
                 .asReversed()
-        this.parenDescs = if (this.cachedParens.isNotEmpty())
-            this.cachedParens.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
-        else if (this.parenCount > 0)
-            listOf("...".gold.visualOrderText)
-        else
-            emptyList()
+//        this.parenDescs = if (this.cachedParens.isNotEmpty())
+//            this.cachedParens.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
+//        else if (this.parenCount > 0)
+//            listOf("...".gold.visualOrderText)
+//        else
+//            emptyList()
+        this.parenDescs = emptyList()
         this.ravenmind =
             this.cachedRavenmind?.let {
                 HexIotaTypes.getDisplayWithMaxWidth(
@@ -234,6 +234,7 @@ class GuiSpellcasting constructor(
                 // Well, we never managed to get anything on the stack this go-around.
                 this.drawState = PatternDrawState.BetweenPatterns
             }
+
             is PatternDrawState.Drawing -> {
                 val (start, _, pat) = this.drawState as PatternDrawState.Drawing
                 this.drawState = PatternDrawState.BetweenPatterns
@@ -325,7 +326,8 @@ class GuiSpellcasting constructor(
         }
         RenderSystem.defaultBlendFunc()
 
-        for ((pat, origin, valid) in this.patterns) {
+        for ((idx, elts) in this.patterns.withIndex()) {
+            val (pat, origin, valid) = elts
             drawPatternFromPoints(
                 mat,
                 pat.toLines(
@@ -336,7 +338,10 @@ class GuiSpellcasting constructor(
                 true,
                 valid.color or (0xC8 shl 24),
                 valid.fadeColor or (0xC8 shl 24),
-                if (valid.success) 0.2f else 0.9f
+                if (valid.success) 0.2f else 0.9f,
+                DEFAULT_READABILITY_OFFSET,
+                1f,
+                idx.toDouble()
             )
         }
 
@@ -358,7 +363,17 @@ class GuiSpellcasting constructor(
             }
 
             points.add(mousePos)
-            drawPatternFromPoints(mat, points, dupIndices, false, 0xff_64c8ff_u.toInt(), 0xff_fecbe6_u.toInt(), 0.1f)
+            // Use the size of the patterns as the seed so that way when this one is added the zappies don't jump
+            drawPatternFromPoints(mat,
+                points,
+                dupIndices,
+                false,
+                0xff_64c8ff_u.toInt(),
+                0xff_fecbe6_u.toInt(),
+                0.1f,
+                DEFAULT_READABILITY_OFFSET,
+                1f,
+                this.patterns.size.toDouble())
         }
 
         RenderSystem.enableDepthTest()
@@ -368,23 +383,23 @@ class GuiSpellcasting constructor(
         ps.pushPose()
         ps.translate(10.0, 10.0, 0.0)
 
-        if (this.parenCount > 0) {
-            val boxHeight = (this.parenDescs.size + 1f) * 10f
-            RenderSystem.setShader(GameRenderer::getPositionColorShader)
-            RenderSystem.defaultBlendFunc()
-            drawBox(ps, 0f, 0f, (this.width * LHS_IOTAS_ALLOCATION + 5).toFloat(), boxHeight, 7.5f)
-            ps.translate(0.0, 0.0, 1.0)
-
-            val time = ClientTickCounter.getTotal() * 0.16f
-            val opacity = (Mth.map(cos(time), -1f, 1f, 200f, 255f)).toInt()
-            val color = 0x00_ffffff or (opacity shl 24)
-            RenderSystem.setShader { prevShader }
-            for (desc in this.parenDescs) {
-                font.draw(ps, desc, 10f, 7f, color)
-                ps.translate(0.0, 10.0, 0.0)
-            }
-            ps.translate(0.0, 15.0, 0.0)
-        }
+//        if (this.parenCount > 0) {
+//            val boxHeight = (this.parenDescs.size + 1f) * 10f
+//            RenderSystem.setShader(GameRenderer::getPositionColorShader)
+//            RenderSystem.defaultBlendFunc()
+//            drawBox(ps, 0f, 0f, (this.width * LHS_IOTAS_ALLOCATION + 5).toFloat(), boxHeight, 7.5f)
+//            ps.translate(0.0, 0.0, 1.0)
+//
+//            val time = ClientTickCounter.getTotal() * 0.16f
+//            val opacity = (Mth.map(cos(time), -1f, 1f, 200f, 255f)).toInt()
+//            val color = 0x00_ffffff or (opacity shl 24)
+//            RenderSystem.setShader { prevShader }
+//            for (desc in this.parenDescs) {
+//                font.draw(ps, desc, 10f, 7f, color)
+//                ps.translate(0.0, 10.0, 0.0)
+//            }
+//            ps.translate(0.0, 15.0, 0.0)
+//        }
 
         if (this.stackDescs.isNotEmpty()) {
             val boxHeight = (this.stackDescs.size + 1f) * 10f
@@ -400,30 +415,27 @@ class GuiSpellcasting constructor(
         }
 
         ps.popPose()
-        if (!this.ravenmind.isNullOrEmpty()) {
+        if (this.ravenmind != null) {
             val kotlinBad = this.ravenmind!!
             ps.pushPose()
-            ps.translate(this.width * 0.8, 10.0, 0.0)
-            val boxHeight = (kotlinBad.size + 0.5f) * 10f
+            val boxHeight = 15f
             val addlScale = 1.5f
+            ps.translate(this.width * (1.0 - RHS_IOTAS_ALLOCATION * addlScale) - 10, 10.0, 0.0)
             RenderSystem.setShader(GameRenderer::getPositionColorShader)
             RenderSystem.enableBlend()
             drawBox(
                 ps, 0f, 0f,
-                ((this.width * RHS_IOTAS_ALLOCATION + 5) * addlScale).toFloat(), boxHeight * addlScale,
+                (this.width * RHS_IOTAS_ALLOCATION * addlScale).toFloat(), boxHeight * addlScale,
             )
             ps.translate(5.0, 5.0, 1.0)
             ps.scale(addlScale, addlScale, 1f)
 
-            val time = ClientTickCounter.getTotal() * 0.42f
+            val time = ClientTickCounter.getTotal() * 0.2f
             val opacity = (Mth.map(sin(time), -1f, 1f, 150f, 255f)).toInt()
             val color = 0x00_ffffff or (opacity shl 24)
 
             RenderSystem.setShader { prevShader }
-            for (desc in kotlinBad) {
-                font.draw(ps, desc, 0f, 0f, color)
-                ps.translate(0.0, 10.0, 0.0)
-            }
+            font.draw(ps, kotlinBad, 0f, 0f, color)
             ps.popPose()
         }
 
@@ -464,7 +476,7 @@ class GuiSpellcasting constructor(
 
     companion object {
         const val LHS_IOTAS_ALLOCATION = 0.7
-        const val RHS_IOTAS_ALLOCATION = 0.1
+        const val RHS_IOTAS_ALLOCATION = 0.15
 
         fun drawBox(ps: PoseStack, x: Float, y: Float, w: Float, h: Float, leftMargin: Float = 2.5f) {
             RenderSystem.setShader(GameRenderer::getPositionColorShader)

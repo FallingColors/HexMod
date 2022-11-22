@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.ClientTickCounter;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -86,12 +86,18 @@ public interface IotaHolderItem {
         return HexIotaTypes.getColor(tag);
     }
 
+    /**
+     * Write {@code null} to indicate erasing
+     */
     boolean canWrite(ItemStack stack, @Nullable Iota iota);
 
+    /**
+     * Write {@code null} to indicate erasing
+     */
     void writeDatum(ItemStack stack, @Nullable Iota iota);
 
     static void appendHoverText(IotaHolderItem self, ItemStack stack, List<Component> components,
-        TooltipFlag flag) {
+                                TooltipFlag flag) {
         var datumTag = self.readIotaTag(stack);
         if (datumTag != null) {
             var cmp = HexIotaTypes.getDisplay(datumTag);

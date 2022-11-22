@@ -8,19 +8,14 @@ import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,8 +24,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Function;
 
 public class FabricClientXplatImpl implements IClientXplatAbstractions {
     @Override
@@ -52,21 +45,15 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type,
-        EntityRendererProvider<T> renderer) {
+                                                          EntityRendererProvider<T> renderer) {
         EntityRendererRegistry.register(type, renderer);
-    }
-
-    @Override
-    public <T extends ParticleOptions> void registerParticleType(ParticleType<T> type,
-        Function<SpriteSet, ParticleProvider<T>> factory) {
-        ParticleFactoryRegistry.getInstance().register(type, factory::apply);
     }
 
     // suck it fabric trying to be "safe"
     private record UnclampedClampedItemPropFunc(ItemPropertyFunction inner) implements ClampedItemPropertyFunction {
         @Override
         public float unclampedCall(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity,
-            int seed) {
+                                   int seed) {
             return inner.call(stack, level, entity, seed);
         }
 

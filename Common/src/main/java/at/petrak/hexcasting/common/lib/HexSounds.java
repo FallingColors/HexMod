@@ -24,6 +24,8 @@ public class HexSounds {
     public static final SoundEvent FAIL_PATTERN = sound("casting.fail_pattern");
     public static final SoundEvent CASTING_AMBIANCE = sound("casting.ambiance");
     public static final SoundEvent ACTUALLY_CAST = sound("casting.cast");
+    public static final SoundEvent CAST_HERMES = sound("casting.hermes");
+    public static final SoundEvent CAST_THOTH = sound("casting.thoth");
 
     public static final SoundEvent ABACUS = sound("abacus");
     public static final SoundEvent ABACUS_SHAKE = sound("abacus.shake");

@@ -22,7 +22,7 @@ public class BlockEntitySlateRenderer implements BlockEntityRenderer<BlockEntity
 
     @Override
     public void render(BlockEntitySlate tile, float pPartialTick, PoseStack ps,
-        MultiBufferSource buffer, int light, int overlay) {
+                       MultiBufferSource buffer, int light, int overlay) {
         if (tile.pattern == null) {
             return;
         }
@@ -84,7 +84,11 @@ public class BlockEntitySlateRenderer implements BlockEntityRenderer<BlockEntity
         }
 
         var isLit = bs.getValue(BlockSlate.ENERGIZED);
-        var zappy = RenderLib.makeZappy(lines2, RenderLib.findDupIndices(tile.pattern.positions()), 10f, isLit ? 2.5f : 0.5f, isLit ? 0.1f : 0f, 0.2f);
+        var variance = isLit ? 2.5f : 0.5f;
+        var speed = isLit ? 0.1f : 0f;
+        var stupidHash = tile.getBlockPos().hashCode();
+        var zappy = RenderLib.makeZappy(lines2, RenderLib.findDupIndices(tile.pattern.positions()),
+            10, variance, speed, 0.2f, 0f, 1f, stupidHash);
 
         int outer = isLit ? 0xff_64c8ff : 0xff_d2c8c8;
         int inner = isLit ? RenderLib.screenCol(outer) : 0xc8_322b33;

@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.utils.TAU
 import at.petrak.hexcasting.api.utils.getValue
 import at.petrak.hexcasting.api.utils.setValue
 import at.petrak.hexcasting.api.utils.weakMapped
-import at.petrak.hexcasting.client.gui.GuiSpellcasting
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
@@ -31,19 +30,25 @@ import net.minecraft.world.entity.npc.VillagerProfession
 import net.minecraft.world.entity.npc.VillagerType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.levelgen.XoroshiroRandomSource
-import net.minecraft.world.level.levelgen.synth.PerlinNoise
+import net.minecraft.world.level.levelgen.SingleThreadedRandomSource
+import net.minecraft.world.level.levelgen.synth.SimplexNoise
 import net.minecraft.world.phys.Vec2
 import kotlin.math.abs
 import kotlin.math.min
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
-/**
- * Source of perlin noise
- */
-val NOISE: PerlinNoise = PerlinNoise.create(XoroshiroRandomSource(9001L), listOf(0, 1, 2, 3, 4))
+val NOISE: SimplexNoise = SimplexNoise(SingleThreadedRandomSource(9001L))
 
-val CAP_THETA: Float = 18f
+// see the test; perlin noise seems to output almost exclusively between -0.5 and 0.5
+// i could probably impl this "properly" with some kind of exponent but it's faster and easier to divide
+fun getNoise(x: Double, y: Double, z: Double): Double =
+    NOISE.getValue(x * 0.6, y * 0.6, z * 0.6) / 2.0
+
+// how many degrees are between each triangle on the smooth caps of the lines
+const val CAP_THETA = 180f / 10f
+const val DEFAULT_READABILITY_OFFSET = 0.2f
+const val DEFAULT_LAST_SEGMENT_LEN_PROP = 0.8f
 
 /**
  * Draw a sequence of linePoints spanning the given points.
@@ -79,7 +84,7 @@ fun drawLineSeq(
     val n = points.size
     val joinAngles = FloatArray(n)
     val joinOffsets = FloatArray(n)
-    for (i in 2..n - 1) {
+    for (i in 2 until n) {
         val p0 = points[i - 2];
         val p1 = points[i - 1];
         val p2 = points[i];
@@ -95,8 +100,11 @@ fun drawLineSeq(
 
     fun vertex(color: BlockPos, pos: Vec2) =
         buf.vertex(mat, pos.x, pos.y, z).color(color.x, color.y, color.z, a).endVertex()
-    for ((i, pair) in points.zipWithNext().withIndex()) {
-        val (p1, p2) = pair
+
+    buf.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR)
+    for (i in 0 until points.size - 1) {
+        val p1 = points[i]
+        val p2 = points[i + 1]
         // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L163
         // GuiComponent::innerFill line 52
         // fedor have useful variable names challenge (99% can't beat)
@@ -110,16 +118,32 @@ fun drawLineSeq(
         val color2 = color((i + 1f) / n)
         val jlow = joinOffsets[i]
         val jhigh = joinOffsets[i + 1]
-        buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR)
-        vertex(color1, p1.add(tangent.scale(Math.max(0f, jlow))).add(normal))
+        // Draw the line segment as a hexagon, sort of
+        // I can't imagine what the hell alwinfy is up to but this is implementing what TRIANGLE_FAN does
+        // using normal triangles so we can send the entire segment to the buffer at once
+        val p1Down = p1.add(tangent.scale(Math.max(0f, jlow))).add(normal)
+        val p1Up = p1.add(tangent.scale(Math.max(0f, -jlow))).add(normal.negated())
+        val p2Down = p2.add(tangent.scale(Math.max(0f, jhigh)).negated()).add(normal)
+        val p2Up = p2.add(tangent.scale(Math.max(0f, -jhigh)).negated()).add(normal.negated())
+
+        vertex(color1, p1Down)
         vertex(color1, p1)
-        vertex(color1, p1.add(tangent.scale(Math.max(0f, -jlow))).add(normal.negated()))
-        vertex(color2, p2.add(tangent.scale(Math.max(0f, -jhigh)).negated()).add(normal.negated()))
+        vertex(color1, p1Up)
+
+        vertex(color1, p1Down)
+        vertex(color1, p1Up)
+        vertex(color2, p2Up)
+
+        vertex(color1, p1Down)
+        vertex(color2, p2Up)
         vertex(color2, p2)
-        vertex(color2, p2.add(tangent.scale(Math.max(0f, jhigh)).negated()).add(normal))
-        tess.end()
+
+        vertex(color1, p1Down)
+        vertex(color2, p2)
+        vertex(color2, p2Down)
 
         if (i > 0) {
+            // Draw the connector to the next line segment
             val sangle = joinAngles[i]
             val angle = Math.abs(sangle)
             val rnormal = normal.negated()
@@ -127,22 +151,35 @@ fun drawLineSeq(
             if (joinSteps < 1) {
                 continue
             }
-            buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR)
-            buf.vertex(mat, p1.x, p1.y, z).color(color1.x, color1.y, color1.z, a).endVertex()
+
             if (sangle < 0) {
-                for (j in 0..joinSteps) {
+                var prevVert = Vec2(p1.x - rnormal.x, p1.y - rnormal.y)
+                for (j in 1..joinSteps) {
                     val fan = rotate(rnormal, -sangle * (j.toFloat() / joinSteps))
-                    buf.vertex(mat, p1.x - fan.x, p1.y - fan.y, z).color(color1.x, color1.y, color1.z, a).endVertex()
+                    val fanShift = Vec2(p1.x - fan.x, p1.y - fan.y)
+
+                    vertex(color1, p1)
+                    vertex(color1, prevVert)
+                    vertex(color1, fanShift)
+                    prevVert = fanShift
                 }
             } else {
-                for (j in joinSteps downTo 0) {
+                val startFan = rotate(normal, -sangle)
+                var prevVert = Vec2(p1.x - startFan.x, p1.y - startFan.y)
+                for (j in joinSteps - 1 downTo 0) {
                     val fan = rotate(normal, -sangle * (j.toFloat() / joinSteps))
-                    buf.vertex(mat, p1.x - fan.x, p1.y - fan.y, z).color(color1.x, color1.y, color1.z, a).endVertex()
+                    val fanShift = Vec2(p1.x - fan.x, p1.y - fan.y)
+
+                    vertex(color1, p1)
+                    vertex(color1, prevVert)
+                    vertex(color1, fanShift)
+                    prevVert = fanShift
                 }
             }
-            tess.end()
         }
     }
+    tess.end()
+
     fun drawCaps(color: BlockPos, point: Vec2, prev: Vec2) {
         val tangent = point.add(prev.negated()).normalized().scale(0.5f * width)
         val normal = Vec2(-tangent.y, tangent.x)
@@ -166,9 +203,9 @@ fun rotate(vec: Vec2, theta: Float): Vec2 {
 }
 
 /**
- *  * Draw a hex pattern from the given list of non-zappy points (as in, do the *style* of drawing it,
- *   * you have to do the conversion yourself.)
- *    */
+ * Draw a hex pattern from the given list of non-zappy points (as in, do the *style* of drawing it,
+ * you have to do the conversion yourself.)
+ */
 fun drawPatternFromPoints(
     mat: Matrix4f,
     points: List<Vec2>,
@@ -177,8 +214,11 @@ fun drawPatternFromPoints(
     tail: Int,
     head: Int,
     flowIrregular: Float,
+    readabilityOffset: Float,
+    lastSegmentLenProportion: Float,
+    seed: Double
 ) {
-    val zappyPts = makeZappy(points, dupIndices, 10f, 2.5f, 0.1f, flowIrregular)
+    val zappyPts = makeZappy(points, dupIndices, 10, 2.5f, 0.1f, flowIrregular, readabilityOffset, lastSegmentLenProportion, seed)
     val nodes = if (drawLast) {
         points
     } else {
@@ -199,16 +239,6 @@ fun drawPatternFromPoints(
     }
 }
 
-fun makeZappy(
-    points: List<Vec2>,
-    dupIndices: Set<Int>?,
-    hops: Float,
-    variance: Float,
-    speed: Float,
-    flowIrregular: Float
-) =
-    makeZappy(points, dupIndices, hops.toInt(), variance, speed, flowIrregular, 0.2f)
-
 /**
  * Split up a sequence of linePoints with a lightning effect
  * @param hops: rough number of points to subdivide each segment into
@@ -216,17 +246,18 @@ fun makeZappy(
  */
 fun makeZappy(
     barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float,
-    readabilityOffset: Float
+    readabilityOffset: Float, lastSegmentLenProportion: Float, seed: Double
 ): List<Vec2> {
     // Nothing in, nothing out
     if (barePoints.isEmpty()) {
         return emptyList()
     }
-    fun zappify(points: List<Vec2>): List<Vec2> {
+    fun zappify(points: List<Vec2>, truncateLast: Boolean): List<Vec2> {
         val scaleVariance = { it: Double -> 1.0.coerceAtMost(8 * (0.5 - abs(0.5 - it))) }
         val zSeed = ClientTickCounter.getTotal().toDouble() * speed
         // Create our output list of zap points
-        val zappyPts = mutableListOf(points[0])
+        val zappyPts = ArrayList<Vec2>(points.size * hops)
+        zappyPts.add(points[0])
         // For each segment in the original...
         for ((i, pair) in points.zipWithNext().withIndex()) {
             val (src, target) = pair
@@ -236,30 +267,40 @@ fun makeZappy(
             // Compute how big the radius of variance should be
             val maxVariance = hopDist * variance
 
-            for (j in 1..hops) {
+            // for a list of length n, there will be n-1 pairs,
+            // and so the last index will be (n-1)-1
+            val maxJ = if (truncateLast && i == points.size - 2) {
+                (lastSegmentLenProportion * hops.toFloat()).roundToInt()
+            } else hops
+
+            for (j in 1..maxJ) {
                 val progress = j.toDouble() / (hops + 1)
                 // Add the next hop...
                 val pos = src.add(delta.scale(progress.toFloat()))
                 // as well as some random variance...
                 // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
                 // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
-                val minorPerturb = NOISE.getValue(i.toDouble(), j.toDouble(), sin(zSeed)) * flowIrregular
-                val theta = (3 * NOISE.getValue(
-                    i.toDouble() + j.toDouble() / (hops + 1) + minorPerturb - zSeed,
+                val minorPerturb = getNoise(i.toDouble(), j.toDouble(), sin(zSeed)) * flowIrregular
+                val theta = (3 * getNoise(
+                    i + progress + minorPerturb - zSeed,
                     1337.0,
-                    0.0
+                    seed
                 ) * TAU).toFloat()
-                val r = (NOISE.getValue(
-                    i.toDouble() + j.toDouble() / (hops + 1) - zSeed,
+                val r = (getNoise(
+                    i + progress - zSeed,
                     69420.0,
-                    0.0
+                    seed
                 ) * maxVariance * scaleVariance(progress)).toFloat()
                 val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
                 // Then record the new location.
                 zappyPts.add(pos.add(randomHop))
+
+                if (j == hops) {
+                    // Finally, we hit the destination, add that too
+                    // but we might not hit the destination if we want to stop short
+                    zappyPts.add(target)
+                }
             }
-            // Finally, we hit the destination, add that too
-            zappyPts.add(target)
         }
         return zappyPts
     }
@@ -277,16 +318,16 @@ fun makeZappy(
             }
             if (i == barePoints.size - 2) {
                 daisyChain.add(tail)
-                points.addAll(zappify(daisyChain))
+                points.addAll(zappify(daisyChain, true))
             } else if (dupIndices.contains(i + 1)) {
                 daisyChain.add(tail.add(tangent.negated()))
-                points.addAll(zappify(daisyChain))
+                points.addAll(zappify(daisyChain, false))
                 daisyChain.clear()
             }
         }
         points
     } else {
-        zappify(barePoints)
+        zappify(barePoints, true)
     }
 }
 
