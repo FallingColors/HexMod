@@ -1,24 +1,14 @@
-package at.petrak.hexcasting.fabric.cc.adimpl;
+package at.petrak.hexcasting.forge.cap.adimpl;
 
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
 import at.petrak.hexcasting.api.spell.iota.Iota;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class CCEntityIotaHolder implements CCIotaHolder {
-    @Override
-    public void writeToNbt(@NotNull CompoundTag tag) {
-        // NO-OP
-    }
-
-    @Override
-    public void readFromNbt(@NotNull CompoundTag tag) {
-        // NO-OP
-    }
-
-    public static class Wrapper extends CCEntityIotaHolder {
+public abstract class CapEntityIotaHolder implements ADIotaHolder {
+    public static class Wrapper extends CapEntityIotaHolder {
         private final ItemDelegatingEntityIotaHolder inner;
 
         public Wrapper(ItemDelegatingEntityIotaHolder inner) {
