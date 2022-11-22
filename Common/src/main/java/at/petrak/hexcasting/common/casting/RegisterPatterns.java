@@ -27,6 +27,7 @@ import at.petrak.hexcasting.common.casting.operators.math.*;
 import at.petrak.hexcasting.common.casting.operators.math.bit.*;
 import at.petrak.hexcasting.common.casting.operators.math.logic.*;
 import at.petrak.hexcasting.common.casting.operators.math.trig.*;
+import at.petrak.hexcasting.common.casting.operators.rw.*;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
 import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
@@ -58,291 +59,291 @@ public class RegisterPatterns {
             // == Getters ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaq", HexDir.NORTH_EAST), modLoc("get_caster"),
-                    OpGetCaster.INSTANCE);
+                OpGetCaster.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aa", HexDir.EAST), modLoc("entity_pos/eye"),
-                    new OpEntityPos(false));
+                new OpEntityPos(false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("dd", HexDir.NORTH_EAST), modLoc("entity_pos/foot"),
-                    new OpEntityPos(true));
+                new OpEntityPos(true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("wa", HexDir.EAST), modLoc("get_entity_look"),
-                    OpEntityLook.INSTANCE);
+                OpEntityLook.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("awq", HexDir.NORTH_EAST), modLoc("get_entity_height"),
-                    OpEntityHeight.INSTANCE);
+                OpEntityHeight.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wq", HexDir.EAST), modLoc("get_entity_velocity"),
-                    OpEntityVelocity.INSTANCE);
+                OpEntityVelocity.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("wqaawdd", HexDir.EAST), modLoc("raycast"),
-                    OpBlockRaycast.INSTANCE);
+                OpBlockRaycast.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("weddwaa", HexDir.EAST), modLoc("raycast/axis"),
-                    OpBlockAxisRaycast.INSTANCE);
+                OpBlockAxisRaycast.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("weaqa", HexDir.EAST), modLoc("raycast/entity"),
-                    OpEntityRaycast.INSTANCE);
+                OpEntityRaycast.INSTANCE);
 
             // == spell circle getters ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("eaqwqae", HexDir.SOUTH_WEST),
-                    modLoc("circle/impetus_pos"), OpImpetusPos.INSTANCE);
+                modLoc("circle/impetus_pos"), OpImpetusPos.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eaqwqaewede", HexDir.SOUTH_WEST),
-                    modLoc("circle/impetus_dir"), OpImpetusDir.INSTANCE);
+                modLoc("circle/impetus_dir"), OpImpetusDir.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eaqwqaewdd", HexDir.SOUTH_WEST),
-                    modLoc("circle/bounds/min"), new OpCircleBounds(false));
+                modLoc("circle/bounds/min"), new OpCircleBounds(false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqwqawaaqa", HexDir.WEST),
-                    modLoc("circle/bounds/max"), new OpCircleBounds(true));
+                modLoc("circle/bounds/max"), new OpCircleBounds(true));
 
             // == Modify Stack ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("aawdd", HexDir.EAST), modLoc("swap"),
-                    new OpTwiddling(2, new int[]{1, 0}));
+                new OpTwiddling(2, new int[]{1, 0}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaeaa", HexDir.EAST), modLoc("rotate"),
-                    new OpTwiddling(3, new int[]{1, 2, 0}));
+                new OpTwiddling(3, new int[]{1, 2, 0}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddqdd", HexDir.NORTH_EAST), modLoc("rotate_reverse"),
-                    new OpTwiddling(3, new int[]{2, 0, 1}));
+                new OpTwiddling(3, new int[]{2, 0, 1}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aadaa", HexDir.EAST), modLoc("duplicate"),
-                    new OpTwiddling(1, new int[]{0, 0}));
+                new OpTwiddling(1, new int[]{0, 0}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaedd", HexDir.EAST), modLoc("over"),
-                    new OpTwiddling(2, new int[]{0, 1, 0}));
+                new OpTwiddling(2, new int[]{0, 1, 0}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddqaa", HexDir.EAST), modLoc("tuck"),
-                    new OpTwiddling(2, new int[]{1, 0, 1}));
+                new OpTwiddling(2, new int[]{1, 0, 1}));
             PatternRegistry.mapPattern(HexPattern.fromAngles("aadadaaw", HexDir.EAST), modLoc("2dup"),
-                    new OpTwiddling(2, new int[]{0, 1, 0, 1}));
+                new OpTwiddling(2, new int[]{0, 1, 0, 1}));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qwaeawqaeaqa", HexDir.NORTH_WEST), modLoc("stack_len"),
-                    OpStackSize.INSTANCE);
+                OpStackSize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aadaadaa", HexDir.EAST), modLoc("duplicate_n"),
-                    OpDuplicateN.INSTANCE);
+                OpDuplicateN.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddad", HexDir.WEST), modLoc("fisherman"),
-                    OpFisherman.INSTANCE);
+                OpFisherman.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aada", HexDir.EAST), modLoc("fisherman/copy"),
-                    OpFishermanButItCopies.INSTANCE);
+                OpFishermanButItCopies.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaawdde", HexDir.SOUTH_EAST), modLoc("swizzle"),
-                    OpAlwinfyHasAscendedToABeingOfPureMath.INSTANCE);
+                OpAlwinfyHasAscendedToABeingOfPureMath.INSTANCE);
 
             // == Math ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("waaw", HexDir.NORTH_EAST), modLoc("add"),
-                    OpAdd.INSTANCE);
+                OpAdd.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wddw", HexDir.NORTH_WEST), modLoc("sub"),
-                    OpSub.INSTANCE);
+                OpSub.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("waqaw", HexDir.SOUTH_EAST), modLoc("mul_dot"),
-                    OpMulDot.INSTANCE);
+                OpMulDot.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wdedw", HexDir.NORTH_EAST), modLoc("div_cross"),
-                    OpDivCross.INSTANCE);
+                OpDivCross.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wqaqw", HexDir.NORTH_EAST), modLoc("abs_len"),
-                    OpAbsLen.INSTANCE);
+                OpAbsLen.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wedew", HexDir.NORTH_WEST), modLoc("pow_proj"),
-                    OpPowProj.INSTANCE);
+                OpPowProj.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ewq", HexDir.EAST), modLoc("floor"),
-                    OpFloor.INSTANCE);
+                OpFloor.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qwe", HexDir.EAST), modLoc("ceil"),
-                    OpCeil.INSTANCE);
+                OpCeil.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("eqqqqq", HexDir.EAST), modLoc("construct_vec"),
-                    OpConstructVec.INSTANCE);
+                OpConstructVec.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qeeeee", HexDir.EAST), modLoc("deconstruct_vec"),
-                    OpDeconstructVec.INSTANCE);
+                OpDeconstructVec.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqaww", HexDir.NORTH_WEST), modLoc("coerce_axial"),
-                    OpCoerceToAxial.INSTANCE);
+                OpCoerceToAxial.INSTANCE);
 
             // == Logic ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("wdw", HexDir.NORTH_EAST), modLoc("and"),
-                    OpBoolAnd.INSTANCE);
+                OpBoolAnd.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("waw", HexDir.SOUTH_EAST), modLoc("or"),
-                    OpBoolOr.INSTANCE);
+                OpBoolOr.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("dwa", HexDir.NORTH_WEST), modLoc("xor"),
-                    OpBoolXor.INSTANCE);
+                OpBoolXor.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("e", HexDir.SOUTH_EAST), modLoc("greater"),
-                    new OpCompare(false, (a, b) -> a > b));
+                new OpCompare(false, (a, b) -> a > b));
             PatternRegistry.mapPattern(HexPattern.fromAngles("q", HexDir.SOUTH_WEST), modLoc("less"),
-                    new OpCompare(false, (a, b) -> a < b));
+                new OpCompare(false, (a, b) -> a < b));
             PatternRegistry.mapPattern(HexPattern.fromAngles("ee", HexDir.SOUTH_EAST), modLoc("greater_eq"),
-                    new OpCompare(true, (a, b) -> a >= b));
+                new OpCompare(true, (a, b) -> a >= b));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qq", HexDir.SOUTH_WEST), modLoc("less_eq"),
-                    new OpCompare(true, (a, b) -> a <= b));
+                new OpCompare(true, (a, b) -> a <= b));
             PatternRegistry.mapPattern(HexPattern.fromAngles("ad", HexDir.EAST), modLoc("equals"),
-                    new OpEquality(false));
+                new OpEquality(false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("da", HexDir.EAST), modLoc("not_equals"),
-                    new OpEquality(true));
+                new OpEquality(true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("dw", HexDir.NORTH_WEST), modLoc("not"),
-                    OpBoolNot.INSTANCE);
+                OpBoolNot.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), modLoc("bool_coerce"),
-                    OpCoerceToBool.INSTANCE);
+                OpCoerceToBool.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("awdd", HexDir.SOUTH_EAST), modLoc("if"),
-                    OpBoolIf.INSTANCE);
+                OpBoolIf.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("eqqq", HexDir.NORTH_WEST), modLoc("random"),
-                    OpRandom.INSTANCE);
+                OpRandom.INSTANCE);
 
             // == Advanced Math ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqaa", HexDir.SOUTH_EAST), modLoc("sin"),
-                    OpSin.INSTANCE);
+                OpSin.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqad", HexDir.SOUTH_EAST), modLoc("cos"),
-                    OpCos.INSTANCE);
+                OpCos.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wqqqqqadq", HexDir.SOUTH_WEST), modLoc("tan"),
-                    OpTan.INSTANCE);
+                OpTan.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddeeeee", HexDir.SOUTH_EAST), modLoc("arcsin"),
-                    OpArcSin.INSTANCE);
+                OpArcSin.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("adeeeee", HexDir.NORTH_EAST), modLoc("arccos"),
-                    OpArcCos.INSTANCE);
+                OpArcCos.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eadeeeeew", HexDir.NORTH_EAST), modLoc("arctan"),
-                    OpArcTan.INSTANCE);
+                OpArcTan.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST), modLoc("logarithm"),
-                    OpLog.INSTANCE);
+                OpLog.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST), modLoc("modulo"),
-                    OpModulo.INSTANCE);
+                OpModulo.INSTANCE);
 
             // == Sets ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("wdweaqa", HexDir.NORTH_EAST), modLoc("and_bit"),
-                    OpAnd.INSTANCE);
+                OpAnd.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("waweaqa", HexDir.SOUTH_EAST), modLoc("or_bit"),
-                    OpOr.INSTANCE);
+                OpOr.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("dwaeaqa", HexDir.NORTH_WEST), modLoc("xor_bit"),
-                    OpXor.INSTANCE);
+                OpXor.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("dweaqa", HexDir.NORTH_WEST), modLoc("not_bit"),
-                    OpNot.INSTANCE);
+                OpNot.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aweaqa", HexDir.NORTH_EAST), modLoc("to_set"),
-                    OpToSet.INSTANCE);
+                OpToSet.INSTANCE);
 
             // == Spells ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("de", HexDir.NORTH_EAST), modLoc("print"),
-                    OpPrint.INSTANCE);
+                OpPrint.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aawaawaa", HexDir.EAST), modLoc("explode"),
-                    new OpExplode(false));
+                new OpExplode(false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddwddwdd", HexDir.EAST), modLoc("explode/fire"),
-                    new OpExplode(true));
+                new OpExplode(true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("awqqqwaqw", HexDir.SOUTH_WEST), modLoc("add_motion"),
-                    OpAddMotion.INSTANCE);
+                OpAddMotion.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("awqqqwaq", HexDir.SOUTH_WEST), modLoc("blink"),
-                    OpBlink.INSTANCE);
+                OpBlink.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaqqqqq", HexDir.EAST), modLoc("break_block"),
-                    OpBreakBlock.INSTANCE);
+                OpBreakBlock.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeede", HexDir.SOUTH_WEST), modLoc("place_block"),
-                    OpPlaceBlock.INSTANCE);
+                OpPlaceBlock.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("awddwqawqwawq", HexDir.EAST),
-                    modLoc("colorize"),
-                    OpColorize.INSTANCE);
+                modLoc("colorize"),
+                OpColorize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqawqadaq", HexDir.SOUTH_EAST), modLoc("create_water"),
-                    new OpCreateFluid(false, MediaConstants.DUST_UNIT,
-                            Items.WATER_BUCKET,
-                            Blocks.WATER_CAULDRON.defaultBlockState()
-                                    .setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL),
-                            Fluids.WATER));
+                new OpCreateFluid(false, MediaConstants.DUST_UNIT,
+                    Items.WATER_BUCKET,
+                    Blocks.WATER_CAULDRON.defaultBlockState()
+                        .setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL),
+                    Fluids.WATER));
             PatternRegistry.mapPattern(HexPattern.fromAngles("dedwedade", HexDir.SOUTH_WEST),
-                    modLoc("destroy_water"),
-                    OpDestroyFluid.INSTANCE);
+                modLoc("destroy_water"),
+                OpDestroyFluid.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaqawawa", HexDir.SOUTH_EAST), modLoc("ignite"),
-                    OpIgnite.INSTANCE);
+                OpIgnite.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), modLoc("extinguish"),
-                    OpExtinguish.INSTANCE);
+                OpExtinguish.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqa", HexDir.NORTH_EAST), modLoc("conjure_block"),
-                    new OpConjureBlock(false));
+                new OpConjureBlock(false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqd", HexDir.NORTH_EAST), modLoc("conjure_light"),
-                    new OpConjureBlock(true));
+                new OpConjureBlock(true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("wqaqwawqaqw", HexDir.NORTH_EAST), modLoc("bonemeal"),
-                    OpTheOnlyReasonAnyoneDownloadedPsi.INSTANCE);
+                OpTheOnlyReasonAnyoneDownloadedPsi.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqwaeaeaeaeaea", HexDir.NORTH_WEST),
-                    modLoc("recharge"),
-                    OpRecharge.INSTANCE);
+                modLoc("recharge"),
+                OpRecharge.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qdqawwaww", HexDir.EAST), modLoc("erase"),
-                    new OpErase());
+                new OpErase());
             PatternRegistry.mapPattern(HexPattern.fromAngles("wqaqwd", HexDir.NORTH_EAST), modLoc("edify"),
-                    OpEdifySapling.INSTANCE);
+                OpEdifySapling.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("adaa", HexDir.WEST), modLoc("beep"),
-                    OpBeep.INSTANCE);
+                OpBeep.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("waqqqqq", HexDir.EAST), modLoc("craft/cypher"),
-                    new OpMakePackagedSpell<>(HexItems.CYPHER, MediaConstants.CRYSTAL_UNIT));
+                new OpMakePackagedSpell<>(HexItems.CYPHER, MediaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(HexPattern.fromAngles("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST),
-                    modLoc("craft/trinket"),
-                    new OpMakePackagedSpell<>(HexItems.TRINKET, 5 * MediaConstants.CRYSTAL_UNIT));
+                modLoc("craft/trinket"),
+                new OpMakePackagedSpell<>(HexItems.TRINKET, 5 * MediaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(
-                    HexPattern.fromAngles("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
-                    modLoc("craft/artifact"),
-                    new OpMakePackagedSpell<>(HexItems.ARTIFACT, 10 * MediaConstants.CRYSTAL_UNIT));
+                HexPattern.fromAngles("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
+                modLoc("craft/artifact"),
+                new OpMakePackagedSpell<>(HexItems.ARTIFACT, 10 * MediaConstants.CRYSTAL_UNIT));
             PatternRegistry.mapPattern(
-                    HexPattern.fromAngles("aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", HexDir.SOUTH_WEST),
-                    modLoc("craft/battery"),
-                    OpMakeBattery.INSTANCE,
-                    true);
+                HexPattern.fromAngles("aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", HexDir.SOUTH_WEST),
+                modLoc("craft/battery"),
+                OpMakeBattery.INSTANCE,
+                true);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqaqwawaw", HexDir.NORTH_WEST),
-                    modLoc("potion/weakness"),
-                    new OpPotionEffect(MobEffects.WEAKNESS, MediaConstants.DUST_UNIT / 10, true, false, false));
+                modLoc("potion/weakness"),
+                new OpPotionEffect(MobEffects.WEAKNESS, MediaConstants.DUST_UNIT / 10, true, false, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqawwawawd", HexDir.WEST),
-                    modLoc("potion/levitation"),
-                    new OpPotionEffect(MobEffects.LEVITATION, MediaConstants.DUST_UNIT / 5, false, false, false));
+                modLoc("potion/levitation"),
+                new OpPotionEffect(MobEffects.LEVITATION, MediaConstants.DUST_UNIT / 5, false, false, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqaewawawe", HexDir.SOUTH_WEST),
-                    modLoc("potion/wither"),
-                    new OpPotionEffect(MobEffects.WITHER, MediaConstants.DUST_UNIT, true, false, false));
+                modLoc("potion/wither"),
+                new OpPotionEffect(MobEffects.WITHER, MediaConstants.DUST_UNIT, true, false, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqadwawaww", HexDir.SOUTH_EAST),
-                    modLoc("potion/poison"),
-                    new OpPotionEffect(MobEffects.POISON, MediaConstants.DUST_UNIT / 3, true, false, false));
+                modLoc("potion/poison"),
+                new OpPotionEffect(MobEffects.POISON, MediaConstants.DUST_UNIT / 3, true, false, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqadwawaw", HexDir.SOUTH_EAST),
-                    modLoc("potion/slowness"),
-                    new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, MediaConstants.DUST_UNIT / 3, true, false, false));
+                modLoc("potion/slowness"),
+                new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN, MediaConstants.DUST_UNIT / 3, true, false, false));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqaawawaedd", HexDir.NORTH_WEST),
-                    modLoc("potion/regeneration"),
-                    new OpPotionEffect(MobEffects.REGENERATION, MediaConstants.DUST_UNIT, true, true, true), true);
+                modLoc("potion/regeneration"),
+                new OpPotionEffect(MobEffects.REGENERATION, MediaConstants.DUST_UNIT, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqaawawaeqdd", HexDir.WEST),
-                    modLoc("potion/night_vision"),
-                    new OpPotionEffect(MobEffects.NIGHT_VISION, MediaConstants.DUST_UNIT / 5, false, true, true), true);
+                modLoc("potion/night_vision"),
+                new OpPotionEffect(MobEffects.NIGHT_VISION, MediaConstants.DUST_UNIT / 5, false, true, true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqaawawaeqqdd", HexDir.SOUTH_WEST),
-                    modLoc("potion/absorption"),
-                    new OpPotionEffect(MobEffects.ABSORPTION, MediaConstants.DUST_UNIT, true, true, true), true);
+                modLoc("potion/absorption"),
+                new OpPotionEffect(MobEffects.ABSORPTION, MediaConstants.DUST_UNIT, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaawawaeqqqdd", HexDir.SOUTH_EAST),
-                    modLoc("potion/haste"),
-                    new OpPotionEffect(MobEffects.DIG_SPEED, MediaConstants.DUST_UNIT / 3, true, true, true), true);
+                modLoc("potion/haste"),
+                new OpPotionEffect(MobEffects.DIG_SPEED, MediaConstants.DUST_UNIT / 3, true, true, true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aawawaeqqqqdd", HexDir.EAST),
-                    modLoc("potion/strength"),
-                    new OpPotionEffect(MobEffects.DAMAGE_BOOST, MediaConstants.DUST_UNIT / 3, true, true, true), true);
+                modLoc("potion/strength"),
+                new OpPotionEffect(MobEffects.DAMAGE_BOOST, MediaConstants.DUST_UNIT / 3, true, true, true), true);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("waeawae", HexDir.EAST),
-                    modLoc("sentinel/create"),
-                    new OpCreateSentinel(false));
+                modLoc("sentinel/create"),
+                new OpCreateSentinel(false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qdwdqdw", HexDir.NORTH_EAST),
-                    modLoc("sentinel/destroy"),
-                    OpDestroySentinel.INSTANCE);
+                modLoc("sentinel/destroy"),
+                OpDestroySentinel.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("waeawaede", HexDir.EAST),
-                    modLoc("sentinel/get_pos"),
-                    OpGetSentinelPos.INSTANCE);
+                modLoc("sentinel/get_pos"),
+                OpGetSentinelPos.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("waeawaedwa", HexDir.EAST),
-                    modLoc("sentinel/wayfind"),
-                    OpGetSentinelWayfind.INSTANCE);
+                modLoc("sentinel/wayfind"),
+                OpGetSentinelWayfind.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("waadwawdaaweewq", HexDir.EAST),
-                    modLoc("lightning"), OpLightning.INSTANCE, true);
+                modLoc("lightning"), OpLightning.INSTANCE, true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eawwaeawawaa", HexDir.NORTH_WEST),
-                    modLoc("flight"), OpFlight.INSTANCE, true);
+                modLoc("flight"), OpFlight.INSTANCE, true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eaqawqadaqd", HexDir.EAST),
-                    modLoc("create_lava"), new OpCreateFluid(true, MediaConstants.CRYSTAL_UNIT,
-                            Items.LAVA_BUCKET,
-                            Blocks.LAVA_CAULDRON.defaultBlockState(),
-                            Fluids.LAVA), true);
+                modLoc("create_lava"), new OpCreateFluid(true, MediaConstants.CRYSTAL_UNIT,
+                    Items.LAVA_BUCKET,
+                    Blocks.LAVA_CAULDRON.defaultBlockState(),
+                    Fluids.LAVA), true);
             PatternRegistry.mapPattern(
-                    HexPattern.fromAngles("wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq", HexDir.EAST),
-                    modLoc("teleport"), OpTeleport.INSTANCE, true);
+                HexPattern.fromAngles("wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq", HexDir.EAST),
+                modLoc("teleport"), OpTeleport.INSTANCE, true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("waeawaeqqqwqwqqwq", HexDir.EAST),
-                    modLoc("sentinel/create/great"),
-                    new OpCreateSentinel(true), true);
+                modLoc("sentinel/create/great"),
+                new OpCreateSentinel(true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeewwweeewwaqqddqdqd", HexDir.EAST),
-                    modLoc("dispel_rain"),
-                    new OpWeather(false), true);
+                modLoc("dispel_rain"),
+                new OpWeather(false), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wwweeewwweewdawdwad", HexDir.WEST),
-                    modLoc("summon_rain"),
-                    new OpWeather(true), true);
+                modLoc("summon_rain"),
+                new OpWeather(true), true);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qeqwqwqwqwqeqaeqeaqeqaeqaqded", HexDir.NORTH_EAST),
-                    modLoc("brainsweep"),
-                    OpBrainsweep.INSTANCE, true);
+                modLoc("brainsweep"),
+                OpBrainsweep.INSTANCE, true);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqwqqqqqaq", HexDir.WEST), modLoc("akashic/read"),
-                    OpAkashicRead.INSTANCE);
+                OpAkashicRead.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeweeeeede", HexDir.EAST), modLoc("akashic/write"),
-                    OpAkashicWrite.INSTANCE);
+                OpAkashicWrite.INSTANCE);
 
             // == Meta stuff ==
 
@@ -352,158 +353,158 @@ public class RegisterPatterns {
             // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
             // eval being a space filling curve feels apt doesn't it
             PatternRegistry.mapPattern(HexPattern.fromAngles("deaqq", HexDir.SOUTH_EAST), modLoc("eval"),
-                    OpEval.INSTANCE);
+                OpEval.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqdee", HexDir.SOUTH_WEST), modLoc("halt"),
-                    OpHalt.INSTANCE);
+                OpHalt.INSTANCE);
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqqqqq", HexDir.EAST), modLoc("read"),
-                    OpRead.INSTANCE);
+                OpRead.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wawqwqwqwqwqw", HexDir.EAST),
-                    modLoc("read/entity"), OpTheCoolerRead.INSTANCE);
+                modLoc("read/entity"), OpTheCoolerRead.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("deeeee", HexDir.EAST), modLoc("write"),
-                    OpWrite.INSTANCE);
+                OpWrite.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wdwewewewewew", HexDir.EAST),
-                    modLoc("write/entity"), OpTheCoolerWrite.INSTANCE);
+                modLoc("write/entity"), OpTheCoolerWrite.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqqqqqe", HexDir.EAST), modLoc("readable"),
-                    OpReadable.INSTANCE);
+                OpReadable.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wawqwqwqwqwqwew", HexDir.EAST),
-                    modLoc("readable/entity"), OpTheCoolerReadable.INSTANCE);
+                modLoc("readable/entity"), OpTheCoolerReadable.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("deeeeeq", HexDir.EAST), modLoc("writable"),
-                    OpWritable.INSTANCE);
+                OpWritable.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wdwewewewewewqw", HexDir.EAST),
-                    modLoc("writable/entity"), OpTheCoolerWritable.INSTANCE);
+                modLoc("writable/entity"), OpTheCoolerWritable.INSTANCE);
 
             // lorge boyes
 
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qeewdweddw", HexDir.NORTH_EAST),
-                    modLoc("read/local"), OpPeekLocal.INSTANCE);
+                modLoc("read/local"), OpPeekLocal.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("eqqwawqaaw", HexDir.NORTH_WEST),
-                    modLoc("write/local"), OpPushLocal.INSTANCE);
+                modLoc("write/local"), OpPushLocal.INSTANCE);
 
             // == Consts ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("d", HexDir.EAST), modLoc("const/null"),
-                    Action.makeConstantOp(new NullIota()));
+                Action.makeConstantOp(new NullIota()));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqae", HexDir.SOUTH_EAST), modLoc("const/true"),
-                    Action.makeConstantOp(new BooleanIota(true)));
+                Action.makeConstantOp(new BooleanIota(true)));
             PatternRegistry.mapPattern(HexPattern.fromAngles("dedq", HexDir.NORTH_EAST), modLoc("const/false"),
-                    Action.makeConstantOp(new BooleanIota(false)));
+                Action.makeConstantOp(new BooleanIota(false)));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqea", HexDir.NORTH_WEST), modLoc("const/vec/px"),
-                    Action.makeConstantOp(new Vec3Iota(new Vec3(1.0, 0.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(1.0, 0.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqew", HexDir.NORTH_WEST), modLoc("const/vec/py"),
-                    Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 1.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 1.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqed", HexDir.NORTH_WEST), modLoc("const/vec/pz"),
-                    Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 0.0, 1.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 0.0, 1.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeeqa", HexDir.SOUTH_WEST), modLoc("const/vec/nx"),
-                    Action.makeConstantOp(new Vec3Iota(new Vec3(-1.0, 0.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(-1.0, 0.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeeqw", HexDir.SOUTH_WEST), modLoc("const/vec/ny"),
-                    Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, -1.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, -1.0, 0.0))));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeeqd", HexDir.SOUTH_WEST), modLoc("const/vec/nz"),
-                    Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 0.0, -1.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 0.0, -1.0))));
             // Yep, this is what I spend the "plain hexagon" pattern on.
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqq", HexDir.NORTH_WEST), modLoc("const/vec/0"),
-                    Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 0.0, 0.0))));
+                Action.makeConstantOp(new Vec3Iota(new Vec3(0.0, 0.0, 0.0))));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qdwdq", HexDir.NORTH_EAST), modLoc("const/double/pi"),
-                    Action.makeConstantOp(new DoubleIota(Math.PI)));
+                Action.makeConstantOp(new DoubleIota(Math.PI)));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eawae", HexDir.NORTH_WEST), modLoc("const/double/tau"),
-                    Action.makeConstantOp(new DoubleIota(HexUtils.TAU)));
+                Action.makeConstantOp(new DoubleIota(HexUtils.TAU)));
 
             // e
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaq", HexDir.EAST), modLoc("const/double/e"),
-                    Action.makeConstantOp(new DoubleIota(Math.E)));
+                Action.makeConstantOp(new DoubleIota(Math.E)));
 
             // == Entities ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqdaqa", HexDir.SOUTH_EAST), modLoc("get_entity"),
-                    new OpGetEntityAt(e -> true));
+                new OpGetEntityAt(e -> true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqdaqaawa", HexDir.SOUTH_EAST),
-                    modLoc("get_entity/animal"),
-                    new OpGetEntityAt(OpGetEntitiesBy::isAnimal));
+                modLoc("get_entity/animal"),
+                new OpGetEntityAt(OpGetEntitiesBy::isAnimal));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqdaqaawq", HexDir.SOUTH_EAST),
-                    modLoc("get_entity/monster"),
-                    new OpGetEntityAt(OpGetEntitiesBy::isMonster));
+                modLoc("get_entity/monster"),
+                new OpGetEntityAt(OpGetEntitiesBy::isMonster));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqdaqaaww", HexDir.SOUTH_EAST),
-                    modLoc("get_entity/item"),
-                    new OpGetEntityAt(OpGetEntitiesBy::isItem));
+                modLoc("get_entity/item"),
+                new OpGetEntityAt(OpGetEntitiesBy::isItem));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqdaqaawe", HexDir.SOUTH_EAST),
-                    modLoc("get_entity/player"),
-                    new OpGetEntityAt(OpGetEntitiesBy::isPlayer));
+                modLoc("get_entity/player"),
+                new OpGetEntityAt(OpGetEntitiesBy::isPlayer));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqdaqaawd", HexDir.SOUTH_EAST),
-                    modLoc("get_entity/living"),
-                    new OpGetEntityAt(OpGetEntitiesBy::isLiving));
+                modLoc("get_entity/living"),
+                new OpGetEntityAt(OpGetEntitiesBy::isLiving));
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqwded", HexDir.SOUTH_EAST), modLoc("zone_entity"),
-                    new OpGetEntitiesBy(e -> true, false));
+                new OpGetEntitiesBy(e -> true, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqwdeddwa", HexDir.SOUTH_EAST),
-                    modLoc("zone_entity/animal"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false));
+                modLoc("zone_entity/animal"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeewaqaawa", HexDir.NORTH_EAST),
-                    modLoc("zone_entity/not_animal"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, true));
+                modLoc("zone_entity/not_animal"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isAnimal, true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqwdeddwq", HexDir.SOUTH_EAST),
-                    modLoc("zone_entity/monster"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, false));
+                modLoc("zone_entity/monster"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeewaqaawq", HexDir.NORTH_EAST),
-                    modLoc("zone_entity/not_monster"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, true));
+                modLoc("zone_entity/not_monster"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isMonster, true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqwdeddww", HexDir.SOUTH_EAST),
-                    modLoc("zone_entity/item"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isItem, false));
+                modLoc("zone_entity/item"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isItem, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeewaqaaww", HexDir.NORTH_EAST),
-                    modLoc("zone_entity/not_item"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isItem, true));
+                modLoc("zone_entity/not_item"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isItem, true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqwdeddwe", HexDir.SOUTH_EAST),
-                    modLoc("zone_entity/player"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, false));
+                modLoc("zone_entity/player"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeewaqaawe", HexDir.NORTH_EAST),
-                    modLoc("zone_entity/not_player"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, true));
+                modLoc("zone_entity/not_player"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isPlayer, true));
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqqqwdeddwd", HexDir.SOUTH_EAST),
-                    modLoc("zone_entity/living"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, false));
+                modLoc("zone_entity/living"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, false));
             PatternRegistry.mapPattern(HexPattern.fromAngles("eeeeewaqaawd", HexDir.NORTH_EAST),
-                    modLoc("zone_entity/not_living"),
-                    new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, true));
+                modLoc("zone_entity/not_living"),
+                new OpGetEntitiesBy(OpGetEntitiesBy::isLiving, true));
 
             // == Lists ==
 
             PatternRegistry.mapPattern(HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST), modLoc("append"),
-                    OpAppend.INSTANCE);
+                OpAppend.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST), modLoc("concat"),
-                    OpConcat.INSTANCE);
+                OpConcat.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("deeed", HexDir.NORTH_WEST), modLoc("index"),
-                    OpIndex.INSTANCE);
+                OpIndex.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("dadad", HexDir.NORTH_EAST), modLoc("for_each"),
-                    OpForEach.INSTANCE);
+                OpForEach.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aqaeaq", HexDir.EAST), modLoc("list_size"),
-                    OpListSize.INSTANCE);
+                OpListSize.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("adeeed", HexDir.EAST), modLoc("singleton"),
-                    OpSingleton.INSTANCE);
+                OpSingleton.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqaeaae", HexDir.NORTH_EAST), modLoc("empty_list"),
-                    OpEmptyList.INSTANCE);
+                OpEmptyList.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qqqaede", HexDir.EAST), modLoc("reverse_list"),
-                    OpReverski.INSTANCE);
+                OpReverski.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ewdqdwe", HexDir.SOUTH_WEST), modLoc("last_n_list"),
-                    OpLastNToList.INSTANCE);
+                OpLastNToList.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qwaeawq", HexDir.NORTH_WEST), modLoc("splat"),
-                    OpSplat.INSTANCE);
+                OpSplat.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("dedqde", HexDir.EAST), modLoc("index_of"),
-                    OpIndexOf.INSTANCE);
+                OpIndexOf.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("edqdewaqa", HexDir.SOUTH_WEST), modLoc("list_remove"),
-                    OpRemove.INSTANCE);
+                OpRemove.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("qaeaqwded", HexDir.NORTH_WEST), modLoc("slice"),
-                    OpSlice.INSTANCE);
+                OpSlice.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST),
-                    modLoc("modify_in_place"),
-                    OpModifyInPlace.INSTANCE);
+                modLoc("modify_in_place"),
+                OpModifyInPlace.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST), modLoc("construct"),
-                    OpCons.INSTANCE);
+                OpCons.INSTANCE);
             PatternRegistry.mapPattern(HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST), modLoc("deconstruct"),
-                    OpUnCons.INSTANCE);
+                OpUnCons.INSTANCE);
 
         } catch (PatternRegistry.RegisterPatternException exn) {
             exn.printStackTrace();

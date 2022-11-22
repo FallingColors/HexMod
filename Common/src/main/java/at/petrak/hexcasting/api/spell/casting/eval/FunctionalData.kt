@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.spell.casting
+package at.petrak.hexcasting.api.spell.casting.eval
 
 import at.petrak.hexcasting.api.spell.iota.Iota
 

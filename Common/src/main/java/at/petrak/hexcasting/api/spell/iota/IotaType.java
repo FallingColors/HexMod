@@ -1,15 +1,12 @@
 package at.petrak.hexcasting.api.spell.iota;
 
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
-import net.minecraft.client.gui.Font;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.FormattedCharSequence;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 // Take notes from ForgeRegistryEntry
 public abstract class IotaType<T extends Iota> {
@@ -30,15 +27,6 @@ public abstract class IotaType<T extends Iota> {
      * This is for use on the client.
      */
     public abstract Component display(Tag tag);
-
-    /**
-     * Get a display of this datum from the {@code data} tag, with a maximum width.
-     * This is for use on the client.
-     */
-    public List<FormattedCharSequence> displayWithWidth(Tag tag, int maxWidth, Font font) {
-        var display = this.display(tag);
-        return font.split(display, maxWidth);
-    }
 
     /**
      * Get the color associated with this datum type.

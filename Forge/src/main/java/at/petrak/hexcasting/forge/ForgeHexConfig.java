@@ -50,28 +50,25 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     }
 
     public static class Client implements HexConfig.ClientConfigAccess {
-        private static ForgeConfigSpec.DoubleValue patternPointSpeedMultiplier;
         private static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
         private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
         private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
 
         public Client(ForgeConfigSpec.Builder builder) {
-            patternPointSpeedMultiplier = builder.comment(
-                    "How fast the point showing you the stroke order on patterns moves")
-                .defineInRange("patternPointSpeedMultiplier", DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER, 0.0,
-                    Double.POSITIVE_INFINITY);
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
                 .define("ctrlTogglesOffStrokeOrder", DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER);
             invertSpellbookScrollDirection = builder.comment(
-                    "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and vice versa")
+                    "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and " +
+                        "vice versa")
                 .define("invertSpellbookScrollDirection", DEFAULT_INVERT_SPELLBOOK_SCROLL);
             invertAbacusScrollDirection = builder.comment(
                     "Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
                 .define("invertAbacusScrollDirection", DEFAULT_INVERT_ABACUS_SCROLL);
             gridSnapThreshold = builder.comment(
-                "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way.")
+                    "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 " +
+                        "means 50% of the way.")
                 .defineInRange("gridSnapThreshold", DEFAULT_GRID_SNAP_THRESHOLD, 0.5, 1.0);
         }
 
@@ -83,11 +80,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean invertAbacusScrollDirection() {
             return invertAbacusScrollDirection.get();
-        }
-
-        @Override
-        public double patternPointSpeedMultiplier() {
-            return patternPointSpeedMultiplier.get();
         }
 
         @Override
@@ -131,7 +123,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineInRange("maxSpellCircleLength", DEFAULT_MAX_SPELL_CIRCLE_LENGTH, 4, Integer.MAX_VALUE);
 
             circleActionDenyList = builder.comment(
-                    "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle will result in a mishap.")
+                    "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
+                        " will result in a mishap.")
                 .defineList("circleActionDenyList", List.of(),
                     obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
             builder.pop();
@@ -210,7 +203,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 // then we are in develop env AND this is being called in the new world screen (it loads datapacks for
                 // world generation options)
                 // config values don't exist yet because config is per-world on Forge, and in dev it throws an exn
-                // (in release it just silently returns default, which is expected behavior here, but the comment suggests
+                // (in release it just silently returns default, which is expected behavior here, but the comment
+                // suggests
                 // it will start throwing at some point soon.)
             }
             return ScrollQuantity.NONE;

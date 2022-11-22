@@ -2,16 +2,13 @@ package at.petrak.hexcasting.api.spell.iota;
 
 import at.petrak.hexcasting.api.spell.SpellList;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.Font;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -110,54 +107,6 @@ public class ListIota extends Iota {
                 }
             }
             return Component.translatable("hexcasting.tooltip.list_contents", out).withStyle(ChatFormatting.DARK_PURPLE);
-        }
-
-        @Override
-        public List<FormattedCharSequence> displayWithWidth(Tag tag, int maxWidth, Font font) {
-            // We aim to not break one iota between lines
-            var listTag = HexUtils.downcast(tag, ListTag.TYPE);
-
-            var start = FormattedCharSequence.forward(listTag.isEmpty() ? "[]" : "[", Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE));
-            var cursor = font.width(start);
-            var currentLine = new ArrayList<>(List.of(start));
-            var out = new ArrayList<FormattedCharSequence>();
-
-            for (int i = 0; i < listTag.size(); i++) {
-                Tag subtag = listTag.get(i);
-                var cSubtag = HexUtils.downcast(subtag, CompoundTag.TYPE);
-                var translation = HexIotaTypes.getDisplay(cSubtag);
-                var currentElement = translation.getVisualOrderText();
-                String addl;
-                if (i < listTag.size() - 1) {
-                    addl = ", ";
-                } else {
-                    // Last go-around, so add the closing bracket
-                    addl = "]";
-                }
-                currentElement = FormattedCharSequence.composite(currentElement,
-                    FormattedCharSequence.forward(addl, Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE)));
-
-                var width = font.width(currentElement);
-
-                if (cursor + width > maxWidth) {
-                    out.add(FormattedCharSequence.composite(currentLine));
-                    currentLine = new ArrayList<>();
-                    // Indent further lines by two spaces
-                    var indentation = FormattedCharSequence.forward("  ", Style.EMPTY);
-                    var lineStart = FormattedCharSequence.composite(indentation, currentElement);
-                    currentLine.add(lineStart);
-                    cursor = font.width(lineStart);
-                } else {
-                    currentLine.add(currentElement);
-                    cursor += width;
-                }
-            }
-
-            if (!currentLine.isEmpty()) {
-                out.add(FormattedCharSequence.composite(currentLine));
-            }
-
-            return out;
         }
 
         @Override

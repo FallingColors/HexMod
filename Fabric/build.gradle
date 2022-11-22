@@ -78,9 +78,6 @@ dependencies {
     modImplementation "at.petra-k.paucal:paucal-fabric-$minecraftVersion:$paucalVersion"
     modImplementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FABRIC"
 
-    modImplementation "me.zeroeightsix:fiber:$fiberVersion"
-    include "me.zeroeightsix:fiber:$fiberVersion"
-
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:$cardinalComponentsVersion"
 
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
@@ -107,7 +104,7 @@ dependencies {
     // *Something* is including an old version of modmenu with a broken mixin
     // We can't figure out what it is
     // so i'm just including a fresher version
-    modImplementation("com.terraformersmc:modmenu:4.1.0")
+    modImplementation("com.terraformersmc:modmenu:$modmenuVersion")
 
     // i am speed
     // sodium is causing frustum mixin errors so don't use it

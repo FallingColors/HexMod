@@ -28,8 +28,6 @@ public class HexConfig {
     }
 
     public interface ClientConfigAccess {
-        double patternPointSpeedMultiplier();
-
         boolean ctrlTogglesOffStrokeOrder();
 
         boolean invertSpellbookScrollDirection();
@@ -38,7 +36,6 @@ public class HexConfig {
 
         double gridSnapThreshold();
 
-        double DEFAULT_PATTERN_POINT_SPEED_MULTIPLIER = 1;
         boolean DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER = false;
         boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
@@ -60,9 +57,11 @@ public class HexConfig {
 
         ScrollQuantity scrollsForLootTable(ResourceLocation lootTable);
 
-        int DEFAULT_MAX_RECURSE_DEPTH = 64;
+        int DEFAULT_MAX_RECURSE_DEPTH = 512;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
+
+        boolean DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER = true;
         List<String> DEFAULT_FEW_SCROLL_TABLES = List.of("minecraft:chests/jungle_temple",
             "minecraft:chests/simple_dungeon", "minecraft:chests/village/village_cartographer");
         List<String> DEFAULT_SOME_SCROLL_TABLES = List.of("minecraft:chests/bastion_treasure",

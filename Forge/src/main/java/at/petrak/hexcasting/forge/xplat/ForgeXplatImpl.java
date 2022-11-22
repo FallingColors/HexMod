@@ -12,10 +12,12 @@ import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
@@ -30,6 +32,7 @@ import at.petrak.hexcasting.mixin.accessor.AccessorVillager;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
+import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -83,6 +86,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
@@ -317,7 +321,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-        Block... blocks) {
+                                                                            Block... blocks) {
         return BlockEntityType.Builder.of(func::apply, blocks).build(null);
     }
 
@@ -414,16 +418,25 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
-    private static Registry<IotaType<?>> IOTA_TYPE_REGISTRY = null;
+    private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
+        ForgeAccessorRegistry.hex$registerDefaulted(
+            ResourceKey.createRegistryKey(modLoc("iota_type")),
+            HexAPI.MOD_ID + ":null", registry -> HexIotaTypes.NULL)
+    );
+    private static final Supplier<Registry<EvalSound>> EVAL_SOUND_REGISTRY = Suppliers.memoize(() ->
+        ForgeAccessorRegistry.hex$registerDefaulted(
+            ResourceKey.createRegistryKey(modLoc("eval_sound")),
+            HexAPI.MOD_ID + ":nothing", registry -> HexEvalSounds.NOTHING)
+    );
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
-        if (IOTA_TYPE_REGISTRY == null) {
-            IOTA_TYPE_REGISTRY = ForgeAccessorRegistry.hex$registerDefaulted(
-                ResourceKey.createRegistryKey(modLoc("iota_type")),
-                HexAPI.MOD_ID + ":null", registry -> HexIotaTypes.NULL);
-        }
-        return IOTA_TYPE_REGISTRY;
+        return IOTA_TYPE_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<EvalSound> getEvalSoundRegistry() {
+        return EVAL_SOUND_REGISTRY.get();
     }
 
     @Override

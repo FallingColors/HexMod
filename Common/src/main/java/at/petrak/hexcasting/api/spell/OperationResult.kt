@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.spell
 
-import at.petrak.hexcasting.api.spell.casting.OperatorSideEffect
-import at.petrak.hexcasting.api.spell.casting.SpellContinuation
+import at.petrak.hexcasting.api.spell.casting.eval.SpellContinuation
+import at.petrak.hexcasting.api.spell.casting.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.iota.Iota
 
 /**

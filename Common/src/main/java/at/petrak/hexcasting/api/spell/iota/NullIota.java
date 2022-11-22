@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.spell.iota;
 
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -15,7 +15,8 @@ import org.jetbrains.annotations.Nullable;
 public class NullIota extends Iota {
     private static final Object NULL_SUBSTITUTE = new Object();
 
-    public static final Component DISPLAY = Component.translatable("hexcasting.tooltip.null_iota").withStyle(ChatFormatting.GRAY);
+    public static final Component DISPLAY =
+        Component.translatable("hexcasting.tooltip.null_iota").withStyle(ChatFormatting.GRAY);
 
     public NullIota() {
         // We have to pass *something* here, but there's nothing that actually needs to go there,

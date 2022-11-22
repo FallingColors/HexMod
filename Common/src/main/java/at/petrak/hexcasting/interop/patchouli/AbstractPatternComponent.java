@@ -47,8 +47,9 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
 
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
+        var patterns = this.getPatterns(lookup);
         var data = PatternDrawingUtil.loadPatterns(
-            this.getPatterns(lookup),
+            patterns,
             this.showStrokeOrder() ? RenderLib.DEFAULT_READABILITY_OFFSET : 0f,
             this.showStrokeOrder() ? RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP : 1f);
         this.hexSize = data.hexSize();

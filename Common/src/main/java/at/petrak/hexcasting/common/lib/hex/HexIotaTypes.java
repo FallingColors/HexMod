@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.lib;
+package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.spell.iota.*;
@@ -150,16 +150,26 @@ public class HexIotaTypes {
         return type.display(data);
     }
 
-    public static List<FormattedCharSequence> getDisplayWithMaxWidth(CompoundTag tag, int maxWidth, Font font) {
+    public static FormattedCharSequence getDisplayWithMaxWidth(CompoundTag tag, int maxWidth, Font font) {
         var type = getTypeFromTag(tag);
         if (type == null) {
-            return font.split(brokenIota(), maxWidth);
+            return brokenIota().getVisualOrderText();
         }
         var data = tag.get(KEY_DATA);
         if (data == null) {
-            return font.split(brokenIota(), maxWidth);
+            return brokenIota().getVisualOrderText();
         }
-        return type.displayWithWidth(data, maxWidth, font);
+        var display = type.display(data);
+        var splitted = font.split(display, maxWidth - font.width("..."));
+        if (splitted.isEmpty())
+            return FormattedCharSequence.EMPTY;
+        else if (splitted.size() == 1)
+            return splitted.get(0);
+        else {
+            var first = splitted.get(0);
+            return FormattedCharSequence.fromPair(first,
+                Component.literal("...").withStyle(ChatFormatting.GRAY).getVisualOrderText());
+        }
     }
 
     public static int getColor(CompoundTag tag) {

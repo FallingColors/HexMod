@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.network;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemAbacus;
 import at.petrak.hexcasting.common.items.ItemSpellbook;
-import at.petrak.hexcasting.common.lib.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;

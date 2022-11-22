@@ -12,6 +12,12 @@ import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellList
+import at.petrak.hexcasting.api.spell.casting.eval.ContinuationFrame
+import at.petrak.hexcasting.api.spell.casting.eval.FrameEvaluate
+import at.petrak.hexcasting.api.spell.casting.eval.FunctionalData
+import at.petrak.hexcasting.api.spell.casting.eval.SpellContinuation
+import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound
+import at.petrak.hexcasting.api.spell.casting.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.ListIota
 import at.petrak.hexcasting.api.spell.iota.PatternIota
@@ -19,7 +25,8 @@ import at.petrak.hexcasting.api.spell.math.HexDir
 import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.*
-import at.petrak.hexcasting.common.lib.HexIotaTypes
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
@@ -75,13 +82,13 @@ class CastingHarness private constructor(
     }
 
     private fun getPatternForFrame(frame: ContinuationFrame): HexPattern? {
-        if (frame !is ContinuationFrame.Evaluate) return null
+        if (frame !is FrameEvaluate) return null
 
         return (frame.list.car as? PatternIota)?.pattern
     }
 
     private fun getOperatorForFrame(frame: ContinuationFrame, world: ServerLevel): Action? {
-        if (frame !is ContinuationFrame.Evaluate) return null
+        if (frame !is FrameEvaluate) return null
 
         return getOperatorForPattern(frame.list.car, world)
     }
@@ -91,10 +98,11 @@ class CastingHarness private constructor(
      */
     fun executeIotas(iotas: List<Iota>, world: ServerLevel): ControllerInfo {
         // Initialize the continuation stack to a single top-level eval for all iotas.
-        var continuation = SpellContinuation.Done.pushFrame(ContinuationFrame.Evaluate(SpellList.LList(0, iotas)))
+        var continuation = SpellContinuation.Done.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false))
         // Begin aggregating info
         val info = TempControllerInfo(earlyExit = false)
         var lastResolutionType = ResolvedPatternType.UNRESOLVED
+        var sound = HexEvalSounds.NOTHING
         while (continuation is SpellContinuation.NotDone && !info.earlyExit) {
             // Take the top of the continuation stack...
             val next = continuation.frame
@@ -114,7 +122,7 @@ class CastingHarness private constructor(
                             Mishap.Context(pattern ?: HexPattern(HexDir.WEST), operator)
                         )
                     ),
-                    EvalSound.MISHAP,
+                    HexEvalSounds.MISHAP,
                 )
             }
             // Then write all pertinent data back to the harness for the next iteration.
@@ -123,8 +131,22 @@ class CastingHarness private constructor(
             }
             continuation = result.continuation
             lastResolutionType = result.resolutionType
-            performSideEffects(info, result.sideEffects, result.sound)
+            performSideEffects(info, result.sideEffects)
             info.earlyExit = info.earlyExit || !lastResolutionType.success
+            sound = if (result.sound == HexEvalSounds.MISHAP) {
+                HexEvalSounds.MISHAP
+            } else {
+                sound.greaterOf(result.sound)
+            }
+        }
+
+        sound.sound?.let {
+            this.ctx.world.playSound(
+                null, this.ctx.position.x, this.ctx.position.y, this.ctx.position.z, it,
+                SoundSource.PLAYERS, 1f, 1f
+            )
+            // TODO: is it worth mixing in to the immut map and making our own game event with blackjack and hookers
+            this.ctx.world.gameEvent(this.ctx.caster, GameEvent.ITEM_INTERACT_FINISH, this.ctx.position)
         }
 
         if (continuation is SpellContinuation.NotDone) {
@@ -146,14 +168,15 @@ class CastingHarness private constructor(
 
     fun getUpdate(iota: Iota, world: ServerLevel, continuation: SpellContinuation): CastResult {
         try {
+            // TODO we can have a special intro/retro sound
             this.handleParentheses(iota)?.let { (data, resolutionType) ->
-                return@getUpdate CastResult(continuation, data, resolutionType, listOf(), EvalSound.GENERIC)
+                return@getUpdate CastResult(continuation, data, resolutionType, listOf(), HexEvalSounds.OPERATOR)
             }
 
-            return if (iota is PatternIota) {
-                updateWithPattern(iota.pattern, world, continuation)
+            if (iota is PatternIota) {
+                return updateWithPattern(iota.pattern, world, continuation)
             } else {
-                CastResult(
+                return CastResult(
                     continuation,
                     null,
                     ResolvedPatternType.INVALID, // Should never matter
@@ -163,7 +186,7 @@ class CastingHarness private constructor(
                             Mishap.Context(HexPattern(HexDir.WEST), null)
                         )
                     ),
-                    EvalSound.MISHAP
+                    HexEvalSounds.MISHAP
                 )
             }
         } catch (mishap: Mishap) {
@@ -180,7 +203,7 @@ class CastingHarness private constructor(
                         )
                     )
                 ),
-                EvalSound.MISHAP
+                HexEvalSounds.MISHAP
             )
         } catch (exception: Exception) {
             // This means something very bad has happened
@@ -198,7 +221,7 @@ class CastingHarness private constructor(
                         )
                     )
                 ),
-                EvalSound.MISHAP
+                HexEvalSounds.MISHAP
             )
         }
     }
@@ -272,20 +295,22 @@ class CastingHarness private constructor(
                 hereFd
             }
 
-            var soundType =
-                if (this.ctx.source == CastingContext.CastSource.STAFF) EvalSound.GENERIC else EvalSound.NONE;
+            var soundType = if (this.ctx.source == CastingContext.CastSource.STAFF) {
+                HexEvalSounds.OPERATOR
+            } else {
+                HexEvalSounds.NOTHING
+            }
             for (se in sideEffects) {
                 if (se is OperatorSideEffect.AttemptSpell) {
-                    if (se.hasCastingSound) {
-                        soundType = soundType.greaterOf(EvalSound.SPELL_BOINK)
+                    soundType = if (se.hasCastingSound) {
+                        soundType.greaterOf(HexEvalSounds.SPELL)
                     } else {
                         // WITH CATLIKE TREAD
                         // UPON OUR PREY WE STEAL
-                        soundType = EvalSound.NONE
-                        break
+                        HexEvalSounds.NOTHING
                     }
                 } else if (se is OperatorSideEffect.DoMishap) {
-                    soundType = EvalSound.MISHAP
+                    soundType = HexEvalSounds.MISHAP
                 }
             }
             return CastResult(
@@ -302,7 +327,7 @@ class CastingHarness private constructor(
                 null,
                 mishap.resolutionType(ctx),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, actionIdPair?.first))),
-                EvalSound.MISHAP
+                HexEvalSounds.MISHAP
             )
         }
     }
@@ -310,21 +335,13 @@ class CastingHarness private constructor(
     /**
      * Execute the side effects of a pattern, updating our aggregated info.
      */
-    fun performSideEffects(info: TempControllerInfo, sideEffects: List<OperatorSideEffect>, sound: EvalSound) {
+    fun performSideEffects(info: TempControllerInfo, sideEffects: List<OperatorSideEffect>) {
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
             if (mustStop) {
                 info.earlyExit = true
                 break
             }
-        }
-        sound.soundEvent()?.let {
-            this.ctx.world.playSound(
-                null, this.ctx.position.x, this.ctx.position.y, this.ctx.position.z, it,
-                SoundSource.PLAYERS, 1f, 1f
-            )
-            // TODO: is it worth mixing in to the immut map and making our own game event with blackjack and hookers
-            this.ctx.world.gameEvent(this.ctx.caster, GameEvent.ITEM_INTERACT_FINISH, this.ctx.position)
         }
     }
 
@@ -382,6 +399,7 @@ class CastingHarness private constructor(
                             escapeNext = true,
                         ) to ResolvedPatternType.EVALUATED
                     }
+
                     SpecialPatterns.INTROSPECTION.anglesSignature() -> {
                         // we have escaped the parens onto the stack; we just also record our count.
                         val newParens = this.parenthesized.toMutableList()
@@ -391,6 +409,7 @@ class CastingHarness private constructor(
                             parenCount = this.parenCount + 1
                         ) to if (this.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
                     }
+
                     SpecialPatterns.RETROSPECTION.anglesSignature() -> {
                         val newParenCount = this.parenCount - 1
                         displayDepth--
@@ -415,6 +434,7 @@ class CastingHarness private constructor(
                             ) to ResolvedPatternType.ESCAPED
                         }
                     }
+
                     else -> {
                         val newParens = this.parenthesized.toMutableList()
                         newParens.add(iota)
@@ -438,14 +458,17 @@ class CastingHarness private constructor(
                         escapeNext = true
                     ) to ResolvedPatternType.EVALUATED
                 }
+
                 SpecialPatterns.INTROSPECTION.anglesSignature() -> {
                     this.getFunctionalData().copy(
                         parenCount = this.parenCount + 1
                     ) to ResolvedPatternType.EVALUATED
                 }
+
                 SpecialPatterns.RETROSPECTION.anglesSignature() -> {
                     throw MishapTooManyCloseParens()
                 }
+
                 else -> {
                     null
                 }
