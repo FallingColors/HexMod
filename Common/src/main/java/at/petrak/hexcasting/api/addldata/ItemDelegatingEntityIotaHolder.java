@@ -3,7 +3,6 @@ package at.petrak.hexcasting.api.addldata;
 import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import com.google.common.base.Suppliers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -15,24 +14,24 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
-    private final Supplier<ItemStack> stackCacher;
+    private final Supplier<ItemStack> stackSupplier;
 
     private final Consumer<ItemStack> save;
 
     public ItemDelegatingEntityIotaHolder(Supplier<ItemStack> stackSupplier, Consumer<ItemStack> save) {
-        this.stackCacher = Suppliers.memoize(stackSupplier::get);
+        this.stackSupplier = stackSupplier;
         this.save = save;
     }
 
     @Override
     public @Nullable CompoundTag readIotaTag() {
-        var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackCacher.get());
+        var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackSupplier.get());
         return delegate == null ? null : delegate.readIotaTag();
     }
 
     @Override
     public boolean writeIota(@Nullable Iota datum, boolean simulate) {
-        var stacc = this.stackCacher.get();
+        var stacc = this.stackSupplier.get();
         var delegate = IXplatAbstractions.INSTANCE.findDataHolder(stacc);
         var success = delegate != null && delegate.writeIota(datum, simulate);
         if (success && !simulate) {
@@ -43,13 +42,13 @@ public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
 
     @Override
     public @Nullable Iota readIota(ServerLevel world) {
-        var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackCacher.get());
+        var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackSupplier.get());
         return delegate == null ? null : delegate.readIota(world);
     }
 
     @Override
     public @Nullable Iota emptyIota() {
-        var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackCacher.get());
+        var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackSupplier.get());
         return delegate == null ? null : delegate.emptyIota();
     }
 

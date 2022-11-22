@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.operators
+package at.petrak.hexcasting.common.casting.operators.rw
 
 import at.petrak.hexcasting.api.addldata.ADIotaHolder
 import at.petrak.hexcasting.api.spell.ParticleSpray
@@ -10,6 +10,8 @@ import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapBadEntity
 import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.phys.Vec3
 
 object OpTheCoolerWrite : SpellAction {
     override val argc = 2
@@ -34,10 +36,16 @@ object OpTheCoolerWrite : SpellAction {
         if (trueName != null)
             throw MishapOthersName(trueName)
 
+        val burstPos = if (target is ItemEntity) {
+            // Special case these because the render is way above the entity
+            target.position().add(0.0, 3.0 / 8.0, 0.0)
+        } else {
+            target.position()
+        }
         return Triple(
             Spell(datum, datumHolder),
             0,
-            listOf(ParticleSpray.burst(target.position(), 0.5))
+            listOf(ParticleSpray(burstPos, Vec3(1.0, 0.0, 0.0), 0.25, 3.14, 40))
         )
     }
 
