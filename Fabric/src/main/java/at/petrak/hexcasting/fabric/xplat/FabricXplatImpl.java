@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
@@ -24,6 +25,7 @@ import at.petrak.hexcasting.mixin.accessor.AccessorVillager;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
+import com.google.common.base.Suppliers;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.mojang.serialization.Lifecycle;
 import net.fabricmc.api.EnvType;
@@ -79,6 +81,7 @@ import virtuoel.pehkui.api.ScaleTypes;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -258,7 +261,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-        Block... blocks) {
+                                                                            Block... blocks) {
         return FabricBlockEntityTypeBuilder.create(func::apply, blocks).build();
     }
 
@@ -409,17 +412,27 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
-    private static Registry<IotaType<?>> IOTA_TYPE_REGISTRY = null;
+    private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
+        FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
+                HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
+                Lifecycle.stable(), null))
+            .buildAndRegister()
+    );
+    private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
+        FabricRegistryBuilder.from(new DefaultedRegistry<EvalSound>(
+                HexAPI.MOD_ID + ":nothing", ResourceKey.createRegistryKey(modLoc("eval_sound")),
+                Lifecycle.stable(), null))
+            .buildAndRegister()
+    );
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
-        if (IOTA_TYPE_REGISTRY == null) {
-            IOTA_TYPE_REGISTRY = FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
-                    HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
-                    Lifecycle.stable(), null))
-                .buildAndRegister();
-        }
-        return IOTA_TYPE_REGISTRY;
+        return IOTA_TYPE_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<EvalSound> getEvalSoundRegistry() {
+        return EVAL_SOUNDS_REGISTRY.get();
     }
 
     @Override

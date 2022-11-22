@@ -43,7 +43,18 @@
       "hexcasting:cast_hex"
     ]
   },
-
+  "casting.hermes": {
+    "subtitle": "hexcasting.subtitles.cast",
+    "sounds": [
+      "hexcasting:hermes"
+    ]
+  },
+  "casting.thoth": {
+    "subtitle": "hexcasting.subtitles.cast",
+    "sounds": [
+      "hexcasting:thoth"
+    ]
+  },
   "abacus": {
     "subtitle": "hexcasting.subtitles.abacus",
     "sounds": [
@@ -58,7 +69,6 @@
       "hexcasting:abacus_shake"
     ]
   },
-
   "spellcircle.find_block": {
     "sounds": [
       {
@@ -83,7 +93,6 @@
     ],
     "subtitle": "hexcasting.subtitles.spellcircle.cast"
   },
-
   "scroll.dust": {
     "sounds": [
       "minecraft:dig/sand1",
@@ -101,7 +110,6 @@
     ],
     "subtitle": "hexcasting.subtitles.scroll.scribble"
   },
-
   "impetus.fletcher.tick": {
     "sounds": [
       "minecraft:note/hat"
@@ -114,7 +122,6 @@
     ],
     "subtitle": "hexcasting.subtitles.impetus.cleric.register"
   },
-
   "lore_fragment.read": {
     "sounds": [
       "block/enchantment_table/enchant1",

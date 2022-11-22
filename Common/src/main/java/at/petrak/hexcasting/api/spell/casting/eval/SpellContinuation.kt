@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.spell.casting
+package at.petrak.hexcasting.api.spell.casting.eval
 
 /**
  * A continuation during the execution of a spell.

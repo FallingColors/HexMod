@@ -12,4 +12,7 @@ import org.jetbrains.annotations.Nullable;
  *                 shortcutMetacasting takes precedence over this.
  */
 public record EvalSound(@Nullable SoundEvent sound, int priority) {
+    public EvalSound greaterOf(EvalSound that) {
+        return (this.priority > that.priority) ? this : that;
+    }
 }
