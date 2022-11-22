@@ -25,6 +25,9 @@ object OpTheCoolerWrite : SpellAction {
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
             ?: throw MishapBadEntity.of(target, "iota.write")
 
+        if (!datumHolder.writeIota(datum, true))
+            throw MishapBadEntity.of(target, "iota.write")
+
         // We pass null here so that even the own caster won't be allowed into a focus.
         // Otherwise, you could sentinel scout to people and remotely write their names into things using a cleric circle.
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, null)
