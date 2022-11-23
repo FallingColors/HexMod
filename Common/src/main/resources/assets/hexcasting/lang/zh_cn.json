@@ -1039,7 +1039,7 @@
 
   "hexcasting.entry.meta": "元运行",
   "hexcasting.page.meta.eval.1": "移除栈顶的图案列表，然后就像我用$(l:items/staff)$(item)法杖/$施法一样依次运行（直到碰到$(l:patterns/meta#hexcasting:halt)$(action)卡戎之策略/$）。如果一个 iota 已用$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$或$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)类似手段/$作为图案加入栈中，那么该 iota 将在运行时被加到栈中。否则其将在非图案元素运行失败。",
-  "hexcasting.page.meta.eval.2": "若与$(l:items/focus)$(item)核心/$同时使用，它将提供$(italic)极为/$强大的操控能力。$(br2)距我找到的一张奇特卷轴所称，它还将自然的咒法体系变为了一个“图灵完备”的系统。$(br2)然而，$(hex)咒术/$能重复执行自身的次数是有限的——自然不会对失控的法术手软的！$(br2)此外，若让图案不在我的引导下操控能量，那么任何事故都可能导致后续操作不稳定甚至直接执行不了。",
+  "hexcasting.page.meta.eval.2": "若与$(l:items/focus)$(item)核心/$同时使用，它将提供$(italic)极为/$强大的操控能力。$(br2)据我找到的一张奇特卷轴所称，它还将自然的咒法体系变为了一个“图灵完备”的系统。$(br2)然而，$(hex)咒术/$能重复执行自身的次数是有限的——自然不会对失控的法术手软的！$(br2)此外，若让图案不在我的引导下操控能量，那么任何事故都可能导致后续操作不稳定甚至直接执行不了。",
   "hexcasting.page.meta.for_each.1": "移除栈中的一个图案列表和一个列表，然后对后一列表中的每个元素运行前一图案列表中的图案。",
   "hexcasting.page.meta.for_each.2": "更确切地说，对应后一列表中的每个元素，它将：$(li)创建一个新栈，其中包括当前栈中的所有元素和后一列表中的一个元素。$(li)绘制前一列表中的所有图案。$(li)将该栈中剩余的所有元素存进一个列表。$(br)在所有元素都运行一遍后，将该列表压入原本的栈中。$(br2)也难怪精通此操作的人都疯了。",
   "hexcasting.page.meta.halt.1": "这个图案将强制停止$(hex)咒术/$的施放。它独自出现可能没什么用，我只要不绘制图案或是放下法杖就行了。",
@@ -1087,7 +1087,7 @@
 
   "hexcasting.entry.nadirs": "天底法术",
   "hexcasting.page.nadirs.1": "此类法术会给予某一实体一个负面药水效果。它们都接受一个实体作为效果受体，和一两个数。其中第一个数是持续时间，第二个数（若有）是效果强度（以 1 起始）。$(br2)每种法术都有一个“基础消耗”，实际消耗为基础消耗乘以效果强度的平方。",
-  "hexcasting.page.nadirs.2": "距某些传说所言，这些法术和它们的姊妹法术——$(l:patterns/great_spells/zeniths)$(action)天顶法术/$，都是“……由另一个世界的魔法启发的。在那个世界里，强大的魔法师会从四处收集魔法并决斗至死。不幸的是，许多信息都没翻译过来……”$(br2)也许这就是它们名字怪异的原因。",
+  "hexcasting.page.nadirs.2": "据某些传说所言，这些法术和它们的姊妹法术——$(l:patterns/great_spells/zeniths)$(action)天顶法术/$，都是“……由另一个世界的魔法启发的。在那个世界里，强大的魔法师会从四处收集魔法并决斗至死。不幸的是，许多信息都没翻译过来……”$(br2)也许这就是它们名字怪异的原因。",
   "hexcasting.page.nadirs.potion/weakness": "给予$(thing)虚弱/$。每 10 秒持续时间的基础消耗为 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
   "hexcasting.page.nadirs.potion/levitation": "给予$(thing)飘浮/$。每 5 秒持续时间的基础消耗为 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
   "hexcasting.page.nadirs.potion/wither": "给予$(thing)凋零/$。每 1 秒持续时间的基础消耗为 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
