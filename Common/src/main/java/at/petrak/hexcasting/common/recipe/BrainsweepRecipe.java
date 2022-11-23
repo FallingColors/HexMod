@@ -6,9 +6,10 @@ import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepIngred
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -21,13 +22,14 @@ import org.jetbrains.annotations.NotNull;
 
 // God I am a horrible person
 public record BrainsweepRecipe(
-        ResourceLocation id,
-        StateIngredient blockIn,
-        BrainsweepIngredient villagerIn,
-        BlockState result
+    ResourceLocation id,
+    StateIngredient blockIn,
+    BrainsweepIngredient entityIn,
+    int mediaCost,
+    BlockState result
 ) implements Recipe<Container> {
-    public boolean matches(BlockState blockIn, Villager villagerIn) {
-        return this.blockIn.test(blockIn) && this.villagerIn.test(villagerIn);
+    public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
+        return this.blockIn.test(blockIn) && this.entityIn.test(victim, level);
     }
 
     @Override
@@ -84,15 +86,17 @@ public record BrainsweepRecipe(
         @Override
         public @NotNull BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
             var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));
-            var villagerIn = BrainsweepIngredient.deserialize(GsonHelper.getAsJsonObject(json, "villagerIn"));
+            var villagerIn = BrainsweepIngredient.deserialize(GsonHelper.getAsJsonObject(json, "entityIn"));
+            var cost = GsonHelper.getAsInt(json, "cost");
             var result = StateIngredientHelper.readBlockState(GsonHelper.getAsJsonObject(json, "result"));
-            return new BrainsweepRecipe(recipeID, blockIn, villagerIn, result);
+            return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buf, BrainsweepRecipe recipe) {
             recipe.blockIn.write(buf);
-            recipe.villagerIn.write(buf);
+            recipe.entityIn.write(buf);
+            buf.writeVarInt(recipe.mediaCost);
             buf.writeVarInt(Block.getId(recipe.result));
         }
 
@@ -100,8 +104,9 @@ public record BrainsweepRecipe(
         public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
             var blockIn = StateIngredientHelper.read(buf);
             var villagerIn = BrainsweepIngredient.read(buf);
+            var cost = buf.readVarInt();
             var result = Block.stateById(buf.readVarInt());
-            return new BrainsweepRecipe(recipeID, blockIn, villagerIn, result);
+            return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);
         }
     }
 }

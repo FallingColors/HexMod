@@ -63,8 +63,8 @@ object FabricHexInitializer : ModInitializer {
     }
 
     fun initListeners() {
-        UseEntityCallback.EVENT.register(Brainsweeping::tradeWithVillager)
-        VillagerConversionCallback.EVENT.register(Brainsweeping::copyBrainsweepFromVillager)
+        UseEntityCallback.EVENT.register(Brainsweeping::interactWithBrainswept)
+        VillagerConversionCallback.EVENT.register(Brainsweeping::copyBrainsweepPostTransformation)
         AttackBlockCallback.EVENT.register { player, world, _, pos, _ ->
             // SUCCESS cancels further processing and, on the client, sends a packet to the server.
             // PASS falls back to further processing.

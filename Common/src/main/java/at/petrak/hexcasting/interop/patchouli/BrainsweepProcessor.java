@@ -47,11 +47,11 @@ public class BrainsweepProcessor implements IComponentProcessor {
             }
 
             case "entity" -> {
-                var profession = Objects.requireNonNullElse(this.recipe.villagerIn().profession(),
+                var profession = Objects.requireNonNullElse(this.recipe.entityIn().profession(),
                     new ResourceLocation("toolsmith"));
-                var biome = Objects.requireNonNullElse(this.recipe.villagerIn().biome(),
+                var biome = Objects.requireNonNullElse(this.recipe.entityIn().biome(),
                     new ResourceLocation("plains"));
-                var level = this.recipe.villagerIn().minLevel();
+                var level = this.recipe.entityIn().minLevel();
                 var iHatePatchouli = String.format(
                     "minecraft:villager{VillagerData:{profession:'%s',type:'%s',level:%d}}",
                     profession, biome, level);
@@ -59,7 +59,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
             }
             case "entityTooltip" -> {
                 Minecraft mc = Minecraft.getInstance();
-                return IVariable.wrapList(this.recipe.villagerIn()
+                return IVariable.wrapList(this.recipe.entityIn()
                     .getTooltip(mc.options.advancedItemTooltips)
                     .stream()
                     .map(IVariable::from)

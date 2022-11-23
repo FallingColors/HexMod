@@ -21,16 +21,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public class BrainsweepRecipeBuilder implements RecipeBuilder {
-    private StateIngredient blockIn;
-    private BrainsweepIngredient villagerIn;
+    private final StateIngredient blockIn;
+    private final BrainsweepIngredient villagerIn;
+    private final int mediaCost;
     private final BlockState result;
 
     private final Advancement.Builder advancement;
 
-    public BrainsweepRecipeBuilder(StateIngredient blockIn, BrainsweepIngredient villagerIn, BlockState result) {
+    public BrainsweepRecipeBuilder(StateIngredient blockIn, BrainsweepIngredient villagerIn, BlockState result,
+        int mediaCost) {
         this.blockIn = blockIn;
         this.villagerIn = villagerIn;
         this.result = result;
+        this.mediaCost = mediaCost;
         this.advancement = Advancement.Builder.advancement();
     }
 
@@ -57,23 +60,24 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
         }
 
         this.advancement.parent(new ResourceLocation("recipes/root"))
-                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeId))
-                .rewards(AdvancementRewards.Builder.recipe(pRecipeId))
-                .requirements(RequirementsStrategy.OR);
+            .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeId))
+            .rewards(AdvancementRewards.Builder.recipe(pRecipeId))
+            .requirements(RequirementsStrategy.OR);
         pFinishedRecipeConsumer.accept(new Result(
-                pRecipeId,
-                this.blockIn, this.villagerIn, this.result,
-                this.advancement,
-                new ResourceLocation(pRecipeId.getNamespace(), "recipes/brainsweep/" + pRecipeId.getPath())));
+            pRecipeId,
+            this.blockIn, this.villagerIn, this.mediaCost, this.result,
+            this.advancement,
+            new ResourceLocation(pRecipeId.getNamespace(), "recipes/brainsweep/" + pRecipeId.getPath())));
     }
 
     public record Result(ResourceLocation id, StateIngredient blockIn, BrainsweepIngredient villagerIn,
-                         BlockState result, Advancement.Builder advancement,
+                         int mediaCost, BlockState result, Advancement.Builder advancement,
                          ResourceLocation advancementId) implements FinishedRecipe {
         @Override
         public void serializeRecipeData(JsonObject json) {
             json.add("blockIn", this.blockIn.serialize());
-            json.add("villagerIn", this.villagerIn.serialize());
+            json.add("entityIn", this.villagerIn.serialize());
+            json.addProperty("cost", this.mediaCost);
             json.add("result", StateIngredientHelper.serializeBlockState(this.result));
         }
 

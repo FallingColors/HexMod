@@ -8,6 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -26,27 +27,26 @@ public class VillagerBrainsweepIngredient extends BrainsweepIngredient {
     private final @Nullable ResourceLocation biome;
     private final int minLevel;
 
-    protected VillagerBrainsweepIngredient(
-            @Nullable ResourceLocation profession,
-            @Nullable ResourceLocation biome,     // aka their "type"
-            int minLevel
+    public VillagerBrainsweepIngredient(
+        @Nullable ResourceLocation profession,
+        @Nullable ResourceLocation biome,     // aka their "type"
+        int minLevel
     ) {
-        super();
         this.profession = profession;
         this.biome = biome;
         this.minLevel = minLevel;
     }
 
     @Override
-    public boolean test(Entity entity) {
+    public boolean test(Entity entity, ServerLevel level) {
         if (!(entity instanceof Villager villager)) return false;
 
         var data = villager.getVillagerData();
         ResourceLocation profID = IXplatAbstractions.INSTANCE.getID(data.getProfession());
 
         return (this.profession == null || this.profession.equals(profID))
-                && (this.biome == null || this.biome.equals(Registry.VILLAGER_TYPE.getKey(data.getType())))
-                && this.minLevel <= data.getLevel();
+            && (this.biome == null || this.biome.equals(Registry.VILLAGER_TYPE.getKey(data.getType())))
+            && this.minLevel <= data.getLevel();
     }
 
     @Override
@@ -57,10 +57,10 @@ public class VillagerBrainsweepIngredient extends BrainsweepIngredient {
         if (advanced) {
             if (minLevel >= 5) {
                 tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.level", 5)
-                        .withStyle(ChatFormatting.DARK_GRAY));
+                    .withStyle(ChatFormatting.DARK_GRAY));
             } else if (minLevel > 1) {
                 tooltip.add(Component.translatable("hexcasting.tooltip.brainsweep.min_level", minLevel)
-                        .withStyle(ChatFormatting.DARK_GRAY));
+                    .withStyle(ChatFormatting.DARK_GRAY));
             }
 
             if (biome != null) {
@@ -68,7 +68,7 @@ public class VillagerBrainsweepIngredient extends BrainsweepIngredient {
             }
 
             ResourceLocation displayId = Objects.requireNonNullElseGet(profession,
-                    () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
+                () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
             tooltip.add(Component.literal(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
@@ -153,14 +153,15 @@ public class VillagerBrainsweepIngredient extends BrainsweepIngredient {
 
     public static VillagerBrainsweepIngredient deserialize(JsonObject json) {
         ResourceLocation profession = null;
-        if (json.has("profession")) {
+        if (json.has("profession") && !json.get("profession").isJsonNull()) {
             profession = new ResourceLocation(GsonHelper.getAsString(json, "profession"));
         }
         ResourceLocation biome = null;
-        if (json.has("biome")) {
+        if (json.has("biome") && !json.get("biome").isJsonNull()) {
             biome = new ResourceLocation(GsonHelper.getAsString(json, "biome"));
         }
         int minLevel = GsonHelper.getAsInt(json, "minLevel");
+        int cost = GsonHelper.getAsInt(json, "cost");
         return new VillagerBrainsweepIngredient(profession, biome, minLevel);
     }
 

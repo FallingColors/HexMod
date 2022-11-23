@@ -70,7 +70,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
             Minecraft mc = Minecraft.getInstance();
-            return recipe.villagerIn().getTooltip(mc.options.advancedItemTooltips);
+            return recipe.entityIn().getTooltip(mc.options.advancedItemTooltips);
         }
 
         return Collections.emptyList();
@@ -81,7 +81,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         @NotNull PoseStack stack, double mouseX, double mouseY) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {
-            Villager villager = RenderLib.prepareVillagerForRendering(recipe.villagerIn(), level);
+            Villager villager = RenderLib.prepareVillagerForRendering(recipe.entityIn(), level);
 
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

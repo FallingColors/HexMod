@@ -3,14 +3,16 @@ package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 
 import java.util.List;
-import java.util.function.Predicate;
 
-public abstract class BrainsweepIngredient implements Predicate<Entity> {
+public abstract class BrainsweepIngredient {
+    public abstract boolean test(Entity entity, ServerLevel level);
+
     public abstract List<Component> getTooltip(boolean advanced);
 
     public abstract JsonObject serialize();
@@ -21,8 +23,7 @@ public abstract class BrainsweepIngredient implements Predicate<Entity> {
         var type = buf.readVarInt();
         return switch (Type.values()[type]) {
             case VILLAGER -> VillagerBrainsweepIngredient.read(buf);
-            case ENTITY -> {
-            }
+            case ENTITY -> EntityBrainsweepIngredient.read(buf);
         };
     }
 
@@ -31,7 +32,7 @@ public abstract class BrainsweepIngredient implements Predicate<Entity> {
         var type = Type.valueOf(typestr);
         return switch (type) {
             case VILLAGER -> VillagerBrainsweepIngredient.deserialize(json);
-            case ENTITY -> null;
+            case ENTITY -> EntityBrainsweepIngredient.deserialize(json);
         };
     }
 

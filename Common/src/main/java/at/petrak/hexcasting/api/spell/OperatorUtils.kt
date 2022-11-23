@@ -13,9 +13,9 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.phys.Vec3
 import java.util.function.DoubleUnaryOperator
 import kotlin.math.abs
@@ -99,14 +99,14 @@ fun List<Iota>.getPlayer(idx: Int, argc: Int = 0): ServerPlayer {
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.player")
 }
 
-fun List<Iota>.getVillager(idx: Int, argc: Int = 0): Villager {
+fun List<Iota>.getMob(idx: Int, argc: Int = 0): Mob {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
-        if (e is Villager)
+        if (e is Mob)
             return e
     }
-    throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.villager")
+    throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.mob")
 }
 
 fun List<Iota>.getLivingEntityButNotArmorStand(idx: Int, argc: Int = 0): LivingEntity {
@@ -216,7 +216,7 @@ fun List<Iota>.getPositiveIntUnderInclusive(idx: Int, max: Int, argc: Int = 0): 
     if (x is DoubleIota) {
         val double = x.double
         val rounded = double.roundToInt()
-        if (abs(double - rounded) <= DoubleIota.TOLERANCE && rounded in 0 .. max) {
+        if (abs(double - rounded) <= DoubleIota.TOLERANCE && rounded in 0..max) {
             return rounded
         }
     }

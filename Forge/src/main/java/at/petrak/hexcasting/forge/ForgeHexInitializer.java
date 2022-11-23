@@ -112,7 +112,7 @@ public class ForgeHexInitializer {
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
     private static <T> void bind(ResourceKey<Registry<T>> registry,
-                                 Consumer<BiConsumer<T, ResourceLocation>> source) {
+        Consumer<BiConsumer<T, ResourceLocation>> source) {
         getModEventBus().addListener((RegisterEvent event) -> {
             if (registry.equals(event.getRegistryKey())) {
                 source.accept((t, rl) -> event.register(registry, rl, () -> t));
@@ -159,7 +159,7 @@ public class ForgeHexInitializer {
             HexAPI.LOGGER.info(PatternRegistry.getPatternCountInfo()));
 
         evBus.addListener((PlayerInteractEvent.EntityInteract evt) -> {
-            var res = Brainsweeping.tradeWithVillager(
+            var res = Brainsweeping.interactWithBrainswept(
                 evt.getEntity(), evt.getLevel(), evt.getHand(), evt.getTarget(), null);
             if (res.consumesAction()) {
                 evt.setCanceled(true);
@@ -167,7 +167,7 @@ public class ForgeHexInitializer {
             }
         });
         evBus.addListener((LivingConversionEvent.Post evt) ->
-            Brainsweeping.copyBrainsweepFromVillager(evt.getEntity(), evt.getOutcome()));
+            Brainsweeping.copyBrainsweepPostTransformation(evt.getEntity(), evt.getOutcome()));
 
         evBus.addListener((LivingEvent.LivingTickEvent evt) -> {
             OpFlight.INSTANCE.tickDownFlight(evt.getEntity());
