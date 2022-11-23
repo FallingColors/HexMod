@@ -506,7 +506,7 @@
 
   "hexcasting.mishap.invalid_pattern": "该图案不对应任何操作",
   "hexcasting.mishap.unescaped": "本应运行一个图案，实际却运行了%s",
-  "hexcasting.mishap.invalid_value": "%1$s本应在栈下标为%3$s处接受%2$s，而实际却接受了%4$s",
+  "hexcasting.mishap.invalid_value": "%1$s本应在栈下标为%3$s处接受%2$s，而实际接受了%4$s",
   "hexcasting.mishap.invalid_value.class.double": "一个数",
   "hexcasting.mishap.invalid_value.class.boolean": "一个布尔值",
   "hexcasting.mishap.invalid_value.class.vector": "一个向量",
