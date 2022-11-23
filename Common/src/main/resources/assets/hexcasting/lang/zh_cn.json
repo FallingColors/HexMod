@@ -560,7 +560,7 @@
   "hexcasting.mishap.bad_item.colorizer": "一个染色剂",
   "hexcasting.mishap.bad_block": "本应在%2$s处接受%1$s，而实际接受了%3$s",
   "hexcasting.mishap.bad_block.sapling": "一个树苗",
-  "hexcasting.mishap.bad_block.replaceable": "放置方块的地方",
+  "hexcasting.mishap.bad_block.replaceable": "一个放置方块的地方",
   "hexcasting.mishap.bad_brainsweep": "%s排斥此村民的意识",
   "hexcasting.mishap.already_brainswept": "此村民已被使用",
   "hexcasting.mishap.no_spell_circle": "%s需在法术环上执行",
