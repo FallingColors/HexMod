@@ -1043,7 +1043,7 @@
   "hexcasting.page.meta.for_each.1": "移除栈中的一个图案列表和一个列表，然后对后一列表中的每个元素运行前一图案列表中的图案。",
   "hexcasting.page.meta.for_each.2": "更确切地说，对应后一列表中的每个元素，它将：$(li)创建一个新栈，其中包括当前栈中的所有元素和后一列表中的一个元素。$(li)绘制前一列表中的所有图案。$(li)将该栈中剩余的所有元素存进一个列表。$(br)在所有元素都运行一遍后，将该列表压入原本的栈中。$(br2)也难怪精通此操作的人都疯了。",
   "hexcasting.page.meta.halt.1": "这个图案将强制停止$(hex)咒术/$的施放。它独自出现可能没什么用，我只要不绘制图案或是放下法杖就行了。",
-  "hexcasting.page.meta.halt.2": "但当与$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$或$(l:patterns/meta#hexcasting:for_each)$(action)托特之策略/$一起使用时，它就将发挥$(italic)大/$用。那些图案会碰到这个休止符，但$(hex)咒术/$本身不会停止，停止运行的是那些策略。它可以用来防止$(l:patterns/meta#hexcasting:for_each)$(action)托特之策略/$将每个 iota 都运行一遍。这便是逃离疯狂的密道。",
+  "hexcasting.page.meta.halt.2": "但当与$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$或$(l:patterns/meta#hexcasting:for_each)$(action)托特之策略/$一起使用时，它就将发挥$(italic)大/$用。那些图案会碰到这个休止符，但$(hex)咒术/$本身不会停止，停止运行的是那些策略。它可以用来防止$(l:patterns/meta#hexcasting:for_each)$(action)托特之策略/$将每个 iota 都运行一遍。这便是逃离疯狂的秘道。",
 
   "hexcasting.entry.circle_patterns": "法术环图案",
   "hexcasting.page.circle_patterns.disclaimer": "这些图案只能在$(l:greatwork/spellcircles)$(item)法术环/$上运行。尝试用$(l:items/staff)$(item)法杖/$绘制它们会招致可怖的事故。",
