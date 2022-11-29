@@ -33,64 +33,64 @@ import java.util.stream.Collectors;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.client.RenderLib.renderEntity;
 
-public class VillagerEmiStack extends EmiStack {
+public class BrainsweepeeEmiStack extends EmiStack {
     private final VillagerEntry entry;
     public final BrainsweepIngredient ingredient;
     public final boolean mindless;
 
     private final ResourceLocation id;
 
-    public VillagerEmiStack(BrainsweepIngredient villager) {
+    public BrainsweepeeEmiStack(BrainsweepIngredient villager) {
         this(villager, false);
     }
 
-    public VillagerEmiStack(BrainsweepIngredient villager, boolean mindless) {
+    public BrainsweepeeEmiStack(BrainsweepIngredient villager, boolean mindless) {
         this(villager, mindless, 1);
     }
 
-    public VillagerEmiStack(BrainsweepIngredient villager, boolean mindless, long amount) {
+    public BrainsweepeeEmiStack(BrainsweepIngredient villager, boolean mindless, long amount) {
         entry = new VillagerEntry(new VillagerVariant(villager, mindless));
         this.ingredient = villager;
         this.mindless = mindless;
         this.amount = amount;
         // This is so scuffed
         this.id = modLoc((Objects.toString(villager.profession()) + villager.minLevel() + mindless)
-                .replace(':', '-'));
+            .replace(':', '-'));
     }
 
     public static Set<BlockState> matchingStatesForProfession(VillagerProfession profession) {
         return Registry.POINT_OF_INTEREST_TYPE.holders()
-                .filter(profession.heldJobSite())
-                .flatMap(it -> it.value().matchingStates().stream())
-                .collect(Collectors.toSet());
+            .filter(profession.heldJobSite())
+            .flatMap(it -> it.value().matchingStates().stream())
+            .collect(Collectors.toSet());
     }
 
     public static EmiIngredient atLevelOrHigher(BrainsweepIngredient ingredient, boolean remainder) {
         if (ingredient.profession() == null) {
             return EmiIngredient.of(Registry.VILLAGER_PROFESSION.stream()
-                    .filter(it -> matchingStatesForProfession(it).isEmpty())
-                    .map(it -> atLevelOrHigher(new BrainsweepIngredient(Registry.VILLAGER_PROFESSION.getKey(it),
-                            ingredient.biome(), ingredient.minLevel()), true))
-                    .toList());
+                .filter(it -> matchingStatesForProfession(it).isEmpty())
+                .map(it -> atLevelOrHigher(new BrainsweepIngredient(Registry.VILLAGER_PROFESSION.getKey(it),
+                    ingredient.biome(), ingredient.minLevel()), true))
+                .toList());
         }
 
-        VillagerEmiStack stack = new VillagerEmiStack(ingredient).orHigher(true);
+        BrainsweepeeEmiStack stack = new BrainsweepeeEmiStack(ingredient).orHigher(true);
         if (remainder) {
-            stack.setRemainder(new VillagerEmiStack(ingredient, true));
+            stack.setRemainder(new BrainsweepeeEmiStack(ingredient, true));
         }
         return stack;
     }
 
     private boolean orHigher = false;
 
-    public VillagerEmiStack orHigher(boolean orHigher) {
+    public BrainsweepeeEmiStack orHigher(boolean orHigher) {
         this.orHigher = orHigher;
         return this;
     }
 
     @Override
     public EmiStack copy() {
-        VillagerEmiStack e = new VillagerEmiStack(ingredient, mindless, amount);
+        BrainsweepeeEmiStack e = new BrainsweepeeEmiStack(ingredient, mindless, amount);
         e.orHigher(orHigher).setRemainder(getRemainder().copy());
         e.comparison = comparison;
         return e;
@@ -136,7 +136,7 @@ public class VillagerEmiStack extends EmiStack {
                 }
 
                 ResourceLocation displayId = Objects.requireNonNullElseGet(ingredient.profession(),
-                        () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
+                    () -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
                 tooltip.add(Component.literal(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
             }
 
@@ -150,9 +150,9 @@ public class VillagerEmiStack extends EmiStack {
     @Override
     public List<ClientTooltipComponent> getTooltip() {
         List<ClientTooltipComponent> list = getTooltipText().stream()
-                .map(Component::getVisualOrderText)
-                .map(ClientTooltipComponent::create)
-                .collect(Collectors.toList());
+            .map(Component::getVisualOrderText)
+            .map(ClientTooltipComponent::create)
+            .collect(Collectors.toList());
         if (!getRemainder().isEmpty()) {
             list.add(EmiTooltipComponents.getRemainderTooltipComponent(this));
         }
@@ -175,7 +175,7 @@ public class VillagerEmiStack extends EmiStack {
                 RenderSystem.enableBlend();
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 renderEntity(poseStack, villager, level, x + 8, y + 16, ClientTickCounter.getTotal(), 8, 0,
-                        mindless ? (it) -> new FakeBufferSource(it, HexRenderTypes::getGrayscaleLayer) : it -> it);
+                    mindless ? (it) -> new FakeBufferSource(it, HexRenderTypes::getGrayscaleLayer) : it -> it);
             }
         }
 

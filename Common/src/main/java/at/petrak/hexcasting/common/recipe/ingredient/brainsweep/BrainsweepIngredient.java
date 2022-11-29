@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import com.google.gson.JsonObject;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -18,6 +19,8 @@ public abstract class BrainsweepIngredient {
     public abstract JsonObject serialize();
 
     public abstract void write(FriendlyByteBuf buf);
+
+    public abstract Entity exampleEntity(ClientLevel level);
 
     public static BrainsweepIngredient read(FriendlyByteBuf buf) {
         var type = buf.readVarInt();

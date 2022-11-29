@@ -5,7 +5,8 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import net.minecraft.resources.ResourceLocation;
 
 public class EmiProfessionRecipe extends EmiVillagerRecipe {
-    public EmiProfessionRecipe(EmiIngredient input, EmiIngredient catalyst, VillagerEmiStack result, ResourceLocation id) {
+    public EmiProfessionRecipe(EmiIngredient input, EmiIngredient catalyst, BrainsweepeeEmiStack result,
+        ResourceLocation id) {
         super(input, catalyst, result, id);
     }
 

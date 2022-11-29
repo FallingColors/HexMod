@@ -20,14 +20,10 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Registry
 import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.npc.Villager
-import net.minecraft.world.entity.npc.VillagerProfession
-import net.minecraft.world.entity.npc.VillagerType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource
@@ -427,6 +423,8 @@ fun transferMsToGl(ms: PoseStack, toRun: Runnable) {
 private var villager: Villager? by weakMapped(Villager::level)
 
 fun prepareVillagerForRendering(ingredient: BrainsweepIngredient, level: Level): Villager {
+    throw NotImplementedError()
+    /*
     val minLevel: Int = ingredient.minLevel()
     val profession: VillagerProfession = Registry.VILLAGER_PROFESSION.getOptional(ingredient.profession())
         .orElse(VillagerProfession.NONE)
@@ -445,6 +443,7 @@ fun prepareVillagerForRendering(ingredient: BrainsweepIngredient, level: Level):
         .setLevel(minLevel)
 
     return instantiatedVillager
+     */
 }
 
 @JvmOverloads

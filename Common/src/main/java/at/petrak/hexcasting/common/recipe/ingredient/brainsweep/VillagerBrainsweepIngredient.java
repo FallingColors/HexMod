@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -13,6 +14,8 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -23,9 +26,9 @@ import java.util.Objects;
  * Special case for villagers so we can have biome/profession/level reqs
  */
 public class VillagerBrainsweepIngredient extends BrainsweepIngredient {
-    private final @Nullable ResourceLocation profession;
-    private final @Nullable ResourceLocation biome;
-    private final int minLevel;
+    public final @Nullable ResourceLocation profession;
+    public final @Nullable ResourceLocation biome;
+    public final int minLevel;
 
     public VillagerBrainsweepIngredient(
         @Nullable ResourceLocation profession,
@@ -47,6 +50,21 @@ public class VillagerBrainsweepIngredient extends BrainsweepIngredient {
         return (this.profession == null || this.profession.equals(profID))
             && (this.biome == null || this.biome.equals(Registry.VILLAGER_TYPE.getKey(data.getType())))
             && this.minLevel <= data.getLevel();
+    }
+
+    @Override
+    public Entity exampleEntity(ClientLevel level) {
+        var type = this.biome == null
+            ? VillagerType.PLAINS
+            : Registry.VILLAGER_TYPE.get(this.biome);
+        var out = new Villager(EntityType.VILLAGER, level, type);
+
+        var profession = this.profession == null
+            ? VillagerProfession.TOOLSMITH
+            : Registry.VILLAGER_PROFESSION.get(this.profession);
+        out.getVillagerData().setProfession(profession);
+        out.getVillagerData().setLevel(Math.max(this.minLevel, 1));
+        return out;
     }
 
     @Override

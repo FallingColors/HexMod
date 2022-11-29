@@ -4,10 +4,11 @@
     "type": "block",
     "block": "minecraft:amethyst_block"
   },
+  "cost": 1000000,
+  "entityIn": {
+    "minLevel": 3
+  },
   "result": {
     "name": "minecraft:budding_amethyst"
-  },
-  "villagerIn": {
-    "minLevel": 3
   }
 }

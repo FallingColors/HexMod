@@ -9,7 +9,7 @@ import net.minecraft.world.item.Items;
 import java.util.List;
 
 public class EmiLevelupRecipe extends EmiVillagerRecipe {
-    public EmiLevelupRecipe(EmiIngredient input, VillagerEmiStack result, ResourceLocation id) {
+    public EmiLevelupRecipe(EmiIngredient input, BrainsweepeeEmiStack result, ResourceLocation id) {
         super(input, EmiStack.of(Items.EMERALD), result, id, false);
     }
 

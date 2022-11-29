@@ -4,11 +4,12 @@
     "type": "block",
     "block": "hexcasting:akashic_connector"
   },
-  "result": {
-    "name": "hexcasting:akashic_record"
-  },
-  "villagerIn": {
+  "cost": 1000000,
+  "entityIn": {
     "minLevel": 5,
     "profession": "minecraft:librarian"
+  },
+  "result": {
+    "name": "hexcasting:akashic_record"
   }
 }

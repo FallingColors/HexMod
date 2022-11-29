@@ -2,6 +2,8 @@ package at.petrak.hexcasting.interop.patchouli;
 
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityBrainsweepIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerBrainsweepIngredient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -47,15 +49,22 @@ public class BrainsweepProcessor implements IComponentProcessor {
             }
 
             case "entity" -> {
-                var profession = Objects.requireNonNullElse(this.recipe.entityIn().profession(),
-                    new ResourceLocation("toolsmith"));
-                var biome = Objects.requireNonNullElse(this.recipe.entityIn().biome(),
-                    new ResourceLocation("plains"));
-                var level = this.recipe.entityIn().minLevel();
-                var iHatePatchouli = String.format(
-                    "minecraft:villager{VillagerData:{profession:'%s',type:'%s',level:%d}}",
-                    profession, biome, level);
-                return IVariable.wrap(iHatePatchouli);
+                if (this.recipe.entityIn() instanceof VillagerBrainsweepIngredient villager) {
+                    var profession = Objects.requireNonNullElse(villager.profession,
+                        new ResourceLocation("toolsmith"));
+                    var biome = Objects.requireNonNullElse(villager.biome,
+                        new ResourceLocation("plains"));
+                    var level = villager.minLevel;
+                    var iHatePatchouli = String.format(
+                        "minecraft:villager{VillagerData:{profession:'%s',type:'%s',level:%d}}",
+                        profession, biome, level);
+                    return IVariable.wrap(iHatePatchouli);
+                } else if (this.recipe.entityIn() instanceof EntityBrainsweepIngredient entity) {
+                    // TODO
+                    return IVariable.wrap("minecraft:chicken");
+                } else {
+                    throw new IllegalStateException();
+                }
             }
             case "entityTooltip" -> {
                 Minecraft mc = Minecraft.getInstance();

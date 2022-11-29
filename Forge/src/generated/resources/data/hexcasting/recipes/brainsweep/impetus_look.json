@@ -4,15 +4,16 @@
     "type": "block",
     "block": "hexcasting:empty_impetus"
   },
+  "cost": 1000000,
+  "entityIn": {
+    "minLevel": 2,
+    "profession": "minecraft:fletcher"
+  },
   "result": {
     "name": "hexcasting:impetus_look",
     "properties": {
       "energized": "false",
       "facing": "north"
     }
-  },
-  "villagerIn": {
-    "minLevel": 2,
-    "profession": "minecraft:fletcher"
   }
 }

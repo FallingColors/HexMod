@@ -18,11 +18,13 @@ public abstract class EmiVillagerRecipe implements EmiRecipe {
     protected final EmiIngredient catalyst;
     protected final EmiStack result;
 
-    public EmiVillagerRecipe(EmiIngredient input, EmiIngredient catalyst, VillagerEmiStack result, ResourceLocation id) {
+    public EmiVillagerRecipe(EmiIngredient input, EmiIngredient catalyst, BrainsweepeeEmiStack result,
+        ResourceLocation id) {
         this(input, catalyst, result, id, true);
     }
 
-    public EmiVillagerRecipe(EmiIngredient input, EmiIngredient catalyst, VillagerEmiStack result, ResourceLocation id, boolean isCatalyst) {
+    public EmiVillagerRecipe(EmiIngredient input, EmiIngredient catalyst, BrainsweepeeEmiStack result,
+        ResourceLocation id, boolean isCatalyst) {
         this.isCatalyst = isCatalyst;
         this.input = input;
         this.catalyst = catalyst;
