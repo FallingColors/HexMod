@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.spell.casting.eval.SpellContinuation
 import at.petrak.hexcasting.api.spell.evaluatable
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.iota.PatternIota
+import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
 
 object OpEval : Action {
     override fun operate(
@@ -18,7 +19,7 @@ object OpEval : Action {
         ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
-        val datum = stack.removeLast()
+        val datum = stack.getOrElse(0) { throw MishapNotEnoughArgs(1, 0) }
         val instrs = evaluatable(datum, 0)
 
         instrs.ifRight {
