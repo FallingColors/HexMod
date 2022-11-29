@@ -35,6 +35,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
+import net.minecraft.util.Mth
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
 import kotlin.math.min
@@ -541,14 +542,14 @@ class CastingHarness private constructor(
                 if (allowOvercast && costLeft > 0) {
                     // Cast from HP!
                     val mediaToHealth = HexConfig.common().mediaToHealthRate()
-                    val healthtoRemove = costLeft.toDouble() / mediaToHealth
+                    val healthToRemove = costLeft.toDouble() / mediaToHealth
                     val mediaAbleToCastFromHP = this.ctx.caster.health * mediaToHealth
 
                     val mediaToActuallyPayFor = min(mediaAbleToCastFromHP.toInt(), costLeft)
                     costLeft -= if (!fake) {
-                        Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthtoRemove.toFloat())
+                        Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthToRemove.toFloat())
 
-                        val actuallyTaken = (mediaAbleToCastFromHP - (this.ctx.caster.health * mediaToHealth)).toInt()
+                        val actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.ctx.caster.health * mediaToHealth))
 
                         HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, actuallyTaken)
                         this.ctx.caster.awardStat(HexStatistics.MEDIA_OVERCAST, mediaCost - costLeft)
