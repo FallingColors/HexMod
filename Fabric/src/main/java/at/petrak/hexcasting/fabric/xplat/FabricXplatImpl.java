@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
@@ -261,7 +261,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-                                                                            Block... blocks) {
+        Block... blocks) {
         return FabricBlockEntityTypeBuilder.create(func::apply, blocks).build();
     }
 
@@ -377,12 +377,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     private static final IXplatTags TAGS = new IXplatTags() {
         @Override
         public TagKey<Item> amethystDust() {
-            return HexItemTags.create(new ResourceLocation("c", "amethyst_dusts"));
+            return HexTags.Items.create(new ResourceLocation("c", "amethyst_dusts"));
         }
 
         @Override
         public TagKey<Item> gems() {
-            return HexItemTags.create(new ResourceLocation("c", "gems"));
+            return HexTags.Items.create(new ResourceLocation("c", "gems"));
         }
     };
 
@@ -396,7 +396,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return AlternativeLootItemCondition.alternative(
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS)),
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(
-                HexItemTags.create(new ResourceLocation("c", "shears"))))
+                HexTags.Items.create(new ResourceLocation("c", "shears"))))
         );
     }
 

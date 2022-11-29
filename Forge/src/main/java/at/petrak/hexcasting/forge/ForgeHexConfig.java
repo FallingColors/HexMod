@@ -2,7 +2,9 @@ package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -104,9 +106,12 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
 
+        private static ForgeConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
+
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
+
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Spells");
@@ -125,33 +130,31 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             circleActionDenyList = builder.comment(
                     "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
                         " will result in a mishap.")
-                .defineList("circleActionDenyList", List.of(),
-                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
+                .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
             actionDenyList = builder.comment(
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
-                .defineList("actionDenyList", List.of(),
-                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
+                .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
 
             villagersOffendedByMindMurder = builder.comment(
                     "Should villagers take offense when you flay the mind of their fellow villagers?")
                 .define("villagersOffendedByMindMurder", true);
 
+            tpDimDenyList = builder.comment("Resource locations of dimensions you can't Blink or Greater Teleport in.")
+                .defineList("tpDimDenyList", DEFAULT_DIM_TP_DENYLIST, Server::isValidReslocArg);
+
             builder.push("Scrolls in Loot");
 
             fewScrollTables = builder.comment(
                     "Which loot tables should a small number of Ancient Scrolls be injected into?")
-                .defineList("fewScrollTables", DEFAULT_FEW_SCROLL_TABLES,
-                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
+                .defineList("fewScrollTables", DEFAULT_FEW_SCROLL_TABLES, Server::isValidReslocArg);
             someScrollTables = builder.comment(
                     "Which loot tables should a decent number of Ancient Scrolls be injected into?")
-                .defineList("someScrollTables", DEFAULT_SOME_SCROLL_TABLES,
-                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
+                .defineList("someScrollTables", DEFAULT_SOME_SCROLL_TABLES, Server::isValidReslocArg);
             manyScrollTables = builder.comment(
                     "Which loot tables should a huge number of Ancient Scrolls be injected into?")
-                .defineList("manyScrollTables", DEFAULT_MANY_SCROLL_TABLES,
-                    obj -> obj instanceof String s && ResourceLocation.isValidResourceLocation(s));
+                .defineList("manyScrollTables", DEFAULT_MANY_SCROLL_TABLES, Server::isValidReslocArg);
         }
 
         @Override
@@ -184,6 +187,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             return villagersOffendedByMindMurder.get();
         }
 
+        @Override
+        public boolean canTeleportInThisDimension(ResourceKey<Level> dimension) {
+            return noneMatch(tpDimDenyList.get(), dimension.location());
+        }
+
         // TODO: on Forge, this value isn't loaded when creating a new world yet because config is per-world.
         // For now I'm hardcoding this, but for correctness we should probably switch the table
         // injects to be loaded from datapack instead of config.
@@ -208,6 +216,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 // it will start throwing at some point soon.)
             }
             return ScrollQuantity.NONE;
+        }
+
+        private static boolean isValidReslocArg(Object o) {
+            return o instanceof String s && ResourceLocation.isValidResourceLocation(s);
         }
     }
 }

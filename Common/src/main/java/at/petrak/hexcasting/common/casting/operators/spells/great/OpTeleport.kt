@@ -1,12 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.spell.*
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
 import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
-import at.petrak.hexcasting.common.lib.HexEntityTags
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -27,17 +28,22 @@ object OpTeleport : SpellAction {
         args: List<Iota>,
         ctx: CastingContext
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+
         val teleportee = args.getEntity(0, argc)
         val delta = args.getVec3(1, argc)
         ctx.assertEntityInRange(teleportee)
 
-        if (!teleportee.canChangeDimensions() || teleportee.type.`is`(HexEntityTags.CANNOT_TELEPORT))
+        if (!teleportee.canChangeDimensions() || teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
 
         val targetPos = teleportee.position().add(delta)
+        if (!HexConfig.server().canTeleportInThisDimension(ctx.world.dimension()))
+            throw MishapLocationTooFarAway(targetPos, "bad_dimension")
+
         ctx.assertVecInWorld(targetPos)
         if (!ctx.isVecInWorld(targetPos.subtract(0.0, 1.0, 0.0)))
             throw MishapLocationTooFarAway(targetPos, "too_close_to_out")
+
 
         val targetMiddlePos = teleportee.position().add(0.0, teleportee.eyeHeight / 2.0, 0.0)
 
@@ -92,14 +98,18 @@ object OpTeleport : SpellAction {
     }
 
     fun teleportRespectSticky(teleportee: Entity, delta: Vec3, world: ServerLevel) {
+        if (!HexConfig.server().canTeleportInThisDimension(world.dimension())) {
+            return
+        }
+
         val base = teleportee.rootVehicle
         val target = base.position().add(delta)
 
         val playersToUpdate = mutableListOf<ServerPlayer>()
         val indirect = base.indirectPassengers
 
-        val sticky = indirect.any { it.type.`is`(HexEntityTags.STICKY_TELEPORTERS) }
-        val cannotSticky = indirect.none { it.type.`is`(HexEntityTags.CANNOT_TELEPORT) }
+        val sticky = indirect.any { it.type.`is`(HexTags.Entities.STICKY_TELEPORTERS) }
+        val cannotSticky = indirect.none { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
         if (sticky && cannotSticky)
             return
 

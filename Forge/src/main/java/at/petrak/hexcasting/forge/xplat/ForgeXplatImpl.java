@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
@@ -321,7 +321,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-                                                                            Block... blocks) {
+        Block... blocks) {
         return BlockEntityType.Builder.of(func::apply, blocks).build(null);
     }
 
@@ -387,12 +387,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     private static final IXplatTags TAGS = new IXplatTags() {
         @Override
         public TagKey<Item> amethystDust() {
-            return HexItemTags.create(new ResourceLocation("forge", "dusts/amethyst"));
+            return HexTags.Items.create(new ResourceLocation("forge", "dusts/amethyst"));
         }
 
         @Override
         public TagKey<Item> gems() {
-            return HexItemTags.create(new ResourceLocation("forge", "gems"));
+            return HexTags.Items.create(new ResourceLocation("forge", "gems"));
         }
     };
 

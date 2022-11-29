@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.advancements.FailToCastGreatSpellTrigger;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.advancements.SpendMediaTrigger;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -39,7 +39,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
                 FrameType.TASK, true, true, true))
             // the only thing making this vaguely tolerable is the knowledge the json files are worse somehow
             .addCriterion("has_charged_amethyst", InventoryChangeTrigger.TriggerInstance.hasItems(
-                ItemPredicate.Builder.item().of(HexItemTags.GRANTS_ROOT_ADVANCEMENT).build()))
+                ItemPredicate.Builder.item().of(HexTags.Items.GRANTS_ROOT_ADVANCEMENT).build()))
             .save(consumer, prefix("root")); // how the hell does one even read this
 
         // weird names so we have alphabetical parity

@@ -7,8 +7,8 @@ import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellList
@@ -531,7 +531,7 @@ class CastingHarness private constructor(
                 false
             }
 
-            if (casterStack.`is`(HexItemTags.STAVES) || hexHolderDrawsFromInventory) {
+            if (casterStack.`is`(HexTags.Items.STAVES) || hexHolderDrawsFromInventory) {
                 val mediaSources = DiscoveryHandlers.collectMediaHolders(this)
                     .sortedWith(Comparator(::compareMediaItem).reversed())
                 for (source in mediaSources) {

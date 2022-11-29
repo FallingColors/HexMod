@@ -2,7 +2,7 @@ package at.petrak.hexcasting.client.gui
 
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.mod.HexItemTags
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.spell.casting.ControllerInfo
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern
 import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
@@ -112,7 +112,7 @@ class GuiSpellcasting constructor(
         val player = minecraft.player
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
-            if (heldItem.isEmpty || !heldItem.`is`(HexItemTags.STAVES))
+            if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES))
                 onClose()
         }
     }
