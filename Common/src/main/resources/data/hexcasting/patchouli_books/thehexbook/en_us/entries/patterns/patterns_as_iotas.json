@@ -18,8 +18,6 @@
       "type": "hexcasting:manual_pattern",
       "header": "hexcasting.spell.hexcasting:escape",
       "anchor": "hexcasting:escape",
-      "input": "",
-      "output": "",
       "text": "hexcasting.page.patterns_as_iotas.escape.1",
       "patterns": {
         "startdir": "WEST",
@@ -34,8 +32,6 @@
       "type": "hexcasting:manual_pattern",
       "header": "hexcasting.spell.hexcasting:open_paren",
       "anchor": "hexcasting:open_paren",
-      "input": "",
-      "output": "",
       "text": "hexcasting.page.patterns_as_iotas.parens.1",
       "patterns": {
         "startdir": "WEST",
@@ -46,8 +42,6 @@
       "type": "hexcasting:manual_pattern",
       "header": "hexcasting.spell.hexcasting:close_paren",
       "anchor": "hexcasting:close_paren",
-      "input": "",
-      "output": "",
       "text": "hexcasting.page.patterns_as_iotas.parens.2",
       "patterns": {
         "startdir": "EAST",
