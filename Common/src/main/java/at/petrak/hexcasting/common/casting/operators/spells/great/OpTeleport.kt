@@ -9,9 +9,13 @@ import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.lib.HexEntityTags
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.level.TicketType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 
 // TODO while we're making breaking changes I *really* want to have the vector in the entity's local space
@@ -51,7 +55,7 @@ object OpTeleport : SpellAction {
 
             // TODO make this not a magic number (config?)
             if (distance < 32768.0) {
-                teleportRespectSticky(teleportee, delta)
+                teleportRespectSticky(teleportee, delta, ctx.world)
             }
 
             if (teleportee is ServerPlayer && teleportee == ctx.caster) {
@@ -87,8 +91,9 @@ object OpTeleport : SpellAction {
         }
     }
 
-    fun teleportRespectSticky(teleportee: Entity, delta: Vec3) {
+    fun teleportRespectSticky(teleportee: Entity, delta: Vec3, world: ServerLevel) {
         val base = teleportee.rootVehicle
+        val target = base.position().add(delta)
 
         val playersToUpdate = mutableListOf<ServerPlayer>()
         val indirect = base.indirectPassengers
@@ -100,7 +105,6 @@ object OpTeleport : SpellAction {
 
         if (sticky) {
             // this handles teleporting the passengers
-            val target = base.position().add(delta)
             base.teleportTo(target.x, target.y, target.z)
             indirect
                 .filterIsInstance<ServerPlayer>()
@@ -109,14 +113,21 @@ object OpTeleport : SpellAction {
             // Break it into two stacks
             teleportee.stopRiding()
             teleportee.passengers.forEach(Entity::stopRiding)
-            teleportee.setPos(teleportee.position().add(delta))
             if (teleportee is ServerPlayer) {
                 playersToUpdate.add(teleportee)
+            } else {
+                teleportee.setPos(teleportee.position().add(delta))
             }
         }
 
         for (player in playersToUpdate) {
+            // See TeleportCommand
+            val chunkPos = ChunkPos(BlockPos(delta))
+            // the `1` is apparently for "distance." i'm not sure what it does but this is what
+            // /tp does
+            world.chunkSource.addRegionTicket(TicketType.POST_TELEPORT, chunkPos, 1, player.id)
             player.connection.resetPosition()
+            player.setPos(target)
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, MsgBlinkAck(delta))
         }
     }

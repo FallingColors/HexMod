@@ -47,7 +47,7 @@ object OpBlink : SpellAction {
     private data class Spell(val target: Entity, val delta: Double) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             val delta = target.lookAngle.scale(delta)
-            OpTeleport.teleportRespectSticky(target, delta)
+            OpTeleport.teleportRespectSticky(target, delta, ctx.world)
         }
     }
 }
