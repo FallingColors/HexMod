@@ -38,6 +38,7 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
+import kotlin.math.max
 import kotlin.math.min
 
 /**
@@ -542,7 +543,7 @@ class CastingHarness private constructor(
                 if (allowOvercast && costLeft > 0) {
                     // Cast from HP!
                     val mediaToHealth = HexConfig.common().mediaToHealthRate()
-                    val healthToRemove = costLeft.toDouble() / mediaToHealth
+                    val healthToRemove = max(costLeft.toDouble() / mediaToHealth, 0.5)
                     val mediaAbleToCastFromHP = this.ctx.caster.health * mediaToHealth
 
                     val mediaToActuallyPayFor = min(mediaAbleToCastFromHP.toInt(), costLeft)
