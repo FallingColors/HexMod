@@ -538,6 +538,7 @@
   "hexcasting.mishap.location_too_far": "%s超出了%s的影响范围",
   "hexcasting.mishap.location_out_of_world": "%s不在此世界内",
   "hexcasting.mishap.location_too_close_to_out": "%s离世界边界太近了",
+  "hexcasting.mishap.location_bad_dimension": "无法在此维度内传送",
   "hexcasting.mishap.wrong_dimension": "%1$s无法在%3$s中影响到%2$s",
   "hexcasting.mishap.entity_too_far": "%s超出了%s的影响范围",
   "hexcasting.mishap.immune_entity": "%s无法影响到%s",
