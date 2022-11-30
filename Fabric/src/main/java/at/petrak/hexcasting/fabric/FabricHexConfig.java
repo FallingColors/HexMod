@@ -10,8 +10,10 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -141,6 +143,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private boolean villagersOffendedByMindMurder = DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER;
 
         @ConfigEntry.Gui.Tooltip
+        private List<String> tpDimDenylist = DEFAULT_DIM_TP_DENYLIST;
+
+        @ConfigEntry.Gui.Tooltip
         private List<String> fewScrollTables = DEFAULT_FEW_SCROLL_TABLES;
         @ConfigEntry.Gui.Tooltip
         private List<String> someScrollTables = DEFAULT_SOME_SCROLL_TABLES;
@@ -181,6 +186,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public boolean doVillagersTakeOffenseAtMindMurder() {
             return villagersOffendedByMindMurder;
+        }
+
+        @Override
+        public boolean canTeleportInThisDimension(ResourceKey<Level> dimension) {
+            return noneMatch(manyScrollTables, dimension.location());
         }
 
         @Override

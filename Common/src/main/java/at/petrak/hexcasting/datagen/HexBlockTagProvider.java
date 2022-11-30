@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.datagen;
 
-import at.petrak.hexcasting.api.mod.HexBlockTags;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.paucal.api.datagen.PaucalBlockTagProvider;
@@ -43,7 +43,7 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
             .add(HexBlocks.CONJURED_LIGHT, HexBlocks.CONJURED_BLOCK, HexBlocks.AMETHYST_TILES,
                 HexBlocks.SCONCE);
 
-        tag(HexBlockTags.EDIFIED_LOGS)
+        tag(HexTags.Blocks.EDIFIED_LOGS)
             .add(HexBlocks.EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_LOG,
                 HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD);
         tag(BlockTags.LOGS)
@@ -58,7 +58,7 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
 
         tag(BlockTags.PLANKS)
             .add(HexBlocks.EDIFIED_PLANKS, HexBlocks.EDIFIED_PANEL, HexBlocks.EDIFIED_TILE);
-        tag(HexBlockTags.EDIFIED_PLANKS)
+        tag(HexTags.Blocks.EDIFIED_PLANKS)
             .add(HexBlocks.EDIFIED_PLANKS, HexBlocks.EDIFIED_PANEL, HexBlocks.EDIFIED_TILE);
         tag(BlockTags.SLABS)
             .add(HexBlocks.EDIFIED_SLAB);

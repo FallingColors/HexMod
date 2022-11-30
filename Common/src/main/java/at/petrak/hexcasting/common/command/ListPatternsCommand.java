@@ -22,32 +22,33 @@ import java.util.List;
 public class ListPatternsCommand {
     public static void add(LiteralArgumentBuilder<CommandSourceStack> cmd) {
         cmd.then(Commands.literal("patterns")
-                .requires(dp -> dp.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                .then(Commands.literal("list")
-                    .executes(ctx -> list(ctx.getSource())))
-                .then(Commands.literal("give")
-                    .then(Commands.argument("patternName", PatternResLocArgument.id())
-                        .executes(ctx ->
-                            giveOne(ctx.getSource(),
-                                getDefaultTarget(ctx.getSource()),
-                                ResourceLocationArgument.getId(ctx, "patternName"),
-                                PatternResLocArgument.getPattern(ctx, "patternName")))
-                        .then(Commands.argument("targets", EntityArgument.players())
-                            .executes(ctx ->
-                                giveOne(ctx.getSource(),
-                                    EntityArgument.getPlayers(ctx, "targets"),
-                                    ResourceLocationArgument.getId(ctx, "patternName"),
-                                    PatternResLocArgument.getPattern(ctx, "patternName"))))))
-                .then(Commands.literal("giveAll")
+            .requires(dp -> dp.hasPermission(Commands.LEVEL_GAMEMASTERS))
+            .then(Commands.literal("list")
+                .executes(ctx -> list(ctx.getSource())))
+            .then(Commands.literal("give")
+                .then(Commands.argument("patternName", PatternResLocArgument.id())
                     .executes(ctx ->
-                        giveAll(ctx.getSource(),
-                            getDefaultTarget(ctx.getSource())))
+                        giveOne(ctx.getSource(),
+                            getDefaultTarget(ctx.getSource()),
+                            ResourceLocationArgument.getId(ctx, "patternName"),
+                            PatternResLocArgument.getPattern(ctx, "patternName")))
                     .then(Commands.argument("targets", EntityArgument.players())
                         .executes(ctx ->
-                            giveAll(ctx.getSource(),
-                                EntityArgument.getPlayers(ctx, "targets")))))
-            );
+                            giveOne(ctx.getSource(),
+                                EntityArgument.getPlayers(ctx, "targets"),
+                                ResourceLocationArgument.getId(ctx, "patternName"),
+                                PatternResLocArgument.getPattern(ctx, "patternName"))))))
+            .then(Commands.literal("giveAll")
+                .executes(ctx ->
+                    giveAll(ctx.getSource(),
+                        getDefaultTarget(ctx.getSource())))
+                .then(Commands.argument("targets", EntityArgument.players())
+                    .executes(ctx ->
+                        giveAll(ctx.getSource(),
+                            EntityArgument.getPlayers(ctx, "targets")))))
+        );
     }
+
     private static Collection<ServerPlayer> getDefaultTarget(CommandSourceStack source) {
         if (source.getEntity() instanceof ServerPlayer player) {
             return List.of(player);
@@ -78,14 +79,14 @@ public class ListPatternsCommand {
         if (!targets.isEmpty()) {
             var lookup = PatternRegistry.getPerWorldPatterns(source.getLevel());
 
-            lookup.forEach((pattern, entry) -> {
+            lookup.forEach((sig, entry) -> {
                 var opId = entry.getFirst();
                 var startDir = entry.getSecond();
 
                 var tag = new CompoundTag();
                 tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
                 tag.put(ItemScroll.TAG_PATTERN,
-                    HexPattern.fromAngles(pattern, startDir).serializeToNBT());
+                    HexPattern.fromAngles(sig, startDir).serializeToNBT());
 
                 var stack = new ItemStack(HexItems.SCROLL_LARGE);
                 stack.setTag(tag);
@@ -110,12 +111,12 @@ public class ListPatternsCommand {
         }
     }
 
-    private static int giveOne(CommandSourceStack source, Collection<ServerPlayer> targets, ResourceLocation patternName, HexPattern pat) {
+    private static int giveOne(CommandSourceStack source, Collection<ServerPlayer> targets,
+        ResourceLocation patternName, HexPattern pat) {
         if (!targets.isEmpty()) {
             var tag = new CompoundTag();
             tag.putString(ItemScroll.TAG_OP_ID, patternName.toString());
-            tag.put(ItemScroll.TAG_PATTERN,
-                pat.serializeToNBT());
+            tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
 
             var stack = new ItemStack(HexItems.SCROLL_LARGE);
             stack.setTag(tag);

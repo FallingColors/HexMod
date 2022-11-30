@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.casting.operators.spells.OpMakeBattery;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -59,7 +59,7 @@ public class PhialRecipeCategory implements IRecipeCategory<OpMakeBattery> {
         var inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 12, 12)
             .addItemStacks(stacks.getFirst());
         builder.addSlot(RecipeIngredientRole.INPUT, 47, 12)
-            .addIngredients(Ingredient.of(HexItemTags.PHIAL_BASE));
+            .addIngredients(Ingredient.of(HexTags.Items.PHIAL_BASE));
 
         var outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 85, 12)
             .addItemStacks(stacks.getSecond());

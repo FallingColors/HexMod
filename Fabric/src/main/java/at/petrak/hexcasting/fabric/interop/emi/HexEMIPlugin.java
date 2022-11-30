@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.common.recipe.ingredient.VillagerIngredient;
@@ -65,9 +65,9 @@ public class HexEMIPlugin implements EmiPlugin {
         registry.addCategory(EDIFY);
         registry.addCategory(VILLAGER_LEVELING);
         registry.addCategory(VILLAGER_PROFESSION);
-        registry.addWorkstation(BRAINSWEEP, EmiIngredient.of(HexItemTags.STAVES));
-        registry.addWorkstation(PHIAL, EmiIngredient.of(HexItemTags.STAVES));
-        registry.addWorkstation(EDIFY, EmiIngredient.of(HexItemTags.STAVES));
+        registry.addWorkstation(BRAINSWEEP, EmiIngredient.of(HexTags.Items.STAVES));
+        registry.addWorkstation(PHIAL, EmiIngredient.of(HexTags.Items.STAVES));
+        registry.addWorkstation(EDIFY, EmiIngredient.of(HexTags.Items.STAVES));
 
         for (BrainsweepRecipe recipe : registry.getRecipeManager()
             .getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)) {

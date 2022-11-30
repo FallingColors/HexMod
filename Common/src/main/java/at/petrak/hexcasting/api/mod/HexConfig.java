@@ -3,9 +3,11 @@ package at.petrak.hexcasting.api.mod;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.misc.ScrollQuantity;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -55,6 +57,9 @@ public class HexConfig {
 
         boolean doVillagersTakeOffenseAtMindMurder();
 
+        // fun fact, although dimension keys are a RegistryHolder, they aren't a registry, so i can't do tags
+        boolean canTeleportInThisDimension(ResourceKey<Level> dimension);
+
         ScrollQuantity scrollsForLootTable(ResourceLocation lootTable);
 
         int DEFAULT_MAX_RECURSE_DEPTH = 512;
@@ -67,7 +72,8 @@ public class HexConfig {
         List<String> DEFAULT_SOME_SCROLL_TABLES = List.of("minecraft:chests/bastion_treasure",
             "minecraft:chests/shipwreck_map");
         List<String> DEFAULT_MANY_SCROLL_TABLES = List.of("minecraft:chests/stronghold_library");
-        // We can't have default values for the break harvest level or if
+
+        List<String> DEFAULT_DIM_TP_DENYLIST = List.of("twilightforest:twilight_forest");
 
         default Tier opBreakHarvestLevel() {
             return switch (this.opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()) {

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.mod.HexItemTags
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellAction
@@ -29,9 +29,9 @@ object OpMakeBattery : SpellAction {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getItemEntity(0, argc)
 
-        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexItemTags.PHIAL_BASE) }
+        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexTags.Items.PHIAL_BASE) }
 
-        if (!handStack.`is`(HexItemTags.PHIAL_BASE)) {
+        if (!handStack.`is`(HexTags.Items.PHIAL_BASE)) {
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,

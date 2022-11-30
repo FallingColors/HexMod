@@ -34,7 +34,7 @@ public class PatternRegistry {
         new ConcurrentHashMap<>();
 
     public static void mapPattern(HexPattern pattern, ResourceLocation id,
-                                  Action action) throws RegisterPatternException {
+        Action action) throws RegisterPatternException {
         mapPattern(pattern, id, action, false);
     }
 
@@ -42,7 +42,7 @@ public class PatternRegistry {
      * Associate a given angle signature with a SpellOperator.
      */
     public static void mapPattern(HexPattern pattern, ResourceLocation id, Action action,
-                                  boolean isPerWorld) throws RegisterPatternException {
+        boolean isPerWorld) throws RegisterPatternException {
         if (actionLookup.containsKey(id)) {
             throw new RegisterPatternException("The operator with id `%s` was already registered to: %s", id,
                 actionLookup.get(id));
@@ -83,7 +83,7 @@ public class PatternRegistry {
      * Internal use only.
      */
     public static Pair<Action, ResourceLocation> matchPatternAndID(HexPattern pat,
-                                                                   ServerLevel overworld) throws MishapInvalidPattern {
+        ServerLevel overworld) throws MishapInvalidPattern {
         // Pipeline:
         // patterns are registered here every time the game boots
         // when we try to look
@@ -143,7 +143,8 @@ public class PatternRegistry {
             return actionLookup.get(it.opId);
         }
 
-        // Currently, there's no way to look up the name of a Great Spell, as the client is unaware of the correct mapping.
+        // Currently, there's no way to look up the name of a Great Spell, as the client is unaware of the correct
+        // mapping.
         // TODO: add code to match any pattern in the shape of a Great Spell to its operator.
 
         // var ds = overworld.getDataStorage();
@@ -160,6 +161,8 @@ public class PatternRegistry {
 
     /**
      * Internal use only.
+     * <p>
+     * Map of signatures to (op id, canonical start dir)
      */
     public static Map<String, Pair<ResourceLocation, HexDir>> getPerWorldPatterns(ServerLevel overworld) {
         var ds = overworld.getDataStorage();
@@ -301,7 +304,8 @@ public class PatternRegistry {
             return new Save(map, missingEntries);
         }
 
-        private static void scrungle(Map<String, Pair<ResourceLocation, HexDir>> lookup, HexPattern prototype, ResourceLocation opId, long seed) {
+        private static void scrungle(Map<String, Pair<ResourceLocation, HexDir>> lookup, HexPattern prototype,
+            ResourceLocation opId, long seed) {
             var scrungled = EulerPathFinder.findAltDrawing(prototype, seed, it -> {
                 var sig = it.anglesSignature();
                 return !lookup.containsKey(sig) &&

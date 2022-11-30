@@ -538,6 +538,7 @@
   "hexcasting.mishap.location_too_far": "%s is out of range for %s",
   "hexcasting.mishap.location_out_of_world": "%s is not within the world",
   "hexcasting.mishap.location_too_close_to_out": "%s is too close to the boundary of the world",
+  "hexcasting.mishap.location_bad_dimension": "It is impossible to teleport in this dimension",
   "hexcasting.mishap.wrong_dimension": "%s cannot see %s from %s",
   "hexcasting.mishap.entity_too_far": "%s is out of range for %s",
   "hexcasting.mishap.immune_entity": "%s cannot alter %s",
