@@ -19,7 +19,7 @@ object OpEval : Action {
         ravenmind: Iota?,
         ctx: CastingContext
     ): OperationResult {
-        val datum = stack.getOrElse(0) { throw MishapNotEnoughArgs(1, 0) }
+        val datum = stack.removeLastOrNull() ?: throw MishapNotEnoughArgs(1, 0)
         val instrs = evaluatable(datum, 0)
 
         instrs.ifRight {
