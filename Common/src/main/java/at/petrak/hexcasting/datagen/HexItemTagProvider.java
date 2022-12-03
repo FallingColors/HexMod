@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.datagen;
 
-import at.petrak.hexcasting.api.mod.HexBlockTags;
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.paucal.api.datagen.PaucalItemTagProvider;
@@ -25,17 +24,17 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
         tag(xtags.gems()).add(HexItems.CHARGED_AMETHYST);
         tag(xtags.amethystDust()).add(HexItems.AMETHYST_DUST);
 
-        tag(HexItemTags.STAVES).add(HexItems.STAFF_EDIFIED,
+        tag(HexTags.Items.STAVES).add(HexItems.STAFF_EDIFIED,
             HexItems.STAFF_OAK, HexItems.STAFF_SPRUCE, HexItems.STAFF_BIRCH,
             HexItems.STAFF_JUNGLE, HexItems.STAFF_ACACIA, HexItems.STAFF_DARK_OAK,
             HexItems.STAFF_CRIMSON, HexItems.STAFF_WARPED);
 
-        tag(HexItemTags.PHIAL_BASE).add(Items.GLASS_BOTTLE);
-        tag(HexItemTags.GRANTS_ROOT_ADVANCEMENT).add(HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD,
+        tag(HexTags.Items.PHIAL_BASE).add(Items.GLASS_BOTTLE);
+        tag(HexTags.Items.GRANTS_ROOT_ADVANCEMENT).add(HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD,
             HexItems.CHARGED_AMETHYST);
 
-        this.copy(HexBlockTags.EDIFIED_LOGS, HexItemTags.EDIFIED_LOGS);
-        this.copy(HexBlockTags.EDIFIED_PLANKS, HexItemTags.EDIFIED_PLANKS);
+        this.copy(HexTags.Blocks.EDIFIED_LOGS, HexTags.Items.EDIFIED_LOGS);
+        this.copy(HexTags.Blocks.EDIFIED_PLANKS, HexTags.Items.EDIFIED_PLANKS);
         this.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
         this.copy(BlockTags.LOGS, ItemTags.LOGS);
         this.copy(BlockTags.PLANKS, ItemTags.PLANKS);

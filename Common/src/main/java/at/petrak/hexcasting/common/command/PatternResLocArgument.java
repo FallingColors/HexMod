@@ -36,10 +36,10 @@ public class PatternResLocArgument extends ResourceLocationArgument {
         var targetId = ctx.getArgument(pName, ResourceLocation.class);
         var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
         HexPattern foundPat = null;
-        for (var key : lookup.keySet()) {
-            var rhs = lookup.get(key);
+        for (var sig : lookup.keySet()) {
+            var rhs = lookup.get(sig);
             if (rhs.getFirst().equals(targetId)) {
-                foundPat = HexPattern.fromAngles(key, rhs.getSecond());
+                foundPat = HexPattern.fromAngles(sig, rhs.getSecond());
                 break;
             }
         }

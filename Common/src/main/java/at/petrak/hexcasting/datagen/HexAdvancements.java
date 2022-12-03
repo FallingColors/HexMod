@@ -5,19 +5,15 @@ import at.petrak.hexcasting.api.advancements.FailToCastGreatSpellTrigger;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.advancements.SpendMediaTrigger;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.datagen.PaucalAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -43,7 +39,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
                 FrameType.TASK, true, true, true))
             // the only thing making this vaguely tolerable is the knowledge the json files are worse somehow
             .addCriterion("has_charged_amethyst", InventoryChangeTrigger.TriggerInstance.hasItems(
-                ItemPredicate.Builder.item().of(HexItemTags.GRANTS_ROOT_ADVANCEMENT).build()))
+                ItemPredicate.Builder.item().of(HexTags.Items.GRANTS_ROOT_ADVANCEMENT).build()))
             .save(consumer, prefix("root")); // how the hell does one even read this
 
         // weird names so we have alphabetical parity
@@ -77,7 +73,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
                     MinMaxBounds.Ints.ANY,
                     MinMaxBounds.Doubles.ANY,
                     // you can't just kill yourself
-                    MinMaxBounds.Doubles.atLeast(0.1)))
+                    MinMaxBounds.Doubles.atLeast(0.0)))
             .save(consumer, prefix("opened_eyes"));
 
         Advancement.Builder.advancement()
@@ -90,9 +86,12 @@ public class HexAdvancements extends PaucalAdvancementProvider {
             .addCriterion("health_used",
                 new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
                     MinMaxBounds.Ints.ANY,
-                    // add a little bit of slop here
+                    // add a little bit of slop here. use 80% or more health ...
                     MinMaxBounds.Doubles.atLeast(0.8),
-                    MinMaxBounds.Doubles.between(0.1, 2.05)))
+                    // and be left with under 1 healthpoint (half a heart)
+                    // TODO this means if 80% of your health is less than half a heart, so if you have 2.5 hearts or
+                    //  less, you can't become enlightened.
+                    MinMaxBounds.Doubles.between(Double.MIN_NORMAL, 1.0)))
             .save(consumer, prefix("enlightenment"));
 
         var loreRoot = Advancement.Builder.advancement()

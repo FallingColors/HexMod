@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.spell.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.mod.HexItemTags
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.casting.CastingContext
@@ -61,7 +61,7 @@ abstract class Mishap : Throwable() {
         // Knock the player's items out of their hands
         val items = mutableListOf<ItemStack>()
         for (hand in InteractionHand.values()) {
-            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).`is`(HexItemTags.STAVES)) {
+            if (hand != ctx.castingHand || ctx.caster.getItemInHand(hand).`is`(HexTags.Items.STAVES)) {
                 items.add(ctx.caster.getItemInHand(hand).copy())
                 ctx.caster.setItemInHand(hand, ItemStack.EMPTY)
             }

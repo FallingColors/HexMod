@@ -7,8 +7,8 @@ import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.api.mod.HexStatistics
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.spell.Action
 import at.petrak.hexcasting.api.spell.ParticleSpray
 import at.petrak.hexcasting.api.spell.SpellList
@@ -35,8 +35,10 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
+import net.minecraft.util.Mth
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
+import kotlin.math.max
 import kotlin.math.min
 
 /**
@@ -529,7 +531,7 @@ class CastingHarness private constructor(
                 false
             }
 
-            if (casterStack.`is`(HexItemTags.STAVES) || hexHolderDrawsFromInventory) {
+            if (casterStack.`is`(HexTags.Items.STAVES) || hexHolderDrawsFromInventory) {
                 val mediaSources = DiscoveryHandlers.collectMediaHolders(this)
                     .sortedWith(Comparator(::compareMediaItem).reversed())
                 for (source in mediaSources) {
@@ -541,14 +543,14 @@ class CastingHarness private constructor(
                 if (allowOvercast && costLeft > 0) {
                     // Cast from HP!
                     val mediaToHealth = HexConfig.common().mediaToHealthRate()
-                    val healthtoRemove = costLeft.toDouble() / mediaToHealth
+                    val healthToRemove = max(costLeft.toDouble() / mediaToHealth, 0.5)
                     val mediaAbleToCastFromHP = this.ctx.caster.health * mediaToHealth
 
                     val mediaToActuallyPayFor = min(mediaAbleToCastFromHP.toInt(), costLeft)
                     costLeft -= if (!fake) {
-                        Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthtoRemove.toFloat())
+                        Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthToRemove.toFloat())
 
-                        val actuallyTaken = (mediaAbleToCastFromHP - (this.ctx.caster.health * mediaToHealth)).toInt()
+                        val actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.ctx.caster.health * mediaToHealth))
 
                         HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, actuallyTaken)
                         this.ctx.caster.awardStat(HexStatistics.MEDIA_OVERCAST, mediaCost - costLeft)

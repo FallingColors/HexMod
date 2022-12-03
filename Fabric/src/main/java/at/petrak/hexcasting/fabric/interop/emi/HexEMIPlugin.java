@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
