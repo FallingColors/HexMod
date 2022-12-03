@@ -113,7 +113,11 @@ class CastingHarness private constructor(
                 next.evaluate(continuation.next, world, this)
             } catch (mishap: Mishap) {
                 val pattern = getPatternForFrame(next)
-                val operator = getOperatorForFrame(next, world)
+                val operator = try {
+                    getOperatorForFrame(next, world)
+                } catch (e: Throwable) {
+                     null
+                }
                 CastResult(
                     continuation,
                     null,
@@ -192,6 +196,11 @@ class CastingHarness private constructor(
                 )
             }
         } catch (mishap: Mishap) {
+            val operator = try {
+                getOperatorForPattern(iota, world)
+            } catch (e: Throwable) {
+                null
+            }
             return CastResult(
                 continuation,
                 null,
@@ -201,7 +210,7 @@ class CastingHarness private constructor(
                         mishap,
                         Mishap.Context(
                             (iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST),
-                            getOperatorForPattern(iota, world)
+                            operator
                         )
                     )
                 ),
@@ -210,6 +219,11 @@ class CastingHarness private constructor(
         } catch (exception: Exception) {
             // This means something very bad has happened
             exception.printStackTrace()
+            val operator = try {
+                getOperatorForPattern(iota, world)
+            } catch (e: Throwable) {
+                null
+            }
             return CastResult(
                 continuation,
                 null,
@@ -219,7 +233,7 @@ class CastingHarness private constructor(
                         MishapError(exception),
                         Mishap.Context(
                             (iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST),
-                            getOperatorForPattern(iota, world)
+                            operator
                         )
                     )
                 ),
