@@ -113,7 +113,11 @@ class CastingHarness private constructor(
                 next.evaluate(continuation.next, world, this)
             } catch (mishap: Mishap) {
                 val pattern = getPatternForFrame(next)
-                val operator = getOperatorForFrame(next, world)
+                val operator = try {
+                    getOperatorForFrame(next, world)
+                } catch (e: Throwable) {
+                     null
+                }
                 CastResult(
                     continuation,
                     null,
