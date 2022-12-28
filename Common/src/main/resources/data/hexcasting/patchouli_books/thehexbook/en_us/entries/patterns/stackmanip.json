@@ -80,6 +80,22 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:2dup",
+      "anchor": "hexcasting:2dup",
+      "input": "any, any",
+      "output": "any, any, any, any",
+      "text": "hexcasting.page.stackmanip.2dup"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:stack_len",
+      "anchor": "hexcasting:stack_len",
+      "input": "",
+      "output": "number",
+      "text": "hexcasting.page.stackmanip.stack_len"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:fisherman",
       "anchor": "hexcasting:fisherman",
       "input": "number",
@@ -137,15 +153,6 @@
       "text": "hexcasting.page.stackmanip.swizzle.2",
       "link_text": "hexcasting.page.stackmanip.swizzle.link",
       "url": "https://github.com/gamma-delta/HexMod/wiki/Table-of-Lehmer-Codes-for-Swindler's-Gambit"
-    },
-    {
-      "_comment": "i hate that I have to put this here at the end. two-page design bad",
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:2dup",
-      "anchor": "hexcasting:2dup",
-      "input": "any, any",
-      "output": "any, any, any, any",
-      "text": "hexcasting.page.stackmanip.2dup"
     }
   ]
 }
