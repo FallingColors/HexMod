@@ -3,7 +3,6 @@ package at.petrak.hexcasting.datagen.recipe
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.advancements.OvercastTrigger
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.mod.HexItemTags
 import at.petrak.hexcasting.common.items.ItemStaff
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer
 import at.petrak.hexcasting.common.lib.HexBlocks
@@ -11,7 +10,7 @@ import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.recipe.SealFocusRecipe
 import at.petrak.hexcasting.common.recipe.SealSpellbookRecipe
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerBrainsweepIngredient
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerIngredient
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder
 import at.petrak.hexcasting.datagen.IXplatIngredients
 import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder
@@ -352,37 +351,37 @@ class HexplatRecipes(
             .unlockedBy("enlightenment", enlightenment).save(recipes)
 
         BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
-            VillagerBrainsweepIngredient(null, null, 3),
+            VillagerIngredient(null, null, 3),
             Blocks.BUDDING_AMETHYST.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/budding_amethyst"))
 
         BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS),
-            VillagerBrainsweepIngredient(ResourceLocation("toolsmith"), null, 2),
+            VillagerIngredient(ResourceLocation("toolsmith"), null, 2),
             HexBlocks.IMPETUS_RIGHTCLICK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_rightclick"))
 
         BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS),
-            VillagerBrainsweepIngredient(ResourceLocation("fletcher"), null, 2),
+            VillagerIngredient(ResourceLocation("fletcher"), null, 2),
             HexBlocks.IMPETUS_LOOK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_look"))
 
         BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS),
-            VillagerBrainsweepIngredient(ResourceLocation("cleric"), null, 2),
+            VillagerIngredient(ResourceLocation("cleric"), null, 2),
             HexBlocks.IMPETUS_STOREDPLAYER.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_storedplayer"))
 
         BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_DIRECTRIX),
-            VillagerBrainsweepIngredient(ResourceLocation("mason"), null, 1),
+            VillagerIngredient(ResourceLocation("mason"), null, 1),
             HexBlocks.DIRECTRIX_REDSTONE.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/directrix_redstone"))
 
         BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.AKASHIC_LIGATURE),
-            VillagerBrainsweepIngredient(ResourceLocation("librarian"), null, 5),
+            VillagerIngredient(ResourceLocation("librarian"), null, 5),
             HexBlocks.AKASHIC_RECORD.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/akashic_record"))

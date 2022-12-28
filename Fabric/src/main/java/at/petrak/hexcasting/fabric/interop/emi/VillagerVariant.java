@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 
-public record VillagerVariant(BrainsweepIngredient ingredient, boolean mindless) {
-    // NO-OP
+public record VillagerVariant(BrainsweepeeIngredient ingredient, boolean mindless) {
+	// NO-OP
 }

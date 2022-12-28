@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.recipe;
 
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -22,91 +22,91 @@ import org.jetbrains.annotations.NotNull;
 
 // God I am a horrible person
 public record BrainsweepRecipe(
-    ResourceLocation id,
-    StateIngredient blockIn,
-    BrainsweepIngredient entityIn,
-    int mediaCost,
-    BlockState result
+	ResourceLocation id,
+	StateIngredient blockIn,
+	BrainsweepeeIngredient entityIn,
+	int mediaCost,
+	BlockState result
 ) implements Recipe<Container> {
-    public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
-        return this.blockIn.test(blockIn) && this.entityIn.test(victim, level);
-    }
+	public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
+		return this.blockIn.test(blockIn) && this.entityIn.test(victim, level);
+	}
 
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
+	@Override
+	public ResourceLocation getId() {
+		return id;
+	}
 
-    @Override
-    public RecipeType<?> getType() {
-        return HexRecipeStuffRegistry.BRAINSWEEP_TYPE;
-    }
+	@Override
+	public RecipeType<?> getType() {
+		return HexRecipeStuffRegistry.BRAINSWEEP_TYPE;
+	}
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return HexRecipeStuffRegistry.BRAINSWEEP;
-    }
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return HexRecipeStuffRegistry.BRAINSWEEP;
+	}
 
-    // in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards
-    // to get the implementation to be satisfied even though we never use it
-    @Override
-    public boolean matches(Container pContainer, Level pLevel) {
-        return false;
-    }
+	// in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards
+	// to get the implementation to be satisfied even though we never use it
+	@Override
+	public boolean matches(Container pContainer, Level pLevel) {
+		return false;
+	}
 
-    @Override
-    public ItemStack assemble(Container pContainer) {
-        return ItemStack.EMPTY;
-    }
+	@Override
+	public ItemStack assemble(Container pContainer) {
+		return ItemStack.EMPTY;
+	}
 
-    @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
-        return false;
-    }
+	@Override
+	public boolean canCraftInDimensions(int pWidth, int pHeight) {
+		return false;
+	}
 
-    @Override
-    public ItemStack getResultItem() {
-        return ItemStack.EMPTY.copy();
-    }
+	@Override
+	public ItemStack getResultItem() {
+		return ItemStack.EMPTY.copy();
+	}
 
-    // Because kotlin doesn't like doing raw, unchecked types
-    // Can't blame it, but that's what we need to do
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public static BlockState copyProperties(BlockState original, BlockState copyTo) {
-        for (Property prop : original.getProperties()) {
-            if (copyTo.hasProperty(prop)) {
-                copyTo = copyTo.setValue(prop, original.getValue(prop));
-            }
-        }
+	// Because kotlin doesn't like doing raw, unchecked types
+	// Can't blame it, but that's what we need to do
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public static BlockState copyProperties(BlockState original, BlockState copyTo) {
+		for (Property prop : original.getProperties()) {
+			if (copyTo.hasProperty(prop)) {
+				copyTo = copyTo.setValue(prop, original.getValue(prop));
+			}
+		}
 
-        return copyTo;
-    }
+		return copyTo;
+	}
 
-    public static class Serializer extends RecipeSerializerBase<BrainsweepRecipe> {
-        @Override
-        public @NotNull BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
-            var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));
-            var villagerIn = BrainsweepIngredient.deserialize(GsonHelper.getAsJsonObject(json, "entityIn"));
-            var cost = GsonHelper.getAsInt(json, "cost");
-            var result = StateIngredientHelper.readBlockState(GsonHelper.getAsJsonObject(json, "result"));
-            return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);
-        }
+	public static class Serializer extends RecipeSerializerBase<BrainsweepRecipe> {
+		@Override
+		public @NotNull BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
+			var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));
+			var villagerIn = BrainsweepeeIngredient.deserialize(GsonHelper.getAsJsonObject(json, "entityIn"));
+			var cost = GsonHelper.getAsInt(json, "cost");
+			var result = StateIngredientHelper.readBlockState(GsonHelper.getAsJsonObject(json, "result"));
+			return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);
+		}
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, BrainsweepRecipe recipe) {
-            recipe.blockIn.write(buf);
-            recipe.entityIn.write(buf);
-            buf.writeVarInt(recipe.mediaCost);
-            buf.writeVarInt(Block.getId(recipe.result));
-        }
+		@Override
+		public void toNetwork(FriendlyByteBuf buf, BrainsweepRecipe recipe) {
+			recipe.blockIn.write(buf);
+			recipe.entityIn.write(buf);
+			buf.writeVarInt(recipe.mediaCost);
+			buf.writeVarInt(Block.getId(recipe.result));
+		}
 
-        @Override
-        public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
-            var blockIn = StateIngredientHelper.read(buf);
-            var villagerIn = BrainsweepIngredient.read(buf);
-            var cost = buf.readVarInt();
-            var result = Block.stateById(buf.readVarInt());
-            return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);
-        }
-    }
+		@Override
+		public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
+			var blockIn = StateIngredientHelper.read(buf);
+			var villagerIn = BrainsweepeeIngredient.read(buf);
+			var cost = buf.readVarInt();
+			var result = Block.stateById(buf.readVarInt());
+			return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);
+		}
+	}
 }

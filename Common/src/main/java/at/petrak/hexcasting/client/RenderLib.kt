@@ -8,7 +8,7 @@ import at.petrak.hexcasting.api.utils.TAU
 import at.petrak.hexcasting.api.utils.getValue
 import at.petrak.hexcasting.api.utils.setValue
 import at.petrak.hexcasting.api.utils.weakMapped
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepIngredient
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
@@ -422,7 +422,7 @@ fun transferMsToGl(ms: PoseStack, toRun: Runnable) {
 
 private var villager: Villager? by weakMapped(Villager::level)
 
-fun prepareVillagerForRendering(ingredient: BrainsweepIngredient, level: Level): Villager {
+fun prepareVillagerForRendering(ingredient: BrainsweepeeIngredient, level: Level): Villager {
     throw NotImplementedError()
     /*
     val minLevel: Int = ingredient.minLevel()
