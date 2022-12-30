@@ -16,14 +16,12 @@ import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -125,7 +123,7 @@ public interface IXplatAbstractions {
     // Blocks
 
     <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-                                                                     Block... blocks);
+        Block... blocks);
 
     boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid);
 
@@ -136,19 +134,6 @@ public interface IXplatAbstractions {
     CreativeModeTab getTab();
 
     boolean isCorrectTierForDrops(Tier tier, BlockState bs);
-
-    // These don't need to be xplat anymore, but it does save refactoring if they're still defined here
-    default ResourceLocation getID(Block block) {
-        return Registry.BLOCK.getKey(block);
-    }
-
-    default ResourceLocation getID(Item item) {
-        return Registry.ITEM.getKey(item);
-    }
-
-    default ResourceLocation getID(VillagerProfession profession) {
-        return Registry.VILLAGER_PROFESSION.getKey(profession);
-    }
 
     Ingredient getUnsealedIngredient(ItemStack stack);
 

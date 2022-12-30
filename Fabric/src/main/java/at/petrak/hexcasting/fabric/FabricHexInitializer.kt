@@ -15,7 +15,7 @@ import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.common.loot.HexLootHandler
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
-import at.petrak.hexcasting.common.misc.Brainsweeping
+import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
@@ -63,8 +63,8 @@ object FabricHexInitializer : ModInitializer {
     }
 
     fun initListeners() {
-        UseEntityCallback.EVENT.register(Brainsweeping::interactWithBrainswept)
-        VillagerConversionCallback.EVENT.register(Brainsweeping::copyBrainsweepPostTransformation)
+        UseEntityCallback.EVENT.register(BrainsweepingEvents::interactWithBrainswept)
+        VillagerConversionCallback.EVENT.register(BrainsweepingEvents::copyBrainsweepPostTransformation)
         AttackBlockCallback.EVENT.register { player, world, _, pos, _ ->
             // SUCCESS cancels further processing and, on the client, sends a packet to the server.
             // PASS falls back to further processing.

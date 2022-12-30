@@ -61,7 +61,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -307,36 +306,18 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public ResourceLocation getID(Block block) {
-        return Registry.BLOCK.getKey(block);
-    }
-
-    @Override
-    public ResourceLocation getID(Item item) {
-        return Registry.ITEM.getKey(item);
-    }
-
-    @Override
-    public ResourceLocation getID(VillagerProfession profession) {
-        return Registry.VILLAGER_PROFESSION.getKey(profession);
-    }
-
-    @Override
     public Ingredient getUnsealedIngredient(ItemStack stack) {
         return FabricUnsealedIngredient.of(stack);
     }
 
-    private static CreativeModeTab TAB = null;
+    private static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> FabricItemGroupBuilder.create(
+            modLoc("creative_tab"))
+        .icon(HexItems::tabIcon)
+        .build());
 
     @Override
     public CreativeModeTab getTab() {
-        if (TAB == null) {
-            TAB = FabricItemGroupBuilder.create(modLoc("creative_tab"))
-                .icon(HexItems::tabIcon)
-                .build();
-        }
-
-        return TAB;
+        return TAB.get();
     }
 
     // do a stupid hack from botania

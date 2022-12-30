@@ -353,25 +353,22 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return ForgeUnsealedIngredient.of(stack);
     }
 
-    private static CreativeModeTab TAB = null;
+    private static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() ->
+        new CreativeModeTab(HexAPI.MOD_ID) {
+            @Override
+            public ItemStack makeIcon() {
+                return HexItems.tabIcon();
+            }
+
+            @Override
+            public void fillItemList(NonNullList<ItemStack> p_40778_) {
+                super.fillItemList(p_40778_);
+            }
+        });
 
     @Override
     public CreativeModeTab getTab() {
-        if (TAB == null) {
-            TAB = new CreativeModeTab(HexAPI.MOD_ID) {
-                @Override
-                public ItemStack makeIcon() {
-                    return HexItems.tabIcon();
-                }
-
-                @Override
-                public void fillItemList(NonNullList<ItemStack> p_40778_) {
-                    super.fillItemList(p_40778_);
-                }
-            };
-        }
-
-        return TAB;
+        return TAB.get();
     }
 
     @Override
