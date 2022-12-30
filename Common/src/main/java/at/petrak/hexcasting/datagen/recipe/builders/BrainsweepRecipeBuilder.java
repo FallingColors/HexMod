@@ -22,16 +22,16 @@ import java.util.function.Consumer;
 
 public class BrainsweepRecipeBuilder implements RecipeBuilder {
 	private final StateIngredient blockIn;
-	private final BrainsweepeeIngredient villagerIn;
+	private final BrainsweepeeIngredient entityIn;
 	private final int mediaCost;
 	private final BlockState result;
 
 	private final Advancement.Builder advancement;
 
-	public BrainsweepRecipeBuilder(StateIngredient blockIn, BrainsweepeeIngredient villagerIn, BlockState result,
+	public BrainsweepRecipeBuilder(StateIngredient blockIn, BrainsweepeeIngredient entityIn, BlockState result,
 		int mediaCost) {
 		this.blockIn = blockIn;
-		this.villagerIn = villagerIn;
+		this.entityIn = entityIn;
 		this.result = result;
 		this.mediaCost = mediaCost;
 		this.advancement = Advancement.Builder.advancement();
@@ -65,7 +65,7 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 			.requirements(RequirementsStrategy.OR);
 		pFinishedRecipeConsumer.accept(new Result(
 			pRecipeId,
-			this.blockIn, this.villagerIn, this.mediaCost, this.result,
+			this.blockIn, this.entityIn, this.mediaCost, this.result,
 			this.advancement,
 			new ResourceLocation(pRecipeId.getNamespace(), "recipes/brainsweep/" + pRecipeId.getPath())));
 	}

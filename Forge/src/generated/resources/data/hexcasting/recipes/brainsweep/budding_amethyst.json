@@ -6,6 +6,7 @@
   },
   "cost": 1000000,
   "entityIn": {
+    "type": "villager",
     "minLevel": 3
   },
   "result": {

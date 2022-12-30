@@ -1,0 +1,18 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "block",
+    "block": "minecraft:scaffolding"
+  },
+  "cost": 50000,
+  "entityIn": {
+    "type": "entity_tag",
+    "tag": "minecraft:skeletons"
+  },
+  "result": {
+    "name": "minecraft:bone_block",
+    "properties": {
+      "axis": "y"
+    }
+  }
+}

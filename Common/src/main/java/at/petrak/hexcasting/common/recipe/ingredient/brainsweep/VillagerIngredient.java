@@ -26,13 +26,13 @@ import java.util.Objects;
  * Special case for villagers so we can have biome/profession/level reqs
  */
 public class VillagerIngredient extends BrainsweepeeIngredient {
-	public final @Nullable ResourceLocation profession;
-	public final @Nullable ResourceLocation biome;
+	public final @Nullable VillagerProfession profession;
+	public final @Nullable VillagerType biome;
 	public final int minLevel;
 
 	public VillagerIngredient(
-		@Nullable ResourceLocation profession,
-		@Nullable ResourceLocation biome,     // aka their "type"
+		@Nullable VillagerProfession profession,
+		@Nullable VillagerType biome,
 		int minLevel
 	) {
 		this.profession = profession;
@@ -45,23 +45,18 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
 		if (!(entity instanceof Villager villager)) return false;
 
 		var data = villager.getVillagerData();
-		ResourceLocation profID = IXplatAbstractions.INSTANCE.getID(data.getProfession());
 
-		return (this.profession == null || this.profession.equals(profID))
-			&& (this.biome == null || this.biome.equals(Registry.VILLAGER_TYPE.getKey(data.getType())))
+		return (this.profession == null || this.profession.equals(data.getProfession()))
+			&& (this.biome == null || this.biome.equals(data.getType()))
 			&& this.minLevel <= data.getLevel();
 	}
 
 	@Override
 	public Entity exampleEntity(ClientLevel level) {
-		var type = this.biome == null
-			? VillagerType.PLAINS
-			: Registry.VILLAGER_TYPE.get(this.biome);
-		var out = new Villager(EntityType.VILLAGER, level, type);
+		var biome = Objects.requireNonNullElse(this.biome, VillagerType.PLAINS);
+		var out = new Villager(EntityType.VILLAGER, level, biome);
 
-		var profession = this.profession == null
-			? VillagerProfession.TOOLSMITH
-			: Registry.VILLAGER_PROFESSION.get(this.profession);
+		var profession = Objects.requireNonNullElse(this.profession, VillagerProfession.TOOLSMITH);
 		out.getVillagerData().setProfession(profession);
 		out.getVillagerData().setLevel(Math.max(this.minLevel, 1));
 		return out;
@@ -70,7 +65,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
 	@Override
 	public List<Component> getTooltip(boolean advanced) {
 		List<Component> tooltip = new ArrayList<>();
-		tooltip.add(name());
+		tooltip.add(this.getName());
 
 		if (advanced) {
 			if (minLevel >= 5) {
@@ -81,21 +76,22 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
 					.withStyle(ChatFormatting.DARK_GRAY));
 			}
 
-			if (biome != null) {
-				tooltip.add(Component.literal(biome.toString()).withStyle(ChatFormatting.DARK_GRAY));
+			if (this.biome != null) {
+				tooltip.add(Component.literal(this.biome.toString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
-			ResourceLocation displayId = Objects.requireNonNullElseGet(profession,
-				() -> Registry.ENTITY_TYPE.getKey(EntityType.VILLAGER));
-			tooltip.add(Component.literal(displayId.toString()).withStyle(ChatFormatting.DARK_GRAY));
+			if (this.profession != null) {
+				tooltip.add(Component.literal(this.profession.toString()).withStyle(ChatFormatting.DARK_GRAY));
+			}
 		}
 
-		tooltip.add(getModNameComponent());
+		tooltip.add(this.getModNameComponent());
 
 		return tooltip;
 	}
 
-	public Component name() {
+	@Override
+	public Component getName() {
 		MutableComponent component = Component.literal("");
 
 		boolean addedAny = false;
@@ -115,14 +111,19 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
 			if (addedAny) {
 				component.append(" ");
 			}
-			component.append(Component.translatable("biome.minecraft." + biome.getPath()));
+			var biomeLoc = Registry.VILLAGER_TYPE.getKey(this.biome);
+			component.append(Component.translatable("biome." + biomeLoc.getNamespace() + "." + biomeLoc.getPath()));
 			addedAny = true;
 		}
 
 		if (profession != null) {
 			// We've for sure added something
 			component.append(" ");
-			component.append(Component.translatable("entity.minecraft.villager." + profession.getPath()));
+			var professionLoc = Registry.VILLAGER_PROFESSION.getKey(this.profession);
+			// TODO: what's the convention used for modded villager types?
+			// Villager::getTypeName implies that it there's no namespace information.
+			// i hope there is some convention
+			component.append(Component.translatable("entity.minecraft.villager." + professionLoc.getPath()));
 		} else {
 			if (addedAny) {
 				component.append(" ");
@@ -134,7 +135,9 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
 	}
 
 	public Component getModNameComponent() {
-		String namespace = profession == null ? "minecraft" : profession.getNamespace();
+		String namespace = profession == null
+			? "minecraft"
+			: Registry.VILLAGER_PROFESSION.getKey(this.profession).getNamespace();
 		String mod = IXplatAbstractions.INSTANCE.getModName(namespace);
 		return Component.literal(mod).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
 	}
@@ -158,13 +161,13 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
 	public void write(FriendlyByteBuf buf) {
 		if (this.profession != null) {
 			buf.writeVarInt(1);
-			buf.writeResourceLocation(this.profession);
+			buf.writeVarInt(Registry.VILLAGER_PROFESSION.getId(this.profession));
 		} else {
 			buf.writeVarInt(0);
 		}
 		if (this.biome != null) {
 			buf.writeVarInt(1);
-			buf.writeResourceLocation(this.biome);
+			buf.writeVarInt(Registry.VILLAGER_TYPE.getId(this.biome));
 		} else {
 			buf.writeVarInt(0);
 		}
@@ -172,31 +175,75 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
 	}
 
 	public static VillagerIngredient deserialize(JsonObject json) {
-		ResourceLocation profession = null;
+		VillagerProfession profession = null;
 		if (json.has("profession") && !json.get("profession").isJsonNull()) {
-			profession = new ResourceLocation(GsonHelper.getAsString(json, "profession"));
+			profession = Registry.VILLAGER_PROFESSION.get(new ResourceLocation(GsonHelper.getAsString(json,
+				"profession")));
 		}
-		ResourceLocation biome = null;
+		VillagerType biome = null;
 		if (json.has("biome") && !json.get("biome").isJsonNull()) {
-			biome = new ResourceLocation(GsonHelper.getAsString(json, "biome"));
+			biome = Registry.VILLAGER_TYPE.get(new ResourceLocation(GsonHelper.getAsString(json, "biome")));
 		}
 		int minLevel = GsonHelper.getAsInt(json, "minLevel");
-		int cost = GsonHelper.getAsInt(json, "cost");
 		return new VillagerIngredient(profession, biome, minLevel);
 	}
 
 	public static VillagerIngredient read(FriendlyByteBuf buf) {
-		ResourceLocation profession = null;
+		VillagerProfession profession = null;
 		var hasProfession = buf.readVarInt();
 		if (hasProfession != 0) {
-			profession = buf.readResourceLocation();
+			profession = Registry.VILLAGER_PROFESSION.byId(buf.readVarInt());
 		}
-		ResourceLocation biome = null;
+		VillagerType biome = null;
 		var hasBiome = buf.readVarInt();
 		if (hasBiome != 0) {
-			biome = buf.readResourceLocation();
+			biome = Registry.VILLAGER_TYPE.byId(buf.readVarInt());
 		}
 		int minLevel = buf.readInt();
 		return new VillagerIngredient(profession, biome, minLevel);
+	}
+
+	@Override
+	public Type ingrType() {
+		return Type.VILLAGER;
+	}
+
+	@Override
+	public String getSomeKindOfReasonableIDForEmi() {
+		var bob = new StringBuilder();
+		if (this.profession != null) {
+			var profLoc = Registry.VILLAGER_PROFESSION.getKey(this.profession);
+			bob.append(profLoc.getNamespace())
+				.append("//")
+				.append(profLoc.getPath());
+		} else {
+			bob.append("null");
+		}
+		bob.append("_");
+		if (this.biome != null) {
+			var biomeLoc = Registry.VILLAGER_TYPE.getKey(this.biome);
+			bob.append(biomeLoc.getNamespace())
+				.append("//")
+				.append(biomeLoc.getPath());
+		} else {
+			bob.append("null");
+		}
+
+		bob.append(this.minLevel);
+		return bob.toString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		VillagerIngredient that = (VillagerIngredient) o;
+		return minLevel == that.minLevel && Objects.equals(profession, that.profession) && Objects.equals(biome,
+			that.biome);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(profession, biome, minLevel);
 	}
 }

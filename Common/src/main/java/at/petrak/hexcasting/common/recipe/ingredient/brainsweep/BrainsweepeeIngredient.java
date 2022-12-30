@@ -16,8 +16,12 @@ import java.util.Locale;
 // Partially based on:
 // https://github.com/SlimeKnights/Mantle/blob/1.18.2/src/main/java/slimeknights/mantle/recipe/ingredient/EntityIngredient.java
 // Licensed under MIT
+//
+// .equals must make sense
 public abstract class BrainsweepeeIngredient {
 	public abstract boolean test(Entity entity, ServerLevel level);
+
+	public abstract Component getName();
 
 	public abstract List<Component> getTooltip(boolean advanced);
 
@@ -32,6 +36,10 @@ public abstract class BrainsweepeeIngredient {
 	 */
 	@Nullable
 	public abstract Entity exampleEntity(ClientLevel level);
+
+	public abstract Type ingrType();
+
+	public abstract String getSomeKindOfReasonableIDForEmi();
 
 	public static BrainsweepeeIngredient read(FriendlyByteBuf buf) {
 		var type = buf.readVarInt();

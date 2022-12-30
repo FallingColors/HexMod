@@ -6,8 +6,9 @@
   },
   "cost": 1000000,
   "entityIn": {
+    "type": "villager",
     "minLevel": 2,
-    "profession": "minecraft:toolsmith"
+    "profession": "toolsmith"
   },
   "result": {
     "name": "hexcasting:impetus_rightclick",

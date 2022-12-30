@@ -2,19 +2,20 @@ package at.petrak.hexcasting.interop.patchouli;
 
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTypeIngredient;
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerIngredient;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
 
-import java.util.Objects;
-
 public class BrainsweepProcessor implements IComponentProcessor {
 	private BrainsweepRecipe recipe;
+	@Nullable
+	private String exampleEntityString;
 
 	@Override
 	public void setup(IVariableProvider vars) {
@@ -49,22 +50,22 @@ public class BrainsweepProcessor implements IComponentProcessor {
 			}
 
 			case "entity" -> {
-				if (this.recipe.entityIn() instanceof VillagerIngredient villager) {
-					var profession = Objects.requireNonNullElse(villager.profession,
-						new ResourceLocation("toolsmith"));
-					var biome = Objects.requireNonNullElse(villager.biome,
-						new ResourceLocation("plains"));
-					var level = villager.minLevel;
-					var iHatePatchouli = String.format(
-						"minecraft:villager{VillagerData:{profession:'%s',type:'%s',level:%d}}",
-						profession, biome, level);
-					return IVariable.wrap(iHatePatchouli);
-				} else if (this.recipe.entityIn() instanceof EntityTypeIngredient entity) {
-					// TODO
-					return IVariable.wrap("minecraft:chicken");
-				} else {
-					throw new IllegalStateException();
+				if (this.exampleEntityString == null) {
+					var entity = this.recipe.entityIn().exampleEntity(Minecraft.getInstance().level);
+					if (entity == null) {
+						// oh dear
+						return null;
+					}
+					var bob = new StringBuilder();
+					bob.append(Registry.ENTITY_TYPE.getKey(entity.getType()));
+
+					var tag = new CompoundTag();
+					entity.save(tag);
+					bob.append(tag.toString());
+					this.exampleEntityString = bob.toString();
 				}
+
+				return IVariable.wrap(this.exampleEntityString);
 			}
 			case "entityTooltip" -> {
 				Minecraft mc = Minecraft.getInstance();

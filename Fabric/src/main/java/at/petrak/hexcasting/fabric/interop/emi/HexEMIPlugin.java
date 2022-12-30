@@ -15,97 +15,48 @@ import net.minecraft.resources.ResourceLocation;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexEMIPlugin implements EmiPlugin {
-    private static final ResourceLocation BRAINSWEEP_ID = modLoc("brainsweep");
-    public static final ResourceLocation PHIAL_ID = modLoc("craft/battery");
-    public static final ResourceLocation EDIFY_ID = modLoc("edify");
-    private static final ResourceLocation VILLAGER_LEVELING_ID = modLoc("villager_leveling");
-    private static final ResourceLocation VILLAGER_PROFESSION_ID = modLoc("villager_profession");
+	private static final ResourceLocation BRAINSWEEP_ID = modLoc("brainsweep");
+	public static final ResourceLocation PHIAL_ID = modLoc("craft/battery");
+	public static final ResourceLocation EDIFY_ID = modLoc("edify");
 
-    private static final ResourceLocation SIMPLIFIED_ICON_BRAINSWEEP = modLoc("textures/gui/brainsweep_emi.png");
-    private static final ResourceLocation SIMPLIFIED_ICON_PHIAL = modLoc("textures/gui/phial_emi.png");
-    private static final ResourceLocation SIMPLIFIED_ICON_EDIFY = modLoc("textures/gui/edify_emi.png");
-    private static final ResourceLocation SIMPLIFIED_ICON_LEVELING = modLoc("textures/gui/villager_leveling.png");
-    private static final ResourceLocation SIMPLIFIED_ICON_PROFESSION = modLoc("textures/gui/villager_profession.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_BRAINSWEEP = modLoc("textures/gui/brainsweep_emi.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_PHIAL = modLoc("textures/gui/phial_emi.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_EDIFY = modLoc("textures/gui/edify_emi.png");
 
-    public static final EmiRecipeCategory BRAINSWEEP = new EmiRecipeCategory(BRAINSWEEP_ID,
-        new PatternRendererEMI(BRAINSWEEP_ID, 16, 16),
-        new EmiTexture(SIMPLIFIED_ICON_BRAINSWEEP, 0, 0, 16, 16, 16, 16, 16, 16));
+	public static final EmiRecipeCategory BRAINSWEEP = new EmiRecipeCategory(BRAINSWEEP_ID,
+		new PatternRendererEMI(BRAINSWEEP_ID, 16, 16),
+		new EmiTexture(SIMPLIFIED_ICON_BRAINSWEEP, 0, 0, 16, 16, 16, 16, 16, 16));
 
-    public static final EmiRecipeCategory PHIAL = new EmiRecipeCategory(PHIAL_ID,
-        new PatternRendererEMI(PHIAL_ID, 12, 12).shift(2, 2),
-        new EmiTexture(SIMPLIFIED_ICON_PHIAL, 0, 0, 16, 16, 16, 16, 16, 16));
+	public static final EmiRecipeCategory PHIAL = new EmiRecipeCategory(PHIAL_ID,
+		new PatternRendererEMI(PHIAL_ID, 12, 12).shift(2, 2),
+		new EmiTexture(SIMPLIFIED_ICON_PHIAL, 0, 0, 16, 16, 16, 16, 16, 16));
 
-    public static final EmiRecipeCategory EDIFY = new EmiRecipeCategory(EDIFY_ID,
-        new PatternRendererEMI(EDIFY_ID, 16, 16).strokeOrder(false),
-        new EmiTexture(SIMPLIFIED_ICON_EDIFY, 0, 0, 16, 16, 16, 16, 16, 16));
+	public static final EmiRecipeCategory EDIFY = new EmiRecipeCategory(EDIFY_ID,
+		new PatternRendererEMI(EDIFY_ID, 16, 16).strokeOrder(false),
+		new EmiTexture(SIMPLIFIED_ICON_EDIFY, 0, 0, 16, 16, 16, 16, 16, 16));
 
-//    public static final EmiRecipeCategory VILLAGER_LEVELING = new EmiRecipeCategory(VILLAGER_LEVELING_ID,
-//        EmiStack.of(Items.EMERALD),
-//        new EmiTexture(SIMPLIFIED_ICON_LEVELING, 0, 0, 16, 16, 16, 16, 16, 16));
-//
-//    public static final EmiRecipeCategory VILLAGER_PROFESSION = new EmiRecipeCategory(VILLAGER_PROFESSION_ID,
-//        EmiStack.of(Blocks.LECTERN),
-//        new EmiTexture(SIMPLIFIED_ICON_PROFESSION, 0, 0, 16, 16, 16, 16, 16, 16));
+	@Override
+	public void register(EmiRegistry registry) {
+		registry.addCategory(BRAINSWEEP);
+		registry.addCategory(PHIAL);
+		registry.addCategory(EDIFY);
+		registry.addWorkstation(BRAINSWEEP, EmiIngredient.of(HexTags.Items.STAVES));
+		registry.addWorkstation(PHIAL, EmiIngredient.of(HexTags.Items.STAVES));
+		registry.addWorkstation(EDIFY, EmiIngredient.of(HexTags.Items.STAVES));
 
-    @Override
-    public void register(EmiRegistry registry) {
-        registry.addCategory(BRAINSWEEP);
-        registry.addCategory(PHIAL);
-        registry.addCategory(EDIFY);
-//        registry.addCategory(VILLAGER_LEVELING);
-//        registry.addCategory(VILLAGER_PROFESSION);
-        registry.addWorkstation(BRAINSWEEP, EmiIngredient.of(HexItemTags.STAVES));
-        registry.addWorkstation(PHIAL, EmiIngredient.of(HexItemTags.STAVES));
-        registry.addWorkstation(EDIFY, EmiIngredient.of(HexItemTags.STAVES));
+		for (BrainsweepRecipe recipe : registry.getRecipeManager()
+			.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)) {
+			var inputBlocks = EmiIngredient.of(recipe.blockIn().getDisplayedStacks().stream()
+				.map(EmiStack::of).toList());
+			var inputEntity = new BrainsweepeeEmiStack(recipe.entityIn());
+			var output = EmiStack.of(recipe.result().getBlock());
+			registry.addRecipe(new EmiBrainsweepRecipe(inputBlocks, inputEntity, output, recipe.getId()));
+		}
 
-        for (BrainsweepRecipe recipe : registry.getRecipeManager()
-            .getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)) {
-            var inputs = EmiIngredient.of(recipe.blockIn().getDisplayedStacks().stream()
-                .map(EmiStack::of).toList());
-            var output = EmiStack.of(recipe.result().getBlock());
-            registry.addRecipe(new EmiBrainsweepRecipe(inputs, villagerInput, output, recipe.getId()));
-        }
+		if (PhialRecipeStackBuilder.shouldAddRecipe()) {
+			registry.addRecipe(new EmiPhialRecipe());
+		}
 
-        if (PhialRecipeStackBuilder.shouldAddRecipe()) {
-            registry.addRecipe(new EmiPhialRecipe());
-        }
-
-        registry.addRecipe(new EmiEdifyRecipe());
-
-//        var basicVillager = new BrainsweepIngredient(null, null, 1);
-//        for (VillagerProfession profession : Registry.VILLAGER_PROFESSION) {
-//            ResourceLocation id = Registry.VILLAGER_PROFESSION.getKey(profession);
-//            ResourceLocation poiRecipeId = modLoc("villager/poi/" + id.getNamespace() + "/" + id.getPath());
-//            var manWithJob = new BrainsweepIngredient(id, null, 1);
-//
-//            Set<BlockState> states = BrainsweepeeEmiStack.matchingStatesForProfession(profession);
-//            if (!states.isEmpty()) {
-//                List<Item> workstations = states.stream()
-//                    .map(BlockState::getBlock)
-//                    .map(Block::asItem)
-//                    .distinct()
-//                    .filter((it) -> it != Items.AIR)
-//                    .toList();
-//
-//                if (!workstations.isEmpty()) {
-//                    registry.addWorkstation(VILLAGER_LEVELING,
-//                        EmiIngredient.of(workstations.stream().map(EmiStack::of).toList()));
-//                    registry.addWorkstation(VILLAGER_PROFESSION,
-//                        EmiIngredient.of(workstations.stream().map(EmiStack::of).toList()));
-//                    registry.addRecipe(new EmiProfessionRecipe(new BrainsweepeeEmiStack(basicVillager),
-//                        EmiIngredient.of(workstations.stream().map(EmiStack::of).toList()),
-//                        new BrainsweepeeEmiStack(manWithJob), poiRecipeId));
-//
-//                    for (int lvl = 1; lvl < 5; lvl++) {
-//                        ResourceLocation levelRecipeId = modLoc(
-//                            "villager/levelup/" + lvl + "/" + id.getNamespace() + "/" + id.getPath());
-//                        var manWithBadJob = new BrainsweepIngredient(id, null, lvl);
-//                        var manWithBetterJob = new BrainsweepIngredient(id, null, lvl + 1);
-//                        registry.addRecipe(new EmiLevelupRecipe(new BrainsweepeeEmiStack(manWithBadJob),
-//                            new BrainsweepeeEmiStack(manWithBetterJob), levelRecipeId));
-//                    }
-//                }
-//            }
-//        }
-    }
+		registry.addRecipe(new EmiEdifyRecipe());
+	}
 }

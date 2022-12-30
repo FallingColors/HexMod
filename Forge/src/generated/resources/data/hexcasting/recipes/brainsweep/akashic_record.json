@@ -6,8 +6,9 @@
   },
   "cost": 1000000,
   "entityIn": {
+    "type": "villager",
     "minLevel": 5,
-    "profession": "minecraft:librarian"
+    "profession": "librarian"
   },
   "result": {
     "name": "hexcasting:akashic_record"

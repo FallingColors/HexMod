@@ -6,8 +6,9 @@
   },
   "cost": 1000000,
   "entityIn": {
+    "type": "villager",
     "minLevel": 1,
-    "profession": "minecraft:mason"
+    "profession": "mason"
   },
   "result": {
     "name": "hexcasting:directrix_redstone",

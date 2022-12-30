@@ -16,6 +16,7 @@ import net.minecraft.world.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EntityTagIngredient extends BrainsweepeeIngredient {
 	public final TagKey<EntityType<?>> entityTypeTag;
@@ -29,12 +30,25 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 		return entity.getType().is(this.entityTypeTag);
 	}
 
+	private static String tagKey(ResourceLocation tagLoc) {
+		return "tag."
+			+ tagLoc.getNamespace()
+			+ "."
+			+ tagLoc.getPath().replace('/', '.');
+	}
+
+	@Override
+	public Component getName() {
+		String key = tagKey(this.entityTypeTag.location());
+		boolean moddersDidAGoodJob = I18n.exists(key);
+		return moddersDidAGoodJob
+			? Component.translatable(key)
+			: Component.literal("#" + entityTypeTag);
+	}
+
 	@Override
 	public List<Component> getTooltip(boolean advanced) {
-		String key = "tag."
-			+ this.entityTypeTag.location().getNamespace()
-			+ "."
-			+ this.entityTypeTag.location().getPath().replace('/', '.');
+		String key = tagKey(this.entityTypeTag.location());
 		boolean moddersDidAGoodJob = I18n.exists(key);
 
 		var out = new ArrayList<Component>();
@@ -76,8 +90,8 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 	}
 
 	public static EntityTagIngredient deserialize(JsonObject obj) {
-		var typeLoc = ResourceLocation.tryParse(GsonHelper.getAsString(obj, "entityType"));
-		var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, typeLoc);
+		var tagLoc = ResourceLocation.tryParse(GsonHelper.getAsString(obj, "tag"));
+		var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, tagLoc);
 		return new EntityTagIngredient(type);
 	}
 
@@ -85,5 +99,31 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 		var typeLoc = buf.readResourceLocation();
 		var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, typeLoc);
 		return new EntityTagIngredient(type);
+	}
+
+	@Override
+	public Type ingrType() {
+		return Type.ENTITY_TAG;
+	}
+
+	@Override
+	public String getSomeKindOfReasonableIDForEmi() {
+		var resloc = this.entityTypeTag.location();
+		return resloc.getNamespace()
+			+ "//"
+			+ resloc.getPath();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		EntityTagIngredient that = (EntityTagIngredient) o;
+		return Objects.equals(entityTypeTag, that.entityTypeTag);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(this.entityTypeTag);
 	}
 }
