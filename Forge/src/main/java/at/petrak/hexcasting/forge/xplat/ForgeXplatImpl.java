@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.SpecialHandler;
 import at.petrak.hexcasting.api.addldata.ADColorizer;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
@@ -9,6 +10,7 @@ import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.api.spell.ActionRegistryEntry;
 import at.petrak.hexcasting.api.spell.casting.CastingContext;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
@@ -415,6 +417,14 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
+    private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
+        ForgeAccessorRegistry.hex$registerSimple(
+            ResourceKey.createRegistryKey(modLoc("action")), null)
+    );
+    private static final Supplier<Registry<SpecialHandler>> SPECIAL_HANDLER_REGISTRY = Suppliers.memoize(() ->
+        ForgeAccessorRegistry.hex$registerSimple(
+            ResourceKey.createRegistryKey(modLoc("special_handler")), null)
+    );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
         ForgeAccessorRegistry.hex$registerDefaulted(
             ResourceKey.createRegistryKey(modLoc("iota_type")),
@@ -425,6 +435,16 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             ResourceKey.createRegistryKey(modLoc("eval_sound")),
             HexAPI.MOD_ID + ":nothing", registry -> HexEvalSounds.NOTHING)
     );
+
+    @Override
+    public Registry<ActionRegistryEntry> getActionRegistry() {
+        return ACTION_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<SpecialHandler> getSpecialHandlerRegistry() {
+        return SPECIAL_HANDLER_REGISTRY.get();
+    }
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {

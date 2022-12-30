@@ -1,8 +1,9 @@
-package at.petrak.hexcasting.common.casting;
+package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.spell.Action;
+import at.petrak.hexcasting.api.spell.ActionRegistryEntry;
 import at.petrak.hexcasting.api.spell.iota.BooleanIota;
 import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.api.spell.iota.NullIota;
@@ -39,7 +40,10 @@ import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentin
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
 import at.petrak.hexcasting.common.casting.operators.stack.*;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -47,9 +51,27 @@ import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class RegisterPatterns {
+public class HexActionsAndHandlers {
+    public static final Registry<ActionRegistryEntry> ACTIONS = IXplatAbstractions.INSTANCE.getActionRegistry();
+
+    private static final Map<ResourceLocation, ActionRegistryEntry> ACTION_MAP = new LinkedHashMap<>();
+
+    public static final ActionRegistryEntry GET_CASTER = make("get_caster",
+        new ActionRegistryEntry(OpGetCaster.INSTANCE, HexPattern.fromAngles("qaq", HexDir.NORTH_EAST)));
+
+    private static ActionRegistryEntry make(String name, ActionRegistryEntry are) {
+        var old = ACTION_MAP.put(modLoc(name), are);
+        if (old != null) {
+            throw new IllegalArgumentException("Typo? Duplicate id " + name);
+        }
+        return are;
+    }
+
     // I guess this means the client will have a big empty map for patterns
     public static void registerPatterns() {
         try {

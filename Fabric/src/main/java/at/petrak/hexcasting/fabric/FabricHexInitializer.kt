@@ -5,13 +5,14 @@ import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
-import at.petrak.hexcasting.common.casting.RegisterPatterns
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.items.ItemLens
 import at.petrak.hexcasting.common.lib.*
+import at.petrak.hexcasting.common.lib.hex.HexActionsAndHandlers
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.common.loot.HexLootHandler
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
@@ -53,7 +54,7 @@ object FabricHexInitializer : ModInitializer {
             PatternResLocArgument::class.java,
             SingletonArgumentInfo.contextFree { PatternResLocArgument.id() }
         )
-        RegisterPatterns.registerPatterns()
+        HexActionsAndHandlers.registerPatterns()
         HexAdvancementTriggers.registerTriggers()
         HexComposting.setup()
         HexStrippables.init()
@@ -106,6 +107,7 @@ object FabricHexInitializer : ModInitializer {
         HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
 
         HexIotaTypes.registerTypes()
+        HexEvalSounds.register()
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
         // any calls that will eventually touch FeatureUtils.register(), as the growers here do,

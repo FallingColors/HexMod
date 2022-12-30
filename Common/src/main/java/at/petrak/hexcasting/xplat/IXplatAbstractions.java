@@ -1,12 +1,14 @@
 package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.SpecialHandler;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.api.spell.ActionRegistryEntry;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
@@ -142,6 +144,16 @@ public interface IXplatAbstractions {
     LootItemCondition.Builder isShearsCondition();
 
     String getModName(String namespace);
+
+    /**
+     * Registry for actions.
+     * <p>
+     * There's some internal caching (so we can directly look up signatures in a map, for example)
+     * but this registry is the source of truth.
+     */
+    Registry<ActionRegistryEntry> getActionRegistry();
+
+    Registry<SpecialHandler> getSpecialHandlerRegistry();
 
     Registry<IotaType<?>> getIotaTypeRegistry();
 

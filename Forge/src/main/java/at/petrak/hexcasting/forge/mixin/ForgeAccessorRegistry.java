@@ -14,4 +14,10 @@ public interface ForgeAccessorRegistry {
         Registry.RegistryBootstrap<T> bootstrap) {
         throw new IllegalStateException();
     }
+
+    @Invoker("registerSimple")
+    static <T> Registry<T> hex$registerSimple(ResourceKey<? extends Registry<T>> registryName,
+        Registry.RegistryBootstrap<T> bootstrap) {
+        throw new IllegalStateException();
+    }
 }

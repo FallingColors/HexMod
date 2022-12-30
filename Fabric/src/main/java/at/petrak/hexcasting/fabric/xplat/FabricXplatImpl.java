@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.SpecialHandler;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
@@ -9,6 +10,7 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.api.spell.ActionRegistryEntry;
 import at.petrak.hexcasting.api.spell.casting.CastingHarness;
 import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
 import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
@@ -45,10 +47,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.DefaultedRegistry;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.*;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -393,6 +392,18 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
+    private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
+        FabricRegistryBuilder.from(new MappedRegistry<ActionRegistryEntry>(
+                ResourceKey.createRegistryKey(modLoc("action")),
+                Lifecycle.stable(), null))
+            .buildAndRegister()
+    );
+    private static final Supplier<Registry<SpecialHandler>> SPECIAL_HANDLER_REGISTRY = Suppliers.memoize(() ->
+        FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler>(
+                ResourceKey.createRegistryKey(modLoc("special_handler")),
+                Lifecycle.stable(), null))
+            .buildAndRegister()
+    );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
                 HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
@@ -405,6 +416,16 @@ public class FabricXplatImpl implements IXplatAbstractions {
                 Lifecycle.stable(), null))
             .buildAndRegister()
     );
+
+    @Override
+    public Registry<ActionRegistryEntry> getActionRegistry() {
+        return ACTION_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<SpecialHandler> getSpecialHandlerRegistry() {
+        return SPECIAL_HANDLER_REGISTRY.get();
+    }
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {

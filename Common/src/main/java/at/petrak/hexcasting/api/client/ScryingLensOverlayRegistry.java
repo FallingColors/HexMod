@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.api.client;
 
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
@@ -153,7 +152,7 @@ public final class ScryingLensOverlayRegistry {
         Player observer, Level world,
         Direction hitFace) {
         List<Pair<ItemStack, Component>> lines = Lists.newArrayList();
-        var idLookedup = ID_LOOKUP.get(IXplatAbstractions.INSTANCE.getID(state.getBlock()));
+        var idLookedup = ID_LOOKUP.get(Registry.BLOCK.getKey(state.getBlock()));
         if (idLookedup != null) {
             idLookedup.addLines(lines, state, pos, observer, world, hitFace);
         }

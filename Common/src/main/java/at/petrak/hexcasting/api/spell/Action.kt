@@ -15,8 +15,6 @@ import java.text.DecimalFormat
  * Manipulates the stack in some way, usually by popping some number of values off the stack
  * and pushing one new value.
  * For a more "traditional" pop arguments, push return experience, see [ConstMediaAction].
- *
- * Implementors MUST NOT mutate the context.
  */
 interface Action {
     /**

@@ -7,12 +7,13 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting;
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables;
-import at.petrak.hexcasting.common.casting.RegisterPatterns;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.lib.*;
+import at.petrak.hexcasting.common.lib.hex.HexActionsAndHandlers;
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
@@ -70,176 +71,177 @@ import java.util.function.Consumer;
 
 @Mod(HexAPI.MOD_ID)
 public class ForgeHexInitializer {
-	public ForgeHexInitializer() {
-		initConfig();
-		initRegistry();
-		initListeners();
-	}
+    public ForgeHexInitializer() {
+        initConfig();
+        initRegistry();
+        initListeners();
+    }
 
-	private static void initConfig() {
-		var config = new ForgeConfigSpec.Builder().configure(ForgeHexConfig::new);
-		var clientConfig = new ForgeConfigSpec.Builder().configure(ForgeHexConfig.Client::new);
-		var serverConfig = new ForgeConfigSpec.Builder().configure(ForgeHexConfig.Server::new);
-		HexConfig.setCommon(config.getLeft());
-		HexConfig.setClient(clientConfig.getLeft());
-		HexConfig.setServer(serverConfig.getLeft());
-		var mlc = ModLoadingContext.get();
-		mlc.registerConfig(ModConfig.Type.COMMON, config.getRight());
-		mlc.registerConfig(ModConfig.Type.CLIENT, clientConfig.getRight());
-		mlc.registerConfig(ModConfig.Type.SERVER, serverConfig.getRight());
-	}
+    private static void initConfig() {
+        var config = new ForgeConfigSpec.Builder().configure(ForgeHexConfig::new);
+        var clientConfig = new ForgeConfigSpec.Builder().configure(ForgeHexConfig.Client::new);
+        var serverConfig = new ForgeConfigSpec.Builder().configure(ForgeHexConfig.Server::new);
+        HexConfig.setCommon(config.getLeft());
+        HexConfig.setClient(clientConfig.getLeft());
+        HexConfig.setServer(serverConfig.getLeft());
+        var mlc = ModLoadingContext.get();
+        mlc.registerConfig(ModConfig.Type.COMMON, config.getRight());
+        mlc.registerConfig(ModConfig.Type.CLIENT, clientConfig.getRight());
+        mlc.registerConfig(ModConfig.Type.SERVER, serverConfig.getRight());
+    }
 
-	private static void initRegistry() {
-		bind(Registry.SOUND_EVENT_REGISTRY, HexSounds::registerSounds);
-		bind(Registry.BLOCK_REGISTRY, HexBlocks::registerBlocks);
-		bind(Registry.ITEM_REGISTRY, HexBlocks::registerBlockItems);
-		bind(Registry.BLOCK_ENTITY_TYPE_REGISTRY, HexBlockEntities::registerTiles);
-		bind(Registry.ITEM_REGISTRY, HexItems::registerItems);
+    private static void initRegistry() {
+        bind(Registry.SOUND_EVENT_REGISTRY, HexSounds::registerSounds);
+        bind(Registry.BLOCK_REGISTRY, HexBlocks::registerBlocks);
+        bind(Registry.ITEM_REGISTRY, HexBlocks::registerBlockItems);
+        bind(Registry.BLOCK_ENTITY_TYPE_REGISTRY, HexBlockEntities::registerTiles);
+        bind(Registry.ITEM_REGISTRY, HexItems::registerItems);
 
-		bind(Registry.RECIPE_SERIALIZER_REGISTRY, HexRecipeStuffRegistry::registerSerializers);
-		bind(Registry.RECIPE_TYPE_REGISTRY, HexRecipeStuffRegistry::registerTypes);
+        bind(Registry.RECIPE_SERIALIZER_REGISTRY, HexRecipeStuffRegistry::registerSerializers);
+        bind(Registry.RECIPE_TYPE_REGISTRY, HexRecipeStuffRegistry::registerTypes);
 
-		bind(Registry.ENTITY_TYPE_REGISTRY, HexEntities::registerEntities);
+        bind(Registry.ENTITY_TYPE_REGISTRY, HexEntities::registerEntities);
 
-		bind(Registry.PARTICLE_TYPE_REGISTRY, HexParticles::registerParticles);
+        bind(Registry.PARTICLE_TYPE_REGISTRY, HexParticles::registerParticles);
 
-		ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
+        ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
 
-		HexIotaTypes.registerTypes();
+        HexIotaTypes.registerTypes();
+        HexEvalSounds.register();
 
-		HexAdvancementTriggers.registerTriggers();
-	}
+        HexAdvancementTriggers.registerTriggers();
+    }
 
-	// https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
-	private static <T> void bind(ResourceKey<Registry<T>> registry,
-		Consumer<BiConsumer<T, ResourceLocation>> source) {
-		getModEventBus().addListener((RegisterEvent event) -> {
-			if (registry.equals(event.getRegistryKey())) {
-				source.accept((t, rl) -> event.register(registry, rl, () -> t));
-			}
-		});
-	}
+    // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
+    private static <T> void bind(ResourceKey<Registry<T>> registry,
+        Consumer<BiConsumer<T, ResourceLocation>> source) {
+        getModEventBus().addListener((RegisterEvent event) -> {
+            if (registry.equals(event.getRegistryKey())) {
+                source.accept((t, rl) -> event.register(registry, rl, () -> t));
+            }
+        });
+    }
 
-	private static void initListeners() {
-		var modBus = getModEventBus();
-		var evBus = MinecraftForge.EVENT_BUS;
+    private static void initListeners() {
+        var modBus = getModEventBus();
+        var evBus = MinecraftForge.EVENT_BUS;
 
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modBus.register(ForgeHexClientInitializer.class));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modBus.register(ForgeHexClientInitializer.class));
 
-		modBus.addListener((FMLCommonSetupEvent evt) ->
-			evt.enqueueWork(() -> {
-				ForgePacketHandler.init();
-				HexComposting.setup();
-				HexStrippables.init();
-				RegisterPatterns.registerPatterns();
-				// Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric
-				// and Quilt.
-				// However, all launcher panic if the same resource is registered twice.  But do need blocks and
-				// items to be completely initialized.
-				// Explicitly calling here avoids potential confusion, or reliance on tricks that may fail under
-				// compiler optimization.
-				AkashicTreeGrower.init();
+        modBus.addListener((FMLCommonSetupEvent evt) ->
+            evt.enqueueWork(() -> {
+                ForgePacketHandler.init();
+                HexComposting.setup();
+                HexStrippables.init();
+                HexActionsAndHandlers.registerPatterns();
+                // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric
+                // and Quilt.
+                // However, all launcher panic if the same resource is registered twice.  But do need blocks and
+                // items to be completely initialized.
+                // Explicitly calling here avoids potential confusion, or reliance on tricks that may fail under
+                // compiler optimization.
+                AkashicTreeGrower.init();
 
-				HexInterop.init();
-			}));
+                HexInterop.init();
+            }));
 
-		// We have to do these at some point when the registries are still open
-		modBus.addListener((RegisterEvent evt) -> {
-			if (evt.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
-				CraftingHelper.register(ForgeUnsealedIngredient.ID, ForgeUnsealedIngredient.Serializer.INSTANCE);
-				CraftingHelper.register(ForgeModConditionalIngredient.ID,
-					ForgeModConditionalIngredient.Serializer.INSTANCE);
-				HexStatistics.register();
-				HexLootFunctions.registerSerializers((lift, id) ->
-					Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));
-			}
-		});
+        // We have to do these at some point when the registries are still open
+        modBus.addListener((RegisterEvent evt) -> {
+            if (evt.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
+                CraftingHelper.register(ForgeUnsealedIngredient.ID, ForgeUnsealedIngredient.Serializer.INSTANCE);
+                CraftingHelper.register(ForgeModConditionalIngredient.ID,
+                    ForgeModConditionalIngredient.Serializer.INSTANCE);
+                HexStatistics.register();
+                HexLootFunctions.registerSerializers((lift, id) ->
+                    Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));
+            }
+        });
 
-		modBus.addListener((FMLLoadCompleteEvent evt) ->
-			HexAPI.LOGGER.info(PatternRegistry.getPatternCountInfo()));
+        modBus.addListener((FMLLoadCompleteEvent evt) ->
+            HexAPI.LOGGER.info(PatternRegistry.getPatternCountInfo()));
 
-		evBus.addListener((PlayerInteractEvent.EntityInteract evt) -> {
-			var res = BrainsweepingEvents.interactWithBrainswept(
-				evt.getEntity(), evt.getLevel(), evt.getHand(), evt.getTarget(), null);
-			if (res.consumesAction()) {
-				evt.setCanceled(true);
-				evt.setCancellationResult(res);
-			}
-		});
-		evBus.addListener((LivingConversionEvent.Post evt) ->
-			BrainsweepingEvents.copyBrainsweepPostTransformation(evt.getEntity(), evt.getOutcome()));
+        evBus.addListener((PlayerInteractEvent.EntityInteract evt) -> {
+            var res = BrainsweepingEvents.interactWithBrainswept(
+                evt.getEntity(), evt.getLevel(), evt.getHand(), evt.getTarget(), null);
+            if (res.consumesAction()) {
+                evt.setCanceled(true);
+                evt.setCancellationResult(res);
+            }
+        });
+        evBus.addListener((LivingConversionEvent.Post evt) ->
+            BrainsweepingEvents.copyBrainsweepPostTransformation(evt.getEntity(), evt.getOutcome()));
 
-		evBus.addListener((LivingEvent.LivingTickEvent evt) -> {
-			OpFlight.INSTANCE.tickDownFlight(evt.getEntity());
-			ItemLens.tickLens(evt.getEntity());
-		});
+        evBus.addListener((LivingEvent.LivingTickEvent evt) -> {
+            OpFlight.INSTANCE.tickDownFlight(evt.getEntity());
+            ItemLens.tickLens(evt.getEntity());
+        });
 
-		evBus.addListener((TickEvent.LevelTickEvent evt) -> {
-			if (evt.phase == TickEvent.Phase.END && evt.level instanceof ServerLevel world) {
-				PlayerPositionRecorder.updateAllPlayers(world);
-			}
-		});
+        evBus.addListener((TickEvent.LevelTickEvent evt) -> {
+            if (evt.phase == TickEvent.Phase.END && evt.level instanceof ServerLevel world) {
+                PlayerPositionRecorder.updateAllPlayers(world);
+            }
+        });
 
-		evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
+        evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
 
-		evBus.addListener((PlayerEvent.BreakSpeed evt) -> {
-			var pos = evt.getPosition();
-			// tracing the dataflow, this is only empty if someone is calling a deprecated function for the
-			// break speed. This will probably not ever hapen, but hey! i will never complain about correctness
-			// enforced at the type level.
-			if (pos.isEmpty()) {
-				return;
-			}
-			evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getEntity(), evt.getState(), pos.get()));
-		});
+        evBus.addListener((PlayerEvent.BreakSpeed evt) -> {
+            var pos = evt.getPosition();
+            // tracing the dataflow, this is only empty if someone is calling a deprecated function for the
+            // break speed. This will probably not ever hapen, but hey! i will never complain about correctness
+            // enforced at the type level.
+            if (pos.isEmpty()) {
+                return;
+            }
+            evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getEntity(), evt.getState(), pos.get()));
+        });
 
-		evBus.addListener((LootTableLoadEvent evt) -> HexLootHandler.lootLoad(
-			evt.getName(),
-			builder -> evt.getTable().addPool(builder.build())));
+        evBus.addListener((LootTableLoadEvent evt) -> HexLootHandler.lootLoad(
+            evt.getName(),
+            builder -> evt.getTable().addPool(builder.build())));
 
-		// === Events implemented in other ways on Fabric
+        // === Events implemented in other ways on Fabric
 
-		// On Fabric this should be auto-synced
-		evBus.addListener((PlayerEvent.StartTracking evt) -> {
-			Entity target = evt.getTarget();
-			if (evt.getTarget() instanceof ServerPlayer serverPlayer &&
-				target instanceof Mob mob && IXplatAbstractions.INSTANCE.isBrainswept(mob)) {
-				ForgePacketHandler.getNetwork()
-					.send(PacketDistributor.PLAYER.with(() -> serverPlayer), MsgBrainsweepAck.of(mob));
-			}
-		});
+        // On Fabric this should be auto-synced
+        evBus.addListener((PlayerEvent.StartTracking evt) -> {
+            Entity target = evt.getTarget();
+            if (evt.getTarget() instanceof ServerPlayer serverPlayer &&
+                target instanceof Mob mob && IXplatAbstractions.INSTANCE.isBrainswept(mob)) {
+                ForgePacketHandler.getNetwork()
+                    .send(PacketDistributor.PLAYER.with(() -> serverPlayer), MsgBrainsweepAck.of(mob));
+            }
+        });
 
-		// Implemented with a mixin on Farbc
-		evBus.addListener((BlockEvent.BlockToolModificationEvent evt) -> {
-			if (!evt.isSimulated() && evt.getToolAction() == ToolActions.AXE_STRIP) {
-				BlockState bs = evt.getState();
-				var output = HexStrippables.STRIPPABLES.get(bs.getBlock());
-				if (output != null) {
-					evt.setFinalState(output.withPropertiesOf(bs));
-				}
-			}
-		});
+        // Implemented with a mixin on Farbc
+        evBus.addListener((BlockEvent.BlockToolModificationEvent evt) -> {
+            if (!evt.isSimulated() && evt.getToolAction() == ToolActions.AXE_STRIP) {
+                BlockState bs = evt.getState();
+                var output = HexStrippables.STRIPPABLES.get(bs.getBlock());
+                if (output != null) {
+                    evt.setFinalState(output.withPropertiesOf(bs));
+                }
+            }
+        });
 
-		// Caps are cardinal components on farbc
-		modBus.addListener(ForgeCapabilityHandler::registerCaps);
-		evBus.addGenericListener(ItemStack.class, ForgeCapabilityHandler::attachItemCaps);
-		evBus.addGenericListener(BlockEntity.class, ForgeCapabilityHandler::attachBlockEntityCaps);
-		evBus.addGenericListener(Entity.class, ForgeCapabilityHandler::attachEntityCaps);
+        // Caps are cardinal components on farbc
+        modBus.addListener(ForgeCapabilityHandler::registerCaps);
+        evBus.addGenericListener(ItemStack.class, ForgeCapabilityHandler::attachItemCaps);
+        evBus.addGenericListener(BlockEntity.class, ForgeCapabilityHandler::attachBlockEntityCaps);
+        evBus.addGenericListener(Entity.class, ForgeCapabilityHandler::attachEntityCaps);
 
-		modBus.register(HexForgeDataGenerators.class);
-		modBus.register(ForgeCapabilityHandler.class);
-		evBus.register(CapSyncers.class);
+        modBus.register(HexForgeDataGenerators.class);
+        modBus.register(ForgeCapabilityHandler.class);
+        evBus.register(CapSyncers.class);
 
-		if (ModList.get().isLoaded(HexInterop.Forge.CURIOS_API_ID)) {
-			modBus.addListener(CuriosApiInterop::onInterModEnqueue);
-			modBus.addListener(CuriosApiInterop::onClientSetup);
-			DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-				() -> () -> modBus.addListener(CuriosRenderers::onLayerRegister));
-		}
-	}
+        if (ModList.get().isLoaded(HexInterop.Forge.CURIOS_API_ID)) {
+            modBus.addListener(CuriosApiInterop::onInterModEnqueue);
+            modBus.addListener(CuriosApiInterop::onClientSetup);
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                () -> () -> modBus.addListener(CuriosRenderers::onLayerRegister));
+        }
+    }
 
-	// aaaauughhg
-	private static IEventBus getModEventBus() {
-		return KotlinModLoadingContext.Companion.get().getKEventBus();
-	}
+    // aaaauughhg
+    private static IEventBus getModEventBus() {
+        return KotlinModLoadingContext.Companion.get().getKEventBus();
+    }
 }
