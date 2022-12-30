@@ -12,7 +12,7 @@ import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.lib.*;
-import at.petrak.hexcasting.common.lib.hex.HexActionsAndHandlers;
+import at.petrak.hexcasting.common.lib.hex.HexActions;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
@@ -133,7 +133,7 @@ public class ForgeHexInitializer {
                 ForgePacketHandler.init();
                 HexComposting.setup();
                 HexStrippables.init();
-                HexActionsAndHandlers.registerPatterns();
+                HexActions.registerPatterns();
                 // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric
                 // and Quilt.
                 // However, all launcher panic if the same resource is registered twice.  But do need blocks and

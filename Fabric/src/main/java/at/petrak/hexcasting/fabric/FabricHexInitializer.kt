@@ -11,7 +11,7 @@ import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.items.ItemLens
 import at.petrak.hexcasting.common.lib.*
-import at.petrak.hexcasting.common.lib.hex.HexActionsAndHandlers
+import at.petrak.hexcasting.common.lib.hex.HexActions
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.common.loot.HexLootHandler
@@ -54,7 +54,7 @@ object FabricHexInitializer : ModInitializer {
             PatternResLocArgument::class.java,
             SingletonArgumentInfo.contextFree { PatternResLocArgument.id() }
         )
-        HexActionsAndHandlers.registerPatterns()
+        HexActions.registerPatterns()
         HexAdvancementTriggers.registerTriggers()
         HexComposting.setup()
         HexStrippables.init()

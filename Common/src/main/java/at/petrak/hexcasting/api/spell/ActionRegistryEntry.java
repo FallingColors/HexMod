@@ -5,10 +5,10 @@ import at.petrak.hexcasting.api.spell.math.HexPattern;
 /**
  * A bit of wrapper information around an action to go in the registry.
  *
- * @param action    The action itself
  * @param prototype The pattern associated with this action. The start dir acts as the "canonical" start direction
  *                  for display in the book. For per-world patterns, the angle signature is the *shape* of the pattern
  *                  but probably not the pattern itself.
+ * @param action    The action itself
  */
-public record ActionRegistryEntry(Action action, HexPattern prototype) {
+public record ActionRegistryEntry(HexPattern prototype, Action action) {
 }
