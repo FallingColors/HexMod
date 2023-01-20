@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
@@ -14,6 +15,7 @@ import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.lib.hex.HexActions
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
+import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
 import at.petrak.hexcasting.common.loot.HexLootHandler
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents
@@ -29,6 +31,7 @@ import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
@@ -54,7 +57,6 @@ object FabricHexInitializer : ModInitializer {
             PatternResLocArgument::class.java,
             SingletonArgumentInfo.contextFree { PatternResLocArgument.id() }
         )
-        HexActions.registerPatterns()
         HexAdvancementTriggers.registerTriggers()
         HexComposting.setup()
         HexStrippables.init()
@@ -77,6 +79,10 @@ object FabricHexInitializer : ModInitializer {
             }
         }
 
+        ServerLifecycleEvents.SERVER_STARTED.register { server ->
+            PatternRegistryManifest.processRegistry(server.overworld())
+        }
+
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(ItemLens::tickAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(OpFlight::tickAllPlayers)
@@ -86,6 +92,8 @@ object FabricHexInitializer : ModInitializer {
         LootTableEvents.MODIFY.register { _, _, id, supplier, _ ->
             HexLootHandler.lootLoad(id, supplier::withPool)
         }
+
+
     }
 
     fun initRegistries() {
@@ -106,6 +114,8 @@ object FabricHexInitializer : ModInitializer {
 
         HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
 
+        HexActions.register()
+        HexSpecialHandlers.register()
         HexIotaTypes.registerTypes()
         HexEvalSounds.register()
 

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.lib.hex;
 
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;

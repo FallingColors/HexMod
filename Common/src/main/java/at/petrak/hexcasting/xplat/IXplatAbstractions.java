@@ -1,18 +1,18 @@
 package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.SpecialHandler;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.CastingHarness;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.api.spell.ActionRegistryEntry;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
-import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import net.minecraft.core.BlockPos;
@@ -153,7 +153,7 @@ public interface IXplatAbstractions {
      */
     Registry<ActionRegistryEntry> getActionRegistry();
 
-    Registry<SpecialHandler> getSpecialHandlerRegistry();
+    Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry();
 
     Registry<IotaType<?>> getIotaTypeRegistry();
 

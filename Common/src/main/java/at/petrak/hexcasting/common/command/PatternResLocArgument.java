@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.command;
 
-import at.petrak.hexcasting.api.PatternRegistry;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -28,13 +28,13 @@ public class PatternResLocArgument extends ResourceLocationArgument {
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         return SharedSuggestionProvider.suggest(
-            PatternRegistry.getAllPerWorldPatternNames().stream().map(Object::toString), builder);
+            PatternRegistryManifest.getAllPerWorldPatternNames().stream().map(Object::toString), builder);
     }
 
     public static HexPattern getPattern(
         CommandContext<CommandSourceStack> ctx, String pName) throws CommandSyntaxException {
         var targetId = ctx.getArgument(pName, ResourceLocation.class);
-        var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
+        var lookup = PatternRegistryManifest.getPerWorldPatterns(ctx.getSource().getLevel());
         HexPattern foundPat = null;
         for (var sig : lookup.keySet()) {
             var rhs = lookup.get(sig);

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
-import at.petrak.hexcasting.api.PatternRegistry;
-import at.petrak.hexcasting.api.spell.math.HexCoord;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
 import at.petrak.hexcasting.interop.utils.PatternEntry;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -24,7 +24,7 @@ public class PatternDrawable implements IDrawable {
     private final List<Vec2> pathfinderDots;
 
     public PatternDrawable(ResourceLocation pattern, int w, int h) {
-        var entry = PatternRegistry.lookupPattern(pattern);
+        var entry = PatternRegistryManifest.lookupPattern(pattern);
         this.strokeOrder = !entry.isPerWorld();
         var data = PatternDrawingUtil.loadPatterns(
             List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin())),

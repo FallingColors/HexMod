@@ -3,7 +3,7 @@
 package at.petrak.hexcasting.client
 
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.spell.math.HexPattern
+import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.utils.TAU
 import at.petrak.hexcasting.api.utils.getValue
 import at.petrak.hexcasting.api.utils.setValue

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.spell.iota.*;
+import at.petrak.hexcasting.api.casting.iota.*;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;

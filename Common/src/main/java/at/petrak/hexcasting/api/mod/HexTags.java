@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.mod;
 
-import at.petrak.hexcasting.api.spell.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;

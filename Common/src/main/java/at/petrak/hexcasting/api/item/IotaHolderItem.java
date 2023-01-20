@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.item;
 
-import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.ClientTickCounter;
@@ -27,7 +27,7 @@ import java.util.List;
 public interface IotaHolderItem {
     /**
      * If this key is set on the item, we ignore the rest of the item and render this as if it were of the
-     * {@link at.petrak.hexcasting.api.spell.iota.IotaType IotaType} given by the resource location.
+     * {@link at.petrak.hexcasting.api.casting.iota.IotaType IotaType} given by the resource location.
      * <p>
      * This is not useful to the player at all.
      */

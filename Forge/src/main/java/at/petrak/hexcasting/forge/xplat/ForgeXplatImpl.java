@@ -1,21 +1,21 @@
 package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.SpecialHandler;
 import at.petrak.hexcasting.api.addldata.ADColorizer;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.CastingContext;
+import at.petrak.hexcasting.api.casting.eval.CastingHarness;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.api.spell.ActionRegistryEntry;
-import at.petrak.hexcasting.api.spell.casting.CastingContext;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
-import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
@@ -421,7 +421,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         ForgeAccessorRegistry.hex$registerSimple(
             ResourceKey.createRegistryKey(modLoc("action")), null)
     );
-    private static final Supplier<Registry<SpecialHandler>> SPECIAL_HANDLER_REGISTRY = Suppliers.memoize(() ->
+    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
+        Suppliers.memoize(() ->
         ForgeAccessorRegistry.hex$registerSimple(
             ResourceKey.createRegistryKey(modLoc("special_handler")), null)
     );
@@ -442,7 +443,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Registry<SpecialHandler> getSpecialHandlerRegistry() {
+    public Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry() {
         return SPECIAL_HANDLER_REGISTRY.get();
     }
 

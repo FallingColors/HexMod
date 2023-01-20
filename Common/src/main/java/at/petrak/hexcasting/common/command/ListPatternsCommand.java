@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.command;
 
-import at.petrak.hexcasting.api.PatternRegistry;
-import at.petrak.hexcasting.api.spell.iota.PatternIota;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -57,7 +57,7 @@ public class ListPatternsCommand {
     }
 
     private static int list(CommandSourceStack source) {
-        var lookup = PatternRegistry.getPerWorldPatterns(source.getLevel());
+        var lookup = PatternRegistryManifest.getPerWorldPatterns(source.getLevel());
         var listing = lookup.entrySet()
             .stream()
             .sorted((a, b) -> compareResLoc(a.getValue().getFirst(), b.getValue().getFirst()))
@@ -77,7 +77,7 @@ public class ListPatternsCommand {
 
     private static int giveAll(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (!targets.isEmpty()) {
-            var lookup = PatternRegistry.getPerWorldPatterns(source.getLevel());
+            var lookup = PatternRegistryManifest.getPerWorldPatterns(source.getLevel());
 
             lookup.forEach((sig, entry) -> {
                 var opId = entry.getFirst();

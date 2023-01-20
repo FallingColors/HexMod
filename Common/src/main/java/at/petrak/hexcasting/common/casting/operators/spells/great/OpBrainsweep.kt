@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.mishaps.MishapAlreadyBrainswept
-import at.petrak.hexcasting.api.spell.mishaps.MishapBadBrainsweep
+import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapAlreadyBrainswept
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadBrainsweep
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.ktxt.tellWitnessesThatIWasMurdered

@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.misc;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
-import at.petrak.hexcasting.api.spell.casting.CastingContext;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
+import at.petrak.hexcasting.api.casting.eval.CastingContext;
+import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import com.google.common.collect.Lists;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

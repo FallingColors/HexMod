@@ -3,11 +3,11 @@ package at.petrak.hexcasting.common.casting.operators.spells
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
-import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
-import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
+import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
+import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpTeleport
 import net.minecraft.world.entity.Entity
 import kotlin.math.roundToInt

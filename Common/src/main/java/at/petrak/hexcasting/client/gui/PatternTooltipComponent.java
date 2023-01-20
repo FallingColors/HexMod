@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.client.gui;
 
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import com.mojang.blaze3d.platform.GlStateManager;

@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
-import at.petrak.hexcasting.api.spell.Action
-import at.petrak.hexcasting.api.spell.OperationResult
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.eval.SpellContinuation
-import at.petrak.hexcasting.api.spell.getPositiveIntUnderInclusive
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.casting.Action
+import at.petrak.hexcasting.api.casting.OperationResult
+import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
+import at.petrak.hexcasting.api.casting.getPositiveIntUnderInclusive
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 
 object OpFishermanButItCopies : Action {
     override fun operate(

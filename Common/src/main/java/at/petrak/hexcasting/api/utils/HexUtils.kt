@@ -2,9 +2,9 @@
 
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.iota.ListIota
-import at.petrak.hexcasting.api.spell.math.HexCoord
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.ListIota
+import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.*

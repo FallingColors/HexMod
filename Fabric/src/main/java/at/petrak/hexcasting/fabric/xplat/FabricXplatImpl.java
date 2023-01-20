@@ -1,20 +1,20 @@
 package at.petrak.hexcasting.fabric.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.SpecialHandler;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.CastingHarness;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.api.spell.ActionRegistryEntry;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
-import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
@@ -398,8 +398,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
                 Lifecycle.stable(), null))
             .buildAndRegister()
     );
-    private static final Supplier<Registry<SpecialHandler>> SPECIAL_HANDLER_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler>(
+    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
+        Suppliers.memoize(() ->
+        FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler.Factory<?>>(
                 ResourceKey.createRegistryKey(modLoc("special_handler")),
                 Lifecycle.stable(), null))
             .buildAndRegister()
@@ -423,7 +424,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Registry<SpecialHandler> getSpecialHandlerRegistry() {
+    public Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry() {
         return SPECIAL_HANDLER_REGISTRY.get();
     }
 

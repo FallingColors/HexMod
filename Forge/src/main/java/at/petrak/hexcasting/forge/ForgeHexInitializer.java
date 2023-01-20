@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting;
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
@@ -15,6 +15,7 @@ import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.common.lib.hex.HexActions;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents;
@@ -54,6 +55,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -61,7 +63,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.RegisterEvent;
 import thedarkcolour.kotlinforforge.KotlinModLoadingContext;
@@ -106,6 +107,8 @@ public class ForgeHexInitializer {
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
 
+        HexActions.register();
+        HexSpecialHandlers.register();
         HexIotaTypes.registerTypes();
         HexEvalSounds.register();
 
@@ -133,7 +136,6 @@ public class ForgeHexInitializer {
                 ForgePacketHandler.init();
                 HexComposting.setup();
                 HexStrippables.init();
-                HexActions.registerPatterns();
                 // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric
                 // and Quilt.
                 // However, all launcher panic if the same resource is registered twice.  But do need blocks and
@@ -144,6 +146,7 @@ public class ForgeHexInitializer {
 
                 HexInterop.init();
             }));
+
 
         // We have to do these at some point when the registries are still open
         modBus.addListener((RegisterEvent evt) -> {
@@ -156,9 +159,6 @@ public class ForgeHexInitializer {
                     Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));
             }
         });
-
-        modBus.addListener((FMLLoadCompleteEvent evt) ->
-            HexAPI.LOGGER.info(PatternRegistry.getPatternCountInfo()));
 
         evBus.addListener((PlayerInteractEvent.EntityInteract evt) -> {
             var res = BrainsweepingEvents.interactWithBrainswept(
@@ -181,6 +181,9 @@ public class ForgeHexInitializer {
                 PlayerPositionRecorder.updateAllPlayers(world);
             }
         });
+
+        evBus.addListener((ServerStartedEvent evt) ->
+            PatternRegistryManifest.processRegistry(evt.getServer().overworld()));
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
 
