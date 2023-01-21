@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.casting.ConstMediaAction
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.getPattern

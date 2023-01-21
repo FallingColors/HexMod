@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.lib.hex;
 
-import at.petrak.hexcasting.api.casting.Action;
+import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;

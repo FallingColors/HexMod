@@ -3,7 +3,7 @@ package at.petrak.hexcasting.api.casting.eval
 import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.casting.Action
+import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway

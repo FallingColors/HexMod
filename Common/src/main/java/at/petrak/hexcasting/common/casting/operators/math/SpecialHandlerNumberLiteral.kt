@@ -2,10 +2,10 @@ package at.petrak.hexcasting.common.casting.operators.math
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.HexAPI.modLoc
-import at.petrak.hexcasting.api.casting.Action
-import at.petrak.hexcasting.api.casting.ConstMediaAction
-import at.petrak.hexcasting.api.casting.SpecialHandler
 import at.petrak.hexcasting.api.casting.asActionResult
+import at.petrak.hexcasting.api.casting.castables.Action
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
@@ -14,7 +14,7 @@ import at.petrak.hexcasting.api.utils.lightPurple
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler() {
+class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
     override fun act(): Action {
         return InnerAction(this.x)
     }

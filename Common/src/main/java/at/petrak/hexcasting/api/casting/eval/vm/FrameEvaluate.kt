@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.casting.SpellList
+import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.CastingHarness
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -23,7 +24,7 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
         continuation: SpellContinuation,
         level: ServerLevel,
         harness: CastingHarness
-    ): CastingHarness.CastResult {
+    ): CastResult {
         // If there are patterns left...
         return if (list.nonEmpty) {
             val newCont = if (list.cdr.nonEmpty) { // yay TCO
@@ -39,7 +40,7 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
             }
         } else {
             // If there are no patterns (e.g. empty Hermes), just return OK.
-            CastingHarness.CastResult(continuation, null, ResolvedPatternType.EVALUATED, listOf(), HexEvalSounds.HERMES)
+            CastResult(continuation, null, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES)
         }
     }
 

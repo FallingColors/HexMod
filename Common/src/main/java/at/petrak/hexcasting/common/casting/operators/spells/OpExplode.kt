@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 import net.minecraft.core.BlockPos

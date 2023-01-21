@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
+import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.CastingHarness
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -20,12 +21,12 @@ object FrameFinishEval : ContinuationFrame {
         continuation: SpellContinuation,
         level: ServerLevel,
         harness: CastingHarness
-    ): CastingHarness.CastResult {
-        return CastingHarness.CastResult(
+    ): CastResult {
+        return CastResult(
             continuation,
             FunctionalData(harness.stack.toList(), 0, listOf(), false, harness.ravenmind),
-            ResolvedPatternType.EVALUATED,
             listOf(),
+            ResolvedPatternType.EVALUATED,
             HexEvalSounds.NOTHING,
         )
     }

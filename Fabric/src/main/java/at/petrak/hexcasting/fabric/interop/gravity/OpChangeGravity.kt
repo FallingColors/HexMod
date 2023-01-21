@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.interop.gravity
 
 import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 import com.fusionflux.gravity_api.api.GravityChangerAPI

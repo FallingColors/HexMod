@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.SpellAction
+import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.xplat.IXplatAbstractions

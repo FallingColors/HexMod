@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.casting.operators
 
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.casting.Action
-import at.petrak.hexcasting.api.casting.ConstMediaAction
+import at.petrak.hexcasting.api.casting.castables.Action
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.getVec3

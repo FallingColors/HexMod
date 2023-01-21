@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api;
 
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
-import at.petrak.hexcasting.api.casting.SpecialHandler;
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import com.google.common.base.Suppliers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

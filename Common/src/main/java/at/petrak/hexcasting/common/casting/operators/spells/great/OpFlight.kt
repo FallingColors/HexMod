@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants

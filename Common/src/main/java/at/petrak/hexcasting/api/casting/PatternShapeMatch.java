@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.casting;
 
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import net.minecraft.resources.ResourceKey;
 
 /**

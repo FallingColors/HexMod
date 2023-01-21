@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
-import at.petrak.hexcasting.api.casting.ConstMediaAction
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 import it.unimi.dsi.fastutil.booleans.BooleanList

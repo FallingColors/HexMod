@@ -1,5 +1,8 @@
-package at.petrak.hexcasting.api.casting
+package at.petrak.hexcasting.api.casting.castables
 
+import at.petrak.hexcasting.api.casting.OperationResult
+import at.petrak.hexcasting.api.casting.ParticleSpray
+import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation

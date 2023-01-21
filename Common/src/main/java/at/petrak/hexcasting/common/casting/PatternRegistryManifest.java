@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
-import at.petrak.hexcasting.api.casting.SpecialHandler;
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.math.EulerPathFinder;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexTags;

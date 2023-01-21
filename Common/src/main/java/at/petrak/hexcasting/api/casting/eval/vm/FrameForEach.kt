@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.casting.SpellList
+import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.CastingHarness
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -39,7 +40,7 @@ data class FrameForEach(
         continuation: SpellContinuation,
         level: ServerLevel,
         harness: CastingHarness
-    ): CastingHarness.CastResult {
+    ): CastResult {
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
         val stack = if (baseStack == null) {
             // init stack to the harness stack...
@@ -67,11 +68,11 @@ data class FrameForEach(
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
         // TODO: this means we could have Thoth casting do a different sound
-        return CastingHarness.CastResult(
+        return CastResult(
             newCont,
             FunctionalData(tStack, 0, listOf(), false, harness.ravenmind),
-            ResolvedPatternType.EVALUATED,
             listOf(),
+            ResolvedPatternType.EVALUATED,
             HexEvalSounds.THOTH,
         )
     }

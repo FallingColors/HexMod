@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math.bit
 
 import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 

@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
-import at.petrak.hexcasting.api.casting.SpecialHandler;
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.CastingContext;
 import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;

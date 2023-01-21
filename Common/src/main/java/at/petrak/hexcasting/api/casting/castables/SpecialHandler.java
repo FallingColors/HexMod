@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.casting;
+package at.petrak.hexcasting.api.casting.castables;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import net.minecraft.network.chat.Component;
@@ -15,18 +15,18 @@ import org.jetbrains.annotations.Nullable;
  * {@link Action} instances on the client. We can have SpecialHandlers on the client though because they're just
  * wrappers.
  */
-public abstract class SpecialHandler {
+public interface SpecialHandler {
     /**
      * Convert this to an action, for modification of the stack and state.
      * <p>
      * This is called on the SERVER-SIDE ONLY.
      */
-    public abstract Action act();
+    Action act();
 
     /**
      * Get the name of this handler.
      */
-    public abstract Component getName();
+    Component getName();
 
     /**
      * Given a pattern, possibly make up the special handler from it.

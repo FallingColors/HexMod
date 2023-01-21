@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastingHarness
-import at.petrak.hexcasting.api.casting.eval.CastingHarness.CastResult
+import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.utils.getList
 import at.petrak.hexcasting.api.utils.hasList

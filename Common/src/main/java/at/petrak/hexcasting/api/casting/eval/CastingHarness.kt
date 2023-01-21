@@ -3,12 +3,11 @@ package at.petrak.hexcasting.api.casting.eval
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
-import at.petrak.hexcasting.api.casting.Action
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.PatternShapeMatch
 import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
 import at.petrak.hexcasting.api.casting.SpellList
-import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound
+import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate
 import at.petrak.hexcasting.api.casting.eval.vm.FunctionalData
@@ -149,14 +148,13 @@ class CastingHarness private constructor(
             // ALSO TODO need to add reader macro-style things
             try {
                 this.handleParentheses(iota)?.let { (data, resolutionType) ->
-                    return@getUpdate CastResult(continuation, data, resolutionType, listOf(), HexEvalSounds.OPERATOR)
+                    return@getUpdate CastResult(continuation, data, listOf(), resolutionType, HexEvalSounds.OPERATOR)
                 }
             } catch (e: MishapTooManyCloseParens) {
                 // This is ridiculous and needs to be fixed
                 return CastResult(
                     continuation,
                     null,
-                    ResolvedPatternType.ERRORED,
                     listOf(
                         OperatorSideEffect.DoMishap(
                             e,
@@ -166,6 +164,7 @@ class CastingHarness private constructor(
                             )
                         )
                     ),
+                    ResolvedPatternType.ERRORED,
                     HexEvalSounds.MISHAP
                 )
             }
@@ -176,13 +175,13 @@ class CastingHarness private constructor(
                 return CastResult(
                     continuation,
                     null,
-                    ResolvedPatternType.INVALID, // Should never matter
                     listOf(
                         OperatorSideEffect.DoMishap(
                             MishapUnescapedValue(iota),
                             Mishap.Context(HexPattern(HexDir.WEST), null)
                         )
-                    ),
+                    ), // Should never matter
+                    ResolvedPatternType.INVALID,
                     HexEvalSounds.MISHAP
                 )
             }
@@ -192,7 +191,6 @@ class CastingHarness private constructor(
             return CastResult(
                 continuation,
                 null,
-                ResolvedPatternType.ERRORED,
                 listOf(
                     OperatorSideEffect.DoMishap(
                         MishapError(exception),
@@ -202,6 +200,7 @@ class CastingHarness private constructor(
                         )
                     )
                 ),
+                ResolvedPatternType.ERRORED,
                 HexEvalSounds.MISHAP
             )
         }
@@ -313,8 +312,8 @@ class CastingHarness private constructor(
             return CastResult(
                 cont2,
                 fd,
-                ResolvedPatternType.EVALUATED,
                 sideEffects,
+                ResolvedPatternType.EVALUATED,
                 soundType,
             )
 
@@ -322,8 +321,8 @@ class CastingHarness private constructor(
             return CastResult(
                 continuation,
                 null,
-                mishap.resolutionType(ctx),
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, castedName))),
+                mishap.resolutionType(ctx),
                 HexEvalSounds.MISHAP
             )
         }
@@ -662,13 +661,5 @@ class CastingHarness private constructor(
 
     data class TempControllerInfo(
         var earlyExit: Boolean,
-    )
-
-    data class CastResult(
-        val continuation: SpellContinuation,
-        val newData: FunctionalData?,
-        val resolutionType: ResolvedPatternType,
-        val sideEffects: List<OperatorSideEffect>,
-        val sound: EvalSound,
     )
 }

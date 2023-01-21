@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.lists
 
-import at.petrak.hexcasting.api.casting.Action
+import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.eval.CastingContext

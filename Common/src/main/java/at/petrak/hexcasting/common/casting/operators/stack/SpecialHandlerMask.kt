@@ -2,9 +2,9 @@ package at.petrak.hexcasting.common.casting.operators.stack
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.HexAPI.modLoc
-import at.petrak.hexcasting.api.casting.Action
-import at.petrak.hexcasting.api.casting.ConstMediaAction
-import at.petrak.hexcasting.api.casting.SpecialHandler
+import at.petrak.hexcasting.api.casting.castables.Action
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexAngle
@@ -16,7 +16,7 @@ import it.unimi.dsi.fastutil.booleans.BooleanList
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler() {
+class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler {
     override fun act(): Action {
         return InnerAction(this.mask)
     }

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.circles
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus
-import at.petrak.hexcasting.api.casting.ConstMediaAction
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
