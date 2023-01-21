@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.command;
 
-import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.server.ScrungledPatternsSave;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -13,8 +13,8 @@ public class RecalcPatternsCommand {
             .executes(ctx -> {
                 var world = ctx.getSource().getServer().overworld();
                 var ds = world.getDataStorage();
-                ds.set(PatternRegistryManifest.TAG_SAVED_DATA,
-                    PatternRegistryManifest.ScrungledPatternsSave.createEmpty());
+                ds.set(ScrungledPatternsSave.TAG_SAVED_DATA,
+                    ScrungledPatternsSave.createFromScratch(world.getSeed()));
 
                 ctx.getSource().sendSuccess(
                     Component.translatable("command.hexcasting.recalc"), true);

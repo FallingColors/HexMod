@@ -15,8 +15,8 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:or_bit",
-      "anchor": "hexcasting:or_bit",
+      "op_id": "hexcasting:bit/or",
+      "anchor": "hexcasting:bit/or",
       "input": "num, num/list, list",
       "output": "num/list",
       "text": "hexcasting.page.sets.or.1"
@@ -27,8 +27,8 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:and_bit",
-      "anchor": "hexcasting:and_bit",
+      "op_id": "hexcasting:bit/and",
+      "anchor": "hexcasting:bit/and",
       "input": "num, num/list, list",
       "output": "num/list",
       "text": "hexcasting.page.sets.and.1"
@@ -39,8 +39,8 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:xor_bit",
-      "anchor": "hexcasting:xor_bit",
+      "op_id": "hexcasting:bit/xor",
+      "anchor": "hexcasting:bit/xor",
       "input": "num, num/list, list",
       "output": "num/list",
       "text": "hexcasting.page.sets.xor.1"
@@ -51,16 +51,16 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:not_bit",
-      "anchor": "hexcasting:not_bit",
+      "op_id": "hexcasting:bit/not",
+      "anchor": "hexcasting:bit/not",
       "input": "num",
       "output": "num",
       "text": "hexcasting.page.sets.not"
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:to_set",
-      "anchor": "hexcasting:to_set",
+      "op_id": "hexcasting:bit/to_set",
+      "anchor": "hexcasting:bit/to_set",
       "input": "list",
       "output": "list",
       "text": "hexcasting.page.sets.to_set"

@@ -11,8 +11,8 @@ import at.petrak.hexcasting.fabric.event.MouseScrollCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.interop.HexInterop
 import net.fabricmc.api.ClientModInitializer
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.*
 import net.minecraft.client.particle.ParticleProvider
@@ -38,7 +38,7 @@ object FabricHexClientInitializer : ClientModInitializer {
             ShiftScrollListener.clientTickEnd()
         }
         TooltipComponentCallback.EVENT.register(PatternTooltipComponent::tryConvert)
-        ClientLifecycleEvents.CLIENT_STARTED.register {
+        ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
             PatternRegistryManifest.processRegistry(null)
         }
 
