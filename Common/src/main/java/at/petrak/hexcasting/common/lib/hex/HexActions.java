@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.lib.hex;
 
-import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
@@ -18,6 +18,7 @@ import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusDir;
 import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusPos;
 import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
 import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
+import at.petrak.hexcasting.common.casting.operators.eval.OpHalt;
 import at.petrak.hexcasting.common.casting.operators.lists.*;
 import at.petrak.hexcasting.common.casting.operators.local.OpPeekLocal;
 import at.petrak.hexcasting.common.casting.operators.local.OpPushLocal;
@@ -373,6 +374,8 @@ public class HexActions {
     // eval being a space filling curve feels apt doesn't it
     public static final ActionRegistryEntry EVAL = make("eval",
         new ActionRegistryEntry(HexPattern.fromAngles("deaqq", HexDir.SOUTH_EAST), OpEval.INSTANCE));
+    public static final ActionRegistryEntry HALT = make("halt",
+        new ActionRegistryEntry(HexPattern.fromAngles("aqdee", HexDir.SOUTH_WEST), OpHalt.INSTANCE));
     // TODO: install Iris' gambit
 
     public static final ActionRegistryEntry READ = make("read",
