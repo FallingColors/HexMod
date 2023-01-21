@@ -5,6 +5,7 @@ import at.petrak.hexcasting.datagen.HexLootTables;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient;
+import at.petrak.hexcasting.datagen.tag.HexActionTagProvider;
 import at.petrak.hexcasting.datagen.tag.HexBlockTagProvider;
 import at.petrak.hexcasting.datagen.tag.HexItemTagProvider;
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient;
@@ -32,6 +33,8 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
         var blockTagProvider = new HexBlockTagProvider(gen, xtags);
         gen.addProvider(blockTagProvider);
         gen.addProvider(new HexItemTagProvider(gen, blockTagProvider, xtags));
+
+        gen.addProvider(new HexActionTagProvider(gen));
 
         gen.addProvider(new HexLootTables(gen));
     }

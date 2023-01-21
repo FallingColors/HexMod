@@ -81,8 +81,8 @@ public class PatternRegistryManifest {
             }
         }
 
-        HexAPI.LOGGER.info(("We're on the %s! Loaded %d regular actions, %d per-world actions, and %d special " +
-            "handlers").formatted(
+        HexAPI.LOGGER.info(("We're on the %s! " +
+            "Loaded %d regular actions, %d per-world actions, and %d special handlers").formatted(
             (overworld == null) ? "client" : "server", NORMAL_ACTION_LOOKUP.size(), PER_WORLD_ACTIONS.size(),
             IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().size()
         ));

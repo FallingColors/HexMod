@@ -51,8 +51,6 @@ public class HexForgeDataGenerators {
         gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(gen, efh));
         gen.addProvider(ev.includeServer(),
             PaucalForgeDatagenWrappers.addEFHToAdvancements(new HexAdvancements(gen), efh));
-        gen.addProvider(ev.includeServer(), PaucalForgeDatagenWrappers.addEFHToTagProvider(
-            new HexActionTagProvider(gen), efh));
     }
 
     private static void configureForgeDatagen(GatherDataEvent ev) {
@@ -70,6 +68,8 @@ public class HexForgeDataGenerators {
         var itemTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
             new HexItemTagProvider(gen, blockTagProvider, IXplatAbstractions.INSTANCE.tags()), efh);
         gen.addProvider(ev.includeServer(), itemTagProvider);
+        gen.addProvider(ev.includeServer(),
+            PaucalForgeDatagenWrappers.addEFHToTagProvider(new HexActionTagProvider(gen), efh));
     }
 
     private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {
