@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapAlreadyBrainswept
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBrainsweep
+import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.ktxt.tellWitnessesThatIWasMurdered
@@ -21,8 +21,6 @@ import net.minecraft.world.phys.Vec3
 
 object OpBrainsweep : SpellAction {
     override val argc = 2
-
-    override val isGreat = true
 
     // this way you can hear the villager dying more : )
     override fun hasCastingSound(ctx: CastingContext) = false

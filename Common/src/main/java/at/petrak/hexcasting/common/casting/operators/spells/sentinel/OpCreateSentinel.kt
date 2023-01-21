@@ -1,19 +1,18 @@
 package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
-import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.phys.Vec3
 
 class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
     override val argc = 1
-    override val isGreat = this.extendsRange
 
     override fun execute(
         args: List<Iota>,

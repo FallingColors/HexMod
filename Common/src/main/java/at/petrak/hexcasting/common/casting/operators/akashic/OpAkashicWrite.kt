@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapNoAkashicRecord
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
 import at.petrak.hexcasting.common.lib.HexSounds
 import net.minecraft.core.BlockPos
@@ -14,10 +14,6 @@ import net.minecraft.sounds.SoundSource
 
 object OpAkashicWrite : SpellAction {
     override val argc = 3
-
-    override val isGreat = true
-    override val alwaysProcessGreatSpell = false
-    override val causesBlindDiversion = false
 
     override fun execute(
         args: List<Iota>,

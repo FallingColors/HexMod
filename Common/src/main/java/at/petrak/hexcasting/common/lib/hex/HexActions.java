@@ -241,7 +241,7 @@ public class HexActions {
     public static final ActionRegistryEntry COLORIZE = make("colorize",
         new ActionRegistryEntry(HexPattern.fromAngles("awddwqawqwawq", HexDir.EAST), OpColorize.INSTANCE));
     public static final ActionRegistryEntry CREATE_WATER = make("create_water",
-        new ActionRegistryEntry(HexPattern.fromAngles("aqawqadaq", HexDir.SOUTH_EAST), new OpCreateFluid(false,
+        new ActionRegistryEntry(HexPattern.fromAngles("aqawqadaq", HexDir.SOUTH_EAST), new OpCreateFluid(
             MediaConstants.DUST_UNIT,
             Items.WATER_BUCKET,
             Blocks.WATER_CAULDRON.defaultBlockState()
@@ -287,44 +287,44 @@ public class HexActions {
 
     public static final ActionRegistryEntry POTION$WEAKNESS = make("potion/weakness", new ActionRegistryEntry(
         HexPattern.fromAngles("qqqqqaqwawaw", HexDir.NORTH_WEST), new OpPotionEffect(MobEffects.WEAKNESS,
-        MediaConstants.DUST_UNIT / 10, true, false, false)
+        MediaConstants.DUST_UNIT / 10, true, false)
     ));
     public static final ActionRegistryEntry POTION$LEVITATION = make("potion/levitation", new ActionRegistryEntry(
         HexPattern.fromAngles("qqqqqawwawawd", HexDir.WEST), new OpPotionEffect(MobEffects.LEVITATION,
-        MediaConstants.DUST_UNIT / 5, false, false, false)
+        MediaConstants.DUST_UNIT / 5, false, false)
     ));
     public static final ActionRegistryEntry POTION$WITHER = make("potion/wither", new ActionRegistryEntry(
         HexPattern.fromAngles("qqqqqaewawawe", HexDir.SOUTH_WEST), new OpPotionEffect(MobEffects.WITHER,
-        MediaConstants.DUST_UNIT, true, false, false)
+        MediaConstants.DUST_UNIT, true, false)
     ));
     public static final ActionRegistryEntry POTION$POISON = make("potion/poison", new ActionRegistryEntry(
         HexPattern.fromAngles("qqqqqadwawaww", HexDir.SOUTH_EAST), new OpPotionEffect(MobEffects.POISON,
-        MediaConstants.DUST_UNIT / 3, true, false, false)
+        MediaConstants.DUST_UNIT / 3, true, false)
     ));
     public static final ActionRegistryEntry POTION$SLOWNESS = make("potion/slowness", new ActionRegistryEntry(
         HexPattern.fromAngles("qqqqqadwawaw", HexDir.SOUTH_EAST), new OpPotionEffect(MobEffects.MOVEMENT_SLOWDOWN,
-        MediaConstants.DUST_UNIT / 3, true, false, false)
+        MediaConstants.DUST_UNIT / 3, true, false)
     ));
 
     public static final ActionRegistryEntry POTION$REGENERATION = make("potion/regeneration", new ActionRegistryEntry(
         HexPattern.fromAngles("qqqqaawawaedd", HexDir.NORTH_WEST), new OpPotionEffect(MobEffects.REGENERATION,
-        MediaConstants.DUST_UNIT, true, true, true)
+        MediaConstants.DUST_UNIT, true, true)
     ));
     public static final ActionRegistryEntry POTION$NIGHT_VISION = make("potion/night_vision", new ActionRegistryEntry(
         HexPattern.fromAngles("qqqaawawaeqdd", HexDir.WEST), new OpPotionEffect(MobEffects.NIGHT_VISION,
-        MediaConstants.DUST_UNIT / 5, false, true, true)
+        MediaConstants.DUST_UNIT / 5, false, true)
     ));
     public static final ActionRegistryEntry POTION$ABSORPTION = make("potion/absorption", new ActionRegistryEntry(
         HexPattern.fromAngles("qqaawawaeqqdd", HexDir.SOUTH_WEST), new OpPotionEffect(MobEffects.ABSORPTION,
-        MediaConstants.DUST_UNIT, true, true, true)
+        MediaConstants.DUST_UNIT, true, true)
     ));
     public static final ActionRegistryEntry POTION$HASTE = make("potion/haste", new ActionRegistryEntry(
         HexPattern.fromAngles("qaawawaeqqqdd", HexDir.SOUTH_EAST), new OpPotionEffect(MobEffects.DIG_SPEED,
-        MediaConstants.DUST_UNIT / 3, true, true, true)
+        MediaConstants.DUST_UNIT / 3, true, true)
     ));
     public static final ActionRegistryEntry POTION$STRENGTH = make("potion/strength", new ActionRegistryEntry(
         HexPattern.fromAngles("aawawaeqqqqdd", HexDir.EAST), new OpPotionEffect(MobEffects.DAMAGE_BOOST,
-        MediaConstants.DUST_UNIT / 3, true, true, true)
+        MediaConstants.DUST_UNIT / 3, true, true)
     ));
 
     public static final ActionRegistryEntry SENTINEL$CREATE = make("sentinel/create",
@@ -341,7 +341,7 @@ public class HexActions {
     public static final ActionRegistryEntry FLIGHT = make("flight",
         new ActionRegistryEntry(HexPattern.fromAngles("eawwaeawawaa", HexDir.NORTH_WEST), OpFlight.INSTANCE));
     public static final ActionRegistryEntry CREATE_LAVA = make("create_lava",
-        new ActionRegistryEntry(HexPattern.fromAngles("eaqawqadaqd", HexDir.EAST), new OpCreateFluid(true,
+        new ActionRegistryEntry(HexPattern.fromAngles("eaqawqadaqd", HexDir.EAST), new OpCreateFluid(
             MediaConstants.CRYSTAL_UNIT,
             Items.LAVA_BUCKET,
             Blocks.LAVA_CAULDRON.defaultBlockState(),

@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -23,7 +23,6 @@ import net.minecraft.world.phys.Vec3
 // WRT its look vector
 object OpTeleport : SpellAction {
     override val argc = 2
-    override val isGreat = true
     override fun execute(
         args: List<Iota>,
         ctx: CastingContext

@@ -3,10 +3,6 @@ package at.petrak.hexcasting.api.casting
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.utils.asTranslatedComponent
-import at.petrak.hexcasting.api.utils.lightPurple
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
 import java.text.DecimalFormat
 
@@ -38,30 +34,6 @@ interface Action {
         ctx: CastingContext
     ): OperationResult
 
-    /**
-     * Do you need to be enlightened to use this operator? (i.e. is this operator a Great Pattern)
-     */
-    val isGreat: Boolean get() = false
-
-    /**
-     * Should this Great Pattern process and have side effects, even if its user isn't enlightened?
-     *
-     * The pattern itself may modify its effects based on whether the user is enlightened or not, regardless of what this value is.
-     */
-    val alwaysProcessGreatSpell: Boolean get() = this is SpellAction
-
-    /**
-     * Can this Great Pattern give you Blind Diversion?
-     */
-    val causesBlindDiversion: Boolean get() = this is SpellAction
-
-    /**
-     * The component for displaying this pattern's name. Override for dynamic patterns.
-     */
-    fun getDisplayName(resLoc: ResourceLocation): Component {
-        return "hexcasting.spell.${resLoc.toString()}".asTranslatedComponent.lightPurple
-    }
-
     companion object {
         // I see why vzakii did this: you can't raycast out to infinity!
         const val MAX_DISTANCE: Double = 32.0
@@ -81,19 +53,6 @@ interface Action {
         }
 
         public val DOUBLE_FORMATTER = DecimalFormat("####.####")
-
-        @JvmStatic
-        fun makeConstantOp(x: Double, key: ResourceLocation): Action = object : ConstMediaAction {
-            override val argc: Int
-                get() = 0
-
-            override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> =
-                x.asActionResult
-
-            override fun getDisplayName(resLoc: ResourceLocation): Component {
-                return "hexcasting.spell.$key".asTranslatedComponent(DOUBLE_FORMATTER.format(x)).lightPurple
-            }
-        }
     }
 }
 

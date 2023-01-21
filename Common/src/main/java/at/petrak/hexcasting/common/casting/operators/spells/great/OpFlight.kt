@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.player.FlightAbility
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.eval.CastingContext
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.player.FlightAbility
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -14,7 +14,6 @@ import kotlin.math.roundToInt
 
 object OpFlight : SpellAction {
     override val argc = 3
-    override val isGreat = true
     override fun execute(
         args: List<Iota>,
         ctx: CastingContext

@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.casting
 
 import at.petrak.hexcasting.api.casting.eval.CastingContext
-import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 
@@ -36,15 +36,13 @@ interface SpellAction : Action {
         if (media > 0)
             sideEffects.add(OperatorSideEffect.ConsumeMedia(media))
 
-        // Don't have an effect if the caster isn't enlightened, even if processing other side effects
-        if (!isGreat || ctx.isCasterEnlightened)
-            sideEffects.add(
-                OperatorSideEffect.AttemptSpell(
-                    spell,
-                    this.hasCastingSound(ctx),
-                    this.awardsCastingStat(ctx)
-                )
+        sideEffects.add(
+            OperatorSideEffect.AttemptSpell(
+                spell,
+                this.hasCastingSound(ctx),
+                this.awardsCastingStat(ctx)
             )
+        )
 
         for (spray in particles)
             sideEffects.add(OperatorSideEffect.Particles(spray))

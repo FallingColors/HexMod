@@ -24,15 +24,9 @@ public class HexActionTagProvider extends TagsProvider<ActionRegistryEntry> {
             var loc = modLoc(normalGreat);
             var key = ResourceKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), loc);
             tag(HexTags.Actions.REQUIRES_ENLIGHTENMENT).add(key);
+            tag(HexTags.Actions.CAN_START_ENLIGHTEN).add(key);
             tag(HexTags.Actions.PER_WORLD_PATTERN).add(key);
         }
-
-        for (var onlyEnlighten : new String[]{
-            "akashic/write",
-        }) {
-            var loc = modLoc(onlyEnlighten);
-            var key = ResourceKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), loc);
-            tag(HexTags.Actions.REQUIRES_ENLIGHTENMENT).add(key);
-        }
+        // deciding that akashic write can be just a normal spell (as a treat)
     }
 }

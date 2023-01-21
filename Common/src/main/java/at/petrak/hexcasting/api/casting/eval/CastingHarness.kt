@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.eval
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
+import at.petrak.hexcasting.api.casting.Action
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.PatternShapeMatch
 import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
@@ -29,6 +30,7 @@ import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import com.mojang.datafixers.util.Either
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
@@ -209,50 +211,46 @@ class CastingHarness private constructor(
      * When the server gets a packet from the client with a new pattern,
      * handle it functionally.
      */
-    fun updateWithPattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
+    private fun updateWithPattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
         var castedName: Component? = null
         try {
-            // Don't catch this one
             val lookup = PatternRegistryManifest.matchPattern(newPat, world, false)
-            val actionNamePair = when (lookup) {
-                is Normal -> {
-                    val action = IXplatAbstractions.INSTANCE.actionRegistry.get(lookup.key)
-                    val i18n = HexAPI.instance().getActionI18nKey(lookup.key)
-                    action!!.action to i18n.asTranslatedComponent.lightPurple
+            val lookupResult: Either<Action, List<OperatorSideEffect>> = if (lookup is Normal || lookup is PerWorld) {
+                val key = when (lookup) {
+                    is Normal -> lookup.key
+                    is PerWorld -> lookup.key
+                    else -> throw IllegalStateException()
                 }
 
-                is PerWorld -> {
-                    // it will always be exact match here.
-                    // TODO add non-exact checking as a hint to the player?
-                    val action = IXplatAbstractions.INSTANCE.actionRegistry.get(lookup.key)
-                    val i18n = HexAPI.instance().getActionI18nKey(lookup.key)
-                    // what the hey let's make great spells golden
-                    action!!.action to i18n.asTranslatedComponent.gold
+                val reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.actionRegistry, key, HexTags.Actions.REQUIRES_ENLIGHTENMENT)
+                val canEnlighten = isOfTag(IXplatAbstractions.INSTANCE.actionRegistry, key, HexTags.Actions.CAN_START_ENLIGHTEN)
+
+                castedName = HexAPI.instance().getActionI18(key.location(), reqsEnlightenment)
+
+                if (!ctx.isCasterEnlightened && reqsEnlightenment) {
+                    Either.right(listOf(OperatorSideEffect.RequiredEnlightenment(canEnlighten)))
+                } else {
+                    val regiEntry = IXplatAbstractions.INSTANCE.actionRegistry.get(key)!!
+                    Either.left(regiEntry.action)
                 }
-
-                is Special -> {
-                    lookup.handler.act() to lookup.handler.name
-                }
-
-                is PatternShapeMatch.Nothing -> throw MishapInvalidPattern()
-
-                else -> throw IllegalStateException()
+            } else if (lookup is Special) {
+                castedName = lookup.handler.name
+                Either.left(lookup.handler.act())
+            } else if (lookup is PatternShapeMatch.Nothing) {
+                throw MishapInvalidPattern()
+            } else {
+                throw IllegalStateException()
             }
-            castedName = actionNamePair.second
-            val action = actionNamePair.first
-
             // TODO: the config denylist should be handled per VM type.
             // I just removed it for now, should re-add it...
-
-            // TODO need to check for enlightenment on VM
-            val requiresAndFailedEnlightenment = action.isGreat && !ctx.isCasterEnlightened
 
             val sideEffects = mutableListOf<OperatorSideEffect>()
             var stack2: List<Iota>? = null
             var cont2 = continuation
             var ravenmind2: Iota? = null
 
-            if (!requiresAndFailedEnlightenment || action.alwaysProcessGreatSpell) {
+            if (lookupResult.left().isPresent) {
+                val action = lookupResult.left().get()
                 displayPatternDebug(false, 0, castedName)
                 val result = action.operate(
                     continuation,
@@ -265,13 +263,13 @@ class CastingHarness private constructor(
                 ravenmind2 = result.newRavenmind
                 // TODO parens also break prescience
                 sideEffects.addAll(result.sideEffects)
-            }
-
-            if (requiresAndFailedEnlightenment) {
-                sideEffects.add(OperatorSideEffect.RequiredEnlightenment(action.causesBlindDiversion))
+            } else {
+                val problems = lookupResult.right().get()
+                sideEffects.addAll(problems)
             }
 
             // Stick a poofy particle effect at the caster position
+            // TODO again this should be on the VM lalala
             if (this.ctx.spellCircle == null)
                 sideEffects.add(
                     OperatorSideEffect.Particles(

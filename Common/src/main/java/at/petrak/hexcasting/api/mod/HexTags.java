@@ -57,6 +57,11 @@ public class HexTags {
          */
         public static final TagKey<ActionRegistryEntry> PER_WORLD_PATTERN = create("per_world_pattern");
 
+        /**
+         * Actions that can cause Blind Diversion
+         */
+        public static final TagKey<ActionRegistryEntry> CAN_START_ENLIGHTEN = create("can_start_enlighten");
+
         public static TagKey<ActionRegistryEntry> create(String name) {
             return TagKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), modLoc(name));
         }
