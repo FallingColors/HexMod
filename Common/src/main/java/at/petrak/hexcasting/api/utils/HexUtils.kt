@@ -7,10 +7,14 @@ import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import net.minecraft.ChatFormatting
+import net.minecraft.core.Registry
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
@@ -272,3 +276,13 @@ fun <T : Tag> Tag.downcast(type: TagType<T>): T {
 }
 
 const val ERROR_COLOR = 0xff_f800f8.toInt()
+fun <T> isOfTag(registry: Registry<T>, key: ResourceKey<T>, tag: TagKey<T>): Boolean {
+    val maybeHolder = registry.getHolder(key)
+    val holder = if (maybeHolder.isPresent) maybeHolder.get() else return false
+    return holder.`is`(tag)
+}
+
+fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation, tag: TagKey<T>): Boolean {
+    val key = ResourceKey.create(registry.key(), loc);
+    return isOfTag(registry, key, tag)
+}

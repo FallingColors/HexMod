@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.math.EulerPathFinder;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.nbt.CompoundTag;
@@ -50,10 +51,7 @@ public class PatternRegistryManifest {
     public static void processRegistry(@Nullable ServerLevel overworld) {
         ScrungledPatternsSave perWorldPatterns = null;
         if (overworld != null) {
-            var ds = overworld.getDataStorage();
-            perWorldPatterns = ds.computeIfAbsent(ScrungledPatternsSave::load,
-                ScrungledPatternsSave::createEmpty,
-                TAG_SAVED_DATA);
+            perWorldPatterns = ScrungledPatternsSave.open(overworld);
         }
 
         var postCalculationNeeders = new ArrayList<ResourceKey<ActionRegistryEntry>>();
@@ -61,7 +59,7 @@ public class PatternRegistryManifest {
         var registry = IXplatAbstractions.INSTANCE.getActionRegistry();
         for (var key : registry.registryKeySet()) {
             var entry = registry.get(key);
-            if (registry.getHolderOrThrow(key).is(HexTags.Actions.PER_WORLD_PATTERN)) {
+            if (HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
                 PER_WORLD_ACTIONS.add(key);
 
                 // Then we need to create this only on the server, gulp

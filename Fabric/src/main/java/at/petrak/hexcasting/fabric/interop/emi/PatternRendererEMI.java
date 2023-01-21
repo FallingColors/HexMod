@@ -1,9 +1,11 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
-import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
+import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
 import at.petrak.hexcasting.interop.utils.PatternEntry;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import dev.emi.emi.api.render.EmiRenderable;
@@ -28,8 +30,9 @@ public class PatternRendererEMI implements EmiRenderable {
     private final List<Vec2> pathfinderDots;
 
     public PatternRendererEMI(ResourceLocation pattern, int w, int h) {
-        var entry = PatternRegistryManifest.lookupPattern(pattern);
-        this.strokeOrder = !entry.isPerWorld();
+        var regi = IXplatAbstractions.INSTANCE.getActionRegistry();
+        var entry = regi.get(pattern);
+        this.strokeOrder = HexUtils.isOfTag(regi, pattern, HexTags.Actions.PER_WORLD_PATTERN);
         var data = PatternDrawingUtil.loadPatterns(List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin())), 0f,
             1f);
         this.patterns = data.patterns();
