@@ -29,7 +29,6 @@ import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
@@ -476,6 +475,8 @@ class CastingHarness private constructor(
             }
         }
 
+        // TODO: replace this once we can read things from the client
+        /*
         if (out != null) {
             val display = if (iota is PatternIota) {
                 PatternNameHelper.representationForPattern(iota.pattern)
@@ -484,6 +485,7 @@ class CastingHarness private constructor(
             } else iota.display()
             displayPatternDebug(this.escapeNext, displayDepth, display)
         }
+        */
         return out
     }
 

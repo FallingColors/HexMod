@@ -54,7 +54,7 @@ public interface IotaHolderItem {
     /**
      * What is this considered to contain when nothing can be read?
      * <p>
-     * TODO i'm not sure what this exists for
+     * TODO i'm not sure what this isCastable for
      */
     @Nullable
     default Iota emptyIota(ItemStack stack) {
@@ -97,7 +97,7 @@ public interface IotaHolderItem {
     void writeDatum(ItemStack stack, @Nullable Iota iota);
 
     static void appendHoverText(IotaHolderItem self, ItemStack stack, List<Component> components,
-                                TooltipFlag flag) {
+        TooltipFlag flag) {
         var datumTag = self.readIotaTag(stack);
         if (datumTag != null) {
             var cmp = HexIotaTypes.getDisplay(datumTag);

@@ -244,7 +244,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public List<ResolvedPattern> getPatterns(ServerPlayer player) {
+    public List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player) {
         ListTag patternsTag = player.getPersistentData().getList(TAG_PATTERNS, Tag.TAG_COMPOUND);
 
         List<ResolvedPattern> patterns = new ArrayList<>(patternsTag.size());
@@ -423,9 +423,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     );
     private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
         Suppliers.memoize(() ->
-        ForgeAccessorRegistry.hex$registerSimple(
-            ResourceKey.createRegistryKey(modLoc("special_handler")), null)
-    );
+            ForgeAccessorRegistry.hex$registerSimple(
+                ResourceKey.createRegistryKey(modLoc("special_handler")), null)
+        );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
         ForgeAccessorRegistry.hex$registerDefaulted(
             ResourceKey.createRegistryKey(modLoc("iota_type")),

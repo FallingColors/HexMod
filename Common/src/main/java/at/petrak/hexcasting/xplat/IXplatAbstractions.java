@@ -93,7 +93,7 @@ public interface IXplatAbstractions {
 
     CastingHarness getHarness(ServerPlayer player, InteractionHand hand);
 
-    List<ResolvedPattern> getPatterns(ServerPlayer player);
+    List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player);
 
     void clearCastingData(ServerPlayer player);
 

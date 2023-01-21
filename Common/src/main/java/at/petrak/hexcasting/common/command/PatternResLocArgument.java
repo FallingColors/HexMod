@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.command;
 
-import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -28,26 +28,17 @@ public class PatternResLocArgument extends ResourceLocationArgument {
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         return SharedSuggestionProvider.suggest(
-            PatternRegistryManifest.getAllPerWorldPatternNames().stream().map(Object::toString), builder);
+            PatternRegistryManifest.getAllPerWorldActions().stream().map(key -> key.location().toString()), builder);
     }
 
     public static HexPattern getPattern(
-        CommandContext<CommandSourceStack> ctx, String pName) throws CommandSyntaxException {
-        var targetId = ctx.getArgument(pName, ResourceLocation.class);
-        var lookup = PatternRegistryManifest.getPerWorldPatterns(ctx.getSource().getLevel());
-        HexPattern foundPat = null;
-        for (var sig : lookup.keySet()) {
-            var rhs = lookup.get(sig);
-            if (rhs.getFirst().equals(targetId)) {
-                foundPat = HexPattern.fromAngles(sig, rhs.getSecond());
-                break;
-            }
-        }
-
+        CommandContext<CommandSourceStack> ctx, String argumentName) throws CommandSyntaxException {
+        var targetId = ctx.getArgument(argumentName, ResourceLocation.class);
+        var foundPat = PatternRegistryManifest.getCanonicalStrokesPerWorld(targetId, ctx.getSource().getLevel());
         if (foundPat == null) {
             throw ERROR_UNKNOWN_PATTERN.create(targetId);
         } else {
-            return foundPat;
+            return foundPat.getSecond();
         }
     }
 }

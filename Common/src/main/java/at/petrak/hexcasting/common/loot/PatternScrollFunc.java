@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.loot;
 
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
-import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;
 import com.google.gson.JsonDeserializationContext;
@@ -14,6 +13,9 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+/**
+ * Slap a random per-world pattern on the scroll
+ */
 public class PatternScrollFunc extends LootItemConditionalFunction {
     public PatternScrollFunc(LootItemCondition[] lootItemConditions) {
         super(lootItemConditions);
@@ -22,17 +24,15 @@ public class PatternScrollFunc extends LootItemConditionalFunction {
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
         var rand = ctx.getRandom();
-        var worldLookup = PatternRegistryManifest.getPerWorldPatterns(ctx.getLevel());
+        var worldLookup = PatternRegistryManifest.getAllPerWorldActions();
 
-        var keys = worldLookup.keySet().stream().toList();
-        var sig = keys.get(rand.nextInt(keys.size()));
+        var keys = worldLookup.stream().toList();
+        var key = keys.get(rand.nextInt(keys.size()));
 
-        var entry = worldLookup.get(sig);
-        var opId = entry.getFirst();
-        var startDir = entry.getSecond();
+        var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(key, ctx.getLevel().getServer().overworld());
         var tag = new CompoundTag();
-        tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
-        tag.put(ItemScroll.TAG_PATTERN, HexPattern.fromAngles(sig, startDir).serializeToNBT());
+        tag.putString(ItemScroll.TAG_OP_ID, key.location().toString());
+        tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
 
         stack.getOrCreateTag().merge(tag);
 

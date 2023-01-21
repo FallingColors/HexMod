@@ -18,6 +18,7 @@ public class HexInterop {
     }
 
     public static final class Fabric {
+        // TODO: the ID for this mod changed, fix that, #362
         public static final String GRAVITY_CHANGER_API_ID = "gravitychanger";
         public static final String TRINKETS_API_ID = "trinkets";
     }

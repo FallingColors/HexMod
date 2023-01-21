@@ -207,7 +207,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public List<ResolvedPattern> getPatterns(ServerPlayer player) {
+    public List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player) {
         var cc = HexCardinalComponents.PATTERNS.get(player);
         return cc.getPatterns();
     }
@@ -400,11 +400,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
     );
     private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
         Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler.Factory<?>>(
-                ResourceKey.createRegistryKey(modLoc("special_handler")),
-                Lifecycle.stable(), null))
-            .buildAndRegister()
-    );
+            FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler.Factory<?>>(
+                    ResourceKey.createRegistryKey(modLoc("special_handler")),
+                    Lifecycle.stable(), null))
+                .buildAndRegister()
+        );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
                 HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),

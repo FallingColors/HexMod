@@ -2,6 +2,9 @@ package at.petrak.hexcasting.fabric
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry
+import at.petrak.hexcasting.api.casting.math.HexDir
+import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
@@ -22,6 +25,9 @@ import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
+import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop
+import at.petrak.hexcasting.fabric.interop.gravity.OpChangeGravity
+import at.petrak.hexcasting.fabric.interop.gravity.OpGetGravity
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient
@@ -96,7 +102,9 @@ object FabricHexInitializer : ModInitializer {
 
     }
 
-    fun initRegistries() {
+    private fun initRegistries() {
+        fabricOnlyRegistration()
+
         HexSounds.registerSounds(bind(Registry.SOUND_EVENT))
         HexBlocks.registerBlocks(bind(Registry.BLOCK))
         HexBlocks.registerBlockItems(bind(Registry.ITEM))
@@ -125,6 +133,22 @@ object FabricHexInitializer : ModInitializer {
         AkashicTreeGrower.init()
 
         // Done with soft implements in forge
+        butYouCouldBeFire()
+
+        HexStatistics.register()
+    }
+
+    // sorry lex (not sorry)
+    private fun fabricOnlyRegistration() {
+        if (GravityApiInterop.isActive()) {
+            HexActions.make("interop/gravity/get",
+                ActionRegistryEntry(HexPattern.fromAngles("wawawddew", HexDir.NORTH_EAST), OpGetGravity))
+            HexActions.make("interop/gravity/set",
+                ActionRegistryEntry(HexPattern.fromAngles("wdwdwaaqw", HexDir.NORTH_WEST), OpChangeGravity))
+        }
+    }
+
+    private fun butYouCouldBeFire() {
         val flameOn = FlammableBlockRegistry.getDefaultInstance()
         for (log in listOf(
             HexBlocks.EDIFIED_LOG,
@@ -165,8 +189,6 @@ object FabricHexInitializer : ModInitializer {
         )) {
             flameOn.add(leaves, 60, 30)
         }
-
-        HexStatistics.register()
     }
 
     private fun <T> bind(registry: Registry<in T>): BiConsumer<T, ResourceLocation> =

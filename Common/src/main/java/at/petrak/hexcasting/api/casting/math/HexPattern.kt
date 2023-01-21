@@ -129,10 +129,8 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
 
         @JvmStatic
         fun isPattern(tag: CompoundTag): Boolean {
-            return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt()) && tag.contains(
-                TAG_ANGLES,
-                Tag.TAG_BYTE_ARRAY.toInt()
-            )
+            return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt())
+                && tag.contains(TAG_ANGLES, Tag.TAG_BYTE_ARRAY.toInt())
         }
 
         @JvmStatic

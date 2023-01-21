@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.interop.patchouli;
 
-import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.annotations.SerializedName;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import vazkii.patchouli.api.IVariable;
 
@@ -23,8 +25,11 @@ public class LookupPatternComponent extends AbstractPatternComponent {
 
     @Override
     public List<Pair<HexPattern, HexCoord>> getPatterns(UnaryOperator<IVariable> lookup) {
-        var entry = PatternRegistryManifest.lookupPattern(this.opName);
-        this.strokeOrder = !entry.isPerWorld();
+        var key = ResourceKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), this.opName);
+        var entry = IXplatAbstractions.INSTANCE.getActionRegistry().get(key);
+
+        this.strokeOrder =
+            !IXplatAbstractions.INSTANCE.getActionRegistry().getHolderOrThrow(key).is(HexTags.Actions.PER_WORLD_PATTERN);
         return List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin()));
     }
 

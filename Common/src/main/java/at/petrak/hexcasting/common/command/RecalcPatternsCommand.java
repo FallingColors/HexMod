@@ -14,7 +14,7 @@ public class RecalcPatternsCommand {
                 var world = ctx.getSource().getServer().overworld();
                 var ds = world.getDataStorage();
                 ds.set(PatternRegistryManifest.TAG_SAVED_DATA,
-                    PatternRegistryManifest.ScrungledPatternsSave.create(world.getSeed()));
+                    PatternRegistryManifest.ScrungledPatternsSave.createEmpty());
 
                 ctx.getSource().sendSuccess(
                     Component.translatable("command.hexcasting.recalc"), true);

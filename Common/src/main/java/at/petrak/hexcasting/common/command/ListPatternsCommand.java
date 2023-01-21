@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.command;
 
-import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.items.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -57,36 +57,36 @@ public class ListPatternsCommand {
     }
 
     private static int list(CommandSourceStack source) {
-        var lookup = PatternRegistryManifest.getPerWorldPatterns(source.getLevel());
-        var listing = lookup.entrySet()
+        var keys = PatternRegistryManifest.getAllPerWorldActions();
+        var listing = keys
             .stream()
-            .sorted((a, b) -> compareResLoc(a.getValue().getFirst(), b.getValue().getFirst()))
+            .sorted((a, b) -> compareResLoc(a.location(), b.location()))
             .toList();
 
+        var ow = source.getLevel().getServer().overworld();
         source.sendSuccess(Component.translatable("command.hexcasting.pats.listing"), false);
-        for (var pair : listing) {
-            source.sendSuccess(Component.literal(pair.getValue().getFirst().toString())
+        for (var key : listing) {
+            var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(key, ow);
+
+            source.sendSuccess(Component.literal(key.location().toString())
                 .append(": ")
-                .append(new PatternIota(HexPattern.fromAngles(pair.getKey(), pair.getValue().getSecond()))
-                    .display()), false);
+                .append(new PatternIota(pat).display()), false);
         }
 
-
-        return lookup.size();
+        return keys.size();
     }
 
     private static int giveAll(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (!targets.isEmpty()) {
-            var lookup = PatternRegistryManifest.getPerWorldPatterns(source.getLevel());
+            var lookup = PatternRegistryManifest.getAllPerWorldActions();
+            var ow = source.getLevel().getServer().overworld();
 
-            lookup.forEach((sig, entry) -> {
-                var opId = entry.getFirst();
-                var startDir = entry.getSecond();
+            lookup.forEach(key -> {
+                var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(key, ow);
 
                 var tag = new CompoundTag();
-                tag.putString(ItemScroll.TAG_OP_ID, opId.toString());
-                tag.put(ItemScroll.TAG_PATTERN,
-                    HexPattern.fromAngles(sig, startDir).serializeToNBT());
+                tag.putString(ItemScroll.TAG_OP_ID, key.location().toString());
+                tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
 
                 var stack = new ItemStack(HexItems.SCROLL_LARGE);
                 stack.setTag(tag);

@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.lib.hex;
 
-import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.casting.Action;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
@@ -9,6 +8,7 @@ import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.casting.operators.*;
 import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicRead;
@@ -37,6 +37,9 @@ import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentin
 import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
 import at.petrak.hexcasting.common.casting.operators.stack.*;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.interop.pehkui.OpGetScale;
+import at.petrak.hexcasting.interop.pehkui.OpSetScale;
+import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -536,7 +539,17 @@ public class HexActions {
     public static final ActionRegistryEntry DECONSTRUCT = make("deconstruct",
         new ActionRegistryEntry(HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST), OpUnCons.INSTANCE));
 
-    private static ActionRegistryEntry make(String name, ActionRegistryEntry are) {
+    // Xplat interops
+    static {
+        if (PehkuiInterop.isActive()) {
+            make("interop/pehkui/get",
+                new ActionRegistryEntry(HexPattern.fromAngles("aawawwawwa", HexDir.NORTH_WEST), OpGetScale.INSTANCE));
+            make("interop/pehkui/set",
+                new ActionRegistryEntry(HexPattern.fromAngles("ddwdwwdwwd", HexDir.NORTH_EAST), OpSetScale.INSTANCE));
+        }
+    }
+
+    public static ActionRegistryEntry make(String name, ActionRegistryEntry are) {
         var old = ACTIONS.put(modLoc(name), are);
         if (old != null) {
             throw new IllegalArgumentException("Typo? Duplicate id " + name);
