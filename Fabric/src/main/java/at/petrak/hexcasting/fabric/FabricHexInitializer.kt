@@ -33,6 +33,7 @@ import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient
 import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
 import at.petrak.hexcasting.interop.HexInterop
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
@@ -122,10 +123,10 @@ object FabricHexInitializer : ModInitializer {
 
         HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
 
-        HexActions.register()
-        HexSpecialHandlers.register()
-        HexIotaTypes.registerTypes()
-        HexEvalSounds.register()
+        HexIotaTypes.registerTypes(bind(IXplatAbstractions.INSTANCE.iotaTypeRegistry))
+        HexActions.register(bind(IXplatAbstractions.INSTANCE.actionRegistry))
+        HexSpecialHandlers.register(bind(IXplatAbstractions.INSTANCE.specialHandlerRegistry))
+        HexEvalSounds.register(bind(IXplatAbstractions.INSTANCE.evalSoundRegistry))
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
         // any calls that will eventually touch FeatureUtils.register(), as the growers here do,

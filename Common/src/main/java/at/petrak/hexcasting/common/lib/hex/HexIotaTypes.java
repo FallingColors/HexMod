@@ -179,8 +179,7 @@ public class HexIotaTypes {
         return type.color();
     }
 
-    public static void registerTypes() {
-        BiConsumer<IotaType<?>, ResourceLocation> r = (type, id) -> Registry.register(REGISTRY, id, type);
+    public static void registerTypes(BiConsumer<IotaType<?>, ResourceLocation> r) {
         for (var e : TYPES.entrySet()) {
             r.accept(e.getValue(), e.getKey());
         }

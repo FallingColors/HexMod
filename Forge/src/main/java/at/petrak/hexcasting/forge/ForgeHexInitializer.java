@@ -105,18 +105,18 @@ public class ForgeHexInitializer {
 
         bind(Registry.PARTICLE_TYPE_REGISTRY, HexParticles::registerParticles);
 
-        ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
+        bind(IXplatAbstractions.INSTANCE.getIotaTypeRegistry().key(), HexIotaTypes::registerTypes);
+        bind(IXplatAbstractions.INSTANCE.getActionRegistry().key(), HexActions::register);
+        bind(IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().key(), HexSpecialHandlers::register);
+        bind(IXplatAbstractions.INSTANCE.getEvalSoundRegistry().key(), HexEvalSounds::register);
 
-        HexActions.register();
-        HexSpecialHandlers.register();
-        HexIotaTypes.registerTypes();
-        HexEvalSounds.register();
+        ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
 
         HexAdvancementTriggers.registerTriggers();
     }
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
-    private static <T> void bind(ResourceKey<Registry<T>> registry,
+    private static <T> void bind(ResourceKey<? extends Registry<T>> registry,
         Consumer<BiConsumer<T, ResourceLocation>> source) {
         getModEventBus().addListener((RegisterEvent event) -> {
             if (registry.equals(event.getRegistryKey())) {

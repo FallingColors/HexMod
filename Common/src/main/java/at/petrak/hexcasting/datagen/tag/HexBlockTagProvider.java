@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.datagen;
+package at.petrak.hexcasting.datagen.tag;
 
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.lib.HexBlocks;

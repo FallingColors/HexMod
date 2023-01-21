@@ -33,8 +33,7 @@ public class HexSpecialHandlers {
         return handler;
     }
 
-    public static void register() {
-        BiConsumer<SpecialHandler.Factory<?>, ResourceLocation> r = (type, id) -> Registry.register(REGISTRY, id, type);
+    public static void register(BiConsumer<SpecialHandler.Factory<?>, ResourceLocation> r) {
         for (var e : SPECIAL_HANDLERS.entrySet()) {
             r.accept(e.getValue(), e.getKey());
         }

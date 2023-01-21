@@ -557,8 +557,7 @@ public class HexActions {
         return are;
     }
 
-    public static void register() {
-        BiConsumer<ActionRegistryEntry, ResourceLocation> r = (type, id) -> Registry.register(REGISTRY, id, type);
+    public static void register(BiConsumer<ActionRegistryEntry, ResourceLocation> r) {
         for (var e : ACTIONS.entrySet()) {
             r.accept(e.getValue(), e.getKey());
         }

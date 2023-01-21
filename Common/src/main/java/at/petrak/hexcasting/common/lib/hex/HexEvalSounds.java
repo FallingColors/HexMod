@@ -38,8 +38,7 @@ public class HexEvalSounds {
         return sound;
     }
 
-    public static void register() {
-        BiConsumer<EvalSound, ResourceLocation> r = (type, id) -> Registry.register(REGISTRY, id, type);
+    public static void register(BiConsumer<EvalSound, ResourceLocation> r) {
         for (var e : SOUNDS.entrySet()) {
             r.accept(e.getValue(), e.getKey());
         }

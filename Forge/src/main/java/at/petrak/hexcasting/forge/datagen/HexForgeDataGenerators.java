@@ -1,9 +1,14 @@
 package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.datagen.*;
+import at.petrak.hexcasting.datagen.HexAdvancements;
+import at.petrak.hexcasting.datagen.HexLootTables;
+import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient;
+import at.petrak.hexcasting.datagen.tag.HexActionTagProvider;
+import at.petrak.hexcasting.datagen.tag.HexBlockTagProvider;
+import at.petrak.hexcasting.datagen.tag.HexItemTagProvider;
 import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
 import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
@@ -46,6 +51,8 @@ public class HexForgeDataGenerators {
         gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(gen, efh));
         gen.addProvider(ev.includeServer(),
             PaucalForgeDatagenWrappers.addEFHToAdvancements(new HexAdvancements(gen), efh));
+        gen.addProvider(ev.includeServer(), PaucalForgeDatagenWrappers.addEFHToTagProvider(
+            new HexActionTagProvider(gen), efh));
     }
 
     private static void configureForgeDatagen(GatherDataEvent ev) {
