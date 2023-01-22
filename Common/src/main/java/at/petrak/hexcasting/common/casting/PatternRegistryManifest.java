@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.server.ScrungledPatternsSave;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.datafixers.util.Unit;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import org.apache.commons.lang3.NotImplementedException;
@@ -19,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentMap;
 
 // Now an internal-only class used to do final processing on the registered stuff
@@ -35,14 +35,17 @@ public class PatternRegistryManifest {
      * A set of all the per-world patterns. This doesn't store <em>what</em> they are, just that
      * they exist.
      */
-    private static final ConcurrentLinkedDeque<ResourceKey<ActionRegistryEntry>> PER_WORLD_ACTIONS =
-        new ConcurrentLinkedDeque<>();
+    private static final ConcurrentMap<ResourceKey<ActionRegistryEntry>, Unit> PER_WORLD_ACTIONS =
+        new ConcurrentHashMap<>();
 
     /**
      * Process the registry!
      * <p>
      * Pass null for the OW to signal we're on the client
      */
+    // TODO i just realized that logically, this should not be run every time the client/server connects
+    // just run it on startup, the info gathered here i think is static per world ... except for the per-worldies
+    // that need to be recalced...
     public static void processRegistry(@Nullable ServerLevel overworld) {
         ScrungledPatternsSave perWorldPatterns = null;
         if (overworld != null) {
@@ -55,7 +58,11 @@ public class PatternRegistryManifest {
         for (var key : registry.registryKeySet()) {
             var entry = registry.get(key);
             if (HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
-                PER_WORLD_ACTIONS.add(key);
+                // We might be double-inserting here, once when the client does it and once when the server does
+                // However, we do need both to happen (what if it's a dedicated client connecting to a dedicated
+                // server?)
+                // hence, a set
+                PER_WORLD_ACTIONS.put(key, Unit.INSTANCE);
 
                 // Then we need to create this only on the server, gulp
                 if (perWorldPatterns != null) {
@@ -157,7 +164,7 @@ public class PatternRegistryManifest {
      * Get the IDs of all the patterns marked as per-world
      */
     public static Collection<ResourceKey<ActionRegistryEntry>> getAllPerWorldActions() {
-        return PER_WORLD_ACTIONS;
+        return PER_WORLD_ACTIONS.keySet();
     }
 
     /**
