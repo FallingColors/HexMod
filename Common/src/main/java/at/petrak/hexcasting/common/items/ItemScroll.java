@@ -125,7 +125,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
         var ancientId = NBTHelper.getString(pStack, TAG_OP_ID);
         if (ancientId != null) {
             return Component.translatable(descID + ".of",
-                Component.translatable("hexcasting.spell." + ResourceLocation.tryParse(ancientId)));
+                Component.translatable("hexcasting.action." + ResourceLocation.tryParse(ancientId)));
         } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
             return Component.translatable(descID);
         } else {
