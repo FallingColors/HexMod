@@ -904,7 +904,7 @@
   "hexcasting.page.math.construct_vec": "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (top to bottom).",
   "hexcasting.page.math.deconstruct_vec": "Split a vector into its X, Y, and Z components (top to bottom).",
   "hexcasting.page.math.modulo": "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 %% 2 is 1, and 5 %% 3 is 2.",
-  "hexcasting.page.math.coerce_axial": "Coerces a vector to its nearest axial direction, a unit vector. The zero vector is unaffected.",
+  "hexcasting.page.math.coerce_axial": "For a vector, coerce it to its nearest axial direction, a unit vector. For a number, return the sign of the number; 1 if positive, -1 if negative. In both cases, zero is unaffected.",
   "hexcasting.page.math.random": "Creates a random number between 0 and 1.",
   
   "hexcasting.entry.advanced_math": "Advanced Mathematics",
