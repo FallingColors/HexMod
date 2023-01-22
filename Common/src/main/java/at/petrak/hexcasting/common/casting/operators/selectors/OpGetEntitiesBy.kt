@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.selectors
 
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getPositiveDouble
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.EntityIota
@@ -20,7 +20,7 @@ import java.util.function.Predicate
 
 class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : ConstMediaAction {
     override val argc = 2
-    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
         val pos = args.getVec3(0, argc)
         val radius = args.getPositiveDouble(1, argc)
         ctx.assertVecInRange(pos)
@@ -35,7 +35,7 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
     }
 
     companion object {
-        fun isReasonablySelectable(ctx: CastingContext, e: Entity) =
+        fun isReasonablySelectable(ctx: CastingEnvironment, e: Entity) =
             ctx.isEntityInRange(e) && e.isAlive && !e.isSpectator
 
         @JvmStatic

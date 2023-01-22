@@ -5,12 +5,14 @@ import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
+import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import it.unimi.dsi.fastutil.booleans.BooleanArrayList
 import it.unimi.dsi.fastutil.booleans.BooleanList
 import net.minecraft.network.chat.Component
@@ -22,8 +24,10 @@ class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler {
     }
 
     override fun getName(): Component {
-        return HexAPI.instance().getActionI18nKey(NAME)
-            .asTranslatedComponent(mask.map { if (it) '-' else 'v' }.joinToString(""))
+        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.NUMBER).get()
+        val fingerprint = mask.map { if (it) '-' else 'v' }.joinToString("")
+        return HexAPI.instance().getSpecialHandlerI18nKey(key)
+            .asTranslatedComponent(fingerprint)
             .lightPurple
     }
 
@@ -31,7 +35,7 @@ class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler {
         override val argc: Int
             get() = this.mask.size
 
-        override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+        override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
             val out = ArrayList<Iota>(this.mask.size)
             for ((i, include) in this.mask.withIndex()) {
                 if (include)

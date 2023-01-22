@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.casting.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.misc.HexDamageSources
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.GarbageIota
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -14,15 +14,15 @@ import net.minecraft.world.phys.Vec3
 
 class MishapDivideByZero(val operand1: Component, val operand2: Component, val suffix: String = "divide") : Mishap() {
 
-    override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
+    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.RED)
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         stack.add(GarbageIota())
         trulyHurt(ctx.caster, HexDamageSources.OVERCAST, ctx.caster.health / 2)
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
         error("divide_by_zero.$suffix", operand1, operand2)
 
     companion object {

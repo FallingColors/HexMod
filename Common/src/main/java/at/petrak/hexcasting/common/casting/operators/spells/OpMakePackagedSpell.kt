@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
@@ -18,7 +18,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
     override val argc = 2
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getItemEntity(0, argc)
         val patterns = args.getList(1, argc).toList()
@@ -55,7 +55,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
     }
 
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<Iota>, val stack: ItemStack) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(stack)
             if (hexHolder != null
                 && !hexHolder.hasHex()

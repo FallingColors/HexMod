@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.rw
 
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadEntity
@@ -12,7 +12,7 @@ object OpTheCoolerRead : ConstMediaAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): List<Iota> {
         val target = args.getEntity(0, argc)
 

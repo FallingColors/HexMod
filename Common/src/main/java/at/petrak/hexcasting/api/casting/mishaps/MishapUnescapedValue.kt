@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.casting.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import net.minecraft.world.item.DyeColor
 
 /**
@@ -11,10 +11,10 @@ import net.minecraft.world.item.DyeColor
 class MishapUnescapedValue(
     val perpetrator: Iota
 ) : Mishap() {
-    override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
+    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.GRAY)
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         // TODO
         /*
         val idx = stack.indexOfLast { it.getType() == DatumType.LIST }
@@ -30,6 +30,6 @@ class MishapUnescapedValue(
          */
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
         error("unescaped", perpetrator.display())
 }

@@ -1,5 +1,5 @@
 {
-  "name": "hexcasting.spell.hexcasting:sentinel/create/great",
+  "name": "hexcasting.action.hexcasting:sentinel/create/great",
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:beacon",
   "sortnum": 5,

@@ -2,7 +2,7 @@ package at.petrak.hexcasting.interop.pehkui
 
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.Entity
@@ -12,7 +12,7 @@ object OpSetScale : SpellAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getEntity(0, argc)
         val scale = args.getDoubleBetween(1, 1.0 / 32.0, 8.0, argc)
@@ -25,7 +25,7 @@ object OpSetScale : SpellAction {
     }
 
     private data class Spell(val target: Entity, val scale: Double) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             IXplatAbstractions.INSTANCE.pehkuiApi.setScale(target, scale.toFloat())
         }
     }

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.casting.mishaps
 
 import at.petrak.hexcasting.api.casting.ParticleSpray
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
@@ -25,29 +25,29 @@ import net.minecraft.world.phys.Vec3
 
 abstract class Mishap : Throwable() {
     /** Mishaps spray half-red, half-this-color. */
-    abstract fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer
+    abstract fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer
 
-    open fun particleSpray(ctx: CastingContext): ParticleSpray {
+    open fun particleSpray(ctx: CastingEnvironment): ParticleSpray {
         return ParticleSpray(ctx.position.add(0.0, 0.2, 0.0), Vec3(0.0, 2.0, 0.0), 0.2, Math.PI / 4, 40)
     }
 
-    open fun resolutionType(ctx: CastingContext): ResolvedPatternType = ResolvedPatternType.ERRORED
+    open fun resolutionType(ctx: CastingEnvironment): ResolvedPatternType = ResolvedPatternType.ERRORED
 
     /**
      * Execute the actual effect, not any sfx.
      *
      * You can also mess up the stack with this.
      */
-    abstract fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>)
+    abstract fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>)
 
-    abstract protected fun errorMessage(ctx: CastingContext, errorCtx: Context): Component
+    abstract protected fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component
 
     /**
      * Every error message should be prefixed with the name of the action...
      */
-    public fun errorMessageWithName(ctx: CastingContext, errorCtx: Context): Component {
+    public fun errorMessageWithName(ctx: CastingEnvironment, errorCtx: Context): Component {
         return if (errorCtx.name != null) {
-            errorCtx.name.copy().append(": ").append(this.errorMessage(ctx, errorCtx))
+            "hexcasting.mishap".asTranslatedComponent(errorCtx.name, this.errorMessage(ctx, errorCtx))
         } else {
             this.errorMessage(ctx, errorCtx)
         }
@@ -67,7 +67,7 @@ abstract class Mishap : Throwable() {
     protected fun actionName(name: Component?): Component =
         name ?: "hexcasting.spell.null".asTranslatedComponent.lightPurple
 
-    protected fun yeetHeldItemsTowards(ctx: CastingContext, targetPos: Vec3) {
+    protected fun yeetHeldItemsTowards(ctx: CastingEnvironment, targetPos: Vec3) {
         // Knock the player's items out of their hands
         val items = mutableListOf<ItemStack>()
         for (hand in InteractionHand.values()) {
@@ -84,7 +84,7 @@ abstract class Mishap : Throwable() {
         }
     }
 
-    protected fun yeetHeldItem(ctx: CastingContext, hand: InteractionHand) {
+    protected fun yeetHeldItem(ctx: CastingEnvironment, hand: InteractionHand) {
         val item = ctx.caster.getItemInHand(hand).copy()
         if (hand == ctx.castingHand && IXplatAbstractions.INSTANCE.findHexHolder(item) != null)
             return
@@ -94,7 +94,7 @@ abstract class Mishap : Throwable() {
         yeetItem(item, ctx, delta)
     }
 
-    protected fun yeetItem(stack: ItemStack, ctx: CastingContext, delta: Vec3) {
+    protected fun yeetItem(stack: ItemStack, ctx: CastingEnvironment, delta: Vec3) {
         val entity = ItemEntity(
             ctx.world,
             ctx.position.x, ctx.position.y, ctx.position.z,
@@ -107,7 +107,7 @@ abstract class Mishap : Throwable() {
         ctx.world.addWithUUID(entity)
     }
 
-    protected fun blockAtPos(ctx: CastingContext, pos: BlockPos): Component {
+    protected fun blockAtPos(ctx: CastingEnvironment, pos: BlockPos): Component {
         return ctx.world.getBlockState(pos).block.name
     }
 

@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.eval.CastingContext;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
@@ -239,7 +239,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
         // This is always from a staff because we don't need to load the harness when casting from item
-        var ctx = new CastingContext(player, hand, CastingContext.CastSource.STAFF);
+        var ctx = new CastingEnvironment(player, hand, CastingEnvironment.CastSource.STAFF);
         return CastingHarness.fromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
     }
 

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.casting.mishaps
 
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
@@ -10,14 +10,14 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 
 class MishapBadOffhandItem(val item: ItemStack, val hand: InteractionHand, val wanted: Component) : Mishap() {
-    override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
+    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.BROWN)
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         yeetHeldItem(ctx, hand)
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context) = if (item.isEmpty)
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = if (item.isEmpty)
         error("no_item.offhand", wanted)
     else
         error("bad_item.offhand", wanted, item.count, item.displayName)

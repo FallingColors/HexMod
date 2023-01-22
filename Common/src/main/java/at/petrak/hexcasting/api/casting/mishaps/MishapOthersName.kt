@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.casting.mishaps
 
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.EntityIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -14,15 +14,15 @@ import net.minecraft.world.item.DyeColor
  * Also throwable for your *own* name, for cases like Chronicler's Gambit
  */
 class MishapOthersName(val confidant: Player) : Mishap() {
-    override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
+    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.BLACK)
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         val seconds = if (this.confidant == ctx.caster) 5 else 60;
         ctx.caster.addEffect(MobEffectInstance(MobEffects.BLINDNESS, seconds * 20))
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
         if (this.confidant == ctx.caster)
             error("others_name.self")
         else

@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.eval
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.SpellList
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate
 import at.petrak.hexcasting.api.casting.eval.vm.FrameFinishEval
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
@@ -17,7 +17,7 @@ object OpEval : Action {
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
         ravenmind: Iota?,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): OperationResult {
         val datum = stack.removeLastOrNull() ?: throw MishapNotEnoughArgs(1, 0)
         val instrs = evaluatable(datum, 0)

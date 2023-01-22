@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.casting
 
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 
 interface RenderedSpell {
-    fun cast(ctx: CastingContext)
+    fun cast(ctx: CastingEnvironment)
 }

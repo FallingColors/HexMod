@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapAlreadyBrainswept
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBrainsweep
@@ -24,11 +24,11 @@ object OpBrainsweep : SpellAction {
     override val argc = 2
 
     // this way you can hear the villager dying more : )
-    override fun hasCastingSound(ctx: CastingContext) = false
+    override fun hasCastingSound(ctx: CastingEnvironment) = false
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val sacrifice = args.getMob(0, argc)
         val pos = args.getBlockPos(1, argc)
@@ -61,7 +61,7 @@ object OpBrainsweep : SpellAction {
         val sacrifice: Mob,
         val recipe: BrainsweepRecipe
     ) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
 
             IXplatAbstractions.INSTANCE.brainsweep(sacrifice)

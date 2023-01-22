@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.stack
 
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.OperationResult
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getPositiveInt
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -15,7 +15,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
         ravenmind: Iota?,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)

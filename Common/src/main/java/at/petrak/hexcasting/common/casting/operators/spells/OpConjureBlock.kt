@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
@@ -21,7 +21,7 @@ class OpConjureBlock(val light: Boolean) : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val pos = args.getBlockPos(0, argc)
         ctx.assertVecInRange(pos)
@@ -43,7 +43,7 @@ class OpConjureBlock(val light: Boolean) : SpellAction {
     }
 
     private data class Spell(val pos: BlockPos, val light: Boolean) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             if (!ctx.canEditBlockAt(pos))
                 return
 

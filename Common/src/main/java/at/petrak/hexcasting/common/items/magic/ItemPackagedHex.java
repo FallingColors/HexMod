@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.casting.eval.CastingContext;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -106,7 +106,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
             return InteractionResultHolder.fail(stack);
         }
         var sPlayer = (ServerPlayer) player;
-        var ctx = new CastingContext(sPlayer, usedHand, CastingContext.CastSource.PACKAGED_HEX);
+        var ctx = new CastingEnvironment(sPlayer, usedHand, CastingEnvironment.CastSource.PACKAGED_HEX);
         var harness = new CastingHarness(ctx);
         var info = harness.executeIotas(instrs, sPlayer.getLevel());
 

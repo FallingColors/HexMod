@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.ktxt.UseOnContext
@@ -22,7 +22,7 @@ object OpIgnite : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getBlockPos(0, argc)
         ctx.assertVecInRange(target)
@@ -35,7 +35,7 @@ object OpIgnite : SpellAction {
     }
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             if (!ctx.canEditBlockAt(pos))
                 return
 
@@ -45,7 +45,7 @@ object OpIgnite : SpellAction {
             }
         }
 
-        fun tryToClick(ctx: CastingContext, pos: BlockPos, item: Item): Boolean {
+        fun tryToClick(ctx: CastingEnvironment, pos: BlockPos, item: Item): Boolean {
             return IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(item), ctx.caster) &&
                     item.useOn(
                         UseOnContext(

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.cc;
 
-import at.petrak.hexcasting.api.casting.eval.CastingContext;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +19,7 @@ public class CCHarness implements Component {
     }
 
     public CastingHarness getHarness(InteractionHand hand) {
-        var ctx = new CastingContext(this.owner, hand, CastingContext.CastSource.STAFF);
+        var ctx = new CastingEnvironment(this.owner, hand, CastingEnvironment.CastSource.STAFF);
         if (this.lazyLoadedTag.isEmpty()) {
             return new CastingHarness(ctx);
         } else {

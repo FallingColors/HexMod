@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
@@ -15,7 +15,7 @@ object OpDestroySentinel : SpellAction {
     override val argc = 0
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val particles = mutableListOf<ParticleSpray>()
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster)
@@ -32,7 +32,7 @@ object OpDestroySentinel : SpellAction {
     }
 
     private object Spell : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             IXplatAbstractions.INSTANCE.setSentinel(ctx.caster, Sentinel.none())
         }
     }

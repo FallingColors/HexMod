@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.stack
 
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.OperationResult
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -16,7 +16,7 @@ object OpFisherman : Action {
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
         ravenmind: Iota?,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): OperationResult {
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)

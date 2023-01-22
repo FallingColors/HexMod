@@ -1,18 +1,18 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
 import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
+import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 
 class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
     override fun act(): Action {
@@ -20,14 +20,15 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
     }
 
     override fun getName(): Component {
-        return HexAPI.instance().getActionI18nKey(NAME)
+        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.NUMBER).get()
+        return HexAPI.instance().getSpecialHandlerI18nKey(key)
             .asTranslatedComponent(Action.DOUBLE_FORMATTER.format(x)).lightPurple
     }
 
     class InnerAction(val x: Double) : ConstMediaAction {
         override val argc = 0
 
-        override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+        override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
             return this.x.asActionResult
         }
     }
@@ -73,9 +74,5 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
             }
         }
 
-    }
-
-    companion object {
-        public val NAME: ResourceLocation = modLoc("number")
     }
 }

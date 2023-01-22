@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -15,7 +15,7 @@ object OpErase : SpellAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
@@ -40,7 +40,7 @@ object OpErase : SpellAction {
     }
 
     private data class Spell(val stack: ItemStack) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(stack)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack)
 

@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway
@@ -26,7 +26,7 @@ object OpTeleport : SpellAction {
     override val argc = 2
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
 
         val teleportee = args.getEntity(0, argc)
@@ -56,7 +56,7 @@ object OpTeleport : SpellAction {
     }
 
     private data class Spell(val teleportee: Entity, val delta: Vec3) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             val distance = delta.length()
 
             // TODO make this not a magic number (config?)

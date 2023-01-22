@@ -2,13 +2,13 @@ package at.petrak.hexcasting.common.casting.operators.math.bit
 
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 
 object OpOr : ConstMediaAction {
     override val argc = 2
 
-    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
         val firstParam = args.getLongOrList(0, argc)
 
         return firstParam.map(

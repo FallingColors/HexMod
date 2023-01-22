@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.casting.castables
 
 import at.petrak.hexcasting.api.casting.OperationResult
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import net.minecraft.world.phys.Vec3
@@ -32,7 +32,7 @@ interface Action {
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
         ravenmind: Iota?,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): OperationResult
 
     companion object {
@@ -49,7 +49,7 @@ interface Action {
             override val argc: Int
                 get() = 0
 
-            override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> =
+            override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> =
                 listOf(x)
         }
 

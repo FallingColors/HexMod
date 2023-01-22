@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway
@@ -17,7 +17,7 @@ object OpBlink : SpellAction {
     override val argc = 2
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getEntity(0, argc)
         val delta = args.getDouble(1, argc)
@@ -51,7 +51,7 @@ object OpBlink : SpellAction {
     }
 
     private data class Spell(val target: Entity, val delta: Double) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             if (!HexConfig.server().canTeleportInThisDimension(ctx.world.dimension()))
                 return
 

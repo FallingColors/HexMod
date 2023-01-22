@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.misc;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
-import at.petrak.hexcasting.api.casting.eval.CastingContext;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import com.google.common.collect.Lists;
 import net.minecraft.world.entity.player.Player;
@@ -17,8 +17,8 @@ public class DiscoveryHandlers {
     private static final List<Predicate<Player>> HAS_LENS_PREDICATE = new ArrayList<>();
     private static final List<Function<CastingHarness, List<ADMediaHolder>>> MEDIA_HOLDER_DISCOVERY = new ArrayList<>();
     private static final List<FunctionToFloat<Player>> GRID_SCALE_MODIFIERS = new ArrayList<>();
-    private static final List<Function<CastingContext, List<ItemStack>>> ITEM_SLOT_DISCOVERER = new ArrayList<>();
-    private static final List<Function<CastingContext, List<ItemStack>>> OPERATIVE_SLOT_DISCOVERER = new ArrayList<>();
+    private static final List<Function<CastingEnvironment, List<ItemStack>>> ITEM_SLOT_DISCOVERER = new ArrayList<>();
+    private static final List<Function<CastingEnvironment, List<ItemStack>>> OPERATIVE_SLOT_DISCOVERER = new ArrayList<>();
     private static final List<BiFunction<Player, String, ItemStack>> DEBUG_DISCOVERER = new ArrayList<>();
 
     public static boolean hasLens(Player player) {
@@ -46,7 +46,7 @@ public class DiscoveryHandlers {
         return mod;
     }
 
-    public static List<ItemStack> collectItemSlots(CastingContext ctx) {
+    public static List<ItemStack> collectItemSlots(CastingEnvironment ctx) {
         List<ItemStack> stacks = Lists.newArrayList();
         for (var discoverer : ITEM_SLOT_DISCOVERER) {
             stacks.addAll(discoverer.apply(ctx));
@@ -54,7 +54,7 @@ public class DiscoveryHandlers {
         return stacks;
     }
 
-    public static List<ItemStack> collectOperableSlots(CastingContext ctx) {
+    public static List<ItemStack> collectOperableSlots(CastingEnvironment ctx) {
         List<ItemStack> stacks = Lists.newArrayList();
         for (var discoverer : OPERATIVE_SLOT_DISCOVERER) {
             stacks.addAll(discoverer.apply(ctx));
@@ -84,11 +84,11 @@ public class DiscoveryHandlers {
         GRID_SCALE_MODIFIERS.add(modifier);
     }
 
-    public static void addItemSlotDiscoverer(Function<CastingContext, List<ItemStack>> discoverer) {
+    public static void addItemSlotDiscoverer(Function<CastingEnvironment, List<ItemStack>> discoverer) {
         ITEM_SLOT_DISCOVERER.add(discoverer);
     }
 
-    public static void addOperativeSlotDiscoverer(Function<CastingContext, List<ItemStack>> discoverer) {
+    public static void addOperativeSlotDiscoverer(Function<CastingEnvironment, List<ItemStack>> discoverer) {
         OPERATIVE_SLOT_DISCOVERER.add(discoverer);
     }
 

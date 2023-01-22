@@ -1,5 +1,5 @@
 {
-  "name": "hexcasting.spell.hexcasting:teleport",
+  "name": "hexcasting.action.hexcasting:teleport",
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:ender_pearl",
   "sortnum": 3,

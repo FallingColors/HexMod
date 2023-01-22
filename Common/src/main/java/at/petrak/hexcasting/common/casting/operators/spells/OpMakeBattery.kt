@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.spells
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getItemEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadItem
@@ -23,7 +23,7 @@ object OpMakeBattery : SpellAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val entity = args.getItemEntity(0, argc)
 
@@ -63,7 +63,7 @@ object OpMakeBattery : SpellAction {
     }
 
     private data class Spell(val itemEntity: ItemEntity, val hand: InteractionHand) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             if (itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
                 val mediamount = extractMedia(entityStack, drainForBatteries = true)

@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
-import at.petrak.hexcasting.api.casting.eval.CastingContext;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.SpellCircleContext;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
@@ -282,7 +282,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         if (player instanceof ServerPlayer splayer) {
             var bounds = getBounds(this.trackedBlocks);
 
-            var ctx = new CastingContext(splayer, InteractionHand.MAIN_HAND,
+            var ctx = new CastingEnvironment(splayer, InteractionHand.MAIN_HAND,
                 new SpellCircleContext(this.getBlockPos(), bounds, this.activatorAlwaysInRange()));
             var harness = new CastingHarness(ctx);
 

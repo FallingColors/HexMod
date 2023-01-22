@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.casting.operators.spells.great
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
 
@@ -12,7 +12,7 @@ class OpWeather(val rain: Boolean) : SpellAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         if (ctx.world.isRaining == rain)
             return null
@@ -25,7 +25,7 @@ class OpWeather(val rain: Boolean) : SpellAction {
     }
 
     private data class Spell(val rain: Boolean) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             val w = ctx.world
             if (w.isRaining != rain) {
                 w.levelData.isRaining = rain // i hex the rains down in minecraftia

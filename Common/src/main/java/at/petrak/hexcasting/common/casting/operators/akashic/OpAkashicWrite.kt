@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.akashic
 
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapNoAkashicRecord
@@ -18,7 +18,7 @@ object OpAkashicWrite : SpellAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getBlockPos(0, argc)
         val key = args.getPattern(1, argc)
@@ -49,7 +49,7 @@ object OpAkashicWrite : SpellAction {
         val datum: Iota
     ) :
         RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             record.addNewDatum(recordPos, ctx.world, key, datum)
 
             ctx.world.playSound(

@@ -25,7 +25,7 @@ import kotlin.math.min
 /**
  * Transient info about the moment the spell started being cast.
  */
-data class CastingContext(
+data class CastingEnvironment(
     val caster: ServerPlayer,
     val castingHand: InteractionHand,
     val source: CastSource,

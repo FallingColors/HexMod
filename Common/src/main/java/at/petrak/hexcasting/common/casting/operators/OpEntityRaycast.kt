@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
@@ -14,7 +14,7 @@ import net.minecraft.world.phys.AABB
 object OpEntityRaycast : ConstMediaAction {
     override val argc = 2
     override val mediaCost = MediaConstants.DUST_UNIT / 100
-    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
         val origin = args.getVec3(0, argc)
         val look = args.getVec3(1, argc)
         val endp = Action.raycastEnd(origin, look)

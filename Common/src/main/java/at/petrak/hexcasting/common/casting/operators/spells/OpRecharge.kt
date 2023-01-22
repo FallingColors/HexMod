@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getItemEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadItem
@@ -19,7 +19,7 @@ object OpRecharge : SpellAction {
     override val argc = 1
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val entity = args.getItemEntity(0, argc)
 
@@ -57,7 +57,7 @@ object OpRecharge : SpellAction {
     }
 
     private data class Spell(val itemEntity: ItemEntity, val stack: ItemStack) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             val media = IXplatAbstractions.INSTANCE.findMediaHolder(stack)
 
             if (media != null && itemEntity.isAlive) {

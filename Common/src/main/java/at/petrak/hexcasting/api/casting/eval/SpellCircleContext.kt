@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.phys.AABB
 
 /**
- * Optional field on a [CastingContext] for the spell circle
+ * Optional field on a [CastingEnvironment] for the spell circle
  */
 data class SpellCircleContext(val impetusPos: BlockPos, val aabb: AABB, val activatorAlwaysInRange: Boolean) {
     fun serializeToNBT() = NBTBuilder {

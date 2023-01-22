@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.casting.mishaps
 
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.utils.aqua
@@ -11,14 +11,14 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.DyeColor
 
 class MishapBadEntity(val entity: Entity, val wanted: Component) : Mishap() {
-    override fun accentColor(ctx: CastingContext, errorCtx: Context): FrozenColorizer =
+    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.BROWN)
 
-    override fun execute(ctx: CastingContext, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         yeetHeldItemsTowards(ctx, entity.position())
     }
 
-    override fun errorMessage(ctx: CastingContext, errorCtx: Context) =
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
         error("bad_entity", wanted, entity.displayName.plainCopy().aqua)
 
     companion object {

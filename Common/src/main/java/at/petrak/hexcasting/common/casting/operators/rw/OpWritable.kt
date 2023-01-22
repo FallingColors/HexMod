@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.operators.rw
 
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
-import at.petrak.hexcasting.api.casting.eval.CastingContext
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -10,7 +10,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 object OpWritable : ConstMediaAction {
     override val argc = 1
 
-    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
         val datum = args[0]
 
         val (handStack) = ctx.getHeldItemToOperateOn {

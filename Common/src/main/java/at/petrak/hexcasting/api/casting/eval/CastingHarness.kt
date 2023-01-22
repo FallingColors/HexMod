@@ -54,13 +54,13 @@ class CastingHarness private constructor(
     var parenCount: Int,
     var parenthesized: List<Iota>,
     var escapeNext: Boolean,
-    val ctx: CastingContext,
+    val ctx: CastingEnvironment,
     val prepackagedColorizer: FrozenColorizer? // for trinkets with colorizers
 ) {
 
     @JvmOverloads
     constructor(
-        ctx: CastingContext,
+        ctx: CastingEnvironment,
         prepackagedColorizer: FrozenColorizer? = null
     ) : this(mutableListOf(), null, 0, mutableListOf(), false, ctx, prepackagedColorizer)
 
@@ -160,7 +160,7 @@ class CastingHarness private constructor(
                             e,
                             Mishap.Context(
                                 (iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST),
-                                HexAPI.instance().getActionI18(HexAPI.modLoc("retrospection"), false)
+                                HexAPI.instance().getRawHookI18n(HexAPI.modLoc("close_paren"))
                             )
                         )
                     ),
@@ -224,7 +224,7 @@ class CastingHarness private constructor(
                 val reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.actionRegistry, key, HexTags.Actions.REQUIRES_ENLIGHTENMENT)
                 val canEnlighten = isOfTag(IXplatAbstractions.INSTANCE.actionRegistry, key, HexTags.Actions.CAN_START_ENLIGHTEN)
 
-                castedName = HexAPI.instance().getActionI18(key.location(), reqsEnlightenment)
+                castedName = HexAPI.instance().getActionI18n(key, reqsEnlightenment)
 
                 if (!ctx.isCasterEnlightened && reqsEnlightenment) {
                     Either.right(listOf(OperatorSideEffect.RequiredEnlightenment(canEnlighten)))
@@ -291,7 +291,7 @@ class CastingHarness private constructor(
             }
 
             // TODO again this should be per VM
-            var soundType = if (this.ctx.source == CastingContext.CastSource.STAFF) {
+            var soundType = if (this.ctx.source == CastingEnvironment.CastSource.STAFF) {
                 HexEvalSounds.OPERATOR
             } else {
                 HexEvalSounds.NOTHING
@@ -623,7 +623,7 @@ class CastingHarness private constructor(
         }
 
         @JvmStatic
-        fun fromNBT(nbt: CompoundTag, ctx: CastingContext): CastingHarness {
+        fun fromNBT(nbt: CompoundTag, ctx: CastingEnvironment): CastingHarness {
             return try {
                 val stack = mutableListOf<Iota>()
                 val stackTag = nbt.getList(TAG_STACK, Tag.TAG_COMPOUND)
