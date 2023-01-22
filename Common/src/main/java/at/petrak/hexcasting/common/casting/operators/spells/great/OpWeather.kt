@@ -30,10 +30,12 @@ class OpWeather(val rain: Boolean) : SpellAction {
             if (w.isRaining != rain) {
                 w.levelData.isRaining = rain // i hex the rains down in minecraftia
 
+                val (minTime, maxTime) = if (rain) (30 to 90) else (60 to 180)
+                val time = (w.random.nextInt(minTime, maxTime)) * 20 * 60
                 if (rain) {
-                    w.setWeatherParameters(0, 6000, true, w.random.nextDouble() < 0.05)
+                    w.setWeatherParameters(0, time, true, w.random.nextDouble() < 0.05)
                 } else {
-                    w.setWeatherParameters(6000, 0, false, false)
+                    w.setWeatherParameters(time, 0, false, false)
                 }
             }
         }
