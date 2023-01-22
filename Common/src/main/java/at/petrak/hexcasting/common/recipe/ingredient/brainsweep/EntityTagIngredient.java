@@ -19,111 +19,116 @@ import java.util.List;
 import java.util.Objects;
 
 public class EntityTagIngredient extends BrainsweepeeIngredient {
-	public final TagKey<EntityType<?>> entityTypeTag;
+    public final TagKey<EntityType<?>> entityTypeTag;
 
-	public EntityTagIngredient(TagKey<EntityType<?>> tag) {
-		this.entityTypeTag = tag;
-	}
+    public EntityTagIngredient(TagKey<EntityType<?>> tag) {
+        this.entityTypeTag = tag;
+    }
 
-	@Override
-	public boolean test(Entity entity, ServerLevel level) {
-		return entity.getType().is(this.entityTypeTag);
-	}
+    @Override
+    public boolean test(Entity entity, ServerLevel level) {
+        return entity.getType().is(this.entityTypeTag);
+    }
 
-	private static String tagKey(ResourceLocation tagLoc) {
-		return "tag."
-			+ tagLoc.getNamespace()
-			+ "."
-			+ tagLoc.getPath().replace('/', '.');
-	}
+    private static String tagKey(ResourceLocation tagLoc) {
+        return "tag."
+            + tagLoc.getNamespace()
+            + "."
+            + tagLoc.getPath().replace('/', '.');
+    }
 
-	@Override
-	public Component getName() {
-		String key = tagKey(this.entityTypeTag.location());
-		boolean moddersDidAGoodJob = I18n.exists(key);
-		return moddersDidAGoodJob
-			? Component.translatable(key)
-			: Component.literal("#" + entityTypeTag);
-	}
+    @Override
+    public Component getName() {
+        String key = tagKey(this.entityTypeTag.location());
+        boolean moddersDidAGoodJob = I18n.exists(key);
+        return moddersDidAGoodJob
+            ? Component.translatable(key)
+            : Component.literal("#" + this.entityTypeTag.location().toString());
+    }
 
-	@Override
-	public List<Component> getTooltip(boolean advanced) {
-		String key = tagKey(this.entityTypeTag.location());
-		boolean moddersDidAGoodJob = I18n.exists(key);
+    @Override
+    public List<Component> getTooltip(boolean advanced) {
+        ResourceLocation loc = this.entityTypeTag.location();
+        String key = tagKey(loc);
+        boolean moddersDidAGoodJob = I18n.exists(key);
 
-		var out = new ArrayList<Component>();
-		out.add(moddersDidAGoodJob
-			? Component.translatable(key)
-			: Component.literal("#" + entityTypeTag));
-		if (advanced && moddersDidAGoodJob) {
-			out.add(Component.literal("#" + entityTypeTag).withStyle(ChatFormatting.DARK_GRAY));
-		}
-		return out;
-	}
+        var out = new ArrayList<Component>();
+        out.add(moddersDidAGoodJob
+            ? Component.translatable(key)
+            : Component.literal("#" + loc.toString()));
+        if (advanced && moddersDidAGoodJob) {
+            // Print it anyways
+            out.add(Component.literal("#" + loc.toString()).withStyle(ChatFormatting.DARK_GRAY));
+        }
 
-	@Override
-	public Entity exampleEntity(ClientLevel level) {
-		var someEntityTys = Registry.ENTITY_TYPE.getTagOrEmpty(this.entityTypeTag).iterator();
-		if (someEntityTys.hasNext()) {
-			var someTy = someEntityTys.next();
-			return someTy.value().create(level);
-		} else {
-			return null;
-		}
-	}
+        out.add(BrainsweepeeIngredient.getModNameComponent(loc.getNamespace()));
 
-	@Override
-	public JsonObject serialize() {
-		var obj = new JsonObject();
-		obj.addProperty("type", Type.ENTITY_TAG.getSerializedName());
+        return out;
+    }
 
-		obj.addProperty("tag", this.entityTypeTag.location().toString());
+    @Override
+    public Entity exampleEntity(ClientLevel level) {
+        var someEntityTys = Registry.ENTITY_TYPE.getTagOrEmpty(this.entityTypeTag).iterator();
+        if (someEntityTys.hasNext()) {
+            var someTy = someEntityTys.next();
+            return someTy.value().create(level);
+        } else {
+            return null;
+        }
+    }
 
-		return obj;
-	}
+    @Override
+    public JsonObject serialize() {
+        var obj = new JsonObject();
+        obj.addProperty("type", Type.ENTITY_TAG.getSerializedName());
 
-	@Override
-	public void write(FriendlyByteBuf buf) {
-		buf.writeVarInt(Type.ENTITY_TAG.ordinal());
+        obj.addProperty("tag", this.entityTypeTag.location().toString());
 
-		buf.writeResourceLocation(this.entityTypeTag.location());
-	}
+        return obj;
+    }
 
-	public static EntityTagIngredient deserialize(JsonObject obj) {
-		var tagLoc = ResourceLocation.tryParse(GsonHelper.getAsString(obj, "tag"));
-		var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, tagLoc);
-		return new EntityTagIngredient(type);
-	}
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeVarInt(Type.ENTITY_TAG.ordinal());
 
-	public static EntityTagIngredient read(FriendlyByteBuf buf) {
-		var typeLoc = buf.readResourceLocation();
-		var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, typeLoc);
-		return new EntityTagIngredient(type);
-	}
+        buf.writeResourceLocation(this.entityTypeTag.location());
+    }
 
-	@Override
-	public Type ingrType() {
-		return Type.ENTITY_TAG;
-	}
+    public static EntityTagIngredient deserialize(JsonObject obj) {
+        var tagLoc = ResourceLocation.tryParse(GsonHelper.getAsString(obj, "tag"));
+        var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, tagLoc);
+        return new EntityTagIngredient(type);
+    }
 
-	@Override
-	public String getSomeKindOfReasonableIDForEmi() {
-		var resloc = this.entityTypeTag.location();
-		return resloc.getNamespace()
-			+ "//"
-			+ resloc.getPath();
-	}
+    public static EntityTagIngredient read(FriendlyByteBuf buf) {
+        var typeLoc = buf.readResourceLocation();
+        var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, typeLoc);
+        return new EntityTagIngredient(type);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		EntityTagIngredient that = (EntityTagIngredient) o;
-		return Objects.equals(entityTypeTag, that.entityTypeTag);
-	}
+    @Override
+    public Type ingrType() {
+        return Type.ENTITY_TAG;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(this.entityTypeTag);
-	}
+    @Override
+    public String getSomeKindOfReasonableIDForEmi() {
+        var resloc = this.entityTypeTag.location();
+        return resloc.getNamespace()
+            + "//"
+            + resloc.getPath();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntityTagIngredient that = (EntityTagIngredient) o;
+        return Objects.equals(entityTypeTag, that.entityTypeTag);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.entityTypeTag);
+    }
 }

@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
-import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -18,7 +17,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -81,11 +79,11 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         @NotNull PoseStack stack, double mouseX, double mouseY) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {
-            Villager villager = RenderLib.prepareVillagerForRendering(recipe.entityIn(), level);
+            var example = recipe.entityIn().exampleEntity(level);
 
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            renderEntity(stack, villager, level, 50, 62.5f, ClientTickCounter.getTotal(), 20, 0);
+            renderEntity(stack, example, level, 50, 62.5f, ClientTickCounter.getTotal(), 20, 0);
         }
     }
 

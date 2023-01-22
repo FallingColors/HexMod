@@ -2,13 +2,9 @@
 
 package at.petrak.hexcasting.client
 
-import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.utils.TAU
-import at.petrak.hexcasting.api.utils.getValue
-import at.petrak.hexcasting.api.utils.setValue
-import at.petrak.hexcasting.api.utils.weakMapped
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
@@ -23,7 +19,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource
@@ -420,38 +415,14 @@ fun transferMsToGl(ms: PoseStack, toRun: Runnable) {
     RenderSystem.applyModelViewMatrix()
 }
 
-private var villager: Villager? by weakMapped(Villager::level)
-
-fun prepareVillagerForRendering(ingredient: BrainsweepeeIngredient, level: Level): Villager {
-    throw NotImplementedError()
-    /*
-    val minLevel: Int = ingredient.minLevel()
-    val profession: VillagerProfession = Registry.VILLAGER_PROFESSION.getOptional(ingredient.profession())
-        .orElse(VillagerProfession.NONE)
-    val biome: VillagerType = Registry.VILLAGER_TYPE.getOptional(ingredient.biome())
-        .orElse(VillagerType.PLAINS)
-
-    val instantiatedVillager = villager ?: run {
-        val newVillager = Villager(EntityType.VILLAGER, level)
-        villager = newVillager
-        newVillager
-    }
-
-    instantiatedVillager.villagerData = instantiatedVillager.villagerData
-        .setProfession(profession)
-        .setType(biome)
-        .setLevel(minLevel)
-
-    return instantiatedVillager
-     */
-}
-
 @JvmOverloads
 fun renderEntity(
     ms: PoseStack, entity: Entity, world: Level, x: Float, y: Float, rotation: Float,
     renderScale: Float, offset: Float,
     bufferTransformer: (MultiBufferSource) -> MultiBufferSource = { it -> it }
 ) {
+    val rotation = if (Screen.hasShiftDown()) 0.0f else rotation
+
     entity.level = world
     ms.pushPose()
     ms.translate(x.toDouble(), y.toDouble(), 50.0)
