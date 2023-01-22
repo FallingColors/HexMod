@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.api.casting.eval
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
-import at.petrak.hexcasting.api.misc.DiscoveryHandlers
-import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway
 import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooDeep
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers
+import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.utils.otherHand
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -39,7 +39,7 @@ data class CastingEnvironment(
     )
 
     constructor(caster: ServerPlayer, castingHand: InteractionHand, spellCircleContext: SpellCircleContext) :
-            this(caster, castingHand, CastSource.SPELL_CIRCLE, spellCircleContext)
+        this(caster, castingHand, CastSource.SPELL_CIRCLE, spellCircleContext)
 
     private var depth: Int = 0
 
@@ -49,6 +49,8 @@ data class CastingEnvironment(
 
     private val entitiesGivenMotion = mutableSetOf<Entity>()
 
+    // TODO: what the hell does this function even do. why are we using it. why do we continually put a predicate
+    // into here and then do the *same* predicate *again*
     inline fun getHeldItemToOperateOn(acceptItemIf: (ItemStack) -> Boolean): Pair<ItemStack, InteractionHand> {
         val handItem = caster.getItemInHand(otherHand)
         if (!acceptItemIf(handItem)) {
@@ -136,8 +138,8 @@ data class CastingEnvironment(
 
     fun canEditBlockAt(pos: BlockPos): Boolean {
         return this.isVecInRange(Vec3.atCenterOf(pos))
-                && this.caster.gameMode.gameModeForPlayer != GameType.ADVENTURE
-                && this.world.mayInteract(this.caster, pos)
+            && this.caster.gameMode.gameModeForPlayer != GameType.ADVENTURE
+            && this.world.mayInteract(this.caster, pos)
     }
 
     /**
