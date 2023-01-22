@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
@@ -65,13 +65,17 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public boolean canWrite(ItemStack stack, Iota datum) {
-        return datum instanceof PatternIota && !NBTHelper.hasCompound(stack, TAG_PATTERN);
+        return datum instanceof PatternIota || datum == null;
     }
 
     @Override
     public void writeDatum(ItemStack stack, Iota datum) {
-        if (this.canWrite(stack, datum) && datum instanceof PatternIota pat) {
-            NBTHelper.putCompound(stack, TAG_PATTERN, pat.getPattern().serializeToNBT());
+        if (this.canWrite(stack, datum)) {
+            if (datum instanceof PatternIota pat) {
+                NBTHelper.putCompound(stack, TAG_PATTERN, pat.getPattern().serializeToNBT());
+            } else if (datum == null) {
+                NBTHelper.remove(stack, TAG_PATTERN);
+            }
         }
     }
 

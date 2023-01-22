@@ -69,7 +69,6 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
         // just random bullshit go to try and get it to update for god's sake
         var tag = new CompoundTag();
         out.save(tag);
-        out.load(tag);
 
         return out;
     }

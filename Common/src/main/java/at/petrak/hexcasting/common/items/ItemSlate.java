@@ -2,10 +2,10 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
@@ -86,10 +86,7 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
 
     @Override
     public boolean canWrite(ItemStack stack, Iota datum) {
-        var isWritten = NBTHelper.hasCompound(stack, "BlockEntityTag")
-            && stack.getTag().getCompound("BlockEntityTag").contains(BlockEntitySlate.TAG_PATTERN);
-        return (datum instanceof PatternIota && !isWritten)
-            || (datum == null && isWritten);
+        return datum instanceof PatternIota || datum == null;
     }
 
     @Override
