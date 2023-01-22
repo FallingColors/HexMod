@@ -40,6 +40,7 @@ public class HexItems {
     public static final ItemStaff STAFF_DARK_OAK = make("dark_oak_staff", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_CRIMSON = make("crimson_staff", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_WARPED = make("warped_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_MANGROVE = make("mangrove_staff", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_EDIFIED = make("edified_staff", new ItemStaff(unstackable()));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(

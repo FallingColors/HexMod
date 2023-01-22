@@ -18,8 +18,8 @@ import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
@@ -121,7 +121,7 @@ public class RegisterClientStuff {
     }
 
     public static void registerColorProviders(BiConsumer<ItemColor, Item> itemColorRegistry,
-                                              BiConsumer<BlockColor, Block> blockColorRegistry) {
+        BiConsumer<BlockColor, Block> blockColorRegistry) {
         itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.FOCUS::getColor), HexItems.FOCUS);
         itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.SPELLBOOK::getColor), HexItems.SPELLBOOK);
 
@@ -303,7 +303,7 @@ public class RegisterClientStuff {
     }
 
     private static void registerDataHolderOverrides(IotaHolderItem item, Predicate<ItemStack> hasIota,
-                                                    Predicate<ItemStack> isSealed) {
+        Predicate<ItemStack> isSealed) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.OVERLAY_PRED,
             (stack, level, holder, holderID) -> {
                 if (!hasIota.test(stack) && !NBTHelper.hasString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY)) {
@@ -326,7 +326,7 @@ public class RegisterClientStuff {
 
     // Copypasta from PoweredRailBlock.class
     private static int findPoweredRailSignal(Level level, BlockPos pos, BlockState state, boolean travelPositive,
-                                             int depth) {
+        int depth) {
         if (depth >= 8) {
             return 0;
         } else {
@@ -447,8 +447,6 @@ public class RegisterClientStuff {
                 var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
                 if (name.contains("old")) {
                     return 1f;
-                } else if (name.contains("wand of the forest")) {
-                    return 2f;
                 } else {
                     return 0f;
                 }
@@ -464,6 +462,6 @@ public class RegisterClientStuff {
     @FunctionalInterface
     public interface BlockEntityRendererRegisterererer {
         <T extends BlockEntity> void registerBlockEntityRenderer(BlockEntityType<T> type,
-                                                                 BlockEntityRendererProvider<? super T> berp);
+            BlockEntityRendererProvider<? super T> berp);
     }
 }

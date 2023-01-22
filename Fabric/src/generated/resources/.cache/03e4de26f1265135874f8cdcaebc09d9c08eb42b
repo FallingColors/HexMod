@@ -1,4 +1,4 @@
-// 1.19.2	2023-01-21T15:43:08.87507582	Tags for minecraft:item
+// 1.19.2	2023-01-22T12:42:43.342254542	Tags for minecraft:item
 5928bad07d3872bb60f29ef4f3c885c8e1967c20 data/hexcasting/tags/items/phial_base.json
 fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data/minecraft/tags/items/wooden_doors.json
 e5df19a1dc6eadf14cd9b0f0fe45a74330b745e9 data/hexcasting/tags/items/edified_planks.json
@@ -6,7 +6,7 @@ e5df19a1dc6eadf14cd9b0f0fe45a74330b745e9 data/hexcasting/tags/items/edified_plan
 fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data/minecraft/tags/items/doors.json
 37cff4ce449b8069b59b2327d78e073fc026d348 data/minecraft/tags/items/wooden_pressure_plates.json
 38d781b60c5c37dc025d4c7e9ec5aa680f2a5835 data/c/tags/items/gems.json
-72ae9c5305aa948e78f95069eb34ecd532915fbf data/hexcasting/tags/items/staves.json
+40ad4686dcbbfce1191edd8ce4d839651b48ba8c data/hexcasting/tags/items/staves.json
 684c3206f38cc9cc494d5875c5e56aad004486af data/minecraft/tags/items/logs_that_burn.json
 20183cd61968ff6548df2dde1100b6378d68d64b data/minecraft/tags/items/wooden_buttons.json
 24145229528668829a1bcecf18a6377ebd07ccf8 data/hexcasting/tags/items/grants_root_advancement.json

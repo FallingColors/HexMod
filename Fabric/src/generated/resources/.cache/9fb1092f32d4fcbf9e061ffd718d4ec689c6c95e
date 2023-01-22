@@ -1,4 +1,4 @@
-// 1.19.2	2023-01-21T15:43:08.846955947	Recipes
+// 1.19.2	2023-01-22T12:42:43.349741357	Recipes
 858dada9c41974f5aa80c66423bf371c9e176a53 data/hexcasting/recipes/pride_colorizer_demigirl.json
 bb0f91c534c888d1cff8793b49986dce236c7b2d data/hexcasting/advancements/recipes/hexcasting.creative_tab/dye_colorizer_white.json
 9f75d3e93ecbbbf3ed9a92b2943397e09dcae1a9 data/hexcasting/recipes/dye_colorizer_light_blue.json
@@ -92,6 +92,7 @@ b62b3b67e6a105e1eb47d04c2ededd8d408df7b7 data/hexcasting/advancements/recipes/he
 b494dc17959c76857f25368eb845e58e4f8bca92 data/hexcasting/recipes/compat/farmersdelight/cutting/akashic_door.json
 36c97b8de7a0b67256e8966eca289a865cb85df5 data/hexcasting/advancements/recipes/hexcasting.creative_tab/pride_colorizer_bisexual.json
 4bff4a59e32c6d1d99bc3a8abd16cd88c51a8e73 data/hexcasting/recipes/dye_colorizer_orange.json
+cba5ffa7cd89116aba040956f4a85073cedd39cf data/hexcasting/recipes/mangrove_staff.json
 1f04d75a1c713d3c5ac44e62889ce834f12d6234 data/hexcasting/recipes/jeweler_hammer.json
 0de6f2437a3c33a92de2f3e6b7ac6102996c8779 data/hexcasting/advancements/recipes/brainsweep/brainsweep/testing/bad_to_the_bone.json
 8a9e7aa8d07556649768729348dff5305b84e1b9 data/hexcasting/recipes/edified_door.json
@@ -119,6 +120,7 @@ ba08fd11d19f54c504ceed6f162a5d814e03d1e8 data/hexcasting/recipes/brainsweep/test
 ab26481b45a7f463e2225b9a04d24a1b4d84daef data/hexcasting/recipes/abacus.json
 fccc3e05b011e1fd1a41a0bfca11876d0fb16df2 data/hexcasting/advancements/recipes/hexcasting.creative_tab/scroll_small.json
 38e7b64a4a15f1ce496f8c156d7262426f98fbcc data/hexcasting/recipes/acacia_staff.json
+6a9a89cfa34732437996431a9c885332cf714449 data/hexcasting/advancements/recipes/hexcasting.creative_tab/mangrove_staff.json
 7c7888ba95d1e2e8620a916df546a2b06b592d37 data/hexcasting/recipes/edified_planks.json
 0d08dab8c9700c7b5b32ad35e7b665a2e3c2cdc7 data/hexcasting/advancements/recipes/hexcasting.creative_tab/artifact.json
 0859373b9e60e80f3c8b0962a3bc94903af43d36 data/hexcasting/recipes/stripped_edified_wood.json

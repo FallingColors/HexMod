@@ -1,4 +1,4 @@
-// 1.19.2	2022-12-29T13:32:49.589849082	Recipes
+// 1.19.2	2023-01-22T12:41:48.311183435	Recipes
 29056d8bbc023668564ee81f4eb8b2a11411cf4a data/create/recipes/crushing/amethyst_block.json
 5bb0b70967a422bfd88c01fa1af64e9b98781fd1 data/create/recipes/crushing/amethyst_cluster.json
 8d6f58c45be52e22559fdbc2806ee48ab40d133c data/hexcasting/advancements/recipes/brainsweep/brainsweep/akashic_record.json
@@ -58,6 +58,7 @@ dfc171097bdd8a8f280e6787ea999286deda643e data/hexcasting/advancements/recipes/he
 48b6d3429e3536a85f3a0e9585a7d252ae0d57a3 data/hexcasting/advancements/recipes/hexcasting/jeweler_hammer.json
 182c2b5dd406c80ed957e1b43d554cce1b212d28 data/hexcasting/advancements/recipes/hexcasting/jungle_staff.json
 8715e71c2fb59ee458ce217040c9a8dd0db04789 data/hexcasting/advancements/recipes/hexcasting/lens.json
+6a9a89cfa34732437996431a9c885332cf714449 data/hexcasting/advancements/recipes/hexcasting/mangrove_staff.json
 a58f37bc66e65c1ac00ba7dbc4d9a7b902f42aad data/hexcasting/advancements/recipes/hexcasting/oak_staff.json
 f9e4d9171ffc6a125d9899f1867398acf8037b27 data/hexcasting/advancements/recipes/hexcasting/pride_colorizer_agender.json
 b7d75dcd88e5091ff44eec236531a56e82c7bd91 data/hexcasting/advancements/recipes/hexcasting/pride_colorizer_aroace.json
@@ -155,6 +156,7 @@ c7d28ccf9df6fc46aa142c2e7b176cc0cb5ea62b data/hexcasting/recipes/empty_impetus.j
 f124395483d1ae0e10b7db2b1828f1a4e269a88c data/hexcasting/recipes/jeweler_hammer.json
 a776209b64fea520f6a2fff9f1623e7086939dd9 data/hexcasting/recipes/jungle_staff.json
 3662834d6e0bac03aba28f0f9d9f07f511492118 data/hexcasting/recipes/lens.json
+cba5ffa7cd89116aba040956f4a85073cedd39cf data/hexcasting/recipes/mangrove_staff.json
 735a7d770f23a02dc4ae93644e7f4c44a32e313a data/hexcasting/recipes/oak_staff.json
 ce0cd4d73792c30dcec2eea306bff44b28cb237f data/hexcasting/recipes/pride_colorizer_agender.json
 17aa26ce6bc9941d1477dee99e514fd66be7f664 data/hexcasting/recipes/pride_colorizer_aroace.json

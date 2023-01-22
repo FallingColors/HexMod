@@ -2,7 +2,7 @@
   "parent": "minecraft:item/handheld_rod",
   "overrides": [
     {
-      "model": "hexcasting:item/oak_staff",
+      "model": "hexcasting:item/mangrove_staff",
       "predicate": {
         "hexcasting:funny_level": 0.0
       }
@@ -15,6 +15,6 @@
     }
   ],
   "textures": {
-    "layer0": "hexcasting:item/staves/oak"
+    "layer0": "hexcasting:item/staves/mangrove"
   }
 }

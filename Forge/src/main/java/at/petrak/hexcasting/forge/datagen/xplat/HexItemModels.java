@@ -74,8 +74,6 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         singleTexture("old_staff", new ResourceLocation("item/handheld_rod"),
             "layer0", modLoc("item/staves/old"));
-        singleTexture("bosnia_staff", new ResourceLocation("item/handheld_rod"),
-            "layer0", modLoc("item/staves/bosnia"));
 
         buildStaff(HexItems.STAFF_OAK, "oak");
         buildStaff(HexItems.STAFF_BIRCH, "birch");
@@ -85,6 +83,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_ACACIA, "acacia");
         buildStaff(HexItems.STAFF_CRIMSON, "crimson");
         buildStaff(HexItems.STAFF_WARPED, "warped");
+        buildStaff(HexItems.STAFF_MANGROVE, "mangrove");
         buildStaff(HexItems.STAFF_EDIFIED, "edified");
 
         simpleItem(modLoc("patchouli_book"));
@@ -201,9 +200,6 @@ public class HexItemModels extends PaucalItemModelProvider {
             .end().override()
             .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 1)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/old_staff")))
-            .end().override()
-            .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 2)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/bosnia_staff")))
             .end();
     }
 
