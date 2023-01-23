@@ -75,7 +75,8 @@
   
   "entity.hexcasting.wall_scroll": "Hanging Scroll",
   
-  "block.hexcasting.conjured": "Conjured Block",
+  "block.hexcasting.conjured": "Conjured Light",
+  "block.hexcasting.conjured_block": "Conjured Block",
   "block.hexcasting.slate.blank": "Blank Slate",
   "block.hexcasting.slate.written": "Patterned Slate",
   "block.hexcasting.empty_impetus": "Empty Impetus",
