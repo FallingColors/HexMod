@@ -101,8 +101,12 @@ public class SealThingsRecipe extends CustomRecipe {
 
         public boolean isCorrectSealee(ItemStack stack) {
             return switch (this) {
-                case FOCUS -> stack.is(HexItems.FOCUS) && !ItemFocus.isSealed(stack);
-                case SPELLBOOK -> stack.is(HexItems.SPELLBOOK) && !ItemSpellbook.isSealed(stack);
+                case FOCUS -> stack.is(HexItems.FOCUS)
+                    && HexItems.FOCUS.readIotaTag(stack) != null
+                    && !ItemFocus.isSealed(stack);
+                case SPELLBOOK -> stack.is(HexItems.SPELLBOOK)
+                    && HexItems.SPELLBOOK.readIotaTag(stack) != null
+                    && !ItemSpellbook.isSealed(stack);
             };
         }
 
