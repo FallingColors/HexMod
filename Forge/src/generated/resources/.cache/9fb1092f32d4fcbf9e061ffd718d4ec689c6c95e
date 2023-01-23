@@ -1,4 +1,4 @@
-// 1.19.2	2023-01-22T19:58:44.861340174	Recipes
+// 1.19.2	2023-01-22T20:49:42.813938013	Recipes
 29056d8bbc023668564ee81f4eb8b2a11411cf4a data/create/recipes/crushing/amethyst_block.json
 5bb0b70967a422bfd88c01fa1af64e9b98781fd1 data/create/recipes/crushing/amethyst_cluster.json
 229931adf8d62f659de5950d711afd24fb5aa535 data/hexcasting/advancements/recipes/brainsweep/brainsweep/akashic_record.json
@@ -55,6 +55,7 @@ b640608755649a8bde55a434016b14522fa6d2e0 data/hexcasting/advancements/recipes/he
 01f8281d0b4b1fa7116989c9a01d71a3312d8d11 data/hexcasting/advancements/recipes/hexcasting/empty_directrix.json
 3db193fa4246ffa5bbfa45ce901bbfaeada0a942 data/hexcasting/advancements/recipes/hexcasting/empty_impetus.json
 dfc171097bdd8a8f280e6787ea999286deda643e data/hexcasting/advancements/recipes/hexcasting/focus.json
+b21a84886b937a4c4e72a674f265dccb21411ab9 data/hexcasting/advancements/recipes/hexcasting/focus_rotated.json
 48b6d3429e3536a85f3a0e9585a7d252ae0d57a3 data/hexcasting/advancements/recipes/hexcasting/jeweler_hammer.json
 182c2b5dd406c80ed957e1b43d554cce1b212d28 data/hexcasting/advancements/recipes/hexcasting/jungle_staff.json
 8715e71c2fb59ee458ce217040c9a8dd0db04789 data/hexcasting/advancements/recipes/hexcasting/lens.json
@@ -152,7 +153,8 @@ a184ee70962538e4f8641c707d6dca8796ca36e7 data/hexcasting/recipes/edified_slab.js
 6aa3e7825025d055a70a58acd4fd48eef0480721 data/hexcasting/recipes/edified_wood.json
 12e1ba1ec29bf0eadf1210d2307fab35e9685085 data/hexcasting/recipes/empty_directrix.json
 c7d28ccf9df6fc46aa142c2e7b176cc0cb5ea62b data/hexcasting/recipes/empty_impetus.json
-74e43d276dad1bb6d6d9fb846cc79e6b5b5bc833 data/hexcasting/recipes/focus.json
+b8145fb8e02d64d1f098ab915f11541c418bb6e3 data/hexcasting/recipes/focus.json
+1b1918b442ac43eec34e29f53506380a84809977 data/hexcasting/recipes/focus_rotated.json
 f124395483d1ae0e10b7db2b1828f1a4e269a88c data/hexcasting/recipes/jeweler_hammer.json
 a776209b64fea520f6a2fff9f1623e7086939dd9 data/hexcasting/recipes/jungle_staff.json
 3662834d6e0bac03aba28f0f9d9f07f511492118 data/hexcasting/recipes/lens.json

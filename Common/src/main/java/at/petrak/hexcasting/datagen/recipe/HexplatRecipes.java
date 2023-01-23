@@ -7,8 +7,7 @@ import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.recipe.SealFocusRecipe;
-import at.petrak.hexcasting.common.recipe.SealSpellbookRecipe;
+import at.petrak.hexcasting.common.recipe.SealThingsRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTagIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTypeIngredient;
@@ -58,8 +57,8 @@ public class HexplatRecipes extends PaucalRecipeProvider {
 
     @Override
     protected void makeRecipes(Consumer<FinishedRecipe> recipes) {
-        specialRecipe(recipes, SealFocusRecipe.SERIALIZER);
-        specialRecipe(recipes, SealSpellbookRecipe.SERIALIZER);
+        specialRecipe(recipes, SealThingsRecipe.FOCUS_SERIALIZER);
+        specialRecipe(recipes, SealThingsRecipe.SPELLBOOK_SERIALIZER);
 
         staffRecipe(recipes, HexItems.STAFF_OAK, Items.OAK_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_BIRCH, Items.BIRCH_PLANKS);
@@ -72,12 +71,26 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_MANGROVE, Items.MANGROVE_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_EDIFIED, HexBlocks.EDIFIED_PLANKS.asItem());
 
-        ringCornered(HexItems.FOCUS, 1,
-            ingredients.glowstoneDust(),
-            ingredients.leather(),
-            Ingredient.of(HexItems.CHARGED_AMETHYST))
+        ShapedRecipeBuilder.shaped(HexItems.FOCUS)
+            .define('G', ingredients.glowstoneDust())
+            .define('L', ingredients.leather())
+            .define('P', Items.PAPER)
+            .define('A', HexItems.CHARGED_AMETHYST)
+            .pattern("GLG")
+            .pattern("PAP")
+            .pattern("GLG")
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
             .save(recipes);
+        ShapedRecipeBuilder.shaped(HexItems.FOCUS)
+            .define('G', ingredients.glowstoneDust())
+            .define('L', ingredients.leather())
+            .define('P', Items.PAPER)
+            .define('A', HexItems.CHARGED_AMETHYST)
+            .pattern("GPG")
+            .pattern("LAL")
+            .pattern("GPG")
+            .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+            .save(recipes, modLoc("focus_rotated"));
 
         ShapedRecipeBuilder.shaped(HexItems.SPELLBOOK)
             .define('N', ingredients.goldNugget())

@@ -18,6 +18,7 @@ public class HexTags {
         public static final TagKey<Item> STAVES = create("staves");
         public static final TagKey<Item> PHIAL_BASE = create("phial_base");
         public static final TagKey<Item> GRANTS_ROOT_ADVANCEMENT = create("grants_root_advancement");
+        public static final TagKey<Item> SEAL_MATERIALS = create("seal_materials");
 
         public static TagKey<Item> create(String name) {
             return create(modLoc(name));

@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.items;
 
-import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -63,11 +63,15 @@ public class ItemFocus extends Item implements IotaHolderItem {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
-                                TooltipFlag pIsAdvanced) {
+        TooltipFlag pIsAdvanced) {
         IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }
 
     public static boolean isSealed(ItemStack stack) {
         return NBTHelper.getBoolean(stack, TAG_SEALED);
+    }
+
+    public static void seal(ItemStack stack) {
+        NBTHelper.putBoolean(stack, TAG_SEALED, true);
     }
 }

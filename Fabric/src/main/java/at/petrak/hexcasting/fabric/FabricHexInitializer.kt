@@ -30,7 +30,6 @@ import at.petrak.hexcasting.fabric.interop.gravity.OpChangeGravity
 import at.petrak.hexcasting.fabric.interop.gravity.OpGetGravity
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient
-import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient
 import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
 import at.petrak.hexcasting.interop.HexInterop
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -111,7 +110,7 @@ object FabricHexInitializer : ModInitializer {
         HexBlocks.registerBlockItems(bind(Registry.ITEM))
         HexBlockEntities.registerTiles(bind(Registry.BLOCK_ENTITY_TYPE))
         HexItems.registerItems(bind(Registry.ITEM))
-        Registry.register(IngredientDeserializer.REGISTRY, FabricUnsealedIngredient.ID, FabricUnsealedIngredient.Deserializer.INSTANCE)
+//        Registry.register(IngredientDeserializer.REGISTRY, FabricUnsealedIngredient.ID, FabricUnsealedIngredient.Deserializer.INSTANCE)
         Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
 
         HexEntities.registerEntities(bind(Registry.ENTITY_TYPE))
