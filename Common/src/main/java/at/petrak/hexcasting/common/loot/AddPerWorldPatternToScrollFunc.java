@@ -14,15 +14,20 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 /**
- * Slap a random per-world pattern on the scroll
+ * Slap a random per-world pattern on the scroll.
+ * <p>
+ * The function itself is only used on Fabric but the behavior {@link AddPerWorldPatternToScrollFunc#doStatic}
+ * is used on both sides
  */
-public class PatternScrollFunc extends LootItemConditionalFunction {
-    public PatternScrollFunc(LootItemCondition[] lootItemConditions) {
+public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction {
+    public AddPerWorldPatternToScrollFunc(LootItemCondition[] lootItemConditions) {
         super(lootItemConditions);
     }
 
-    @Override
-    protected ItemStack run(ItemStack stack, LootContext ctx) {
+    /**
+     * This doesn't actually have any params so extract behaviour out for the benefit of forge
+     */
+    public static ItemStack doStatic(ItemStack stack, LootContext ctx) {
         var rand = ctx.getRandom();
         var worldLookup = PatternRegistryManifest.getAllPerWorldActions();
 
@@ -40,20 +45,25 @@ public class PatternScrollFunc extends LootItemConditionalFunction {
     }
 
     @Override
+    protected ItemStack run(ItemStack stack, LootContext ctx) {
+        return doStatic(stack, ctx);
+    }
+
+    @Override
     public LootItemFunctionType getType() {
         return HexLootFunctions.PATTERN_SCROLL;
     }
 
-    public static class Serializer extends LootItemConditionalFunction.Serializer<PatternScrollFunc> {
+    public static class Serializer extends LootItemConditionalFunction.Serializer<AddPerWorldPatternToScrollFunc> {
         @Override
-        public void serialize(JsonObject json, PatternScrollFunc value, JsonSerializationContext ctx) {
+        public void serialize(JsonObject json, AddPerWorldPatternToScrollFunc value, JsonSerializationContext ctx) {
             super.serialize(json, value, ctx);
         }
 
         @Override
-        public PatternScrollFunc deserialize(JsonObject object, JsonDeserializationContext ctx,
+        public AddPerWorldPatternToScrollFunc deserialize(JsonObject object, JsonDeserializationContext ctx,
             LootItemCondition[] conditions) {
-            return new PatternScrollFunc(conditions);
+            return new AddPerWorldPatternToScrollFunc(conditions);
         }
     }
 }

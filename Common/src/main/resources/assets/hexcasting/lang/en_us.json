@@ -174,10 +174,12 @@
   "emi.category.hexcasting.villager_leveling": "Trade Leveling",
   "emi.category.hexcasting.villager_profession": "Villager Profession",
   
+  
   "text.autoconfig.hexcasting.title": "Hexcasting Config",
   "text.autoconfig.hexcasting.category.common": "Common",
   "text.autoconfig.hexcasting.category.client": "Client",
   "text.autoconfig.hexcasting.category.server": "Server",
+  
   "text.autoconfig.hexcasting.option.common.dustMediaAmount": "Dust Media Amount",
   "text.autoconfig.hexcasting.option.common.shardMediaAmount": "Shard Media Amount",
   "text.autoconfig.hexcasting.option.common.chargedCrystalMediaAmount": "Charged Crystal Media Amount",
@@ -186,6 +188,7 @@
   "text.autoconfig.hexcasting.option.common.shardMediaAmount.@Tooltip": "How much media a single Amethyst Shard item is worth",
   "text.autoconfig.hexcasting.option.common.chargedCrystalMediaAmount.@Tooltip": "How much media a single Charged Amethyst Crystal item is worth",
   "text.autoconfig.hexcasting.option.common.mediaToHealthRate.@Tooltip": "How many points of media a half-heart is worth when casting from HP",
+  
   "text.autoconfig.hexcasting.option.client.ctrlTogglesOffStrokeOrder": "Ctrl Toggles Off Stroke Order",
   "text.autoconfig.hexcasting.option.client.invertSpellbookScrollDirection": "Invert Spellbook Scroll Direction",
   "text.autoconfig.hexcasting.option.client.invertAbacusScrollDirection": "Invert Abacus Scroll Direction",
@@ -194,15 +197,15 @@
   "text.autoconfig.hexcasting.option.client.invertSpellbookScrollDirection.@Tooltip": "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and vice versa",
   "text.autoconfig.hexcasting.option.client.invertAbacusScrollDirection.@Tooltip": "Whether scrolling up (as opposed to down) will increase the page index of the abacus, and vice versa",
   "text.autoconfig.hexcasting.option.client.gridSnapThreshold.@Tooltip": "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way (0.5-1)",
+  
   "text.autoconfig.hexcasting.option.server.opBreakHarvestLevel": "Break Harvest Level",
   "text.autoconfig.hexcasting.option.server.maxRecurseDepth": "Max Recurse Depth",
   "text.autoconfig.hexcasting.option.server.maxSpellCircleLength": "Max Spell Circle Length",
   "text.autoconfig.hexcasting.option.server.actionDenyList": "Action Deny List",
   "text.autoconfig.hexcasting.option.server.circleActionDenyList": "Circle Action Deny List",
   "text.autoconfig.hexcasting.option.server.villagersOffendedByMindMurder": "Villagers Offended By Mind Murder",
-  "text.autoconfig.hexcasting.option.server.fewScrollTables": "Few Scroll Tables",
-  "text.autoconfig.hexcasting.option.server.someScrollTables": "Some Scroll Tables",
-  "text.autoconfig.hexcasting.option.server.manyScrollTables": "Many Scroll Tables",
+  "text.autoconfig.hexcasting.option.server.scrollInjectionsRaw": "Scroll Injection Weights",
+  "text.autoconfig.hexcasting.option.server.amethystShardModification": "Amethyst Shard Drop Rate Change",
   "text.autoconfig.hexcasting.option.server.opBreakHarvestLevel.@Tooltip": "The harvest level of the Break Block spell.\n0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite.",
   "text.autoconfig.hexcasting.option.server.maxRecurseDepth.@Tooltip": "How many times an action can recursively cast other actions",
   "text.autoconfig.hexcasting.option.server.maxSpellCircleLength.@Tooltip": "The maximum number of slates in a spell circle",
@@ -212,6 +215,8 @@
   "text.autoconfig.hexcasting.option.server.fewScrollTables.@Tooltip": "Loot tables that a small number of Ancient Scrolls are injected into",
   "text.autoconfig.hexcasting.option.server.someScrollTables.@Tooltip": "Loot tables that a decent number of Ancient Scrolls are injected into",
   "text.autoconfig.hexcasting.option.server.manyScrollTables.@Tooltip": "Loot tables that a huge number of Ancient Scrolls are injected into",
+  "text.autoconfig.hexcasting.option.server.scrollInjectionsRaw.@Tooltip": "Maps the names of loot tables to the amount of per-world patterns on scrolls should go in them. There's about a 50% chance to get any scrolls in a given chest marked here; once that is met, between 1 and that many scrolls are generated.",
+  "text.autoconfig.hexcasting.option.server.amethystShardModification.@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",
   
   
   "advancement.hexcasting:root": "Hexcasting Research",

@@ -31,7 +31,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.EnumMap;
 import java.util.stream.Stream;
 
-public class HexForgeDataGenerators {
+public class ForgeHexDataGenerators {
     @SubscribeEvent
     public static void generateData(GatherDataEvent ev) {
         if (System.getProperty("hexcasting.xplat_datagen") != null) {
@@ -59,7 +59,7 @@ public class HexForgeDataGenerators {
         DataGenerator gen = ev.getGenerator();
         ExistingFileHelper efh = ev.getExistingFileHelper();
         gen.addProvider(ev.includeServer(), new HexLootTables(gen));
-        gen.addProvider(ev.includeServer(), new HexplatRecipes(gen, INGREDIENTS, HexForgeConditionsBuilder::new));
+        gen.addProvider(ev.includeServer(), new HexplatRecipes(gen, INGREDIENTS, ForgeHexConditionsBuilder::new));
 
         var xtags = IXplatAbstractions.INSTANCE.tags();
         var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
@@ -70,6 +70,8 @@ public class HexForgeDataGenerators {
         gen.addProvider(ev.includeServer(), itemTagProvider);
         gen.addProvider(ev.includeServer(),
             PaucalForgeDatagenWrappers.addEFHToTagProvider(new HexActionTagProvider(gen), efh));
+
+        gen.addProvider(ev.includeServer(), new ForgeHexLootModGen(gen));
     }
 
     private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {

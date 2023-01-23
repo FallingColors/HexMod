@@ -1,9 +1,11 @@
 package at.petrak.hexcasting.fabric;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -17,7 +19,6 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-import static at.petrak.hexcasting.api.mod.HexConfig.anyMatch;
 import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
 @Config(name = HexAPI.MOD_ID)
@@ -27,15 +28,15 @@ import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 public class FabricHexConfig extends PartitioningSerializer.GlobalData {
     @ConfigEntry.Category("common")
     @ConfigEntry.Gui.TransitiveObject
-    private final Common common = new Common();
+    public final Common common = new Common();
     @ConfigEntry.Category("client")
     @ConfigEntry.Gui.TransitiveObject
-    private final Client client = new Client();
+    public final Client client = new Client();
     @ConfigEntry.Category("server")
     @ConfigEntry.Gui.TransitiveObject
-    private final Server server = new Server();
+    public final Server server = new Server();
 
-    public static void setup() {
+    public static FabricHexConfig setup() {
         AutoConfig.register(FabricHexConfig.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
         var instance = AutoConfig.getConfigHolder(FabricHexConfig.class).getConfig();
 
@@ -47,10 +48,12 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         // but we care about the server on the *logical* server
         // i believe this should Just Work without a guard? assuming we don't access it from the client ever
         HexConfig.setServer(instance.server);
+
+        return instance;
     }
 
     @Config(name = "common")
-    private static final class Common implements HexConfig.CommonConfigAccess, ConfigData {
+    public static final class Common implements HexConfig.CommonConfigAccess, ConfigData {
         @ConfigEntry.Gui.Tooltip
         private int dustMediaAmount = DEFAULT_DUST_MEDIA_AMOUNT;
         @ConfigEntry.Gui.Tooltip
@@ -90,7 +93,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
     }
 
     @Config(name = "client")
-    private static final class Client implements HexConfig.ClientConfigAccess, ConfigData {
+    public static final class Client implements HexConfig.ClientConfigAccess, ConfigData {
         @ConfigEntry.Gui.Tooltip
         private boolean ctrlTogglesOffStrokeOrder = DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER;
         @ConfigEntry.Gui.Tooltip
@@ -127,7 +130,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
     }
 
     @Config(name = "server")
-    private static final class Server implements HexConfig.ServerConfigAccess, ConfigData {
+    public static final class Server implements HexConfig.ServerConfigAccess, ConfigData {
         @ConfigEntry.BoundedDiscrete(min = 0, max = 4)
         @ConfigEntry.Gui.Tooltip
         private int opBreakHarvestLevel = DEFAULT_OP_BREAK_HARVEST_LEVEL;
@@ -146,16 +149,22 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private List<String> tpDimDenylist = DEFAULT_DIM_TP_DENYLIST;
 
         @ConfigEntry.Gui.Tooltip
-        private List<String> fewScrollTables = DEFAULT_FEW_SCROLL_TABLES;
-        @ConfigEntry.Gui.Tooltip
-        private List<String> someScrollTables = DEFAULT_SOME_SCROLL_TABLES;
-        @ConfigEntry.Gui.Tooltip
-        private List<String> manyScrollTables = DEFAULT_MANY_SCROLL_TABLES;
+        private List<ScrollInjectionMirror> scrollInjectionsRaw = HexLootHandler.DEFAULT_SCROLL_INJECTS
+            .stream()
+            .map(si -> new ScrollInjectionMirror(si.injectee(), si.countRange()))
+            .toList();
+        @ConfigEntry.Gui.Excluded
+        private transient Object2IntMap<ResourceLocation> scrollInjections;
 
         @Override
         public void validatePostLoad() throws ValidationException {
             this.maxRecurseDepth = Math.max(this.maxRecurseDepth, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
+
+            this.scrollInjections = new Object2IntOpenHashMap<>();
+            for (var mirror : this.scrollInjectionsRaw) {
+                this.scrollInjections.put(mirror.injectee(), mirror.countRange());
+            }
         }
 
         @Override
@@ -190,19 +199,17 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         @Override
         public boolean canTeleportInThisDimension(ResourceKey<Level> dimension) {
-            return noneMatch(manyScrollTables, dimension.location());
+            return noneMatch(tpDimDenylist, dimension.location());
         }
 
-        @Override
-        public ScrollQuantity scrollsForLootTable(ResourceLocation lootTable) {
-            if (anyMatch(fewScrollTables, lootTable)) {
-                return ScrollQuantity.FEW;
-            } else if (anyMatch(someScrollTables, lootTable)) {
-                return ScrollQuantity.SOME;
-            } else if (anyMatch(manyScrollTables, lootTable)) {
-                return ScrollQuantity.MANY;
-            }
-            return ScrollQuantity.NONE;
+        /**
+         * Returns -1 if none is found
+         */
+        public int scrollRangeForLootTable(ResourceLocation lootTable) {
+            return this.scrollInjections.getOrDefault(lootTable, -1);
+        }
+
+        record ScrollInjectionMirror(ResourceLocation injectee, int countRange) {
         }
     }
 }

@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class HexForgeConditionsBuilder implements IXplatConditionsBuilder, IConditionBuilder {
+public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, IConditionBuilder {
     private final List<ICondition> conditions = new ArrayList<>();
     private final RecipeBuilder parent;
 
-    public HexForgeConditionsBuilder(RecipeBuilder parent) {
+    public ForgeHexConditionsBuilder(RecipeBuilder parent) {
         this.parent = parent;
     }
 
@@ -37,7 +37,8 @@ public class HexForgeConditionsBuilder implements IXplatConditionsBuilder, ICond
     }
 
     @Override
-    public @NotNull RecipeBuilder unlockedBy(@NotNull String string, @NotNull CriterionTriggerInstance criterionTriggerInstance) {
+    public @NotNull RecipeBuilder unlockedBy(@NotNull String string,
+        @NotNull CriterionTriggerInstance criterionTriggerInstance) {
         return parent.unlockedBy(string, criterionTriggerInstance);
     }
 

@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.mod;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
@@ -60,18 +59,11 @@ public class HexConfig {
         // fun fact, although dimension keys are a RegistryHolder, they aren't a registry, so i can't do tags
         boolean canTeleportInThisDimension(ResourceKey<Level> dimension);
 
-        ScrollQuantity scrollsForLootTable(ResourceLocation lootTable);
-
         int DEFAULT_MAX_RECURSE_DEPTH = 512;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
 
         boolean DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER = true;
-        List<String> DEFAULT_FEW_SCROLL_TABLES = List.of("minecraft:chests/jungle_temple",
-            "minecraft:chests/simple_dungeon", "minecraft:chests/village/village_cartographer");
-        List<String> DEFAULT_SOME_SCROLL_TABLES = List.of("minecraft:chests/bastion_treasure",
-            "minecraft:chests/shipwreck_map");
-        List<String> DEFAULT_MANY_SCROLL_TABLES = List.of("minecraft:chests/stronghold_library");
 
         List<String> DEFAULT_DIM_TP_DENYLIST = List.of("twilightforest:twilight_forest");
 

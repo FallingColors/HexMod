@@ -1,7 +1,7 @@
-package at.petrak.hexcasting.mixin;
+package at.petrak.hexcasting.fabric.mixin;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.common.loot.HexLootHandler;
+import at.petrak.hexcasting.fabric.loot.FabricHexLootModJankery;
 import at.petrak.hexcasting.mixin.accessor.AccessorLootTable;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.world.level.block.Blocks;
@@ -15,7 +15,8 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 @Mixin(ReloadableServerResources.class)
-public class MixinReloadableServerResources {
+public class FabricMixinReloadableServerResources {
+    // Add the amethyst shard
     @Inject(method = "loadResources", at = @At("RETURN"), cancellable = true)
     private static void onLoadResources(CallbackInfoReturnable<CompletableFuture<ReloadableServerResources>> cir) {
         cir.setReturnValue(cir.getReturnValue().thenApply((rsr) -> {
@@ -23,13 +24,13 @@ public class MixinReloadableServerResources {
             var theCoolerAmethystTable = (AccessorLootTable) amethystTable;
             var oldFuncs = theCoolerAmethystTable.hex$getFunctions();
             var newFuncs = Arrays.copyOf(oldFuncs, oldFuncs.length + 1);
-            var shardReducer = rsr.getItemModifierManager().get(HexLootHandler.FUNC_AMETHYST_SHARD_REDUCER);
+            var shardReducer = rsr.getItemModifierManager().get(FabricHexLootModJankery.FUNC_AMETHYST_SHARD_REDUCER);
             if (shardReducer != null) {
                 newFuncs[newFuncs.length - 1] = shardReducer;
                 theCoolerAmethystTable.hex$setFunctions(newFuncs);
                 theCoolerAmethystTable.hex$setCompositeFunction(LootItemFunctions.compose(newFuncs));
             } else {
-                HexAPI.LOGGER.warn("{} was not found?", HexLootHandler.FUNC_AMETHYST_SHARD_REDUCER);
+                HexAPI.LOGGER.warn("{} was not found?", FabricHexLootModJankery.FUNC_AMETHYST_SHARD_REDUCER);
             }
             return rsr;
         }));

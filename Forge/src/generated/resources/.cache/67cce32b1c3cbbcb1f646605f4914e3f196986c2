@@ -1,4 +1,4 @@
-// 1.19.2	2022-11-04T11:52:25.2422393	LootTables
+// 1.19.2	2023-01-22T23:58:04.863036007	LootTables
 3b1e2f738c4906371a4cdecf24253ad94ae66320 data/hexcasting/loot_tables/blocks/akashic_bookshelf.json
 201bbf7adff979ff8cb087e1798da5a2a31eed09 data/hexcasting/loot_tables/blocks/akashic_connector.json
 16498092b43c43a4a7617ba91bcfcc13b87d9a7e data/hexcasting/loot_tables/blocks/akashic_record.json
@@ -34,6 +34,3 @@ a3ca7f9427bd57a6033f241754d49425251cc091 data/hexcasting/loot_tables/blocks/scro
 457b355c6a5e1b2ee4ddda37a39084ceef3546d7 data/hexcasting/loot_tables/blocks/stripped_edified_log.json
 6e4bc6364e7e1cc97f1ad1127608a0b95e4d156f data/hexcasting/loot_tables/blocks/stripped_edified_wood.json
 e17ca4b3e84c4fb6dadfee273e6040cf15724014 data/hexcasting/loot_tables/inject/amethyst_cluster.json
-a7a08d76b8a1b1596a0d67d422d7a0d93f3a1d2f data/hexcasting/loot_tables/inject/scroll_loot_few.json
-01a50f557196c705c275722015cf893e0abe6425 data/hexcasting/loot_tables/inject/scroll_loot_many.json
-fd874549344d85ec2bb6edcb7fe7af62cafebba2 data/hexcasting/loot_tables/inject/scroll_loot_some.json

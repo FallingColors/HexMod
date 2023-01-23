@@ -1,0 +1,20 @@
+{
+  "entries": [
+    "hexcasting:scroll/minecraft/chests/bastion_other",
+    "hexcasting:scroll/minecraft/chests/nether_bridge",
+    "hexcasting:scroll/minecraft/chests/village/village_cartographer",
+    "hexcasting:scroll/minecraft/chests/end_city_treasure",
+    "hexcasting:scroll/minecraft/chests/jungle_temple",
+    "hexcasting:scroll/minecraft/chests/bastion_treasure",
+    "hexcasting:scroll/minecraft/chests/pillager_outpost",
+    "hexcasting:scroll/minecraft/chests/desert_pyramid",
+    "hexcasting:scroll/minecraft/chests/shipwreck_map",
+    "hexcasting:scroll/minecraft/chests/abandoned_mineshaft",
+    "hexcasting:amethyst_cluster",
+    "hexcasting:scroll/minecraft/chests/ancient_city",
+    "hexcasting:scroll/minecraft/chests/stronghold_library",
+    "hexcasting:scroll/minecraft/chests/woodland_mansion",
+    "hexcasting:scroll/minecraft/chests/simple_dungeon"
+  ],
+  "replace": false
+}

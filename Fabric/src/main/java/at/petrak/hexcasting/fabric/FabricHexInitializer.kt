@@ -19,7 +19,6 @@ import at.petrak.hexcasting.common.lib.hex.HexActions
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
-import at.petrak.hexcasting.common.loot.HexLootHandler
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
@@ -28,6 +27,7 @@ import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop
 import at.petrak.hexcasting.fabric.interop.gravity.OpChangeGravity
 import at.petrak.hexcasting.fabric.interop.gravity.OpGetGravity
+import at.petrak.hexcasting.fabric.loot.FabricHexLootModJankery
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient
 import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
@@ -50,8 +50,10 @@ import net.minecraft.world.InteractionResult
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
+    public lateinit var CONFIG: FabricHexConfig
+
     override fun onInitialize() {
-        FabricHexConfig.setup()
+        this.CONFIG = FabricHexConfig.setup()
         FabricPacketHandler.init()
 
         initListeners()
@@ -96,10 +98,8 @@ object FabricHexInitializer : ModInitializer {
         CommandRegistrationCallback.EVENT.register { dp, _, _ -> HexCommands.register(dp) }
 
         LootTableEvents.MODIFY.register { _, _, id, supplier, _ ->
-            HexLootHandler.lootLoad(id, supplier::withPool)
+            FabricHexLootModJankery.lootLoad(id, supplier::withPool)
         }
-
-
     }
 
     private fun initRegistries() {

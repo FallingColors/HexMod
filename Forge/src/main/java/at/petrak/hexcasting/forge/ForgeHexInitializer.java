@@ -16,14 +16,13 @@ import at.petrak.hexcasting.common.lib.hex.HexActions;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers;
-import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
-import at.petrak.hexcasting.forge.datagen.HexForgeDataGenerators;
+import at.petrak.hexcasting.forge.datagen.ForgeHexDataGenerators;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
 import at.petrak.hexcasting.forge.lib.ForgeHexArgumentTypeRegistry;
@@ -49,7 +48,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingConversionEvent;
@@ -201,10 +199,6 @@ public class ForgeHexInitializer {
             evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getEntity(), evt.getState(), pos.get()));
         });
 
-        evBus.addListener((LootTableLoadEvent evt) -> HexLootHandler.lootLoad(
-            evt.getName(),
-            builder -> evt.getTable().addPool(builder.build())));
-
         // === Events implemented in other ways on Fabric
 
         // On Fabric this should be auto-synced
@@ -234,7 +228,7 @@ public class ForgeHexInitializer {
         evBus.addGenericListener(BlockEntity.class, ForgeCapabilityHandler::attachBlockEntityCaps);
         evBus.addGenericListener(Entity.class, ForgeCapabilityHandler::attachEntityCaps);
 
-        modBus.register(HexForgeDataGenerators.class);
+        modBus.register(ForgeHexDataGenerators.class);
         modBus.register(ForgeCapabilityHandler.class);
         evBus.register(CapSyncers.class);
 
