@@ -3,8 +3,6 @@ package at.petrak.hexcasting.common.lib.hex;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.common.casting.operators.math.SpecialHandlerNumberLiteral;
 import at.petrak.hexcasting.common.casting.operators.stack.SpecialHandlerMask;
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.LinkedHashMap;
@@ -14,9 +12,6 @@ import java.util.function.BiConsumer;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexSpecialHandlers {
-    public static final Registry<SpecialHandler.Factory<?>> REGISTRY =
-        IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry();
-
     private static final Map<ResourceLocation, SpecialHandler.Factory<?>> SPECIAL_HANDLERS = new LinkedHashMap<>();
 
     public static final SpecialHandler.Factory<SpecialHandlerNumberLiteral> NUMBER = make("number",
