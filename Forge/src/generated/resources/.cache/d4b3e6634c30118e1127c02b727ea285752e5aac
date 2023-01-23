@@ -1,6 +1,16 @@
-// 1.19.2	2023-01-22T23:58:04.861380072	Global Loot Modifiers : hexcasting
-bdfa7329fd17b9128e2bc03c662682e434d74c29 data/forge/loot_modifiers/global_loot_modifiers.json
+// 1.19.2	2023-01-23T14:20:40.916977642	Global Loot Modifiers : hexcasting
+fcf77123631746f3ee4e815183c0731c3ec206c9 data/forge/loot_modifiers/global_loot_modifiers.json
 28ca895a27221312c2451f26646111a68aadbf6c data/hexcasting/loot_modifiers/amethyst_cluster.json
+f98707c91dc8712409833df1e5da245e9b14ebfa data/hexcasting/loot_modifiers/lore/minecraft/chests/abandoned_mineshaft.json
+16b4bbb5358f2fcad31a8b796cdc3eef28caaf09 data/hexcasting/loot_modifiers/lore/minecraft/chests/pillager_outpost.json
+6d6a9fd35a8f4e94c7ae64bf8c130b40d0d7d0e4 data/hexcasting/loot_modifiers/lore/minecraft/chests/simple_dungeon.json
+d1b282c57a8f5d1a37f3b87fbdba408b2a1b1415 data/hexcasting/loot_modifiers/lore/minecraft/chests/stronghold_library.json
+85e98d5aafc8f80415acf2a7e88acc09b6e17e45 data/hexcasting/loot_modifiers/lore/minecraft/chests/village/village_desert_house.json
+4f23231622d1aa9d69511af2a783838f851888c4 data/hexcasting/loot_modifiers/lore/minecraft/chests/village/village_plains_house.json
+1cf8de77951e07da409c5b11016f8ec513910723 data/hexcasting/loot_modifiers/lore/minecraft/chests/village/village_savanna_house.json
+e52b9cba9d685a2ca7ea7db629c7c0990f12be26 data/hexcasting/loot_modifiers/lore/minecraft/chests/village/village_snowy_house.json
+a59a9c55b02b76c0e3f6a2ee4fa7bcf3ab538595 data/hexcasting/loot_modifiers/lore/minecraft/chests/village/village_taiga_house.json
+348688be7af2a3ea62c605428c958e62e449252d data/hexcasting/loot_modifiers/lore/minecraft/chests/woodland_mansion.json
 a89a9e3113b83c6eb978f101aad42a6b37e7c1d8 data/hexcasting/loot_modifiers/scroll/minecraft/chests/abandoned_mineshaft.json
 bfac0ff9e84cd974ccfb47edc9dce78476470103 data/hexcasting/loot_modifiers/scroll/minecraft/chests/ancient_city.json
 0fcb299789a1b0162ab81a025a06b1aab5eb504b data/hexcasting/loot_modifiers/scroll/minecraft/chests/bastion_other.json

@@ -9,6 +9,8 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,11 +25,15 @@ public class FabricHexLootModJankery {
     public static void lootLoad(ResourceLocation id, Consumer<LootPool.Builder> addPool) {
         if (id.equals(Blocks.AMETHYST_CLUSTER.getLootTable())) {
             addPool.accept(makeAmethystInjectPool());
-        } else {
-            int countRange = FabricHexInitializer.CONFIG.server.scrollRangeForLootTable(id);
-            if (countRange != -1) {
-                addPool.accept(makeScrollAddPool(countRange));
-            }
+        }
+
+        int countRange = FabricHexInitializer.CONFIG.server.scrollRangeForLootTable(id);
+        if (countRange != -1) {
+            addPool.accept(makeScrollAddPool(countRange));
+        }
+
+        if (FabricHexInitializer.CONFIG.server.shouldInjectLore(id)) {
+            addPool.accept(makeLoreAddPool(FabricHexInitializer.CONFIG.server.getLoreChance()));
         }
     }
 
@@ -42,5 +48,12 @@ public class FabricHexLootModJankery {
             .setRolls(UniformGenerator.between(-range, range))
             .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE))
             .apply(() -> new AddPerWorldPatternToScrollFunc(new LootItemCondition[0]));
+    }
+
+    private static LootPool.Builder makeLoreAddPool(double chance) {
+        return LootPool.lootPool()
+            .when(LootItemRandomChanceCondition.randomChance((float) chance))
+            .setRolls(ConstantValue.exactly(1))
+            .add(LootItem.lootTableItem(HexItems.LORE_FRAGMENT));
     }
 }

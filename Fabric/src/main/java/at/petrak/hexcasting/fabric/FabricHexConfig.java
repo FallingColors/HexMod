@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+import static at.petrak.hexcasting.api.mod.HexConfig.anyMatchResLoc;
 import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
 @Config(name = HexAPI.MOD_ID)
@@ -156,6 +157,13 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Excluded
         private transient Object2IntMap<ResourceLocation> scrollInjections;
 
+        // TODO: hook this up to the config, change Jankery, test, also test scroll injects on fabric
+        @ConfigEntry.Gui.Tooltip
+        private List<ResourceLocation> loreInjections = HexLootHandler.DEFAULT_LORE_INJECTS;
+        @ConfigEntry.Gui.Tooltip
+        private double loreChance = HexLootHandler.DEFAULT_LORE_CHANCE;
+
+
         @Override
         public void validatePostLoad() throws ValidationException {
             this.maxRecurseDepth = Math.max(this.maxRecurseDepth, 0);
@@ -165,6 +173,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             for (var mirror : this.scrollInjectionsRaw) {
                 this.scrollInjections.put(mirror.injectee(), mirror.countRange());
             }
+
+            this.loreChance = Mth.clamp(this.loreChance, 0.0, 1.0);
         }
 
         @Override
@@ -207,6 +217,14 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
          */
         public int scrollRangeForLootTable(ResourceLocation lootTable) {
             return this.scrollInjections.getOrDefault(lootTable, -1);
+        }
+
+        public boolean shouldInjectLore(ResourceLocation lootTable) {
+            return anyMatchResLoc(this.loreInjections, lootTable);
+        }
+
+        public double getLoreChance() {
+            return loreChance;
         }
 
         record ScrollInjectionMirror(ResourceLocation injectee, int countRange) {

@@ -88,6 +88,10 @@ public class HexConfig {
         return keys.stream().map(ResourceLocation::new).noneMatch(key::equals);
     }
 
+    public static boolean anyMatchResLoc(List<? extends ResourceLocation> keys, ResourceLocation key) {
+        return keys.stream().anyMatch(key::equals);
+    }
+
     // oh man this is aesthetically pleasing
     private static CommonConfigAccess common = null;
     private static ClientConfigAccess client = null;
