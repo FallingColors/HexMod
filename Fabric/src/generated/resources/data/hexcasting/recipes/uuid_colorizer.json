@@ -1,9 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "B": {
-      "item": "minecraft:bowl"
-    },
     "C": {
       "item": "minecraft:amethyst_shard"
     },
@@ -12,9 +9,9 @@
     }
   },
   "pattern": [
-    " C ",
     " D ",
-    " B "
+    "DCD",
+    " D "
   ],
   "result": {
     "item": "hexcasting:uuid_colorizer"

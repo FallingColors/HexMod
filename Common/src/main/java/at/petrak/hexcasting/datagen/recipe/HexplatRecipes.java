@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.datagen.recipe;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.ItemStaff;
@@ -14,6 +13,7 @@ import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTagIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTypeIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerIngredient;
+import at.petrak.hexcasting.datagen.HexAdvancements;
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder;
@@ -21,8 +21,6 @@ import at.petrak.hexcasting.datagen.recipe.builders.CompatIngredientValue;
 import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightCuttingRecipeBuilder;
 import at.petrak.paucal.api.datagen.PaucalRecipeProvider;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
@@ -171,36 +169,35 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         gayRecipe(recipes, ItemPrideColorizer.Type.TRANSGENDER, Ingredient.of(Items.EGG));
 
         ShapedRecipeBuilder.shaped(HexItems.UUID_COLORIZER)
-            .define('B', Items.BOWL)
             .define('D', HexItems.AMETHYST_DUST)
             .define('C', Items.AMETHYST_SHARD)
-            .pattern(" C ")
             .pattern(" D ")
-            .pattern(" B ")
+            .pattern("DCD")
+            .pattern(" D ")
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.SCROLL_SMOL)
             .define('P', Items.PAPER)
-            .define('A', Items.AMETHYST_SHARD)
+            .define('A', HexItems.AMETHYST_DUST)
             .pattern(" A")
             .pattern("P ")
-            .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
+            .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.SCROLL_MEDIUM)
             .define('P', Items.PAPER)
-            .define('A', Items.AMETHYST_SHARD)
+            .define('A', HexItems.AMETHYST_DUST)
             .pattern("  A")
             .pattern("PP ")
             .pattern("PP ")
-            .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
+            .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.SCROLL_LARGE)
             .define('P', Items.PAPER)
-            .define('A', Items.AMETHYST_SHARD)
+            .define('A', HexItems.AMETHYST_DUST)
             .pattern("PPA")
             .pattern("PPP")
             .pattern("PPP")
-            .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
+            .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.SLATE, 6)
             .define('S', Items.DEEPSLATE)
@@ -325,13 +322,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .requires(HexTags.Items.EDIFIED_PLANKS)
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
-        // TODO: probably should have some constant enlightenment trigger somewhere
-        var enlightenment = new OvercastTrigger.Instance(
-            EntityPredicate.Composite.ANY,
-            MinMaxBounds.Ints.ANY,  // add a little bit of slop here
-            MinMaxBounds.Doubles.atLeast(0.8),
-            MinMaxBounds.Doubles.between(0.1, 2.05)
-        );
+        var enlightenment = HexAdvancements.ENLIGHTEN;
         ShapedRecipeBuilder.shaped(HexBlocks.EMPTY_IMPETUS)
             .define('B', Items.IRON_BARS)
             .define('A', HexItems.CHARGED_AMETHYST)
@@ -361,12 +352,14 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("LPL")
             .unlockedBy("enlightenment", enlightenment).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_LIGATURE)
+        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_LIGATURE, 4)
             .define('L', HexTags.Items.EDIFIED_LOGS)
             .define('P', HexTags.Items.EDIFIED_PLANKS)
-            .define('C', HexItems.CHARGED_AMETHYST)
+            .define('1', HexItems.AMETHYST_DUST)
+            .define('2', Items.AMETHYST_SHARD)
+            .define('3', HexItems.CHARGED_AMETHYST)
             .pattern("LPL")
-            .pattern("CCC")
+            .pattern("123")
             .pattern("LPL")
             .unlockedBy("enlightenment", enlightenment).save(recipes);
 
