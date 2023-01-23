@@ -6,15 +6,17 @@ import org.jetbrains.annotations.Nullable;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public enum ScrollQuantity {
-    NONE(null),
-    FEW(modLoc("inject/scroll_loot_few")),
-    SOME(modLoc("inject/scroll_loot_some")),
-    MANY(modLoc("inject/scroll_loot_many"));
+    NONE(null, 0),
+    FEW(modLoc("inject/scroll_loot_few"), 2),
+    SOME(modLoc("inject/scroll_loot_some"), 3),
+    MANY(modLoc("inject/scroll_loot_many"), 4);
 
     private final ResourceLocation pool;
+    public final int countRange;
 
-    ScrollQuantity(ResourceLocation pool) {
+    ScrollQuantity(ResourceLocation pool, int countRange) {
         this.pool = pool;
+        this.countRange = countRange;
     }
 
     @Nullable

@@ -26,6 +26,8 @@ import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
 import at.petrak.hexcasting.forge.datagen.HexForgeDataGenerators;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
+import at.petrak.hexcasting.forge.lib.ForgeHexArgumentTypeRegistry;
+import at.petrak.hexcasting.forge.lib.ForgeHexLootMods;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
@@ -111,6 +113,7 @@ public class ForgeHexInitializer {
         bind(IXplatAbstractions.INSTANCE.getEvalSoundRegistry().key(), HexEvalSounds::register);
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
+        ForgeHexLootMods.REGISTRY.register(getModEventBus());
 
         HexAdvancementTriggers.registerTriggers();
     }

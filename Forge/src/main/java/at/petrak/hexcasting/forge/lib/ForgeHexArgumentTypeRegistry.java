@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge;
+package at.petrak.hexcasting.forge.lib;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.command.PatternResLocArgument;
@@ -16,7 +16,8 @@ public class ForgeHexArgumentTypeRegistry {
         ForgeRegistries.COMMAND_ARGUMENT_TYPES, HexAPI.MOD_ID);
 
     // how fucking ergonomic
-    public static final RegistryObject<ArgumentTypeInfo<PatternResLocArgument, SingletonArgumentInfo<PatternResLocArgument>.Template>>
+    public static final RegistryObject<ArgumentTypeInfo<PatternResLocArgument,
+        SingletonArgumentInfo<PatternResLocArgument>.Template>>
         PATTERN_RESLOC = register(PatternResLocArgument.class,
         "pattern",
         SingletonArgumentInfo.contextFree(PatternResLocArgument::id)

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.datagen;
 
+import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -101,19 +102,19 @@ public class HexLootTables extends PaucalLootTableProvider {
             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond)
             .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
-                 0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
+                0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
 
         var isThatAnMFingBadBrandonSandersonReference = LootPool.lootPool()
-             .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
-             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-             .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
-             .when(LootItemRandomChanceCondition.randomChance(0.125f));
+            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
+            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
+            .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
+            .when(LootItemRandomChanceCondition.randomChance(0.125f));
 
         lootTables.put(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER, LootTable.lootTable()
-             .withPool(dustPoolWhenGood)
-             .withPool(dustPoolWhenBad)
-             .withPool(isThatAnMFingBrandonSandersonReference)
-             .withPool(isThatAnMFingBadBrandonSandersonReference));
+            .withPool(dustPoolWhenGood)
+            .withPool(dustPoolWhenBad)
+            .withPool(isThatAnMFingBrandonSandersonReference)
+            .withPool(isThatAnMFingBadBrandonSandersonReference));
 
         String[] rarities = new String[]{
             "few",
@@ -121,7 +122,8 @@ public class HexLootTables extends PaucalLootTableProvider {
             "many"
         };
         for (int i = 0; i < rarities.length; i++) {
-            var scrollPool = makeScrollAdder(i + 1);
+            var quantity = ScrollQuantity.values()[i + 1];
+            var scrollPool = makeScrollAdder(quantity.countRange);
             lootTables.put(modLoc("inject/scroll_loot_" + rarities[i]), scrollPool);
         }
     }
