@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.mixin.accessor.AccessorAbstractArrow;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.phys.Vec3;
 
 public class VelocityFudging {
@@ -17,12 +18,15 @@ public class VelocityFudging {
             }
         });
 
-        HexAPI.instance().registerSpecialVelocityGetter(EntityType.ARROW, arrow -> {
-            if (((AccessorAbstractArrow) arrow).hex$isInGround()) {
-                return Vec3.ZERO;
-            } else {
-                return arrow.getDeltaMovement();
-            }
-        });
+        HexAPI.instance().registerSpecialVelocityGetter(EntityType.ARROW, VelocityFudging::arrowVelocitizer);
+        HexAPI.instance().registerSpecialVelocityGetter(EntityType.SPECTRAL_ARROW, VelocityFudging::arrowVelocitizer);
+    }
+
+    private static Vec3 arrowVelocitizer(AbstractArrow arrow) {
+        if (((AccessorAbstractArrow) arrow).hex$isInGround()) {
+            return Vec3.ZERO;
+        } else {
+            return arrow.getDeltaMovement();
+        }
     }
 }
