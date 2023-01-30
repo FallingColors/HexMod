@@ -7,6 +7,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -61,6 +64,27 @@ public interface HexAPI {
 
     default Component getRawHookI18n(ResourceLocation name) {
         return Component.translatable(getRawHookI18nKey(name)).withStyle(ChatFormatting.LIGHT_PURPLE);
+    }
+
+    /**
+     * Register an entity with the given ID to have its velocity as perceived by OpEntityVelocity be different
+     * than it's "normal" velocity
+     */
+    // Should be OK to use the type directly as the key as they're singleton identity objects
+    default <T extends Entity> void registerSpecialVelocityGetter(EntityType<T> key, EntityVelocityGetter<T> getter) {
+    }
+
+    /**
+     * If the entity has had a special getter registered with {@link HexAPI#registerSpecialVelocityGetter} then
+     * return that, otherwise return its normal delta movement
+     */
+    default Vec3 getEntityVelocitySpecial(Entity entity) {
+        return entity.getDeltaMovement();
+    }
+
+    @FunctionalInterface
+    interface EntityVelocityGetter<T extends Entity> {
+        Vec3 getVelocity(T entity);
     }
 
     static HexAPI instance() {
