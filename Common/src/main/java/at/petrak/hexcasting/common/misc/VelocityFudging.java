@@ -20,6 +20,8 @@ public class VelocityFudging {
 
         HexAPI.instance().registerSpecialVelocityGetter(EntityType.ARROW, VelocityFudging::arrowVelocitizer);
         HexAPI.instance().registerSpecialVelocityGetter(EntityType.SPECTRAL_ARROW, VelocityFudging::arrowVelocitizer);
+        // this is an arrow apparently
+        HexAPI.instance().registerSpecialVelocityGetter(EntityType.TRIDENT, VelocityFudging::arrowVelocitizer);
     }
 
     private static Vec3 arrowVelocitizer(AbstractArrow arrow) {
