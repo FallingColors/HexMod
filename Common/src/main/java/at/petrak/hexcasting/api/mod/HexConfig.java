@@ -81,11 +81,19 @@ public class HexConfig {
 
     // Simple extensions for resource location configs
     public static boolean anyMatch(List<? extends String> keys, ResourceLocation key) {
-        return keys.stream().map(ResourceLocation::new).anyMatch(key::equals);
+        for (String s : keys) {
+            if (ResourceLocation.isValidResourceLocation(s)) {
+                var rl = new ResourceLocation(s);
+                if (rl.equals(key)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean noneMatch(List<? extends String> keys, ResourceLocation key) {
-        return keys.stream().map(ResourceLocation::new).noneMatch(key::equals);
+        return !anyMatch(keys, key);
     }
 
     public static boolean anyMatchResLoc(List<? extends ResourceLocation> keys, ResourceLocation key) {
