@@ -33,7 +33,7 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
                 HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD,
                 HexBlocks.EDIFIED_PLANKS, HexBlocks.EDIFIED_PANEL, HexBlocks.EDIFIED_TILE,
                 HexBlocks.EDIFIED_DOOR, HexBlocks.EDIFIED_TRAPDOOR, HexBlocks.EDIFIED_SLAB,
-                HexBlocks.EDIFIED_BUTTON);
+                HexBlocks.EDIFIED_BUTTON, HexBlocks.EDIFIED_STAIRS);
 
         tag(BlockTags.MINEABLE_WITH_HOE)
             .add(HexBlocks.AMETHYST_EDIFIED_LEAVES, HexBlocks.AVENTURINE_EDIFIED_LEAVES,
@@ -64,6 +64,10 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
             .add(HexBlocks.EDIFIED_SLAB);
         tag(BlockTags.WOODEN_SLABS)
             .add(HexBlocks.EDIFIED_SLAB);
+        tag(BlockTags.STAIRS)
+            .add(HexBlocks.EDIFIED_STAIRS);
+        tag(BlockTags.WOODEN_STAIRS)
+            .add(HexBlocks.EDIFIED_STAIRS);
         tag(BlockTags.DOORS)
             .add(HexBlocks.EDIFIED_DOOR);
         tag(BlockTags.WOODEN_DOORS)
