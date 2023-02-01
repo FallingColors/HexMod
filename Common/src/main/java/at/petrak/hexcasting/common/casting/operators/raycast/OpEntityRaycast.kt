@@ -1,13 +1,13 @@
-package at.petrak.hexcasting.common.casting.operators
+package at.petrak.hexcasting.common.casting.operators.raycast
 
-import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
-import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
+import at.petrak.hexcasting.api.misc.MediaConstants
 import net.minecraft.world.entity.projectile.ProjectileUtil
 import net.minecraft.world.phys.AABB
 

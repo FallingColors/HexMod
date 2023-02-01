@@ -127,7 +127,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             circleActionDenyList = builder.comment(
                     "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
-                        " will result in a mishap.")
+                        " will result in a mishap. For example: hexcasting:get_caster will prevent Mind's Reflection.")
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
