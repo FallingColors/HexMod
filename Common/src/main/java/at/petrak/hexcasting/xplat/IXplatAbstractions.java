@@ -101,6 +101,9 @@ public interface IXplatAbstractions {
     ADMediaHolder findMediaHolder(ItemStack stack);
 
     @Nullable
+    ADMediaHolder findMediaHolder(ServerPlayer player);
+
+    @Nullable
     ADIotaHolder findDataHolder(ItemStack stack);
 
     @Nullable

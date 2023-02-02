@@ -145,11 +145,6 @@ data class CastingEnvironment(
     /**
      * Return the slot from which to take blocks and items.
      */
-    // https://wiki.vg/Inventory is WRONG
-    // slots 0-8 are the hotbar
-    // for what purpose i cannot imagine
-    // http://redditpublic.com/images/b/b2/Items_slot_number.png looks right
-    // and offhand is 150 Inventory.java:464
     fun getOperativeSlot(stackOK: Predicate<ItemStack>): ItemStack? {
         val operable = DiscoveryHandlers.collectOperableSlots(this)
 

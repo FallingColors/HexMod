@@ -1,17 +1,22 @@
 package at.petrak.hexcasting.api;
 
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.player.Sentinel;
 import com.google.common.base.Suppliers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -85,6 +90,16 @@ public interface HexAPI {
     @FunctionalInterface
     interface EntityVelocityGetter<T extends Entity> {
         Vec3 getVelocity(T entity);
+    }
+
+    @Nullable
+    default Sentinel getSentinel(ServerPlayer player) {
+        return null;
+    }
+
+    @Nullable
+    default ADMediaHolder findMediaHolder(ItemStack stack) {
+        return null;
     }
 
     static HexAPI instance() {

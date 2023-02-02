@@ -226,6 +226,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
+        var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(player);
+        return cc.orElse(null);
+    }
+
+    @Override
     public @Nullable
     ADIotaHolder findDataHolder(ItemStack stack) {
         var cc = HexCardinalComponents.IOTA_HOLDER.maybeGet(stack);

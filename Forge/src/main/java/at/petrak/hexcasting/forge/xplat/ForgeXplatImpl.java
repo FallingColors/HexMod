@@ -226,7 +226,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         CompoundTag tag = player.getPersistentData();
         var exists = tag.getBoolean(TAG_SENTINEL_EXISTS);
         if (!exists) {
-            return Sentinel.none();
+            return null;
         }
         var extendsRange = tag.getBoolean(TAG_SENTINEL_GREATER);
         var position = HexUtils.vecFromNBT(tag.getLongArray(TAG_SENTINEL_POSITION));
@@ -265,6 +265,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.MEDIA).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
+    public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
+        var maybeCap = player.getCapability(HexCapabilities.MEDIA).resolve();
         return maybeCap.orElse(null);
     }
 
