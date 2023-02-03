@@ -71,7 +71,9 @@ fun scanPlayerForMediaStuff(player: ServerPlayer): List<ADMediaHolder> {
         }
     }
 
-    
+    sources.sortWith(::compareMediaItem)
+    sources.reverse()
+    return sources
 }
 
 /**

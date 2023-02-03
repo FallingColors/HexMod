@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.Sentinel;
 import com.google.common.base.Suppliers;
 import net.minecraft.ChatFormatting;
@@ -12,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
@@ -100,6 +102,10 @@ public interface HexAPI {
     @Nullable
     default ADMediaHolder findMediaHolder(ItemStack stack) {
         return null;
+    }
+
+    default FrozenColorizer getColorizer(Player player) {
+        return FrozenColorizer.DEFAULT.get();
     }
 
     static HexAPI instance() {

@@ -1,17 +1,30 @@
 package at.petrak.hexcasting.common.casting.env;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
+import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.misc.HexDamageSources;
+import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.api.utils.MediaHelper;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     protected final ServerPlayer caster;
@@ -21,6 +34,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         super(caster.getLevel());
         this.caster = caster;
         this.castingHand = castingHand;
+    }
+
+    @Override
+    public @Nullable ServerPlayer getCaster() {
+        return this.caster;
     }
 
     @Override
@@ -78,7 +96,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         var sentinel = HexAPI.instance().getSentinel(this.caster);
         if (sentinel != null
             && sentinel.extendsRange()
-            && world.dimension() == sentinel.dimension()
+            && this.caster.getLevel().dimension() == sentinel.dimension()
             && vec.distanceToSqr(sentinel.position()) <= Action.MAX_DISTANCE_FROM_SENTINEL * Action.MAX_DISTANCE_FROM_SENTINEL
         ) {
             return true;
@@ -100,13 +118,44 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
     /**
      * Search the player's inventory for media ADs and use them.
-     * <p>
-     * TODO it looks like i'm going to strip out DiscoveryHandlers entirely and replace it. Was anyone hoping to make a
-     * media source that isn't item-based? Might be worth scanning for ADMediaHolders on the player themself.
-     * <p>
-     * TODO vis a vis that stop special-casing overcasting
      */
-    protected long extractMediaFromInventory(long cost) {
+    protected long extractMediaFromInventory(long costLeft, boolean allowOvercast) {
+        List<ADMediaHolder> sources = MediaHelper.scanPlayerForMediaStuff(this.caster);
 
+        for (var source : sources) {
+            var found = MediaHelper.extractMedia(source, (int) costLeft, true, false);
+            costLeft -= found;
+            if (costLeft <= 0) {
+                break;
+            }
+        }
+
+        if (costLeft > 0 && allowOvercast) {
+            var mediaToHealth = HexConfig.common().mediaToHealthRate();
+            var healthToRemove = Math.max(costLeft / mediaToHealth, 0.5);
+            var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
+
+            Mishap.trulyHurt(this.caster, HexDamageSources.OVERCAST, healthToRemove);
+
+            var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
+
+            HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.caster, actuallyTaken);
+            this.caster.awardStat(HexStatistics.MEDIA_OVERCAST, actuallyTaken);
+
+            costLeft -= actuallyTaken;
+        }
+
+        return costLeft;
+    }
+
+    protected boolean canOvercast() {
+        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("y_u_no_cast_angy"));
+        var advs = this.caster.getAdvancements();
+        return advs.getOrStartProgress(adv).isDone();
+    }
+
+    @Override
+    public void produceParticles(ParticleSpray particles, FrozenColorizer colorizer) {
+        particles.sprayParticles(this.world, colorizer);
     }
 }

@@ -2,11 +2,13 @@ package at.petrak.hexcasting.common.impl;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -42,5 +44,10 @@ public class HexAPIImpl implements HexAPI {
     @Override
     public @Nullable ADMediaHolder findMediaHolder(ItemStack stack) {
         return IXplatAbstractions.INSTANCE.findMediaHolder(stack);
+    }
+
+    @Override
+    public FrozenColorizer getColorizer(Player player) {
+        return IXplatAbstractions.INSTANCE.getColorizer(player);
     }
 }

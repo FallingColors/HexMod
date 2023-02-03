@@ -1,17 +1,17 @@
 package at.petrak.hexcasting.api.casting.eval;
 
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -29,28 +29,28 @@ import java.util.function.Predicate;
  * Stuff like "the player with a staff," "the player with a trinket," "spell circles,"
  */
 public abstract class CastingEnvironment {
-    protected final CompoundTag userData;
+    protected final ServerLevel world;
+    // TODO move this to the env?
     protected final Set<Entity> entitiesGivenMotion;
 
-    protected final ServerLevel world;
-
     protected CastingEnvironment(ServerLevel world) {
-        this.userData = new CompoundTag();
-        this.entitiesGivenMotion = new HashSet<>();
         this.world = world;
+        this.entitiesGivenMotion = new HashSet<>();
+    }
+
+    public final ServerLevel getWorld() {
+        return this.world;
     }
 
     /**
-     * Get a tag within which you can put whatever you like.
+     * Get the caster. Might be null!
      * <p>
-     * Use this to do stuff like implement custom ravenminds.
-     * <p>
-     * If there isn't a value associated with the given key, it makes and returns a new empty tag.
+     * Implementations should NOT rely on this in general, use the methods on this class instead.
+     * This is mostly for things like mishaps.
      */
-    public CompoundTag getUserData(ResourceLocation key) {
-        var strKey = key.toString();
-        return NBTHelper.getOrCreateCompound(this.userData, strKey);
-    }
+    @Nullable
+    public abstract ServerPlayer getCaster();
+
 
     /**
      * If something about this ARE itself is invalid, mishap.
@@ -62,6 +62,13 @@ public abstract class CastingEnvironment {
             throw new MishapDisallowedSpell();
         }
     }
+
+    /**
+     * Do whatever you like after a pattern is executed.
+     */
+    public abstract void postExecution(CastResult result);
+
+    public abstract Vec3 mishapSprayPos();
 
     /**
      * Attempt to extract the given amount of media. Returns the amount of media left in the cost.
@@ -199,7 +206,7 @@ public abstract class CastingEnvironment {
     /**
      * The order/mode stacks should be discovered in
      */
-    public enum StackDiscoveryMode {
+    protected enum StackDiscoveryMode {
         /**
          * When finding items to pick (hotbar)
          */
@@ -209,4 +216,8 @@ public abstract class CastingEnvironment {
          */
         EXTRACTION,
     }
+
+    public abstract FrozenColorizer getColorizer();
+
+    public abstract void produceParticles(ParticleSpray particles, FrozenColorizer colorizer);
 }

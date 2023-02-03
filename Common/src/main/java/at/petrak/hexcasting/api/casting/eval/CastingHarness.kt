@@ -1,8 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval
 
 import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.PatternShapeMatch
 import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
@@ -20,9 +18,6 @@ import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.*
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.misc.HexDamageSources
-import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
@@ -35,11 +30,8 @@ import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
-import net.minecraft.util.Mth
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
-import kotlin.math.max
-import kotlin.math.min
 
 /**
  * Keeps track of a player casting a spell on the server.
@@ -484,93 +476,6 @@ class CastingHarness private constructor(
         }
         */
         return out
-    }
-
-    /**
-     * Might cast from hitpoints.
-     * Returns the media cost still remaining after we deplete everything. It will be <= 0 if we could pay for it.
-     *
-     * Also awards stats and achievements and such
-     */
-    fun withdrawMedia(mediaCost: Int, allowOvercast: Boolean): Int {
-        // prevent poor impls from gaining you media
-        if (mediaCost <= 0) return 0
-        var costLeft = mediaCost
-
-        val fake = this.ctx.caster.isCreative
-
-        if (this.ctx.spellCircle != null) {
-            if (fake)
-                return 0
-
-            val tile = this.ctx.world.getBlockEntity(this.ctx.spellCircle.impetusPos)
-            if (tile is BlockEntityAbstractImpetus) {
-                val mediaAvailable = tile.media
-                if (mediaAvailable < 0)
-                    return 0
-
-                val mediaToTake = min(costLeft, mediaAvailable)
-                costLeft -= mediaToTake
-                tile.media = mediaAvailable - mediaToTake
-            }
-        } else {
-            val casterStack = this.ctx.caster.getItemInHand(this.ctx.castingHand)
-            val casterMediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(casterStack)
-            val casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack)
-            val hexHolderDrawsFromInventory = if (casterHexHolder != null) {
-                if (casterMediaHolder != null) {
-                    val mediaAvailable = casterMediaHolder.withdrawMedia(-1, true)
-                    val mediaToTake = min(costLeft, mediaAvailable)
-                    if (!fake) casterMediaHolder.withdrawMedia(mediaToTake, false)
-                    costLeft -= mediaToTake
-                }
-                casterHexHolder.canDrawMediaFromInventory()
-            } else {
-                false
-            }
-
-            if (casterStack.`is`(HexTags.Items.STAVES) || hexHolderDrawsFromInventory) {
-                val mediaSources = DiscoveryHandlers.collectMediaHolders(this)
-                    .sortedWith(Comparator(::compareMediaItem).reversed())
-                for (source in mediaSources) {
-                    costLeft -= extractMedia(source, costLeft, simulate = fake)
-                    if (costLeft <= 0)
-                        break
-                }
-
-                if (allowOvercast && costLeft > 0) {
-                    // Cast from HP!
-                    val mediaToHealth = HexConfig.common().mediaToHealthRate()
-                    val healthToRemove = max(costLeft.toDouble() / mediaToHealth, 0.5)
-                    val mediaAbleToCastFromHP = this.ctx.caster.health * mediaToHealth
-
-                    val mediaToActuallyPayFor = min(mediaAbleToCastFromHP.toInt(), costLeft)
-                    costLeft -= if (!fake) {
-                        Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthToRemove.toFloat())
-
-                        val actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.ctx.caster.health * mediaToHealth))
-
-                        HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, actuallyTaken)
-                        this.ctx.caster.awardStat(HexStatistics.MEDIA_OVERCAST, mediaCost - costLeft)
-                        actuallyTaken
-                    } else {
-                        mediaToActuallyPayFor
-                    }
-                }
-            }
-        }
-
-        if (!fake) {
-            // this might be more than the media cost! for example if we waste a lot of media from an item
-            this.ctx.caster.awardStat(HexStatistics.MEDIA_USED, mediaCost - costLeft)
-            HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.trigger(
-                this.ctx.caster,
-                mediaCost - costLeft,
-                if (costLeft < 0) -costLeft else 0
-            )
-        }
-
-        return if (fake) 0 else costLeft
     }
 
     fun getColorizer(): FrozenColorizer {

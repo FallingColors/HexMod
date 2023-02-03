@@ -23,7 +23,7 @@ sealed class OperatorSideEffect {
 
     data class RequiredEnlightenment(val awardStat: Boolean) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
-            harness.ctx.caster.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
+            harness.ctx.caster?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
 
             if (awardStat)
                 HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.ctx.caster)
@@ -42,7 +42,7 @@ sealed class OperatorSideEffect {
         override fun performEffect(harness: CastingHarness): Boolean {
             this.spell.cast(harness.ctx)
             if (awardStat)
-                harness.ctx.caster.awardStat(HexStatistics.SPELLS_CAST)
+                harness.ctx.caster?.awardStat(HexStatistics.SPELLS_CAST)
 
             return false
         }
@@ -50,17 +50,14 @@ sealed class OperatorSideEffect {
 
     data class ConsumeMedia(val amount: Int) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
-            val overcastOk = harness.ctx.canOvercast
-            val leftoverMedia = harness.withdrawMedia(this.amount, overcastOk)
-            if (leftoverMedia > 0 && !overcastOk) {
-                harness.ctx.caster.sendSystemMessage("hexcasting.message.cant_overcast".asTranslatedComponent)
-            }
+            val leftoverMedia = harness.ctx.extractMedia(this.amount.toLong())
             return leftoverMedia > 0
         }
     }
 
     data class Particles(val spray: ParticleSpray) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
+            harness.ctx.produceParticles(this.spray, harness.ctx.colorizer)
             this.spray.sprayParticles(harness.ctx.world, harness.getColorizer())
 
             return false
