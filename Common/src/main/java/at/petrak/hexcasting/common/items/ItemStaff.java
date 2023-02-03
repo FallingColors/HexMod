@@ -33,7 +33,7 @@ public class ItemStaff extends Item {
         }
 
         if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
-            var harness = IXplatAbstractions.INSTANCE.getHarness(serverPlayer, hand);
+            var harness = IXplatAbstractions.INSTANCE.getStaffHarness(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
             var descs = harness.generateDescs();
 

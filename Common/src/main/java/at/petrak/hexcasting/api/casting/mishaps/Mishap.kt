@@ -105,6 +105,7 @@ abstract class Mishap : Throwable() {
     data class Context(val pattern: HexPattern, val name: Component?)
 
     companion object {
+        @JvmStatic
         public fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
             entity.setHurtWithStamp(source, entity.level.gameTime)
 

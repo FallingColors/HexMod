@@ -91,7 +91,7 @@ public interface IXplatAbstractions {
 
     Sentinel getSentinel(Player player);
 
-    CastingHarness getHarness(ServerPlayer player, InteractionHand hand);
+    CastingHarness getStaffHarness(ServerPlayer player, InteractionHand hand);
 
     List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player);
 

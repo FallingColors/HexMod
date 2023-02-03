@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.misc.HexDamageSources;
@@ -131,11 +132,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         }
 
         if (costLeft > 0 && allowOvercast) {
-            var mediaToHealth = HexConfig.common().mediaToHealthRate();
-            var healthToRemove = Math.max(costLeft / mediaToHealth, 0.5);
+            double mediaToHealth = HexConfig.common().mediaToHealthRate();
+            double healthToRemove = Math.max(costLeft / mediaToHealth, 0.5);
             var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
 
-            Mishap.trulyHurt(this.caster, HexDamageSources.OVERCAST, healthToRemove);
+            Mishap.trulyHurt(this.caster, HexDamageSources.OVERCAST, (float) healthToRemove);
 
             var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
 
@@ -158,4 +159,15 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     public void produceParticles(ParticleSpray particles, FrozenColorizer colorizer) {
         particles.sprayParticles(this.world, colorizer);
     }
+
+    @Override
+    public Vec3 mishapSprayPos() {
+        return this.caster.position();
+    }
+
+    protected void sendMishapMsgToPlayer(OperatorSideEffect.DoMishap mishap) {
+        var msg = mishap.getMishap().errorMessageWithName(this, mishap.getErrorCtx());
+        this.caster.sendSystemMessage(msg);
+    }
+
 }

@@ -201,7 +201,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
+    public CastingHarness getStaffHarness(ServerPlayer player, InteractionHand hand) {
         var cc = HexCardinalComponents.HARNESS.get(player);
         return cc.getHarness(hand);
     }

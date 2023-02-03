@@ -2,6 +2,8 @@ package at.petrak.hexcasting.common.casting.env;
 
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,6 +24,12 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     @Override
     public void postExecution(CastResult result) {
         this.sound = this.sound.greaterOf(result.getSound());
+
+        for (var sideEffect : result.getSideEffects()) {
+            if (sideEffect instanceof OperatorSideEffect.DoMishap doMishap) {
+                this.sendMishapMsgToPlayer(doMishap);
+            }
+        }
     }
 
     @Override
@@ -43,5 +51,10 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
         }
 
         return costLeft;
+    }
+
+    @Override
+    public FrozenColorizer getColorizer() {
+        return null;
     }
 }

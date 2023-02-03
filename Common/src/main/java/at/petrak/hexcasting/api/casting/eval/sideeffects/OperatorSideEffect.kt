@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval.sideeffects
 
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.CastingHarness
@@ -66,18 +65,6 @@ sealed class OperatorSideEffect {
 
     data class DoMishap(val mishap: Mishap, val errorCtx: Mishap.Context) : OperatorSideEffect() {
         override fun performEffect(harness: CastingHarness): Boolean {
-            val msg = mishap.errorMessageWithName(harness.ctx, errorCtx);
-            if (harness.ctx.spellCircle != null) {
-                val tile = harness.ctx.world.getBlockEntity(harness.ctx.spellCircle.impetusPos)
-                if (tile is BlockEntityAbstractImpetus) {
-                    tile.lastMishap = msg
-                    tile.setChanged()
-                }
-            } else {
-                // for now
-                harness.ctx.caster.sendSystemMessage(msg)
-            }
-
             val spray = mishap.particleSpray(harness.ctx)
             val color = mishap.accentColor(harness.ctx, errorCtx)
             spray.sprayParticles(harness.ctx.world, color)
