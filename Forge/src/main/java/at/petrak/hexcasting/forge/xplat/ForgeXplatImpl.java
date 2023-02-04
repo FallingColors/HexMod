@@ -8,9 +8,9 @@ import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexTags;
@@ -183,7 +183,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setHarness(ServerPlayer player, CastingHarness harness) {
+    public void setHarness(ServerPlayer player, CastingVM harness) {
         player.getPersistentData().put(TAG_HARNESS, harness == null ? new CompoundTag() : harness.serializeToNBT());
     }
 
@@ -237,10 +237,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public CastingHarness getStaffHarness(ServerPlayer player, InteractionHand hand) {
+    public CastingVM getStaffHarness(ServerPlayer player, InteractionHand hand) {
         // This is always from a staff because we don't need to load the harness when casting from item
         var ctx = new CastingEnvironment(player, hand, CastingEnvironment.CastSource.STAFF);
-        return CastingHarness.fromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
+        return CastingVM.fromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
     }
 
     @Override

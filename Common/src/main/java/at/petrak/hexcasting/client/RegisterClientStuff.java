@@ -2,6 +2,7 @@ package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
@@ -19,7 +20,6 @@ import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
@@ -138,7 +138,7 @@ public class RegisterClientStuff {
             if (iotaTag == null) {
                 return 0xff_ffffff;
             }
-            return HexIotaTypes.getColor(iotaTag);
+            return IotaType.getColor(iotaTag);
         }, HexBlocks.AKASHIC_BOOKSHELF);
     }
 
@@ -192,7 +192,7 @@ public class RegisterClientStuff {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
                     var iotaTag = tile.getIotaTag();
                     if (iotaTag != null) {
-                        var display = HexIotaTypes.getDisplay(iotaTag);
+                        var display = IotaType.getDisplay(iotaTag);
                         lines.add(new Pair<>(new ItemStack(Items.BOOK), display));
                     }
                 }

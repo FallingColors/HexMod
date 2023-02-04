@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.casting.SpellList
-import at.petrak.hexcasting.api.casting.eval.CastingHarness
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.utils.getList
@@ -31,7 +30,7 @@ sealed interface ContinuationFrame {
      * For Evaluate, this consumes one pattern; for ForEach this queues the next iteration of the outer loop.
      * @return the result of this pattern step
      */
-    fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingHarness): CastResult
+    fun evaluate(continuation: SpellContinuation, level: ServerLevel, harness: CastingVM): CastResult
 
     /**
      * The OpHalt instruction wants us to "jump to" the END of the nearest meta-eval.

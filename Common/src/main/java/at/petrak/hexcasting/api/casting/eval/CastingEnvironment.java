@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.casting.eval;
 
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
@@ -9,7 +9,6 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -57,7 +56,7 @@ public abstract class CastingEnvironment {
      * <p>
      * This is used for stuff like requiring enlightenment and pattern denylists
      */
-    public void precheckAction(ResourceKey<ActionRegistryEntry> key) throws Mishap {
+    public void precheckAction(PatternShapeMatch match) throws Mishap {
         if (!HexConfig.server().isActionAllowed(key.location())) {
             throw new MishapDisallowedSpell();
         }

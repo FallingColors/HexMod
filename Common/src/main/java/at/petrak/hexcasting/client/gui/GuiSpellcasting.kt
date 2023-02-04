@@ -1,21 +1,21 @@
 package at.petrak.hexcasting.client.gui
 
-import at.petrak.hexcasting.api.misc.DiscoveryHandlers
-import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.mod.HexTags
-import at.petrak.hexcasting.api.casting.eval.ControllerInfo
+import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
+import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers
+import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.client.*
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.lib.HexSounds
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
@@ -59,7 +59,7 @@ class GuiSpellcasting constructor(
         this.calculateIotaDisplays()
     }
 
-    fun recvServerUpdate(info: ControllerInfo, index: Int) {
+    fun recvServerUpdate(info: ExecutionClientView, index: Int) {
         this.patterns.getOrNull(index)?.let {
             it.type = info.resolutionType
         }
@@ -75,7 +75,7 @@ class GuiSpellcasting constructor(
         val mc = Minecraft.getInstance()
         val width = (this.width * LHS_IOTAS_ALLOCATION).toInt()
         this.stackDescs =
-            this.cachedStack.map { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
+            this.cachedStack.map { IotaType.getDisplayWithMaxWidth(it, width, mc.font) }
                 .asReversed()
 //        this.parenDescs = if (this.cachedParens.isNotEmpty())
 //            this.cachedParens.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
@@ -86,7 +86,7 @@ class GuiSpellcasting constructor(
         this.parenDescs = emptyList()
         this.ravenmind =
             this.cachedRavenmind?.let {
-                HexIotaTypes.getDisplayWithMaxWidth(
+                IotaType.getDisplayWithMaxWidth(
                     it,
                     (this.width * RHS_IOTAS_ALLOCATION).toInt(),
                     mc.font

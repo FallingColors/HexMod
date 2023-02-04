@@ -68,7 +68,7 @@ public class ListIota extends Iota {
     public @NotNull Tag serialize() {
         var out = new ListTag();
         for (var subdatum : this.getList()) {
-            out.add(HexIotaTypes.serialize(subdatum));
+            out.add(IotaType.serialize(subdatum));
         }
         return out;
     }
@@ -82,7 +82,7 @@ public class ListIota extends Iota {
 
             for (var sub : listTag) {
                 var csub = HexUtils.downcast(sub, CompoundTag.TYPE);
-                var subiota = HexIotaTypes.deserialize(csub, world);
+                var subiota = IotaType.deserialize(csub, world);
                 if (subiota == null) {
                     return null;
                 }
@@ -100,7 +100,7 @@ public class ListIota extends Iota {
                 Tag sub = list.get(i);
                 var csub = HexUtils.downcast(sub, CompoundTag.TYPE);
 
-                out.append(HexIotaTypes.getDisplay(csub));
+                out.append(IotaType.getDisplay(csub));
 
                 if (i < list.size() - 1) {
                     out.append(", ");

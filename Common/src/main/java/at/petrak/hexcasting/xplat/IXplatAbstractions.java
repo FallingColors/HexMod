@@ -6,9 +6,9 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.FlightAbility;
@@ -79,7 +79,7 @@ public interface IXplatAbstractions {
 
     void setFlight(ServerPlayer target, FlightAbility flight);
 
-    void setHarness(ServerPlayer target, @Nullable CastingHarness harness);
+    void setHarness(ServerPlayer target, @Nullable CastingVM harness);
 
     void setPatterns(ServerPlayer target, List<ResolvedPattern> patterns);
 
@@ -91,7 +91,7 @@ public interface IXplatAbstractions {
 
     Sentinel getSentinel(Player player);
 
-    CastingHarness getStaffHarness(ServerPlayer player, InteractionHand hand);
+    CastingVM getStaffHarness(ServerPlayer player, InteractionHand hand);
 
     List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player);
 

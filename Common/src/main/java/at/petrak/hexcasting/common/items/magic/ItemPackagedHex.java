@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -66,7 +66,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var out = new ArrayList<Iota>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
-            out.add(HexIotaTypes.deserialize(tag, level));
+            out.add(IotaType.deserialize(tag, level));
         }
         return out;
     }
@@ -75,7 +75,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     public void writeHex(ItemStack stack, List<Iota> program, int media) {
         ListTag patsTag = new ListTag();
         for (Iota pat : program) {
-            patsTag.add(HexIotaTypes.serialize(pat));
+            patsTag.add(IotaType.serialize(pat));
         }
 
         NBTHelper.putList(stack, TAG_PROGRAM, patsTag);
@@ -107,8 +107,8 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         }
         var sPlayer = (ServerPlayer) player;
         var ctx = new CastingEnvironment(sPlayer, usedHand, CastingEnvironment.CastSource.PACKAGED_HEX);
-        var harness = new CastingHarness(ctx);
-        var info = harness.executeIotas(instrs, sPlayer.getLevel());
+        var harness = new CastingVM(ctx);
+        var info = harness.queueAndExecuteIotas(instrs, sPlayer.getLevel());
 
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 

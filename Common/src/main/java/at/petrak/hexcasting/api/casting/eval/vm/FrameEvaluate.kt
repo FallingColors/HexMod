@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
-import at.petrak.hexcasting.api.casting.eval.CastingHarness
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.utils.NBTBuilder
@@ -23,7 +22,7 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
     override fun evaluate(
         continuation: SpellContinuation,
         level: ServerLevel,
-        harness: CastingHarness
+        harness: CastingVM
     ): CastResult {
         // If there are patterns left...
         return if (list.nonEmpty) {
@@ -32,7 +31,7 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
                 continuation.pushFrame(FrameEvaluate(list.cdr, this.isMetacasting))
             } else continuation
             // ...before evaluating the first one in the list.
-            val update = harness.getUpdate(list.car, level, newCont)
+            val update = harness.executeInner(list.car, level, newCont)
             if (this.isMetacasting && update.sound != HexEvalSounds.MISHAP) {
                 update.copy(sound = HexEvalSounds.HERMES)
             } else {

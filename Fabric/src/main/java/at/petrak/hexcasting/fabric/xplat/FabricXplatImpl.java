@@ -6,9 +6,9 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
@@ -165,7 +165,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setHarness(ServerPlayer target, CastingHarness harness) {
+    public void setHarness(ServerPlayer target, CastingVM harness) {
         var cc = HexCardinalComponents.HARNESS.get(target);
         cc.setHarness(harness);
     }
@@ -201,7 +201,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public CastingHarness getStaffHarness(ServerPlayer player, InteractionHand hand) {
+    public CastingVM getStaffHarness(ServerPlayer player, InteractionHand hand) {
         var cc = HexCardinalComponents.HARNESS.get(player);
         return cc.getHarness(hand);
     }

@@ -108,6 +108,11 @@ public interface HexAPI {
         return FrozenColorizer.DEFAULT.get();
     }
 
+    /**
+     * Location in the userdata of the ravenmind
+     */
+    ResourceLocation RAVENMIND_USERDATA = modLoc("ravenmind");
+
     static HexAPI instance() {
         return INSTANCE.get();
     }

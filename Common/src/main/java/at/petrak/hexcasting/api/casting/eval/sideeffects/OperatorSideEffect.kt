@@ -3,7 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.sideeffects
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
-import at.petrak.hexcasting.api.casting.eval.CastingHarness
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexStatistics
@@ -18,10 +18,10 @@ import net.minecraft.world.item.ItemStack
  */
 sealed class OperatorSideEffect {
     /** Return whether to cancel all further [OperatorSideEffect] */
-    abstract fun performEffect(harness: CastingHarness): Boolean
+    abstract fun performEffect(harness: CastingVM): Boolean
 
     data class RequiredEnlightenment(val awardStat: Boolean) : OperatorSideEffect() {
-        override fun performEffect(harness: CastingHarness): Boolean {
+        override fun performEffect(harness: CastingVM): Boolean {
             harness.ctx.caster?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
 
             if (awardStat)
@@ -38,7 +38,7 @@ sealed class OperatorSideEffect {
         val awardStat: Boolean = true
     ) :
         OperatorSideEffect() {
-        override fun performEffect(harness: CastingHarness): Boolean {
+        override fun performEffect(harness: CastingVM): Boolean {
             this.spell.cast(harness.ctx)
             if (awardStat)
                 harness.ctx.caster?.awardStat(HexStatistics.SPELLS_CAST)
@@ -48,14 +48,14 @@ sealed class OperatorSideEffect {
     }
 
     data class ConsumeMedia(val amount: Int) : OperatorSideEffect() {
-        override fun performEffect(harness: CastingHarness): Boolean {
+        override fun performEffect(harness: CastingVM): Boolean {
             val leftoverMedia = harness.ctx.extractMedia(this.amount.toLong())
             return leftoverMedia > 0
         }
     }
 
     data class Particles(val spray: ParticleSpray) : OperatorSideEffect() {
-        override fun performEffect(harness: CastingHarness): Boolean {
+        override fun performEffect(harness: CastingVM): Boolean {
             harness.ctx.produceParticles(this.spray, harness.ctx.colorizer)
             this.spray.sprayParticles(harness.ctx.world, harness.getColorizer())
 
@@ -64,7 +64,7 @@ sealed class OperatorSideEffect {
     }
 
     data class DoMishap(val mishap: Mishap, val errorCtx: Mishap.Context) : OperatorSideEffect() {
-        override fun performEffect(harness: CastingHarness): Boolean {
+        override fun performEffect(harness: CastingVM): Boolean {
             val spray = mishap.particleSpray(harness.ctx)
             val color = mishap.accentColor(harness.ctx, errorCtx)
             spray.sprayParticles(harness.ctx.world, color)

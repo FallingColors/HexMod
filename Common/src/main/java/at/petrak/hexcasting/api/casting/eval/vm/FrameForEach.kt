@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
-import at.petrak.hexcasting.api.casting.eval.CastingHarness
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -39,7 +38,7 @@ data class FrameForEach(
     override fun evaluate(
         continuation: SpellContinuation,
         level: ServerLevel,
-        harness: CastingHarness
+        harness: CastingVM
     ): CastResult {
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
         val stack = if (baseStack == null) {

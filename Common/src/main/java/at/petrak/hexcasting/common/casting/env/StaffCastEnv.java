@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.casting.env;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
-import at.petrak.hexcasting.api.casting.eval.ControllerInfo;
+import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
@@ -74,13 +74,13 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
             var harness = IXplatAbstractions.INSTANCE.getStaffHarness(sender, msg.handUsed());
 
-            ControllerInfo clientInfo;
+            ExecutionClientView clientInfo;
             if (autoFail) {
                 var descs = harness.generateDescs();
-                clientInfo = new ControllerInfo(harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
+                clientInfo = new ExecutionClientView(harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
                     descs.getFirst(), descs.getSecond(), descs.getThird(), harness.getParenCount());
             } else {
-                clientInfo = harness.executeIota(new PatternIota(msg.pattern()), sender.getLevel());
+                clientInfo = harness.queueAndExecuteIota(new PatternIota(msg.pattern()), sender.getLevel());
             }
 
             if (clientInfo.isStackClear()) {

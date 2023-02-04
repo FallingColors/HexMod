@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.item;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.ClientTickCounter;
@@ -45,7 +46,7 @@ public interface IotaHolderItem {
 
         var tag = dh.readIotaTag(stack);
         if (tag != null) {
-            return HexIotaTypes.deserialize(tag, world);
+            return IotaType.deserialize(tag, world);
         } else {
             return null;
         }
@@ -83,7 +84,7 @@ public interface IotaHolderItem {
             return HexUtils.ERROR_COLOR;
         }
 
-        return HexIotaTypes.getColor(tag);
+        return IotaType.getColor(tag);
     }
 
     /**
@@ -100,7 +101,7 @@ public interface IotaHolderItem {
         TooltipFlag flag) {
         var datumTag = self.readIotaTag(stack);
         if (datumTag != null) {
-            var cmp = HexIotaTypes.getDisplay(datumTag);
+            var cmp = IotaType.getDisplay(datumTag);
             components.add(Component.translatable("hexcasting.spelldata.onitem", cmp));
 
             if (flag.isAdvanced()) {

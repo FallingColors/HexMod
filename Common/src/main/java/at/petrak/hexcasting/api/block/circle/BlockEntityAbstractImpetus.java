@@ -1,14 +1,14 @@
 package at.petrak.hexcasting.api.block.circle;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
+import at.petrak.hexcasting.api.casting.ParticleSpray;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.SpellCircleContext;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.casting.ParticleSpray;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
-import at.petrak.hexcasting.api.casting.eval.SpellCircleContext;
-import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -284,7 +284,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
             var ctx = new CastingEnvironment(splayer, InteractionHand.MAIN_HAND,
                 new SpellCircleContext(this.getBlockPos(), bounds, this.activatorAlwaysInRange()));
-            var harness = new CastingHarness(ctx);
+            var harness = new CastingVM(ctx);
 
             BlockPos erroredPos = null;
             for (var tracked : this.trackedBlocks) {
@@ -292,7 +292,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 if (bs.getBlock() instanceof BlockCircleComponent cc) {
                     var newPattern = cc.getPattern(tracked, bs, this.level);
                     if (newPattern != null) {
-                        var info = harness.executeIota(new PatternIota(newPattern), splayer.getLevel());
+                        var info = harness.queueAndExecuteIota(new PatternIota(newPattern), splayer.getLevel());
                         if (!info.getResolutionType().getSuccess()) {
                             erroredPos = tracked;
                             break;

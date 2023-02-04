@@ -3,9 +3,9 @@
 package at.petrak.hexcasting.api.utils
 
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import net.minecraft.ChatFormatting
 import net.minecraft.core.Registry
 import net.minecraft.nbt.*
@@ -251,7 +251,7 @@ inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty
  * Returns an empty list if it's too complicated.
  */
 fun Iterable<Iota>.serializeToNBT() =
-    if (HexIotaTypes.isTooLargeToSerialize(this))
+    if (IotaType.isTooLargeToSerialize(this))
         ListTag()
     else
         ListIota(this.toList()).serialize()
