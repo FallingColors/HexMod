@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -57,7 +58,19 @@ public abstract class CastingEnvironment {
      * This is used for stuff like requiring enlightenment and pattern denylists
      */
     public void precheckAction(PatternShapeMatch match) throws Mishap {
-        if (!HexConfig.server().isActionAllowed(key.location())) {
+        // TODO: this doesn't let you select special handlers.
+        // Might be worth making a "no casting" tag on each thing
+        ResourceLocation key;
+        if (match instanceof PatternShapeMatch.Normal normal) {
+            key = normal.key.location();
+        } else if (match instanceof PatternShapeMatch.PerWorld perWorld) {
+            key = perWorld.key.location();
+        } else if (match instanceof PatternShapeMatch.Special special) {
+            key = special.key.location();
+        } else {
+            key = null;
+        }
+        if (!HexConfig.server().isActionAllowed(key)) {
             throw new MishapDisallowedSpell();
         }
     }

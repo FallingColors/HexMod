@@ -18,6 +18,8 @@ import java.text.DecimalFormat
  * the client needs about them is stored elsewhere. (For example, their canonical stroke order
  * is stored in [ActionRegistryEntry], and their localization key is gotten from the resource key
  * via [at.petrak.hexcasting.api.HexAPI.getActionI18nKey].)
+ *
+ * Each action is a singleton
  */
 interface Action {
     /**
