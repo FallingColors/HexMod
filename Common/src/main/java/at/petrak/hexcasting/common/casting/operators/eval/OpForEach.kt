@@ -1,20 +1,21 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
 import at.petrak.hexcasting.api.casting.castables.Action
-import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getList
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import net.minecraft.nbt.CompoundTag
 
 object OpForEach : Action {
     override fun operate(
-        continuation: SpellContinuation,
+        env: CastingEnvironment,
         stack: MutableList<Iota>,
-        ravenmind: Iota?,
-        ctx: CastingEnvironment
+        userData: CompoundTag,
+        continuation: SpellContinuation
     ): OperationResult {
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)
@@ -27,10 +28,10 @@ object OpForEach : Action {
         val frame = FrameForEach(datums, instrs, null, mutableListOf())
 
         return OperationResult(
-            continuation.pushFrame(frame),
             stack,
-            ravenmind,
-            listOf()
+            userData,
+            listOf(),
+            continuation.pushFrame(frame)
         )
     }
 }

@@ -1,20 +1,21 @@
 package at.petrak.hexcasting.common.casting.operators.lists
 
-import at.petrak.hexcasting.api.casting.castables.Action
-import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.asActionResult
+import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getPositiveIntUnderInclusive
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import net.minecraft.nbt.CompoundTag
 
 object OpLastNToList : Action {
     override fun operate(
-        continuation: SpellContinuation,
+        env: CastingEnvironment,
         stack: MutableList<Iota>,
-        ravenmind: Iota?,
-        ctx: CastingEnvironment
+        userData: CompoundTag,
+        continuation: SpellContinuation
     ): OperationResult {
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
@@ -27,6 +28,6 @@ object OpLastNToList : Action {
         }
         stack.addAll(output.asActionResult)
 
-        return OperationResult(continuation, stack, ravenmind, listOf())
+        return OperationResult(stack, userData, listOf(), continuation)
     }
 }

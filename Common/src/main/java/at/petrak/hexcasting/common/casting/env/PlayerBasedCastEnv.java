@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
-import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
@@ -28,6 +27,9 @@ import java.util.List;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public abstract class PlayerBasedCastEnv extends CastingEnvironment {
+    public static final double AMBIT_RADIUS = 32.0;
+    public static final double SENTINEL_RADIUS = 16.0;
+
     protected final ServerPlayer caster;
     protected final InteractionHand castingHand;
 
@@ -98,12 +100,12 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         if (sentinel != null
             && sentinel.extendsRange()
             && this.caster.getLevel().dimension() == sentinel.dimension()
-            && vec.distanceToSqr(sentinel.position()) <= Action.MAX_DISTANCE_FROM_SENTINEL * Action.MAX_DISTANCE_FROM_SENTINEL
+            && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
         ) {
             return true;
         }
 
-        return vec.distanceToSqr(this.caster.position()) <= Action.MAX_DISTANCE * Action.MAX_DISTANCE;
+        return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS;
     }
 
     @Override

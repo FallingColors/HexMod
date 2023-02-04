@@ -175,10 +175,10 @@ class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
             var ravenmind2: Iota? = null
 
             val result = action.operate(
-                continuation,
+                this.ctx,
                 this.stack.toMutableList(),
                 this.ravenmind,
-                this.ctx
+                continuation
             )
             cont2 = result.newContinuation
             stack2 = result.newStack

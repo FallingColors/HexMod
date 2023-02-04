@@ -1,13 +1,14 @@
 package at.petrak.hexcasting.api.casting.castables
 
-import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import net.minecraft.nbt.CompoundTag
 
 interface SpellAction : Action {
     val argc: Int
@@ -22,16 +23,16 @@ interface SpellAction : Action {
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>?
 
     override fun operate(
-        continuation: SpellContinuation,
+        env: CastingEnvironment,
         stack: MutableList<Iota>,
-        ravenmind: Iota?,
-        ctx: CastingEnvironment
+        userData: CompoundTag,
+        continuation: SpellContinuation
     ): OperationResult {
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
-        val executeResult = this.execute(args, ctx) ?: return OperationResult(continuation, stack, ravenmind, listOf())
+        val executeResult = this.execute(args, env) ?: return OperationResult(stack, userData, listOf(), continuation)
         val (spell, media, particles) = executeResult
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
@@ -42,15 +43,15 @@ interface SpellAction : Action {
         sideEffects.add(
             OperatorSideEffect.AttemptSpell(
                 spell,
-                this.hasCastingSound(ctx),
-                this.awardsCastingStat(ctx)
+                this.hasCastingSound(env),
+                this.awardsCastingStat(env)
             )
         )
 
         for (spray in particles)
             sideEffects.add(OperatorSideEffect.Particles(spray))
 
-        return OperationResult(continuation, stack, ravenmind, sideEffects)
+        return OperationResult(stack, userData, sideEffects, continuation)
     }
 
 }

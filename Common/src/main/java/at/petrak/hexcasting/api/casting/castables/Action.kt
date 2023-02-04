@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.api.casting.castables
 
-import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.phys.Vec3
 import java.text.DecimalFormat
 
@@ -24,25 +25,26 @@ interface Action {
      *
      * Although this is passed a [MutableList], this is only for the convenience of implementors.
      * It is a clone of the stack and modifying it does nothing. You must return the new stack
-     * with the [OperationResult].
+     * with the [OperationResult]. Similar with the `userData`.
      *
      * A particle effect at the cast site and various messages and advancements are done automagically.
      */
     fun operate(
-        continuation: SpellContinuation,
+        env: CastingEnvironment,
         stack: MutableList<Iota>,
-        ravenmind: Iota?,
-        ctx: CastingEnvironment
+        userData: CompoundTag,
+        continuation: SpellContinuation
     ): OperationResult
 
     companion object {
-        // I see why vzakii did this: you can't raycast out to infinity!
-        const val MAX_DISTANCE: Double = 32.0
-        const val MAX_DISTANCE_FROM_SENTINEL: Double = 16.0
+        // I see why vazkii did this: you can't raycast out to infinity!
+        const val RAYCAST_DISTANCE: Double = 32.0
 
+        // TODO: currently, this means you can't raycast in a very long spell circle, or out of your local ambit into
+        // your sentinel's.
         @JvmStatic
         fun raycastEnd(origin: Vec3, look: Vec3): Vec3 =
-            origin.add(look.normalize().scale(MAX_DISTANCE))
+            origin.add(look.normalize().scale(RAYCAST_DISTANCE))
 
         @JvmStatic
         fun makeConstantOp(x: Iota): Action = object : ConstMediaAction {
