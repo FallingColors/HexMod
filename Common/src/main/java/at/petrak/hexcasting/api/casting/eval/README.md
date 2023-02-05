@@ -38,24 +38,34 @@ because I keep forgetting.
 
 ## The Hell's A Continuation And A Continuation Frame
 
-IDFK ask Alwinfy.
+~~IDFK ask Alwinfy.~~ <- Disregard this, I am a goober
 
-But as I understand it, a [continuation frame][ContinuationFrame] tells the VM what to do *next*.
+A [continuation][Continuation] roughly represents a "call stack" in a more traditional VM structure.
+It is a stack (implemented as a linked list) of [continuation frames][ContinuationFrame] ("call frames" in more
+traditional nomenclature, where each frame is usually a list of iotas remaining to execute.
 
-While there are frames left on the stack (not the normal stack, a special execution stack), it is popped and
-queried. It will then operate the VM into executing a [continuation][Continuation] in a certain way.
+While there are frames left on the Continuation stack, the topmost frame is told to execute. During execution,
+a frame can push more frames to execute (Hermes' Gambit does this), pop itself (once a Hermes execution
+finishes), or even remove frames below it (Charon's Gambit)!
 
-Continuations are just a linked list of iotas to execute. The VM goes through each one and executes them.
+There are three types of frames:
 
-- For staffcasting, each pattern drawn spins up the VM with a `FrameEvaluate`, which will provide exactly one
-  continuation containing the pattern.
+1. [FrameEvaluate][] is a list of iotas to execute. The VM will step through the list and execute each pattern.
+   Once its patterns are exhausted, it pops itself (returning flow control to the frame below).
+- For staffcasting, each pattern drawn spins up the VM with a `FrameEvaluate` containing a single pattern.
 - For trinket casting, the VM gets a `FrameEvaluate` again, but the continuation list it provides has
   all the patterns in the trinket.
-- Hermes' Gambit pushes a new `FrameEvaluate` to the stack with the pattern list argument inside it. This doesn't clear
-  the continuation underneath, so once those patterns are through execution control goes right back to where it was
-  interrupted.
-- Thoth's and Charon's do something with different kinds of stack frames, I don't really understand it.
-- Iris' gambit is waaaay outside of my pay grade
+- Hermes' Gambit pushes a new `FrameEvaluate` to the continuation stack with the pattern list argument inside it.
+2. [FrameForEach][] manages the state of a Thoth's Gambit.
+- It stores the template data-stack, the list of remaining values to foreach over, and the accumulated output list.
+- When told to execute, it will push a `FrameEvaluate` for the next iteration and push the next value;
+  it will also append the previous iteration's values to the accumulated output.
+- Once finished, `FrameForEach` will append the final output list to the data stack, then pop itself.
+3. [FrameFinishEval][] does not perform any function; when executed it simply pops itself.
+- Its purpose is to serve as a marker for Charon's Gambit to know how many frames to abort.
+  In the "call stack" analogy, this is a "catch" handler which serves as a counterpart to Charon's Gambit "throwing".
+- Charon's Gambit pops continuation frames until it reaches a FrameFinishEval.
+- Hermes' Gambit pushes this before pushing a FrameEvaluate, so that a Charon will abort down to the FrameEvaluate, and no further.
 
 [CastingVM]: vm/CastingVM.kt
 
@@ -71,7 +81,10 @@ Continuations are just a linked list of iotas to execute. The VM goes through ea
 
 [FrameEvaluate]: vm/FrameEvaluate.kt
 
+[FrameForEach]: vm/FrameForEach.kt
+
+[FrameFinishEval]: vm/FrameFinishEval.kt
+
 [OperationResult]: OperationResult.kt
 
 [CastResult]: CastResult.kt
-
