@@ -16,6 +16,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     private static ForgeConfigSpec.IntValue chargedCrystalMediaAmount;
     private static ForgeConfigSpec.DoubleValue mediaToHealthRate;
 
+    private static ForgeConfigSpec.IntValue cypherCooldown;
+    private static ForgeConfigSpec.IntValue trinketCooldown;
+    private static ForgeConfigSpec.IntValue artifactCooldown;
+
     public ForgeHexConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Media Amounts");
         dustMediaAmount = builder.comment("How much media a single Amethyst Dust item is worth")
@@ -26,6 +30,15 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             .defineInRange("chargedCrystalMediaAmount", DEFAULT_CHARGED_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
         mediaToHealthRate = builder.comment("How many points of media a half-heart is worth when casting from HP")
             .defineInRange("mediaToHealthRate", DEFAULT_MEDIA_TO_HEALTH_RATE, 0.0, Double.POSITIVE_INFINITY);
+        builder.pop();
+
+        builder.push("Cooldowns");
+        cypherCooldown = builder.comment("Cooldown in ticks of a cypher")
+            .defineInRange("cypherCooldown", DEFAULT_CYPHER_COOLDOWN, 0, Integer.MAX_VALUE);
+        trinketCooldown = builder.comment("Cooldown in ticks of a trinket")
+            .defineInRange("trinketCooldown", DEFAULT_TRINKET_COOLDOWN, 0, Integer.MAX_VALUE);
+        artifactCooldown = builder.comment("Cooldown in ticks of a artifact")
+            .defineInRange("artifactCooldown", DEFAULT_ARTIFACT_COOLDOWN, 0, Integer.MAX_VALUE);
         builder.pop();
     }
 
@@ -47,6 +60,21 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     @Override
     public double mediaToHealthRate() {
         return mediaToHealthRate.get();
+    }
+
+    @Override
+    public int cypherCooldown() {
+        return cypherCooldown.get();
+    }
+
+    @Override
+    public int trinketCooldown() {
+        return trinketCooldown.get();
+    }
+
+    @Override
+    public int artifactCooldown() {
+        return artifactCooldown.get();
     }
 
     public static class Client implements HexConfig.ClientConfigAccess {
