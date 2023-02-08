@@ -25,7 +25,7 @@ import net.minecraft.server.level.ServerLevel
  * The virtual machine! This is the glue that determines the next iteration of a [CastingImage], using a
  * [CastingEnvironment] to affect the world.
  */
-class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
+class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
 
     /**
      * Execute a single iota.
@@ -51,7 +51,7 @@ class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
             val image2 = next.evaluate(continuation.next, world, this)
             // Then write all pertinent data back to the harness for the next iteration.
             if (image2.newData != null) {
-                this.applyFunctionalData(image2.newData)
+                this.image = image2.newData
             }
             this.env.postExecution(image2)
 
@@ -172,25 +172,25 @@ class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
             val sideEffects = mutableListOf<OperatorSideEffect>()
             var stack2: List<Iota>? = null
             var cont2 = continuation
-            var ravenmind2: Iota? = null
+            var userData2: CompoundTag? = null
 
             val result = action.operate(
-                this.ctx,
-                this.stack.toMutableList(),
-                this.ravenmind,
+                this.env,
+                this.image.stack.toMutableList(),
+                this.image.userData,
                 continuation
             )
             cont2 = result.newContinuation
             stack2 = result.newStack
-            ravenmind2 = result.newRavenmind
+            userData2 = result.newUserdata
             // TODO parens also break prescience
             sideEffects.addAll(result.sideEffects)
 
-            val hereFd = this.getFunctionalData()
+            val hereFd = this.image
             val fd = if (stack2 != null) {
                 hereFd.copy(
                     stack = stack2,
-                    ravenmind = ravenmind2
+                    userData = userData2,
                 )
             } else {
                 hereFd
@@ -201,7 +201,7 @@ class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
                 fd,
                 sideEffects,
                 ResolvedPatternType.EVALUATED,
-                soundType,
+                env.soundType,
             )
 
         } catch (mishap: Mishap) {
@@ -209,7 +209,7 @@ class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
                 continuation,
                 null,
                 listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, castedName))),
-                mishap.resolutionType(ctx),
+                mishap.resolutionType(env),
                 HexEvalSounds.MISHAP
             )
         }
@@ -238,43 +238,20 @@ class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
     }
 
     /**
-     * Return the functional update represented by the current state (for use with `copy`)
-     */
-    fun getFunctionalData() = FunctionalData(
-        this.stack.toList(),
-        this.parenCount,
-        this.parenthesized.toList(),
-        this.escapeNext,
-        this.ravenmind,
-    )
-
-    /**
-     * Apply the functional update.
-     */
-    fun applyFunctionalData(data: FunctionalData) {
-        this.stack.clear()
-        this.stack.addAll(data.stack)
-        this.parenCount = data.parenCount
-        this.parenthesized = data.parenthesized
-        this.escapeNext = data.escapeNext
-        this.ravenmind = data.ravenmind
-    }
-
-    /**
      * Return a non-null value if we handled this in some sort of parenthesey way,
      * either escaping it onto the stack or changing the parenthese-handling state.
      */
     @Throws(MishapTooManyCloseParens::class)
-    private fun handleParentheses(iota: Iota): Pair<FunctionalData, ResolvedPatternType>? {
+    private fun handleParentheses(iota: Iota): Pair<CastingImage, ResolvedPatternType>? {
         val sig = (iota as? PatternIota)?.pattern?.anglesSignature()
 
-        var displayDepth = this.parenCount
+        var displayDepth = this.image.parenCount
 
-        val out = if (this.parenCount > 0) {
-            if (this.escapeNext) {
-                val newParens = this.parenthesized.toMutableList()
+        val out = if (displayDepth > 0) {
+            if (this.image.escapeNext) {
+                val newParens = this.image.parenthesized.toMutableList()
                 newParens.add(iota)
-                this.getFunctionalData().copy(
+                this.image.copy(
                     escapeNext = false,
                     parenthesized = newParens
                 ) to ResolvedPatternType.ESCAPED
@@ -282,28 +259,28 @@ class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
 
                 when (sig) {
                     SpecialPatterns.CONSIDERATION.anglesSignature() -> {
-                        this.getFunctionalData().copy(
+                        this.image.copy(
                             escapeNext = true,
                         ) to ResolvedPatternType.EVALUATED
                     }
 
                     SpecialPatterns.INTROSPECTION.anglesSignature() -> {
                         // we have escaped the parens onto the stack; we just also record our count.
-                        val newParens = this.parenthesized.toMutableList()
+                        val newParens = this.image.parenthesized.toMutableList()
                         newParens.add(iota)
-                        this.getFunctionalData().copy(
+                        this.image.copy(
                             parenthesized = newParens,
-                            parenCount = this.parenCount + 1
-                        ) to if (this.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
+                            parenCount = this.image.parenCount + 1
+                        ) to if (this.image.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
                     }
 
                     SpecialPatterns.RETROSPECTION.anglesSignature() -> {
-                        val newParenCount = this.parenCount - 1
+                        val newParenCount = this.image.parenCount - 1
                         displayDepth--
                         if (newParenCount == 0) {
-                            val newStack = this.stack.toMutableList()
-                            newStack.add(ListIota(this.parenthesized.toList()))
-                            this.getFunctionalData().copy(
+                            val newStack = this.image.stack.toMutableList()
+                            newStack.add(ListIota(this.image.parenthesized.toList()))
+                            this.image.copy(
                                 stack = newStack,
                                 parenCount = newParenCount,
                                 parenthesized = listOf()
@@ -313,9 +290,9 @@ class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
                         } else {
                             // we have this situation: "(()"
                             // we need to add the close paren
-                            val newParens = this.parenthesized.toMutableList()
+                            val newParens = this.image.parenthesized.toMutableList()
                             newParens.add(iota)
-                            this.getFunctionalData().copy(
+                            this.image.copy(
                                 parenCount = newParenCount,
                                 parenthesized = newParens
                             ) to ResolvedPatternType.ESCAPED
@@ -323,32 +300,32 @@ class CastingVM(val image: CastingImage, val env: CastingEnvironment) {
                     }
 
                     else -> {
-                        val newParens = this.parenthesized.toMutableList()
+                        val newParens = this.image.parenthesized.toMutableList()
                         newParens.add(iota)
-                        this.getFunctionalData().copy(
+                        this.image.copy(
                             parenthesized = newParens
                         ) to ResolvedPatternType.ESCAPED
                     }
                 }
             }
-        } else if (this.escapeNext) {
-            val newStack = this.stack.toMutableList()
+        } else if (this.image.escapeNext) {
+            val newStack = this.image.stack.toMutableList()
             newStack.add(iota)
-            this.getFunctionalData().copy(
+            this.image.copy(
                 stack = newStack,
                 escapeNext = false,
             ) to ResolvedPatternType.ESCAPED
         } else {
             when (sig) {
                 SpecialPatterns.CONSIDERATION.anglesSignature() -> {
-                    this.getFunctionalData().copy(
+                    this.image.copy(
                         escapeNext = true
                     ) to ResolvedPatternType.EVALUATED
                 }
 
                 SpecialPatterns.INTROSPECTION.anglesSignature() -> {
-                    this.getFunctionalData().copy(
-                        parenCount = this.parenCount + 1
+                    this.image.copy(
+                        parenCount = this.image.parenCount + 1
                     ) to ResolvedPatternType.EVALUATED
                 }
 

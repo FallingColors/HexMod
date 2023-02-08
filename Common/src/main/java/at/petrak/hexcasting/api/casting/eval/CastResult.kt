@@ -2,7 +2,7 @@ package at.petrak.hexcasting.api.casting.eval
 
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
-import at.petrak.hexcasting.api.casting.eval.vm.FunctionalData
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 
 /**
@@ -13,7 +13,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
  */
 data class CastResult(
     val continuation: SpellContinuation,
-    val newData: FunctionalData?,
+    val newData: CastingImage?,
     val sideEffects: List<OperatorSideEffect>,
     val resolutionType: ResolvedPatternType,
     val sound: EvalSound,

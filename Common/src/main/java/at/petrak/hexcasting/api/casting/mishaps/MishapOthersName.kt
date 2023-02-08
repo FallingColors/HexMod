@@ -19,7 +19,11 @@ class MishapOthersName(val confidant: Player) : Mishap() {
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         val seconds = if (this.confidant == ctx.caster) 5 else 60;
-        ctx.caster.addEffect(MobEffectInstance(MobEffects.BLINDNESS, seconds * 20))
+        val caster = ctx.caster
+        if (caster != null) {
+            // FIXME: handle null caster case
+            caster.addEffect(MobEffectInstance(MobEffects.BLINDNESS, seconds * 20))
+        }
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

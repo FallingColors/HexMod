@@ -23,7 +23,7 @@ object FrameFinishEval : ContinuationFrame {
     ): CastResult {
         return CastResult(
             continuation,
-            FunctionalData(harness.stack.toList(), 0, listOf(), false, harness.ravenmind),
+            null,
             listOf(),
             ResolvedPatternType.EVALUATED,
             HexEvalSounds.NOTHING,

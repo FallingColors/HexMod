@@ -69,9 +69,14 @@ abstract class Mishap : Throwable() {
     protected fun actionName(name: Component?): Component =
         name ?: "hexcasting.spell.null".asTranslatedComponent.lightPurple
 
-    protected fun yeetHeldItemsTowards(env: CastingEnvironment, caster: ServerPlayer, targetPos: Vec3) {
+    protected fun yeetHeldItemsTowards(env: CastingEnvironment, targetPos: Vec3) {
         // Knock the player's items out of their hands
         val items = mutableListOf<ItemStack>()
+        val caster = env.caster
+        if (caster != null) {
+            // FIXME: handle null caster case
+            return
+        }
         for (hand in InteractionHand.values()) {
             items.add(caster.getItemInHand(hand).copy())
             caster.setItemInHand(hand, ItemStack.EMPTY)

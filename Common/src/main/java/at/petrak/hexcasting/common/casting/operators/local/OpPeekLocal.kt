@@ -15,7 +15,9 @@ object OpPeekLocal : Action {
         userData: CompoundTag,
         continuation: SpellContinuation
     ): OperationResult {
-        stack.add(userData.orNull())
+        // TODO winfy: figure out ravenmind semantics
+        stack.add(userData.getCompound(CastingEnvironment.TAG_RAVENMIND))
+        //IotaType.deserialize(subtag.downcast(CompoundTag.TYPE), world)
         return OperationResult(stack, userData, listOf(), continuation)
     }
 }

@@ -23,8 +23,9 @@ object OpEval : Action {
         val datum = stack.removeLastOrNull() ?: throw MishapNotEnoughArgs(1, 0)
         val instrs = evaluatable(datum, 0)
 
-        instrs.ifRight {
-            env.incDepth()
+        val stack = instrs.ifRight {
+            // FIXME: Casting depth increment not implemented yet
+            //env.incDepth()
         }
 
         // if not installed already...

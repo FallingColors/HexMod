@@ -19,7 +19,11 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         stack.add(GarbageIota())
-        trulyHurt(ctx.caster, HexDamageSources.OVERCAST, ctx.caster.health / 2)
+        val caster = ctx.caster
+        if (caster != null) {
+            // FIXME case where caster is null
+            trulyHurt(caster, HexDamageSources.OVERCAST, caster.health / 2)
+        }
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

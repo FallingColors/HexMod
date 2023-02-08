@@ -11,7 +11,11 @@ class MishapShameOnYou() : Mishap() {
         dyeColor(DyeColor.BLACK)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        Mishap.trulyHurt(ctx.caster, HexDamageSources.SHAME, 69420f)
+        val caster = ctx.caster
+        if (caster != null) {
+            // FIXME: handle null caster case
+            Mishap.trulyHurt(caster, HexDamageSources.SHAME, 69420f)
+        }
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = error("shame")

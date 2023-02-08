@@ -11,10 +11,11 @@ object OpImpetusDir : ConstMediaAction {
     override val argc = 0
 
     override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
-        if (ctx.spellCircle == null)
+        val circle = ctx.spellCircle
+        if (circle == null)
             throw MishapNoSpellCircle()
 
-        val pos = ctx.spellCircle.impetusPos
+        val pos = circle.impetusPos
         val bs = ctx.world.getBlockState(pos)
         val dir = bs.getValue(BlockAbstractImpetus.FACING)
         return dir.step().asActionResult

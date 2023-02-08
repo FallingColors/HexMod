@@ -14,7 +14,8 @@ class MishapBadOffhandItem(val item: ItemStack, val hand: InteractionHand, val w
         dyeColor(DyeColor.BROWN)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        yeetHeldItem(ctx, hand)
+        // FIXME: Missing implementation in mishap
+        //yeetHeldItem(ctx, hand)
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = if (item.isEmpty)

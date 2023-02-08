@@ -15,9 +15,10 @@ object OpPushLocal : Action {
         userData: CompoundTag,
         continuation: SpellContinuation
     ): OperationResult {
+        // TODO winfy: figure out ravenmind semantics
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
-        val newLocal = stack.removeLast()
+        val newLocal = stack.removeLast().serialize()
         return OperationResult(stack, newLocal, listOf(), continuation)
     }
 }

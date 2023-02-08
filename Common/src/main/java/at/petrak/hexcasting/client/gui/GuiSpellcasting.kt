@@ -33,6 +33,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
 import kotlin.math.*
 
+// TODO winfy: fix this class to use ExecutionClientView
 class GuiSpellcasting constructor(
     private val handOpenedWith: InteractionHand,
     private var patterns: MutableList<ResolvedPattern>,

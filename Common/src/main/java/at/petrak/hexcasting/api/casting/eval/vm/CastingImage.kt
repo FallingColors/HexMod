@@ -18,6 +18,7 @@ data class CastingImage private constructor(
     val parenthesized: List<Iota>,
     val escapeNext: Boolean,
 
+    val iterationSteps: Int,
     val userData: CompoundTag
 ) {
     public constructor() : this(listOf(), 0, listOf(), false, CompoundTag())
@@ -32,12 +33,24 @@ data class CastingImage private constructor(
         TAG_USERDATA %= userData
     }
 
+    /**
+     * Throws if we get too deep.
+     */
+    fun incDepth(): CastingImage {
+        val maxAllowedDepth = HexConfig.server().maxRecurseDepth()
+        if (this.iterationSteps + 1 > maxAllowedDepth) {
+            throw MishapEvalTooDeep()
+        }
+        return copy(iterationSteps = iterationSteps + 1)
+    }
+
     companion object {
         const val TAG_STACK = "stack"
         const val TAG_PAREN_COUNT = "open_parens"
         const val TAG_PARENTHESIZED = "parenthesized"
         const val TAG_ESCAPE_NEXT = "escape_next"
         const val TAG_USERDATA = "userdata"
+        const val TAG_RAVENMIND = "ravenmind"
 
         @JvmStatic
         public fun loadFromNbt(tag: CompoundTag, world: ServerLevel): CastingImage {
@@ -65,8 +78,8 @@ data class CastingImage private constructor(
                     parenthesized.add(IotaType.deserialize(subtag.downcast(CompoundTag.TYPE), world))
                 }
 
-                val parenCount = tag.getInt(CastingVM.TAG_PAREN_COUNT)
-                val escapeNext = tag.getBoolean(CastingVM.TAG_ESCAPE_NEXT)
+                val parenCount = tag.getInt(TAG_PAREN_COUNT)
+                val escapeNext = tag.getBoolean(TAG_ESCAPE_NEXT)
 
                 CastingImage(stack, parenCount, parenthesized, escapeNext, userData)
             } catch (exn: Exception) {

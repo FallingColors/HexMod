@@ -10,7 +10,11 @@ class MishapEvalTooDeep : Mishap() {
         dyeColor(DyeColor.BLUE)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.caster.airSupply -= 290
+        // FIXME what if caster is null
+        val caster = ctx.caster
+        if (caster != null) {
+            caster.airSupply -= 290
+        }
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

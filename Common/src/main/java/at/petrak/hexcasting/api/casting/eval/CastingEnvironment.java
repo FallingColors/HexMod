@@ -2,16 +2,20 @@ package at.petrak.hexcasting.api.casting.eval;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
+import at.petrak.hexcasting.api.casting.eval.SpellCircleContext;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -51,6 +55,17 @@ public abstract class CastingEnvironment {
     @Nullable
     public abstract ServerPlayer getCaster();
 
+    /**
+     * Get the sound that this I/O module makes.
+     * <p>
+     */
+    public abstract EvalSound getSoundType();
+
+    /**
+     * Get the spell circle running this cast. Might be null if not casting from a spell circle!
+     */
+    @Nullable
+    public abstract SpellCircleContext getSpellCircle();
 
     /**
      * If something about this ARE itself is invalid, mishap.
@@ -106,24 +121,31 @@ public abstract class CastingEnvironment {
         return this.isVecInRange(vec) && this.isVecInWorld(vec);
     }
 
-    public final boolean isEntityInAmbit(Entity e) {
+    public final boolean isEntityInRange(Entity e) {
         return this.isVecInRange(e.position());
     }
 
     /**
      * Convenience function to throw if the vec is out of the caster's range or the world
      */
-    public final void assertVecInAmbit(Vec3 vec) throws MishapLocationTooFarAway {
+    public final void assertVecInRange(Vec3 vec) throws MishapLocationTooFarAway {
         this.assertVecInWorld(vec);
         if (this.isVecInRange(vec)) {
             throw new MishapLocationTooFarAway(vec, "too_far");
         }
     }
+    public final void assertVecInRange(BlockPos vec) throws MishapLocationTooFarAway {
+        this.assertVecInRange(new Vec3(vec.x(), vec.y(), vec.z()));
+    }
+    public final boolean canEditBlockAt(BlockPos vec) {
+        // TODO winfy: fill this in
+        return false;
+    }
 
     /**
      * Convenience function to throw if the entity is out of the caster's range or the world
      */
-    public final void assertEntityInAmbit(Entity e) throws MishapEntityTooFarAway {
+    public final void assertEntityInRange(Entity e) throws MishapEntityTooFarAway {
         if (!this.isVecInWorld(e.position())) {
             throw new MishapEntityTooFarAway(e);
         }
@@ -145,7 +167,7 @@ public abstract class CastingEnvironment {
         this.entitiesGivenMotion.add(e);
     }
 
-    public boolean hasEntityBeenImpulsed(Entity e) {
+    public boolean hasBeenGivenMotion(Entity e) {
         return this.entitiesGivenMotion.contains(e);
     }
 
@@ -174,6 +196,20 @@ public abstract class CastingEnvironment {
             }
         }
 
+        return null;
+    }
+
+    public static record HeldItemInfo(ItemStack stack, InteractionHand hand) {
+        public ItemStack component1() { return stack; }
+        public InteractionHand component2() { return hand; }
+    }
+    /**
+     * Return the slot from which to take blocks and items.
+     */
+    // TODO winfy: resolve the null here
+    // @Nullable
+    public HeldItemInfo getHeldItemToOperateOn(Predicate<ItemStack> stackOk) {
+        // TODO winfy: return something properly
         return null;
     }
 

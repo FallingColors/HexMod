@@ -22,10 +22,10 @@ sealed class OperatorSideEffect {
 
     data class RequiredEnlightenment(val awardStat: Boolean) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            harness.ctx.caster?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
+            harness.env.caster?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
 
             if (awardStat)
-                HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.ctx.caster)
+                HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.env.caster)
 
             return true
         }
@@ -39,9 +39,9 @@ sealed class OperatorSideEffect {
     ) :
         OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            this.spell.cast(harness.ctx)
+            this.spell.cast(harness.env)
             if (awardStat)
-                harness.ctx.caster?.awardStat(HexStatistics.SPELLS_CAST)
+                harness.env.caster?.awardStat(HexStatistics.SPELLS_CAST)
 
             return false
         }
@@ -49,15 +49,15 @@ sealed class OperatorSideEffect {
 
     data class ConsumeMedia(val amount: Int) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            val leftoverMedia = harness.ctx.extractMedia(this.amount.toLong())
+            val leftoverMedia = harness.env.extractMedia(this.amount.toLong())
             return leftoverMedia > 0
         }
     }
 
     data class Particles(val spray: ParticleSpray) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            harness.ctx.produceParticles(this.spray, harness.ctx.colorizer)
-            this.spray.sprayParticles(harness.ctx.world, harness.getColorizer())
+            harness.env.produceParticles(this.spray, harness.env.colorizer)
+            this.spray.sprayParticles(harness.env.world, harness.env.colorizer)
 
             return false
         }
@@ -65,18 +65,18 @@ sealed class OperatorSideEffect {
 
     data class DoMishap(val mishap: Mishap, val errorCtx: Mishap.Context) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            val spray = mishap.particleSpray(harness.ctx)
-            val color = mishap.accentColor(harness.ctx, errorCtx)
-            spray.sprayParticles(harness.ctx.world, color)
+            val spray = mishap.particleSpray(harness.env)
+            val color = mishap.accentColor(harness.env, errorCtx)
+            spray.sprayParticles(harness.env.world, color)
             spray.sprayParticles(
-                harness.ctx.world,
+                harness.env.world,
                 FrozenColorizer(
                     ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!),
                     Util.NIL_UUID
                 )
             )
 
-            mishap.execute(harness.ctx, errorCtx, harness.stack)
+            mishap.execute(harness.env, errorCtx, harness.image.stack.toMutableList())
 
             return true
         }

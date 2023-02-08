@@ -11,7 +11,11 @@ class MishapNoAkashicRecord(val pos: BlockPos) : Mishap() {
         dyeColor(DyeColor.PURPLE)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.caster.giveExperiencePoints(-100)
+        val caster = ctx.caster
+        if (caster != null) {
+            // FIXME: handle null case
+            caster.giveExperiencePoints(-100)
+        }
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
