@@ -111,7 +111,7 @@ public interface HexAPI {
     /**
      * Location in the userdata of the ravenmind
      */
-    ResourceLocation RAVENMIND_USERDATA = modLoc("ravenmind");
+    String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
 
     static HexAPI instance() {
         return INSTANCE.get();

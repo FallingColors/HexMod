@@ -18,6 +18,7 @@ import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 
@@ -177,7 +178,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             val result = action.operate(
                 this.env,
                 this.image.stack.toMutableList(),
-                this.image.userData,
+                this.image.userData.copy(),
                 continuation
             )
             cont2 = result.newContinuation
@@ -230,8 +231,8 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
 
     fun generateDescs(): Pair<List<Component>, Component?> {
         val stackDescs = this.image.stack.map { it.display() }
-        val ravenmind = if (this.image.userData.contains(HexAPI.RAVENMIND_USERDATA.toString())) {
-            val tag = this.image.userData.getCompound(HexAPI.RAVENMIND_USERDATA.toString())
+        val ravenmind = if (this.image.userData.contains(HexAPI.RAVENMIND_USERDATA)) {
+            val tag = this.image.userData.getCompound(HexAPI.RAVENMIND_USERDATA)
             IotaType.getDisplay(tag)
         } else null
         return Pair(stackDescs, ravenmind)

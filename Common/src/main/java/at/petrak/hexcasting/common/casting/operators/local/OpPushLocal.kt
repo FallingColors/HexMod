@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.local
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
@@ -15,10 +16,12 @@ object OpPushLocal : Action {
         userData: CompoundTag,
         continuation: SpellContinuation
     ): OperationResult {
-        // TODO winfy: figure out ravenmind semantics
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
-        val newLocal = stack.removeLast().serialize()
-        return OperationResult(stack, newLocal, listOf(), continuation)
+
+        val newLocal = stack.removeLast()
+        userData.put(HexAPI.RAVENMIND_USERDATA, newLocal.serialize())
+
+        return OperationResult(stack, userData, listOf(), continuation)
     }
 }
