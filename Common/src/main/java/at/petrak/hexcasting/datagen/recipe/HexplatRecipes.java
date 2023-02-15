@@ -71,6 +71,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_MANGROVE, Items.MANGROVE_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_EDIFIED, HexBlocks.EDIFIED_PLANKS.asItem());
 
+        ShapelessRecipeBuilder.shapeless(HexItems.THOUGHT_KNOT)
+            .requires(HexItems.AMETHYST_DUST)
+            .requires(Items.STRING)
+            .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+            .save(recipes);
         ShapedRecipeBuilder.shaped(HexItems.FOCUS)
             .define('G', ingredients.glowstoneDust())
             .define('L', ingredients.leather())

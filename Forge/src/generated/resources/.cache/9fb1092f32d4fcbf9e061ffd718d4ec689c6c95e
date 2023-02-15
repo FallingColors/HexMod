@@ -1,4 +1,4 @@
-// 1.19.2	2023-01-22T20:49:42.813938013	Recipes
+// 1.19.2	2023-02-15T02:10:16.055363304	Recipes
 29056d8bbc023668564ee81f4eb8b2a11411cf4a data/create/recipes/crushing/amethyst_block.json
 5bb0b70967a422bfd88c01fa1af64e9b98781fd1 data/create/recipes/crushing/amethyst_cluster.json
 229931adf8d62f659de5950d711afd24fb5aa535 data/hexcasting/advancements/recipes/brainsweep/brainsweep/akashic_record.json
@@ -90,6 +90,7 @@ f0a77ba758e649d0c16a8e2d9964d18f95a544f4 data/hexcasting/advancements/recipes/he
 9c8503715195c4cb2e2d9a1abe4f94df7bb9f4b5 data/hexcasting/advancements/recipes/hexcasting/stonecutting/amethyst_tiles.json
 63da3af421dfb38283d750eb3b9761f42e95fb91 data/hexcasting/advancements/recipes/hexcasting/stripped_edified_wood.json
 e0e49c8a9977fe2b0619179b11a4379b5b19ace9 data/hexcasting/advancements/recipes/hexcasting/sub_sandwich.json
+2589d3a202f24b2f4f78d90ee3e3ad7961eea023 data/hexcasting/advancements/recipes/hexcasting/thought_knot.json
 993a613fabd0ee1005bde11ebe92f8046351ba9e data/hexcasting/advancements/recipes/hexcasting/trinket.json
 4440b41499c9c32e297dc184c39da010ff82ac5e data/hexcasting/advancements/recipes/hexcasting/uuid_colorizer.json
 dc2a9bf96ca9d04ea6bdeb32249322530b5e1cbf data/hexcasting/advancements/recipes/hexcasting/warped_staff.json
@@ -189,6 +190,7 @@ f0852056a692d776bf537c821f3d166c2be88bd8 data/hexcasting/recipes/spruce_staff.js
 3608f0ec056f2c5d29a9a89305218497fd2c4383 data/hexcasting/recipes/stonecutting/amethyst_tiles.json
 0859373b9e60e80f3c8b0962a3bc94903af43d36 data/hexcasting/recipes/stripped_edified_wood.json
 13ca24f9f87a6b34f7717e5c326291079e6db96f data/hexcasting/recipes/sub_sandwich.json
+81132fbb6784ed15721aff520964988c1d5be06b data/hexcasting/recipes/thought_knot.json
 42ab683499c3b0f7ae594879490a37eb6aff9703 data/hexcasting/recipes/trinket.json
 ffba0344dfc7f604e8e33a333549f74c53f3e7e6 data/hexcasting/recipes/uuid_colorizer.json
 4ffed306e5f640054a6f269ae0e548388f087996 data/hexcasting/recipes/warped_staff.json
