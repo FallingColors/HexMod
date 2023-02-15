@@ -12,8 +12,7 @@ class MishapEntityTooFarAway(val entity: Entity) : Mishap() {
         dyeColor(DyeColor.PINK)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        // Knock the player's items out of their hands
-        yeetHeldItemsTowards(ctx, entity.position())
+        ctx.mishapEnvironment.yeetHeldItemsTowards(entity.position())
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =

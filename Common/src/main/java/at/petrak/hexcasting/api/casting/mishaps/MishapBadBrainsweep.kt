@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.api.casting.mishaps
 
-import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.misc.HexDamageSources
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.item.DyeColor
@@ -15,6 +15,7 @@ class MishapBadBrainsweep(val mob: Mob, val pos: BlockPos) : Mishap() {
         dyeColor(DyeColor.GREEN)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        // TODO: you can just instakill things with this
         trulyHurt(mob, HexDamageSources.overcastDamageFrom(ctx.caster), mob.health)
     }
 

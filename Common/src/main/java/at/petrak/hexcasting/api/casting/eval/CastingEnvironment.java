@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.casting.eval;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
-import at.petrak.hexcasting.api.casting.eval.SpellCircleContext;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
@@ -10,7 +9,6 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -50,22 +48,21 @@ public abstract class CastingEnvironment {
      * Get the caster. Might be null!
      * <p>
      * Implementations should NOT rely on this in general, use the methods on this class instead.
-     * This is mostly for things like mishaps.
+     * This is mostly for spells (flight, etc)
      */
     @Nullable
     public abstract ServerPlayer getCaster();
+
+    /**
+     * Get an interface used to do mishaps
+     */
+    public abstract MishapEnvironment getMishapEnvironment();
 
     /**
      * Get the sound that this I/O module makes.
      * <p>
      */
     public abstract EvalSound getSoundType();
-
-    /**
-     * Get the spell circle running this cast. Might be null if not casting from a spell circle!
-     */
-    @Nullable
-    public abstract SpellCircleContext getSpellCircle();
 
     /**
      * If something about this ARE itself is invalid, mishap.
@@ -134,9 +131,11 @@ public abstract class CastingEnvironment {
             throw new MishapLocationTooFarAway(vec, "too_far");
         }
     }
+
     public final void assertVecInRange(BlockPos vec) throws MishapLocationTooFarAway {
-        this.assertVecInRange(new Vec3(vec.x(), vec.y(), vec.z()));
+        this.assertVecInRange(new Vec3(vec.getX(), vec.getY(), vec.getZ()));
     }
+
     public final boolean canEditBlockAt(BlockPos vec) {
         // TODO winfy: fill this in
         return false;
@@ -200,9 +199,15 @@ public abstract class CastingEnvironment {
     }
 
     public static record HeldItemInfo(ItemStack stack, InteractionHand hand) {
-        public ItemStack component1() { return stack; }
-        public InteractionHand component2() { return hand; }
+        public ItemStack component1() {
+            return stack;
+        }
+
+        public InteractionHand component2() {
+            return hand;
+        }
     }
+
     /**
      * Return the slot from which to take blocks and items.
      */

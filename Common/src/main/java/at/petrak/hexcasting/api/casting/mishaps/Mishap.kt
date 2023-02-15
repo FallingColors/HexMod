@@ -13,11 +13,8 @@ import at.petrak.hexcasting.ktxt.*
 import net.minecraft.Util
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
@@ -69,40 +66,6 @@ abstract class Mishap : Throwable() {
     protected fun actionName(name: Component?): Component =
         name ?: "hexcasting.spell.null".asTranslatedComponent.lightPurple
 
-    protected fun yeetHeldItemsTowards(env: CastingEnvironment, targetPos: Vec3) {
-        // Knock the player's items out of their hands
-        val items = mutableListOf<ItemStack>()
-        val caster = env.caster
-        if (caster != null) {
-            // FIXME: handle null caster case
-            return
-        }
-        for (hand in InteractionHand.values()) {
-            items.add(caster.getItemInHand(hand).copy())
-            caster.setItemInHand(hand, ItemStack.EMPTY)
-        }
-
-        val pos = caster.position()
-        val delta = targetPos.subtract(pos).normalize().scale(0.5)
-
-        for (item in items) {
-            yeetItem(env, item, pos, delta)
-        }
-    }
-
-    protected fun yeetItem(env: CastingEnvironment, stack: ItemStack, pos: Vec3, delta: Vec3) {
-        val entity = ItemEntity(
-            env.world,
-            pos.x, pos.y, pos.z,
-            stack,
-            delta.x + (Math.random() - 0.5) * 0.1,
-            delta.y + (Math.random() - 0.5) * 0.1,
-            delta.z + (Math.random() - 0.5) * 0.1
-        )
-        entity.setPickUpDelay(40)
-        env.world.addWithUUID(entity)
-    }
-
     protected fun blockAtPos(ctx: CastingEnvironment, pos: BlockPos): Component {
         return ctx.world.getBlockState(pos).block.name
     }
@@ -111,7 +74,7 @@ abstract class Mishap : Throwable() {
 
     companion object {
         @JvmStatic
-        public fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
+        fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
             entity.setHurtWithStamp(source, entity.level.gameTime)
 
             val targetHealth = entity.health - amount

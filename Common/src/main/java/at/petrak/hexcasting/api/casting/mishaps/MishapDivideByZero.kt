@@ -1,12 +1,11 @@
 package at.petrak.hexcasting.api.casting.mishaps
 
-import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.misc.HexDamageSources
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.GarbageIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota
+import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
@@ -19,11 +18,7 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         stack.add(GarbageIota())
-        val caster = ctx.caster
-        if (caster != null) {
-            // FIXME case where caster is null
-            trulyHurt(caster, HexDamageSources.OVERCAST, caster.health / 2)
-        }
+        ctx.mishapEnvironment.damage(0.5f)
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

@@ -13,7 +13,7 @@ class MishapLocationTooFarAway(val location: Vec3, val type: String = "too_far")
         dyeColor(DyeColor.MAGENTA)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        yeetHeldItemsTowards(ctx, location)
+        ctx.mishapEnvironment.yeetHeldItemsTowards(this.location)
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
