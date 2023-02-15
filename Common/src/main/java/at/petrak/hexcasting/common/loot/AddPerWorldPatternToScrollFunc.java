@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.loot;
 
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
-import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;

@@ -1,13 +1,14 @@
 package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.common.items.ItemFocus;
-import at.petrak.hexcasting.common.items.ItemScroll;
-import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
+import at.petrak.hexcasting.common.items.storage.ItemFocus;
+import at.petrak.hexcasting.common.items.storage.ItemScroll;
+import at.petrak.hexcasting.common.items.storage.ItemSlate;
+import at.petrak.hexcasting.common.items.storage.ItemThoughtKnot;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
@@ -88,6 +89,7 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         simpleItem(modLoc("patchouli_book"));
 
+        buildThoughtKnot();
         buildSealableIotaHolder(HexItems.FOCUS, "focus");
         buildSealableIotaHolder(HexItems.SPELLBOOK, "spellbook");
 
@@ -159,6 +161,19 @@ public class HexItemModels extends PaucalItemModelProvider {
             .texture("texture", modLoc("block/edified_planks"));
         getBuilder(getPath(HexBlocks.EDIFIED_PRESSURE_PLATE))
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/edified_pressure_plate")));
+    }
+
+    private void buildThoughtKnot() {
+        var unwritten = singleTexture("thought_knot", new ResourceLocation("item/generated"),
+            "layer0", modLoc("item/thought_knot"));
+        var written = withExistingParent("thought_knot_written", new ResourceLocation("item/generated"))
+            .texture("layer0", modLoc("item/thought_knot"))
+            .texture("layer1", modLoc("item/thought_knot_overlay"));
+        getBuilder("thought_knot")
+            .override().predicate(ItemThoughtKnot.WRITTEN_PRED, 0f)
+            .model(unwritten).end()
+            .override().predicate(ItemThoughtKnot.WRITTEN_PRED, 1f)
+            .model(written).end();
     }
 
     private void buildSealableIotaHolder(Item item, String stub) {

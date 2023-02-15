@@ -1,4 +1,4 @@
-// 1.19.2	2023-01-22T12:41:02.49644171	Item Models: hexcasting
+// 1.19.2	2023-02-15T01:34:30.703213817	Item Models: hexcasting
 f2156b3a7041cf99891b528393db64c6b9ca1a4f assets/hexcasting/models/item/abacus.json
 933059cd7c2dbaff0e643c644c14af0c0e77aa29 assets/hexcasting/models/item/acacia_staff.json
 19730853397b109cfedd0c3bbda83d5de6cd15b9 assets/hexcasting/models/item/akashic_record.json
@@ -101,6 +101,8 @@ c29e6e7b2168eeeb13b1fc3e93ffc3e0c9bd11ce assets/hexcasting/models/item/spellbook
 d6ebc87cb0fa6f86bee3a4eade7329ebb0cf2d38 assets/hexcasting/models/item/stripped_edified_log.json
 ea3f18f75776022127f3a108119e3f7a5c211c0f assets/hexcasting/models/item/stripped_edified_wood.json
 0a100b64e77394606018320bbc5752a546fe0af4 assets/hexcasting/models/item/sub_sandwich.json
+6a7f5af82cf8ec72c3457ef4c1ae11a76717bf88 assets/hexcasting/models/item/thought_knot.json
+93b2191ffab47003f661b75a85cd833ec64f0c15 assets/hexcasting/models/item/thought_knot_written.json
 5f4831d11d8f45b037a6f48e12d2e794ada7b961 assets/hexcasting/models/item/trinket.json
 946970e74b8d3c76c15191f494bc1f3d7e36aa43 assets/hexcasting/models/item/trinket_filled.json
 c6523de66cbfae3a1e6361c635cc693a0a089bb3 assets/hexcasting/models/item/uuid_colorizer.json
