@@ -4,13 +4,11 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
-import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexStatistics;
-import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternAck;
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -51,52 +49,45 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     }
 
     public static void handleNewPatternOnServer(ServerPlayer sender, MsgNewSpellPatternSyn msg) {
-        var held = sender.getItemInHand(msg.handUsed());
-        if (held.is(HexTags.Items.STAVES)) {
-            boolean autoFail = false;
+        boolean cheatedPatternOverlap = false;
 
-            List<ResolvedPattern> resolvedPatterns = msg.resolvedPatterns();
-            if (!resolvedPatterns.isEmpty()) {
-                var allPoints = new HashSet<HexCoord>();
-                for (int i = 0; i < resolvedPatterns.size() - 1; i++) {
-                    ResolvedPattern pat = resolvedPatterns.get(i);
-                    allPoints.addAll(pat.getPattern().positions(pat.getOrigin()));
-                }
-                var currentResolvedPattern = resolvedPatterns.get(resolvedPatterns.size() - 1);
-                var currentSpellPoints = currentResolvedPattern.getPattern()
-                    .positions(currentResolvedPattern.getOrigin());
-                if (currentSpellPoints.stream().anyMatch(allPoints::contains)) {
-                    autoFail = true;
-                }
+        List<ResolvedPattern> resolvedPatterns = msg.resolvedPatterns();
+        if (!resolvedPatterns.isEmpty()) {
+            var allPoints = new HashSet<HexCoord>();
+            for (int i = 0; i < resolvedPatterns.size() - 1; i++) {
+                ResolvedPattern pat = resolvedPatterns.get(i);
+                allPoints.addAll(pat.getPattern().positions(pat.getOrigin()));
             }
-
-            sender.awardStat(HexStatistics.PATTERNS_DRAWN);
-
-            var harness = IXplatAbstractions.INSTANCE.getStaffHarness(sender, msg.handUsed());
-
-            ExecutionClientView clientInfo;
-            if (autoFail) {
-                var descs = harness.generateDescs();
-                clientInfo = new ExecutionClientView(harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
-                    descs.getFirst(), descs.getSecond(), descs.getThird(), harness.getParenCount());
-            } else {
-                clientInfo = harness.queueAndExecuteIota(new PatternIota(msg.pattern()), sender.getLevel());
+            var currentResolvedPattern = resolvedPatterns.get(resolvedPatterns.size() - 1);
+            var currentSpellPoints = currentResolvedPattern.getPattern()
+                .positions(currentResolvedPattern.getOrigin());
+            if (currentSpellPoints.stream().anyMatch(allPoints::contains)) {
+                cheatedPatternOverlap = true;
             }
-
-            if (clientInfo.isStackClear()) {
-                IXplatAbstractions.INSTANCE.setHarness(sender, null);
-                IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
-            } else {
-                IXplatAbstractions.INSTANCE.setHarness(sender, harness);
-                if (!resolvedPatterns.isEmpty()) {
-                    resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
-                }
-                IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
-            }
-
-            IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,
-                new MsgNewSpellPatternAck(clientInfo, resolvedPatterns.size() - 1));
         }
 
+        if (cheatedPatternOverlap) {
+            return;
+        }
+
+        sender.awardStat(HexStatistics.PATTERNS_DRAWN);
+
+        var harness = IXplatAbstractions.INSTANCE.getStaffHarness(sender, msg.handUsed());
+
+        ExecutionClientView clientInfo = harness.queueAndExecuteIota(new PatternIota(msg.pattern()), sender.getLevel());
+
+        if (clientInfo.isStackClear()) {
+            IXplatAbstractions.INSTANCE.setHarness(sender, null);
+            IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
+        } else {
+            IXplatAbstractions.INSTANCE.setHarness(sender, harness);
+            if (!resolvedPatterns.isEmpty()) {
+                resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
+            }
+            IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
+        }
+
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,
+            new MsgNewSpellPatternAck(clientInfo, resolvedPatterns.size() - 1));
     }
 }

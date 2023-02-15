@@ -15,14 +15,14 @@ public class HexEvalSounds {
 
     public static final EvalSound NOTHING = make("nothing",
         new EvalSound(null, Integer.MIN_VALUE));
-    public static final EvalSound OPERATOR = make("operator",
+    public static final EvalSound ADD_PATTERN = make("operator",
         new EvalSound(HexSounds.ADD_PATTERN, 0));
     public static final EvalSound SPELL = make("spell",
         new EvalSound(HexSounds.ACTUALLY_CAST, 1000));
     public static final EvalSound HERMES = make("hermes",
         new EvalSound(HexSounds.CAST_HERMES, 2000));
     public static final EvalSound THOTH = make("thoth",
-        new EvalSound(HexSounds.CAST_THOTH, 2000));
+        new EvalSound(HexSounds.CAST_THOTH, 2500));
 
     public static final EvalSound MUTE = make("mute",
         new EvalSound(null, 3000));

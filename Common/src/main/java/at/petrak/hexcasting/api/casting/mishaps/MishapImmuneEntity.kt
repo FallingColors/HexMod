@@ -12,7 +12,7 @@ class MishapImmuneEntity(val entity: Entity) : Mishap() {
         dyeColor(DyeColor.BLUE)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        yeetHeldItemsTowards(ctx, entity.position())
+        ctx.mishapEnvironment.yeetHeldItemsTowards(entity.position())
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

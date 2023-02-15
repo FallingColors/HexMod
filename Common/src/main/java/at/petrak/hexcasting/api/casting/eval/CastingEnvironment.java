@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -20,9 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -32,12 +31,9 @@ import java.util.function.Predicate;
  */
 public abstract class CastingEnvironment {
     protected final ServerLevel world;
-    // TODO move this to the env?
-    protected final Set<Entity> entitiesGivenMotion;
 
     protected CastingEnvironment(ServerLevel world) {
         this.world = world;
-        this.entitiesGivenMotion = new HashSet<>();
     }
 
     public final ServerLevel getWorld() {
@@ -59,8 +55,7 @@ public abstract class CastingEnvironment {
     public abstract MishapEnvironment getMishapEnvironment();
 
     /**
-     * Get the sound that this I/O module makes.
-     * <p>
+     * Get the sound that this I/O module makes upon receiving a pattern
      */
     public abstract EvalSound getSoundType();
 
@@ -162,12 +157,10 @@ public abstract class CastingEnvironment {
         }
     }
 
-    public void markEntityAsImpulsed(Entity e) {
-        this.entitiesGivenMotion.add(e);
-    }
+    public abstract InteractionHand castingHand();
 
-    public boolean hasBeenGivenMotion(Entity e) {
-        return this.entitiesGivenMotion.contains(e);
+    public InteractionHand otherHand() {
+        return HexUtils.otherHand(this.castingHand());
     }
 
     /**

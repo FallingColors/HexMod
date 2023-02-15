@@ -22,6 +22,12 @@ interface SpellAction : Action {
         ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>?
 
+    fun executeWithUserdata(
+        args: List<Iota>, ctx: CastingEnvironment, userData: CompoundTag
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+        return this.execute(args, ctx)
+    }
+
     override fun operate(
         env: CastingEnvironment,
         stack: MutableList<Iota>,
@@ -32,7 +38,8 @@ interface SpellAction : Action {
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
-        val executeResult = this.execute(args, env) ?: return OperationResult(stack, userData, listOf(), continuation)
+        val executeResult = this.executeWithUserdata(args, env, userData)
+            ?: return OperationResult(stack, userData, listOf(), continuation)
         val (spell, media, particles) = executeResult
 
         val sideEffects = mutableListOf<OperatorSideEffect>()

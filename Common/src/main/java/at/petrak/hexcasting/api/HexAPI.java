@@ -112,6 +112,12 @@ public interface HexAPI {
      * Location in the userdata of the ravenmind
      */
     String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
+    /**
+     * Location in the userdata of the evaluation depth
+     */
+    String EVAL_DEPTH_USERDATA = modLoc("eval_depth").toString();
+
+    String MARKED_MOVED_USERDATA = modLoc("impulsed").toString();
 
     static HexAPI instance() {
         return INSTANCE.get();

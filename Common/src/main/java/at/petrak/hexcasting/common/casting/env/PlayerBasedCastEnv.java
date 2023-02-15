@@ -5,6 +5,8 @@ import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
@@ -13,6 +15,7 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -42,6 +45,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     @Override
     public @Nullable ServerPlayer getCaster() {
         return this.caster;
+    }
+
+    @Override
+    public EvalSound getSoundType() {
+        return HexEvalSounds.ADD_PATTERN;
     }
 
     @Override
@@ -167,9 +175,13 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         return this.caster.position();
     }
 
+    @Override
+    public MishapEnvironment getMishapEnvironment() {
+        return new PlayerBasedMishapEnv(this.caster);
+    }
+
     protected void sendMishapMsgToPlayer(OperatorSideEffect.DoMishap mishap) {
         var msg = mishap.getMishap().errorMessageWithName(this, mishap.getErrorCtx());
         this.caster.sendSystemMessage(msg);
     }
-
 }
