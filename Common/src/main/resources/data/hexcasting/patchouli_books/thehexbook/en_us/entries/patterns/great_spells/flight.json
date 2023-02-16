@@ -1,5 +1,5 @@
 {
-  "name": "hexcasting.spell.hexcasting:flight",
+  "name": "hexcasting.action.hexcasting:flight",
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:feather",
   "sortnum": 2,

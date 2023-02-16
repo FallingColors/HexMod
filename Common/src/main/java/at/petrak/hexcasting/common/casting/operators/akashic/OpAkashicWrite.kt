@@ -1,12 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
+import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.castables.SpellAction
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.casting.mishaps.MishapNoAkashicRecord
+import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.math.HexPattern
-import at.petrak.hexcasting.api.spell.mishaps.MishapNoAkashicRecord
-import at.petrak.hexcasting.api.spell.mishaps.MishapOthersName
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
 import at.petrak.hexcasting.common.lib.HexSounds
 import net.minecraft.core.BlockPos
@@ -15,13 +16,9 @@ import net.minecraft.sounds.SoundSource
 object OpAkashicWrite : SpellAction {
     override val argc = 3
 
-    override val isGreat = true
-    override val alwaysProcessGreatSpell = false
-    override val causesBlindDiversion = false
-
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getBlockPos(0, argc)
         val key = args.getPattern(1, argc)
@@ -52,7 +49,7 @@ object OpAkashicWrite : SpellAction {
         val datum: Iota
     ) :
         RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             record.addNewDatum(recordPos, ctx.world, key, datum)
 
             ctx.world.playSound(

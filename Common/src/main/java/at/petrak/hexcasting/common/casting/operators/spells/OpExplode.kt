@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.castables.SpellAction
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.iota.Iota
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.level.Explosion
@@ -15,7 +16,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getVec3(0, argc)
         val strength = args.getPositiveDoubleUnderInclusive(1, 10.0, argc)
@@ -30,7 +31,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
     }
 
     private data class Spell(val pos: Vec3, val strength: Double, val fire: Boolean) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             // TODO: you can use this to explode things *outside* of the worldborder?
             if (!ctx.canEditBlockAt(BlockPos(pos)))
                 return

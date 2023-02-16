@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.mod;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
@@ -22,10 +21,20 @@ public class HexConfig {
 
         double mediaToHealthRate();
 
+        int cypherCooldown();
+
+        int trinketCooldown();
+
+        int artifactCooldown();
+
         int DEFAULT_DUST_MEDIA_AMOUNT = MediaConstants.DUST_UNIT;
         int DEFAULT_SHARD_MEDIA_AMOUNT = MediaConstants.SHARD_UNIT;
         int DEFAULT_CHARGED_MEDIA_AMOUNT = MediaConstants.CRYSTAL_UNIT;
         double DEFAULT_MEDIA_TO_HEALTH_RATE = 2 * MediaConstants.CRYSTAL_UNIT / 20.0;
+
+        int DEFAULT_CYPHER_COOLDOWN = 8;
+        int DEFAULT_TRINKET_COOLDOWN = 5;
+        int DEFAULT_ARTIFACT_COOLDOWN = 3;
 
     }
 
@@ -60,18 +69,11 @@ public class HexConfig {
         // fun fact, although dimension keys are a RegistryHolder, they aren't a registry, so i can't do tags
         boolean canTeleportInThisDimension(ResourceKey<Level> dimension);
 
-        ScrollQuantity scrollsForLootTable(ResourceLocation lootTable);
-
         int DEFAULT_MAX_RECURSE_DEPTH = 512;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
 
         boolean DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER = true;
-        List<String> DEFAULT_FEW_SCROLL_TABLES = List.of("minecraft:chests/jungle_temple",
-            "minecraft:chests/simple_dungeon", "minecraft:chests/village/village_cartographer");
-        List<String> DEFAULT_SOME_SCROLL_TABLES = List.of("minecraft:chests/bastion_treasure",
-            "minecraft:chests/shipwreck_map");
-        List<String> DEFAULT_MANY_SCROLL_TABLES = List.of("minecraft:chests/stronghold_library");
 
         List<String> DEFAULT_DIM_TP_DENYLIST = List.of("twilightforest:twilight_forest");
 
@@ -89,11 +91,23 @@ public class HexConfig {
 
     // Simple extensions for resource location configs
     public static boolean anyMatch(List<? extends String> keys, ResourceLocation key) {
-        return keys.stream().map(ResourceLocation::new).anyMatch(key::equals);
+        for (String s : keys) {
+            if (ResourceLocation.isValidResourceLocation(s)) {
+                var rl = new ResourceLocation(s);
+                if (rl.equals(key)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean noneMatch(List<? extends String> keys, ResourceLocation key) {
-        return keys.stream().map(ResourceLocation::new).noneMatch(key::equals);
+        return !anyMatch(keys, key);
+    }
+
+    public static boolean anyMatchResLoc(List<? extends ResourceLocation> keys, ResourceLocation key) {
+        return keys.stream().anyMatch(key::equals);
     }
 
     // oh man this is aesthetically pleasing

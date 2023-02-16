@@ -1,5 +1,5 @@
 {
-  "name": "hexcasting.spell.hexcasting:colorize",
+  "name": "hexcasting.action.hexcasting:colorize",
   "category": "hexcasting:patterns/spells",
   "icon": "hexcasting:pride_colorizer_gay",
   "sortnum": 5,

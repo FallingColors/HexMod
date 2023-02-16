@@ -28,7 +28,7 @@ public class CapSyncers {
         x.setSentinel(player, x.getSentinel(proto));
         x.setColorizer(player, x.getColorizer(proto));
         x.setHarness(player, x.getHarness(proto, InteractionHand.MAIN_HAND));
-        x.setPatterns(player, x.getPatterns(proto));
+        x.setPatterns(player, x.getPatternsSavedInUi(proto));
     }
 
     @SubscribeEvent

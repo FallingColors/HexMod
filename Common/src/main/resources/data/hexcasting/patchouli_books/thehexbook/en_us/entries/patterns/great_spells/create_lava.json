@@ -1,5 +1,5 @@
 {
-  "name": "hexcasting.spell.hexcasting:create_lava",
+  "name": "hexcasting.action.hexcasting:create_lava",
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:lava_bucket",
   "sortnum": 0,

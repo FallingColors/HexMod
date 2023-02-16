@@ -1,7 +1,8 @@
 package at.petrak.hexcasting.common.command;
 
-import at.petrak.hexcasting.api.PatternRegistry;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -11,6 +12,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.concurrent.CompletableFuture;
@@ -28,22 +30,14 @@ public class PatternResLocArgument extends ResourceLocationArgument {
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         return SharedSuggestionProvider.suggest(
-            PatternRegistry.getAllPerWorldPatternNames().stream().map(Object::toString), builder);
+            PatternRegistryManifest.getAllPerWorldActions().stream().map(key -> key.location().toString()), builder);
     }
 
     public static HexPattern getPattern(
-        CommandContext<CommandSourceStack> ctx, String pName) throws CommandSyntaxException {
-        var targetId = ctx.getArgument(pName, ResourceLocation.class);
-        var lookup = PatternRegistry.getPerWorldPatterns(ctx.getSource().getLevel());
-        HexPattern foundPat = null;
-        for (var sig : lookup.keySet()) {
-            var rhs = lookup.get(sig);
-            if (rhs.getFirst().equals(targetId)) {
-                foundPat = HexPattern.fromAngles(sig, rhs.getSecond());
-                break;
-            }
-        }
-
+        CommandContext<CommandSourceStack> ctx, String argumentName) throws CommandSyntaxException {
+        var targetId = ctx.getArgument(argumentName, ResourceLocation.class);
+        var targetKey = ResourceKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), targetId);
+        var foundPat = PatternRegistryManifest.getCanonicalStrokesPerWorld(targetKey, ctx.getSource().getLevel());
         if (foundPat == null) {
             throw ERROR_UNKNOWN_PATTERN.create(targetId);
         } else {

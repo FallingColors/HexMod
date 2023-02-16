@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.castables.SpellAction
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.common.network.MsgBeepAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
@@ -15,7 +16,7 @@ object OpBeep : SpellAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getVec3(0, argc)
         val instrument = args.getPositiveIntUnder(1, NoteBlockInstrument.values().size, argc)
@@ -29,10 +30,10 @@ object OpBeep : SpellAction {
         )
     }
 
-    override fun hasCastingSound(ctx: CastingContext) = false
+    override fun hasCastingSound(ctx: CastingEnvironment) = false
 
     private data class Spell(val target: Vec3, val note: Int, val instrument: NoteBlockInstrument) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             IXplatAbstractions.INSTANCE.sendPacketNear(target, 128.0, ctx.world, MsgBeepAck(target, note, instrument))
             ctx.world.gameEvent(null, GameEvent.NOTE_BLOCK_PLAY, target)
         }

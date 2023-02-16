@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.entities;
 
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.RenderLib;
-import at.petrak.hexcasting.common.items.ItemScroll;
+import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.network.MsgNewWallScrollAck;
@@ -53,7 +53,7 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll, boolean showStrokeOrder,
-                            int blockSize) {
+        int blockSize) {
         super(HexEntities.WALL_SCROLL, world, pos);
         this.setDirection(dir);
         this.blockSize = blockSize;
@@ -160,7 +160,7 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     public void readSpawnData(BlockPos pos, Direction dir, ItemStack scrollItem,
-                              boolean showsStrokeOrder, int blockSize) {
+        boolean showsStrokeOrder, int blockSize) {
         this.pos = pos;
         this.scroll = scrollItem;
         this.blockSize = blockSize;
@@ -203,7 +203,7 @@ public class EntityWallScroll extends HangingEntity {
 
     @Override
     public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements,
-                       boolean pTeleport) {
+        boolean pTeleport) {
         BlockPos blockpos = this.pos.offset(pX - this.getX(), pY - this.getY(), pZ - this.getZ());
         this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
     }

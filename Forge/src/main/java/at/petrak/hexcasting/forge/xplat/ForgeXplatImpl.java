@@ -5,15 +5,17 @@ import at.petrak.hexcasting.api.addldata.ADColorizer;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.CastingHarness;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.api.spell.casting.CastingContext;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
-import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
@@ -237,12 +239,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
         // This is always from a staff because we don't need to load the harness when casting from item
-        var ctx = new CastingContext(player, hand, CastingContext.CastSource.STAFF);
+        var ctx = new CastingEnvironment(player, hand, CastingEnvironment.CastSource.STAFF);
         return CastingHarness.fromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
     }
 
     @Override
-    public List<ResolvedPattern> getPatterns(ServerPlayer player) {
+    public List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player) {
         ListTag patternsTag = player.getPersistentData().getList(TAG_PATTERNS, Tag.TAG_COMPOUND);
 
         List<ResolvedPattern> patterns = new ArrayList<>(patternsTag.size());
@@ -353,25 +355,22 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return ForgeUnsealedIngredient.of(stack);
     }
 
-    private static CreativeModeTab TAB = null;
+    private static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() ->
+        new CreativeModeTab(HexAPI.MOD_ID) {
+            @Override
+            public ItemStack makeIcon() {
+                return HexItems.tabIcon();
+            }
+
+            @Override
+            public void fillItemList(NonNullList<ItemStack> p_40778_) {
+                super.fillItemList(p_40778_);
+            }
+        });
 
     @Override
     public CreativeModeTab getTab() {
-        if (TAB == null) {
-            TAB = new CreativeModeTab(HexAPI.MOD_ID) {
-                @Override
-                public ItemStack makeIcon() {
-                    return HexItems.tabIcon();
-                }
-
-                @Override
-                public void fillItemList(NonNullList<ItemStack> p_40778_) {
-                    super.fillItemList(p_40778_);
-                }
-            };
-        }
-
-        return TAB;
+        return TAB.get();
     }
 
     @Override
@@ -418,6 +417,15 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
+    private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
+        ForgeAccessorRegistry.hex$registerSimple(
+            ResourceKey.createRegistryKey(modLoc("action")), null)
+    );
+    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
+        Suppliers.memoize(() ->
+            ForgeAccessorRegistry.hex$registerSimple(
+                ResourceKey.createRegistryKey(modLoc("special_handler")), null)
+        );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
         ForgeAccessorRegistry.hex$registerDefaulted(
             ResourceKey.createRegistryKey(modLoc("iota_type")),
@@ -428,6 +436,16 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             ResourceKey.createRegistryKey(modLoc("eval_sound")),
             HexAPI.MOD_ID + ":nothing", registry -> HexEvalSounds.NOTHING)
     );
+
+    @Override
+    public Registry<ActionRegistryEntry> getActionRegistry() {
+        return ACTION_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry() {
+        return SPECIAL_HANDLER_REGISTRY.get();
+    }
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {

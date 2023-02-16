@@ -1,16 +1,16 @@
 package at.petrak.hexcasting.api.client;
 
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -120,7 +120,7 @@ public final class ScryingLensOverlayRegistry {
      * @throws IllegalArgumentException if the block is already registered.
      */
     public static void addDisplayer(Block block, OverlayBuilder displayer) {
-        addDisplayer(IXplatAbstractions.INSTANCE.getID(block), displayer);
+        addDisplayer(Registry.BLOCK.getKey(block), displayer);
     }
 
     /**
@@ -152,7 +152,7 @@ public final class ScryingLensOverlayRegistry {
         Player observer, Level world,
         Direction hitFace) {
         List<Pair<ItemStack, Component>> lines = Lists.newArrayList();
-        var idLookedup = ID_LOOKUP.get(IXplatAbstractions.INSTANCE.getID(state.getBlock()));
+        var idLookedup = ID_LOOKUP.get(Registry.BLOCK.getKey(state.getBlock()));
         if (idLookedup != null) {
             idLookedup.addLines(lines, state, pos, observer, world, hitFace);
         }

@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "A": {
-      "item": "minecraft:amethyst_shard"
+      "item": "hexcasting:amethyst_dust"
     },
     "P": {
       "item": "minecraft:paper"

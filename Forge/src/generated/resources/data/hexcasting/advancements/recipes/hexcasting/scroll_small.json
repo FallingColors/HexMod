@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:amethyst_shard"
-            ]
+            "tag": "hexcasting:staves"
           }
         ]
       },

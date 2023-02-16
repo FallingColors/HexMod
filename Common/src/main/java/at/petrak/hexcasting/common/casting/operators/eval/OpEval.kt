@@ -1,23 +1,23 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
-import at.petrak.hexcasting.api.spell.Action
-import at.petrak.hexcasting.api.spell.OperationResult
-import at.petrak.hexcasting.api.spell.SpellList
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.casting.eval.FrameEvaluate
-import at.petrak.hexcasting.api.spell.casting.eval.FrameFinishEval
-import at.petrak.hexcasting.api.spell.casting.eval.SpellContinuation
-import at.petrak.hexcasting.api.spell.evaluatable
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.iota.PatternIota
-import at.petrak.hexcasting.api.spell.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.casting.castables.Action
+import at.petrak.hexcasting.api.casting.OperationResult
+import at.petrak.hexcasting.api.casting.SpellList
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate
+import at.petrak.hexcasting.api.casting.eval.vm.FrameFinishEval
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
+import at.petrak.hexcasting.api.casting.evaluatable
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.PatternIota
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 
 object OpEval : Action {
     override fun operate(
         continuation: SpellContinuation,
         stack: MutableList<Iota>,
         ravenmind: Iota?,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): OperationResult {
         val datum = stack.removeLastOrNull() ?: throw MishapNotEnoughArgs(1, 0)
         val instrs = evaluatable(datum, 0)

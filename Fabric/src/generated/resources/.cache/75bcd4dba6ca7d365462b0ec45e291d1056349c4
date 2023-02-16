@@ -1,10 +1,10 @@
-// 1.19.2	2022-11-21T19:55:21.971658683	Tags for minecraft:block
+// 1.19.2	2023-02-15T02:11:12.162941713	Tags for minecraft:block
 20183cd61968ff6548df2dde1100b6378d68d64b data/minecraft/tags/blocks/wooden_buttons.json
 357eddf3cee6f16725bed0701d57b2ca3097d74d data/minecraft/tags/blocks/mineable/shovel.json
 5216ba5c57db29b8dee9aebc63a2e3b17c97dc17 data/minecraft/tags/blocks/wooden_trapdoors.json
 20183cd61968ff6548df2dde1100b6378d68d64b data/minecraft/tags/blocks/buttons.json
 5853312830fdd8ee85e2c5b1be3dd4a6357a4971 data/minecraft/tags/blocks/mineable/pickaxe.json
-f38c2a2a896388b3b87f53887609b417930abdf7 data/minecraft/tags/blocks/mineable/axe.json
+d5a3405be832907cb12fd9d1f423e297fe8e3e66 data/minecraft/tags/blocks/mineable/axe.json
 5f3b600b4fd98744bd08c993ce7bcb9c2f195cd2 data/minecraft/tags/blocks/mineable/hoe.json
 fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data/minecraft/tags/blocks/wooden_doors.json
 684c3206f38cc9cc494d5875c5e56aad004486af data/minecraft/tags/blocks/logs.json
@@ -13,6 +13,8 @@ fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data/minecraft/tags/blocks/wooden_doors
 684c3206f38cc9cc494d5875c5e56aad004486af data/minecraft/tags/blocks/logs_that_burn.json
 e5df19a1dc6eadf14cd9b0f0fe45a74330b745e9 data/minecraft/tags/blocks/planks.json
 5f3b600b4fd98744bd08c993ce7bcb9c2f195cd2 data/minecraft/tags/blocks/leaves.json
+281cb08b9b68ef049820c4f3f36b40820044681e data/minecraft/tags/blocks/stairs.json
+281cb08b9b68ef049820c4f3f36b40820044681e data/minecraft/tags/blocks/wooden_stairs.json
 37cff4ce449b8069b59b2327d78e073fc026d348 data/minecraft/tags/blocks/pressure_plates.json
 36b54a86d2ed41c8a503f7a61817a7a9d7a94536 data/minecraft/tags/blocks/crystal_sound_blocks.json
 fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data/minecraft/tags/blocks/doors.json

@@ -1,13 +1,14 @@
 package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.common.items.ItemFocus;
-import at.petrak.hexcasting.common.items.ItemScroll;
-import at.petrak.hexcasting.common.items.ItemSlate;
 import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
+import at.petrak.hexcasting.common.items.storage.ItemFocus;
+import at.petrak.hexcasting.common.items.storage.ItemScroll;
+import at.petrak.hexcasting.common.items.storage.ItemSlate;
+import at.petrak.hexcasting.common.items.storage.ItemThoughtKnot;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
@@ -74,8 +75,6 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         singleTexture("old_staff", new ResourceLocation("item/handheld_rod"),
             "layer0", modLoc("item/staves/old"));
-        singleTexture("bosnia_staff", new ResourceLocation("item/handheld_rod"),
-            "layer0", modLoc("item/staves/bosnia"));
 
         buildStaff(HexItems.STAFF_OAK, "oak");
         buildStaff(HexItems.STAFF_BIRCH, "birch");
@@ -85,10 +84,12 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_ACACIA, "acacia");
         buildStaff(HexItems.STAFF_CRIMSON, "crimson");
         buildStaff(HexItems.STAFF_WARPED, "warped");
+        buildStaff(HexItems.STAFF_MANGROVE, "mangrove");
         buildStaff(HexItems.STAFF_EDIFIED, "edified");
 
         simpleItem(modLoc("patchouli_book"));
 
+        buildThoughtKnot();
         buildSealableIotaHolder(HexItems.FOCUS, "focus");
         buildSealableIotaHolder(HexItems.SPELLBOOK, "spellbook");
 
@@ -162,6 +163,19 @@ public class HexItemModels extends PaucalItemModelProvider {
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/edified_pressure_plate")));
     }
 
+    private void buildThoughtKnot() {
+        var unwritten = singleTexture("thought_knot", new ResourceLocation("item/generated"),
+            "layer0", modLoc("item/thought_knot"));
+        var written = withExistingParent("thought_knot_written", new ResourceLocation("item/generated"))
+            .texture("layer0", modLoc("item/thought_knot"))
+            .texture("layer1", modLoc("item/thought_knot_overlay"));
+        getBuilder("thought_knot")
+            .override().predicate(ItemThoughtKnot.WRITTEN_PRED, 0f)
+            .model(unwritten).end()
+            .override().predicate(ItemThoughtKnot.WRITTEN_PRED, 1f)
+            .model(written).end();
+    }
+
     private void buildSealableIotaHolder(Item item, String stub) {
         var name = getPath(item);
         var plain = singleTexture(name, new ResourceLocation("item/generated"),
@@ -201,9 +215,6 @@ public class HexItemModels extends PaucalItemModelProvider {
             .end().override()
             .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 1)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/old_staff")))
-            .end().override()
-            .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 2)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/bosnia_staff")))
             .end();
     }
 

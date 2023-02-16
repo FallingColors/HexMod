@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.spell.iota.DoubleIota;
+import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.fabric.cc.adimpl.*;

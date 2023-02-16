@@ -1,6 +1,6 @@
-import at.petrak.hexcasting.api.spell.math.EulerPathFinder.findAltDrawing
-import at.petrak.hexcasting.api.spell.math.HexDir
-import at.petrak.hexcasting.api.spell.math.HexPattern.Companion.fromAngles
+import at.petrak.hexcasting.api.casting.math.EulerPathFinder.findAltDrawing
+import at.petrak.hexcasting.api.casting.math.HexDir
+import at.petrak.hexcasting.api.casting.math.HexPattern.Companion.fromAngles
 import org.junit.jupiter.api.Test
 
 internal class EulerPathFinderTest {

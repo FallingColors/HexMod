@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.forge;
 
-import at.petrak.hexcasting.api.misc.ScrollQuantity;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -9,7 +8,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
 
-import static at.petrak.hexcasting.api.mod.HexConfig.anyMatch;
 import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
 public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
@@ -17,6 +15,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     private static ForgeConfigSpec.IntValue shardMediaAmount;
     private static ForgeConfigSpec.IntValue chargedCrystalMediaAmount;
     private static ForgeConfigSpec.DoubleValue mediaToHealthRate;
+
+    private static ForgeConfigSpec.IntValue cypherCooldown;
+    private static ForgeConfigSpec.IntValue trinketCooldown;
+    private static ForgeConfigSpec.IntValue artifactCooldown;
 
     public ForgeHexConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Media Amounts");
@@ -28,6 +30,15 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             .defineInRange("chargedCrystalMediaAmount", DEFAULT_CHARGED_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
         mediaToHealthRate = builder.comment("How many points of media a half-heart is worth when casting from HP")
             .defineInRange("mediaToHealthRate", DEFAULT_MEDIA_TO_HEALTH_RATE, 0.0, Double.POSITIVE_INFINITY);
+        builder.pop();
+
+        builder.push("Cooldowns");
+        cypherCooldown = builder.comment("Cooldown in ticks of a cypher")
+            .defineInRange("cypherCooldown", DEFAULT_CYPHER_COOLDOWN, 0, Integer.MAX_VALUE);
+        trinketCooldown = builder.comment("Cooldown in ticks of a trinket")
+            .defineInRange("trinketCooldown", DEFAULT_TRINKET_COOLDOWN, 0, Integer.MAX_VALUE);
+        artifactCooldown = builder.comment("Cooldown in ticks of a artifact")
+            .defineInRange("artifactCooldown", DEFAULT_ARTIFACT_COOLDOWN, 0, Integer.MAX_VALUE);
         builder.pop();
     }
 
@@ -49,6 +60,21 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     @Override
     public double mediaToHealthRate() {
         return mediaToHealthRate.get();
+    }
+
+    @Override
+    public int cypherCooldown() {
+        return cypherCooldown.get();
+    }
+
+    @Override
+    public int trinketCooldown() {
+        return trinketCooldown.get();
+    }
+
+    @Override
+    public int artifactCooldown() {
+        return artifactCooldown.get();
     }
 
     public static class Client implements HexConfig.ClientConfigAccess {
@@ -129,7 +155,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             circleActionDenyList = builder.comment(
                     "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
-                        " will result in a mishap.")
+                        " will result in a mishap. For example: hexcasting:get_caster will prevent Mind's Reflection.")
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
@@ -143,18 +169,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             tpDimDenyList = builder.comment("Resource locations of dimensions you can't Blink or Greater Teleport in.")
                 .defineList("tpDimDenyList", DEFAULT_DIM_TP_DENYLIST, Server::isValidReslocArg);
-
-            builder.push("Scrolls in Loot");
-
-            fewScrollTables = builder.comment(
-                    "Which loot tables should a small number of Ancient Scrolls be injected into?")
-                .defineList("fewScrollTables", DEFAULT_FEW_SCROLL_TABLES, Server::isValidReslocArg);
-            someScrollTables = builder.comment(
-                    "Which loot tables should a decent number of Ancient Scrolls be injected into?")
-                .defineList("someScrollTables", DEFAULT_SOME_SCROLL_TABLES, Server::isValidReslocArg);
-            manyScrollTables = builder.comment(
-                    "Which loot tables should a huge number of Ancient Scrolls be injected into?")
-                .defineList("manyScrollTables", DEFAULT_MANY_SCROLL_TABLES, Server::isValidReslocArg);
         }
 
         @Override
@@ -190,32 +204,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean canTeleportInThisDimension(ResourceKey<Level> dimension) {
             return noneMatch(tpDimDenyList.get(), dimension.location());
-        }
-
-        // TODO: on Forge, this value isn't loaded when creating a new world yet because config is per-world.
-        // For now I'm hardcoding this, but for correctness we should probably switch the table
-        // injects to be loaded from datapack instead of config.
-        // (Without hardcoding loading a new world is *incredibly* laggy because it throws every single time it tries to
-        // load *any* loot table)
-        @Override
-        public ScrollQuantity scrollsForLootTable(ResourceLocation lootTable) {
-            try {
-                if (anyMatch(HexConfig.ServerConfigAccess.DEFAULT_FEW_SCROLL_TABLES, lootTable)) {
-                    return ScrollQuantity.FEW;
-                } else if (anyMatch(HexConfig.ServerConfigAccess.DEFAULT_SOME_SCROLL_TABLES, lootTable)) {
-                    return ScrollQuantity.SOME;
-                } else if (anyMatch(HexConfig.ServerConfigAccess.DEFAULT_MANY_SCROLL_TABLES, lootTable)) {
-                    return ScrollQuantity.MANY;
-                }
-            } catch (IllegalStateException ignored) {
-                // then we are in develop env AND this is being called in the new world screen (it loads datapacks for
-                // world generation options)
-                // config values don't exist yet because config is per-world on Forge, and in dev it throws an exn
-                // (in release it just silently returns default, which is expected behavior here, but the comment
-                // suggests
-                // it will start throwing at some point soon.)
-            }
-            return ScrollQuantity.NONE;
         }
 
         private static boolean isValidReslocArg(Object o) {

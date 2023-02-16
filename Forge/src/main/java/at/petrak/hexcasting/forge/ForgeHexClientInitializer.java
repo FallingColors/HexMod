@@ -6,6 +6,7 @@ import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.client.shader.HexShaders;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -36,11 +37,14 @@ public class ForgeHexClientInitializer {
         evt.enqueueWork(() -> {
             RegisterClientStuff.init();
             RegisterClientStuff.registerColorProviders(
-                    (colorizer, item) -> GLOBAL_ITEM_COLORS.register(colorizer, item),
-                    (colorizer, block) -> GLOBAL_BLOCK_COLORS.register(colorizer, block));
+                (colorizer, item) -> GLOBAL_ITEM_COLORS.register(colorizer, item),
+                (colorizer, block) -> GLOBAL_BLOCK_COLORS.register(colorizer, block));
         });
 
         var evBus = MinecraftForge.EVENT_BUS;
+
+        evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) ->
+            PatternRegistryManifest.processRegistry(null));
 
         evBus.addListener((RenderLevelStageEvent e) -> {
             if (e.getStage().equals(RenderLevelStageEvent.Stage.AFTER_PARTICLES)) {
@@ -84,7 +88,8 @@ public class ForgeHexClientInitializer {
     public static void registerParticles(RegisterParticleProvidersEvent evt) {
         HexParticles.FactoryHandler.registerFactories(new HexParticles.FactoryHandler.Consumer() {
             @Override
-            public <T extends ParticleOptions> void register(ParticleType<T> type, Function<SpriteSet, ParticleProvider<T>> constructor) {
+            public <T extends ParticleOptions> void register(ParticleType<T> type, Function<SpriteSet,
+                ParticleProvider<T>> constructor) {
                 evt.register(type, constructor::apply);
             }
         });

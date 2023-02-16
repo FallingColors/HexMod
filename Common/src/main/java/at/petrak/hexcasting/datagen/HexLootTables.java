@@ -4,7 +4,6 @@ import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
-import at.petrak.hexcasting.common.loot.PatternScrollFunc;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.paucal.api.datagen.PaucalLootTableProvider;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
@@ -33,8 +32,6 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.Map;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexLootTables extends PaucalLootTableProvider {
     public HexLootTables(DataGenerator pGenerator) {
@@ -101,29 +98,19 @@ public class HexLootTables extends PaucalLootTableProvider {
             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond)
             .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
-                 0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
+                0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
 
         var isThatAnMFingBadBrandonSandersonReference = LootPool.lootPool()
-             .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
-             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-             .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
-             .when(LootItemRandomChanceCondition.randomChance(0.125f));
+            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
+            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
+            .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
+            .when(LootItemRandomChanceCondition.randomChance(0.125f));
 
         lootTables.put(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER, LootTable.lootTable()
-             .withPool(dustPoolWhenGood)
-             .withPool(dustPoolWhenBad)
-             .withPool(isThatAnMFingBrandonSandersonReference)
-             .withPool(isThatAnMFingBadBrandonSandersonReference));
-
-        String[] rarities = new String[]{
-            "few",
-            "some",
-            "many"
-        };
-        for (int i = 0; i < rarities.length; i++) {
-            var scrollPool = makeScrollAdder(i + 1);
-            lootTables.put(modLoc("inject/scroll_loot_" + rarities[i]), scrollPool);
-        }
+            .withPool(dustPoolWhenGood)
+            .withPool(dustPoolWhenBad)
+            .withPool(isThatAnMFingBrandonSandersonReference)
+            .withPool(isThatAnMFingBadBrandonSandersonReference));
     }
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {
@@ -144,14 +131,5 @@ public class HexLootTables extends PaucalLootTableProvider {
                 )))
             .apply(ApplyExplosionDecay.explosionDecay());
         lootTables.put(block, LootTable.lootTable().withPool(leafPool));
-    }
-
-    // "stddev"
-    private LootTable.Builder makeScrollAdder(float stddev) {
-        var pool = LootPool.lootPool()
-            .setRolls(UniformGenerator.between(-stddev, stddev))
-            .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE))
-            .apply(() -> new PatternScrollFunc(new LootItemCondition[0]));
-        return LootTable.lootTable().withPool(pool);
     }
 }

@@ -32,7 +32,7 @@ public class EdifyRecipeCategory implements IRecipeCategory<OpEdifySapling> {
         ResourceLocation location = modLoc("textures/gui/edify_jei.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 79, 61).setTextureSize(128, 128).build();
         var edify = modLoc("edify");
-        localizedName = Component.translatable("hexcasting.spell." + edify);
+        localizedName = Component.translatable("hexcasting.action." + edify);
         icon = new PatternDrawable(edify, 16, 16).strokeOrder(false);
     }
 

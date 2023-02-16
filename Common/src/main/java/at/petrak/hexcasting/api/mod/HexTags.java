@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.api.mod;
 
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -16,6 +18,7 @@ public class HexTags {
         public static final TagKey<Item> STAVES = create("staves");
         public static final TagKey<Item> PHIAL_BASE = create("phial_base");
         public static final TagKey<Item> GRANTS_ROOT_ADVANCEMENT = create("grants_root_advancement");
+        public static final TagKey<Item> SEAL_MATERIALS = create("seal_materials");
 
         public static TagKey<Item> create(String name) {
             return create(modLoc(name));
@@ -41,6 +44,27 @@ public class HexTags {
 
         public static TagKey<EntityType<?>> create(String name) {
             return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, modLoc(name));
+        }
+    }
+
+    public static final class Actions {
+        /**
+         * Actions with this tag can't be used until the caster is enlightened and send the
+         * "am I not skilled enough" message
+         */
+        public static final TagKey<ActionRegistryEntry> REQUIRES_ENLIGHTENMENT = create("requires_enlightenment");
+        /**
+         * Actions where the pattern is calculated per-world
+         */
+        public static final TagKey<ActionRegistryEntry> PER_WORLD_PATTERN = create("per_world_pattern");
+
+        /**
+         * Actions that can cause Blind Diversion
+         */
+        public static final TagKey<ActionRegistryEntry> CAN_START_ENLIGHTEN = create("can_start_enlighten");
+
+        public static TagKey<ActionRegistryEntry> create(String name) {
+            return TagKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), modLoc(name));
         }
     }
 }

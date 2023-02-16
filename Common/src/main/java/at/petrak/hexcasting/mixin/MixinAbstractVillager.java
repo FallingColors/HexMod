@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.mixin;
 
-import at.petrak.hexcasting.common.misc.Brainsweeping;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.item.trading.MerchantOffers;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ public class MixinAbstractVillager {
     @Inject(method = "getOffers", at = @At("HEAD"), cancellable = true)
     private void nixOffers(CallbackInfoReturnable<MerchantOffers> cir) {
         var self = (AbstractVillager) (Object) this;
-        if (Brainsweeping.isBrainswept(self)) {
+        if (IXplatAbstractions.INSTANCE.isBrainswept(self)) {
             cir.setReturnValue(new MerchantOffers());
         }
     }

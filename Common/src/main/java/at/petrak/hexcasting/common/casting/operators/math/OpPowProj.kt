@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.spell.ConstMediaAction
-import at.petrak.hexcasting.api.spell.asActionResult
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.getNumOrVec
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.mishaps.MishapDivideByZero
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
+import at.petrak.hexcasting.api.casting.asActionResult
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.getNumOrVec
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero
 import net.minecraft.world.phys.Vec3
 import kotlin.math.pow
 
@@ -13,7 +13,7 @@ object OpPowProj : ConstMediaAction {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<Iota>, ctx: CastingContext): List<Iota> {
+    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
         val lhs = args.getNumOrVec(0, OpAdd.argc)
         val rhs = args.getNumOrVec(1, OpAdd.argc)
         val theMishap = MishapDivideByZero.of(args[0], args[1], "exponent")

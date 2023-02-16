@@ -1,13 +1,17 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
+import at.petrak.hexcasting.api.casting.ParticleSpray
+import at.petrak.hexcasting.api.casting.RenderedSpell
+import at.petrak.hexcasting.api.casting.castables.SpellAction
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.getEntity
+import at.petrak.hexcasting.api.casting.getVec3
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
+import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
-import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.mishaps.MishapImmuneEntity
-import at.petrak.hexcasting.api.spell.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.common.network.MsgBlinkAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -23,10 +27,9 @@ import net.minecraft.world.phys.Vec3
 // WRT its look vector
 object OpTeleport : SpellAction {
     override val argc = 2
-    override val isGreat = true
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
 
         val teleportee = args.getEntity(0, argc)
@@ -56,7 +59,7 @@ object OpTeleport : SpellAction {
     }
 
     private data class Spell(val teleportee: Entity, val delta: Vec3) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             val distance = delta.length()
 
             // TODO make this not a magic number (config?)
@@ -102,25 +105,25 @@ object OpTeleport : SpellAction {
             return
         }
 
-        val base = teleportee.rootVehicle
-        val target = base.position().add(delta)
-
         val playersToUpdate = mutableListOf<ServerPlayer>()
-        val indirect = base.indirectPassengers
+        val target = teleportee.position().add(delta)
 
-        val sticky = indirect.any { it.type.`is`(HexTags.Entities.STICKY_TELEPORTERS) }
-        val cannotSticky = indirect.none { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
-        if (sticky && cannotSticky)
+        val cannotTeleport = teleportee.passengers.any { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
+        if (cannotTeleport)
             return
 
+        // A "sticky" entity teleports itself and its riders
+        val sticky = teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)
+
+        // TODO: this probably does funky things with stacks of passengers. I doubt this will come up in practice
+        // though
         if (sticky) {
+            teleportee.stopRiding()
+            teleportee.indirectPassengers.filterIsInstance<ServerPlayer>().forEach(playersToUpdate::add)
             // this handles teleporting the passengers
-            base.teleportTo(target.x, target.y, target.z)
-            indirect
-                .filterIsInstance<ServerPlayer>()
-                .forEach(playersToUpdate::add)
+            teleportee.teleportTo(target.x, target.y, target.z)
         } else {
-            // Break it into two stacks
+            // Snap everyone off the stacks
             teleportee.stopRiding()
             teleportee.passengers.forEach(Entity::stopRiding)
             if (teleportee is ServerPlayer) {

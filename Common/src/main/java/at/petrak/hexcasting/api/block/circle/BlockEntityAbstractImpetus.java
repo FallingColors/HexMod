@@ -4,11 +4,11 @@ import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.spell.ParticleSpray;
-import at.petrak.hexcasting.api.spell.casting.CastingContext;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.casting.SpellCircleContext;
-import at.petrak.hexcasting.api.spell.iota.PatternIota;
+import at.petrak.hexcasting.api.casting.ParticleSpray;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.CastingHarness;
+import at.petrak.hexcasting.api.casting.eval.SpellCircleContext;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -282,7 +282,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         if (player instanceof ServerPlayer splayer) {
             var bounds = getBounds(this.trackedBlocks);
 
-            var ctx = new CastingContext(splayer, InteractionHand.MAIN_HAND,
+            var ctx = new CastingEnvironment(splayer, InteractionHand.MAIN_HAND,
                 new SpellCircleContext(this.getBlockPos(), bounds, this.activatorAlwaysInRange()));
             var harness = new CastingHarness(ctx);
 

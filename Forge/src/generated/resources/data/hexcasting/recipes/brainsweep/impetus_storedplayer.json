@@ -4,6 +4,12 @@
     "type": "block",
     "block": "hexcasting:empty_impetus"
   },
+  "cost": 1000000,
+  "entityIn": {
+    "type": "villager",
+    "minLevel": 2,
+    "profession": "cleric"
+  },
   "result": {
     "name": "hexcasting:impetus_storedplayer",
     "properties": {
@@ -11,9 +17,5 @@
       "facing": "north",
       "powered": "true"
     }
-  },
-  "villagerIn": {
-    "minLevel": 2,
-    "profession": "minecraft:cleric"
   }
 }

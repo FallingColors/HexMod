@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.interop.utils;
 
-import at.petrak.hexcasting.api.spell.math.HexCoord;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.casting.math.HexCoord;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.client.RenderLib;
 import com.mojang.blaze3d.platform.GlStateManager;
