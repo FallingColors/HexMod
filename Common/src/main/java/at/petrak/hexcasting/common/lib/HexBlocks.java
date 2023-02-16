@@ -147,8 +147,12 @@ public class HexBlocks {
     public static final BlockAkashicLigature AKASHIC_LIGATURE = blockItem("akashic_connector",
         new BlockAkashicLigature(akashicWoodyHard().lightLevel(bs -> 4)));
 
-    public static final BlockQuenchedAllay QUENCHED_ALLAY = blockItem("quenched_allay",
-        new BlockQuenchedAllay(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+    // we have to make it emit light because otherwise it occludes itself and is always dark
+    public static final BlockQuenchedAllay QUENCHED_ALLAY = blockItem("quenched_allay", new BlockQuenchedAllay(
+        BlockBehaviour.Properties
+            .copy(Blocks.AMETHYST_BLOCK)
+            .lightLevel($ -> 4)
+            .noOcclusion()));
 
     // Decoration?!
     public static final Block SLATE_BLOCK = blockItem("slate_block", new Block(slateish().strength(2f, 4f)));

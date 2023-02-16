@@ -3,10 +3,7 @@ package at.petrak.hexcasting.common.lib;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
-import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
-import at.petrak.hexcasting.common.blocks.entity.BlockEntityLookingImpetus;
-import at.petrak.hexcasting.common.blocks.entity.BlockEntityRightClickImpetus;
-import at.petrak.hexcasting.common.blocks.entity.BlockEntityStoredPlayerImpetus;
+import at.petrak.hexcasting.common.blocks.entity.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -50,6 +47,9 @@ public class HexBlockEntities {
     public static final BlockEntityType<BlockEntitySlate> SLATE_TILE = register(
         "slate_tile",
         BlockEntitySlate::new, HexBlocks.SLATE);
+
+    public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_TILE = register(
+        "quenched_allay_tile", BlockEntityQuenchedAllay::new, HexBlocks.QUENCHED_ALLAY);
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String id,
         BiFunction<BlockPos, BlockState, T> func, Block... blocks) {

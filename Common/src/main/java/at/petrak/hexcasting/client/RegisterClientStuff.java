@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.GaslightingModel;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
+import at.petrak.hexcasting.client.be.BlockEntityQuenchedAllayRenderer;
 import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
@@ -27,7 +27,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
@@ -38,6 +37,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -48,6 +48,8 @@ import java.util.function.ToIntFunction;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class RegisterClientStuff {
+    public static List<BakedModel> QUENCHED_ALLAY_VARIANTS = new ArrayList<>();
+
     public static void init() {
         registerSealableDataHolderOverrides(HexItems.FOCUS,
             stack -> HexItems.FOCUS.readIotaTag(stack) != null,
@@ -204,6 +206,8 @@ public class RegisterClientStuff {
         registerer.registerBlockEntityRenderer(HexBlockEntities.SLATE_TILE, BlockEntitySlateRenderer::new);
         registerer.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE,
             BlockEntityAkashicBookshelfRenderer::new);
+        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_TILE,
+            BlockEntityQuenchedAllayRenderer::new);
     }
 
     @FunctionalInterface
@@ -219,12 +223,10 @@ public class RegisterClientStuff {
     }
 
     public static void onModelBake(ModelBakery loader, Map<ResourceLocation, BakedModel> map) {
-        var quenchedName = new ModelResourceLocation(modLoc("quenched_allay"), "");
-        var variants = new ArrayList<BakedModel>(BlockQuenchedAllay.VARIANTS);
         for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
             var variantLoc = modLoc("block/quenched_allay_" + i);
-            variants.add(map.get(variantLoc));
+            var model = map.get(variantLoc);
+            QUENCHED_ALLAY_VARIANTS.add(model);
         }
-        map.put(quenchedName, new GaslightingModel(variants));
     }
 }

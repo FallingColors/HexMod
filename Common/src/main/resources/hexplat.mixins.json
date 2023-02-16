@@ -19,6 +19,7 @@
     "accessor.CriteriaTriggersAccessor"
   ],
   "client": [
+    "accessor.client.AccessorBlockEntityRenderDispatcher",
     "accessor.client.AccessorCompositeRenderType",
     "accessor.client.AccessorEmptyTextureStateShard",
     "accessor.client.AccessorMouseHandler",
