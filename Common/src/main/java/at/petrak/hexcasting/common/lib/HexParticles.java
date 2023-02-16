@@ -25,9 +25,7 @@ public class HexParticles {
     private static final Map<ResourceLocation, ParticleType<?>> PARTICLES = new LinkedHashMap<>();
 
     public static final ConjureParticleOptions.Type CONJURE_PARTICLE = register(
-            "conjure_block_particle", new ConjureParticleOptions.Type(false));
-    public static final ConjureParticleOptions.Type LIGHT_PARTICLE = register(
-            "conjure_light_particle", new ConjureParticleOptions.Type(false));
+        "conjure_particle", new ConjureParticleOptions.Type(false));
 
     private static <O extends ParticleOptions, T extends ParticleType<O>> T register(String id, T particle) {
         var old = PARTICLES.put(modLoc(id), particle);
@@ -39,12 +37,12 @@ public class HexParticles {
 
     public static class FactoryHandler {
         public interface Consumer {
-            <T extends ParticleOptions> void register(ParticleType<T> type, Function<SpriteSet, ParticleProvider<T>> constructor);
+            <T extends ParticleOptions> void register(ParticleType<T> type,
+                Function<SpriteSet, ParticleProvider<T>> constructor);
         }
 
         public static void registerFactories(Consumer consumer) {
             consumer.register(CONJURE_PARTICLE, ConjureParticle.Provider::new);
-            consumer.register(LIGHT_PARTICLE, ConjureParticle.Provider::new);
         }
     }
 }

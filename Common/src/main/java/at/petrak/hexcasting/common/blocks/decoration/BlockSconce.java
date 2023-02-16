@@ -32,7 +32,7 @@ public class BlockSconce extends AmethystBlock {
             var cy = pPos.getY() + 0.5;
             var cz = pPos.getZ() + 0.5;
             int[] colors = {0xff_6f4fab, 0xff_b38ef3, 0xff_cfa0f3, 0xff_cfa0f3, 0xff_fffdd5};
-            pLevel.addParticle(new ConjureParticleOptions(colors[rand.nextInt(colors.length)], true), cx, cy, cz,
+            pLevel.addParticle(new ConjureParticleOptions(colors[rand.nextInt(colors.length)]), cx, cy, cz,
                 rand.triangle(-0.01f, 0.01f), rand.triangle(0.01f, 0.05f), rand.triangle(-0.01f, 0.01f));
             if (rand.nextFloat() < 0.08f) {
                 pLevel.playLocalSound(cx, cy, cz,
