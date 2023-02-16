@@ -110,7 +110,7 @@ dependencies {
     // sodium is causing frustum mixin errors so don't use it
 //    modImplementation "maven.modrinth:sodium:${sodiumVersion}"
     modImplementation "maven.modrinth:lithium:${lithiumVersion}"
-    modImplementation "maven.modrinth:phosphor:${phosphorVersion}"
+    //modImplementation "maven.modrinth:phosphor:${phosphorVersion}"
 }
 
 tasks.withType(JavaCompile) {
