@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.BlockConjured;
 import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
 import at.petrak.hexcasting.common.blocks.BlockFlammable;
+import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicLigature;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
@@ -145,6 +146,9 @@ public class HexBlocks {
             .lightLevel(bs -> (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS)) ? 4 : 0)));
     public static final BlockAkashicLigature AKASHIC_LIGATURE = blockItem("akashic_connector",
         new BlockAkashicLigature(akashicWoodyHard().lightLevel(bs -> 4)));
+
+    public static final BlockQuenchedAllay QUENCHED_ALLAY = blockItem("quenched_allay",
+        new BlockQuenchedAllay(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
 
     // Decoration?!
     public static final Block SLATE_BLOCK = blockItem("slate_block", new Block(slateish().strength(2f, 4f)));

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.GaslightingModel;
 import net.minecraft.client.Minecraft;
 
 public class ClientTickCounter {
@@ -7,7 +8,7 @@ public class ClientTickCounter {
     public static float partialTicks = 0.0F;
 
     public static float getTotal() {
-        return (float)ticksInGame + partialTicks;
+        return (float) ticksInGame + partialTicks;
     }
 
     public static void renderTickStart(float renderTickTime) {
@@ -18,6 +19,7 @@ public class ClientTickCounter {
         if (!Minecraft.getInstance().isPaused()) {
             ++ticksInGame;
             partialTicks = 0.0F;
+            GaslightingModel.postFrameCheckRendered();
         }
     }
 }

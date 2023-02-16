@@ -1,4 +1,4 @@
-// 1.19.2	2022-11-05T14:30:43.69127	Block States: hexcasting
+// 1.19.2	2023-02-15T18:25:55.007347158	Block States: hexcasting
 901e38574bdaa40ea4a0f6e773a88a95d9c03e55 assets/hexcasting/blockstates/akashic_bookshelf.json
 32a77ef668198002563d68be35a24fa93c8d454a assets/hexcasting/blockstates/akashic_connector.json
 85080ce0a0387583a839e4788517d675a1a35e24 assets/hexcasting/blockstates/akashic_record.json
@@ -134,6 +134,10 @@ de2a5fd9b621e5086852f2191c360d9274b9b10c assets/hexcasting/models/block/impetus_
 7ac5cb74f321b061c1e93b859540b508c7dcdaa4 assets/hexcasting/models/block/impetus_storedplayer_lit_south.json
 46c29660e3fa78aeaa264268b43017f4b0c0d655 assets/hexcasting/models/block/impetus_storedplayer_lit_up.json
 4d22557274958179da4671c43c2f387336a701a2 assets/hexcasting/models/block/impetus_storedplayer_lit_west.json
+9af2754cb1e53eeaa85618cf92651b4878cf62b1 assets/hexcasting/models/block/quenched_allay_0.json
+de4ff723b4332d4e26bd01f74e0485e28c9a2178 assets/hexcasting/models/block/quenched_allay_1.json
+4c29163e07f3a903017e38a9cc102f4b37db20b1 assets/hexcasting/models/block/quenched_allay_2.json
+487d34cd8e70b3e468337228b74af5c1b4d14c53 assets/hexcasting/models/block/quenched_allay_3.json
 e1e7ce0bcc08a53b3e6634f7e5b7a6cf488cf45b assets/hexcasting/models/block/redstone_directrix_powered_dim_down.json
 fb22e529f1ca638b7e952176694ab1912eb4274b assets/hexcasting/models/block/redstone_directrix_powered_dim_east.json
 a5a53ec6a3cd54592dcb224245a4515a2b3b72ed assets/hexcasting/models/block/redstone_directrix_powered_dim_north.json
@@ -185,6 +189,10 @@ d4a109488c27fc5d60e9054cd1485f1982040ff3 assets/hexcasting/models/item/ancient_s
 40e22b81ff5a65154cbb82e2a17a19abbc898e63 assets/hexcasting/models/item/impetus_look.json
 485b2fdbe038c1671f7d67747e8d640a2f171266 assets/hexcasting/models/item/impetus_rightclick.json
 064caa7c4c05c5f0736fe09745ad42eb4515e767 assets/hexcasting/models/item/impetus_storedplayer.json
+bab05b6c9632359d9a2961221d18bf63abccf803 assets/hexcasting/models/item/quenched_allay_0.json
+2df419ac393b73acc2c679394d89b38db5af4b04 assets/hexcasting/models/item/quenched_allay_1.json
+9e0bcaf7d32799af125ce3487f8a6cdd03bf7c49 assets/hexcasting/models/item/quenched_allay_2.json
+da748fddb87f4130b21a30f70f11159f98b0125d assets/hexcasting/models/item/quenched_allay_3.json
 769dcfb4a504e4dcd28a43cf603a18c66f57e594 assets/hexcasting/models/item/scroll_paper.json
 222e40e5754f5cb5a04321c4ed4cee27748c9224 assets/hexcasting/models/item/scroll_paper_lantern.json
 145db42b0d90bdb4fd82f5a7eea229be4c0f9675 assets/hexcasting/models/item/slate_block.json

@@ -12,6 +12,7 @@ import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.interop.HexInterop
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.*
@@ -67,5 +68,6 @@ object FabricHexClientInitializer : ClientModInitializer {
         RegisterClientStuff.registerColorProviders(
             { colorizer, item -> ColorProviderRegistry.ITEM.register(colorizer, item) },
             { colorizer, block -> ColorProviderRegistry.BLOCK.register(colorizer, block) })
+        ModelLoadingRegistry.INSTANCE.registerModelProvider(RegisterClientStuff::onModelRegister)
     }
 }

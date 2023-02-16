@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.interop.HexInterop;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.particle.ParticleProvider;
@@ -103,5 +104,16 @@ public class ForgeHexClientInitializer {
     @SubscribeEvent
     public static void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent evt) {
         evt.register(PatternTooltip.class, PatternTooltipComponent::new);
+    }
+
+    @SubscribeEvent
+    public static void onModelRegister(ModelEvent.RegisterAdditional evt) {
+        var recMan = Minecraft.getInstance().getResourceManager();
+        RegisterClientStuff.onModelRegister(recMan, evt::register);
+    }
+
+    @SubscribeEvent
+    public static void onModelBake(ModelEvent.BakingCompleted evt) {
+        RegisterClientStuff.onModelBake(evt.getModelBakery(), evt.getModels());
     }
 }
