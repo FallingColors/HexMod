@@ -757,7 +757,7 @@
 
   "hexcasting.entry.thought_knot": "结念绳",
   "hexcasting.page.thought_knot.1": "健忘者常在手指上缠绕丝线以助记忆。我也坚信我的咒法技艺能活用这种做法。以特定方式绑出的绳结应该能稳定存储一个 iota，且能独立于栈存在。$(br2)我将其称为“$(item)结念绳/$”。",
-  "hexcasting.page.thought_knot.2": "在初合成时，它的存储空间内没有 iota。在另一只手持有$(item)结念绳/$时，绘制$(l:patterns/readwrite#hexcasting:write)$(action)书吏之策略/$就会将栈顶 iota 移除并存入$(item)结念绳/$。绘制$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$则会将$(item)结念绳/$复制出来并压入栈顶。$(br2)一旦将 iota 写入$(item)结念绳/$，绳结本身便不再能解开。其中 iota 可被随意读取，但不可被清除或覆写。不过还好，这些绳结十分易得。",
+  "hexcasting.page.thought_knot.2": "在初合成时，它的存储空间内没有 iota。在另一只手持有$(item)结念绳/$时，绘制$(l:patterns/readwrite#hexcasting:write)$(action)书吏之策略/$就会将栈顶 iota 移除并存入$(item)结念绳/$。绘制$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$则会将$(item)结念绳/$中 iota 复制出来并压入栈顶。$(br2)一旦将 iota 写入$(item)结念绳/$，绳结本身便不再能解开。其中 iota 可被随意读取，但不可被清除或覆写。不过还好，这些绳结十分易得。",
   "hexcasting.page.thought_knot.3": "另外，如果我在$(item)结念绳/$中写入一个实体，然后在该实体死亡或消失后尝试复制，则$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$会压入一个 $(l:casting/influences)$(thing)Null/$。",
   "hexcasting.page.thought_knot.crafting.desc": "$(italic)别人要是看到你带着块牌子，上面写着“本人风度翩翩，品貌非凡”，你又会有什么感想？/$",
   
