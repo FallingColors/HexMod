@@ -1,4 +1,4 @@
-// 1.19.2	2023-02-16T00:47:45.995002865	Block States: hexcasting
+// 1.19.2	2023-02-16T14:18:57.037640645	Block States: hexcasting
 901e38574bdaa40ea4a0f6e773a88a95d9c03e55 assets/hexcasting/blockstates/akashic_bookshelf.json
 32a77ef668198002563d68be35a24fa93c8d454a assets/hexcasting/blockstates/akashic_connector.json
 85080ce0a0387583a839e4788517d675a1a35e24 assets/hexcasting/blockstates/akashic_record.json
@@ -134,6 +134,7 @@ de2a5fd9b621e5086852f2191c360d9274b9b10c assets/hexcasting/models/block/impetus_
 7ac5cb74f321b061c1e93b859540b508c7dcdaa4 assets/hexcasting/models/block/impetus_storedplayer_lit_south.json
 46c29660e3fa78aeaa264268b43017f4b0c0d655 assets/hexcasting/models/block/impetus_storedplayer_lit_up.json
 4d22557274958179da4671c43c2f387336a701a2 assets/hexcasting/models/block/impetus_storedplayer_lit_west.json
+9af2754cb1e53eeaa85618cf92651b4878cf62b1 assets/hexcasting/models/block/quenched_allay.json
 9af2754cb1e53eeaa85618cf92651b4878cf62b1 assets/hexcasting/models/block/quenched_allay_0.json
 de4ff723b4332d4e26bd01f74e0485e28c9a2178 assets/hexcasting/models/block/quenched_allay_1.json
 4c29163e07f3a903017e38a9cc102f4b37db20b1 assets/hexcasting/models/block/quenched_allay_2.json

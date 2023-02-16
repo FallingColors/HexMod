@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
@@ -174,7 +175,8 @@ public class HexBlocks {
         new BlockSconce(BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.COLOR_PURPLE)
             .sound(SoundType.AMETHYST)
             .strength(1f)
-            .lightLevel($ -> 15)));
+            .lightLevel($ -> 15)),
+        HexItems.props().rarity(Rarity.RARE));
 
     public static final BlockAkashicLog EDIFIED_LOG = blockItem("edified_log",
         new BlockAkashicLog(edifiedWoody()));

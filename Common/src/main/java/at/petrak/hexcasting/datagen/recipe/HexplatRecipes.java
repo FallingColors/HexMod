@@ -9,7 +9,6 @@ import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.SealThingsRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTagIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTypeIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerIngredient;
 import at.petrak.hexcasting.datagen.HexAdvancements;
@@ -25,8 +24,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -418,16 +415,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes, modLoc("brainsweep/akashic_record"));
 
         // Temporary tests
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(BlockTags.SMALL_FLOWERS),
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
             new EntityTypeIngredient(EntityType.ALLAY),
-            Blocks.AMETHYST_CLUSTER.defaultBlockState(), MediaConstants.SHARD_UNIT)
+            HexBlocks.QUENCHED_ALLAY.defaultBlockState(), MediaConstants.CRYSTAL_UNIT)
             .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/testing/flowey_the_flower"));
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.SCAFFOLDING),
-            new EntityTagIngredient(EntityTypeTags.SKELETONS),
-            Blocks.BONE_BLOCK.defaultBlockState(), MediaConstants.SHARD_UNIT)
-            .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/testing/bad_to_the_bone"));
+            .save(recipes, modLoc("brainsweep/quench_allay"));
 
         // Create compat
         this.conditions.apply(new CreateCrushingRecipeBuilder()

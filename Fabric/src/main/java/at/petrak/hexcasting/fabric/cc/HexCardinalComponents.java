@@ -2,13 +2,15 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
+import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.fabric.cc.adimpl.*;
 import dev.onyxstudios.cca.api.v3.component.ComponentFactory;
@@ -91,6 +93,9 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         ));
         registry.register(HexItems.CHARGED_AMETHYST, MEDIA_HOLDER, s -> new CCMediaHolder.Static(
             () -> HexConfig.common().chargedCrystalMediaAmount(), ADMediaHolder.CHARGED_AMETHYST_PRIORITY, s
+        ));
+        registry.register(HexBlocks.QUENCHED_ALLAY.asItem(), MEDIA_HOLDER, s -> new CCMediaHolder.Static(
+            () -> MediaConstants.QUENCHED_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, s
         ));
 
         registry.register(i -> i instanceof HexHolderItem, HEX_HOLDER, CCHexHolder.ItemBased::new);

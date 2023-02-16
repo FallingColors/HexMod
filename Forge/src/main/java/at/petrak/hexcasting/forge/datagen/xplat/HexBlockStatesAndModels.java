@@ -271,6 +271,8 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         simpleBlock(HexBlocks.CONJURED_BLOCK, conjuredModel);
         simpleBlock(HexBlocks.CONJURED_LIGHT, conjuredModel);
 
+        // for the break particles
+        models().cubeAll("quenched_allay", modLoc("block/quenched_allay_0"));
         var quenchedItemBuilder = itemModels().getBuilder("quenched_allay");
         for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
             var name = "quenched_allay_" + i;

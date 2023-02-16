@@ -13,6 +13,7 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
@@ -111,6 +112,27 @@ public class HexLootTables extends PaucalLootTableProvider {
             .withPool(dustPoolWhenBad)
             .withPool(isThatAnMFingBrandonSandersonReference)
             .withPool(isThatAnMFingBadBrandonSandersonReference));
+
+        // to make one quenched allay requires 5 shards, and then 2 shard's worth of any media.
+        // TODO add fortune?
+        var quenchedUnsilkDust = LootPool.lootPool()
+            .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST))
+            .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 4)))
+            .when(noSilkTouchCond);
+        var quenchedUnsilkShard = LootPool.lootPool()
+            .add(LootItem.lootTableItem(Items.AMETHYST_SHARD))
+            .apply(SetItemCountFunction.setCount(UniformGenerator.between(4, 8)))
+            .when(noSilkTouchCond);
+        var quenchedUnsilkCrystal = LootPool.lootPool()
+            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
+            .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1)))
+            .when(noSilkTouchCond);
+        var quenchedSilk = LootPool.lootPool()
+            .add(LootItem.lootTableItem(HexBlocks.QUENCHED_ALLAY.asItem()))
+            .when(noSilkTouchCond.invert());
+        blockTables.put(HexBlocks.QUENCHED_ALLAY, LootTable.lootTable()
+            .withPool(quenchedUnsilkDust).withPool(quenchedUnsilkShard).withPool(quenchedUnsilkCrystal)
+            .withPool(quenchedSilk));
     }
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {
