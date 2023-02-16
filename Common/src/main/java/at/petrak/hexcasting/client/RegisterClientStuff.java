@@ -66,6 +66,10 @@ public class RegisterClientStuff {
                 }
             });
 
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(HexBlocks.QUENCHED_ALLAY.asItem(),
+            BlockQuenchedAllay.GASLIGHTING_PRED, (stack, level, holder, holderID) ->
+                Math.abs(BlockEntityQuenchedAllayRenderer.getGaslightingAmount() % BlockQuenchedAllay.VARIANTS));
+
         registerPackagedSpellOverrides(HexItems.CYPHER);
         registerPackagedSpellOverrides(HexItems.TRINKET);
         registerPackagedSpellOverrides(HexItems.ARTIFACT);
@@ -110,6 +114,7 @@ public class RegisterClientStuff {
         x.setRenderLayer(HexBlocks.CITRINE_EDIFIED_LEAVES, RenderType.cutoutMipped());
 
         x.setRenderLayer(HexBlocks.AKASHIC_RECORD, RenderType.translucent());
+        x.setRenderLayer(HexBlocks.QUENCHED_ALLAY, RenderType.translucent());
 
         x.registerEntityRenderer(HexEntities.WALL_SCROLL, WallScrollRenderer::new);
 
