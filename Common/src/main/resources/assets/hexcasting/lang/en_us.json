@@ -297,6 +297,8 @@
   "hexcasting.subtitles.impetus.fletcher.tick": "Fletcher Impetus ticks",
   "hexcasting.subtitles.impetus.cleric.register": "Cleric Impetus dings",
   "hexcasting.subtitles.lore_fragment.read": "Read lore fragment",
+  "hexcasting.subtitles.flight.ambience": "Player flies",
+  "hexcasting.subtitles.flight.finish": "Flight ends",
   
   "_comment": "hexcasting.spell.book keys override the name of a pattern in the patchouli book if present",
   

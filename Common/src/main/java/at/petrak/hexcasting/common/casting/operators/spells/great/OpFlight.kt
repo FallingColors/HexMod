@@ -11,10 +11,12 @@ import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.player.FlightAbility
 import at.petrak.hexcasting.common.lib.HexItems
+import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.Util
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
@@ -112,6 +114,10 @@ class OpFlight(val type: Type) : SpellAction {
                         abilities.mayfly = false
                         player.onUpdateAbilities()
                     }
+                    player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_FINISH, SoundSource.PLAYERS, 2f, 1f)
+                    val superDangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), Math.PI, 0.4, count = 20)
+                    superDangerSpray.sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!), Util.NIL_UUID))
+                    superDangerSpray.sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.BLACK]!!), Util.NIL_UUID))
                 } else {
                     if (!player.abilities.mayfly) {
                         player.abilities.mayfly = true
@@ -139,19 +145,16 @@ class OpFlight(val type: Type) : SpellAction {
                     val color = IXplatAbstractions.INSTANCE.getColorizer(player)
 
                     // TODO: have the particles go in the opposite direction of the velocity?
-                    ParticleSpray(player.position(), Vec3(0.0, -0.4, 0.0), Math.PI / 4.0, 0.4, count = okParticleCount)
+                    ParticleSpray(player.position(), Vec3(0.0, -0.6, 0.0), Math.PI * 0.3, 0.6, count = okParticleCount)
                         .sprayParticles(player.getLevel(), color)
-                    val dangerSpray = ParticleSpray(player.position(), Vec3(0.0, -0.2, 0.0), Math.PI * 0.75, 0.3, count = 0)
+                    val dangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), Math.PI * 0.75, 0.3, count = 0)
                     dangerSpray.copy(count = oneDangerParticleCount)
                         .sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.BLACK]!!), Util.NIL_UUID))
                     dangerSpray.copy(count = oneDangerParticleCount)
                         .sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!), Util.NIL_UUID))
 
-                    if (danger >= 0.95) {
-                        val superDangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), Math.PI, 0.4, count = 10)
-                        superDangerSpray.sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!), Util.NIL_UUID))
-                        superDangerSpray.sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.BLACK]!!), Util.NIL_UUID))
-                    }
+                    if (player.level.random.nextFloat() < 0.02)
+                        player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_AMBIENCE, SoundSource.PLAYERS, 0.2f, 1f)
                 }
             }
         }
