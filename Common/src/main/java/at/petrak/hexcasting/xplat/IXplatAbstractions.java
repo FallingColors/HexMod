@@ -77,7 +77,7 @@ public interface IXplatAbstractions {
 
     void setSentinel(Player target, Sentinel sentinel);
 
-    void setFlight(ServerPlayer target, FlightAbility flight);
+    void setFlight(ServerPlayer target, @Nullable FlightAbility flight);
 
     void setHarness(ServerPlayer target, @Nullable CastingHarness harness);
 
@@ -85,7 +85,7 @@ public interface IXplatAbstractions {
 
     boolean isBrainswept(Mob mob);
 
-    FlightAbility getFlight(ServerPlayer player);
+    @Nullable FlightAbility getFlight(ServerPlayer player);
 
     FrozenColorizer getColorizer(Player player);
 

@@ -120,6 +120,8 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    // caelus elytra
+    maven { url = "https://maven.theillusivec4.top" }
 }
 
 dependencies {

@@ -345,8 +345,17 @@ public class HexActions {
 
     public static final ActionRegistryEntry LIGHTNING = make("lightning",
         new ActionRegistryEntry(HexPattern.fromAngles("waadwawdaaweewq", HexDir.EAST), OpLightning.INSTANCE));
+    // TODO: turn this into elytra flight
     public static final ActionRegistryEntry FLIGHT = make("flight",
-        new ActionRegistryEntry(HexPattern.fromAngles("eawwaeawawaa", HexDir.NORTH_WEST), OpFlight.INSTANCE));
+        new ActionRegistryEntry(HexPattern.fromAngles("eawwaeawawaa", HexDir.NORTH_WEST), OpLightning.INSTANCE));
+
+    public static final ActionRegistryEntry FLIGHT$RANGE = make("flight/range",
+        new ActionRegistryEntry(HexPattern.fromAngles("awawaawq", HexDir.SOUTH_WEST),
+            new OpFlight(OpFlight.Type.LimitRange)));
+    public static final ActionRegistryEntry FLIGHT$TIME = make("flight/time",
+        new ActionRegistryEntry(HexPattern.fromAngles("dwdwdewq", HexDir.NORTH_EAST),
+            new OpFlight(OpFlight.Type.LimitTime)));
+
     public static final ActionRegistryEntry CREATE_LAVA = make("create_lava",
         new ActionRegistryEntry(HexPattern.fromAngles("eaqawqadaqd", HexDir.EAST), new OpCreateFluid(
             MediaConstants.CRYSTAL_UNIT,

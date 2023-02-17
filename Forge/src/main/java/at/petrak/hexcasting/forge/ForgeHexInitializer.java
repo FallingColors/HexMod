@@ -176,8 +176,10 @@ public class ForgeHexInitializer {
             BrainsweepingEvents.copyBrainsweepPostTransformation(evt.getEntity(), evt.getOutcome()));
 
         evBus.addListener((LivingEvent.LivingTickEvent evt) -> {
-            OpFlight.INSTANCE.tickDownFlight(evt.getEntity());
-            ItemLens.tickLens(evt.getEntity());
+            if (evt.getEntity() instanceof ServerPlayer splayer) {
+                OpFlight.tickDownFlight(splayer);
+                ItemLens.tickLens(splayer);
+            }
         });
 
         evBus.addListener((TickEvent.LevelTickEvent evt) -> {

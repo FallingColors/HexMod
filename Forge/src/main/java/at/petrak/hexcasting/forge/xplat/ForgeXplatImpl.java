@@ -139,8 +139,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public void setFlight(ServerPlayer player, FlightAbility flight) {
         CompoundTag tag = player.getPersistentData();
-        tag.putBoolean(TAG_FLIGHT_ALLOWED, flight.allowed());
-        if (flight.allowed()) {
+        tag.putBoolean(TAG_FLIGHT_ALLOWED, flight != null);
+        if (flight != null) {
             tag.putInt(TAG_FLIGHT_TIME, flight.timeLeft());
             tag.put(TAG_FLIGHT_ORIGIN, HexUtils.serializeToNBT(flight.origin()));
             tag.putString(TAG_FLIGHT_DIMENSION, flight.dimension().location().toString());
@@ -211,9 +211,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             var radius = tag.getDouble(TAG_FLIGHT_RADIUS);
             var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
                 new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
-            return new FlightAbility(true, timeLeft, dimension, origin, radius);
+            return new FlightAbility(timeLeft, dimension, origin, radius);
         }
-        return FlightAbility.deny();
+        return null;
     }
 
     @Override
