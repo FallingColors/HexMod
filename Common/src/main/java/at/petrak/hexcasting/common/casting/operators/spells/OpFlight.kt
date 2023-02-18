@@ -139,9 +139,9 @@ class OpFlight(val type: Type) : SpellAction {
                     val color = IXplatAbstractions.INSTANCE.getColorizer(player)
 
                     // TODO: have the particles go in the opposite direction of the velocity?
-                    ParticleSpray(player.position(), Vec3(0.0, -0.6, 0.0), Math.PI * 0.3, 0.6, count = okParticleCount)
+                    ParticleSpray(player.position(), Vec3(0.0, -0.6, 0.0), 0.6, Math.PI * 0.3, count = okParticleCount)
                         .sprayParticles(player.getLevel(), color)
-                    val dangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), Math.PI * 0.75, 0.3, count = 0)
+                    val dangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), 0.3, Math.PI * 0.75, count = 0)
                     dangerSpray.copy(count = oneDangerParticleCount)
                         .sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.BLACK]!!), Util.NIL_UUID))
                     dangerSpray.copy(count = oneDangerParticleCount)
