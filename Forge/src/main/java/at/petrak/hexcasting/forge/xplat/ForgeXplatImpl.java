@@ -167,6 +167,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             tag.remove(TAG_ALTIORA_ALLOWED);
         }
 
+        // The elytra ability is done with an event on fabric
         var elytraing = CaelusApi.getInstance().getFlightAttribute();
         var inst = player.getAttributes().getInstance(elytraing);
         if (altiora != null) {
@@ -243,7 +244,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public AltioraAbility getAltiora(ServerPlayer player) {
+    public AltioraAbility getAltiora(Player anyPlayer) {
+        if (!(anyPlayer instanceof ServerPlayer player)) {
+            // the check only needs to happen client-side on fabric
+            // which is great, cause it's not even synced on forge
+            return null;
+        }
         CompoundTag tag = player.getPersistentData();
         boolean allowed = tag.getBoolean(TAG_ALTIORA_ALLOWED);
         if (allowed) {

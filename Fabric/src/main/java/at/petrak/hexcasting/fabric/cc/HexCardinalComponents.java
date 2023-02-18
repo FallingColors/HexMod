@@ -69,6 +69,9 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         registry.registerFor(ServerPlayer.class, HARNESS, CCHarness::new);
         registry.registerFor(ServerPlayer.class, PATTERNS, CCPatterns::new);
 
+        // On Fabric, this is needed on the client because the c/s need to agree on when wings are being deployed
+        registry.registerForPlayers(ALTIORA, CCAltiora::new, RespawnCopyStrategy.LOSSLESS_ONLY);
+
         registry.registerFor(ItemEntity.class, IOTA_HOLDER, wrapItemEntityDelegate(
             ItemDelegatingEntityIotaHolder.ToItemEntity::new));
         registry.registerFor(ItemFrame.class, IOTA_HOLDER, wrapItemEntityDelegate(

@@ -90,7 +90,7 @@ public interface IXplatAbstractions {
 
     @Nullable FlightAbility getFlight(ServerPlayer player);
 
-    @Nullable AltioraAbility getAltiora(ServerPlayer player);
+    @Nullable AltioraAbility getAltiora(Player player);
 
     FrozenColorizer getColorizer(Player player);
 

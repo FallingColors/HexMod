@@ -2,21 +2,20 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import dev.onyxstudios.cca.api.v3.component.Component;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
-public class CCAltiora implements Component {
+public class CCAltiora implements Component, AutoSyncedComponent {
     public static final String
         TAG_ALLOWED = "allowed",
         TAG_GRACE = "grace_period";
 
-    private final ServerPlayer owner;
     @Nullable
     private AltioraAbility altiora = null;
 
-    public CCAltiora(ServerPlayer owner) {
-        this.owner = owner;
+    public CCAltiora(Player owner) {
     }
 
 

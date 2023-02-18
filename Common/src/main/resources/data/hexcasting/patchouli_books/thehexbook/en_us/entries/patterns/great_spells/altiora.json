@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.action.hexcasting:flight",
   "category": "hexcasting:patterns/great_spells",
-  "icon": "minecraft:feather",
+  "icon": "minecraft:elytra",
   "sortnum": 2,
   "advancement": "hexcasting:root",
   "read_by_default": true,
@@ -12,11 +12,11 @@
       "anchor": "hexcasting:flight",
       "input": "entity, number, number",
       "output": "",
-      "text": "hexcasting.page.flight.1"
+      "text": "hexcasting.page.altiora.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.flight.2"
+      "text": "hexcasting.page.altiora.2"
     }
   ]
 }

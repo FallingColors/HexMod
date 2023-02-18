@@ -36,8 +36,8 @@ class OpFlight(val type: Type) : SpellAction {
 
         val cost = when (this.type) {
             Type.LimitRange -> theArg * MediaConstants.DUST_UNIT
-            // A minute of flight should cost a charged crystal?
-            Type.LimitTime -> theArg / 60.0 * MediaConstants.CRYSTAL_UNIT
+            // A second of flight should cost 1 shard
+            Type.LimitTime -> theArg * MediaConstants.SHARD_UNIT
         }.roundToInt()
 
         // Convert to ticks
@@ -73,22 +73,16 @@ class OpFlight(val type: Type) : SpellAction {
             IXplatAbstractions.INSTANCE.setFlight(target, flight)
 
             target.abilities.mayfly = true
-            target.abilities.flying = true
-            // On fabric it only seems to make them actually fly once every other time so let's try this
             target.onUpdateAbilities()
-            target.onUpdateAbilities()
-            // Launch the player into the air to really emphasize the flight
-            target.push(0.0, 1.0, 0.0)
-            target.hurtMarked = true // Whyyyyy
         }
     }
 
 
     companion object {
-        // danger particles up to 1 block from the edge
-        private val DIST_DANGER_THRESHOLD = 2.0
+        // blocks from the edge
+        private val DIST_DANGER_THRESHOLD = 4.0
 
-        // danger particles up to 7 seconds from the limit
+        // seconds left
         private val TIME_DANGER_THRESHOLD = 7.0 * 20.0
 
         @JvmStatic
@@ -155,6 +149,15 @@ class OpFlight(val type: Type) : SpellAction {
 
                     if (player.level.random.nextFloat() < 0.02)
                         player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_AMBIENCE, SoundSource.PLAYERS, 0.2f, 1f)
+
+                    if (flight.radius >= 0.0) {
+                        // Show the origin
+                        val spoofedOrigin = flight.origin.add(0.0, 1.0, 0.0)
+                        ParticleSpray(spoofedOrigin, Vec3(0.0, 1.0, 0.0), 0.5, Math.PI * 0.1, count = 5)
+                            .sprayParticles(player.getLevel(), color)
+                        ParticleSpray(spoofedOrigin, Vec3(0.0, -1.0, 0.0), 1.5, Math.PI * 0.25, count = 5)
+                            .sprayParticles(player.getLevel(), color)
+                    }
                 }
             }
         }

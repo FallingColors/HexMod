@@ -49,8 +49,8 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
@@ -108,7 +108,7 @@ object FabricHexInitializer : ModInitializer {
         }
 
         EntityElytraEvents.CUSTOM.register { target, _ ->
-            if (target is ServerPlayer) {
+            if (target is Player) {
                 val altiora = IXplatAbstractions.INSTANCE.getAltiora(target)
                 altiora != null
             } else {
