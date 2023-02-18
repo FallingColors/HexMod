@@ -54,6 +54,11 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
+    public InteractionHand castingHand() {
+        return this.castingHand;
+    }
+
+    @Override
     public FrozenColorizer getColorizer() {
         return null;
     }

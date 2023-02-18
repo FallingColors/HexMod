@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
@@ -82,7 +83,7 @@ public interface IXplatAbstractions {
 
     void setAltiora(Player target, @Nullable AltioraAbility altiora);
 
-    void setHarness(ServerPlayer target, @Nullable CastingVM harness);
+    void setStaffcastImage(ServerPlayer target, @Nullable CastingImage image);
 
     void setPatterns(ServerPlayer target, List<ResolvedPattern> patterns);
 

@@ -40,7 +40,6 @@ class GuiSpellcasting constructor(
     private val handOpenedWith: InteractionHand,
     private var patterns: MutableList<ResolvedPattern>,
     private var cachedStack: List<CompoundTag>,
-    private var cachedParens: List<CompoundTag>,
     private var cachedRavenmind: CompoundTag?,
     private var parenCount: Int,
 ) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
@@ -67,10 +66,8 @@ class GuiSpellcasting constructor(
             it.type = info.resolutionType
         }
 
-        this.cachedStack = info.stack
-        this.cachedParens = info.parenthesized
+        this.cachedStack = info.stackDescs
         this.cachedRavenmind = info.ravenmind
-        this.parenCount = info.parenCount
         this.calculateIotaDisplays()
     }
 

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;

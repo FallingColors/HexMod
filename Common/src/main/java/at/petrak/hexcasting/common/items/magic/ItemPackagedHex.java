@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.casting.env.PackagedItemCastEnv;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -108,9 +108,9 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
             return InteractionResultHolder.fail(stack);
         }
         var sPlayer = (ServerPlayer) player;
-        var ctx = new CastingEnvironment(sPlayer, usedHand, CastingEnvironment.CastSource.PACKAGED_HEX);
-        var harness = new CastingVM(ctx);
-        var info = harness.queueAndExecuteIotas(instrs, sPlayer.getLevel());
+        var ctx = new PackagedItemCastEnv(sPlayer, usedHand);
+        var harness = CastingVM.empty(ctx);
+        harness.queueAndExecuteIotas(instrs, sPlayer.getLevel());
 
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 
@@ -131,11 +131,6 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         } else {
             return InteractionResultHolder.success(stack);
         }
-    }
-
-    @Override
-    public int getUseDuration(ItemStack pStack) {
-        return 16;
     }
 
     @Override

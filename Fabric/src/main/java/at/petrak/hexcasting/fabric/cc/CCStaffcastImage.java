@@ -8,13 +8,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import org.jetbrains.annotations.Nullable;
 
-public class CCHarness implements Component {
+public class CCStaffcastImage implements Component {
     public static final String TAG_HARNESS = "harness";
 
     private final ServerPlayer owner;
     private CompoundTag lazyLoadedTag = new CompoundTag();
 
-    public CCHarness(ServerPlayer owner) {
+    public CCStaffcastImage(ServerPlayer owner) {
         this.owner = owner;
     }
 

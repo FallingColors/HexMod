@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
@@ -170,7 +171,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
         cc.setAltiora(altiora);
     }
 
-    public void setHarness(ServerPlayer target, CastingHarness harness) {
+    public void setHarness(ServerPlayer target, CastingImage image) {
         var cc = HexCardinalComponents.HARNESS.get(target);
         cc.setHarness(harness);
     }

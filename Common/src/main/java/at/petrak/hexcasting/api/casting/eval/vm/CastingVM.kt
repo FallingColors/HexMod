@@ -27,7 +27,6 @@ import net.minecraft.server.level.ServerLevel
  * [CastingEnvironment] to affect the world.
  */
 class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
-
     /**
      * Execute a single iota.
      */
@@ -229,11 +228,10 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
         }
     }
 
-    fun generateDescs(): Pair<List<Component>, Component?> {
-        val stackDescs = this.image.stack.map { it.display() }
+    fun generateDescs(): Pair<List<CompoundTag>, CompoundTag?> {
+        val stackDescs = this.image.stack.map { IotaType.serialize(it) }
         val ravenmind = if (this.image.userData.contains(HexAPI.RAVENMIND_USERDATA)) {
-            val tag = this.image.userData.getCompound(HexAPI.RAVENMIND_USERDATA)
-            IotaType.getDisplay(tag)
+            this.image.userData.getCompound(HexAPI.RAVENMIND_USERDATA)
         } else null
         return Pair(stackDescs, ravenmind)
     }
@@ -357,4 +355,11 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
     data class TempControllerInfo(
         var earlyExit: Boolean,
     )
+
+    companion object {
+        @JvmStatic
+        fun empty(env: CastingEnvironment): CastingVM {
+            return CastingVM(CastingImage(), env)
+        }
+    }
 }

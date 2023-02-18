@@ -77,10 +77,10 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
         ExecutionClientView clientInfo = harness.queueAndExecuteIota(new PatternIota(msg.pattern()), sender.getLevel());
 
         if (clientInfo.isStackClear()) {
-            IXplatAbstractions.INSTANCE.setHarness(sender, null);
+            IXplatAbstractions.INSTANCE.setStaffcastImage(sender, null);
             IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
         } else {
-            IXplatAbstractions.INSTANCE.setHarness(sender, harness);
+            IXplatAbstractions.INSTANCE.setStaffcastImage(sender, harness);
             if (!resolvedPatterns.isEmpty()) {
                 resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
             }

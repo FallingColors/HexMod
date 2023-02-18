@@ -214,7 +214,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setHarness(ServerPlayer player, CastingVM harness) {
+    public void setStaffcastImage(ServerPlayer player, CastingVM harness) {
         player.getPersistentData().put(TAG_HARNESS, harness == null ? new CompoundTag() : harness.serializeToNBT());
     }
 
