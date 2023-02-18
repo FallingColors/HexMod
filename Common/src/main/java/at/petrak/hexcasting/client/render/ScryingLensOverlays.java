@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.client;
+package at.petrak.hexcasting.client.render;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;

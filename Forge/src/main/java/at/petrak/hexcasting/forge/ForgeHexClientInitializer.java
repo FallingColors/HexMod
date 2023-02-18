@@ -5,6 +5,7 @@ import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers;
+import at.petrak.hexcasting.client.render.HexModelLayers;
 import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.HexParticles;
@@ -115,5 +116,10 @@ public class ForgeHexClientInitializer {
     @SubscribeEvent
     public static void onModelBake(ModelEvent.BakingCompleted evt) {
         RegisterClientStuff.onModelBake(evt.getModelBakery(), evt.getModels());
+    }
+
+    @SubscribeEvent
+    public static void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions evt) {
+        HexModelLayers.init(evt::registerLayerDefinition);
     }
 }

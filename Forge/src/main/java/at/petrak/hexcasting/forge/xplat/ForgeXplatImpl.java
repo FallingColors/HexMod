@@ -158,7 +158,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setAltiora(ServerPlayer player, @Nullable AltioraAbility altiora) {
+    public void setAltiora(Player player, @Nullable AltioraAbility altiora) {
         CompoundTag tag = player.getPersistentData();
         tag.putBoolean(TAG_ALTIORA_ALLOWED, altiora != null);
         if (altiora != null) {
@@ -177,6 +177,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             }
         } else {
             inst.removeModifier(ALTIORA_ATTRIBUTE_ID);
+        }
+
+        if (player instanceof ServerPlayer serverPlayer) {
+            CapSyncers.syncAltiora(serverPlayer);
         }
     }
 

@@ -166,10 +166,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setAltiora(ServerPlayer target, @Nullable AltioraAbility altiora) {
+    public void setAltiora(Player target, @Nullable AltioraAbility altiora) {
         var cc = HexCardinalComponents.ALTIORA.get(target);
         cc.setAltiora(altiora);
-        HexCardinalComponents.ALTIORA.sync(target);
     }
 
     @Override

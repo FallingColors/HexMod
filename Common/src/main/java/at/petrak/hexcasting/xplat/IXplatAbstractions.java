@@ -80,7 +80,7 @@ public interface IXplatAbstractions {
 
     void setFlight(ServerPlayer target, @Nullable FlightAbility flight);
 
-    void setAltiora(ServerPlayer target, @Nullable AltioraAbility altiora);
+    void setAltiora(Player target, @Nullable AltioraAbility altiora);
 
     void setHarness(ServerPlayer target, @Nullable CastingHarness harness);
 

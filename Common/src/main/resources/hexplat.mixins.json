@@ -26,6 +26,6 @@
     "accessor.client.AccessorRenderStateShard",
     "accessor.client.AccessorRenderType",
     "client.MixinClientLevel",
-    "client.MixinElytraLayer"
+    "client.MixinPlayerRenderer"
   ]
 }

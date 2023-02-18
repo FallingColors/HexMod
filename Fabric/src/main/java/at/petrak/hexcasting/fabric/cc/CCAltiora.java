@@ -15,7 +15,10 @@ public class CCAltiora implements Component, AutoSyncedComponent {
     @Nullable
     private AltioraAbility altiora = null;
 
+    private final Player owner;
+
     public CCAltiora(Player owner) {
+        this.owner = owner;
     }
 
 
@@ -27,6 +30,7 @@ public class CCAltiora implements Component, AutoSyncedComponent {
 
     public void setAltiora(AltioraAbility altiora) {
         this.altiora = altiora;
+        HexCardinalComponents.ALTIORA.sync(this.owner);
     }
 
     @Override

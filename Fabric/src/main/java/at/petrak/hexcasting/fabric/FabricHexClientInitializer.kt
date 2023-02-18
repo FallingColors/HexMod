@@ -5,6 +5,7 @@ import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers
+import at.petrak.hexcasting.client.render.HexModelLayers
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.lib.HexParticles
 import at.petrak.hexcasting.fabric.event.MouseScrollCallback
@@ -46,6 +47,8 @@ object FabricHexClientInitializer : ClientModInitializer {
         MouseScrollCallback.EVENT.register(ShiftScrollListener::onScrollInGameplay)
 
         RegisterClientStuff.init()
+        HexModelLayers.init { loc, defn -> EntityModelLayerRegistry.registerModelLayer(loc, defn::get) }
+
 
         HexParticles.FactoryHandler.registerFactories(object : HexParticles.FactoryHandler.Consumer {
             override fun <T : ParticleOptions?> register(type: ParticleType<T>, constructor: Function<SpriteSet, ParticleProvider<T>>) {
