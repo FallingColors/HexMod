@@ -37,6 +37,9 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
 
         this.copy(HexTags.Blocks.EDIFIED_LOGS, HexTags.Items.EDIFIED_LOGS);
         this.copy(HexTags.Blocks.EDIFIED_PLANKS, HexTags.Items.EDIFIED_PLANKS);
+        this.copy(HexTags.Blocks.IMPETI, HexTags.Items.IMPETI);
+        this.copy(HexTags.Blocks.DIRECTRICES, HexTags.Items.DIRECTRICES);
+        this.copy(HexTags.Blocks.MINDFLAYED_CIRCLE_COMPONENTS, HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS);
         this.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
         this.copy(BlockTags.LOGS, ItemTags.LOGS);
         this.copy(BlockTags.PLANKS, ItemTags.PLANKS);

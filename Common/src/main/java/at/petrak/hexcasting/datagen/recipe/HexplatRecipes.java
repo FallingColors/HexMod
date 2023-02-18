@@ -67,6 +67,8 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_WARPED, Items.WARPED_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_MANGROVE, Items.MANGROVE_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_EDIFIED, HexBlocks.EDIFIED_PLANKS.asItem());
+        staffRecipe(recipes, HexItems.STAFF_QUENCHED, HexItems.QUENCHED_SHARD);
+        staffRecipe(recipes, HexItems.STAFF_MINDSPLICE, Ingredient.of(HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS));
 
         ShapelessRecipeBuilder.shapeless(HexItems.THOUGHT_KNOT)
             .requires(HexItems.AMETHYST_DUST)
@@ -501,6 +503,10 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     }
 
     private void staffRecipe(Consumer<FinishedRecipe> recipes, ItemStaff staff, Item plank) {
+        staffRecipe(recipes, staff, Ingredient.of(plank));
+    }
+
+    private void staffRecipe(Consumer<FinishedRecipe> recipes, ItemStaff staff, Ingredient plank) {
         ShapedRecipeBuilder.shaped(staff)
             .define('W', plank)
             .define('S', Items.STICK)
