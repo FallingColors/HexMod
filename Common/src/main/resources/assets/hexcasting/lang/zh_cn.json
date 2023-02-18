@@ -10,6 +10,8 @@
   "item.hexcasting.warped_staff": "诡异木法杖",
   "item.hexcasting.mangrove_staff": "红树木法杖",
   "item.hexcasting.edified_staff": "启迪木法杖",
+  "item.hexcasting.quenched_staff": "Quenched Shard Staff",
+  "item.hexcasting.mindsplice_staff": "Mindsplice Staff",
   "item.hexcasting.thought_knot": "结念绳",
   "item.hexcasting.focus": "核心",
   "item.hexcasting.focus.sealed": "密封核心",
@@ -76,8 +78,8 @@
 
   "entity.hexcasting.wall_scroll": "壁挂卷轴",
 
-  "block.hexcasting.conjured": "构筑光源",
-  "block.hexcasting.conjured_block": "构筑方块",
+  "block.hexcasting.conjured": "构筑的光源",
+  "block.hexcasting.conjured_block": "构筑的方块",
   "block.hexcasting.slate.blank": "空白石板",
   "block.hexcasting.slate.written": "有图案的石板",
   "block.hexcasting.empty_impetus": "空白促动石",
@@ -114,6 +116,7 @@
   "block.hexcasting.amethyst_edified_leaves": "晶紫启迪树叶",
   "block.hexcasting.aventurine_edified_leaves": "砂蓝启迪树叶",
   "block.hexcasting.citrine_edified_leaves": "晶黄启迪树叶",
+  "block.hexcasting.quenched_allay": "Quenched Allay",
 
   "itemGroup.hexcasting": "咒法学",
   "itemGroup.hexcasting.creative_tab": "咒法学",
@@ -216,7 +219,7 @@
   "text.autoconfig.hexcasting.option.server.opBreakHarvestLevel.@Tooltip": "破坏方块法术的挖掘等级\n0 = 木，1 = 石，2 = 铁，3 = 钻石，4 = 下界合金",
   "text.autoconfig.hexcasting.option.server.maxRecurseDepth.@Tooltip": "一个操作能执行其他操作的最大次数",
   "text.autoconfig.hexcasting.option.server.maxSpellCircleLength.@Tooltip": "法术环所允许含有石板的最大个数",
-  "text.autoconfig.hexcasting.option.server.actionDenyList.@Tooltip": "被禁用操作的资源位置；试图执行此类操作会导致事故。例如。“hexcasting:get_caster”会禁用意识之精思。",
+  "text.autoconfig.hexcasting.option.server.actionDenyList.@Tooltip": "被禁用操作的资源位置；试图执行此类操作会导致事故。例如，“hexcasting:get_caster”会禁用意识之精思。",
   "text.autoconfig.hexcasting.option.server.circleActionDenyList.@Tooltip": "法术环中被禁用操作的资源位置；试图执行此类操作会导致事故",
   "text.autoconfig.hexcasting.option.server.villagersOffendedByMindMurder.@Tooltip": "村民是否会在其他村民被剥离意识时感到气愤",
   "text.autoconfig.hexcasting.option.server.fewScrollTables.@Tooltip": "会额外生成较少数量卷轴的战利品表",
@@ -296,6 +299,8 @@
   "hexcasting.subtitles.impetus.fletcher.tick": "制箭师促动石：咔哒",
   "hexcasting.subtitles.impetus.cleric.register": "牧师促动石：叮~",
   "hexcasting.subtitles.lore_fragment.read": "故事残卷：被阅读",
+  "hexcasting.subtitles.flight.ambience": "玩家：飞翔",
+  "hexcasting.subtitles.flight.finish": "飞翔结束",
   
   "_comment": "hexcasting.spell.book keys override the name of a pattern in the patchouli book if present",
 
@@ -488,13 +493,15 @@
   "hexcasting.action.hexcasting:potion/wither": "黑阳西沉",
   "hexcasting.action.hexcasting:potion/poison": "红阳西沉",
   "hexcasting.action.hexcasting:potion/slowness": "绿阳西沉",
+  "hexcasting.action.hexcasting:flight/range": "隐士之飞行",
+  "hexcasting.action.hexcasting:flight/time": "旅者之飞行",
 
   "hexcasting.action.hexcasting:potion/regeneration": "白阳当空",
   "hexcasting.action.hexcasting:potion/night_vision": "蓝阳当空",
   "hexcasting.action.hexcasting:potion/absorption": "黑阳当空",
   "hexcasting.action.hexcasting:potion/haste": "红阳当空",
   "hexcasting.action.hexcasting:potion/strength": "绿阳当空",
-  "hexcasting.action.hexcasting:flight": "飞行",
+  "hexcasting.action.hexcasting:flight": "翱翔",
   "hexcasting.action.hexcasting:lightning": "召雷",
   "hexcasting.action.hexcasting:summon_rain": "召雨",
   "hexcasting.action.hexcasting:dispel_rain": "驱雨",
@@ -759,7 +766,7 @@
   "hexcasting.page.thought_knot.1": "健忘者常在手指上缠绕丝线以助记忆。我也坚信我的咒法技艺能活用这种做法。以特定方式绑出的绳结应该能稳定存储一个 iota，且能独立于栈存在。$(br2)我将其称为“$(item)结念绳/$”。",
   "hexcasting.page.thought_knot.2": "在初合成时，它的存储空间内没有 iota。在另一只手持有$(item)结念绳/$时，绘制$(l:patterns/readwrite#hexcasting:write)$(action)书吏之策略/$就会将栈顶 iota 移除并存入$(item)结念绳/$。绘制$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$则会将$(item)结念绳/$中 iota 复制出来并压入栈顶。$(br2)一旦将 iota 写入$(item)结念绳/$，绳结本身便不再能解开。其中 iota 可被随意读取，但不可被清除或覆写。不过还好，这些绳结十分易得。",
   "hexcasting.page.thought_knot.3": "另外，如果我在$(item)结念绳/$中写入一个实体，然后在该实体死亡或消失后尝试复制，则$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$会压入一个 $(l:casting/influences)$(thing)Null/$。",
-  "hexcasting.page.thought_knot.crafting.desc": "$(italic)别人要是看到你带着块牌子，上面写着“本人风度翩翩，品貌非凡”，你又会有什么感想？/$",
+  "hexcasting.page.thought_knot.crafting.desc": "$(italic)别人要是看到你带着块牌子，上面写着“本人风度翩翩，品貌非凡”，你又会作何感想？/$",
   
   "hexcasting.entry.focus": "核心",
   "hexcasting.page.focus.1": "$(l:items/focus)$(item)核心/$能存储一个 iota。$(br2)合成核心时，其默认存有 $(l:casting/influences)$(thing)Null/$ 这一虚指。在另一只手持有$(l:items/focus)$(item)核心/$时，可以用$(l:patterns/readwrite#hexcasting:write)$(action)书吏之策略/$将栈顶元素弹出栈并写入其中。而使用$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$就会将$(l:items/focus)$(item)核心/$中的 iota 复制出来并压入栈中。",
@@ -1131,6 +1138,14 @@
 
   "hexcasting.page.colorize": "我需要在施法时在另一只手中持有$(l:items/pigments)$(item)染色剂/$。施法后，染色剂将被消耗而我意识的颜色也将永久改变（至少是在再次施法前）。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
 
+  "hexcasting.entry.flights": "飞行",
+  "hexcasting.page.flights.1": "尽管无法掌握自由飞行的力量，我还是找到了若干能将物体滞空的方法，但各种方法各有缺陷。$(br2)所有种类的飞行法术都会产生微量多余$(media)媒质/$。在法术效果将要结束时，其会产生越来越多红色和黑色的火花。",
+  "hexcasting.page.flights.2": "当然，也有其他种类的飞行法术。例如，将$(l:patterns/spells/basic#hexcasting:add_motion)$(action)驱动/$和$(l:patterns/spells/nadirs#hexcasting:potion/levitation)$(action)蓝阳西沉/$结合使用的类飞行技术自古代起就多有运用。$(br2)我还听说过一种能给予滑翔能力的，可以穿在背上的薄透翼膜。研究表明，被称为“$(l:patterns/great_spells/altiora)$(action)翱翔/$”的卓越法术也许能模仿这种翼膜的功用。",
+  "hexcasting.page.flights.range.1": "受范围限制的飞行法术。",
+  "hexcasting.page.flights.range.2": "第二参数代表水平方向上的半径（以米计），在此范围内，法术能保持稳定。走出该范围就会结束该法术，滞空的物体会直接坠向地面。但只要一直呆在这个范围内，法术的效果便会无限持续。此法术还会额外产生微量$(media)媒质/$用以标记安全区域中心点。$(br2)每米安全范围消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+  "hexcasting.page.flights.time.1": "受时间限制的飞行法术。",
+  "hexcasting.page.flights.time.2": "第二参数代表持续时间（以秒计），在此限制内，法术能保持稳定。持续时间超过限制就会结束该法术，滞空的物体会直接坠向地面。$(br2)此法术相对较昂贵，每秒持续时间消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。我觉得它极其适合长途旅行。",
+
   "hexcasting.page.create_lava.1": "在给定位置生成一格熔岩（或给流体容器注入至多一桶熔岩）。消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
   "hexcasting.page.create_lava.2": "建议不要声张自己知道这个法术。某些植物学家对此……比较敏感，至少我听说是这样。$(br2)也罢，确实没人说过探究宇宙最深层的秘密是什么好干的活。",
 
@@ -1139,8 +1154,8 @@
   "hexcasting.page.weather_manip.summon_rain": "我能控制云彩！此法术会在我所处世界各处召来雨水。消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。若已在下雨就无效。",
   "hexcasting.page.weather_manip.dispel_rain": "召雨的反面。此法术会将我所处世界的雨水驱离。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶碎片/$。若未在下雨就无效。",
 
-  "hexcasting.page.flight.1": "飞行的力量！我已使自然屈膝臣服。但自然懂得复仇，它无时无刻不在盼望着我打破与它的条约，这样它就能打折我的腿。",
-  "hexcasting.page.flight.2": "实体（必须是玩家）将被给予飞行的力量。第一个数字是飞行能持续的时间，第二个数字则是允许飞行区域的半径。如果该玩家飞出了那个区域，或是在空中时时间耗尽，他们所藐视的引力就会出手。极尽其能。$(br2)每米半径、每秒持续时间消耗 1/4 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+  "hexcasting.page.altiora.1": "此法术会将一束$(media)媒质/$在我身旁塑成翅膀状，并赋予其足够物质性，从而允许施法者滑翔。",
+  "hexcasting.page.altiora.2": "这对翅膀的操作方式与$(item)鞘翅/$完全一致。目标（必须是玩家）会被弹起而升空，此时按下$(k:jump)就能张开翅膀。这些翅膀十分脆弱，会在触碰到任意表面时破碎消失。长距飞行则可能需要$(l:patterns/spells/basic#hexcasting:add_motion)$(action)驱动/$或者$(item)烟花火箭/$（可能稍显鲁莽）的协助。$(br2)消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
 
   "hexcasting.page.teleport.1": "比$(l:patterns/spells/basic#hexcasting:blink)$(action)闪现/$更为强大，此法术能让我传送到世界上几乎任何一处！当然它也有极限，但可比我熟悉的施法距离要远得$(italic)多/$。",
   "hexcasting.page.teleport.2": "实体会按所给向量偏移出其原有位置。它似乎一直会消耗大约 10 个$(l:items/amethyst)$(item)充能紫水晶/$，不论传送距离。$(br2)当然这种传送也不是尽善尽美的，在传送如玩家般复杂的实体时，实体身上的物品就不会$(italic)非常/$安稳了，它们可能会散落在目的地周围。还有，传送的实体将会被强制从其所乘坐的无生命载具中卸下……但我曾读到过动物可以一起被传送，大概吧。",
