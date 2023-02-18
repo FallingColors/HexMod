@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.client.be;
+package at.petrak.hexcasting.client.render.be;
 
 import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;

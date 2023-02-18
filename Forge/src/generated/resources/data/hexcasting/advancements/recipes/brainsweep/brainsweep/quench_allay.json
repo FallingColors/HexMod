@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "hexcasting:brainsweep/testing/flowey_the_flower"
+        "recipe": "hexcasting:brainsweep/quench_allay"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "hexcasting:brainsweep/testing/flowey_the_flower"
+      "hexcasting:brainsweep/quench_allay"
     ]
   }
 }

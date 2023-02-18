@@ -1,4 +1,4 @@
-// 1.19.2	2023-02-16T14:30:44.859286177	LootTables
+// 1.19.2	2023-02-17T23:44:47.192617485	LootTables
 3b1e2f738c4906371a4cdecf24253ad94ae66320 data/hexcasting/loot_tables/blocks/akashic_bookshelf.json
 201bbf7adff979ff8cb087e1798da5a2a31eed09 data/hexcasting/loot_tables/blocks/akashic_connector.json
 16498092b43c43a4a7617ba91bcfcc13b87d9a7e data/hexcasting/loot_tables/blocks/akashic_record.json
@@ -27,7 +27,7 @@ f99e241d651abe7f9234301508bc805deba179ad data/hexcasting/loot_tables/blocks/empt
 90f8f97b941408ed89d01b69e1fccf5f2a35e2bc data/hexcasting/loot_tables/blocks/impetus_look.json
 d97f573d03712b4d677e3a0a22ab6a000b1db060 data/hexcasting/loot_tables/blocks/impetus_rightclick.json
 c8dd063aa3fe320f9f4518736d4ae97ba2c93a79 data/hexcasting/loot_tables/blocks/impetus_storedplayer.json
-86e3cde7fe514ef267748f9933b2b3fdff924439 data/hexcasting/loot_tables/blocks/quenched_allay.json
+468f68d1e889afe4f7ce28d1a597a57a17f5a6c3 data/hexcasting/loot_tables/blocks/quenched_allay.json
 4bd736b9d96bb5a0f0b18cb423566bf0ec63f530 data/hexcasting/loot_tables/blocks/scroll_paper.json
 a3ca7f9427bd57a6033f241754d49425251cc091 data/hexcasting/loot_tables/blocks/scroll_paper_lantern.json
 745b510161cfff804b115f566ad6b50e0cb492d1 data/hexcasting/loot_tables/blocks/slate.json

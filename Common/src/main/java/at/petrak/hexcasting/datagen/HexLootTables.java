@@ -13,7 +13,6 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
@@ -22,6 +21,8 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
+import net.minecraft.world.level.storage.loot.entries.EntryGroup;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
@@ -75,10 +76,10 @@ public class HexLootTables extends PaucalLootTableProvider {
         blockTables.put(HexBlocks.EDIFIED_DOOR, LootTable.lootTable().withPool(doorPool));
 
 
-        var noSilkTouchCond = MatchTool.toolMatches(
-                ItemPredicate.Builder.item().hasEnchantment(
-                    new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
-            .invert();
+        var silkTouchCond = MatchTool.toolMatches(
+            ItemPredicate.Builder.item().hasEnchantment(
+                new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)));
+        var noSilkTouchCond = silkTouchCond.invert();
         var goodAtAmethystingCond = MatchTool.toolMatches(
             ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES)
         );
@@ -113,26 +114,17 @@ public class HexLootTables extends PaucalLootTableProvider {
             .withPool(isThatAnMFingBrandonSandersonReference)
             .withPool(isThatAnMFingBadBrandonSandersonReference));
 
-        // to make one quenched allay requires 5 shards, and then 2 shard's worth of any media.
-        // TODO add fortune?
-        var quenchedUnsilkDust = LootPool.lootPool()
-            .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST))
-            .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 4)))
-            .when(noSilkTouchCond);
-        var quenchedUnsilkShard = LootPool.lootPool()
-            .add(LootItem.lootTableItem(Items.AMETHYST_SHARD))
-            .apply(SetItemCountFunction.setCount(UniformGenerator.between(4, 8)))
-            .when(noSilkTouchCond);
-        var quenchedUnsilkCrystal = LootPool.lootPool()
-            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
-            .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1)))
-            .when(noSilkTouchCond);
-        var quenchedSilk = LootPool.lootPool()
-            .add(LootItem.lootTableItem(HexBlocks.QUENCHED_ALLAY.asItem()))
-            .when(noSilkTouchCond.invert());
-        blockTables.put(HexBlocks.QUENCHED_ALLAY, LootTable.lootTable()
-            .withPool(quenchedUnsilkDust).withPool(quenchedUnsilkShard).withPool(quenchedUnsilkCrystal)
-            .withPool(quenchedSilk));
+        var quenchedPool = LootPool.lootPool().add(AlternativesEntry.alternatives(
+            LootItem.lootTableItem(HexBlocks.QUENCHED_ALLAY).when(silkTouchCond),
+            EntryGroup.list(
+                LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(2f, 4f))),
+                LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
+                    .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
+                        0.25f, 0.35f, 0.5f, 0.75f, 1.0f))
+            )
+        ));
+        blockTables.put(HexBlocks.QUENCHED_ALLAY, LootTable.lootTable().withPool(quenchedPool));
     }
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {

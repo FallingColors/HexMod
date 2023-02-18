@@ -100,7 +100,7 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
             () -> HexConfig.common().chargedCrystalMediaAmount(), ADMediaHolder.CHARGED_AMETHYST_PRIORITY, s
         ));
         registry.register(HexBlocks.QUENCHED_ALLAY.asItem(), MEDIA_HOLDER, s -> new CCMediaHolder.Static(
-            () -> MediaConstants.QUENCHED_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, s
+            () -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, s
         ));
 
         registry.register(i -> i instanceof HexHolderItem, HEX_HOLDER, CCHexHolder.ItemBased::new);

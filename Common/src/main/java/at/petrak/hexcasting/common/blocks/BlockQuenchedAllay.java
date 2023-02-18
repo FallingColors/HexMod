@@ -5,7 +5,6 @@ import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -17,12 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class BlockQuenchedAllay extends Block implements EntityBlock {
     public static final int VARIANTS = 4;
-
-    public static ResourceLocation GASLIGHTING_PRED = modLoc("variant");
 
     public BlockQuenchedAllay(Properties properties) {
         super(properties);

@@ -2,7 +2,6 @@ package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
-import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
@@ -272,18 +271,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         simpleBlock(HexBlocks.CONJURED_LIGHT, conjuredModel);
 
         // for the break particles
-        models().cubeAll("quenched_allay", modLoc("block/quenched_allay_0"));
-        var quenchedItemBuilder = itemModels().getBuilder("quenched_allay");
-        for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-            var name = "quenched_allay_" + i;
-            var textureLoc = modLoc("block/" + name);
-            var model = models().cubeAll(name, textureLoc);
-
-            quenchedItemBuilder.override()
-                .predicate(BlockQuenchedAllay.GASLIGHTING_PRED, i)
-                .model(model)
-                .end();
-        }
+        simpleBlock(HexBlocks.QUENCHED_ALLAY, models().cubeAll("quenched_allay", modLoc("block/quenched_allay_0")));
     }
 
     private void impetus(Block block, String name, String stub) {

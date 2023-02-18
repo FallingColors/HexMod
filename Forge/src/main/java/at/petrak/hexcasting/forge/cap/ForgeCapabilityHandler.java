@@ -92,7 +92,7 @@ public class ForgeCapabilityHandler {
             // no one uses the config
             evt.addCapability(MEDIA_STATIC_CAP,
                 provide(stack, HexCapabilities.MEDIA, () -> new CapStaticMediaHolder(
-                    () -> MediaConstants.QUENCHED_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)));
+                    () -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)));
         }
 
         if (stack.getItem() instanceof IotaHolderItem holder) {

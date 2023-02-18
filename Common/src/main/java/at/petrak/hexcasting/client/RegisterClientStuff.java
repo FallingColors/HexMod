@@ -4,11 +4,12 @@ import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.client.be.BlockEntityAkashicBookshelfRenderer;
-import at.petrak.hexcasting.client.be.BlockEntityQuenchedAllayRenderer;
-import at.petrak.hexcasting.client.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
+import at.petrak.hexcasting.client.render.GaslightingTracker;
 import at.petrak.hexcasting.client.render.ScryingLensOverlays;
+import at.petrak.hexcasting.client.render.be.BlockEntityAkashicBookshelfRenderer;
+import at.petrak.hexcasting.client.render.be.BlockEntityQuenchedAllayRenderer;
+import at.petrak.hexcasting.client.render.be.BlockEntitySlateRenderer;
 import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
@@ -67,10 +68,6 @@ public class RegisterClientStuff {
                 }
             });
 
-        IClientXplatAbstractions.INSTANCE.registerItemProperty(HexBlocks.QUENCHED_ALLAY.asItem(),
-            BlockQuenchedAllay.GASLIGHTING_PRED, (stack, level, holder, holderID) ->
-                Math.abs(BlockEntityQuenchedAllayRenderer.getGaslightingAmount() % BlockQuenchedAllay.VARIANTS));
-
         registerPackagedSpellOverrides(HexItems.CYPHER);
         registerPackagedSpellOverrides(HexItems.TRINKET);
         registerPackagedSpellOverrides(HexItems.ARTIFACT);
@@ -102,6 +99,11 @@ public class RegisterClientStuff {
         registerWandOverrides(HexItems.STAFF_DARK_OAK);
         registerWandOverrides(HexItems.STAFF_ACACIA);
         registerWandOverrides(HexItems.STAFF_EDIFIED);
+        // purposely skip quenched
+        registerWandOverrides(HexItems.STAFF_MINDSPLICE);
+
+        registerGaslight4(HexItems.STAFF_QUENCHED);
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY.asItem());
 
         x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
         x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
@@ -128,6 +130,12 @@ public class RegisterClientStuff {
 //        }
 
         ScryingLensOverlays.addScryingLensStuff();
+    }
+
+    private static void registerGaslight4(Item item) {
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(item,
+            GaslightingTracker.GASLIGHTING_PRED, (stack, level, holder, holderID) ->
+                Math.abs(GaslightingTracker.getGaslightingAmount() % 4));
     }
 
     public static void registerColorProviders(BiConsumer<ItemColor, Item> itemColorRegistry,
@@ -202,6 +210,8 @@ public class RegisterClientStuff {
                 var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
                 if (name.contains("old")) {
                     return 1f;
+                } else if (name.contains("cherry")) {
+                    return 2f;
                 } else {
                     return 0f;
                 }

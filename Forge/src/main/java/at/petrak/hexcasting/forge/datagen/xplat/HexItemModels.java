@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.client.render.GaslightingTracker;
+import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
@@ -23,6 +25,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 public class HexItemModels extends PaucalItemModelProvider {
     public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
@@ -75,6 +78,8 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         singleTexture("old_staff", new ResourceLocation("item/handheld_rod"),
             "layer0", modLoc("item/staves/old"));
+        singleTexture("cherry_staff", new ResourceLocation("item/handheld_rod"),
+            "layer0", modLoc("item/staves/cherry"));
 
         buildStaff(HexItems.STAFF_OAK, "oak");
         buildStaff(HexItems.STAFF_BIRCH, "birch");
@@ -86,6 +91,16 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_WARPED, "warped");
         buildStaff(HexItems.STAFF_MANGROVE, "mangrove");
         buildStaff(HexItems.STAFF_EDIFIED, "edified");
+        buildStaff(HexItems.STAFF_MINDSPLICE, "mindsplice");
+
+        buildFourVariantGaslight(HexItems.STAFF_QUENCHED, "item/staves/quenched", (name, path) ->
+            singleTexture(path.getPath(), new ResourceLocation("item/handheld_rod"),
+                "layer0", modLoc(path.getPath())));
+        buildFourVariantGaslight(HexItems.QUENCHED_SHARD, "item/quenched_shard", (name, path) ->
+            singleTexture(path.getPath(), new ResourceLocation("item/handheld"),
+                "layer0", modLoc(path.getPath())));
+        buildFourVariantGaslight(HexBlocks.QUENCHED_ALLAY.asItem(), "block/quenched_allay", (name, path) ->
+            cubeAll(path.getPath(), path));
 
         simpleItem(modLoc("patchouli_book"));
 
@@ -215,6 +230,8 @@ public class HexItemModels extends PaucalItemModelProvider {
             .end().override()
             .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 1)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/old_staff")))
+            .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 2)
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/cherry_staff")))
             .end();
     }
 
@@ -230,5 +247,20 @@ public class HexItemModels extends PaucalItemModelProvider {
             .predicate(ItemPackagedHex.HAS_PATTERNS_PRED, 1f - 0.01f)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name + "_filled")))
             .end();
+    }
+
+    private void buildFourVariantGaslight(Item item, String path,
+        BiFunction<String, ResourceLocation, ModelFile> makeModel) {
+        var name = getPath(item);
+        var builder = getBuilder(name);
+        for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
+            var textureLoc = modLoc(path + "_" + i);
+            var model = makeModel.apply(name, textureLoc);
+
+            builder.override()
+                .predicate(GaslightingTracker.GASLIGHTING_PRED, i)
+                .model(model)
+                .end();
+        }
     }
 }

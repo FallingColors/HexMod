@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.client.be.BlockEntityQuenchedAllayRenderer;
+import at.petrak.hexcasting.client.render.GaslightingTracker;
 import net.minecraft.client.Minecraft;
 
 public class ClientTickCounter {
@@ -19,7 +19,7 @@ public class ClientTickCounter {
         if (!Minecraft.getInstance().isPaused()) {
             ++ticksInGame;
             partialTicks = 0.0F;
-            BlockEntityQuenchedAllayRenderer.postFrameCheckRendered();
+            GaslightingTracker.postFrameCheckRendered();
         }
     }
 }

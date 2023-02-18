@@ -1,6 +1,7 @@
-package at.petrak.hexcasting.client.be;
+package at.petrak.hexcasting.client.render.be;
 
 import at.petrak.hexcasting.client.RegisterClientStuff;
+import at.petrak.hexcasting.client.render.GaslightingTracker;
 import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityQuenchedAllay;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
@@ -12,10 +13,9 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.phys.AABB;
 
+// TODO: this doesn't cover the block being *behind* something. Is it possible to cleanly do that?
+// it would probably require some depth-texture bullshit that I don't want to worry about
 public class BlockEntityQuenchedAllayRenderer implements BlockEntityRenderer<BlockEntityQuenchedAllay> {
-    private static int GASLIGHTING_AMOUNT = 0;
-    private static boolean HAS_RENDERED_THIS_FRAME = true;
-
     private final BlockEntityRendererProvider.Context ctx;
 
     public BlockEntityQuenchedAllayRenderer(BlockEntityRendererProvider.Context ctx) {
@@ -24,12 +24,10 @@ public class BlockEntityQuenchedAllayRenderer implements BlockEntityRenderer<Blo
 
     private static void doRender(BlockRenderDispatcher dispatcher, PoseStack ps, MultiBufferSource bufSource,
         int packedLight, int packedOverlay) {
-        HAS_RENDERED_THIS_FRAME = true;
-
         var buffer = bufSource.getBuffer(RenderType.translucent());
         var pose = ps.last();
 
-        var idx = Math.abs(BlockEntityQuenchedAllayRenderer.GASLIGHTING_AMOUNT % BlockQuenchedAllay.VARIANTS);
+        var idx = Math.abs(GaslightingTracker.getGaslightingAmount() % BlockQuenchedAllay.VARIANTS);
         var model = RegisterClientStuff.QUENCHED_ALLAY_VARIANTS.get(idx);
 
         dispatcher.getModelRenderer().renderModel(pose, buffer, null, model, 1f, 1f, 1f, packedLight, packedOverlay);
@@ -53,15 +51,4 @@ public class BlockEntityQuenchedAllayRenderer implements BlockEntityRenderer<Blo
         return false;
     }
 
-    public static int getGaslightingAmount() {
-        HAS_RENDERED_THIS_FRAME = true;
-        return GASLIGHTING_AMOUNT;
-    }
-
-    public static void postFrameCheckRendered() {
-        if (!HAS_RENDERED_THIS_FRAME) {
-            GASLIGHTING_AMOUNT += 1;
-        }
-        HAS_RENDERED_THIS_FRAME = false;
-    }
 }

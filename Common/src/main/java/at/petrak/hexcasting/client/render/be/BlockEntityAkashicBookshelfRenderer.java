@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.client.be;
+package at.petrak.hexcasting.client.render.be;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.client.render.RenderLib;

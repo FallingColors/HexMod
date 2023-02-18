@@ -231,6 +231,25 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern(" S ")
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
 
+        ShapelessRecipeBuilder.shapeless(HexItems.AMETHYST_DUST,
+                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.DUST_UNIT) + 1)
+            .requires(HexItems.QUENCHED_SHARD)
+            .requires(HexItems.AMETHYST_DUST)
+            .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
+            .save(recipes, modLoc("decompose_quenched_shard/dust"));
+        ShapelessRecipeBuilder.shapeless(Items.AMETHYST_SHARD,
+                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.SHARD_UNIT) + 1)
+            .requires(HexItems.QUENCHED_SHARD)
+            .requires(Items.AMETHYST_SHARD)
+            .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
+            .save(recipes, modLoc("decompose_quenched_shard/shard"));
+        ShapelessRecipeBuilder.shapeless(HexItems.CHARGED_AMETHYST,
+                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.CRYSTAL_UNIT) + 1)
+            .requires(HexItems.QUENCHED_SHARD)
+            .requires(HexItems.CHARGED_AMETHYST)
+            .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
+            .save(recipes, modLoc("decompose_quenched_shard/charged"));
+
         ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK)
             .define('S', HexItems.SLATE)
             .pattern("S")
