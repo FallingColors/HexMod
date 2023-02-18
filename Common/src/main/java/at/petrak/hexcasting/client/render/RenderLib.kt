@@ -1,10 +1,11 @@
 @file:JvmName("RenderLib")
 
-package at.petrak.hexcasting.client
+package at.petrak.hexcasting.client.render
 
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.utils.TAU
+import at.petrak.hexcasting.client.ClientTickCounter
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack

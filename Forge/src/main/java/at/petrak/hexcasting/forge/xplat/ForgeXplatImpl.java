@@ -244,12 +244,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public AltioraAbility getAltiora(Player anyPlayer) {
-        if (!(anyPlayer instanceof ServerPlayer player)) {
-            // the check only needs to happen client-side on fabric
-            // which is great, cause it's not even synced on forge
-            return null;
-        }
+    public AltioraAbility getAltiora(Player player) {
         CompoundTag tag = player.getPersistentData();
         boolean allowed = tag.getBoolean(TAG_ALTIORA_ALLOWED);
         if (allowed) {

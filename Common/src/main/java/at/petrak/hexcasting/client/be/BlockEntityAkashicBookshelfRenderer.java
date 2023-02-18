@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.client.be;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.client.RenderLib;
+import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -22,7 +22,7 @@ public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<
 
     @Override
     public void render(BlockEntityAkashicBookshelf tile, float pPartialTick, PoseStack ps,
-                       MultiBufferSource buffer, int light, int overlay) {
+        MultiBufferSource buffer, int light, int overlay) {
         HexPattern pattern = tile.getPattern();
         if (pattern == null) {
             return;

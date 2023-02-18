@@ -1,8 +1,5 @@
 package at.petrak.hexcasting.client.gui
 
-import at.petrak.hexcasting.api.misc.DiscoveryHandlers
-import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.casting.eval.ControllerInfo
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
@@ -10,9 +7,14 @@ import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers
+import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
-import at.petrak.hexcasting.client.*
+import at.petrak.hexcasting.client.ClientTickCounter
+import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
+import at.petrak.hexcasting.client.render.*
 import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes

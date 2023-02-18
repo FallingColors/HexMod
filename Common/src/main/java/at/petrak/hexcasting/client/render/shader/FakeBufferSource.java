@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.client.shader;
+package at.petrak.hexcasting.client.render.shader;
 
 import at.petrak.hexcasting.mixin.accessor.client.AccessorCompositeRenderType;
 import at.petrak.hexcasting.mixin.accessor.client.AccessorEmptyTextureStateShard;
@@ -13,13 +13,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.function.Function;
 
-public record FakeBufferSource(MultiBufferSource parent, Function<ResourceLocation, RenderType> mapper) implements MultiBufferSource {
+public record FakeBufferSource(MultiBufferSource parent,
+                               Function<ResourceLocation, RenderType> mapper) implements MultiBufferSource {
 
     @Override
     @SuppressWarnings("ConstantConditions")
     public @NotNull VertexConsumer getBuffer(@NotNull RenderType renderType) {
         if (((AccessorRenderStateShard) renderType).hex$name().equals("entity_cutout_no_cull")
-                && renderType instanceof RenderType.CompositeRenderType) {
+            && renderType instanceof RenderType.CompositeRenderType) {
             RenderType.CompositeState state = ((AccessorCompositeRenderType) renderType).hex$state();
             RenderStateShard.EmptyTextureStateShard shard = state.textureState;
             Optional<ResourceLocation> texture = ((AccessorEmptyTextureStateShard) shard).hex$cutoutTexture();

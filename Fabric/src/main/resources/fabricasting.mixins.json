@@ -17,6 +17,7 @@
   "client": [
     "client.FabricAbstractTextureMixin",
     "client.FabricLevelRendererMixin",
+    "client.FabricMixinElytraLayer",
     "client.FabricMixinGameRenderer",
     "client.FabricModelManagerMixin",
     "client.FabricMouseHandlerMixin",

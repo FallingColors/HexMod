@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
-import at.petrak.hexcasting.client.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
-import at.petrak.hexcasting.client.shader.HexShaders;
+import at.petrak.hexcasting.client.render.HexAdditionalRenderers;
+import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;

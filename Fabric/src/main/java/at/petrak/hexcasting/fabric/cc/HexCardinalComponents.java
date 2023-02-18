@@ -64,13 +64,12 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         registry.registerFor(Mob.class, BRAINSWEPT, CCBrainswept::new);
         registry.registerForPlayers(FAVORED_COLORIZER, CCFavoredColorizer::new, RespawnCopyStrategy.ALWAYS_COPY);
         registry.registerForPlayers(SENTINEL, CCSentinel::new, RespawnCopyStrategy.ALWAYS_COPY);
+        registry.registerForPlayers(ALTIORA, CCAltiora::new, RespawnCopyStrategy.LOSSLESS_ONLY);
         // Fortunately these are all both only needed on the server and don't want to be copied across death
         registry.registerFor(ServerPlayer.class, FLIGHT, CCFlight::new);
         registry.registerFor(ServerPlayer.class, HARNESS, CCHarness::new);
         registry.registerFor(ServerPlayer.class, PATTERNS, CCPatterns::new);
 
-        // On Fabric, this is needed on the client because the c/s need to agree on when wings are being deployed
-        registry.registerForPlayers(ALTIORA, CCAltiora::new, RespawnCopyStrategy.LOSSLESS_ONLY);
 
         registry.registerFor(ItemEntity.class, IOTA_HOLDER, wrapItemEntityDelegate(
             ItemDelegatingEntityIotaHolder.ToItemEntity::new));

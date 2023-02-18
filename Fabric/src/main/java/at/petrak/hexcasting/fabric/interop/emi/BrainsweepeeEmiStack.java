@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
-import static at.petrak.hexcasting.client.RenderLib.renderEntity;
+import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
 
 public class BrainsweepeeEmiStack extends EmiStack {
     public final BrainsweepeeIngredient ingredient;

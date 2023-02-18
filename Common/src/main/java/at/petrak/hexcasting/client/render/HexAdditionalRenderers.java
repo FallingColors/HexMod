@@ -1,8 +1,9 @@
-package at.petrak.hexcasting.client;
+package at.petrak.hexcasting.client.render;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;

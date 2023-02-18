@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.client.be;
 
-import at.petrak.hexcasting.client.RenderLib;
+import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -22,7 +22,7 @@ public class BlockEntitySlateRenderer implements BlockEntityRenderer<BlockEntity
 
     @Override
     public void render(BlockEntitySlate tile, float pPartialTick, PoseStack ps,
-                       MultiBufferSource buffer, int light, int overlay) {
+        MultiBufferSource buffer, int light, int overlay) {
         if (tile.pattern == null) {
             return;
         }

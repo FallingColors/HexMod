@@ -25,6 +25,7 @@ public class CapSyncers {
         // Copy data from this to new player
         var x = IXplatAbstractions.INSTANCE;
         x.setFlight(player, x.getFlight(proto));
+        x.setAltiora(player, x.getAltiora(proto));
         x.setSentinel(player, x.getSentinel(proto));
         x.setColorizer(player, x.getColorizer(proto));
         x.setHarness(player, x.getHarness(proto, InteractionHand.MAIN_HAND));
