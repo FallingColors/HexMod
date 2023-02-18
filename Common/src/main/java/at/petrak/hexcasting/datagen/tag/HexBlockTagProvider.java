@@ -22,7 +22,8 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
                 HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE,
                 HexBlocks.EMPTY_IMPETUS,
                 HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_STOREDPLAYER,
-                HexBlocks.AMETHYST_TILES, HexBlocks.SCONCE);
+                HexBlocks.AMETHYST_TILES, HexBlocks.SCONCE,
+                HexBlocks.QUENCHED_ALLAY);
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(HexBlocks.AMETHYST_DUST_BLOCK);

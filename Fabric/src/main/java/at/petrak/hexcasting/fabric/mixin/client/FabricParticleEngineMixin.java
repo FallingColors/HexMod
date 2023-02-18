@@ -24,7 +24,7 @@ public class FabricParticleEngineMixin {
     @Inject(at = @At("RETURN"), method = "<clinit>")
     private static void addTypes(CallbackInfo ci) {
         RENDER_ORDER = ImmutableList.<ParticleRenderType>builder().addAll(RENDER_ORDER)
-                .add(ConjureParticle.CONJURE_RENDER_TYPE, ConjureParticle.LIGHT_RENDER_TYPE)
-                .build();
+            .add(ConjureParticle.CONJURE_RENDER_TYPE, ConjureParticle.CONJURE_RENDER_TYPE)
+            .build();
     }
 }

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.common.blocks.BlockConjured;
 import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
 import at.petrak.hexcasting.common.blocks.BlockFlammable;
+import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicLigature;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
@@ -20,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
@@ -146,6 +148,13 @@ public class HexBlocks {
     public static final BlockAkashicLigature AKASHIC_LIGATURE = blockItem("akashic_connector",
         new BlockAkashicLigature(akashicWoodyHard().lightLevel(bs -> 4)));
 
+    // we have to make it emit light because otherwise it occludes itself and is always dark
+    public static final BlockQuenchedAllay QUENCHED_ALLAY = blockItem("quenched_allay", new BlockQuenchedAllay(
+        BlockBehaviour.Properties
+            .copy(Blocks.AMETHYST_BLOCK)
+            .lightLevel($ -> 4)
+            .noOcclusion()));
+
     // Decoration?!
     public static final Block SLATE_BLOCK = blockItem("slate_block", new Block(slateish().strength(2f, 4f)));
     public static final SandBlock AMETHYST_DUST_BLOCK = blockItem("amethyst_dust_block",
@@ -166,7 +175,8 @@ public class HexBlocks {
         new BlockSconce(BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.COLOR_PURPLE)
             .sound(SoundType.AMETHYST)
             .strength(1f)
-            .lightLevel($ -> 15)));
+            .lightLevel($ -> 15)),
+        HexItems.props().rarity(Rarity.RARE));
 
     public static final BlockAkashicLog EDIFIED_LOG = blockItem("edified_log",
         new BlockAkashicLog(edifiedWoody()));

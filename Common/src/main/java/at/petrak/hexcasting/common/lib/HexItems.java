@@ -36,6 +36,8 @@ public class HexItems {
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
     public static final Item CHARGED_AMETHYST = make("charged_amethyst", new Item(props()));
 
+    public static final Item QUENCHED_SHARD = make("quenched_allay_shard", new Item(props()));
+
     public static final ItemStaff STAFF_OAK = make("oak_staff", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_SPRUCE = make("spruce_staff", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_BIRCH = make("birch_staff", new ItemStaff(unstackable()));
@@ -46,6 +48,9 @@ public class HexItems {
     public static final ItemStaff STAFF_WARPED = make("warped_staff", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_MANGROVE = make("mangrove_staff", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_EDIFIED = make("edified_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_QUENCHED = make("quenched_staff", new ItemStaff(unstackable()));
+    // mindsplice staffaratus
+    public static final ItemStaff STAFF_MINDSPLICE = make("mindsplice_staff", new ItemStaff(unstackable()));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
         IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)

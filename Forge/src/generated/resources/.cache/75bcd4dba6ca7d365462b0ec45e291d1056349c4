@@ -1,4 +1,4 @@
-// 1.19.2	2023-01-31T18:59:34.290485155	Tags for minecraft:block
+// 1.19.2	2023-02-16T14:30:44.861480995	Tags for minecraft:block
 42c76a43081acfb0194e2cee6de18104fb0ba5ad data/hexcasting/tags/blocks/edified_logs.json
 86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/hexcasting/tags/blocks/edified_planks.json
 841dfbe4970e9167b205e5aa2b0f0936c6b9af60 data/minecraft/tags/blocks/buttons.json
@@ -9,7 +9,7 @@ cba96d2ff28087e7fd9807e5e80104f3befc2512 data/minecraft/tags/blocks/doors.json
 42c76a43081acfb0194e2cee6de18104fb0ba5ad data/minecraft/tags/blocks/logs_that_burn.json
 102621940be9f729e9b0e14ae08e784efac89381 data/minecraft/tags/blocks/mineable/axe.json
 6312e44ef31d2401dddbd46c4d3eda03da6e2db3 data/minecraft/tags/blocks/mineable/hoe.json
-7037bf368d7951eddf3c324a0ce9e6a64403843d data/minecraft/tags/blocks/mineable/pickaxe.json
+3782c7408d0d53cdf3954d2be0b72c099489d4f7 data/minecraft/tags/blocks/mineable/pickaxe.json
 abfa06b8189660656acf8f7cdccc3844fb40600f data/minecraft/tags/blocks/mineable/shovel.json
 86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/minecraft/tags/blocks/planks.json
 ee24953b8f5d4742f03c57842a3588618bbc5a0a data/minecraft/tags/blocks/pressure_plates.json

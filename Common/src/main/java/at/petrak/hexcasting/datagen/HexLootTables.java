@@ -21,6 +21,8 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
+import net.minecraft.world.level.storage.loot.entries.EntryGroup;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
@@ -74,10 +76,10 @@ public class HexLootTables extends PaucalLootTableProvider {
         blockTables.put(HexBlocks.EDIFIED_DOOR, LootTable.lootTable().withPool(doorPool));
 
 
-        var noSilkTouchCond = MatchTool.toolMatches(
-                ItemPredicate.Builder.item().hasEnchantment(
-                    new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
-            .invert();
+        var silkTouchCond = MatchTool.toolMatches(
+            ItemPredicate.Builder.item().hasEnchantment(
+                new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)));
+        var noSilkTouchCond = silkTouchCond.invert();
         var goodAtAmethystingCond = MatchTool.toolMatches(
             ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES)
         );
@@ -111,6 +113,18 @@ public class HexLootTables extends PaucalLootTableProvider {
             .withPool(dustPoolWhenBad)
             .withPool(isThatAnMFingBrandonSandersonReference)
             .withPool(isThatAnMFingBadBrandonSandersonReference));
+
+        var quenchedPool = LootPool.lootPool().add(AlternativesEntry.alternatives(
+            LootItem.lootTableItem(HexBlocks.QUENCHED_ALLAY).when(silkTouchCond),
+            EntryGroup.list(
+                LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(2f, 4f))),
+                LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
+                    .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
+                        0.25f, 0.35f, 0.5f, 0.75f, 1.0f))
+            )
+        ));
+        blockTables.put(HexBlocks.QUENCHED_ALLAY, LootTable.lootTable().withPool(quenchedPool));
     }
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {

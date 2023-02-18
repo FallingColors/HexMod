@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.entities;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.client.RenderLib;
+import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;

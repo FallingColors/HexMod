@@ -334,6 +334,13 @@ public class HexActions {
         MediaConstants.DUST_UNIT / 3, true, true)
     ));
 
+    public static final ActionRegistryEntry FLIGHT$RANGE = make("flight/range",
+        new ActionRegistryEntry(HexPattern.fromAngles("awawaawq", HexDir.SOUTH_WEST),
+            new OpFlight(OpFlight.Type.LimitRange)));
+    public static final ActionRegistryEntry FLIGHT$TIME = make("flight/time",
+        new ActionRegistryEntry(HexPattern.fromAngles("dwdwdewq", HexDir.NORTH_EAST),
+            new OpFlight(OpFlight.Type.LimitTime)));
+
     public static final ActionRegistryEntry SENTINEL$CREATE = make("sentinel/create",
         new ActionRegistryEntry(HexPattern.fromAngles("waeawae", HexDir.EAST), new OpCreateSentinel(false)));
     public static final ActionRegistryEntry SENTINEL$DESTROY = make("sentinel/destroy",
@@ -345,8 +352,11 @@ public class HexActions {
 
     public static final ActionRegistryEntry LIGHTNING = make("lightning",
         new ActionRegistryEntry(HexPattern.fromAngles("waadwawdaaweewq", HexDir.EAST), OpLightning.INSTANCE));
-    public static final ActionRegistryEntry FLIGHT = make("flight",
-        new ActionRegistryEntry(HexPattern.fromAngles("eawwaeawawaa", HexDir.NORTH_WEST), OpFlight.INSTANCE));
+
+    public static final ActionRegistryEntry ALTIORA = make("flight",
+        new ActionRegistryEntry(HexPattern.fromAngles("eawwaeawawaa", HexDir.NORTH_WEST), OpAltiora.INSTANCE));
+
+
     public static final ActionRegistryEntry CREATE_LAVA = make("create_lava",
         new ActionRegistryEntry(HexPattern.fromAngles("eaqawqadaqd", HexDir.EAST), new OpCreateFluid(
             MediaConstants.CRYSTAL_UNIT,

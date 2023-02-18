@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
-import static at.petrak.hexcasting.client.RenderLib.renderEntity;
+import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
 
 public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecipe> {
     public static final ResourceLocation UID = modLoc("brainsweep");
