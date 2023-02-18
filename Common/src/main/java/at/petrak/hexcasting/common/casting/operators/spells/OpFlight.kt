@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.operators.spells.great
+package at.petrak.hexcasting.common.casting.operators.spells
 
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell

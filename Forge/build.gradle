@@ -142,6 +142,8 @@ dependencies {
     testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
     testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
 
+    implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:$caelusVersion")
+
     // Optional interop
 
     compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")

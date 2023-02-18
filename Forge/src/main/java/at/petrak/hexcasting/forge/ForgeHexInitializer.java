@@ -7,7 +7,8 @@ import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting;
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
+import at.petrak.hexcasting.common.casting.operators.spells.OpFlight;
+import at.petrak.hexcasting.common.casting.operators.spells.great.OpAltiora;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
@@ -178,6 +179,7 @@ public class ForgeHexInitializer {
         evBus.addListener((LivingEvent.LivingTickEvent evt) -> {
             if (evt.getEntity() instanceof ServerPlayer splayer) {
                 OpFlight.tickDownFlight(splayer);
+                OpAltiora.checkPlayerCollision(splayer);
                 ItemLens.tickLens(splayer);
             }
         });

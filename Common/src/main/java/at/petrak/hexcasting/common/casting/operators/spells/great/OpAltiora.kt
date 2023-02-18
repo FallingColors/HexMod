@@ -1,0 +1,64 @@
+package at.petrak.hexcasting.common.casting.operators.spells.great
+
+import at.petrak.hexcasting.api.casting.ParticleSpray
+import at.petrak.hexcasting.api.casting.RenderedSpell
+import at.petrak.hexcasting.api.casting.castables.SpellAction
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.getPlayer
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.player.AltioraAbility
+import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.phys.Vec3
+import kotlin.math.max
+
+object OpAltiora : SpellAction {
+    override val argc = 1
+
+    override fun execute(args: List<Iota>, ctx: CastingEnvironment): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+        val target = args.getPlayer(0, argc)
+        ctx.assertEntityInRange(target)
+
+        return Triple(
+            Spell(target),
+            MediaConstants.CRYSTAL_UNIT,
+            listOf(
+                ParticleSpray.burst(target.position(), 0.5),
+                ParticleSpray(target.position(), Vec3(0.0, 2.0, 0.0), 0.0, 0.1)
+            )
+        )
+    }
+
+    private data class Spell(val target: ServerPlayer) : RenderedSpell {
+        override fun cast(ctx: CastingEnvironment) {
+            target.push(0.0, 1.5, 0.0)
+            // They won't move otherwise?
+            target.hurtMarked = true
+
+            IXplatAbstractions.INSTANCE.setAltiora(target, AltioraAbility(GRACE_PERIOD))
+        }
+    }
+
+    @JvmStatic
+    fun checkPlayerCollision(player: ServerPlayer) {
+        val altiora = IXplatAbstractions.INSTANCE.getAltiora(player);
+        if (altiora != null) {
+            if (altiora.gracePeriod == 0 && (player.isOnGround || player.horizontalCollision)) {
+                IXplatAbstractions.INSTANCE.setAltiora(player, null)
+            } else {
+                val grace2 = max(altiora.gracePeriod - 1, 0)
+                IXplatAbstractions.INSTANCE.setAltiora(player, AltioraAbility(grace2))
+            }
+        }
+    }
+
+    fun checkAllPlayers(world: ServerLevel) {
+        for (player in world.players()) {
+            checkPlayerCollision(player)
+        }
+    }
+
+    private val GRACE_PERIOD = 20
+}

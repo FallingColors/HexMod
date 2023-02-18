@@ -9,7 +9,8 @@ import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight
+import at.petrak.hexcasting.common.casting.operators.spells.OpFlight
+import at.petrak.hexcasting.common.casting.operators.spells.great.OpAltiora
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
@@ -38,6 +39,7 @@ import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
@@ -47,6 +49,7 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
 import java.util.function.BiConsumer
 
@@ -96,11 +99,21 @@ object FabricHexInitializer : ModInitializer {
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(ItemLens::tickAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(OpFlight::tickAllPlayers)
+        ServerTickEvents.END_WORLD_TICK.register(OpAltiora::checkAllPlayers)
 
         CommandRegistrationCallback.EVENT.register { dp, _, _ -> HexCommands.register(dp) }
 
         LootTableEvents.MODIFY.register { _, _, id, supplier, _ ->
             FabricHexLootModJankery.lootLoad(id, supplier::withPool)
+        }
+
+        EntityElytraEvents.CUSTOM.register { target, _ ->
+            if (target is ServerPlayer) {
+                val altiora = IXplatAbstractions.INSTANCE.getAltiora(target)
+                altiora != null
+            } else {
+                false
+            }
         }
     }
 

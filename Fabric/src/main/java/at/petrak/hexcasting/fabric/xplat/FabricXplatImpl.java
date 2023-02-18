@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -165,6 +166,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public void setAltiora(ServerPlayer target, @Nullable AltioraAbility altiora) {
+        var cc = HexCardinalComponents.ALTIORA.get(target);
+        cc.setAltiora(altiora);
+    }
+
+    @Override
     public void setHarness(ServerPlayer target, CastingHarness harness) {
         var cc = HexCardinalComponents.HARNESS.get(target);
         cc.setHarness(harness);
@@ -183,9 +190,15 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FlightAbility getFlight(ServerPlayer player) {
+    public @Nullable FlightAbility getFlight(ServerPlayer player) {
         var cc = HexCardinalComponents.FLIGHT.get(player);
         return cc.getFlight();
+    }
+
+    @Override
+    public @Nullable AltioraAbility getAltiora(ServerPlayer player) {
+        var cc = HexCardinalComponents.ALTIORA.get(player);
+        return cc.getAltiora();
     }
 
     @Override

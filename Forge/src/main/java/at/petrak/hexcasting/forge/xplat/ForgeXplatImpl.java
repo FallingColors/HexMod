@@ -14,6 +14,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
@@ -52,6 +53,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -82,11 +84,13 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.caelus.api.CaelusApi;
 import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -154,6 +158,28 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public void setAltiora(ServerPlayer player, @Nullable AltioraAbility altiora) {
+        CompoundTag tag = player.getPersistentData();
+        tag.putBoolean(TAG_ALTIORA_ALLOWED, altiora != null);
+        if (altiora != null) {
+            tag.putInt(TAG_ALTIORA_GRACE, altiora.gracePeriod());
+        } else {
+            tag.remove(TAG_ALTIORA_ALLOWED);
+        }
+
+        var elytraing = CaelusApi.getInstance().getFlightAttribute();
+        var inst = player.getAttributes().getInstance(elytraing);
+        if (altiora != null) {
+            if (inst.getModifier(ALTIORA_ATTRIBUTE_ID) == null) {
+                inst.addTransientModifier(new AttributeModifier(ALTIORA_ATTRIBUTE_ID, "Altiora", 1.0,
+                    AttributeModifier.Operation.ADDITION));
+            }
+        } else {
+            inst.removeModifier(ALTIORA_ATTRIBUTE_ID);
+        }
+    }
+
+    @Override
     public void setColorizer(Player player, FrozenColorizer colorizer) {
         CompoundTag tag = player.getPersistentData();
         tag.put(TAG_COLOR, colorizer.serializeToNBT());
@@ -212,6 +238,17 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
                 new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
             return new FlightAbility(timeLeft, dimension, origin, radius);
+        }
+        return null;
+    }
+
+    @Override
+    public AltioraAbility getAltiora(ServerPlayer player) {
+        CompoundTag tag = player.getPersistentData();
+        boolean allowed = tag.getBoolean(TAG_ALTIORA_ALLOWED);
+        if (allowed) {
+            var grace = tag.getInt(TAG_ALTIORA_GRACE);
+            return new AltioraAbility(grace);
         }
         return null;
     }
@@ -510,6 +547,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public static final String TAG_FLIGHT_ORIGIN = "hexcasting:flight_origin";
     public static final String TAG_FLIGHT_DIMENSION = "hexcasting:flight_dimension";
     public static final String TAG_FLIGHT_RADIUS = "hexcasting:flight_radius";
+
+    public static final String TAG_ALTIORA_ALLOWED = "hexcasting:altiora_allowed";
+    public static final String TAG_ALTIORA_GRACE = "hexcasting:altiora_grace_period";
+
+    public static final UUID ALTIORA_ATTRIBUTE_ID = UUID.fromString("91897c79-3ebb-468c-a265-40418ed01c41");
 
     public static final String TAG_HARNESS = "hexcasting:spell_harness";
     public static final String TAG_PATTERNS = "hexcasting:spell_patterns";
