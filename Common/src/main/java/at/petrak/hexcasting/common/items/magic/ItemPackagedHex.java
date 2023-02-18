@@ -40,6 +40,8 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     public abstract boolean breakAfterDepletion();
 
+    public abstract int cooldown();
+
     @Override
     public boolean canRecharge(ItemStack stack) {
         return !breakAfterDepletion();
@@ -120,7 +122,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         }
         player.awardStat(stat);
 
-        sPlayer.getCooldowns().addCooldown(this, 5);
+        sPlayer.getCooldowns().addCooldown(this, this.cooldown());
 
         if (broken) {
             stack.shrink(1);

@@ -9,7 +9,6 @@ import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.SealThingsRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTagIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTypeIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerIngredient;
 import at.petrak.hexcasting.datagen.HexAdvancements;
@@ -25,8 +24,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -70,7 +67,14 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_WARPED, Items.WARPED_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_MANGROVE, Items.MANGROVE_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_EDIFIED, HexBlocks.EDIFIED_PLANKS.asItem());
+        staffRecipe(recipes, HexItems.STAFF_QUENCHED, HexItems.QUENCHED_SHARD);
+        staffRecipe(recipes, HexItems.STAFF_MINDSPLICE, Ingredient.of(HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS));
 
+        ShapelessRecipeBuilder.shapeless(HexItems.THOUGHT_KNOT)
+            .requires(HexItems.AMETHYST_DUST)
+            .requires(Items.STRING)
+            .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+            .save(recipes);
         ShapedRecipeBuilder.shaped(HexItems.FOCUS)
             .define('G', ingredients.glowstoneDust())
             .define('L', ingredients.leather())
@@ -228,6 +232,25 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern(" S ")
             .pattern(" S ")
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
+
+        ShapelessRecipeBuilder.shapeless(HexItems.AMETHYST_DUST,
+                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.DUST_UNIT) + 1)
+            .requires(HexItems.QUENCHED_SHARD)
+            .requires(HexItems.AMETHYST_DUST)
+            .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
+            .save(recipes, modLoc("decompose_quenched_shard/dust"));
+        ShapelessRecipeBuilder.shapeless(Items.AMETHYST_SHARD,
+                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.SHARD_UNIT) + 1)
+            .requires(HexItems.QUENCHED_SHARD)
+            .requires(Items.AMETHYST_SHARD)
+            .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
+            .save(recipes, modLoc("decompose_quenched_shard/shard"));
+        ShapelessRecipeBuilder.shapeless(HexItems.CHARGED_AMETHYST,
+                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.CRYSTAL_UNIT) + 1)
+            .requires(HexItems.QUENCHED_SHARD)
+            .requires(HexItems.CHARGED_AMETHYST)
+            .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
+            .save(recipes, modLoc("decompose_quenched_shard/charged"));
 
         ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK)
             .define('S', HexItems.SLATE)
@@ -413,16 +436,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes, modLoc("brainsweep/akashic_record"));
 
         // Temporary tests
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(BlockTags.SMALL_FLOWERS),
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
             new EntityTypeIngredient(EntityType.ALLAY),
-            Blocks.AMETHYST_CLUSTER.defaultBlockState(), MediaConstants.SHARD_UNIT)
+            HexBlocks.QUENCHED_ALLAY.defaultBlockState(), MediaConstants.CRYSTAL_UNIT)
             .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/testing/flowey_the_flower"));
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.SCAFFOLDING),
-            new EntityTagIngredient(EntityTypeTags.SKELETONS),
-            Blocks.BONE_BLOCK.defaultBlockState(), MediaConstants.SHARD_UNIT)
-            .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/testing/bad_to_the_bone"));
+            .save(recipes, modLoc("brainsweep/quench_allay"));
 
         // Create compat
         this.conditions.apply(new CreateCrushingRecipeBuilder()
@@ -485,6 +503,10 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     }
 
     private void staffRecipe(Consumer<FinishedRecipe> recipes, ItemStaff staff, Item plank) {
+        staffRecipe(recipes, staff, Ingredient.of(plank));
+    }
+
+    private void staffRecipe(Consumer<FinishedRecipe> recipes, ItemStaff staff, Ingredient plank) {
         ShapedRecipeBuilder.shaped(staff)
             .define('W', plank)
             .define('S', Items.STICK)

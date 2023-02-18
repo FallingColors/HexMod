@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.recipe;
 
 import at.petrak.hexcasting.api.mod.HexTags;
-import at.petrak.hexcasting.common.items.ItemFocus;
-import at.petrak.hexcasting.common.items.ItemSpellbook;
+import at.petrak.hexcasting.common.items.storage.ItemFocus;
+import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;

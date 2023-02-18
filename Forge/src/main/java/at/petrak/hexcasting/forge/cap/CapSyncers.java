@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.forge.cap;
 
+import at.petrak.hexcasting.forge.network.MsgAltioraUpdateAck;
 import at.petrak.hexcasting.forge.network.MsgColorizerUpdateAck;
 import at.petrak.hexcasting.forge.network.MsgSentinelStatusUpdateAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -25,6 +26,7 @@ public class CapSyncers {
         // Copy data from this to new player
         var x = IXplatAbstractions.INSTANCE;
         x.setFlight(player, x.getFlight(proto));
+        x.setAltiora(player, x.getAltiora(proto));
         x.setSentinel(player, x.getSentinel(proto));
         x.setColorizer(player, x.getColorizer(proto));
         x.setHarness(player, x.getStaffHarness(proto, InteractionHand.MAIN_HAND));
@@ -39,6 +41,7 @@ public class CapSyncers {
 
         syncSentinel(player);
         syncColorizer(player);
+        syncAltiora(player);
     }
 
     @SubscribeEvent
@@ -49,6 +52,7 @@ public class CapSyncers {
 
         syncSentinel(player);
         syncColorizer(player);
+        syncAltiora(player);
     }
 
     public static void syncSentinel(ServerPlayer player) {
@@ -59,5 +63,10 @@ public class CapSyncers {
     public static void syncColorizer(ServerPlayer player) {
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
             new MsgColorizerUpdateAck(IXplatAbstractions.INSTANCE.getColorizer(player)));
+    }
+
+    public static void syncAltiora(ServerPlayer player) {
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
+            new MsgAltioraUpdateAck(IXplatAbstractions.INSTANCE.getAltiora(player)));
     }
 }

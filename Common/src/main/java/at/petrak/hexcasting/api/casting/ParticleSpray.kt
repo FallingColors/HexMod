@@ -6,6 +6,10 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
 
+/**
+ * @param fuzziness the radius of the sphere the particle might happen in (pos)
+ * @param spread the max angle in radians the particle can move in, in relation to vel
+ */
 data class ParticleSpray(val pos: Vec3, val vel: Vec3, val fuzziness: Double, val spread: Double, val count: Int = 20) {
     companion object {
         @JvmStatic

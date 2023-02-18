@@ -10,6 +10,9 @@
   "item.hexcasting.warped_staff": "Warped Staff",
   "item.hexcasting.mangrove_staff": "Mangrove Staff",
   "item.hexcasting.edified_staff": "Edified Staff",
+  "item.hexcasting.quenched_staff": "Quenched Shard Staff",
+  "item.hexcasting.mindsplice_staff": "Mindsplice Staff",
+  "item.hexcasting.thought_knot": "Thought-Knot",
   "item.hexcasting.focus": "Focus",
   "item.hexcasting.focus.sealed": "Sealed Focus",
   "item.hexcasting.spellbook": "Spellbook",
@@ -19,6 +22,7 @@
   "item.hexcasting.battery": "Phial of Media",
   "item.hexcasting.amethyst_dust": "Amethyst Dust",
   "item.hexcasting.charged_amethyst": "Charged Amethyst",
+  "item.hexcasting.quenched_allay_shard": "Shard of Quenched Allay",
   "item.hexcasting.lens": "Scrying Lens",
   "item.hexcasting.scroll_small": "Small Scroll",
   "item.hexcasting.scroll_small.of": "How did you get this item of %s",
@@ -113,6 +117,7 @@
   "block.hexcasting.amethyst_edified_leaves": "Amethyst Edified Leaves",
   "block.hexcasting.aventurine_edified_leaves": "Aventurine Edified Leaves",
   "block.hexcasting.citrine_edified_leaves": "Citrine Edified Leaves",
+  "block.hexcasting.quenched_allay": "Quenched Allay",
   
   "itemGroup.hexcasting": "Hexcasting",
   "itemGroup.hexcasting.creative_tab": "Hexcasting",
@@ -184,10 +189,16 @@
   "text.autoconfig.hexcasting.option.common.shardMediaAmount": "Shard Media Amount",
   "text.autoconfig.hexcasting.option.common.chargedCrystalMediaAmount": "Charged Crystal Media Amount",
   "text.autoconfig.hexcasting.option.common.mediaToHealthRate": "Media To Health Rate",
+  "text.autoconfig.hexcasting.option.common.cypherCooldown": "Cypher Cooldown",
+  "text.autoconfig.hexcasting.option.common.trinketCooldown": "Trinket Cooldown",
+  "text.autoconfig.hexcasting.option.common.artifactCooldown": "Artifact Cooldown",
   "text.autoconfig.hexcasting.option.common.dustMediaAmount.@Tooltip": "How much media a single Amethyst Dust item is worth",
   "text.autoconfig.hexcasting.option.common.shardMediaAmount.@Tooltip": "How much media a single Amethyst Shard item is worth",
   "text.autoconfig.hexcasting.option.common.chargedCrystalMediaAmount.@Tooltip": "How much media a single Charged Amethyst Crystal item is worth",
   "text.autoconfig.hexcasting.option.common.mediaToHealthRate.@Tooltip": "How many points of media a half-heart is worth when casting from HP",
+  "text.autoconfig.hexcasting.option.common.cypherCooldown.@Tooltip": "Cooldown of a cypher in ticks",
+  "text.autoconfig.hexcasting.option.common.trinketCooldown.@Tooltip": "Cooldown of a trinket in ticks",
+  "text.autoconfig.hexcasting.option.common.artifactCooldown.@Tooltip": "Cooldown of an artifact in ticks",
   
   "text.autoconfig.hexcasting.option.client.ctrlTogglesOffStrokeOrder": "Ctrl Toggles Off Stroke Order",
   "text.autoconfig.hexcasting.option.client.invertSpellbookScrollDirection": "Invert Spellbook Scroll Direction",
@@ -289,6 +300,8 @@
   "hexcasting.subtitles.impetus.fletcher.tick": "Fletcher Impetus ticks",
   "hexcasting.subtitles.impetus.cleric.register": "Cleric Impetus dings",
   "hexcasting.subtitles.lore_fragment.read": "Read lore fragment",
+  "hexcasting.subtitles.flight.ambience": "Player flies",
+  "hexcasting.subtitles.flight.finish": "Flight ends",
   
   "_comment": "hexcasting.spell.book keys override the name of a pattern in the patchouli book if present",
   
@@ -481,13 +494,15 @@
   "hexcasting.action.hexcasting:potion/wither": "Black Sun's Nadir",
   "hexcasting.action.hexcasting:potion/poison": "Red Sun's Nadir",
   "hexcasting.action.hexcasting:potion/slowness": "Green Sun's Nadir",
+  "hexcasting.action.hexcasting:flight/range": "Anchorite's Flight",
+  "hexcasting.action.hexcasting:flight/time": "Wayfarer's Flight",
   
   "hexcasting.action.hexcasting:potion/regeneration": "White Sun's Zenith",
   "hexcasting.action.hexcasting:potion/night_vision": "Blue Sun's Zenith",
   "hexcasting.action.hexcasting:potion/absorption": "Black Sun's Zenith",
   "hexcasting.action.hexcasting:potion/haste": "Red Sun's Zenith",
   "hexcasting.action.hexcasting:potion/strength": "Green Sun's Zenith",
-  "hexcasting.action.hexcasting:flight": "Flight",
+  "hexcasting.action.hexcasting:flight": "Altiora",
   "hexcasting.action.hexcasting:lightning": "Summon Lightning",
   "hexcasting.action.hexcasting:summon_rain": "Summon Rain",
   "hexcasting.action.hexcasting:dispel_rain": "Dispel Rain",
@@ -745,17 +760,23 @@
   
   "hexcasting.entry.lens": "Scrying Lens",
   "hexcasting.page.lens.1": "_Media can have peculiar effects on any type of information, in specific circumstances. Coating a glass in a thin film of it can lead to ... elucidating insights.$(br2)By holding a $(l:items/lens)$(item)Scrying Lens/$ in my hand, certain blocks will display additional information when I look at them.",
-  "hexcasting.page.lens.2": "For example, looking at a piece of $(item)Redstone/$ will display its signal strength. I suspect I will discover other blocks with additional insight as my studies into my art progress.$(br2)In addition, holding it while casting using a $(l:items/staff)$(item)Staff/$ will shrink the spacing between dots, allowing me to draw more on my grid.$(br2)I can also wear it on my head as a strange sort of monocle. This reveals information, but won't shrink my grid. No matter. There must be a way to have both...",
+  "hexcasting.page.lens.2": "For example, looking at a piece of $(item)Redstone/$ will display its signal strength. I suspect I will discover other blocks with additional insight as my studies into my art progress.$(br2)In addition, holding it while casting using a $(l:items/staff)$(item)Staff/$ will shrink the spacing between dots, allowing me to draw more on my grid.$(br2)I can also wear it on my head as a strange sort of monocle.",
   "hexcasting.page.lens.crafting.desc": "$(italic)You must learn... to see what you are looking at./$",
   
+  "hexcasting.entry.thought_knot": "Thought-Knot",
+  "hexcasting.page.thought_knot.1": "The forgetful often tie a piece of string about their finger to help them remember something important. I believe this idea might be of use in my art. A specially knotted piece of string should be able to hold a single iota stably, irregardless of my stack.$(br2)I will call my invention a $(item)Thought-Knot/$.",
+  "hexcasting.page.thought_knot.2": "When I craft it, it stores no iota. Using $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ while holding a $(item)Thought-Knot/$ in my other hand will remove the top of the stack and save it into the $(item)Thought-Knot/$. Using $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$ will copy whatever iota's in the $(item)Thought-Knot/$ and add it to the stack.$(br2)Once a $(item)Thought-Knot/$ has been written to, the string is indelibly tangled; the iota can be read any number of times, but there is no way to erase or overwrite it. Fortunately, they are not expensive.",
+  "hexcasting.page.thought_knot.3": "Also, if I store an entity in a $(item)Thought-Knot/$ and try to recall it after the referenced entity has died or otherwise disappeared, the $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$ will add $(l:casting/influences)$(thing)Null/$ to the stack instead.",
+  "hexcasting.page.thought_knot.crafting.desc": "$(italic)How would you feel if someone saw you wearing a sign that said, \"I am dashing and handsome?\"/$",
+  
   "hexcasting.entry.focus": "Focus",
-  "hexcasting.page.focus.1": "A $(l:items/focus)$(item)Focus/$ can store a single iota.$(br2)When I craft it, it holds the $(l:casting/influences)$(thing)Null/$ influence by default. Using $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ while holding a $(l:items/focus)$(item)Focus/$ in my other hand will remove the top of the stack and save it into the $(l:items/focus)$(item)Focus/$. Using $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$ will copy whatever iota's in the $(l:items/focus)$(item)Focus/$ and add it to the stack.",
-  "hexcasting.page.focus.2": "It occurs to me that I could conceivably store a whole list of patterns in a $(l:items/focus)$(item)Focus/$, then recall them and evaluate them with $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$. This way I can cast complex spells, or parts of spells, without having to draw them over and over.$(br2)I could use this like a slightly less convenient $(l:items/hexcasting#artifact)$(item)Artifact/$, but I think I could get much better dividends by putting common \"phrases\" in a $(l:items/focus)$(item)Focus/$, like the patterns for figuring out where I'm looking.",
-  "hexcasting.page.focus.3": "Also, if I store an entity in a $(l:items/focus)$(item)Focus/$ and try to recall it after the referenced entity has died or otherwise disappeared, the $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$ will add $(l:casting/influences)$(thing)Null/$ to the stack instead.$(br2)Finally, it seems if I wish to protect a $(l:items/focus)$(item)focus/$ from accidentally being overwritten, I can seal it with wax by crafting it with a $(item)Honeycomb/$. Attempting to use $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ on a sealed focus will fail. $(l:patterns/spells/hexcasting#hexcasting:erase)$(action)Erase Item/$ will remove this seal along with the contents.",
+  "hexcasting.page.focus.1": "A $(item)Focus/$ is like a $(l:items/thought_knot)$(item)Thought-Knot/$, in that iota can be written to or read from it. However, the advantage of a focus is that it is $(italic)reusable/$. If I make a mistake in the iota I write to a $(item)Focus, I can simply cast $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ again and write over the iota inside.",
+  "hexcasting.page.focus.2": "If I wish to protect a $(l:items/focus)$(item)focus/$ from accidentally being overwritten, I can seal it with wax by crafting it with a $(item)Honeycomb/$. Attempting to use $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ on a sealed focus will fail.$(br2)$(l:patterns/spells/hexcasting#hexcasting:erase)$(action)Erase Item/$ will remove this seal along with the contents.",
+  "hexcasting.page.focus.3": "Indeed, the only advantage of my $(l:items/thought_knot)$(item)Thought-Knot/$s have over $(item)Foci/$ is that $(item)Foci/$ are more expensive to produce. My research indicates that the early practitioners of the art used exclusively $(item)Foci/$, with the $(l:items/thought_knot)$(item)Thought-Knot/$ being an original creation of mine.$(br2)Whoever those ancient people were, they must have been very prosperous.",
   "hexcasting.page.focus.crafting.desc": "$(italic)Poison apples, poison worms./$",
   
   "hexcasting.entry.abacus": "Abacus",
-  "hexcasting.page.abacus.1": "Although there are $(l:patterns/numbers)$(action)patterns for drawing numbers/$, I find them ... cumbersome, to say the least.$(br2)Fortunately, the old masters of my craft invented an ingenious device called an $(l:items/abacus)$(item)Abacus/$ to provide numbers to my casting. I simply set the number to what I want, then read the value using $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$, just like I would read a $(l:items/focus)$(item)Focus/$.",
+  "hexcasting.page.abacus.1": "Although there are $(l:patterns/numbers)$(action)patterns for drawing numbers/$, I find them ... cumbersome, to say the least.$(br2)Fortunately, the old masters of my craft invented an ingenious device called an $(l:items/abacus)$(item)Abacus/$ to provide numbers to my casting. I simply set the number to what I want, then read the value using $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$, just like I would read a $(l:items/thought_knot)$(item)Thought-Knot/$ or $(l:items/focus)$(item)Focus/$.",
   "hexcasting.page.abacus.2": "To operate one, I simply hold it, sneak, and scroll. If in my main hand, the number will increment or decrement by 1, or 10 if I am also holding Control/Command. If in my off hand, the number will increment or decrement by 0.1, or 0.001 if I am also holding Control/Command.$(br2)I can shake the abacus to reset it to zero by sneak-right-clicking.",
   "hexcasting.page.abacus.crafting.desc": "$(italic)Mathematics? That's for eggheads!/$",
   
@@ -856,6 +877,16 @@
   "hexcasting.page.akashiclib.2": "The library. Here. My plans.$(br2)Like how patterns are associated with actions, I can associate my own patterns with iotas in any way I choose. An $(l:greatwork/akashiclib)$(item)Akashic Record/$ controls the library, and each $(l:greatwork/akashiclib)$(item)Akashic Bookshelf/$ stores one pattern mapped to one iota. These must all be directly connected together, touching, within 32 blocks. An $(l:greatwork/akashiclib)$(item)Akashic Ligature/$ doesn't do anything but count as a connecting block, to extend the size of my library.",
   "hexcasting.page.akashiclib.akashic_record": "Allocating and assigning patterns is simple but oh so boring. I have better things to do. I will need a mind well-used to its work for the extraction to stay sound.",
   "hexcasting.page.akashiclib.3": "Then to operate the library is simple, the patterns are routed through the librarian and it looks them up and returns the iota to you. Two actions do the work. $(l:patterns/akashic_patterns)Notes here/$.$(br2)Using an empty $(l:items/scroll)$(item)scroll/$ on a bookshelf copies the pattern there onto the $(l:items/scroll)$(item)scroll/$. Sneaking and using an empty hand clears the datum in the shelf.",
+  
+  "hexcasting.entry.quenching_allays": "Quenching Allays",
+  "hexcasting.page.quenching_allays.1": "THEY ARE BITS OF MEDIA. How did I not see it sooner? They are -- as I am a heap of flesh with a scrap, blessed with a scrap of thought, an Allay is a self-sustaining quarrel of media pinned to a scrap of flesh. It explains everything -- their propensity for media, their response to music, I SEE NOW, HOW did the ones before NOT?",
+  "hexcasting.page.quenching_allays.2": "And given this it is only RIGHT I conquer their peculiar minds -- their peculiar selves -- that is all they are, a mind, a self, a coda. Something about their phase speaks to me. I can... I can compress _media with them, overlay two wends of thought in one space, physical and cognitive, all and once.$(br2)Somehow, the process produces _media of its own. How? Perhaps -- perhaps MY work, the process of doing it --",
+  "hexcasting.page.quenching_allays.3": "It matters not. I matter not. They matter not, all that matters is what it does. And this is it.$(br2)It must hurt so very much.",
+  "hexcasting.page.quenching_allays.4": "The product is fragile. Breaking it shatters it into pieces, with $(thing)Fortune/$ increasing the yield... if I wish the block itself I need a silken touch.$(br2)The produced shards are worth thrice an $(l:items/amethyst)$(item)Charged Amethyst Crystal/$ apiece. The block itself is worth four of the shards.",
+  "hexcasting.page.quenching_allays.5": "They are mercurial, they seem to twist and wink under my fingers, and by giving them a mentor in another form of _media they may be coerced into its shape, in an equivalent exchange of _media.",
+  
+  "hexcasting.entry.fanciful_staves": "Fanciful Staves",
+  "hexcasting.page.fanciful_staves.1": "It is only right as I shed the husk of ignorance I replace my tools, my palm-polished staves. These new constructions of mine have no additional properties -- but they are so glorious, oh so Glorious... They match the radiance winking at the corners of my sight.",
   
   "_comment": "Patterns",
   
@@ -1079,7 +1110,7 @@
   
   "hexcasting.entry.blockworks": "Blockworks",
   "hexcasting.page.blockworks.place_block": "Remove a location from the stack, then pick a block item and place it at the given location.$(br)Costs a negligible amount of _media.",
-  "hexcasting.page.blockworks.break_block": "Remove a location from the stack, then break the block at the given location. This spell can break nearly anything a Diamond Pickaxe can break.$(br)Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
+  "hexcasting.page.blockworks.break_block": "Remove a location from the stack, then break the block at the given location. This spell can break nearly anything a Diamond Pickaxe can break.$(br)Costs about an eighth of one $(l:items/amethyst)$(item)Amethyst Dust/$.",
   "hexcasting.page.blockworks.create_water": "Summon a block of water (or insert up to a bucket's worth) into a block at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
   "hexcasting.page.blockworks.destroy_water": "Drains either a liquid container at, or a body of liquid around, the given position. Costs about two $(l:items/amethyst)$(item)Charged Amethyst/$.",
   "hexcasting.page.blockworks.conjure_block": "Conjure an ethereal, but solid, block that sparkles with my pigment at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
@@ -1118,6 +1149,14 @@
   
   "hexcasting.page.colorize": "I must be holding a $(l:items/pigments)$(item)Pigment/$ in my other hand to cast this spell. When I do, it will consume the dye and permanently change my mind's coloration (at least, until I cast the spell again). Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
   
+  "hexcasting.entry.flights": "Flight",
+  "hexcasting.page.flights.1": "Although it seems that true, limitless flight is out of my grasp, I have nonetheless found some methods of holding one in the sky, each with their respective drawbacks.$(br2)All forms produce a shimmer of excess _media; as the spell gets closer to ending, the sparks are shot through with more red and black.",
+  "hexcasting.page.flights.2": "Other forms of flight do exist, of course. For example, a combination of $(l:patterns/spells/basic#hexcasting:add_motion)$(action)Impulse/$ and $(l:patterns/spells/nadirs#hexcasting:potion/levitation)$(action)Blue Sun's Nadir/$ has been used since antiquity for a flight of sorts.$(br2)I've also heard tell of a thin membrane worn on the back that allows the ability to glide. From my research, I believe the Great spell $(l:patterns/great_spells/altiora)$(action)Altiora/$ may be used to mimic it.",
+  "hexcasting.page.flights.range.1": "A flight limited in its range.",
+  "hexcasting.page.flights.range.2": "The second argument is a horizontal radius, in meters, in which the spell is stable. Moving outside of that radius will end the spell, dropping me out of the sky. As long as I stay inside the safe zone, however, the spell lasts indefinitely. An additional shimmer of _media marks the origin point of the safe zone. $(br2)Costs about 1 $(l:items/amethyst)$(item)Amethyst Dust/$ per meter of safety.",
+  "hexcasting.page.flights.time.1": "A flight limited in its duration.",
+  "hexcasting.page.flights.time.2": "The second argument is an amount of time in seconds for which the spell is stable. After that time, the spell ends and I am dropped from the sky. $(br2)It is relatively expensive at about 1 $(l:items/amethyst)$(item)Charged Crystal/$ per second of flight; I believe it is best suited for travel.",
+  
   "hexcasting.page.create_lava.1": "Summon a block of lava (or insert up to a bucket's worth) into a block at the given position. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
   "hexcasting.page.create_lava.2": "It may be advisable to keep my knowledge of this spell secret. A certain faction of botanists get... touchy about it, or so I've heard.$(br2)Well, no one said tracing the deep secrets of the universe was going to be an easy time.",
   
@@ -1126,8 +1165,8 @@
   "hexcasting.page.weather_manip.summon_rain": "I control the clouds! This spell will summon rain across the world I cast it upon. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$. Does nothing if it is already raining.",
   "hexcasting.page.weather_manip.dispel_rain": "A counterpart to summoning rain. This spell will dispel rain across the world I cast it upon. Costs about one $(l:items/amethyst)$(item)Amethyst Shard/$. Does nothing if the skies are already clear.",
   
-  "hexcasting.page.flight.1": "The power of flight! I have wrestled Nature to its knees. But Nature is vengeful, and itches for me to break its contract so it may break my shins.",
-  "hexcasting.page.flight.2": "The entity (which must be a player) will be endowed with flight. The first number is the number of seconds they may fly for, and the second number is the radius of the zone they may fly in. If the recipient exits that zone, or their timer runs out while midair, the gravity that they spurned will get its revenge. Painfully.$(br2)It costs one quarter of an $(l:items/amethyst)$(item)Amethyst Dust/$, per meter of radius, per second in flight.",
+  "hexcasting.page.altiora.1": "Summon a sheaf of _media about me in the shape of wings, endowed with enough substance to allow gliding.",
+  "hexcasting.page.altiora.2": "Using them is identical to using $(item)Elytra/$; the target (which must be a player) is lofted into the air, after which pressing $(k:jump) will deploy the wings. The wings are fragile, and break upon touching any surface. Longer flights may benefit from $(l:patterns/spells/basic#hexcasting:add_motion)$(action)Impulse/$ or (for the foolhardy) $(item)Fireworks/$.$(br2)Costs about one $(l:items/amethyst)$(item)Charged Crystal/$.",
   
   "hexcasting.page.teleport.1": "Far more powerful than $(l:patterns/spells/basic#hexcasting:blink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to.",
   "hexcasting.page.teleport.2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(l:items/amethyst)$(item)Charged Amethyst/$.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination. In addition, the target will be forcibly removed from anything inanimate they are riding or sitting on ... but I've read scraps that suggest animals can come along for the ride, so to speak.",

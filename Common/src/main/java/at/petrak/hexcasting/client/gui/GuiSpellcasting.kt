@@ -12,8 +12,10 @@ import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
-import at.petrak.hexcasting.client.*
+import at.petrak.hexcasting.client.ClientTickCounter
+import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
+import at.petrak.hexcasting.client.render.*
 import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn

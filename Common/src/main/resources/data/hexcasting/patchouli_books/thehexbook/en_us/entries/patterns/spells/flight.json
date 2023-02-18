@@ -1,0 +1,30 @@
+{
+  "name": "hexcasting.entry.flights",
+  "category": "hexcasting:patterns/spells",
+  "icon": "minecraft:feather",
+  "advancement": "hexcasting:root",
+  "sortnum": 6,
+  "read_by_default": true,
+  "pages": [
+    "hexcasting.page.flights.1",
+    "hexcasting.page.flights.2",
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:flight/range",
+      "anchor": "hexcasting:flight/range",
+      "input": "entity, number",
+      "output": "",
+      "text": "hexcasting.page.flights.range.1"
+    },
+    "hexcasting.page.flights.range.2",
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:flight/time",
+      "anchor": "hexcasting:flight/time",
+      "input": "entity, number",
+      "output": "",
+      "text": "hexcasting.page.flights.time.1"
+    },
+    "hexcasting.page.flights.time.2"
+  ]
+}

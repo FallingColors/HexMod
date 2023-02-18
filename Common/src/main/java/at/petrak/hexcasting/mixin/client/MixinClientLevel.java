@@ -21,14 +21,16 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public abstract class MixinClientLevel {
 
     @Inject(method = "doAnimateTick",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;animateTick(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V"),
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;animateTick" +
+            "(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;" +
+            "Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V"),
         locals = LocalCapture.CAPTURE_FAILSOFT)
     public void addBuddingAmethystParticles(int $$0, int $$1, int $$2, int $$3, RandomSource rand, Block $$5,
         BlockPos.MutableBlockPos pos, CallbackInfo ci, int trueX, int trueY, int trueZ, BlockState state) {
         ClientLevel self = ((ClientLevel) (Object) this);
 
         if (state.is(Blocks.BUDDING_AMETHYST)) {
-            ParticleOptions options = new ConjureParticleOptions(0x8932b8, true);
+            ParticleOptions options = new ConjureParticleOptions(0x8932b8);
             Vec3 center = Vec3.atCenterOf(pos);
             for (Direction direction : Direction.values()) {
                 int dX = direction.getStepX();

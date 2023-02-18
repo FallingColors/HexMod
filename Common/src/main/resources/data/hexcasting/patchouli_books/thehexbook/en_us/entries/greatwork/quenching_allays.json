@@ -1,0 +1,39 @@
+{
+  "name": "hexcasting.entry.quenching_allays",
+  "category": "hexcasting:greatwork",
+  "icon": "hexcasting:quenched_allay",
+  "advancement": "hexcasting:enlightenment",
+  "entry_color": "54398a",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.quenching_allays.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.quenching_allays.2"
+    },
+    {
+      "type": "hexcasting:brainsweep",
+      "recipe": "hexcasting:brainsweep/quench_allay",
+      "text": "hexcasting.page.quenching_allays.3"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "hexcasting:quenched_allay_shard",
+      "link_recipe": true,
+      "text": "hexcasting.page.quenching_allays.4"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:decompose_quenched_shard/dust",
+      "text": "hexcasting.page.quenching_allays.5"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:decompose_quenched_shard/shard",
+      "recipe2": "hexcasting:decompose_quenched_shard/charged"
+    }
+  ]
+}

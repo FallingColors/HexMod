@@ -42,6 +42,9 @@ public class HexSounds {
 
     public static final SoundEvent READ_LORE_FRAGMENT = sound("lore_fragment.read");
 
+    public static final SoundEvent FLIGHT_AMBIENCE = sound("flight.ambience");
+    public static final SoundEvent FLIGHT_FINISH = sound("flight.finish");
+
     private static SoundEvent sound(String name) {
         var id = modLoc(name);
         var sound = new SoundEvent(id);

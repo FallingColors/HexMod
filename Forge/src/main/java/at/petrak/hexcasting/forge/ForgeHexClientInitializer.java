@@ -1,15 +1,17 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
-import at.petrak.hexcasting.client.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
-import at.petrak.hexcasting.client.shader.HexShaders;
+import at.petrak.hexcasting.client.render.HexAdditionalRenderers;
+import at.petrak.hexcasting.client.render.HexModelLayers;
+import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.interop.HexInterop;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.particle.ParticleProvider;
@@ -103,5 +105,21 @@ public class ForgeHexClientInitializer {
     @SubscribeEvent
     public static void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent evt) {
         evt.register(PatternTooltip.class, PatternTooltipComponent::new);
+    }
+
+    @SubscribeEvent
+    public static void onModelRegister(ModelEvent.RegisterAdditional evt) {
+        var recMan = Minecraft.getInstance().getResourceManager();
+        RegisterClientStuff.onModelRegister(recMan, evt::register);
+    }
+
+    @SubscribeEvent
+    public static void onModelBake(ModelEvent.BakingCompleted evt) {
+        RegisterClientStuff.onModelBake(evt.getModelBakery(), evt.getModels());
+    }
+
+    @SubscribeEvent
+    public static void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions evt) {
+        HexModelLayers.init(evt::registerLayerDefinition);
     }
 }

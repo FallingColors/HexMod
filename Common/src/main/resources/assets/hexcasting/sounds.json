@@ -129,5 +129,20 @@
       "block/enchantment_table/enchant3"
     ],
     "subtitle": "hexcasting.subtitles.lore_fragment.read"
+  },
+  "flight.ambience": {
+    "sounds": [
+      "block/amethyst/shimmer"
+    ],
+    "subtitle": "hexcasting.subtitles.flight.ambience"
+  },
+  "flight.finish": {
+    "sounds": [
+      "block/amethyst/break1",
+      "block/amethyst/break2",
+      "block/amethyst/break3",
+      "block/amethyst/break4"
+    ],
+    "subtitle": "hexcasting.subtitles.flight.finish"
   }
 }

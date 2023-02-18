@@ -238,7 +238,8 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .texture("all", modLoc("block/citrine_edified_leaves"))
                 .renderType("cutout_mipped"));
 
-        doorBlockWithRenderType(HexBlocks.EDIFIED_DOOR, modLoc("block/edified_door_lower"), modLoc("block/edified_door_upper"), "cutout");
+        doorBlockWithRenderType(HexBlocks.EDIFIED_DOOR, modLoc("block/edified_door_lower"), modLoc("block" +
+            "/edified_door_upper"), "cutout");
         // door model via the given texture
         trapdoorBlockWithRenderType(HexBlocks.EDIFIED_TRAPDOOR, modLoc("block/edified_trapdoor"), true, "cutout");
 
@@ -268,6 +269,9 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             .renderType("cutout");
         simpleBlock(HexBlocks.CONJURED_BLOCK, conjuredModel);
         simpleBlock(HexBlocks.CONJURED_LIGHT, conjuredModel);
+
+        // for the break particles
+        simpleBlock(HexBlocks.QUENCHED_ALLAY, models().cubeAll("quenched_allay", modLoc("block/quenched_allay_0")));
     }
 
     private void impetus(Block block, String name, String stub) {

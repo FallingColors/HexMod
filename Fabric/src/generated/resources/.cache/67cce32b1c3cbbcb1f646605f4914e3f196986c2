@@ -1,4 +1,4 @@
-// 1.19.2	2023-01-31T19:01:22.799226001	LootTables
+// 1.19.2	2023-02-18T11:41:21.846932255	LootTables
 dec1d3592e82f99d9e059d9c771530f103b2bda5 data/hexcasting/loot_tables/blocks/empty_directrix.json
 2c42fc5d8c74c98ad15b8bd50f56541fccbef750 data/hexcasting/loot_tables/blocks/edified_tile.json
 cfb39e2151725fe4f9a7269d9b5de8031ea54a44 data/hexcasting/loot_tables/blocks/directrix_redstone.json
@@ -34,3 +34,4 @@ b7f7af68760b51d0c438f5c6039f1cd7157fa452 data/hexcasting/loot_tables/blocks/anci
 9ee4259b51cccd4582fb2e52ab9f64e92af857bb data/hexcasting/loot_tables/blocks/edified_log.json
 c089d3d230ae5354f2a9953f65bba77b6e26d976 data/hexcasting/loot_tables/blocks/edified_trapdoor.json
 745b510161cfff804b115f566ad6b50e0cb492d1 data/hexcasting/loot_tables/blocks/slate.json
+33ac65cb8351f73958f6d1cb9a5dacfe53d4a2a7 data/hexcasting/loot_tables/blocks/quenched_allay.json

@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.network.IMessage;
@@ -77,7 +78,9 @@ public interface IXplatAbstractions {
 
     void setSentinel(Player target, Sentinel sentinel);
 
-    void setFlight(ServerPlayer target, FlightAbility flight);
+    void setFlight(ServerPlayer target, @Nullable FlightAbility flight);
+
+    void setAltiora(Player target, @Nullable AltioraAbility altiora);
 
     void setHarness(ServerPlayer target, @Nullable CastingVM harness);
 
@@ -85,7 +88,9 @@ public interface IXplatAbstractions {
 
     boolean isBrainswept(Mob mob);
 
-    FlightAbility getFlight(ServerPlayer player);
+    @Nullable FlightAbility getFlight(ServerPlayer player);
+
+    @Nullable AltioraAbility getAltiora(Player player);
 
     FrozenColorizer getColorizer(Player player);
 
