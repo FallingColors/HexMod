@@ -1,0 +1,4 @@
+[ ] Spell to breed animals, speed up babies, excite allays
+[ ] Sleep:
+- make players sleep till the next sun/moonrise
+- clears AI tasks of mobs (temporarily)

@@ -20,6 +20,10 @@ public class HexTags {
         public static final TagKey<Item> GRANTS_ROOT_ADVANCEMENT = create("grants_root_advancement");
         public static final TagKey<Item> SEAL_MATERIALS = create("seal_materials");
 
+        public static final TagKey<Item> IMPETI = create("impeti");
+        public static final TagKey<Item> DIRECTRICES = create("directrices");
+        public static final TagKey<Item> MINDFLAYED_CIRCLE_COMPONENTS = create("brainswept_circle_components");
+
         public static TagKey<Item> create(String name) {
             return create(modLoc(name));
         }
@@ -32,6 +36,11 @@ public class HexTags {
     public static final class Blocks {
         public static final TagKey<Block> EDIFIED_LOGS = create("edified_logs");
         public static final TagKey<Block> EDIFIED_PLANKS = create("edified_planks");
+
+
+        public static final TagKey<Block> IMPETI = create("impeti");
+        public static final TagKey<Block> DIRECTRICES = create("directrices");
+        public static final TagKey<Block> MINDFLAYED_CIRCLE_COMPONENTS = create("brainswept_circle_components");
 
         public static TagKey<Block> create(String name) {
             return TagKey.create(Registry.BLOCK_REGISTRY, modLoc(name));

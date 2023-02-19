@@ -24,30 +24,23 @@
               "name": "hexcasting:quenched_allay"
             },
             {
-              "type": "minecraft:group",
-              "children": [
+              "type": "minecraft:item",
+              "functions": [
                 {
-                  "type": "minecraft:item",
-                  "functions": [
-                    {
-                      "add": false,
-                      "count": {
-                        "type": "minecraft:uniform",
-                        "max": 4.0,
-                        "min": 2.0
-                      },
-                      "function": "minecraft:set_count"
-                    }
-                  ],
-                  "name": "hexcasting:quenched_allay_shard"
+                  "add": false,
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "max": 4.0,
+                    "min": 2.0
+                  },
+                  "function": "minecraft:set_count"
                 },
                 {
-                  "type": "minecraft:item",
+                  "add": true,
                   "conditions": [
                     {
                       "chances": [
                         0.25,
-                        0.35,
                         0.5,
                         0.75,
                         1.0
@@ -56,9 +49,11 @@
                       "enchantment": "minecraft:fortune"
                     }
                   ],
-                  "name": "hexcasting:quenched_allay_shard"
+                  "count": 1.0,
+                  "function": "minecraft:set_count"
                 }
-              ]
+              ],
+              "name": "hexcasting:quenched_allay_shard"
             }
           ]
         }

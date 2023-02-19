@@ -22,6 +22,7 @@
   "item.hexcasting.battery": "Phial of Media",
   "item.hexcasting.amethyst_dust": "Amethyst Dust",
   "item.hexcasting.charged_amethyst": "Charged Amethyst",
+  "item.hexcasting.quenched_allay_shard": "Shard of Quenched Allay",
   "item.hexcasting.lens": "Scrying Lens",
   "item.hexcasting.scroll_small": "Small Scroll",
   "item.hexcasting.scroll_small.of": "How did you get this item of %s",
@@ -608,7 +609,7 @@
   
   "_comment": "Patchi stuff",
   
-  "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
+  "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
   
   "hexcasting.entry.basics": "Getting Started",
   "hexcasting.entry.basics.desc": "The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)staff/$-- or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them. How might I do the same?",
@@ -876,6 +877,16 @@
   "hexcasting.page.akashiclib.2": "The library. Here. My plans.$(br2)Like how patterns are associated with actions, I can associate my own patterns with iotas in any way I choose. An $(l:greatwork/akashiclib)$(item)Akashic Record/$ controls the library, and each $(l:greatwork/akashiclib)$(item)Akashic Bookshelf/$ stores one pattern mapped to one iota. These must all be directly connected together, touching, within 32 blocks. An $(l:greatwork/akashiclib)$(item)Akashic Ligature/$ doesn't do anything but count as a connecting block, to extend the size of my library.",
   "hexcasting.page.akashiclib.akashic_record": "Allocating and assigning patterns is simple but oh so boring. I have better things to do. I will need a mind well-used to its work for the extraction to stay sound.",
   "hexcasting.page.akashiclib.3": "Then to operate the library is simple, the patterns are routed through the librarian and it looks them up and returns the iota to you. Two actions do the work. $(l:patterns/akashic_patterns)Notes here/$.$(br2)Using an empty $(l:items/scroll)$(item)scroll/$ on a bookshelf copies the pattern there onto the $(l:items/scroll)$(item)scroll/$. Sneaking and using an empty hand clears the datum in the shelf.",
+  
+  "hexcasting.entry.quenching_allays": "Quenching Allays",
+  "hexcasting.page.quenching_allays.1": "THEY ARE BITS OF MEDIA. How did I not see it sooner? They are -- as I am a heap of flesh with a scrap, blessed with a scrap of thought, an Allay is a self-sustaining quarrel of media pinned to a scrap of flesh. It explains everything -- their propensity for media, their response to music, I SEE NOW, HOW did the ones before NOT?",
+  "hexcasting.page.quenching_allays.2": "And given this it is only RIGHT I conquer their peculiar minds -- their peculiar selves -- that is all they are, a mind, a self, a coda. Something about their phase speaks to me. I can... I can compress _media with them, overlay two wends of thought in one space, physical and cognitive, all and once.$(br2)Somehow, the process produces _media of its own. How? Perhaps -- perhaps MY work, the process of doing it --",
+  "hexcasting.page.quenching_allays.3": "It matters not. I matter not. They matter not, all that matters is what it does. And this is it.$(br2)It must hurt so very much.",
+  "hexcasting.page.quenching_allays.4": "The product is fragile. Breaking it shatters it into pieces, with $(thing)Fortune/$ increasing the yield... if I wish the block itself I need a silken touch.$(br2)The produced shards are worth thrice an $(l:items/amethyst)$(item)Charged Amethyst Crystal/$ apiece. The block itself is worth four of the shards.",
+  "hexcasting.page.quenching_allays.5": "They are mercurial, they seem to twist and wink under my fingers, and by giving them a mentor in another form of _media they may be coerced into its shape, in an equivalent exchange of _media.",
+  
+  "hexcasting.entry.fanciful_staves": "Fanciful Staves",
+  "hexcasting.page.fanciful_staves.1": "It is only right as I shed the husk of ignorance I replace my tools, my palm-polished staves. These new constructions of mine have no additional properties -- but they are so glorious, oh so Glorious... They match the radiance winking at the corners of my sight.",
   
   "_comment": "Patterns",
   

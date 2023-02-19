@@ -17,6 +17,14 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
 
     @Override
     public void addTags() {
+        tag(HexTags.Blocks.IMPETI)
+            .add(HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_STOREDPLAYER);
+        tag(HexTags.Blocks.DIRECTRICES)
+            .add(HexBlocks.DIRECTRIX_REDSTONE);
+        tag(HexTags.Blocks.MINDFLAYED_CIRCLE_COMPONENTS)
+            .addTag(HexTags.Blocks.IMPETI)
+            .addTag(HexTags.Blocks.DIRECTRICES);
+
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(HexBlocks.SLATE_BLOCK, HexBlocks.SLATE,
                 HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE,

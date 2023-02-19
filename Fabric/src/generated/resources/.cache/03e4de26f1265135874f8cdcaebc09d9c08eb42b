@@ -1,4 +1,5 @@
-// 1.19.2	2023-02-17T23:47:13.460414023	Tags for minecraft:item
+// 1.19.2	2023-02-18T11:41:21.846317687	Tags for minecraft:item
+b61c62d136132d63889fccca2055c5f7e9b25112 data/hexcasting/tags/items/impeti.json
 5928bad07d3872bb60f29ef4f3c885c8e1967c20 data/hexcasting/tags/items/phial_base.json
 fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data/minecraft/tags/items/wooden_doors.json
 e5df19a1dc6eadf14cd9b0f0fe45a74330b745e9 data/hexcasting/tags/items/edified_planks.json
@@ -13,10 +14,12 @@ fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data/minecraft/tags/items/doors.json
 684c3206f38cc9cc494d5875c5e56aad004486af data/hexcasting/tags/items/edified_logs.json
 e186f43ed06770e698c886691f91b2c6acdb5a2a data/hexcasting/tags/items/seal_materials.json
 5f3b600b4fd98744bd08c993ce7bcb9c2f195cd2 data/minecraft/tags/items/leaves.json
+9818dcd28edc496bc434b4f7b6b9cc27658d545e data/hexcasting/tags/items/directrices.json
 684c3206f38cc9cc494d5875c5e56aad004486af data/minecraft/tags/items/logs.json
 5bbfd513fd2eb2090b0c2d1ec33504deb79d53b9 data/minecraft/tags/items/slabs.json
 5bbfd513fd2eb2090b0c2d1ec33504deb79d53b9 data/minecraft/tags/items/wooden_slabs.json
 4461ef6db41a675fd077dd833cfd0ea537e755be data/c/tags/items/amethyst_dusts.json
 5216ba5c57db29b8dee9aebc63a2e3b17c97dc17 data/minecraft/tags/items/trapdoors.json
 e5df19a1dc6eadf14cd9b0f0fe45a74330b745e9 data/minecraft/tags/items/planks.json
+c72a147bc65d26424df199388969ebd11119aed3 data/hexcasting/tags/items/brainswept_circle_components.json
 5216ba5c57db29b8dee9aebc63a2e3b17c97dc17 data/minecraft/tags/items/wooden_trapdoors.json

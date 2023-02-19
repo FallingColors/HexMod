@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
-import net.minecraft.world.level.storage.loot.entries.EntryGroup;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
@@ -114,15 +113,15 @@ public class HexLootTables extends PaucalLootTableProvider {
             .withPool(isThatAnMFingBrandonSandersonReference)
             .withPool(isThatAnMFingBadBrandonSandersonReference));
 
+        // it looks like loot groups are bugged?
+        // so instead we add some and then *increment* the amount, gated behind the cond
         var quenchedPool = LootPool.lootPool().add(AlternativesEntry.alternatives(
             LootItem.lootTableItem(HexBlocks.QUENCHED_ALLAY).when(silkTouchCond),
-            EntryGroup.list(
-                LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
-                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(2f, 4f))),
-                LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
+            LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
+                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2f, 4f)))
+                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1), true)
                     .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
-                        0.25f, 0.35f, 0.5f, 0.75f, 1.0f))
-            )
+                        0.25f, 0.5f, 0.75f, 1.0f)))
         ));
         blockTables.put(HexBlocks.QUENCHED_ALLAY, LootTable.lootTable().withPool(quenchedPool));
     }

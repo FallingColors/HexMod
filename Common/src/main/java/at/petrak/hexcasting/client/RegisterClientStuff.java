@@ -104,6 +104,7 @@ public class RegisterClientStuff {
 
         registerGaslight4(HexItems.STAFF_QUENCHED);
         registerGaslight4(HexBlocks.QUENCHED_ALLAY.asItem());
+        registerGaslight4(HexItems.QUENCHED_SHARD);
 
         x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
         x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
