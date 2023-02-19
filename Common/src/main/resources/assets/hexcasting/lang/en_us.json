@@ -609,7 +609,7 @@
   
   "_comment": "Patchi stuff",
   
-  "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",
+  "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
   
   "hexcasting.entry.basics": "Getting Started",
   "hexcasting.entry.basics.desc": "The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)staff/$-- or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them. How might I do the same?",
