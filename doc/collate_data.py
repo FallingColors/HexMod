@@ -177,8 +177,8 @@ test_root = {"i18n": {}, "macros": default_macros, "resource_dir": "Common/src/m
 test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
 
 def localize_pattern(root_data, op_id):
-    return localize(root_data["i18n"], "hexcasting.spell.book." + op_id,
-                    localize(root_data["i18n"], "hexcasting.spell." + op_id))
+    return localize(root_data["i18n"], "hexcasting.action.book." + op_id,
+                    localize(root_data["i18n"], "hexcasting.action." + op_id))
 
 
 def do_localize(root_data, obj, *names):
@@ -213,7 +213,6 @@ def fetch_patterns(root_data):
             for mobj in re.finditer(pattern_pat, pattern_data):
                 name, string, start_angle = mobj.groups()
                 registry[root_data["modid"] + ":" + name] = (string, start_angle, name in great_names)
-    print(registry)
     return registry
 
 def resolve_pattern(root_data, page):
