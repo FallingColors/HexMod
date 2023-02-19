@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from sys import argv, stdout
 from collections import namedtuple
+from fnmatch import fnmatch
 from html import escape
 import json # codec
 import re # parsing
@@ -397,7 +398,8 @@ def get_format(out, ty, value):
     raise ValueError("Unknown format type: " + ty)
 
 def entry_spoilered(root_info, entry):
-    return entry.get("advancement", None) in root_info["spoilers"]
+    if "advancement" not in entry: return False
+    return any(fnmatch(entry["advancement"], pat) for pat in root_info["spoilers"])
 
 def category_spoilered(root_info, category):
     return all(entry_spoilered(root_info, ent) for ent in category["entries"])
