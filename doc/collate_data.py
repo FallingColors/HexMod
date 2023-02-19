@@ -67,6 +67,7 @@ types = {
 keys = {
     "use": "Right Click",
     "sneak": "Left Shift",
+    "jump": "Space",
 }
 
 bind1 = (lambda: None).__get__(0).__class__
@@ -192,18 +193,27 @@ def do_format(root_data, obj, *names):
 
 def identity(x): return x
 
-pattern_pat = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?')
-pattern_stubs = [(None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"), (None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"), ("Fabric", "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java")]
+pattern_pat = re.compile(r'make\(\s*"([a-zA-Z0-9_\/]+)",\s*(?:new )?ActionRegistryEntry\(\s*HexPattern\.fromAngles\(\s*"([aqwed]+)",\s*HexDir.(\w+)\),')
+pattern_stubs = [(None, "at/petrak/hexcasting/common/lib/hex/HexActions.java"), ("Fabric", "at/petrak/hexcasting/fabric/FabricHexInitializer.kt")]
+great_world_stubs = [("Fabric", "data/hexcasting/tags/action/per_world_pattern.json")]
 def fetch_patterns(root_data):
     registry = {}
+    great_names = set()
+    for loader, stub in great_world_stubs:
+        filename = f"{root_data['resource_dir'].replace('/main/', '/generated/')}/{stub}"
+        if loader: filename = filename.replace("Common", loader)
+        tag = slurp(filename)
+        for val in tag["values"]:
+            great_names.add(val.replace("hexcasting:", ""))
     for loader, stub in pattern_stubs:
         filename = f"{root_data['resource_dir']}/../java/{stub}"
         if loader: filename = filename.replace("Common", loader)
         with open(filename, "r") as fh:
             pattern_data = fh.read()
             for mobj in re.finditer(pattern_pat, pattern_data):
-                string, start_angle, name, is_per_world = mobj.groups()
-                registry[root_data["modid"] + ":" + name] = (string, start_angle, bool(is_per_world))
+                name, string, start_angle = mobj.groups()
+                registry[root_data["modid"] + ":" + name] = (string, start_angle, name in great_names)
+    print(registry)
     return registry
 
 def resolve_pattern(root_data, page):
