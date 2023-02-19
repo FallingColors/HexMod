@@ -171,9 +171,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
         cc.setAltiora(altiora);
     }
 
-    public void setHarness(ServerPlayer target, CastingImage image) {
-        var cc = HexCardinalComponents.HARNESS.get(target);
-        cc.setHarness(harness);
+    public void setStaffcastImage(ServerPlayer target, CastingImage image) {
+        var cc = HexCardinalComponents.STAFFCAST_IMAGE.get(target);
+        cc.setImage(image);
     }
 
     @Override
@@ -213,9 +213,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public CastingVM getStaffHarness(ServerPlayer player, InteractionHand hand) {
-        var cc = HexCardinalComponents.HARNESS.get(player);
-        return cc.getHarness(hand);
+    public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
+        var cc = HexCardinalComponents.STAFFCAST_IMAGE.get(player);
+        return cc.getVM(hand);
     }
 
     @Override
@@ -226,7 +226,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void clearCastingData(ServerPlayer player) {
-        this.setHarness(player, null);
+        this.setStaffcastImage(player, null);
         this.setPatterns(player, List.of());
     }
 

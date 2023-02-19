@@ -45,7 +45,8 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
 
     public static final ComponentKey<CCAltiora> ALTIORA = ComponentRegistry.getOrCreate(modLoc("altiora"),
         CCAltiora.class);
-    public static final ComponentKey<CCStaffcastImage> HARNESS = ComponentRegistry.getOrCreate(modLoc("harness"),
+    public static final ComponentKey<CCStaffcastImage> STAFFCAST_IMAGE = ComponentRegistry.getOrCreate(modLoc(
+        "harness"),
         CCStaffcastImage.class);
     public static final ComponentKey<CCPatterns> PATTERNS = ComponentRegistry.getOrCreate(modLoc("patterns"),
         CCPatterns.class);
@@ -67,7 +68,7 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         registry.registerForPlayers(ALTIORA, CCAltiora::new, RespawnCopyStrategy.LOSSLESS_ONLY);
         // Fortunately these are all both only needed on the server and don't want to be copied across death
         registry.registerFor(ServerPlayer.class, FLIGHT, CCFlight::new);
-        registry.registerFor(ServerPlayer.class, HARNESS, CCStaffcastImage::new);
+        registry.registerFor(ServerPlayer.class, STAFFCAST_IMAGE, CCStaffcastImage::new);
         registry.registerFor(ServerPlayer.class, PATTERNS, CCPatterns::new);
 
 

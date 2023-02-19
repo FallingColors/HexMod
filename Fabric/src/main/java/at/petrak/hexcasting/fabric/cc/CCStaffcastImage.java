@@ -1,7 +1,8 @@
 package at.petrak.hexcasting.fabric.cc;
 
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.common.casting.env.StaffCastEnv;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,17 +19,22 @@ public class CCStaffcastImage implements Component {
         this.owner = owner;
     }
 
-    public CastingVM getHarness(InteractionHand hand) {
-        var ctx = new CastingEnvironment(this.owner, hand, CastingEnvironment.CastSource.STAFF);
-        if (this.lazyLoadedTag.isEmpty()) {
-            return new CastingVM(ctx);
-        } else {
-            return CastingVM.fromNBT(this.lazyLoadedTag, ctx);
-        }
+    /**
+     * Turn the saved image into a VM in a player staffcasting environment
+     */
+    public CastingVM getVM(InteractionHand hand) {
+        var img = this.lazyLoadedTag.isEmpty()
+            ? new CastingImage()
+            : CastingImage.loadFromNbt(this.lazyLoadedTag, this.owner.getLevel());
+        var env = new StaffCastEnv(this.owner, hand);
+        return new CastingVM(img, env);
     }
 
-    public void setHarness(@Nullable CastingVM harness) {
-        this.lazyLoadedTag = harness == null ? new CompoundTag() : harness.serializeToNBT();
+    public void setImage(@Nullable CastingImage image) {
+        this.lazyLoadedTag =
+            image == null
+                ? new CompoundTag()
+                : image.serializeToNbt();
     }
 
     @Override

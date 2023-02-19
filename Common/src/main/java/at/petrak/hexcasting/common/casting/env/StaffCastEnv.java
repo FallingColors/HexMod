@@ -72,7 +72,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
         sender.awardStat(HexStatistics.PATTERNS_DRAWN);
 
-        var harness = IXplatAbstractions.INSTANCE.getStaffHarness(sender, msg.handUsed());
+        var harness = IXplatAbstractions.INSTANCE.getStaffcastVM(sender, msg.handUsed());
 
         ExecutionClientView clientInfo = harness.queueAndExecuteIota(new PatternIota(msg.pattern()), sender.getLevel());
 
