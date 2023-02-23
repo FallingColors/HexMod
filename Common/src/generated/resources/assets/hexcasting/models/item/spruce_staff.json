@@ -8,13 +8,7 @@
       }
     },
     {
-      "model": "hexcasting:item/old_staff",
-      "predicate": {
-        "hexcasting:funny_level": 1.0
-      }
-    },
-    {
-      "model": "hexcasting:item/bosnia_staff",
+      "model": "hexcasting:item/cherry_staff",
       "predicate": {
         "hexcasting:funny_level": 2.0
       }

@@ -3,10 +3,11 @@ package at.petrak.hexcasting.forge.interop.jei;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.casting.operators.spells.OpEdifySapling;
 import at.petrak.hexcasting.common.casting.operators.spells.OpMakeBattery;
+import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
-import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
+import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.RecipeType;
@@ -68,14 +69,19 @@ public class HexJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_OAK), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_SPRUCE), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_BIRCH), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_JUNGLE), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_ACACIA), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_DARK_OAK), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_CRIMSON), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_WARPED), BRAINSWEEPING, PHIAL, EDIFY);
-        registration.addRecipeCatalyst(new ItemStack(HexItems.STAFF_EDIFIED), BRAINSWEEPING, PHIAL, EDIFY);
+        for (ItemStaff staff : new ItemStaff[]{
+            HexItems.STAFF_OAK,
+            HexItems.STAFF_SPRUCE,
+            HexItems.STAFF_BIRCH,
+            HexItems.STAFF_JUNGLE,
+            HexItems.STAFF_ACACIA,
+            HexItems.STAFF_DARK_OAK,
+            HexItems.STAFF_CRIMSON,
+            HexItems.STAFF_WARPED,
+            HexItems.STAFF_MANGROVE,
+            HexItems.STAFF_EDIFIED,
+        }) {
+            registration.addRecipeCatalyst(new ItemStack(staff), BRAINSWEEPING, PHIAL, EDIFY);
+        }
     }
 }

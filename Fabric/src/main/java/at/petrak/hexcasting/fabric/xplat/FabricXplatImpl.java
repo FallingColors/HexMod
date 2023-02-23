@@ -4,15 +4,18 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.CastingHarness;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
-import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.network.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
@@ -45,10 +48,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.DefaultedRegistry;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.*;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -61,7 +61,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -167,6 +166,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public void setAltiora(Player target, @Nullable AltioraAbility altiora) {
+        var cc = HexCardinalComponents.ALTIORA.get(target);
+        cc.setAltiora(altiora);
+    }
+
+    @Override
     public void setHarness(ServerPlayer target, CastingHarness harness) {
         var cc = HexCardinalComponents.HARNESS.get(target);
         cc.setHarness(harness);
@@ -185,9 +190,15 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FlightAbility getFlight(ServerPlayer player) {
+    public @Nullable FlightAbility getFlight(ServerPlayer player) {
         var cc = HexCardinalComponents.FLIGHT.get(player);
         return cc.getFlight();
+    }
+
+    @Override
+    public @Nullable AltioraAbility getAltiora(Player player) {
+        var cc = HexCardinalComponents.ALTIORA.get(player);
+        return cc.getAltiora();
     }
 
     @Override
@@ -209,7 +220,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public List<ResolvedPattern> getPatterns(ServerPlayer player) {
+    public List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player) {
         var cc = HexCardinalComponents.PATTERNS.get(player);
         return cc.getPatterns();
     }
@@ -261,7 +272,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-                                                                            Block... blocks) {
+        Block... blocks) {
         return FabricBlockEntityTypeBuilder.create(func::apply, blocks).build();
     }
 
@@ -307,36 +318,18 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public ResourceLocation getID(Block block) {
-        return Registry.BLOCK.getKey(block);
-    }
-
-    @Override
-    public ResourceLocation getID(Item item) {
-        return Registry.ITEM.getKey(item);
-    }
-
-    @Override
-    public ResourceLocation getID(VillagerProfession profession) {
-        return Registry.VILLAGER_PROFESSION.getKey(profession);
-    }
-
-    @Override
     public Ingredient getUnsealedIngredient(ItemStack stack) {
         return FabricUnsealedIngredient.of(stack);
     }
 
-    private static CreativeModeTab TAB = null;
+    private static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> FabricItemGroupBuilder.create(
+            modLoc("creative_tab"))
+        .icon(HexItems::tabIcon)
+        .build());
 
     @Override
     public CreativeModeTab getTab() {
-        if (TAB == null) {
-            TAB = FabricItemGroupBuilder.create(modLoc("creative_tab"))
-                .icon(HexItems::tabIcon)
-                .build();
-        }
-
-        return TAB;
+        return TAB.get();
     }
 
     // do a stupid hack from botania
@@ -377,12 +370,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     private static final IXplatTags TAGS = new IXplatTags() {
         @Override
         public TagKey<Item> amethystDust() {
-            return HexItemTags.create(new ResourceLocation("c", "amethyst_dusts"));
+            return HexTags.Items.create(new ResourceLocation("c", "amethyst_dusts"));
         }
 
         @Override
         public TagKey<Item> gems() {
-            return HexItemTags.create(new ResourceLocation("c", "gems"));
+            return HexTags.Items.create(new ResourceLocation("c", "gems"));
         }
     };
 
@@ -396,7 +389,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return AlternativeLootItemCondition.alternative(
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS)),
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(
-                HexItemTags.create(new ResourceLocation("c", "shears"))))
+                HexTags.Items.create(new ResourceLocation("c", "shears"))))
         );
     }
 
@@ -412,6 +405,19 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
+    private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
+        FabricRegistryBuilder.from(new MappedRegistry<ActionRegistryEntry>(
+                ResourceKey.createRegistryKey(modLoc("action")),
+                Lifecycle.stable(), null))
+            .buildAndRegister()
+    );
+    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
+        Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler.Factory<?>>(
+                    ResourceKey.createRegistryKey(modLoc("special_handler")),
+                    Lifecycle.stable(), null))
+                .buildAndRegister()
+        );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
                 HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
@@ -424,6 +430,16 @@ public class FabricXplatImpl implements IXplatAbstractions {
                 Lifecycle.stable(), null))
             .buildAndRegister()
     );
+
+    @Override
+    public Registry<ActionRegistryEntry> getActionRegistry() {
+        return ACTION_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry() {
+        return SPECIAL_HANDLER_REGISTRY.get();
+    }
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {

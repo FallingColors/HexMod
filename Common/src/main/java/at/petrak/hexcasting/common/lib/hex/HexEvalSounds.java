@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.lib.hex;
 
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
@@ -38,8 +38,7 @@ public class HexEvalSounds {
         return sound;
     }
 
-    public static void registerTypes() {
-        BiConsumer<EvalSound, ResourceLocation> r = (type, id) -> Registry.register(REGISTRY, id, type);
+    public static void register(BiConsumer<EvalSound, ResourceLocation> r) {
         for (var e : SOUNDS.entrySet()) {
             r.accept(e.getValue(), e.getKey());
         }

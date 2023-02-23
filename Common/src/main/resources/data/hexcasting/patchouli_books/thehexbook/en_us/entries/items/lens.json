@@ -3,7 +3,8 @@
   "icon": "hexcasting:lens",
   "category": "hexcasting:items",
   "advancement": "hexcasting:root",
-  "sortnum": 0,
+  "priority": true,
+  "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",

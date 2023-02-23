@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.api.mod.HexItemTags;
 import at.petrak.hexcasting.api.mod.HexStatistics;
-import at.petrak.hexcasting.api.spell.casting.ControllerInfo;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType;
-import at.petrak.hexcasting.api.spell.iota.PatternIota;
-import at.petrak.hexcasting.api.spell.math.HexCoord;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.casting.eval.ControllerInfo;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
+import at.petrak.hexcasting.api.casting.math.HexCoord;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
@@ -62,7 +62,7 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
         server.execute(() -> {
             // TODO: should we maybe not put tons of logic in a packet class
             var held = sender.getItemInHand(this.handUsed);
-            if (held.is(HexItemTags.STAVES)) {
+            if (held.is(HexTags.Items.STAVES)) {
                 boolean autoFail = false;
 
                 if (!resolvedPatterns.isEmpty()) {

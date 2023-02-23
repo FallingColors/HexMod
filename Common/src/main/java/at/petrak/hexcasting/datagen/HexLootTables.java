@@ -4,7 +4,6 @@ import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
-import at.petrak.hexcasting.common.loot.PatternScrollFunc;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.paucal.api.datagen.PaucalLootTableProvider;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
@@ -33,8 +33,6 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.Map;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexLootTables extends PaucalLootTableProvider {
     public HexLootTables(DataGenerator pGenerator) {
@@ -77,10 +75,10 @@ public class HexLootTables extends PaucalLootTableProvider {
         blockTables.put(HexBlocks.EDIFIED_DOOR, LootTable.lootTable().withPool(doorPool));
 
 
-        var noSilkTouchCond = MatchTool.toolMatches(
-                ItemPredicate.Builder.item().hasEnchantment(
-                    new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)))
-            .invert();
+        var silkTouchCond = MatchTool.toolMatches(
+            ItemPredicate.Builder.item().hasEnchantment(
+                new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)));
+        var noSilkTouchCond = silkTouchCond.invert();
         var goodAtAmethystingCond = MatchTool.toolMatches(
             ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES)
         );
@@ -101,29 +99,31 @@ public class HexLootTables extends PaucalLootTableProvider {
             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond)
             .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
-                 0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
+                0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
 
         var isThatAnMFingBadBrandonSandersonReference = LootPool.lootPool()
-             .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
-             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-             .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
-             .when(LootItemRandomChanceCondition.randomChance(0.125f));
+            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
+            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
+            .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
+            .when(LootItemRandomChanceCondition.randomChance(0.125f));
 
         lootTables.put(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER, LootTable.lootTable()
-             .withPool(dustPoolWhenGood)
-             .withPool(dustPoolWhenBad)
-             .withPool(isThatAnMFingBrandonSandersonReference)
-             .withPool(isThatAnMFingBadBrandonSandersonReference));
+            .withPool(dustPoolWhenGood)
+            .withPool(dustPoolWhenBad)
+            .withPool(isThatAnMFingBrandonSandersonReference)
+            .withPool(isThatAnMFingBadBrandonSandersonReference));
 
-        String[] rarities = new String[]{
-            "few",
-            "some",
-            "many"
-        };
-        for (int i = 0; i < rarities.length; i++) {
-            var scrollPool = makeScrollAdder(i + 1);
-            lootTables.put(modLoc("inject/scroll_loot_" + rarities[i]), scrollPool);
-        }
+        // it looks like loot groups are bugged?
+        // so instead we add some and then *increment* the amount, gated behind the cond
+        var quenchedPool = LootPool.lootPool().add(AlternativesEntry.alternatives(
+            LootItem.lootTableItem(HexBlocks.QUENCHED_ALLAY).when(silkTouchCond),
+            LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
+                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2f, 4f)))
+                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1), true)
+                    .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
+                        0.25f, 0.5f, 0.75f, 1.0f)))
+        ));
+        blockTables.put(HexBlocks.QUENCHED_ALLAY, LootTable.lootTable().withPool(quenchedPool));
     }
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {
@@ -144,14 +144,5 @@ public class HexLootTables extends PaucalLootTableProvider {
                 )))
             .apply(ApplyExplosionDecay.explosionDecay());
         lootTables.put(block, LootTable.lootTable().withPool(leafPool));
-    }
-
-    // "stddev"
-    private LootTable.Builder makeScrollAdder(float stddev) {
-        var pool = LootPool.lootPool()
-            .setRolls(UniformGenerator.between(-stddev, stddev))
-            .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE))
-            .apply(() -> new PatternScrollFunc(new LootItemCondition[0]));
-        return LootTable.lootTable().withPool(pool);
     }
 }

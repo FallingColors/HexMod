@@ -28,14 +28,12 @@ public class HexRecipeStuffRegistry {
     private static final Map<ResourceLocation, RecipeSerializer<?>> SERIALIZERS = new LinkedHashMap<>();
     private static final Map<ResourceLocation, RecipeType<?>> TYPES = new LinkedHashMap<>();
 
-    // TODO: custom costs in brainsweeping. also custom entities but we'll getting there
     public static final RecipeSerializer<?> BRAINSWEEP = registerSerializer("brainsweep",
         new BrainsweepRecipe.Serializer());
-    public static final RecipeSerializer<SealFocusRecipe> SEAL_FOCUS = registerSerializer("seal_focus",
-        SealFocusRecipe.SERIALIZER);
-    public static final RecipeSerializer<SealSpellbookRecipe> SEAL_SPELLBOOK = registerSerializer(
-        "seal_spellbook",
-        SealSpellbookRecipe.SERIALIZER);
+    public static final RecipeSerializer<SealThingsRecipe> SEAL_FOCUS = registerSerializer(
+        "seal_focus", SealThingsRecipe.FOCUS_SERIALIZER);
+    public static final RecipeSerializer<SealThingsRecipe> SEAL_SPELLBOOK = registerSerializer(
+        "seal_spellbook", SealThingsRecipe.SPELLBOOK_SERIALIZER);
 
     public static RecipeType<BrainsweepRecipe> BRAINSWEEP_TYPE = registerType("brainsweep");
 

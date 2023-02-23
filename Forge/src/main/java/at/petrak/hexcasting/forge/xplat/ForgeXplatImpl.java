@@ -5,15 +5,18 @@ import at.petrak.hexcasting.api.addldata.ADColorizer;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.CastingHarness;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.api.spell.casting.CastingContext;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
-import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
@@ -50,6 +53,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -80,11 +84,13 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.caelus.api.CaelusApi;
 import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -137,8 +143,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public void setFlight(ServerPlayer player, FlightAbility flight) {
         CompoundTag tag = player.getPersistentData();
-        tag.putBoolean(TAG_FLIGHT_ALLOWED, flight.allowed());
-        if (flight.allowed()) {
+        tag.putBoolean(TAG_FLIGHT_ALLOWED, flight != null);
+        if (flight != null) {
             tag.putInt(TAG_FLIGHT_TIME, flight.timeLeft());
             tag.put(TAG_FLIGHT_ORIGIN, HexUtils.serializeToNBT(flight.origin()));
             tag.putString(TAG_FLIGHT_DIMENSION, flight.dimension().location().toString());
@@ -148,6 +154,33 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             tag.remove(TAG_FLIGHT_ORIGIN);
             tag.remove(TAG_FLIGHT_DIMENSION);
             tag.remove(TAG_FLIGHT_RADIUS);
+        }
+    }
+
+    @Override
+    public void setAltiora(Player player, @Nullable AltioraAbility altiora) {
+        CompoundTag tag = player.getPersistentData();
+        tag.putBoolean(TAG_ALTIORA_ALLOWED, altiora != null);
+        if (altiora != null) {
+            tag.putInt(TAG_ALTIORA_GRACE, altiora.gracePeriod());
+        } else {
+            tag.remove(TAG_ALTIORA_ALLOWED);
+        }
+
+        // The elytra ability is done with an event on fabric
+        var elytraing = CaelusApi.getInstance().getFlightAttribute();
+        var inst = player.getAttributes().getInstance(elytraing);
+        if (altiora != null) {
+            if (inst.getModifier(ALTIORA_ATTRIBUTE_ID) == null) {
+                inst.addTransientModifier(new AttributeModifier(ALTIORA_ATTRIBUTE_ID, "Altiora", 1.0,
+                    AttributeModifier.Operation.ADDITION));
+            }
+        } else {
+            inst.removeModifier(ALTIORA_ATTRIBUTE_ID);
+        }
+
+        if (player instanceof ServerPlayer serverPlayer) {
+            CapSyncers.syncAltiora(serverPlayer);
         }
     }
 
@@ -209,9 +242,20 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             var radius = tag.getDouble(TAG_FLIGHT_RADIUS);
             var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
                 new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
-            return new FlightAbility(true, timeLeft, dimension, origin, radius);
+            return new FlightAbility(timeLeft, dimension, origin, radius);
         }
-        return FlightAbility.deny();
+        return null;
+    }
+
+    @Override
+    public AltioraAbility getAltiora(Player player) {
+        CompoundTag tag = player.getPersistentData();
+        boolean allowed = tag.getBoolean(TAG_ALTIORA_ALLOWED);
+        if (allowed) {
+            var grace = tag.getInt(TAG_ALTIORA_GRACE);
+            return new AltioraAbility(grace);
+        }
+        return null;
     }
 
     @Override
@@ -237,12 +281,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
         // This is always from a staff because we don't need to load the harness when casting from item
-        var ctx = new CastingContext(player, hand, CastingContext.CastSource.STAFF);
+        var ctx = new CastingEnvironment(player, hand, CastingEnvironment.CastSource.STAFF);
         return CastingHarness.fromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
     }
 
     @Override
-    public List<ResolvedPattern> getPatterns(ServerPlayer player) {
+    public List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player) {
         ListTag patternsTag = player.getPersistentData().getList(TAG_PATTERNS, Tag.TAG_COMPOUND);
 
         List<ResolvedPattern> patterns = new ArrayList<>(patternsTag.size());
@@ -321,7 +365,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-                                                                            Block... blocks) {
+        Block... blocks) {
         return BlockEntityType.Builder.of(func::apply, blocks).build(null);
     }
 
@@ -353,25 +397,22 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return ForgeUnsealedIngredient.of(stack);
     }
 
-    private static CreativeModeTab TAB = null;
+    private static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() ->
+        new CreativeModeTab(HexAPI.MOD_ID) {
+            @Override
+            public ItemStack makeIcon() {
+                return HexItems.tabIcon();
+            }
+
+            @Override
+            public void fillItemList(NonNullList<ItemStack> p_40778_) {
+                super.fillItemList(p_40778_);
+            }
+        });
 
     @Override
     public CreativeModeTab getTab() {
-        if (TAB == null) {
-            TAB = new CreativeModeTab(HexAPI.MOD_ID) {
-                @Override
-                public ItemStack makeIcon() {
-                    return HexItems.tabIcon();
-                }
-
-                @Override
-                public void fillItemList(NonNullList<ItemStack> p_40778_) {
-                    super.fillItemList(p_40778_);
-                }
-            };
-        }
-
-        return TAB;
+        return TAB.get();
     }
 
     @Override
@@ -387,12 +428,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     private static final IXplatTags TAGS = new IXplatTags() {
         @Override
         public TagKey<Item> amethystDust() {
-            return HexItemTags.create(new ResourceLocation("forge", "dusts/amethyst"));
+            return HexTags.Items.create(new ResourceLocation("forge", "dusts/amethyst"));
         }
 
         @Override
         public TagKey<Item> gems() {
-            return HexItemTags.create(new ResourceLocation("forge", "gems"));
+            return HexTags.Items.create(new ResourceLocation("forge", "gems"));
         }
     };
 
@@ -418,6 +459,15 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
+    private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
+        ForgeAccessorRegistry.hex$registerSimple(
+            ResourceKey.createRegistryKey(modLoc("action")), null)
+    );
+    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
+        Suppliers.memoize(() ->
+            ForgeAccessorRegistry.hex$registerSimple(
+                ResourceKey.createRegistryKey(modLoc("special_handler")), null)
+        );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
         ForgeAccessorRegistry.hex$registerDefaulted(
             ResourceKey.createRegistryKey(modLoc("iota_type")),
@@ -428,6 +478,16 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             ResourceKey.createRegistryKey(modLoc("eval_sound")),
             HexAPI.MOD_ID + ":nothing", registry -> HexEvalSounds.NOTHING)
     );
+
+    @Override
+    public Registry<ActionRegistryEntry> getActionRegistry() {
+        return ACTION_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry() {
+        return SPECIAL_HANDLER_REGISTRY.get();
+    }
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
@@ -492,6 +552,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public static final String TAG_FLIGHT_ORIGIN = "hexcasting:flight_origin";
     public static final String TAG_FLIGHT_DIMENSION = "hexcasting:flight_dimension";
     public static final String TAG_FLIGHT_RADIUS = "hexcasting:flight_radius";
+
+    public static final String TAG_ALTIORA_ALLOWED = "hexcasting:altiora_allowed";
+    public static final String TAG_ALTIORA_GRACE = "hexcasting:altiora_grace_period";
+
+    public static final UUID ALTIORA_ATTRIBUTE_ID = UUID.fromString("91897c79-3ebb-468c-a265-40418ed01c41");
 
     public static final String TAG_HARNESS = "hexcasting:spell_harness";
     public static final String TAG_PATTERNS = "hexcasting:spell_patterns";

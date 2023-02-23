@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.AABB;
 
 public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
@@ -34,7 +35,7 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type,
-                                                          EntityRendererProvider<T> renderer) {
+        EntityRendererProvider<T> renderer) {
         EntityRenderers.register(type, renderer);
     }
 
@@ -51,5 +52,10 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public void restoreLastFilter(AbstractTexture texture) {
         texture.restoreLastBlurMipmap();
+    }
+
+    @Override
+    public boolean fabricAdditionalQuenchFrustumCheck(AABB aabb) {
+        return true; // forge fixes this with a patch so we just say "yep"
     }
 }

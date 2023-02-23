@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
+import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
-import at.petrak.hexcasting.api.spell.ParticleSpray;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -96,7 +96,7 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer)
                     var vel = velUnlen.scale(msg.spray().getVel().length() / 20);
 
                     Minecraft.getInstance().level.addParticle(
-                        new ConjureParticleOptions(color, false),
+                        new ConjureParticleOptions(color),
                         pos.x, pos.y, pos.z,
                         vel.x, vel.y, vel.z
                     );

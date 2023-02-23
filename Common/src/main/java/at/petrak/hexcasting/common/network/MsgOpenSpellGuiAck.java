@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

@@ -3,6 +3,7 @@
   "category": "hexcasting:greatwork",
   "icon": "minecraft:nether_star",
   "priority": true,
+  "sortnum": 0,
   "advancement": "hexcasting:enlightenment",
   "entry_color": "54398a",
   "pages": [

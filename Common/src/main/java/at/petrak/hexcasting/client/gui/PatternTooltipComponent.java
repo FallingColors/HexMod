@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.client.gui;
 
-import at.petrak.hexcasting.api.spell.math.HexPattern;
-import at.petrak.hexcasting.client.RenderLib;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -64,7 +64,7 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
 
     @Override
     public void renderImage(Font font, int mouseX, int mouseY, PoseStack ps, ItemRenderer pItemRenderer,
-                            int pBlitOffset) {
+        int pBlitOffset) {
         var width = this.getWidth(font);
         var height = this.getHeight();
 

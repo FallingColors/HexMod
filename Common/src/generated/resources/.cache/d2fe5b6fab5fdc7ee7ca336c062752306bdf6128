@@ -1,4 +1,4 @@
-// 1.19.2	2022-11-05T14:30:43.69127	Block States: hexcasting
+// 1.19.2	2023-02-17T23:01:49.857526865	Block States: hexcasting
 901e38574bdaa40ea4a0f6e773a88a95d9c03e55 assets/hexcasting/blockstates/akashic_bookshelf.json
 32a77ef668198002563d68be35a24fa93c8d454a assets/hexcasting/blockstates/akashic_connector.json
 85080ce0a0387583a839e4788517d675a1a35e24 assets/hexcasting/blockstates/akashic_record.json
@@ -29,6 +29,7 @@ e44322f1178e121b70f45e5242d5b0e9a11c211c assets/hexcasting/blockstates/edified_w
 4ffe2f23f6774045d40e3763efa161da84d777c8 assets/hexcasting/blockstates/impetus_look.json
 1e45bbe847d2edbec8189249f9afb58acda3fe05 assets/hexcasting/blockstates/impetus_rightclick.json
 1d568faf935ff3c67d6a7f074a5d0d3ef6406101 assets/hexcasting/blockstates/impetus_storedplayer.json
+c41c3f2f39c9fa8a319a705e2183112df18cb4f8 assets/hexcasting/blockstates/quenched_allay.json
 0aca7e2e67793a21ffc794c02fb2b22d02d2058a assets/hexcasting/blockstates/scroll_paper.json
 e5c88e23be0552d4c06062510e8feeab510472ef assets/hexcasting/blockstates/scroll_paper_lantern.json
 ef6b44bd2360926cb9dcde5bb3f1380385acea90 assets/hexcasting/blockstates/slate.json
@@ -134,6 +135,7 @@ de2a5fd9b621e5086852f2191c360d9274b9b10c assets/hexcasting/models/block/impetus_
 7ac5cb74f321b061c1e93b859540b508c7dcdaa4 assets/hexcasting/models/block/impetus_storedplayer_lit_south.json
 46c29660e3fa78aeaa264268b43017f4b0c0d655 assets/hexcasting/models/block/impetus_storedplayer_lit_up.json
 4d22557274958179da4671c43c2f387336a701a2 assets/hexcasting/models/block/impetus_storedplayer_lit_west.json
+9af2754cb1e53eeaa85618cf92651b4878cf62b1 assets/hexcasting/models/block/quenched_allay.json
 e1e7ce0bcc08a53b3e6634f7e5b7a6cf488cf45b assets/hexcasting/models/block/redstone_directrix_powered_dim_down.json
 fb22e529f1ca638b7e952176694ab1912eb4274b assets/hexcasting/models/block/redstone_directrix_powered_dim_east.json
 a5a53ec6a3cd54592dcb224245a4515a2b3b72ed assets/hexcasting/models/block/redstone_directrix_powered_dim_north.json

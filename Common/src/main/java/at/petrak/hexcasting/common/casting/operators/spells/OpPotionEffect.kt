@@ -1,8 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.spell.*
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.castables.SpellAction
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.iota.Iota
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
@@ -12,14 +13,13 @@ class OpPotionEffect(
     val baseCost: Int,
     val allowPotency: Boolean,
     val potencyCubic: Boolean,
-    override val isGreat: Boolean,
 ) : SpellAction {
     override val argc: Int
         get() = if (this.allowPotency) 3 else 2
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val target = args.getLivingEntityButNotArmorStand(0, argc)
         val duration = args.getPositiveDouble(1, argc)
@@ -43,7 +43,7 @@ class OpPotionEffect(
 
     private class Spell(val effect: MobEffect, val target: LivingEntity, val duration: Double, val potency: Double) :
         RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             if (duration > 1.0 / 20.0) {
                 val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt() - 1)
                 target.addEffect(effectInst)

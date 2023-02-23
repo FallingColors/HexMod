@@ -120,6 +120,8 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    // caelus elytra
+    maven { url = "https://maven.theillusivec4.top" }
 }
 
 dependencies {
@@ -139,6 +141,8 @@ dependencies {
     // aughh
     testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
     testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+
+    implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:$caelusVersion")
 
     // Optional interop
 

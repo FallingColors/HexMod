@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
-import at.petrak.hexcasting.client.RenderLib;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -18,7 +17,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -28,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
-import static at.petrak.hexcasting.client.RenderLib.renderEntity;
+import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
 
 public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecipe> {
     public static final ResourceLocation UID = modLoc("brainsweep");
@@ -41,7 +39,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         ResourceLocation location = modLoc("textures/gui/brainsweep_jei.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 118, 86).setTextureSize(128, 128).build();
         var brainsweep = modLoc("brainsweep");
-        localizedName = Component.translatable("hexcasting.spell." + brainsweep);
+        localizedName = Component.translatable("hexcasting.action." + brainsweep);
         icon = new PatternDrawable(brainsweep, 16, 16);
     }
 
@@ -70,7 +68,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
             Minecraft mc = Minecraft.getInstance();
-            return recipe.villagerIn().getTooltip(mc.options.advancedItemTooltips);
+            return recipe.entityIn().getTooltip(mc.options.advancedItemTooltips);
         }
 
         return Collections.emptyList();
@@ -81,11 +79,11 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         @NotNull PoseStack stack, double mouseX, double mouseY) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {
-            Villager villager = RenderLib.prepareVillagerForRendering(recipe.villagerIn(), level);
+            var example = recipe.entityIn().exampleEntity(level);
 
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            renderEntity(stack, villager, level, 50, 62.5f, ClientTickCounter.getTotal(), 20, 0);
+            renderEntity(stack, example, level, 50, 62.5f, ClientTickCounter.getTotal(), 20, 0);
         }
     }
 

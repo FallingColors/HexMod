@@ -18,7 +18,7 @@ public class HexInterop {
     }
 
     public static final class Fabric {
-        public static final String GRAVITY_CHANGER_API_ID = "gravitychanger";
+        public static final String GRAVITY_CHANGER_API_ID = "gravity_api";
         public static final String TRINKETS_API_ID = "trinkets";
     }
 

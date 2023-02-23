@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:lightning",
+    "hexcasting:flight",
+    "hexcasting:create_lava",
+    "hexcasting:teleport",
+    "hexcasting:sentinel/create/great",
+    "hexcasting:dispel_rain",
+    "hexcasting:summon_rain",
+    "hexcasting:brainsweep"
+  ]
+}

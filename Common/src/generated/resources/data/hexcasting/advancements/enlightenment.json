@@ -7,8 +7,8 @@
           "min": 0.8
         },
         "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion": {
-          "max": 2.05,
-          "min": 0.1
+          "max": 1.0,
+          "min": 2.2250738585072014E-308
         }
       },
       "trigger": "hexcasting:overcast"

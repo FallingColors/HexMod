@@ -1,13 +1,16 @@
 package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.common.items.ItemFocus;
-import at.petrak.hexcasting.common.items.ItemScroll;
-import at.petrak.hexcasting.common.items.ItemSlate;
+import at.petrak.hexcasting.client.render.GaslightingTracker;
+import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
+import at.petrak.hexcasting.common.items.storage.ItemFocus;
+import at.petrak.hexcasting.common.items.storage.ItemScroll;
+import at.petrak.hexcasting.common.items.storage.ItemSlate;
+import at.petrak.hexcasting.common.items.storage.ItemThoughtKnot;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
@@ -22,6 +25,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 public class HexItemModels extends PaucalItemModelProvider {
     public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
@@ -74,8 +78,8 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         singleTexture("old_staff", new ResourceLocation("item/handheld_rod"),
             "layer0", modLoc("item/staves/old"));
-        singleTexture("bosnia_staff", new ResourceLocation("item/handheld_rod"),
-            "layer0", modLoc("item/staves/bosnia"));
+        singleTexture("cherry_staff", new ResourceLocation("item/handheld_rod"),
+            "layer0", modLoc("item/staves/cherry"));
 
         buildStaff(HexItems.STAFF_OAK, "oak");
         buildStaff(HexItems.STAFF_BIRCH, "birch");
@@ -85,10 +89,22 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_ACACIA, "acacia");
         buildStaff(HexItems.STAFF_CRIMSON, "crimson");
         buildStaff(HexItems.STAFF_WARPED, "warped");
+        buildStaff(HexItems.STAFF_MANGROVE, "mangrove");
         buildStaff(HexItems.STAFF_EDIFIED, "edified");
+        buildStaff(HexItems.STAFF_MINDSPLICE, "mindsplice");
+
+        buildFourVariantGaslight(HexItems.STAFF_QUENCHED, "item/staves/quenched", (name, path) ->
+            singleTexture(path.getPath(), new ResourceLocation("item/handheld_rod"),
+                "layer0", modLoc(path.getPath())));
+        buildFourVariantGaslight(HexItems.QUENCHED_SHARD, "item/quenched_shard", (name, path) ->
+            singleTexture(path.getPath(), new ResourceLocation("item/handheld"),
+                "layer0", modLoc(path.getPath())));
+        buildFourVariantGaslight(HexBlocks.QUENCHED_ALLAY.asItem(), "block/quenched_allay", (name, path) ->
+            cubeAll(path.getPath(), path));
 
         simpleItem(modLoc("patchouli_book"));
 
+        buildThoughtKnot();
         buildSealableIotaHolder(HexItems.FOCUS, "focus");
         buildSealableIotaHolder(HexItems.SPELLBOOK, "spellbook");
 
@@ -162,6 +178,19 @@ public class HexItemModels extends PaucalItemModelProvider {
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/edified_pressure_plate")));
     }
 
+    private void buildThoughtKnot() {
+        var unwritten = singleTexture("thought_knot", new ResourceLocation("item/generated"),
+            "layer0", modLoc("item/thought_knot"));
+        var written = withExistingParent("thought_knot_written", new ResourceLocation("item/generated"))
+            .texture("layer0", modLoc("item/thought_knot"))
+            .texture("layer1", modLoc("item/thought_knot_overlay"));
+        getBuilder("thought_knot")
+            .override().predicate(ItemThoughtKnot.WRITTEN_PRED, 0f)
+            .model(unwritten).end()
+            .override().predicate(ItemThoughtKnot.WRITTEN_PRED, 1f)
+            .model(written).end();
+    }
+
     private void buildSealableIotaHolder(Item item, String stub) {
         var name = getPath(item);
         var plain = singleTexture(name, new ResourceLocation("item/generated"),
@@ -201,9 +230,8 @@ public class HexItemModels extends PaucalItemModelProvider {
             .end().override()
             .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 1)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/old_staff")))
-            .end().override()
             .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 2)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/bosnia_staff")))
+            .model(new ModelFile.UncheckedModelFile(modLoc("item/cherry_staff")))
             .end();
     }
 
@@ -219,5 +247,20 @@ public class HexItemModels extends PaucalItemModelProvider {
             .predicate(ItemPackagedHex.HAS_PATTERNS_PRED, 1f - 0.01f)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name + "_filled")))
             .end();
+    }
+
+    private void buildFourVariantGaslight(Item item, String path,
+        BiFunction<String, ResourceLocation, ModelFile> makeModel) {
+        var name = getPath(item);
+        var builder = getBuilder(name);
+        for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
+            var textureLoc = modLoc(path + "_" + i);
+            var model = makeModel.apply(name, textureLoc);
+
+            builder.override()
+                .predicate(GaslightingTracker.GASLIGHTING_PRED, i)
+                .model(model)
+                .end();
+        }
     }
 }

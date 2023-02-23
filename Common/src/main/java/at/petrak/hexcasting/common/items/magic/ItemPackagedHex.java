@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.items.magic;
 
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.CastingHarness;
+import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.spell.casting.CastingContext;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.iota.Iota;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -39,6 +39,8 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     public abstract boolean breakAfterDepletion();
+
+    public abstract int cooldown();
 
     @Override
     public boolean canRecharge(ItemStack stack) {
@@ -106,7 +108,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
             return InteractionResultHolder.fail(stack);
         }
         var sPlayer = (ServerPlayer) player;
-        var ctx = new CastingContext(sPlayer, usedHand, CastingContext.CastSource.PACKAGED_HEX);
+        var ctx = new CastingEnvironment(sPlayer, usedHand, CastingEnvironment.CastSource.PACKAGED_HEX);
         var harness = new CastingHarness(ctx);
         var info = harness.executeIotas(instrs, sPlayer.getLevel());
 
@@ -120,7 +122,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         }
         player.awardStat(stat);
 
-        sPlayer.getCooldowns().addCooldown(this, 5);
+        sPlayer.getCooldowns().addCooldown(this, this.cooldown());
 
         if (broken) {
             stack.shrink(1);

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.lib;
 
+import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.common.loot.AmethystReducerFunc;
-import at.petrak.hexcasting.common.loot.PatternScrollFunc;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
@@ -21,7 +21,7 @@ public class HexLootFunctions {
     private static final Map<ResourceLocation, LootItemFunctionType> LOOT_FUNCS = new LinkedHashMap<>();
 
     public static final LootItemFunctionType PATTERN_SCROLL = register("pattern_scroll",
-        new LootItemFunctionType(new PatternScrollFunc.Serializer()));
+        new LootItemFunctionType(new AddPerWorldPatternToScrollFunc.Serializer()));
     public static final LootItemFunctionType AMETHYST_SHARD_REDUCER = register("amethyst_shard_reducer",
         new LootItemFunctionType(new AmethystReducerFunc.Serializer()));
 

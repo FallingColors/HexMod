@@ -2,13 +2,15 @@ package at.petrak.hexcasting.forge.cap;
 
 import at.petrak.hexcasting.api.addldata.*;
 import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.forge.cap.adimpl.*;
 import net.minecraft.core.Direction;
@@ -86,6 +88,11 @@ public class ForgeCapabilityHandler {
             evt.addCapability(MEDIA_STATIC_CAP,
                 provide(stack, HexCapabilities.MEDIA, () -> new CapStaticMediaHolder(
                     HexConfig.common()::chargedCrystalMediaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)));
+        } else if (stack.is(HexBlocks.QUENCHED_ALLAY.asItem())) {
+            // no one uses the config
+            evt.addCapability(MEDIA_STATIC_CAP,
+                provide(stack, HexCapabilities.MEDIA, () -> new CapStaticMediaHolder(
+                    () -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)));
         }
 
         if (stack.getItem() instanceof IotaHolderItem holder) {

@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
-import at.petrak.hexcasting.api.mod.HexItemTags;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
 import dev.emi.emi.EmiUtil;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -28,7 +28,7 @@ public class EmiPhialRecipe implements EmiRecipe {
     public EmiPhialRecipe() {
         var stacks = PhialRecipeStackBuilder.createStacks();
         this.inputs = EmiIngredient.of(stacks.getFirst().stream().map(EmiStack::of).collect(Collectors.toList()));
-        this.bottle = EmiIngredient.of(HexItemTags.PHIAL_BASE);
+        this.bottle = EmiIngredient.of(HexTags.Items.PHIAL_BASE);
         this.outputs = EmiIngredient.of(stacks.getSecond().stream().map(EmiStack::of).collect(Collectors.toList()));
     }
 
@@ -69,7 +69,8 @@ public class EmiPhialRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        widgets.addTexture(OVERLAY, 0, 0, getDisplayWidth(), getDisplayHeight(), 0, 0, getDisplayWidth(), getDisplayHeight(), 128, 128);
+        widgets.addTexture(OVERLAY, 0, 0, getDisplayWidth(), getDisplayHeight(), 0, 0, getDisplayWidth(),
+            getDisplayHeight(), 128, 128);
         widgets.addGeneratedSlot((r) -> {
             var stacks = inputs.getEmiStacks();
             return stacks.get(r.nextInt(stacks.size()));

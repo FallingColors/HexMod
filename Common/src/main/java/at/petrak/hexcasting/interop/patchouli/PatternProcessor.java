@@ -16,7 +16,7 @@ public class PatternProcessor implements IComponentProcessor {
             IVariable key = vars.get("op_id");
             String opName = key.asString();
 
-            String prefix = "hexcasting.spell.";
+            String prefix = "hexcasting.action.";
             boolean hasOverride = I18n.exists(prefix + "book." + opName);
             translationKey = prefix + (hasOverride ? "book." : "") + opName;
         }

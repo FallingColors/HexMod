@@ -4,15 +4,17 @@
     "type": "block",
     "block": "hexcasting:empty_impetus"
   },
+  "cost": 1000000,
+  "entityIn": {
+    "type": "villager",
+    "minLevel": 2,
+    "profession": "toolsmith"
+  },
   "result": {
     "name": "hexcasting:impetus_rightclick",
     "properties": {
       "energized": "false",
       "facing": "north"
     }
-  },
-  "villagerIn": {
-    "minLevel": 2,
-    "profession": "minecraft:toolsmith"
   }
 }

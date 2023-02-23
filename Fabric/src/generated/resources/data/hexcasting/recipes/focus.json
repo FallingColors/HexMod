@@ -1,7 +1,10 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "C": [
+    "A": {
+      "item": "hexcasting:charged_amethyst"
+    },
+    "G": [
       {
         "item": "minecraft:glowstone_dust"
       },
@@ -9,17 +12,17 @@
         "tag": "c:glowstone_dusts"
       }
     ],
-    "D": {
+    "L": {
       "item": "minecraft:leather"
     },
-    "I": {
-      "item": "hexcasting:charged_amethyst"
+    "P": {
+      "item": "minecraft:paper"
     }
   },
   "pattern": [
-    "DCD",
-    "CIC",
-    "DCD"
+    "GLG",
+    "PAP",
+    "GLG"
   ],
   "result": {
     "item": "hexcasting:focus"

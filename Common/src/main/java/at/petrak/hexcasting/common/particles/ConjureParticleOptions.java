@@ -11,21 +11,20 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Locale;
 
-public record ConjureParticleOptions(int color, boolean isLight) implements ParticleOptions {
+public record ConjureParticleOptions(int color) implements ParticleOptions {
     @Override
     public ParticleType<?> getType() {
-        return (this.isLight ? HexParticles.LIGHT_PARTICLE : HexParticles.CONJURE_PARTICLE);
+        return HexParticles.CONJURE_PARTICLE;
     }
 
     @Override
     public void writeToNetwork(FriendlyByteBuf buf) {
         buf.writeInt(this.color);
-        buf.writeBoolean(this.isLight);
     }
 
     @Override
     public String writeToString() {
-        return String.format(Locale.ROOT, "%s %s", this.color, this.isLight);
+        return String.format(Locale.ROOT, "%s %s", this.color);
     }
 
     public static final Deserializer<ConjureParticleOptions> DESERIALIZER = new Deserializer<>() {
@@ -35,18 +34,14 @@ public record ConjureParticleOptions(int color, boolean isLight) implements Part
 
             reader.expect(' ');
             var color = reader.readInt();
-            reader.expect(' ');
-            var isLight = reader.readBoolean();
-
-            return new ConjureParticleOptions(color, isLight);
+            return new ConjureParticleOptions(color);
         }
 
         @Override
         public ConjureParticleOptions fromNetwork(ParticleType<ConjureParticleOptions> type,
             FriendlyByteBuf buf) {
             var col = buf.readInt();
-            var isLight = buf.readBoolean();
-            return new ConjureParticleOptions(col, isLight);
+            return new ConjureParticleOptions(col);
         }
     };
 
@@ -58,8 +53,7 @@ public record ConjureParticleOptions(int color, boolean isLight) implements Part
         public static final Codec<ConjureParticleOptions> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     Codec.INT.fieldOf("color")
-                        .forGetter((ConjureParticleOptions o) -> o.color),
-                    Codec.BOOL.fieldOf("isLight").forGetter(ConjureParticleOptions::isLight)
+                        .forGetter((ConjureParticleOptions o) -> o.color)
                 )
                 .apply(instance, ConjureParticleOptions::new)
         );

@@ -1,19 +1,18 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
+import at.petrak.hexcasting.api.casting.ParticleSpray
+import at.petrak.hexcasting.api.casting.RenderedSpell
+import at.petrak.hexcasting.api.casting.castables.SpellAction
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.SpellAction
-import at.petrak.hexcasting.api.spell.casting.CastingContext
 
 class OpWeather(val rain: Boolean) : SpellAction {
     override val argc = 0
-    override val isGreat = true
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingContext
+        ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         if (ctx.world.isRaining == rain)
             return null
@@ -26,15 +25,17 @@ class OpWeather(val rain: Boolean) : SpellAction {
     }
 
     private data class Spell(val rain: Boolean) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
+        override fun cast(ctx: CastingEnvironment) {
             val w = ctx.world
             if (w.isRaining != rain) {
                 w.levelData.isRaining = rain // i hex the rains down in minecraftia
 
+                val (minTime, maxTime) = if (rain) (30 to 90) else (60 to 180)
+                val time = (w.random.nextInt(minTime, maxTime)) * 20 * 60
                 if (rain) {
-                    w.setWeatherParameters(0, 6000, true, w.random.nextDouble() < 0.05)
+                    w.setWeatherParameters(0, time, true, w.random.nextDouble() < 0.05)
                 } else {
-                    w.setWeatherParameters(6000, 0, false, false)
+                    w.setWeatherParameters(time, 0, false, false)
                 }
             }
         }

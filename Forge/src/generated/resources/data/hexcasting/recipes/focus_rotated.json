@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "hexcasting:charged_amethyst"
+    },
+    "G": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "L": {
+      "tag": "forge:leather"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "GPG",
+    "LAL",
+    "GPG"
+  ],
+  "result": {
+    "item": "hexcasting:focus"
+  }
+}

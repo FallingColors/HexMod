@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.spell.iota.*;
+import at.petrak.hexcasting.api.casting.iota.*;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -180,9 +179,7 @@ public class HexIotaTypes {
         return type.color();
     }
 
-    @ApiStatus.Internal
-    public static void registerTypes() {
-        BiConsumer<IotaType<?>, ResourceLocation> r = (type, id) -> Registry.register(REGISTRY, id, type);
+    public static void registerTypes(BiConsumer<IotaType<?>, ResourceLocation> r) {
         for (var e : TYPES.entrySet()) {
             r.accept(e.getValue(), e.getKey());
         }

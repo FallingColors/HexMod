@@ -15,7 +15,8 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
     private static final String TAG_MEDIA_GENERATED = "media_generated";
     private static final String TAG_HEALTH_USED = "health_used";
     // HEY KIDS DID YOYU KNOW THERE'S NOT A CRITERIA FOR HOW MUCH ***HEALTH*** AN ENTITY HAS
-    private static final String TAG_HEALTH_LEFT = "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion";
+    private static final String TAG_HEALTH_LEFT =
+        "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion";
 
     @Override
     public ResourceLocation getId() {
@@ -41,6 +42,7 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
 
     public static class Instance extends AbstractCriterionTriggerInstance {
         protected final MinMaxBounds.Ints mediaGenerated;
+        // This is the *proporttion* of the health bar.
         protected final MinMaxBounds.Doubles healthUsed;
         // DID YOU KNOW THERES ONE TO CHECK THE WORLD TIME, BUT NOT THE HEALTH!?
         protected final MinMaxBounds.Doubles healthLeft;

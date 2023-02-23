@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class ItemStaff extends Item {
-    // 0 = normal. 1 = old. 2 = bosnia
+    // 0 = normal. 1 = old. 2 = cherry preview
     public static final ResourceLocation FUNNY_LEVEL_PREDICATE = new ResourceLocation(HexAPI.MOD_ID, "funny_level");
 
     public ItemStaff(Properties pProperties) {
@@ -34,7 +34,7 @@ public class ItemStaff extends Item {
 
         if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             var harness = IXplatAbstractions.INSTANCE.getHarness(serverPlayer, hand);
-            var patterns = IXplatAbstractions.INSTANCE.getPatterns(serverPlayer);
+            var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
             var descs = harness.generateDescs();
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
