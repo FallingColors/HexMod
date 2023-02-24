@@ -327,6 +327,7 @@
   "hexcasting.action.book.hexcasting:arcsin": "反正弦之纯化",
   "hexcasting.action.book.hexcasting:arccos": "反余弦之纯化",
   "hexcasting.action.book.hexcasting:arctan": "反正切之纯化",
+  "hexcasting.action.book.hexcasting:arctan2": "反正切之纯化，第二型",
   "hexcasting.action.book.hexcasting:const/vec/x": "向量之精思，+X/-X型",
   "hexcasting.action.book.hexcasting:const/vec/y": "向量之精思，+Y/-Y型",
   "hexcasting.action.book.hexcasting:const/vec/z": "向量之精思，+Z/-Z型",
@@ -445,6 +446,7 @@
   "hexcasting.action.hexcasting:arcsin": "反正弦之纯化",
   "hexcasting.action.hexcasting:arccos": "反余弦之纯化",
   "hexcasting.action.hexcasting:arctan": "反正切之纯化",
+  "hexcasting.action.hexcasting:arctan2": "反正切之纯化，第二型",
   "hexcasting.action.hexcasting:random": "熵之精思",
   "hexcasting.action.hexcasting:logarithm": "对数之馏化",
   "hexcasting.action.hexcasting:coerce_axial": "轴向之纯化",
@@ -952,6 +954,7 @@
   "hexcasting.page.advanced_math.arcsin": "计算所给数（绝对值小于 1）的反正弦，也即正弦为该值的角。与 $(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$ 和 $(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$ 的值有关。",
   "hexcasting.page.advanced_math.arccos": "计算所给数（绝对值小于 1）的反余弦，也即余弦为该值的角。与 $(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$ 和 $(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$ 的值有关。",
   "hexcasting.page.advanced_math.arctan": "计算所给数的反正切，也即正切为该值的角。与 $(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$ 和 $(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$ 的值有关。",
+  "hexcasting.page.advanced_math.arctan2": "计算所给纵坐标与横坐标的反正切，也即计算 X 轴正向，与原点至所给坐标的射线间的夹角的反正切。",
   "hexcasting.page.advanced_math.logarithm": "计算以栈顶元素为底的，栈顶往下第二元素为真数的对数。与 $(l:patterns/consts#hexcasting:const/double/e)$(thing)$(italic)e/$ 的值有关。",
 
   "hexcasting.entry.sets": "集合",
