@@ -15,7 +15,8 @@ public class BrainsweepingEvents {
     public static InteractionResult interactWithBrainswept(Player player, Level world, InteractionHand hand,
         Entity entity, @Nullable EntityHitResult hitResult) {
         if (entity instanceof Mob mob && IXplatAbstractions.INSTANCE.isBrainswept(mob)) {
-            return InteractionResult.FAIL;
+            // As in, this interaction "successfully" consumes the result and doesn't pass it on
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;
