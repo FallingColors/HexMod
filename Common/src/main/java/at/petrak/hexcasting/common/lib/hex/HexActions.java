@@ -211,6 +211,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("adeeeee", HexDir.NORTH_EAST), OpArcCos.INSTANCE));
     public static final ActionRegistryEntry ARCTAN = make("arctan",
         new ActionRegistryEntry(HexPattern.fromAngles("eadeeeeew", HexDir.NORTH_EAST), OpArcTan.INSTANCE));
+    public static final ActionRegistryEntry ARCTAN2 = make("arctan2",
+        new ActionRegistryEntry(HexPattern.fromAngles("deadeeeeewd", HexDir.WEST), OpArcTan2.INSTANCE));
     public static final ActionRegistryEntry LOGARITHM = make("logarithm",
         new ActionRegistryEntry(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST), OpLog.INSTANCE));
     public static final ActionRegistryEntry MODULO = make("modulo",
