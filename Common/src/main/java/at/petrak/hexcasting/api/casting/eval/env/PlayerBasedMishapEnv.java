@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.env;
+package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;

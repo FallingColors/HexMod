@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.misc.MediaConstants;
@@ -186,15 +186,15 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
             for (int i : arr) {
                 if (i < 0) {
                     entity.sendSystemMessage(Component.translatable("hexcasting.debug.media_" + langKey,
-                        stack.getDisplayName(),
-                        Component.translatable("hexcasting.debug." + allKey).withStyle(ChatFormatting.GRAY))
+                            stack.getDisplayName(),
+                            Component.translatable("hexcasting.debug." + allKey).withStyle(ChatFormatting.GRAY))
                         .withStyle(ChatFormatting.LIGHT_PURPLE));
                 } else {
                     entity.sendSystemMessage(Component.translatable("hexcasting.debug.media_" + langKey + ".with_dust",
-                        stack.getDisplayName(),
-                        Component.literal("" + i).withStyle(ChatFormatting.WHITE),
-                        Component.literal(String.format("%.2f", i * 1.0 / MediaConstants.DUST_UNIT)).withStyle(
-                            ChatFormatting.WHITE))
+                            stack.getDisplayName(),
+                            Component.literal("" + i).withStyle(ChatFormatting.WHITE),
+                            Component.literal(String.format("%.2f", i * 1.0 / MediaConstants.DUST_UNIT)).withStyle(
+                                ChatFormatting.WHITE))
                         .withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
             }
@@ -206,7 +206,8 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         BlockEntity be = context.getLevel().getBlockEntity(context.getClickedPos());
         if (be instanceof BlockEntityAbstractImpetus impetus) {
             impetus.setInfiniteMedia();
-            context.getLevel().playSound(null, context.getClickedPos(), HexSounds.SPELL_CIRCLE_FIND_BLOCK, SoundSource.PLAYERS, 1f, 1f);
+            context.getLevel().playSound(null, context.getClickedPos(), HexSounds.SPELL_CIRCLE_FIND_BLOCK,
+                SoundSource.PLAYERS, 1f, 1f);
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
         }
         return InteractionResult.PASS;

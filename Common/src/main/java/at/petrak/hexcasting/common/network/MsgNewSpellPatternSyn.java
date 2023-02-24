@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.common.casting.env.StaffCastEnv;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

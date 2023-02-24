@@ -607,6 +607,9 @@
   "hexcasting.mishap.unknown": "threw an exception (%s). This is a bug in the mod.",
   "hexcasting.mishap.shame": "Shame on you!",
   
+  "hexcasting.circles.no_exit": "The flow of media at %s could not find an exit",
+  "hexcasting.circles.many_exits": "The flow of media at %s had too many exits",
+  
   "_comment": "Patchi stuff",
   
   "hexcasting.landing": "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. It fascinates me. I've decided to start a journal of my thoughts and findings.$(br2)$(l:https://discord.gg/4xxHGYteWk)Discord Server Link/$",

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.cap;
 
 import at.petrak.hexcasting.api.addldata.*;
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.item.ColorizerItem;
 import at.petrak.hexcasting.api.item.HexHolderItem;

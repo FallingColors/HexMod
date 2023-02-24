@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.entity;
 
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import com.mojang.authlib.GameProfile;
@@ -80,9 +80,9 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-                                        BlockState state, BlockPos pos, Player observer,
-                                        Level world,
-                                        Direction hitFace) {
+        BlockState state, BlockPos pos, Player observer,
+        Level world,
+        Direction hitFace) {
         super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace);
 
         var name = this.getPlayerName();

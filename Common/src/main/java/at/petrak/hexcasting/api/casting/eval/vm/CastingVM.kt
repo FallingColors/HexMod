@@ -6,6 +6,9 @@ import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.*
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
+import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -31,14 +34,15 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
     /**
      * Execute a single iota.
      */
-    fun queueAndExecuteIota(iota: Iota, world: ServerLevel): ExecutionClientView = queueAndExecuteIotas(listOf(iota), world)
+    fun queueExecuteAndWrapIota(iota: Iota, world: ServerLevel): ExecutionClientView = queueExecuteAndWrapIotas(listOf(iota), world)
 
     /**
      * The main entrypoint to the VM. Given a list of iotas, execute them in sequence, and return whatever the client
      * needs to see.
+     *
+     * Mutates this
      */
-    fun queueAndExecuteIotas(iotas: List<Iota>, world: ServerLevel): ExecutionClientView {
-
+    fun queueExecuteAndWrapIotas(iotas: List<Iota>, world: ServerLevel): ExecutionClientView {
         // Initialize the continuation stack to a single top-level eval for all iotas.
         var continuation = SpellContinuation.Done.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false))
         // Begin aggregating info
@@ -149,7 +153,6 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
     private fun executePattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
         var castedName: Component? = null
         try {
-
             val lookup = PatternRegistryManifest.matchPattern(newPat, world, false)
             this.env.precheckAction(lookup)
 
