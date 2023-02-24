@@ -56,6 +56,14 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:arctan2",
+      "anchor": "hexcasting:arctan2",
+      "input": "num, num",
+      "output": "num",
+      "text": "hexcasting.page.advanced_math.arctan2"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:logarithm",
       "anchor": "hexcasting:logarithm",
       "input": "num, num",

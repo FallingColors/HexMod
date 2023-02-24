@@ -327,6 +327,7 @@
   "hexcasting.action.book.hexcasting:arcsin": "Inverse Sine Prfn.",
   "hexcasting.action.book.hexcasting:arccos": "Inverse Cosine Prfn.",
   "hexcasting.action.book.hexcasting:arctan": "Inverse Tangent Prfn.",
+  "hexcasting.action.book.hexcasting:arctan2": "Inverse Tan. Prfn. II",
   "hexcasting.action.book.hexcasting:const/vec/x": "Vector Rfln. +X/-X",
   "hexcasting.action.book.hexcasting:const/vec/y": "Vector Rfln. +Y/-Y",
   "hexcasting.action.book.hexcasting:const/vec/z": "Vector Rfln. +Z/-Z",
@@ -445,6 +446,7 @@
   "hexcasting.action.hexcasting:arcsin": "Inverse Sine Purification",
   "hexcasting.action.hexcasting:arccos": "Inverse Cosine Purification",
   "hexcasting.action.hexcasting:arctan": "Inverse Tangent Purification",
+  "hexcasting.action.hexcasting:arctan2": "Inverse Tangent Purification II",
   "hexcasting.action.hexcasting:random": "Entropy Reflection",
   "hexcasting.action.hexcasting:logarithm": "Logarithmic Distillation",
   "hexcasting.action.hexcasting:coerce_axial": "Axial Purification",
@@ -952,6 +954,7 @@
   "hexcasting.page.advanced_math.arcsin": "Takes the inverse sine of a value with absolute value 1 or less, yielding the angle whose sine is that value. Related to the values of $(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$ and $(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$.",
   "hexcasting.page.advanced_math.arccos": "Takes the inverse cosine of a value with absolute value 1 or less, yielding the angle whose cosine is that value. Related to the values of $(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$ and $(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$.",
   "hexcasting.page.advanced_math.arctan": "Takes the inverse tangent of a value, yielding the angle whose tangent is that value. Related to the values of $(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$ and $(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$.",
+  "hexcasting.page.advanced_math.arctan2": "Takes the inverse tangent of a Y and X value, yielding the angle between the X-axis and a line from the origin to that point.",
   "hexcasting.page.advanced_math.logarithm": "Removes the number at the top of the stack, then takes the logarithm of the number at the top using the other number as its base. Related to the value of $(l:patterns/consts#hexcasting:const/double/e)$(thing)$(italic)e/$.",
   
   "hexcasting.entry.sets": "Sets",
