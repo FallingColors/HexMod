@@ -24,7 +24,7 @@ public class BrainsweepingEvents {
     public static InteractionResult copyBrainsweepPostTransformation(LivingEntity original, LivingEntity outcome) {
         if (original instanceof Mob mOriginal && outcome instanceof Mob mOutcome
             && IXplatAbstractions.INSTANCE.isBrainswept(mOriginal)) {
-            IXplatAbstractions.INSTANCE.brainsweep(mOutcome);
+            IXplatAbstractions.INSTANCE.setBrainsweepAddlData(mOutcome);
         }
         return InteractionResult.PASS;
     }

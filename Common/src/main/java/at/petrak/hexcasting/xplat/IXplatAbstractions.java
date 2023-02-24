@@ -70,9 +70,12 @@ public interface IXplatAbstractions {
     // Things that used to be caps
 
     /**
-     * Irregardless of whether it can actually be brainswept (you need to do the checking yourself)
+     * Doesn't actually knock out its AI or anything anymore, just sets caps/ccs
      */
-    void brainsweep(Mob mob);
+    // heheheheh addled data
+    void setBrainsweepAddlData(Mob mob);
+
+    boolean isBrainswept(Mob mob);
 
     void setColorizer(Player target, FrozenColorizer colorizer);
 
@@ -85,8 +88,6 @@ public interface IXplatAbstractions {
     void setHarness(ServerPlayer target, @Nullable CastingHarness harness);
 
     void setPatterns(ServerPlayer target, List<ResolvedPattern> patterns);
-
-    boolean isBrainswept(Mob mob);
 
     @Nullable FlightAbility getFlight(ServerPlayer player);
 
