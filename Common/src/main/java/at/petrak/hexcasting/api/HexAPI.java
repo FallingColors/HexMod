@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api;
 
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.base.Suppliers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -9,10 +10,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public interface HexAPI {
@@ -86,6 +89,54 @@ public interface HexAPI {
     interface EntityVelocityGetter<T extends Entity> {
         Vec3 getVelocity(T entity);
     }
+
+    /**
+     * Register an entity type to have a custom behavior when getting brainswept.
+     * <p>
+     * This knocks out the normal behavior; if you want that behavior you should call
+     */
+    default <T extends Mob> void registerCustomBrainsweepingBehavior(EntityType<T> key, Consumer<T> hook) {
+    }
+
+    /**
+     * The default behavior when an entity gets brainswept.
+     * <p>
+     * Something registered with {@link HexAPI#registerCustomBrainsweepingBehavior} doesn't call this automatically;
+     * you can use this to add things on top of the default behavior
+     */
+    default Consumer<Mob> defaultBrainsweepingBehavior() {
+        return mob -> {
+        };
+    }
+
+    /**
+     * If something special's been returned with {@link HexAPI#registerCustomBrainsweepingBehavior}, return that,
+     * otherwise return the default behavior
+     */
+    default <T extends Mob> Consumer<T> getBrainsweepBehavior(EntityType<T> mobType) {
+        return mob -> {
+        };
+    }
+
+    /**
+     * Brainsweep (flay the mind of) the given mob.
+     * <p>
+     * This ignores the unbrainsweepable tag.
+     */
+    default void brainsweep(Mob mob) {
+        var type = (EntityType<? extends Mob>) mob.getType();
+        var behavior = this.getBrainsweepBehavior(type);
+        var erasedBehavior = (Consumer<Mob>) behavior;
+        erasedBehavior.accept(mob);
+
+        IXplatAbstractions.INSTANCE.setBrainsweepAddlData(mob);
+    }
+
+    default boolean isBrainswept(Mob mob) {
+        return IXplatAbstractions.INSTANCE.isBrainswept(mob);
+    }
+
+    //
 
     static HexAPI instance() {
         return INSTANCE.get();

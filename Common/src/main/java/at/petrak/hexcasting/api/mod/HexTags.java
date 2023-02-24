@@ -51,6 +51,8 @@ public class HexTags {
         public static final TagKey<EntityType<?>> STICKY_TELEPORTERS = create("sticky_teleporters");
         public static final TagKey<EntityType<?>> CANNOT_TELEPORT = create("cannot_teleport");
 
+        public static final TagKey<EntityType<?>> NO_BRAINSWEEPING = create("cannot_brainsweep");
+
         public static TagKey<EntityType<?>> create(String name) {
             return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, modLoc(name));
         }

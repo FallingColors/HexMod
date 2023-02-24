@@ -23,7 +23,7 @@ import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
-import at.petrak.hexcasting.common.misc.VelocityFudging
+import at.petrak.hexcasting.common.misc.RegisterMisc
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop
@@ -75,7 +75,7 @@ object FabricHexInitializer : ModInitializer {
         FabricImpetusStorage.registerStorage()
 
         HexInterop.init()
-        VelocityFudging.register()
+        RegisterMisc.register()
     }
 
     fun initListeners() {

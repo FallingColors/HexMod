@@ -1,12 +1,16 @@
 package at.petrak.hexcasting.common.casting.operators.spells.great
 
-import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.ParticleSpray
+import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.getBlockPos
+import at.petrak.hexcasting.api.casting.getMob
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapAlreadyBrainswept
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBrainsweep
 import at.petrak.hexcasting.api.mod.HexConfig
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.ktxt.tellWitnessesThatIWasMurdered
@@ -34,6 +38,9 @@ object OpBrainsweep : SpellAction {
         val pos = args.getBlockPos(1, argc)
         ctx.assertVecInRange(pos)
         ctx.assertEntityInRange(sacrifice)
+
+        if (sacrifice.type.`is`(HexTags.Entities.NO_BRAINSWEEPING))
+            throw MishapBadBrainsweep(sacrifice, pos)
 
         if (IXplatAbstractions.INSTANCE.isBrainswept(sacrifice))
             throw MishapAlreadyBrainswept(sacrifice)
@@ -64,7 +71,7 @@ object OpBrainsweep : SpellAction {
         override fun cast(ctx: CastingEnvironment) {
             ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
 
-            IXplatAbstractions.INSTANCE.brainsweep(sacrifice)
+            IXplatAbstractions.INSTANCE.setBrainsweepAddlData(sacrifice)
             if (sacrifice is Villager && HexConfig.server().doVillagersTakeOffenseAtMindMurder()) {
                 sacrifice.tellWitnessesThatIWasMurdered(ctx.caster)
             }

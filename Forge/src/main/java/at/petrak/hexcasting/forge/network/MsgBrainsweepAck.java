@@ -46,7 +46,7 @@ public record MsgBrainsweepAck(int target) implements IMessage {
                 if (level != null) {
                     Entity entity = level.getEntity(msg.target());
                     if (entity instanceof Mob living) {
-                        IXplatAbstractions.INSTANCE.brainsweep(living);
+                        IXplatAbstractions.INSTANCE.setBrainsweepAddlData(living);
                     }
                 }
             }

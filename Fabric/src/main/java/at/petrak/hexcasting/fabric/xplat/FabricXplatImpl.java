@@ -24,7 +24,6 @@ import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
-import at.petrak.hexcasting.mixin.accessor.AccessorVillager;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
@@ -60,7 +59,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -136,15 +134,10 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void brainsweep(Mob mob) {
+    public void setBrainsweepAddlData(Mob mob) {
         var cc = HexCardinalComponents.BRAINSWEPT.get(mob);
         cc.setBrainswept(true);
         // CC API does the syncing for us
-
-        mob.removeFreeWill();
-        if (mob instanceof Villager villager) {
-            ((AccessorVillager) villager).hex$releaseAllPois();
-        }
     }
 
     @Override
