@@ -8,6 +8,12 @@
     "hexcasting:sentinel/create/great",
     "hexcasting:dispel_rain",
     "hexcasting:summon_rain",
-    "hexcasting:brainsweep"
+    "hexcasting:brainsweep",
+    "hexcasting:craft/battery",
+    "hexcasting:potion/regeneration",
+    "hexcasting:potion/night_vision",
+    "hexcasting:potion/absorption",
+    "hexcasting:potion/haste",
+    "hexcasting:potion/strength"
   ]
 }
