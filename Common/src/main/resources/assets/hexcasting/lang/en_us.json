@@ -210,7 +210,7 @@
   "text.autoconfig.hexcasting.option.client.gridSnapThreshold.@Tooltip": "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way (0.5-1)",
   
   "text.autoconfig.hexcasting.option.server.opBreakHarvestLevel": "Break Harvest Level",
-  "text.autoconfig.hexcasting.option.server.maxRecurseDepth": "Max Recurse Depth",
+  "text.autoconfig.hexcasting.option.server.maxOpCount": "Max Action Count",
   "text.autoconfig.hexcasting.option.server.maxSpellCircleLength": "Max Spell Circle Length",
   "text.autoconfig.hexcasting.option.server.actionDenyList": "Action Deny List",
   "text.autoconfig.hexcasting.option.server.circleActionDenyList": "Circle Action Deny List",
@@ -218,7 +218,7 @@
   "text.autoconfig.hexcasting.option.server.scrollInjectionsRaw": "Scroll Injection Weights",
   "text.autoconfig.hexcasting.option.server.amethystShardModification": "Amethyst Shard Drop Rate Change",
   "text.autoconfig.hexcasting.option.server.opBreakHarvestLevel.@Tooltip": "The harvest level of the Break Block spell.\n0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite.",
-  "text.autoconfig.hexcasting.option.server.maxRecurseDepth.@Tooltip": "How many times an action can recursively cast other actions",
+  "text.autoconfig.hexcasting.option.server.maxOpCount.@Tooltip": "The maximum number of actions that can be executed in one tick, to avoid hanging the server.",
   "text.autoconfig.hexcasting.option.server.maxSpellCircleLength.@Tooltip": "The maximum number of slates in a spell circle",
   "text.autoconfig.hexcasting.option.server.actionDenyList.@Tooltip": "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection",
   "text.autoconfig.hexcasting.option.server.circleActionDenyList.@Tooltip": "Resource locations of disallowed actions within circles. Trying to cast one of these from a circle will result in a mishap.",

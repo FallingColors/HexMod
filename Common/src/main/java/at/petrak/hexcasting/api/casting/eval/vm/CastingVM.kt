@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.*
+import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
@@ -37,6 +38,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
      * needs to see.
      */
     fun queueAndExecuteIotas(iotas: List<Iota>, world: ServerLevel): ExecutionClientView {
+
         // Initialize the continuation stack to a single top-level eval for all iotas.
         var continuation = SpellContinuation.Done.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false))
         // Begin aggregating info
@@ -147,6 +149,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
     private fun executePattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
         var castedName: Component? = null
         try {
+
             val lookup = PatternRegistryManifest.matchPattern(newPat, world, false)
             this.env.precheckAction(lookup)
 
@@ -168,6 +171,17 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             } else if (lookup is PatternShapeMatch.Nothing) {
                 throw MishapInvalidPattern()
             } else throw IllegalStateException()
+
+            val opCount = if (this.image.userData.contains(HexAPI.OP_COUNT_USERDATA)) {
+                this.image.userData.getInt(HexAPI.OP_COUNT_USERDATA)
+            } else {
+                this.image.userData.putInt(HexAPI.OP_COUNT_USERDATA, 0)
+                0
+            }
+            if (opCount + 1 > HexConfig.server().maxOpCount()) {
+                throw MishapEvalTooMuch()
+            }
+            this.image.userData.putInt(HexAPI.OP_COUNT_USERDATA, opCount + 1)
 
             val sideEffects = mutableListOf<OperatorSideEffect>()
             var stack2: List<Iota>? = null

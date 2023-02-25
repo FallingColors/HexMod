@@ -3,8 +3,6 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
-import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooDeep
-import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.utils.*
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -77,21 +75,6 @@ data class CastingImage private constructor(
                 HexAPI.LOGGER.warn("error while loading a CastingImage", exn)
                 CastingImage()
             }
-        }
-
-        /**
-         * Throws if we get too deep.
-         */
-        @JvmStatic
-        fun incDepth(userData: CompoundTag): CompoundTag {
-            val maxAllowedDepth = HexConfig.server().maxRecurseDepth()
-            val depth = userData.getInt(HexAPI.EVAL_DEPTH_USERDATA)
-            if (depth + 1 > maxAllowedDepth) {
-                throw MishapEvalTooDeep()
-            }
-
-            userData.putInt(HexAPI.EVAL_DEPTH_USERDATA, depth + 1)
-            return userData
         }
 
         @JvmStatic

@@ -72,15 +72,19 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
         sender.awardStat(HexStatistics.PATTERNS_DRAWN);
 
-        var harness = IXplatAbstractions.INSTANCE.getStaffcastVM(sender, msg.handUsed());
+        var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(sender, msg.handUsed());
+        // every time we send a new pattern it'll be happening in a different tick, so reset here
+        // i don't think we can do this in the casting vm itself because it doesn't know if `queueAndExecuteIotas`
+        // is being called from the top level or not
+        vm.getImage().getUserData().remove(HexAPI.OP_COUNT_USERDATA);
 
-        ExecutionClientView clientInfo = harness.queueAndExecuteIota(new PatternIota(msg.pattern()), sender.getLevel());
+        ExecutionClientView clientInfo = vm.queueAndExecuteIota(new PatternIota(msg.pattern()), sender.getLevel());
 
         if (clientInfo.isStackClear()) {
             IXplatAbstractions.INSTANCE.setStaffcastImage(sender, null);
             IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
         } else {
-            IXplatAbstractions.INSTANCE.setStaffcastImage(sender, harness);
+            IXplatAbstractions.INSTANCE.setStaffcastImage(sender, vm);
             if (!resolvedPatterns.isEmpty()) {
                 resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
             }

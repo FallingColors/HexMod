@@ -113,9 +113,9 @@ public interface HexAPI {
      */
     String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
     /**
-     * Location in the userdata of the evaluation depth
+     * Location in the userdata of the number of ops executed
      */
-    String EVAL_DEPTH_USERDATA = modLoc("eval_depth").toString();
+    String OP_COUNT_USERDATA = modLoc("op_count").toString();
 
     String MARKED_MOVED_USERDATA = modLoc("impulsed").toString();
 
