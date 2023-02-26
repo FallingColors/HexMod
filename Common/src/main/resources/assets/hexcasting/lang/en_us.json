@@ -332,6 +332,7 @@
   "hexcasting.action.book.hexcasting:const/vec/y": "Vector Rfln. +Y/-Y",
   "hexcasting.action.book.hexcasting:const/vec/z": "Vector Rfln. +Z/-Z",
   "hexcasting.action.book.hexcasting:read/entity": "Chronicler's Prfn.",
+  "hexcasting.action.book.hexcasting:bool_to_number": "Numerologist's Prfn.",
   "hexcasting.action.book.hexcasting:number": "Numerical Reflection",
   "hexcasting.action.book.hexcasting:mask": "Bookkeeper's Gambit",
   
@@ -427,6 +428,7 @@
   "hexcasting.action.hexcasting:not_equals": "Inequality Distillation",
   "hexcasting.action.hexcasting:not": "Negation Purification",
   "hexcasting.action.hexcasting:bool_coerce": "Augur's Purification",
+  "hexcasting.action.hexcasting:bool_to_number": "Numerologist's Purification",
   "hexcasting.action.hexcasting:if": "Augur's Exaltation",
   
   "hexcasting.action.hexcasting:add": "Additive Distillation",
@@ -557,6 +559,7 @@
   "hexcasting.mishap.invalid_value.int.positive.less.equal": "a positive integer less than or equal to %d",
   "hexcasting.mishap.invalid_value.int.between": "an integer between %d and %d",
   "hexcasting.mishap.invalid_value.evaluatable": "something evaluatable",
+  "hexcasting.mishap.invalid_value.bool_commute": "a boolean, 0, or 1",
   "hexcasting.mishap.not_enough_args": "expected %s or more arguments but the stack was only %s tall",
   "hexcasting.mishap.no_args": "expected %s or more arguments but the stack was empty",
   "hexcasting.mishap.too_many_close_parens": "Did not first use Introspection",
@@ -1002,6 +1005,7 @@
   
   "hexcasting.entry.logic": "Logical Operators",
   "hexcasting.page.logic.bool_coerce": "Convert an argument to a boolean. The number $(thing)0/$, $(l:influences#null)$(thing)Null/$, and the empty list become False; everything else becomes True.",
+  "hexcasting.page.logic.bool_to_number": "Convert a boolean to a number; True becomes $(thing)1/$, and False becomes $(thing)0/$.",
   "hexcasting.page.logic.not": "If the argument is True, return False; if it is False, return True.",
   "hexcasting.page.logic.or": "Returns True if at least one of the arguments are True; otherwise returns False.",
   "hexcasting.page.logic.and": "Returns True if both arguments are true; otherwise returns False.",

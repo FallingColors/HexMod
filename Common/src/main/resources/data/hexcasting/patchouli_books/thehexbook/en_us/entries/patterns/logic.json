@@ -8,19 +8,27 @@
   "pages": [
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:not",
-      "anchor": "hexcasting:not",
-      "input": "any",
-      "output": "number",
-      "text": "hexcasting.page.logic.not"
-    },
-    {
-      "type": "hexcasting:pattern",
       "op_id": "hexcasting:bool_coerce",
       "anchor": "hexcasting:bool_coerce",
       "input": "any",
       "output": "bool",
       "text": "hexcasting.page.logic.bool_coerce"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:bool_to_number",
+      "anchor": "hexcasting:bool_to_number",
+      "input": "bool",
+      "output": "number",
+      "text": "hexcasting.page.logic.bool_to_number"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:not",
+      "anchor": "hexcasting:not",
+      "input": "any",
+      "output": "number",
+      "text": "hexcasting.page.logic.not"
     },
     {
       "type": "hexcasting:pattern",
