@@ -191,6 +191,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("dw", HexDir.NORTH_WEST), OpBoolNot.INSTANCE));
     public static final ActionRegistryEntry BOOL_COERCE = make("bool_coerce",
         new ActionRegistryEntry(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), OpCoerceToBool.INSTANCE));
+    public static final ActionRegistryEntry BOOL_TO_NUMBER = make("bool_to_number",
+        new ActionRegistryEntry(HexPattern.fromAngles("awd", HexDir.SOUTH_EAST), OpBoolToNumber.INSTANCE));
     public static final ActionRegistryEntry IF = make("if",
         new ActionRegistryEntry(HexPattern.fromAngles("awdd", HexDir.SOUTH_EAST), OpBoolIf.INSTANCE));
 
