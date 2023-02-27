@@ -332,6 +332,7 @@
   "hexcasting.action.book.hexcasting:const/vec/y": "向量之精思，+Y/-Y型",
   "hexcasting.action.book.hexcasting:const/vec/z": "向量之精思，+Z/-Z型",
   "hexcasting.action.book.hexcasting:read/entity": "编年史家之纯化",
+  "hexcasting.action.book.hexcasting:bool_to_number": "数秘术师之纯化",
   "hexcasting.action.book.hexcasting:number": "数字之精思",
   "hexcasting.action.book.hexcasting:mask": "簿记员之策略",
 
@@ -427,6 +428,7 @@
   "hexcasting.action.hexcasting:not_equals": "不等之馏化",
   "hexcasting.action.hexcasting:not": "取非之纯化",
   "hexcasting.action.hexcasting:bool_coerce": "占卜师之纯化",
+  "hexcasting.action.hexcasting:bool_to_number": "数秘术师之纯化",
   "hexcasting.action.hexcasting:if": "占卜师之提整",
 
   "hexcasting.action.hexcasting:add": "加法之馏化",
@@ -557,6 +559,7 @@
   "hexcasting.mishap.invalid_value.int.positive.less.equal": "一个小于等于%d的正整数",
   "hexcasting.mishap.invalid_value.int.between": "一个介于%d和%d之间的整数",
   "hexcasting.mishap.invalid_value.evaluatable": "可运行的事物",
+  "hexcasting.mishap.invalid_value.bool_commute": "一个布尔值、0或1",
   "hexcasting.mishap.not_enough_args": "本应接受大于等于%s个参数，而实际栈中元素数为%s",
   "hexcasting.mishap.no_args": "本应接受大于等于%s个参数，而实际为空栈",
   "hexcasting.mishap.too_many_close_parens": "在绘制反思前未先绘制内省",
@@ -1002,6 +1005,7 @@
 
   "hexcasting.entry.logic": "逻辑运算",
   "hexcasting.page.logic.bool_coerce": "将参数变换为布尔值。数 $(thing)0/$、$(l:influences#null)$(thing)Null/$，以及空列表会变为 False。其余所有则变为 True。",
+  "hexcasting.page.logic.bool_to_number": "将布尔值变换为树。True 变为 $(thing)1/$， False 变为 $(thing)0/$。",
   "hexcasting.page.logic.not": "如果参数是 True，返回 False；如果参数是 False，返回 True。",
   "hexcasting.page.logic.or": "如果至少有一个参数是 True，返回 True。否则返回 False。",
   "hexcasting.page.logic.and": "如果两个参数都是 True，返回 True。否则返回 False。",
