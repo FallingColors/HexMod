@@ -25,6 +25,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -168,6 +169,10 @@ public interface IXplatAbstractions {
     boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player);
 
     boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player);
+
+    GoalSelector getGoalSelector(Mob mob);
+
+    GoalSelector getTargetSelector(Mob mob);
 
     // interop
 
