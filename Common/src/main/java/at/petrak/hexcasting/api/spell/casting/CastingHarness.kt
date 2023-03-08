@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
 import kotlin.math.min
+import kotlin.math.max
 
 /**
  * Keeps track of a player casting a spell on the server.
@@ -450,14 +451,14 @@ class CastingHarness private constructor(
                 if (allowOvercast && costLeft > 0) {
                     // Cast from HP!
                     val manaToHealth = HexConfig.common().manaToHealthRate()
-                    val healthtoRemove = costLeft.toDouble() / manaToHealth
+                    val healthToRemove = max(costLeft.toDouble() / manaToHealth, 0.5)
                     val manaAbleToCastFromHP = this.ctx.caster.health * manaToHealth
 
                     val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
                     costLeft -= if (!fake) {
                         Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthtoRemove.toFloat())
 
-                        val actuallyTaken = (manaAbleToCastFromHP - (this.ctx.caster.health * manaToHealth)).toInt()
+                        val actuallyTaken = Util.Mth.ciel(manaAbleToCastFromHP - (this.ctx.caster.health * manaToHealth))
 
                         HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, actuallyTaken)
                         this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
