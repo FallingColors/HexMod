@@ -456,9 +456,9 @@ class CastingHarness private constructor(
 
                     val manaToActuallyPayFor = min(manaAbleToCastFromHP.toInt(), costLeft)
                     costLeft -= if (!fake) {
-                        Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthtoRemove.toFloat())
+                        Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthToRemove.toFloat())
 
-                        val actuallyTaken = Util.Mth.ciel(manaAbleToCastFromHP - (this.ctx.caster.health * manaToHealth))
+                        val actuallyTaken = Util.Mth.ceil(manaAbleToCastFromHP - (this.ctx.caster.health * manaToHealth))
 
                         HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, actuallyTaken)
                         this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
