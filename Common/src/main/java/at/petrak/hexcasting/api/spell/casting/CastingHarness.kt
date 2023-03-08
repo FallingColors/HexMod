@@ -16,6 +16,7 @@ import at.petrak.hexcasting.api.spell.mishaps.*
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.Util
+import net.minecraft.util.Mth
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
@@ -458,7 +459,7 @@ class CastingHarness private constructor(
                     costLeft -= if (!fake) {
                         Mishap.trulyHurt(this.ctx.caster, HexDamageSources.OVERCAST, healthToRemove.toFloat())
 
-                        val actuallyTaken = Util.Mth.ceil(manaAbleToCastFromHP - (this.ctx.caster.health * manaToHealth))
+                        val actuallyTaken = Mth.ceil(manaAbleToCastFromHP - (this.ctx.caster.health * manaToHealth))
 
                         HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.ctx.caster, actuallyTaken)
                         this.ctx.caster.awardStat(HexStatistics.MANA_OVERCASTED, manaCost - costLeft)
