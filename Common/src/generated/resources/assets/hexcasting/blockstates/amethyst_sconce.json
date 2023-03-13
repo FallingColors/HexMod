@@ -1,7 +1,30 @@
 {
   "variants": {
-    "": {
+    "facing=down": {
+      "model": "hexcasting:block/amethyst_sconce",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "hexcasting:block/amethyst_sconce",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "hexcasting:block/amethyst_sconce",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "hexcasting:block/amethyst_sconce",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
       "model": "hexcasting:block/amethyst_sconce"
+    },
+    "facing=west": {
+      "model": "hexcasting:block/amethyst_sconce",
+      "x": 90,
+      "y": 270
     }
   }
 }
