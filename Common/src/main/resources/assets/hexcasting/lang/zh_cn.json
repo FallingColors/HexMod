@@ -1005,7 +1005,7 @@
 
   "hexcasting.entry.logic": "逻辑运算",
   "hexcasting.page.logic.bool_coerce": "将参数变换为布尔值。数 $(thing)0/$、$(l:influences#null)$(thing)Null/$，以及空列表会变为 False。其余所有则变为 True。",
-  "hexcasting.page.logic.bool_to_number": "将布尔值变换为树。True 变为 $(thing)1/$， False 变为 $(thing)0/$。",
+  "hexcasting.page.logic.bool_to_number": "将布尔值变换为数。True 变为 $(thing)1/$， False 变为 $(thing)0/$。",
   "hexcasting.page.logic.not": "如果参数是 True，返回 False；如果参数是 False，返回 True。",
   "hexcasting.page.logic.or": "如果至少有一个参数是 True，返回 True。否则返回 False。",
   "hexcasting.page.logic.and": "如果两个参数都是 True，返回 True。否则返回 False。",
