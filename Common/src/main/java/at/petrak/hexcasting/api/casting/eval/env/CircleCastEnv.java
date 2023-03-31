@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
@@ -12,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +32,22 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     public @Nullable ServerPlayer getCaster() {
         return null;
+    }
+
+    public @Nullable BlockEntityAbstractImpetus getCircle() {
+        var entity = this.world.getBlockEntity(impetusLoc);
+
+        if (entity instanceof BlockEntityAbstractImpetus)
+            return (BlockEntityAbstractImpetus) entity;
+        return null;
+    }
+
+    public BlockPos getImpetusLoc() {
+        return impetusLoc;
+    }
+
+    public Direction getStartDir() {
+        return startDir;
     }
 
     @Override

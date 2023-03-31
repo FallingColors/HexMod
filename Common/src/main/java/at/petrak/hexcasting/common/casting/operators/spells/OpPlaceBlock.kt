@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.sounds.SoundSource
@@ -27,14 +28,14 @@ object OpPlaceBlock : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val pos = args.getBlockPos(0, argc)
         ctx.assertVecInRange(pos)
 
         val blockHit = BlockHitResult(
-            Vec3.atCenterOf(pos), ctx.caster.direction, pos, false
+            Vec3.atCenterOf(pos), ctx.caster?.direction ?: Direction.NORTH, pos, false
         )
-        val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
+        val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand(), blockHit)
         val placeContext = BlockPlaceContext(itemUseCtx)
 
         val worldState = ctx.world.getBlockState(pos)
