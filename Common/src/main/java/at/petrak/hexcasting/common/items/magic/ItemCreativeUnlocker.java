@@ -65,7 +65,10 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         });
 
         DiscoveryHandlers.addMediaHolderDiscoverer(harness -> {
-            var player = harness.getCtx().getCaster();
+            var player = harness.getEnv().getCaster();
+            if (player == null)
+                return List.of();
+
             if (!player.isCreative())
                 return List.of();
 
@@ -117,12 +120,12 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     @Override
-    public int getMaxMedia(ItemStack stack) {
-        return Integer.MAX_VALUE - 1;
+    public long getMaxMedia(ItemStack stack) {
+        return Long.MAX_VALUE - 1;
     }
 
     @Override
-    public void setMedia(ItemStack stack, int media) {
+    public void setMedia(ItemStack stack, long media) {
         // NO-OP
     }
 
@@ -146,21 +149,31 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         NBTHelper.putIntArray(stack, tag, newArr);
     }
 
+    public static void addToLongArray(ItemStack stack, String tag, long n) {
+        long[] arr = NBTHelper.getLongArray(stack, tag);
+        if (arr == null) {
+            arr = new long[0];
+        }
+        long[] newArr = Arrays.copyOf(arr, arr.length + 1);
+        newArr[newArr.length - 1] = n;
+        NBTHelper.putLongArray(stack, tag, newArr);
+    }
+
     @Override
-    public int withdrawMedia(ItemStack stack, int cost, boolean simulate) {
+    public long withdrawMedia(ItemStack stack, long cost, boolean simulate) {
         // In case it's withdrawn through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
-            addToIntArray(stack, TAG_EXTRACTIONS, cost);
+            addToLongArray(stack, TAG_EXTRACTIONS, cost);
         }
 
         return cost < 0 ? getMedia(stack) : cost;
     }
 
     @Override
-    public int insertMedia(ItemStack stack, int amount, boolean simulate) {
+    public long insertMedia(ItemStack stack, long amount, boolean simulate) {
         // In case it's inserted through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
-            addToIntArray(stack, TAG_INSERTIONS, amount);
+            addToLongArray(stack, TAG_INSERTIONS, amount);
         }
 
         return amount < 0 ? getMaxMedia(stack) : amount;
@@ -180,10 +193,10 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     private void debugDisplay(ItemStack stack, String tag, String langKey, String allKey, Entity entity) {
-        int[] arr = NBTHelper.getIntArray(stack, tag);
+        long[] arr = NBTHelper.getLongArray(stack, tag);
         if (arr != null) {
             NBTHelper.remove(stack, tag);
-            for (int i : arr) {
+            for (long i : arr) {
                 if (i < 0) {
                     entity.sendSystemMessage(Component.translatable("hexcasting.debug.media_" + langKey,
                             stack.getDisplayName(),

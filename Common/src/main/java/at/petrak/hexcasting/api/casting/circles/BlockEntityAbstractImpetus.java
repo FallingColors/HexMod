@@ -39,7 +39,7 @@ import java.util.List;
  */
 public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implements WorldlyContainer {
     private static final DecimalFormat DUST_AMOUNT = new DecimalFormat("###,###.##");
-    private static final int MAX_CAPACITY = 2_000_000_000;
+    private static final long MAX_CAPACITY = 9_000_000_000_000_000_000L;
 
     public static final String
         TAG_EXECUTION_STATE = "executor",
@@ -53,7 +53,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     @Nullable
     protected CircleExecutionState executionState;
 
-    protected int media = 0;
+    protected long media = 0;
 
     // these are null together
     @Nullable
@@ -155,15 +155,15 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     //region media handling
 
-    public int getMedia() {
+    public long getMedia() {
         return this.media;
     }
 
-    public void setMedia(int media) {
+    public void setMedia(long media) {
         this.media = media;
     }
 
-    public int extractMediaFromInsertedItem(ItemStack stack, boolean simulate) {
+    public long extractMediaFromInsertedItem(ItemStack stack, boolean simulate) {
         if (this.media < 0) {
             return 0;
         }
@@ -188,7 +188,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         this.sync();
     }
 
-    public int remainingMediaCapacity() {
+    public long remainingMediaCapacity() {
         if (this.media < 0) {
             return 0;
         }
@@ -203,7 +203,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             tag.put(TAG_EXECUTION_STATE, this.executionState.save());
         }
 
-        tag.putInt(TAG_MEDIA, this.media);
+        tag.putLong(TAG_MEDIA, this.media);
+
         if (this.errorMsg != null && this.errorDisplay != null) {
             tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.errorMsg));
             var itemTag = new CompoundTag();
@@ -219,6 +220,12 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.lazyExecutionState = tag.getCompound(TAG_EXECUTION_STATE);
         } else {
             this.lazyExecutionState = null;
+        }
+
+        if (tag.contains(TAG_MEDIA, Tag.TAG_INT)) {
+            this.media = tag.getInt(TAG_MEDIA);
+        } else if (tag.contains(TAG_MEDIA, Tag.TAG_LONG)) {
+            this.media = tag.getLong(TAG_MEDIA);
         }
     }
 

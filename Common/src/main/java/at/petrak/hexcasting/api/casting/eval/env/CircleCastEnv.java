@@ -7,19 +7,26 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CircleCastEnv extends CastingEnvironment {
+    protected EvalSound sound = HexEvalSounds.NOTHING;
+
     protected final BlockPos impetusLoc;
     protected final Direction startDir;
 
@@ -52,27 +59,39 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     public MishapEnvironment getMishapEnvironment() {
-        return null;
+        return new CircleMishapEnv(this.world, this.impetusLoc, this.startDir);
     }
 
     @Override
     public EvalSound getSoundType() {
-        return null;
+        return sound;
     }
 
     @Override
     public void postExecution(CastResult result) {
-
+        this.sound = this.sound.greaterOf(result.getSound());
     }
 
     @Override
     public Vec3 mishapSprayPos() {
-        return null;
+        return Vec3.atCenterOf(impetusLoc);
     }
 
     @Override
     public long extractMedia(long cost) {
-        return 0;
+        var entity = this.getCircle();
+        if (entity == null)
+            return cost;
+
+        var mediaAvailable = entity.getMedia();
+        if (mediaAvailable < 0)
+            return 0;
+
+        long mediaToTake = Math.min(cost, mediaAvailable);
+        cost -= mediaToTake;
+        entity.setMedia(mediaAvailable - mediaToTake);
+
+        return cost;
     }
 
     @Override
@@ -82,26 +101,26 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     public InteractionHand castingHand() {
-        return null;
+        return InteractionHand.MAIN_HAND;
     }
 
     @Override
     public ItemStack getAlternateItem() {
-        return null;
+        return ItemStack.EMPTY.copy();
     }
 
     @Override
     protected List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
-        return null;
+        return new ArrayList<>(); // TODO: Could do something like get items in inventories adjacent to the circle?
     }
 
     @Override
     public FrozenColorizer getColorizer() {
-        return null;
+        return new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)), Util.NIL_UUID);
     }
 
     @Override
     public void produceParticles(ParticleSpray particles, FrozenColorizer colorizer) {
-
+        particles.sprayParticles(this.world, colorizer);
     }
 }

@@ -15,7 +15,7 @@ public interface ADHexHolder {
     @Nullable
     List<Iota> getHex(ServerLevel level);
 
-    void writeHex(List<Iota> patterns, int media);
+    void writeHex(List<Iota> patterns, long media);
 
     void clearHex();
 }

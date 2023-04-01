@@ -14,6 +14,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
+// TODO: How to handle in circles
 class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) : SpellAction {
     override val argc = 2
     override fun execute(

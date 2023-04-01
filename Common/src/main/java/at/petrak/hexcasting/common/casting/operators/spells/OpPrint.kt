@@ -31,7 +31,7 @@ object OpPrint : Action {
 
     private data class Spell(val datum: Iota) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
-            ctx.caster?.sendSystemMessage(datum.display())
+            ctx.caster?.sendSystemMessage(datum.display()) // TODO: how to handle in cirles
         }
     }
 }

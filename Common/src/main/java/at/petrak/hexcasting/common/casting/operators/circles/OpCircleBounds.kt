@@ -16,7 +16,7 @@ class OpCircleBounds(val max: Boolean) : ConstMediaAction {
             throw MishapNoSpellCircle()
         val circle = ctx.circle ?: throw MishapNoSpellCircle()
 
-        val aabb = circle.getBounds(listOf())
+        val aabb = circle.executionState!!.bounds // the circle should have an execution state since it's executing this.
 
         return if (max)
             Vec3(aabb.maxX - 0.5, aabb.maxY - 0.5, aabb.maxZ - 0.5).asActionResult

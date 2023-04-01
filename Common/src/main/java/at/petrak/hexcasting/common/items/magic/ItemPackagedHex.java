@@ -74,7 +74,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<Iota> program, int media) {
+    public void writeHex(ItemStack stack, List<Iota> program, long media) {
         ListTag patsTag = new ListTag();
         for (Iota pat : program) {
             patsTag.add(IotaType.serialize(pat));

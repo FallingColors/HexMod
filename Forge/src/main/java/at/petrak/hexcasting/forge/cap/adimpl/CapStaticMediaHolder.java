@@ -12,17 +12,17 @@ public record CapStaticMediaHolder(Supplier<Integer> baseWorth,
                                    int consumptionPriority,
                                    ItemStack stack) implements ADMediaHolder {
     @Override
-    public int getMedia() {
-        return baseWorth.get() * stack.getCount();
+    public long getMedia() {
+        return (long) baseWorth.get() * stack.getCount();
     }
 
     @Override
-    public int getMaxMedia() {
+    public long getMaxMedia() {
         return getMedia();
     }
 
     @Override
-    public void setMedia(int media) {
+    public void setMedia(long media) {
         // NO-OP
     }
 
@@ -47,8 +47,8 @@ public record CapStaticMediaHolder(Supplier<Integer> baseWorth,
     }
 
     @Override
-    public int withdrawMedia(int cost, boolean simulate) {
-        int worth = baseWorth.get();
+    public long withdrawMedia(long cost, boolean simulate) {
+        long worth = baseWorth.get();
         if (cost < 0) {
             cost = worth * stack.getCount();
         }

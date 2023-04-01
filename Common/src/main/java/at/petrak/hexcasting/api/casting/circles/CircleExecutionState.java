@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ public class CircleExecutionState {
     public Direction enteredFrom;
     public CastingImage currentImage;
 
+    public final AABB bounds;
+
 
     protected CircleExecutionState(Set<BlockPos> knownPositions, BlockPos currentPos, Direction enteredFrom,
         CastingImage currentImage) {
@@ -45,11 +48,16 @@ public class CircleExecutionState {
         this.currentPos = currentPos;
         this.enteredFrom = enteredFrom;
         this.currentImage = currentImage;
+
+        this.bounds = BlockEntityAbstractImpetus.getBounds(new ArrayList<>(this.knownPositions));
     }
 
     // Return null if the circle does not close.
     public static @Nullable CircleExecutionState createNew(BlockEntityAbstractImpetus impetus) {
         var level = (ServerLevel) impetus.getLevel();
+
+        if (level == null)
+            return null;
 
         // Flood fill! Just like VCC all over again.
         // this contains tentative positions and directions entered from
@@ -129,6 +137,9 @@ public class CircleExecutionState {
     public boolean tick(BlockEntityAbstractImpetus impetus) {
         var world = (ServerLevel) impetus.getLevel();
 
+        if (world == null)
+            return true; // if the world is null, try again next tick.
+
         var env = new CircleCastEnv(world, impetus.getBlockPos(), impetus.getStartDirection());
 
         var executorBlock = world.getBlockState(this.currentPos);
@@ -165,7 +176,7 @@ public class CircleExecutionState {
             }
 
             if (found == null) {
-                // will never enter here if there were too manu because found will have been set
+                // will never enter here if there were too many because found will have been set
                 impetus.postError(
                     Component.translatable("hexcasting.circles.no_exits",
                         Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),

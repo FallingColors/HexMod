@@ -18,6 +18,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
+// TODO: how to handle in cirles
 object OpMakeBattery : SpellAction {
     override val argc = 1
 
