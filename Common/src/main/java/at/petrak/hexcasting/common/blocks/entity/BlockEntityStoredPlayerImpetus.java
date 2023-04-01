@@ -35,17 +35,6 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         super(HexBlockEntities.IMPETUS_STOREDPLAYER_TILE, pWorldPosition, pBlockState);
     }
 
-    @Override
-    public boolean activatorAlwaysInRange() {
-        return true;
-    }
-
-    @Override
-    protected @Nullable
-    Player getPlayer() {
-        return this.storedPlayer == null ? null : this.level.getPlayerByUUID(this.storedPlayer);
-    }
-
     protected @Nullable
     GameProfile getPlayerName() {
         Player player = getStoredPlayer();

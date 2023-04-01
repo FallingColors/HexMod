@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.casting.operators.spells.sentinel
 
 import at.petrak.hexcasting.api.misc.MediaConstants
 
-import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -16,9 +15,9 @@ object OpDestroySentinel : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val particles = mutableListOf<ParticleSpray>()
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster)
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster) ?: return null
         // TODO why can't you remove things from other dimensions?
         if (sentinel.dimension != ctx.world.dimension())
             throw MishapLocationInWrongDimension(sentinel.dimension.location())
@@ -33,7 +32,7 @@ object OpDestroySentinel : SpellAction {
 
     private object Spell : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
-            IXplatAbstractions.INSTANCE.setSentinel(ctx.caster, Sentinel.none())
+            IXplatAbstractions.INSTANCE.setSentinel(ctx.caster, null)
         }
     }
 }

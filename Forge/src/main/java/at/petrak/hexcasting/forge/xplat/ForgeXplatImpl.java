@@ -195,7 +195,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setSentinel(Player player, Sentinel sentinel) {
+    public void setSentinel(Player player, @Nullable Sentinel sentinel) {
         CompoundTag tag = player.getPersistentData();
         tag.putBoolean(TAG_SENTINEL_EXISTS, sentinel.hasSentinel());
         if (sentinel.hasSentinel()) {

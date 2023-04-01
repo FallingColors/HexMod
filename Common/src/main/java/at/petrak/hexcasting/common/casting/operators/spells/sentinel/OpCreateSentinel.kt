@@ -33,7 +33,6 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
             IXplatAbstractions.INSTANCE.setSentinel(
                 ctx.caster,
                 Sentinel(
-                    true,
                     extendsRange,
                     target,
                     ctx.world.dimension()

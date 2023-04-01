@@ -155,7 +155,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setSentinel(Player target, Sentinel sentinel) {
+    public void setSentinel(Player target, @Nullable Sentinel sentinel) {
         var cc = HexCardinalComponents.SENTINEL.get(target);
         cc.setSentinel(sentinel);
     }
