@@ -100,7 +100,7 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public InteractionHand castingHand() {
+    public InteractionHand getCastingHand() {
         return InteractionHand.MAIN_HAND;
     }
 

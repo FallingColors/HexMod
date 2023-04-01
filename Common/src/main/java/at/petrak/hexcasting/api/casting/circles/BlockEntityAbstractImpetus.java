@@ -118,6 +118,10 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         return this.executionState;
     }
 
+    public void startExecution() {
+        this.executionState = CircleExecutionState.createNew(this);
+    }
+
     @Contract(pure = true)
     protected static AABB getBounds(List<BlockPos> poses) {
         int minX = Integer.MAX_VALUE;

@@ -49,7 +49,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public InteractionHand castingHand() {
+    public InteractionHand getCastingHand() {
         return castingHand;
     }
 

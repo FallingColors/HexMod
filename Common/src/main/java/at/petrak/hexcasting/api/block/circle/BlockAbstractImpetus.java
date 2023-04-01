@@ -59,7 +59,7 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus tile && pState.getValue(ENERGIZED)) {
-            tile.stepCircle();
+            tile.tickExecution();
         }
     }
 
@@ -67,7 +67,7 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pNewState.is(pState.getBlock())
             && pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus impetus) {
-            impetus.stopCasting();
+//            impetus.stopCasting(); TODO: Determine if this was important
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }

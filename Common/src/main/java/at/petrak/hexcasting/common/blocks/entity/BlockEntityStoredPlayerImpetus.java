@@ -65,7 +65,7 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     // just feels wrong to use the protected method
     public @Nullable
     Player getStoredPlayer() {
-        return this.getPlayer();
+        return null; // TODO: Fix
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,

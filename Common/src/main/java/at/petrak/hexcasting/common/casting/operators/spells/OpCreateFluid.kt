@@ -49,7 +49,7 @@ class OpCreateFluid(val cost: Int, val bucket: Item, val cauldron: BlockState, v
                 ctx.world.setBlock(pos, cauldron, 3)
             else if (!IXplatAbstractions.INSTANCE.tryPlaceFluid(
                     ctx.world,
-                    ctx.castingHand(),
+                    ctx.getCastingHand(),
                     pos,
                     fluid
                 ) && bucket is BucketItem) {

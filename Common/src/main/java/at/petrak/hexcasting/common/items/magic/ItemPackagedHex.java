@@ -110,7 +110,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var sPlayer = (ServerPlayer) player;
         var ctx = new PackagedItemCastEnv(sPlayer, usedHand);
         var harness = CastingVM.empty(ctx);
-        harness.queueAndExecuteIotas(instrs, sPlayer.getLevel());
+        harness.queueExecuteAndWrapIotas(instrs, sPlayer.getLevel());
 
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 

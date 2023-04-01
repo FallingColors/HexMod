@@ -115,13 +115,13 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     @Override
-    public int getMedia(ItemStack stack) {
-        return Integer.MAX_VALUE;
+    public long getMedia(ItemStack stack) {
+        return Long.MAX_VALUE;
     }
 
     @Override
     public long getMaxMedia(ItemStack stack) {
-        return Long.MAX_VALUE - 1;
+        return Long.MAX_VALUE;
     }
 
     @Override

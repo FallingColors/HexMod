@@ -9,9 +9,4 @@ public class BlockEntityRightClickImpetus extends BlockEntityAbstractImpetus {
     public BlockEntityRightClickImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlockEntities.IMPETUS_RIGHTCLICK_TILE, pWorldPosition, pBlockState);
     }
-
-    @Override
-    public boolean activatorAlwaysInRange() {
-        return false;
-    }
 }

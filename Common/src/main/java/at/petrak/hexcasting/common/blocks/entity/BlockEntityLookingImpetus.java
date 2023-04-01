@@ -27,11 +27,6 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
         super(HexBlockEntities.IMPETUS_LOOK_TILE, pWorldPosition, pBlockState);
     }
 
-    @Override
-    public boolean activatorAlwaysInRange() {
-        return false;
-    }
-
     // https://github.com/VazkiiMods/Botania/blob/2607bcd31c4eaeb617f7d1b3ec1c1db08f59add4/Common/src/main/java/vazkii/botania/common/block/tile/TileEnderEye.java#L27
     public static void serverTick(Level level, BlockPos pos, BlockState bs, BlockEntityLookingImpetus self) {
         if (bs.getValue(BlockCircleComponent.ENERGIZED)) {
@@ -74,7 +69,8 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
         if (newLook != prevLookAmt) {
             if (newLook == MAX_LOOK_AMOUNT) {
                 self.lookAmount = 0;
-                self.activateSpellCircle(looker);
+                self.startExecution();
+//                self.activateSpellCircle(looker);
             } else {
                 if (newLook % 5 == 1) {
                     var t = (float) newLook / MAX_LOOK_AMOUNT;

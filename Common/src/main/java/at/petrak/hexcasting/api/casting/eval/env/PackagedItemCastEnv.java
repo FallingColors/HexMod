@@ -54,7 +54,7 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public InteractionHand castingHand() {
+    public InteractionHand getCastingHand() {
         return this.castingHand;
     }
 

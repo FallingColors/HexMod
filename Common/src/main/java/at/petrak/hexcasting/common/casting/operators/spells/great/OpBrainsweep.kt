@@ -66,7 +66,7 @@ object OpBrainsweep : SpellAction {
 
             IXplatAbstractions.INSTANCE.brainsweep(sacrifice)
             if (sacrifice is Villager && HexConfig.server().doVillagersTakeOffenseAtMindMurder()) {
-                sacrifice.tellWitnessesThatIWasMurdered(ctx.caster)
+                ctx.caster?.let { sacrifice.tellWitnessesThatIWasMurdered(it) }
             }
 
             val sound = (sacrifice as AccessorLivingEntity).`hex$getDeathSound`()

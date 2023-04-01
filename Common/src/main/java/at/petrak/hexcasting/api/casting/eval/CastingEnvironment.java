@@ -157,10 +157,10 @@ public abstract class CastingEnvironment {
         }
     }
 
-    public abstract InteractionHand castingHand();
+    public abstract InteractionHand getCastingHand();
 
     public InteractionHand otherHand() {
-        return HexUtils.otherHand(this.castingHand());
+        return HexUtils.otherHand(this.getCastingHand());
     }
 
     /**
