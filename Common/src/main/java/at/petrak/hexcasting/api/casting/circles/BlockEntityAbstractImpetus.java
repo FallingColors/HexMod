@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.circles;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
+import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
@@ -98,7 +99,10 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             return;
         }
 
-        // TODO winfy 🥺 pls help
+        var shouldContinue = state.tick(this);
+
+        if (!shouldContinue)
+            this.executionState = null;
     }
 
     /**
@@ -119,7 +123,16 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     public void startExecution(@Nullable ServerPlayer player) {
+        if (this.level == null)
+            return; // TODO: error here?
+        if (this.level.isClientSide)
+            return; // TODO: error here?
+
         this.executionState = CircleExecutionState.createNew(this, player);
+
+        var serverLevel = (ServerLevel) this.level;
+
+        serverLevel.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, true));
     }
 
     @Contract(pure = true)
