@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval.env;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
@@ -17,28 +18,34 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv.SENTINEL_RADIUS;
+
 public class CircleCastEnv extends CastingEnvironment {
     protected EvalSound sound = HexEvalSounds.NOTHING;
 
     protected final BlockPos impetusLoc;
     protected final Direction startDir;
+    protected final @Nullable ServerPlayer caster;
+    protected final AABB bounds;
 
-    public CircleCastEnv(ServerLevel world, BlockPos impetusLoc, Direction startDir) {
+    public CircleCastEnv(ServerLevel world, BlockPos impetusLoc, Direction startDir, @Nullable ServerPlayer caster, AABB bounds) {
         super(world);
         this.impetusLoc = impetusLoc;
         this.startDir = startDir;
+        this.caster = caster;
+        this.bounds = bounds;
     }
 
     @Override
     public @Nullable ServerPlayer getCaster() {
-        return null;
+        return this.caster;
     }
 
     public @Nullable BlockEntityAbstractImpetus getCircle() {
@@ -59,7 +66,7 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     public MishapEnvironment getMishapEnvironment() {
-        return new CircleMishapEnv(this.world, this.impetusLoc, this.startDir);
+        return new CircleMishapEnv(this.world, this.impetusLoc, this.startDir, this.caster, this.bounds);
     }
 
     @Override
@@ -96,7 +103,18 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     public boolean isVecInRange(Vec3 vec) {
-        return false;
+        if (this.caster != null) {
+            var sentinel = HexAPI.instance().getSentinel(this.caster);
+            if (sentinel != null
+                    && sentinel.extendsRange()
+                    && this.caster.getLevel().dimension() == sentinel.dimension()
+                    && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
+            ) {
+                return true;
+            }
+        }
+
+        return this.bounds.contains(vec);
     }
 
     @Override

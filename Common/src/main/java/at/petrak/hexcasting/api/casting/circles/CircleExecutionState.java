@@ -13,15 +13,13 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * See {@link BlockEntityAbstractImpetus}, this is what's stored in it
@@ -31,7 +29,8 @@ public class CircleExecutionState {
         TAG_KNOWN_POSITIONS = "known_positions",
         TAG_CURRENT_POS = "current_pos",
         TAG_ENTERED_FROM = "entered_from",
-        TAG_IMAGE = "image";
+        TAG_IMAGE = "image",
+        TAG_CASTER = "caster";
 
     // Does contain the starting impetus
     public final Set<BlockPos> knownPositions;
@@ -41,19 +40,22 @@ public class CircleExecutionState {
 
     public final AABB bounds;
 
+    public @Nullable UUID caster;
+
 
     protected CircleExecutionState(Set<BlockPos> knownPositions, BlockPos currentPos, Direction enteredFrom,
-        CastingImage currentImage) {
+        CastingImage currentImage, @Nullable UUID caster) {
         this.knownPositions = knownPositions;
         this.currentPos = currentPos;
         this.enteredFrom = enteredFrom;
         this.currentImage = currentImage;
+        this.caster = caster;
 
         this.bounds = BlockEntityAbstractImpetus.getBounds(new ArrayList<>(this.knownPositions));
     }
 
     // Return null if the circle does not close.
-    public static @Nullable CircleExecutionState createNew(BlockEntityAbstractImpetus impetus) {
+    public static @Nullable CircleExecutionState createNew(BlockEntityAbstractImpetus impetus, @Nullable ServerPlayer caster) {
         var level = (ServerLevel) impetus.getLevel();
 
         if (level == null)
@@ -95,8 +97,11 @@ public class CircleExecutionState {
         }
 
         var start = seenGoodPositions.get(0);
-        return new CircleExecutionState(new HashSet<>(seenGoodPositions), start, impetus.getStartDirection(),
-            new CastingImage());
+
+        if (caster == null)
+            return new CircleExecutionState(new HashSet<>(seenGoodPositions), start, impetus.getStartDirection(), new CastingImage(), null);
+        else
+            return new CircleExecutionState(new HashSet<>(seenGoodPositions), start, impetus.getStartDirection(), new CastingImage(), caster.getUUID());
     }
 
     public CompoundTag save() {
@@ -112,6 +117,9 @@ public class CircleExecutionState {
         out.putByte(TAG_ENTERED_FROM, (byte) this.enteredFrom.ordinal());
         out.put(TAG_IMAGE, this.currentImage.serializeToNbt());
 
+        if (this.caster != null)
+            out.putUUID(TAG_CASTER, this.caster);
+
         return out;
     }
 
@@ -126,7 +134,11 @@ public class CircleExecutionState {
         var enteredFrom = Direction.values()[nbt.getByte(TAG_ENTERED_FROM)];
         var image = CastingImage.loadFromNbt(nbt.getCompound(TAG_IMAGE), world);
 
-        return new CircleExecutionState(knownPositions, currentPos, enteredFrom, image);
+        UUID caster = null;
+        if (nbt.hasUUID(TAG_CASTER))
+            caster = nbt.getUUID(TAG_CASTER);
+
+        return new CircleExecutionState(knownPositions, currentPos, enteredFrom, image, caster);
     }
 
     /**
@@ -140,7 +152,11 @@ public class CircleExecutionState {
         if (world == null)
             return true; // if the world is null, try again next tick.
 
-        var env = new CircleCastEnv(world, impetus.getBlockPos(), impetus.getStartDirection());
+        ServerPlayer caster = null;
+        if (this.caster != null && world.getEntity(this.caster) instanceof ServerPlayer player)
+            caster = player;
+
+        var env = new CircleCastEnv(world, impetus.getBlockPos(), impetus.getStartDirection(), caster, this.bounds);
 
         var executorBlock = world.getBlockState(this.currentPos);
         if (!(executorBlock instanceof ICircleComponent executor)) {
@@ -151,7 +167,7 @@ public class CircleExecutionState {
         boolean halt = false;
         var ctrl = executor.acceptControlFlow(this.currentImage, env, this.enteredFrom, this.currentPos,
             executorBlock, world);
-        if (ctrl instanceof ICircleComponent.ControlFlow.Stop stop) {
+        if (ctrl instanceof ICircleComponent.ControlFlow.Stop) {
             // acceptControlFlow should have already posted the error
             halt = true;
         } else if (ctrl instanceof ICircleComponent.ControlFlow.Continue cont) {

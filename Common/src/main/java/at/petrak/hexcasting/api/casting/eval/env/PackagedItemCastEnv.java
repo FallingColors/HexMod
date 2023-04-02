@@ -34,6 +34,9 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
 
     @Override
     public long extractMedia(long costLeft) {
+        if (this.caster.isCreative())
+            return 0;
+
         var casterStack = this.caster.getItemInHand(this.castingHand);
         var casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack);
         var canCastFromInv = casterHexHolder.canDrawMediaFromInventory();

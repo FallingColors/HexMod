@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class StaffCastEnv extends PlayerBasedCastEnv {
-    private InteractionHand castingHand;
+    private final InteractionHand castingHand;
 
 
     public StaffCastEnv(ServerPlayer caster, InteractionHand castingHand) {
@@ -40,6 +40,9 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
     @Override
     public long extractMedia(long cost) {
+        if (this.caster.isCreative())
+            return 0;
+
         var canOvercast = this.canOvercast();
         var remaining = this.extractMediaFromInventory(cost, canOvercast);
         if (remaining > 0 && !canOvercast) {
