@@ -32,10 +32,7 @@ public record MsgNewSpellPatternAck(ExecutionClientView info, int index) impleme
         var index = buf.readInt();
 
         var stack = buf.readList(FriendlyByteBuf::readNbt);
-        var parens = buf.readList(FriendlyByteBuf::readNbt);
         var raven = buf.readOptional(FriendlyByteBuf::readNbt).orElse(null);
-
-        var parenCount = buf.readVarInt();
 
         return new MsgNewSpellPatternAck(
             new ExecutionClientView(isStackEmpty, resolutionType, stack, raven), index

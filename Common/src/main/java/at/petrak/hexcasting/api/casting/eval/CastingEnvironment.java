@@ -122,7 +122,7 @@ public abstract class CastingEnvironment {
      */
     public final void assertVecInRange(Vec3 vec) throws MishapLocationTooFarAway {
         this.assertVecInWorld(vec);
-        if (this.isVecInRange(vec)) {
+        if (!this.isVecInRange(vec)) {
             throw new MishapLocationTooFarAway(vec, "too_far");
         }
     }
@@ -143,7 +143,7 @@ public abstract class CastingEnvironment {
         if (!this.isVecInWorld(e.position())) {
             throw new MishapEntityTooFarAway(e);
         }
-        if (this.isVecInRange(e.position())) {
+        if (!this.isVecInRange(e.position())) {
             throw new MishapEntityTooFarAway(e);
         }
     }
