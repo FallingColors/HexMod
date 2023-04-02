@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.WorldlyContainer;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
@@ -118,8 +118,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         return this.executionState;
     }
 
-    public void startExecution() {
-        this.executionState = CircleExecutionState.createNew(this);
+    public void startExecution(@Nullable ServerPlayer player) {
+        this.executionState = CircleExecutionState.createNew(this, player);
     }
 
     @Contract(pure = true)

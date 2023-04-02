@@ -32,7 +32,7 @@ public class BlockRightClickImpetus extends BlockAbstractImpetus {
             if (tile instanceof BlockEntityRightClickImpetus impetus) {
                 if (pPlayer instanceof ServerPlayer serverPlayer) {
 //                    impetus.activateSpellCircle(serverPlayer);
-                    impetus.startExecution();
+                    impetus.startExecution(serverPlayer);
                 }
                 return InteractionResult.SUCCESS;
             }

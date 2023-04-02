@@ -69,8 +69,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
         if (newLook != prevLookAmt) {
             if (newLook == MAX_LOOK_AMOUNT) {
                 self.lookAmount = 0;
-                self.startExecution();
-//                self.activateSpellCircle(looker);
+                self.startExecution(looker);
             } else {
                 if (newLook % 5 == 1) {
                     var t = (float) newLook / MAX_LOOK_AMOUNT;

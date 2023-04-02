@@ -27,6 +27,7 @@ object OpRecharge : SpellAction {
             val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)
             media != null && media.canRecharge() && media.insertMedia(-1, true) != 0L
         }
+                ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "rechargable") // TODO: hack
 
         val media = IXplatAbstractions.INSTANCE.findMediaHolder(handStack)
 

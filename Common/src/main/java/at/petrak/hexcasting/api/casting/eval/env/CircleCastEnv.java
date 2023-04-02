@@ -118,13 +118,18 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
+    public boolean hasEditPermissionsAt(BlockPos vec) {
+        return true;
+    }
+
+    @Override
     public InteractionHand getCastingHand() {
         return InteractionHand.MAIN_HAND;
     }
 
     @Override
     public ItemStack getAlternateItem() {
-        return ItemStack.EMPTY.copy();
+        return ItemStack.EMPTY.copy(); // TODO: adjacent inventory/item frame?
     }
 
     @Override
@@ -133,7 +138,16 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
+    protected List<HeldItemInfo> getPrimaryStacks() {
+        return List.of(); // TODO: Adjacent inv!
+    }
+
+    @Override
     public FrozenColorizer getColorizer() {
+        if (this.caster != null)
+            return HexAPI.instance().getColorizer(this.caster);
+
+        // TODO: colouriser from an adjacent inventory also?
         return new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)), Util.NIL_UUID);
     }
 

@@ -28,6 +28,8 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             it.`is`(itemType) && hexHolder != null && !hexHolder.hasHex()
         }
+            ?: throw MishapBadOffhandItem(ItemStack.EMPTY.copy(), null, itemType.description) // TODO: hack
+
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         if (!handStack.`is`(itemType)) {
             throw MishapBadOffhandItem(handStack, hand, itemType.description)
