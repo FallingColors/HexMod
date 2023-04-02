@@ -49,6 +49,11 @@ public interface ICircleComponent {
     @Contract(pure = true)
     EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world);
 
+    @Contract(pure = true)
+    default Pair<BlockPos, Direction> exitPositionFromDirection(BlockPos pos, Direction dir) {
+        return Pair.of(new BlockPos(dir.getStepX(), dir.getStepY(), dir.getStepZ()), dir);
+    }
+
     abstract sealed class ControlFlow {
         public static final class Continue extends ControlFlow {
             public final CastingImage update;

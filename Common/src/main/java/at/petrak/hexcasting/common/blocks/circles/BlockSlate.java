@@ -2,11 +2,14 @@ package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -70,29 +73,23 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos, BlockState bs,
-        Level world) {
-        var thisNormal = this.normalDir(pos, bs, world);
-        return enterDir != thisNormal && normalDir == thisNormal;
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+        return null;
     }
 
     @Override
-    public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world) {
+    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+        var thisNormal = this.normalDir(pos, bs, world);
+        return enterDir != thisNormal && enterDir != thisNormal.getOpposite();
+    }
+
+    @Override
+    public EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world) {
         var allDirs = EnumSet.allOf(Direction.class);
         var normal = this.normalDir(pos, bs, world);
         allDirs.remove(normal);
         allDirs.remove(normal.getOpposite());
         return allDirs;
-    }
-
-    @Override
-    public @Nullable
-    HexPattern getPattern(BlockPos pos, BlockState bs, Level world) {
-        if (world.getBlockEntity(pos) instanceof BlockEntitySlate tile) {
-            return tile.pattern;
-        } else {
-            return null;
-        }
     }
 
     @SoftImplement("forge")

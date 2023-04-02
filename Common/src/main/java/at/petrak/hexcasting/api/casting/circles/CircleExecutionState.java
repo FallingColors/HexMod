@@ -73,7 +73,7 @@ public class CircleExecutionState {
             var enterDir = pair.getFirst();
             var herePos = pair.getSecond();
 
-            if (!seenPositions.add(herePos)) {
+            if (seenPositions.add(herePos)) {
                 // it's new
                 var hereBs = level.getBlockState(herePos);
                 if (!(hereBs.getBlock() instanceof ICircleComponent cmp)) {

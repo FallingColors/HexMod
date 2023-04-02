@@ -1,18 +1,18 @@
 package at.petrak.hexcasting.api.block.circle;
 
-import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.circles.ICircleComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-public abstract class BlockCircleComponent extends Block {
+public abstract class BlockCircleComponent extends Block implements ICircleComponent {
     public static final BooleanProperty ENERGIZED = BooleanProperty.create("energized");
 
     public BlockCircleComponent(Properties p_49795_) {
@@ -20,19 +20,8 @@ public abstract class BlockCircleComponent extends Block {
     }
 
     /**
-     * Can this component get transferred to from a block coming in from that direction, with the given normal?
-     */
-    abstract public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos,
-        BlockState bs, Level world);
-
-    abstract public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world);
-
-    @Nullable
-    abstract public HexPattern getPattern(BlockPos pos, BlockState bs, Level world);
-
-    /**
      * Which direction points "up" or "out" for this block?
-     * This is used for {@link BlockCircleComponent#canEnterFromDirection(Direction, Direction, BlockPos, BlockState, Level)}
+     * This is used for {@link ICircleComponent#canEnterFromDirection(Direction, BlockPos, BlockState, ServerLevel)}
      * as well as particles.
      */
     public Direction normalDir(BlockPos pos, BlockState bs, Level world) {
