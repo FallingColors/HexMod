@@ -198,7 +198,8 @@ public class CircleExecutionState {
         }
         
         executorBlockState = executor.startEnergized(this.currentPos, executorBlockState, world);
-        
+        this.reachedPositions.add(this.currentPos);
+
         boolean halt = false;
         var ctrl = executor.acceptControlFlow(this.currentImage, env, this.enteredFrom, this.currentPos,
             executorBlockState, world);
@@ -237,8 +238,6 @@ public class CircleExecutionState {
                 halt = true;
             } else {
                 // A single valid exit position has been found.
-                reachedPositions.add(found.getFirst());
-                
                 ICircleComponent.sfx(this.currentPos, executorBlockState, world, Objects.requireNonNull(env.getImpetus()), true);
                 currentPos = found.getFirst();
                 enteredFrom = found.getSecond();

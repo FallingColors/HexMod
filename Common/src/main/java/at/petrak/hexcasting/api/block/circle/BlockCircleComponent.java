@@ -22,7 +22,7 @@ public abstract class BlockCircleComponent extends Block implements ICircleCompo
     @Override
     public BlockState startEnergized(BlockPos pos, BlockState bs, Level world) {
         var newState = bs.setValue(ENERGIZED, true);
-        world.setBlockAndUpdate(pos, bs);
+        world.setBlockAndUpdate(pos, newState);
 
         return newState;
     }
