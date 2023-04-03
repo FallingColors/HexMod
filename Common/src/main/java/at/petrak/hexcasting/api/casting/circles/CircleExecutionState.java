@@ -178,7 +178,9 @@ public class CircleExecutionState {
             // TODO: notification of the error?
             return false;
         }
-
+        
+        executorBlock = executor.startEnergized(this.currentPos, executorBlock, world);
+        
         boolean halt = false;
         var ctrl = executor.acceptControlFlow(this.currentImage, env, this.enteredFrom, this.currentPos,
             executorBlock, world);
@@ -217,9 +219,15 @@ public class CircleExecutionState {
                 // A single valid exit position has been found.
                 knownPositions.add(found.getFirst());
                 
-                currentPos = found.getFirst();
-                enteredFrom = found.getSecond();
-                currentImage = cont.update;
+                if (found.getFirst() != impetus.getBlockPos()) {
+                    currentPos = found.getFirst();
+                    enteredFrom = found.getSecond();
+                    currentImage = cont.update;
+                } else {
+                    // The wave has reached the impetus, end the execution.
+                    // TODO: this should maybe just be in the execution code for
+                    halt = true;
+                }
             }
         }
 
@@ -242,7 +250,7 @@ public class CircleExecutionState {
         for (var pos : this.reachedPositions) {
             var there = world.getBlockState(pos);
             if (there instanceof ICircleComponent cc) {
-            
+                cc.endEnergized(pos, there, world);
             }
         }
     }

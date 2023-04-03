@@ -48,11 +48,29 @@ public interface ICircleComponent {
      */
     @Contract(pure = true)
     EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world);
-
+    
+    /**
+     * Given the current position and a direction, return a pair of the new position after a step
+     * in that direction, along with the direction (this is a helper function for creating
+     * {@link ICircleComponent.ControlFlow}s.
+     */
     @Contract(pure = true)
     default Pair<BlockPos, Direction> exitPositionFromDirection(BlockPos pos, Direction dir) {
         return Pair.of(new BlockPos(dir.getStepX(), dir.getStepY(), dir.getStepZ()), dir);
     }
+    
+    /**
+     * Start the {@link ICircleComponent} at the given position glowing. Returns the new state
+     * of the given block.
+     * // TODO: determine if this should just be in {@link ICircleComponent#acceptControlFlow(CastingImage, CircleCastEnv, Direction, BlockPos, BlockState, ServerLevel)}.
+     */
+    BlockState startEnergized(BlockPos pos, BlockState bs, Level world);
+    
+    /**
+     * End the {@link ICircleComponent} at the given position glowing. Returns the new state of
+     * the given block.
+     */
+    BlockState endEnergized(BlockPos pos, BlockState bs, Level world);
 
     abstract sealed class ControlFlow {
         public static final class Continue extends ControlFlow {
