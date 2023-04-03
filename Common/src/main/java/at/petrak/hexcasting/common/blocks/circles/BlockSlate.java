@@ -37,6 +37,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 
 // When on the floor or ceiling FACING is the direction the *bottom* of the pattern points
 // (or which way is "down").
@@ -79,10 +80,10 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
         // TODO: Do something here actually with imageIn
         
         var exitDirsSet = this.possibleExitDirections(pos, bs, world);
-        exitDirsSet.remove(enterDir);
+        exitDirsSet.remove(enterDir.getOpposite());
         
         var exitDirs = exitDirsSet.stream().map((dir) -> this.exitPositionFromDirection(pos, dir));
-        
+
         return new ControlFlow.Continue(imageIn, exitDirs.toList());
     }
 

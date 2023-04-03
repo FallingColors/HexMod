@@ -19,6 +19,26 @@ public abstract class BlockCircleComponent extends Block implements ICircleCompo
         super(p_49795_);
     }
 
+    @Override
+    public BlockState startEnergized(BlockPos pos, BlockState bs, Level world) {
+        var newState = bs.setValue(ENERGIZED, true);
+        world.setBlockAndUpdate(pos, bs);
+
+        return newState;
+    }
+
+    @Override
+    public boolean isEnergized(BlockPos pos, BlockState bs, Level world) {
+        return bs.getValue(ENERGIZED);
+    }
+
+    @Override
+    public BlockState endEnergized(BlockPos pos, BlockState bs, Level world) {
+        var newState = bs.setValue(ENERGIZED, false);
+        world.setBlockAndUpdate(pos, newState);
+        return newState;
+    }
+
     /**
      * Which direction points "up" or "out" for this block?
      * This is used for {@link ICircleComponent#canEnterFromDirection(Direction, BlockPos, BlockState, ServerLevel)}

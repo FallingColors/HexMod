@@ -33,7 +33,7 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
 
     @Override
     public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
-        return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos, bs.getValue(FACING))));
+        return new ControlFlow.Stop();
     }
 
     @Override

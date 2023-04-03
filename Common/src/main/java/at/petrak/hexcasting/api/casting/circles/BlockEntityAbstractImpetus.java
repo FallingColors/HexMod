@@ -96,6 +96,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     public void tickExecution() {
         if (this.level == null)
             return;
+
+        this.setChanged();
         
         var state = this.getExecutionState();
         if (state == null) {
@@ -127,11 +129,11 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             throw new IllegalStateException("didn't you read the doc comment, don't call this if the level is null");
         }
 
-        if (this.lazyExecutionState != null) {
+        if (this.executionState != null)
+            return this.executionState;
+
+        if (this.lazyExecutionState != null)
             this.executionState = CircleExecutionState.load(this.lazyExecutionState, (ServerLevel) this.level);
-        } else {
-            this.executionState = null;
-        }
 
         return this.executionState;
     }

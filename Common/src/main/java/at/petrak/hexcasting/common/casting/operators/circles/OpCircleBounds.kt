@@ -14,7 +14,7 @@ class OpCircleBounds(val max: Boolean) : ConstMediaAction {
     override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
         if (ctx !is CircleCastEnv)
             throw MishapNoSpellCircle()
-        val circle = ctx.circle ?: throw MishapNoSpellCircle()
+        val circle = ctx.impetus ?: throw MishapNoSpellCircle()
 
         val aabb = circle.executionState!!.bounds // the circle should have an execution state since it's executing this.
 

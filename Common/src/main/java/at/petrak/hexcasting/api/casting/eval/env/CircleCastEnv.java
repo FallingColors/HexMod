@@ -48,7 +48,7 @@ public class CircleCastEnv extends CastingEnvironment {
         return this.caster;
     }
 
-    public @Nullable BlockEntityAbstractImpetus getCircle() {
+    public @Nullable BlockEntityAbstractImpetus getImpetus() {
         var entity = this.world.getBlockEntity(impetusLoc);
 
         if (entity instanceof BlockEntityAbstractImpetus)
@@ -86,7 +86,7 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     public long extractMedia(long cost) {
-        var entity = this.getCircle();
+        var entity = this.getImpetus();
         if (entity == null)
             return cost;
 
@@ -144,11 +144,22 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     public FrozenColorizer getColorizer() {
-        if (this.caster != null)
-            return HexAPI.instance().getColorizer(this.caster);
+        var out = this.getColorizerFromImpetus();
+        if (out != null)
+            return out;
 
         // TODO: colouriser from an adjacent inventory also?
         return new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)), Util.NIL_UUID);
+    }
+
+    private @Nullable FrozenColorizer getColorizerFromImpetus() {
+        var impetus = this.getImpetus();
+        if (impetus == null)
+            return null;
+        var state = impetus.getExecutionState();
+        if (state == null)
+            return null;
+        return state.colorizer;
     }
 
     @Override

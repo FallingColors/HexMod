@@ -1,17 +1,29 @@
 package at.petrak.hexcasting.api.casting.circles;
 
+import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.HexSounds;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Implement this on a block to make circles interact with it.
@@ -56,7 +68,7 @@ public interface ICircleComponent {
      */
     @Contract(pure = true)
     default Pair<BlockPos, Direction> exitPositionFromDirection(BlockPos pos, Direction dir) {
-        return Pair.of(new BlockPos(dir.getStepX(), dir.getStepY(), dir.getStepZ()), dir);
+        return Pair.of(pos.offset(dir.getStepX(), dir.getStepY(), dir.getStepZ()), dir);
     }
     
     /**
@@ -65,12 +77,64 @@ public interface ICircleComponent {
      * // TODO: determine if this should just be in {@link ICircleComponent#acceptControlFlow(CastingImage, CircleCastEnv, Direction, BlockPos, BlockState, ServerLevel)}.
      */
     BlockState startEnergized(BlockPos pos, BlockState bs, Level world);
+
+    /**
+     * Returns whether the {@link ICircleComponent} at the given position is energized.
+     */
+    boolean isEnergized(BlockPos pos, BlockState bs, Level world);
     
     /**
      * End the {@link ICircleComponent} at the given position glowing. Returns the new state of
      * the given block.
      */
     BlockState endEnergized(BlockPos pos, BlockState bs, Level world);
+
+    static void sfx(BlockPos pos, BlockState bs, Level world, BlockEntityAbstractImpetus impetus, boolean success) {
+        Vec3 vpos;
+        Vec3 vecOutDir;
+        FrozenColorizer colorizer;
+
+        UUID activator = Util.NIL_UUID;
+        if (impetus.getExecutionState() != null && impetus.getExecutionState().caster != null)
+            activator = impetus.getExecutionState().caster;
+        if (impetus.getExecutionState() == null)
+            colorizer = new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)), activator);
+        else
+            colorizer = impetus.getExecutionState().colorizer;
+
+        if (bs.getBlock() instanceof BlockCircleComponent bcc) {
+            var outDir = bcc.normalDir(pos, bs, world);
+            var height = bcc.particleHeight(pos, bs, world);
+            vecOutDir = new Vec3(outDir.step());
+            vpos = Vec3.atCenterOf(pos).add(vecOutDir.scale(height));
+        } else {
+            // we probably are doing this because it's an error and we removed a block
+            vpos = Vec3.atCenterOf(pos);
+            vecOutDir = new Vec3(0, 0, 0);
+        }
+
+        if (world instanceof ServerLevel serverLevel) {
+            var spray = new ParticleSpray(vpos, vecOutDir.scale(success ? 1.0 : 1.5), success ? 0.1 : 0.5,
+                    Mth.PI / (success ? 4 : 2), success ? 30 : 100);
+            spray.sprayParticles(serverLevel,
+                    success ? colorizer : new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)),
+                            activator));
+        }
+
+        var pitch = 1f;
+        var sound = HexSounds.SPELL_CIRCLE_FAIL;
+        if (success) {
+            sound = HexSounds.SPELL_CIRCLE_FIND_BLOCK;
+
+            var state = impetus.getExecutionState();
+
+            // This is a good use of my time
+            var note = state.reachedPositions.size() - 1;
+            var semitone = impetus.semitoneFromScale(note);
+            pitch = (float) Math.pow(2.0, (semitone - 8) / 12d);
+        }
+        world.playSound(null, vpos.x, vpos.y, vpos.z, sound, SoundSource.BLOCKS, 1f, pitch);
+    }
 
     abstract sealed class ControlFlow {
         public static final class Continue extends ControlFlow {
