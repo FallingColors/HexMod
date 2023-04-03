@@ -4,6 +4,7 @@ import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -77,14 +78,26 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
 
     @Override
     public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
-        // TODO: Do something here actually with imageIn
+        HexPattern pattern;
+        if (world.getBlockEntity(pos) instanceof BlockEntitySlate tile) {
+            pattern = tile.pattern;
+        } else {
+            return new ControlFlow.Stop();
+        }
         
         var exitDirsSet = this.possibleExitDirections(pos, bs, world);
         exitDirsSet.remove(enterDir.getOpposite());
         
         var exitDirs = exitDirsSet.stream().map((dir) -> this.exitPositionFromDirection(pos, dir));
 
-        return new ControlFlow.Continue(imageIn, exitDirs.toList());
+        if (pattern == null)
+            return new ControlFlow.Continue(imageIn, exitDirs.toList());
+
+        var vm = new CastingVM(imageIn, env);
+
+        vm.queueExecuteAndWrapIota(new PatternIota(pattern), world);
+
+        return new ControlFlow.Continue(vm.getImage(), exitDirs.toList());
     }
 
     @Override
