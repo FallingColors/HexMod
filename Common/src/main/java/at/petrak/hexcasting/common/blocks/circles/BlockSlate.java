@@ -34,7 +34,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 // When on the floor or ceiling FACING is the direction the *bottom* of the pattern points
 // (or which way is "down").
@@ -74,7 +76,14 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
 
     @Override
     public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
-        return null;
+        // TODO: Do something here actually with imageIn
+        
+        var exitDirsSet = this.possibleExitDirections(pos, bs, world);
+        exitDirsSet.remove(enterDir);
+        
+        var exitDirs = exitDirsSet.stream().map((dir) -> this.exitPositionFromDirection(pos, dir));
+        
+        return new ControlFlow.Continue(imageIn, exitDirs.toList());
     }
 
     @Override

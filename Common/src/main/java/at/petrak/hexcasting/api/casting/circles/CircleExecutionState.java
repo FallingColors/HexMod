@@ -27,6 +27,7 @@ import java.util.*;
 public class CircleExecutionState {
     public static final String
         TAG_KNOWN_POSITIONS = "known_positions",
+        TAG_REACHED_POSITIONS = "reached_positions",
         TAG_CURRENT_POS = "current_pos",
         TAG_ENTERED_FROM = "entered_from",
         TAG_IMAGE = "image",
@@ -34,6 +35,7 @@ public class CircleExecutionState {
 
     // Does contain the starting impetus
     public final Set<BlockPos> knownPositions;
+    public final List<BlockPos> reachedPositions;
     public BlockPos currentPos;
     public Direction enteredFrom;
     public CastingImage currentImage;
@@ -43,9 +45,11 @@ public class CircleExecutionState {
     public @Nullable UUID caster;
 
 
-    protected CircleExecutionState(Set<BlockPos> knownPositions, BlockPos currentPos, Direction enteredFrom,
-        CastingImage currentImage, @Nullable UUID caster) {
+    protected CircleExecutionState(Set<BlockPos> knownPositions, List<BlockPos> reachedPositions,
+                                   BlockPos currentPos, Direction enteredFrom,
+                                   CastingImage currentImage, @Nullable UUID caster) {
         this.knownPositions = knownPositions;
+        this.reachedPositions = reachedPositions;
         this.currentPos = currentPos;
         this.enteredFrom = enteredFrom;
         this.currentImage = currentImage;
@@ -99,9 +103,9 @@ public class CircleExecutionState {
         var start = seenGoodPositions.get(0);
 
         if (caster == null)
-            return new CircleExecutionState(new HashSet<>(seenGoodPositions), start, impetus.getStartDirection(), new CastingImage(), null);
+            return new CircleExecutionState(new HashSet<>(seenGoodPositions), List.of(impetus.getBlockPos()), start, impetus.getStartDirection(), new CastingImage(), null);
         else
-            return new CircleExecutionState(new HashSet<>(seenGoodPositions), start, impetus.getStartDirection(), new CastingImage(), caster.getUUID());
+            return new CircleExecutionState(new HashSet<>(seenGoodPositions), List.of(impetus.getBlockPos()), start, impetus.getStartDirection(), new CastingImage(), caster.getUUID());
     }
 
     public CompoundTag save() {
@@ -112,6 +116,12 @@ public class CircleExecutionState {
             knownTag.add(NbtUtils.writeBlockPos(bp));
         }
         out.put(TAG_KNOWN_POSITIONS, knownTag);
+    
+        var reachedTag = new ListTag();
+        for (var bp : this.reachedPositions) {
+            reachedTag.add(NbtUtils.writeBlockPos(bp));
+        }
+        out.put(TAG_REACHED_POSITIONS, reachedTag);
 
         out.put(TAG_CURRENT_POS, NbtUtils.writeBlockPos(this.currentPos));
         out.putByte(TAG_ENTERED_FROM, (byte) this.enteredFrom.ordinal());
@@ -129,6 +139,11 @@ public class CircleExecutionState {
         for (var tag : knownTag) {
             knownPositions.add(NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE)));
         }
+        var reachedPositions = new ArrayList<BlockPos>();
+        var reachedTag = nbt.getList(TAG_REACHED_POSITIONS, Tag.TAG_COMPOUND);
+        for (var tag : reachedTag) {
+            reachedPositions.add(NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE)));
+        }
 
         var currentPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_CURRENT_POS));
         var enteredFrom = Direction.values()[nbt.getByte(TAG_ENTERED_FROM)];
@@ -138,7 +153,7 @@ public class CircleExecutionState {
         if (nbt.hasUUID(TAG_CASTER))
             caster = nbt.getUUID(TAG_CASTER);
 
-        return new CircleExecutionState(knownPositions, currentPos, enteredFrom, image, caster);
+        return new CircleExecutionState(knownPositions, reachedPositions, currentPos, enteredFrom, image, caster);
     }
 
     /**
@@ -198,10 +213,37 @@ public class CircleExecutionState {
                         Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),
                     new ItemStack(Items.OAK_SIGN));
                 halt = true;
+            } else {
+                // A single valid exit position has been found.
+                knownPositions.add(found.getFirst());
+                
+                currentPos = found.getFirst();
+                enteredFrom = found.getSecond();
+                currentImage = cont.update;
             }
         }
 
         return !halt;
     }
-
+    
+    /**
+     * How many ticks should pass between activations, given the number of blocks encountered so far.
+     */
+    protected int getTickSpeed() {
+        return Math.max(2, 10 - (this.reachedPositions.size() - 1) / 3);
+    }
+    
+    public void endExecution(BlockEntityAbstractImpetus impetus) {
+        var world = (ServerLevel) impetus.getLevel();
+    
+        if (world == null)
+            return; // TODO: error here?
+        
+        for (var pos : this.reachedPositions) {
+            var there = world.getBlockState(pos);
+            if (there instanceof ICircleComponent cc) {
+            
+            }
+        }
+    }
 }

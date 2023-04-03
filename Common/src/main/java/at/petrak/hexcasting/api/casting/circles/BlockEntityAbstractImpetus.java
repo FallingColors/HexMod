@@ -94,6 +94,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     //region execution
 
     public void tickExecution() {
+        if (this.level == null)
+            return;
+        
         var state = this.getExecutionState();
         if (state == null) {
             return;
@@ -101,8 +104,19 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
         var shouldContinue = state.tick(this);
 
-        if (!shouldContinue)
+        if (!shouldContinue) {
+            this.endExecution();
             this.executionState = null;
+        }
+        else
+            this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), state.getTickSpeed());
+    }
+    
+    public void endExecution() {
+        if (this.executionState == null)
+            return;
+        
+        this.executionState.endExecution(this);
     }
 
     /**
@@ -127,11 +141,19 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             return; // TODO: error here?
         if (this.level.isClientSide)
             return; // TODO: error here?
-
+    
+        if (this.executionState != null) {
+            return;
+        }
         this.executionState = CircleExecutionState.createNew(this, player);
 
+        if (this.executionState == null)
+            return;
+        
         var serverLevel = (ServerLevel) this.level;
-
+    
+        serverLevel.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), this.executionState.getTickSpeed());
+        
         serverLevel.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, true));
     }
 
