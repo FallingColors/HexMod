@@ -54,7 +54,7 @@ data class FrameForEach(
         val (stackTop, newImage, newCont) = if (data.nonEmpty) {
             // Increment the evaluation depth,
             // push the next datum to the top of the stack,
-            Triple(data.car, harness.image.copy(userData = CastingImage.incDepth(harness.image.userData)), continuation
+            Triple(data.car, harness.image, continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
                 .pushFrame(FrameForEach(data.cdr, code, stack, acc))
                 // and prep the Thoth'd code block for evaluation.
