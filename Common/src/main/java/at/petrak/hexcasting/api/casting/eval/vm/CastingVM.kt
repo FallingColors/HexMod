@@ -1,14 +1,10 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.casting.PatternShapeMatch
 import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.*
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
-import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate
-import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -16,14 +12,9 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.*
-import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.*
-import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
-import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -109,22 +100,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 )
             }
 
-            if (iota is PatternIota) {
-                return executePattern(iota.pattern, world, continuation)
-            } else {
-                return CastResult(
-                    continuation,
-                    null,
-                    listOf(
-                        OperatorSideEffect.DoMishap(
-                            MishapUnescapedValue(iota),
-                            Mishap.Context(HexPattern(HexDir.WEST), null)
-                        )
-                    ), // Should never matter
-                    ResolvedPatternType.INVALID,
-                    HexEvalSounds.MISHAP
-                )
-            }
+            return iota.execute(this, world, continuation)
         } catch (exception: Exception) {
             // This means something very bad has happened
             exception.printStackTrace()
@@ -141,92 +117,6 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     )
                 ),
                 ResolvedPatternType.ERRORED,
-                HexEvalSounds.MISHAP
-            )
-        }
-    }
-
-    /**
-     * When the server gets a packet from the client with a new pattern,
-     * handle it functionally.
-     */
-    private fun executePattern(newPat: HexPattern, world: ServerLevel, continuation: SpellContinuation): CastResult {
-        var castedName: Component? = null
-        try {
-            val lookup = PatternRegistryManifest.matchPattern(newPat, world, false)
-            this.env.precheckAction(lookup)
-
-            val action = if (lookup is Normal || lookup is PerWorld) {
-                val key = when (lookup) {
-                    is Normal -> lookup.key
-                    is PerWorld -> lookup.key
-                    else -> throw IllegalStateException()
-                }
-
-                val reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.actionRegistry, key, HexTags.Actions.REQUIRES_ENLIGHTENMENT)
-
-                castedName = HexAPI.instance().getActionI18n(key, reqsEnlightenment)
-
-                IXplatAbstractions.INSTANCE.actionRegistry.get(key)!!.action
-            } else if (lookup is Special) {
-                castedName = lookup.handler.name
-                lookup.handler.act()
-            } else if (lookup is PatternShapeMatch.Nothing) {
-                throw MishapInvalidPattern()
-            } else throw IllegalStateException()
-
-            val opCount = if (this.image.userData.contains(HexAPI.OP_COUNT_USERDATA)) {
-                this.image.userData.getInt(HexAPI.OP_COUNT_USERDATA)
-            } else {
-                this.image.userData.putInt(HexAPI.OP_COUNT_USERDATA, 0)
-                0
-            }
-            if (opCount + 1 > HexConfig.server().maxOpCount()) {
-                throw MishapEvalTooMuch()
-            }
-            this.image.userData.putInt(HexAPI.OP_COUNT_USERDATA, opCount + 1)
-
-            val sideEffects = mutableListOf<OperatorSideEffect>()
-            var stack2: List<Iota>? = null
-            var cont2 = continuation
-            var userData2: CompoundTag? = null
-
-            val result = action.operate(
-                this.env,
-                this.image.stack.toMutableList(),
-                this.image.userData.copy(),
-                continuation
-            )
-            cont2 = result.newContinuation
-            stack2 = result.newStack
-            userData2 = result.newUserdata
-            // TODO parens also break prescience
-            sideEffects.addAll(result.sideEffects)
-
-            val hereFd = this.image
-            val fd = if (stack2 != null) {
-                hereFd.copy(
-                    stack = stack2,
-                    userData = userData2,
-                )
-            } else {
-                hereFd
-            }
-
-            return CastResult(
-                cont2,
-                fd,
-                sideEffects,
-                ResolvedPatternType.EVALUATED,
-                env.soundType,
-            )
-
-        } catch (mishap: Mishap) {
-            return CastResult(
-                continuation,
-                null,
-                listOf(OperatorSideEffect.DoMishap(mishap, Mishap.Context(newPat, castedName))),
-                mishap.resolutionType(env),
                 HexEvalSounds.MISHAP
             )
         }

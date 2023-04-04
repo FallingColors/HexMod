@@ -1,9 +1,22 @@
 package at.petrak.hexcasting.api.casting.iota;
 
+import at.petrak.hexcasting.api.casting.eval.CastResult;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
+import at.petrak.hexcasting.api.casting.math.HexDir;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.casting.mishaps.MishapUnescapedValue;
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public abstract class Iota {
     @NotNull
@@ -33,6 +46,25 @@ public abstract class Iota {
      * You probably don't want to call this directly; use {@link IotaType#serialize}.
      */
     abstract public @NotNull Tag serialize();
+
+    /**
+     * This method is called when this iota is executed (i.e. Hermes is run on a list containing it, unescaped).
+     * By default it will return a {@link CastResult} indicating an error has occurred.
+     */
+    public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+        return new CastResult(
+            continuation,
+            null,
+            List.of(
+                new OperatorSideEffect.DoMishap(
+                    new MishapUnescapedValue(this),
+                    new Mishap.Context(new HexPattern(HexDir.WEST, List.of()), null)
+                )
+            ), // Should never matter
+            ResolvedPatternType.INVALID,
+            HexEvalSounds.MISHAP
+        );
+    }
 
     public Component display() {
         return this.type.display(this.serialize());
