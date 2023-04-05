@@ -34,6 +34,6 @@ object OpEval : Action {
 
         val instrsList = instrs.map({ SpellList.LList(0, listOf(PatternIota(it))) }, { it })
         val frame = FrameEvaluate(instrsList, true)
-        return OperationResult(listOf(), userData, listOf(), newCont.pushFrame(frame))
+        return OperationResult(stack, userData, listOf(), newCont.pushFrame(frame))
     }
 }
