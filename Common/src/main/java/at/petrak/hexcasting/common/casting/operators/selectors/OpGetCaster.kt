@@ -9,6 +9,9 @@ object OpGetCaster : ConstMediaAction {
     override val argc = 0
 
     override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+        if (ctx.caster == null)
+            return null.asActionResult
+
         ctx.assertEntityInRange(ctx.caster)
         return ctx.caster.asActionResult
     }
