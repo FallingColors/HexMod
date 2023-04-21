@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import com.google.gson.JsonObject;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -10,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Objects;
@@ -41,7 +41,7 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
-    public Entity exampleEntity(ClientLevel level) {
+    public Entity exampleEntity(Level level) {
         return this.entityType.create(level);
     }
 
@@ -63,7 +63,7 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
 
     public static EntityTypeIngredient deserialize(JsonObject obj) {
         var typeLoc = ResourceLocation.tryParse(GsonHelper.getAsString(obj, "entityType"));
-        if (!Registry.ENTITY_TYPE.containsKey(typeLoc)) {
+        if (typeLoc == null || !Registry.ENTITY_TYPE.containsKey(typeLoc)) {
             throw new IllegalArgumentException("unknown entity type " + typeLoc);
         }
         return new EntityTypeIngredient(Registry.ENTITY_TYPE.get(typeLoc));
