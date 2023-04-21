@@ -73,6 +73,11 @@ public class ListIota extends Iota {
         return out;
     }
 
+    @Override
+    public @Nullable Iterable<Iota> subIotas() {
+        return this.getList();
+    }
+
     public static IotaType<ListIota> TYPE = new IotaType<>() {
         @Nullable
         @Override

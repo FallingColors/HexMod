@@ -15,6 +15,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -64,6 +65,15 @@ public abstract class Iota {
             ResolvedPatternType.INVALID,
             HexEvalSounds.MISHAP
         );
+    }
+
+    /**
+     * This method is called to determine whether the iota is above the max serialisation depth/serialisation count limits. It should return every "iota" that is a subelement of this iota.
+     * For example, if you implemented a Map<Iota, Iota>, then it should be an iterable over the keys *and* values of the map. If you implemented a typed List<Double> iota for some reason, it would
+     * probably be a good idea to supply an iterable over those doubles mapped to double iotas.
+     */
+    public @Nullable Iterable<Iota> subIotas() {
+        return null;
     }
 
     public Component display() {
