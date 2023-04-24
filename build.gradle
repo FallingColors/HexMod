@@ -31,43 +31,22 @@ pkpcpbp {
         mcVersion(project.minecraftVersion)
         modVersion(project.modVersion)
     }
+    curseforgeInfo {
+        id 569849
+        stability "beta"
+        token(System.getenv("CURSEFORGE_TOKEN"))
+    }
+    modrinthInfo {
+        id "nTW3yKrm"
+        stability "beta"
+        token(System.getenv("MODRINTH_TOKEN"))
+    }
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
-
-    /*
-    repositories {
-        maven { url "https://libraries.minecraft.net/" }
-
-        mavenCentral()
-
-        maven {
-            name = 'Sponge / Mixin'
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-        }
-
-        maven {
-            name = 'BlameJared Maven'
-            url = 'https://maven.blamejared.com'
-        }
-
-        maven {
-            name = "Modrinth"
-            url = "https://api.modrinth.com/maven"
-            content {
-                includeGroup "maven.modrinth"
-            }
-        }
-
-        maven {
-            url = "https://jitpack.io"
-        }
-    }
-     */
-
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
