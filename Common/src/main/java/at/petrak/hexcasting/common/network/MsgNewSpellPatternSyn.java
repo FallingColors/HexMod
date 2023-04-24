@@ -1,14 +1,8 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.api.mod.HexStatistics;
-import at.petrak.hexcasting.api.mod.HexTags;
-import at.petrak.hexcasting.api.casting.eval.ControllerInfo;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
-import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
-import at.petrak.hexcasting.api.casting.iota.PatternIota;
-import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.common.casting.env.StaffCastEnv;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -59,54 +53,6 @@ public record MsgNewSpellPatternSyn(InteractionHand handUsed, HexPattern pattern
     }
 
     public void handle(MinecraftServer server, ServerPlayer sender) {
-        server.execute(() -> {
-            // TODO: should we maybe not put tons of logic in a packet class
-            var held = sender.getItemInHand(this.handUsed);
-            if (held.is(HexTags.Items.STAVES)) {
-                boolean autoFail = false;
-
-                if (!resolvedPatterns.isEmpty()) {
-                    var allPoints = new ArrayList<HexCoord>();
-                    for (int i = 0; i < resolvedPatterns.size() - 1; i++) {
-                        ResolvedPattern pat = resolvedPatterns.get(i);
-                        allPoints.addAll(pat.getPattern().positions(pat.getOrigin()));
-                    }
-                    var currentResolvedPattern = resolvedPatterns.get(resolvedPatterns.size() - 1);
-                    var currentSpellPoints = currentResolvedPattern.getPattern()
-                        .positions(currentResolvedPattern.getOrigin());
-                    if (currentSpellPoints.stream().anyMatch(allPoints::contains)) {
-                        autoFail = true;
-                    }
-                }
-
-                sender.awardStat(HexStatistics.PATTERNS_DRAWN);
-
-                var harness = IXplatAbstractions.INSTANCE.getHarness(sender, this.handUsed);
-
-                ControllerInfo clientInfo;
-                if (autoFail) {
-                    var descs = harness.generateDescs();
-                    clientInfo = new ControllerInfo(harness.getStack().isEmpty(), ResolvedPatternType.INVALID,
-                        descs.getFirst(), descs.getSecond(), descs.getThird(), harness.getParenCount());
-                } else {
-                    clientInfo = harness.executeIota(new PatternIota(this.pattern), sender.getLevel());
-                }
-
-                if (clientInfo.isStackClear()) {
-                    IXplatAbstractions.INSTANCE.setHarness(sender, null);
-                    IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
-                } else {
-                    IXplatAbstractions.INSTANCE.setHarness(sender, harness);
-                    if (!resolvedPatterns.isEmpty()) {
-                        resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
-                    }
-                    IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
-                }
-
-                IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,
-                    new MsgNewSpellPatternAck(clientInfo, resolvedPatterns.size() - 1));
-            }
-        });
+        server.execute(() -> StaffCastEnv.handleNewPatternOnServer(sender, this));
     }
-
 }

@@ -6,9 +6,10 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
@@ -158,16 +159,14 @@ public class FabricXplatImpl implements IXplatAbstractions {
         cc.setFlight(flight);
     }
 
-    @Override
     public void setAltiora(Player target, @Nullable AltioraAbility altiora) {
         var cc = HexCardinalComponents.ALTIORA.get(target);
         cc.setAltiora(altiora);
     }
 
-    @Override
-    public void setHarness(ServerPlayer target, CastingHarness harness) {
-        var cc = HexCardinalComponents.HARNESS.get(target);
-        cc.setHarness(harness);
+    public void setStaffcastImage(ServerPlayer target, CastingImage image) {
+        var cc = HexCardinalComponents.STAFFCAST_IMAGE.get(target);
+        cc.setImage(image);
     }
 
     @Override
@@ -207,9 +206,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
-        var cc = HexCardinalComponents.HARNESS.get(player);
-        return cc.getHarness(hand);
+    public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
+        var cc = HexCardinalComponents.STAFFCAST_IMAGE.get(player);
+        return cc.getVM(hand);
     }
 
     @Override
@@ -220,7 +219,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void clearCastingData(ServerPlayer player) {
-        this.setHarness(player, null);
+        this.setStaffcastImage(player, null);
         this.setPatterns(player, List.of());
     }
 
@@ -228,6 +227,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
         var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(stack);
+        return cc.orElse(null);
+    }
+
+    @Override
+    public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
+        var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(player);
         return cc.orElse(null);
     }
 

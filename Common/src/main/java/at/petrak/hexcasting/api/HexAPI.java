@@ -1,19 +1,26 @@
 package at.petrak.hexcasting.api;
 
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.base.Suppliers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -137,6 +144,30 @@ public interface HexAPI {
     }
 
     //
+    @Nullable
+    default Sentinel getSentinel(ServerPlayer player) {
+        return null;
+    }
+
+    @Nullable
+    default ADMediaHolder findMediaHolder(ItemStack stack) {
+        return null;
+    }
+
+    default FrozenColorizer getColorizer(Player player) {
+        return FrozenColorizer.DEFAULT.get();
+    }
+
+    /**
+     * Location in the userdata of the ravenmind
+     */
+    String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
+    /**
+     * Location in the userdata of the number of ops executed
+     */
+    String OP_COUNT_USERDATA = modLoc("op_count").toString();
+
+    String MARKED_MOVED_USERDATA = modLoc("impulsed").toString();
 
     static HexAPI instance() {
         return INSTANCE.get();

@@ -1,9 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
-import at.petrak.hexcasting.api.casting.castables.Action
-import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.SpellList
+import at.petrak.hexcasting.api.casting.asActionResult
+import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate
 import at.petrak.hexcasting.api.casting.eval.vm.FrameFinishEval
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
@@ -11,19 +13,21 @@ import at.petrak.hexcasting.api.casting.evaluatable
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import net.minecraft.nbt.CompoundTag
 
 object OpEval : Action {
     override fun operate(
-        continuation: SpellContinuation,
+        env: CastingEnvironment,
         stack: MutableList<Iota>,
-        ravenmind: Iota?,
-        ctx: CastingEnvironment
+        userData: CompoundTag,
+        continuation: SpellContinuation
     ): OperationResult {
         val datum = stack.removeLastOrNull() ?: throw MishapNotEnoughArgs(1, 0)
         val instrs = evaluatable(datum, 0)
 
         instrs.ifRight {
-            ctx.incDepth()
+            CastingImage.incDepth(userData)
+            it.asActionResult
         }
 
         // if not installed already...
@@ -37,6 +41,6 @@ object OpEval : Action {
 
         val instrsList = instrs.map({ SpellList.LList(0, listOf(PatternIota(it))) }, { it })
         val frame = FrameEvaluate(instrsList, true)
-        return OperationResult(newCont.pushFrame(frame), stack, ravenmind, listOf())
+        return OperationResult(listOf(), userData, listOf(), newCont.pushFrame(frame))
     }
 }

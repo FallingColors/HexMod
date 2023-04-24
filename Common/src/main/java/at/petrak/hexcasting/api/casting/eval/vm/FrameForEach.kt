@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
-import at.petrak.hexcasting.api.casting.eval.CastingHarness
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -39,38 +38,37 @@ data class FrameForEach(
     override fun evaluate(
         continuation: SpellContinuation,
         level: ServerLevel,
-        harness: CastingHarness
+        harness: CastingVM
     ): CastResult {
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
         val stack = if (baseStack == null) {
             // init stack to the harness stack...
-            harness.stack.toList()
+            harness.image.stack.toList()
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
-            acc.addAll(harness.stack)
+            acc.addAll(harness.image.stack)
             baseStack
         }
 
         // If we still have data to process...
-        val (stackTop, newCont) = if (data.nonEmpty) {
+        val (stackTop, newImage, newCont) = if (data.nonEmpty) {
             // Increment the evaluation depth,
-            harness.ctx.incDepth()
             // push the next datum to the top of the stack,
-            data.car to continuation
+            Triple(data.car, harness.image.incDepth(), continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
                 .pushFrame(FrameForEach(data.cdr, code, stack, acc))
                 // and prep the Thoth'd code block for evaluation.
-                .pushFrame(FrameEvaluate(code, true))
+                .pushFrame(FrameEvaluate(code, true)))
         } else {
             // Else, dump our final list onto the stack.
-            ListIota(acc) to continuation
+            Triple(ListIota(acc), harness.image, continuation)
         }
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
         // TODO: this means we could have Thoth casting do a different sound
         return CastResult(
             newCont,
-            FunctionalData(tStack, 0, listOf(), false, harness.ravenmind),
+            newImage.copy(stack = tStack),
             listOf(),
             ResolvedPatternType.EVALUATED,
             HexEvalSounds.THOTH,

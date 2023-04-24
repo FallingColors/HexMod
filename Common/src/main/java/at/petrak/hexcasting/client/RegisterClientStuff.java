@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
@@ -21,7 +22,6 @@ import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
@@ -158,7 +158,7 @@ public class RegisterClientStuff {
             if (iotaTag == null) {
                 return 0xff_ffffff;
             }
-            return HexIotaTypes.getColor(iotaTag);
+            return IotaType.getColor(iotaTag);
         }, HexBlocks.AKASHIC_BOOKSHELF);
     }
 

@@ -1,21 +1,22 @@
 package at.petrak.hexcasting.common.casting.operators.stack
 
 import at.petrak.hexcasting.api.casting.castables.Action
-import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getPositiveInt
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import net.minecraft.nbt.CompoundTag
 
 // Yes this is weird in that 1=remove, 0=keep, but i think the UX is better
 // todo this is untested
 object OpBitMask : Action {
     override fun operate(
-        continuation: SpellContinuation,
+        env: CastingEnvironment,
         stack: MutableList<Iota>,
-        ravenmind: Iota?,
-        ctx: CastingEnvironment
+        userData: CompoundTag,
+        continuation: SpellContinuation
     ): OperationResult {
         if (stack.size < 1)
             throw MishapNotEnoughArgs(1, 0)
@@ -38,6 +39,6 @@ object OpBitMask : Action {
             }
         }
 
-        return OperationResult(continuation, out.asReversed(), ravenmind, listOf())
+        return OperationResult(out.asReversed(), userData, listOf(), continuation)
     }
 }

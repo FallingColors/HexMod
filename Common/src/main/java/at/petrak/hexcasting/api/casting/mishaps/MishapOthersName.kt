@@ -1,12 +1,10 @@
 package at.petrak.hexcasting.api.casting.mishaps
 
-import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.EntityIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
-import net.minecraft.world.effect.MobEffectInstance
-import net.minecraft.world.effect.MobEffects
+import at.petrak.hexcasting.api.misc.FrozenColorizer
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 
@@ -19,7 +17,7 @@ class MishapOthersName(val confidant: Player) : Mishap() {
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         val seconds = if (this.confidant == ctx.caster) 5 else 60;
-        ctx.caster.addEffect(MobEffectInstance(MobEffects.BLINDNESS, seconds * 20))
+        ctx.mishapEnvironment.blind(seconds * 20)
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

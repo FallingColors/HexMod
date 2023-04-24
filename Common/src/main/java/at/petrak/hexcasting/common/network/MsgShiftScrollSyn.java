@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.network;
 
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.storage.ItemAbacus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
@@ -144,7 +144,7 @@ public record MsgShiftScrollSyn(double mainHandDelta, double offHandDelta, boole
 
         var datumTag = HexItems.ABACUS.readIotaTag(stack);
         if (datumTag != null) {
-            var popup = HexIotaTypes.getDisplay(datumTag);
+            var popup = IotaType.getDisplay(datumTag);
             sender.displayClientMessage(
                 Component.translatable("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
         }

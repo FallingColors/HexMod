@@ -30,7 +30,7 @@ public abstract class Iota {
     /**
      * Serialize this under the {@code data} tag.
      * <p>
-     * You probably don't want to call this directly; use {@link HexIotaTypes#serialize}.
+     * You probably don't want to call this directly; use {@link IotaType#serialize}.
      */
     abstract public @NotNull Tag serialize();
 

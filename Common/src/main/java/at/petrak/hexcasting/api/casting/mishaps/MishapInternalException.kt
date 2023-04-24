@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.FrozenColorizer
 import net.minecraft.world.item.DyeColor
 
-class MishapError(val exception: Exception) : Mishap() {
+class MishapInternalException(val exception: Exception) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.BLACK)
 

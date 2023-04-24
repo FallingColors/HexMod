@@ -1,16 +1,16 @@
 package at.petrak.hexcasting.api.casting.mishaps
 
-import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.FrozenColorizer
 import net.minecraft.world.item.DyeColor
 
-class MishapEvalTooDeep : Mishap() {
+class MishapEvalTooMuch : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.BLUE)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.caster.airSupply -= 290
+        ctx.mishapEnvironment.drown()
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

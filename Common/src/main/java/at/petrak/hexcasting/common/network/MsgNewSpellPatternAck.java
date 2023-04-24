@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.network;
 
-import at.petrak.hexcasting.api.casting.eval.ControllerInfo;
+import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import at.petrak.hexcasting.common.lib.HexSounds;
@@ -16,7 +16,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client when the player finishes casting a spell.
  */
-public record MsgNewSpellPatternAck(ControllerInfo info, int index) implements IMessage {
+public record MsgNewSpellPatternAck(ExecutionClientView info, int index) implements IMessage {
     public static final ResourceLocation ID = modLoc("pat_sc");
 
     @Override
@@ -38,7 +38,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info, int index) implements I
         var parenCount = buf.readVarInt();
 
         return new MsgNewSpellPatternAck(
-            new ControllerInfo(isStackEmpty, resolutionType, stack, parens, raven, parenCount), index
+            new ExecutionClientView(isStackEmpty, resolutionType, stack, parens, raven, parenCount), index
         );
     }
 
@@ -66,7 +66,7 @@ public record MsgNewSpellPatternAck(ControllerInfo info, int index) implements I
                 }
                 var screen = Minecraft.getInstance().screen;
                 if (screen instanceof GuiSpellcasting spellGui) {
-                    if (self.info().isStackClear()) {
+                    if (self.info().isStackClear() && self.info.getRavenmind() == null) {
                         mc.setScreen(null);
                     } else {
                         spellGui.recvServerUpdate(self.info(), self.index());

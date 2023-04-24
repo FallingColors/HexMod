@@ -23,10 +23,14 @@ class MishapNoSpellCircle : Mishap() {
     }
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        dropAll(ctx.caster, ctx.caster.inventory.items)
-        dropAll(ctx.caster, ctx.caster.inventory.offhand)
-        dropAll(ctx.caster, ctx.caster.inventory.armor) {
-            !EnchantmentHelper.hasBindingCurse(it)
+        val caster = ctx.caster
+        if (caster != null) {
+            // FIXME: handle null caster case
+            dropAll(caster, caster.inventory.items)
+            dropAll(caster, caster.inventory.offhand)
+            dropAll(caster, caster.inventory.armor) {
+                !EnchantmentHelper.hasBindingCurse(it)
+            }
         }
     }
 

@@ -11,10 +11,11 @@ class OpCircleBounds(val max: Boolean) : ConstMediaAction {
     override val argc = 0
 
     override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
-        if (ctx.spellCircle == null)
+        val circle = ctx.spellCircle
+        if (circle == null)
             throw MishapNoSpellCircle()
 
-        val aabb = ctx.spellCircle.aabb
+        val aabb = circle.aabb
 
         return if (max)
             Vec3(aabb.maxX - 0.5, aabb.maxY - 0.5, aabb.maxZ - 0.5).asActionResult

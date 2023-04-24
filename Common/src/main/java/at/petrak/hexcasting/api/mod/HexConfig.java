@@ -56,7 +56,7 @@ public class HexConfig {
     public interface ServerConfigAccess {
         int opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort();
 
-        int maxRecurseDepth();
+        int maxOpCount();
 
         int maxSpellCircleLength();
 
@@ -69,7 +69,7 @@ public class HexConfig {
         // fun fact, although dimension keys are a RegistryHolder, they aren't a registry, so i can't do tags
         boolean canTeleportInThisDimension(ResourceKey<Level> dimension);
 
-        int DEFAULT_MAX_RECURSE_DEPTH = 512;
+        int DEFAULT_MAX_OP_COUNT = 1_000_000;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
 

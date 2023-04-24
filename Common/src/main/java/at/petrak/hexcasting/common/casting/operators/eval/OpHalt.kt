@@ -1,17 +1,18 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
 import at.petrak.hexcasting.api.casting.castables.Action
-import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
+import net.minecraft.nbt.CompoundTag
 
 object OpHalt : Action {
     override fun operate(
-        continuation: SpellContinuation,
+        env: CastingEnvironment,
         stack: MutableList<Iota>,
-        ravenmind: Iota?,
-        ctx: CastingEnvironment
+        userData: CompoundTag,
+        continuation: SpellContinuation
     ): OperationResult {
         var newStack = stack.toList()
         var done = false
@@ -29,6 +30,6 @@ object OpHalt : Action {
             newStack = listOf()
         }
 
-        return OperationResult(newCont, newStack, ravenmind, listOf())
+        return OperationResult(newStack, userData, listOf(), newCont)
     }
 }

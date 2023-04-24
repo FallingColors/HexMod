@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.casting.eval.CastResult
-import at.petrak.hexcasting.api.casting.eval.CastingHarness
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.utils.NBTBuilder
@@ -20,11 +19,11 @@ object FrameFinishEval : ContinuationFrame {
     override fun evaluate(
         continuation: SpellContinuation,
         level: ServerLevel,
-        harness: CastingHarness
+        harness: CastingVM
     ): CastResult {
         return CastResult(
             continuation,
-            FunctionalData(harness.stack.toList(), 0, listOf(), false, harness.ravenmind),
+            null,
             listOf(),
             ResolvedPatternType.EVALUATED,
             HexEvalSounds.NOTHING,

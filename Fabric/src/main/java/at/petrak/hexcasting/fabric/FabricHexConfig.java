@@ -159,7 +159,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private int opBreakHarvestLevel = DEFAULT_OP_BREAK_HARVEST_LEVEL;
         @ConfigEntry.Gui.Tooltip
-        private int maxRecurseDepth = DEFAULT_MAX_RECURSE_DEPTH;
+        private int maxOpCount = DEFAULT_MAX_OP_COUNT;
         @ConfigEntry.Gui.Tooltip
         private int maxSpellCircleLength = DEFAULT_MAX_SPELL_CIRCLE_LENGTH;
         @ConfigEntry.Gui.Tooltip
@@ -189,7 +189,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         @Override
         public void validatePostLoad() throws ValidationException {
-            this.maxRecurseDepth = Math.max(this.maxRecurseDepth, 0);
+            this.maxOpCount = Math.max(this.maxOpCount, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
 
             this.scrollInjections = new Object2IntOpenHashMap<>();
@@ -206,8 +206,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         @Override
-        public int maxRecurseDepth() {
-            return maxRecurseDepth;
+        public int maxOpCount() {
+            return maxOpCount;
         }
 
         @Override

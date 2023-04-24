@@ -2,8 +2,10 @@
 
 package at.petrak.hexcasting.api.utils
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.addldata.ADMediaHolder
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 import kotlin.math.roundToInt
@@ -53,6 +55,25 @@ fun extractMedia(
         return 0
 
     return holder.withdrawMedia(cost, simulate)
+}
+
+/**
+ * Convenience function to scan the player's inventory, curios, etc for media sources,
+ * and then sorts them
+ */
+fun scanPlayerForMediaStuff(player: ServerPlayer): List<ADMediaHolder> {
+    val sources = mutableListOf<ADMediaHolder>()
+
+    (player.inventory.items + player.inventory.armor + player.inventory.offhand).forEach {
+        val holder = HexAPI.instance().findMediaHolder(it)
+        if (holder != null) {
+            sources.add(holder)
+        }
+    }
+
+    sources.sortWith(::compareMediaItem)
+    sources.reverse()
+    return sources
 }
 
 /**

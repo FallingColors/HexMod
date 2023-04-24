@@ -123,7 +123,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
     public static class Server implements HexConfig.ServerConfigAccess {
         private static ForgeConfigSpec.IntValue opBreakHarvestLevel;
-        private static ForgeConfigSpec.IntValue maxRecurseDepth;
+        private static ForgeConfigSpec.IntValue maxOpCount;
 
         private static ForgeConfigSpec.IntValue maxSpellCircleLength;
 
@@ -141,8 +141,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Spells");
-            maxRecurseDepth = builder.comment("How many times a spell can recursively cast other spells")
-                .defineInRange("maxRecurseDepth", DEFAULT_MAX_RECURSE_DEPTH, 0, Integer.MAX_VALUE);
+            maxOpCount = builder.comment("The maximum number of actions that can be executed in one tick, to avoid " +
+                    "hanging the server.")
+                .defineInRange("maxOpCount", DEFAULT_MAX_OP_COUNT, 0, Integer.MAX_VALUE);
             opBreakHarvestLevel = builder.comment(
                 "The harvest level of the Break Block spell.",
                 "0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite."
@@ -177,8 +178,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         }
 
         @Override
-        public int maxRecurseDepth() {
-            return maxRecurseDepth.get();
+        public int maxOpCount() {
+            return maxOpCount.get();
         }
 
         @Override

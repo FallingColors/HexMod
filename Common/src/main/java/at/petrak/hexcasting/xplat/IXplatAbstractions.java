@@ -6,9 +6,10 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.player.AltioraAbility;
@@ -85,7 +86,7 @@ public interface IXplatAbstractions {
 
     void setAltiora(Player target, @Nullable AltioraAbility altiora);
 
-    void setHarness(ServerPlayer target, @Nullable CastingHarness harness);
+    void setStaffcastImage(ServerPlayer target, @Nullable CastingImage image);
 
     void setPatterns(ServerPlayer target, List<ResolvedPattern> patterns);
 
@@ -97,7 +98,7 @@ public interface IXplatAbstractions {
 
     Sentinel getSentinel(Player player);
 
-    CastingHarness getHarness(ServerPlayer player, InteractionHand hand);
+    CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand);
 
     List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player);
 
@@ -105,6 +106,9 @@ public interface IXplatAbstractions {
 
     @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack);
+
+    @Nullable
+    ADMediaHolder findMediaHolder(ServerPlayer player);
 
     @Nullable
     ADIotaHolder findDataHolder(ItemStack stack);

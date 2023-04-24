@@ -36,10 +36,11 @@ object OpColorize : SpellAction {
     private data class Spell(val stack: ItemStack) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
             val copy = stack.copy()
-            if (ctx.withdrawItem(copy, 1, true)) {
+            val caster = ctx.caster
+            if (caster != null && ctx.withdrawItem(copy::equals, 1, true)) {
                 IXplatAbstractions.INSTANCE.setColorizer(
                     ctx.caster,
-                    FrozenColorizer(copy, ctx.caster.uuid)
+                    FrozenColorizer(copy, caster.uuid)
                 )
             }
         }
