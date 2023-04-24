@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.common.blocks.entity;
 
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import com.mojang.authlib.GameProfile;
@@ -35,17 +35,6 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
         super(HexBlockEntities.IMPETUS_STOREDPLAYER_TILE, pWorldPosition, pBlockState);
     }
 
-    @Override
-    public boolean activatorAlwaysInRange() {
-        return true;
-    }
-
-    @Override
-    protected @Nullable
-    Player getPlayer() {
-        return this.storedPlayer == null ? null : this.level.getPlayerByUUID(this.storedPlayer);
-    }
-
     protected @Nullable
     GameProfile getPlayerName() {
         Player player = getStoredPlayer();
@@ -76,13 +65,13 @@ public class BlockEntityStoredPlayerImpetus extends BlockEntityAbstractImpetus {
     // just feels wrong to use the protected method
     public @Nullable
     Player getStoredPlayer() {
-        return this.getPlayer();
+        return null; // TODO: Fix
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-                                        BlockState state, BlockPos pos, Player observer,
-                                        Level world,
-                                        Direction hitFace) {
+        BlockState state, BlockPos pos, Player observer,
+        Level world,
+        Direction hitFace) {
         super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace);
 
         var name = this.getPlayerName();

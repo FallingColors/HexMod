@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.env;
+package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
@@ -16,11 +16,13 @@ import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,6 +105,16 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
+    protected List<HeldItemInfo> getPrimaryStacks() {
+        var primaryItem = this.caster.getItemInHand(this.castingHand);
+
+        if (primaryItem.isEmpty())
+            primaryItem = ItemStack.EMPTY.copy();
+
+        return List.of(new HeldItemInfo(getAlternateItem(), this.getOtherHand()), new HeldItemInfo(primaryItem, this.castingHand));
+    }
+
+    @Override
     public boolean isVecInRange(Vec3 vec) {
         var sentinel = HexAPI.instance().getSentinel(this.caster);
         if (sentinel != null
@@ -114,6 +126,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         }
 
         return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS;
+    }
+
+    @Override
+    public boolean hasEditPermissionsAt(BlockPos vec) {
+        return this.caster.gameMode.getGameModeForPlayer() != GameType.ADVENTURE && this.world.mayInteract(this.caster, vec);
     }
 
     @Override

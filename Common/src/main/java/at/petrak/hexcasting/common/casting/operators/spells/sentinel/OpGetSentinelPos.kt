@@ -13,12 +13,9 @@ object OpGetSentinelPos : ConstMediaAction {
     override val argc = 0
     override val mediaCost = MediaConstants.DUST_UNIT / 10
     override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster)
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster) ?: return listOf(NullIota())
         if (sentinel.dimension != ctx.world.dimension())
             throw MishapLocationInWrongDimension(sentinel.dimension.location())
-        return if (sentinel.hasSentinel)
-            sentinel.position.asActionResult
-        else
-            listOf(NullIota())
+        return sentinel.position.asActionResult
     }
 }

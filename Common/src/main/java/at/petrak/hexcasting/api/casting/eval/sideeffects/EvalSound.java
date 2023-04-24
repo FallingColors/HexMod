@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param sound    the actual sound file
  * @param priority the priority of this sound. the sound with the highest priority in a given cast will be
- *                 playd.
+ *                 played.
  *                 shortcutMetacasting takes precedence over this.
  */
 public record EvalSound(@Nullable SoundEvent sound, int priority) {

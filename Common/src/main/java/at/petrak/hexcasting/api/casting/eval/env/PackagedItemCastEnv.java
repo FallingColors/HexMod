@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.env;
+package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
@@ -34,6 +34,9 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
 
     @Override
     public long extractMedia(long costLeft) {
+        if (this.caster.isCreative())
+            return 0;
+
         var casterStack = this.caster.getItemInHand(this.castingHand);
         var casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack);
         var canCastFromInv = casterHexHolder.canDrawMediaFromInventory();
@@ -54,7 +57,7 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public InteractionHand castingHand() {
+    public InteractionHand getCastingHand() {
         return this.castingHand;
     }
 

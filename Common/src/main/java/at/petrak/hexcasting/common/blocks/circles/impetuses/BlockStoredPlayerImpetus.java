@@ -92,9 +92,11 @@ public class BlockStoredPlayerImpetus extends BlockAbstractImpetus {
 
                 if (isPowered && pLevel.getBlockEntity(pPos) instanceof BlockEntityStoredPlayerImpetus tile) {
                     var player = tile.getStoredPlayer();
-                    if (player instanceof ServerPlayer splayer) {
+                    if (player == null) {
+                        tile.startExecution(null);
+                    } else if (player instanceof ServerPlayer splayer) {
                         // phew
-                        tile.activateSpellCircle(splayer);
+                        tile.startExecution(splayer);
                     }
                 }
             }

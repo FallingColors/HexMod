@@ -34,15 +34,17 @@ object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
+            val caster = ctx.caster ?: return // TODO: fix!
+
             // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/PieceTrickOvergrow.java
-            if (!ctx.world.mayInteract(ctx.caster, pos))
+            if (!ctx.world.mayInteract(caster, pos))
                 return
 
             val hit = BlockHitResult(Vec3.ZERO, Direction.UP, pos, false)
-            val save: ItemStack = ctx.caster.getItemInHand(InteractionHand.MAIN_HAND)
-            ctx.caster.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(Items.BONE_MEAL))
-            val fakeContext = UseOnContext(ctx.caster, InteractionHand.MAIN_HAND, hit)
-            ctx.caster.setItemInHand(InteractionHand.MAIN_HAND, save)
+            val save: ItemStack = caster.getItemInHand(InteractionHand.MAIN_HAND)
+            caster.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(Items.BONE_MEAL))
+            val fakeContext = UseOnContext(caster, InteractionHand.MAIN_HAND, hit)
+            caster.setItemInHand(InteractionHand.MAIN_HAND, save)
             Items.BONE_MEAL.useOn(fakeContext)
         }
     }

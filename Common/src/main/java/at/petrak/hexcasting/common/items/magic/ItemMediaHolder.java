@@ -35,29 +35,35 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
         super(pProperties);
     }
 
-    public static ItemStack withMedia(ItemStack stack, int media, int maxMedia) {
+    public static ItemStack withMedia(ItemStack stack, long media, long maxMedia) {
         Item item = stack.getItem();
         if (item instanceof ItemMediaHolder) {
-            NBTHelper.putInt(stack, TAG_MEDIA, media);
-            NBTHelper.putInt(stack, TAG_MAX_MEDIA, maxMedia);
+            NBTHelper.putLong(stack, TAG_MEDIA, media);
+            NBTHelper.putLong(stack, TAG_MAX_MEDIA, maxMedia);
         }
 
         return stack;
     }
 
     @Override
-    public int getMedia(ItemStack stack) {
-        return NBTHelper.getInt(stack, TAG_MEDIA);
+    public long getMedia(ItemStack stack) {
+        if (NBTHelper.hasInt(stack, TAG_MEDIA))
+            return NBTHelper.getInt(stack, TAG_MEDIA);
+
+        return NBTHelper.getLong(stack, TAG_MEDIA);
     }
 
     @Override
-    public int getMaxMedia(ItemStack stack) {
-        return NBTHelper.getInt(stack, TAG_MAX_MEDIA);
+    public long getMaxMedia(ItemStack stack) {
+        if (NBTHelper.hasInt(stack, TAG_MAX_MEDIA))
+            return NBTHelper.getInt(stack, TAG_MAX_MEDIA);
+
+        return NBTHelper.getLong(stack, TAG_MAX_MEDIA);
     }
 
     @Override
-    public void setMedia(ItemStack stack, int media) {
-        NBTHelper.putInt(stack, TAG_MEDIA, Mth.clamp(media, 0, getMaxMedia(stack)));
+    public void setMedia(ItemStack stack, long media) {
+        NBTHelper.putLong(stack, TAG_MEDIA, Mth.clamp(media, 0, getMaxMedia(stack)));
     }
 
     @Override

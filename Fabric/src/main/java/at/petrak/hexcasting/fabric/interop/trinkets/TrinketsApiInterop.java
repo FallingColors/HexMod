@@ -29,7 +29,7 @@ public class TrinketsApiInterop {
         });
 
         DiscoveryHandlers.addMediaHolderDiscoverer(harness -> {
-            Optional<TrinketComponent> optional = TrinketsApi.getTrinketComponent(harness.getCtx().getCaster());
+            Optional<TrinketComponent> optional = TrinketsApi.getTrinketComponent(harness.getEnv().getCaster());
             if (optional.isPresent()) {
                 TrinketComponent component = optional.get();
                 return component.getEquipped(MediaHelper::isMediaItem).stream()

@@ -12,7 +12,7 @@ object OpReadable : ConstMediaAction {
     override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
         val (handStack) = ctx.getHeldItemToOperateOn {
             IXplatAbstractions.INSTANCE.findDataHolder(it) != null
-        }
+        } ?: return false.asActionResult
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             ?: return false.asActionResult

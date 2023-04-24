@@ -23,7 +23,8 @@ object OpErase : SpellAction {
 
             (hexHolder?.hasHex() == true) ||
                 (datumHolder?.writeIota(null, true) == true)
-        }
+        } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "eraseable") // TODO: hack
+
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
 

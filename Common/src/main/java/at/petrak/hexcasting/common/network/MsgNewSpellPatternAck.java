@@ -32,13 +32,10 @@ public record MsgNewSpellPatternAck(ExecutionClientView info, int index) impleme
         var index = buf.readInt();
 
         var stack = buf.readList(FriendlyByteBuf::readNbt);
-        var parens = buf.readList(FriendlyByteBuf::readNbt);
         var raven = buf.readOptional(FriendlyByteBuf::readNbt).orElse(null);
 
-        var parenCount = buf.readVarInt();
-
         return new MsgNewSpellPatternAck(
-            new ExecutionClientView(isStackEmpty, resolutionType, stack, parens, raven, parenCount), index
+            new ExecutionClientView(isStackEmpty, resolutionType, stack, raven), index
         );
     }
 
@@ -48,29 +45,23 @@ public record MsgNewSpellPatternAck(ExecutionClientView info, int index) impleme
         buf.writeEnum(this.info.getResolutionType());
         buf.writeInt(this.index);
 
-        buf.writeCollection(this.info.getStack(), FriendlyByteBuf::writeNbt);
-        buf.writeCollection(this.info.getParenthesized(), FriendlyByteBuf::writeNbt);
+        buf.writeCollection(this.info.getStackDescs(), FriendlyByteBuf::writeNbt);
         buf.writeOptional(Optional.ofNullable(this.info.getRavenmind()), FriendlyByteBuf::writeNbt);
-
-        buf.writeVarInt(this.info.getParenCount());
     }
 
     public static void handle(MsgNewSpellPatternAck self) {
-        Minecraft.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                var mc = Minecraft.getInstance();
-                if (self.info().isStackClear()) {
-                    // don't pay attention to the screen, so it also stops when we die
-                    mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getLocation(), null);
-                }
-                var screen = Minecraft.getInstance().screen;
-                if (screen instanceof GuiSpellcasting spellGui) {
-                    if (self.info().isStackClear() && self.info.getRavenmind() == null) {
-                        mc.setScreen(null);
-                    } else {
-                        spellGui.recvServerUpdate(self.info(), self.index());
-                    }
+        Minecraft.getInstance().execute(() -> {
+            var mc = Minecraft.getInstance();
+            if (self.info().isStackClear()) {
+                // don't pay attention to the screen, so it also stops when we die
+                mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getLocation(), null);
+            }
+            var screen = Minecraft.getInstance().screen;
+            if (screen instanceof GuiSpellcasting spellGui) {
+                if (self.info().isStackClear() && self.info.getRavenmind() == null) {
+                    mc.setScreen(null);
+                } else {
+                    spellGui.recvServerUpdate(self.info(), self.index());
                 }
             }
         });

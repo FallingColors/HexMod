@@ -1,9 +1,23 @@
 package at.petrak.hexcasting.api.casting.iota;
 
+import at.petrak.hexcasting.api.casting.eval.CastResult;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
+import at.petrak.hexcasting.api.casting.math.HexDir;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.casting.mishaps.MishapUnescapedValue;
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public abstract class Iota {
     @NotNull
@@ -33,6 +47,34 @@ public abstract class Iota {
      * You probably don't want to call this directly; use {@link IotaType#serialize}.
      */
     abstract public @NotNull Tag serialize();
+
+    /**
+     * This method is called when this iota is executed (i.e. Hermes is run on a list containing it, unescaped).
+     * By default it will return a {@link CastResult} indicating an error has occurred.
+     */
+    public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+        return new CastResult(
+            continuation,
+            null,
+            List.of(
+                new OperatorSideEffect.DoMishap(
+                    new MishapUnescapedValue(this),
+                    new Mishap.Context(new HexPattern(HexDir.WEST, List.of()), null)
+                )
+            ), // Should never matter
+            ResolvedPatternType.INVALID,
+            HexEvalSounds.MISHAP
+        );
+    }
+
+    /**
+     * This method is called to determine whether the iota is above the max serialisation depth/serialisation count limits. It should return every "iota" that is a subelement of this iota.
+     * For example, if you implemented a Map<Iota, Iota>, then it should be an iterable over the keys *and* values of the map. If you implemented a typed List<Double> iota for some reason, it would
+     * probably be a good idea to supply an iterable over those doubles mapped to double iotas.
+     */
+    public @Nullable Iterable<Iota> subIotas() {
+        return null;
+    }
 
     public Component display() {
         return this.type.display(this.serialize());

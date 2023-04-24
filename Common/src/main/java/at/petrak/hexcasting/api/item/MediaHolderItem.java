@@ -11,25 +11,25 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @ApiStatus.OverrideOnly
 public interface MediaHolderItem {
-    int getMedia(ItemStack stack);
+    long getMedia(ItemStack stack);
 
-    int getMaxMedia(ItemStack stack);
+    long getMaxMedia(ItemStack stack);
 
-    void setMedia(ItemStack stack, int media);
+    void setMedia(ItemStack stack, long media);
 
     boolean canProvideMedia(ItemStack stack);
 
     boolean canRecharge(ItemStack stack);
 
     default float getMediaFullness(ItemStack stack) {
-        int max = getMaxMedia(stack);
+        long max = getMaxMedia(stack);
         if (max == 0) {
             return 0;
         }
         return (float) getMedia(stack) / (float) max;
     }
 
-    default int withdrawMedia(ItemStack stack, int cost, boolean simulate) {
+    default long withdrawMedia(ItemStack stack, long cost, boolean simulate) {
         var mediaHere = getMedia(stack);
         if (cost < 0) {
             cost = mediaHere;
@@ -41,9 +41,9 @@ public interface MediaHolderItem {
         return Math.min(cost, mediaHere);
     }
 
-    default int insertMedia(ItemStack stack, int amount, boolean simulate) {
+    default long insertMedia(ItemStack stack, long amount, boolean simulate) {
         var mediaHere = getMedia(stack);
-        int emptySpace = getMaxMedia(stack) - mediaHere;
+        long emptySpace = getMaxMedia(stack) - mediaHere;
         if (emptySpace <= 0) {
             return 0;
         }
@@ -51,7 +51,7 @@ public interface MediaHolderItem {
             amount = emptySpace;
         }
 
-        int inserting = Math.min(amount, emptySpace);
+        long inserting = Math.min(amount, emptySpace);
 
         if (!simulate) {
             var newMedia = mediaHere + inserting;

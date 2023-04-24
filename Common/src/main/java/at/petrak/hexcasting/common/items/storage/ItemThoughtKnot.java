@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.items.storage;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -40,7 +40,7 @@ public class ItemThoughtKnot extends Item implements IotaHolderItem {
     @Override
     public void writeDatum(ItemStack stack, @Nullable Iota iota) {
         if (iota != null) {
-            NBTHelper.putCompound(stack, TAG_DATA, HexIotaTypes.serialize(iota));
+            NBTHelper.putCompound(stack, TAG_DATA, IotaType.serialize(iota));
         }
     }
 

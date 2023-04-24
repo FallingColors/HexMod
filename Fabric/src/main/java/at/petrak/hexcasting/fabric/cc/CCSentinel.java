@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
+import javax.annotation.Nullable;
+
 public class CCSentinel implements Component, AutoSyncedComponent {
     public static final String
         TAG_HAS_SENTINEL = "has_sentinel",
@@ -18,13 +20,13 @@ public class CCSentinel implements Component, AutoSyncedComponent {
         TAG_DIMENSION = "dimension";
 
     private final Player owner;
-    private Sentinel sentinel = Sentinel.none();
+    private @Nullable Sentinel sentinel = null;
 
     public CCSentinel(Player owner) {
         this.owner = owner;
     }
 
-    public Sentinel getSentinel() {
+    public @Nullable Sentinel getSentinel() {
         return sentinel;
     }
 
@@ -41,16 +43,16 @@ public class CCSentinel implements Component, AutoSyncedComponent {
             var position = HexUtils.vecFromNBT(tag.getLongArray(TAG_POSITION));
             var dim = ResourceKey.create(Registry.DIMENSION_REGISTRY,
                 new ResourceLocation(tag.getString(TAG_DIMENSION)));
-            this.sentinel = new Sentinel(true, extendsRange, position, dim);
+            this.sentinel = new Sentinel(extendsRange, position, dim);
         } else {
-            this.sentinel = Sentinel.none();
+            this.sentinel = null;
         }
     }
 
     @Override
     public void writeToNbt(CompoundTag tag) {
-        tag.putBoolean(TAG_HAS_SENTINEL, this.sentinel.hasSentinel());
-        if (this.sentinel.hasSentinel()) {
+        tag.putBoolean(TAG_HAS_SENTINEL, this.sentinel != null);
+        if (this.sentinel != null) {
             tag.putBoolean(TAG_EXTENDS_RANGE, this.sentinel.extendsRange());
             tag.put(TAG_POSITION, HexUtils.serializeToNBT(this.sentinel.position()));
             tag.putString(TAG_DIMENSION, this.sentinel.dimension().location().toString());

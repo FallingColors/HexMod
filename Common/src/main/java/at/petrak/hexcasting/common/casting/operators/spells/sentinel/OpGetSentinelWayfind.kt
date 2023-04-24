@@ -18,14 +18,11 @@ object OpGetSentinelWayfind : ConstMediaAction {
     override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
         val from = args.getVec3(0, argc)
 
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster)
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster) ?: return listOf(NullIota())
 
         if (sentinel.dimension != ctx.world.dimension())
             throw MishapLocationInWrongDimension(sentinel.dimension.location())
 
-        return if (!sentinel.hasSentinel)
-            listOf(NullIota())
-        else
-            sentinel.position.subtract(from).normalize().asActionResult
+        return sentinel.position.subtract(from).normalize().asActionResult
     }
 }

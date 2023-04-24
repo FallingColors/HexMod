@@ -38,8 +38,8 @@ public class ItemStaff extends Item {
             var descs = harness.generateDescs();
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
-                new MsgOpenSpellGuiAck(hand, patterns, descs.getFirst(), descs.getSecond(), descs.getThird(),
-                    harness.getParenCount()));
+                new MsgOpenSpellGuiAck(hand, patterns, descs.getFirst(), descs.getSecond(),
+                    0)); // TODO: Fix!
         }
 
         player.awardStat(Stats.ITEM_USED.get(this));

@@ -39,7 +39,6 @@ data class CastingImage private constructor(
         const val TAG_PARENTHESIZED = "parenthesized"
         const val TAG_ESCAPE_NEXT = "escape_next"
         const val TAG_USERDATA = "userdata"
-        const val TAG_RAVENMIND = "ravenmind"
 
         @JvmStatic
         public fun loadFromNbt(tag: CompoundTag, world: ServerLevel): CastingImage {

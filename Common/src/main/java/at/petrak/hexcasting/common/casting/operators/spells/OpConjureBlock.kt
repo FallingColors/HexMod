@@ -53,14 +53,14 @@ class OpConjureBlock(val light: Boolean) : SpellAction {
             if (worldState.canBeReplaced(placeContext)) {
                 val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
 
-                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(block), ctx.caster))
+                if (ctx.caster != null && !IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(block), ctx.caster))
                     return
 
                 val state = block.getStateForPlacement(placeContext)
                 if (state != null) {
                     ctx.world.setBlock(pos, state, 5)
 
-                    val colorizer = IXplatAbstractions.INSTANCE.getColorizer(ctx.caster)
+                    val colorizer = ctx.colorizer
 
                     if (ctx.world.getBlockState(pos).block is BlockConjured) {
                         BlockConjured.setColor(ctx.world, pos, colorizer)

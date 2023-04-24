@@ -19,6 +19,8 @@ object OpColorize : SpellAction {
         ctx: CastingEnvironment
     ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
         val (handStack, hand) = ctx.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isColorizer)
+                ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, null, "colorizer") // TODO: hack
+
         if (!IXplatAbstractions.INSTANCE.isColorizer(handStack)) {
             throw MishapBadOffhandItem.of(
                 handStack,
@@ -26,6 +28,7 @@ object OpColorize : SpellAction {
                 "colorizer"
             )
         }
+
         return Triple(
             Spell(handStack),
             MediaConstants.DUST_UNIT,
