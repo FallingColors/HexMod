@@ -22,10 +22,16 @@ object OpPrint : Action {
             throw MishapNotEnoughArgs(1, 0)
         }
         val datum = stack[stack.lastIndex]
+
+
         return OperationResult(
-            stack, userData, listOf(
-            OperatorSideEffect.AttemptSpell(Spell(datum), hasCastingSound = false, awardStat = false)
-        ), continuation
+            stack,
+            userData,
+            listOf(
+                OperatorSideEffect.AttemptSpell(Spell(datum), hasCastingSound = false, awardStat = false)
+            ),
+            continuation,
+            1,
         )
     }
 

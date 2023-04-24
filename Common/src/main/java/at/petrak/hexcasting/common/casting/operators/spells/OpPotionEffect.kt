@@ -20,7 +20,7 @@ class OpPotionEffect(
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val target = args.getLivingEntityButNotArmorStand(0, argc)
         val duration = args.getPositiveDouble(1, argc)
         val potency = if (this.allowPotency)
@@ -34,7 +34,7 @@ class OpPotionEffect(
         } else {
             potency * potency
         }
-        return Triple(
+        return SpellAction.Result(
             Spell(effect, target, duration, potency),
             cost.toInt(),
             listOf(ParticleSpray.cloud(target.position().add(0.0, target.eyeHeight / 2.0, 0.0), 1.0))

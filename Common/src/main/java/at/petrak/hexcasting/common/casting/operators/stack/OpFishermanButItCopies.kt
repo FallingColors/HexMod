@@ -30,6 +30,6 @@ object OpFishermanButItCopies : Action {
             stack.add(stack.size - 1 + depth, lure)
         }
 
-        return OperationResult(stack, userData, listOf(), continuation)
+        return OperationResult(stack, userData, listOf(), continuation, 1)
     }
 }

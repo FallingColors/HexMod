@@ -4,11 +4,12 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.getMob
+import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapAlreadyBrainswept
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBrainsweep
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
@@ -33,11 +34,16 @@ object OpBrainsweep : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+    ): SpellAction.Result {
         val sacrifice = args.getMob(0, argc)
-        val pos = args.getBlockPos(1, argc)
-        ctx.assertVecInRange(pos)
+        val vecPos = args.getVec3(1, argc)
+        val pos = BlockPos(vecPos)
+
+        ctx.assertVecInRange(vecPos)
         ctx.assertEntityInRange(sacrifice)
+
+        if (!ctx.canEditBlockAt(pos))
+            throw MishapBadLocation(vecPos, "forbidden")
 
         if (sacrifice.type.`is`(HexTags.Entities.NO_BRAINSWEEPING))
             throw MishapBadBrainsweep(sacrifice, pos)
@@ -47,15 +53,12 @@ object OpBrainsweep : SpellAction {
 
         val state = ctx.world.getBlockState(pos)
 
-        if (!ctx.canEditBlockAt(pos))
-            return null
-
         val recman = ctx.world.recipeManager
         val recipes = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)
         val recipe = recipes.find { it.matches(state, sacrifice, ctx.world) }
             ?: throw MishapBadBrainsweep(sacrifice, pos)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(pos, state, sacrifice, recipe),
             recipe.mediaCost,
             listOf(ParticleSpray.cloud(sacrifice.position(), 1.0), ParticleSpray.burst(Vec3.atCenterOf(pos), 0.3, 100))

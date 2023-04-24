@@ -12,5 +12,6 @@ data class OperationResult(
     val newStack: List<Iota>,
     val newUserdata: CompoundTag,
     val sideEffects: List<OperatorSideEffect>,
-    val newContinuation: SpellContinuation
+    val newContinuation: SpellContinuation,
+    val opsUsed: Long,
 )

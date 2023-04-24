@@ -18,6 +18,11 @@ interface ConstMediaAction : Action {
 
     fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota>
 
+    fun executeWithOpCount(args: List<Iota>, env: CastingEnvironment): CostMediaActionResult {
+        val stack = this.execute(args, env)
+        return CostMediaActionResult(stack)
+    }
+
     override fun operate(
         env: CastingEnvironment,
         stack: MutableList<Iota>,
@@ -28,11 +33,13 @@ interface ConstMediaAction : Action {
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         repeat(this.argc) { stack.removeLast() }
-        val newData = this.execute(args, env)
-        stack.addAll(newData)
+        val result = this.executeWithOpCount(args, env)
+        stack.addAll(result.resultStack)
 
         val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMedia(this.mediaCost))
 
-        return OperationResult(stack, userData, sideEffects, continuation)
+        return OperationResult(stack, userData, sideEffects, continuation, result.opCount)
     }
+
+    data class CostMediaActionResult(val resultStack: List<Iota>, val opCount: Long = 1)
 }

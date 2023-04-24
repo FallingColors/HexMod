@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getBlockPos
+import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -24,14 +24,15 @@ object OpDestroyFluid : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getBlockPos(0, argc)
-        ctx.assertVecInRange(target)
+    ): SpellAction.Result {
+        val vecPos = args.getVec3(0, argc)
+        val pos = BlockPos(vecPos)
+        ctx.assertPosInRangeForEditing(pos)
 
-        return Triple(
-            Spell(target),
+        return SpellAction.Result(
+            Spell(pos),
             2 * MediaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(target), 3.0))
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 3.0))
         )
     }
 
@@ -40,17 +41,14 @@ object OpDestroyFluid : SpellAction {
     private data class Spell(val basePos: BlockPos) : RenderedSpell {
 
         override fun cast(ctx: CastingEnvironment) {
-
             // Try draining from fluid handlers first, and if so, don't do the normal behavior
-            if (ctx.canEditBlockAt(basePos)) {
-                if (IXplatAbstractions.INSTANCE.drainAllFluid(ctx.world, basePos)) {
+            if (IXplatAbstractions.INSTANCE.drainAllFluid(ctx.world, basePos)) {
+                return
+            } else {
+                val state = ctx.world.getBlockState(basePos)
+                if (state.block is AbstractCauldronBlock && state.block != Blocks.CAULDRON) {
+                    ctx.world.setBlock(basePos, Blocks.CAULDRON.defaultBlockState(), 3)
                     return
-                } else {
-                    val state = ctx.world.getBlockState(basePos)
-                    if (state.block is AbstractCauldronBlock && state.block != Blocks.CAULDRON) {
-                        ctx.world.setBlock(basePos, Blocks.CAULDRON.defaultBlockState(), 3)
-                        return
-                    }
                 }
             }
 

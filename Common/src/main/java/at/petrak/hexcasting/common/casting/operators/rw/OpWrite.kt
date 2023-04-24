@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.casting.operators.rw
 
 import at.petrak.hexcasting.api.addldata.ADIotaHolder
-import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
@@ -17,7 +16,7 @@ object OpWrite : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val datum = args[0]
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
@@ -36,7 +35,7 @@ object OpWrite : SpellAction {
         if (trueName != null)
             throw MishapOthersName(trueName)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(datum, datumHolder),
             0,
             listOf()

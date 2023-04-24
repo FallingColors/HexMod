@@ -82,7 +82,8 @@ public class PatternIota extends Iota {
                     key = perWorld.key;
                 }
 
-                var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key, HexTags.Actions.REQUIRES_ENLIGHTENMENT);
+                var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key,
+                    HexTags.Actions.REQUIRES_ENLIGHTENMENT);
 
                 castedName = HexAPI.instance().getActionI18n(key, reqsEnlightenment);
 
@@ -94,23 +95,16 @@ public class PatternIota extends Iota {
                 throw new MishapInvalidPattern();
             } else throw new IllegalStateException();
 
-            var opCount = 0;
-            if (vm.getImage().getUserData().contains(HexAPI.OP_COUNT_USERDATA)) {
-                opCount = vm.getImage().getUserData().getInt(HexAPI.OP_COUNT_USERDATA);
-            } else
-                vm.getImage().getUserData().putInt(HexAPI.OP_COUNT_USERDATA, 0);
-
-            if (opCount + 1 > HexConfig.server().maxOpCount()) {
+            var result = action.operate(
+                vm.getEnv(),
+                new ArrayList<>(vm.getImage().getStack()),
+                vm.getImage().getUserData().copy(),
+                continuation
+            );
+            var opsUsed = result.getOpsUsed();
+            if (vm.getImage().getOpsConsumed() + opsUsed > HexConfig.server().maxOpCount()) {
                 throw new MishapEvalTooMuch();
             }
-            vm.getImage().getUserData().putInt(HexAPI.OP_COUNT_USERDATA, opCount + 1);
-
-            var result = action.operate(
-                    vm.getEnv(),
-                    new ArrayList<>(vm.getImage().getStack()),
-                    vm.getImage().getUserData().copy(),
-                    continuation
-            );
 
             var cont2 = result.getNewContinuation();
             var stack2 = result.getNewStack();
@@ -118,24 +112,27 @@ public class PatternIota extends Iota {
             // TODO parens also break prescience
             var sideEffects = result.getSideEffects();
 
-            var hereFd = vm.getImage();
-            hereFd = hereFd.copy(stack2, hereFd.getParenCount(), hereFd.getParenthesized(), hereFd.getEscapeNext(), userData2);
+            var extantImage = vm.getImage();
+            var updatedImage = extantImage.copy(stack2,
+                extantImage.getParenCount(), extantImage.getParenthesized(), extantImage.getEscapeNext(),
+                extantImage.getOpsConsumed() + opsUsed,
+                userData2);
 
             return new CastResult(
-                    cont2,
-                    hereFd,
-                    sideEffects,
-                    ResolvedPatternType.EVALUATED,
-                    vm.getEnv().getSoundType()
-                    );
+                cont2,
+                updatedImage,
+                sideEffects,
+                ResolvedPatternType.EVALUATED,
+                vm.getEnv().getSoundType()
+            );
 
         } catch (Mishap mishap) {
             return new CastResult(
-                    continuation,
-                    null,
-                    List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName))),
-                    mishap.resolutionType(vm.getEnv()),
-                    HexEvalSounds.MISHAP
+                continuation,
+                null,
+                List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName))),
+                mishap.resolutionType(vm.getEnv()),
+                HexEvalSounds.MISHAP
             );
         }
     }

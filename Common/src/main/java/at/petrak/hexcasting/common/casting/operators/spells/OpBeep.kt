@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.network.MsgBeepAck
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
@@ -17,13 +17,13 @@ object OpBeep : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val target = args.getVec3(0, argc)
         val instrument = args.getPositiveIntUnder(1, NoteBlockInstrument.values().size, argc)
         val note = args.getPositiveIntUnderInclusive(2, 24, argc) // mojang don't have magic numbers challenge
         ctx.assertVecInRange(target)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(target, note, NoteBlockInstrument.values()[instrument]),
             MediaConstants.DUST_UNIT / 10,
             listOf(ParticleSpray.cloud(target, 1.0))

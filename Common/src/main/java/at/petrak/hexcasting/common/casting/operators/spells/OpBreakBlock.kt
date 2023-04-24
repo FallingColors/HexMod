@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getBlockPos
+import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
@@ -19,11 +19,12 @@ object OpBreakBlock : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val pos = args.getBlockPos(0, argc)
-        ctx.assertVecInRange(pos)
+    ): SpellAction.Result {
+        val vecPos = args.getVec3(0, argc)
+        val pos = BlockPos(vecPos)
+        ctx.assertPosInRangeForEditing(pos)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(pos),
             MediaConstants.DUST_UNIT / 8,
             listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
@@ -32,15 +33,8 @@ object OpBreakBlock : SpellAction {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
-            if (!ctx.canEditBlockAt(pos))
-                return
-
             val blockstate = ctx.world.getBlockState(pos)
-            if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, pos, blockstate, ctx.caster))
-                return
-
-            val tier =
-                HexConfig.server().opBreakHarvestLevel()
+            val tier = HexConfig.server().opBreakHarvestLevel()
 
             if (
                 !blockstate.isAir

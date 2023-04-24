@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
@@ -8,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -29,21 +29,22 @@ object OpPlaceBlock : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+    ): SpellAction.Result {
         val pos = args.getBlockPos(0, argc)
-        ctx.assertVecInRange(pos)
+        ctx.assertPosInRangeForEditing(pos)
 
         val blockHit = BlockHitResult(
             Vec3.atCenterOf(pos), ctx.caster?.direction ?: Direction.NORTH, pos, false
         )
-        val itemUseCtx = ctx.caster?.let { UseOnContext(it, ctx.castingHand, blockHit) } ?: return null
+        val itemUseCtx = ctx.caster?.let { UseOnContext(it, ctx.castingHand, blockHit) }
+            ?: throw NotImplementedError("how to implement this")
         val placeContext = BlockPlaceContext(itemUseCtx)
 
         val worldState = ctx.world.getBlockState(pos)
         if (!worldState.canBeReplaced(placeContext))
             throw MishapBadBlock.of(pos, "replaceable")
 
-        return Triple(
+        return SpellAction.Result(
             Spell(pos),
             MediaConstants.DUST_UNIT / 8,
             listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
@@ -52,9 +53,6 @@ object OpPlaceBlock : SpellAction {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
-            if (!ctx.canEditBlockAt(pos))
-                return
-
             val caster = ctx.caster ?: return // TODO: Fix!
 
             val blockHit = BlockHitResult(

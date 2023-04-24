@@ -16,6 +16,6 @@ object OpStackSize : Action {
         continuation: SpellContinuation
     ): OperationResult {
         stack.add(DoubleIota(stack.size.toDouble()))
-        return OperationResult(stack, userData, listOf(), continuation)
+        return OperationResult(stack, userData, listOf(), continuation, 1)
     }
 }

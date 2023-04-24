@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.common.casting.operators.akashic
 
-import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.getBlockPos
+import at.petrak.hexcasting.api.casting.getPattern
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapNoAkashicRecord
@@ -19,12 +21,12 @@ object OpAkashicWrite : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val pos = args.getBlockPos(0, argc)
         val key = args.getPattern(1, argc)
         val datum = args.get(2)
 
-        ctx.assertVecInRange(pos)
+        ctx.assertPosInRange(pos)
 
         val record = ctx.world.getBlockState(pos).block
         if (record !is BlockAkashicRecord) {
@@ -35,7 +37,7 @@ object OpAkashicWrite : SpellAction {
         if (trueName != null)
             throw MishapOthersName(trueName)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(record, pos, key, datum),
             MediaConstants.DUST_UNIT,
             listOf()

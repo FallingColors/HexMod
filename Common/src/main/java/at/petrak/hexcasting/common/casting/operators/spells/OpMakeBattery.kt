@@ -25,11 +25,11 @@ object OpMakeBattery : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexTags.Items.PHIAL_BASE) }
-                ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "bottle") // TODO: hack
+            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "bottle") // TODO: hack
 
         if (hand == null)
             throw MishapBadOffhandItem.of(handStack, null, "havent_handled_null_hand_yet") // TODO: hack!
@@ -63,8 +63,11 @@ object OpMakeBattery : SpellAction {
             )
         }
 
-        return Triple(Spell(entity, hand),
-            MediaConstants.CRYSTAL_UNIT, listOf(ParticleSpray.burst(entity.position(), 0.5)))
+        return SpellAction.Result(
+            Spell(entity, hand),
+            MediaConstants.CRYSTAL_UNIT,
+            listOf(ParticleSpray.burst(entity.position(), 0.5))
+        )
     }
 
     private data class Spell(val itemEntity: ItemEntity, val hand: InteractionHand) : RenderedSpell {

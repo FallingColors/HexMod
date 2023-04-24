@@ -8,6 +8,7 @@ public class GravityApiInterop {
     }
 
     public static boolean isActive() {
-        return IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.GRAVITY_CHANGER_API_ID);
+        return IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.GRAVITY_CHANGER_API_ID)
+            || IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.GRAVITY_CHANGER_API_ID_POST_119_OR_SOMETHING);
     }
 }

@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.phys.Vec3
 
-class MishapLocationTooFarAway(val location: Vec3, val type: String = "too_far") : Mishap() {
+class MishapBadLocation(val location: Vec3, val type: String = "too_far") : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer =
         dyeColor(DyeColor.MAGENTA)
 

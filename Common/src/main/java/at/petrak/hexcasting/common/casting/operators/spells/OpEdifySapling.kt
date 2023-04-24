@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getBlockPos
+import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -20,13 +20,16 @@ object OpEdifySapling : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val pos = args.getBlockPos(0, argc)
+    ): SpellAction.Result {
+        val vecPos = args.getVec3(0, argc)
+        val pos = BlockPos(vecPos)
+        ctx.assertPosInRangeForEditing(pos)
+
         val bs = ctx.world.getBlockState(pos)
         if (!bs.`is`(BlockTags.SAPLINGS))
             throw MishapBadBlock.of(pos, "sapling")
 
-        return Triple(
+        return SpellAction.Result(
             Spell(pos),
             MediaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray(Vec3.atCenterOf(pos), Vec3(0.0, 2.0, 0.0), 0.1, Math.PI / 4, 100))

@@ -45,6 +45,6 @@ object OpFisherman : Action {
         }
 
 
-        return OperationResult(stack, userData, listOf(), continuation)
+        return OperationResult(stack, userData, listOf(), continuation, 1)
     }
 }

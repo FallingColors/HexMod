@@ -20,11 +20,11 @@ interface SpellAction : Action {
     fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>>?
+    ): Result
 
     fun executeWithUserdata(
         args: List<Iota>, ctx: CastingEnvironment, userData: CompoundTag
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+    ): Result {
         return this.execute(args, ctx)
     }
 
@@ -38,27 +38,26 @@ interface SpellAction : Action {
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
-        val executeResult = this.executeWithUserdata(args, env, userData)
-            ?: return OperationResult(stack, userData, listOf(), continuation)
-        val (spell, media, particles) = executeResult
+        val result = this.executeWithUserdata(args, env, userData)
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
-        if (media > 0)
-            sideEffects.add(OperatorSideEffect.ConsumeMedia(media))
+        if (result.cost > 0)
+            sideEffects.add(OperatorSideEffect.ConsumeMedia(result.cost))
 
         sideEffects.add(
             OperatorSideEffect.AttemptSpell(
-                spell,
+                result.effect,
                 this.hasCastingSound(env),
                 this.awardsCastingStat(env)
             )
         )
 
-        for (spray in particles)
+        for (spray in result.particles)
             sideEffects.add(OperatorSideEffect.Particles(spray))
 
-        return OperationResult(stack, userData, sideEffects, continuation)
+        return OperationResult(stack, userData, sideEffects, continuation, result.opCount)
     }
 
+    data class Result(val effect: RenderedSpell, val cost: Int, val particles: List<ParticleSpray>, val opCount: Long = 1)
 }

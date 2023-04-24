@@ -17,11 +17,11 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val target = args.getVec3(0, argc)
         ctx.assertVecInRange(target)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(target, this.extendsRange),
             MediaConstants.DUST_UNIT * if (extendsRange) 2 else 1,
             listOf(ParticleSpray.burst(target, 2.0))

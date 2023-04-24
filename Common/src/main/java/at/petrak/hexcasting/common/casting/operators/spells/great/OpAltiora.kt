@@ -19,11 +19,11 @@ import kotlin.math.max
 object OpAltiora : SpellAction {
     override val argc = 1
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    override fun execute(args: List<Iota>, ctx: CastingEnvironment): SpellAction.Result {
         val target = args.getPlayer(0, argc)
         ctx.assertEntityInRange(target)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(target),
             MediaConstants.CRYSTAL_UNIT,
             listOf(
@@ -43,6 +43,7 @@ object OpAltiora : SpellAction {
         }
     }
 
+    // TODO: this sends a packet to the player every tick. I need to find out what the monotonically increasing time value is
     @JvmStatic
     fun checkPlayerCollision(player: ServerPlayer) {
         val altiora = IXplatAbstractions.INSTANCE.getAltiora(player);

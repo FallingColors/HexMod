@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.ktxt.UseOnContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -23,11 +23,11 @@ object OpIgnite : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val target = args.getBlockPos(0, argc)
-        ctx.assertVecInRange(target)
+        ctx.assertPosInRangeForEditing(target)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(target),
             MediaConstants.DUST_UNIT,
             listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
@@ -36,9 +36,6 @@ object OpIgnite : SpellAction {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
-            if (!ctx.canEditBlockAt(pos))
-                return
-
             // help
             if (!tryToClick(ctx, pos, Items.FIRE_CHARGE)) {
                 tryToClick(ctx, pos, Items.FLINT_AND_STEEL)
@@ -47,15 +44,15 @@ object OpIgnite : SpellAction {
 
         fun tryToClick(ctx: CastingEnvironment, pos: BlockPos, item: Item): Boolean {
             return IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(item), ctx.caster) &&
-                    item.useOn(
-                        UseOnContext(
-                            ctx.world,
-                            null,
-                            InteractionHand.MAIN_HAND,
-                            ItemStack(item),
-                            BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)
-                        )
-                    ).consumesAction()
+                item.useOn(
+                    UseOnContext(
+                        ctx.world,
+                        null,
+                        InteractionHand.MAIN_HAND,
+                        ItemStack(item),
+                        BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)
+                    )
+                ).consumesAction()
         }
     }
 }

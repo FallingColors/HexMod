@@ -30,6 +30,6 @@ object OpHalt : Action {
             newStack = listOf()
         }
 
-        return OperationResult(newStack, userData, listOf(), newCont)
+        return OperationResult(newStack, userData, listOf(), newCont, 1)
     }
 }

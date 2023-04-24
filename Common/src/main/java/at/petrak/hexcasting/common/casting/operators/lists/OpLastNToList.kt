@@ -28,6 +28,6 @@ object OpLastNToList : Action {
         }
         stack.addAll(output.asActionResult)
 
-        return OperationResult(stack, userData, listOf(), continuation)
+        return OperationResult(stack, userData, listOf(), continuation, 1)
     }
 }

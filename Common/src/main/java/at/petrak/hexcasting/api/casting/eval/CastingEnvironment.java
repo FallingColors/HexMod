@@ -4,9 +4,9 @@ import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
-import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.utils.HexUtils;
@@ -125,15 +125,21 @@ public abstract class CastingEnvironment {
     /**
      * Convenience function to throw if the vec is out of the caster's range or the world
      */
-    public final void assertVecInRange(Vec3 vec) throws MishapLocationTooFarAway {
+    public final void assertVecInRange(Vec3 vec) throws MishapBadLocation {
         this.assertVecInWorld(vec);
         if (!this.isVecInRange(vec)) {
-            throw new MishapLocationTooFarAway(vec, "too_far");
+            throw new MishapBadLocation(vec, "too_far");
         }
     }
 
-    public final void assertVecInRange(BlockPos vec) throws MishapLocationTooFarAway {
+    public final void assertPosInRange(BlockPos vec) throws MishapBadLocation {
         this.assertVecInRange(new Vec3(vec.getX(), vec.getY(), vec.getZ()));
+    }
+
+    public final void assertPosInRangeForEditing(BlockPos vec) throws MishapBadLocation {
+        this.assertVecInRange(new Vec3(vec.getX(), vec.getY(), vec.getZ()));
+        if (!this.canEditBlockAt(vec))
+            throw new MishapBadLocation(Vec3.atCenterOf(vec), "forbidden");
     }
 
     public final boolean canEditBlockAt(BlockPos vec) {
@@ -155,9 +161,9 @@ public abstract class CastingEnvironment {
     /**
      * Convenience function to throw if the vec is out of the world (for GTP)
      */
-    public final void assertVecInWorld(Vec3 vec) throws MishapLocationTooFarAway {
+    public final void assertVecInWorld(Vec3 vec) throws MishapBadLocation {
         if (!this.isVecInWorld(vec)) {
-            throw new MishapLocationTooFarAway(vec, "out_of_world");
+            throw new MishapBadLocation(vec, "out_of_world");
         }
     }
 

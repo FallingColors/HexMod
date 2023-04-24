@@ -49,7 +49,8 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
             stack,
             userData,
             listOf(),
-            continuation
+            continuation,
+            1
         )
     }
 

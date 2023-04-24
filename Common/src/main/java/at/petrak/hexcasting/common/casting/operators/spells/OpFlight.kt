@@ -29,7 +29,7 @@ class OpFlight(val type: Type) : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val target = args.getPlayer(0, argc)
         val theArg = args.getPositiveDouble(1, argc)
         ctx.assertEntityInRange(target)
@@ -41,7 +41,7 @@ class OpFlight(val type: Type) : SpellAction {
         }.roundToInt()
 
         // Convert to ticks
-        return Triple(
+        return SpellAction.Result(
             Spell(this.type, target, theArg),
             cost,
             listOf(ParticleSpray(target.position(), Vec3(0.0, 2.0, 0.0), 0.0, 0.1))

@@ -22,6 +22,6 @@ object OpPushLocal : Action {
         val newLocal = stack.removeLast()
         userData.put(HexAPI.RAVENMIND_USERDATA, newLocal.serialize())
 
-        return OperationResult(stack, userData, listOf(), continuation)
+        return OperationResult(stack, userData, listOf(), continuation, 1)
     }
 }

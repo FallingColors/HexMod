@@ -31,7 +31,8 @@ object OpForEach : Action {
             stack,
             userData,
             listOf(),
-            continuation.pushFrame(frame)
+            continuation.pushFrame(frame),
+            1
         )
     }
 }
