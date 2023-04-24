@@ -201,9 +201,9 @@ public class HexBlocks {
     public static final SlabBlock EDIFIED_SLAB = blockItem("edified_slab",
         new BlockHexSlab(edifiedWoody().noOcclusion()));
     public static final WoodButtonBlock EDIFIED_BUTTON = blockItem("edified_button",
-        new BlockHexWoodButton(edifiedWoody().noOcclusion()));
+        new BlockHexWoodButton(edifiedWoody().noOcclusion().noCollission()));
     public static final PressurePlateBlock EDIFIED_PRESSURE_PLATE = blockItem("edified_pressure_plate",
-        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, edifiedWoody().noOcclusion()));
+        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, edifiedWoody().noOcclusion().noCollission()));
     public static final BlockAkashicLeaves AMETHYST_EDIFIED_LEAVES = blockItem("amethyst_edified_leaves",
         new BlockAkashicLeaves(leaves(MaterialColor.COLOR_PURPLE)));
     public static final BlockAkashicLeaves AVENTURINE_EDIFIED_LEAVES = blockItem("aventurine_edified_leaves",
