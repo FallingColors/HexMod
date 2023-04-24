@@ -7,28 +7,28 @@ public interface ADMediaHolder {
     /**
      * Use {@code withdrawMedia(-1, true)}
      *
-     * @see ADMediaHolder#withdrawMedia(int, boolean)
+     * @see ADMediaHolder#withdrawMedia(long, boolean)
      */
     @ApiStatus.OverrideOnly
-    int getMedia();
+    long getMedia();
 
     /**
      * Use {@code withdrawMedia(-1, true) + insertMedia(-1, true)} where possible
      *
-     * @see ADMediaHolder#insertMedia(int, boolean)
-     * @see ADMediaHolder#withdrawMedia(int, boolean)
+     * @see ADMediaHolder#insertMedia(long, boolean)
+     * @see ADMediaHolder#withdrawMedia(long, boolean)
      */
     @ApiStatus.OverrideOnly
-    int getMaxMedia();
+    long getMaxMedia();
 
     /**
      * Use {@code insertMedia(media - withdrawMedia(-1, true), false)} where possible
      *
-     * @see ADMediaHolder#insertMedia(int, boolean)
-     * @see ADMediaHolder#withdrawMedia(int, boolean)
+     * @see ADMediaHolder#insertMedia(long, boolean)
+     * @see ADMediaHolder#withdrawMedia(long, boolean)
      */
     @ApiStatus.OverrideOnly
-    void setMedia(int media);
+    void setMedia(long media);
 
     /**
      * Whether this media holder can have media inserted into it.
@@ -63,7 +63,7 @@ public interface ADMediaHolder {
      * <p>
      * Withdrawing a negative amount will act as though you attempted to withdraw as much media as the holder contains.
      */
-    default int withdrawMedia(int cost, boolean simulate) {
+    default long withdrawMedia(long cost, boolean simulate) {
         var mediaHere = getMedia();
         if (cost < 0) {
             cost = mediaHere;
@@ -83,9 +83,9 @@ public interface ADMediaHolder {
      * Inserting a negative amount will act as though you attempted to insert exactly as much media as the holder was
      * missing.
      */
-    default int insertMedia(int amount, boolean simulate) {
+    default long insertMedia(long amount, boolean simulate) {
         var mediaHere = getMedia();
-        int emptySpace = getMaxMedia() - mediaHere;
+        long emptySpace = getMaxMedia() - mediaHere;
         if (emptySpace <= 0) {
             return 0;
         }
@@ -93,7 +93,7 @@ public interface ADMediaHolder {
             amount = emptySpace;
         }
 
-        int inserting = Math.min(amount, emptySpace);
+        long inserting = Math.min(amount, emptySpace);
 
         if (!simulate) {
             var newMedia = mediaHere + inserting;

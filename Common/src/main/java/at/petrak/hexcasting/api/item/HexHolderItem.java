@@ -24,7 +24,7 @@ public interface HexHolderItem extends MediaHolderItem {
     @Nullable
     List<Iota> getHex(ItemStack stack, ServerLevel level);
 
-    void writeHex(ItemStack stack, List<Iota> program, int media);
+    void writeHex(ItemStack stack, List<Iota> program, long media);
 
     void clearHex(ItemStack stack);
 }

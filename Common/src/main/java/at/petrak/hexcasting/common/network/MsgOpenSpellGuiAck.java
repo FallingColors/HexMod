@@ -18,7 +18,6 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> patterns,
                                  List<CompoundTag> stack,
-                                 List<CompoundTag> parenthesized,
                                  CompoundTag ravenmind,
                                  int parenCount
 )
@@ -38,12 +37,11 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
         var patterns = buf.readList(fbb -> ResolvedPattern.fromNBT(fbb.readAnySizeNbt()));
 
         var stack = buf.readList(FriendlyByteBuf::readNbt);
-        var parens = buf.readList(FriendlyByteBuf::readNbt);
         var raven = buf.readAnySizeNbt();
 
         var parenCount = buf.readVarInt();
 
-        return new MsgOpenSpellGuiAck(hand, patterns, stack, parens, raven, parenCount);
+        return new MsgOpenSpellGuiAck(hand, patterns, stack, raven, parenCount);
     }
 
     public void serialize(FriendlyByteBuf buf) {
@@ -52,21 +50,17 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
         buf.writeCollection(this.patterns, (fbb, pat) -> fbb.writeNbt(pat.serializeToNBT()));
 
         buf.writeCollection(this.stack, FriendlyByteBuf::writeNbt);
-        buf.writeCollection(this.parenthesized, FriendlyByteBuf::writeNbt);
         buf.writeNbt(this.ravenmind);
 
         buf.writeVarInt(this.parenCount);
     }
 
     public static void handle(MsgOpenSpellGuiAck msg) {
-        Minecraft.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                var mc = Minecraft.getInstance();
-                mc.setScreen(
-                    new GuiSpellcasting(msg.hand(), msg.patterns(), msg.stack, msg.parenthesized, msg.ravenmind,
-                        msg.parenCount));
-            }
+        Minecraft.getInstance().execute(() -> {
+            var mc = Minecraft.getInstance();
+            mc.setScreen(
+                new GuiSpellcasting(msg.hand(), msg.patterns(), msg.stack, msg.ravenmind,
+                    msg.parenCount));
         });
     }
 }

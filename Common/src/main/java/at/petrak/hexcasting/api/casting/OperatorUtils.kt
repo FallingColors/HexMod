@@ -232,7 +232,7 @@ fun List<Iota>.getIntBetween(idx: Int, min: Int, max: Int, argc: Int = 0): Int {
             return rounded
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.between", min, max)
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.between", min, max)
 }
 
 fun List<Iota>.getBlockPos(idx: Int, argc: Int = 0): BlockPos {

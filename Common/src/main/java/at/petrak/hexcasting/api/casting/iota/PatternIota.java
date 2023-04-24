@@ -1,15 +1,39 @@
 package at.petrak.hexcasting.api.casting.iota;
 
+import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
+import at.petrak.hexcasting.api.casting.castables.Action;
+import at.petrak.hexcasting.api.casting.eval.CastResult;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooMuch;
+import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidPattern;
+import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
 public class PatternIota extends Iota {
     public PatternIota(@NotNull HexPattern pattern) {
@@ -41,9 +65,82 @@ public class PatternIota extends Iota {
         return this.getPattern().serializeToNBT();
     }
 
+    @Override
+    public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+        @Nullable Component castedName = null;
+        try {
+            var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), world, false);
+            vm.getEnv().precheckAction(lookup);
+
+            Action action;
+            if (lookup instanceof PatternShapeMatch.Normal || lookup instanceof PatternShapeMatch.PerWorld) {
+                ResourceKey<ActionRegistryEntry> key;
+                if (lookup instanceof PatternShapeMatch.Normal normal) {
+                    key = normal.key;
+                } else {
+                    PatternShapeMatch.PerWorld perWorld = (PatternShapeMatch.PerWorld) lookup;
+                    key = perWorld.key;
+                }
+
+                var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key, HexTags.Actions.REQUIRES_ENLIGHTENMENT);
+
+                castedName = HexAPI.instance().getActionI18n(key, reqsEnlightenment);
+
+                action = Objects.requireNonNull(IXplatAbstractions.INSTANCE.getActionRegistry().get(key)).action();
+            } else if (lookup instanceof PatternShapeMatch.Special special) {
+                castedName = special.handler.getName();
+                action = special.handler.act();
+            } else if (lookup instanceof PatternShapeMatch.Nothing) {
+                throw new MishapInvalidPattern();
+            } else throw new IllegalStateException();
+
+            var opCount = 0;
+            if (vm.getImage().getUserData().contains(HexAPI.OP_COUNT_USERDATA)) {
+                opCount = vm.getImage().getUserData().getInt(HexAPI.OP_COUNT_USERDATA);
+            } else
+                vm.getImage().getUserData().putInt(HexAPI.OP_COUNT_USERDATA, 0);
+
+            if (opCount + 1 > HexConfig.server().maxOpCount()) {
+                throw new MishapEvalTooMuch();
+            }
+            vm.getImage().getUserData().putInt(HexAPI.OP_COUNT_USERDATA, opCount + 1);
+
+            var result = action.operate(
+                    vm.getEnv(),
+                    new ArrayList<>(vm.getImage().getStack()),
+                    vm.getImage().getUserData().copy(),
+                    continuation
+            );
+
+            var cont2 = result.getNewContinuation();
+            var stack2 = result.getNewStack();
+            var userData2 = result.getNewUserdata();
+            // TODO parens also break prescience
+            var sideEffects = result.getSideEffects();
+
+            var hereFd = vm.getImage();
+            hereFd = hereFd.copy(stack2, hereFd.getParenCount(), hereFd.getParenthesized(), hereFd.getEscapeNext(), userData2);
+
+            return new CastResult(
+                    cont2,
+                    hereFd,
+                    sideEffects,
+                    ResolvedPatternType.EVALUATED,
+                    vm.getEnv().getSoundType()
+                    );
+
+        } catch (Mishap mishap) {
+            return new CastResult(
+                    continuation,
+                    null,
+                    List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName))),
+                    mishap.resolutionType(vm.getEnv()),
+                    HexEvalSounds.MISHAP
+            );
+        }
+    }
 
     public static IotaType<PatternIota> TYPE = new IotaType<>() {
-        @Nullable
         @Override
         public PatternIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
             return PatternIota.deserialize(tag);

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.entity;
 
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
@@ -25,11 +25,6 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
 
     public BlockEntityLookingImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlockEntities.IMPETUS_LOOK_TILE, pWorldPosition, pBlockState);
-    }
-
-    @Override
-    public boolean activatorAlwaysInRange() {
-        return false;
     }
 
     // https://github.com/VazkiiMods/Botania/blob/2607bcd31c4eaeb617f7d1b3ec1c1db08f59add4/Common/src/main/java/vazkii/botania/common/block/tile/TileEnderEye.java#L27
@@ -74,7 +69,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
         if (newLook != prevLookAmt) {
             if (newLook == MAX_LOOK_AMOUNT) {
                 self.lookAmount = 0;
-                self.activateSpellCircle(looker);
+                self.startExecution(looker);
             } else {
                 if (newLook % 5 == 1) {
                     var t = (float) newLook / MAX_LOOK_AMOUNT;

@@ -104,6 +104,11 @@ public abstract class CastingEnvironment {
      */
     public abstract boolean isVecInRange(Vec3 vec);
 
+    /**
+     * Return whether the caster can edit blocks at the given permission (i.e. not adventure mode, etc.)
+     */
+    public abstract boolean hasEditPermissionsAt(BlockPos vec);
+
     public final boolean isVecInWorld(Vec3 vec) {
         return this.world.isInWorldBounds(new BlockPos(vec))
             && this.world.getWorldBorder().isWithinBounds(vec.x, vec.z, 0.5);
@@ -122,7 +127,7 @@ public abstract class CastingEnvironment {
      */
     public final void assertVecInRange(Vec3 vec) throws MishapLocationTooFarAway {
         this.assertVecInWorld(vec);
-        if (this.isVecInRange(vec)) {
+        if (!this.isVecInRange(vec)) {
             throw new MishapLocationTooFarAway(vec, "too_far");
         }
     }
@@ -132,8 +137,7 @@ public abstract class CastingEnvironment {
     }
 
     public final boolean canEditBlockAt(BlockPos vec) {
-        // TODO winfy: fill this in
-        return false;
+        return this.isVecInRange(Vec3.atCenterOf(vec)) && this.hasEditPermissionsAt(vec);
     }
 
     /**
@@ -143,7 +147,7 @@ public abstract class CastingEnvironment {
         if (!this.isVecInWorld(e.position())) {
             throw new MishapEntityTooFarAway(e);
         }
-        if (this.isVecInRange(e.position())) {
+        if (!this.isVecInRange(e.position())) {
             throw new MishapEntityTooFarAway(e);
         }
     }
@@ -157,10 +161,10 @@ public abstract class CastingEnvironment {
         }
     }
 
-    public abstract InteractionHand castingHand();
+    public abstract InteractionHand getCastingHand();
 
-    public InteractionHand otherHand() {
-        return HexUtils.otherHand(this.castingHand());
+    public InteractionHand getOtherHand() {
+        return HexUtils.otherHand(this.getCastingHand());
     }
 
     /**
@@ -177,6 +181,11 @@ public abstract class CastingEnvironment {
     protected abstract List<ItemStack> getUsableStacks(StackDiscoveryMode mode);
 
     /**
+     * Get the primary/secondary item stacks this env can use (i.e. main hand and offhand for the player).
+     */
+    protected abstract List<HeldItemInfo> getPrimaryStacks();
+
+    /**
      * Return the slot from which to take blocks and items.
      */
     @Nullable
@@ -191,12 +200,12 @@ public abstract class CastingEnvironment {
         return null;
     }
 
-    public static record HeldItemInfo(ItemStack stack, InteractionHand hand) {
+    public static record HeldItemInfo(ItemStack stack, @Nullable InteractionHand hand) {
         public ItemStack component1() {
             return stack;
         }
 
-        public InteractionHand component2() {
+        public @Nullable InteractionHand component2() {
             return hand;
         }
     }
@@ -205,9 +214,14 @@ public abstract class CastingEnvironment {
      * Return the slot from which to take blocks and items.
      */
     // TODO winfy: resolve the null here
-    // @Nullable
-    public HeldItemInfo getHeldItemToOperateOn(Predicate<ItemStack> stackOk) {
-        // TODO winfy: return something properly
+    public @Nullable HeldItemInfo getHeldItemToOperateOn(Predicate<ItemStack> stackOk) {
+        var stacks = this.getPrimaryStacks();
+        for (HeldItemInfo stack : stacks) {
+            if (stackOk.test(stack.stack)) {
+                return stack;
+            }
+        }
+
         return null;
     }
 

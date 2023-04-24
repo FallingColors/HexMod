@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.world.item.ItemStack
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpWrite : SpellAction {
@@ -23,7 +24,7 @@ object OpWrite : SpellAction {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
             datumHolder != null && datumHolder.writeIota(datum, true)
-        }
+        } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "iota.write") // TODO: hack
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.write")

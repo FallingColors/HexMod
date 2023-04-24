@@ -15,7 +15,7 @@ object OpWritable : ConstMediaAction {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
             datumHolder != null
-        }
+        } ?: return false.asActionResult
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack) ?: return false.asActionResult
         val success = datumHolder.writeIota(NullIota(), true)

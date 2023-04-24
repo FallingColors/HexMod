@@ -80,7 +80,7 @@ public interface IXplatAbstractions {
 
     void setColorizer(Player target, FrozenColorizer colorizer);
 
-    void setSentinel(Player target, Sentinel sentinel);
+    void setSentinel(Player target, @Nullable Sentinel sentinel);
 
     void setFlight(ServerPlayer target, @Nullable FlightAbility flight);
 
@@ -96,7 +96,7 @@ public interface IXplatAbstractions {
 
     FrozenColorizer getColorizer(Player player);
 
-    Sentinel getSentinel(Player player);
+    @Nullable Sentinel getSentinel(Player player);
 
     CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand);
 

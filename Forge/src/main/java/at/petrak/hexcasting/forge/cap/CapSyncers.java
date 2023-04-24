@@ -29,7 +29,7 @@ public class CapSyncers {
         x.setAltiora(player, x.getAltiora(proto));
         x.setSentinel(player, x.getSentinel(proto));
         x.setColorizer(player, x.getColorizer(proto));
-        x.setStaffcastImage(player, x.getStaffcastVM(proto, InteractionHand.MAIN_HAND));
+        x.setStaffcastImage(player, x.getStaffcastVM(proto, InteractionHand.MAIN_HAND).getImage());
         x.setPatterns(player, x.getPatternsSavedInUi(proto));
     }
 

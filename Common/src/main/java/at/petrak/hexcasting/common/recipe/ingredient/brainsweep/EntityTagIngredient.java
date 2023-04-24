@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,6 +12,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
         boolean moddersDidAGoodJob = I18n.exists(key);
         return moddersDidAGoodJob
             ? Component.translatable(key)
-            : Component.literal("#" + this.entityTypeTag.location().toString());
+            : Component.literal("#" + this.entityTypeTag.location());
     }
 
     @Override
@@ -55,10 +55,10 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
         var out = new ArrayList<Component>();
         out.add(moddersDidAGoodJob
             ? Component.translatable(key)
-            : Component.literal("#" + loc.toString()));
+            : Component.literal("#" + loc));
         if (advanced && moddersDidAGoodJob) {
             // Print it anyways
-            out.add(Component.literal("#" + loc.toString()).withStyle(ChatFormatting.DARK_GRAY));
+            out.add(Component.literal("#" + loc).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         out.add(BrainsweepeeIngredient.getModNameComponent(loc.getNamespace()));
@@ -67,7 +67,7 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
-    public Entity exampleEntity(ClientLevel level) {
+    public Entity exampleEntity(Level level) {
         var someEntityTys = Registry.ENTITY_TYPE.getTagOrEmpty(this.entityTypeTag).iterator();
         if (someEntityTys.hasNext()) {
             var someTy = someEntityTys.next();
@@ -96,6 +96,9 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 
     public static EntityTagIngredient deserialize(JsonObject obj) {
         var tagLoc = ResourceLocation.tryParse(GsonHelper.getAsString(obj, "tag"));
+        if (tagLoc == null) {
+            throw new IllegalArgumentException("unknown tag " + obj);
+        }
         var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, tagLoc);
         return new EntityTagIngredient(type);
     }

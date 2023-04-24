@@ -1,11 +1,11 @@
 package at.petrak.hexcasting.common.items.magic;
 
+import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.common.casting.env.PackagedItemCastEnv;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -74,7 +74,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<Iota> program, int media) {
+    public void writeHex(ItemStack stack, List<Iota> program, long media) {
         ListTag patsTag = new ListTag();
         for (Iota pat : program) {
             patsTag.add(IotaType.serialize(pat));
@@ -110,7 +110,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var sPlayer = (ServerPlayer) player;
         var ctx = new PackagedItemCastEnv(sPlayer, usedHand);
         var harness = CastingVM.empty(ctx);
-        harness.queueAndExecuteIotas(instrs, sPlayer.getLevel());
+        harness.queueExecuteAndWrapIotas(instrs, sPlayer.getLevel());
 
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 

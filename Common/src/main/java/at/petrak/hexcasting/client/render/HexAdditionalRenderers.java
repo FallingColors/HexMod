@@ -36,7 +36,7 @@ public class HexAdditionalRenderers {
         var player = Minecraft.getInstance().player;
         if (player != null) {
             var sentinel = IXplatAbstractions.INSTANCE.getSentinel(player);
-            if (sentinel.hasSentinel() && player.getLevel().dimension().equals(sentinel.dimension())) {
+            if (sentinel != null && player.getLevel().dimension().equals(sentinel.dimension())) {
                 renderSentinel(sentinel, player, ps, partialTick);
             }
         }

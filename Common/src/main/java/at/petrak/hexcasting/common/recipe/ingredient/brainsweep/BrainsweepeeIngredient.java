@@ -3,13 +3,13 @@ package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public abstract class BrainsweepeeIngredient {
      * Can return null in case someone did something stupid with a recipe
      */
     @Nullable
-    public abstract Entity exampleEntity(ClientLevel level);
+    public abstract Entity exampleEntity(Level level);
 
     public abstract Type ingrType();
 

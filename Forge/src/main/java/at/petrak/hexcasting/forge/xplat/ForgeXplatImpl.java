@@ -7,9 +7,10 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
@@ -188,10 +189,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setSentinel(Player player, Sentinel sentinel) {
+    public void setSentinel(Player player, @Nullable Sentinel sentinel) {
         CompoundTag tag = player.getPersistentData();
-        tag.putBoolean(TAG_SENTINEL_EXISTS, sentinel.hasSentinel());
-        if (sentinel.hasSentinel()) {
+        tag.putBoolean(TAG_SENTINEL_EXISTS, sentinel == null);
+        if (sentinel != null) {
             tag.putBoolean(TAG_SENTINEL_GREATER, sentinel.extendsRange());
             tag.put(TAG_SENTINEL_POSITION, HexUtils.serializeToNBT(sentinel.position()));
             tag.putString(TAG_SENTINEL_DIMENSION, sentinel.dimension().location().toString());
@@ -207,8 +208,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setStaffcastImage(ServerPlayer player, CastingVM harness) {
-        player.getPersistentData().put(TAG_HARNESS, harness == null ? new CompoundTag() : harness.serializeToNBT());
+    public void setStaffcastImage(ServerPlayer player, @Nullable CastingImage image) {
+        player.getPersistentData().put(TAG_HARNESS, image == null ? new CompoundTag() : image.serializeToNbt());
     }
 
     @Override
@@ -268,14 +269,14 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
             new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
 
-        return new Sentinel(true, extendsRange, position, dimension);
+        return new Sentinel(extendsRange, position, dimension);
     }
 
     @Override
     public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
         // This is always from a staff because we don't need to load the harness when casting from item
-        var ctx = new CastingEnvironment(player, hand, CastingEnvironment.CastSource.STAFF);
-        return CastingVM.fromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
+        var ctx = new StaffCastEnv(player, hand);
+        return new CastingVM(CastingImage.loadFromNbt(player.getPersistentData().getCompound(TAG_HARNESS), player.getLevel()), ctx);
     }
 
     @Override
@@ -396,7 +397,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return ForgeUnsealedIngredient.of(stack);
     }
 
-    private static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() ->
+    private final static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() ->
         new CreativeModeTab(HexAPI.MOD_ID) {
             @Override
             public ItemStack makeIcon() {
@@ -404,8 +405,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             }
 
             @Override
-            public void fillItemList(NonNullList<ItemStack> p_40778_) {
-                super.fillItemList(p_40778_);
+            public void fillItemList(NonNullList<ItemStack> items) {
+                super.fillItemList(items);
             }
         });
 

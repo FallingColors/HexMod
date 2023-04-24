@@ -91,11 +91,13 @@ public abstract class IotaType<T extends Iota> {
                 if (totalEltsFound >= HexIotaTypes.MAX_SERIALIZATION_TOTAL) {
                     return true; // too bad
                 }
-                if (iota instanceof ListIota subsublist) {
+                var subIotas = iota.subIotas();
+                if (subIotas != null) {
                     if (depth + 1 >= HexIotaTypes.MAX_SERIALIZATION_DEPTH) {
                         return true;
                     }
-                    listsToExamine.addLast(new Pair<>(subsublist.getList(), depth + 1));
+
+                    listsToExamine.addLast(new Pair<>(subIotas, depth + 1));
                 }
             }
         }
@@ -105,7 +107,7 @@ public abstract class IotaType<T extends Iota> {
 
     /**
      * This method attempts to find the type from the {@code type} key.
-     * See {@link HexIotaTypes#serialize(Iota)} for the storage format.
+     * See {@link IotaType#serialize(Iota)} for the storage format.
      *
      * @return {@code null} if it cannot get the type.
      */

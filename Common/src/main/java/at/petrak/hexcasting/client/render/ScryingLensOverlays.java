@@ -1,7 +1,8 @@
 package at.petrak.hexcasting.client.render;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.lib.HexBlocks;
@@ -63,7 +64,7 @@ public class ScryingLensOverlays {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
                     var iotaTag = tile.getIotaTag();
                     if (iotaTag != null) {
-                        var display = HexIotaTypes.getDisplay(iotaTag);
+                        var display = IotaType.getDisplay(iotaTag);
                         lines.add(new Pair<>(new ItemStack(Items.BOOK), display));
                     }
                 }

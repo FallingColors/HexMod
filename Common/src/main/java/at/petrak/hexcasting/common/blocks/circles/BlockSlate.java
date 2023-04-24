@@ -2,11 +2,15 @@ package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +35,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
 
 // When on the floor or ceiling FACING is the direction the *bottom* of the pattern points
 // (or which way is "down").
@@ -70,29 +77,42 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos, BlockState bs,
-        Level world) {
-        var thisNormal = this.normalDir(pos, bs, world);
-        return enterDir != thisNormal && normalDir == thisNormal;
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+        HexPattern pattern;
+        if (world.getBlockEntity(pos) instanceof BlockEntitySlate tile) {
+            pattern = tile.pattern;
+        } else {
+            return new ControlFlow.Stop();
+        }
+        
+        var exitDirsSet = this.possibleExitDirections(pos, bs, world);
+        exitDirsSet.remove(enterDir.getOpposite());
+        
+        var exitDirs = exitDirsSet.stream().map((dir) -> this.exitPositionFromDirection(pos, dir));
+
+        if (pattern == null)
+            return new ControlFlow.Continue(imageIn, exitDirs.toList());
+
+        var vm = new CastingVM(imageIn, env);
+
+        vm.queueExecuteAndWrapIota(new PatternIota(pattern), world);
+
+        return new ControlFlow.Continue(vm.getImage(), exitDirs.toList());
     }
 
     @Override
-    public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world) {
+    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+        var thisNormal = this.normalDir(pos, bs, world);
+        return enterDir != thisNormal && enterDir != thisNormal.getOpposite();
+    }
+
+    @Override
+    public EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world) {
         var allDirs = EnumSet.allOf(Direction.class);
         var normal = this.normalDir(pos, bs, world);
         allDirs.remove(normal);
         allDirs.remove(normal.getOpposite());
         return allDirs;
-    }
-
-    @Override
-    public @Nullable
-    HexPattern getPattern(BlockPos pos, BlockState bs, Level world) {
-        if (world.getBlockEntity(pos) instanceof BlockEntitySlate tile) {
-            return tile.pattern;
-        } else {
-            return null;
-        }
     }
 
     @SoftImplement("forge")

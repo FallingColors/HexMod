@@ -1,11 +1,9 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
 import at.petrak.hexcasting.api.casting.SpellList
-import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate
 import at.petrak.hexcasting.api.casting.eval.vm.FrameFinishEval
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
@@ -25,11 +23,6 @@ object OpEval : Action {
         val datum = stack.removeLastOrNull() ?: throw MishapNotEnoughArgs(1, 0)
         val instrs = evaluatable(datum, 0)
 
-        instrs.ifRight {
-            CastingImage.incDepth(userData)
-            it.asActionResult
-        }
-
         // if not installed already...
         // also, never make a break boundary when evaluating just one pattern
         val newCont =
@@ -41,6 +34,6 @@ object OpEval : Action {
 
         val instrsList = instrs.map({ SpellList.LList(0, listOf(PatternIota(it))) }, { it })
         val frame = FrameEvaluate(instrsList, true)
-        return OperationResult(listOf(), userData, listOf(), newCont.pushFrame(frame))
+        return OperationResult(stack, userData, listOf(), newCont.pushFrame(frame))
     }
 }

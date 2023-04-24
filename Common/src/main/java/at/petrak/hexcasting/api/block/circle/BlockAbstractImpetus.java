@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.api.block.circle;
 
-import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -15,9 +17,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.List;
 
 // Facing dir is the direction it starts searching for slates in to start
 public abstract class BlockAbstractImpetus extends BlockCircleComponent implements EntityBlock {
@@ -30,19 +32,18 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos, BlockState bs,
-        Level world) {
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+        return new ControlFlow.Stop();
+    }
+
+    @Override
+    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
         return enterDir != bs.getValue(FACING);
     }
 
     @Override
-    public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world) {
+    public EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world) {
         return EnumSet.of(bs.getValue(FACING));
-    }
-
-    @Override
-    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, Level world) {
-        return null;
     }
 
     @Override
@@ -58,7 +59,7 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus tile && pState.getValue(ENERGIZED)) {
-            tile.stepCircle();
+            tile.tickExecution();
         }
     }
 
@@ -66,7 +67,8 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pNewState.is(pState.getBlock())
             && pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus impetus) {
-            impetus.stopCasting();
+            impetus.endExecution(); // TODO: Determine if this was important
+            // TODO: Fix this, it should make all the glowy circle components stop glowing.
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }

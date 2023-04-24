@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
-    public Entity exampleEntity(ClientLevel level) {
+    public Entity exampleEntity(Level level) {
         var biome = Objects.requireNonNullElse(this.biome, VillagerType.PLAINS);
         var profession = Objects.requireNonNullElse(this.profession, VillagerProfession.TOOLSMITH);
         var tradeLevel = Math.min(this.minLevel, 1);
