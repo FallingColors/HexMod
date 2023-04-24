@@ -18,10 +18,21 @@ data class CastingImage private constructor(
     val parenCount: Int,
     val parenthesized: List<Iota>,
     val escapeNext: Boolean,
+    val opsConsumed: Long,
 
     val userData: CompoundTag
 ) {
-    constructor() : this(listOf(), 0, listOf(), false, CompoundTag())
+    constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
+
+    /**
+     * Return a copy of this with the given number of ops additionally exhausted
+     */
+    fun withUsedOps(count: Long) = this.copy(opsConsumed = this.opsConsumed + count)
+
+    /**
+     * Return a copy of this with 1 op used
+     */
+    fun withUsedOp() = this.withUsedOps(1)
 
     fun serializeToNbt() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()
@@ -29,6 +40,7 @@ data class CastingImage private constructor(
         TAG_PAREN_COUNT %= parenCount
         TAG_ESCAPE_NEXT %= escapeNext
         TAG_PARENTHESIZED %= parenthesized.serializeToNBT()
+        TAG_OPS_CONSUMED %= opsConsumed
 
         TAG_USERDATA %= userData
     }
@@ -38,8 +50,8 @@ data class CastingImage private constructor(
         const val TAG_PAREN_COUNT = "open_parens"
         const val TAG_PARENTHESIZED = "parenthesized"
         const val TAG_ESCAPE_NEXT = "escape_next"
+        const val TAG_OPS_CONSUMED = "ops_consumed"
         const val TAG_USERDATA = "userdata"
-        const val TAG_RAVENMIND = "ravenmind"
 
         @JvmStatic
         public fun loadFromNbt(tag: CompoundTag, world: ServerLevel): CastingImage {
@@ -53,10 +65,6 @@ data class CastingImage private constructor(
 
                 val userData = if (tag.contains(TAG_USERDATA)) {
                     tag.getCompound(TAG_USERDATA)
-                } else if (tag.contains("local")) {
-                    NBTBuilder {
-                        TAG_USERDATA %= tag.getCompound("local")
-                    }
                 } else {
                     CompoundTag()
                 }
@@ -69,8 +77,9 @@ data class CastingImage private constructor(
 
                 val parenCount = tag.getInt(TAG_PAREN_COUNT)
                 val escapeNext = tag.getBoolean(TAG_ESCAPE_NEXT)
+                val opsUsed = tag.getLong(TAG_OPS_CONSUMED)
 
-                CastingImage(stack, parenCount, parenthesized, escapeNext, userData)
+                CastingImage(stack, parenCount, parenthesized, escapeNext, opsUsed, userData)
             } catch (exn: Exception) {
                 HexAPI.LOGGER.warn("error while loading a CastingImage", exn)
                 CastingImage()

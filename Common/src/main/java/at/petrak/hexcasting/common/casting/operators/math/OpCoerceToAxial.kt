@@ -13,7 +13,7 @@ object OpCoerceToAxial : ConstMediaAction {
     override val argc: Int
         get() = 1
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val value = args.getNumOrVec(0, argc)
         return value.map({ num ->
             num.sign.asActionResult

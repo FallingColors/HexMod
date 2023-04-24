@@ -53,19 +53,20 @@ data class FrameForEach(
         // If we still have data to process...
         val (stackTop, newImage, newCont) = if (data.nonEmpty) {
             // Increment the evaluation depth,
+
             // push the next datum to the top of the stack,
-            Triple(data.car, harness.image.incDepth(), continuation
+            val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
                 .pushFrame(FrameForEach(data.cdr, code, stack, acc))
                 // and prep the Thoth'd code block for evaluation.
-                .pushFrame(FrameEvaluate(code, true)))
+                .pushFrame(FrameEvaluate(code, true))
+            Triple(data.car, harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
             Triple(ListIota(acc), harness.image, continuation)
         }
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
-        // TODO: this means we could have Thoth casting do a different sound
         return CastResult(
             newCont,
             newImage.copy(stack = tStack),

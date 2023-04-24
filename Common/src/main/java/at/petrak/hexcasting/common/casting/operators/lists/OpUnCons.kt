@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.NullIota
 
 object OpUnCons : ConstMediaAction {
     override val argc = 1
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val list = args.getList(0, argc)
         if (list.nonEmpty) {
             return listOf(ListIota(list.cdr), list.car)

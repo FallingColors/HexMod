@@ -16,7 +16,7 @@ interface ConstMediaAction : Action {
     val mediaCost: Int
         get() = 0
 
-    fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota>
+    fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota>
 
     override fun operate(
         env: CastingEnvironment,

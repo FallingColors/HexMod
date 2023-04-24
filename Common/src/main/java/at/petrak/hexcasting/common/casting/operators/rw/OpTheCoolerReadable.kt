@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.rw
 
-import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -12,15 +12,15 @@ object OpTheCoolerReadable : ConstMediaAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingEnvironment
+        env: CastingEnvironment
     ): List<Iota> {
         val target = args.getEntity(0, argc)
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
             ?: return false.asActionResult
 
-        datumHolder.readIota(ctx.world)
+        datumHolder.readIota(env.world)
             ?: datumHolder.emptyIota()
             ?: return false.asActionResult
 

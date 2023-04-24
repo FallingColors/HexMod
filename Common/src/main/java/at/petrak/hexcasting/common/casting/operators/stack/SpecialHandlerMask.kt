@@ -35,7 +35,7 @@ class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler {
         override val argc: Int
             get() = this.mask.size
 
-        override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+        override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
             val out = ArrayList<Iota>(this.mask.size)
             for ((i, include) in this.mask.withIndex()) {
                 if (include)

@@ -44,7 +44,6 @@ public class HexAPIImpl implements HexAPI {
         return entity.getDeltaMovement();
     }
 
-<<<<<<< HEAD
     //region brainsweeping
 
     @Override
@@ -75,7 +74,6 @@ public class HexAPIImpl implements HexAPI {
     }
 
     //endregion
-=======
     @Override
     public @Nullable Sentinel getSentinel(ServerPlayer player) {
         return IXplatAbstractions.INSTANCE.getSentinel(player);
@@ -90,5 +88,4 @@ public class HexAPIImpl implements HexAPI {
     public FrozenColorizer getColorizer(Player player) {
         return IXplatAbstractions.INSTANCE.getColorizer(player);
     }
->>>>>>> casting-context
 }

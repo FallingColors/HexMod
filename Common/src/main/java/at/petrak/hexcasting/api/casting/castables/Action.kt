@@ -53,7 +53,7 @@ interface Action {
             override val argc: Int
                 get() = 0
 
-            override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> =
+            override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> =
                 listOf(x)
         }
 

@@ -10,7 +10,7 @@ object OpDuplicateN : ConstMediaAction {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val count = args.getPositiveInt(1, argc)
 
         if (count > 1000) {

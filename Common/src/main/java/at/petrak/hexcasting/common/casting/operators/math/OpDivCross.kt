@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getNumOrVec
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -12,7 +12,7 @@ object OpDivCross : ConstMediaAction {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val lhs = args.getNumOrVec(0, argc)
         val rhs = args.getNumOrVec(1, argc)
         val theMishap = MishapDivideByZero.of(args[0], args[1])
@@ -30,13 +30,13 @@ object OpDivCross : ConstMediaAction {
                     }
                 )
             }, { lvec ->
-                rhs.map(
-                    { rnum ->
-                        if (lvec == Vec3.ZERO) throw theMishap
-                        lvec.scale(1.0 / rnum).asActionResult
-                    },
-                    { rvec -> lvec.cross(rvec).asActionResult }
-                )
-            })
+            rhs.map(
+                { rnum ->
+                    if (lvec == Vec3.ZERO) throw theMishap
+                    lvec.scale(1.0 / rnum).asActionResult
+                },
+                { rvec -> lvec.cross(rvec).asActionResult }
+            )
+        })
     }
 }

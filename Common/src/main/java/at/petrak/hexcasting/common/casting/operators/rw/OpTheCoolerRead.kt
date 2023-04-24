@@ -12,16 +12,16 @@ object OpTheCoolerRead : ConstMediaAction {
 
     override fun execute(
         args: List<Iota>,
-        ctx: CastingEnvironment
+        env: CastingEnvironment
     ): List<Iota> {
         val target = args.getEntity(0, argc)
 
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
             ?: throw MishapBadEntity.of(target, "iota.read")
 
-        val datum = datumHolder.readIota(ctx.world)
+        val datum = datumHolder.readIota(env.world)
             ?: datumHolder.emptyIota()
             ?: throw MishapBadEntity.of(target, "iota.read")
         return listOf(datum)
