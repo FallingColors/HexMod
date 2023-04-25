@@ -29,7 +29,6 @@ import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -95,32 +94,23 @@ public class PatternIota extends Iota {
                 throw new MishapInvalidPattern();
             } else throw new IllegalStateException();
 
+            // do the actual calculation!!
             var result = action.operate(
                 vm.getEnv(),
-                new ArrayList<>(vm.getImage().getStack()),
-                vm.getImage().getUserData().copy(),
+                vm.getImage(),
                 continuation
             );
-            var opsUsed = result.getOpsUsed();
-            if (vm.getImage().getOpsConsumed() + opsUsed > HexConfig.server().maxOpCount()) {
+            if (result.getNewImage().getOpsConsumed() > HexConfig.server().maxOpCount()) {
                 throw new MishapEvalTooMuch();
             }
 
             var cont2 = result.getNewContinuation();
-            var stack2 = result.getNewStack();
-            var userData2 = result.getNewUserdata();
             // TODO parens also break prescience
             var sideEffects = result.getSideEffects();
 
-            var extantImage = vm.getImage();
-            var updatedImage = extantImage.copy(stack2,
-                extantImage.getParenCount(), extantImage.getParenthesized(), extantImage.getEscapeNext(),
-                extantImage.getOpsConsumed() + opsUsed,
-                userData2);
-
             return new CastResult(
                 cont2,
-                updatedImage,
+                result.getNewImage(),
                 sideEffects,
                 ResolvedPatternType.EVALUATED,
                 vm.getEnv().getSoundType()

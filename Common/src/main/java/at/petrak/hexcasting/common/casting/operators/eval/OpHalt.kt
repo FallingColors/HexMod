@@ -3,18 +3,13 @@ package at.petrak.hexcasting.common.casting.operators.eval
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
-import at.petrak.hexcasting.api.casting.iota.Iota
-import net.minecraft.nbt.CompoundTag
 
 object OpHalt : Action {
-    override fun operate(
-        env: CastingEnvironment,
-        stack: MutableList<Iota>,
-        userData: CompoundTag,
-        continuation: SpellContinuation
-    ): OperationResult {
-        var newStack = stack.toList()
+    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+        var newStack = image.stack.toList()
+
         var done = false
         var newCont = continuation
         while (!done && newCont is SpellContinuation.NotDone) {
@@ -30,6 +25,7 @@ object OpHalt : Action {
             newStack = listOf()
         }
 
-        return OperationResult(newStack, userData, listOf(), newCont, 1)
+        val image2 = image.withUsedOp().copy(stack = newStack)
+        return OperationResult(image2, listOf(), newCont)
     }
 }

@@ -2,9 +2,9 @@ package at.petrak.hexcasting.api.casting.castables
 
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.phys.Vec3
 import java.text.DecimalFormat
 
@@ -23,18 +23,19 @@ import java.text.DecimalFormat
  */
 interface Action {
     /**
-     * Operate on the stack. Return the new stack and any side effects of the cast.
+     * Functionally update the image. Return the image and any side effects.
      *
-     * Although this is passed a [MutableList], this is only for the convenience of implementors.
-     * It is a clone of the stack and modifying it does nothing. You must return the new stack
-     * with the [OperationResult]. Similar with the `userData`.
+     * This is a <i>very</i> low-level function -- the implementor is responsible for a lot. For example,
+     * remember to increment the op count, sil vous plait.
      *
      * A particle effect at the cast site and various messages and advancements are done automagically.
+     *
+     * The userdata tag is copied for you, so you don't need to worry about mutation messing up things
+     * behind the scenes.
      */
     fun operate(
         env: CastingEnvironment,
-        stack: MutableList<Iota>,
-        userData: CompoundTag,
+        image: CastingImage,
         continuation: SpellContinuation
     ): OperationResult
 

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
@@ -28,17 +29,17 @@ interface SpellAction : Action {
         return this.execute(args, ctx)
     }
 
-    override fun operate(
-        env: CastingEnvironment,
-        stack: MutableList<Iota>,
-        userData: CompoundTag,
-        continuation: SpellContinuation
-    ): OperationResult {
+    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+        val stack = image.stack.toMutableList()
+
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
-        val result = this.executeWithUserdata(args, env, userData)
+
+        // execute!
+        val userDataMut = image.userData.copy()
+        val result = this.executeWithUserdata(args, env, userDataMut)
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
@@ -56,7 +57,9 @@ interface SpellAction : Action {
         for (spray in result.particles)
             sideEffects.add(OperatorSideEffect.Particles(spray))
 
-        return OperationResult(stack, userData, sideEffects, continuation, result.opCount)
+        val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + result.opCount, userData = userDataMut)
+
+        return OperationResult(image2, sideEffects, continuation)
     }
 
     data class Result(val effect: RenderedSpell, val cost: Int, val particles: List<ParticleSpray>, val opCount: Long = 1)
