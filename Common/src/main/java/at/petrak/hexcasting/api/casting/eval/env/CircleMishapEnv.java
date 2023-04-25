@@ -1,26 +1,16 @@
 package at.petrak.hexcasting.api.casting.eval.env;
 
+import at.petrak.hexcasting.api.casting.circles.CircleExecutionState;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 public class CircleMishapEnv extends MishapEnvironment {
-    protected final BlockPos impetusLoc;
-    protected final Direction startDir;
-    protected final @Nullable ServerPlayer caster;
-    protected final AABB bounds;
+    protected final CircleExecutionState execState;
 
-    protected CircleMishapEnv(ServerLevel world, BlockPos impetusLoc, Direction startDir, @Nullable ServerPlayer caster, AABB bounds) {
+    protected CircleMishapEnv(ServerLevel world, CircleExecutionState execState) {
         super(world, null);
-        this.impetusLoc = impetusLoc;
-        this.startDir = startDir;
-        this.caster = caster;
-        this.bounds = bounds;
+        this.execState = execState;
     }
 
     @Override

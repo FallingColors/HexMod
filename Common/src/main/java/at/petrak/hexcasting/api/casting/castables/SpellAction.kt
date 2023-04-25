@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.nbt.CompoundTag
 
 interface SpellAction : Action {
@@ -59,7 +60,8 @@ interface SpellAction : Action {
 
         val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + result.opCount, userData = userDataMut)
 
-        return OperationResult(image2, sideEffects, continuation)
+        val sound = if (this.hasCastingSound(env)) HexEvalSounds.SPELL else HexEvalSounds.MUTE
+        return OperationResult(image2, sideEffects, continuation, sound)
     }
 
     data class Result(val effect: RenderedSpell, val cost: Int, val particles: List<ParticleSpray>, val opCount: Long = 1)

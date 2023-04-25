@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getPositiveInt
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import it.unimi.dsi.fastutil.ints.IntArrayList
 
 // "lehmer code"
@@ -42,7 +43,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
         }
 
         val image2 = image.withUsedOp().copy(stack = stack)
-        return OperationResult(image2, listOf(), continuation)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 
     private class FactorialIter : Iterator<Int> {

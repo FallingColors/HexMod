@@ -33,10 +33,11 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     public void postExecution(CastResult result) {
         super.postExecution(result);
 
+        // we always want to play this sound one at a time
         var sound = result.getSound().sound();
         if (sound != null) {
             var soundPos = this.caster.position();
-            this.caster.getLevel().playSound(null, soundPos.x, soundPos.y, soundPos.z,
+            this.world.playSound(null, soundPos.x, soundPos.y, soundPos.z,
                 sound, SoundSource.PLAYERS, 1f, 1f);
         }
     }

@@ -16,13 +16,10 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
         super(caster, castingHand);
     }
 
-    public EvalSound getFinalSound() {
-        return sound;
-    }
-
     @Override
     public void postExecution(CastResult result) {
         super.postExecution(result);
+        // TODO: how do we know when to actually play this sound?
         this.sound = this.sound.greaterOf(result.getSound());
     }
 

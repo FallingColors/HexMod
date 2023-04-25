@@ -12,7 +12,7 @@ import net.minecraft.world.entity.Entity
 /**
  * The state of a casting VM, containing the stack and all
  */
-data class CastingImage constructor(
+data class CastingImage private constructor(
     val stack: List<Iota>,
 
     val parenCount: Int,

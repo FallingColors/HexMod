@@ -3,22 +3,20 @@ package at.petrak.hexcasting.api.casting.eval.env;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.CircleExecutionState;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
-import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,60 +26,48 @@ import java.util.List;
 import static at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv.SENTINEL_RADIUS;
 
 public class CircleCastEnv extends CastingEnvironment {
-    protected EvalSound sound = HexEvalSounds.NOTHING;
+    protected final CircleExecutionState execState;
 
-    protected final BlockPos impetusLoc;
-    protected final Direction startDir;
-    protected final @Nullable ServerPlayer caster;
-    protected final AABB bounds;
-
-    public CircleCastEnv(ServerLevel world, BlockPos impetusLoc, Direction startDir, @Nullable ServerPlayer caster, AABB bounds) {
+    public CircleCastEnv(ServerLevel world, CircleExecutionState execState) {
         super(world);
-        this.impetusLoc = impetusLoc;
-        this.startDir = startDir;
-        this.caster = caster;
-        this.bounds = bounds;
+        this.execState = execState;
     }
 
     @Override
     public @Nullable ServerPlayer getCaster() {
-        return this.caster;
+        return this.execState.getCaster(this.world);
     }
 
     public @Nullable BlockEntityAbstractImpetus getImpetus() {
-        var entity = this.world.getBlockEntity(impetusLoc);
+        var entity = this.world.getBlockEntity(execState.impetusPos);
 
         if (entity instanceof BlockEntityAbstractImpetus)
             return (BlockEntityAbstractImpetus) entity;
         return null;
     }
 
-    public BlockPos getImpetusLoc() {
-        return impetusLoc;
-    }
-
-    public Direction getStartDir() {
-        return startDir;
+    public CircleExecutionState circleState() {
+        return execState;
     }
 
     @Override
     public MishapEnvironment getMishapEnvironment() {
-        return new CircleMishapEnv(this.world, this.impetusLoc, this.startDir, this.caster, this.bounds);
-    }
-
-    @Override
-    public EvalSound getSoundType() {
-        return sound;
+        return new CircleMishapEnv(this.world, this.execState);
     }
 
     @Override
     public void postExecution(CastResult result) {
-        this.sound = this.sound.greaterOf(result.getSound());
+        // we always want to play this sound one at a time
+        var sound = result.getSound().sound();
+        if (sound != null) {
+            var soundPos = this.execState.currentPos;
+            this.world.playSound(null, soundPos, sound, SoundSource.PLAYERS, 1f, 1f);
+        }
     }
 
     @Override
     public Vec3 mishapSprayPos() {
-        return Vec3.atCenterOf(impetusLoc);
+        return Vec3.atCenterOf(this.execState.currentPos);
     }
 
     @Override
@@ -103,18 +89,19 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     public boolean isVecInRange(Vec3 vec) {
-        if (this.caster != null) {
-            var sentinel = HexAPI.instance().getSentinel(this.caster);
+        var caster = this.execState.getCaster(this.world);
+        if (caster != null) {
+            var sentinel = HexAPI.instance().getSentinel(caster);
             if (sentinel != null
-                    && sentinel.extendsRange()
-                    && this.caster.getLevel().dimension() == sentinel.dimension()
-                    && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
+                && sentinel.extendsRange()
+                && caster.getLevel().dimension() == sentinel.dimension()
+                && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
             ) {
                 return true;
             }
         }
 
-        return this.bounds.contains(vec);
+        return this.execState.bounds.contains(vec);
     }
 
     @Override

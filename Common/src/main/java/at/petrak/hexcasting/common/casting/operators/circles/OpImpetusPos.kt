@@ -14,6 +14,6 @@ object OpImpetusPos : ConstMediaAction {
         if (ctx !is CircleCastEnv)
             throw MishapNoSpellCircle()
 
-        return ctx.impetusLoc.asActionResult
+        return ctx.circleState().impetusPos.asActionResult
     }
 }

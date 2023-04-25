@@ -113,7 +113,7 @@ public class PatternIota extends Iota {
                 result.getNewImage(),
                 sideEffects,
                 ResolvedPatternType.EVALUATED,
-                vm.getEnv().getSoundType()
+                result.getSound()
             );
 
         } catch (Mishap mishap) {

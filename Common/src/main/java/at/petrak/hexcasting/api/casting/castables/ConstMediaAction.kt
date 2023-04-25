@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 /**
  * A SimpleOperator that always costs the same amount of media.
@@ -36,7 +37,7 @@ interface ConstMediaAction : Action {
         val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMedia(this.mediaCost))
 
         val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + result.opCount)
-        return OperationResult(image2, sideEffects, continuation)
+        return OperationResult(image2, sideEffects, continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 
     data class CostMediaActionResult(val resultStack: List<Iota>, val opCount: Long = 1)

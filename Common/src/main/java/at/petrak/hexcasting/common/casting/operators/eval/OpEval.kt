@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.evaluatable
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpEval : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
@@ -32,6 +33,6 @@ object OpEval : Action {
         val frame = FrameEvaluate(instrsList, true)
 
         val image2 = image.withUsedOp().copy(stack = stack)
-        return OperationResult(image2, listOf(), newCont.pushFrame(frame))
+        return OperationResult(image2, listOf(), newCont.pushFrame(frame), HexEvalSounds.HERMES)
     }
 }

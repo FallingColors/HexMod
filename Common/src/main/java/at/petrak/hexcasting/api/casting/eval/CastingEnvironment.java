@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.casting.eval;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
-import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
@@ -53,11 +52,6 @@ public abstract class CastingEnvironment {
      * Get an interface used to do mishaps
      */
     public abstract MishapEnvironment getMishapEnvironment();
-
-    /**
-     * Get the sound that this I/O module makes upon receiving a pattern
-     */
-    public abstract EvalSound getSoundType();
 
     /**
      * If something about this ARE itself is invalid, mishap.

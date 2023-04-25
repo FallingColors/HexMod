@@ -31,6 +31,8 @@ import java.util.*;
  */
 public class CircleExecutionState {
     public static final String
+        TAG_IMPETUS_POS = "impetus_pos",
+        TAG_IMPETUS_DIR = "impetus_dir",
         TAG_KNOWN_POSITIONS = "known_positions",
         TAG_REACHED_POSITIONS = "reached_positions",
         TAG_CURRENT_POS = "current_pos",
@@ -39,6 +41,8 @@ public class CircleExecutionState {
         TAG_CASTER = "caster",
         TAG_COLORIZER = "colorizer";
 
+    public final BlockPos impetusPos;
+    public final Direction impetusDir;
     // Does contain the starting impetus
     public final Set<BlockPos> knownPositions;
     public final List<BlockPos> reachedPositions;
@@ -51,9 +55,11 @@ public class CircleExecutionState {
     public final AABB bounds;
 
 
-    protected CircleExecutionState(Set<BlockPos> knownPositions, List<BlockPos> reachedPositions,
-                                   BlockPos currentPos, Direction enteredFrom,
-                                   CastingImage currentImage, @Nullable UUID caster, FrozenColorizer colorizer) {
+    protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, Set<BlockPos> knownPositions,
+        List<BlockPos> reachedPositions, BlockPos currentPos, Direction enteredFrom,
+        CastingImage currentImage, @Nullable UUID caster, FrozenColorizer colorizer) {
+        this.impetusPos = impetusPos;
+        this.impetusDir = impetusDir;
         this.knownPositions = knownPositions;
         this.reachedPositions = reachedPositions;
         this.currentPos = currentPos;
@@ -65,8 +71,21 @@ public class CircleExecutionState {
         this.bounds = BlockEntityAbstractImpetus.getBounds(new ArrayList<>(this.knownPositions));
     }
 
+    public @Nullable ServerPlayer getCaster(ServerLevel world) {
+        if (this.caster == null) {
+            return null;
+        }
+        var entity = world.getEntity(this.caster);
+        if (entity instanceof ServerPlayer serverPlayer) {
+            return serverPlayer;
+        }
+        // there's a problem if this branch is reached
+        return null;
+    }
+
     // Return null if the circle does not close.
-    public static @Nullable CircleExecutionState createNew(BlockEntityAbstractImpetus impetus, @Nullable ServerPlayer caster) {
+    public static @Nullable CircleExecutionState createNew(BlockEntityAbstractImpetus impetus,
+        @Nullable ServerPlayer caster) {
         var level = (ServerLevel) impetus.getLevel();
 
         if (level == null)
@@ -112,24 +131,32 @@ public class CircleExecutionState {
         reachedPositions.add(impetus.getBlockPos());
         var start = seenGoodPositions.get(0);
 
+        FrozenColorizer colorizer;
+        UUID casterUUID;
         if (caster == null) {
-            var colorizer = new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)), Util.NIL_UUID);
-            return new CircleExecutionState(knownPositions, reachedPositions, start, impetus.getStartDirection(), new CastingImage(), null, colorizer);
+            colorizer = new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)),
+                Util.NIL_UUID);
+            casterUUID = null;
         } else {
-            var colorizer = HexAPI.instance().getColorizer(caster);
-            return new CircleExecutionState(knownPositions, reachedPositions, start, impetus.getStartDirection(), new CastingImage(), caster.getUUID(), colorizer);
+            colorizer = HexAPI.instance().getColorizer(caster);
+            casterUUID = caster.getUUID();
         }
+        return new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(), knownPositions,
+            reachedPositions, start, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer);
     }
 
     public CompoundTag save() {
         var out = new CompoundTag();
+
+        out.put(TAG_IMPETUS_POS, NbtUtils.writeBlockPos(this.impetusPos));
+        out.putByte(TAG_IMPETUS_DIR, (byte) this.impetusDir.ordinal());
 
         var knownTag = new ListTag();
         for (var bp : this.knownPositions) {
             knownTag.add(NbtUtils.writeBlockPos(bp));
         }
         out.put(TAG_KNOWN_POSITIONS, knownTag);
-    
+
         var reachedTag = new ListTag();
         for (var bp : this.reachedPositions) {
             reachedTag.add(NbtUtils.writeBlockPos(bp));
@@ -149,6 +176,9 @@ public class CircleExecutionState {
     }
 
     public static CircleExecutionState load(CompoundTag nbt, ServerLevel world) {
+        var startPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_IMPETUS_POS));
+        var startDir = Direction.values()[nbt.getByte(TAG_IMPETUS_DIR)];
+
         var knownPositions = new HashSet<BlockPos>();
         var knownTag = nbt.getList(TAG_KNOWN_POSITIONS, Tag.TAG_COMPOUND);
         for (var tag : knownTag) {
@@ -170,7 +200,8 @@ public class CircleExecutionState {
 
         FrozenColorizer colorizer = FrozenColorizer.fromNBT(nbt.getCompound(TAG_COLORIZER));
 
-        return new CircleExecutionState(knownPositions, reachedPositions, currentPos, enteredFrom, image, caster, colorizer);
+        return new CircleExecutionState(startPos, startDir, knownPositions, reachedPositions, currentPos,
+            enteredFrom, image, caster, colorizer);
     }
 
     /**
@@ -188,15 +219,16 @@ public class CircleExecutionState {
         if (this.caster != null && world.getEntity(this.caster) instanceof ServerPlayer player)
             caster = player;
 
-        var env = new CircleCastEnv(world, impetus.getBlockPos(), impetus.getStartDirection(), caster, this.bounds);
+        var env = new CircleCastEnv(world, this);
 
         var executorBlockState = world.getBlockState(this.currentPos);
         if (!(executorBlockState.getBlock() instanceof ICircleComponent executor)) {
             // TODO: notification of the error?
-            ICircleComponent.sfx(this.currentPos, executorBlockState, world, Objects.requireNonNull(env.getImpetus()), false);
+            ICircleComponent.sfx(this.currentPos, executorBlockState, world, Objects.requireNonNull(env.getImpetus())
+                , false);
             return false;
         }
-        
+
         executorBlockState = executor.startEnergized(this.currentPos, executorBlockState, world);
         this.reachedPositions.add(this.currentPos);
 
@@ -219,7 +251,8 @@ public class CircleExecutionState {
                             Component.translatable("hexcasting.circles.many_exits",
                                 Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),
                             new ItemStack(Items.COMPASS));
-                        ICircleComponent.sfx(this.currentPos, executorBlockState, world, Objects.requireNonNull(env.getImpetus()), false);
+                        ICircleComponent.sfx(this.currentPos, executorBlockState, world,
+                            Objects.requireNonNull(env.getImpetus()), false);
                         halt = true;
                         break;
                     } else {
@@ -234,11 +267,13 @@ public class CircleExecutionState {
                     Component.translatable("hexcasting.circles.no_exits",
                         Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),
                     new ItemStack(Items.OAK_SIGN));
-                ICircleComponent.sfx(this.currentPos, executorBlockState, world, Objects.requireNonNull(env.getImpetus()), false);
+                ICircleComponent.sfx(this.currentPos, executorBlockState, world,
+                    Objects.requireNonNull(env.getImpetus()), false);
                 halt = true;
             } else {
                 // A single valid exit position has been found.
-                ICircleComponent.sfx(this.currentPos, executorBlockState, world, Objects.requireNonNull(env.getImpetus()), true);
+                ICircleComponent.sfx(this.currentPos, executorBlockState, world,
+                    Objects.requireNonNull(env.getImpetus()), true);
                 currentPos = found.getFirst();
                 enteredFrom = found.getSecond();
                 currentImage = cont.update;
@@ -247,20 +282,20 @@ public class CircleExecutionState {
 
         return !halt;
     }
-    
+
     /**
      * How many ticks should pass between activations, given the number of blocks encountered so far.
      */
     protected int getTickSpeed() {
         return Math.max(2, 10 - (this.reachedPositions.size() - 1) / 3);
     }
-    
+
     public void endExecution(BlockEntityAbstractImpetus impetus) {
         var world = (ServerLevel) impetus.getLevel();
-    
+
         if (world == null)
             return; // TODO: error here?
-        
+
         for (var pos : this.reachedPositions) {
             var there = world.getBlockState(pos);
             if (there.getBlock() instanceof ICircleComponent cc) {

@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 // TODO should this dump the whole stack
 object OpPrint : Action {
@@ -27,6 +28,7 @@ object OpPrint : Action {
                 OperatorSideEffect.AttemptSpell(Spell(datum), hasCastingSound = false, awardStat = false)
             ),
             continuation,
+            HexEvalSounds.SPELL,
         )
     }
 
