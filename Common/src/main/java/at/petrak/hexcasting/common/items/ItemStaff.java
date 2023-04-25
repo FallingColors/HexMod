@@ -26,7 +26,7 @@ public class ItemStaff extends Item {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if (player.isShiftKeyDown()) {
             if (world.isClientSide()) {
-                player.playSound(HexSounds.FAIL_PATTERN, 1f, 1f);
+                player.playSound(HexSounds.STAFF_RESET, 1f, 1f);
             } else if (player instanceof ServerPlayer serverPlayer) {
                 IXplatAbstractions.INSTANCE.clearCastingData(serverPlayer);
             }

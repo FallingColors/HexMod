@@ -62,6 +62,11 @@ class GuiSpellcasting constructor(
     }
 
     fun recvServerUpdate(info: ExecutionClientView, index: Int) {
+        if (info.isStackClear && info.ravenmind == null) {
+            this.minecraft?.setScreen(null)
+            return
+        }
+
         this.patterns.getOrNull(index)?.let {
             it.type = info.resolutionType
         }
@@ -206,7 +211,7 @@ class GuiSpellcasting constructor(
                 if (playSound) {
                     Minecraft.getInstance().soundManager.play(
                         SimpleSoundInstance(
-                            HexSounds.ADD_LINE,
+                            HexSounds.ADD_TO_PATTERN,
                             SoundSource.PLAYERS,
                             0.25f,
                             1f + (Math.random().toFloat() - 0.5f) * 0.1f,

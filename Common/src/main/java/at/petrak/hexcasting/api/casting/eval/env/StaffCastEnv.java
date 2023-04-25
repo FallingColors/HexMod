@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
-import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
@@ -14,6 +13,7 @@ import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 
 import java.util.HashSet;
@@ -31,10 +31,13 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
     @Override
     public void postExecution(CastResult result) {
-        for (var sideEffect : result.getSideEffects()) {
-            if (sideEffect instanceof OperatorSideEffect.DoMishap doMishap) {
-                this.sendMishapMsgToPlayer(doMishap);
-            }
+        super.postExecution(result);
+
+        var sound = result.getSound().sound();
+        if (sound != null) {
+            var soundPos = this.caster.position();
+            this.caster.getLevel().playSound(null, soundPos.x, soundPos.y, soundPos.z,
+                sound, SoundSource.PLAYERS, 1f, 1f);
         }
     }
 
@@ -87,10 +90,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
         var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(sender, msg.handUsed());
 
-        // every time we send a new pattern it'll be happening in a different tick, so reset here
-        // i don't think we can do this in the casting vm itself because it doesn't know if `queueAndExecuteIotas`
-        // is being called from the top level or not
-        vm.getImage().getUserData().remove(HexAPI.OP_COUNT_USERDATA);
+        // TODO: do we reset the number of evals run via the staff? because each new pat is a new tick.
 
         ExecutionClientView clientInfo = vm.queueExecuteAndWrapIota(new PatternIota(msg.pattern()), sender.getLevel());
 

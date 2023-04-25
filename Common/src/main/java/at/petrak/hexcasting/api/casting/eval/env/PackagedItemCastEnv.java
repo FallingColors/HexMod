@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
-import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -23,13 +22,8 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
 
     @Override
     public void postExecution(CastResult result) {
+        super.postExecution(result);
         this.sound = this.sound.greaterOf(result.getSound());
-
-        for (var sideEffect : result.getSideEffects()) {
-            if (sideEffect instanceof OperatorSideEffect.DoMishap doMishap) {
-                this.sendMishapMsgToPlayer(doMishap);
-            }
-        }
     }
 
     @Override

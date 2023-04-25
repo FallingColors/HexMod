@@ -1,6 +1,6 @@
 {
-  "name": "hexcasting.entry.patterns",
+  "name": "hexcasting.category.patterns",
   "icon": "minecraft:bookshelf",
-  "description": "hexcasting.entry.patterns.desc",
+  "description": "hexcasting.category.patterns.desc",
   "sortnum": 100
 }

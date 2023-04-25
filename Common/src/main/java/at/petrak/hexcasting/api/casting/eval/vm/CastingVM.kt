@@ -79,7 +79,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             // ALSO TODO need to add reader macro-style things
             try {
                 this.handleParentheses(iota)?.let { (data, resolutionType) ->
-                    return@executeInner CastResult(continuation, data, listOf(), resolutionType, HexEvalSounds.ADD_PATTERN)
+                    return@executeInner CastResult(continuation, data, listOf(), resolutionType, HexEvalSounds.NORMAL_EXECUTE)
                 }
             } catch (e: MishapTooManyCloseParens) {
                 // This is ridiculous and needs to be fixed

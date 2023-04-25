@@ -17,8 +17,8 @@ plugins {
     // Also it looks like property lookups don't work this early
     id 'fabric-loom' version '1.0-SNAPSHOT' apply false
 
-    id("at.petra-k.PKPlugin") version "0.1.0-pre-64"
-    id("at.petra-k.PKSubprojPlugin") version "0.1.0-pre-64" apply false
+    id("at.petra-k.PKPlugin") version "0.1.0-pre-65"
+    id("at.petra-k.PKSubprojPlugin") version "0.1.0-pre-65" apply false
 }
 
 repositories {

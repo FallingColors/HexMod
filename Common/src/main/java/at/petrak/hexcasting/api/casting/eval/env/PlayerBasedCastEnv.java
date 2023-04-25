@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
+import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
@@ -51,7 +52,16 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
     @Override
     public EvalSound getSoundType() {
-        return HexEvalSounds.ADD_PATTERN;
+        return HexEvalSounds.NORMAL_EXECUTE;
+    }
+
+    @Override
+    public void postExecution(CastResult result) {
+        for (var sideEffect : result.getSideEffects()) {
+            if (sideEffect instanceof OperatorSideEffect.DoMishap doMishap) {
+                this.sendMishapMsgToPlayer(doMishap);
+            }
+        }
     }
 
     @Override
@@ -111,7 +121,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         if (primaryItem.isEmpty())
             primaryItem = ItemStack.EMPTY.copy();
 
-        return List.of(new HeldItemInfo(getAlternateItem(), this.getOtherHand()), new HeldItemInfo(primaryItem, this.castingHand));
+        return List.of(new HeldItemInfo(getAlternateItem(), this.getOtherHand()), new HeldItemInfo(primaryItem,
+            this.castingHand));
     }
 
     @Override

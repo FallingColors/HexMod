@@ -58,11 +58,7 @@ public record MsgNewSpellPatternAck(ExecutionClientView info, int index) impleme
             }
             var screen = Minecraft.getInstance().screen;
             if (screen instanceof GuiSpellcasting spellGui) {
-                if (self.info().isStackClear() && self.info.getRavenmind() == null) {
-                    mc.setScreen(null);
-                } else {
-                    spellGui.recvServerUpdate(self.info(), self.index());
-                }
+                spellGui.recvServerUpdate(self.info(), self.index());
             }
         });
     }

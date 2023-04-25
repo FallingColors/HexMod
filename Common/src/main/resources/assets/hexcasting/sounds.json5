@@ -1,61 +1,64 @@
 {
-  "casting.start_pattern": {
-    "subtitle": "hexcasting.subtitles.start_pattern",
-    "sounds": [
+  "casting.pattern.start": {
+    subtitle: "hexcasting.subtitles.casting.pattern.start",
+    sounds: [
       {
-        "name": "hexcasting:add_line",
-        "volume": 1.0,
-        "pitch": 0.8
+        name: "hexcasting:add_segment",
+        volume: 1.0,
+        pitch: 0.8
       }
     ]
   },
-  "casting.add_line": {
-    "subtitle": "hexcasting.subtitles.add_line",
-    "sounds": [
+  "casting.pattern.add_segment": {
+    subtitle: "hexcasting.subtitles.casting.pattern.add_segment",
+    sounds: [
       {
-        "name": "hexcasting:add_line",
-        "volume": 0.8,
-        "pitch": 1.0
+        name: "hexcasting:add_segment",
+        volume: 0.8,
+        pitch: 1.0
       }
     ]
   },
-  "casting.add_pattern": {
-    "subtitle": "hexcasting.subtitles.add_pattern",
-    "sounds": [
-      "hexcasting:add_pattern"
-    ]
-  },
-  "casting.fail_pattern": {
-    "subtitle": "hexcasting.subtitles.fail_pattern",
-    "sounds": [
-      "hexcasting:fail_pattern"
-    ]
-  },
+  
   "casting.ambiance": {
-    "subtitle": "hexcasting.subtitles.ambiance",
-    "sounds": [
+    subtitle: "hexcasting.subtitles.ambiance",
+    sounds: [
       "hexcasting:casting_ambiance"
     ]
   },
-  "casting.cast": {
-    "subtitle": "hexcasting.subtitles.cast",
-    "sounds": [
-      "hexcasting:cast_hex"
+  
+  "casting.cast.normal": {
+    subtitle: "hexcasting.subtitles.casting.cast.normal",
+    sounds: [
+      "hexcasting:cast/normal"
     ]
   },
-  "casting.hermes": {
-    "subtitle": "hexcasting.subtitles.cast",
-    "sounds": [
-      "hexcasting:hermes"
+  "casting.cast.spell": {
+    subtitle: "hexcasting.subtitles.casting.cast.spell",
+    sounds: [
+      "hexcasting:cast/spell"
     ]
   },
-  "casting.thoth": {
-    "subtitle": "hexcasting.subtitles.cast",
-    "sounds": [
-      "hexcasting:thoth"
+  "casting.cast.hermes": {
+    subtitle: "hexcasting.subtitles.casting.cast.hermes",
+    sounds: [
+      "hexcasting:cast/hermes"
     ]
   },
-  "abacus": {
+  "casting.cast.thoth": {
+    subtitle: "hexcasting.subtitles.casting.cast.thoth",
+    sounds: [
+      "hexcasting:cast/thoth"
+    ],
+  },
+  "casting.cast.fail": {
+    subtitle: "hexcasting.subtitles.casting.cast.fail",
+    sounds: [
+      "hexcasting:cast/fail"
+    ],
+  },
+  
+  abacus: {
     "subtitle": "hexcasting.subtitles.abacus",
     "sounds": [
       "hexcasting:abacus1",
@@ -69,10 +72,21 @@
       "hexcasting:abacus_shake"
     ]
   },
+  
+  "staff.reset": {
+    "subtitle": "hexcasting.subtitles.staff.reset",
+    "sounds": [
+      {
+        "name": "hexcasting:cast/fail",
+        "pitch": 0.8
+      }
+    ]
+  },
+  
   "spellcircle.find_block": {
     "sounds": [
       {
-        "name": "hexcasting:add_pattern",
+        "name": "hexcasting:cast/normal",
         "pitch": 0.8
       }
     ],
@@ -81,18 +95,13 @@
   "spellcircle.fail": {
     "sounds": [
       {
-        "name": "hexcasting:fail_pattern",
+        "name": "hexcasting:cast/fail",
         "pitch": 0.8
       }
     ],
     "subtitle": "hexcasting.subtitles.spellcircle.fail"
   },
-  "spellcircle.cast": {
-    "sounds": [
-      "hexcasting:cast_hex"
-    ],
-    "subtitle": "hexcasting.subtitles.spellcircle.cast"
-  },
+  
   "scroll.dust": {
     "sounds": [
       "minecraft:dig/sand1",
@@ -110,6 +119,7 @@
     ],
     "subtitle": "hexcasting.subtitles.scroll.scribble"
   },
+  
   "impetus.fletcher.tick": {
     "sounds": [
       "minecraft:note/hat"
@@ -122,6 +132,7 @@
     ],
     "subtitle": "hexcasting.subtitles.impetus.cleric.register"
   },
+  
   "lore_fragment.read": {
     "sounds": [
       "block/enchantment_table/enchant1",
@@ -130,6 +141,8 @@
     ],
     "subtitle": "hexcasting.subtitles.lore_fragment.read"
   },
+  
+  // this is for altiora
   "flight.ambience": {
     "sounds": [
       "block/amethyst/shimmer"
