@@ -11,7 +11,8 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.ColorProvider;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
@@ -78,7 +79,7 @@ public interface IXplatAbstractions {
 
     boolean isBrainswept(Mob mob);
 
-    void setColorizer(Player target, FrozenColorizer colorizer);
+    void setColorizer(Player target, FrozenPigment colorizer);
 
     void setSentinel(Player target, @Nullable Sentinel sentinel);
 
@@ -94,7 +95,7 @@ public interface IXplatAbstractions {
 
     @Nullable AltioraAbility getAltiora(Player player);
 
-    FrozenColorizer getColorizer(Player player);
+    FrozenPigment getColorizer(Player player);
 
     @Nullable Sentinel getSentinel(Player player);
 
@@ -123,7 +124,7 @@ public interface IXplatAbstractions {
 
     boolean isColorizer(ItemStack stack);
 
-    int getRawColor(FrozenColorizer colorizer, float time, Vec3 position);
+    ColorProvider getColorProvider(FrozenPigment colorizer);
 
     // Items
 

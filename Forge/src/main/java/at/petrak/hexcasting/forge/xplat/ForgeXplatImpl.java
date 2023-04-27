@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.addldata.ADColorizer;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
@@ -13,8 +12,9 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.pigment.ColorProvider;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
@@ -179,7 +179,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setColorizer(Player player, FrozenColorizer colorizer) {
+    public void setColorizer(Player player, FrozenPigment colorizer) {
         CompoundTag tag = player.getPersistentData();
         tag.put(TAG_COLOR, colorizer.serializeToNBT());
 
@@ -253,8 +253,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FrozenColorizer getColorizer(Player player) {
-        return FrozenColorizer.fromNBT(player.getPersistentData().getCompound(TAG_COLOR));
+    public FrozenPigment getColorizer(Player player) {
+        return FrozenPigment.fromNBT(player.getPersistentData().getCompound(TAG_COLOR));
     }
 
     @Override
@@ -276,7 +276,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
         // This is always from a staff because we don't need to load the harness when casting from item
         var ctx = new StaffCastEnv(player, hand);
-        return new CastingVM(CastingImage.loadFromNbt(player.getPersistentData().getCompound(TAG_HARNESS), player.getLevel()), ctx);
+        return new CastingVM(CastingImage.loadFromNbt(player.getPersistentData().getCompound(TAG_HARNESS),
+            player.getLevel()), ctx);
     }
 
     @Override
@@ -336,14 +337,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public int getRawColor(FrozenColorizer colorizer, float time, Vec3 position) {
+    public ColorProvider getColorProvider(FrozenPigment colorizer) {
         var maybeColorizer = colorizer.item().getCapability(HexCapabilities.COLOR).resolve();
         if (maybeColorizer.isPresent()) {
-            ADColorizer col = maybeColorizer.get();
-            return col.color(colorizer.owner(), time, position);
+            return maybeColorizer.get().provideColor(colorizer.owner());
         }
-
-        return 0xff_ff00dc; // missing color
+        return ColorProvider.MISSING;
     }
 
     @Override

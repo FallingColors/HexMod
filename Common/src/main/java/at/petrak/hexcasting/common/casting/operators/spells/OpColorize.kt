@@ -5,8 +5,8 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
-import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.item.ItemStack
 
@@ -39,10 +39,10 @@ object OpColorize : SpellAction {
         override fun cast(ctx: CastingEnvironment) {
             val copy = stack.copy()
             val caster = ctx.caster
-            if (caster != null && ctx.withdrawItem(copy::equals, 1, true)) {
+            if (caster != null && ctx.withdrawItem(copy::sameItem, 1, true)) {
                 IXplatAbstractions.INSTANCE.setColorizer(
                     ctx.caster,
-                    FrozenColorizer(copy, caster.uuid)
+                    FrozenPigment(copy, caster.uuid)
                 )
             }
         }

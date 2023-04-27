@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import com.mojang.datafixers.util.Pair;
@@ -60,7 +60,7 @@ public interface ICircleComponent {
      */
     @Contract(pure = true)
     EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world);
-    
+
     /**
      * Given the current position and a direction, return a pair of the new position after a step
      * in that direction, along with the direction (this is a helper function for creating
@@ -70,11 +70,12 @@ public interface ICircleComponent {
     default Pair<BlockPos, Direction> exitPositionFromDirection(BlockPos pos, Direction dir) {
         return Pair.of(pos.offset(dir.getStepX(), dir.getStepY(), dir.getStepZ()), dir);
     }
-    
+
     /**
      * Start the {@link ICircleComponent} at the given position glowing. Returns the new state
      * of the given block.
-     * // TODO: determine if this should just be in {@link ICircleComponent#acceptControlFlow(CastingImage, CircleCastEnv, Direction, BlockPos, BlockState, ServerLevel)}.
+     * // TODO: determine if this should just be in
+     * {@link ICircleComponent#acceptControlFlow(CastingImage, CircleCastEnv, Direction, BlockPos, BlockState, ServerLevel)}.
      */
     BlockState startEnergized(BlockPos pos, BlockState bs, Level world);
 
@@ -82,7 +83,7 @@ public interface ICircleComponent {
      * Returns whether the {@link ICircleComponent} at the given position is energized.
      */
     boolean isEnergized(BlockPos pos, BlockState bs, Level world);
-    
+
     /**
      * End the {@link ICircleComponent} at the given position glowing. Returns the new state of
      * the given block.
@@ -92,13 +93,13 @@ public interface ICircleComponent {
     static void sfx(BlockPos pos, BlockState bs, Level world, BlockEntityAbstractImpetus impetus, boolean success) {
         Vec3 vpos;
         Vec3 vecOutDir;
-        FrozenColorizer colorizer;
+        FrozenPigment colorizer;
 
         UUID activator = Util.NIL_UUID;
         if (impetus.getExecutionState() != null && impetus.getExecutionState().caster != null)
             activator = impetus.getExecutionState().caster;
         if (impetus.getExecutionState() == null)
-            colorizer = new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)), activator);
+            colorizer = new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)), activator);
         else
             colorizer = impetus.getExecutionState().colorizer;
 
@@ -115,10 +116,10 @@ public interface ICircleComponent {
 
         if (world instanceof ServerLevel serverLevel) {
             var spray = new ParticleSpray(vpos, vecOutDir.scale(success ? 1.0 : 1.5), success ? 0.1 : 0.5,
-                    Mth.PI / (success ? 4 : 2), success ? 30 : 100);
+                Mth.PI / (success ? 4 : 2), success ? 30 : 100);
             spray.sprayParticles(serverLevel,
-                    success ? colorizer : new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)),
-                            activator));
+                success ? colorizer : new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)),
+                    activator));
         }
 
         var pitch = 1f;

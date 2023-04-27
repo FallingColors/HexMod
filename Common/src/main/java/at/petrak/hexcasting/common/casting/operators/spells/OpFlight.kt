@@ -7,8 +7,8 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getPlayer
 import at.petrak.hexcasting.api.casting.getPositiveDouble
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.player.FlightAbility
 import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.lib.HexSounds
@@ -110,8 +110,8 @@ class OpFlight(val type: Type) : SpellAction {
                     }
                     player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_FINISH, SoundSource.PLAYERS, 2f, 1f)
                     val superDangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), Math.PI, 0.4, count = 20)
-                    superDangerSpray.sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!), Util.NIL_UUID))
-                    superDangerSpray.sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.BLACK]!!), Util.NIL_UUID))
+                    superDangerSpray.sprayParticles(player.getLevel(), FrozenPigment(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!), Util.NIL_UUID))
+                    superDangerSpray.sprayParticles(player.getLevel(), FrozenPigment(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.BLACK]!!), Util.NIL_UUID))
                 } else {
                     if (!player.abilities.mayfly) {
                         player.abilities.mayfly = true
@@ -143,9 +143,9 @@ class OpFlight(val type: Type) : SpellAction {
                         .sprayParticles(player.getLevel(), color)
                     val dangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), 0.3, Math.PI * 0.75, count = 0)
                     dangerSpray.copy(count = oneDangerParticleCount)
-                        .sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.BLACK]!!), Util.NIL_UUID))
+                        .sprayParticles(player.getLevel(), FrozenPigment(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.BLACK]!!), Util.NIL_UUID))
                     dangerSpray.copy(count = oneDangerParticleCount)
-                        .sprayParticles(player.getLevel(), FrozenColorizer(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!), Util.NIL_UUID))
+                        .sprayParticles(player.getLevel(), FrozenPigment(ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!), Util.NIL_UUID))
 
                     if (player.level.random.nextFloat() < 0.02)
                         player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_AMBIENCE, SoundSource.PLAYERS, 0.2f, 1f)

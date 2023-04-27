@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
 import at.petrak.hexcasting.xplat.IForgeLikeBlock;
 import net.minecraft.core.BlockPos;
@@ -70,7 +70,7 @@ public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock
         return new BlockEntityConjured(pPos, pState);
     }
 
-    public static void setColor(LevelAccessor pLevel, BlockPos pPos, FrozenColorizer colorizer) {
+    public static void setColor(LevelAccessor pLevel, BlockPos pPos, FrozenPigment colorizer) {
         BlockEntity blockentity = pLevel.getBlockEntity(pPos);
         if (blockentity instanceof BlockEntityConjured tile) {
             tile.setColorizer(colorizer);
@@ -114,13 +114,13 @@ public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock
 
     @SoftImplement("forge")
     public boolean addLandingEffects(BlockState state1, ServerLevel worldserver, BlockPos pos, BlockState state2,
-                                     LivingEntity entity, int numberOfParticles) {
+        LivingEntity entity, int numberOfParticles) {
         return addLandingEffects(state1, worldserver, pos, entity, numberOfParticles);
     }
 
     @Override
     public boolean addLandingEffects(BlockState state, ServerLevel worldserver, BlockPos pos,
-                                     LivingEntity entity, int numberOfParticles) {
+        LivingEntity entity, int numberOfParticles) {
         BlockEntity tile = worldserver.getBlockEntity(pos);
         if (tile instanceof BlockEntityConjured bec) {
             bec.landParticle(entity, numberOfParticles);

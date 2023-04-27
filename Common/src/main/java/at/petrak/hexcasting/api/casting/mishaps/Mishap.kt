@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
-import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import at.petrak.hexcasting.common.lib.HexItems
@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3
 
 abstract class Mishap : Throwable() {
     /** Mishaps spray half-red, half-this-color. */
-    abstract fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer
+    abstract fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment
 
     open fun particleSpray(ctx: CastingEnvironment): ParticleSpray {
         return ParticleSpray(
@@ -54,8 +54,8 @@ abstract class Mishap : Throwable() {
 
     // Useful helper functions
 
-    protected fun dyeColor(color: DyeColor): FrozenColorizer =
-        FrozenColorizer(
+    protected fun dyeColor(color: DyeColor): FrozenPigment =
+        FrozenPigment(
             ItemStack(HexItems.DYE_COLORIZERS[color]!!),
             Util.NIL_UUID
         )

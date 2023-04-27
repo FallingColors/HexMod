@@ -11,9 +11,10 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.pigment.ColorProvider;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
@@ -142,7 +143,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setColorizer(Player target, FrozenColorizer colorizer) {
+    public void setColorizer(Player target, FrozenPigment colorizer) {
         var cc = HexCardinalComponents.FAVORED_COLORIZER.get(target);
         cc.setColorizer(colorizer);
     }
@@ -194,7 +195,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FrozenColorizer getColorizer(Player player) {
+    public FrozenPigment getColorizer(Player player) {
         var cc = HexCardinalComponents.FAVORED_COLORIZER.get(player);
         return cc.getColorizer();
     }
@@ -263,9 +264,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public int getRawColor(FrozenColorizer colorizer, float time, Vec3 position) {
+    public ColorProvider getColorProvider(FrozenPigment colorizer) {
         var cc = HexCardinalComponents.COLORIZER.maybeGet(colorizer.item());
-        return cc.map(col -> col.color(colorizer.owner(), time, position)).orElse(0xff_ff00dc);
+        return cc.map(col -> col.provideColor(colorizer.owner())).orElse(ColorProvider.MISSING);
     }
 
     @Override

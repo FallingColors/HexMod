@@ -84,9 +84,10 @@ public class HexAdditionalRenderers {
         RenderSystem.lineWidth(5f);
 
         var colorizer = IXplatAbstractions.INSTANCE.getColorizer(owner);
+        var colProvider = colorizer.getColorProvider();
         BiConsumer<float[], float[]> v = (l, r) -> {
-            int lcolor = colorizer.getColor(time, new Vec3(l[0], l[1], l[2])),
-                rcolor = colorizer.getColor(time, new Vec3(r[0], r[1], r[2]));
+            int lcolor = colProvider.getColor(time, new Vec3(l[0], l[1], l[2])),
+                rcolor = colProvider.getColor(time, new Vec3(r[0], r[1], r[2]));
             var normal = new Vector3f(r[0] - l[0], r[1] - l[1], r[2] - l[2]);
             normal.normalize();
             buf.vertex(neo, l[0], l[1], l[2])

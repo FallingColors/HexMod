@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.impl;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.server.level.ServerPlayer;
@@ -85,7 +85,7 @@ public class HexAPIImpl implements HexAPI {
     }
 
     @Override
-    public FrozenColorizer getColorizer(Player player) {
+    public FrozenPigment getColorizer(Player player) {
         return IXplatAbstractions.INSTANCE.getColorizer(player);
     }
 }

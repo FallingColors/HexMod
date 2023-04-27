@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.casting.circles.CircleExecutionState;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -130,16 +130,16 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public FrozenColorizer getColorizer() {
+    public FrozenPigment getColorizer() {
         var out = this.getColorizerFromImpetus();
         if (out != null)
             return out;
 
         // TODO: colouriser from an adjacent inventory also?
-        return new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)), Util.NIL_UUID);
+        return new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)), Util.NIL_UUID);
     }
 
-    private @Nullable FrozenColorizer getColorizerFromImpetus() {
+    private @Nullable FrozenPigment getColorizerFromImpetus() {
         var impetus = this.getImpetus();
         if (impetus == null)
             return null;
@@ -150,7 +150,7 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public void produceParticles(ParticleSpray particles, FrozenColorizer colorizer) {
+    public void produceParticles(ParticleSpray particles, FrozenPigment colorizer) {
         particles.sprayParticles(this.world, colorizer);
     }
 }

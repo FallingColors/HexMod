@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.addldata;
 
+import at.petrak.hexcasting.api.pigment.ColorProvider;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -7,7 +8,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 public interface ADColorizer {
-    int color(UUID owner, float time, Vec3 position);
+    ColorProvider provideColor(UUID owner);
 
     static int morphBetweenColors(int[] colors, Vec3 gradientDir, float time, Vec3 position) {
         float fIdx = Mth.positiveModulo(time + (float) gradientDir.dot(position), 1f) * colors.length;

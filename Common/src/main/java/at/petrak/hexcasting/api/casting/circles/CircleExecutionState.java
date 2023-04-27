@@ -3,7 +3,7 @@ package at.petrak.hexcasting.api.casting.circles;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.datafixers.util.Pair;
@@ -50,14 +50,14 @@ public class CircleExecutionState {
     public Direction enteredFrom;
     public CastingImage currentImage;
     public @Nullable UUID caster;
-    public FrozenColorizer colorizer;
+    public FrozenPigment colorizer;
 
     public final AABB bounds;
 
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, Set<BlockPos> knownPositions,
         List<BlockPos> reachedPositions, BlockPos currentPos, Direction enteredFrom,
-        CastingImage currentImage, @Nullable UUID caster, FrozenColorizer colorizer) {
+        CastingImage currentImage, @Nullable UUID caster, FrozenPigment colorizer) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
         this.knownPositions = knownPositions;
@@ -131,10 +131,10 @@ public class CircleExecutionState {
         reachedPositions.add(impetus.getBlockPos());
         var start = seenGoodPositions.get(0);
 
-        FrozenColorizer colorizer;
+        FrozenPigment colorizer;
         UUID casterUUID;
         if (caster == null) {
-            colorizer = new FrozenColorizer(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)),
+            colorizer = new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)),
                 Util.NIL_UUID);
             casterUUID = null;
         } else {
@@ -198,7 +198,7 @@ public class CircleExecutionState {
         if (nbt.hasUUID(TAG_CASTER))
             caster = nbt.getUUID(TAG_CASTER);
 
-        FrozenColorizer colorizer = FrozenColorizer.fromNBT(nbt.getCompound(TAG_COLORIZER));
+        FrozenPigment colorizer = FrozenPigment.fromNBT(nbt.getCompound(TAG_COLORIZER));
 
         return new CircleExecutionState(startPos, startDir, knownPositions, reachedPositions, currentPos,
             enteredFrom, image, caster, colorizer);

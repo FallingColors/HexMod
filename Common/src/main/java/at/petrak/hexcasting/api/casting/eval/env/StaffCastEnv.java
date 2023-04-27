@@ -1,13 +1,14 @@
 package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexStatistics;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternAck;
 import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -15,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
 import java.util.List;
@@ -61,7 +63,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public FrozenColorizer getColorizer() {
+    public FrozenPigment getColorizer() {
         return HexAPI.instance().getColorizer(this.caster);
     }
 
@@ -108,5 +110,12 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,
             new MsgNewSpellPatternAck(clientInfo, resolvedPatterns.size() - 1));
+
+        if (clientInfo.getResolutionType().getSuccess()) {
+            // Somehow we lost spraying particles on each new pattern, so do it here
+            // this also nicely prevents particle spam on trinkets
+            new ParticleSpray(sender.position(), new Vec3(0.0, 1.5, 0.0), 0.4, Math.PI / 3, 30)
+                .sprayParticles(sender.getLevel(), IXplatAbstractions.INSTANCE.getColorizer(sender));
+        }
     }
 }

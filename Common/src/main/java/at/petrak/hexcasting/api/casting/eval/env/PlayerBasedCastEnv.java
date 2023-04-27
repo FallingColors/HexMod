@@ -9,10 +9,10 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.misc.HexDamageSources;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import net.minecraft.core.BlockPos;
@@ -91,10 +91,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
                 var out = new ArrayList<ItemStack>();
 
                 // First, the inventory backwards
+                // We use inv.items here to get the main inventory, but not offhand or armor
                 Inventory inv = this.caster.getInventory();
-                for (int i = inv.getContainerSize(); i >= 0; i--) {
+                for (int i = inv.items.size() - 1; i >= 0; i--) {
                     if (i != inv.selected) {
-                        out.add(inv.getItem(i));
+                        out.add(inv.items.get(i));
                     }
                 }
 
@@ -187,7 +188,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public void produceParticles(ParticleSpray particles, FrozenColorizer colorizer) {
+    public void produceParticles(ParticleSpray particles, FrozenPigment colorizer) {
         particles.sprayParticles(this.world, colorizer);
     }
 
@@ -204,5 +205,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     protected void sendMishapMsgToPlayer(OperatorSideEffect.DoMishap mishap) {
         var msg = mishap.getMishap().errorMessageWithName(this, mishap.getErrorCtx());
         this.caster.sendSystemMessage(msg);
+    }
+
+    @Override
+    protected boolean isCreativeMode() {
+        // not sure what the diff between this and isCreative() is
+        return this.caster.getAbilities().instabuild;
     }
 }

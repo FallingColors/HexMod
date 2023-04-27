@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.blocks.entity;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.blocks.BlockConjured;
 import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class BlockEntityConjured extends HexBlockEntity {
     private static final Random RANDOM = new Random();
-    private FrozenColorizer colorizer = FrozenColorizer.DEFAULT.get();
+    private FrozenPigment colorizer = FrozenPigment.DEFAULT.get();
 
     public static final String TAG_COLORIZER = "tag_colorizer";
 
@@ -26,8 +26,9 @@ public class BlockEntityConjured extends HexBlockEntity {
 
     public void walkParticle(Entity pEntity) {
         if (getBlockState().getBlock() instanceof BlockConjured conjured && !(conjured instanceof BlockConjuredLight)) {
+            var colProvider = this.colorizer.getColorProvider();
             for (int i = 0; i < 3; ++i) {
-                int color = this.colorizer.getColor(pEntity.tickCount, pEntity.position()
+                int color = colProvider.getColor(pEntity.tickCount, pEntity.position()
                     .add(new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
                         RANDOM.nextFloat() * 3)));
                 assert level != null;
@@ -44,7 +45,7 @@ public class BlockEntityConjured extends HexBlockEntity {
 
     public void particleEffect() {
         if (getBlockState().getBlock() instanceof BlockConjured) {
-            int color = this.colorizer.getColor(RANDOM.nextFloat() * 16384,
+            int color = this.colorizer.getColorProvider().getColor(RANDOM.nextFloat() * 16384,
                 new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
                     RANDOM.nextFloat() * 3));
             assert level != null;
@@ -73,8 +74,9 @@ public class BlockEntityConjured extends HexBlockEntity {
     }
 
     public void landParticle(Entity entity, int number) {
+        var colProvider = this.colorizer.getColorProvider();
         for (int i = 0; i < number * 2; i++) {
-            int color = this.colorizer.getColor(entity.tickCount, entity.position()
+            int color = colProvider.getColor(entity.tickCount, entity.position()
                 .add(new Vec3(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat()).scale(
                     RANDOM.nextFloat() * 3)));
             assert level != null;
@@ -93,14 +95,14 @@ public class BlockEntityConjured extends HexBlockEntity {
 
     @Override
     protected void loadModData(CompoundTag tag) {
-        this.colorizer = FrozenColorizer.fromNBT(tag.getCompound(TAG_COLORIZER));
+        this.colorizer = FrozenPigment.fromNBT(tag.getCompound(TAG_COLORIZER));
     }
 
-    public FrozenColorizer getColorizer() {
+    public FrozenPigment getColorizer() {
         return this.colorizer;
     }
 
-    public void setColorizer(FrozenColorizer colorizer) {
+    public void setColorizer(FrozenPigment colorizer) {
         this.colorizer = colorizer;
         this.sync();
     }

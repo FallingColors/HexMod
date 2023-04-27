@@ -3,7 +3,7 @@ package at.petrak.hexcasting.api;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.base.Suppliers;
@@ -154,8 +154,8 @@ public interface HexAPI {
         return null;
     }
 
-    default FrozenColorizer getColorizer(Player player) {
-        return FrozenColorizer.DEFAULT.get();
+    default FrozenPigment getColorizer(Player player) {
+        return FrozenPigment.DEFAULT.get();
     }
 
     /**

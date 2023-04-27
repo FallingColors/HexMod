@@ -5,8 +5,8 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
-import at.petrak.hexcasting.api.misc.FrozenColorizer
 import at.petrak.hexcasting.api.mod.HexStatistics
+import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.common.lib.HexItems
 import net.minecraft.Util
@@ -57,7 +57,7 @@ sealed class OperatorSideEffect {
     data class Particles(val spray: ParticleSpray) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
             harness.env.produceParticles(this.spray, harness.env.colorizer)
-            this.spray.sprayParticles(harness.env.world, harness.env.colorizer)
+//            this.spray.sprayParticles(harness.env.world, harness.env.colorizer)
 
             return false
         }
@@ -70,7 +70,7 @@ sealed class OperatorSideEffect {
             spray.sprayParticles(harness.env.world, color)
             spray.sprayParticles(
                 harness.env.world,
-                FrozenColorizer(
+                FrozenPigment(
                     ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!),
                     Util.NIL_UUID
                 )

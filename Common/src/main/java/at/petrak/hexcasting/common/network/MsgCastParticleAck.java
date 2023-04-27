@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -17,7 +17,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client to spray particles everywhere.
  */
-public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer) implements IMessage {
+public record MsgCastParticleAck(ParticleSpray spray, FrozenPigment colorizer) implements IMessage {
     public static final ResourceLocation ID = modLoc("cprtcl");
 
     @Override
@@ -37,7 +37,7 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer)
         var spread = buf.readDouble();
         var count = buf.readInt();
         var tag = buf.readAnySizeNbt();
-        var colorizer = FrozenColorizer.fromNBT(tag);
+        var colorizer = FrozenPigment.fromNBT(tag);
         return new MsgCastParticleAck(
             new ParticleSpray(new Vec3(posX, posY, posZ), new Vec3(velX, velY, velZ), fuzziness, spread, count),
             colorizer);
@@ -71,9 +71,10 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenColorizer colorizer)
         Minecraft.getInstance().execute(new Runnable() {
             @Override
             public void run() {
+                var colProvider = msg.colorizer().getColorProvider();
                 for (int i = 0; i < msg.spray().getCount(); i++) {
                     // For the colors, pick any random time to get a mix of colors
-                    var color = msg.colorizer().getColor(RANDOM.nextFloat() * 256f, Vec3.ZERO);
+                    var color = colProvider.getColor(RANDOM.nextFloat() * 256f, Vec3.ZERO);
 
                     var offset = randomInCircle(Mth.TWO_PI).normalize()
                         .scale(RANDOM.nextFloat() * msg.spray().getFuzziness() / 2);

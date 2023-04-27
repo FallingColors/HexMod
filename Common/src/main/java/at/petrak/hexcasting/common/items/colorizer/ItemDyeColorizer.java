@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items.colorizer;
 
 import at.petrak.hexcasting.api.item.ColorizerItem;
+import at.petrak.hexcasting.api.pigment.ColorProvider;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +22,16 @@ public class ItemDyeColorizer extends Item implements ColorizerItem {
     }
 
     @Override
-    public int color(ItemStack stack, UUID owner, float time, Vec3 position) {
-        return dyeColor.getTextColor();
+    public ColorProvider provideColor(ItemStack stack, UUID owner) {
+        return colorProvider;
+    }
+
+    protected MyColorProvider colorProvider = new MyColorProvider();
+
+    protected class MyColorProvider extends ColorProvider {
+        @Override
+        protected int getRawColor(float time, Vec3 position) {
+            return dyeColor.getTextColor();
+        }
     }
 }

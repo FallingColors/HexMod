@@ -6,8 +6,8 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -200,7 +200,7 @@ public abstract class CastingEnvironment {
         return null;
     }
 
-    public static record HeldItemInfo(ItemStack stack, @Nullable InteractionHand hand) {
+    public record HeldItemInfo(ItemStack stack, @Nullable InteractionHand hand) {
         public ItemStack component1() {
             return stack;
         }
@@ -226,11 +226,22 @@ public abstract class CastingEnvironment {
     }
 
     /**
+     * Whether to provide infinite items.
+     */
+    protected boolean isCreativeMode() {
+        return false;
+    }
+
+    /**
      * Attempt to withdraw some number of items from stacks available.
      * <p>
      * Return whether it was successful.
      */
     public boolean withdrawItem(Predicate<ItemStack> stackOk, int count, boolean actuallyRemove) {
+        if (this.isCreativeMode()) {
+            return true;
+        }
+
         var stacks = this.getUsableStacks(StackDiscoveryMode.EXTRACTION);
 
         var presentCount = 0;
@@ -277,7 +288,7 @@ public abstract class CastingEnvironment {
         EXTRACTION,
     }
 
-    public abstract FrozenColorizer getColorizer();
+    public abstract FrozenPigment getColorizer();
 
-    public abstract void produceParticles(ParticleSpray particles, FrozenColorizer colorizer);
+    public abstract void produceParticles(ParticleSpray particles, FrozenPigment colorizer);
 }

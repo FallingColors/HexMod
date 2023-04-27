@@ -3,7 +3,7 @@ package at.petrak.hexcasting.api.mod;
 // Don't understand what this does so i commented it all out :gigachad:
 /*
 
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenColorizer;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.spell.ParticleSpray;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -24,7 +24,8 @@ public final class HexApiMessages {
                                       Function<FrozenColorizer, Object> colorizerMessage,
                                       BiFunction<ParticleSpray, FrozenColorizer, Object> particleSprayMessage) {
         if (HexApiMessages.channel != null)
-            throw new IllegalStateException("Already set sync channel! If you're not Hex, you shouldn't be calling this.");
+            throw new IllegalStateException("Already set sync channel! If you're not Hex, you shouldn't be calling
+            this.");
         HexApiMessages.channel = channel;
         HexApiMessages.sentinelMessage = sentinelMessage;
         HexApiMessages.colorizerMessage = colorizerMessage;

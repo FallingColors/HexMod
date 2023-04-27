@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.cc;
 
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.CompoundTag;
@@ -18,20 +18,20 @@ public class CCFavoredColorizer implements Component, AutoSyncedComponent {
         this.owner = owner;
     }
 
-    private FrozenColorizer colorizer = FrozenColorizer.DEFAULT.get();
+    private FrozenPigment colorizer = FrozenPigment.DEFAULT.get();
 
-    public FrozenColorizer getColorizer() {
+    public FrozenPigment getColorizer() {
         return colorizer;
     }
 
-    public void setColorizer(FrozenColorizer colorizer) {
+    public void setColorizer(FrozenPigment colorizer) {
         this.colorizer = colorizer;
         HexCardinalComponents.FAVORED_COLORIZER.sync(this.owner);
     }
 
     @Override
     public void readFromNbt(CompoundTag tag) {
-        this.colorizer = FrozenColorizer.fromNBT(tag.getCompound(TAG_COLORIZER));
+        this.colorizer = FrozenPigment.fromNBT(tag.getCompound(TAG_COLORIZER));
     }
 
     @Override
