@@ -8,7 +8,7 @@
       "item": "hexcasting:amethyst_dust"
     },
     "I": {
-      "item": "minecraft:amethyst_shard"
+      "item": "minecraft:copper_ingot"
     }
   },
   "pattern": [
@@ -17,6 +17,6 @@
     "DCD"
   ],
   "result": {
-    "item": "hexcasting:uuid_colorizer"
+    "item": "hexcasting:default_colorizer"
   }
 }

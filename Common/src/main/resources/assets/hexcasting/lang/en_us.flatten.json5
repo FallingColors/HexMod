@@ -76,6 +76,7 @@
     "pride_colorizer_plural": "Plural Pigment",
     "pride_colorizer_transgender": "Transgender Pigment",
     "uuid_colorizer": "Soulglimmer Pigment",
+    "default_colorizer": "Vacant Pigment",
     
     "creative_unlocker": "The Media Cube",
     "creative_unlocker.for_emphasis": "INFINITE MEDIA",
@@ -1000,11 +1001,11 @@
       "phials.desc": "$(italic)Drink the milk./$",
       
       
-      "pigments.1": "Although their names were lost to time, the old practitioners of my art seem to have identified themselves by a color, emblematic of them and their spells. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in personal colour.\"",
-      "pigments.2": "I'm not certain on the specifics of how it works, but I believe I have isolated the formulae for many different colors of pigments. To use a pigment, I hold it in one hand while casting $(l:patterns/spells/colorize)$(action)Internalize Pigment/$ with the other, consuming the pigment and marking my mind with its color.$(br2)The pigments seem to affect the color of the sparks of media emitted out of a staff when I cast a _Hex, as well as my $(l:patterns/spells/sentinels)$(thing)sentinel/$.",
+      "pigments.1": "The old practitioners of my art sometimes identified themselves by a color, emblematic of them and their _Hexes. Although their names have faded, their colors remain. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in personal colour.\"",
+      "pigments.2": "I'm not certain on the specifics, but I believe I have isolated the formulae for many different colors and blends of pigments. To apply a pigment, I hold it in one hand and cast $(l:patterns/spells/colorize)$(action)Internalize Pigment/$ with the other; this consumes the pigment.$(br2)The pigments seem to affect the color of the sparks of _media emitted when I cast a _Hex and my $(l:patterns/spells/sentinels)$(thing)sentinel/$, but I don't doubt that the color will show up elsewhere.",
       "pigments.colored.crafting.header": "Chromatic Pigments",
       "pigments.colored.crafting.desc": "Pigments in all the colors of the rainbow.",
-      "pigments.uuid.crafting.desc": "And finally, a pigment with a color wholly unique to me.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
+      "pigments.special": "And finally, a pair of special pigments. $(item)Soulglimmer Pigment/$ shines with colors wholly unique to me, and $(item)Vacant Pigment/$ restores my original purplish-orange spread.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
       
       
       "edified.1": "By infusing _media into a sapling via the use of $(l:patterns/spells/blockworks#hexcasting:edify)$(action)Edify Sapling/$, I can create what is called an $(l:items/edified)$(thing)Edified Tree/$. They tend to be tall and pointy, with ridged bark and wood that grows in a strange spiral pattern. Their leaves come in three pretty colors.",

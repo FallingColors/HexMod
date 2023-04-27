@@ -5,10 +5,8 @@ import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -18,7 +16,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
@@ -134,8 +131,7 @@ public class CircleExecutionState {
         FrozenPigment colorizer;
         UUID casterUUID;
         if (caster == null) {
-            colorizer = new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)),
-                Util.NIL_UUID);
+            colorizer = FrozenPigment.DEFAULT.get();
             casterUUID = null;
         } else {
             colorizer = HexAPI.instance().getColorizer(caster);

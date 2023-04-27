@@ -69,10 +69,11 @@
       "recipe": "hexcasting:pride_colorizer_plural",
       "recipe2": "hexcasting:pride_colorizer_transgender"
     },
+    "hexcasting.page.pigments.special",
     {
       "type": "patchouli:crafting",
       "recipe": "hexcasting:uuid_colorizer",
-      "text": "hexcasting.page.pigments.uuid.crafting.desc"
+      "recipe2": "hexcasting:default_colorizer"
     }
   ]
 }

@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.network;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -74,7 +75,6 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenPigment colorizer) i
                 var colProvider = msg.colorizer().getColorProvider();
                 for (int i = 0; i < msg.spray().getCount(); i++) {
                     // For the colors, pick any random time to get a mix of colors
-                    var color = colProvider.getColor(RANDOM.nextFloat() * 256f, Vec3.ZERO);
 
                     var offset = randomInCircle(Mth.TWO_PI).normalize()
                         .scale(RANDOM.nextFloat() * msg.spray().getFuzziness() / 2);
@@ -95,6 +95,8 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenPigment colorizer) i
                         .add(k.scale(Math.sin(phi) * Math.cos(theta)))
                         .add(v.cross(k).scale(Math.sin(phi) * Math.sin(theta)));
                     var vel = velUnlen.scale(msg.spray().getVel().length() / 20);
+
+                    var color = colProvider.getColor(ClientTickCounter.getTotal(), velUnlen);
 
                     Minecraft.getInstance().level.addParticle(
                         new ConjureParticleOptions(color),

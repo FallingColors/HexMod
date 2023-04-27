@@ -185,12 +185,9 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         gayRecipe(recipes, ItemPrideColorizer.Type.PLURAL, Ingredient.of(Items.REPEATER));
         gayRecipe(recipes, ItemPrideColorizer.Type.TRANSGENDER, Ingredient.of(Items.EGG));
 
-        ShapedRecipeBuilder.shaped(HexItems.UUID_COLORIZER)
-            .define('D', HexItems.AMETHYST_DUST)
-            .define('C', Items.AMETHYST_SHARD)
-            .pattern(" D ")
-            .pattern("DCD")
-            .pattern(" D ")
+        ring(HexItems.UUID_COLORIZER, 1, HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD)
+            .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
+        ring(HexItems.DEFAULT_COLORIZER, 1, HexItems.AMETHYST_DUST, Items.COPPER_INGOT)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.SCROLL_SMOL)

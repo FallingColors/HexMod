@@ -1,4 +1,4 @@
-// 1.19.2	2023-02-18T11:42:13.012790417	Recipes
+// 1.19.2	2023-04-27T15:18:55.496498244	Recipes
 29056d8bbc023668564ee81f4eb8b2a11411cf4a data/create/recipes/crushing/amethyst_block.json
 5bb0b70967a422bfd88c01fa1af64e9b98781fd1 data/create/recipes/crushing/amethyst_cluster.json
 229931adf8d62f659de5950d711afd24fb5aa535 data/hexcasting/advancements/recipes/brainsweep/brainsweep/akashic_record.json
@@ -26,6 +26,7 @@ b62b3b67e6a105e1eb47d04c2ededd8d408df7b7 data/hexcasting/advancements/recipes/he
 3c552071e6b3cfd4932b8f1e8d8b91aae8ead99d data/hexcasting/advancements/recipes/hexcasting/dark_oak_staff.json
 1407fa19f33b98ad0f125a0cba0cf8388b1441e5 data/hexcasting/advancements/recipes/hexcasting/decompose_quenched_shard/charged.json
 1468a014f6fedc4736989fa9a5a0faeb14ee0cd1 data/hexcasting/advancements/recipes/hexcasting/decompose_quenched_shard/dust.json
+5f89f1a6eef256066bd9c45121003c1f4c3776dd data/hexcasting/advancements/recipes/hexcasting/default_colorizer.json
 a3c7f19df257ee07f0894708b48438fdf3b14a47 data/hexcasting/advancements/recipes/hexcasting/dye_colorizer_black.json
 e687ceab424098d586f0b67a34fe65bee1f4dfca data/hexcasting/advancements/recipes/hexcasting/dye_colorizer_blue.json
 1b210391768fede639b29ae6fc5adf2b8b4e64c6 data/hexcasting/advancements/recipes/hexcasting/dye_colorizer_brown.json
@@ -129,6 +130,7 @@ f398f4a10736f967482dd1d254d37c7ba9e67bb0 data/hexcasting/recipes/compat/farmersd
 9f2c8e96930991decc2968f1e11978b034ef80b6 data/hexcasting/recipes/decompose_quenched_shard/charged.json
 73d8339dc7ba1d305df09cd52037597d4ffaea2a data/hexcasting/recipes/decompose_quenched_shard/dust.json
 7feebaa04946fc765add8bd6560c0c0b5eca464d data/hexcasting/recipes/decompose_quenched_shard/shard.json
+f138f70998ced6042dfcf6850901801aecba31c0 data/hexcasting/recipes/default_colorizer.json
 768d70365c56ef1fbad089d3e3fd68548f964227 data/hexcasting/recipes/dye_colorizer_black.json
 7caa7a8d9f8b0859f9507376bb715bdbe4b3fb56 data/hexcasting/recipes/dye_colorizer_blue.json
 2b16fb3f6b4e4e31c5c507e6c0535bd12c7c63a1 data/hexcasting/recipes/dye_colorizer_brown.json
@@ -200,5 +202,5 @@ f0852056a692d776bf537c821f3d166c2be88bd8 data/hexcasting/recipes/spruce_staff.js
 13ca24f9f87a6b34f7717e5c326291079e6db96f data/hexcasting/recipes/sub_sandwich.json
 81132fbb6784ed15721aff520964988c1d5be06b data/hexcasting/recipes/thought_knot.json
 42ab683499c3b0f7ae594879490a37eb6aff9703 data/hexcasting/recipes/trinket.json
-ffba0344dfc7f604e8e33a333549f74c53f3e7e6 data/hexcasting/recipes/uuid_colorizer.json
+27bbddd139a5ec5b86245cd0541e8e2d9e50d9cf data/hexcasting/recipes/uuid_colorizer.json
 4ffed306e5f640054a6f269ae0e548388f087996 data/hexcasting/recipes/warped_staff.json
