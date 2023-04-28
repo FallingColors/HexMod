@@ -9,8 +9,8 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.common.network.MsgNewSpellPatternAck;
-import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn;
+import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S;
+import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -67,7 +67,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
         return HexAPI.instance().getColorizer(this.caster);
     }
 
-    public static void handleNewPatternOnServer(ServerPlayer sender, MsgNewSpellPatternSyn msg) {
+    public static void handleNewPatternOnServer(ServerPlayer sender, MsgNewSpellPatternC2S msg) {
         boolean cheatedPatternOverlap = false;
 
         List<ResolvedPattern> resolvedPatterns = msg.resolvedPatterns();
@@ -109,7 +109,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
         }
 
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,
-            new MsgNewSpellPatternAck(clientInfo, resolvedPatterns.size() - 1));
+            new MsgNewSpellPatternS2C(clientInfo, resolvedPatterns.size() - 1));
 
         if (clientInfo.getResolutionType().getSuccess()) {
             // Somehow we lost spraying particles on each new pattern, so do it here

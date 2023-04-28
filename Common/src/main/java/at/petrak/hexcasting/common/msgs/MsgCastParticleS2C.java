@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
@@ -18,7 +18,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client to spray particles everywhere.
  */
-public record MsgCastParticleAck(ParticleSpray spray, FrozenPigment colorizer) implements IMessage {
+public record MsgCastParticleS2C(ParticleSpray spray, FrozenPigment colorizer) implements IMessage {
     public static final ResourceLocation ID = modLoc("cprtcl");
 
     @Override
@@ -26,7 +26,7 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenPigment colorizer) i
         return ID;
     }
 
-    public static MsgCastParticleAck deserialize(ByteBuf buffer) {
+    public static MsgCastParticleS2C deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var posX = buf.readDouble();
         var posY = buf.readDouble();
@@ -39,7 +39,7 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenPigment colorizer) i
         var count = buf.readInt();
         var tag = buf.readAnySizeNbt();
         var colorizer = FrozenPigment.fromNBT(tag);
-        return new MsgCastParticleAck(
+        return new MsgCastParticleS2C(
             new ParticleSpray(new Vec3(posX, posY, posZ), new Vec3(velX, velY, velZ), fuzziness, spread, count),
             colorizer);
     }
@@ -68,7 +68,7 @@ public record MsgCastParticleAck(ParticleSpray spray, FrozenPigment colorizer) i
         return new Vec3(Math.sqrt(1.0 - z * z) * Math.cos(th), Math.sqrt(1.0 - z * z) * Math.sin(th), z);
     }
 
-    public static void handle(MsgCastParticleAck msg) {
+    public static void handle(MsgCastParticleS2C msg) {
         Minecraft.getInstance().execute(new Runnable() {
             @Override
             public void run() {

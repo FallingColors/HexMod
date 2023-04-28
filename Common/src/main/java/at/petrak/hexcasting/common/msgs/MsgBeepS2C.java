@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.common.msgs;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public record MsgBeepAck(Vec3 target, int note, NoteBlockInstrument instrument) implements IMessage {
+public record MsgBeepS2C(Vec3 target, int note, NoteBlockInstrument instrument) implements IMessage {
     public static final ResourceLocation ID = modLoc("beep");
 
     @Override
@@ -19,14 +19,14 @@ public record MsgBeepAck(Vec3 target, int note, NoteBlockInstrument instrument) 
         return ID;
     }
 
-    public static MsgBeepAck deserialize(ByteBuf buffer) {
+    public static MsgBeepS2C deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var x = buf.readDouble();
         var y = buf.readDouble();
         var z = buf.readDouble();
         var note = buf.readInt();
         var instrument = buf.readEnum(NoteBlockInstrument.class);
-        return new MsgBeepAck(new Vec3(x, y, z), note, instrument);
+        return new MsgBeepS2C(new Vec3(x, y, z), note, instrument);
     }
 
     @Override
@@ -37,8 +37,8 @@ public record MsgBeepAck(Vec3 target, int note, NoteBlockInstrument instrument) 
         buf.writeInt(this.note);
         buf.writeEnum(instrument);
     }
-    
-    public static void handle(MsgBeepAck msg) {
+
+    public static void handle(MsgBeepS2C msg) {
         Minecraft.getInstance().execute(new Runnable() {
             @Override
             public void run() {

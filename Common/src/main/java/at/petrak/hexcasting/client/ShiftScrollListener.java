@@ -2,7 +2,7 @@ package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.network.MsgShiftScrollSyn;
+import at.petrak.hexcasting.common.msgs.MsgShiftScrollC2S;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -46,7 +46,7 @@ public class ShiftScrollListener {
     public static void clientTickEnd() {
         if (mainHandDelta != 0 || offHandDelta != 0) {
             IClientXplatAbstractions.INSTANCE.sendPacketToServer(
-                new MsgShiftScrollSyn(mainHandDelta, offHandDelta, Screen.hasControlDown(),
+                new MsgShiftScrollC2S(mainHandDelta, offHandDelta, Screen.hasControlDown(),
                     HexConfig.client().invertSpellbookScrollDirection(),
                     HexConfig.client().invertAbacusScrollDirection()));
             mainHandDelta = 0;

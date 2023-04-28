@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
@@ -16,7 +16,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client when the player finishes casting a spell.
  */
-public record MsgNewSpellPatternAck(ExecutionClientView info, int index) implements IMessage {
+public record MsgNewSpellPatternS2C(ExecutionClientView info, int index) implements IMessage {
     public static final ResourceLocation ID = modLoc("pat_sc");
 
     @Override
@@ -24,7 +24,7 @@ public record MsgNewSpellPatternAck(ExecutionClientView info, int index) impleme
         return ID;
     }
 
-    public static MsgNewSpellPatternAck deserialize(ByteBuf buffer) {
+    public static MsgNewSpellPatternS2C deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
         var isStackEmpty = buf.readBoolean();
@@ -34,7 +34,7 @@ public record MsgNewSpellPatternAck(ExecutionClientView info, int index) impleme
         var stack = buf.readList(FriendlyByteBuf::readNbt);
         var raven = buf.readOptional(FriendlyByteBuf::readNbt).orElse(null);
 
-        return new MsgNewSpellPatternAck(
+        return new MsgNewSpellPatternS2C(
             new ExecutionClientView(isStackEmpty, resolutionType, stack, raven), index
         );
     }
@@ -49,7 +49,7 @@ public record MsgNewSpellPatternAck(ExecutionClientView info, int index) impleme
         buf.writeOptional(Optional.ofNullable(this.info.getRavenmind()), FriendlyByteBuf::writeNbt);
     }
 
-    public static void handle(MsgNewSpellPatternAck self) {
+    public static void handle(MsgNewSpellPatternS2C self) {
         Minecraft.getInstance().execute(() -> {
             var mc = Minecraft.getInstance();
             if (self.info().isStackClear()) {

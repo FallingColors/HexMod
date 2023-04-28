@@ -18,7 +18,7 @@ import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.render.*
 import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.lib.HexSounds
-import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
+import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
@@ -248,7 +248,7 @@ class GuiSpellcasting constructor(
                 this.usedSpots.addAll(pat.positions(start))
 
                 IClientXplatAbstractions.INSTANCE.sendPacketToServer(
-                    MsgNewSpellPatternSyn(
+                    MsgNewSpellPatternC2S(
                         this.handOpenedWith,
                         pat,
                         this.patterns
