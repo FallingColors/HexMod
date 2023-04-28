@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -24,7 +24,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * Sent client->server when the client shift+scrolls with a shift-scrollable item
  * or scrolls in the spellcasting UI.
  */
-public record MsgShiftScrollSyn(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook,
+public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook,
                                 boolean invertAbacus) implements IMessage {
     public static final ResourceLocation ID = modLoc("scroll");
 
@@ -33,14 +33,14 @@ public record MsgShiftScrollSyn(double mainHandDelta, double offHandDelta, boole
         return ID;
     }
 
-    public static MsgShiftScrollSyn deserialize(ByteBuf buffer) {
+    public static MsgShiftScrollC2S deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var mainHandDelta = buf.readDouble();
         var offHandDelta = buf.readDouble();
         var isCtrl = buf.readBoolean();
         var invertSpellbook = buf.readBoolean();
         var invertAbacus = buf.readBoolean();
-        return new MsgShiftScrollSyn(mainHandDelta, offHandDelta, isCtrl, invertSpellbook, invertAbacus);
+        return new MsgShiftScrollC2S(mainHandDelta, offHandDelta, isCtrl, invertSpellbook, invertAbacus);
     }
 
     public void serialize(FriendlyByteBuf buf) {

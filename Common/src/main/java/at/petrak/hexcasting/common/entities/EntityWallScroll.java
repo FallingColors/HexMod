@@ -7,8 +7,8 @@ import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import at.petrak.hexcasting.common.network.MsgNewWallScrollAck;
-import at.petrak.hexcasting.common.network.MsgRecalcWallScrollDisplayAck;
+import at.petrak.hexcasting.common.msgs.MsgNewWallScrollS2C;
+import at.petrak.hexcasting.common.msgs.MsgRecalcWallScrollDisplayS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -137,7 +137,7 @@ public class EntityWallScroll extends HangingEntity {
 
             if (pPlayer.getLevel() instanceof ServerLevel slevel) {
                 IXplatAbstractions.INSTANCE.sendPacketNear(this.position(), 32.0, slevel,
-                    new MsgRecalcWallScrollDisplayAck(this.getId(), true));
+                    new MsgRecalcWallScrollDisplayS2C(this.getId(), true));
             } else {
                 // Beat the packet roundtrip to the punch to get a quicker visual
                 this.recalculateDisplay();
@@ -155,7 +155,7 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public Packet<?> getAddEntityPacket() {
         return IXplatAbstractions.INSTANCE.toVanillaClientboundPacket(
-            new MsgNewWallScrollAck(new ClientboundAddEntityPacket(this),
+            new MsgNewWallScrollS2C(new ClientboundAddEntityPacket(this),
                 pos, direction, scroll, getShowsStrokeOrder(), blockSize));
     }
 

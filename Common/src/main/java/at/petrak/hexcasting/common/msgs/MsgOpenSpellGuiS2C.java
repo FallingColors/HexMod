@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
@@ -16,7 +16,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client when the player opens the spell gui to request the server provide the current stack.
  */
-public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> patterns,
+public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> patterns,
                                  List<CompoundTag> stack,
                                  CompoundTag ravenmind,
                                  int parenCount
@@ -29,7 +29,7 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
         return ID;
     }
 
-    public static MsgOpenSpellGuiAck deserialize(ByteBuf buffer) {
+    public static MsgOpenSpellGuiS2C deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
         var hand = buf.readEnum(InteractionHand.class);
@@ -41,7 +41,7 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
 
         var parenCount = buf.readVarInt();
 
-        return new MsgOpenSpellGuiAck(hand, patterns, stack, raven, parenCount);
+        return new MsgOpenSpellGuiS2C(hand, patterns, stack, raven, parenCount);
     }
 
     public void serialize(FriendlyByteBuf buf) {
@@ -55,7 +55,7 @@ public record MsgOpenSpellGuiAck(InteractionHand hand, List<ResolvedPattern> pat
         buf.writeVarInt(this.parenCount);
     }
 
-    public static void handle(MsgOpenSpellGuiAck msg) {
+    public static void handle(MsgOpenSpellGuiS2C msg) {
         Minecraft.getInstance().execute(() -> {
             var mc = Minecraft.getInstance();
             mc.setScreen(

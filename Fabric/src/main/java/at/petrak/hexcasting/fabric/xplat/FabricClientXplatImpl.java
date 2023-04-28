@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.xplat;
 
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.client.ExtendedTexture;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;

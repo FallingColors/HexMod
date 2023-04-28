@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.common.msgs;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -11,7 +11,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client to synchronize OpBlink when the target is a player.
  */
-public record MsgBlinkAck(Vec3 addedPosition) implements IMessage {
+public record MsgBlinkS2C(Vec3 addedPosition) implements IMessage {
     public static final ResourceLocation ID = modLoc("blink");
 
     @Override
@@ -19,12 +19,12 @@ public record MsgBlinkAck(Vec3 addedPosition) implements IMessage {
         return ID;
     }
 
-    public static MsgBlinkAck deserialize(ByteBuf buffer) {
+    public static MsgBlinkS2C deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var x = buf.readDouble();
         var y = buf.readDouble();
         var z = buf.readDouble();
-        return new MsgBlinkAck(new Vec3(x, y, z));
+        return new MsgBlinkS2C(new Vec3(x, y, z));
     }
 
     @Override
@@ -34,7 +34,7 @@ public record MsgBlinkAck(Vec3 addedPosition) implements IMessage {
         buf.writeDouble(this.addedPosition.z);
     }
 
-    public static void handle(MsgBlinkAck self) {
+    public static void handle(MsgBlinkS2C self) {
         Minecraft.getInstance().execute(new Runnable() {
             @Override
             public void run() {

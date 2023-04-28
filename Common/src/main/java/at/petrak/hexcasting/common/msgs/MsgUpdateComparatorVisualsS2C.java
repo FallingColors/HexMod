@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import io.netty.buffer.ByteBuf;
@@ -10,9 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
- * Sent server->client when a player is looking at a block through a lens whose comparator value is not the same as what they last saw.
+ * Sent server->client when a player is looking at a block through a lens whose comparator value is not the same as
+ * what they last saw.
  */
-public record MsgUpdateComparatorVisualsAck(BlockPos pos, int comparator, int bee) implements IMessage {
+public record MsgUpdateComparatorVisualsS2C(BlockPos pos, int comparator, int bee) implements IMessage {
     public static final ResourceLocation ID = modLoc("cmp");
 
     @Override
@@ -20,14 +21,14 @@ public record MsgUpdateComparatorVisualsAck(BlockPos pos, int comparator, int be
         return ID;
     }
 
-    public static MsgUpdateComparatorVisualsAck deserialize(ByteBuf buffer) {
+    public static MsgUpdateComparatorVisualsS2C deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
 
         int comparator = buf.readInt();
         int bee = buf.readInt();
         BlockPos pos = comparator == -1 && bee == -1 ? null : buf.readBlockPos();
 
-        return new MsgUpdateComparatorVisualsAck(pos, comparator, bee);
+        return new MsgUpdateComparatorVisualsS2C(pos, comparator, bee);
     }
 
     public void serialize(FriendlyByteBuf buf) {
@@ -38,7 +39,7 @@ public record MsgUpdateComparatorVisualsAck(BlockPos pos, int comparator, int be
         }
     }
 
-    public static void handle(MsgUpdateComparatorVisualsAck msg) {
+    public static void handle(MsgUpdateComparatorVisualsS2C msg) {
         Minecraft.getInstance().execute(new Runnable() {
             @Override
             public void run() {

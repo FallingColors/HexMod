@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import at.petrak.hexcasting.common.network.MsgOpenSpellGuiAck;
+import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,7 +38,7 @@ public class ItemStaff extends Item {
             var descs = harness.generateDescs();
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
-                new MsgOpenSpellGuiAck(hand, patterns, descs.getFirst(), descs.getSecond(),
+                new MsgOpenSpellGuiS2C(hand, patterns, descs.getFirst(), descs.getSecond(),
                     0)); // TODO: Fix!
         }
 

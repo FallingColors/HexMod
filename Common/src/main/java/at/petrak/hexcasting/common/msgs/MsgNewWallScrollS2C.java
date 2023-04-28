@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.network;
+package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/network/clientbound/PacketSpawnDoppleganger.java
-public record MsgNewWallScrollAck(ClientboundAddEntityPacket inner, BlockPos pos, Direction dir, ItemStack scrollItem,
+public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos, Direction dir, ItemStack scrollItem,
                                   boolean showsStrokeOrder, int blockSize) implements IMessage {
     public static final ResourceLocation ID = modLoc("wallscr");
 
@@ -32,17 +32,17 @@ public record MsgNewWallScrollAck(ClientboundAddEntityPacket inner, BlockPos pos
         buf.writeVarInt(blockSize);
     }
 
-    public static MsgNewWallScrollAck deserialize(FriendlyByteBuf buf) {
+    public static MsgNewWallScrollS2C deserialize(FriendlyByteBuf buf) {
         var inner = new ClientboundAddEntityPacket(buf);
         var pos = buf.readBlockPos();
         var dir = HexUtils.getSafe(Direction.values(), buf.readByte());
         var scroll = buf.readItem();
         var strokeOrder = buf.readBoolean();
         var blockSize = buf.readVarInt();
-        return new MsgNewWallScrollAck(inner, pos, dir, scroll, strokeOrder, blockSize);
+        return new MsgNewWallScrollS2C(inner, pos, dir, scroll, strokeOrder, blockSize);
     }
 
-    public static void handle(MsgNewWallScrollAck self) {
+    public static void handle(MsgNewWallScrollS2C self) {
         Minecraft.getInstance().execute(new Runnable() {
             @Override
             public void run() {
