@@ -35,10 +35,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
 
 // When on the floor or ceiling FACING is the direction the *bottom* of the pattern points
 // (or which way is "down").
@@ -77,17 +74,18 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
+        BlockState bs, ServerLevel world) {
         HexPattern pattern;
         if (world.getBlockEntity(pos) instanceof BlockEntitySlate tile) {
             pattern = tile.pattern;
         } else {
             return new ControlFlow.Stop();
         }
-        
+
         var exitDirsSet = this.possibleExitDirections(pos, bs, world);
         exitDirsSet.remove(enterDir.getOpposite());
-        
+
         var exitDirs = exitDirsSet.stream().map((dir) -> this.exitPositionFromDirection(pos, dir));
 
         if (pattern == null)
@@ -95,7 +93,8 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
 
         var vm = new CastingVM(imageIn, env);
 
-        vm.queueExecuteAndWrapIota(new PatternIota(pattern), world);
+        var result = vm.queueExecuteAndWrapIota(new PatternIota(pattern), world);
+        // TODO: make mishaps actually halt execution
 
         return new ControlFlow.Continue(vm.getImage(), exitDirs.toList());
     }

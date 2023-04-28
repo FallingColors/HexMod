@@ -149,8 +149,6 @@ public interface ICircleComponent {
         }
 
         public static final class Stop extends ControlFlow {
-            public Stop() {
-            }
         }
     }
 }

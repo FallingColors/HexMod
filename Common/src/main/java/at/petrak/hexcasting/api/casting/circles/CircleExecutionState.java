@@ -211,26 +211,24 @@ public class CircleExecutionState {
         if (world == null)
             return true; // if the world is null, try again next tick.
 
-        ServerPlayer caster = null;
-        if (this.caster != null && world.getEntity(this.caster) instanceof ServerPlayer player)
-            caster = player;
-
         var env = new CircleCastEnv(world, this);
 
         var executorBlockState = world.getBlockState(this.currentPos);
         if (!(executorBlockState.getBlock() instanceof ICircleComponent executor)) {
             // TODO: notification of the error?
-            ICircleComponent.sfx(this.currentPos, executorBlockState, world, Objects.requireNonNull(env.getImpetus())
-                , false);
+            ICircleComponent.sfx(this.currentPos, executorBlockState, world,
+                Objects.requireNonNull(env.getImpetus()), false);
             return false;
         }
 
         executorBlockState = executor.startEnergized(this.currentPos, executorBlockState, world);
         this.reachedPositions.add(this.currentPos);
 
+        // Do the execution!
         boolean halt = false;
         var ctrl = executor.acceptControlFlow(this.currentImage, env, this.enteredFrom, this.currentPos,
             executorBlockState, world);
+
         if (ctrl instanceof ICircleComponent.ControlFlow.Stop) {
             // acceptControlFlow should have already posted the error
             halt = true;
