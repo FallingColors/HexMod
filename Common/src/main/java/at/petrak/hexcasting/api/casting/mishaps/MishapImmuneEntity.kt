@@ -2,17 +2,17 @@ package at.petrak.hexcasting.api.casting.mishaps
 
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.misc.FrozenColorizer
+import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.utils.aqua
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.DyeColor
 
 class MishapImmuneEntity(val entity: Entity) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenColorizer =
+    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLUE)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        yeetHeldItemsTowards(ctx, entity.position())
+        ctx.mishapEnvironment.yeetHeldItemsTowards(entity.position())
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

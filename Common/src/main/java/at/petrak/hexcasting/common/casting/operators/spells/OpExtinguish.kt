@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getBlockPos
+import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.ktxt.UseOnContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -26,14 +26,16 @@ object OpExtinguish : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getBlockPos(0, argc)
-        ctx.assertVecInRange(target)
+    ): SpellAction.Result {
+        // TODO: sho
+        val vecPos = args.getVec3(0, argc)
+        val pos = BlockPos(vecPos)
+        ctx.assertPosInRangeForEditing(pos)
 
-        return Triple(
-            Spell(target),
+        return SpellAction.Result(
+            Spell(pos),
             MediaConstants.DUST_UNIT * 6,
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(target), 1.0))
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
         )
     }
 
@@ -60,6 +62,7 @@ object OpExtinguish : SpellAction {
                                 is BaseFireBlock -> {
                                     ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
                                 }
+
                                 is CampfireBlock -> {
                                     if (blockstate.getValue(CampfireBlock.LIT)) { // check if campfire is lit before putting it out
                                         val wilson =
@@ -76,14 +79,17 @@ object OpExtinguish : SpellAction {
                                         ); true
                                     } else false
                                 }
+
                                 is AbstractCandleBlock -> {
                                     if (blockstate.getValue(AbstractCandleBlock.LIT)) { // same check for candles
                                         AbstractCandleBlock.extinguish(null, blockstate, ctx.world, here); true
                                     } else false
                                 }
+
                                 is NetherPortalBlock -> {
                                     ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
                                 }
+
                                 else -> false
                             }
 

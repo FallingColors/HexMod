@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.casting
 
-import at.petrak.hexcasting.api.misc.FrozenColorizer
-import at.petrak.hexcasting.common.network.MsgCastParticleAck
+import at.petrak.hexcasting.api.pigment.FrozenPigment
+import at.petrak.hexcasting.common.msgs.MsgCastParticleS2C
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
@@ -23,7 +23,7 @@ data class ParticleSpray(val pos: Vec3, val vel: Vec3, val fuzziness: Double, va
         }
     }
 
-    fun sprayParticles(world: ServerLevel, color: FrozenColorizer) {
-        IXplatAbstractions.INSTANCE.sendPacketNear(this.pos, 128.0, world, MsgCastParticleAck(this, color))
+    fun sprayParticles(world: ServerLevel, color: FrozenPigment) {
+        IXplatAbstractions.INSTANCE.sendPacketNear(this.pos, 128.0, world, MsgCastParticleS2C(this, color))
     }
 }

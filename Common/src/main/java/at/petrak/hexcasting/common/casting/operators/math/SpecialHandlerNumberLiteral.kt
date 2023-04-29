@@ -28,7 +28,7 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
     class InnerAction(val x: Double) : ConstMediaAction {
         override val argc = 0
 
-        override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+        override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
             return this.x.asActionResult
         }
     }

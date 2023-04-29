@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
@@ -8,8 +7,10 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.sounds.SoundSource
@@ -20,6 +21,7 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
+// TODO: how to handle in cirles
 object OpPlaceBlock : SpellAction {
     override val argc: Int
         get() = 1
@@ -27,21 +29,22 @@ object OpPlaceBlock : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+    ): SpellAction.Result {
         val pos = args.getBlockPos(0, argc)
-        ctx.assertVecInRange(pos)
+        ctx.assertPosInRangeForEditing(pos)
 
         val blockHit = BlockHitResult(
-            Vec3.atCenterOf(pos), ctx.caster.direction, pos, false
+            Vec3.atCenterOf(pos), ctx.caster?.direction ?: Direction.NORTH, pos, false
         )
-        val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
+        val itemUseCtx = ctx.caster?.let { UseOnContext(it, ctx.castingHand, blockHit) }
+            ?: throw NotImplementedError("how to implement this")
         val placeContext = BlockPlaceContext(itemUseCtx)
 
         val worldState = ctx.world.getBlockState(pos)
         if (!worldState.canBeReplaced(placeContext))
             throw MishapBadBlock.of(pos, "replaceable")
 
-        return Triple(
+        return SpellAction.Result(
             Spell(pos),
             MediaConstants.DUST_UNIT / 8,
             listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
@@ -50,37 +53,36 @@ object OpPlaceBlock : SpellAction {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
-            if (!ctx.canEditBlockAt(pos))
-                return
+            val caster = ctx.caster ?: return // TODO: Fix!
 
             val blockHit = BlockHitResult(
-                Vec3.atCenterOf(pos), ctx.caster.direction, pos, false
+                Vec3.atCenterOf(pos), caster.direction, pos, false
             )
 
             val bstate = ctx.world.getBlockState(pos)
-            val placeeStack = ctx.getOperativeSlot { it.item is BlockItem }?.copy()
+            val placeeStack = ctx.getHeldItemToOperateOn { it.item is BlockItem }?.stack
             if (placeeStack != null) {
                 if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, placeeStack, ctx.caster))
                     return
 
                 if (!placeeStack.isEmpty) {
                     // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/block/PieceTrickPlaceBlock.java#L143
-                    val oldStack = ctx.caster.getItemInHand(ctx.castingHand)
+                    val oldStack = caster.getItemInHand(ctx.castingHand)
                     val spoofedStack = placeeStack.copy()
 
                     // we temporarily give the player the stack, place it using mc code, then give them the old stack back.
                     spoofedStack.count = 1
-                    ctx.caster.setItemInHand(ctx.castingHand, spoofedStack)
+                    caster.setItemInHand(ctx.castingHand, spoofedStack)
 
-                    val itemUseCtx = UseOnContext(ctx.caster, ctx.castingHand, blockHit)
+                    val itemUseCtx = UseOnContext(caster, ctx.castingHand, blockHit)
                     val placeContext = BlockPlaceContext(itemUseCtx)
                     if (bstate.canBeReplaced(placeContext)) {
-                        if (ctx.withdrawItem(placeeStack, 1, false)) {
+                        if (ctx.withdrawItem({ it == placeeStack }, 1, false)) {
                             val res = spoofedStack.useOn(placeContext)
 
-                            ctx.caster.setItemInHand(ctx.castingHand, oldStack)
+                            caster.setItemInHand(ctx.castingHand, oldStack)
                             if (res != InteractionResult.FAIL) {
-                                ctx.withdrawItem(placeeStack, 1, true)
+                                ctx.withdrawItem({ it == placeeStack }, 1, true)
 
                                 ctx.world.playSound(
                                     ctx.caster,
@@ -95,10 +97,10 @@ object OpPlaceBlock : SpellAction {
                                 )
                             }
                         } else {
-                            ctx.caster.setItemInHand(ctx.castingHand, oldStack)
+                            caster.setItemInHand(ctx.castingHand, oldStack)
                         }
                     } else {
-                        ctx.caster.setItemInHand(ctx.castingHand, oldStack)
+                        caster.setItemInHand(ctx.castingHand, oldStack)
                     }
                 }
             }

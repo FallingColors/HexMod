@@ -1,6 +1,6 @@
 {
-  "name": "hexcasting.entry.lore",
+  "name": "hexcasting.category.lore",
   "icon": "hexcasting:lore_fragment",
-  "description": "hexcasting.entry.lore.desc",
+  "description": "hexcasting.category.lore.desc",
   "sortnum": 98
 }

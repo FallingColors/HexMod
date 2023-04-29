@@ -1,12 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.item.ItemStack
 
@@ -16,14 +15,15 @@ object OpErase : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
             (hexHolder?.hasHex() == true) ||
                 (datumHolder?.writeIota(null, true) == true)
-        }
+        } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "eraseable") // TODO: hack
+
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
 
@@ -33,7 +33,7 @@ object OpErase : SpellAction {
             throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
         }
 
-        return Triple(
+        return SpellAction.Result(
             Spell(handStack),
             MediaConstants.DUST_UNIT, listOf()
         )

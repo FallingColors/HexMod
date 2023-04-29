@@ -1,19 +1,16 @@
 package at.petrak.hexcasting.common.casting.operators.eval
 
 import at.petrak.hexcasting.api.casting.castables.Action
-import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
-import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpHalt : Action {
-    override fun operate(
-        continuation: SpellContinuation,
-        stack: MutableList<Iota>,
-        ravenmind: Iota?,
-        ctx: CastingEnvironment
-    ): OperationResult {
-        var newStack = stack.toList()
+    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+        var newStack = image.stack.toList()
+
         var done = false
         var newCont = continuation
         while (!done && newCont is SpellContinuation.NotDone) {
@@ -29,6 +26,7 @@ object OpHalt : Action {
             newStack = listOf()
         }
 
-        return OperationResult(newCont, newStack, ravenmind, listOf())
+        val image2 = image.withUsedOp().copy(stack = newStack)
+        return OperationResult(image2, listOf(), newCont, HexEvalSounds.SPELL)
     }
 }

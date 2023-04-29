@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;

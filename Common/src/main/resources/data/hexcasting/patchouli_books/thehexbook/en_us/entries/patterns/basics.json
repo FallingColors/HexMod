@@ -11,7 +11,7 @@
       "op_id": "hexcasting:get_caster",
       "anchor": "hexcasting:get_caster",
       "input": "",
-      "output": "entity",
+      "output": "entity | null",
       "text": "hexcasting.page.basics_pattern.get_caster"
     },
     {

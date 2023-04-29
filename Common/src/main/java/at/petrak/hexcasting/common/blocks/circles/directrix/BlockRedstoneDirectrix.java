@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.common.blocks.circles.directrix;
 
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
-import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -18,9 +20,9 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.List;
 
 public class BlockRedstoneDirectrix extends BlockCircleComponent {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -35,19 +37,18 @@ public class BlockRedstoneDirectrix extends BlockCircleComponent {
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos, BlockState bs,
-        Level world) {
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+        return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos, getRealFacing(bs))));
+    }
+
+    @Override
+    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
         return enterDir != getRealFacing(bs);
     }
 
     @Override
-    public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world) {
-        return EnumSet.of(getRealFacing(bs));
-    }
-
-    @Override
-    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, Level world) {
-        return null;
+    public EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world) {
+        return EnumSet.of(bs.getValue(FACING), bs.getValue(FACING).getOpposite());
     }
 
     @Override

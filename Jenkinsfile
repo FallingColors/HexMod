@@ -7,6 +7,8 @@ pipeline {
     }
     environment {
         discordWebhook = credentials('discordWebhook')
+        CURSEFORGE_TOKEN = credentials('curseforgeApiKey')
+        MODRINTH_TOKEN = credentials('modrinthApiKey')
     }
     stages {
         stage('Clean') {
@@ -23,13 +25,24 @@ pipeline {
             }
         }
         stage('Publish') {
-            when { anyOf {
-             branch 'main'
-             branch '1.18'
-            } }
-            steps {
-                echo 'Deploying to Maven'
-                sh './gradlew publish sendWebhook'
+            when {
+                anyOf {
+                    branch 'main'
+                }
+            }
+            stages {
+                stage('Deploy Previews') {
+                    steps {
+                        echo 'Deploying previews to various places'
+                        sh './gradlew publish publishToDiscord'
+                    }
+                }
+                stage('Deploy releases') {
+                    steps {
+                        echo 'Maybe deploy releases'
+                        sh './gradlew publishCurseforge publishModrinth'
+                    }
+                }
             }
         }
     }

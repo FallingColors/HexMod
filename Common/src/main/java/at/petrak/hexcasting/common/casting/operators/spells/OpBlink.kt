@@ -7,8 +7,8 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getDouble
 import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
-import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
@@ -22,7 +22,7 @@ object OpBlink : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val target = args.getEntity(0, argc)
         val delta = args.getDouble(1, argc)
         ctx.assertEntityInRange(target)
@@ -34,17 +34,17 @@ object OpBlink : SpellAction {
         val endPos = target.position().add(dvec)
 
         if (!HexConfig.server().canTeleportInThisDimension(ctx.world.dimension()))
-            throw MishapLocationTooFarAway(endPos, "bad_dimension")
+            throw MishapBadLocation(endPos, "bad_dimension")
 
         ctx.assertVecInRange(target.position())
         ctx.assertVecInRange(endPos)
         if (!ctx.isVecInWorld(endPos.subtract(0.0, 1.0, 0.0)))
-            throw MishapLocationTooFarAway(endPos, "too_close_to_out")
+            throw MishapBadLocation(endPos, "too_close_to_out")
 
 
         val targetMiddlePos = target.position().add(0.0, target.eyeHeight / 2.0, 0.0)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(target, delta),
             (MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).roundToInt(),
             listOf(

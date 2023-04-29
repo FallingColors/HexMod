@@ -52,7 +52,7 @@
     "fabric": ">=0.64",
     "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
     "cardinal-components": "~5.0.0",
-    "paucal": "0.5.x",
+    "paucal": "0.6.x",
     "cloth-config": "8.2.x",
     "patchouli": ">=1.19.2-77"
   },

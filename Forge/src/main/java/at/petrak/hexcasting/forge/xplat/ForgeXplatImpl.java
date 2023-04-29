@@ -1,19 +1,20 @@
 package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.addldata.ADColorizer;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.pigment.ColorProvider;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
@@ -21,7 +22,7 @@ import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
@@ -178,7 +179,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setColorizer(Player player, FrozenColorizer colorizer) {
+    public void setColorizer(Player player, FrozenPigment colorizer) {
         CompoundTag tag = player.getPersistentData();
         tag.put(TAG_COLOR, colorizer.serializeToNBT());
 
@@ -188,10 +189,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setSentinel(Player player, Sentinel sentinel) {
+    public void setSentinel(Player player, @Nullable Sentinel sentinel) {
         CompoundTag tag = player.getPersistentData();
-        tag.putBoolean(TAG_SENTINEL_EXISTS, sentinel.hasSentinel());
-        if (sentinel.hasSentinel()) {
+        tag.putBoolean(TAG_SENTINEL_EXISTS, sentinel == null);
+        if (sentinel != null) {
             tag.putBoolean(TAG_SENTINEL_GREATER, sentinel.extendsRange());
             tag.put(TAG_SENTINEL_POSITION, HexUtils.serializeToNBT(sentinel.position()));
             tag.putString(TAG_SENTINEL_DIMENSION, sentinel.dimension().location().toString());
@@ -207,8 +208,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setHarness(ServerPlayer player, CastingHarness harness) {
-        player.getPersistentData().put(TAG_HARNESS, harness == null ? new CompoundTag() : harness.serializeToNBT());
+    public void setStaffcastImage(ServerPlayer player, @Nullable CastingImage image) {
+        player.getPersistentData().put(TAG_HARNESS, image == null ? new CompoundTag() : image.serializeToNbt());
     }
 
     @Override
@@ -252,8 +253,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FrozenColorizer getColorizer(Player player) {
-        return FrozenColorizer.fromNBT(player.getPersistentData().getCompound(TAG_COLOR));
+    public FrozenPigment getColorizer(Player player) {
+        return FrozenPigment.fromNBT(player.getPersistentData().getCompound(TAG_COLOR));
     }
 
     @Override
@@ -261,21 +262,22 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         CompoundTag tag = player.getPersistentData();
         var exists = tag.getBoolean(TAG_SENTINEL_EXISTS);
         if (!exists) {
-            return Sentinel.none();
+            return null;
         }
         var extendsRange = tag.getBoolean(TAG_SENTINEL_GREATER);
         var position = HexUtils.vecFromNBT(tag.getLongArray(TAG_SENTINEL_POSITION));
         var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
             new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
 
-        return new Sentinel(true, extendsRange, position, dimension);
+        return new Sentinel(extendsRange, position, dimension);
     }
 
     @Override
-    public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
+    public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
         // This is always from a staff because we don't need to load the harness when casting from item
-        var ctx = new CastingEnvironment(player, hand, CastingEnvironment.CastSource.STAFF);
-        return CastingHarness.fromNBT(player.getPersistentData().getCompound(TAG_HARNESS), ctx);
+        var ctx = new StaffCastEnv(player, hand);
+        return new CastingVM(CastingImage.loadFromNbt(player.getPersistentData().getCompound(TAG_HARNESS),
+            player.getLevel()), ctx);
     }
 
     @Override
@@ -300,6 +302,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.MEDIA).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
+    public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
+        var maybeCap = player.getCapability(HexCapabilities.MEDIA).resolve();
         return maybeCap.orElse(null);
     }
 
@@ -329,14 +337,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public int getRawColor(FrozenColorizer colorizer, float time, Vec3 position) {
+    public ColorProvider getColorProvider(FrozenPigment colorizer) {
         var maybeColorizer = colorizer.item().getCapability(HexCapabilities.COLOR).resolve();
         if (maybeColorizer.isPresent()) {
-            ADColorizer col = maybeColorizer.get();
-            return col.color(colorizer.owner(), time, position);
+            return maybeColorizer.get().provideColor(colorizer.owner());
         }
-
-        return 0xff_ff00dc; // missing color
+        return ColorProvider.MISSING;
     }
 
     @Override
@@ -390,7 +396,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return ForgeUnsealedIngredient.of(stack);
     }
 
-    private static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() ->
+    private final static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() ->
         new CreativeModeTab(HexAPI.MOD_ID) {
             @Override
             public ItemStack makeIcon() {
@@ -398,8 +404,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             }
 
             @Override
-            public void fillItemList(NonNullList<ItemStack> p_40778_) {
-                super.fillItemList(p_40778_);
+            public void fillItemList(NonNullList<ItemStack> items) {
+                super.fillItemList(items);
             }
         });
 

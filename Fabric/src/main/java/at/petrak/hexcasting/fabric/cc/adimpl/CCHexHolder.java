@@ -45,7 +45,7 @@ public abstract class CCHexHolder extends ItemComponent implements ADHexHolder {
         }
 
         @Override
-        public void writeHex(List<Iota> patterns, int media) {
+        public void writeHex(List<Iota> patterns, long media) {
             this.hexHolder.writeHex(this.stack, patterns, media);
         }
 

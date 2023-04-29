@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.misc.MediaConstants
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
@@ -22,10 +22,11 @@ object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val target = args.getBlockPos(0, argc)
+        ctx.assertPosInRangeForEditing(target)
 
-        return Triple(
+        return SpellAction.Result(
             Spell(target),
             (MediaConstants.DUST_UNIT * 1.125).toInt(),
             listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
@@ -34,15 +35,14 @@ object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
-            // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/PieceTrickOvergrow.java
-            if (!ctx.world.mayInteract(ctx.caster, pos))
-                return
+            val caster = ctx.caster ?: return // TODO: fix!
 
+            // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/PieceTrickOvergrow.java
             val hit = BlockHitResult(Vec3.ZERO, Direction.UP, pos, false)
-            val save: ItemStack = ctx.caster.getItemInHand(InteractionHand.MAIN_HAND)
-            ctx.caster.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(Items.BONE_MEAL))
-            val fakeContext = UseOnContext(ctx.caster, InteractionHand.MAIN_HAND, hit)
-            ctx.caster.setItemInHand(InteractionHand.MAIN_HAND, save)
+            val save: ItemStack = caster.getItemInHand(InteractionHand.MAIN_HAND)
+            caster.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(Items.BONE_MEAL))
+            val fakeContext = UseOnContext(caster, InteractionHand.MAIN_HAND, hit)
+            caster.setItemInHand(InteractionHand.MAIN_HAND, save)
             Items.BONE_MEAL.useOn(fakeContext)
         }
     }

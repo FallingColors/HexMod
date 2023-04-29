@@ -18,7 +18,7 @@ object OpTheCoolerWrite : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val target = args.getEntity(0, argc)
         val datum = args[1]
 
@@ -42,7 +42,7 @@ object OpTheCoolerWrite : SpellAction {
         } else {
             target.position()
         }
-        return Triple(
+        return SpellAction.Result(
             Spell(datum, datumHolder),
             0,
             listOf(ParticleSpray(burstPos, Vec3(1.0, 0.0, 0.0), 0.25, 3.14, 40))

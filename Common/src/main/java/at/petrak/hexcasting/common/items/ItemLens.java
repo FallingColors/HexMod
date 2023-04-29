@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.items;
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.network.MsgUpdateComparatorVisualsAck;
+import at.petrak.hexcasting.common.msgs.MsgUpdateComparatorVisualsS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -92,7 +92,8 @@ public class ItemLens extends Item implements Wearable {
 
             if (state.is(Blocks.COMPARATOR)) {
                 syncComparatorValue(player, pos,
-                    state.getDirectSignal(player.level, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING)), bee);
+                    state.getDirectSignal(player.level, pos, state.getValue(BlockStateProperties.HORIZONTAL_FACING)),
+                    bee);
             } else if (state.hasAnalogOutputSignal()) {
                 syncComparatorValue(player, pos, state.getAnalogOutputSignal(player.level, pos), bee);
             } else {
@@ -110,13 +111,14 @@ public class ItemLens extends Item implements Wearable {
             if (previousComparator != null || previousBee != null) {
                 comparatorDataMap.remove(player);
                 beeDataMap.remove(player);
-                IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(null, -1, -1));
+                IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsS2C(null, -1, -1));
             }
         } else if (previousComparator == null || !pos.equals(previousComparator.getFirst()) || comparator != previousComparator.getSecond() ||
             previousBee == null || !pos.equals(previousBee.getFirst()) || bee != previousBee.getSecond()) {
             comparatorDataMap.put(player, new Pair<>(pos, comparator));
             beeDataMap.put(player, new Pair<>(pos, bee));
-            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsAck(pos, comparator, bee));
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, new MsgUpdateComparatorVisualsS2C(pos, comparator,
+                bee));
         }
     }
 

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.items.ItemStaff;
+import at.petrak.hexcasting.common.items.colorizer.ItemAmethystAndCopperColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
@@ -95,6 +96,8 @@ public class HexItems {
     });
 
     public static final Item UUID_COLORIZER = make("uuid_colorizer", new ItemUUIDColorizer(unstackable()));
+    public static final Item DEFAULT_COLORIZER = make("default_colorizer",
+        new ItemAmethystAndCopperColorizer(unstackable()));
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",

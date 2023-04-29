@@ -6,15 +6,17 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.pigment.ColorProvider;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -77,15 +79,15 @@ public interface IXplatAbstractions {
 
     boolean isBrainswept(Mob mob);
 
-    void setColorizer(Player target, FrozenColorizer colorizer);
+    void setColorizer(Player target, FrozenPigment colorizer);
 
-    void setSentinel(Player target, Sentinel sentinel);
+    void setSentinel(Player target, @Nullable Sentinel sentinel);
 
     void setFlight(ServerPlayer target, @Nullable FlightAbility flight);
 
     void setAltiora(Player target, @Nullable AltioraAbility altiora);
 
-    void setHarness(ServerPlayer target, @Nullable CastingHarness harness);
+    void setStaffcastImage(ServerPlayer target, @Nullable CastingImage image);
 
     void setPatterns(ServerPlayer target, List<ResolvedPattern> patterns);
 
@@ -93,11 +95,11 @@ public interface IXplatAbstractions {
 
     @Nullable AltioraAbility getAltiora(Player player);
 
-    FrozenColorizer getColorizer(Player player);
+    FrozenPigment getColorizer(Player player);
 
-    Sentinel getSentinel(Player player);
+    @Nullable Sentinel getSentinel(Player player);
 
-    CastingHarness getHarness(ServerPlayer player, InteractionHand hand);
+    CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand);
 
     List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player);
 
@@ -105,6 +107,9 @@ public interface IXplatAbstractions {
 
     @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack);
+
+    @Nullable
+    ADMediaHolder findMediaHolder(ServerPlayer player);
 
     @Nullable
     ADIotaHolder findDataHolder(ItemStack stack);
@@ -119,7 +124,7 @@ public interface IXplatAbstractions {
 
     boolean isColorizer(ItemStack stack);
 
-    int getRawColor(FrozenColorizer colorizer, float time, Vec3 position);
+    ColorProvider getColorProvider(FrozenPigment colorizer);
 
     // Items
 

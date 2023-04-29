@@ -7,12 +7,12 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
-import at.petrak.hexcasting.api.casting.mishaps.MishapLocationTooFarAway
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
-import at.petrak.hexcasting.common.network.MsgBlinkAck
+import at.petrak.hexcasting.common.msgs.MsgBlinkS2C
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -30,7 +30,7 @@ object OpTeleport : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
 
         val teleportee = args.getEntity(0, argc)
         val delta = args.getVec3(1, argc)
@@ -41,17 +41,15 @@ object OpTeleport : SpellAction {
 
         val targetPos = teleportee.position().add(delta)
         if (!HexConfig.server().canTeleportInThisDimension(ctx.world.dimension()))
-            throw MishapLocationTooFarAway(targetPos, "bad_dimension")
+            throw MishapBadLocation(targetPos, "bad_dimension")
 
         ctx.assertVecInWorld(targetPos)
         if (!ctx.isVecInWorld(targetPos.subtract(0.0, 1.0, 0.0)))
-            throw MishapLocationTooFarAway(targetPos, "too_close_to_out")
-
+            throw MishapBadLocation(targetPos, "too_close_to_out")
 
         val targetMiddlePos = teleportee.position().add(0.0, teleportee.eyeHeight / 2.0, 0.0)
 
-
-        return Triple(
+        return SpellAction.Result(
             Spell(teleportee, delta),
             10 * MediaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray.cloud(targetMiddlePos, 2.0), ParticleSpray.burst(targetMiddlePos.add(delta), 2.0))
@@ -62,10 +60,7 @@ object OpTeleport : SpellAction {
         override fun cast(ctx: CastingEnvironment) {
             val distance = delta.length()
 
-            // TODO make this not a magic number (config?)
-            if (distance < 32768.0) {
-                teleportRespectSticky(teleportee, delta, ctx.world)
-            }
+            teleportRespectSticky(teleportee, delta, ctx.world)
 
             if (teleportee is ServerPlayer && teleportee == ctx.caster) {
                 // Drop items conditionally, based on distance teleported.
@@ -141,7 +136,7 @@ object OpTeleport : SpellAction {
             world.chunkSource.addRegionTicket(TicketType.POST_TELEPORT, chunkPos, 1, player.id)
             player.connection.resetPosition()
             player.setPos(target)
-            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, MsgBlinkAck(delta))
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, MsgBlinkS2C(delta))
         }
     }
 }

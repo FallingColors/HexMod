@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.network;
 
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -13,7 +13,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client to synchronize the status of the sentinel.
  */
-public record MsgColorizerUpdateAck(FrozenColorizer update) implements IMessage {
+public record MsgColorizerUpdateAck(FrozenPigment update) implements IMessage {
     public static final ResourceLocation ID = modLoc("color");
 
     @Override
@@ -25,7 +25,7 @@ public record MsgColorizerUpdateAck(FrozenColorizer update) implements IMessage 
         var buf = new FriendlyByteBuf(buffer);
 
         var tag = buf.readAnySizeNbt();
-        var colorizer = FrozenColorizer.fromNBT(tag);
+        var colorizer = FrozenPigment.fromNBT(tag);
         return new MsgColorizerUpdateAck(colorizer);
     }
 

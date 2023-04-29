@@ -1,4 +1,5 @@
 @file:Suppress("NOTHING_TO_INLINE")
+
 package at.petrak.hexcasting.api.utils
 
 import net.minecraft.nbt.*
@@ -68,6 +69,10 @@ value class NbtCompoundBuilder(val tag: CompoundTag) {
 
     inline operator fun String.remAssign(num: Int) {
         tag.put(this, int(num))
+    }
+
+    inline operator fun String.remAssign(num: Long) {
+        tag.put(this, long(num))
     }
 
     inline operator fun String.remAssign(num: Double) {

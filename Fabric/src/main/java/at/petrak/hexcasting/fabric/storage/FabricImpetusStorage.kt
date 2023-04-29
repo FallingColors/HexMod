@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.storage
 
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus
 import at.petrak.hexcasting.common.lib.HexBlocks
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
@@ -27,7 +27,7 @@ class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlot
         fun insertStack(stack: ItemStack, transaction: TransactionContext) {
             val copied = stack.copy()
             val size = stack.count
-            val extractable = impetus.extractMediaFromItem(stack, false)
+            val extractable = impetus.extractMediaFromInsertedItem(stack, false)
             mediaToTake -= extractable
             val taken = size - stack.count
             itemsConsumed += taken.toLong()

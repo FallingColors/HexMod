@@ -1,8 +1,15 @@
 plugins {
     id 'fabric-loom' // version "1.0-SNAPSHOT"
+    id "at.petra-k.PKSubprojPlugin"
 }
 
-archivesBaseName = getArtifactID("fabric")
+pkSubproj {
+    platform "fabric"
+    curseforgeJar remapJar.archiveFile
+    curseforgeDependencies[]
+    modrinthJar remapJar.archiveFile
+    modrinthDependencies[]
+}
 
 loom {
     mixin.defaultRefmapName = "hexcasting.mixins.refmap.json"
@@ -34,30 +41,24 @@ loom {
 
 repositories {
     mavenCentral()
+
+    // paucal and patchi
+    maven { url = 'https://maven.blamejared.com' }
+    // modmenu and clothconfig
     maven { url "https://maven.shedaniel.me/" }
-    maven {
-        url 'https://ladysnake.jfrog.io/artifactory/mods'
-    }
-    maven {
-        name "entity reach"
-        url "https://maven.jamieswhiteshirt.com/libs-release/"
-    }
+    maven { url 'https://ladysnake.jfrog.io/artifactory/mods' }
+    // Entity reach
+    maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
     maven { url "https://mvn.devos.one/snapshots/" }
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/releases/"
-    }
+    maven { url = "https://maven.terraformersmc.com/releases/" }
     exclusiveContent {
         forRepository {
-            maven {
-                name = "Modrinth"
-                url = "https://api.modrinth.com/maven"
-            }
+            maven { url = "https://api.modrinth.com/maven" }
         }
-        filter {
-            includeGroup "maven.modrinth"
-        }
+        filter { includeGroup "maven.modrinth" }
     }
+    // pehkui
+    maven { url = "https://jitpack.io" }
 }
 
 dependencies {
@@ -136,5 +137,3 @@ processResources {
         expand "version": project.version
     }
 }
-
-setupJar(this)

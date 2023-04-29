@@ -8,6 +8,6 @@ class OpTwiddling(val argumentCount: Int, val lookup: IntArray) : ConstMediaActi
     override val argc: Int
         get() = this.argumentCount
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> =
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> =
         this.lookup.map(args::get)
 }

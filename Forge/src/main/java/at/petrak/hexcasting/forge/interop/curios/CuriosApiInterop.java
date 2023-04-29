@@ -44,7 +44,12 @@ public class CuriosApiInterop {
 
         DiscoveryHandlers.addMediaHolderDiscoverer(harness -> {
             List<ADMediaHolder> holders = Lists.newArrayList();
-            harness.getCtx().getCaster().getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
+            var caster = harness.getEnv().getCaster();
+
+            if (caster == null)
+                return holders;
+
+            caster.getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
                 for (var stacksHandler : handler.getCurios().values()) {
                     var stacks = stacksHandler.getStacks();
                     for (int i = 0; i < stacks.getSlots(); i++) {

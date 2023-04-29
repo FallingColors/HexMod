@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.forge.xplat;
 
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.renderer.RenderType;

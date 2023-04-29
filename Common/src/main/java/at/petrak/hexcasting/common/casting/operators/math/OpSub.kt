@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math
 
-import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getNumOrVec
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -11,7 +11,7 @@ object OpSub : ConstMediaAction {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val lhs = args.getNumOrVec(0, OpAdd.argc)
         val rhs = args.getNumOrVec(1, OpAdd.argc)
 

@@ -14,15 +14,15 @@ import net.minecraft.world.phys.AABB
 object OpEntityRaycast : ConstMediaAction {
     override val argc = 2
     override val mediaCost = MediaConstants.DUST_UNIT / 100
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val origin = args.getVec3(0, argc)
         val look = args.getVec3(1, argc)
         val endp = Action.raycastEnd(origin, look)
 
-        ctx.assertVecInRange(origin)
+        env.assertVecInRange(origin)
 
         val entityHitResult = ProjectileUtil.getEntityHitResult(
-            ctx.caster,
+            env.caster,
             origin,
             endp,
             AABB(origin, endp),
@@ -30,7 +30,7 @@ object OpEntityRaycast : ConstMediaAction {
             1_000_000.0
         )
 
-        return if (entityHitResult != null && ctx.isEntityInRange(entityHitResult.entity)) {
+        return if (entityHitResult != null && env.isEntityInRange(entityHitResult.entity)) {
             entityHitResult.entity.asActionResult
         } else {
             listOf(NullIota())

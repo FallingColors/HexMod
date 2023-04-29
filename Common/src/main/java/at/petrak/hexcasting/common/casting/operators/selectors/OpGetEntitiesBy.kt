@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.selectors
 
-import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getPositiveDouble
 import at.petrak.hexcasting.api.casting.getVec3
@@ -20,16 +20,16 @@ import java.util.function.Predicate
 
 class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : ConstMediaAction {
     override val argc = 2
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val pos = args.getVec3(0, argc)
         val radius = args.getPositiveDouble(1, argc)
-        ctx.assertVecInRange(pos)
+        env.assertVecInRange(pos)
 
         val aabb = AABB(pos.add(Vec3(-radius, -radius, -radius)), pos.add(Vec3(radius, radius, radius)))
-        val entitiesGot = ctx.world.getEntities(null, aabb) {
-            isReasonablySelectable(ctx, it)
-                    && it.distanceToSqr(pos) <= radius * radius
-                    && (checker.test(it) != negate)
+        val entitiesGot = env.world.getEntities(null, aabb) {
+            isReasonablySelectable(env, it)
+                && it.distanceToSqr(pos) <= radius * radius
+                && (checker.test(it) != negate)
         }.sortedBy { it.distanceToSqr(pos) }
         return entitiesGot.map(::EntityIota).asActionResult
     }

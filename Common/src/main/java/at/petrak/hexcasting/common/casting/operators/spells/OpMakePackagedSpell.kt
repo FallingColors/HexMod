@@ -1,8 +1,11 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.casting.*
+import at.petrak.hexcasting.api.casting.ParticleSpray
+import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.getItemEntity
+import at.petrak.hexcasting.api.casting.getList
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
@@ -14,12 +17,13 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
+// TODO: How to handle in circles
 class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) : SpellAction {
     override val argc = 2
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)
         val patterns = args.getList(1, argc).toList()
 
@@ -27,6 +31,8 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             it.`is`(itemType) && hexHolder != null && !hexHolder.hasHex()
         }
+            ?: throw MishapBadOffhandItem(ItemStack.EMPTY.copy(), null, itemType.description) // TODO: hack
+
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         if (!handStack.`is`(itemType)) {
             throw MishapBadOffhandItem(handStack, hand, itemType.description)
@@ -47,11 +53,15 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
             )
         }
 
-        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, ctx.caster)
+        val trueName = ctx.caster?.let { MishapOthersName.getTrueNameFromArgs(patterns, it) }
         if (trueName != null)
             throw MishapOthersName(trueName)
 
-        return Triple(Spell(entity, patterns, handStack), cost, listOf(ParticleSpray.burst(entity.position(), 0.5)))
+        return SpellAction.Result(
+            Spell(entity, patterns, handStack),
+            cost,
+            listOf(ParticleSpray.burst(entity.position(), 0.5))
+        )
     }
 
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<Iota>, val stack: ItemStack) : RenderedSpell {

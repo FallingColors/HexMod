@@ -1,4 +1,4 @@
-// 1.19.2	2023-02-17T23:19:00.76285061	Item Models: hexcasting
+// 1.19.2	2023-04-27T15:19:36.557930991	Item Models: hexcasting
 9af2754cb1e53eeaa85618cf92651b4878cf62b1 assets/hexcasting/models/block/quenched_allay_0.json
 de4ff723b4332d4e26bd01f74e0485e28c9a2178 assets/hexcasting/models/block/quenched_allay_1.json
 4c29163e07f3a903017e38a9cc102f4b37db20b1 assets/hexcasting/models/block/quenched_allay_2.json
@@ -20,6 +20,7 @@ fd00d0c14663804b78911d7aa73606b88e90ef22 assets/hexcasting/models/item/crimson_s
 e47acd1d6ef29a3e1941afb1b212bd40b963cb72 assets/hexcasting/models/item/cypher.json
 2db55347092ad6bc9e58bc968e88a3b6c5fd77c1 assets/hexcasting/models/item/cypher_filled.json
 73ded6154a6e2f6929a05c5625372c9e0498db3d assets/hexcasting/models/item/dark_oak_staff.json
+c6523de66cbfae3a1e6361c635cc693a0a089bb3 assets/hexcasting/models/item/default_colorizer.json
 113c51af571a92009f5f687a82e10bc5ce97b010 assets/hexcasting/models/item/dye_colorizer_black.json
 b5a04716775ba2e1b137abc513025b2f1065e5d1 assets/hexcasting/models/item/dye_colorizer_blue.json
 0bb3afbd937b2e07523a581f6e3f389e11078595 assets/hexcasting/models/item/dye_colorizer_brown.json

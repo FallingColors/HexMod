@@ -28,7 +28,7 @@ public record CapItemHexHolder(HexHolderItem holder,
     }
 
     @Override
-    public void writeHex(List<Iota> patterns, int media) {
+    public void writeHex(List<Iota> patterns, long media) {
         holder.writeHex(stack, patterns, media);
     }
 

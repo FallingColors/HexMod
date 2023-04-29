@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.items.storage;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -57,7 +57,7 @@ public class ItemFocus extends Item implements IotaHolderItem {
             stack.removeTagKey(TAG_DATA);
             stack.removeTagKey(TAG_SEALED);
         } else if (!isSealed(stack)) {
-            NBTHelper.put(stack, TAG_DATA, HexIotaTypes.serialize(datum));
+            NBTHelper.put(stack, TAG_DATA, IotaType.serialize(datum));
         }
     }
 

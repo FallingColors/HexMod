@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import at.petrak.hexcasting.common.network.MsgOpenSpellGuiAck;
+import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,20 +26,20 @@ public class ItemStaff extends Item {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if (player.isShiftKeyDown()) {
             if (world.isClientSide()) {
-                player.playSound(HexSounds.FAIL_PATTERN, 1f, 1f);
+                player.playSound(HexSounds.STAFF_RESET, 1f, 1f);
             } else if (player instanceof ServerPlayer serverPlayer) {
                 IXplatAbstractions.INSTANCE.clearCastingData(serverPlayer);
             }
         }
 
         if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
-            var harness = IXplatAbstractions.INSTANCE.getHarness(serverPlayer, hand);
+            var harness = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
             var descs = harness.generateDescs();
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
-                new MsgOpenSpellGuiAck(hand, patterns, descs.getFirst(), descs.getSecond(), descs.getThird(),
-                    harness.getParenCount()));
+                new MsgOpenSpellGuiS2C(hand, patterns, descs.getFirst(), descs.getSecond(),
+                    0)); // TODO: Fix!
         }
 
         player.awardStat(Stats.ITEM_USED.get(this));

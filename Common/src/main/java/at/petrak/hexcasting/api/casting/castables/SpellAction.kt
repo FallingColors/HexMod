@@ -1,13 +1,16 @@
 package at.petrak.hexcasting.api.casting.castables
 
-import at.petrak.hexcasting.api.casting.OperationResult
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import net.minecraft.nbt.CompoundTag
 
 interface SpellAction : Action {
     val argc: Int
@@ -19,38 +22,47 @@ interface SpellAction : Action {
     fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>>?
+    ): Result
 
-    override fun operate(
-        continuation: SpellContinuation,
-        stack: MutableList<Iota>,
-        ravenmind: Iota?,
-        ctx: CastingEnvironment
-    ): OperationResult {
+    fun executeWithUserdata(
+        args: List<Iota>, ctx: CastingEnvironment, userData: CompoundTag
+    ): Result {
+        return this.execute(args, ctx)
+    }
+
+    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+        val stack = image.stack.toMutableList()
+
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
-        val executeResult = this.execute(args, ctx) ?: return OperationResult(continuation, stack, ravenmind, listOf())
-        val (spell, media, particles) = executeResult
+
+        // execute!
+        val userDataMut = image.userData.copy()
+        val result = this.executeWithUserdata(args, env, userDataMut)
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
-        if (media > 0)
-            sideEffects.add(OperatorSideEffect.ConsumeMedia(media))
+        if (result.cost > 0)
+            sideEffects.add(OperatorSideEffect.ConsumeMedia(result.cost))
 
         sideEffects.add(
             OperatorSideEffect.AttemptSpell(
-                spell,
-                this.hasCastingSound(ctx),
-                this.awardsCastingStat(ctx)
+                result.effect,
+                this.hasCastingSound(env),
+                this.awardsCastingStat(env)
             )
         )
 
-        for (spray in particles)
+        for (spray in result.particles)
             sideEffects.add(OperatorSideEffect.Particles(spray))
 
-        return OperationResult(continuation, stack, ravenmind, sideEffects)
+        val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + result.opCount, userData = userDataMut)
+
+        val sound = if (this.hasCastingSound(env)) HexEvalSounds.SPELL else HexEvalSounds.MUTE
+        return OperationResult(image2, sideEffects, continuation, sound)
     }
 
+    data class Result(val effect: RenderedSpell, val cost: Int, val particles: List<ParticleSpray>, val opCount: Long = 1)
 }

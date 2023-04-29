@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.operators.spells
 
-import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
@@ -9,6 +8,7 @@ import at.petrak.hexcasting.api.casting.getItemEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.utils.extractMedia
 import at.petrak.hexcasting.api.utils.isMediaItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -20,13 +20,14 @@ object OpRecharge : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
+    ): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)
 
         val (handStack, hand) = ctx.getHeldItemToOperateOn {
             val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)
-            media != null && media.canRecharge() && media.insertMedia(-1, true) != 0
+            media != null && media.canRecharge() && media.insertMedia(-1, true) != 0L
         }
+            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "rechargable") // TODO: hack
 
         val media = IXplatAbstractions.INSTANCE.findMediaHolder(handStack)
 
@@ -46,10 +47,13 @@ object OpRecharge : SpellAction {
             )
         }
 
-        if (media.insertMedia(-1, true) == 0)
+        // TODO: why did this code exist
+        /*
+        if (media.insertMedia(-1, true) == 0L)
             return null
+         */
 
-        return Triple(
+        return SpellAction.Result(
             Spell(entity, handStack),
             MediaConstants.SHARD_UNIT,
             listOf(ParticleSpray.burst(entity.position(), 0.5))

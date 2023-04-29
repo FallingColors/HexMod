@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.casting.operators.math.logic
 
-import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.asActionResult
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getBool
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 object OpBoolXor : ConstMediaAction {
     override val argc = 2
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val lhs = args.getBool(0, argc)
         val rhs = args.getBool(1, argc)
         return (lhs xor rhs).asActionResult

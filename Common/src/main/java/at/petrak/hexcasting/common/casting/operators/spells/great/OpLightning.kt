@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.misc.MediaConstants
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.EntityType
@@ -18,10 +19,14 @@ object OpLightning : SpellAction {
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
+    ): SpellAction.Result {
         val target = args.getVec3(0, argc)
         ctx.assertVecInRange(target)
-        return Triple(
+
+        if (!ctx.canEditBlockAt(BlockPos(target)))
+            throw MishapBadLocation(target, "forbidden")
+
+        return SpellAction.Result(
             Spell(target),
             3 * MediaConstants.SHARD_UNIT,
             listOf(ParticleSpray(target.add(0.0, 2.0, 0.0), Vec3(0.0, -1.0, 0.0), 0.5, 0.1))
@@ -30,8 +35,6 @@ object OpLightning : SpellAction {
 
     private data class Spell(val target: Vec3) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
-            if (!ctx.world.mayInteract(ctx.caster, BlockPos(target)))
-                return
 
             val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, ctx.world)
             lightning.setPosRaw(target.x, target.y, target.z)

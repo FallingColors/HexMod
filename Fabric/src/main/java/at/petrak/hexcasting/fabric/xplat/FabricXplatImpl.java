@@ -6,18 +6,20 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.eval.CastingHarness;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.pigment.ColorProvider;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
@@ -141,13 +143,13 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setColorizer(Player target, FrozenColorizer colorizer) {
+    public void setColorizer(Player target, FrozenPigment colorizer) {
         var cc = HexCardinalComponents.FAVORED_COLORIZER.get(target);
         cc.setColorizer(colorizer);
     }
 
     @Override
-    public void setSentinel(Player target, Sentinel sentinel) {
+    public void setSentinel(Player target, @Nullable Sentinel sentinel) {
         var cc = HexCardinalComponents.SENTINEL.get(target);
         cc.setSentinel(sentinel);
     }
@@ -158,16 +160,14 @@ public class FabricXplatImpl implements IXplatAbstractions {
         cc.setFlight(flight);
     }
 
-    @Override
     public void setAltiora(Player target, @Nullable AltioraAbility altiora) {
         var cc = HexCardinalComponents.ALTIORA.get(target);
         cc.setAltiora(altiora);
     }
 
-    @Override
-    public void setHarness(ServerPlayer target, CastingHarness harness) {
-        var cc = HexCardinalComponents.HARNESS.get(target);
-        cc.setHarness(harness);
+    public void setStaffcastImage(ServerPlayer target, CastingImage image) {
+        var cc = HexCardinalComponents.STAFFCAST_IMAGE.get(target);
+        cc.setImage(image);
     }
 
     @Override
@@ -195,7 +195,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FrozenColorizer getColorizer(Player player) {
+    public FrozenPigment getColorizer(Player player) {
         var cc = HexCardinalComponents.FAVORED_COLORIZER.get(player);
         return cc.getColorizer();
     }
@@ -207,9 +207,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
-        var cc = HexCardinalComponents.HARNESS.get(player);
-        return cc.getHarness(hand);
+    public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
+        var cc = HexCardinalComponents.STAFFCAST_IMAGE.get(player);
+        return cc.getVM(hand);
     }
 
     @Override
@@ -220,7 +220,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void clearCastingData(ServerPlayer player) {
-        this.setHarness(player, null);
+        this.setStaffcastImage(player, null);
         this.setPatterns(player, List.of());
     }
 
@@ -228,6 +228,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
         var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(stack);
+        return cc.orElse(null);
+    }
+
+    @Override
+    public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
+        var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(player);
         return cc.orElse(null);
     }
 
@@ -258,9 +264,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public int getRawColor(FrozenColorizer colorizer, float time, Vec3 position) {
+    public ColorProvider getColorProvider(FrozenPigment colorizer) {
         var cc = HexCardinalComponents.COLORIZER.maybeGet(colorizer.item());
-        return cc.map(col -> col.color(colorizer.owner(), time, position)).orElse(0xff_ff00dc);
+        return cc.map(col -> col.provideColor(colorizer.owner())).orElse(ColorProvider.MISSING);
     }
 
     @Override

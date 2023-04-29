@@ -4,8 +4,9 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getBlockPos
+import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.BucketItem
@@ -21,27 +22,28 @@ class OpCreateFluid(val cost: Int, val bucket: Item, val cauldron: BlockState, v
     override fun execute(
         args: List<Iota>,
         ctx: CastingEnvironment
-    ): Triple<RenderedSpell, Int, List<ParticleSpray>> {
-        val target = args.getBlockPos(0, argc)
-        ctx.assertVecInRange(target)
+    ): SpellAction.Result {
+        val vecPos = args.getVec3(0, argc)
+        val pos = BlockPos(vecPos)
 
-        return Triple(
-            Spell(target, bucket, cauldron, fluid),
+        if (!ctx.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
+                ctx.world,
+                pos,
+                ItemStack(bucket),
+                ctx.caster
+            )
+        )
+            throw MishapBadLocation(vecPos, "forbidden")
+
+        return SpellAction.Result(
+            Spell(pos, bucket, cauldron, fluid),
             cost,
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(pos)), 1.0))
         )
     }
 
     private data class Spell(val pos: BlockPos, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
-            if (!ctx.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
-                    ctx.world,
-                    pos,
-                    ItemStack(bucket),
-                    ctx.caster
-                )
-            )
-                return
 
             val state = ctx.world.getBlockState(pos)
 
