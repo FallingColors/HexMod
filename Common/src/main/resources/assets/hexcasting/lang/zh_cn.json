@@ -1,5 +1,6 @@
 {
   "item.hexcasting.book": "咒术笔记",
+
   "item.hexcasting.oak_staff": "橡木法杖",
   "item.hexcasting.spruce_staff": "云杉木法杖",
   "item.hexcasting.birch_staff": "白桦木法杖",
@@ -12,18 +13,10 @@
   "item.hexcasting.edified_staff": "启迪木法杖",
   "item.hexcasting.quenched_staff": "淬灵晶法杖",
   "item.hexcasting.mindsplice_staff": "制念法杖",
-  "item.hexcasting.thought_knot": "结念绳",
-  "item.hexcasting.focus": "核心",
-  "item.hexcasting.focus.sealed": "密封核心",
-  "item.hexcasting.spellbook": "法术书",
-  "item.hexcasting.cypher": "杂件",
-  "item.hexcasting.trinket": "缀品",
-  "item.hexcasting.artifact": "造物",
-  "item.hexcasting.battery": "媒质之瓶",
+
   "item.hexcasting.amethyst_dust": "紫水晶粉",
   "item.hexcasting.charged_amethyst": "充能紫水晶",
   "item.hexcasting.quenched_allay_shard": "淬灵晶碎片",
-  "item.hexcasting.lens": "探知透镜",
   "item.hexcasting.scroll_small": "小型卷轴",
   "item.hexcasting.scroll_small.of": "是如何拿到此%s卷轴的",
   "item.hexcasting.scroll_small.empty": "空白小型卷轴",
@@ -33,9 +26,20 @@
   "item.hexcasting.scroll": "大型卷轴",
   "item.hexcasting.scroll.of": "%s之远古卷轴",
   "item.hexcasting.scroll.empty": "空白大型卷轴",
+
+  "item.hexcasting.thought_knot": "结念绳",
+  "item.hexcasting.focus": "核心",
+  "item.hexcasting.focus.sealed": "密封核心",
+  "item.hexcasting.spellbook": "法术书",
+  "item.hexcasting.cypher": "杂件",
+  "item.hexcasting.trinket": "缀品",
+  "item.hexcasting.artifact": "造物",
+  "item.hexcasting.battery": "媒质之瓶",
+  "item.hexcasting.lens": "探知透镜",
   "item.hexcasting.abacus": "算盘",
   "item.hexcasting.jeweler_hammer": "珠宝匠锤",
   "item.hexcasting.sub_sandwich": "潜艇三明治",
+
   "item.hexcasting.dye_colorizer_white": "白色染色剂",
   "item.hexcasting.dye_colorizer_orange": "橙色染色剂",
   "item.hexcasting.dye_colorizer_magenta": "品红色染色剂",
@@ -69,6 +73,8 @@
   "item.hexcasting.pride_colorizer_plural": "多重人格染色剂",
   "item.hexcasting.pride_colorizer_transgender": "跨性别染色剂",
   "item.hexcasting.uuid_colorizer": "灵魂闪光染色剂",
+  "item.hexcasting.default_colorizer": "空无染色剂",
+
   "item.hexcasting.creative_unlocker": "媒质立方",
   "item.hexcasting.creative_unlocker.for_emphasis": "无限媒质",
   "item.hexcasting.creative_unlocker.tooltip": "食用以解锁所有有关%s的知识。",
@@ -77,7 +83,11 @@
   "item.hexcasting.lore_fragment": "故事残卷",
   "item.hexcasting.lore_fragment.all": "似乎我已找齐了此世界上的所有故事。",
 
+
+
   "entity.hexcasting.wall_scroll": "壁挂卷轴",
+
+
 
   "block.hexcasting.conjured": "构筑的光源",
   "block.hexcasting.conjured_block": "构筑的方块",
@@ -120,54 +130,12 @@
   "block.hexcasting.quenched_allay": "淬灵晶块",
   "block.hexcasting.slate": "石板",
 
+
+
   "itemGroup.hexcasting": "咒法学",
   "itemGroup.hexcasting.creative_tab": "咒法学",
 
-  "hexcasting.tooltip.spellbook.page": "所选书页 %d/%d",
-  "hexcasting.tooltip.spellbook.page.sealed": "所选书页 %d/%d（%s）",
-  "hexcasting.tooltip.spellbook.page_with_name": "所选书页 %d/%d（“%s”）",
-  "hexcasting.tooltip.spellbook.page_with_name.sealed": "所选书页 %d/%d（“%s”）（%s）",
-  "hexcasting.tooltip.spellbook.sealed": "已密封",
-  "hexcasting.tooltip.spellbook.empty": "空白",
-  "hexcasting.tooltip.spellbook.empty.sealed": "空白（%s）",
-  "hexcasting.tooltip.abacus": "%d",
-  "hexcasting.tooltip.abacus.reset": "重置为0",
-  "hexcasting.tooltip.abacus.reset.nice": "nice",
-  "hexcasting.tooltip.lens.bee": "%s只蜜蜂",
-  "hexcasting.tooltip.lens.bee.single": "%s只蜜蜂",
-  "hexcasting.tooltip.lens.impetus.storedplayer": "与%s绑定",
-  "hexcasting.tooltip.lens.impetus.storedplayer.none": "未绑定",
-  "hexcasting.tooltip.lens.pattern.invalid": "无效图案",
-  "hexcasting.tooltip.lens.akashic.bookshelf.location": "记录于%s",
-  "hexcasting.tooltip.lens.akashic.record.count": "存有%s个iota",
-  "hexcasting.tooltip.lens.akashic.record.count.single": "存有%s个iota",
-  "hexcasting.tooltip.brainsweep.min_level": "%s级或以上",
-  "hexcasting.tooltip.brainsweep.level": "%s级",
-  "hexcasting.tooltip.brainsweep.product": "无意识的躯体",
-  "hexcasting.spelldata.onitem": "存有：%s",
-  "hexcasting.spelldata.anything": "任意",
-  "hexcasting.spelldata.unknown": "损坏的iota",
-  "hexcasting.spelldata.entity.whoknows": "未知实体",
-  "hexcasting.spelldata.akashic.nopos": "阿卡夏记录无法读取此处iota（这是个bug）",
-  
-  "hexcasting.tooltip.media": "%s 紫水晶粉",
-  "hexcasting.tooltip.media_amount": "含有：%s（%s）",
-  "hexcasting.tooltip.media_amount.advanced": "含有：%s/%s（%s）",
 
-  "hexcasting.tooltip.list_contents": "[%s]",
-  "hexcasting.tooltip.pattern_iota": "HexPattern(%s)",
-  "hexcasting.tooltip.null_iota": "NULL",
-  "hexcasting.tooltip.boolean_true": "True",
-  "hexcasting.tooltip.boolean_false": "False",
-
-  "hexcasting.iota.hexcasting:null": "Null",
-  "hexcasting.iota.hexcasting:double": "数",
-  "hexcasting.iota.hexcasting:boolean": "布尔值",
-  "hexcasting.iota.hexcasting:entity": "实体",
-  "hexcasting.iota.hexcasting:list": "列表",
-  "hexcasting.iota.hexcasting:pattern": "图案",
-  "hexcasting.iota.hexcasting:garbage": "垃圾",
-  "hexcasting.iota.hexcasting:vec3": "向量",
 
   "gui.hexcasting.spellcasting": "咒术网格",
   "tag.hexcasting.staves": "咒术法杖",
@@ -179,6 +147,7 @@
   "emi.category.hexcasting.edify": "启迪树苗",
   "emi.category.hexcasting.villager_leveling": "职业等级",
   "emi.category.hexcasting.villager_profession": "村民职业",
+
 
 
   "text.autoconfig.hexcasting.title": "咒法学（Hexcasting）配置",
@@ -231,6 +200,7 @@
   "text.autoconfig.hexcasting.option.server.amethystShardModification.@Tooltip": "采掘紫水晶簇时紫水晶碎片掉落数量相较原版的改变量",
 
 
+
   "advancement.hexcasting:root": "咒法学研究",
   "advancement.hexcasting:root.desc": "在地底深处找到并采集不断生长着的、凝聚的媒质",
   "advancement.hexcasting:enlightenment": "获得启迪",
@@ -259,13 +229,19 @@
   "advancement.hexcasting:lore/experiment2": "“毡障”采访日志",
   "advancement.hexcasting:lore/inventory": "回收日志 #72",
 
+
+
   "stat.hexcasting.media_used": "消耗媒质量（以紫水晶粉计）",
   "stat.hexcasting.media_overcasted": "过度施法消耗媒质量（以紫水晶粉计）",
   "stat.hexcasting.patterns_drawn": "绘制图案次数",
   "stat.hexcasting.spells_cast": "施放法术次数",
 
+
+
   "death.attack.hexcasting.overcast": "%s的意识消散为了能量",
   "death.attack.hexcasting.shame": "%s真是可耻！",
+
+
 
   "command.hexcasting.pats.listing": "此世界特有的图案：",
   "command.hexcasting.pats.all": "给予%s所有%d张卷轴",
@@ -274,7 +250,11 @@
   "command.hexcasting.brainsweep": "已清除%s的意识",
   "command.hexcasting.brainsweep.fail.badtype": "%s不是生物",
   "command.hexcasting.brainsweep.fail.already": "%s早已没有了意识",
+
+
+
   "hexcasting.pattern.unknown": "未知图案资源 %s",
+
   "hexcasting.debug.media_withdrawn": "%s - 取出的媒质：%s",
   "hexcasting.debug.media_withdrawn.with_dust": "%s - 取出的媒质：%s（计%s个紫水晶粉）",
   "hexcasting.debug.media_inserted": "%s - 存入的媒质：%s",
@@ -285,17 +265,60 @@
   "hexcasting.message.cant_overcast": "这个咒术需求的媒质量比我有的还多……我应该再算几遍。",
   "hexcasting.message.cant_great_spell": "奇怪，法术没起效……也许我还不够熟练？",
 
-  "hexcasting.subtitles.start_pattern": "开始绘制",
-  "hexcasting.subtitles.add_line": "绘制线段",
-  "hexcasting.subtitles.add_pattern": "绘制图案",
-  "hexcasting.subtitles.fail_pattern": "图案：失效",
+  "hexcasting.tooltip.spellbook.page": "所选书页 %d/%d",
+  "hexcasting.tooltip.spellbook.page.sealed": "所选书页 %d/%d（%s）",
+  "hexcasting.tooltip.spellbook.page_with_name": "所选书页 %d/%d（“%s”）",
+  "hexcasting.tooltip.spellbook.page_with_name.sealed": "所选书页 %d/%d（“%s”）（%s）",
+  "hexcasting.tooltip.spellbook.sealed": "已密封",
+  "hexcasting.tooltip.spellbook.empty": "空白",
+  "hexcasting.tooltip.spellbook.empty.sealed": "空白（%s）",
+  "hexcasting.tooltip.abacus": "%d",
+  "hexcasting.tooltip.abacus.reset": "重置为0",
+  "hexcasting.tooltip.abacus.reset.nice": "nice",
+  "hexcasting.tooltip.lens.bee": "%s只蜜蜂",
+  "hexcasting.tooltip.lens.bee.single": "%s只蜜蜂",
+  "hexcasting.tooltip.lens.impetus.storedplayer": "与%s绑定",
+  "hexcasting.tooltip.lens.impetus.storedplayer.none": "未绑定",
+  "hexcasting.tooltip.lens.pattern.invalid": "无效图案",
+  "hexcasting.tooltip.lens.akashic.bookshelf.location": "记录于%s",
+  "hexcasting.tooltip.lens.akashic.record.count": "存有%s个iota",
+  "hexcasting.tooltip.lens.akashic.record.count.single": "存有%s个iota",
+  "hexcasting.tooltip.brainsweep.min_level": "%s级或以上",
+  "hexcasting.tooltip.brainsweep.level": "%s级",
+  "hexcasting.tooltip.brainsweep.product": "无意识的躯体",
+  
+  "hexcasting.tooltip.media": "%s 紫水晶粉",
+  "hexcasting.tooltip.media_amount": "含有：%s（%s）",
+  "hexcasting.tooltip.media_amount.advanced": "含有：%s/%s（%s）",
+
+  "hexcasting.tooltip.list_contents": "[%s]",
+  "hexcasting.tooltip.pattern_iota": "HexPattern(%s)",
+  "hexcasting.tooltip.null_iota": "NULL",
+  "hexcasting.tooltip.boolean_true": "True",
+  "hexcasting.tooltip.boolean_false": "False",
+
+
+
+  "hexcasting.spelldata.onitem": "存有：%s",
+  "hexcasting.spelldata.anything": "任意",
+  "hexcasting.spelldata.unknown": "损坏的iota",
+  "hexcasting.spelldata.entity.whoknows": "未知实体",
+  "hexcasting.spelldata.akashic.nopos": "阿卡夏记录无法读取此处iota（这是个bug）",
+  
+
+
+  "hexcasting.subtitles.casting.pattern.start": "开始绘制",
+  "hexcasting.subtitles.casting.pattern.add_segment": "绘制线段",
+  "hexcasting.subtitles.cast.normal": "操作：嗡鸣",
+  "hexcasting.subtitles.cast.spell": "咒术：施放",
+  "hexcasting.subtitles.cast.hermes": "赫尔墨斯之策略：鸣响",
+  "hexcasting.subtitles.cast.thoth": "托特之策略：鸣响",
   "hexcasting.subtitles.ambiance": "咒术网格：嗡鸣",
-  "hexcasting.subtitles.cast": "咒术：施放",
+  "hexcasting.subtitles.staff.reset": "重置咒术",
   "hexcasting.subtitles.abacus": "算盘：咔哒",
   "hexcasting.subtitles.abacus.shake": "算盘：摇晃",
   "hexcasting.subtitles.spellcircle.add_pattern": "法术环：噼啪作响",
   "hexcasting.subtitles.spellcircle.fail": "法术环：失效",
-  "hexcasting.subtitles.spellcircle.cast": "法术环：施法",
   "hexcasting.subtitles.scroll.dust": "卷轴：被施粉",
   "hexcasting.subtitles.scroll.scribble": "卷轴：被涂写",
   "hexcasting.subtitles.impetus.fletcher.tick": "制箭师促动石：咔哒",
@@ -304,38 +327,7 @@
   "hexcasting.subtitles.flight.ambience": "玩家：飞翔",
   "hexcasting.subtitles.flight.finish": "飞翔结束",
   
-  "_comment": "hexcasting.spell.book keys override the name of a pattern in the patchouli book if present",
 
-  "hexcasting.action.book.hexcasting:get_entity_height": "测高仪之纯化",
-  "hexcasting.action.book.hexcasting:get_entity/animal": "实体之纯化：动物",
-  "hexcasting.action.book.hexcasting:get_entity/monster": "实体之纯化：怪物",
-  "hexcasting.action.book.hexcasting:get_entity/item": "实体之纯化：物品",
-  "hexcasting.action.book.hexcasting:get_entity/player": "实体之纯化：玩家",
-  "hexcasting.action.book.hexcasting:get_entity/living": "实体之纯化：生物",
-  "hexcasting.action.book.hexcasting:zone_entity": "区域之馏化：任意",
-  "hexcasting.action.book.hexcasting:zone_entity/animal": "区域之馏化：动物",
-  "hexcasting.action.book.hexcasting:zone_entity/monster": "区域之馏化：怪物",
-  "hexcasting.action.book.hexcasting:zone_entity/item": "区域之馏化：物品",
-  "hexcasting.action.book.hexcasting:zone_entity/player": "区域之馏化：玩家",
-  "hexcasting.action.book.hexcasting:zone_entity/living": "区域之馏化：生物",
-  "hexcasting.action.book.hexcasting:zone_entity/not_animal": "区域之馏化：非动物",
-  "hexcasting.action.book.hexcasting:zone_entity/not_monster": "区域之馏化：非怪物",
-  "hexcasting.action.book.hexcasting:zone_entity/not_item": "区域之馏化：非物品",
-  "hexcasting.action.book.hexcasting:zone_entity/not_player": "区域之馏化：非玩家",
-  "hexcasting.action.book.hexcasting:zone_entity/not_living": "区域之馏化：非生物",
-  "hexcasting.action.book.hexcasting:mul_dot": "乘法之馏化",
-  "hexcasting.action.book.hexcasting:div_cross": "除法之馏化",
-  "hexcasting.action.book.hexcasting:arcsin": "反正弦之纯化",
-  "hexcasting.action.book.hexcasting:arccos": "反余弦之纯化",
-  "hexcasting.action.book.hexcasting:arctan": "反正切之纯化",
-  "hexcasting.action.book.hexcasting:arctan2": "反正切之纯化，第二型",
-  "hexcasting.action.book.hexcasting:const/vec/x": "向量之精思，+X/-X型",
-  "hexcasting.action.book.hexcasting:const/vec/y": "向量之精思，+Y/-Y型",
-  "hexcasting.action.book.hexcasting:const/vec/z": "向量之精思，+Z/-Z型",
-  "hexcasting.action.book.hexcasting:read/entity": "编年史家之纯化",
-  "hexcasting.action.book.hexcasting:bool_to_number": "数秘术师之纯化",
-  "hexcasting.action.book.hexcasting:number": "数字之精思",
-  "hexcasting.action.book.hexcasting:mask": "簿记员之策略",
 
   "hexcasting.action.hexcasting:const/null": "空元之精思",
   "hexcasting.action.hexcasting:const/vec/px": "向量之精思，+X型",
@@ -520,20 +512,98 @@
   "hexcasting.action.hexcasting:for_each": "托特之策略",
   "hexcasting.action.hexcasting:halt": "卡戎之策略",
 
-  "hexcasting.special.hexcasting:number": "数字之精思：%s",
-  "hexcasting.special.hexcasting:mask": "簿记员之策略：%s",
-  "hexcasting.rawhook.hexcasting:open_paren": "内省",
-  "hexcasting.rawhook.hexcasting:close_paren": "反思",
-  "hexcasting.rawhook.hexcasting:escape": "考察",
-
   "hexcasting.action.hexcasting:interop/gravity/get": "引力之纯化",
   "hexcasting.action.hexcasting:interop/gravity/set": "改变引力",
   "hexcasting.action.hexcasting:interop/pehkui/get": "格列佛之纯化",
   "hexcasting.action.hexcasting:interop/pehkui/set": "改变大小",
 
+  "hexcasting.action.book.hexcasting:get_entity_height": "测高仪之纯化",
+  "hexcasting.action.book.hexcasting:get_entity/animal": "实体之纯化：动物",
+  "hexcasting.action.book.hexcasting:get_entity/monster": "实体之纯化：怪物",
+  "hexcasting.action.book.hexcasting:get_entity/item": "实体之纯化：物品",
+  "hexcasting.action.book.hexcasting:get_entity/player": "实体之纯化：玩家",
+  "hexcasting.action.book.hexcasting:get_entity/living": "实体之纯化：生物",
+  "hexcasting.action.book.hexcasting:zone_entity": "区域之馏化：任意",
+  "hexcasting.action.book.hexcasting:zone_entity/animal": "区域之馏化：动物",
+  "hexcasting.action.book.hexcasting:zone_entity/monster": "区域之馏化：怪物",
+  "hexcasting.action.book.hexcasting:zone_entity/item": "区域之馏化：物品",
+  "hexcasting.action.book.hexcasting:zone_entity/player": "区域之馏化：玩家",
+  "hexcasting.action.book.hexcasting:zone_entity/living": "区域之馏化：生物",
+  "hexcasting.action.book.hexcasting:zone_entity/not_animal": "区域之馏化：非动物",
+  "hexcasting.action.book.hexcasting:zone_entity/not_monster": "区域之馏化：非怪物",
+  "hexcasting.action.book.hexcasting:zone_entity/not_item": "区域之馏化：非物品",
+  "hexcasting.action.book.hexcasting:zone_entity/not_player": "区域之馏化：非玩家",
+  "hexcasting.action.book.hexcasting:zone_entity/not_living": "区域之馏化：非生物",
+  "hexcasting.action.book.hexcasting:mul_dot": "乘法之馏化",
+  "hexcasting.action.book.hexcasting:div_cross": "除法之馏化",
+  "hexcasting.action.book.hexcasting:arcsin": "反正弦之纯化",
+  "hexcasting.action.book.hexcasting:arccos": "反余弦之纯化",
+  "hexcasting.action.book.hexcasting:arctan": "反正切之纯化",
+  "hexcasting.action.book.hexcasting:arctan2": "反正切之纯化，第二型",
+  "hexcasting.action.book.hexcasting:const/vec/x": "向量之精思，+X/-X型",
+  "hexcasting.action.book.hexcasting:const/vec/y": "向量之精思，+Y/-Y型",
+  "hexcasting.action.book.hexcasting:const/vec/z": "向量之精思，+Z/-Z型",
+  "hexcasting.action.book.hexcasting:read/entity": "编年史家之纯化",
+  "hexcasting.action.book.hexcasting:bool_to_number": "数秘术师之纯化",
+  "hexcasting.action.book.hexcasting:number": "数字之精思",
+  "hexcasting.action.book.hexcasting:mask": "簿记员之策略",
+
+  "hexcasting.special.hexcasting:number": "数字之精思：%s",
+  "hexcasting.special.hexcasting:mask": "簿记员之策略：%s",
+
+  "hexcasting.rawhook.hexcasting:open_paren": "内省",
+  "hexcasting.rawhook.hexcasting:close_paren": "反思",
+  "hexcasting.rawhook.hexcasting:escape": "考察",
+
+  "hexcasting.iota.hexcasting:null": "Null",
+  "hexcasting.iota.hexcasting:double": "数",
+  "hexcasting.iota.hexcasting:boolean": "布尔值",
+  "hexcasting.iota.hexcasting:entity": "实体",
+  "hexcasting.iota.hexcasting:list": "列表",
+  "hexcasting.iota.hexcasting:pattern": "图案",
+  "hexcasting.iota.hexcasting:garbage": "垃圾",
+  "hexcasting.iota.hexcasting:vec3": "向量",
+
+
+
   "hexcasting.mishap": "%s：%s",
+
   "hexcasting.mishap.invalid_pattern": "该图案不对应任何操作",
   "hexcasting.mishap.unescaped": "本应运行一个图案，而实际运行了%s",
+
+  "hexcasting.mishap.not_enough_args": "本应接受大于等于%s个参数，而实际栈中元素数为%s",
+  "hexcasting.mishap.no_args": "本应接受大于等于%s个参数，而实际为空栈",
+  "hexcasting.mishap.too_many_close_parens": "在绘制反思前未先绘制内省",
+
+  "hexcasting.mishap.wrong_dimension": "无法在%2$s中影响到%1$s",
+  "hexcasting.mishap.entity_too_far": "%s超出影响范围",
+  "hexcasting.mishap.immune_entity": "无法影响到%s",
+  "hexcasting.mishap.eval_too_deep": "递归深度过大",
+  "hexcasting.mishap.no_item": "需要%s，而实际无对应物品",
+  "hexcasting.mishap.no_item.offhand": "需要在另一只手里持有%s，而实际无对应物品",
+  "hexcasting.mishap.bad_entity": "需要%s，而实际接受了%s",
+  "hexcasting.mishap.bad_brainsweep": "%s排斥此生物的意识",
+  "hexcasting.mishap.already_brainswept": "此意识已被使用",
+  "hexcasting.mishap.no_spell_circle": "%s需在法术环上执行",
+  "hexcasting.mishap.others_name": "试图侵犯%s的灵魂的隐私",
+  "hexcasting.mishap.others_name.self": "试图随意泄露我自己真名的秘密",
+  "hexcasting.mishap.divide_by_zero.divide": "试图用%2$s除%1$s",
+  "hexcasting.mishap.divide_by_zero.project": "试图将%s投影至%s",
+  "hexcasting.mishap.divide_by_zero.exponent": "试图计算%s的%s",
+  "hexcasting.mishap.divide_by_zero.logarithm": "试图计算%s以%s为底的对数",
+  "hexcasting.mishap.divide_by_zero.zero": "零",
+  "hexcasting.mishap.divide_by_zero.zero.power": "零次幂",
+  "hexcasting.mishap.divide_by_zero.zero.vec": "零向量",
+  "hexcasting.mishap.divide_by_zero.power": "%s次幂",
+  "hexcasting.mishap.divide_by_zero.sin": "%s的正弦",
+  "hexcasting.mishap.divide_by_zero.cos": "%s的余弦",
+  "hexcasting.mishap.no_akashic_record": "%s处无阿卡夏记录",
+  "hexcasting.mishap.disallowed": "已被服务器管理员禁用于施法",
+  "hexcasting.mishap.disallowed_circle": "已被服务器管理员禁用于法术环",
+  "hexcasting.mishap.invalid_spell_datum_type": "尝试将某无效类型的值用作SpellDatum：%s（class %s）。这是模组中的bug。",
+  "hexcasting.mishap.unknown": "抛出异常（%s）。这是模组中的bug。",
+  "hexcasting.mishap.shame": "你真是可耻！",
+
   "hexcasting.mishap.invalid_value": "本应在栈下标为%2$s处接受%1$s，而实际接受了%3$s",
   "hexcasting.mishap.invalid_value.class.double": "一个数",
   "hexcasting.mishap.invalid_value.class.boolean": "一个布尔值",
@@ -561,20 +631,13 @@
   "hexcasting.mishap.invalid_value.int.between": "一个介于%d和%d之间的整数",
   "hexcasting.mishap.invalid_value.evaluatable": "可运行的事物",
   "hexcasting.mishap.invalid_value.bool_commute": "一个布尔值、0或1",
-  "hexcasting.mishap.not_enough_args": "本应接受大于等于%s个参数，而实际栈中元素数为%s",
-  "hexcasting.mishap.no_args": "本应接受大于等于%s个参数，而实际为空栈",
-  "hexcasting.mishap.too_many_close_parens": "在绘制反思前未先绘制内省",
-  "hexcasting.mishap.location_too_far": "%s超出影响范围",
-  "hexcasting.mishap.location_out_of_world": "%s不在此世界内",
-  "hexcasting.mishap.location_too_close_to_out": "%s离世界边界太近了",
-  "hexcasting.mishap.location_bad_dimension": "无法在此维度内传送",
-  "hexcasting.mishap.wrong_dimension": "无法在%2$s中影响到%1$s",
-  "hexcasting.mishap.entity_too_far": "%s超出影响范围",
-  "hexcasting.mishap.immune_entity": "无法影响到%s",
-  "hexcasting.mishap.eval_too_deep": "递归深度过大",
-  "hexcasting.mishap.no_item": "需要%s，而实际无对应物品",
-  "hexcasting.mishap.no_item.offhand": "需要在另一只手里持有%s，而实际无对应物品",
-  "hexcasting.mishap.bad_entity": "需要%s，而实际接受了%s",
+
+  "hexcasting.mishap.location.too_far": "%s超出影响范围",
+  "hexcasting.mishap.location.out_of_world": "%s不在此世界内",
+  "hexcasting.mishap.location.too_close_to_out": "%s离世界边界太近了",
+  "hexcasting.mishap.location.forbidden": "%s并未对你开放",
+  "hexcasting.mishap.location.bad_dimension": "无法在此维度内传送",
+
   "hexcasting.mishap.bad_item": "需要%s，而实际持有%d个%s",
   "hexcasting.mishap.bad_item.offhand": "需要在另一只手里持有%s，而实际持有%d个%s",
   "hexcasting.mishap.bad_item.iota": "一个可以存储iota的地方",
@@ -591,55 +654,36 @@
   "hexcasting.mishap.bad_block": "本应在%2$s处接受%1$s，而实际接受了%3$s",
   "hexcasting.mishap.bad_block.sapling": "一个树苗",
   "hexcasting.mishap.bad_block.replaceable": "一个可放置方块的地方",
-  "hexcasting.mishap.bad_brainsweep": "%s排斥此生物的意识",
-  "hexcasting.mishap.already_brainswept": "此意识已被使用",
-  "hexcasting.mishap.no_spell_circle": "%s需在法术环上执行",
-  "hexcasting.mishap.others_name": "试图侵犯%s的灵魂的隐私",
-  "hexcasting.mishap.others_name.self": "试图随意泄露我自己真名的秘密",
-  "hexcasting.mishap.divide_by_zero.divide": "试图用%2$s除%1$s",
-  "hexcasting.mishap.divide_by_zero.project": "试图将%s投影至%s",
-  "hexcasting.mishap.divide_by_zero.exponent": "试图计算%s的%s",
-  "hexcasting.mishap.divide_by_zero.logarithm": "试图计算%s以%s为底的对数",
-  "hexcasting.mishap.divide_by_zero.zero": "零",
-  "hexcasting.mishap.divide_by_zero.zero.power": "零次幂",
-  "hexcasting.mishap.divide_by_zero.zero.vec": "零向量",
-  "hexcasting.mishap.divide_by_zero.power": "%s次幂",
-  "hexcasting.mishap.divide_by_zero.sin": "%s的正弦",
-  "hexcasting.mishap.divide_by_zero.cos": "%s的余弦",
-  "hexcasting.mishap.no_akashic_record": "%s处无阿卡夏记录",
-  "hexcasting.mishap.disallowed": "已被服务器管理员禁用于施法",
-  "hexcasting.mishap.disallowed_circle": "已被服务器管理员禁用于法术环",
-  "hexcasting.mishap.invalid_spell_datum_type": "尝试将某无效类型的值用作SpellDatum：%s（class %s）。这是模组中的bug。",
-  "hexcasting.mishap.unknown": "抛出异常（%s）。这是模组中的bug。",
-  "hexcasting.mishap.shame": "你真是可耻！",
 
-  "_comment": "Patchi stuff",
+  "hexcasting.circles.no_exit": "%s处的媒质流无法找到出口",
+  "hexcasting.circles.many_exits": "%s处的媒质流的可选去路过多",
 
+
+  
   "hexcasting.landing": "我似乎发现了一种全新的魔法，一种在六边形网格上画各式奇诡图案的魔法。它深深地迷住了我。我决定着手撰写一本笔记，以此记述我的想法和研究成果。$(br2)$(l:https://forum.petra-k.at/index.php)论坛链接/$",
 
-  "hexcasting.entry.basics": "初入咒法",
-  "hexcasting.entry.basics.desc": "研究这种魔法的人士会用$(l:items/staff)$(item)法杖/$在空中绘制奇异的图案来施放他们口中的“$(hex)咒术/$”，他们也会让$(l:items/hexcasting)$(item)强大的魔法物品/$替他们施法。我应该也可以这样做？",
+  "hexcasting.category.basics": "初入咒法",
+  "hexcasting.category.basics.desc": "研究这种魔法的人士会用$(l:items/staff)$(item)法杖/$在空中绘制奇异的图案来施放他们口中的“$(hex)咒术/$”，他们也会让$(l:items/hexcasting)$(item)强大的魔法物品/$替他们施法。我应该也可以这样做？",
 
-  "hexcasting.entry.casting": "咒法学",
-  "hexcasting.entry.casting.desc": "我好像已经开始理解以前的咒法师们是如何施放$(hex)咒术/$的了！虽然有些复杂，但我坚信我能理清其中脉络。继续研究吧……",
+  "hexcasting.category.casting": "咒法学",
+  "hexcasting.category.casting.desc": "我好像已经开始理解以前的咒法师们是如何施放$(hex)咒术/$的了！虽然有些复杂，但我坚信我能理清其中脉络。继续研究吧……",
 
-  "hexcasting.entry.items": "物品",
-  "hexcasting.entry.items.desc": "这部分主要介绍我在研究过程中可能要用到的魔法物品和各类神秘物品。$(br2)这里面的许多物品似乎在和$(l:items/staff)$(item)法杖/$一起持有的时候就会起效。要谨慎考虑另一只手里要拿什么物品。",
+  "hexcasting.category.items": "物品",
+  "hexcasting.category.items.desc": "这部分主要介绍我在研究过程中可能要用到的魔法物品和各类神秘物品。$(br2)这里面的许多物品似乎在和$(l:items/staff)$(item)法杖/$一起持有的时候就会起效。要谨慎考虑另一只手里要拿什么物品。",
 
-  "hexcasting.entry.greatwork": "卓伟之作",
-  "hexcasting.entry.greatwork.desc": "我所见……甚多。我已……经历……湮灭与解构与重构。我已听闻世上的原子在被翻转而后被搅乱而后消散为能量时的尖啸。我已见我已见我已冂$(k)get stick bugged lmao/$",
+  "hexcasting.category.greatwork": "卓伟之作",
+  "hexcasting.category.greatwork.desc": "我所见……甚多。我已……经历……湮灭与解构与重构。我已听闻世上的原子在被翻转而后被搅乱而后消散为能量时的尖啸。我已见我已见我已冂$(k)get stick bugged lmao/$",
 
-  "hexcasting.entry.patterns": "图案",
-  "hexcasting.entry.patterns.desc": "我所发现的各式图案，和它们的功用。",
+  "hexcasting.category.patterns": "图案",
+  "hexcasting.category.patterns.desc": "我所发现的各式图案，和它们的功用。",
 
-  "hexcasting.entry.spells": "法术",
-  "hexcasting.entry.spells.desc": "能以魔法影响到世界的图案和操作。",
+  "hexcasting.category.spells": "法术",
+  "hexcasting.category.spells.desc": "能以魔法影响到世界的图案和操作。",
 
-  "hexcasting.entry.great_spells": "卓越法术",
-  "hexcasting.entry.great_spells.desc": "这类法术据信极难施放，但也极为强力。记载它们的文献极为少见（据称理由充分）。这也许只是某些消亡的老古董口中的胡言乱语，不过——它们只是简单的图案罢了，试试看又能出什么错呢？",
+  "hexcasting.category.great_spells": "卓越法术",
+  "hexcasting.category.great_spells.desc": "这类法术据信极难施放，但也极为强力。记载它们的文献极为少见（据称理由充分）。这也许只是某些消亡的老古董口中的胡言乱语，不过——它们只是简单的图案罢了。$(br2)试试看又能出什么错呢？",
 
 
-  "_comment": "Basics",
 
   "hexcasting.entry.media": "媒质",
   "hexcasting.page.media.1": "$(media)媒质/$是一种独立于意识的思维能量。所有生物都会在思考时产生痕量的$(media)媒质/$，而在这一思考过程结束后，产生的媒质就会被释放至环境中。$(br2)所谓施放$(hex)咒术/$，就是操纵$(media)媒质/$以产生有效影响的过程。",
@@ -664,7 +708,6 @@
   "hexcasting.page.start_to_see.4": "但我不应该。我也$(italic)清楚/$我不应该。那很危险。非常非常危险。跨越屏障需要的力量……我必须仅凭$(italic)一次施法/$就让我自己濒临死亡。$(br2)但我，就是，$(italic)不甘心/$。$(p)$(italic)这/$就是我魔法的集大成之作。这就是我所追求的$(#54398a)启迪/$。$(br2)我还想知道更多。我要再看到那场景。我$(italic)必将/$再见。$(p)我脆弱的意识和永恒的荣耀相比，又算得上什么呢？",
 
 
-  "_comment": "Casting",
 
   "hexcasting.entry.101": "咒术 101",
   "hexcasting.page.101.1": "施放$(hex)咒术/$难度颇高，也难怪这门学问早已遗落！我必须要仔细回看我的笔记。$(br2)我可以手持$(l:items/staff)$(item)法杖/$按下$(k:use)来施放$(hex)咒术/$，而后就会浮现一个按六边形网格排列的点阵。然后便可在点阵上单击并拖动以在网格的$(media)媒质/$中绘制图案。绘制完一个图案就会立刻执行其对应的操作（详情见后）。",
@@ -751,7 +794,6 @@
   "hexcasting.page.mishaps2.no_record": "试图在无对应方块处访问$(l:greatwork/akashiclib)$(item)阿卡夏记录/$。$(br2)产生紫色火花，并消耗部分经验。",
 
 
-  "_comment": "Items",
 
   "hexcasting.entry.amethyst": "紫水晶",
   "hexcasting.page.amethyst.dust": "在晶洞里破坏紫水晶会产生三种形态的紫水晶。紫水晶量最少的物品是一堆闪着光的粉末，含有较少量的$(media)媒质/$。",
@@ -839,7 +881,6 @@
   "hexcasting.page.decoration.sconce.crafting.desc": "$(l:items/decoration)$(item)紫水晶灯台/$会发出光和粒子，并会产生悦耳的“叮铃”声。",
 
 
-  "_comment": "The Work",
 
   "hexcasting.entry.the_work": "卓伟之作",
   "hexcasting.page.the_work.1": "我所见甚多。不可言之物。不可数之物。仅三词就能将我的意识从里翻到外然后把我的大脑抹在头颅黑暗的内壁然后腐朽为混沌和虚无。",
@@ -894,7 +935,7 @@
   "hexcasting.entry.fanciful_staves": "华丽法杖",
   "hexcasting.page.fanciful_staves.1": "卸去无知的外壳后，更换工具——那些我亲手打磨的法杖——更是理所应当。这些全新的设计并非拥有额外属性——但它们光彩万分，光耀夺目……它们一如我视线边缘的闪烁与光耀。",
   
-  "_comment": "Patterns",
+
 
   "hexcasting.entry.readers_guide": "如何阅读这一章节",
   "hexcasting.page.readers_guide.1": "我将我找到的所有图案根据作用分为了几类。我也记下了它们的笔画顺序，前提是我在研究中发现了确切顺序。绘制起点标记为一个稍大的红点。$(br2)如果某个操作需要绘制多个图案才能执行，我会将那些图案排在一起。",
@@ -1099,7 +1140,7 @@
   "hexcasting.page.akashic_patterns.akashic/read": "在$(l:greatwork/akashiclib)$(item)阿卡夏记录/$处从$(l:greatwork/akashiclib)$(item)阿卡夏图书馆/$中读出所给图案对应的 iota。没有读取距离限制。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
   "hexcasting.page.akashic_patterns.akashic/write": "在$(l:greatwork/akashiclib)$(item)阿卡夏图书馆/$的$(l:greatwork/akashiclib)$(item)记录/$处将 iota 和所给图案对应起来。$(italic)有/$存储距离限制。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
 
-  "_comment": "Normal Spells",
+
 
   "hexcasting.entry.itempicking": "处理物品",
   "hexcasting.page.itempicking.1": "某些法术，例如$(l:patterns/spells/blockworks#hexcasting:place_block)$(action)放置方块/$，会消耗物品栏内的其他物品。在这种情况下，法术会先检索要用哪个物品，然后就会消耗物品栏内所有同种物品。$(br2)这一过程被称为“挑选物品”。",
