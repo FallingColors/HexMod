@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.client.render.patternado.PatternadosTracker;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -44,6 +45,21 @@ public class HexAdditionalRenderers {
 
     public static void overlayGui(PoseStack ps, float partialTicks) {
         tryRenderScryingLensOverlay(ps, partialTicks);
+    }
+
+    public static void renderPatternado(LocalPlayer player, PoseStack ps, float partialTicks) {
+        var me = Minecraft.getInstance().player;
+        if (me == player && !Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
+            return;
+        }
+
+        var pats = PatternadosTracker.getPatterns(player.getUUID());
+        if (pats == null) {
+            return;
+        }
+
+        ps.pushPose();
+
     }
 
     private static void renderSentinel(Sentinel sentinel, LocalPlayer owner,
