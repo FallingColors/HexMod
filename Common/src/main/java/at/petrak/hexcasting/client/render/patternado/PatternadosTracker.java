@@ -37,7 +37,7 @@ public class PatternadosTracker {
     /**
      * Load a player fresh.
      */
-    public void clobberPatterns(UUID owner, List<PatternadoPatInstance> pats) {
+    public static void clobberPatterns(UUID owner, List<PatternadoPatInstance> pats) {
         PATTERNADOS.put(owner, PlayerPats.newFromList(pats));
     }
 

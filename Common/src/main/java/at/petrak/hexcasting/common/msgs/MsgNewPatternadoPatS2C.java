@@ -21,6 +21,7 @@ public record MsgNewPatternadoPatS2C(UUID owner, PatternadoPatInstance newPat) i
 
     public static MsgNewPatternadoPatS2C deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
+
         var owner = buf.readUUID();
         var pat = PatternadoPatInstance.loadFromWire(buf);
         return new MsgNewPatternadoPatS2C(owner, pat);
@@ -28,8 +29,8 @@ public record MsgNewPatternadoPatS2C(UUID owner, PatternadoPatInstance newPat) i
 
     @Override
     public void serialize(FriendlyByteBuf buf) {
-        this.newPat.saveToWire(buf);
         buf.writeUUID(this.owner);
+        this.newPat.saveToWire(buf);
     }
 
     public static void handle(MsgNewPatternadoPatS2C msg) {

@@ -7,11 +7,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public record MsgLoadPatternadoS2C(UUID owner, PatternadoPatInstance newPat) implements IMessage {
+/**
+ * Set the patternado of a given player to this, overwrite the previous
+ */
+public record MsgOverridePatternadoS2C(UUID owner, List<PatternadoPatInstance> pats) implements IMessage {
     public static final ResourceLocation ID = modLoc("nados");
 
     @Override
@@ -19,24 +24,24 @@ public record MsgLoadPatternadoS2C(UUID owner, PatternadoPatInstance newPat) imp
         return ID;
     }
 
-    public static MsgLoadPatternadoS2C deserialize(ByteBuf buffer) {
+    public static MsgOverridePatternadoS2C deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var owner = buf.readUUID();
-        var pat = PatternadoPatInstance.loadFromWire(buf);
-        return new MsgLoadPatternadoS2C(owner, pat);
+        var pats = buf.readCollection(ArrayList::new, PatternadoPatInstance::loadFromWire);
+        return new MsgOverridePatternadoS2C(owner, pats);
     }
 
     @Override
     public void serialize(FriendlyByteBuf buf) {
-        this.newPat.saveToWire(buf);
         buf.writeUUID(this.owner);
+        buf.writeCollection(this.pats, (bf, it) -> it.saveToWire(bf));
     }
 
-    public static void handle(MsgLoadPatternadoS2C msg) {
+    public static void handle(MsgOverridePatternadoS2C msg) {
         Minecraft.getInstance().execute(new Runnable() {
             @Override
             public void run() {
-                PatternadosTracker.getNewPat(msg.owner, msg.newPat);
+                PatternadosTracker.clobberPatterns(msg.owner, msg.pats);
             }
         });
     }

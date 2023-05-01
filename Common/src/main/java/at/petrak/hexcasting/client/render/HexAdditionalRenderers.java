@@ -27,12 +27,15 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.function.BiConsumer;
 
 public class HexAdditionalRenderers {
+    private static final float PATTERNADO_SPEEN_SPEED = 0.01f;
+
     public static void overlayLevel(PoseStack ps, float partialTick) {
         var player = Minecraft.getInstance().player;
         if (player != null) {
@@ -58,8 +61,61 @@ public class HexAdditionalRenderers {
             return;
         }
 
+        var oldShader = RenderSystem.getShader();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableCull();
         ps.pushPose();
 
+        float time = player.level.getGameTime() + partialTicks;
+        var col = IXplatAbstractions.INSTANCE.getColorizer(player).getColorProvider();
+
+        for (var spinner : pats) {
+            // So it stops moving near the end?
+            float lifetimeOffset = spinner.getLifetime() <= 5 ? (5f - spinner.getLifetime()) / 5f : 0f;
+            {
+                ps.mulPose(Vector3f.YP.rotationDegrees(time * spinner.getLifetime() * PATTERNADO_SPEEN_SPEED));
+                // X: sideways, don't move it
+                // Y: up/down, each pattern stays on its own ring
+                // Z: in/out, it's mostly determined by the idx but also slowly drifts in/out
+                ps.translate(
+                    0,
+                    Mth.sin(spinner.getIdx() * 0.75f),
+                    0.75f + (Mth.cos(spinner.getIdx() / 8f) * 0.25f) + Mth.cos(time) / (7f + (spinner.getIdx() / 4f)) * 0.065f
+                );
+                var scale = 1f / 24f * (1 - lifetimeOffset);
+                ps.scale(scale, scale, scale);
+                // Don't know why amo did this in two translate calls
+                ps.translate(
+                    0,
+                    Mth.floor(spinner.getIdx() / 8f) + Mth.sin(time) / (7f + (spinner.getIdx() / 8f)),
+                    0
+                );
+            }
+
+            var pat = spinner.getPattern();
+            var lines = RenderLib.getCenteredPattern(pat, 1, 1, 3.8f).getSecond();
+
+            float variance = 0.65f;
+            float speed = 0.1f;
+            List<Vec2> zappy = RenderLib.makeZappy(lines, RenderLib.findDupIndices(pat.positions()),
+                5, variance, speed, 0.2f, 0f,
+                1f, spinner.getUuid().hashCode());
+            int outer = col.getColor(ClientTickCounter.getTotal() / 2f, Vec3.ZERO);
+            int rgbOnly = outer & 0x00FFFFFF;
+            int newAlpha = outer >>> 24;
+            if (spinner.getLifetime() <= 60) {
+                newAlpha = (int) Math.floor(spinner.getLifetime() / 60f * 255);
+            }
+            int newARGB = (newAlpha << 24) | rgbOnly;
+            int inner = RenderLib.screen(newARGB);
+            RenderLib.drawLineSeq(ps.last().pose(), zappy, 0.35f, 0f, newARGB, newARGB);
+            RenderLib.drawLineSeq(ps.last().pose(), zappy, 0.14f, 0.01f, inner, inner);
+        }
+
+        ps.popPose();
+        RenderSystem.setShader(() -> oldShader);
+        RenderSystem.enableCull();
     }
 
     private static void renderSentinel(Sentinel sentinel, LocalPlayer owner,

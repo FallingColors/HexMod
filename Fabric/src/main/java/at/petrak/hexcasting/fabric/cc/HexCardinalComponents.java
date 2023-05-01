@@ -42,11 +42,11 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         CCSentinel.class);
     public static final ComponentKey<CCFlight> FLIGHT = ComponentRegistry.getOrCreate(modLoc("flight"),
         CCFlight.class);
-
     public static final ComponentKey<CCAltiora> ALTIORA = ComponentRegistry.getOrCreate(modLoc("altiora"),
         CCAltiora.class);
+
     public static final ComponentKey<CCStaffcastImage> STAFFCAST_IMAGE = ComponentRegistry.getOrCreate(modLoc(
-        "harness"),
+            "harness"),
         CCStaffcastImage.class);
     public static final ComponentKey<CCPatterns> PATTERNS = ComponentRegistry.getOrCreate(modLoc("patterns"),
         CCPatterns.class);
