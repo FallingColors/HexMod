@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.client.model.armor;
+package at.petrak.hexcasting.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

@@ -55,10 +55,6 @@ public class ForgePacketHandler {
             MsgBeepS2C::deserialize, makeClientBoundHandler(MsgBeepS2C::handle));
         NETWORK.registerMessage(messageIdx++, MsgBrainsweepAck.class, MsgBrainsweepAck::serialize,
             MsgBrainsweepAck::deserialize, makeClientBoundHandler(MsgBrainsweepAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgUpdateComparatorVisualsS2C.class,
-            MsgUpdateComparatorVisualsS2C::serialize,
-            MsgUpdateComparatorVisualsS2C::deserialize,
-            makeClientBoundHandler(MsgUpdateComparatorVisualsS2C::handle));
         NETWORK.registerMessage(messageIdx++, MsgNewWallScrollS2C.class,
             MsgNewWallScrollS2C::serialize,
             MsgNewWallScrollS2C::deserialize,

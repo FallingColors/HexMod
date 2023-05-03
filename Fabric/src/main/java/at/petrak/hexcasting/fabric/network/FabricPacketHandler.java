@@ -35,8 +35,6 @@ public class FabricPacketHandler {
             makeClientBoundHandler(MsgOpenSpellGuiS2C::deserialize, MsgOpenSpellGuiS2C::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgBeepS2C.ID,
             makeClientBoundHandler(MsgBeepS2C::deserialize, MsgBeepS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgUpdateComparatorVisualsS2C.ID,
-            makeClientBoundHandler(MsgUpdateComparatorVisualsS2C::deserialize, MsgUpdateComparatorVisualsS2C::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgNewWallScrollS2C.ID,
             makeClientBoundHandler(MsgNewWallScrollS2C::deserialize, MsgNewWallScrollS2C::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgRecalcWallScrollDisplayS2C.ID,

@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.client.render;
+package at.petrak.hexcasting.client.model;
 
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.blaze3d.vertex.PoseStack;

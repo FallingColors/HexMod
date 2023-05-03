@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.mixin.client;
 
-import at.petrak.hexcasting.client.render.AltioraLayer;
+import at.petrak.hexcasting.client.model.AltioraLayer;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

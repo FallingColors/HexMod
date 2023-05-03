@@ -12,6 +12,7 @@
     "FabricLivingEntityMixin",
     "FabricMixinReloadableServerResources",
     "FabricMobMixin",
+    "FabricPlayerMixin",
     "FabricVillagerTurnIntoWitchMixin"
   ],
   "client": [

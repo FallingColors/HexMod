@@ -14,7 +14,6 @@ import at.petrak.hexcasting.common.casting.operators.spells.great.OpAltiora
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
-import at.petrak.hexcasting.common.items.ItemLens
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.lib.hex.HexActions
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
@@ -97,7 +96,6 @@ object FabricHexInitializer : ModInitializer {
         }
 
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
-        ServerTickEvents.END_WORLD_TICK.register(ItemLens::tickAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(OpFlight::tickAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(OpAltiora::checkAllPlayers)
 
@@ -129,6 +127,7 @@ object FabricHexInitializer : ModInitializer {
         Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
 
         HexEntities.registerEntities(bind(Registry.ENTITY_TYPE))
+        HexAttributes.register(bind(Registry.ATTRIBUTE))
 
         HexRecipeStuffRegistry.registerSerializers(bind(Registry.RECIPE_SERIALIZER))
         HexRecipeStuffRegistry.registerTypes(bind(Registry.RECIPE_TYPE))

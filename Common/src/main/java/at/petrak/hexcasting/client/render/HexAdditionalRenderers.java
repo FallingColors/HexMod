@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.client.render;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
-import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -157,7 +157,7 @@ public class HexAdditionalRenderers {
             return;
         }
 
-        if (!DiscoveryHandlers.hasLens(player))
+        if (player.getAttributeValue(HexAttributes.SCRY_SIGHT) <= 0.0)
             return;
 
         var hitRes = mc.hitResult;

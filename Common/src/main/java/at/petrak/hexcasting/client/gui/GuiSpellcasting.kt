@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
-import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
@@ -17,6 +16,7 @@ import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.render.*
 import at.petrak.hexcasting.client.sound.GridSoundInstance
+import at.petrak.hexcasting.common.lib.HexAttributes
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
@@ -452,12 +452,12 @@ class GuiSpellcasting constructor(
 
     /** Distance between adjacent hex centers */
     fun hexSize(): Float {
-        val scaleModifier = DiscoveryHandlers.gridScaleModifier(Minecraft.getInstance().player)
+        val scaleModifier = Minecraft.getInstance().player!!.getAttributeValue(HexAttributes.GRID_ZOOM)
 
         // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like 500-odd area.
         // Let's be generous and give them 512.
         val baseScale = sqrt(this.width.toDouble() * this.height / 512.0)
-        return baseScale.toFloat() * scaleModifier
+        return (baseScale / scaleModifier).toFloat()
     }
 
     fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)

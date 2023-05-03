@@ -4,8 +4,8 @@ import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent
+import at.petrak.hexcasting.client.model.HexModelLayers
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers
-import at.petrak.hexcasting.client.render.HexModelLayers
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.lib.HexParticles
 import at.petrak.hexcasting.fabric.event.MouseScrollCallback

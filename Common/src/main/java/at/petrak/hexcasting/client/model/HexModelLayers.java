@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.client.render;
+package at.petrak.hexcasting.client.model;
 
 import net.minecraft.client.model.ElytraModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -13,6 +13,8 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class HexModelLayers {
     public static final ModelLayerLocation ALTIORA = make("altiora");
 
+    public static final ModelLayerLocation ROBES = make("robes");
+
     private static ModelLayerLocation make(String name) {
         return make(name, "main");
     }
@@ -23,8 +25,10 @@ public class HexModelLayers {
         return new ModelLayerLocation(modLoc(name), layer);
     }
 
-    // combine with https://github.com/VazkiiMods/Botania/blob/1.19.x/Xplat/src/main/java/vazkii/botania/client/model/BotaniaLayerDefinitions.java
+    // moving this stuff into the same file:
+    // https://github.com/VazkiiMods/Botania/blob/1.19.x/Xplat/src/main/java/vazkii/botania/client/model/BotaniaLayerDefinitions.java
     public static void init(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> consumer) {
         consumer.accept(ALTIORA, ElytraModel::createLayer);
+        consumer.accept(ROBES, HexRobesModels::variant1);
     }
 }
