@@ -106,6 +106,9 @@ public class ForgeHexInitializer {
 
         bind(Registry.ENTITY_TYPE_REGISTRY, HexEntities::registerEntities);
         bind(Registry.ATTRIBUTE_REGISTRY, HexAttributes::register);
+        bind(Registry.MOB_EFFECT_REGISTRY, HexMobEffects::register);
+        bind(Registry.POTION_REGISTRY, HexPotions::register);
+        HexPotions.addRecipes();
 
         bind(Registry.PARTICLE_TYPE_REGISTRY, HexParticles::registerParticles);
 
@@ -244,7 +247,6 @@ public class ForgeHexInitializer {
             e.add(EntityType.PLAYER, HexAttributes.GRID_ZOOM);
             e.add(EntityType.PLAYER, HexAttributes.SCRY_SIGHT);
         });
-
 
         if (ModList.get().isLoaded(HexInterop.Forge.CURIOS_API_ID)) {
             modBus.addListener(CuriosApiInterop::onInterModEnqueue);

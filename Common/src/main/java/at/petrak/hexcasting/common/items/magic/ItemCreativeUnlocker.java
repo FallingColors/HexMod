@@ -63,21 +63,6 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
             }
             return ItemStack.EMPTY;
         });
-
-        DiscoveryHandlers.addMediaHolderDiscoverer(harness -> {
-            var player = harness.getEnv().getCaster();
-            if (player == null)
-                return List.of();
-
-            if (!player.isCreative())
-                return List.of();
-
-            ItemStack stack = DiscoveryHandlers.findDebugItem(player, DISPLAY_MEDIA);
-            if (!stack.isEmpty())
-                return List.of(new DebugUnlockerHolder(stack));
-
-            return List.of();
-        });
     }
 
     public static boolean isDebug(ItemStack stack) {

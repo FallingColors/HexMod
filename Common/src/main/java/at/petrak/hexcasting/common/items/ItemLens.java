@@ -22,9 +22,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class ItemLens extends Item implements Wearable {
+
+
+    // The 0.1 is *additive*
+
     public static final AttributeModifier GRID_ZOOM = new AttributeModifier(
         UUID.fromString("59d739b8-d419-45f7-a4ea-0efee0e3adf5"),
-        "Scrying Lens Zoom", 1.25, AttributeModifier.Operation.MULTIPLY_BASE);
+        "Scrying Lens Zoom", 0.33, AttributeModifier.Operation.MULTIPLY_BASE);
+
     public static final AttributeModifier SCRY_SIGHT = new AttributeModifier(
         UUID.fromString("e2e6e5d4-f978-4c11-8fdc-82a5af83385c"),
         "Scrying Lens Sight", 1.0, AttributeModifier.Operation.ADDITION);
