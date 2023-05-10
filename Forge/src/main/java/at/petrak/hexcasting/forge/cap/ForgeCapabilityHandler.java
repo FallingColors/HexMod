@@ -10,9 +10,13 @@ import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.common.items.HexBaubleItem;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.forge.cap.adimpl.*;
+import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
+import at.petrak.hexcasting.interop.HexInterop;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -61,6 +65,7 @@ public class ForgeCapabilityHandler {
      * Items that work as pigments.
      */
     public static final ResourceLocation PIGMENT_CAP = modLoc("pigment");
+    public static final ResourceLocation CURIO_CAP = modLoc("curio");
 
     private static final ResourceLocation IMPETUS_HANDLER = modLoc("impetus_items");
 
@@ -113,6 +118,11 @@ public class ForgeCapabilityHandler {
             evt.addCapability(PIGMENT_CAP,
                 provide(stack, HexCapabilities.COLOR, () -> new CapItemColorizer(colorizer, stack)));
         }
+
+        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Forge.CURIOS_API_ID)
+            && stack.getItem() instanceof HexBaubleItem) {
+            evt.addCapability(CURIO_CAP, CuriosApiInterop.curioCap(stack));
+        }
     }
 
     public static void attachEntityCaps(AttachCapabilitiesEvent<Entity> evt) {
@@ -153,7 +163,7 @@ public class ForgeCapabilityHandler {
         return provide(be::isRemoved, capability, supplier);
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability,
+    public static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability,
         NonNullSupplier<CAP> supplier) {
         return provide(stack::isEmpty, capability, supplier);
     }
@@ -163,9 +173,14 @@ public class ForgeCapabilityHandler {
         return new SimpleProvider<>(invalidated, capability, LazyOptional.of(supplier));
     }
 
-    private record SimpleProvider<CAP>(BooleanSupplier invalidated,
-                                       Capability<CAP> capability,
-                                       LazyOptional<CAP> instance) implements ICapabilityProvider {
+    public static <T, U extends T> ICapabilityProvider makeProvider(Capability<T> cap, U instance) {
+        LazyOptional<T> lazyInstanceButNotReally = LazyOptional.of(() -> instance);
+        return new SimpleProvider<>(() -> false, cap, lazyInstanceButNotReally);
+    }
+
+    public record SimpleProvider<CAP>(BooleanSupplier invalidated,
+                                      Capability<CAP> capability,
+                                      LazyOptional<CAP> instance) implements ICapabilityProvider {
 
         @NotNull
         @Override

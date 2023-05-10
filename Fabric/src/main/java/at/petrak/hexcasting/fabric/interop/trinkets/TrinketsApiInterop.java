@@ -1,9 +1,8 @@
 package at.petrak.hexcasting.fabric.interop.trinkets;
 
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
-import at.petrak.hexcasting.common.items.ItemLens;
+import at.petrak.hexcasting.common.items.HexBaubleItem;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
-import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.google.common.collect.Multimap;
 import dev.emi.trinkets.api.SlotReference;
@@ -13,6 +12,7 @@ import dev.emi.trinkets.api.TrinketsApi;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -23,16 +23,20 @@ import java.util.UUID;
 
 public class TrinketsApiInterop {
     public static void init() {
-        TrinketsApi.registerTrinket(HexItems.SCRYING_LENS, new Trinket() {
-            @Override
-            public Multimap<Attribute, AttributeModifier> getModifiers(ItemStack stack, SlotReference slot,
-                LivingEntity entity, UUID uuid) {
-                var map = Trinket.super.getModifiers(stack, slot, entity, uuid);
-                map.put(HexAttributes.GRID_ZOOM, ItemLens.GRID_ZOOM);
-                map.put(HexAttributes.SCRY_SIGHT, ItemLens.SCRY_SIGHT);
-                return map;
+        Registry.ITEM.stream().forEach(item -> {
+            if (item instanceof HexBaubleItem bauble) {
+                TrinketsApi.registerTrinket(item, new Trinket() {
+                    @Override
+                    public Multimap<Attribute, AttributeModifier> getModifiers(ItemStack stack, SlotReference slot,
+                        LivingEntity entity, UUID uuid) {
+                        var map = Trinket.super.getModifiers(stack, slot, entity, uuid);
+                        map.putAll(bauble.getHexBaubleAttrs(stack));
+                        return map;
+                    }
+                });
             }
         });
+
 
         DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
             Optional<TrinketComponent> optional = TrinketsApi.getTrinketComponent(player);

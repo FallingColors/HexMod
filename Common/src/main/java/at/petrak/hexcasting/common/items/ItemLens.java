@@ -21,8 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class ItemLens extends Item implements Wearable {
-
+public class ItemLens extends Item implements Wearable, HexBaubleItem {
 
     // The 0.1 is *additive*
 
@@ -52,6 +51,14 @@ public class ItemLens extends Item implements Wearable {
             out.put(HexAttributes.GRID_ZOOM, GRID_ZOOM);
             out.put(HexAttributes.SCRY_SIGHT, SCRY_SIGHT);
         }
+        return out;
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getHexBaubleAttrs(ItemStack stack) {
+        HashMultimap<Attribute, AttributeModifier> out = HashMultimap.create();
+        out.put(HexAttributes.GRID_ZOOM, GRID_ZOOM);
+        out.put(HexAttributes.SCRY_SIGHT, SCRY_SIGHT);
         return out;
     }
 
