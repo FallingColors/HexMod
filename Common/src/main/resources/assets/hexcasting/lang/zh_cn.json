@@ -859,11 +859,11 @@
   "hexcasting.page.phials.desc": "$(italic)玉液琼浆。/$",
 
   "hexcasting.entry.pigments": "染色剂",
-  "hexcasting.page.pigments.1": "虽然研究咒法学的古代研究者们的名字已不可考，但他们会用一种颜色来象征自己和自己的法术。倘若直接向自然呈上一种特殊的染色剂，就能“……以自然乐见的方式为某人的思维涂上颜色，并使个人代表色产生奇妙的变化。”",
-  "hexcasting.page.pigments.2": "我不懂它们工作的具体原理，但我相信我已琢磨出制造不同颜色的染色剂的配方了。若要使用染色剂，可手持之并以另一只手施放$(l:patterns/spells/colorize)$(action)内化染色剂/$。这会消耗对应染色剂并将我的意识涂为对应颜色。$(br2)染色剂会影响我用法杖施放$(hex)咒术/$时产生的火花的颜色，也会影响我的$(l:patterns/spells/sentinels)$(thing)哨卫/$的颜色。",
+  "hexcasting.page.pigments.1": "咒法学的古代研究者们偶尔会用一种颜色来象征自己和自己的$(hex)咒术/$。他们的名字已不可考，但那些颜色留存至今。倘若直接向自然呈上一种特殊的染色剂，就能“……以自然乐见的方式为某人的思维涂上颜色，并使个人代表色产生奇妙的变化。”",
+  "hexcasting.page.pigments.2": "我不懂它们的具体原理，但我相信我已琢磨出制造不同颜色染色剂的配方了。若要使用染色剂，可手持之并以另一只手施放$(l:patterns/spells/colorize)$(action)内化染色剂/$，染色剂则会被消耗。$(br2)染色剂似乎会影响我施放$(hex)咒术/$时的$(media)媒质/$火花以及我的$(l:patterns/spells/sentinels)$(thing)哨卫/$的颜色，但影响到其他地方也完全是正常现象。",
   "hexcasting.page.pigments.colored.crafting.header": "色彩染色剂",
   "hexcasting.page.pigments.colored.crafting.desc": "五彩缤纷的染色剂。",
-  "hexcasting.page.pigments.uuid.crafting.desc": "一种只属于我的染色剂。$(br2)$(italic)也含有许多还没被研究出来的我所特有的颜色。/$",
+  "hexcasting.page.pigments.special": "最后还有两种特殊的染色剂。$(item)灵魂闪光染色剂/$的颜色为我所独有，而$(item)空无染色剂/$则会重置为初始状态的紫橙混色。$(br2)$(italic)以及许多还没被研究出来的内在颜色。/$",
 
   "hexcasting.entry.edified": "启迪树",
   "hexcasting.page.edified.1": "用$(l:patterns/spells/blockworks#hexcasting:edify)$(action)启迪树苗/$就能将部分$(media)媒质/$注入树苗，就能造出$(l:items/edified)$(thing)启迪树/$。它们又高又尖，树皮上有特殊纹理。树叶则有三种不同颜色。",
@@ -950,7 +950,7 @@
   "hexcasting.page.basics_pattern.get_entity_look": "将栈顶的实体变为其视线方向上的单位向量。",
   "hexcasting.page.basics_pattern.print": "向我展示栈顶的 iota。",
   "hexcasting.page.basics_pattern.raycast.1": "将两个向量组合（分别表示位置和方向）并返回如下问题的答案：若我站在该位置并看向该方向，我会看到什么方块？消耗极少量$(media)媒质/$。",
-  "hexcasting.page.basics_pattern.raycast.2": "如果视线并未击中任何事物，所提供的向量会变为 $(l:casting/influences)$(thing)Null/$。$(br2)有一套常用的图案序列（常称“光线投射曼怛罗”），由$(action)意识之精思/$、$(action)指南针之纯化/$、$(action)意识之精思/$、$(action)照准仪之纯化/$、$(action)弓箭手之馏化/$组成。依次绘制就能返回我所看的方块的位置向量。",
+  "hexcasting.page.basics_pattern.raycast.2": "如果视线并未击中任何事物，所提供的向量会变为 $(l:casting/influences)$(thing)Null/$。$(br2)有一套常用的图案序列（常称“射线追踪曼怛罗”），由$(action)意识之精思/$、$(action)指南针之纯化/$、$(action)意识之精思/$、$(action)照准仪之纯化/$、$(action)弓箭手之馏化/$组成。依次绘制就能返回我所看的方块的位置向量。",
   "hexcasting.page.basics_pattern.raycast/axis.1": "与$(l:patterns/basics#hexcasting:raycast)$(action)弓箭手之馏化/$类似，但会返回如下问题的答案：我看着的是方块的$(italic)哪一面/$？消耗极少量$(media)媒质/$。",
   "hexcasting.page.basics_pattern.raycast/axis.2": "更确切地说，它会返回所看面的$(italic)法向量/$，也即垂直于该面的单位向量。$(li)如果我看着地面，它会返回 (0, 1, 0)。$(li)如果我看着某方块面向南方的侧面，它会返回 (0, 0, 1)。",
   "hexcasting.page.basics_pattern.raycast/entity": "与$(l:patterns/basics#hexcasting:raycast)$(action)弓箭手之馏化/$类似，但会返回我所看的$(italic)实体/$。消耗极少量$(media)媒质/$。",
