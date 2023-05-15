@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.circles.CircleExecutionState;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.Util;
@@ -62,6 +63,20 @@ public class CircleCastEnv extends CastingEnvironment {
         if (sound != null) {
             var soundPos = this.execState.currentPos;
             this.world.playSound(null, soundPos, sound, SoundSource.PLAYERS, 1f, 1f);
+        }
+
+        // TODO: this is gonna bite us in the bum someday
+        // we check whether we should cut the execution in BlockSlate, but post the mishap here;
+        // although everything should be pretty immutable here it's something to keep in mind
+        // classic time-of-check/time-of-use
+        var imp = this.getImpetus();
+        if (imp != null) {
+            for (var sideEffect : result.getSideEffects()) {
+                if (sideEffect instanceof OperatorSideEffect.DoMishap doMishap) {
+                    var msg = doMishap.getMishap().errorMessageWithName(this, doMishap.getErrorCtx());
+                    imp.postMishap(msg);
+                }
+            }
         }
     }
 

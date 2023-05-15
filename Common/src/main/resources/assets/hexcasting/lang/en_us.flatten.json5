@@ -286,6 +286,8 @@
       "brainsweep.min_level": "Level %s or higher",
       "brainsweep.level": "Level %s",
       "brainsweep.product": "Mindless Body",
+      
+      "media": "%d dust"
     },
     // ^ tooltip
     spelldata: {
