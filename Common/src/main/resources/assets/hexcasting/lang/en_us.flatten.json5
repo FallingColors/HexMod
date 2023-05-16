@@ -338,7 +338,7 @@
       scry_sight: "Scrying Sight"
     },
     
-    // Actual hexcasting stuff
+    // Action localizations
     
     action: {
       "hexcasting:": {
