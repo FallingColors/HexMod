@@ -11,7 +11,6 @@ import at.petrak.hexcasting.common.casting.operators.spells.OpFlight;
 import at.petrak.hexcasting.common.casting.operators.spells.great.OpAltiora;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
-import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.common.lib.hex.HexActions;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
@@ -41,6 +40,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -52,6 +52,7 @@ import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.living.LivingConversionEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -104,6 +105,10 @@ public class ForgeHexInitializer {
         bind(Registry.RECIPE_TYPE_REGISTRY, HexRecipeStuffRegistry::registerTypes);
 
         bind(Registry.ENTITY_TYPE_REGISTRY, HexEntities::registerEntities);
+        bind(Registry.ATTRIBUTE_REGISTRY, HexAttributes::register);
+        bind(Registry.MOB_EFFECT_REGISTRY, HexMobEffects::register);
+        bind(Registry.POTION_REGISTRY, HexPotions::register);
+        HexPotions.addRecipes();
 
         bind(Registry.PARTICLE_TYPE_REGISTRY, HexParticles::registerParticles);
 
@@ -180,7 +185,6 @@ public class ForgeHexInitializer {
             if (evt.getEntity() instanceof ServerPlayer splayer) {
                 OpFlight.tickDownFlight(splayer);
                 OpAltiora.checkPlayerCollision(splayer);
-                ItemLens.tickLens(splayer);
             }
         });
 
@@ -238,6 +242,11 @@ public class ForgeHexInitializer {
         modBus.register(ForgeHexDataGenerators.class);
         modBus.register(ForgeCapabilityHandler.class);
         evBus.register(CapSyncers.class);
+
+        modBus.addListener((EntityAttributeModificationEvent e) -> {
+            e.add(EntityType.PLAYER, HexAttributes.GRID_ZOOM);
+            e.add(EntityType.PLAYER, HexAttributes.SCRY_SIGHT);
+        });
 
         if (ModList.get().isLoaded(HexInterop.Forge.CURIOS_API_ID)) {
             modBus.addListener(CuriosApiInterop::onInterModEnqueue);

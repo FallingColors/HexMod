@@ -12,14 +12,20 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -156,6 +162,54 @@ public interface HexAPI {
 
     default FrozenPigment getColorizer(Player player) {
         return FrozenPigment.DEFAULT.get();
+    }
+
+    ArmorMaterial DUMMY_ARMOR_MATERIAL = new ArmorMaterial() {
+        @Override
+        public int getDurabilityForSlot(@NotNull EquipmentSlot slot) {
+            return 0;
+        }
+
+        @Override
+        public int getDefenseForSlot(@NotNull EquipmentSlot slot) {
+            return 0;
+        }
+
+        @Override
+        public int getEnchantmentValue() {
+            return 0;
+        }
+
+        @NotNull
+        @Override
+        public SoundEvent getEquipSound() {
+            return SoundEvents.ARMOR_EQUIP_LEATHER;
+        }
+
+        @NotNull
+        @Override
+        public Ingredient getRepairIngredient() {
+            return Ingredient.EMPTY;
+        }
+
+        @Override
+        public String getName() {
+            return "missingno";
+        }
+
+        @Override
+        public float getToughness() {
+            return 0;
+        }
+
+        @Override
+        public float getKnockbackResistance() {
+            return 0;
+        }
+    };
+
+    default ArmorMaterial robesMaterial() {
+        return DUMMY_ARMOR_MATERIAL;
     }
 
     /**

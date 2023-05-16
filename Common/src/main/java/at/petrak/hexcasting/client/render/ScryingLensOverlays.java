@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -72,7 +71,7 @@ public class ScryingLensOverlays {
 
         ScryingLensOverlayRegistry.addDisplayer(Blocks.COMPARATOR,
             (lines, state, pos, observer, world, direction) -> {
-                int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(true);
+                int comparatorValue = state.getAnalogOutputSignal(world, pos);
                 lines.add(new Pair<>(
                     new ItemStack(Items.REDSTONE),
                     Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
@@ -102,17 +101,6 @@ public class ScryingLensOverlays {
                     .withStyle(ChatFormatting.YELLOW))));
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction) -> state.getBlock() instanceof BeehiveBlock,
-            (lines, state, pos, observer, world, direction) -> {
-                int count = ScryingLensOverlayRegistry.getBeeValue();
-                lines.add(new Pair<>(new ItemStack(Items.BEE_NEST), count == -1 ? Component.empty() :
-                    Component.translatable(
-                        "hexcasting.tooltip.lens.bee" + (count == 1 ? ".single" : ""),
-                        count
-                    )));
-            });
-
-        ScryingLensOverlayRegistry.addPredicateDisplayer(
             (state, pos, observer, world, direction) -> state.isSignalSource() && !state.is(
                 Blocks.COMPARATOR),
             (lines, state, pos, observer, world, direction) -> {
@@ -129,17 +117,6 @@ public class ScryingLensOverlays {
                     new ItemStack(Items.REDSTONE),
                     Component.literal(String.valueOf(signalStrength))
                         .withStyle(redstoneColor(signalStrength))));
-            });
-
-        ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction) -> state.hasAnalogOutputSignal(),
-            (lines, state, pos, observer, world, direction) -> {
-                int comparatorValue = ScryingLensOverlayRegistry.getComparatorValue(false);
-                lines.add(
-                    new Pair<>(
-                        new ItemStack(Items.COMPARATOR),
-                        Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
-                            .withStyle(redstoneColor(comparatorValue))));
             });
     }
 
