@@ -328,6 +328,9 @@
   "hexcasting.subtitles.flight.finish": "飞翔结束",
   
 
+  "hexcasting.attribute.grid_zoom": "咒术网格大小",
+  "hexcasting.attribute.scry_sight": "探知视觉",
+
 
   "hexcasting.action.hexcasting:const/null": "空元之精思",
   "hexcasting.action.hexcasting:const/vec/px": "向量之精思，+X型",
