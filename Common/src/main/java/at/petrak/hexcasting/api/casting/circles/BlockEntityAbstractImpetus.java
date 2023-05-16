@@ -79,16 +79,17 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     public void clearError() {
         this.errorMsg = null;
         this.errorDisplay = null;
+        this.sync();
     }
 
     public void postError(Component error, ItemStack display) {
         this.errorMsg = error;
         this.errorDisplay = display;
+        this.sync();
     }
 
     public void postMishap(Component mishapDisplay) {
-        this.errorMsg = mishapDisplay;
-        this.errorDisplay = new ItemStack(Items.MUSIC_DISC_11);
+        this.postError(mishapDisplay, new ItemStack(Items.MUSIC_DISC_11));
     }
 
     //region execution
@@ -98,7 +99,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             return;
 
         this.setChanged();
-        
+
         var state = this.getExecutionState();
         if (state == null) {
             return;
@@ -109,15 +110,14 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         if (!shouldContinue) {
             this.endExecution();
             this.executionState = null;
-        }
-        else
+        } else
             this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), state.getTickSpeed());
     }
-    
+
     public void endExecution() {
         if (this.executionState == null)
             return;
-        
+
         this.executionState.endExecution(this);
     }
 
@@ -143,7 +143,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             return; // TODO: error here?
         if (this.level.isClientSide)
             return; // TODO: error here?
-    
+
         if (this.executionState != null) {
             return;
         }
@@ -151,12 +151,14 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
         if (this.executionState == null)
             return;
-        
+
         var serverLevel = (ServerLevel) this.level;
-    
-        serverLevel.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), this.executionState.getTickSpeed());
-        
-        serverLevel.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, true));
+
+        serverLevel.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(),
+            this.executionState.getTickSpeed());
+
+        serverLevel.setBlockAndUpdate(this.getBlockPos(),
+            this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, true));
     }
 
     @Contract(pure = true)
@@ -263,10 +265,18 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.lazyExecutionState = null;
         }
 
-        if (tag.contains(TAG_MEDIA, Tag.TAG_INT)) {
-            this.media = tag.getInt(TAG_MEDIA);
-        } else if (tag.contains(TAG_MEDIA, Tag.TAG_LONG)) {
+        if (tag.contains(TAG_MEDIA, Tag.TAG_LONG)) {
             this.media = tag.getLong(TAG_MEDIA);
+        }
+
+        if (tag.contains(TAG_ERROR_MSG, Tag.TAG_STRING) && tag.contains(TAG_ERROR_DISPLAY, Tag.TAG_COMPOUND)) {
+            var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG));
+            var display = ItemStack.of(tag.getCompound(TAG_ERROR_DISPLAY));
+            this.errorMsg = msg;
+            this.errorDisplay = display;
+        } else {
+            this.errorMsg = null;
+            this.errorDisplay = null;
         }
     }
 

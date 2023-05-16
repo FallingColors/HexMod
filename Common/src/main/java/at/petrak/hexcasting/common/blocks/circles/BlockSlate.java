@@ -94,9 +94,11 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
         var vm = new CastingVM(imageIn, env);
 
         var result = vm.queueExecuteAndWrapIota(new PatternIota(pattern), world);
-        // TODO: make mishaps actually halt execution
-
-        return new ControlFlow.Continue(vm.getImage(), exitDirs.toList());
+        if (result.getResolutionType().getSuccess()) {
+            return new ControlFlow.Continue(vm.getImage(), exitDirs.toList());
+        } else {
+            return new ControlFlow.Stop();
+        }
     }
 
     @Override
