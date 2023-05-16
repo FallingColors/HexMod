@@ -330,6 +330,12 @@
       "flight.finish": "飞翔结束",
     },
 
+    attributes: {
+      grid_zoom: "咒术网格大小",
+      // TODO: the +1 is kind of janky
+      scry_sight: "探知视觉"
+    },
+    
     // Actual hexcasting stuff
 
     action: {
