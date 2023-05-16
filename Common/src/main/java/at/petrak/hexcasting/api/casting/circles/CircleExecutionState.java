@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.circles;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.misc.Result;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import com.mojang.datafixers.util.Pair;
@@ -80,19 +81,19 @@ public class CircleExecutionState {
         return null;
     }
 
-    // Return null if the circle does not close.
-    public static @Nullable CircleExecutionState createNew(BlockEntityAbstractImpetus impetus,
+    // Return OK if it succeeded; returns Err if it didn't close and the location
+    public static Result<CircleExecutionState, @Nullable BlockPos> createNew(BlockEntityAbstractImpetus impetus,
         @Nullable ServerPlayer caster) {
         var level = (ServerLevel) impetus.getLevel();
 
         if (level == null)
-            return null;
+            return new Result.Err<>(null);
 
         // Flood fill! Just like VCC all over again.
         // this contains tentative positions and directions entered from
         var todo = new Stack<Pair<Direction, BlockPos>>();
         todo.add(Pair.of(impetus.getStartDirection(), impetus.getBlockPos().relative(impetus.getStartDirection())));
-        var seenPositions = new HashSet<BlockPos>();
+        var seenGoodPosSet = new HashSet<BlockPos>();
         var seenGoodPositions = new ArrayList<BlockPos>();
 
         while (!todo.isEmpty()) {
@@ -100,17 +101,16 @@ public class CircleExecutionState {
             var enterDir = pair.getFirst();
             var herePos = pair.getSecond();
 
-            if (seenPositions.add(herePos)) {
+            var hereBs = level.getBlockState(herePos);
+            if (!(hereBs.getBlock() instanceof ICircleComponent cmp)) {
+                continue;
+            }
+            if (!cmp.canEnterFromDirection(enterDir, herePos, hereBs, level)) {
+                continue;
+            }
+
+            if (seenGoodPosSet.add(herePos)) {
                 // it's new
-                var hereBs = level.getBlockState(herePos);
-                if (!(hereBs.getBlock() instanceof ICircleComponent cmp)) {
-                    continue;
-                }
-
-                if (!cmp.canEnterFromDirection(enterDir, herePos, hereBs, level)) {
-                    continue;
-                }
-
                 seenGoodPositions.add(herePos);
                 var outs = cmp.possibleExitDirections(herePos, hereBs, level);
                 for (var out : outs) {
@@ -119,8 +119,13 @@ public class CircleExecutionState {
             }
         }
 
-        if (!seenPositions.contains(impetus.getBlockPos()) || seenGoodPositions.isEmpty()) {
-            return null;
+        if (seenGoodPositions.isEmpty()) {
+            return new Result.Err<>(null);
+        } else if (!seenGoodPosSet.contains(impetus.getBlockPos())) {
+            // we can't enter from the side the directrix exits from, so this means we couldn't loop back.
+            // the last item we tried to examine will always be a terminal slate (b/c if it wasn't,
+            // then the *next* slate would be last qed)
+            return new Result.Err<>(seenGoodPositions.get(seenGoodPositions.size() - 1));
         }
 
         var knownPositions = new HashSet<>(seenGoodPositions);
@@ -137,8 +142,9 @@ public class CircleExecutionState {
             colorizer = HexAPI.instance().getColorizer(caster);
             casterUUID = caster.getUUID();
         }
-        return new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(), knownPositions,
-            reachedPositions, start, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer);
+        return new Result.Ok<>(
+            new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(), knownPositions,
+                reachedPositions, start, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer));
     }
 
     public CompoundTag save() {
@@ -242,7 +248,7 @@ public class CircleExecutionState {
                     if (found != null) {
                         // oh no!
                         impetus.postError(
-                            Component.translatable("hexcasting.circles.many_exits",
+                            Component.translatable("hexcasting.tooltip.circle.many_exits",
                                 Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),
                             new ItemStack(Items.COMPASS));
                         ICircleComponent.sfx(this.currentPos, executorBlockState, world,
@@ -257,12 +263,9 @@ public class CircleExecutionState {
 
             if (found == null) {
                 // will never enter here if there were too many because found will have been set
-                impetus.postError(
-                    Component.translatable("hexcasting.circles.no_exits",
-                        Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),
-                    new ItemStack(Items.OAK_SIGN));
                 ICircleComponent.sfx(this.currentPos, executorBlockState, world,
                     Objects.requireNonNull(env.getImpetus()), false);
+                impetus.postNoExits(this.currentPos);
                 halt = true;
             } else {
                 // A single valid exit position has been found.

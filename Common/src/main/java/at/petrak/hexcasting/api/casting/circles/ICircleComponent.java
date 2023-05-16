@@ -96,9 +96,10 @@ public interface ICircleComponent {
         FrozenPigment colorizer;
 
         UUID activator = Util.NIL_UUID;
-        if (impetus.getExecutionState() != null && impetus.getExecutionState().caster != null)
+        if (impetus != null && impetus.getExecutionState() != null && impetus.getExecutionState().caster != null)
             activator = impetus.getExecutionState().caster;
-        if (impetus.getExecutionState() == null)
+
+        if (impetus == null || impetus.getExecutionState() == null)
             colorizer = new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)), activator);
         else
             colorizer = impetus.getExecutionState().colorizer;
@@ -124,7 +125,7 @@ public interface ICircleComponent {
 
         var pitch = 1f;
         var sound = HexSounds.SPELL_CIRCLE_FAIL;
-        if (success) {
+        if (success && impetus != null) {
             sound = HexSounds.SPELL_CIRCLE_FIND_BLOCK;
 
             var state = impetus.getExecutionState();

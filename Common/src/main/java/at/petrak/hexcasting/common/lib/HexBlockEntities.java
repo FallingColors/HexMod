@@ -3,7 +3,11 @@ package at.petrak.hexcasting.common.lib;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
-import at.petrak.hexcasting.common.blocks.entity.*;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityLookingImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRedstoneImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClickImpetus;
+import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
+import at.petrak.hexcasting.common.blocks.entity.BlockEntityQuenchedAllay;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -34,9 +38,9 @@ public class HexBlockEntities {
         "akashic_bookshelf_tile",
         BlockEntityAkashicBookshelf::new, HexBlocks.AKASHIC_BOOKSHELF);
 
-    public static final BlockEntityType<BlockEntityStoredPlayerImpetus> IMPETUS_STOREDPLAYER_TILE = register(
-        "impetus_storedplayer_tile",
-        BlockEntityStoredPlayerImpetus::new, HexBlocks.IMPETUS_STOREDPLAYER);
+    public static final BlockEntityType<BlockEntityRedstoneImpetus> IMPETUS_REDSTONE_TILE = register(
+        "impetus_redstone_tile",
+        BlockEntityRedstoneImpetus::new, HexBlocks.IMPETUS_REDSTONE);
     public static final BlockEntityType<BlockEntityLookingImpetus> IMPETUS_LOOK_TILE = register(
         "impetus_look_tile",
         BlockEntityLookingImpetus::new, HexBlocks.IMPETUS_LOOK);

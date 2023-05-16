@@ -31,7 +31,8 @@ public class BlockEmptyImpetus extends BlockCircleComponent {
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
+        BlockState bs, ServerLevel world) {
         return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos, bs.getValue(FACING))));
     }
 
@@ -68,7 +69,7 @@ public class BlockEmptyImpetus extends BlockCircleComponent {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getNearestLookingDirection());
+        return BlockCircleComponent.placeStateDirAndSneak(this.defaultBlockState(), pContext);
     }
 
     @Override

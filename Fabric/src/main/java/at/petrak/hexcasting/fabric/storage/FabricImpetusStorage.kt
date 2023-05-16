@@ -14,7 +14,7 @@ class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlot
         fun registerStorage() {
             ItemStorage.SIDED.registerForBlocks({ _, _, _, blockEntity, _ ->
                 (blockEntity as? BlockEntityAbstractImpetus)?.let(::FabricImpetusStorage)
-            }, HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_STOREDPLAYER)
+            }, HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE)
         }
     }
 

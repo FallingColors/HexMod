@@ -20,6 +20,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class BlockEmptyDirectrix extends BlockCircleComponent {
+    // The empty directrix only cares about the axis because the two sides are symmetrical
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
     public BlockEmptyDirectrix(Properties p_49795_) {
@@ -30,9 +31,11 @@ public class BlockEmptyDirectrix extends BlockCircleComponent {
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
+        BlockState bs, ServerLevel world) {
         var sign = world.random.nextBoolean() ? Direction.AxisDirection.POSITIVE : Direction.AxisDirection.NEGATIVE;
-        return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos, Direction.fromAxisAndDirection(bs.getValue(AXIS), sign))));
+        return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos,
+            Direction.fromAxisAndDirection(bs.getValue(AXIS), sign))));
     }
 
     @Override
@@ -43,8 +46,8 @@ public class BlockEmptyDirectrix extends BlockCircleComponent {
     @Override
     public EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world) {
         return EnumSet.of(
-                Direction.fromAxisAndDirection(bs.getValue(AXIS), Direction.AxisDirection.NEGATIVE),
-                Direction.fromAxisAndDirection(bs.getValue(AXIS), Direction.AxisDirection.POSITIVE));
+            Direction.fromAxisAndDirection(bs.getValue(AXIS), Direction.AxisDirection.NEGATIVE),
+            Direction.fromAxisAndDirection(bs.getValue(AXIS), Direction.AxisDirection.POSITIVE));
     }
 
     @Override

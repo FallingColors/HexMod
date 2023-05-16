@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.entity.BlockEntityLookingImpetus;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;

@@ -99,7 +99,7 @@
     "empty_directrix": "Empty Directrix",
     "impetus_rightclick": "Toolsmith Impetus",
     "impetus_look": "Fletcher Impetus",
-    "impetus_storedplayer": "Cleric Impetus",
+    "impetus_redstone": "Cleric Impetus",
     "akashic_record": "Akashic Record",
     "akashic_bookshelf": "Akashic Bookshelf",
     "akashic_connector": "Akashic Ligature",
@@ -272,15 +272,22 @@
       "abacus.reset": "Reset to 0",
       "abacus.reset.nice": "nice",
       
+      circle: {
+        "no_exit": "The flow of media could not find an exit at %s",
+        "many_exits": "The flow of media had too many exits at %s",
+        no_closure: "The flow of media will not be able to return to the impetus at %s"
+      },
+      
+      impetus: {
+        "redstone.bound": "Bound to %s",
+        "redstone.bound.none": "Unbound",
+      },
+      
       lens: {
-        "impetus.storedplayer": "Bound to %s",
-        "impetus.storedplayer.none": "Unbound",
         "pattern.invalid": "Invalid Pattern",
         "akashic.bookshelf.location": "Record at %s",
         "akashic.record.count": "%s iotas stored",
         "akashic.record.count.single": "%s iota stored",
-        "bee": "%s bees",
-        "bee.single": "%s bee",
       },
       
       "brainsweep.min_level": "Level %s or higher",

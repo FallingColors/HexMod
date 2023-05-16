@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -92,6 +93,14 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         this.postError(mishapDisplay, new ItemStack(Items.MUSIC_DISC_11));
     }
 
+    // Pull this out because we may need to call it both on startup and halfway thru
+    public void postNoExits(BlockPos pos) {
+        this.postError(
+            Component.translatable("hexcasting.tooltip.circle.no_exit",
+                Component.literal(pos.toShortString()).withStyle(ChatFormatting.RED)),
+            new ItemStack(Items.OAK_SIGN));
+    }
+
     //region execution
 
     public void tickExecution() {
@@ -147,16 +156,27 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         if (this.executionState != null) {
             return;
         }
-        this.executionState = CircleExecutionState.createNew(this, player);
+        var result = CircleExecutionState.createNew(this, player);
+        if (result.isErr()) {
+            var errPos = result.unwrapErr();
+            if (errPos == null) {
+                ICircleComponent.sfx(this.getBlockPos(), this.getBlockState(), this.level, null, false);
+                this.postNoExits(this.getBlockPos());
+            } else {
+                ICircleComponent.sfx(errPos, this.level.getBlockState(errPos), this.level, null, false);
+                this.postError(Component.translatable("hexcasting.tooltip.circle.no_closure",
+                        Component.literal(errPos.toShortString()).withStyle(ChatFormatting.RED)),
+                    new ItemStack(Items.LEAD));
+            }
 
-        if (this.executionState == null)
             return;
+        }
+        this.executionState = result.unwrap();
 
+        this.clearError();
         var serverLevel = (ServerLevel) this.level;
-
         serverLevel.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(),
             this.executionState.getTickSpeed());
-
         serverLevel.setBlockAndUpdate(this.getBlockPos(),
             this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, true));
     }

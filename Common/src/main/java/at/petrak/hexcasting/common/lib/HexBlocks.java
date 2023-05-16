@@ -13,8 +13,8 @@ import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockEmptyDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockLookingImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRedstoneImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockStoredPlayerImpetus;
 import at.petrak.hexcasting.common.blocks.decoration.*;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
@@ -130,8 +130,8 @@ public class HexBlocks {
     public static final BlockLookingImpetus IMPETUS_LOOK = blockItem("impetus_look",
         new BlockLookingImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
-    public static final BlockStoredPlayerImpetus IMPETUS_STOREDPLAYER = blockItem("impetus_storedplayer",
-        new BlockStoredPlayerImpetus(slateish()
+    public static final BlockRedstoneImpetus IMPETUS_REDSTONE = blockItem("impetus_redstone",
+        new BlockRedstoneImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
 
@@ -203,7 +203,8 @@ public class HexBlocks {
     public static final WoodButtonBlock EDIFIED_BUTTON = blockItem("edified_button",
         new BlockHexWoodButton(edifiedWoody().noOcclusion().noCollission()));
     public static final PressurePlateBlock EDIFIED_PRESSURE_PLATE = blockItem("edified_pressure_plate",
-        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, edifiedWoody().noOcclusion().noCollission()));
+        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING,
+            edifiedWoody().noOcclusion().noCollission()));
     public static final BlockAkashicLeaves AMETHYST_EDIFIED_LEAVES = blockItem("amethyst_edified_leaves",
         new BlockAkashicLeaves(leaves(MaterialColor.COLOR_PURPLE)));
     public static final BlockAkashicLeaves AVENTURINE_EDIFIED_LEAVES = blockItem("aventurine_edified_leaves",
