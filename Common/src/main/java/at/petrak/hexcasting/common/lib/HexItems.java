@@ -4,7 +4,6 @@ import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.items.ItemStaff;
-import at.petrak.hexcasting.common.items.armor.ItemRobes;
 import at.petrak.hexcasting.common.items.colorizer.ItemAmethystAndCopperColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
@@ -40,19 +39,19 @@ public class HexItems {
 
     public static final Item QUENCHED_SHARD = make("quenched_allay_shard", new Item(props()));
 
-    public static final ItemStaff STAFF_OAK = make("oak_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_SPRUCE = make("spruce_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_BIRCH = make("birch_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_JUNGLE = make("jungle_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_ACACIA = make("acacia_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_DARK_OAK = make("dark_oak_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_CRIMSON = make("crimson_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_WARPED = make("warped_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_MANGROVE = make("mangrove_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_EDIFIED = make("edified_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_QUENCHED = make("quenched_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_OAK = make("staff/oak", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_SPRUCE = make("staff/spruce", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_BIRCH = make("staff/birch", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_JUNGLE = make("staff/jungle", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_ACACIA = make("staff/acacia", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_DARK_OAK = make("staff/dark_oak", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_CRIMSON = make("staff/crimson", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_WARPED = make("staff/warped", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_MANGROVE = make("staff/mangrove", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_EDIFIED = make("staff/edified", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_QUENCHED = make("staff/quenched", new ItemStaff(unstackable()));
     // mindsplice staffaratus
-    public static final ItemStaff STAFF_MINDSPLICE = make("mindsplice_staff", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_MINDSPLICE = make("staff/mindsplice", new ItemStaff(unstackable()));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
         IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
@@ -99,9 +98,6 @@ public class HexItems {
     public static final Item UUID_COLORIZER = make("uuid_colorizer", new ItemUUIDColorizer(unstackable()));
     public static final Item DEFAULT_COLORIZER = make("default_colorizer",
         new ItemAmethystAndCopperColorizer(unstackable()));
-
-    public static final ItemRobes ARMOR_HOOD = make("robes",
-        new ItemRobes(EquipmentSlot.HEAD, unstackable()));
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",

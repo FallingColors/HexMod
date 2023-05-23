@@ -77,9 +77,9 @@ public class HexItemModels extends PaucalItemModelProvider {
             .scale(0.4f);
 
         singleTexture("old_staff", new ResourceLocation("item/handheld_rod"),
-            "layer0", modLoc("item/staves/old"));
+            "layer0", modLoc("item/staff/old"));
         singleTexture("cherry_staff", new ResourceLocation("item/handheld_rod"),
-            "layer0", modLoc("item/staves/cherry"));
+            "layer0", modLoc("item/staff/cherry"));
 
         buildStaff(HexItems.STAFF_OAK, "oak");
         buildStaff(HexItems.STAFF_BIRCH, "birch");
@@ -93,13 +93,14 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_EDIFIED, "edified");
         buildStaff(HexItems.STAFF_MINDSPLICE, "mindsplice");
 
-        buildFourVariantGaslight(HexItems.STAFF_QUENCHED, "item/staves/quenched", (name, path) ->
+        // again, doesn't like paths with slashes in them, so we do it manually
+        buildFourVariantGaslight("item/staff/quenched", "item/staff/quenched", (name, path) ->
             singleTexture(path.getPath(), new ResourceLocation("item/handheld_rod"),
                 "layer0", modLoc(path.getPath())));
-        buildFourVariantGaslight(HexItems.QUENCHED_SHARD, "item/quenched_shard", (name, path) ->
+        buildFourVariantGaslight(getPath(HexItems.QUENCHED_SHARD), "item/quenched_shard", (name, path) ->
             singleTexture(path.getPath(), new ResourceLocation("item/handheld"),
                 "layer0", modLoc(path.getPath())));
-        buildFourVariantGaslight(HexBlocks.QUENCHED_ALLAY.asItem(), "block/quenched_allay", (name, path) ->
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY), "block/quenched_allay", (name, path) ->
             cubeAll(path.getPath(), path));
 
         simpleItem(modLoc("patchouli_book"));
@@ -223,8 +224,8 @@ public class HexItemModels extends PaucalItemModelProvider {
     }
 
     private void buildStaff(Item item, String name) {
-        singleTexture("item/staves/" + getPath(item), new ResourceLocation("item/handheld_rod"),
-            "layer0", modLoc("item/staves/" + name));
+        singleTexture("item/" + getPath(item), new ResourceLocation("item/handheld_rod"),
+            "layer0", modLoc("item/staff/" + name));
         getBuilder(getPath(item))
             .override()
             .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 0)
@@ -251,9 +252,8 @@ public class HexItemModels extends PaucalItemModelProvider {
             .end();
     }
 
-    private void buildFourVariantGaslight(Item item, String path,
+    private void buildFourVariantGaslight(String name, String path,
         BiFunction<String, ResourceLocation, ModelFile> makeModel) {
-        var name = getPath(item);
         var builder = getBuilder(name);
         for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
             var textureLoc = modLoc(path + "_" + i);

@@ -1,4 +1,4 @@
-// 1.19.2	2023-05-23T12:25:03.187149224	Block States: hexcasting
+// 1.19.2	2023-05-23T13:06:30.179893298	Block States: hexcasting
 901e38574bdaa40ea4a0f6e773a88a95d9c03e55 assets/hexcasting/blockstates/akashic_bookshelf.json
 32a77ef668198002563d68be35a24fa93c8d454a assets/hexcasting/blockstates/akashic_connector.json
 85080ce0a0387583a839e4788517d675a1a35e24 assets/hexcasting/blockstates/akashic_record.json
@@ -184,15 +184,15 @@ d0eb15cbb5d10fdf43d421d89b4018ed60d352e2 assets/hexcasting/models/item/amethyst_
 d4a109488c27fc5d60e9054cd1485f1982040ff3 assets/hexcasting/models/item/ancient_scroll_paper_lantern.json
 7c2b9b5296ba5e3c261bb237555e7d4082ad9303 assets/hexcasting/models/item/aventurine_edified_leaves.json
 50b0a55c712887ceb02bc835a1111cf855c11b6e assets/hexcasting/models/item/citrine_edified_leaves.json
-7f762c5dfcd009b91e0bb4b375f7006aacd54dd5 assets/hexcasting/models/item/directrix/empty.json
-bfecdf6b0d21f05c7d4700ffa18b706a1b88a660 assets/hexcasting/models/item/directrix/redstone.json
+c24d9c5ec6c7f3212ea814ecd40e56bdc94c22a8 assets/hexcasting/models/item/directrix/empty.json
+c84399ca55a1ac9b37ed4b8153b4469fa5ed9c5a assets/hexcasting/models/item/directrix/redstone.json
 96e1cd457414bddbddda1383564c6a566808f958 assets/hexcasting/models/item/edified_panel.json
 82bac5442c940fb74e1ad068a9c8df1d0e10d959 assets/hexcasting/models/item/edified_planks.json
 3e55be12a83ab041f8e269ad4e40454e32e05421 assets/hexcasting/models/item/edified_tile.json
-7346c00f5e94d46a77ea24d152c9589b1c3c9ffa assets/hexcasting/models/item/impetus/empty.json
-5d7949217b7b3b95a06d70ecbf32f31d8f6440f8 assets/hexcasting/models/item/impetus/look.json
-c3b67849c2b401b3d174ae0c91e0c0a4af523f07 assets/hexcasting/models/item/impetus/redstone.json
-a4cc1bad18b80081d12f0bb5777ae2b85512a7d6 assets/hexcasting/models/item/impetus/rightclick.json
+486c1fad6dd0bf76f160d157439e6d4add950ff8 assets/hexcasting/models/item/impetus/empty.json
+cbe5bc7148b9e1c1cf5c4517801da664aa39efb8 assets/hexcasting/models/item/impetus/look.json
+37ae2de56929989d8c44ba0d72e1623c2056c397 assets/hexcasting/models/item/impetus/redstone.json
+e7f590cfc681aa7d19c56df325c95c5fbed01bc5 assets/hexcasting/models/item/impetus/rightclick.json
 769dcfb4a504e4dcd28a43cf603a18c66f57e594 assets/hexcasting/models/item/scroll_paper.json
 222e40e5754f5cb5a04321c4ed4cee27748c9224 assets/hexcasting/models/item/scroll_paper_lantern.json
 145db42b0d90bdb4fd82f5a7eea229be4c0f9675 assets/hexcasting/models/item/slate_block.json
