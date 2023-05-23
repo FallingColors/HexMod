@@ -3,18 +3,20 @@
   "item.hexcasting": {
     "book": "Hex Notebook",
     
-    "oak_staff": "Oak Staff",
-    "spruce_staff": "Spruce Staff",
-    "birch_staff": "Birch Staff",
-    "jungle_staff": "Jungle Staff",
-    "acacia_staff": "Acacia Staff",
-    "dark_oak_staff": "Dark Oak Staff",
-    "crimson_staff": "Crimson Staff",
-    "warped_staff": "Warped Staff",
-    "mangrove_staff": "Mangrove Staff",
-    "edified_staff": "Edified Staff",
-    "quenched_staff": "Quenched Shard Staff",
-    "mindsplice_staff": "Mindsplice Staff",
+    staff: {
+      "oak": "Oak Staff",
+      "spruce": "Spruce Staff",
+      "birch": "Birch Staff",
+      "jungle": "Jungle Staff",
+      "acacia": "Acacia Staff",
+      "dark_oak": "Dark Oak Staff",
+      "crimson": "Crimson Staff",
+      "warped": "Warped Staff",
+      "mangrove": "Mangrove Staff",
+      "edified": "Edified Staff",
+      "quenched": "Quenched Shard Staff",
+      "mindsplice": "Mindsplice Staff"
+    },
     
     "amethyst_dust": "Amethyst Dust",
     "charged_amethyst": "Charged Amethyst",
