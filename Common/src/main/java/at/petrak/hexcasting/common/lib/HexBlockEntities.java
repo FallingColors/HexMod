@@ -31,29 +31,29 @@ public class HexBlockEntities {
     private static final Map<ResourceLocation, BlockEntityType<?>> BLOCK_ENTITIES = new LinkedHashMap<>();
 
     public static final BlockEntityType<BlockEntityConjured> CONJURED_TILE = register(
-        "conjured_tile",
+        "conjured",
         BlockEntityConjured::new, HexBlocks.CONJURED_LIGHT, HexBlocks.CONJURED_BLOCK);
 
     public static final BlockEntityType<BlockEntityAkashicBookshelf> AKASHIC_BOOKSHELF_TILE = register(
-        "akashic_bookshelf_tile",
+        "akashic_bookshelf",
         BlockEntityAkashicBookshelf::new, HexBlocks.AKASHIC_BOOKSHELF);
 
     public static final BlockEntityType<BlockEntityRedstoneImpetus> IMPETUS_REDSTONE_TILE = register(
-        "impetus_redstone_tile",
+        "impetus/redstone",
         BlockEntityRedstoneImpetus::new, HexBlocks.IMPETUS_REDSTONE);
     public static final BlockEntityType<BlockEntityLookingImpetus> IMPETUS_LOOK_TILE = register(
-        "impetus_look_tile",
+        "impetus/look",
         BlockEntityLookingImpetus::new, HexBlocks.IMPETUS_LOOK);
     public static final BlockEntityType<BlockEntityRightClickImpetus> IMPETUS_RIGHTCLICK_TILE = register(
-        "impetus_rightclick_tile",
+        "impetus/rightclick",
         BlockEntityRightClickImpetus::new, HexBlocks.IMPETUS_RIGHTCLICK);
 
     public static final BlockEntityType<BlockEntitySlate> SLATE_TILE = register(
-        "slate_tile",
+        "slate",
         BlockEntitySlate::new, HexBlocks.SLATE);
 
     public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_TILE = register(
-        "quenched_allay_tile", BlockEntityQuenchedAllay::new, HexBlocks.QUENCHED_ALLAY);
+        "quenched_allay", BlockEntityQuenchedAllay::new, HexBlocks.QUENCHED_ALLAY);
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String id,
         BiFunction<BlockPos, BlockState, T> func, Block... blocks) {

@@ -1,5 +1,4 @@
 {
-  "parent": "minecraft:item/handheld_rod",
   "overrides": [
     {
       "model": "hexcasting:item/edified_staff",
@@ -13,8 +12,5 @@
         "hexcasting:funny_level": 2.0
       }
     }
-  ],
-  "textures": {
-    "layer0": "hexcasting:item/staves/edified"
-  }
+  ]
 }

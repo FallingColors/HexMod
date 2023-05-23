@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.paucal.api.forge.datagen.PaucalBlockStateAndModelProvider;
 import net.minecraft.core.Direction;
@@ -44,10 +45,11 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         }, BlockSlate.WATERLOGGED);
 
-        arrowCircleBlock(HexBlocks.EMPTY_IMPETUS, "empty_impetus", "impetus/empty", modLoc("block/slate"));
-        arrowCircleBlock(HexBlocks.IMPETUS_RIGHTCLICK, "toolsmith_impetus", "impetus/toolsmith", modLoc("block/slate"));
-        arrowCircleBlock(HexBlocks.IMPETUS_LOOK, "fletcher_impetus", "impetus/fletcher", modLoc("block/slate"));
-        arrowCircleBlock(HexBlocks.IMPETUS_REDSTONE, "cleric_impetus", "impetus/cleric", modLoc("block/slate"));
+        impetus(HexBlocks.IMPETUS_EMPTY, "impetus/empty", "empty", false);
+        impetus(HexBlocks.IMPETUS_RIGHTCLICK, "impetus/rightclick", "rightclick", true);
+        impetus(HexBlocks.IMPETUS_LOOK, "impetus/look", "look", true);
+        impetus(HexBlocks.IMPETUS_REDSTONE, "impetus/redstone", "redstone", true);
+        doAllTheDirectrices();
 
         var akashicRecordModel = models().withExistingParent("akashic_record", "block/block")
             .renderType("translucent")
@@ -200,31 +202,38 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         simpleBlock(HexBlocks.QUENCHED_ALLAY, models().cubeAll("quenched_allay", modLoc("block/quenched_allay_0")));
     }
 
-    // Assumes that the bottom and back are always the same
-    private void arrowCircleBlock(Block block, String name, String texStub, ResourceLocation particle) {
+    // Assumes that the bottom are always the same
+    private void arrowCircleBlock(Block block, String name, ResourceLocation particle,
+        String frontStub,
+        String topStob,
+        String leftStub,
+        String rightStub,
+        String backStub,
+        boolean itemModelIsLit
+    ) {
         getVariantBuilder(block).forAllStates(bs -> {
-            var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
+            boolean isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
             var litness = isLit ? "lit" : "dim";
             var dir = bs.getValue(BlockStateProperties.FACING);
 
             // I wish we didn't have to put the top "upside down" but there you go
-            var front = "block/circle/" + texStub + "_front_" + litness;
-            var top = "block/circle/" + texStub + "_top_" + litness;
-            var left = "block/circle/" + texStub + "_left_" + litness;
-            var right = "block/circle/" + texStub + "_right_" + litness;
-            // and always the same
-            var back = "block/circle/back_" + litness;
+            var front = "block/circle/" + frontStub + "_" + litness;
+            var top = "block/circle/" + topStob + "_" + litness;
+            var left = "block/circle/" + leftStub + "_" + litness;
+            var right = "block/circle/" + rightStub + "_" + litness;
+            var back = "block/circle/" + backStub + "_" + litness;
+            // and never light the bottom
             var bottom = "block/circle/bottom";
 
-            var modelName = name + "_" + litness + "_" + dir.getName();
+            var modelName = "block/circle/" + name + "/" + litness + "_" + dir.getName();
             var model = models().cube(modelName, modLoc(bottom), modLoc(top), modLoc(front), modLoc(back),
                     modLoc(left), modLoc(right))
                 .texture("particle", particle);
 
-            // Something about the way I do something changed so now north is the direction
-            // not covered by the stack number. Who knows
-            if (!isLit && dir == Direction.NORTH) {
-                simpleBlockItem(block, model);
+            // Most blocks point north in the inv, but we have these point east so that their faces aren't obscured
+            // by the count number
+            if (isLit == itemModelIsLit && dir == Direction.EAST) {
+                itemModels().getBuilder("item/" + name).parent(model);
             }
 
             return ConfiguredModel.builder()
@@ -238,5 +247,73 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                     : 0)
                 .build();
         });
+    }
+
+    private void impetus(Block block, String name, String stub, boolean itemModelIsLit) {
+        arrowCircleBlock(block, name, modLoc("block/slate"),
+            "impetus/" + stub + "/front",
+            "impetus/" + stub + "/top",
+            "impetus/" + stub + "/left",
+            "impetus/" + stub + "/right",
+            "impetus/back",
+            itemModelIsLit
+        );
+    }
+
+    private void doAllTheDirectrices() {
+        arrowCircleBlock(HexBlocks.EMPTY_DIRECTRIX, "directrix/empty", modLoc("block/slate"),
+            "directrix/empty/front", "directrix/empty/top", "directrix/empty/left",
+            "directrix/empty/right", "directrix/empty/back", false);
+
+        // Note that "unpowered" means the jowls of the back face are ON.
+        getVariantBuilder(HexBlocks.DIRECTRIX_REDSTONE).forAllStates(bs -> {
+            var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
+            var litness = isLit ? "lit" : "dim";
+            var isPowered = bs.getValue(BlockRedstoneDirectrix.REDSTONE_POWERED);
+            var poweredness = isPowered ? "powered" : "unpowered";
+            var dir = bs.getValue(BlockStateProperties.FACING);
+
+            var top = "block/circle/directrix/redstone/top_" + poweredness;
+            var left = "block/circle/directrix/redstone/left_" + poweredness;
+            var right = "block/circle/directrix/redstone/right_" + poweredness;
+
+            // The front face can never be both lit and unpowered (b/c otherwise it would exit the other way)
+            String frontEnding, backEnding;
+            if (isLit) {
+                frontEnding = "lit_powered";
+                backEnding = "lit_unpowered";
+            } else {
+                frontEnding = "dim_" + poweredness;
+                backEnding = "dim_" + poweredness;
+            }
+            var front = "block/circle/directrix/redstone/front_" + frontEnding;
+            var back = "block/circle/directrix/redstone/back_" + backEnding;
+            // and always the same
+            var bottom = "block/circle/bottom";
+
+
+            var modelName = "block/circle/directrix/redstone/" + litness + "_" + poweredness + "_" + dir.getName();
+            var model = models().cube(modelName, modLoc(bottom), modLoc(top), modLoc(front), modLoc(back),
+                    modLoc(left), modLoc(right))
+                .texture("particle", modLoc("block/slate"));
+
+            if (isLit && !isPowered && dir == Direction.EAST) {
+                // getBuilder does not add the block/etc to the front if the path contains any slashes
+                // this is a problem because the block IDs have slashes in them
+                itemModels().getBuilder("item/directrix/redstone").parent(model);
+            }
+
+            return ConfiguredModel.builder()
+                .modelFile(model)
+                // this code has been stolen from myself several times
+                .rotationX(dir.getAxis() == Direction.Axis.Y
+                    ? dir.getAxisDirection().getStep() * -90
+                    : 0)
+                .rotationY(dir.getAxis() != Direction.Axis.Y
+                    ? ((dir.get2DDataValue() + 2) % 4) * 90
+                    : 0)
+                .build();
+        });
+
     }
 }

@@ -356,7 +356,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
         var enlightenment = HexAdvancements.ENLIGHTEN;
-        ShapedRecipeBuilder.shaped(HexBlocks.EMPTY_IMPETUS)
+        ShapedRecipeBuilder.shaped(HexBlocks.IMPETUS_EMPTY)
             .define('B', Items.IRON_BARS)
             .define('A', HexItems.CHARGED_AMETHYST)
             .define('S', HexBlocks.SLATE_BLOCK)
@@ -402,19 +402,19 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/budding_amethyst"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS),
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.TOOLSMITH, null, 2),
             HexBlocks.IMPETUS_RIGHTCLICK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_rightclick"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS),
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.TOOLSMITH, null, 2),
             HexBlocks.IMPETUS_LOOK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_look"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_IMPETUS),
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.CLERIC, null, 2),
             HexBlocks.IMPETUS_REDSTONE.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)

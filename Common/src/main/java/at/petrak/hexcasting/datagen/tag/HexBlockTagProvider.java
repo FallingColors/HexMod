@@ -28,7 +28,7 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(HexBlocks.SLATE_BLOCK, HexBlocks.SLATE,
                 HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE,
-                HexBlocks.EMPTY_IMPETUS,
+                HexBlocks.IMPETUS_EMPTY,
                 HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE,
                 HexBlocks.AMETHYST_TILES, HexBlocks.SCONCE,
                 HexBlocks.QUENCHED_ALLAY);

@@ -223,7 +223,7 @@ public class HexItemModels extends PaucalItemModelProvider {
     }
 
     private void buildStaff(Item item, String name) {
-        singleTexture(getPath(item), new ResourceLocation("item/handheld_rod"),
+        singleTexture("item/staves/" + getPath(item), new ResourceLocation("item/handheld_rod"),
             "layer0", modLoc("item/staves/" + name));
         getBuilder(getPath(item))
             .override()
