@@ -3,18 +3,20 @@
   "item.hexcasting": {
     "book": "咒术笔记",
 
-    "oak_staff": "橡木法杖",
-    "spruce_staff": "云杉木法杖",
-    "birch_staff": "白桦木法杖",
-    "jungle_staff": "丛林木法杖",
-    "acacia_staff": "金合欢木法杖",
-    "dark_oak_staff": "深色橡木法杖",
-    "crimson_staff": "绯红木法杖",
-    "warped_staff": "诡异木法杖",
-    "mangrove_staff": "红树木法杖",
-    "edified_staff": "启迪木法杖",
-    "quenched_staff": "淬灵晶法杖",
-    "mindsplice_staff": "制念法杖",
+    staff: {
+      "oak": "橡木法杖",
+      "spruce": "云杉木法杖",
+      "birch": "白桦木法杖",
+      "jungle": "丛林木法杖",
+      "acacia": "金合欢木法杖",
+      "dark_oak": "深色橡木法杖",
+      "crimson": "绯红木法杖",
+      "warped": "诡异木法杖",
+      "mangrove": "红树木法杖",
+      "edified": "启迪木法杖",
+      "quenched": "淬灵晶法杖",
+      "mindsplice": "制念法杖"
+    },
 
     "amethyst_dust": "紫水晶粉",
     "charged_amethyst": "充能紫水晶",
@@ -99,7 +101,7 @@
     "empty_directrix": "空白导向石",
     "impetus_rightclick": "工具匠促动石",
     "impetus_look": "制箭师促动石",
-    "impetus_storedplayer": "牧师促动石",
+    "impetus_redstone": "牧师促动石",
     "akashic_record": "阿卡夏记录",
     "akashic_bookshelf": "阿卡夏书架",
     "akashic_connector": "阿卡夏桥接块",
@@ -272,15 +274,22 @@
       "abacus.reset": "重置为0",
       "abacus.reset.nice": "nice",
 
+      circle: {
+        "no_exit": "%s处的媒质流无法找到出口",
+        "many_exits": "%s处的媒质流的可选去路过多",
+        no_closure: "%s处的媒质流无法返回促动石"
+      },
+      
+      impetus: {
+        "redstone.bound": "与%s绑定",
+        "redstone.bound.none": "未绑定",
+      },
+
       lens: {
-        "impetus.storedplayer": "与%s绑定",
-        "impetus.storedplayer.none": "未绑定",
         "pattern.invalid": "无效图案",
         "akashic.bookshelf.location": "记录于%s",
         "akashic.record.count": "存有%s个iota",
         "akashic.record.count.single": "存有%s个iota",
-        "bee": "%s只蜜蜂",
-        "bee.single": "%s只蜜蜂",
       },
 
       "brainsweep.min_level": "%s级或以上",
@@ -682,6 +691,11 @@
         "": "本应在%2$s处接受%1$s，而实际接受了%3$s",
         "sapling": "一个树苗",
         "replaceable": "一个可放置方块的地方",
+      },
+      
+      circle: {
+        "bool_directrix.no_bool": "%s处的iota实际为%s，而非布尔值",
+        "bool_directrix.empty_stack": "%s处的栈为空栈"
       }
     },
     // ^ mishap
@@ -1498,4 +1512,4 @@
   "hexcasting.tooltip.boolean_true": "True",
   "hexcasting.tooltip.boolean_false": "False",
 
-},
+}
