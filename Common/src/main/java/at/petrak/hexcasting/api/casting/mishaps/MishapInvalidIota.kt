@@ -10,8 +10,6 @@ import net.minecraft.world.item.DyeColor
 
 /**
  * The value failed some kind of predicate.
- *
- * [MishapInvalidIota.reverseIdx] is the index from the *back* of the stack.
  */
 class MishapInvalidIota(
     val perpetrator: Iota,

@@ -3,7 +3,10 @@ package at.petrak.hexcasting.api.casting.circles;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
@@ -11,6 +14,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -96,9 +100,10 @@ public interface ICircleComponent {
         FrozenPigment colorizer;
 
         UUID activator = Util.NIL_UUID;
-        if (impetus.getExecutionState() != null && impetus.getExecutionState().caster != null)
+        if (impetus != null && impetus.getExecutionState() != null && impetus.getExecutionState().caster != null)
             activator = impetus.getExecutionState().caster;
-        if (impetus.getExecutionState() == null)
+
+        if (impetus == null || impetus.getExecutionState() == null)
             colorizer = new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)), activator);
         else
             colorizer = impetus.getExecutionState().colorizer;
@@ -124,7 +129,7 @@ public interface ICircleComponent {
 
         var pitch = 1f;
         var sound = HexSounds.SPELL_CIRCLE_FAIL;
-        if (success) {
+        if (success && impetus != null) {
             sound = HexSounds.SPELL_CIRCLE_FIND_BLOCK;
 
             var state = impetus.getExecutionState();
@@ -135,6 +140,17 @@ public interface ICircleComponent {
             pitch = (float) Math.pow(2.0, (semitone - 8) / 12d);
         }
         world.playSound(null, vpos.x, vpos.y, vpos.z, sound, SoundSource.BLOCKS, 1f, pitch);
+    }
+
+    /**
+     * Helper function to "throw a mishap"
+     */
+    default void fakeThrowMishap(BlockPos pos, BlockState bs, CastingImage image, CircleCastEnv env, Mishap mishap) {
+        Mishap.Context errorCtx = new Mishap.Context(null,
+            bs.getBlock().getName().append(" (").append(Component.literal(pos.toShortString())).append(")"));
+        var sideEffect = new OperatorSideEffect.DoMishap(mishap, errorCtx);
+        var vm = new CastingVM(image, env);
+        sideEffect.performEffect(vm);
     }
 
     abstract sealed class ControlFlow {

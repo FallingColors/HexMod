@@ -70,7 +70,7 @@ abstract class Mishap : Throwable() {
         return ctx.world.getBlockState(pos).block.name
     }
 
-    data class Context(val pattern: HexPattern, val name: Component?)
+    data class Context(val pattern: HexPattern?, val name: Component?)
 
     companion object {
         @JvmStatic

@@ -9,30 +9,36 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.PushReaction;
 
 import java.util.EnumSet;
 import java.util.List;
 
 public class BlockEmptyDirectrix extends BlockCircleComponent {
-    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
+    // Technically the impetus only needs an axis, but all the datagen assumes it has a facing
+    // so i might as well
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public BlockEmptyDirectrix(Properties p_49795_) {
         super(p_49795_);
         this.registerDefaultState(this.stateDefinition.any()
             .setValue(ENERGIZED, false)
-            .setValue(AXIS, Direction.Axis.X));
+            .setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
-        var sign = world.random.nextBoolean() ? Direction.AxisDirection.POSITIVE : Direction.AxisDirection.NEGATIVE;
-        return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos, Direction.fromAxisAndDirection(bs.getValue(AXIS), sign))));
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
+        BlockState bs, ServerLevel world) {
+        var sign = world.random.nextBoolean()
+            ? bs.getValue(FACING)
+            : bs.getValue(FACING).getOpposite();
+        return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos, sign)));
     }
 
     @Override
@@ -42,9 +48,7 @@ public class BlockEmptyDirectrix extends BlockCircleComponent {
 
     @Override
     public EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world) {
-        return EnumSet.of(
-                Direction.fromAxisAndDirection(bs.getValue(AXIS), Direction.AxisDirection.NEGATIVE),
-                Direction.fromAxisAndDirection(bs.getValue(AXIS), Direction.AxisDirection.POSITIVE));
+        return EnumSet.of(bs.getValue(FACING), bs.getValue(FACING).getOpposite());
     }
 
     @Override
@@ -65,18 +69,21 @@ public class BlockEmptyDirectrix extends BlockCircleComponent {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(AXIS);
+        builder.add(FACING);
     }
-
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(AXIS, pContext.getNearestLookingDirection().getAxis());
+        return BlockCircleComponent.placeStateDirAndSneak(this.defaultBlockState(), pContext);
     }
 
     @Override
     public BlockState rotate(BlockState pState, Rotation pRot) {
-        return pState.setValue(AXIS,
-            pRot.rotate(Direction.get(Direction.AxisDirection.POSITIVE, pState.getValue(AXIS))).getAxis());
+        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState pState, Mirror pMirror) {
+        return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
     }
 }

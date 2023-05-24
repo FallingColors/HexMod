@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
 import java.util.EnumSet;
-import java.util.List;
 
 // Facing dir is the direction it starts searching for slates in to start
 public abstract class BlockAbstractImpetus extends BlockCircleComponent implements EntityBlock {
@@ -32,13 +31,16 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
+        BlockState bs, ServerLevel world) {
         return new ControlFlow.Stop();
     }
 
     @Override
     public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
-        return enterDir != bs.getValue(FACING);
+        // FACING is the direction media EXITS from, so we can't have media entering in that direction
+        // so, flip it
+        return enterDir != bs.getValue(FACING).getOpposite();
     }
 
     @Override
@@ -81,7 +83,7 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getNearestLookingDirection());
+        return BlockCircleComponent.placeStateDirAndSneak(this.defaultBlockState(), pContext);
     }
 
     @Override

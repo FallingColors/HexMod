@@ -2,12 +2,12 @@
   "values": [
     "hexcasting:slate_block",
     "hexcasting:slate",
-    "hexcasting:empty_directrix",
-    "hexcasting:directrix_redstone",
-    "hexcasting:empty_impetus",
-    "hexcasting:impetus_rightclick",
-    "hexcasting:impetus_look",
-    "hexcasting:impetus_storedplayer",
+    "hexcasting:directrix/empty",
+    "hexcasting:directrix/redstone",
+    "hexcasting:impetus/empty",
+    "hexcasting:impetus/rightclick",
+    "hexcasting:impetus/look",
+    "hexcasting:impetus/redstone",
     "hexcasting:amethyst_tiles",
     "hexcasting:amethyst_sconce",
     "hexcasting:quenched_allay"

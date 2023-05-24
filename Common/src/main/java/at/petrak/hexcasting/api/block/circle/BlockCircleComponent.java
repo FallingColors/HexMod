@@ -4,14 +4,15 @@ import at.petrak.hexcasting.api.casting.circles.ICircleComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-import java.util.EnumSet;
-
+// Convenience impl of ICircleComponent
 public abstract class BlockCircleComponent extends Block implements ICircleComponent {
     public static final BooleanProperty ENERGIZED = BooleanProperty.create("energized");
 
@@ -82,5 +83,13 @@ public abstract class BlockCircleComponent extends Block implements ICircleCompo
     @Override
     public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
         return pState.getValue(ENERGIZED) ? 15 : 0;
+    }
+
+    public static BlockState placeStateDirAndSneak(BlockState stock, BlockPlaceContext ctx) {
+        var dir = ctx.getNearestLookingDirection();
+        if (ctx.getPlayer() != null && ctx.getPlayer().isDiscrete()) {
+            dir = dir.getOpposite();
+        }
+        return stock.setValue(BlockStateProperties.FACING, dir);
     }
 }

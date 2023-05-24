@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "hexcasting:impetus_look",
-    "hexcasting:impetus_rightclick",
-    "hexcasting:impetus_storedplayer"
+    "hexcasting:impetus/look",
+    "hexcasting:impetus/rightclick",
+    "hexcasting:impetus/redstone"
   ]
 }

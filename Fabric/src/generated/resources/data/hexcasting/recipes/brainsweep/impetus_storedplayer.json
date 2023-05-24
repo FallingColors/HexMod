@@ -2,7 +2,7 @@
   "type": "hexcasting:brainsweep",
   "blockIn": {
     "type": "block",
-    "block": "hexcasting:empty_impetus"
+    "block": "hexcasting:impetus/empty"
   },
   "cost": 1000000,
   "entityIn": {
@@ -11,7 +11,7 @@
     "profession": "cleric"
   },
   "result": {
-    "name": "hexcasting:impetus_storedplayer",
+    "name": "hexcasting:impetus/redstone",
     "properties": {
       "energized": "false",
       "facing": "north",

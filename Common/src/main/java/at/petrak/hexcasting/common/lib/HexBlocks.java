@@ -10,11 +10,12 @@ import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicLigature;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.blocks.circles.directrix.BlockBooleanDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockEmptyDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockLookingImpetus;
+import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRedstoneImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
-import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockStoredPlayerImpetus;
 import at.petrak.hexcasting.common.blocks.decoration.*;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
@@ -123,22 +124,24 @@ public class HexBlocks {
     // "no" item because we add it manually
     public static final BlockSlate SLATE = blockNoItem("slate", new BlockSlate(slateish()));
 
-    public static final BlockEmptyImpetus EMPTY_IMPETUS = blockItem("empty_impetus", new BlockEmptyImpetus(slateish()));
-    public static final BlockRightClickImpetus IMPETUS_RIGHTCLICK = blockItem("impetus_rightclick",
+    public static final BlockEmptyImpetus IMPETUS_EMPTY = blockItem("impetus/empty", new BlockEmptyImpetus(slateish()));
+    public static final BlockRightClickImpetus IMPETUS_RIGHTCLICK = blockItem("impetus/rightclick",
         new BlockRightClickImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
-    public static final BlockLookingImpetus IMPETUS_LOOK = blockItem("impetus_look",
+    public static final BlockLookingImpetus IMPETUS_LOOK = blockItem("impetus/look",
         new BlockLookingImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
-    public static final BlockStoredPlayerImpetus IMPETUS_STOREDPLAYER = blockItem("impetus_storedplayer",
-        new BlockStoredPlayerImpetus(slateish()
+    public static final BlockRedstoneImpetus IMPETUS_REDSTONE = blockItem("impetus/redstone",
+        new BlockRedstoneImpetus(slateish()
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
 
-    public static final BlockEmptyDirectrix EMPTY_DIRECTRIX = blockItem("empty_directrix",
+    public static final BlockEmptyDirectrix EMPTY_DIRECTRIX = blockItem("directrix/empty",
         new BlockEmptyDirectrix(slateish()));
-    public static final BlockRedstoneDirectrix DIRECTRIX_REDSTONE = blockItem("directrix_redstone",
+    public static final BlockRedstoneDirectrix DIRECTRIX_REDSTONE = blockItem("directrix/redstone",
         new BlockRedstoneDirectrix(slateish()));
+    public static final BlockBooleanDirectrix DIRECTRIX_BOOLEAN = blockItem("directrix/boolean",
+        new BlockBooleanDirectrix(slateish()));
 
     public static final BlockAkashicRecord AKASHIC_RECORD = blockItem("akashic_record",
         new BlockAkashicRecord(akashicWoodyHard().lightLevel(bs -> 15)));
@@ -203,7 +206,8 @@ public class HexBlocks {
     public static final WoodButtonBlock EDIFIED_BUTTON = blockItem("edified_button",
         new BlockHexWoodButton(edifiedWoody().noOcclusion().noCollission()));
     public static final PressurePlateBlock EDIFIED_PRESSURE_PLATE = blockItem("edified_pressure_plate",
-        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, edifiedWoody().noOcclusion().noCollission()));
+        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING,
+            edifiedWoody().noOcclusion().noCollission()));
     public static final BlockAkashicLeaves AMETHYST_EDIFIED_LEAVES = blockItem("amethyst_edified_leaves",
         new BlockAkashicLeaves(leaves(MaterialColor.COLOR_PURPLE)));
     public static final BlockAkashicLeaves AVENTURINE_EDIFIED_LEAVES = blockItem("aventurine_edified_leaves",
