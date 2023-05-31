@@ -41,7 +41,7 @@ public class OperatorVec3Delegating extends Operator {
 				fb.apply(new IterPair<>(new DoubleIota(lh.x()), new DoubleIota(rh.x()))),
 				fb.apply(new IterPair<>(new DoubleIota(lh.y()), new DoubleIota(rh.y()))),
 				fb.apply(new IterPair<>(new DoubleIota(lh.z()), new DoubleIota(rh.z()))),
-				(x, y, z) -> new Vec3Iota(new Vec3(downcast(x, DOUBLE).getDouble(), downcast(y, DOUBLE).getDouble(), downcast(y, DOUBLE).getDouble()))
+				(x, y, z) -> new Vec3Iota(new Vec3(downcast(x, DOUBLE).getDouble(), downcast(y, DOUBLE).getDouble(), downcast(z, DOUBLE).getDouble()))
 		);
 	}
 

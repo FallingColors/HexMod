@@ -22,4 +22,12 @@ public interface Arithmetic {
 	HexPattern MOD = HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST);
 	HexPattern PACK = HexPattern.fromAngles("eqqqqq", HexDir.EAST);
 	HexPattern UNPACK = HexPattern.fromAngles("qeeeee", HexDir.EAST);
+
+	// Lists
+	HexPattern INDEX = HexPattern.fromAngles("deeed", HexDir.NORTH_WEST);
+	HexPattern SLICE = HexPattern.fromAngles("qaeaqwded", HexDir.NORTH_WEST);
+	HexPattern REV = HexPattern.fromAngles("qqqaede", HexDir.EAST);
+	HexPattern INDEX_OF = HexPattern.fromAngles("dedqde", HexDir.EAST);
+	HexPattern REMOVE = HexPattern.fromAngles("edqdewaqa", HexDir.SOUTH_WEST);
+	HexPattern REPLACE = HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST);
 }
