@@ -32,8 +32,16 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:concat",
-      "anchor": "hexcasting:concat",
+      "op_id": "hexcasting:unappend",
+      "anchor": "hexcasting:unappend",
+      "input": "list",
+      "output": "list, any",
+      "text": "hexcasting.page.lists.unappend"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:add",
+      "anchor": "hexcasting:add",
       "input": "list, list",
       "output": "list",
       "text": "hexcasting.page.lists.concat"
@@ -56,19 +64,19 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:list_size",
-      "anchor": "hexcasting:list_size",
+      "op_id": "hexcasting:abs_len",
+      "anchor": "hexcasting:abs_len",
       "input": "list",
       "output": "num",
       "text": "hexcasting.page.lists.list_size"
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:reverse_list",
-      "anchor": "hexcasting:reverse_list",
+      "op_id": "hexcasting:reverse",
+      "anchor": "hexcasting:reverse",
       "input": "list",
       "output": "list",
-      "text": "hexcasting.page.lists.reverse_list"
+      "text": "hexcasting.page.lists.reverse"
     },
     {
       "type": "hexcasting:pattern",
@@ -80,11 +88,11 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:list_remove",
-      "anchor": "hexcasting:list_remove",
+      "op_id": "hexcasting:remove_from",
+      "anchor": "hexcasting:remove_from",
       "input": "list, num",
       "output": "list",
-      "text": "hexcasting.page.lists.list_remove"
+      "text": "hexcasting.page.lists.remove_from"
     },
     {
       "type": "hexcasting:pattern",

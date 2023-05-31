@@ -19,18 +19,18 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 
 object ListArithmetic : Arithmetic {
     private val OPS = listOf(
-            INDEX,
-            SLICE,
-            APPEND,
-            UNAPPEND,
-            ADD,
-            ABS,
-            REV,
-            INDEX_OF,
-            REMOVE,
-            REPLACE,
-            CONS,
-            UNCONS
+        INDEX,
+        SLICE,
+        APPEND,
+        UNAPPEND,
+        ADD,
+        ABS,
+        REV,
+        INDEX_OF,
+        REMOVE,
+        REPLACE,
+        CONS,
+        UNCONS
     )
 
     override fun arithName() = "list_ops"

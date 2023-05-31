@@ -531,37 +531,39 @@ public class HexActions {
     // == Lists ==
 
     public static final ActionRegistryEntry APPEND = make("append",
-        new ActionRegistryEntry(HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST), OpAppend.INSTANCE));
-    public static final ActionRegistryEntry CONCAT = make("concat",
-        new ActionRegistryEntry(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST), OpConcat.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST)));
+    public static final ActionRegistryEntry UNAPPEND = make("unappend",
+            new OperationAction(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST)));
+//    public static final ActionRegistryEntry CONCAT = make("concat",
+//        new ActionRegistryEntry(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST), OpConcat.INSTANCE));
     public static final ActionRegistryEntry INDEX = make("index",
-        new ActionRegistryEntry(HexPattern.fromAngles("deeed", HexDir.NORTH_WEST), OpIndex.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("deeed", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry FOR_EACH = make("for_each",
         new ActionRegistryEntry(HexPattern.fromAngles("dadad", HexDir.NORTH_EAST), OpForEach.INSTANCE));
-    public static final ActionRegistryEntry LIST_SIZE = make("list_size",
-        new ActionRegistryEntry(HexPattern.fromAngles("aqaeaq", HexDir.EAST), OpListSize.INSTANCE));
+//    public static final ActionRegistryEntry LIST_SIZE = make("list_size",
+//        new ActionRegistryEntry(HexPattern.fromAngles("aqaeaq", HexDir.EAST), OpListSize.INSTANCE));
     public static final ActionRegistryEntry SINGLETON = make("singleton",
         new ActionRegistryEntry(HexPattern.fromAngles("adeeed", HexDir.EAST), OpSingleton.INSTANCE));
     public static final ActionRegistryEntry EMPTY_LIST = make("empty_list",
         new ActionRegistryEntry(HexPattern.fromAngles("qqaeaae", HexDir.NORTH_EAST), OpEmptyList.INSTANCE));
-    public static final ActionRegistryEntry REVERSE_LIST = make("reverse_list",
-        new ActionRegistryEntry(HexPattern.fromAngles("qqqaede", HexDir.EAST), OpReverski.INSTANCE));
+    public static final ActionRegistryEntry REVERSE = make("reverse",
+        new OperationAction(HexPattern.fromAngles("qqqaede", HexDir.EAST)));
     public static final ActionRegistryEntry LAST_N_LIST = make("last_n_list",
         new ActionRegistryEntry(HexPattern.fromAngles("ewdqdwe", HexDir.SOUTH_WEST), OpLastNToList.INSTANCE));
     public static final ActionRegistryEntry SPLAT = make("splat",
         new ActionRegistryEntry(HexPattern.fromAngles("qwaeawq", HexDir.NORTH_WEST), OpSplat.INSTANCE));
     public static final ActionRegistryEntry INDEX_OF = make("index_of",
-        new ActionRegistryEntry(HexPattern.fromAngles("dedqde", HexDir.EAST), OpIndexOf.INSTANCE));
-    public static final ActionRegistryEntry LIST_REMOVE = make("list_remove",
-        new ActionRegistryEntry(HexPattern.fromAngles("edqdewaqa", HexDir.SOUTH_WEST), OpRemove.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("dedqde", HexDir.EAST)));
+    public static final ActionRegistryEntry REMOVE_FROM = make("remove_from",
+        new OperationAction(HexPattern.fromAngles("edqdewaqa", HexDir.SOUTH_WEST)));
     public static final ActionRegistryEntry SLICE = make("slice",
-        new ActionRegistryEntry(HexPattern.fromAngles("qaeaqwded", HexDir.NORTH_WEST), OpSlice.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qaeaqwded", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry MODIFY_IN_PLACE = make("modify_in_place",
-        new ActionRegistryEntry(HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST), OpModifyInPlace.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry CONSTRUCT = make("construct",
-        new ActionRegistryEntry(HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST), OpCons.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry DECONSTRUCT = make("deconstruct",
-        new ActionRegistryEntry(HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST), OpUnCons.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST)));
 
     // Xplat interops
     static {
