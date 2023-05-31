@@ -16,6 +16,29 @@ fun Iterator<IndexedValue<Iota>>.nextList(argc: Int = 0): SpellList {
         throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "list")
     }
 }
+fun Iterator<IndexedValue<Iota>>.nextInt(argc: Int = 0): Int {
+    val (idx, x) = this.next()
+    if (x is DoubleIota) {
+        val double = x.double
+        val rounded = double.roundToInt()
+        if (abs(double - rounded) <= DoubleIota.TOLERANCE) {
+            return rounded
+        }
+    }
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int")
+}
+
+fun Iterator<IndexedValue<Iota>>.nextPositiveIntUnder(max: Int, argc: Int = 0): Int {
+    val (idx, x) = this.next()
+    if (x is DoubleIota) {
+        val double = x.double
+        val rounded = double.roundToInt()
+        if (abs(double - rounded) <= DoubleIota.TOLERANCE && rounded in 0 until max) {
+            return rounded
+        }
+    }
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
+}
 
 fun Iterator<IndexedValue<Iota>>.nextPositiveIntUnderInclusive(max: Int, argc: Int = 0): Int {
     val (idx, x) = this.next()

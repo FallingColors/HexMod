@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class OperatorUnpack extends Operator {
 	public static OperatorUnpack INSTANCE = new OperatorUnpack();
 
 	@Override
-	public Iterable<Iota> apply(Iterable<Iota> iotas) {
+	public @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas) {
 		var it = iotas.iterator();
 		var vec = downcast(it.next(), VEC3).getVec3();
 		return List.of(new DoubleIota(vec.x), new DoubleIota(vec.y), new DoubleIota(vec.z));

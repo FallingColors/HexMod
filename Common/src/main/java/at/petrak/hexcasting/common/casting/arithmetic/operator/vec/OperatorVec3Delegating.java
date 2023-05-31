@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public class OperatorVec3Delegating extends Operator {
 	}
 
 	@Override
-	public Iterable<Iota> apply(Iterable<Iota> iotas) {
+	public @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas) {
 		var it = iotas.iterator();
 		var left = it.next();
 		var right = it.next();
