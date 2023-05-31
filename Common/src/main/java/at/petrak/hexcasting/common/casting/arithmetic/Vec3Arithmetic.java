@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.casting.arithmetic;
 
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
+import at.petrak.hexcasting.api.casting.arithmetic.engine.InvalidOperatorException;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.*;
@@ -66,7 +67,7 @@ public enum Vec3Arithmetic implements Arithmetic {
 		} else if (pattern.equals(MOD)) {
 			return make2Fallback(pattern);
 		}
-		return null;
+		throw new InvalidOperatorException(pattern + " is not a valid operator in Arithmetic " + this + ".");
 	}
 	public static OperatorUnary make1Double(Function<Vec3, Double> op) {
 		return new OperatorUnary(ACCEPTS, i -> new DoubleIota(op.apply(downcast(i, VEC3).getVec3())));

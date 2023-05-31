@@ -27,7 +27,6 @@ import at.petrak.hexcasting.common.casting.operators.lists.*;
 import at.petrak.hexcasting.common.casting.operators.local.OpPeekLocal;
 import at.petrak.hexcasting.common.casting.operators.local.OpPushLocal;
 import at.petrak.hexcasting.common.casting.operators.math.*;
-import at.petrak.hexcasting.common.casting.operators.math.bit.*;
 import at.petrak.hexcasting.common.casting.operators.math.logic.*;
 import at.petrak.hexcasting.common.casting.operators.math.trig.*;
 import at.petrak.hexcasting.common.casting.operators.raycast.OpBlockAxisRaycast;
@@ -144,13 +143,13 @@ public class HexActions {
         new OperationAction(HexPattern.fromAngles("waaw", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry SUB = make("sub",
         new OperationAction(HexPattern.fromAngles("wddw", HexDir.NORTH_WEST)));
-    public static final ActionRegistryEntry MUL_DOT = make("mul_dot",
+    public static final ActionRegistryEntry MUL_DOT = make("mul",
         new OperationAction(HexPattern.fromAngles("waqaw", HexDir.SOUTH_EAST)));
-    public static final ActionRegistryEntry DIV_CROSS = make("div_cross",
+    public static final ActionRegistryEntry DIV_CROSS = make("div",
         new OperationAction(HexPattern.fromAngles("wdedw", HexDir.NORTH_EAST)));
-    public static final ActionRegistryEntry ABS_LEN = make("abs_len",
+    public static final ActionRegistryEntry ABS = make("abs",
         new OperationAction(HexPattern.fromAngles("wqaqw", HexDir.NORTH_EAST)));
-    public static final ActionRegistryEntry POW_PROJ = make("pow_proj",
+    public static final ActionRegistryEntry POW_PROJ = make("pow",
         new OperationAction(HexPattern.fromAngles("wedew", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry FLOOR = make("floor",
         new OperationAction(HexPattern.fromAngles("ewq", HexDir.EAST)));
@@ -167,23 +166,23 @@ public class HexActions {
     // == Logic ==
 
     public static final ActionRegistryEntry AND = make("and",
-        new ActionRegistryEntry(HexPattern.fromAngles("wdw", HexDir.NORTH_EAST), OpBoolAnd.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wdw", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry OR = make("or",
-        new ActionRegistryEntry(HexPattern.fromAngles("waw", HexDir.SOUTH_EAST), OpBoolOr.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("waw", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry XOR = make("xor",
-        new ActionRegistryEntry(HexPattern.fromAngles("dwa", HexDir.NORTH_WEST), OpBoolXor.INSTANCE));
-    public static final ActionRegistryEntry GREATER = make("greater", new ActionRegistryEntry(
-        HexPattern.fromAngles("e", HexDir.SOUTH_EAST), new OpCompare(false, (a, b) -> a > b)
-    ));
-    public static final ActionRegistryEntry LESS = make("less", new ActionRegistryEntry(
-        HexPattern.fromAngles("q", HexDir.SOUTH_WEST), new OpCompare(false, (a, b) -> a < b)
-    ));
-    public static final ActionRegistryEntry GREATER_EQ = make("greater_eq", new ActionRegistryEntry(
-        HexPattern.fromAngles("ee", HexDir.SOUTH_EAST), new OpCompare(true, (a, b) -> a >= b)
-    ));
-    public static final ActionRegistryEntry LESS_EQ = make("less_eq", new ActionRegistryEntry(
-        HexPattern.fromAngles("qq", HexDir.SOUTH_WEST), new OpCompare(true, (a, b) -> a <= b)
-    ));
+        new OperationAction(HexPattern.fromAngles("dwa", HexDir.NORTH_WEST)));
+    public static final ActionRegistryEntry GREATER = make("greater", new OperationAction(
+        HexPattern.fromAngles("e", HexDir.SOUTH_EAST))
+    );
+    public static final ActionRegistryEntry LESS = make("less", new OperationAction(
+        HexPattern.fromAngles("q", HexDir.SOUTH_WEST))
+    );
+    public static final ActionRegistryEntry GREATER_EQ = make("greater_eq", new OperationAction(
+        HexPattern.fromAngles("ee", HexDir.SOUTH_EAST))
+    );
+    public static final ActionRegistryEntry LESS_EQ = make("less_eq", new OperationAction(
+        HexPattern.fromAngles("qq", HexDir.SOUTH_WEST))
+    );
     public static final ActionRegistryEntry EQUALS = make("equals",
         new ActionRegistryEntry(HexPattern.fromAngles("ad", HexDir.EAST), new OpEquality(false)));
     public static final ActionRegistryEntry NOT_EQUALS = make("not_equals",
@@ -192,8 +191,6 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("dw", HexDir.NORTH_WEST), OpBoolNot.INSTANCE));
     public static final ActionRegistryEntry BOOL_COERCE = make("bool_coerce",
         new ActionRegistryEntry(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), OpCoerceToBool.INSTANCE));
-    public static final ActionRegistryEntry BOOL_TO_NUMBER = make("bool_to_number",
-        new ActionRegistryEntry(HexPattern.fromAngles("awd", HexDir.SOUTH_EAST), OpBoolToNumber.INSTANCE));
     public static final ActionRegistryEntry IF = make("if",
         new ActionRegistryEntry(HexPattern.fromAngles("awdd", HexDir.SOUTH_EAST), OpBoolIf.INSTANCE));
 
@@ -219,20 +216,12 @@ public class HexActions {
     public static final ActionRegistryEntry LOGARITHM = make("logarithm",
         new ActionRegistryEntry(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST), OpLog.INSTANCE));
     public static final ActionRegistryEntry MODULO = make("modulo",
-        new ActionRegistryEntry(HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST), OpModulo.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST)));
 
     // == Sets ==
 
-    public static final ActionRegistryEntry BIT$AND = make("bit/and",
-        new ActionRegistryEntry(HexPattern.fromAngles("wdweaqa", HexDir.NORTH_EAST), OpAnd.INSTANCE));
-    public static final ActionRegistryEntry BIT$OR = make("bit/or",
-        new ActionRegistryEntry(HexPattern.fromAngles("waweaqa", HexDir.SOUTH_EAST), OpOr.INSTANCE));
-    public static final ActionRegistryEntry BIT$XOR = make("bit/xor",
-        new ActionRegistryEntry(HexPattern.fromAngles("dwaeaqa", HexDir.NORTH_WEST), OpXor.INSTANCE));
-    public static final ActionRegistryEntry BIT$NOT = make("bit/not",
-        new ActionRegistryEntry(HexPattern.fromAngles("dweaqa", HexDir.NORTH_WEST), OpNot.INSTANCE));
-    public static final ActionRegistryEntry BIT$TO_SET = make("bit/to_set",
-        new ActionRegistryEntry(HexPattern.fromAngles("aweaqa", HexDir.NORTH_EAST), OpToSet.INSTANCE));
+    public static final ActionRegistryEntry UNIQUE = make("unique",
+        new OperationAction(HexPattern.fromAngles("aweaqa", HexDir.NORTH_EAST)));
 
     // == Spells ==
 

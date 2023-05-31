@@ -39,51 +39,51 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:mul_dot",
-      "anchor": "hexcasting:mul_dot",
+      "op_id": "hexcasting:mul",
+      "anchor": "hexcasting:mul",
       "input": "num/vec, num/vec",
       "output": "num/vec",
-      "text": "hexcasting.page.math.mul_dot.1"
+      "text": "hexcasting.page.math.mul.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math.mul_dot.2"
+      "text": "hexcasting.page.math.mul.2"
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:div_cross",
-      "anchor": "hexcasting:div_cross",
+      "op_id": "hexcasting:div",
+      "anchor": "hexcasting:div",
       "input": "num/vec, num/vec",
       "output": "num/vec",
-      "text": "hexcasting.page.math.div_cross.1"
+      "text": "hexcasting.page.math.div.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math.div_cross.2"
+      "text": "hexcasting.page.math.div.2"
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:abs_len",
-      "anchor": "hexcasting:abs_len",
+      "op_id": "hexcasting:abs",
+      "anchor": "hexcasting:abs",
       "input": "num/vec",
       "output": "number",
-      "text": "hexcasting.page.math.abs_len.1"
+      "text": "hexcasting.page.math.abs.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math.abs_len.2"
+      "text": "hexcasting.page.math.abs.2"
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:pow_proj",
-      "anchor": "hexcasting:pow_proj",
+      "op_id": "hexcasting:pow",
+      "anchor": "hexcasting:pow",
       "input": "num/vec, num/vec",
       "output": "num/vec",
-      "text": "hexcasting.page.math.pow_proj.1"
+      "text": "hexcasting.page.math.pow.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.math.pow_proj.2"
+      "text": "hexcasting.page.math.pow.2"
     },
     {
       "type": "hexcasting:pattern",

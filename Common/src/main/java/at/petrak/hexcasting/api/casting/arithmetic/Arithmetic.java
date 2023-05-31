@@ -34,4 +34,15 @@ public interface Arithmetic {
 	HexPattern REPLACE = HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST);
 	HexPattern CONS = HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST);
 	HexPattern UNCONS = HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST);
+
+	// Boolean Logic, Comparisons, & Sets
+	HexPattern AND = HexPattern.fromAngles("wdw", HexDir.NORTH_EAST);
+	HexPattern OR = HexPattern.fromAngles("waw", HexDir.SOUTH_EAST);
+	HexPattern XOR = HexPattern.fromAngles("dwa", HexDir.NORTH_WEST);
+	HexPattern GREATER = HexPattern.fromAngles("e", HexDir.SOUTH_EAST);
+	HexPattern LESS = HexPattern.fromAngles("q", HexDir.SOUTH_WEST);
+	HexPattern GREATER_EQ = HexPattern.fromAngles("ee", HexDir.SOUTH_EAST);
+	HexPattern LESS_EQ = HexPattern.fromAngles("qq", HexDir.SOUTH_WEST);
+	HexPattern NOT = HexPattern.fromAngles("dw", HexDir.NORTH_WEST);
+	HexPattern UNIQUE = HexPattern.fromAngles("aweaqa", HexDir.NORTH_EAST);
 }

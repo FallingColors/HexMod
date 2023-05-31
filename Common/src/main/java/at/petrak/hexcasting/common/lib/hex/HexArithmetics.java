@@ -2,9 +2,7 @@ package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.arithmetic.engine.ArithmeticEngine;
-import at.petrak.hexcasting.common.casting.arithmetic.DoubleArithmetic;
-import at.petrak.hexcasting.common.casting.arithmetic.ListArithmetic;
-import at.petrak.hexcasting.common.casting.arithmetic.Vec3Arithmetic;
+import at.petrak.hexcasting.common.casting.arithmetic.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -40,6 +38,9 @@ public class HexArithmetics {
     public static DoubleArithmetic DOUBLE = make("double", DoubleArithmetic.INSTANCE);
     public static Vec3Arithmetic VEC3 = make("vec3", Vec3Arithmetic.INSTANCE);
     public static ListArithmetic LIST = make("list", ListArithmetic.INSTANCE);
+    public static BoolArithmetic BOOL = make("bool", BoolArithmetic.INSTANCE);
+    public static ListSetArithmetic LIST_SET = make("list_set", ListSetArithmetic.INSTANCE);
+    public static BitwiseSetArithmetic BITWISE_SET = make("bitwise_set", BitwiseSetArithmetic.INSTANCE);
 
     private static <T extends Arithmetic> T make(String name, T arithmetic) {
         var old = ARITHMETICS.put(modLoc(name), arithmetic);
