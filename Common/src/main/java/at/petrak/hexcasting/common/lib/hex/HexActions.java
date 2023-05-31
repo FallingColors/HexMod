@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.Action;
+import at.petrak.hexcasting.api.casting.castables.OperationAction;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
@@ -140,26 +141,26 @@ public class HexActions {
     // == Math ==
 
     public static final ActionRegistryEntry ADD = make("add",
-        new ActionRegistryEntry(HexPattern.fromAngles("waaw", HexDir.NORTH_EAST), OpAdd.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("waaw", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry SUB = make("sub",
-        new ActionRegistryEntry(HexPattern.fromAngles("wddw", HexDir.NORTH_WEST), OpSub.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wddw", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry MUL_DOT = make("mul_dot",
-        new ActionRegistryEntry(HexPattern.fromAngles("waqaw", HexDir.SOUTH_EAST), OpMulDot.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("waqaw", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry DIV_CROSS = make("div_cross",
-        new ActionRegistryEntry(HexPattern.fromAngles("wdedw", HexDir.NORTH_EAST), OpDivCross.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wdedw", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry ABS_LEN = make("abs_len",
-        new ActionRegistryEntry(HexPattern.fromAngles("wqaqw", HexDir.NORTH_EAST), OpAbsLen.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wqaqw", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry POW_PROJ = make("pow_proj",
-        new ActionRegistryEntry(HexPattern.fromAngles("wedew", HexDir.NORTH_WEST), OpPowProj.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wedew", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry FLOOR = make("floor",
-        new ActionRegistryEntry(HexPattern.fromAngles("ewq", HexDir.EAST), OpFloor.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("ewq", HexDir.EAST)));
     public static final ActionRegistryEntry CEIL = make("ceil",
-        new ActionRegistryEntry(HexPattern.fromAngles("qwe", HexDir.EAST), OpCeil.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qwe", HexDir.EAST)));
 
     public static final ActionRegistryEntry CONSTRUCT_VEC = make("construct_vec",
-        new ActionRegistryEntry(HexPattern.fromAngles("eqqqqq", HexDir.EAST), OpConstructVec.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("eqqqqq", HexDir.EAST)));
     public static final ActionRegistryEntry DECONSTRUCT_VEC = make("deconstruct_vec",
-        new ActionRegistryEntry(HexPattern.fromAngles("qeeeee", HexDir.EAST), OpDeconstructVec.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qeeeee", HexDir.EAST)));
     public static final ActionRegistryEntry COERCE_AXIAL = make("coerce_axial",
         new ActionRegistryEntry(HexPattern.fromAngles("qqqqqaww", HexDir.NORTH_WEST), OpCoerceToAxial.INSTANCE));
 
@@ -573,6 +574,15 @@ public class HexActions {
     }
 
     public static ActionRegistryEntry make(String name, ActionRegistryEntry are) {
+        var old = ACTIONS.put(modLoc(name), are);
+        if (old != null) {
+            throw new IllegalArgumentException("Typo? Duplicate id " + name);
+        }
+        return are;
+    }
+
+    public static ActionRegistryEntry make(String name, OperationAction oa) {
+        var are = new ActionRegistryEntry(oa.getPattern(), oa);
         var old = ACTIONS.put(modLoc(name), are);
         if (old != null) {
             throw new IllegalArgumentException("Typo? Duplicate id " + name);

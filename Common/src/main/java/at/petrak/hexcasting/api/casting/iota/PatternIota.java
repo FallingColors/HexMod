@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
+import at.petrak.hexcasting.api.casting.eval.OperationResult;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
@@ -17,7 +18,6 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
-import at.petrak.hexcasting.common.lib.hex.HexArithmetics;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -69,7 +69,7 @@ public class PatternIota extends Iota {
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         @Nullable Component castedName = null;
         try {
-            var result = HexArithmetics.ENGINE.operate(this.getPattern(), vm.getEnv(), vm.getImage(), continuation);
+            OperationResult result = null; // HexArithmetics.ENGINE.operate(this.getPattern(), vm.getEnv(), vm.getImage(), continuation);
 
             if (result == null) {
                 var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), world, false);

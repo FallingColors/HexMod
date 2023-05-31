@@ -20,4 +20,21 @@ public class NoOperatorCandidatesException extends RuntimeException {
         this.args = args;
     }
 
+    public HexPattern getPattern() {
+        return pattern;
+    }
+
+    public HexPattern setPattern(HexPattern pattern) {
+        this.pattern = pattern;
+        return this.pattern;
+    }
+
+    public List<Iota> getArgs() {
+        return args;
+    }
+
+    public List<Iota> setArgs(List<Iota> args) {
+        this.args = args;
+        return this.args;
+    }
 }

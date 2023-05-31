@@ -2,18 +2,10 @@ package at.petrak.hexcasting.api.casting.arithmetic.engine;
 
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.OperationResult;
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
-import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
-import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidOperatorArgs;
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
-import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -49,24 +41,6 @@ public class ArithmeticEngine {
 
     public Iterable<HexPattern> operatorSyms() {
         return operators.keySet();
-    }
-
-    @Nullable
-    public OperationResult operate(@NotNull HexPattern operator, @NotNull CastingEnvironment env, @NotNull CastingImage image, @NotNull SpellContinuation continuation) throws Mishap {
-        var stackList = image.getStack();
-        var stack = new Stack<Iota>();
-        stack.addAll(stackList);
-        var startingLength = stackList.size();
-        try {
-            var ret = run(operator, stack, startingLength);
-            ret.forEach(stack::add);
-            var image2 = image.copy(stack, image.getParenCount(), image.getParenthesized(), image.getEscapeNext(), image.getOpsConsumed() + 1, image.getUserData());
-            return new OperationResult(image2, List.of(), continuation, HexEvalSounds.NORMAL_EXECUTE);
-        } catch (InvalidOperatorException e) {
-            return null;
-        } catch (NoOperatorCandidatesException e) {
-            throw new MishapInvalidOperatorArgs(e.args, e.pattern);
-        }
     }
 
     public Iterable<Iota> run(HexPattern operator, Stack<Iota> iotas, int startingLength) throws Mishap {
