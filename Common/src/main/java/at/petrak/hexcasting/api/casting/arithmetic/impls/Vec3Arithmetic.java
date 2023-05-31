@@ -3,11 +3,18 @@ package at.petrak.hexcasting.api.casting.arithmetic.impls;
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.arithmetic.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.IotaPredicate;
+import at.petrak.hexcasting.api.casting.arithmetic.operator.*;
+import at.petrak.hexcasting.api.casting.iota.DoubleIota;
+import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
+import static at.petrak.hexcasting.api.casting.arithmetic.operator.Operator.downcast;
 import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.*;
 
 public enum Vec3Arithmetic implements Arithmetic {
@@ -31,28 +38,43 @@ public enum Vec3Arithmetic implements Arithmetic {
 	}
 
 	@Override
-	public Iterable<Symbol> opTypes() {
+	public Iterable<HexPattern> opTypes() {
 		return OPS;
 	}
 
 	@Override
-	public Operator getOperator(Symbol name) {
-		switch (name.inner()) {
-		case "pack":  return OperatorPack.INSTANCE;
-		case "add":   return make2(name, null);
-		case "sub":   return make2(name, null);
-		case "mul":   return make2(name, Vec3::dot);
-		case "div":   return make2(name, Vec3::cross);
-		case "abs":   return make1(Vec3::len);
-		case "pow":   return make2(name, Vec3::proj);
-		case "mod":   return make2(name, null);
+	public Operator getOperator(HexPattern pattern) {
+		if (pattern.equals(PACK)) {
+			return OperatorPack.INSTANCE;
+		} else if (pattern.equals(UNPACK)) {
+			return OperatorUnpack.INSTANCE;
+		} else if (pattern.equals(ADD)) {
+			return make2Fallback(pattern);
+		} else if (pattern.equals(SUB)) {
+			return make2Fallback(pattern);
+		} else if (pattern.equals(MUL)) {
+			return make2Double(pattern, Vec3::dot);
+		} else if (pattern.equals(DIV)) {
+			return make2Vec(pattern, Vec3::cross);
+		} else if (pattern.equals(ABS)) {
+			return make1Double(Vec3::length);
+		} else if (pattern.equals(POW)) {
+			return make2Vec(pattern, (u, v) -> v.normalize().scale(u.dot(v.normalize())));
+		} else if (pattern.equals(MOD)) {
+			return make2Fallback(pattern);
 		}
 		return null;
 	}
-	public static OperatorUnary make1(Function<Vec3, Object> op) {
-		return new OperatorUnary(ACCEPTS, i -> new Iota(op.apply(i.downcast(Vec3.class))));
+	public static OperatorUnary make1Double(Function<Vec3, Double> op) {
+		return new OperatorUnary(ACCEPTS, i -> new DoubleIota(op.apply(downcast(i, VEC3).getVec3())));
 	}
-	public static OperatorVec3Delegating make2(Symbol name, BiFunction<Vec3, Vec3, Object> op) {
-		return new OperatorVec3Delegating(op, name);
+	public static OperatorVec3Delegating make2Fallback(HexPattern pattern) {
+		return new OperatorVec3Delegating(null, pattern);
+	}
+	public static OperatorVec3Delegating make2Double(HexPattern pattern, BiFunction<Vec3, Vec3, Double> op) {
+		return new OperatorVec3Delegating(op.andThen(DoubleIota::new), pattern);
+	}
+	public static OperatorVec3Delegating make2Vec(HexPattern pattern, BiFunction<Vec3, Vec3, Vec3> op) {
+		return new OperatorVec3Delegating(op.andThen(Vec3Iota::new), pattern);
 	}
 }

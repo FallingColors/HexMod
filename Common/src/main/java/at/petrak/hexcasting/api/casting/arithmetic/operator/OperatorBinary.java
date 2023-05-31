@@ -4,6 +4,7 @@ package at.petrak.hexcasting.api.casting.arithmetic.operator;
 import at.petrak.hexcasting.api.casting.arithmetic.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 
+import java.util.List;
 import java.util.function.BinaryOperator;
 
 public class OperatorBinary extends Operator {
@@ -15,8 +16,8 @@ public class OperatorBinary extends Operator {
 	}
 
 	@Override
-	public Iota apply(Iterable<Iota> iotas) {
+	public Iterable<Iota> apply(Iterable<Iota> iotas) {
 		var it = iotas.iterator();
-		return inner.apply(it.next(), it.next());
+		return List.of(inner.apply(it.next(), it.next()));
 	}
 }

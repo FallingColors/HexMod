@@ -2,8 +2,17 @@ package at.petrak.hexcasting.api.casting.arithmetic.engine;
 
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.OperationResult;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidOperatorArgs;
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -42,15 +51,33 @@ public class ArithmeticEngine {
         return operators.keySet();
     }
 
-    public @Nullable Iota run(HexPattern operator, Stack<Iota> iotas) {
+    @Nullable
+    public OperationResult operate(@NotNull HexPattern operator, @NotNull CastingEnvironment env, @NotNull CastingImage image, @NotNull SpellContinuation continuation) throws Mishap {
+        var stackList = image.getStack();
+        var stack = new Stack<Iota>();
+        stack.addAll(stackList);
+        var startingLength = stackList.size();
+        try {
+            var ret = run(operator, stack, startingLength);
+            ret.forEach(stack::add);
+            var image2 = image.copy(stack, image.getParenCount(), image.getParenthesized(), image.getEscapeNext(), image.getOpsConsumed() + 1, image.getUserData());
+            return new OperationResult(image2, List.of(), continuation, HexEvalSounds.NORMAL_EXECUTE);
+        } catch (InvalidOperatorException e) {
+            return null;
+        } catch (NoOperatorCandidatesException e) {
+            throw new MishapInvalidOperatorArgs(e.args, e.pattern);
+        }
+    }
+
+    public Iterable<Iota> run(HexPattern operator, Stack<Iota> iotas, int startingLength) throws Mishap {
         var candidates = operators.get(operator);
         if (candidates == null)
-            return null; // not an operator
+            throw new InvalidOperatorException("the pattern " + operator + " is not an operator."); //
         HashCons hash = new HashCons.Pattern(operator);
         var args = new ArrayList<Iota>(candidates.arity());
         for (var i = 0; i < candidates.arity(); i++) {
             if (iotas.isEmpty()) {
-                throw new IllegalStateException("Not enough args on stack for operator: " + operator);
+                throw new MishapNotEnoughArgs(candidates.arity, startingLength);
             }
             var iota = iotas.pop();
             hash = new HashCons.Pair(iota.getType(), hash);
@@ -68,7 +95,7 @@ public class ArithmeticEngine {
                     return op;
                 }
             }
-            throw new IllegalArgumentException("No implementation candidates for op " + candidates.pattern() + " on args: " + args);
+            throw new NoOperatorCandidatesException(candidates.pattern(), args, "No implementation candidates for op " + candidates.pattern() + " on args: " + args);
         });
     }
 }

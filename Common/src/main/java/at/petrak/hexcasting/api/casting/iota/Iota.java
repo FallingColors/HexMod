@@ -97,4 +97,9 @@ public abstract class Iota {
     public static boolean tolerates(Iota a, Iota b) {
         return a.toleratesOther(b) || b.toleratesOther(a);
     }
+
+    @Override
+    public int hashCode() {
+        return payload.hashCode();
+    }
 }

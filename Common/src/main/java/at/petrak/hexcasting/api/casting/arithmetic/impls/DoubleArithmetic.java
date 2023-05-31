@@ -7,16 +7,14 @@ import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBinary;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorUnary;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
-import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 
 import java.util.List;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
 import static at.petrak.hexcasting.api.casting.arithmetic.operator.Operator.downcast;
-import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.*;
+import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE;
 
 public enum DoubleArithmetic implements Arithmetic {
 	INSTANCE;
@@ -47,16 +45,24 @@ public enum DoubleArithmetic implements Arithmetic {
 
 	@Override
 	public Operator getOperator(HexPattern pattern) {
-		switch (pattern) {
-			case ADD: return make2(Double::sum);
-			case SUB: return make2((p, q) -> p - q);
-			case MUL: return make2((p, q) -> p * q);
-			case DIV: return make2((p, q) -> p / q);
-			case ABS: return make1(Math::abs);
-			case POW: return make2(Math::pow);
-			case FLOOR: return make1(Math::floor);
-			case CEIL: return make1(Math::ceil);
-			case MOD: return make2((p, q) -> p % q);
+		if (pattern.equals(ADD)) {
+			return make2(Double::sum);
+		} else if (pattern.equals(SUB)) {
+			return make2((p, q) -> p - q);
+		} else if (pattern.equals(MUL)) {
+			return make2((p, q) -> p * q);
+		} else if (pattern.equals(DIV)) {
+			return make2((p, q) -> p / q);
+		} else if (pattern.equals(ABS)) {
+			return make1(Math::abs);
+		} else if (pattern.equals(POW)) {
+			return make2(Math::pow);
+		} else if (pattern.equals(FLOOR)) {
+			return make1(Math::floor);
+		} else if (pattern.equals(CEIL)) {
+			return make1(Math::ceil);
+		} else if (pattern.equals(MOD)) {
+			return make2((p, q) -> p % q);
 		}
 		return null;
 	}

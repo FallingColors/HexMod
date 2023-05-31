@@ -3,7 +3,6 @@ package at.petrak.hexcasting.api.casting.arithmetic.operator;
 import at.petrak.hexcasting.api.casting.arithmetic.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota;
 
 public abstract class Operator {
 	public final int arity;
@@ -15,7 +14,7 @@ public abstract class Operator {
 		this.accepts = accepts;
 	}
 
-	public abstract Iota apply(Iterable<Iota> iotas);
+	public abstract Iterable<Iota> apply(Iterable<Iota> iotas);
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Iota> T downcast(Iota iota, IotaType<T> iotaType) {
