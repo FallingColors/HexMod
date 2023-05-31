@@ -296,7 +296,11 @@
       "brainsweep.level": "Level %s",
       "brainsweep.product": "Mindless Body",
       
-      "media": "%d dust"
+      "media": "%d dust",
+
+      "list_contents": "[%s]",
+      "null_iota": "Null",
+      "pattern_iota": "HexPattern(%s)"
     },
     // ^ tooltip
     spelldata: {
