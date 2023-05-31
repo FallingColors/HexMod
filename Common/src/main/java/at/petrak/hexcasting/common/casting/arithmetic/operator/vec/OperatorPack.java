@@ -1,8 +1,9 @@
-package at.petrak.hexcasting.api.casting.arithmetic.operator;
+package at.petrak.hexcasting.common.casting.arithmetic.operator.vec;
 
 
-import at.petrak.hexcasting.api.casting.arithmetic.IotaMultiPredicate;
-import at.petrak.hexcasting.api.casting.arithmetic.IotaPredicate;
+import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
+import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
+import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;

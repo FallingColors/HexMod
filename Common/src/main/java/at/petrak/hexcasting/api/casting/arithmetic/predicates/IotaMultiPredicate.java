@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.casting.arithmetic;
+package at.petrak.hexcasting.api.casting.arithmetic.predicates;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 
@@ -9,17 +9,27 @@ public interface IotaMultiPredicate {
 	static IotaMultiPredicate all(IotaPredicate child) {
 		return new All(child);
 	}
-	static IotaMultiPredicate bofa(IotaPredicate first, IotaPredicate second) {
-		return new Any(first, second);
+	static IotaMultiPredicate pair(IotaPredicate first, IotaPredicate second) {
+		return new Pair(first, second);
+	}
+	static IotaMultiPredicate triple(IotaPredicate first, IotaPredicate second, IotaPredicate third) {
+		return new Triple(first, second, third);
 	}
 	static IotaMultiPredicate any(IotaPredicate needs, IotaPredicate fallback) {
 		return new Any(needs, fallback);
 	}
-	record Bofa(IotaPredicate first, IotaPredicate second) implements IotaMultiPredicate {
+	record Pair(IotaPredicate first, IotaPredicate second) implements IotaMultiPredicate {
 		@Override
 		public boolean test(Iterable<Iota> iotas) {
 			var it = iotas.iterator();
 			return it.hasNext() && first.test(it.next()) && it.hasNext() && second.test(it.next()) && !it.hasNext();
+		}
+	}
+	record Triple(IotaPredicate first, IotaPredicate second, IotaPredicate third) implements IotaMultiPredicate {
+		@Override
+		public boolean test(Iterable<Iota> iotas) {
+			var it = iotas.iterator();
+			return it.hasNext() && first.test(it.next()) && it.hasNext() && second.test(it.next()) && it.hasNext() && third.test(it.next()) && !it.hasNext();
 		}
 	}
 	record Any(IotaPredicate needs, IotaPredicate fallback) implements IotaMultiPredicate {

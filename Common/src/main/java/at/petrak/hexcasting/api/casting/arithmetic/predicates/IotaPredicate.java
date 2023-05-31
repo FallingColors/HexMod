@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.casting.arithmetic;
+package at.petrak.hexcasting.api.casting.arithmetic.predicates;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
@@ -28,4 +28,6 @@ public interface IotaPredicate {
 			return iota.getType().equals(this.type);
 		}
 	}
+
+	IotaPredicate TRUE = iota -> true;
 }

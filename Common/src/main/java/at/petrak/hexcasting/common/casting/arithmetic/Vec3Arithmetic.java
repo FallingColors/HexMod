@@ -1,12 +1,15 @@
-package at.petrak.hexcasting.api.casting.arithmetic.impls;
+package at.petrak.hexcasting.common.casting.arithmetic;
 
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
-import at.petrak.hexcasting.api.casting.arithmetic.IotaMultiPredicate;
-import at.petrak.hexcasting.api.casting.arithmetic.IotaPredicate;
+import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
+import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.*;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.common.casting.arithmetic.operator.vec.OperatorPack;
+import at.petrak.hexcasting.common.casting.arithmetic.operator.vec.OperatorUnpack;
+import at.petrak.hexcasting.common.casting.arithmetic.operator.vec.OperatorVec3Delegating;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;

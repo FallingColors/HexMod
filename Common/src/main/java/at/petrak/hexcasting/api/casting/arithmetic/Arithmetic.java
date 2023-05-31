@@ -26,8 +26,12 @@ public interface Arithmetic {
 	// Lists
 	HexPattern INDEX = HexPattern.fromAngles("deeed", HexDir.NORTH_WEST);
 	HexPattern SLICE = HexPattern.fromAngles("qaeaqwded", HexDir.NORTH_WEST);
+	HexPattern APPEND = HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST);
+	HexPattern UNAPPEND = HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST);
 	HexPattern REV = HexPattern.fromAngles("qqqaede", HexDir.EAST);
 	HexPattern INDEX_OF = HexPattern.fromAngles("dedqde", HexDir.EAST);
 	HexPattern REMOVE = HexPattern.fromAngles("edqdewaqa", HexDir.SOUTH_WEST);
 	HexPattern REPLACE = HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST);
+	HexPattern CONS = HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST);
+	HexPattern UNCONS = HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST);
 }

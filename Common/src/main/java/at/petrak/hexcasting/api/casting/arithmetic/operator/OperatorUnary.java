@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.api.casting.arithmetic.operator;
 
 
-import at.petrak.hexcasting.api.casting.arithmetic.IotaMultiPredicate;
+import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 
 import java.util.List;
