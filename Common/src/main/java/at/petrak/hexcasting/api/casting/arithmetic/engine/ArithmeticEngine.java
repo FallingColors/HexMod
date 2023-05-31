@@ -31,8 +31,8 @@ public class ArithmeticEngine {
     private final Map<HexPattern, OpCandidates> operators = new HashMap<>();
     private final Map<HashCons, Operator> cache = new HashMap<>();
 
-    public ArithmeticEngine(Arithmetic... arithmetics) {
-        this.arithmetics = arithmetics;
+    public ArithmeticEngine(List<Arithmetic> arithmetics) {
+        this.arithmetics = arithmetics.toArray(new Arithmetic[0]);
         for (var arith : arithmetics) {
             for (var op : arith.opTypes()) {
                 operators.compute(op, ($, info) -> {
