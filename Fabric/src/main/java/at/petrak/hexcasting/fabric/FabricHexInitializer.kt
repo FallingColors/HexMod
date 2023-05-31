@@ -16,6 +16,7 @@ import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.lib.hex.HexActions
+import at.petrak.hexcasting.common.lib.hex.HexArithmetics
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
@@ -53,7 +54,7 @@ import net.minecraft.world.entity.player.Player
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
-    public lateinit var CONFIG: FabricHexConfig
+    lateinit var CONFIG: FabricHexConfig
 
     override fun onInitialize() {
         this.CONFIG = FabricHexConfig.setup()
@@ -142,6 +143,7 @@ object FabricHexInitializer : ModInitializer {
         HexIotaTypes.registerTypes(bind(IXplatAbstractions.INSTANCE.iotaTypeRegistry))
         HexActions.register(bind(IXplatAbstractions.INSTANCE.actionRegistry))
         HexSpecialHandlers.register(bind(IXplatAbstractions.INSTANCE.specialHandlerRegistry))
+        HexArithmetics.register(bind(IXplatAbstractions.INSTANCE.arithmeticRegistry))
         HexEvalSounds.register(bind(IXplatAbstractions.INSTANCE.evalSoundRegistry))
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for

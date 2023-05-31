@@ -20,7 +20,7 @@ data class OperationAction(val pattern: HexPattern) : Action {
         stack.addAll(stackList)
         val startingLength = stackList.size
         return try {
-            val ret: Iterable<Iota> = HexArithmetics.ENGINE.run(pattern, stack, startingLength)
+            val ret: Iterable<Iota> = HexArithmetics.getEngine().run(pattern, stack, startingLength)
             ret.forEach(Consumer { e: Iota -> stack.add(e) })
             val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + 1)
             OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)

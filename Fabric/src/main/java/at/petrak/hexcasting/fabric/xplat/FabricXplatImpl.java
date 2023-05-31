@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
@@ -321,7 +322,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return FabricUnsealedIngredient.of(stack);
     }
 
-    private static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> FabricItemGroupBuilder.create(
+    private static final Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> FabricItemGroupBuilder.create(
             modLoc("creative_tab"))
         .icon(HexItems::tabIcon)
         .build());
@@ -423,6 +424,13 @@ public class FabricXplatImpl implements IXplatAbstractions {
                 Lifecycle.stable(), null))
             .buildAndRegister()
     );
+
+    private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new DefaultedRegistry<Arithmetic>(
+                            HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("arithmetic")),
+                            Lifecycle.stable(), null))
+                    .buildAndRegister()
+    );
     private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new DefaultedRegistry<EvalSound>(
                 HexAPI.MOD_ID + ":nothing", ResourceKey.createRegistryKey(modLoc("eval_sound")),
@@ -443,6 +451,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
         return IOTA_TYPE_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<Arithmetic> getArithmeticRegistry() {
+        return ARITHMETIC_REGISTRY.get();
     }
 
     @Override

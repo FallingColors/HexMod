@@ -12,10 +12,7 @@ import at.petrak.hexcasting.common.casting.operators.spells.great.OpAltiora;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.lib.*;
-import at.petrak.hexcasting.common.lib.hex.HexActions;
-import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers;
+import at.petrak.hexcasting.common.lib.hex.*;
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
@@ -115,6 +112,7 @@ public class ForgeHexInitializer {
         bind(IXplatAbstractions.INSTANCE.getIotaTypeRegistry().key(), HexIotaTypes::registerTypes);
         bind(IXplatAbstractions.INSTANCE.getActionRegistry().key(), HexActions::register);
         bind(IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().key(), HexSpecialHandlers::register);
+        bind(IXplatAbstractions.INSTANCE.getArithmeticRegistry().key(), HexArithmetics::register);
         bind(IXplatAbstractions.INSTANCE.getEvalSoundRegistry().key(), HexEvalSounds::register);
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
