@@ -96,7 +96,7 @@ public class HexBlocks {
     }
 
     // we give these faux items so Patchi can have an item to view with
-    public static final Block CONJURED_LIGHT = blockItem("conjured",
+    public static final Block CONJURED_LIGHT = blockItem("conjured_light",
         new BlockConjuredLight(
             BlockBehaviour.Properties.of(Material.GLASS, MaterialColor.NONE)
                 .sound(SoundType.AMETHYST)

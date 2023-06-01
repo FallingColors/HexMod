@@ -338,7 +338,7 @@ public class HexActions {
             Items.LAVA_BUCKET,
             Blocks.LAVA_CAULDRON.defaultBlockState(),
             Fluids.LAVA)));
-    public static final ActionRegistryEntry TELEPORT = make("teleport",
+    public static final ActionRegistryEntry TELEPORT = make("teleport/great",
         new ActionRegistryEntry(HexPattern.fromAngles("wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq",
             HexDir.EAST), OpTeleport.INSTANCE));
     public static final ActionRegistryEntry SENTINEL$GREAT = make("sentinel/create/great",

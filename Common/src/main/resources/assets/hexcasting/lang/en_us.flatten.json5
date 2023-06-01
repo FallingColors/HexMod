@@ -92,7 +92,7 @@
   "entity.hexcasting.wall_scroll": "Hanging Scroll",
   
   "block.hexcasting": {
-    "conjured": "Conjured Light",
+    "conjured_light": "Conjured Light",
     "conjured_block": "Conjured Block",
     "slate.blank": "Blank Slate",
     "slate.written": "Patterned Slate",
@@ -526,7 +526,7 @@
         "summon_rain": "Summon Rain",
         "dispel_rain": "Dispel Rain",
         "create_lava": "Create Lava",
-        "teleport": "Greater Teleport",
+        "teleport/great": "Greater Teleport",
         "brainsweep": "Flay Mind",
         "sentinel/create/great": "Summon Greater Sentinel",
         
@@ -1383,8 +1383,8 @@
       "altiora.1": "Summon a sheaf of _media about me in the shape of wings, endowed with enough substance to allow gliding.",
       "altiora.2": "Using them is identical to using $(item)Elytra/$; the target (which must be a player) is lofted into the air, after which pressing $(k:jump) will deploy the wings. The wings are fragile, and break upon touching any surface. Longer flights may benefit from $(l:patterns/spells/basic#hexcasting:add_motion)$(action)Impulse/$ or (for the foolhardy) $(item)Fireworks/$.$(br2)Costs about one $(l:items/amethyst)$(item)Charged Crystal/$.",
       
-      "teleport.1": "Far more powerful than $(l:patterns/spells/basic#hexcasting:blink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to.",
-      "teleport.2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(l:items/amethyst)$(item)Charged Amethyst/$.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination. In addition, the target will be forcibly removed from anything inanimate they are riding or sitting on ... but I've read scraps that suggest animals can come along for the ride, so to speak.",
+      "teleport/great.1": "Far more powerful than $(l:patterns/spells/basic#hexcasting:blink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to.",
+      "teleport/great.2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(l:items/amethyst)$(item)Charged Amethyst/$.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination. In addition, the target will be forcibly removed from anything inanimate they are riding or sitting on ... but I've read scraps that suggest animals can come along for the ride, so to speak.",
       
       
       "zeniths.1": "This family of spells all impart a positive potion effect upon an entity, similar to the $(l:patterns/spells/nadirs)$(action)Nadirs/$. However, these have their _media costs increase with the $(italic)cube/$ of the potency.",

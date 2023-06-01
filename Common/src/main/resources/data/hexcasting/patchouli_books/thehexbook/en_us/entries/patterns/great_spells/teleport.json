@@ -8,16 +8,16 @@
   "pages": [
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:teleport",
-      "anchor": "hexcasting:teleport",
+      "op_id": "hexcasting:teleport/great",
+      "anchor": "hexcasting:teleport/great",
       "input": "entity, vector",
       "output": "",
       "hex_size": 8,
-      "text": "hexcasting.page.teleport.1"
+      "text": "hexcasting.page.teleport/great.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.teleport.2"
+      "text": "hexcasting.page.teleport/great.2"
     }
   ]
 }
