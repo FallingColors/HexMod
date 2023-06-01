@@ -448,8 +448,8 @@
         
         "add": "Additive Distillation",
         "sub": "Subtractive Distillation",
-        "mul": "Multiplicative Dstl.",
-        "div": "Division Dstl.",
+        "mul": "Multiplicative Distillation",
+        "div": "Division Distillation",
         "abs": "Length Purification",
         "pow": "Power Distillation",
         "floor": "Floor Purification",
@@ -879,7 +879,7 @@
       "101.4.header": "An Example",
       "101.4": "It's interesting to note that the $(italic)rotation/$ of a pattern doesn't seem to matter at all. These two patterns both perform an action called $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, for example.",
       "101.5": "A _Hex is cast by drawing (valid) actions in sequence. Each action might do one of a few things:$(li)Gather some information about the environment, leaving it on the top of the stack;$(li)manipulate the info gathered (e.g. adding two numbers); or$(li)perform some magical effect, like summoning lightning or an explosion. (These actions are called \"spells.\")$(p)When I start casting a _Hex, it creates an empty stack. Actions manipulate the top of that stack.",
-      "101.6": "For example, $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$ will create an iota representing $(italic)me/$, the caster, and add it to the top of the stack. $(l:patterns/basics#hexcasting:get_entity_pos)$(action)Compass Purification/$ will take the iota at the top the stack, if it represents an entity, and transform it into an iota representing that entity's location.$(br2)So, drawing those patterns in that order would result in an iota on the stack representing my position.",
+      "101.6": "For example, $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$ will create an iota representing $(italic)me/$, the caster, and add it to the top of the stack. $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)Compass Purification/$ will take the iota at the top the stack, if it represents an entity, and transform it into an iota representing that entity's location.$(br2)So, drawing those patterns in that order would result in an iota on the stack representing my position.",
       "101.7": "$(thing)Iotas/$ can represent things like myself or my position, but there are several other types I can manipulate with $(thing)Actions/$. Here's a comprehensive list:$(li)Numbers (which some legends called \"doubles\");$(li)Vectors, a collection of three numbers representing a position, movement, or direction in the world;$(li)Booleans or \"bools\" for short, representing an abstract True or False,",
       "101.8": "$(li)Entities, like myself, chickens, and minecarts;$(li)Influences, peculiar types of iota that seem to represent abstract ideas;$(li)Patterns themselves, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$; and$(li)A list of several of the above, gathered into a single iota.",
       "101.9": "Of course, there's no such thing as a free lunch. All spells, and certain other actions, require _media as payment.$(br2)The best I can figure, a _Hex is a little bit like a plan of action presented to Nature-- in this analogy, the _media is used to provide the arguments to back it up, so Nature will accept your plan and carry it out.",
@@ -1149,11 +1149,11 @@
       "math.abs.2": "Replaces a number with its absolute value, or a vector with its length.",
       "math.pow.1": "Perform exponentiation or vector projection.",
       "math.pow.2": "With two numbers, combines them by raising the first to the power of the second.$(li)With a number and a vector, removes the number and raises each component of the vector to the number's power.$(li)With two vectors, combines them into the $(l:https://en.wikipedia.org/wiki/Vector_projection)vector projection/$ of the top of the stack onto the second-from-the-top.$(br2)In the first and second cases, the first argument or its components are the base, and the second argument or its components are the exponent.",
-      "math.floor": "\"Floors\" a number, cutting off the fractional component and leaving an integer value.",
-      "math.ceil": "\"Ceilings\" a number, raising it to the next integer value if it has a fractional component.",
+      "math.floor": "\"Floors\" a number, cutting off the fractional component and leaving an integer value. If passed a vector, instead floors each of its components.",
+      "math.ceil": "\"Ceilings\" a number, raising it to the next integer value if it has a fractional component. If passed a vector, instead ceils each of its components.",
       "math.construct_vec": "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (top to bottom).",
       "math.deconstruct_vec": "Split a vector into its X, Y, and Z components (top to bottom).",
-      "math.modulo": "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 %% 2 is 1, and 5 %% 3 is 2.",
+      "math.modulo": "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 %% 2 is 1, and 5 %% 3 is 2. When applied on vectors, performs the above operation elementwise.",
       "math.coerce_axial": "For a vector, coerce it to its nearest axial direction, a unit vector. For a number, return the sign of the number; 1 if positive, -1 if negative. In both cases, zero is unaffected.",
       "math.random": "Creates a random number between 0 and 1.",
       
@@ -1324,7 +1324,7 @@
       "basic_spell.beep.2": "There appear to be 16 different $(thing)instruments/$ and 25 different $(thing)notes/$. Both are indexed by zero.$(br2)These seem to be the same instruments I can produce with a $(item)Note Block/$, though the reason for each instrument's number being what it is eludes me.$(br2)Either way, I can find the numbers I need to use by inspecting a $(item)Note Block/$ through a $(l:items/lens)$(item)Scrying Lens/$.",
       
       
-      "blockworks.place_block": "Remove a location from the stack, then pick a block item and place it at the given location.$(br)Costs a negligible amount of _media.",
+      "blockworks.place_block": "Remove a location from the stack, then pick a block item and place it at the given location.$(br)Costs about an eighth of one $(l:items/amethyst)$(item)Amethyst Dust/$.",
       "blockworks.break_block": "Remove a location from the stack, then break the block at the given location. This spell can break nearly anything a Diamond Pickaxe can break.$(br)Costs about an eighth of one $(l:items/amethyst)$(item)Amethyst Dust/$.",
       "blockworks.create_water": "Summon a block of water (or insert up to a bucket's worth) into a block at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
       "blockworks.destroy_water": "Drains either a liquid container at, or a body of liquid around, the given position. Costs about two $(l:items/amethyst)$(item)Charged Amethyst/$.",

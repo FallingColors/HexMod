@@ -32,6 +32,8 @@ public enum Vec3Arithmetic implements Arithmetic {
 			DIV,
 			ABS,
 			POW,
+			FLOOR,
+			CEIL,
 			MOD
 	);
 
@@ -65,10 +67,17 @@ public enum Vec3Arithmetic implements Arithmetic {
 			return make1Double(Vec3::length);
 		} else if (pattern.equals(POW)) {
 			return make2Vec(pattern, (u, v) -> v.normalize().scale(u.dot(v.normalize())));
+		} else if (pattern.equals(FLOOR)) {
+			return make1(v -> new Vec3(Math.floor(v.x), Math.floor(v.y), Math.floor(v.z)));
+		} else if (pattern.equals(CEIL)) {
+			return make1(v -> new Vec3(Math.ceil(v.x), Math.ceil(v.y), Math.ceil(v.z)));
 		} else if (pattern.equals(MOD)) {
 			return make2Fallback(pattern);
 		}
 		throw new InvalidOperatorException(pattern + " is not a valid operator in Arithmetic " + this + ".");
+	}
+	public static OperatorUnary make1(Function<Vec3, Vec3> op) {
+		return new OperatorUnary(ACCEPTS, i -> new Vec3Iota(op.apply(downcast(i, VEC3).getVec3())));
 	}
 	public static OperatorUnary make1Double(Function<Vec3, Double> op) {
 		return new OperatorUnary(ACCEPTS, i -> new DoubleIota(op.apply(downcast(i, VEC3).getVec3())));
