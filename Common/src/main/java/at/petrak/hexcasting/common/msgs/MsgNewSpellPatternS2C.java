@@ -52,7 +52,7 @@ public record MsgNewSpellPatternS2C(ExecutionClientView info, int index) impleme
     public static void handle(MsgNewSpellPatternS2C self) {
         Minecraft.getInstance().execute(() -> {
             var mc = Minecraft.getInstance();
-            if (self.info().isStackClear()) {
+            if (self.info().isStackClear() && self.info().getRavenmind() == null) {
                 // don't pay attention to the screen, so it also stops when we die
                 mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getLocation(), null);
             }

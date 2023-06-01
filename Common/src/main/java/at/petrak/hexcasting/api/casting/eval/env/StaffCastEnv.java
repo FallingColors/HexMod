@@ -97,7 +97,8 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
         ExecutionClientView clientInfo = vm.queueExecuteAndWrapIota(new PatternIota(msg.pattern()), sender.getLevel());
 
-        if (clientInfo.isStackClear()) {
+//        if (clientInfo.isStackClear()) {
+        if (clientInfo.isStackClear() && clientInfo.getRavenmind() == null) {
             IXplatAbstractions.INSTANCE.setStaffcastImage(sender, null);
             IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
         } else {
