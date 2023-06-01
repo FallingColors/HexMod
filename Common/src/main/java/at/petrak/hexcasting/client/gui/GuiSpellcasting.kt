@@ -62,14 +62,18 @@ class GuiSpellcasting constructor(
     }
 
     fun recvServerUpdate(info: ExecutionClientView, index: Int) {
-        if (info.isStackClear && info.ravenmind == null) {
+        if (info.isStackClear) {
             this.minecraft?.setScreen(null)
             return
         }
 
-        this.patterns.getOrNull(index)?.let {
-            it.type = info.resolutionType
-        }
+        // TODO this is the kinda hacky bit
+        if (info.resolutionType == ResolvedPatternType.UNDONE) {
+            this.patterns.getOrNull(index - 1)?.let { it.type = ResolvedPatternType.UNDONE }
+            this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
+        } else this.patterns.getOrNull(index)?.let {
+                it.type = info.resolutionType
+            }
 
         this.cachedStack = info.stackDescs
         this.cachedRavenmind = info.ravenmind

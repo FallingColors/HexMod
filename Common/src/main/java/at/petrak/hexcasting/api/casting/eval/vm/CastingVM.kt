@@ -65,7 +65,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
 
         val (stackDescs, ravenmind) = generateDescs()
 
-        val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext
+        val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext && ravenmind == null
         return ExecutionClientView(isStackClear, lastResolutionType, stackDescs, ravenmind)
     }
 
@@ -168,6 +168,12 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         this.image.copy(
                             escapeNext = true,
                         ) to ResolvedPatternType.EVALUATED
+                    }
+
+                    SpecialPatterns.EVANITION.anglesSignature() -> {
+                        val newParens = this.image.parenthesized.toMutableList()
+                        val last = newParens.removeLastOrNull()
+                        this.image.copy(parenthesized = newParens) to if (last == null) ResolvedPatternType.ERRORED else ResolvedPatternType.UNDONE
                     }
 
                     SpecialPatterns.INTROSPECTION.anglesSignature() -> {
