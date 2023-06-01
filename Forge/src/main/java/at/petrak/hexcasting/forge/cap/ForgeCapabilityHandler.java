@@ -93,6 +93,11 @@ public class ForgeCapabilityHandler {
             evt.addCapability(MEDIA_STATIC_CAP,
                 provide(stack, HexCapabilities.MEDIA, () -> new CapStaticMediaHolder(
                     HexConfig.common()::chargedCrystalMediaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)));
+        } else if (stack.is(HexItems.QUENCHED_SHARD)) {
+            // no one uses the config
+            evt.addCapability(MEDIA_STATIC_CAP,
+                    provide(stack, HexCapabilities.MEDIA, () -> new CapStaticMediaHolder(
+                            () -> MediaConstants.QUENCHED_SHARD_UNIT, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack)));
         } else if (stack.is(HexBlocks.QUENCHED_ALLAY.asItem())) {
             // no one uses the config
             evt.addCapability(MEDIA_STATIC_CAP,
