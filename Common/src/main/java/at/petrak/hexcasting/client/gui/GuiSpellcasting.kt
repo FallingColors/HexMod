@@ -122,7 +122,7 @@ class GuiSpellcasting constructor(
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
             if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES))
-                onClose()
+                closeForReal()
         }
     }
 
@@ -287,6 +287,13 @@ class GuiSpellcasting constructor(
     }
 
     override fun onClose() {
+        if (drawState == PatternDrawState.BetweenPatterns)
+            closeForReal()
+        else
+            drawState = PatternDrawState.BetweenPatterns
+    }
+
+    fun closeForReal() {
         Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
 
         super.onClose()
