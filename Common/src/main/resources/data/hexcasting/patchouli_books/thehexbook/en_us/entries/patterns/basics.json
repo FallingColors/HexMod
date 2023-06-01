@@ -43,7 +43,7 @@
       "op_id": "hexcasting:raycast",
       "anchor": "hexcasting:raycast",
       "input": "vector, vector",
-      "output": "vector/null",
+      "output": "vector | null",
       "text": "hexcasting.page.basics_pattern.raycast.1"
     },
     {
@@ -55,7 +55,7 @@
       "op_id": "hexcasting:raycast/axis",
       "anchor": "hexcasting:raycast/axis",
       "input": "vector, vector",
-      "output": "vector/null",
+      "output": "vector | null",
       "text": "hexcasting.page.basics_pattern.raycast/axis.1"
     },
     {
@@ -67,7 +67,7 @@
       "op_id": "hexcasting:raycast/entity",
       "anchor": "hexcasting:raycast/entity",
       "input": "vector, vector",
-      "output": "entity/null",
+      "output": "entity | null",
       "text": "hexcasting.page.basics_pattern.raycast/entity"
     },
     {

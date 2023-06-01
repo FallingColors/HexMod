@@ -17,8 +17,8 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:add",
       "anchor": "hexcasting:add",
-      "input": "num/vec, num/vec",
-      "output": "num/vec",
+      "input": "num|vec, num|vec",
+      "output": "num|vec",
       "text": "hexcasting.page.math.add.1"
     },
     {
@@ -29,8 +29,8 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:sub",
       "anchor": "hexcasting:sub",
-      "input": "num/vec, num/vec",
-      "output": "num/vec",
+      "input": "num|vec, num|vec",
+      "output": "num|vec",
       "text": "hexcasting.page.math.sub.1"
     },
     {
@@ -41,8 +41,8 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:mul",
       "anchor": "hexcasting:mul",
-      "input": "num/vec, num/vec",
-      "output": "num/vec",
+      "input": "num|vec, num|vec",
+      "output": "num|vec",
       "text": "hexcasting.page.math.mul.1"
     },
     {
@@ -53,8 +53,8 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:div",
       "anchor": "hexcasting:div",
-      "input": "num/vec, num/vec",
-      "output": "num/vec",
+      "input": "num|vec, num|vec",
+      "output": "num|vec",
       "text": "hexcasting.page.math.div.1"
     },
     {
@@ -65,7 +65,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:abs",
       "anchor": "hexcasting:abs",
-      "input": "num/vec",
+      "input": "num|vec",
       "output": "number",
       "text": "hexcasting.page.math.abs.1"
     },
@@ -77,8 +77,8 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:pow",
       "anchor": "hexcasting:pow",
-      "input": "num/vec, num/vec",
-      "output": "num/vec",
+      "input": "num|vec, num|vec",
+      "output": "num|vec",
       "text": "hexcasting.page.math.pow.1"
     },
     {
@@ -89,16 +89,16 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:floor",
       "anchor": "hexcasting:floor",
-      "input": "num/vec",
-      "output": "num/vec",
+      "input": "num|vec",
+      "output": "num|vec",
       "text": "hexcasting.page.math.floor"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:ceil",
       "anchor": "hexcasting:ceil",
-      "input": "num/vec",
-      "output": "num/vec",
+      "input": "num|vec",
+      "output": "num|vec",
       "text": "hexcasting.page.math.ceil"
     },
     {
@@ -121,16 +121,16 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:modulo",
       "anchor": "hexcasting:modulo",
-      "input": "num/vec, num/vec",
-      "output": "num/vec",
+      "input": "num|vec, num|vec",
+      "output": "num|vec",
       "text": "hexcasting.page.math.modulo"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:coerce_axial",
       "anchor": "hexcasting:coerce_axial",
-      "input": "vec/num",
-      "output": "vec/num",
+      "input": "vec|num",
+      "output": "vec|num",
       "text": "hexcasting.page.math.coerce_axial"
     },
     {
