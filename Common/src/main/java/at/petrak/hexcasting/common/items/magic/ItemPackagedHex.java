@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.HexHolderItem;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -32,6 +33,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHolderItem {
     public static final String TAG_PROGRAM = "patterns";
+    public static final String TAG_PIGMENT = "pigment";
     public static final ResourceLocation HAS_PATTERNS_PRED = modLoc("has_patterns");
 
     public ItemPackagedHex(Properties pProperties) {
@@ -74,22 +76,33 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<Iota> program, long media) {
+    public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
         ListTag patsTag = new ListTag();
         for (Iota pat : program) {
             patsTag.add(IotaType.serialize(pat));
         }
 
         NBTHelper.putList(stack, TAG_PROGRAM, patsTag);
+        if (pigment != null)
+            NBTHelper.putCompound(stack, TAG_PIGMENT, pigment.serializeToNBT());
 
         withMedia(stack, media, media);
     }
 
     @Override
     public void clearHex(ItemStack stack) {
-        NBTHelper.remove(stack, ItemPackagedHex.TAG_PROGRAM);
+        NBTHelper.remove(stack, TAG_PROGRAM);
+        NBTHelper.remove(stack, TAG_PIGMENT);
         NBTHelper.remove(stack, TAG_MEDIA);
         NBTHelper.remove(stack, TAG_MAX_MEDIA);
+    }
+
+    @Override
+    public @Nullable FrozenPigment getPigment(ItemStack stack) {
+        var ctag = NBTHelper.getCompound(stack, TAG_PIGMENT);
+        if (ctag == null)
+            return null;
+        return FrozenPigment.fromNBT(ctag);
     }
 
     @Override

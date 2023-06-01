@@ -3,6 +3,7 @@ package at.petrak.hexcasting.forge.cap.adimpl;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -28,12 +29,17 @@ public record CapItemHexHolder(HexHolderItem holder,
     }
 
     @Override
-    public void writeHex(List<Iota> patterns, long media) {
-        holder.writeHex(stack, patterns, media);
+    public void writeHex(List<Iota> patterns, @Nullable FrozenPigment pigment, long media) {
+        holder.writeHex(stack, patterns, pigment, media);
     }
 
     @Override
     public void clearHex() {
         holder.clearHex(stack);
+    }
+
+    @Override
+    public @Nullable FrozenPigment getPigment() {
+        return holder.getPigment(stack);
     }
 }

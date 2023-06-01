@@ -33,8 +33,8 @@ const val SQRT_3 = 1.7320508f
 fun Vec3.serializeToNBT(): CompoundTag {
     val tag = CompoundTag()
     tag.putDouble("x", this.x)
-    tag.putDouble("y", this.x)
-    tag.putDouble("z", this.x)
+    tag.putDouble("y", this.y)
+    tag.putDouble("z", this.z)
     return tag
 }
 
