@@ -11,42 +11,23 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.casting.operators.OpEntityHeight;
-import at.petrak.hexcasting.common.casting.operators.OpEntityLook;
-import at.petrak.hexcasting.common.casting.operators.OpEntityPos;
-import at.petrak.hexcasting.common.casting.operators.OpEntityVelocity;
-import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicRead;
-import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicWrite;
-import at.petrak.hexcasting.common.casting.operators.circles.OpCircleBounds;
-import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusDir;
-import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusPos;
-import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
-import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
-import at.petrak.hexcasting.common.casting.operators.eval.OpHalt;
+import at.petrak.hexcasting.common.casting.operators.*;
+import at.petrak.hexcasting.common.casting.operators.akashic.*;
+import at.petrak.hexcasting.common.casting.operators.circles.*;
+import at.petrak.hexcasting.common.casting.operators.eval.*;
 import at.petrak.hexcasting.common.casting.operators.lists.*;
-import at.petrak.hexcasting.common.casting.operators.local.OpPeekLocal;
-import at.petrak.hexcasting.common.casting.operators.local.OpPushLocal;
+import at.petrak.hexcasting.common.casting.operators.local.*;
 import at.petrak.hexcasting.common.casting.operators.math.*;
 import at.petrak.hexcasting.common.casting.operators.math.logic.*;
-import at.petrak.hexcasting.common.casting.operators.math.trig.*;
-import at.petrak.hexcasting.common.casting.operators.raycast.OpBlockAxisRaycast;
-import at.petrak.hexcasting.common.casting.operators.raycast.OpBlockRaycast;
-import at.petrak.hexcasting.common.casting.operators.raycast.OpEntityRaycast;
+import at.petrak.hexcasting.common.casting.operators.raycast.*;
 import at.petrak.hexcasting.common.casting.operators.rw.*;
-import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
-import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
-import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
+import at.petrak.hexcasting.common.casting.operators.selectors.*;
 import at.petrak.hexcasting.common.casting.operators.spells.*;
 import at.petrak.hexcasting.common.casting.operators.spells.great.*;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSentinel;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
+import at.petrak.hexcasting.common.casting.operators.spells.sentinel.*;
 import at.petrak.hexcasting.common.casting.operators.stack.*;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.interop.pehkui.OpGetScale;
-import at.petrak.hexcasting.interop.pehkui.OpSetScale;
-import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
+import at.petrak.hexcasting.interop.pehkui.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -200,21 +181,21 @@ public class HexActions {
     // == Advanced Math ==
 
     public static final ActionRegistryEntry SIN = make("sin",
-        new ActionRegistryEntry(HexPattern.fromAngles("qqqqqaa", HexDir.SOUTH_EAST), OpSin.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qqqqqaa", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry COS = make("cos",
-        new ActionRegistryEntry(HexPattern.fromAngles("qqqqqad", HexDir.SOUTH_EAST), OpCos.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qqqqqad", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry TAN = make("tan",
-        new ActionRegistryEntry(HexPattern.fromAngles("wqqqqqadq", HexDir.SOUTH_WEST), OpTan.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wqqqqqadq", HexDir.SOUTH_WEST)));
     public static final ActionRegistryEntry ARCSIN = make("arcsin",
-        new ActionRegistryEntry(HexPattern.fromAngles("ddeeeee", HexDir.SOUTH_EAST), OpArcSin.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("ddeeeee", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry ARCCOS = make("arccos",
-        new ActionRegistryEntry(HexPattern.fromAngles("adeeeee", HexDir.NORTH_EAST), OpArcCos.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("adeeeee", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry ARCTAN = make("arctan",
-        new ActionRegistryEntry(HexPattern.fromAngles("eadeeeeew", HexDir.NORTH_EAST), OpArcTan.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("eadeeeeew", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry ARCTAN2 = make("arctan2",
-        new ActionRegistryEntry(HexPattern.fromAngles("deadeeeeewd", HexDir.WEST), OpArcTan2.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("deadeeeeewd", HexDir.WEST)));
     public static final ActionRegistryEntry LOGARITHM = make("logarithm",
-        new ActionRegistryEntry(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST), OpLog.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry MODULO = make("modulo",
         new OperationAction(HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST)));
 

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBinary;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorUnary;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.common.casting.arithmetic.operator.OperatorLog;
 
 import java.util.List;
 import java.util.function.DoubleBinaryOperator;
@@ -28,6 +29,14 @@ public enum DoubleArithmetic implements Arithmetic {
 		POW,
 		FLOOR,
 		CEIL,
+		SIN,
+		COS,
+		TAN,
+		ARCSIN,
+		ARCCOS,
+		ARCTAN,
+		ARCTAN2,
+		LOG,
 		MOD
 	);
 
@@ -61,6 +70,22 @@ public enum DoubleArithmetic implements Arithmetic {
 			return make1(Math::floor);
 		} else if (pattern.equals(CEIL)) {
 			return make1(Math::ceil);
+		} else if (pattern.equals(SIN)) {
+			return make1(Math::sin);
+		} else if (pattern.equals(COS)) {
+			return make1(Math::cos);
+		} else if (pattern.equals(TAN)) {
+			return make1(Math::tan);
+		} else if (pattern.equals(ARCSIN)) {
+			return make1(Math::asin);
+		} else if (pattern.equals(ARCCOS)) {
+			return make1(Math::acos);
+		} else if (pattern.equals(ARCTAN)) {
+			return make1(Math::atan);
+		} else if (pattern.equals(ARCTAN2)) {
+			return make2(Math::atan2);
+		} else if (pattern.equals(LOG)) {
+			return OperatorLog.INSTANCE;
 		} else if (pattern.equals(MOD)) {
 			return make2((p, q) -> p % q);
 		}

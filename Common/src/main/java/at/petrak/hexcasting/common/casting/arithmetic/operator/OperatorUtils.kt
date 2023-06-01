@@ -16,6 +16,13 @@ fun Iterator<IndexedValue<Iota>>.nextList(argc: Int = 0): SpellList {
         throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "list")
     }
 }
+
+fun Iterator<IndexedValue<Iota>>.nextDouble(argc: Int = 0): Double {
+    val (idx, x) = this.next()
+    if (x is DoubleIota) return x.double
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double")
+}
+
 fun Iterator<IndexedValue<Iota>>.nextInt(argc: Int = 0): Int {
     val (idx, x) = this.next()
     if (x is DoubleIota) {

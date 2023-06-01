@@ -19,7 +19,18 @@ public interface Arithmetic {
 	HexPattern POW = HexPattern.fromAngles("wedew", HexDir.NORTH_WEST);
 	HexPattern FLOOR = HexPattern.fromAngles("ewq", HexDir.EAST);
 	HexPattern CEIL = HexPattern.fromAngles("qwe", HexDir.EAST);
+	HexPattern SIN = HexPattern.fromAngles("qqqqqaa", HexDir.SOUTH_EAST);
+	HexPattern COS = HexPattern.fromAngles("qqqqqad", HexDir.SOUTH_EAST);
+	HexPattern TAN = HexPattern.fromAngles("wqqqqqadq", HexDir.SOUTH_WEST);
+	HexPattern ARCSIN = HexPattern.fromAngles("ddeeeee", HexDir.SOUTH_EAST);
+	HexPattern ARCCOS = HexPattern.fromAngles("adeeeee", HexDir.NORTH_EAST);
+	HexPattern ARCTAN = HexPattern.fromAngles("eadeeeeew", HexDir.NORTH_EAST);
+	HexPattern ARCTAN2 = HexPattern.fromAngles("deadeeeeewd", HexDir.WEST);
+	HexPattern LOG = HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST);
 	HexPattern MOD = HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST);
+
+
+	// Vecs
 	HexPattern PACK = HexPattern.fromAngles("eqqqqq", HexDir.EAST);
 	HexPattern UNPACK = HexPattern.fromAngles("qeeeee", HexDir.EAST);
 
