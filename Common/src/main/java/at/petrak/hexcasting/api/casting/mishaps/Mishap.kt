@@ -39,12 +39,17 @@ abstract class Mishap : Throwable() {
      */
     abstract fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>)
 
+    fun executeReturnStack(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>): List<Iota> {
+        execute(ctx, errorCtx, stack)
+        return stack
+    }
+
     protected abstract fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component
 
     /**
      * Every error message should be prefixed with the name of the action...
      */
-    public fun errorMessageWithName(ctx: CastingEnvironment, errorCtx: Context): Component {
+    fun errorMessageWithName(ctx: CastingEnvironment, errorCtx: Context): Component {
         return if (errorCtx.name != null) {
             "hexcasting.mishap".asTranslatedComponent(errorCtx.name, this.errorMessage(ctx, errorCtx))
         } else {

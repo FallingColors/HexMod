@@ -13,7 +13,6 @@ import at.petrak.hexcasting.common.casting.arithmetic.operator.vec.OperatorUnpac
 import at.petrak.hexcasting.common.casting.arithmetic.operator.vec.OperatorVec3Delegating;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -24,15 +23,17 @@ import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.*;
 public enum Vec3Arithmetic implements Arithmetic {
 	INSTANCE;
 
-	public static final List<HexPattern> OPS;
-	static {
-		var ops = new ArrayList<>(DoubleArithmetic.OPS);
-		ops.add(PACK);
-		ops.add(UNPACK);
-		ops.remove(FLOOR);
-		ops.remove(CEIL);
-		OPS = ops;
-	}
+	public static final List<HexPattern> OPS = List.of(
+			PACK,
+			UNPACK,
+			ADD,
+			SUB,
+			MUL,
+			DIV,
+			ABS,
+			POW,
+			MOD
+	);
 
 	public static final IotaMultiPredicate ACCEPTS = IotaMultiPredicate.any(IotaPredicate.ofType(VEC3), IotaPredicate.ofType(DOUBLE));
 

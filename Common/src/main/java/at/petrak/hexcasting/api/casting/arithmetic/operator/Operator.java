@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.arithmetic.operator;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,11 +33,13 @@ public abstract class Operator {
 	}
 
 	/**
+	 /**
 	 * The method called when this Operator is actually acting on the stack, for real.
 	 * @param iotas An iterable of iotas with {@link Operator#arity} elements that satisfied {@link Operator#accepts}.
 	 * @return the iotas that this operator will return to the stack (with the first element of the returned iterable being placed deepest into the stack, and the last element on top of the stack).
+	 * @throws Mishap if the Operator mishaps for any reason it will be passed up the chain.
 	 */
-	public abstract @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas);
+	public abstract @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas) throws Mishap;
 
 	/**
 	 * A helper method to take an iota that you know is of iotaType and returning it as an iota of that type.

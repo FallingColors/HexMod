@@ -1,104 +1,80 @@
-package at.petrak.hexcasting.common.casting.arithmetic;
+package at.petrak.hexcasting.common.casting.arithmetic
 
-import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
-import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
-import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
-import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
-import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBinary;
-import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorUnary;
-import at.petrak.hexcasting.api.casting.iota.DoubleIota;
-import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.common.casting.arithmetic.operator.OperatorLog;
+import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic
+import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic.*
+import at.petrak.hexcasting.api.casting.arithmetic.engine.InvalidOperatorException
+import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator
+import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBinary
+import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorUnary
+import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate
+import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate
+import at.petrak.hexcasting.api.casting.iota.DoubleIota
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero
+import at.petrak.hexcasting.common.casting.arithmetic.operator.OperatorLog
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
+import java.util.function.DoubleBinaryOperator
+import java.util.function.DoubleUnaryOperator
+import kotlin.math.*
 
-import java.util.List;
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleUnaryOperator;
+object DoubleArithmetic : Arithmetic {
+    @JvmField
+    val OPS = listOf(
+        ADD,
+        SUB,
+        MUL,
+        DIV,
+        ABS,
+        POW,
+        FLOOR,
+        CEIL,
+        SIN,
+        COS,
+        TAN,
+        ARCSIN,
+        ARCCOS,
+        ARCTAN,
+        ARCTAN2,
+        LOG,
+        MOD
+    )
 
-import static at.petrak.hexcasting.api.casting.arithmetic.operator.Operator.downcast;
-import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE;
+    /**
+     * An example of an IotaMultiPredicate, which returns true only if all arguments to the Operator are DoubleIotas.
+     */
+    val ACCEPTS: IotaMultiPredicate = IotaMultiPredicate.all(IotaPredicate.ofType(HexIotaTypes.DOUBLE))
 
-public enum DoubleArithmetic implements Arithmetic {
-	INSTANCE;
+    override fun arithName() = "double_math"
 
-	public static final List<HexPattern> OPS = List.of(
-		ADD,
-		SUB,
-		MUL,
-		DIV,
-		ABS,
-		POW,
-		FLOOR,
-		CEIL,
-		SIN,
-		COS,
-		TAN,
-		ARCSIN,
-		ARCCOS,
-		ARCTAN,
-		ARCTAN2,
-		LOG,
-		MOD
-	);
+    override fun opTypes() = OPS
 
-	/**
-	 * An example of an IotaMultiPredicate, which returns true only if all arguments to the Operator are DoubleIotas.
-	 */
-	public static final IotaMultiPredicate ACCEPTS = IotaMultiPredicate.all(IotaPredicate.ofType(DOUBLE));
+    override fun getOperator(pattern: HexPattern): Operator {
+        return when (pattern) {
+            ADD     -> make2 { a, b -> java.lang.Double.sum(a, b) }
+            SUB     -> make2 { a, b -> a - b }
+            MUL     -> make2 { a, b -> a * b }
+            DIV     -> make2 { a, b -> if (b == 0.0) throw MishapDivideByZero.of(a, b) else a / b }
+            ABS     -> make1 { a -> abs(a) }
+            POW     -> make2 { a, b -> a.pow(b) }
+            FLOOR   -> make1 { a -> floor(a) }
+            CEIL    -> make1 { a -> ceil(a) }
+            SIN     -> make1 { a -> sin(a) }
+            COS     -> make1 { a -> cos(a) }
+            TAN     -> make1 { a -> if (cos(a) == 0.0) throw MishapDivideByZero.tan(a) else tan(a) }
+            ARCSIN  -> make1 { a -> asin(a) }
+            ARCCOS  -> make1 { a -> acos(a) }
+            ARCTAN  -> make1 { a -> atan(a) }
+            ARCTAN2 -> make2 { a, b -> atan2(a, b) }
+            LOG     -> OperatorLog
+            MOD     -> make2 { a, b -> if (b == 0.0) throw MishapDivideByZero.of(a, b) else a % b }
+            else    -> throw InvalidOperatorException("$pattern is not a valid operator in Arithmetic $this.")
+        }
+    }
 
-	@Override
-	public String arithName() {
-		return "double_math";
-	}
+    fun make1(op: DoubleUnaryOperator) = OperatorUnary(ACCEPTS)
+        { i: Iota -> DoubleIota(op.applyAsDouble(Operator.downcast(i, HexIotaTypes.DOUBLE).double)) }
 
-	@Override
-	public Iterable<HexPattern> opTypes() {
-		return OPS;
-	}
-
-	@Override
-	public Operator getOperator(HexPattern pattern) {
-		if (pattern.equals(ADD)) {
-			return make2(Double::sum);
-		} else if (pattern.equals(SUB)) {
-			return make2((p, q) -> p - q);
-		} else if (pattern.equals(MUL)) {
-			return make2((p, q) -> p * q);
-		} else if (pattern.equals(DIV)) {
-			return make2((p, q) -> p / q);
-		} else if (pattern.equals(ABS)) {
-			return make1(Math::abs);
-		} else if (pattern.equals(POW)) {
-			return make2(Math::pow);
-		} else if (pattern.equals(FLOOR)) {
-			return make1(Math::floor);
-		} else if (pattern.equals(CEIL)) {
-			return make1(Math::ceil);
-		} else if (pattern.equals(SIN)) {
-			return make1(Math::sin);
-		} else if (pattern.equals(COS)) {
-			return make1(Math::cos);
-		} else if (pattern.equals(TAN)) {
-			return make1(Math::tan);
-		} else if (pattern.equals(ARCSIN)) {
-			return make1(Math::asin);
-		} else if (pattern.equals(ARCCOS)) {
-			return make1(Math::acos);
-		} else if (pattern.equals(ARCTAN)) {
-			return make1(Math::atan);
-		} else if (pattern.equals(ARCTAN2)) {
-			return make2(Math::atan2);
-		} else if (pattern.equals(LOG)) {
-			return OperatorLog.INSTANCE;
-		} else if (pattern.equals(MOD)) {
-			return make2((p, q) -> p % q);
-		}
-		return null;
-	}
-
-	public static OperatorUnary make1(DoubleUnaryOperator op) {
-		return new OperatorUnary(ACCEPTS, i -> new DoubleIota(op.applyAsDouble(downcast(i, DOUBLE).getDouble())));
-	}
-	public static OperatorBinary make2(DoubleBinaryOperator op) {
-		return new OperatorBinary(ACCEPTS, (i, j) -> new DoubleIota(op.applyAsDouble(downcast(i, DOUBLE).getDouble(), downcast(j, DOUBLE).getDouble())));
-	}
+    fun make2(op: DoubleBinaryOperator) = OperatorBinary(ACCEPTS)
+        { i: Iota, j: Iota -> DoubleIota(op.applyAsDouble(Operator.downcast(i, HexIotaTypes.DOUBLE).double, Operator.downcast(j, HexIotaTypes.DOUBLE).double)) }
 }
