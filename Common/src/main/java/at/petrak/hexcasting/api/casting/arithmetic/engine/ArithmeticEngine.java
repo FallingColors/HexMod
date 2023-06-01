@@ -9,11 +9,23 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
 
 import java.util.*;
 
+/**
+ * This is the class responsible for managing the various Arithmetics that are in use, deciding based on the current
+ * stack which Operator should be called, etc.
+ */
 public class ArithmeticEngine {
+    /**
+     * Data structure for mapping the pattern that gets drawn on the stack to the list of Operators that
+     * are overloading that pattern.
+     * @param pattern The pattern that the caster will need to draw to cast one of these operators.
+     * @param arity The number of arguments that all of these operators must consume from the stack.
+     * @param operators The list of all operators that overload this pattern.
+     */
     private record OpCandidates(HexPattern pattern, int arity, List<Operator> operators) {
         public void addOp(Operator next) {
             if (next.arity != arity) {
-                throw new IllegalArgumentException("Operators exist of differing arity!");
+                throw new IllegalArgumentException("Operators exist of differing arity! The pattern " + pattern
+                        + " already had arity " + arity + " when the operator with arity " + next.arity + ", " + next + " was added.");
             }
             operators.add(next);
         }
@@ -21,6 +33,11 @@ public class ArithmeticEngine {
 
     public final Arithmetic[] arithmetics;
     private final Map<HexPattern, OpCandidates> operators = new HashMap<>();
+
+    /**
+     * A cache mapping specific sets of Pattern, IotaType, IotaType, ..., IotaType to Operators so that the Operators don't need to be
+     * queried for what types they accept every time they are used.
+     */
     private final Map<HashCons, Operator> cache = new HashMap<>();
 
     public ArithmeticEngine(List<Arithmetic> arithmetics) {
@@ -43,11 +60,19 @@ public class ArithmeticEngine {
         return operators.keySet();
     }
 
-    public Iterable<Iota> run(HexPattern operator, Stack<Iota> iotas, int startingLength) throws Mishap {
-        var candidates = operators.get(operator);
+    /**
+     * Runs one of the contained Operators assigned to the given pattern, modifying the passed stack of iotas.
+     * @param pattern The pattern that was drawn, used to determine which operators are candidates.
+     * @param iotas The current stack.
+     * @param startingLength The length of the stack before the operator executes (used for errors).
+     * @return The iotas to be added to the stack.
+     * @throws Mishap mishaps if invalid input to the operators is given by the caster.
+     */
+    public Iterable<Iota> run(HexPattern pattern, Stack<Iota> iotas, int startingLength) throws Mishap {
+        var candidates = operators.get(pattern);
         if (candidates == null)
-            throw new InvalidOperatorException("the pattern " + operator + " is not an operator."); //
-        HashCons hash = new HashCons.Pattern(operator);
+            throw new InvalidOperatorException("the pattern " + pattern + " is not an operator."); //
+        HashCons hash = new HashCons.Pattern(pattern);
         var args = new ArrayList<Iota>(candidates.arity());
         for (var i = 0; i < candidates.arity(); i++) {
             if (iotas.isEmpty()) {
@@ -62,7 +87,7 @@ public class ArithmeticEngine {
         return op.apply(args);
     }
 
-    public Operator resolveCandidates(List<Iota> args, HashCons hash, OpCandidates candidates) {
+    private Operator resolveCandidates(List<Iota> args, HashCons hash, OpCandidates candidates) {
         return cache.computeIfAbsent(hash, $ -> {
             for (var op : candidates.operators()) {
                 if (op.accepts.test(args)) {

@@ -13,6 +13,10 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import java.util.*
 import java.util.function.Consumer
 
+/**
+ * Represents an Operator with the give pattern as its identifier, a special type of Action that calls a different function depending on the type of its arguments.
+ * This exists so that addons can easily define their own overloads to patterns like addition, subtraction, etc.
+ */
 data class OperationAction(val pattern: HexPattern) : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
         val stackList = image.stack

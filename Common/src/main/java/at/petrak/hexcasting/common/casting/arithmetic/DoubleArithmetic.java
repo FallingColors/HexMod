@@ -40,6 +40,9 @@ public enum DoubleArithmetic implements Arithmetic {
 		MOD
 	);
 
+	/**
+	 * An example of an IotaMultiPredicate, which returns true only if all arguments to the Operator are DoubleIotas.
+	 */
 	public static final IotaMultiPredicate ACCEPTS = IotaMultiPredicate.all(IotaPredicate.ofType(DOUBLE));
 
 	@Override
@@ -91,6 +94,7 @@ public enum DoubleArithmetic implements Arithmetic {
 		}
 		return null;
 	}
+
 	public static OperatorUnary make1(DoubleUnaryOperator op) {
 		return new OperatorUnary(ACCEPTS, i -> new DoubleIota(op.applyAsDouble(downcast(i, DOUBLE).getDouble())));
 	}

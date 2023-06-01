@@ -2,19 +2,35 @@ package at.petrak.hexcasting.api.casting.arithmetic.predicates;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 
+/**
+ * Used to determine whether a given set of iotas on the stack are acceptable types for
+ * the operator that is storing this IotaMultiPredicate.
+ */
 @FunctionalInterface
 public interface IotaMultiPredicate {
 	boolean test(Iterable<Iota> iotas);
 
+	/**
+	 * The resulting IotaMultiPredicate only returns true if all iotas passed into test match the type dictated by child.
+	 */
 	static IotaMultiPredicate all(IotaPredicate child) {
 		return new All(child);
 	}
+	/**
+	 * The resulting IotaMultiPredicate returns true if two iotas are passed, the first matching first, and the second matching second.
+	 */
 	static IotaMultiPredicate pair(IotaPredicate first, IotaPredicate second) {
 		return new Pair(first, second);
 	}
+	/**
+	 * The resulting IotaMultiPredicate returns true if three iotas are passed, the first matching first, the second matching second, and the third matching third.
+	 */
 	static IotaMultiPredicate triple(IotaPredicate first, IotaPredicate second, IotaPredicate third) {
 		return new Triple(first, second, third);
 	}
+	/**
+	 * The resulting IotaMultiPredicate returns true if at least one iota passed matches needs, and the rest match fallback.
+	 */
 	static IotaMultiPredicate any(IotaPredicate needs, IotaPredicate fallback) {
 		return new Any(needs, fallback);
 	}

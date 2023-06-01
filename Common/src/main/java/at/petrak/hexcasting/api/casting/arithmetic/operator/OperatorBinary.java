@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.BinaryOperator;
 
+/**
+ * A helper class for defining {@link Operator}s of two iotas.
+ */
 public class OperatorBinary extends Operator {
 	public BinaryOperator<Iota> inner;
 

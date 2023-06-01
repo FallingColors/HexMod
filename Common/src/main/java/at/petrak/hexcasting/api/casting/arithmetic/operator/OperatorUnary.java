@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
+/**
+ * A helper class for defining {@link Operator}s of one iota.
+ */
 public class OperatorUnary extends Operator {
 	public UnaryOperator<Iota> inner;
 

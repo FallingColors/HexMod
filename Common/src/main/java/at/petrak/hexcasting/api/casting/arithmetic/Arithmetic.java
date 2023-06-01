@@ -4,12 +4,25 @@ import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 
+/**
+ * This is the interface to implement if you want to override the behaviour of an Operator pattern like ADD, SUB, etc. for some type/s of
+ * iotas for which that Operator pattern is not yet defined.
+ */
 public interface Arithmetic {
 	String arithName();
 
+	/**
+	 * @return All the HexPatterns for which this Arithmetic has defined Operators.
+	 */
 	Iterable<HexPattern> opTypes();
 
+	/**
+	 * @param pattern The HexPattern that would be drawn by the caster.
+	 * @return The Operator that this Arithmetic has defined for that pattern.
+	 */
 	Operator getOperator(HexPattern pattern);
+
+	// Below are some common Operator patterns that you can make use of in your Arithmetic:
 
 	HexPattern ADD = HexPattern.fromAngles("waaw", HexDir.NORTH_EAST);
 	HexPattern SUB = HexPattern.fromAngles("wddw", HexDir.NORTH_WEST);
