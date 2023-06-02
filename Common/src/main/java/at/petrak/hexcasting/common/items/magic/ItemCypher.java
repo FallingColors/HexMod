@@ -1,9 +1,12 @@
 package at.petrak.hexcasting.common.items.magic;
 
+import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import net.minecraft.world.item.ItemStack;
 
-public class ItemCypher extends ItemPackagedHex {
+import static at.petrak.hexcasting.common.items.storage.ItemFocus.NUM_VARIANTS;
+
+public class ItemCypher extends ItemPackagedHex implements VariantItem {
     public ItemCypher(Properties pProperties) {
         super(pProperties);
     }
@@ -21,5 +24,10 @@ public class ItemCypher extends ItemPackagedHex {
     @Override
     public int cooldown() {
         return HexConfig.common().cypherCooldown();
+    }
+
+    @Override
+    public int numVariants() {
+        return NUM_VARIANTS;
     }
 }

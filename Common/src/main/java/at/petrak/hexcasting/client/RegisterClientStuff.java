@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
@@ -42,10 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
+import java.util.function.*;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -59,6 +57,11 @@ public class RegisterClientStuff {
         registerSealableDataHolderOverrides(HexItems.SPELLBOOK,
             stack -> HexItems.SPELLBOOK.readIotaTag(stack) != null,
             ItemSpellbook::isSealed);
+        registerVariantOverrides(HexItems.FOCUS, HexItems.FOCUS::getVariant);
+        registerVariantOverrides(HexItems.SPELLBOOK, HexItems.SPELLBOOK::getVariant);
+        registerVariantOverrides(HexItems.CYPHER, HexItems.CYPHER::getVariant);
+        registerVariantOverrides(HexItems.TRINKET, HexItems.TRINKET::getVariant);
+        registerVariantOverrides(HexItems.ARTIFACT, HexItems.ARTIFACT::getVariant);
         IClientXplatAbstractions.INSTANCE.registerItemProperty(HexItems.THOUGHT_KNOT, ItemThoughtKnot.WRITTEN_PRED,
             (stack, level, holder, holderID) -> {
                 if (NBTHelper.contains(stack, ItemThoughtKnot.TAG_DATA)) {
@@ -188,6 +191,11 @@ public class RegisterClientStuff {
                 }
                 return 2;
             });
+    }
+
+    private static void registerVariantOverrides(VariantItem item, Function<ItemStack, Integer> variant) {
+        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.VARIANT_PRED,
+                (stack, level, holder, holderID) -> variant.apply(stack));
     }
 
     private static void registerScrollOverrides(ItemScroll scroll) {

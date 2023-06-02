@@ -1,4 +1,4 @@
-// 1.19.2	2023-05-23T13:06:30.179893298	Block States: hexcasting
+// 1.19.2	2023-06-02T13:11:35.7728131	Block States: hexcasting
 901e38574bdaa40ea4a0f6e773a88a95d9c03e55 assets/hexcasting/blockstates/akashic_bookshelf.json
 32a77ef668198002563d68be35a24fa93c8d454a assets/hexcasting/blockstates/akashic_connector.json
 85080ce0a0387583a839e4788517d675a1a35e24 assets/hexcasting/blockstates/akashic_record.json
@@ -10,8 +10,8 @@ d422119401df3daae032f86ea740b6065a92c44c assets/hexcasting/blockstates/amethyst_
 236496e910696b68480a7b8a977434213fa2197a assets/hexcasting/blockstates/ancient_scroll_paper_lantern.json
 2f2eb1130119f6d5f17a98082b727ec7a2ea5334 assets/hexcasting/blockstates/aventurine_edified_leaves.json
 fa6dfbc40e5b9b22c01356e8a3848d242c414c02 assets/hexcasting/blockstates/citrine_edified_leaves.json
-dc268e4c50e5e155fc5414a5f6b58ce1782bd39b assets/hexcasting/blockstates/conjured.json
 dc268e4c50e5e155fc5414a5f6b58ce1782bd39b assets/hexcasting/blockstates/conjured_block.json
+dc268e4c50e5e155fc5414a5f6b58ce1782bd39b assets/hexcasting/blockstates/conjured_light.json
 b76cc8a2d66700417046c0dc671badd9af3eb519 assets/hexcasting/blockstates/directrix/empty.json
 365eba1c32a7a33698120bc7f12670d29087e999 assets/hexcasting/blockstates/directrix/redstone.json
 e125b73869a438bafa7f47cfa4c8d837e2463c6f assets/hexcasting/blockstates/edified_button.json

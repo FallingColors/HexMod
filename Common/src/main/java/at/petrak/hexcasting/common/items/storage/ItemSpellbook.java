@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +21,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ItemSpellbook extends Item implements IotaHolderItem {
+import static at.petrak.hexcasting.common.items.storage.ItemFocus.NUM_VARIANTS;
+
+public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     public static String TAG_SELECTED_PAGE = "page_idx";
     // this is a CompoundTag of string numerical keys to SpellData
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
@@ -33,6 +36,9 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
     // this stores the sealed status of each page, to be restored when you scroll
     // it is 1-indexed, and the 0-case for TAG_PAGES will be treated as 1
     public static String TAG_SEALED = "sealed_pages";
+
+    // this stores which variant of the spellbook should be rendered
+    public static final String TAG_VARIANT = "variant";
 
     public static final int MAX_PAGES = 64;
 
@@ -237,5 +243,16 @@ public class ItemSpellbook extends Item implements IotaHolderItem {
         }
 
         return idx;
+    }
+
+    @Override
+    public int numVariants() {
+        return NUM_VARIANTS;
+    }
+
+    @Override
+    public void setVariant(ItemStack stack, int variant) {
+        if (!isSealed(stack))
+            NBTHelper.putInt(stack, TAG_VARIANT, clampVariant(variant));
     }
 }
