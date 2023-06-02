@@ -44,6 +44,11 @@ sealed interface ContinuationFrame {
      */
     fun serializeToNBT(): CompoundTag
 
+    /**
+     * Return the number of iotas contained inside this frame, used for determining whether it is valid to serialise.
+     */
+    fun size(): Int
+
     companion object {
         @JvmStatic
         fun fromNBT(tag: CompoundTag, world: ServerLevel): ContinuationFrame {

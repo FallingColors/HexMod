@@ -48,4 +48,6 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
         "patterns" %= list.serializeToNBT()
         "isMetacasting" %= isMetacasting
     }
+
+    override fun size() = list.size()
 }

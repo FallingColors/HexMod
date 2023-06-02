@@ -87,7 +87,7 @@ public abstract class IotaType<T extends Iota> {
             var sublist = iotaPair.getFirst();
             int depth = iotaPair.getSecond();
             for (var iota : sublist) {
-                totalEltsFound++;
+                totalEltsFound += iota.size();
                 if (totalEltsFound >= HexIotaTypes.MAX_SERIALIZATION_TOTAL) {
                     return true; // too bad
                 }
