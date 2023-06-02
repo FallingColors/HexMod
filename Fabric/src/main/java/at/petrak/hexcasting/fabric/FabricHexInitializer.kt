@@ -9,8 +9,8 @@ import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
-import at.petrak.hexcasting.common.casting.operators.spells.OpFlight
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpAltiora
+import at.petrak.hexcasting.common.casting.actions.spells.OpFlight
+import at.petrak.hexcasting.common.casting.actions.spells.great.OpAltiora
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer

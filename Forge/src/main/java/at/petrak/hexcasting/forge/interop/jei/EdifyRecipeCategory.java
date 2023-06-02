@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
-import at.petrak.hexcasting.common.casting.operators.spells.OpEdifySapling;
+import at.petrak.hexcasting.common.casting.actions.spells.OpEdifySapling;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;

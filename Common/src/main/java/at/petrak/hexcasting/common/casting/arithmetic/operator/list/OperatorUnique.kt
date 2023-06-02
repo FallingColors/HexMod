@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.common.casting.arithmetic.operator.nextList
-import at.petrak.hexcasting.common.casting.operators.math.bit.OpToSet
+import at.petrak.hexcasting.common.casting.actions.math.bit.OpToSet
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 
 object OperatorUnique : Operator(1, IotaMultiPredicate.all(IotaPredicate.ofType(LIST))) {
