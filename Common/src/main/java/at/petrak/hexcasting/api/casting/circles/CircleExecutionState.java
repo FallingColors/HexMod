@@ -273,7 +273,7 @@ public class CircleExecutionState {
                     Objects.requireNonNull(env.getImpetus()), true);
                 currentPos = found.getFirst();
                 enteredFrom = found.getSecond();
-                currentImage = cont.update;
+                currentImage = cont.update.withOverriddenUsedOps(0); // reset ops used after each slate finishes executing
             }
         }
 

@@ -34,6 +34,11 @@ data class CastingImage private constructor(
      */
     fun withUsedOp() = this.withUsedOps(1)
 
+    /**
+     * Returns a copy of this with the [opsConsumed] replaced with [count].
+     */
+    fun withOverriddenUsedOps(count: Long) = this.copy(opsConsumed = count)
+
     fun serializeToNbt() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()
 
@@ -54,7 +59,7 @@ data class CastingImage private constructor(
         const val TAG_USERDATA = "userdata"
 
         @JvmStatic
-        public fun loadFromNbt(tag: CompoundTag, world: ServerLevel): CastingImage {
+        fun loadFromNbt(tag: CompoundTag, world: ServerLevel): CastingImage {
             return try {
                 val stack = mutableListOf<Iota>()
                 val stackTag = tag.getList(TAG_STACK, Tag.TAG_COMPOUND)
