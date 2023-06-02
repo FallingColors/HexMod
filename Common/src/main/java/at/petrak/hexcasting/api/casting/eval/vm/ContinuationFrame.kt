@@ -48,7 +48,7 @@ sealed interface ContinuationFrame {
         @JvmStatic
         fun fromNBT(tag: CompoundTag, world: ServerLevel): ContinuationFrame {
             return when (tag.getString("type")) {
-                "eval" -> FrameEvaluate(
+                "evaluate" -> FrameEvaluate(
                     HexIotaTypes.LIST.deserialize(
                         tag.getList("patterns", Tag.TAG_COMPOUND),
                         world

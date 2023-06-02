@@ -5,7 +5,6 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
-import at.petrak.hexcasting.api.casting.eval.OperationResult;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
@@ -69,42 +68,38 @@ public class PatternIota extends Iota {
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         @Nullable Component castedName = null;
         try {
-            OperationResult result = null; // HexArithmetics.ENGINE.operate(this.getPattern(), vm.getEnv(), vm.getImage(), continuation);
+            var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), world, false);
+            vm.getEnv().precheckAction(lookup);
 
-            if (result == null) {
-                var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), world, false);
-                vm.getEnv().precheckAction(lookup);
+            Action action;
+            if (lookup instanceof PatternShapeMatch.Normal || lookup instanceof PatternShapeMatch.PerWorld) {
+                ResourceKey<ActionRegistryEntry> key;
+                if (lookup instanceof PatternShapeMatch.Normal normal) {
+                    key = normal.key;
+                } else {
+                    PatternShapeMatch.PerWorld perWorld = (PatternShapeMatch.PerWorld) lookup;
+                    key = perWorld.key;
+                }
 
-                Action action;
-                if (lookup instanceof PatternShapeMatch.Normal || lookup instanceof PatternShapeMatch.PerWorld) {
-                    ResourceKey<ActionRegistryEntry> key;
-                    if (lookup instanceof PatternShapeMatch.Normal normal) {
-                        key = normal.key;
-                    } else {
-                        PatternShapeMatch.PerWorld perWorld = (PatternShapeMatch.PerWorld) lookup;
-                        key = perWorld.key;
-                    }
+                var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key,
+                        HexTags.Actions.REQUIRES_ENLIGHTENMENT);
 
-                    var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key,
-                            HexTags.Actions.REQUIRES_ENLIGHTENMENT);
+                castedName = HexAPI.instance().getActionI18n(key, reqsEnlightenment);
 
-                    castedName = HexAPI.instance().getActionI18n(key, reqsEnlightenment);
+                action = Objects.requireNonNull(IXplatAbstractions.INSTANCE.getActionRegistry().get(key)).action();
+            } else if (lookup instanceof PatternShapeMatch.Special special) {
+                castedName = special.handler.getName();
+                action = special.handler.act();
+            } else if (lookup instanceof PatternShapeMatch.Nothing) {
+                throw new MishapInvalidPattern();
+            } else throw new IllegalStateException();
 
-                    action = Objects.requireNonNull(IXplatAbstractions.INSTANCE.getActionRegistry().get(key)).action();
-                } else if (lookup instanceof PatternShapeMatch.Special special) {
-                    castedName = special.handler.getName();
-                    action = special.handler.act();
-                } else if (lookup instanceof PatternShapeMatch.Nothing) {
-                    throw new MishapInvalidPattern();
-                } else throw new IllegalStateException();
-
-                // do the actual calculation!!
-                result = action.operate(
-                        vm.getEnv(),
-                        vm.getImage(),
-                        continuation
-                );
-            }
+            // do the actual calculation!!
+            var result = action.operate(
+                    vm.getEnv(),
+                    vm.getImage(),
+                    continuation
+            );
 
             if (result.getNewImage().getOpsConsumed() > HexConfig.server().maxOpCount()) {
                 throw new MishapEvalTooMuch();
@@ -131,6 +126,11 @@ public class PatternIota extends Iota {
                 HexEvalSounds.MISHAP
             );
         }
+    }
+
+    @Override
+    public boolean executable() {
+        return true;
     }
 
     public static IotaType<PatternIota> TYPE = new IotaType<>() {

@@ -26,6 +26,7 @@ import at.petrak.hexcasting.common.casting.actions.spells.*;
 import at.petrak.hexcasting.common.casting.actions.spells.great.*;
 import at.petrak.hexcasting.common.casting.actions.spells.sentinel.*;
 import at.petrak.hexcasting.common.casting.actions.stack.*;
+import at.petrak.hexcasting.common.casting.actions.eval.OpEvalBreakable;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.interop.pehkui.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -367,9 +368,10 @@ public class HexActions {
     // eval being a space filling curve feels apt doesn't it
     public static final ActionRegistryEntry EVAL = make("eval",
         new ActionRegistryEntry(HexPattern.fromAngles("deaqq", HexDir.SOUTH_EAST), OpEval.INSTANCE));
+    public static final ActionRegistryEntry EVAL$CC = make("eval/cc",
+        new ActionRegistryEntry(HexPattern.fromAngles("qwaqde", HexDir.NORTH_WEST), OpEvalBreakable.INSTANCE));
     public static final ActionRegistryEntry HALT = make("halt",
         new ActionRegistryEntry(HexPattern.fromAngles("aqdee", HexDir.SOUTH_WEST), OpHalt.INSTANCE));
-    // TODO: install Iris' gambit
 
     public static final ActionRegistryEntry READ = make("read",
         new ActionRegistryEntry(HexPattern.fromAngles("aqqqqq", HexDir.EAST), OpRead.INSTANCE));

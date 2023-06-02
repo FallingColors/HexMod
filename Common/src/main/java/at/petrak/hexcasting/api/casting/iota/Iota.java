@@ -68,6 +68,13 @@ public abstract class Iota {
     }
 
     /**
+     * Returns whether this iota is possible to execute (i.e. whether {@link Iota#execute} has been overridden.
+     */
+    public boolean executable() {
+        return false;
+    }
+
+    /**
      * This method is called to determine whether the iota is above the max serialisation depth/serialisation count
      * limits. It should return every "iota" that is a subelement of this iota.
      * For example, if you implemented a Map&lt;Iota, Iota&gt;, then it should be an iterable over the keys *and*
