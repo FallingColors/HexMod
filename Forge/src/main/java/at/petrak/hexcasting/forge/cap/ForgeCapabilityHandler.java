@@ -3,10 +3,7 @@ package at.petrak.hexcasting.forge.cap;
 import at.petrak.hexcasting.api.addldata.*;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
-import at.petrak.hexcasting.api.item.ColorizerItem;
-import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.api.item.*;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
@@ -61,6 +58,10 @@ public class ForgeCapabilityHandler {
      * Items that store a packaged Hex.
      */
     public static final ResourceLocation HEX_HOLDER_CAP = modLoc("hex_item");
+    /**
+     * Items that have multiple visual variants.
+     */
+    public static final ResourceLocation VARIANT_ITEM_CAP = modLoc("variant_item");
     /**
      * Items that work as pigments.
      */
@@ -117,6 +118,10 @@ public class ForgeCapabilityHandler {
         if (stack.getItem() instanceof HexHolderItem holder) {
             evt.addCapability(HEX_HOLDER_CAP,
                 provide(stack, HexCapabilities.STORED_HEX, () -> new CapItemHexHolder(holder, stack)));
+        }
+        if (stack.getItem() instanceof VariantItem variantItem) {
+            evt.addCapability(VARIANT_ITEM_CAP,
+                    provide(stack, HexCapabilities.VARIANT_ITEM, () -> new CapItemVariantItem(variantItem, stack)));
         }
 
         if (stack.getItem() instanceof ColorizerItem colorizer) {

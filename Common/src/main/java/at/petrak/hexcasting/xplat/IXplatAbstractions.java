@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
@@ -120,6 +121,8 @@ public interface IXplatAbstractions {
 
     @Nullable
     ADHexHolder findHexHolder(ItemStack stack);
+
+    @Nullable ADVariantItem findVariantHolder(ItemStack stack);
 
     // coooollooorrrs
 

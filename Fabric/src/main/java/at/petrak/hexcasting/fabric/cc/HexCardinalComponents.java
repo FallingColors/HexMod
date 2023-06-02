@@ -3,10 +3,7 @@ package at.petrak.hexcasting.fabric.cc;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
-import at.petrak.hexcasting.api.item.ColorizerItem;
-import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.api.item.*;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
@@ -60,6 +57,9 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     public static final ComponentKey<CCHexHolder> HEX_HOLDER = ComponentRegistry.getOrCreate(modLoc("hex_holder"),
         CCHexHolder.class);
 
+    public static final ComponentKey<CCVariantItem> VARIANT_ITEM = ComponentRegistry.getOrCreate(modLoc("variant_item"),
+        CCVariantItem.class);
+
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(Mob.class, BRAINSWEPT, CCBrainswept::new);
@@ -108,6 +108,8 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         ));
 
         registry.register(i -> i instanceof HexHolderItem, HEX_HOLDER, CCHexHolder.ItemBased::new);
+
+        registry.register(i -> i instanceof VariantItem, VARIANT_ITEM, CCVariantItem.ItemBased::new);
     }
 
     private <E extends Entity> ComponentFactory<E, CCEntityIotaHolder.Wrapper> wrapItemEntityDelegate(Function<E,

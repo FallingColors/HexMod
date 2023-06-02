@@ -686,6 +686,7 @@
         "bottle": "a glass bottle",
         "rechargable": "a rechargable item",
         "colorizer": "a pigment",
+        "variant": "an item with variants"
       },
       bad_block: {
         "": "Expected %s at %s, but got %s",

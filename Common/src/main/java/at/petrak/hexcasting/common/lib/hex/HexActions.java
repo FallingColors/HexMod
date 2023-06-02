@@ -222,6 +222,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("eeeeede", HexDir.SOUTH_WEST), OpPlaceBlock.INSTANCE));
     public static final ActionRegistryEntry COLORIZE = make("colorize",
         new ActionRegistryEntry(HexPattern.fromAngles("awddwqawqwawq", HexDir.EAST), OpColorize.INSTANCE));
+    public static final ActionRegistryEntry CYCLE_VARIANT = make("cycle_variant",
+            new ActionRegistryEntry(HexPattern.fromAngles("dwaawedwewdwe", HexDir.WEST), OpCycleVariant.INSTANCE));
     public static final ActionRegistryEntry CREATE_WATER = make("create_water",
         new ActionRegistryEntry(HexPattern.fromAngles("aqawqadaq", HexDir.SOUTH_EAST), new OpCreateFluid(
             MediaConstants.DUST_UNIT,

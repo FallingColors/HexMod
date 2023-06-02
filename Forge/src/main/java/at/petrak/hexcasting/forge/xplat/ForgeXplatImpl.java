@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
@@ -329,6 +330,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
         var maybeCap = stack.getCapability(HexCapabilities.STORED_HEX).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
+    public @Nullable ADVariantItem findVariantHolder(ItemStack stack) {
+        var maybeCap = stack.getCapability(HexCapabilities.VARIANT_ITEM).resolve();
         return maybeCap.orElse(null);
     }
 

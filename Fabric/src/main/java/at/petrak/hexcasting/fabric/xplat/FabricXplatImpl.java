@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
@@ -256,6 +257,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
         var cc = HexCardinalComponents.HEX_HOLDER.maybeGet(stack);
+        return cc.orElse(null);
+    }
+
+    @Override
+    public @Nullable ADVariantItem findVariantHolder(ItemStack stack) {
+        var cc = HexCardinalComponents.VARIANT_ITEM.maybeGet(stack);
         return cc.orElse(null);
     }
 
