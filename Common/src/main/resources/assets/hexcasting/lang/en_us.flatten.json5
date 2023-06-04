@@ -587,6 +587,7 @@
       "open_paren": "Introspection",
       "close_paren": "Retrospection",
       "escape": "Consideration",
+      "undo": "Evanition"
     },
     "iota.hexcasting:": {
       "null": "Null",
@@ -947,7 +948,7 @@
       
       
       "influences.1": "Influences are ... strange, to say the least. Whereas most iotas seem to represent something about the world, influences represent something more... abstract, or formless.$(br2)For example, one influence I've named $(l:casting/influences)$(thing)Null/$ seems to represent nothing at all. It's created when there isn't a suitable answer to a question asked, such as an $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$ facing the sky.",
-      "influences.2": "In addition, I've discovered a curious triplet of influences I've named $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$, $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$, and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$. They seem to have properties of both patterns and other influences, yet act very differently. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:patterns/patterns_as_iotas)My notes on the subject are here/$.",
+      "influences.2": "In addition, I've discovered a curious triplet of influences I've named $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$, $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$, $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, and $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$. They seem to have properties of both patterns and other influences, yet act very differently. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:patterns/patterns_as_iotas)My notes on the subject are here/$.",
       "influences.3": "Finally, there seems to be an infinite family of influences that just seem to be a tangled mess of _media. I've named them $(l:casting/influences)$(action)Garbage/$, as they are completely useless. They seem to appear in my stack at various places in response to $(l:casting/mishaps)$(thing)mishaps/$, and appear to my senses as a nonsense jumble.",
       
       
@@ -1273,6 +1274,7 @@
       "patterns_as_iotas.parens.1": "Drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$ makes my drawing of patterns act differently, for a time. Until I draw $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Retrospection/$, the patterns I draw are saved. Then, when I draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, they are added to the stack as a list iota.",
       "patterns_as_iotas.parens.2": "If I draw another $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Introspection/$, it'll still be saved to the list, but I'll then have to draw $(italic)two/$ $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ to get back to normal casting.",
       "patterns_as_iotas.parens.3": "Also, I can escape the special behavior of $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ by drawing a $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ I need to return to casting.$(br2)If I draw two $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Considerations/$ in a row while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, it will add a single $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ to the list.",
+      "patterns_as_iotas.undo": "Finally, if I make a mistake while drawning patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
       
       
       "readwrite.1": "This section deals with the storage of $(thing)Iotas/$ in a more permanent medium. Nearly any iota can be stored to a suitable item, such as a $(l:items/focus)$(item)Focus/$ or $(l:items/spellbook)$(item)Spellbook/$), and read back later. Certain items, such as an $(l:items/abacus)$(item)Abacus/$, can only be read from.$(br2)Iotas are usually read and written from the other hand, but it is also possible to read and write with an item when it is sitting on the ground as an item entity, or when in an item frame.",
