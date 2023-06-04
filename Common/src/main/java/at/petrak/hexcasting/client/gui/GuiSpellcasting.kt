@@ -69,7 +69,7 @@ class GuiSpellcasting constructor(
 
         // TODO this is the kinda hacky bit
         if (info.resolutionType == ResolvedPatternType.UNDONE) {
-            this.patterns.getOrNull(index - 1)?.let { it.type = ResolvedPatternType.UNDONE }
+            this.patterns.reversed().drop(1).firstOrNull { it.type == ResolvedPatternType.ESCAPED }?.let { it.type = ResolvedPatternType.UNDONE }
             this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
         } else this.patterns.getOrNull(index)?.let {
                 it.type = info.resolutionType

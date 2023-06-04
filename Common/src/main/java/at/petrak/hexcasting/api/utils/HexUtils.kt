@@ -267,6 +267,22 @@ fun Iterable<Iota>.serializeToNBT() =
     else
         ListIota(this.toList()).serialize()
 
+fun Iterable<Boolean>.serializeToNBT(): ByteArrayTag {
+    val out = ByteArray(if (this is Collection<*>) this.size else 10)
+    for ((i, b) in this.withIndex()) {
+        out[i] = if (b) 1 else 0
+    }
+    return ByteArrayTag(out)
+}
+
+fun <A> List<A>.zipWithDefault(array: ByteArray, default: (idx: Int) -> Byte): List<Pair<A, Byte>> {
+    val list = ArrayList<Pair<A, Byte>>(this.size)
+    var i = 0
+    for (element in this) list.add(element to array.getOrElse(i++, default))
+
+    return list
+}
+
 // Copy the impl from forge
 fun ItemStack.serializeToNBT(): CompoundTag {
     val out = CompoundTag()

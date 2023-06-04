@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.*
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -156,7 +157,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
         val out = if (displayDepth > 0) {
             if (this.image.escapeNext) {
                 val newParens = this.image.parenthesized.toMutableList()
-                newParens.add(iota)
+                newParens.add(ParenthesizedIota(iota, true))
                 this.image.copy(
                     escapeNext = false,
                     parenthesized = newParens
@@ -173,13 +174,18 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     SpecialPatterns.EVANITION.anglesSignature() -> {
                         val newParens = this.image.parenthesized.toMutableList()
                         val last = newParens.removeLastOrNull()
-                        this.image.copy(parenthesized = newParens) to if (last == null) ResolvedPatternType.ERRORED else ResolvedPatternType.UNDONE
+                        val newParenCount = this.image.parenCount + if (last == null || last.escaped || last.iota !is PatternIota) 0 else when (last.iota.pattern) {
+                            SpecialPatterns.INTROSPECTION -> -1
+                            SpecialPatterns.RETROSPECTION -> 1
+                            else -> -1
+                        }
+                        this.image.copy(parenthesized = newParens, parenCount = newParenCount) to if (last == null) ResolvedPatternType.ERRORED else ResolvedPatternType.UNDONE
                     }
 
                     SpecialPatterns.INTROSPECTION.anglesSignature() -> {
                         // we have escaped the parens onto the stack; we just also record our count.
                         val newParens = this.image.parenthesized.toMutableList()
-                        newParens.add(iota)
+                        newParens.add(ParenthesizedIota(iota, false))
                         this.image.copy(
                             parenthesized = newParens,
                             parenCount = this.image.parenCount + 1
@@ -191,7 +197,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         displayDepth--
                         if (newParenCount == 0) {
                             val newStack = this.image.stack.toMutableList()
-                            newStack.add(ListIota(this.image.parenthesized.toList()))
+                            newStack.add(ListIota(this.image.parenthesized.toList().map { it.iota }))
                             this.image.copy(
                                 stack = newStack,
                                 parenCount = newParenCount,
@@ -203,7 +209,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                             // we have this situation: "(()"
                             // we need to add the close paren
                             val newParens = this.image.parenthesized.toMutableList()
-                            newParens.add(iota)
+                            newParens.add(ParenthesizedIota(iota, false))
                             this.image.copy(
                                 parenCount = newParenCount,
                                 parenthesized = newParens
@@ -213,7 +219,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
 
                     else -> {
                         val newParens = this.image.parenthesized.toMutableList()
-                        newParens.add(iota)
+                        newParens.add(ParenthesizedIota(iota, false))
                         this.image.copy(
                             parenthesized = newParens
                         ) to ResolvedPatternType.ESCAPED
