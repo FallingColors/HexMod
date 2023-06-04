@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero
 import at.petrak.hexcasting.common.casting.arithmetic.operator.OperatorLog
+import at.petrak.hexcasting.common.casting.arithmetic.operator.asDoubleBetween
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import java.util.function.DoubleBinaryOperator
 import java.util.function.DoubleUnaryOperator
@@ -51,7 +52,7 @@ object DoubleArithmetic : Arithmetic {
 
     override fun getOperator(pattern: HexPattern): Operator {
         return when (pattern) {
-            ADD     -> make2 { a, b -> java.lang.Double.sum(a, b) }
+            ADD     -> make2 { a, b -> a + b }
             SUB     -> make2 { a, b -> a - b }
             MUL     -> make2 { a, b -> a * b }
             DIV     -> make2 { a, b -> if (b == 0.0) throw MishapDivideByZero.of(a, b) else a / b }
@@ -62,8 +63,8 @@ object DoubleArithmetic : Arithmetic {
             SIN     -> make1 { a -> sin(a) }
             COS     -> make1 { a -> cos(a) }
             TAN     -> make1 { a -> if (cos(a) == 0.0) throw MishapDivideByZero.tan(a) else tan(a) }
-            ARCSIN  -> make1 { a -> asin(a) }
-            ARCCOS  -> make1 { a -> acos(a) }
+            ARCSIN  -> make1 { a -> asin(a.asDoubleBetween(-1.0, 1.0, 0)) }
+            ARCCOS  -> make1 { a -> acos(a.asDoubleBetween(-1.0, 1.0, 0)) }
             ARCTAN  -> make1 { a -> atan(a) }
             ARCTAN2 -> make2 { a, b -> atan2(a, b) }
             LOG     -> OperatorLog
