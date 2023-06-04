@@ -26,19 +26,25 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
             .addTag(HexTags.Blocks.DIRECTRICES);
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .add(HexBlocks.SLATE_BLOCK, HexBlocks.SLATE,
+            .add(HexBlocks.SLATE_BLOCK, HexBlocks.SLATE_TILES, HexBlocks.SLATE_BRICKS,
+                HexBlocks.SLATE_BRICKS_SMALL, HexBlocks.SLATE_PILLAR, HexBlocks.SLATE,
                 HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE,
                 HexBlocks.IMPETUS_EMPTY,
                 HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE,
-                HexBlocks.AMETHYST_TILES, HexBlocks.SCONCE,
-                HexBlocks.QUENCHED_ALLAY);
+                HexBlocks.AMETHYST_TILES, HexBlocks.AMETHYST_BRICKS, HexBlocks.AMETHYST_BRICKS_SMALL,
+                HexBlocks.AMETHYST_PILLAR, HexBlocks.SLATE_AMETHYST_TILES, HexBlocks.SLATE_AMETHYST_BRICKS,
+                HexBlocks.SLATE_AMETHYST_BRICKS_SMALL, HexBlocks.SLATE_AMETHYST_PILLAR, HexBlocks.SCONCE,
+                HexBlocks.QUENCHED_ALLAY, HexBlocks.QUENCHED_ALLAY_TILES, HexBlocks.QUENCHED_ALLAY_BRICKS,
+                HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL);
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(HexBlocks.AMETHYST_DUST_BLOCK);
 
         tag(BlockTags.MINEABLE_WITH_AXE)
             .add(HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_LIGATURE,
-                HexBlocks.EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_LOG,
+                HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
+                HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
+                HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.STRIPPED_EDIFIED_LOG,
                 HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD,
                 HexBlocks.EDIFIED_PLANKS, HexBlocks.EDIFIED_PANEL, HexBlocks.EDIFIED_TILE,
                 HexBlocks.EDIFIED_DOOR, HexBlocks.EDIFIED_TRAPDOOR, HexBlocks.EDIFIED_SLAB,
@@ -53,13 +59,19 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
                 HexBlocks.SCONCE);
 
         tag(HexTags.Blocks.EDIFIED_LOGS)
-            .add(HexBlocks.EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_LOG,
+            .add(HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
+                HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
+                HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.STRIPPED_EDIFIED_LOG,
                 HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD);
         tag(BlockTags.LOGS)
-            .add(HexBlocks.EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_LOG,
+            .add(HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
+                HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
+                HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.STRIPPED_EDIFIED_LOG,
                 HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD);
         tag(BlockTags.LOGS_THAT_BURN)
-            .add(HexBlocks.EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_LOG,
+            .add(HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
+                HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
+                HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.STRIPPED_EDIFIED_LOG,
                 HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD);
         tag(BlockTags.LEAVES)
             .add(HexBlocks.AMETHYST_EDIFIED_LEAVES, HexBlocks.AVENTURINE_EDIFIED_LEAVES,

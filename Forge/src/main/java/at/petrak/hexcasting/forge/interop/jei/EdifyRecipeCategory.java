@@ -63,7 +63,11 @@ public class EdifyRecipeCategory implements IRecipeCategory<OpEdifySapling> {
             .addItemStack(new ItemStack(HexBlocks.AVENTURINE_EDIFIED_LEAVES))
             .addItemStack(new ItemStack(HexBlocks.CITRINE_EDIFIED_LEAVES));
         builder.addSlot(RecipeIngredientRole.OUTPUT, 51, 35)
-            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG));
+            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG))
+            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_AMETHYST))
+            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_AVENTURINE))
+            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_CITRINE));
+//            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_PURPLE));
 
     }
 

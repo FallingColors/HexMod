@@ -30,7 +30,13 @@ public class EmiEdifyRecipe implements EmiRecipe {
             EmiStack.of(HexBlocks.AVENTURINE_EDIFIED_LEAVES),
             EmiStack.of(HexBlocks.CITRINE_EDIFIED_LEAVES)
         ));
-        this.log = EmiStack.of(HexBlocks.EDIFIED_LOG);
+        this.log = EmiIngredient.of(List.of(
+                EmiStack.of(HexBlocks.EDIFIED_LOG),
+                EmiStack.of(HexBlocks.EDIFIED_LOG_AMETHYST),
+                EmiStack.of(HexBlocks.EDIFIED_LOG_AVENTURINE),
+                EmiStack.of(HexBlocks.EDIFIED_LOG_CITRINE)
+//                EmiStack.of(HexBlocks.EDIFIED_LOG_PURPLE)
+        ));
     }
 
     @Override

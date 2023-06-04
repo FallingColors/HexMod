@@ -171,6 +171,10 @@ object FabricHexInitializer : ModInitializer {
         val flameOn = FlammableBlockRegistry.getDefaultInstance()
         for (log in listOf(
             HexBlocks.EDIFIED_LOG,
+            HexBlocks.EDIFIED_LOG_AMETHYST,
+            HexBlocks.EDIFIED_LOG_AVENTURINE,
+            HexBlocks.EDIFIED_LOG_CITRINE,
+            HexBlocks.EDIFIED_LOG_PURPLE,
             HexBlocks.STRIPPED_EDIFIED_LOG,
             HexBlocks.EDIFIED_WOOD,
             HexBlocks.STRIPPED_EDIFIED_LOG,

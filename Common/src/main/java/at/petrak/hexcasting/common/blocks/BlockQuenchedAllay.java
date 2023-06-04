@@ -26,7 +26,7 @@ public class BlockQuenchedAllay extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BlockEntityQuenchedAllay(pos, state);
+        return new BlockEntityQuenchedAllay(this, pos, state);
     }
 
     @Override

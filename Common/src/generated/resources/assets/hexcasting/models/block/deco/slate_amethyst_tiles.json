@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "hexcasting:block/amethyst_tiles"
+    "all": "hexcasting:block/deco/slate_amethyst_tiles"
   }
 }

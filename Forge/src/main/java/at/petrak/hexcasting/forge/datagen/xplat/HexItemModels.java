@@ -102,6 +102,12 @@ public class HexItemModels extends PaucalItemModelProvider {
                 "layer0", modLoc(path.getPath())));
         buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY), "block/quenched_allay", (name, path) ->
             cubeAll(path.getPath(), path));
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_TILES), "block/deco/quenched_allay_tiles", (name, path) ->
+                cubeAll(path.getPath(), path));
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS), "block/deco/quenched_allay_bricks", (name, path) ->
+                cubeAll(path.getPath(), path));
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL), "block/deco/quenched_allay_bricks_small", (name, path) ->
+                cubeAll(path.getPath(), path));
 
         simpleItem(modLoc("patchouli_book"));
 
@@ -157,6 +163,13 @@ public class HexItemModels extends PaucalItemModelProvider {
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_written")))
             .end();
 
+        getBuilder(getPath(HexBlocks.SLATE_PILLAR)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/slate_pillar")));
+        getBuilder(getPath(HexBlocks.AMETHYST_PILLAR)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/deco/amethyst_pillar")));
+        getBuilder(getPath(HexBlocks.SLATE_AMETHYST_PILLAR)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/slate_amethyst_pillar")));
+
         getBuilder(getPath(HexBlocks.AKASHIC_RECORD)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_record")));
         simpleItem(modLoc("edified_door"));
@@ -164,6 +177,14 @@ public class HexItemModels extends PaucalItemModelProvider {
             new ModelFile.UncheckedModelFile(modLoc("block/edified_trapdoor_bottom")));
         getBuilder(getPath(HexBlocks.EDIFIED_LOG)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_log")));
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_AMETHYST)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_log_amethyst")));
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_AVENTURINE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_log_aventurine")));
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_CITRINE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_log_citrine")));
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_PURPLE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_log_purple")));
         getBuilder(getPath(HexBlocks.STRIPPED_EDIFIED_LOG)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_log")));
         getBuilder(getPath(HexBlocks.EDIFIED_WOOD)).parent(

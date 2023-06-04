@@ -95,6 +95,14 @@ public class HexBlocks {
             .isViewBlocking(HexBlocks::never);
     }
 
+    // we have to make it emit light because otherwise it occludes itself and is always dark
+    private static BlockBehaviour.Properties quenched() {
+        return BlockBehaviour.Properties
+                .copy(Blocks.AMETHYST_BLOCK)
+                .lightLevel($ -> 4)
+                .noOcclusion();
+    }
+
     // we give these faux items so Patchi can have an item to view with
     public static final Block CONJURED_LIGHT = blockItem("conjured_light",
         new BlockConjuredLight(
@@ -151,20 +159,33 @@ public class HexBlocks {
     public static final BlockAkashicLigature AKASHIC_LIGATURE = blockItem("akashic_connector",
         new BlockAkashicLigature(akashicWoodyHard().lightLevel(bs -> 4)));
 
-    // we have to make it emit light because otherwise it occludes itself and is always dark
-    public static final BlockQuenchedAllay QUENCHED_ALLAY = blockItem("quenched_allay", new BlockQuenchedAllay(
-        BlockBehaviour.Properties
-            .copy(Blocks.AMETHYST_BLOCK)
-            .lightLevel($ -> 4)
-            .noOcclusion()));
+    public static final BlockQuenchedAllay QUENCHED_ALLAY = blockItem("quenched_allay", new BlockQuenchedAllay(quenched()));
 
     // Decoration?!
     public static final Block SLATE_BLOCK = blockItem("slate_block", new Block(slateish().strength(2f, 4f)));
+    public static final Block SLATE_TILES = blockItem("slate_tiles", new Block(slateish().strength(2f, 4f)));
+    public static final Block SLATE_BRICKS = blockItem("slate_bricks", new Block(slateish().strength(2f, 4f)));
+    public static final Block SLATE_BRICKS_SMALL = blockItem("slate_bricks_small", new Block(slateish().strength(2f, 4f)));
+    public static final RotatedPillarBlock SLATE_PILLAR = blockItem("slate_pillar", new RotatedPillarBlock(slateish().strength(2f, 4f)));
     public static final SandBlock AMETHYST_DUST_BLOCK = blockItem("amethyst_dust_block",
         new SandBlock(0xff_b38ef3, BlockBehaviour.Properties.of(Material.SAND, MaterialColor.COLOR_PURPLE)
             .strength(0.5f).sound(SoundType.SAND)));
     public static final AmethystBlock AMETHYST_TILES = blockItem("amethyst_tiles",
         new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+    public static final AmethystBlock AMETHYST_BRICKS = blockItem("amethyst_bricks",
+            new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+    public static final AmethystBlock AMETHYST_BRICKS_SMALL = blockItem("amethyst_bricks_small",
+            new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+    public static final BlockAmethystDirectional AMETHYST_PILLAR = blockItem("amethyst_pillar",
+            new BlockAmethystDirectional(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+    public static final Block SLATE_AMETHYST_TILES = blockItem("slate_amethyst_tiles", new Block(slateish().strength(2f, 4f)));
+    public static final Block SLATE_AMETHYST_BRICKS = blockItem("slate_amethyst_bricks", new Block(slateish().strength(2f, 4f)));
+    public static final Block SLATE_AMETHYST_BRICKS_SMALL = blockItem("slate_amethyst_bricks_small", new Block(slateish().strength(2f, 4f)));
+    public static final RotatedPillarBlock SLATE_AMETHYST_PILLAR = blockItem("slate_amethyst_pillar",
+            new RotatedPillarBlock(slateish().strength(2f, 4f)));
+    public static final BlockQuenchedAllay QUENCHED_ALLAY_TILES = blockItem("quenched_allay_tiles", new BlockQuenchedAllay(quenched()));
+    public static final BlockQuenchedAllay QUENCHED_ALLAY_BRICKS = blockItem("quenched_allay_bricks", new BlockQuenchedAllay(quenched()));
+    public static final BlockQuenchedAllay QUENCHED_ALLAY_BRICKS_SMALL = blockItem("quenched_allay_bricks_small", new BlockQuenchedAllay(quenched()));
     public static final Block SCROLL_PAPER = blockItem("scroll_paper",
         new BlockFlammable(papery(MaterialColor.TERRACOTTA_WHITE), 100, 60));
     public static final Block ANCIENT_SCROLL_PAPER = blockItem("ancient_scroll_paper",
@@ -183,6 +204,14 @@ public class HexBlocks {
 
     public static final BlockAkashicLog EDIFIED_LOG = blockItem("edified_log",
         new BlockAkashicLog(edifiedWoody()));
+    public static final BlockAkashicLog EDIFIED_LOG_AMETHYST = blockItem("edified_log_amethyst",
+            new BlockAkashicLog(edifiedWoody()));
+    public static final BlockAkashicLog EDIFIED_LOG_AVENTURINE = blockItem("edified_log_aventurine",
+            new BlockAkashicLog(edifiedWoody()));
+    public static final BlockAkashicLog EDIFIED_LOG_CITRINE = blockItem("edified_log_citrine",
+            new BlockAkashicLog(edifiedWoody()));
+    public static final BlockAkashicLog EDIFIED_LOG_PURPLE = blockItem("edified_log_purple",
+            new BlockAkashicLog(edifiedWoody()));
     public static final BlockAkashicLog STRIPPED_EDIFIED_LOG = blockItem("stripped_edified_log",
         new BlockAkashicLog(edifiedWoody()));
     public static final BlockAkashicLog EDIFIED_WOOD = blockItem("edified_wood",
