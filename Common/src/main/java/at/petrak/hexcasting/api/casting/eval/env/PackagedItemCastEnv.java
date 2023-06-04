@@ -58,4 +58,8 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
         var casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack);
         return casterHexHolder.getPigment();
     }
+
+    public EvalSound getSound() {
+        return sound;
+    }
 }

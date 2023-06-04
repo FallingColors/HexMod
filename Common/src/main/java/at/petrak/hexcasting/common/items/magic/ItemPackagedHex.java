@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.items.magic;
 
+import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
@@ -13,6 +14,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -21,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -123,7 +126,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var sPlayer = (ServerPlayer) player;
         var ctx = new PackagedItemCastEnv(sPlayer, usedHand);
         var harness = CastingVM.empty(ctx);
-        harness.queueExecuteAndWrapIotas(instrs, sPlayer.getLevel());
+        var clientView = harness.queueExecuteAndWrapIotas(instrs, sPlayer.getLevel());
 
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 
@@ -136,6 +139,20 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         player.awardStat(stat);
 
         sPlayer.getCooldowns().addCooldown(this, this.cooldown());
+
+        if (clientView.getResolutionType().getSuccess()) {
+            // Somehow we lost spraying particles on each new pattern, so do it here
+            // this also nicely prevents particle spam on trinkets
+            new ParticleSpray(player.position(), new Vec3(0.0, 1.5, 0.0), 0.4, Math.PI / 3, 30)
+                    .sprayParticles(sPlayer.getLevel(), ctx.getColorizer());
+        }
+
+        var sound = ctx.getSound().sound();
+        if (sound != null) {
+            var soundPos = sPlayer.position();
+            sPlayer.level.playSound(null, soundPos.x, soundPos.y, soundPos.z,
+                    sound, SoundSource.PLAYERS, 1f, 1f);
+        }
 
         if (broken) {
             stack.shrink(1);
