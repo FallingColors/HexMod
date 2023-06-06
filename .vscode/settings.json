@@ -1,0 +1,19 @@
+{
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+    },
+    "isort.args": [
+        "--profile", "black",
+        // "-l", "100",
+    ],
+    "python.formatting.provider": "black",
+    "python.analysis.typeCheckingMode": "basic", // might turn on strict eventually, but right now it lights up like a Christmas tree
+    "python.analysis.diagnosticMode": "workspace",
+    "python.languageServer": "Pylance",
+    "python.testing.cwd": "${workspaceFolder}/doc",
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+}

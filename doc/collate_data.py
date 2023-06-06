@@ -3,7 +3,6 @@ import json  # codec
 import os  # listdir
 import re  # parsing
 from collections import namedtuple
-from fnmatch import fnmatch
 from html import escape
 from sys import argv, stdout
 
@@ -67,14 +66,13 @@ types = {
 keys = {
     "use": "Right Click",
     "sneak": "Left Shift",
-    "jump": "Space",
 }
 
 bind1 = (lambda: None).__get__(0).__class__
 
 
 def slurp(filename):
-    with open(filename, "r") as fh:
+    with open(filename, "r", encoding="utf-8") as fh:
         return json.load(fh)
 
 
@@ -200,8 +198,8 @@ test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/l
 def localize_pattern(root_data, op_id):
     return localize(
         root_data["i18n"],
-        "hexcasting.action.book." + op_id,
-        localize(root_data["i18n"], "hexcasting.action." + op_id),
+        "hexcasting.spell.book." + op_id,
+        localize(root_data["i18n"], "hexcasting.spell." + op_id),
     )
 
 
@@ -222,39 +220,29 @@ def identity(x):
 
 
 pattern_pat = re.compile(
-    r'make\(\s*"([a-zA-Z0-9_\/]+)",\s*(?:new )?ActionRegistryEntry\(\s*HexPattern\.fromAngles\(\s*"([aqwed]+)",\s*HexDir.(\w+)\),'
+    r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?'
 )
 pattern_stubs = [
-    (None, "at/petrak/hexcasting/common/lib/hex/HexActions.java"),
-    ("Fabric", "at/petrak/hexcasting/fabric/FabricHexInitializer.kt"),
+    (None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"),
+    (None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"),
+    ("Fabric", "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java"),
 ]
-great_world_stubs = [("Fabric", "data/hexcasting/tags/action/per_world_pattern.json")]
 
 
 def fetch_patterns(root_data):
     registry = {}
-    great_names = set()
-    for loader, stub in great_world_stubs:
-        filename = (
-            f"{root_data['resource_dir'].replace('/main/', '/generated/')}/{stub}"
-        )
-        if loader:
-            filename = filename.replace("Common", loader)
-        tag = slurp(filename)
-        for val in tag["values"]:
-            great_names.add(val.replace("hexcasting:", ""))
     for loader, stub in pattern_stubs:
         filename = f"{root_data['resource_dir']}/../java/{stub}"
         if loader:
             filename = filename.replace("Common", loader)
-        with open(filename, "r") as fh:
+        with open(filename, "r", encoding="utf-8") as fh:
             pattern_data = fh.read()
             for mobj in re.finditer(pattern_pat, pattern_data):
-                name, string, start_angle = mobj.groups()
+                string, start_angle, name, is_per_world = mobj.groups()
                 registry[root_data["modid"] + ":" + name] = (
                     string,
                     start_angle,
-                    name in great_names,
+                    bool(is_per_world),
                 )
     return registry
 
@@ -516,9 +504,7 @@ def get_format(out, ty, value):
 
 
 def entry_spoilered(root_info, entry):
-    if "advancement" not in entry:
-        return False
-    return any(fnmatch(entry["advancement"], pat) for pat in root_info["spoilers"])
+    return entry.get("advancement", None) in root_info["spoilers"]
 
 
 def category_spoilered(root_info, category):
@@ -750,7 +736,7 @@ def main(argv):
     book_name = argv[3]
     book = parse_book(root, mod_name, book_name)
     template_file = argv[4]
-    with open(template_file, "r") as fh:
+    with open(template_file, "r", encoding="utf-8") as fh:
         with stdout if len(argv) < 6 else open(argv[5], "w", encoding="utf-8") as out:
             for line in fh:
                 if line.startswith("#DO_NOT_RENDER"):
