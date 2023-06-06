@@ -27,3 +27,5 @@ forge*changelog.txt
 Session.vim
 plot/
 
+# Python
+__pycache__/

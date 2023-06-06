@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-from sys import argv, stdout
+import json  # codec
+import os  # listdir
+import re  # parsing
 from collections import namedtuple
+from fnmatch import fnmatch
 from html import escape
-import json # codec
-import re # parsing
-import os # listdir
+from sys import argv, stdout
 
 # TO USE: put in Hexcasting root dir, collate_data.py src/main/resources hexcasting thehexbook out.html
 
@@ -66,16 +67,20 @@ types = {
 keys = {
     "use": "Right Click",
     "sneak": "Left Shift",
+    "jump": "Space",
 }
 
 bind1 = (lambda: None).__get__(0).__class__
+
 
 def slurp(filename):
     with open(filename, "r") as fh:
         return json.load(fh)
 
+
 FormatTree = namedtuple("FormatTree", ["style", "children"])
 Style = namedtuple("Style", ["type", "value"])
+
 
 def parse_style(sty):
     if sty == "br":
@@ -111,10 +116,16 @@ def parse_style(sty):
     # TODO more style parse
     raise ValueError("Unknown style: " + sty)
 
+
 def localize(i18n, string, default=None):
-    return (i18n.get(string, default if default else string) if i18n else string).replace("%%", "%")
+    return (
+        i18n.get(string, default if default else string) if i18n else string
+    ).replace("%%", "%")
+
 
 format_re = re.compile(r"\$\(([^)]*)\)")
+
+
 def format_string(root_data, string):
     # resolve lang
     string = localize(root_data["i18n"], string)
@@ -124,7 +135,8 @@ def format_string(root_data, string):
         old_string = string
         for macro, replace in root_data["macros"].items():
             string = string.replace(macro, replace)
-        else: break
+        else:
+            break
 
     # lex out parsed styles
     text_nodes = []
@@ -133,7 +145,7 @@ def format_string(root_data, string):
     extra_text = ""
     for mobj in re.finditer(format_re, string):
         bonus_text, sty = parse_style(mobj.group(1))
-        text = string[last_end:mobj.start()] + bonus_text
+        text = string[last_end : mobj.start()] + bonus_text
         if sty:
             styles.append(sty)
             text_nodes.append(extra_text + text)
@@ -145,7 +157,10 @@ def format_string(root_data, string):
     first_node, *text_nodes = text_nodes
 
     # parse
-    style_stack = [FormatTree(Style("base", True), []), FormatTree(Style("para", {}), [first_node])]
+    style_stack = [
+        FormatTree(Style("base", True), []),
+        FormatTree(Style("para", {}), [first_node]),
+    ]
     for style, text in zip(styles, text_nodes):
         tmp_stylestack = []
         if style.type == "base":
@@ -162,7 +177,8 @@ def format_string(root_data, string):
         for sty in tmp_stylestack:
             style_stack.append(FormatTree(sty, []))
         if style.value is None:
-            if text: style_stack[-1].children.append(text)
+            if text:
+                style_stack[-1].children.append(text)
         else:
             style_stack.append(FormatTree(style, [text] if text else []))
     while len(style_stack) >= 2:
@@ -171,12 +187,22 @@ def format_string(root_data, string):
 
     return style_stack[0]
 
-test_root = {"i18n": {}, "macros": default_macros, "resource_dir": "Common/src/main/resources", "modid": "hexcasting"}
+
+test_root = {
+    "i18n": {},
+    "macros": default_macros,
+    "resource_dir": "Common/src/main/resources",
+    "modid": "hexcasting",
+}
 test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
 
+
 def localize_pattern(root_data, op_id):
-    return localize(root_data["i18n"], "hexcasting.spell.book." + op_id,
-                    localize(root_data["i18n"], "hexcasting.spell." + op_id))
+    return localize(
+        root_data["i18n"],
+        "hexcasting.action.book." + op_id,
+        localize(root_data["i18n"], "hexcasting.action." + op_id),
+    )
 
 
 def do_localize(root_data, obj, *names):
@@ -184,26 +210,54 @@ def do_localize(root_data, obj, *names):
         if name in obj:
             obj[name] = localize(root_data["i18n"], obj[name])
 
+
 def do_format(root_data, obj, *names):
     for name in names:
         if name in obj:
             obj[name] = format_string(root_data, obj[name])
 
-def identity(x): return x
 
-pattern_pat = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?')
-pattern_stubs = [(None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"), (None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"), ("Fabric", "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java")]
+def identity(x):
+    return x
+
+
+pattern_pat = re.compile(
+    r'make\(\s*"([a-zA-Z0-9_\/]+)",\s*(?:new )?ActionRegistryEntry\(\s*HexPattern\.fromAngles\(\s*"([aqwed]+)",\s*HexDir.(\w+)\),'
+)
+pattern_stubs = [
+    (None, "at/petrak/hexcasting/common/lib/hex/HexActions.java"),
+    ("Fabric", "at/petrak/hexcasting/fabric/FabricHexInitializer.kt"),
+]
+great_world_stubs = [("Fabric", "data/hexcasting/tags/action/per_world_pattern.json")]
+
+
 def fetch_patterns(root_data):
     registry = {}
+    great_names = set()
+    for loader, stub in great_world_stubs:
+        filename = (
+            f"{root_data['resource_dir'].replace('/main/', '/generated/')}/{stub}"
+        )
+        if loader:
+            filename = filename.replace("Common", loader)
+        tag = slurp(filename)
+        for val in tag["values"]:
+            great_names.add(val.replace("hexcasting:", ""))
     for loader, stub in pattern_stubs:
         filename = f"{root_data['resource_dir']}/../java/{stub}"
-        if loader: filename = filename.replace("Common", loader)
+        if loader:
+            filename = filename.replace("Common", loader)
         with open(filename, "r") as fh:
             pattern_data = fh.read()
             for mobj in re.finditer(pattern_pat, pattern_data):
-                string, start_angle, name, is_per_world = mobj.groups()
-                registry[root_data["modid"] + ":" + name] = (string, start_angle, bool(is_per_world))
+                name, string, start_angle = mobj.groups()
+                registry[root_data["modid"] + ":" + name] = (
+                    string,
+                    start_angle,
+                    name in great_names,
+                )
     return registry
+
 
 def resolve_pattern(root_data, page):
     if "pattern_reg" not in root_data:
@@ -211,11 +265,13 @@ def resolve_pattern(root_data, page):
     page["op"] = [root_data["pattern_reg"][page["op_id"]]]
     page["name"] = localize_pattern(root_data, page["op_id"])
 
+
 def fixup_pattern(do_sig, root_data, page):
     patterns = page["patterns"]
     if "op_id" in page:
         page["header"] = localize_pattern(root_data, page["op_id"])
-    if not isinstance(patterns, list): patterns = [patterns]
+    if not isinstance(patterns, list):
+        patterns = [patterns]
     if do_sig:
         inp = page.get("input", None) or ""
         oup = page.get("output", None) or ""
@@ -224,42 +280,73 @@ def fixup_pattern(do_sig, root_data, page):
         page["header"] += suffix
     page["op"] = [(p["signature"], p["startdir"], False) for p in patterns]
 
+
 def fetch_recipe(root_data, recipe):
     modid, recipeid = recipe.split(":")
-    gen_resource_dir = root_data["resource_dir"].replace("/main/", "/generated/").replace("Common/", "Forge/") # TODO hack
+    gen_resource_dir = (
+        root_data["resource_dir"]
+        .replace("/main/", "/generated/")
+        .replace("Common/", "Forge/")
+    )  # TODO hack
     recipe_path = f"{gen_resource_dir}/data/{modid}/recipes/{recipeid}.json"
     return slurp(recipe_path)
+
+
 def fetch_recipe_result(root_data, recipe):
     return fetch_recipe(root_data, recipe)["result"]["item"]
+
+
 def fetch_bswp_recipe_result(root_data, recipe):
     return fetch_recipe(root_data, recipe)["result"]["name"]
+
 
 def localize_item(root_data, item):
     # TODO hack
     item = re.sub("{.*", "", item.replace(":", "."))
     block = "block." + item
     block_l = localize(root_data["i18n"], block)
-    if block_l != block: return block_l
+    if block_l != block:
+        return block_l
     return localize(root_data["i18n"], "item." + item)
+
 
 page_types = {
     "hexcasting:pattern": resolve_pattern,
     "hexcasting:manual_pattern": bind1(fixup_pattern, True),
     "hexcasting:manual_pattern_nosig": bind1(fixup_pattern, False),
-    "hexcasting:brainsweep": lambda rd, page: page.__setitem__("output_name", localize_item(rd, fetch_bswp_recipe_result(rd, page["recipe"]))),
+    "hexcasting:brainsweep": lambda rd, page: page.__setitem__(
+        "output_name", localize_item(rd, fetch_bswp_recipe_result(rd, page["recipe"]))
+    ),
     "patchouli:link": lambda rd, page: do_localize(rd, page, "link_text"),
-    "patchouli:crafting": lambda rd, page: page.__setitem__("item_name", [localize_item(rd, fetch_recipe_result(rd, page[ty])) for ty in ("recipe", "recipe2") if ty in page]),
-    "hexcasting:crafting_multi": lambda rd, page: page.__setitem__("item_name", [localize_item(rd, fetch_recipe_result(rd, recipe)) for recipe in page["recipes"]]),
-    "patchouli:spotlight": lambda rd, page: page.__setitem__("item_name", localize_item(rd, page["item"]))
+    "patchouli:crafting": lambda rd, page: page.__setitem__(
+        "item_name",
+        [
+            localize_item(rd, fetch_recipe_result(rd, page[ty]))
+            for ty in ("recipe", "recipe2")
+            if ty in page
+        ],
+    ),
+    "hexcasting:crafting_multi": lambda rd, page: page.__setitem__(
+        "item_name",
+        [
+            localize_item(rd, fetch_recipe_result(rd, recipe))
+            for recipe in page["recipes"]
+        ],
+    ),
+    "patchouli:spotlight": lambda rd, page: page.__setitem__(
+        "item_name", localize_item(rd, page["item"])
+    ),
 }
 
+
 def walk_dir(root_dir, prefix):
-    search_dir = root_dir + '/' + prefix
+    search_dir = root_dir + "/" + prefix
     for fh in os.scandir(search_dir):
         if fh.is_dir():
-            yield from walk_dir(root_dir, prefix + fh.name + '/')
+            yield from walk_dir(root_dir, prefix + fh.name + "/")
         elif fh.name.endswith(".json"):
             yield prefix + fh.name
+
 
 def parse_entry(root_data, entry_path, ent_name):
     data = slurp(f"{entry_path}")
@@ -277,6 +364,7 @@ def parse_entry(root_data, entry_path, ent_name):
 
     return data
 
+
 def parse_category(root_data, base_dir, cat_name):
     data = slurp(f"{base_dir}/categories/{cat_name}.json")
     do_localize(root_data, data, "name")
@@ -287,18 +375,30 @@ def parse_category(root_data, base_dir, cat_name):
     for filename in os.listdir(entry_dir):
         if filename.endswith(".json"):
             basename = filename[:-5]
-            entries.append(parse_entry(root_data, f"{entry_dir}/{filename}", cat_name + "/" + basename))
-    entries.sort(key=lambda ent: (not ent.get("priority", False), ent.get("sortnum", 0), ent["name"]))
+            entries.append(
+                parse_entry(
+                    root_data, f"{entry_dir}/{filename}", cat_name + "/" + basename
+                )
+            )
+    entries.sort(
+        key=lambda ent: (
+            not ent.get("priority", False),
+            ent.get("sortnum", 0),
+            ent["name"],
+        )
+    )
     data["entries"] = entries
     data["id"] = cat_name
 
     return data
 
+
 def parse_sortnum(cats, name):
-    if '/' in name:
-        ix = name.rindex('/')
+    if "/" in name:
+        ix = name.rindex("/")
         return parse_sortnum(cats, name[:ix]) + (cats[name].get("sortnum", 0),)
-    return cats[name].get("sortnum", 0),
+    return (cats[name].get("sortnum", 0),)
+
 
 def parse_book(root, mod_name, book_name):
     base_dir = f"{root}/data/{mod_name}/patchouli_books/{book_name}"
@@ -328,26 +428,40 @@ def parse_book(root, mod_name, book_name):
 
     return root_info
 
+
 def tag_args(kwargs):
-    return "".join(f" {'class' if key == 'clazz' else key.replace('_', '-')}={repr(escape(str(value)))}" for key, value in kwargs.items())
+    return "".join(
+        f" {'class' if key == 'clazz' else key.replace('_', '-')}={repr(escape(str(value)))}"
+        for key, value in kwargs.items()
+    )
+
 
 class PairTag:
     __slots__ = ["stream", "name", "kwargs"]
+
     def __init__(self, stream, name, **kwargs):
         self.stream = stream
         self.name = name
         self.kwargs = tag_args(kwargs)
+
     def __enter__(self):
         print(f"<{self.name}{self.kwargs}>", file=self.stream, end="")
+
     def __exit__(self, _1, _2, _3):
         print(f"</{self.name}>", file=self.stream, end="")
 
+
 class Empty:
-    def __enter__(self): pass
-    def __exit__(self, _1, _2, _3): pass
+    def __enter__(self):
+        pass
+
+    def __exit__(self, _1, _2, _3):
+        pass
+
 
 class Stream:
     __slots__ = ["stream", "thunks"]
+
     def __init__(self, stream):
         self.stream = stream
         self.thunks = []
@@ -364,11 +478,13 @@ class Stream:
         return self.pair_tag(name, **kwargs) if cond else Empty()
 
     def empty_pair_tag(self, name, **kwargs):
-        with self.pair_tag(name, **kwargs): pass
+        with self.pair_tag(name, **kwargs):
+            pass
 
     def text(self, txt):
         print(escape(txt), file=self.stream, end="")
         return self
+
 
 def get_format(out, ty, value):
     if ty == "para":
@@ -383,7 +499,9 @@ def get_format(out, ty, value):
     if ty == "tooltip":
         return out.pair_tag("span", clazz="has-tooltip", title=value)
     if ty == "cmd_click":
-        return out.pair_tag("span", clazz="has-cmd_click", title="When clicked, would execute: "+value)
+        return out.pair_tag(
+            "span", clazz="has-cmd_click", title="When clicked, would execute: " + value
+        )
     if ty == "obf":
         return out.pair_tag("span", clazz="obfuscated")
     if ty == "bold":
@@ -396,11 +514,16 @@ def get_format(out, ty, value):
         return out.pair_tag("span", style="text-decoration: underline")
     raise ValueError("Unknown format type: " + ty)
 
+
 def entry_spoilered(root_info, entry):
-    return entry.get("advancement", None) in root_info["spoilers"]
+    if "advancement" not in entry:
+        return False
+    return any(fnmatch(entry["advancement"], pat) for pat in root_info["spoilers"])
+
 
 def category_spoilered(root_info, category):
     return all(entry_spoilered(root_info, ent) for ent in category["entries"])
+
 
 def write_block(out, block):
     if isinstance(block, str):
@@ -413,26 +536,33 @@ def write_block(out, block):
         return
     sty_type = block.style.type
     if sty_type == "base":
-        for child in block.children: write_block(out, child)
+        for child in block.children:
+            write_block(out, child)
         return
     tag = get_format(out, sty_type, block.style.value)
     with tag:
         for child in block.children:
             write_block(out, child)
 
+
 def anchor_toc(out):
-    with out.pair_tag("a", href="#table-of-contents", clazz="permalink small", title="Jump to top"):
+    with out.pair_tag(
+        "a", href="#table-of-contents", clazz="permalink small", title="Jump to top"
+    ):
         out.empty_pair_tag("i", clazz="bi bi-box-arrow-up")
+
 
 def permalink(out, link):
     with out.pair_tag("a", href=link, clazz="permalink small", title="Permalink"):
         out.empty_pair_tag("i", clazz="bi bi-link-45deg")
 
+
 # TODO modularize
 def write_page(out, pageid, page):
     if "anchor" in page:
         anchor_id = pageid + "@" + page["anchor"]
-    else: anchor_id = None
+    else:
+        anchor_id = None
 
     with out.pair_tag_if(anchor_id, "div", id=anchor_id):
         if "header" in page or "title" in page:
@@ -444,7 +574,8 @@ def write_page(out, pageid, page):
         ty = page["type"]
         if ty == "patchouli:text":
             write_block(out, page["text"])
-        elif ty == "patchouli:empty": pass
+        elif ty == "patchouli:empty":
+            pass
         elif ty == "patchouli:link":
             write_block(out, page["text"])
             with out.pair_tag("h4", clazz="linkout"):
@@ -453,40 +584,56 @@ def write_page(out, pageid, page):
         elif ty == "patchouli:spotlight":
             with out.pair_tag("h4", clazz="spotlight-title page-header"):
                 out.text(page["item_name"])
-            if "text" in page: write_block(out, page["text"])
+            if "text" in page:
+                write_block(out, page["text"])
         elif ty == "patchouli:crafting":
             with out.pair_tag("blockquote", clazz="crafting-info"):
                 out.text(f"Depicted in the book: The crafting recipe for the ")
                 first = True
                 for name in page["item_name"]:
-                    if not first: out.text(" and ")
+                    if not first:
+                        out.text(" and ")
                     first = False
-                    with out.pair_tag("code"): out.text(name)
+                    with out.pair_tag("code"):
+                        out.text(name)
                 out.text(".")
-            if "text" in page: write_block(out, page["text"])
+            if "text" in page:
+                write_block(out, page["text"])
         elif ty == "patchouli:image":
             with out.pair_tag("p", clazz="img-wrapper"):
                 for img in page["images"]:
                     modid, coords = img.split(":")
-                    out.empty_pair_tag("img", src=f"{repo_names[modid]}/assets/{modid}/{coords}")
-            if "text" in page: write_block(out, page["text"])
+                    out.empty_pair_tag(
+                        "img", src=f"{repo_names[modid]}/assets/{modid}/{coords}"
+                    )
+            if "text" in page:
+                write_block(out, page["text"])
         elif ty == "hexcasting:crafting_multi":
             recipes = page["item_name"]
             with out.pair_tag("blockquote", clazz="crafting-info"):
                 out.text(f"Depicted in the book: Several crafting recipes, for the ")
-                with out.pair_tag("code"): out.text(recipes[0])
+                with out.pair_tag("code"):
+                    out.text(recipes[0])
                 for i in recipes[1:]:
                     out.text(", ")
-                    with out.pair_tag("code"): out.text(i)
+                    with out.pair_tag("code"):
+                        out.text(i)
                 out.text(".")
-            if "text" in page: write_block(out, page["text"])
+            if "text" in page:
+                write_block(out, page["text"])
         elif ty == "hexcasting:brainsweep":
             with out.pair_tag("blockquote", clazz="crafting-info"):
                 out.text(f"Depicted in the book: A mind-flaying recipe producing the ")
-                with out.pair_tag("code"): out.text(page["output_name"])
+                with out.pair_tag("code"):
+                    out.text(page["output_name"])
                 out.text(".")
-            if "text" in page: write_block(out, page["text"])
-        elif ty in ("hexcasting:pattern", "hexcasting:manual_pattern_nosig", "hexcasting:manual_pattern"):
+            if "text" in page:
+                write_block(out, page["text"])
+        elif ty in (
+            "hexcasting:pattern",
+            "hexcasting:manual_pattern_nosig",
+            "hexcasting:manual_pattern",
+        ):
             if "name" in page:
                 with out.pair_tag("h4", clazz="pattern-title"):
                     inp = page.get("input", None) or ""
@@ -499,8 +646,19 @@ def write_page(out, pageid, page):
             with out.pair_tag("details", clazz="spell-collapsible"):
                 out.empty_pair_tag("summary", clazz="collapse-spell")
                 for string, start_angle, per_world in page["op"]:
-                    with out.pair_tag("canvas", clazz="spell-viz", width=216, height=216, data_string=string, data_start=start_angle.lower(), data_per_world=per_world):
-                        out.text("Your browser does not support visualizing patterns. Pattern code: " + string)
+                    with out.pair_tag(
+                        "canvas",
+                        clazz="spell-viz",
+                        width=216,
+                        height=216,
+                        data_string=string,
+                        data_start=start_angle.lower(),
+                        data_per_world=per_world,
+                    ):
+                        out.text(
+                            "Your browser does not support visualizing patterns. Pattern code: "
+                            + string
+                        )
             write_block(out, page["text"])
         else:
             with out.pair_tag("p", clazz="todo-note"):
@@ -508,6 +666,7 @@ def write_page(out, pageid, page):
             if "text" in page:
                 write_block(out, page["text"])
     out.tag("br")
+
 
 def write_entry(out, book, entry):
     with out.pair_tag("div", id=entry["id"]):
@@ -519,9 +678,12 @@ def write_entry(out, book, entry):
             for page in entry["pages"]:
                 write_page(out, entry["id"], page)
 
+
 def write_category(out, book, category):
     with out.pair_tag("section", id=category["id"]):
-        with out.pair_tag_if(category_spoilered(book, category), "div", clazz="spoilered"):
+        with out.pair_tag_if(
+            category_spoilered(book, category), "div", clazz="spoilered"
+        ):
             with out.pair_tag("h2", clazz="category-title page-header"):
                 write_block(out, category["name"])
                 anchor_toc(out)
@@ -529,24 +691,40 @@ def write_category(out, book, category):
             write_block(out, category["description"])
         for entry in category["entries"]:
             if entry["id"] not in book["blacklist"]:
-                    write_entry(out, book, entry)
+                write_entry(out, book, entry)
+
 
 def write_toc(out, book):
     with out.pair_tag("h2", id="table-of-contents", clazz="page-header"):
         out.text("Table of Contents")
-        with out.pair_tag("a", href="javascript:void(0)", clazz="permalink toggle-link small", data_target="toc-category", title="Toggle all"):
+        with out.pair_tag(
+            "a",
+            href="javascript:void(0)",
+            clazz="permalink toggle-link small",
+            data_target="toc-category",
+            title="Toggle all",
+        ):
             out.empty_pair_tag("i", clazz="bi bi-list-nested")
         permalink(out, "#table-of-contents")
     for category in book["categories"]:
         with out.pair_tag("details", clazz="toc-category"):
             with out.pair_tag("summary"):
-                with out.pair_tag("a", href="#" + category["id"], clazz="spoilered" if category_spoilered(book, category) else ""):
+                with out.pair_tag(
+                    "a",
+                    href="#" + category["id"],
+                    clazz="spoilered" if category_spoilered(book, category) else "",
+                ):
                     out.text(category["name"])
             with out.pair_tag("ul"):
                 for entry in category["entries"]:
                     with out.pair_tag("li"):
-                        with out.pair_tag("a", href="#" + entry["id"], clazz="spoilered" if entry_spoilered(book, entry) else ""):
+                        with out.pair_tag(
+                            "a",
+                            href="#" + entry["id"],
+                            clazz="spoilered" if entry_spoilered(book, entry) else "",
+                        ):
                             out.text(entry["name"])
+
 
 def write_book(out, book):
     with out.pair_tag("div", clazz="container"):
@@ -560,9 +738,12 @@ def write_book(out, book):
             for category in book["categories"]:
                 write_category(out, book, category)
 
+
 def main(argv):
     if len(argv) < 5:
-        print(f"Usage: {argv[0]} <resources dir> <mod name> <book name> <template file> [<output>]")
+        print(
+            f"Usage: {argv[0]} <resources dir> <mod name> <book name> <template file> [<output>]"
+        )
         return
     root = argv[1]
     mod_name = argv[2]
@@ -580,8 +761,10 @@ def main(argv):
                     book["spoilers"].update(spoilers)
                 elif line == "#DUMP_BODY_HERE\n":
                     write_book(Stream(out), book)
-                    print('', file=out)
-                else: print(line, end='', file=out)
+                    print("", file=out)
+                else:
+                    print(line, end="", file=out)
+
 
 if __name__ == "__main__":
     main(argv)
