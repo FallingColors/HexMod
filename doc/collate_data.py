@@ -751,7 +751,7 @@ def main(argv):
     book = parse_book(root, mod_name, book_name)
     template_file = argv[4]
     with open(template_file, "r") as fh:
-        with stdout if len(argv) < 6 else open(argv[5], "w") as out:
+        with stdout if len(argv) < 6 else open(argv[5], "w", encoding="utf-8") as out:
             for line in fh:
                 if line.startswith("#DO_NOT_RENDER"):
                     _, *blacklist = line.split()
