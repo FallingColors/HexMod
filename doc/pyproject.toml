@@ -1,0 +1,13 @@
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib"
+]
+markers = [
+    "filename: name of file for fixtures to create",
+    "file_contents: data for fixtures to write to files",
+    "fixture_data: other misc data",
+]
+pythonpath = ["src", "test"]
+
+[tool.coverage.report]
+include_namespace_packages = true
