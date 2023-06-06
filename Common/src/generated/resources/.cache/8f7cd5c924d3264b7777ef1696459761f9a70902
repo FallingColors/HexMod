@@ -1,4 +1,4 @@
-// 1.19.2	2023-06-04T21:59:01.7641342	Item Models: hexcasting
+// 1.19.2	2023-06-05T15:45:45.9658447	Item Models: hexcasting
 2fc68dcd6d73da3deaa6a33240dd9160a2b79592 assets/hexcasting/models/block/deco/quenched_allay_bricks_0.json
 d59af7a48b20b210240b26115fb172d6202f9254 assets/hexcasting/models/block/deco/quenched_allay_bricks_1.json
 a62eeebbca2d145c22f25725bd848ed4d673cefa assets/hexcasting/models/block/deco/quenched_allay_bricks_2.json
@@ -35,7 +35,7 @@ c499e86bb5b5bc2fe29914ce14832212ca23df10 assets/hexcasting/models/item/artifact_
 ccb8a41fdd4bc1b493a11cfa2ea4a39b7f7c3888 assets/hexcasting/models/item/artifact_6_filled.json
 6461c5261ec1eb92a608bd2db420b1e5b0c3591a assets/hexcasting/models/item/artifact_7.json
 373617635cf75ee236da52eb5b9f341d2b77eac3 assets/hexcasting/models/item/artifact_7_filled.json
-82e3be7bbdad92d2b4c728be54d9d2f2809a0ac2 assets/hexcasting/models/item/battery.json
+c77fe07e43f7a46e04f16e43054588cdcdf4c01e assets/hexcasting/models/item/battery.json
 ec7c3a51882a432185fdbb6a449e66165b6a4c4c assets/hexcasting/models/item/charged_amethyst.json
 3ed3e3d86dcbc29d2e6fb59b9c6a7e455e9a3332 assets/hexcasting/models/item/cherry_staff.json
 c64ed609ece68994ce23dd2809145040bce13579 assets/hexcasting/models/item/conjured_block.json
@@ -115,6 +115,16 @@ abfc028c974a02780aed3d7a5859352503bbd920 assets/hexcasting/models/item/lens.json
 a34a6d777ae265c7e49c8bb23c15f04359236544 assets/hexcasting/models/item/lore_fragment.json
 a3e134b79977545049da01671f3a1bd636d14789 assets/hexcasting/models/item/old_staff.json
 82fa0a2bb17e40c0b3f826e97b2e95445ec24ab8 assets/hexcasting/models/item/patchouli_book.json
+91186c79af073cc390a1f1e6712540e1a49b716e assets/hexcasting/models/item/phial_larger_0.json
+548d6999c6b5cb2c5b8d36d190fc849632f9f8ea assets/hexcasting/models/item/phial_larger_1.json
+3162e3b88e59a9ab4b9df345724a0964db695688 assets/hexcasting/models/item/phial_larger_2.json
+4e8f120d8472135ba1d8c332848fd0cc4c9ef1a0 assets/hexcasting/models/item/phial_larger_3.json
+7b0d93186cd60cf31049512ca1147262a2bf203f assets/hexcasting/models/item/phial_larger_4.json
+8943ca4912ab23d507725744f675ddcc56ccf1a9 assets/hexcasting/models/item/phial_largest_0.json
+e20faba33418dac72ff3ad360eeb6fce3fce2728 assets/hexcasting/models/item/phial_largest_1.json
+f0623e9b9192098dff982fabf1e598a27f96b7a8 assets/hexcasting/models/item/phial_largest_2.json
+911736f4e2e3d825fb01f13dd32bf0108b68df99 assets/hexcasting/models/item/phial_largest_3.json
+86d475f4c5bda63a564604e828f408ac6769e9eb assets/hexcasting/models/item/phial_largest_4.json
 d69d10e6cb967b98b3294cc86174182c671de671 assets/hexcasting/models/item/phial_large_0.json
 9b7805bec9481956b0ccc6c65dd8e02d3b3cdf54 assets/hexcasting/models/item/phial_large_1.json
 596a866a0fac7cfe916d1e78f2a5f20856493c62 assets/hexcasting/models/item/phial_large_2.json

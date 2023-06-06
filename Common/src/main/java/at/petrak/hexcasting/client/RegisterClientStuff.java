@@ -88,7 +88,7 @@ public class RegisterClientStuff {
             (stack, level, holder, holderID) -> {
                 var item = (ItemMediaBattery) stack.getItem();
                 var max = item.getMaxMedia(stack);
-                return (float) Math.sqrt((float) max / MediaConstants.CRYSTAL_UNIT / 10);
+                return 1.049658f * (float) Math.log((float) max / MediaConstants.CRYSTAL_UNIT + 9.06152f) - 2.1436f;
             });
 
         registerScrollOverrides(HexItems.SCROLL_SMOL);

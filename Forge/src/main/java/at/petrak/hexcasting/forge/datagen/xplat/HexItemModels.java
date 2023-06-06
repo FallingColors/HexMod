@@ -32,7 +32,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         super(generator, HexAPI.MOD_ID, existingFileHelper);
     }
 
-    private static final String[] PHIAL_SIZES = {"small", "medium", "large"};
+    private static final String[] PHIAL_SIZES = {"small", "medium", "large", "larger", "largest"};
 
     private static String getPath(Item item) {
         return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).getPath();
