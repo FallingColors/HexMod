@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.google.gson.GsonBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -38,7 +39,12 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
     public final Server server = new Server();
 
     public static FabricHexConfig setup() {
-        AutoConfig.register(FabricHexConfig.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
+        var gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+            .create();
+        AutoConfig.register(FabricHexConfig.class, PartitioningSerializer.wrap((cfg, clazz) ->
+            new GsonConfigSerializer<>(cfg, clazz, gson)));
         var instance = AutoConfig.getConfigHolder(FabricHexConfig.class).getConfig();
 
         HexConfig.setCommon(instance.common);
@@ -172,10 +178,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private List<String> tpDimDenylist = DEFAULT_DIM_TP_DENYLIST;
 
+        // ModMenu bad and doesn't like java objects in here so we do stupid string parsing
         @ConfigEntry.Gui.Tooltip
-        private List<ScrollInjectionMirror> scrollInjectionsRaw = HexLootHandler.DEFAULT_SCROLL_INJECTS
+        private List<String> scrollInjectionsRaw = HexLootHandler.DEFAULT_SCROLL_INJECTS
             .stream()
-            .map(si -> new ScrollInjectionMirror(si.injectee(), si.countRange()))
+            .map(si -> si.injectee() + " " + si.countRange())
             .toList();
         @ConfigEntry.Gui.Excluded
         private transient Object2IntMap<ResourceLocation> scrollInjections;
@@ -193,8 +200,16 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
 
             this.scrollInjections = new Object2IntOpenHashMap<>();
-            for (var mirror : this.scrollInjectionsRaw) {
-                this.scrollInjections.put(mirror.injectee(), mirror.countRange());
+            try {
+                for (var auugh : this.scrollInjectionsRaw) {
+                    String[] split = auugh.split(" ");
+                    ResourceLocation loc = new ResourceLocation(split[0]);
+                    int count = Integer.parseInt(split[1]);
+                    this.scrollInjections.put(loc, count);
+                }
+
+            } catch (Exception e) {
+                throw new ValidationException("Bad parsing of scroll injects", e);
             }
 
             this.loreChance = Mth.clamp(this.loreChance, 0.0, 1.0);
@@ -248,9 +263,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         public double getLoreChance() {
             return loreChance;
-        }
-
-        record ScrollInjectionMirror(ResourceLocation injectee, int countRange) {
         }
     }
 }
