@@ -7,7 +7,7 @@ markers = [
     "file_contents: data for fixtures to write to files",
     "fixture_data: other misc data",
 ]
-pythonpath = ["."]
+pythonpath = ["src", "test"]
 
 [tool.coverage.report]
 include_namespace_packages = true

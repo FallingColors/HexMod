@@ -1,25 +1,52 @@
+import subprocess
+import sys
+from dataclasses import dataclass
 from pathlib import Path
 
-from collate_data import main
+import pytest
+from main import Args, main
 from syrupy.assertion import SnapshotAssertion
 
 
-def test_full_html(snapshot: SnapshotAssertion, tmp_path: Path):
-    # generate output docs html file and assert it hasn't changed vs. the snapshot
-    # arrange
+@dataclass
+class DocgenArgs:
+    out_path: Path
+    snapshot: SnapshotAssertion
+    argv: list[str]
+
+    def assert_out_path(self):
+        actual = self.out_path.read_text()
+        assert actual == self.snapshot
+
+
+@pytest.fixture
+def docgen(tmp_path: Path, snapshot: SnapshotAssertion) -> DocgenArgs:
+    # arguments we want to pass to the docgen
     out_path = tmp_path / "out.html"
-    argv = [
-        "collate_data.py",
-        "../Common/src/main/resources",  # resources dir
-        "hexcasting",  # mod name
-        "thehexbook",  # book name
-        "template.html",  # template file
-        out_path.as_posix(),  # output file
-    ]
+    return DocgenArgs(
+        out_path,
+        snapshot,
+        [
+            "../Common/src/main/resources",
+            "hexcasting",
+            "thehexbook",
+            "template.html",
+            out_path.as_posix(),
+        ],
+    )
 
-    # act
-    main(argv)
 
-    # assert
-    actual = out_path.read_text()
-    assert actual == snapshot
+def test_file(docgen: DocgenArgs):
+    # generate output docs html file and assert it hasn't changed vs. the snapshot
+    main(Args().parse_args(docgen.argv))
+    docgen.assert_out_path()
+
+
+def test_cmd(docgen: DocgenArgs):
+    # as above, but running the command we actually want to be using
+    subprocess.run(
+        [sys.executable, "src/main.py"] + docgen.argv,
+        stdout=sys.stdout,
+        stderr=sys.stderr,
+    )
+    docgen.assert_out_path()

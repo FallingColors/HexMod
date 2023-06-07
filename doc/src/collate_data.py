@@ -4,7 +4,7 @@ import os  # listdir
 import re  # parsing
 from collections import namedtuple
 from html import escape
-from sys import argv, stdout
+from typing import TextIO
 
 # TO USE: put in Hexcasting root dir, collate_data.py src/main/resources hexcasting thehexbook out.html
 
@@ -725,32 +725,17 @@ def write_book(out, book):
                 write_category(out, book, category)
 
 
-def main(argv):
-    if len(argv) < 5:
-        print(
-            f"Usage: {argv[0]} <resources dir> <mod name> <book name> <template file> [<output>]"
-        )
-        return
-    root = argv[1]
-    mod_name = argv[2]
-    book_name = argv[3]
-    book = parse_book(root, mod_name, book_name)
-    template_file = argv[4]
-    with open(template_file, "r", encoding="utf-8") as fh:
-        with stdout if len(argv) < 6 else open(argv[5], "w", encoding="utf-8") as out:
-            for line in fh:
-                if line.startswith("#DO_NOT_RENDER"):
-                    _, *blacklist = line.split()
-                    book["blacklist"].update(blacklist)
-                if line.startswith("#SPOILER"):
-                    _, *spoilers = line.split()
-                    book["spoilers"].update(spoilers)
-                elif line == "#DUMP_BODY_HERE\n":
-                    write_book(Stream(out), book)
-                    print("", file=out)
-                else:
-                    print(line, end="", file=out)
+def write_docs(book, template_f: TextIO, output_f: TextIO):
+    for line in template_f:
+        if line.startswith("#DO_NOT_RENDER"):
+            _, *blacklist = line.split()
+            book["blacklist"].update(blacklist)
 
-
-if __name__ == "__main__":
-    main(argv)
+        if line.startswith("#SPOILER"):
+            _, *spoilers = line.split()
+            book["spoilers"].update(spoilers)
+        elif line == "#DUMP_BODY_HERE\n":
+            write_book(Stream(output_f), book)
+            print("", file=output_f)
+        else:
+            print(line, end="", file=output_f)

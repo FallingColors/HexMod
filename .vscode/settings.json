@@ -16,4 +16,5 @@
     "python.testing.cwd": "${workspaceFolder}/doc",
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "python.analysis.extraPaths": ["${workspaceFolder}/doc/src", "${workspaceFolder}/doc/test"]
 }
