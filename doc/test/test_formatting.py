@@ -1,18 +1,21 @@
 from collate_data import FormatTree, Style, default_macros, format_string
+from patchouli.types import Book
 
 
-def test_format_string():
+def test_format_string(book: Book):
     # arrange
-    test_root = {
-        "i18n": {},
-        "macros": default_macros,
-        "resource_dir": "Common/src/main/resources",
-        "modid": "hexcasting",
-    }
+    book.update(
+        {
+            "i18n": {},
+            "macros": default_macros,
+            "resource_dir": "Common/src/main/resources",
+            "modid": "hexcasting",
+        }
+    )
     test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
 
     # act
-    tree = format_string(test_root, test_str)
+    tree = format_string(book, test_str)
 
     # assert
     # FIXME: extremely lazy

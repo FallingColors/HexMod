@@ -3,10 +3,10 @@ import io
 import json  # codec
 import os  # listdir
 import re  # parsing
-from collections import namedtuple
 from html import escape
+from typing import Any
 
-# TO USE: put in Hexcasting root dir, collate_data.py src/main/resources hexcasting thehexbook out.html
+from patchouli.types import Book, FormatTree, Style
 
 # extra info :(
 lang = "en_us"
@@ -37,7 +37,7 @@ default_macros = {
     "$(thing)": "$(#490)",
 }
 
-colors = {
+colors: dict[str, str | None] = {
     "0": None,
     "1": "00a",
     "2": "0a0",
@@ -68,19 +68,17 @@ keys = {
     "sneak": "Left Shift",
 }
 
+# TODO: what the hell is this
 bind1 = (lambda: None).__get__(0).__class__
 
 
-def slurp(filename):
+def slurp(filename: str) -> Any:
     with open(filename, "r", encoding="utf-8") as fh:
         return json.load(fh)
 
 
-FormatTree = namedtuple("FormatTree", ["style", "children"])
-Style = namedtuple("Style", ["type", "value"])
-
-
-def parse_style(sty):
+def parse_style(sty: str) -> tuple[str, Style | None]:
+    # TODO: match, maybe
     if sty == "br":
         return "\n", None
     if sty == "br2":
@@ -115,7 +113,7 @@ def parse_style(sty):
     raise ValueError("Unknown style: " + sty)
 
 
-def localize(i18n, string, default=None):
+def localize(i18n: dict[str, str], string: str, default: str | None = None) -> str:
     return (
         i18n.get(string, default if default else string) if i18n else string
     ).replace("%%", "%")
@@ -124,7 +122,8 @@ def localize(i18n, string, default=None):
 format_re = re.compile(r"\$\(([^)]*)\)")
 
 
-def format_string(root_data, string):
+def format_string(root_data: Book, string: str):
+    # FIXME: ew.
     # resolve lang
     string = localize(root_data["i18n"], string)
     # resolve macros
