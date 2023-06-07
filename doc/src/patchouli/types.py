@@ -22,14 +22,17 @@ class Style(NamedTuple):
 
 class FormatTree(NamedTuple):
     style: Style
-    children: list[str | Self]
+    children: list[Self | str]
 
 
-class BookPage(TypedDict, Generic[T]):
+Text = FormatTree | str
+
+
+class _BasePage(TypedDict, Generic[T]):
     type: T
 
 
-class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
+class Page_patchouli_text(_BasePage[Literal["patchouli:text"]]):
     text: FormatTree | list
     anchor: NotRequired[str]
     input: NotRequired[str]
@@ -38,22 +41,13 @@ class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
     title: NotRequired[str]
 
 
-class BookPage_hexcasting_manual_pattern_nosig(
-    BookPage[Literal["hexcasting:manual_pattern_nosig"]]
-):
-    header: str
-    op: list
-    patterns: dict | list
-    text: FormatTree
-
-
-class BookPage_patchouli_link(BookPage[Literal["patchouli:link"]]):
+class Page_patchouli_link(_BasePage[Literal["patchouli:link"]]):
     link_text: str
     text: FormatTree
     url: str
 
 
-class BookPage_patchouli_spotlight(BookPage[Literal["patchouli:spotlight"]]):
+class Page_patchouli_spotlight(_BasePage[Literal["patchouli:spotlight"]]):
     item: str
     item_name: str
     link_recipe: bool
@@ -61,16 +55,7 @@ class BookPage_patchouli_spotlight(BookPage[Literal["patchouli:spotlight"]]):
     anchor: NotRequired[str]
 
 
-class BookPage_hexcasting_crafting_multi(
-    BookPage[Literal["hexcasting:crafting_multi"]]
-):
-    heading: str
-    item_name: list
-    recipes: list
-    text: FormatTree
-
-
-class BookPage_patchouli_crafting(BookPage[Literal["patchouli:crafting"]]):
+class Page_patchouli_crafting(_BasePage[Literal["patchouli:crafting"]]):
     item_name: list
     recipe: str
     anchor: NotRequired[str]
@@ -79,19 +64,17 @@ class BookPage_patchouli_crafting(BookPage[Literal["patchouli:crafting"]]):
     title: NotRequired[str]
 
 
-class BookPage_hexcasting_brainsweep(BookPage[Literal["hexcasting:brainsweep"]]):
-    output_name: str
-    recipe: str
-    text: FormatTree
-
-
-class BookPage_patchouli_image(BookPage[Literal["patchouli:image"]]):
+class Page_patchouli_image(_BasePage[Literal["patchouli:image"]]):
     border: bool
     images: list
     title: str
 
 
-class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
+class Page_patchouli_empty(_BasePage[Literal["patchouli:empty"]]):
+    pass
+
+
+class Page_hexcasting_pattern(_BasePage[Literal["hexcasting:pattern"]]):
     name: str
     op: list
     op_id: str
@@ -103,9 +86,7 @@ class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
     output: NotRequired[str]
 
 
-class BookPage_hexcasting_manual_pattern(
-    BookPage[Literal["hexcasting:manual_pattern"]]
-):
+class Page_hexcasting_manual_pattern(_BasePage[Literal["hexcasting:manual_pattern"]]):
     anchor: str
     header: str
     op: list
@@ -116,20 +97,70 @@ class BookPage_hexcasting_manual_pattern(
     output: NotRequired[str]
 
 
-class BookPage_patchouli_empty(BookPage[Literal["patchouli:empty"]]):
-    pass
+class Page_hexcasting_manual_pattern_nosig(
+    _BasePage[Literal["hexcasting:manual_pattern_nosig"]]
+):
+    header: str
+    op: list
+    patterns: dict | list
+    text: FormatTree
 
 
-class BookPage_hexal_everbook_entry(BookPage[Literal["hexal:everbook_entry"]]):
-    pass
+class Page_hexcasting_crafting_multi(_BasePage[Literal["hexcasting:crafting_multi"]]):
+    heading: str
+    item_name: list
+    recipes: list
+    text: FormatTree
 
 
-class BookEntry(TypedDict):
+class Page_hexcasting_brainsweep(_BasePage[Literal["hexcasting:brainsweep"]]):
+    output_name: str
+    recipe: str
+    text: FormatTree
+
+
+# convenient type aliases
+# TODO: replace with polymorphism, probably
+
+Page = (
+    Page_patchouli_text
+    | Page_patchouli_link
+    | Page_patchouli_spotlight
+    | Page_patchouli_crafting
+    | Page_patchouli_image
+    | Page_patchouli_empty
+    | Page_hexcasting_pattern
+    | Page_hexcasting_manual_pattern
+    | Page_hexcasting_manual_pattern_nosig
+    | Page_hexcasting_crafting_multi
+    | Page_hexcasting_brainsweep
+)
+
+RecipePage = (
+    Page_patchouli_crafting
+    | Page_hexcasting_crafting_multi
+    | Page_hexcasting_brainsweep
+)
+
+PatternPageWithSig = Page_hexcasting_pattern | Page_hexcasting_manual_pattern
+
+ManualPatternPage = (
+    Page_hexcasting_manual_pattern | Page_hexcasting_manual_pattern_nosig
+)
+
+PatternPage = (
+    Page_hexcasting_pattern
+    | Page_hexcasting_manual_pattern
+    | Page_hexcasting_manual_pattern_nosig
+)
+
+
+class Entry(TypedDict):
     category: str
     icon: str
     id: str
     name: str
-    pages: list[BookPage]
+    pages: list[_BasePage]
     advancement: NotRequired[str]
     entry_color: NotRequired[str]
     extra_recipe_mappings: NotRequired[dict]
@@ -140,9 +171,9 @@ class BookEntry(TypedDict):
     sortnum: NotRequired[float | int]
 
 
-class BookCategory(TypedDict):
+class Category(TypedDict):
     description: FormatTree | list
-    entries: list[BookEntry]
+    entries: list[Entry]
     icon: str
     id: str
     name: str
@@ -152,15 +183,19 @@ class BookCategory(TypedDict):
     parent: NotRequired[str]
 
 
+# TODO: class
+Registry = dict[str, tuple[str, str, bool]]
+
+
 class Book(TypedDict):
     blacklist: set
-    categories: list[BookCategory]
+    categories: list[Category]
     i18n: dict[str, str]
     landing_text: FormatTree
-    macros: dict
+    macros: dict[str, str]
     modid: str
     name: str
-    pattern_reg: dict
+    pattern_reg: Registry
     resource_dir: str
     spoilers: set
     version: int

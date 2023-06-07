@@ -13,12 +13,13 @@
     "python.analysis.typeCheckingMode": "strict", // god save us
     "python.analysis.diagnosticSeverityOverrides": {
         "reportMissingParameterType": "error",
-        "reportUnknownParameterType": "warning",
+        "reportUnknownParameterType": "error",
         "reportUnknownArgumentType": "warning",
         "reportUnknownLambdaType": "warning",
         "reportUnknownVariableType": "warning",
         "reportUnknownMemberType": "warning",
         "reportUnnecessaryComparison": "warning",
+        "reportMissingTypeArgument": "warning",
     },
     "python.analysis.diagnosticMode": "workspace",
     "python.languageServer": "Pylance",

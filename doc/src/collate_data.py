@@ -4,9 +4,24 @@ import json  # codec
 import os  # listdir
 import re  # parsing
 from html import escape
-from typing import Any
+from typing import Any, Callable, Generator
 
-from patchouli.types import Book, FormatTree, Style
+from patchouli.types import (
+    Book,
+    Category,
+    Entry,
+    FormatTree,
+    ManualPatternPage,
+    Page,
+    Page_hexcasting_pattern,
+    Page_patchouli_text,
+    PatternPage,
+    PatternPageWithSig,
+    Registry,
+    Style,
+    Text,
+    _BasePage,
+)
 
 # extra info :(
 lang = "en_us"
@@ -68,10 +83,20 @@ keys = {
     "sneak": "Left Shift",
 }
 
+pattern_pat = re.compile(
+    r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?'
+)
+pattern_stubs = [
+    (None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"),
+    (None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"),
+    ("Fabric", "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java"),
+]
+
 # TODO: what the hell is this
 bind1 = (lambda: None).__get__(0).__class__
 
 
+# TODO: serde
 def slurp(filename: str) -> Any:
     with open(filename, "r", encoding="utf-8") as fh:
         return json.load(fh)
@@ -122,11 +147,13 @@ def localize(i18n: dict[str, str], string: str, default: str | None = None) -> s
 format_re = re.compile(r"\$\(([^)]*)\)")
 
 
-def format_string(root_data: Book, string: str):
+def format_string(root_data: Book, string: str) -> FormatTree:
     # FIXME: ew.
     # resolve lang
     string = localize(root_data["i18n"], string)
+
     # resolve macros
+    # FIXME: this is just a fancy if statement, I think
     old_string = None
     while old_string != string:
         old_string = string
@@ -136,8 +163,8 @@ def format_string(root_data: Book, string: str):
             break
 
     # lex out parsed styles
-    text_nodes = []
-    styles = []
+    text_nodes: list[str] = []
+    styles: list[Style] = []
     last_end = 0
     extra_text = ""
     for mobj in re.finditer(format_re, string):
@@ -159,7 +186,7 @@ def format_string(root_data: Book, string: str):
         FormatTree(Style("para", {}), [first_node]),
     ]
     for style, text in zip(styles, text_nodes):
-        tmp_stylestack = []
+        tmp_stylestack: list[Style] = []
         if style.type == "base":
             while style_stack[-1].style.type != "para":
                 last_node = style_stack.pop()
@@ -185,7 +212,7 @@ def format_string(root_data: Book, string: str):
     return style_stack[0]
 
 
-def localize_pattern(root_data, op_id):
+def localize_pattern(root_data: Book, op_id: str) -> str:
     return localize(
         root_data["i18n"],
         "hexcasting.spell.book." + op_id,
@@ -193,30 +220,22 @@ def localize_pattern(root_data, op_id):
     )
 
 
-def do_localize(root_data, obj, *names):
+# TODO: types
+def do_localize(root_data: Book, obj: Any, *names: str) -> None:
     for name in names:
         if name in obj:
             obj[name] = localize(root_data["i18n"], obj[name])
 
 
-def do_format(root_data, obj, *names):
+# TODO: types
+def do_format(root_data: Book, obj: Any, *names: str) -> None:
     for name in names:
         if name in obj:
             obj[name] = format_string(root_data, obj[name])
 
 
-pattern_pat = re.compile(
-    r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?'
-)
-pattern_stubs = [
-    (None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"),
-    (None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"),
-    ("Fabric", "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java"),
-]
-
-
-def fetch_patterns(root_data):
-    registry = {}
+def fetch_patterns(root_data: Book) -> Registry:
+    registry: Registry = {}
     for loader, stub in pattern_stubs:
         filename = f"{root_data['resource_dir']}/../java/{stub}"
         if loader:
@@ -228,22 +247,24 @@ def fetch_patterns(root_data):
                 registry[root_data["modid"] + ":" + name] = (
                     string,
                     start_angle,
-                    bool(is_per_world),
+                    bool(
+                        is_per_world
+                    ),  # TODO: changing to is_per_world == "true" makes the tests fail??
                 )
     return registry
 
 
-def resolve_pattern(root_data, page):
+def resolve_pattern(root_data: Book, page: Page_hexcasting_pattern) -> None:
     if "pattern_reg" not in root_data:
         root_data["pattern_reg"] = fetch_patterns(root_data)
     page["op"] = [root_data["pattern_reg"][page["op_id"]]]
     page["name"] = localize_pattern(root_data, page["op_id"])
 
 
-def fixup_pattern(do_sig, root_data, page):
+def fixup_pattern(do_sig: bool, root_data: Book, page: ManualPatternPage) -> None:
     patterns = page["patterns"]
-    if "op_id" in page:
-        page["header"] = localize_pattern(root_data, page["op_id"])
+    if (op_id := page.get("op_id")) is not None:
+        page["header"] = localize_pattern(root_data, op_id)
     if not isinstance(patterns, list):
         patterns = [patterns]
     if do_sig:
@@ -255,7 +276,8 @@ def fixup_pattern(do_sig, root_data, page):
     page["op"] = [(p["signature"], p["startdir"], False) for p in patterns]
 
 
-def fetch_recipe(root_data, recipe):
+# TODO: recipe type (not a page, apparently)
+def fetch_recipe(root_data: Book, recipe: str) -> dict[str, dict[str, str]]:
     modid, recipeid = recipe.split(":")
     gen_resource_dir = (
         root_data["resource_dir"]
@@ -266,15 +288,15 @@ def fetch_recipe(root_data, recipe):
     return slurp(recipe_path)
 
 
-def fetch_recipe_result(root_data, recipe):
+def fetch_recipe_result(root_data: Book, recipe: str):
     return fetch_recipe(root_data, recipe)["result"]["item"]
 
 
-def fetch_bswp_recipe_result(root_data, recipe):
+def fetch_bswp_recipe_result(root_data: Book, recipe: str):
     return fetch_recipe(root_data, recipe)["result"]["name"]
 
 
-def localize_item(root_data, item):
+def localize_item(root_data: Book, item: str) -> str:
     # TODO hack
     item = re.sub("{.*", "", item.replace(":", "."))
     block = "block." + item
@@ -284,7 +306,8 @@ def localize_item(root_data, item):
     return localize(root_data["i18n"], "item." + item)
 
 
-page_types = {
+# TODO: move all of this to the individual classes, because this cannot be properly typed
+page_types: dict[str, Callable[[Book, dict[str, Any]], None]] = {
     "hexcasting:pattern": resolve_pattern,
     "hexcasting:manual_pattern": bind1(fixup_pattern, True),
     "hexcasting:manual_pattern_nosig": bind1(fixup_pattern, False),
@@ -313,7 +336,7 @@ page_types = {
 }
 
 
-def walk_dir(root_dir, prefix):
+def walk_dir(root_dir: str, prefix: str) -> Generator[str, None, None]:
     search_dir = root_dir + "/" + prefix
     for fh in os.scandir(search_dir):
         if fh.is_dir():
@@ -322,30 +345,31 @@ def walk_dir(root_dir, prefix):
             yield prefix + fh.name
 
 
-def parse_entry(root_data, entry_path, ent_name):
-    data = slurp(f"{entry_path}")
+# TODO: move to serde
+def parse_entry(root_data: Book, entry_path: str, ent_name: str) -> Entry:
+    data: Entry = slurp(f"{entry_path}")
     do_localize(root_data, data, "name")
     for i, page in enumerate(data["pages"]):
         if isinstance(page, str):
-            page = {"type": "patchouli:text", "text": page}
+            page = Page_patchouli_text(type="patchouli:text", text=page)
             data["pages"][i] = page
 
         do_localize(root_data, page, "title", "header")
         do_format(root_data, page, "text")
-        if page["type"] in page_types:
-            page_types[page["type"]](root_data, page)
+        if page_type := page_types.get(page["type"]):
+            page_type(root_data, page)
     data["id"] = ent_name
 
     return data
 
 
-def parse_category(root_data, base_dir, cat_name):
-    data = slurp(f"{base_dir}/categories/{cat_name}.json")
+def parse_category(root_data: Book, base_dir: str, cat_name: str) -> Category:
+    data: Category = slurp(f"{base_dir}/categories/{cat_name}.json")
     do_localize(root_data, data, "name")
     do_format(root_data, data, "description")
 
     entry_dir = f"{base_dir}/entries/{cat_name}"
-    entries = []
+    entries: list[Entry] = []
     for filename in os.listdir(entry_dir):
         if filename.endswith(".json"):
             basename = filename[:-5]
@@ -367,27 +391,28 @@ def parse_category(root_data, base_dir, cat_name):
     return data
 
 
-def parse_sortnum(cats, name):
+def parse_sortnum(cats: dict[str, Category], name: str) -> tuple[int, ...]:
     if "/" in name:
         ix = name.rindex("/")
         return parse_sortnum(cats, name[:ix]) + (cats[name].get("sortnum", 0),)
     return (cats[name].get("sortnum", 0),)
 
 
-def parse_book(root, mod_name, book_name):
-    base_dir = f"{root}/data/{mod_name}/patchouli_books/{book_name}"
-    root_info = slurp(f"{base_dir}/book.json")
+# TODO: use Path instead of strings
+def parse_book(resource_dir: str, mod_name: str, book_name: str) -> Book:
+    base_dir = f"{resource_dir}/data/{mod_name}/patchouli_books/{book_name}"
+    root_info: Book = slurp(f"{base_dir}/book.json")
 
-    root_info["resource_dir"] = root
+    root_info["resource_dir"] = resource_dir
     root_info["modid"] = mod_name
     root_info.setdefault("macros", {}).update(default_macros)
     if root_info.setdefault("i18n", {}):
-        root_info["i18n"] = slurp(f"{root}/assets/{mod_name}/lang/{lang}.json")
+        root_info["i18n"] = slurp(f"{resource_dir}/assets/{mod_name}/lang/{lang}.json")
         root_info["i18n"].update(extra_i18n)
 
     book_dir = f"{base_dir}/{lang}"
 
-    categories = []
+    categories: list[Category] = []
     for filename in walk_dir(f"{book_dir}/categories", ""):
         basename = filename[:-5]
         categories.append(parse_category(root_info, book_dir, basename))
@@ -403,7 +428,8 @@ def parse_book(root, mod_name, book_name):
     return root_info
 
 
-def tag_args(kwargs):
+# TODO: type
+def tag_args(kwargs: dict[str, Any]):
     return "".join(
         f" {'class' if key == 'clazz' else key.replace('_', '-')}={repr(escape(str(value)))}"
         for key, value in kwargs.items()
