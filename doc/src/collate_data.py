@@ -186,15 +186,6 @@ def format_string(root_data, string):
     return style_stack[0]
 
 
-test_root = {
-    "i18n": {},
-    "macros": default_macros,
-    "resource_dir": "Common/src/main/resources",
-    "modid": "hexcasting",
-}
-test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
-
-
 def localize_pattern(root_data, op_id):
     return localize(
         root_data["i18n"],
@@ -213,10 +204,6 @@ def do_format(root_data, obj, *names):
     for name in names:
         if name in obj:
             obj[name] = format_string(root_data, obj[name])
-
-
-def identity(x):
-    return x
 
 
 pattern_pat = re.compile(
@@ -448,11 +435,10 @@ class Empty:
 
 
 class Stream:
-    __slots__ = ["stream", "thunks"]
+    __slots__ = ["stream"]
 
     def __init__(self, stream):
         self.stream = stream
-        self.thunks = []
 
     def tag(self, name, **kwargs):
         keywords = tag_args(kwargs)

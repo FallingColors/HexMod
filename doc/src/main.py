@@ -1,6 +1,4 @@
 from pathlib import Path
-from sys import stdout
-from typing import Optional
 
 from collate_data import generate_docs, parse_book
 from tap import Tap
