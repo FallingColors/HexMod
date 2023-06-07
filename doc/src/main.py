@@ -1,5 +1,6 @@
 from pathlib import Path
 from sys import stdout
+from typing import Optional
 
 from collate_data import parse_book, write_docs
 from tap import Tap
@@ -25,7 +26,7 @@ class Args(Tap):
         self.add_argument("mod_name")
         self.add_argument("book_name")
         self.add_argument("template_file")
-        self.add_argument("output_file", nargs="?")
+        self.add_argument("output_file", help="(Path, optional)", nargs="?")
 
 
 def main(args: Args) -> None:

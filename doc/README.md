@@ -13,3 +13,9 @@ source venv/bin/activate # anything other than Windows
 
 pip install -r requirements.txt
 ```
+
+## Usage
+
+```sh
+python src/main.py ../Common/src/main/resources hexcasting thehexbook template.html out.html
+```

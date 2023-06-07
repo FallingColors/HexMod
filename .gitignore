@@ -29,6 +29,8 @@ plot/
 
 
 # Python
+/doc/*.html
+!/doc/template.html
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
