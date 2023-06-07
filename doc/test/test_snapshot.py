@@ -50,3 +50,8 @@ def test_cmd(docgen: DocgenArgs):
         stderr=sys.stderr,
     )
     docgen.assert_out_path()
+
+
+def test_stdout(docgen: DocgenArgs, capsys: pytest.CaptureFixture[str]):
+    main(Args().parse_args(docgen.argv[:-1]))
+    assert capsys.readouterr() == docgen.snapshot

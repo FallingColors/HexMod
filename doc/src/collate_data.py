@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+import io
 import json  # codec
 import os  # listdir
 import re  # parsing
 from collections import namedtuple
 from html import escape
-from typing import TextIO
 
 # TO USE: put in Hexcasting root dir, collate_data.py src/main/resources hexcasting thehexbook out.html
 
@@ -725,17 +725,23 @@ def write_book(out, book):
                 write_category(out, book, category)
 
 
-def write_docs(book, template_f: TextIO, output_f: TextIO):
-    for line in template_f:
-        if line.startswith("#DO_NOT_RENDER"):
-            _, *blacklist = line.split()
-            book["blacklist"].update(blacklist)
+def generate_docs(book, template: str) -> str:
+    # FIXME: super hacky temporary solution for returning this as a string
+    # just pass a string buffer to everything instead of a file
+    with io.StringIO() as output:
+        # TODO: refactor
+        for line in template.splitlines(True):
+            if line.startswith("#DO_NOT_RENDER"):
+                _, *blacklist = line.split()
+                book["blacklist"].update(blacklist)
 
-        if line.startswith("#SPOILER"):
-            _, *spoilers = line.split()
-            book["spoilers"].update(spoilers)
-        elif line == "#DUMP_BODY_HERE\n":
-            write_book(Stream(output_f), book)
-            print("", file=output_f)
-        else:
-            print(line, end="", file=output_f)
+            if line.startswith("#SPOILER"):
+                _, *spoilers = line.split()
+                book["spoilers"].update(spoilers)
+            elif line == "#DUMP_BODY_HERE\n":
+                write_book(Stream(output), book)
+                print("", file=output)
+            else:
+                print(line, end="", file=output)
+
+        return output.getvalue()

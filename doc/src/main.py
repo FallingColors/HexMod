@@ -2,7 +2,7 @@ from pathlib import Path
 from sys import stdout
 from typing import Optional
 
-from collate_data import parse_book, write_docs
+from collate_data import generate_docs, parse_book
 from tap import Tap
 
 
@@ -30,16 +30,20 @@ class Args(Tap):
 
 
 def main(args: Args) -> None:
+    # read the book and template, then fill the template
     book = parse_book(args.root.as_posix(), args.mod_name, args.book_name)
+    template = args.template_file.read_text("utf-8")
 
-    with args.template_file.open("r", encoding="utf-8") as template_f:
-        if args.output_file:
-            with args.output_file.open("w", encoding="utf-8") as output_f:
-                write_docs(book, template_f, output_f)
-        else:
-            write_docs(book, template_f, stdout)
+    docs = generate_docs(book, template)
+
+    # if there's an output file specified, write to it
+    # otherwise just print the generated docs
+    if args.output_file:
+        args.output_file.write_text(docs, "utf-8")
+    else:
+        print(docs)
 
 
-# entry point - just read the CLI args and run our main function with them
+# entry point: just read the CLI args and pass them to the actual logic
 if __name__ == "__main__":
     main(Args().parse_args())
