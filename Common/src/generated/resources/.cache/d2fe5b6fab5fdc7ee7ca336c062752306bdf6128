@@ -1,4 +1,4 @@
-// 1.19.2	2023-06-04T22:11:58.5791186	Block States: hexcasting
+// 1.19.2	2023-06-10T16:57:29.5188333	Block States: hexcasting
 901e38574bdaa40ea4a0f6e773a88a95d9c03e55 assets/hexcasting/blockstates/akashic_bookshelf.json
 32a77ef668198002563d68be35a24fa93c8d454a assets/hexcasting/blockstates/akashic_connector.json
 85080ce0a0387583a839e4788517d675a1a35e24 assets/hexcasting/blockstates/akashic_record.json
@@ -91,18 +91,18 @@ c0a2818ae1162e8b93d32a913602ba8523476695 assets/hexcasting/models/block/ancient_
 5a61959d58c2e01b970aea64980b854f5611dd7c assets/hexcasting/models/block/circle/directrix/redstone/dim_unpowered_south.json
 5a61959d58c2e01b970aea64980b854f5611dd7c assets/hexcasting/models/block/circle/directrix/redstone/dim_unpowered_up.json
 5a61959d58c2e01b970aea64980b854f5611dd7c assets/hexcasting/models/block/circle/directrix/redstone/dim_unpowered_west.json
-2d5e4a8848a8c856a2712ddb72b4adc83cf952a2 assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_down.json
-2d5e4a8848a8c856a2712ddb72b4adc83cf952a2 assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_east.json
-2d5e4a8848a8c856a2712ddb72b4adc83cf952a2 assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_north.json
-2d5e4a8848a8c856a2712ddb72b4adc83cf952a2 assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_south.json
-2d5e4a8848a8c856a2712ddb72b4adc83cf952a2 assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_up.json
-2d5e4a8848a8c856a2712ddb72b4adc83cf952a2 assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_west.json
-1a51c4f6d2d749c85562da1df2fa97392eeec40a assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_down.json
-1a51c4f6d2d749c85562da1df2fa97392eeec40a assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_east.json
-1a51c4f6d2d749c85562da1df2fa97392eeec40a assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_north.json
-1a51c4f6d2d749c85562da1df2fa97392eeec40a assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_south.json
-1a51c4f6d2d749c85562da1df2fa97392eeec40a assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_up.json
-1a51c4f6d2d749c85562da1df2fa97392eeec40a assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_west.json
+985d84a2d334b491d50ab434bdb402d35d31420a assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_down.json
+985d84a2d334b491d50ab434bdb402d35d31420a assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_east.json
+985d84a2d334b491d50ab434bdb402d35d31420a assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_north.json
+985d84a2d334b491d50ab434bdb402d35d31420a assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_south.json
+985d84a2d334b491d50ab434bdb402d35d31420a assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_up.json
+985d84a2d334b491d50ab434bdb402d35d31420a assets/hexcasting/models/block/circle/directrix/redstone/lit_powered_west.json
+04dd35d39851feb1b1203b698da39aef2f672e04 assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_down.json
+04dd35d39851feb1b1203b698da39aef2f672e04 assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_east.json
+04dd35d39851feb1b1203b698da39aef2f672e04 assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_north.json
+04dd35d39851feb1b1203b698da39aef2f672e04 assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_south.json
+04dd35d39851feb1b1203b698da39aef2f672e04 assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_up.json
+04dd35d39851feb1b1203b698da39aef2f672e04 assets/hexcasting/models/block/circle/directrix/redstone/lit_unpowered_west.json
 85a51b4253b01a236df8c691364f14566b964b8e assets/hexcasting/models/block/circle/impetus/empty/dim_down.json
 85a51b4253b01a236df8c691364f14566b964b8e assets/hexcasting/models/block/circle/impetus/empty/dim_east.json
 85a51b4253b01a236df8c691364f14566b964b8e assets/hexcasting/models/block/circle/impetus/empty/dim_north.json

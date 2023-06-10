@@ -315,8 +315,13 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             // The front face can never be both lit and unpowered (b/c otherwise it would exit the other way)
             String frontEnding, backEnding;
             if (isLit) {
-                frontEnding = "lit_powered";
-                backEnding = "lit_unpowered";
+                if (isPowered) {
+                    frontEnding = "lit_powered";
+                    backEnding = "dim_powered";
+                } else {
+                    frontEnding = "dim_unpowered";
+                    backEnding = "lit_unpowered";
+                }
             } else {
                 frontEnding = "dim_" + poweredness;
                 backEnding = "dim_" + poweredness;
