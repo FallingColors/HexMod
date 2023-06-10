@@ -15,7 +15,7 @@ class DocgenArgs:
     argv: list[str]
 
     def assert_out_path(self):
-        actual = self.out_path.read_text()
+        actual = self.out_path.read_text("utf-8")
         assert actual == self.snapshot
 
 

@@ -1,431 +1,17 @@
 #!/usr/bin/env python3
-import io
-import json  # codec
-import os  # listdir
-import re  # parsing
-from html import escape
-from typing import Any, Callable, Generator
+from __future__ import annotations
 
-from patchouli.types import (
-    Book,
-    Category,
-    Entry,
-    FormatTree,
-    ManualPatternPage,
-    Page,
-    Page_hexcasting_pattern,
-    Page_patchouli_text,
-    PatternPage,
-    PatternPageWithSig,
-    Registry,
-    Style,
-    Text,
-    _BasePage,
-)
+import io
+from html import escape
+from typing import IO, Any
+
+from common.formatting import FormatTree
+from patchouli.book import Book, Category, Entry, Page
 
 # extra info :(
-lang = "en_us"
 repo_names = {
     "hexcasting": "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources",
 }
-extra_i18n = {
-    "item.minecraft.amethyst_shard": "Amethyst Shard",
-    "item.minecraft.budding_amethyst": "Budding Amethyst",
-    "block.hexcasting.slate": "Blank Slate",
-}
-
-default_macros = {
-    "$(obf)": "$(k)",
-    "$(bold)": "$(l)",
-    "$(strike)": "$(m)",
-    "$(italic)": "$(o)",
-    "$(italics)": "$(o)",
-    "$(list": "$(li",
-    "$(reset)": "$()",
-    "$(clear)": "$()",
-    "$(2br)": "$(br2)",
-    "$(p)": "$(br2)",
-    "/$": "$()",
-    "<br>": "$(br)",
-    "$(nocolor)": "$(0)",
-    "$(item)": "$(#b0b)",
-    "$(thing)": "$(#490)",
-}
-
-colors: dict[str, str | None] = {
-    "0": None,
-    "1": "00a",
-    "2": "0a0",
-    "3": "0aa",
-    "4": "a00",
-    "5": "a0a",
-    "6": "fa0",
-    "7": "aaa",
-    "8": "555",
-    "9": "55f",
-    "a": "5f5",
-    "b": "5ff",
-    "c": "f55",
-    "d": "f5f",
-    "e": "ff5",
-    "f": "fff",
-}
-types = {
-    "k": "obf",
-    "l": "bold",
-    "m": "strikethrough",
-    "n": "underline",
-    "o": "italic",
-}
-
-keys = {
-    "use": "Right Click",
-    "sneak": "Left Shift",
-}
-
-pattern_pat = re.compile(
-    r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?'
-)
-pattern_stubs = [
-    (None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"),
-    (None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"),
-    ("Fabric", "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java"),
-]
-
-# TODO: what the hell is this
-bind1 = (lambda: None).__get__(0).__class__
-
-
-# TODO: serde
-def slurp(filename: str) -> Any:
-    with open(filename, "r", encoding="utf-8") as fh:
-        return json.load(fh)
-
-
-def parse_style(sty: str) -> tuple[str, Style | None]:
-    # TODO: match, maybe
-    if sty == "br":
-        return "\n", None
-    if sty == "br2":
-        return "", Style("para", {})
-    if sty == "li":
-        return "", Style("para", {"clazz": "fake-li"})
-    if sty[:2] == "k:":
-        return keys[sty[2:]], None
-    if sty[:2] == "l:":
-        return "", Style("link", sty[2:])
-    if sty == "/l":
-        return "", Style("link", None)
-    if sty == "playername":
-        return "[Playername]", None
-    if sty[:2] == "t:":
-        return "", Style("tooltip", sty[2:])
-    if sty == "/t":
-        return "", Style("tooltip", None)
-    if sty[:2] == "c:":
-        return "", Style("cmd_click", sty[2:])
-    if sty == "/c":
-        return "", Style("cmd_click", None)
-    if sty == "r" or not sty:
-        return "", Style("base", None)
-    if sty in types:
-        return "", Style(types[sty], True)
-    if sty in colors:
-        return "", Style("color", colors[sty])
-    if sty.startswith("#") and len(sty) in [4, 7]:
-        return "", Style("color", sty[1:])
-    # TODO more style parse
-    raise ValueError("Unknown style: " + sty)
-
-
-def localize(i18n: dict[str, str], string: str, default: str | None = None) -> str:
-    return (
-        i18n.get(string, default if default else string) if i18n else string
-    ).replace("%%", "%")
-
-
-format_re = re.compile(r"\$\(([^)]*)\)")
-
-
-def format_string(root_data: Book, string: str) -> FormatTree:
-    # FIXME: ew.
-    # resolve lang
-    string = localize(root_data["i18n"], string)
-
-    # resolve macros
-    # FIXME: this is just a fancy if statement, I think
-    old_string = None
-    while old_string != string:
-        old_string = string
-        for macro, replace in root_data["macros"].items():
-            string = string.replace(macro, replace)
-        else:
-            break
-
-    # lex out parsed styles
-    text_nodes: list[str] = []
-    styles: list[Style] = []
-    last_end = 0
-    extra_text = ""
-    for mobj in re.finditer(format_re, string):
-        bonus_text, sty = parse_style(mobj.group(1))
-        text = string[last_end : mobj.start()] + bonus_text
-        if sty:
-            styles.append(sty)
-            text_nodes.append(extra_text + text)
-            extra_text = ""
-        else:
-            extra_text += text
-        last_end = mobj.end()
-    text_nodes.append(extra_text + string[last_end:])
-    first_node, *text_nodes = text_nodes
-
-    # parse
-    style_stack = [
-        FormatTree(Style("base", True), []),
-        FormatTree(Style("para", {}), [first_node]),
-    ]
-    for style, text in zip(styles, text_nodes):
-        tmp_stylestack: list[Style] = []
-        if style.type == "base":
-            while style_stack[-1].style.type != "para":
-                last_node = style_stack.pop()
-                style_stack[-1].children.append(last_node)
-        elif any(tree.style.type == style.type for tree in style_stack):
-            while len(style_stack) >= 2:
-                last_node = style_stack.pop()
-                style_stack[-1].children.append(last_node)
-                if last_node.style.type == style.type:
-                    break
-                tmp_stylestack.append(last_node.style)
-        for sty in tmp_stylestack:
-            style_stack.append(FormatTree(sty, []))
-        if style.value is None:
-            if text:
-                style_stack[-1].children.append(text)
-        else:
-            style_stack.append(FormatTree(style, [text] if text else []))
-    while len(style_stack) >= 2:
-        last_node = style_stack.pop()
-        style_stack[-1].children.append(last_node)
-
-    return style_stack[0]
-
-
-def localize_pattern(root_data: Book, op_id: str) -> str:
-    return localize(
-        root_data["i18n"],
-        "hexcasting.spell.book." + op_id,
-        localize(root_data["i18n"], "hexcasting.spell." + op_id),
-    )
-
-
-# TODO: types
-def do_localize(root_data: Book, obj: Any, *names: str) -> None:
-    for name in names:
-        if name in obj:
-            obj[name] = localize(root_data["i18n"], obj[name])
-
-
-# TODO: types
-def do_format(root_data: Book, obj: Any, *names: str) -> None:
-    for name in names:
-        if name in obj:
-            obj[name] = format_string(root_data, obj[name])
-
-
-def fetch_patterns(root_data: Book) -> Registry:
-    registry: Registry = {}
-    for loader, stub in pattern_stubs:
-        filename = f"{root_data['resource_dir']}/../java/{stub}"
-        if loader:
-            filename = filename.replace("Common", loader)
-        with open(filename, "r", encoding="utf-8") as fh:
-            pattern_data = fh.read()
-            for mobj in re.finditer(pattern_pat, pattern_data):
-                string, start_angle, name, is_per_world = mobj.groups()
-                registry[root_data["modid"] + ":" + name] = (
-                    string,
-                    start_angle,
-                    bool(
-                        is_per_world
-                    ),  # TODO: changing to is_per_world == "true" makes the tests fail??
-                )
-    return registry
-
-
-def resolve_pattern(root_data: Book, page: Page_hexcasting_pattern) -> None:
-    if "pattern_reg" not in root_data:
-        root_data["pattern_reg"] = fetch_patterns(root_data)
-    page["op"] = [root_data["pattern_reg"][page["op_id"]]]
-    page["name"] = localize_pattern(root_data, page["op_id"])
-
-
-def fixup_pattern(do_sig: bool, root_data: Book, page: ManualPatternPage) -> None:
-    patterns = page["patterns"]
-    if (op_id := page.get("op_id")) is not None:
-        page["header"] = localize_pattern(root_data, op_id)
-    if not isinstance(patterns, list):
-        patterns = [patterns]
-    if do_sig:
-        inp = page.get("input", None) or ""
-        oup = page.get("output", None) or ""
-        pipe = f"{inp} \u2192 {oup}".strip()
-        suffix = f" ({pipe})" if inp or oup else ""
-        page["header"] += suffix
-    page["op"] = [(p["signature"], p["startdir"], False) for p in patterns]
-
-
-# TODO: recipe type (not a page, apparently)
-def fetch_recipe(root_data: Book, recipe: str) -> dict[str, dict[str, str]]:
-    modid, recipeid = recipe.split(":")
-    gen_resource_dir = (
-        root_data["resource_dir"]
-        .replace("/main/", "/generated/")
-        .replace("Common/", "Forge/")
-    )  # TODO hack
-    recipe_path = f"{gen_resource_dir}/data/{modid}/recipes/{recipeid}.json"
-    return slurp(recipe_path)
-
-
-def fetch_recipe_result(root_data: Book, recipe: str):
-    return fetch_recipe(root_data, recipe)["result"]["item"]
-
-
-def fetch_bswp_recipe_result(root_data: Book, recipe: str):
-    return fetch_recipe(root_data, recipe)["result"]["name"]
-
-
-def localize_item(root_data: Book, item: str) -> str:
-    # TODO hack
-    item = re.sub("{.*", "", item.replace(":", "."))
-    block = "block." + item
-    block_l = localize(root_data["i18n"], block)
-    if block_l != block:
-        return block_l
-    return localize(root_data["i18n"], "item." + item)
-
-
-# TODO: move all of this to the individual classes, because this cannot be properly typed
-page_types: dict[str, Callable[[Book, dict[str, Any]], None]] = {
-    "hexcasting:pattern": resolve_pattern,
-    "hexcasting:manual_pattern": bind1(fixup_pattern, True),
-    "hexcasting:manual_pattern_nosig": bind1(fixup_pattern, False),
-    "hexcasting:brainsweep": lambda rd, page: page.__setitem__(
-        "output_name", localize_item(rd, fetch_bswp_recipe_result(rd, page["recipe"]))
-    ),
-    "patchouli:link": lambda rd, page: do_localize(rd, page, "link_text"),
-    "patchouli:crafting": lambda rd, page: page.__setitem__(
-        "item_name",
-        [
-            localize_item(rd, fetch_recipe_result(rd, page[ty]))
-            for ty in ("recipe", "recipe2")
-            if ty in page
-        ],
-    ),
-    "hexcasting:crafting_multi": lambda rd, page: page.__setitem__(
-        "item_name",
-        [
-            localize_item(rd, fetch_recipe_result(rd, recipe))
-            for recipe in page["recipes"]
-        ],
-    ),
-    "patchouli:spotlight": lambda rd, page: page.__setitem__(
-        "item_name", localize_item(rd, page["item"])
-    ),
-}
-
-
-def walk_dir(root_dir: str, prefix: str) -> Generator[str, None, None]:
-    search_dir = root_dir + "/" + prefix
-    for fh in os.scandir(search_dir):
-        if fh.is_dir():
-            yield from walk_dir(root_dir, prefix + fh.name + "/")
-        elif fh.name.endswith(".json"):
-            yield prefix + fh.name
-
-
-# TODO: move to serde
-def parse_entry(root_data: Book, entry_path: str, ent_name: str) -> Entry:
-    data: Entry = slurp(f"{entry_path}")
-    do_localize(root_data, data, "name")
-    for i, page in enumerate(data["pages"]):
-        if isinstance(page, str):
-            page = Page_patchouli_text(type="patchouli:text", text=page)
-            data["pages"][i] = page
-
-        do_localize(root_data, page, "title", "header")
-        do_format(root_data, page, "text")
-        if page_type := page_types.get(page["type"]):
-            page_type(root_data, page)
-    data["id"] = ent_name
-
-    return data
-
-
-def parse_category(root_data: Book, base_dir: str, cat_name: str) -> Category:
-    data: Category = slurp(f"{base_dir}/categories/{cat_name}.json")
-    do_localize(root_data, data, "name")
-    do_format(root_data, data, "description")
-
-    entry_dir = f"{base_dir}/entries/{cat_name}"
-    entries: list[Entry] = []
-    for filename in os.listdir(entry_dir):
-        if filename.endswith(".json"):
-            basename = filename[:-5]
-            entries.append(
-                parse_entry(
-                    root_data, f"{entry_dir}/{filename}", cat_name + "/" + basename
-                )
-            )
-    entries.sort(
-        key=lambda ent: (
-            not ent.get("priority", False),
-            ent.get("sortnum", 0),
-            ent["name"],
-        )
-    )
-    data["entries"] = entries
-    data["id"] = cat_name
-
-    return data
-
-
-def parse_sortnum(cats: dict[str, Category], name: str) -> tuple[int, ...]:
-    if "/" in name:
-        ix = name.rindex("/")
-        return parse_sortnum(cats, name[:ix]) + (cats[name].get("sortnum", 0),)
-    return (cats[name].get("sortnum", 0),)
-
-
-# TODO: use Path instead of strings
-def parse_book(resource_dir: str, mod_name: str, book_name: str) -> Book:
-    base_dir = f"{resource_dir}/data/{mod_name}/patchouli_books/{book_name}"
-    root_info: Book = slurp(f"{base_dir}/book.json")
-
-    root_info["resource_dir"] = resource_dir
-    root_info["modid"] = mod_name
-    root_info.setdefault("macros", {}).update(default_macros)
-    if root_info.setdefault("i18n", {}):
-        root_info["i18n"] = slurp(f"{resource_dir}/assets/{mod_name}/lang/{lang}.json")
-        root_info["i18n"].update(extra_i18n)
-
-    book_dir = f"{base_dir}/{lang}"
-
-    categories: list[Category] = []
-    for filename in walk_dir(f"{book_dir}/categories", ""):
-        basename = filename[:-5]
-        categories.append(parse_category(root_info, book_dir, basename))
-    cats = {cat["id"]: cat for cat in categories}
-    categories.sort(key=lambda cat: (parse_sortnum(cats, cat["id"]), cat["name"]))
-
-    do_localize(root_info, root_info, "name")
-    do_format(root_info, root_info, "landing_text")
-    root_info["categories"] = categories
-    root_info["blacklist"] = set()
-    root_info["spoilers"] = set()
-
-    return root_info
 
 
 # TODO: type
@@ -439,7 +25,8 @@ def tag_args(kwargs: dict[str, Any]):
 class PairTag:
     __slots__ = ["stream", "name", "kwargs"]
 
-    def __init__(self, stream, name, **kwargs):
+    # TODO: type
+    def __init__(self, stream: IO[str], name: str, **kwargs: Any):
         self.stream = stream
         self.name = name
         self.kwargs = tag_args(kwargs)
@@ -447,7 +34,7 @@ class PairTag:
     def __enter__(self):
         print(f"<{self.name}{self.kwargs}>", file=self.stream, end="")
 
-    def __exit__(self, _1, _2, _3):
+    def __exit__(self, _1: Any, _2: Any, _3: Any):
         print(f"</{self.name}>", file=self.stream, end="")
 
 
@@ -455,37 +42,38 @@ class Empty:
     def __enter__(self):
         pass
 
-    def __exit__(self, _1, _2, _3):
+    def __exit__(self, _1: Any, _2: Any, _3: Any):
         pass
 
 
 class Stream:
     __slots__ = ["stream"]
 
-    def __init__(self, stream):
+    def __init__(self, stream: IO[str]):
         self.stream = stream
 
-    def tag(self, name, **kwargs):
+    def tag(self, name: str, **kwargs: Any):
         keywords = tag_args(kwargs)
         print(f"<{name}{keywords} />", file=self.stream, end="")
         return self
 
-    def pair_tag(self, name, **kwargs):
+    def pair_tag(self, name: str, **kwargs: Any):
         return PairTag(self.stream, name, **kwargs)
 
-    def pair_tag_if(self, cond, name, **kwargs):
+    def pair_tag_if(self, cond: Any, name: str, **kwargs: Any):
         return self.pair_tag(name, **kwargs) if cond else Empty()
 
-    def empty_pair_tag(self, name, **kwargs):
+    def empty_pair_tag(self, name: str, **kwargs: Any):
         with self.pair_tag(name, **kwargs):
             pass
 
-    def text(self, txt):
+    def text(self, txt: str):
         print(escape(txt), file=self.stream, end="")
         return self
 
 
-def get_format(out, ty, value):
+# TODO: move
+def get_format(out: Stream, ty: str, value: Any):
     if ty == "para":
         return out.pair_tag("p", **value)
     if ty == "color":
@@ -514,15 +102,15 @@ def get_format(out, ty, value):
     raise ValueError("Unknown format type: " + ty)
 
 
-def entry_spoilered(root_info, entry):
-    return entry.get("advancement", None) in root_info["spoilers"]
+def entry_spoilered(root_info: Book, entry: Entry):
+    return entry.get("advancement", None) in root_info.spoilers
 
 
-def category_spoilered(root_info, category):
+def category_spoilered(root_info: Book, category: Category):
     return all(entry_spoilered(root_info, ent) for ent in category["entries"])
 
 
-def write_block(out, block):
+def write_block(out: Stream, block: FormatTree | str):
     if isinstance(block, str):
         first = False
         for line in block.split("\n"):
@@ -542,22 +130,21 @@ def write_block(out, block):
             write_block(out, child)
 
 
-def anchor_toc(out):
+def anchor_toc(out: Stream):
     with out.pair_tag(
         "a", href="#table-of-contents", clazz="permalink small", title="Jump to top"
     ):
         out.empty_pair_tag("i", clazz="bi bi-box-arrow-up")
 
 
-def permalink(out, link):
+def permalink(out: Stream, link: str):
     with out.pair_tag("a", href=link, clazz="permalink small", title="Permalink"):
         out.empty_pair_tag("i", clazz="bi bi-link-45deg")
 
 
-# TODO modularize
-def write_page(out, pageid, page):
-    if "anchor" in page:
-        anchor_id = pageid + "@" + page["anchor"]
+def write_page(out: Stream, pageid: str, page: Page):
+    if anchor := page.get("anchor"):
+        anchor_id = pageid + "@" + anchor
     else:
         anchor_id = None
 
@@ -642,19 +229,19 @@ def write_page(out, pageid, page):
                         permalink(out, "#" + anchor_id)
             with out.pair_tag("details", clazz="spell-collapsible"):
                 out.empty_pair_tag("summary", clazz="collapse-spell")
-                for string, start_angle, per_world in page["op"]:
+                for pattern in page["op"]:
                     with out.pair_tag(
                         "canvas",
                         clazz="spell-viz",
                         width=216,
                         height=216,
-                        data_string=string,
-                        data_start=start_angle.lower(),
-                        data_per_world=per_world,
+                        data_string=pattern.angle_sig,
+                        data_start=pattern.direction.lower(),
+                        data_per_world=pattern.is_per_world,
                     ):
                         out.text(
                             "Your browser does not support visualizing patterns. Pattern code: "
-                            + string
+                            + pattern.angle_sig
                         )
             write_block(out, page["text"])
         else:
@@ -665,7 +252,7 @@ def write_page(out, pageid, page):
     out.tag("br")
 
 
-def write_entry(out, book, entry):
+def write_entry(out: Stream, book: Book, entry: Entry):
     with out.pair_tag("div", id=entry["id"]):
         with out.pair_tag_if(entry_spoilered(book, entry), "div", clazz="spoilered"):
             with out.pair_tag("h3", clazz="entry-title page-header"):
@@ -676,7 +263,7 @@ def write_entry(out, book, entry):
                 write_page(out, entry["id"], page)
 
 
-def write_category(out, book, category):
+def write_category(out: Stream, book: Book, category: Category):
     with out.pair_tag("section", id=category["id"]):
         with out.pair_tag_if(
             category_spoilered(book, category), "div", clazz="spoilered"
@@ -687,11 +274,11 @@ def write_category(out, book, category):
                 permalink(out, "#" + category["id"])
             write_block(out, category["description"])
         for entry in category["entries"]:
-            if entry["id"] not in book["blacklist"]:
+            if entry["id"] not in book.blacklist:
                 write_entry(out, book, entry)
 
 
-def write_toc(out, book):
+def write_toc(out: Stream, book: Book):
     with out.pair_tag("h2", id="table-of-contents", clazz="page-header"):
         out.text("Table of Contents")
         with out.pair_tag(
@@ -703,7 +290,7 @@ def write_toc(out, book):
         ):
             out.empty_pair_tag("i", clazz="bi bi-list-nested")
         permalink(out, "#table-of-contents")
-    for category in book["categories"]:
+    for category in book.categories:
         with out.pair_tag("details", clazz="toc-category"):
             with out.pair_tag("summary"):
                 with out.pair_tag(
@@ -723,20 +310,20 @@ def write_toc(out, book):
                             out.text(entry["name"])
 
 
-def write_book(out, book):
+def write_book(out: Stream, book: Book):
     with out.pair_tag("div", clazz="container"):
         with out.pair_tag("header", clazz="jumbotron"):
             with out.pair_tag("h1", clazz="book-title"):
-                write_block(out, book["name"])
-            write_block(out, book["landing_text"])
+                write_block(out, book.name)
+            write_block(out, book.landing_text)
         with out.pair_tag("nav"):
             write_toc(out, book)
         with out.pair_tag("main", clazz="book-body"):
-            for category in book["categories"]:
+            for category in book.categories:
                 write_category(out, book, category)
 
 
-def generate_docs(book, template: str) -> str:
+def generate_docs(book: Book, template: str) -> str:
     # FIXME: super hacky temporary solution for returning this as a string
     # just pass a string buffer to everything instead of a file
     with io.StringIO() as output:
@@ -744,11 +331,11 @@ def generate_docs(book, template: str) -> str:
         for line in template.splitlines(True):
             if line.startswith("#DO_NOT_RENDER"):
                 _, *blacklist = line.split()
-                book["blacklist"].update(blacklist)
+                book.blacklist.update(blacklist)
 
             if line.startswith("#SPOILER"):
                 _, *spoilers = line.split()
-                book["spoilers"].update(spoilers)
+                book.spoilers.update(spoilers)
             elif line == "#DUMP_BODY_HERE\n":
                 write_book(Stream(output), book)
                 print("", file=output)

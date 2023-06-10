@@ -1,8 +1,24 @@
+# pyright: reportUnknownMemberType=false
+
+import sys
 from pathlib import Path
 
-from collate_data import generate_docs, parse_book
+from collate_data import generate_docs
+from common.pattern_info import PatternStubFile
+from patchouli.book import Book
 from tap import Tap
 
+if sys.version_info < (3, 11):
+    raise RuntimeError("Minimum Python version: 3.11")
+
+_PATTERN_STUBS = [
+    PatternStubFile(None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"),
+    PatternStubFile(None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"),
+    PatternStubFile(
+        "Fabric",
+        "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java",
+    ),
+]
 
 # CLI arguments
 class Args(Tap):
@@ -29,7 +45,7 @@ class Args(Tap):
 
 def main(args: Args) -> None:
     # read the book and template, then fill the template
-    book = parse_book(args.root.as_posix(), args.mod_name, args.book_name)
+    book = Book(args.root, args.mod_name, args.book_name, _PATTERN_STUBS)
     template = args.template_file.read_text("utf-8")
 
     docs = generate_docs(book, template)

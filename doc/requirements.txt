@@ -2,3 +2,4 @@ black==22.10.0               # formatting
 pytest==7.3.1                # testing framework
 syrupy==4.0.2                # snapshot tests
 typed-argument-parser==1.8.0 # better argument parsing
+pyserde==0.10.8              # book deserialization
