@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 from typing import (
-    TYPE_CHECKING,
     Any,
     Callable,
     Generic,
@@ -13,12 +12,9 @@ from typing import (
     TypeVar,
 )
 
+from common.composition import Book, Entry
 from common.formatting import FormatTree
 from common.pattern_info import PatternInfo, RawPatternInfo
-
-if TYPE_CHECKING:
-    from patchouli.book import Book
-    from patchouli.entry import Entry
 
 _T_LiteralString = TypeVar("_T_LiteralString", bound=LiteralString)
 
@@ -161,13 +157,13 @@ def slurp(filename: str) -> Any:
 
 def resolve_pattern(book: Book, page: Page_hexcasting_pattern) -> None:
     page["op"] = [book.patterns[page["op_id"]]]
-    page["name"] = book.localize_pattern(page["op_id"])
+    page["name"] = book.i18n.localize_pattern(page["op_id"])
 
 
 def fixup_pattern(do_sig: bool, book: Book, page: ManualPatternPage) -> None:
     patterns = page["patterns"]
     if (op_id := page.get("op_id")) is not None:
-        page["header"] = book.localize_pattern(op_id)
+        page["header"] = book.i18n.localize_pattern(op_id)
     if not isinstance(patterns, list):
         patterns = [patterns]
     if do_sig:
@@ -205,7 +201,7 @@ def fetch_bswp_recipe_result(book: Book, recipe: str):
 def do_localize(book: Book, obj: Entry | Page, *names: str) -> None:
     for name in names:
         if name in obj:
-            obj[name] = book.localize(obj[name])
+            obj[name] = book.i18n.localize(obj[name])
 
 
 # TODO: move all of this to the individual page classes
@@ -215,13 +211,13 @@ page_transformers: dict[str, Callable[[Book, Any], None]] = {
     "hexcasting:manual_pattern_nosig": bind1(fixup_pattern, False),
     "hexcasting:brainsweep": lambda book, page: page.__setitem__(
         "output_name",
-        book.localize_item(fetch_bswp_recipe_result(book, page["recipe"])),
+        book.i18n.localize_item(fetch_bswp_recipe_result(book, page["recipe"])),
     ),
     "patchouli:link": lambda book, page: do_localize(book, page, "link_text"),
     "patchouli:crafting": lambda book, page: page.__setitem__(
         "item_name",
         [
-            book.localize_item(fetch_recipe_result(book, page[ty]))
+            book.i18n.localize_item(fetch_recipe_result(book, page[ty]))
             for ty in ("recipe", "recipe2")
             if ty in page
         ],
@@ -229,11 +225,11 @@ page_transformers: dict[str, Callable[[Book, Any], None]] = {
     "hexcasting:crafting_multi": lambda book, page: page.__setitem__(
         "item_name",
         [
-            book.localize_item(fetch_recipe_result(book, recipe))
+            book.i18n.localize_item(fetch_recipe_result(book, recipe))
             for recipe in page["recipes"]
         ],
     ),
     "patchouli:spotlight": lambda book, page: page.__setitem__(
-        "item_name", book.localize_item(page["item"])
+        "item_name", book.i18n.localize_item(page["item"])
     ),
 }

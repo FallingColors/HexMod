@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, NotRequired, TypedDict
+from typing import NotRequired, TypedDict
 
+from common.composition import Book
 from patchouli.page import Page, Page_patchouli_text, page_transformers, slurp
-
-if TYPE_CHECKING:
-    from patchouli.book import Book
 
 
 class Entry(TypedDict):
@@ -28,7 +26,7 @@ class Entry(TypedDict):
 def do_localize(book: Book, obj: Entry | Page, *names: str) -> None:
     for name in names:
         if name in obj:
-            obj[name] = book.localize(obj[name])
+            obj[name] = book.i18n.localize(obj[name])
 
 
 # TODO: remove

@@ -2,17 +2,15 @@ from __future__ import annotations
 
 from dataclasses import InitVar, dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
+from common.composition import WithBook
 from common.deserialize import FromJson
 from common.formatting import FormatTree
 from minecraft.i18n import LocalizedStr
 from minecraft.resource import ItemStack, ResourceLocation
 from patchouli.entry import Entry, parse_entry
 from serde import deserialize
-
-if TYPE_CHECKING:
-    from patchouli.book import Book
 
 
 @deserialize
@@ -35,10 +33,9 @@ class RawCategory(FromJson):
 
 
 @dataclass
-class Category:
+class Category(WithBook):
     """Category with pages and localizations."""
 
-    book: Book
     path: InitVar[Path]
 
     def __post_init__(self, path: Path):
@@ -46,10 +43,10 @@ class Category:
 
         # category id
         id_resource_path = path.relative_to(self.dir).with_suffix("").as_posix()
-        self.id = ResourceLocation(self.book.modid, id_resource_path)
+        self.id = ResourceLocation(self.modid, id_resource_path)
 
         # localized strings
-        self.name: LocalizedStr = self.book.localize(self.raw.name)
+        self.name: LocalizedStr = self.i18n.localize(self.raw.name)
         self.description: FormatTree = self.book.format(self.raw.description)
 
         # entries
@@ -96,13 +93,3 @@ class Category:
         if isinstance(other, Category):
             return self.sortnum < other.sortnum
         return NotImplemented
-
-
-def load_categories(book: Book) -> dict[ResourceLocation, Category]:
-    """Deserializes and returns a dict of categories in the book.
-
-    Order is implementation-defined, since sorting is not possible until the categories
-    have been added to the book.
-    """
-    categories = (Category(book, path) for path in book.categories_dir.rglob("*.json"))
-    return {category.id: category for category in categories}

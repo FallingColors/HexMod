@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import os
-import re
 from dataclasses import InitVar, dataclass
 from pathlib import Path
 from typing import Literal
@@ -11,9 +9,9 @@ from common.formatting import FormatTree
 from common.pattern_info import PatternInfo, PatternStubFile, load_all_patterns
 from common.types import Color
 from common.utils import sorted_dict
-from minecraft.i18n import LocalizedStr, load_i18n
+from minecraft.i18n import I18n, LocalizedStr
 from minecraft.resource import ItemStack, ResourceLocation
-from patchouli.category import Category, load_categories
+from patchouli.category import Category
 from serde import deserialize
 
 _DEFAULT_LANG = "en_us"
@@ -122,9 +120,7 @@ class Book:
 
         # i18n lookup dict
         # must be initialized before using self.localize or self.format
-        self.i18n: dict[str, LocalizedStr] | None = None
-        if self.raw.i18n:
-            self.i18n = load_i18n(self.lang_dir / f"{lang_name}.json")
+        self.i18n: I18n = I18n(self.resource_dir, self.modid, lang_name, self.raw.i18n)
 
         # macros
         # must be initialized before using self.format
@@ -135,7 +131,7 @@ class Book:
         self.macros.update(_DEFAULT_MACROS)
 
         # localized strings
-        self.name: LocalizedStr = self.localize(self.raw.name)
+        self.name: LocalizedStr = self.i18n.localize(self.raw.name)
         self.landing_text: FormatTree = self.format(self.raw.landing_text)
 
         # patterns
@@ -147,7 +143,7 @@ class Book:
         )
 
         # categories, sorted by sortnum
-        self.categories: dict[ResourceLocation, Category] = load_categories(self)
+        self.categories: dict[ResourceLocation, Category] = self._load_categories()
         self.categories = sorted_dict(self.categories)
 
         # other fields
@@ -178,61 +174,19 @@ class Book:
     def templates_dir(self) -> Path:
         return self.dir_with_lang / "templates"
 
-    @property
-    def lang_dir(self) -> Path:
-        """eg. `resources/assets/hexcasting/lang`"""
-        return self.resource_dir / "assets" / self.modid / "lang"
-
-    def localize(
-        self,
-        key: str,
-        default: str | None = None,
-        skip_errors: bool = False,
-    ) -> LocalizedStr:
-        """Looks up the given string in the lang table if i18n is enabled.
-        Otherwise, returns the original key.
-
-        Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
-        """
-        if self.i18n is None:
-            return LocalizedStr(key.replace("%%", "%"))
-
-        if default is not None:
-            localized = self.i18n.get(key, default)
-        elif skip_errors:
-            localized = self.i18n.get(key, key)
-        else:
-            # raises if not found
-            localized = self.i18n[key]
-
-        return LocalizedStr(localized.replace("%%", "%"))
-
-    def localize_pattern(self, op_id: str, skip_errors: bool = False) -> LocalizedStr:
-        """Localizes the given pattern id (internal name, eg. brainsweep).
-
-        Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
-        """
-        try:
-            # prefer the book-specific translation if it exists
-            # don't pass skip_errors here because we need to catch it below
-            return self.localize(f"hexcasting.spell.book.{op_id}")
-        except KeyError:
-            return self.localize(f"hexcasting.spell.{op_id}", skip_errors=skip_errors)
-
-    def localize_item(self, item: str, skip_errors: bool = False) -> LocalizedStr:
-        """Localizes the given item resource name.
-
-        Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
-        """
-        # FIXME: hack
-        item = re.sub(r"{.*", "", item.replace(":", "."))
-        try:
-            return self.localize(f"block.{item}")
-        except KeyError:
-            return self.localize(f"item.{item}", skip_errors=skip_errors)
-
     def format(self, text: str | LocalizedStr, skip_errors: bool = False) -> FormatTree:
         """Converts the given string into a FormatTree, localizing it if necessary."""
         if not isinstance(text, LocalizedStr):
-            text = self.localize(text, skip_errors=skip_errors)
+            text = self.i18n.localize(text, skip_errors=skip_errors)
         return FormatTree.format(self.macros, text)
+
+    def _load_categories(self) -> dict[ResourceLocation, Category]:
+        """Deserializes and returns a dict of categories in the book.
+
+        Order is implementation-defined, since sorting is not possible until the categories
+        have been added to the book.
+        """
+        categories = (
+            Category(self, path) for path in self.categories_dir.rglob("*.json")
+        )
+        return {category.id: category for category in categories}
