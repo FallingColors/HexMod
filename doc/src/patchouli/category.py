@@ -3,12 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from common.composition import Book, WithBook
+from common.abstract import Book, Sortable, WithBook, WithPathId
 from common.deserialize import FromJson
 from common.formatting import FormatTree
-from common.utils import Sortable
 from minecraft.i18n import LocalizedStr
-from minecraft.resource import ItemStack, ResourceLocation, WithPathId
+from minecraft.resource import ItemStack, ResourceLocation
 from patchouli.entry import Entry
 from serde import deserialize
 

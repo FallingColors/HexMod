@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import re
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Self
 
 from common.deserialize import FromStr
@@ -12,8 +10,6 @@ _RESOURCE_LOCATION_RE = re.compile(r"(?:([0-9a-z_\-.]+):)?([0-9a-z_\-./]+)")
 _ITEM_STACK_SUFFIX_RE = re.compile(r"(?:#([0-9]+))?({.*})?")
 
 
-# TODO: instead of the dataclass field thing, make this subclass str
-# _namespace and _method, access via properties
 @dataclass(repr=False, frozen=True)
 class ResourceLocation(FromStr):
     """Represents a Minecraft resource location / namespaced ID."""
@@ -69,29 +65,3 @@ class ItemStack(ResourceLocation):
         if self.nbt is not None:
             s += self.nbt
         return s
-
-
-@dataclass
-class WithPathId(ABC):
-    """ABC for classes with a ResourceLocation id."""
-
-    path: Path
-
-    @property
-    @abstractmethod
-    def base_dir(self) -> Path:
-        """Base directory. Combine with self.id.path to find this file."""
-
-    @property
-    @abstractmethod
-    def modid(self) -> str:
-        ...
-
-    @property
-    def id(self) -> ResourceLocation:
-        resource_path = self.path.relative_to(self.base_dir).with_suffix("").as_posix()
-        return ResourceLocation(self.modid, resource_path)
-
-    @property
-    def href(self) -> str:
-        return f"#{self.id.path}"

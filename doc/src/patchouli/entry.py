@@ -4,11 +4,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from common.composition import Book, Category, WithBook
+from common.abstract import Book, Category, Sortable, WithBook, WithPathId
 from common.deserialize import FromJson
-from common.utils import Sortable
 from minecraft.i18n import LocalizedStr
-from minecraft.resource import ItemStack, ResourceLocation, WithPathId
+from minecraft.resource import ItemStack, ResourceLocation
 from patchouli.page import Page, Page_patchouli_text, page_transformers
 from serde import deserialize
 

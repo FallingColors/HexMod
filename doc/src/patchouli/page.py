@@ -12,7 +12,7 @@ from typing import (
     TypeVar,
 )
 
-from common.composition import Book, Entry
+from common.abstract import Book, Entry
 from common.formatting import FormatTree
 from common.pattern_info import PatternInfo, RawPatternInfo
 
