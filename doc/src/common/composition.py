@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any
 
 # circular imports are gross
@@ -11,12 +11,16 @@ if TYPE_CHECKING:
 else:
     Book, Category, Entry = Any, Any, Any
 
+# TODO: consolidate ABCs here
 
-@dataclass
-class WithBook:
-    """Helper base class for composition with Book."""
 
-    book: Book
+class WithBook(ABC):
+    """ABC for composition with Book."""
+
+    @property
+    @abstractmethod
+    def book(self) -> Book:
+        ...
 
     @property
     def resource_dir(self):

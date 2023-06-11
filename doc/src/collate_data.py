@@ -105,7 +105,9 @@ def get_format(out: Stream, ty: str, value: Any):
 
 
 def entry_spoilered(root_info: Book, entry: Entry):
-    return entry.get("advancement", None) in root_info.spoilers
+    if entry.raw.advancement is None:
+        return False
+    return str(entry.raw.advancement) in root_info.spoilers
 
 
 def category_spoilered(root_info: Book, category: Category):
@@ -255,14 +257,14 @@ def write_page(out: Stream, pageid: str, page: Page):
 
 
 def write_entry(out: Stream, book: Book, entry: Entry):
-    with out.pair_tag("div", id=entry["id"]):
+    with out.pair_tag("div", id=entry.id.path):
         with out.pair_tag_if(entry_spoilered(book, entry), "div", clazz="spoilered"):
             with out.pair_tag("h3", clazz="entry-title page-header"):
-                write_block(out, entry["name"])
+                write_block(out, entry.name)
                 anchor_toc(out)
-                permalink(out, "#" + entry["id"])
-            for page in entry["pages"]:
-                write_page(out, entry["id"], page)
+                permalink(out, entry.href)
+            for page in entry.pages:
+                write_page(out, entry.id.path, page)
 
 
 def write_category(out: Stream, book: Book, category: Category):
@@ -276,7 +278,7 @@ def write_category(out: Stream, book: Book, category: Category):
                 permalink(out, category.href)
             write_block(out, category.description)
         for entry in category.entries:
-            if entry["id"] not in book.blacklist:
+            if entry.id.path not in book.blacklist:
                 write_entry(out, book, entry)
 
 
@@ -306,10 +308,10 @@ def write_toc(out: Stream, book: Book):
                     with out.pair_tag("li"):
                         with out.pair_tag(
                             "a",
-                            href="#" + entry["id"],
+                            href=entry.href,
                             clazz="spoilered" if entry_spoilered(book, entry) else "",
                         ):
-                            out.text(entry["name"])
+                            out.text(entry.name)
 
 
 def write_book(out: Stream, book: Book):

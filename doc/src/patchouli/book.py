@@ -54,11 +54,11 @@ class RawBook(FromJson):
 
     # optional
     book_texture: ResourceLocation = ResourceLocation.field(
-        "patchouli:textures/gui/book_brown.png"
+        factory="patchouli:textures/gui/book_brown.png"
     )
     filler_texture: ResourceLocation | None = ResourceLocation.field(default=None)
     crafting_texture: ResourceLocation | None = ResourceLocation.field(default=None)
-    model: ResourceLocation = ResourceLocation.field("patchouli:book_brown")
+    model: ResourceLocation = ResourceLocation.field(factory="patchouli:book_brown")
     text_color: Color = Color("000000")
     header_color: Color = Color("333333")
     nameplate_color: Color = Color("FFDD00")
@@ -69,7 +69,8 @@ class RawBook(FromJson):
     open_sound: ResourceLocation | None = ResourceLocation.field(default=None)
     flip_sound: ResourceLocation | None = ResourceLocation.field(default=None)
     _index_icon: ResourceLocation | None = ResourceLocation.field(
-        rename="index_icon", default=None
+        rename="index_icon",
+        default=None,
     )
     pamphlet: bool = False
     show_progress: bool = True
@@ -187,6 +188,6 @@ class Book:
         have been added to the book.
         """
         categories = (
-            Category(self, path) for path in self.categories_dir.rglob("*.json")
+            Category(path, self) for path in self.categories_dir.rglob("*.json")
         )
         return {category.id: category for category in categories}

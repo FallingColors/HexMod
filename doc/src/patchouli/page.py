@@ -198,7 +198,7 @@ def fetch_bswp_recipe_result(book: Book, recipe: str):
 
 
 # TODO: remove
-def do_localize(book: Book, obj: Entry | Page, *names: str) -> None:
+def do_localize(book: Book, obj: Page, *names: str) -> None:
     for name in names:
         if name in obj:
             obj[name] = book.i18n.localize(obj[name])

@@ -1,6 +1,6 @@
 import json
 import re
-from dataclasses import InitVar, dataclass, field
+from dataclasses import InitVar, dataclass
 from pathlib import Path
 from typing import Self
 
@@ -20,6 +20,8 @@ _EXTRA_I18N = {
     "block.hexcasting.slate": LocalizedStr("Blank Slate"),
 }
 
+I18nLookup = dict[str, LocalizedStr]
+
 
 @dataclass
 class I18n:
@@ -30,32 +32,37 @@ class I18n:
     default_lang: str
 
     enabled: InitVar[bool]
-    extra_i18n: InitVar[dict[str, LocalizedStr] | None] = None
+    extra_i18n: InitVar[I18nLookup | None] = None
 
-    _i18n: dict[str, LocalizedStr] | None = field(default=None)
+    _lookup: I18nLookup | None = None
 
-    def __post_init__(self, enabled: bool, extra_i18n: dict[str, LocalizedStr] | None):
+    def __post_init__(self, enabled: bool, extra_i18n: I18nLookup | None):
         if not enabled:
             return
 
-        # load and deserialize
-        # TODO: load ALL of the i18n files, return dict[str, dict[str, LocalizedStr]]
+        # load, deserialize, validate
+        # TODO: load ALL of the i18n files, return dict[str, _Lookup] | None
         # or maybe dict[(str, str), LocalizedStr]
         # we could also use that to ensure all i18n files have the same set of keys
+        # TODO: types, all of this is nasty
         path = self.dir / f"{self.default_lang}.json"
-        self._i18n = json.loads(path.read_text("utf-8"))
-        self._i18n.update(_EXTRA_I18N)
-        if extra_i18n:
-            self._i18n.update(extra_i18n)
+        self._lookup: I18nLookup | None = json.loads(path.read_text("utf-8"))
 
-        # type-checking
+        # validate
         # TODO: there's probably a library we can use to do this for us
         assert isinstance(
-            self._i18n, dict
-        ), f"Unexpected top-level type `{type(self._i18n)}` in i18n: {path}"
-        for k, v in self._i18n.items():
-            assert isinstance(k, str), f"Unexpected key type `{type(k)}` in i18n: {k}"
-            assert isinstance(v, str), f"Unexpected value type `{type(v)}` in i18n: {v}"
+            self._lookup, dict
+        ), f"Unexpected top-level type `{type(self._lookup)}` in {path}"
+        for k, v in self._lookup.items():
+            assert isinstance(k, str), f"Unexpected key type `{type(k)}` in {path}: {k}"
+            assert isinstance(
+                v, str
+            ), f"Unexpected value type `{type(v)}` in {path}: {v}"
+
+        # add extras
+        self._lookup.update(_EXTRA_I18N)
+        if extra_i18n:
+            self._lookup.update(extra_i18n)
 
     @property
     def dir(self) -> Path:
@@ -73,16 +80,16 @@ class I18n:
 
         Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
         """
-        if self._i18n is None:
+        if self._lookup is None:
             return LocalizedStr(key.replace("%%", "%"))
 
         if default is not None:
-            localized = self._i18n.get(key, default)
+            localized = self._lookup.get(key, default)
         elif skip_errors:
-            localized = self._i18n.get(key, key)
+            localized = self._lookup.get(key, key)
         else:
             # raises if not found
-            localized = self._i18n[key]
+            localized = self._lookup[key]
 
         return LocalizedStr(localized.replace("%%", "%"))
 

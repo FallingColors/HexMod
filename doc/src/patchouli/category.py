@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-from dataclasses import InitVar, dataclass
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
-from common.composition import WithBook
+from common.composition import Book, WithBook
 from common.deserialize import FromJson
 from common.formatting import FormatTree
+from common.utils import Sortable
 from minecraft.i18n import LocalizedStr
-from minecraft.resource import ItemStack, ResourceLocation
-from patchouli.entry import Entry, parse_entry
+from minecraft.resource import ItemStack, ResourceLocation, WithPathId
+from patchouli.entry import Entry
 from serde import deserialize
 
 
@@ -33,45 +33,20 @@ class RawCategory(FromJson):
 
 
 @dataclass
-class Category(WithBook):
+class Category(WithBook, WithPathId, Sortable):
     """Category with pages and localizations."""
 
-    path: InitVar[Path]
+    _book: Book
 
-    def __post_init__(self, path: Path):
-        self.raw: RawCategory = RawCategory.load(path)
-
-        # category id
-        id_resource_path = path.relative_to(self.dir).with_suffix("").as_posix()
-        self.id = ResourceLocation(self.modid, id_resource_path)
+    def __post_init__(self):
+        self.raw: RawCategory = RawCategory.load(self.path)
 
         # localized strings
         self.name: LocalizedStr = self.i18n.localize(self.raw.name)
         self.description: FormatTree = self.book.format(self.raw.description)
 
         # entries
-        # TODO: make not bad
-        self.entries: list[Entry] = []
-        entry_dir = self.book.entries_dir / self.id.path
-        for entry_path in entry_dir.glob("*.json"):
-            basename = entry_path.stem
-            self.entries.append(
-                parse_entry(
-                    self.book, entry_path.as_posix(), self.id.path + "/" + basename
-                )
-            )
-        self.entries.sort(
-            key=lambda ent: (
-                not ent.get("priority", False),
-                ent.get("sortnum", 0),
-                ent["name"],
-            )
-        )
-
-    @property
-    def dir(self) -> Path:
-        """Directory containing this category's json file."""
-        return self.book.categories_dir
+        self.entries: list[Entry] = self._load_entries()
 
     @property
     def parent(self) -> Category | None:
@@ -79,17 +54,23 @@ class Category(WithBook):
             return None
         return self.book.categories[self.raw.parent]
 
-    @property
-    def href(self) -> str:
-        return f"#{self.id.path}"
+    def _load_entries(self) -> list[Entry]:
+        entry_dir = self.book.entries_dir / self.id.path
+        return sorted(Entry(path, self) for path in entry_dir.glob("*.json"))
 
     @property
-    def sortnum(self) -> tuple[int, ...]:
+    def book(self) -> Book:
+        # implement WithBook
+        return self._book
+
+    @property
+    def base_dir(self) -> Path:
+        # implement WithPathId
+        return self.book.categories_dir
+
+    @property
+    def cmp_key(self) -> tuple[int, ...]:
+        # implement Sortable
         if self.parent:
-            return self.parent.sortnum + (self.raw.sortnum,)
+            return self.parent.cmp_key + (self.raw.sortnum,)
         return (self.raw.sortnum,)
-
-    def __lt__(self, other: Any) -> bool:
-        if isinstance(other, Category):
-            return self.sortnum < other.sortnum
-        return NotImplemented
