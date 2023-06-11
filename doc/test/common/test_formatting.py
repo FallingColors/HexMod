@@ -1,6 +1,6 @@
 # pyright: reportPrivateUsage=false
-from common.deserialize import LocalizedStr
 from common.formatting import FormatTree, Style
+from minecraft.i18n import LocalizedStr
 from patchouli.book import _DEFAULT_MACROS
 
 
@@ -12,7 +12,7 @@ def test_format_string():
     tree = FormatTree.format(_DEFAULT_MACROS, LocalizedStr(test_str))
 
     # assert
-    # FIXME: extremely lazy
+    # TODO: possibly make this less lazy
     assert tree == FormatTree(
         style=Style(type="base", value=True),
         children=[

@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass
 from typing import NamedTuple, Self
 
-from common.types import LocalizedStr
+from minecraft.i18n import LocalizedStr
 
 _COLORS: dict[str, str | None] = {
     "0": None,

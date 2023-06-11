@@ -6,15 +6,17 @@ from dataclasses import InitVar, dataclass
 from pathlib import Path
 from typing import Literal
 
-from common.deserialize import FromJson, load_i18n
+from common.deserialize import FromJson
 from common.formatting import FormatTree
-from common.pattern_info import PatternInfo, PatternStubFile, load_patterns
-from common.types import Color, ItemStack, LocalizedStr, ResourceLocation
+from common.pattern_info import PatternInfo, PatternStubFile, load_all_patterns
+from common.types import Color
 from common.utils import sorted_dict
+from minecraft.i18n import LocalizedStr, load_i18n
+from minecraft.resource import ItemStack, ResourceLocation
 from patchouli.category import Category, load_categories
 from serde import deserialize
 
-_DEFAULT_LANG_NAME = "en_us"
+_DEFAULT_LANG = "en_us"
 
 _DEFAULT_MACROS: dict[str, str] = {
     "$(obf)": "$(k)",
@@ -107,7 +109,7 @@ class Book:
     book_name: str
     """Internal Patchouli name for the book, eg. `thehexbook`."""
     pattern_stubs: InitVar[list[PatternStubFile]]
-    lang_name: InitVar[str] = _DEFAULT_LANG_NAME
+    lang: InitVar[str] = _DEFAULT_LANG
 
     def __post_init__(
         self,
@@ -118,12 +120,11 @@ class Book:
         # must be first
         self.raw: RawBook = RawBook.load(self.dir / "book.json")
 
-        # lang
+        # i18n lookup dict
         # must be initialized before using self.localize or self.format
-        lang_file = self.lang_dir / f"{lang_name}.json"
-        self.lang: dict[str, LocalizedStr] | None = (
-            load_i18n(lang_file) if self.raw.i18n else None
-        )
+        self.i18n: dict[str, LocalizedStr] | None = None
+        if self.raw.i18n:
+            self.i18n = load_i18n(self.lang_dir / f"{lang_name}.json")
 
         # macros
         # must be initialized before using self.format
@@ -139,7 +140,7 @@ class Book:
 
         # patterns
         # must be initialized before categories
-        self.patterns: dict[str, PatternInfo] = load_patterns(
+        self.patterns: dict[str, PatternInfo] = load_all_patterns(
             pattern_stubs,
             self.resource_dir,
             self.modid,
@@ -163,7 +164,7 @@ class Book:
     @property
     def dir_with_lang(self) -> Path:
         """eg. `resources/data/hexcasting/patchouli_books/thehexbook/en_us`"""
-        return self.dir / _DEFAULT_LANG_NAME
+        return self.dir / _DEFAULT_LANG
 
     @property
     def categories_dir(self) -> Path:
@@ -193,16 +194,16 @@ class Book:
 
         Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
         """
-        if self.lang is None:
+        if self.i18n is None:
             return LocalizedStr(key.replace("%%", "%"))
 
         if default is not None:
-            localized = self.lang.get(key, default)
+            localized = self.i18n.get(key, default)
         elif skip_errors:
-            localized = self.lang.get(key, key)
+            localized = self.i18n.get(key, key)
         else:
             # raises if not found
-            localized = self.lang[key]
+            localized = self.i18n[key]
 
         return LocalizedStr(localized.replace("%%", "%"))
 

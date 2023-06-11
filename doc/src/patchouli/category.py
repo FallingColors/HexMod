@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, Any
 
 from common.deserialize import FromJson
 from common.formatting import FormatTree
-from common.types import ItemStack, LocalizedStr, ResourceLocation
+from minecraft.i18n import LocalizedStr
+from minecraft.resource import ItemStack, ResourceLocation
 from patchouli.entry import Entry, parse_entry
 from serde import deserialize
 

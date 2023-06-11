@@ -61,7 +61,7 @@ class PatternStubFile:
         return patterns
 
 
-def load_patterns(
+def load_all_patterns(
     pattern_stubs: list[PatternStubFile],
     resource_dir: Path,
     modid: str,
