@@ -6,7 +6,9 @@ from html import escape
 from typing import IO, Any
 
 from common.formatting import FormatTree
-from patchouli.book import Book, Category, Entry, Page
+from patchouli.book import Book
+from patchouli.category import Category
+from patchouli.entry import Entry, Page
 
 # extra info :(
 repo_names = {
@@ -107,7 +109,7 @@ def entry_spoilered(root_info: Book, entry: Entry):
 
 
 def category_spoilered(root_info: Book, category: Category):
-    return all(entry_spoilered(root_info, ent) for ent in category["entries"])
+    return all(entry_spoilered(root_info, ent) for ent in category.entries)
 
 
 def write_block(out: Stream, block: FormatTree | str):
@@ -264,16 +266,16 @@ def write_entry(out: Stream, book: Book, entry: Entry):
 
 
 def write_category(out: Stream, book: Book, category: Category):
-    with out.pair_tag("section", id=category["id"]):
+    with out.pair_tag("section", id=category.id.path):
         with out.pair_tag_if(
             category_spoilered(book, category), "div", clazz="spoilered"
         ):
             with out.pair_tag("h2", clazz="category-title page-header"):
-                write_block(out, category["name"])
+                write_block(out, category.name)
                 anchor_toc(out)
-                permalink(out, "#" + category["id"])
-            write_block(out, category["description"])
-        for entry in category["entries"]:
+                permalink(out, category.href)
+            write_block(out, category.description)
+        for entry in category.entries:
             if entry["id"] not in book.blacklist:
                 write_entry(out, book, entry)
 
@@ -290,17 +292,17 @@ def write_toc(out: Stream, book: Book):
         ):
             out.empty_pair_tag("i", clazz="bi bi-list-nested")
         permalink(out, "#table-of-contents")
-    for category in book.categories:
+    for category in book.categories.values():
         with out.pair_tag("details", clazz="toc-category"):
             with out.pair_tag("summary"):
                 with out.pair_tag(
                     "a",
-                    href="#" + category["id"],
+                    href=category.href,
                     clazz="spoilered" if category_spoilered(book, category) else "",
                 ):
-                    out.text(category["name"])
+                    out.text(category.name)
             with out.pair_tag("ul"):
-                for entry in category["entries"]:
+                for entry in category.entries:
                     with out.pair_tag("li"):
                         with out.pair_tag(
                             "a",
@@ -319,7 +321,7 @@ def write_book(out: Stream, book: Book):
         with out.pair_tag("nav"):
             write_toc(out, book)
         with out.pair_tag("main", clazz="book-body"):
-            for category in book.categories:
+            for category in book.categories.values():
                 write_category(out, book, category)
 
 

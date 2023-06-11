@@ -4,6 +4,7 @@
         "editor.codeActionsOnSave": {
             "source.organizeImports": true,
         },
+        "editor.rulers": [88],
     },
     "isort.args": [
         "--profile", "black",

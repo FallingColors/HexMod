@@ -52,7 +52,7 @@ _RESOURCE_LOCATION_RE = re.compile(r"(?:([0-9a-z_\-.]+):)?([0-9a-z_\-./]+)")
 _ITEM_STACK_SUFFIX_RE = re.compile(r"(?:#([0-9]+))?({.*})?")
 
 
-@dataclass(repr=False)
+@dataclass(repr=False, frozen=True)
 class ResourceLocation:
     """Represents a Minecraft resource location / namespaced ID."""
 
@@ -73,6 +73,11 @@ class ResourceLocation:
 
     @classmethod
     def field(cls, s: str | None = None, **kwargs: Any) -> Any:
+        """Helper method for using this as a dataclass field. You must use this method if
+        you're putting this in a serde class.
+
+        s may be a raw resource location string to construct a default value from.
+        """
         if s is not None:
             kwargs["default_factory"] = cls.from_str(s)
         return field(deserializer=cls.from_str, **kwargs)
@@ -81,7 +86,7 @@ class ResourceLocation:
         return f"{self.namespace}:{self.path}"
 
 
-@dataclass(repr=False)
+@dataclass(repr=False, frozen=True)
 class ItemStack(ResourceLocation):
     """Represents an item with optional count and NBT tags."""
 
