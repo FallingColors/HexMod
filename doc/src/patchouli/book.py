@@ -17,7 +17,7 @@ from typing import (
     TypeVar,
 )
 
-from common.deserialize import Color, FromJson, LocalizedStr, load_i18n
+from common.deserialize import FromJson, load_i18n
 from common.formatting import FormatTree
 from common.pattern_info import (
     PatternInfo,
@@ -25,7 +25,8 @@ from common.pattern_info import (
     RawPatternInfo,
     load_patterns,
 )
-from serde import deserialize, field
+from common.types import Color, ItemStack, LocalizedStr, ResourceLocation
+from serde import deserialize, field, serde
 
 _T_LiteralString = TypeVar("_T_LiteralString", bound=LiteralString)
 
@@ -357,7 +358,6 @@ TextOverflowMode = Literal["overflow"] | Literal["resize"] | Literal["truncate"]
 
 
 @deserialize
-@dataclass
 class RawBook(FromJson):
     """Direct representation of book.json.
 
@@ -372,10 +372,12 @@ class RawBook(FromJson):
     landing_text: str
 
     # optional
-    book_texture: str = "patchouli:textures/gui/book_brown.png"
-    filler_texture: str | None = None
-    crafting_texture: str | None = None
-    model: str = "patchouli:book_brown"
+    book_texture: ResourceLocation = ResourceLocation.field(
+        "patchouli:textures/gui/book_brown.png"
+    )
+    filler_texture: ResourceLocation | None = ResourceLocation.field(default=None)
+    crafting_texture: ResourceLocation | None = ResourceLocation.field(default=None)
+    model: ResourceLocation = ResourceLocation.field("patchouli:book_brown")
     text_color: Color = Color("000000")
     header_color: Color = Color("333333")
     nameplate_color: Color = Color("FFDD00")
@@ -383,9 +385,11 @@ class RawBook(FromJson):
     link_hover_color: Color = Color("8800EE")
     progress_bar_color: Color = Color("FFFF55")
     progress_bar_background: Color = Color("DDDDDD")
-    open_sound: str | None = None
-    flip_sound: str | None = None
-    _index_icon: str | None = field(rename="index_icon", default=None)
+    open_sound: ResourceLocation | None = ResourceLocation.field(default=None)
+    flip_sound: ResourceLocation | None = ResourceLocation.field(default=None)
+    _index_icon: ResourceLocation | None = ResourceLocation.field(
+        rename="index_icon", default=None
+    )
     pamphlet: bool = False
     show_progress: bool = True
     version: str | int = 0
@@ -393,7 +397,7 @@ class RawBook(FromJson):
     creative_tab: str = "misc"  # TODO: this was changed in 1.19.3+, and again in 1.20
     advancements_tab: str | None = None
     dont_generate_book: bool = False
-    custom_book_item: str | None = None
+    custom_book_item: ItemStack | None = ItemStack.field(default=None)
     show_toasts: bool = True
     use_blocky_font: bool = False
     i18n: bool = False
@@ -405,7 +409,7 @@ class RawBook(FromJson):
     allow_extensions: bool = True
 
     @property
-    def index_icon(self) -> str:
+    def index_icon(self) -> ResourceLocation:
         return self.model if self._index_icon is None else self._index_icon
 
 
@@ -421,15 +425,8 @@ class Book:
     resource_dir: Path
     modid: str
     patchouli_name: str
-
     pattern_stubs: InitVar[list[PatternStubFile]]
     lang_name: InitVar[str] = _DEFAULT_LANG_NAME
-
-    # other fields
-    blacklist: set[str] = dc.field(init=False, default_factory=set)
-    categories: list[Category] = dc.field(init=False, default_factory=list)
-    macros: dict[str, str] = dc.field(init=False, default_factory=dict)
-    spoilers: set[str] = dc.field(init=False, default_factory=set)
 
     def __post_init__(
         self,
@@ -450,9 +447,14 @@ class Book:
         # macros
         # must be initialized before using self.format
         # TODO: order of operations - should default macros really be overriding book macros?
+        self.macros: dict[str, str] = {}
         if self.raw.macros is not None:
             self.macros.update(self.raw.macros)
         self.macros.update(_DEFAULT_MACROS)
+
+        # other fields
+        self.blacklist: set[str] = set()
+        self.spoilers: set[str] = set()
 
         # localized strings
         self.name: LocalizedStr = self.localize(self.raw.name)
@@ -467,6 +469,7 @@ class Book:
 
         # categories
         # TODO: make this not awful
+        self.categories: list[Category] = []
         base_dir = self.book_dir / _DEFAULT_LANG_NAME
         categories_dir = base_dir / "categories"
         for path in categories_dir.rglob("*.json"):
