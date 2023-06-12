@@ -300,16 +300,19 @@
         no_closure: "The flow of media will not be able to return to the impetus at %s"
       },
       
-      impetus: {
-        "redstone.bound": "Bound to %s",
-        "redstone.bound.none": "Unbound",
-      },
+
       
       lens: {
+        impetus: {
+          "redstone.bound": "Bound to %s",
+          "redstone.bound.none": "Unbound",
+        },
         "pattern.invalid": "Invalid Pattern",
         "akashic.bookshelf.location": "Record at %s",
         "akashic.record.count": "%s iotas stored",
         "akashic.record.count.single": "%s iota stored",
+        "bee": "%s bees",
+        "bee.single": "%s bee",
       },
       
       "brainsweep.min_level": "Level %s or higher",
@@ -362,7 +365,7 @@
       "scroll.dust": "Scroll covers with dust",
       "scroll.scribble": "Scroll is scribbled",
       "impetus.fletcher.tick": "Fletcher Impetus ticks",
-      "impetus.cleric.register": "Cleric Impetus dings",
+      "impetus.redstone.register": "Cleric Impetus dings",
       "lore_fragment.read": "Read lore fragment",
       "flight.ambience": "Player flies",
       "flight.finish": "Flight ends",
