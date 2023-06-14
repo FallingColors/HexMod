@@ -40,8 +40,9 @@
     },
     {
       "type": "hexcasting:pattern",
+      "header": "hexcasting.action.hexcasting:concat",
       "op_id": "hexcasting:add",
-      "anchor": "hexcasting:add",
+      "anchor": "hexcasting:concat",
       "input": "list, list",
       "output": "list",
       "text": "hexcasting.page.lists.concat"
@@ -64,6 +65,7 @@
     },
     {
       "type": "hexcasting:pattern",
+      "header": "hexcasting.action.hexcasting:list_size",
       "op_id": "hexcasting:abs",
       "anchor": "hexcasting:abs",
       "input": "list",
