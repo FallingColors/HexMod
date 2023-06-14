@@ -57,10 +57,14 @@ public record MsgSentinelStatusUpdateAck(@Nullable Sentinel update) implements I
     }
 
     public static void handle(MsgSentinelStatusUpdateAck self) {
-        Minecraft.getInstance().execute(() -> {
-            var player = Minecraft.getInstance().player;
-            if (player != null) {
-                IXplatAbstractions.INSTANCE.setSentinel(player, self.update());
+        //noinspection Convert2Lambda
+        Minecraft.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                var player = Minecraft.getInstance().player;
+                if (player != null) {
+                    IXplatAbstractions.INSTANCE.setSentinel(player, self.update());
+                }
             }
         });
     }
