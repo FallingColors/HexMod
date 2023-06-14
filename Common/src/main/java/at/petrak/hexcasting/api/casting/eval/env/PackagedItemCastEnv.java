@@ -53,7 +53,7 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public FrozenPigment getColorizer() {
+    public FrozenPigment getPigment() {
         var casterStack = this.caster.getItemInHand(this.castingHand);
         var casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack);
         return casterHexHolder.getPigment();

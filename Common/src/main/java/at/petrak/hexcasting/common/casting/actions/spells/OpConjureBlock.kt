@@ -58,10 +58,10 @@ class OpConjureBlock(val light: Boolean) : SpellAction {
                 if (state != null) {
                     ctx.world.setBlock(pos, state, 5)
 
-                    val colorizer = ctx.colorizer
+                    val pigment = ctx.pigment
 
                     if (ctx.world.getBlockState(pos).block is BlockConjured) {
-                        BlockConjured.setColor(ctx.world, pos, colorizer)
+                        BlockConjured.setColor(ctx.world, pos, pigment)
                     }
                 }
             }

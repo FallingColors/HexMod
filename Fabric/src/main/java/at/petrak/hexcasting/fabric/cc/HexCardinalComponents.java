@@ -33,8 +33,8 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     // entities
     public static final ComponentKey<CCBrainswept> BRAINSWEPT = ComponentRegistry.getOrCreate(modLoc("brainswept"),
         CCBrainswept.class);
-    public static final ComponentKey<CCFavoredColorizer> FAVORED_COLORIZER = ComponentRegistry.getOrCreate(
-        modLoc("favored_colorizer"), CCFavoredColorizer.class);
+    public static final ComponentKey<CCFavoredPigment> FAVORED_PIGMENT = ComponentRegistry.getOrCreate(
+        modLoc("favored_pigment"), CCFavoredPigment.class);
     public static final ComponentKey<CCSentinel> SENTINEL = ComponentRegistry.getOrCreate(modLoc("sentinel"),
         CCSentinel.class);
     public static final ComponentKey<CCFlight> FLIGHT = ComponentRegistry.getOrCreate(modLoc("flight"),
@@ -48,8 +48,8 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     public static final ComponentKey<CCPatterns> PATTERNS = ComponentRegistry.getOrCreate(modLoc("patterns"),
         CCPatterns.class);
 
-    public static final ComponentKey<CCColorizer> COLORIZER = ComponentRegistry.getOrCreate(modLoc("colorizer"),
-        CCColorizer.class);
+    public static final ComponentKey<CCPigment> PIGMENT = ComponentRegistry.getOrCreate(modLoc("pigment"),
+        CCPigment.class);
     public static final ComponentKey<CCIotaHolder> IOTA_HOLDER = ComponentRegistry.getOrCreate(modLoc("iota_holder"),
         CCIotaHolder.class);
     public static final ComponentKey<CCMediaHolder> MEDIA_HOLDER = ComponentRegistry.getOrCreate(modLoc("media_holder"),
@@ -63,7 +63,7 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(Mob.class, BRAINSWEPT, CCBrainswept::new);
-        registry.registerForPlayers(FAVORED_COLORIZER, CCFavoredColorizer::new, RespawnCopyStrategy.ALWAYS_COPY);
+        registry.registerForPlayers(FAVORED_PIGMENT, CCFavoredPigment::new, RespawnCopyStrategy.ALWAYS_COPY);
         registry.registerForPlayers(SENTINEL, CCSentinel::new, RespawnCopyStrategy.ALWAYS_COPY);
         registry.registerForPlayers(ALTIORA, CCAltiora::new, RespawnCopyStrategy.LOSSLESS_ONLY);
         // Fortunately these are all both only needed on the server and don't want to be copied across death
@@ -82,7 +82,7 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
 
     @Override
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
-        registry.register(i -> i instanceof ColorizerItem, COLORIZER, CCColorizer.ItemBased::new);
+        registry.register(i -> i instanceof PigmentItem, PIGMENT, CCPigment.ItemBased::new);
 
         registry.register(i -> i instanceof IotaHolderItem, IOTA_HOLDER, CCItemIotaHolder.ItemBased::new);
         // oh havoc, you think you're so funny

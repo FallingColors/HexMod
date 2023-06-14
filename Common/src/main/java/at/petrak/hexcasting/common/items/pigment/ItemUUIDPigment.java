@@ -1,7 +1,7 @@
-package at.petrak.hexcasting.common.items.colorizer;
+package at.petrak.hexcasting.common.items.pigment;
 
-import at.petrak.hexcasting.api.addldata.ADColorizer;
-import at.petrak.hexcasting.api.item.ColorizerItem;
+import at.petrak.hexcasting.api.addldata.ADPigment;
+import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.paucal.api.PaucalAPI;
 import com.google.gson.JsonElement;
@@ -14,8 +14,8 @@ import java.awt.*;
 import java.util.Random;
 import java.util.UUID;
 
-public class ItemUUIDColorizer extends Item implements ColorizerItem {
-    public ItemUUIDColorizer(Properties pProperties) {
+public class ItemUUIDPigment extends Item implements PigmentItem {
+    public ItemUUIDPigment(Properties pProperties) {
         super(pProperties);
     }
 
@@ -67,7 +67,7 @@ public class ItemUUIDColorizer extends Item implements ColorizerItem {
 
         @Override
         protected int getRawColor(float time, Vec3 position) {
-            return ADColorizer.morphBetweenColors(this.colors, new Vec3(0.1, 0.1, 0.1), time / 400, position);
+            return ADPigment.morphBetweenColors(this.colors, new Vec3(0.1, 0.1, 0.1), time / 400, position);
         }
     }
 }

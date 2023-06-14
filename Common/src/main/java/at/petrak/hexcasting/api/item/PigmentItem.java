@@ -13,6 +13,6 @@ import java.util.UUID;
  * and the appropriate cap/CC will be attached.
  */
 @ApiStatus.OverrideOnly
-public interface ColorizerItem {
+public interface PigmentItem {
     ColorProvider provideColor(ItemStack stack, UUID owner);
 }

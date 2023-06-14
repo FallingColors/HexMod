@@ -61,7 +61,7 @@ abstract class Mishap : Throwable() {
 
     protected fun dyeColor(color: DyeColor): FrozenPigment =
         FrozenPigment(
-            ItemStack(HexItems.DYE_COLORIZERS[color]!!),
+            ItemStack(HexItems.DYE_PIGMENTS[color]!!),
             Util.NIL_UUID
         )
 

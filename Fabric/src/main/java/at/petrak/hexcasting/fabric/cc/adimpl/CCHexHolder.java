@@ -24,7 +24,7 @@ public abstract class CCHexHolder extends ItemComponent implements ADHexHolder {
             super(owner);
             var item = owner.getItem();
             if (!(item instanceof HexHolderItem hexHolderItem)) {
-                throw new IllegalStateException("item is not a colorizer: " + owner);
+                throw new IllegalStateException("item is not a pigment: " + owner);
             }
             this.hexHolder = hexHolderItem;
         }

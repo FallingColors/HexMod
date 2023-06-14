@@ -74,7 +74,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
                 val entityStack = itemEntity.item.copy()
                 val mediamount = extractMedia(entityStack, drainForBatteries = true)
                 if (mediamount > 0) {
-                    hexHolder.writeHex(patterns, ctx.colorizer, mediamount)
+                    hexHolder.writeHex(patterns, ctx.pigment, mediamount)
                 }
 
                 itemEntity.item = entityStack

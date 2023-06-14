@@ -18,10 +18,10 @@ object OpColorize : SpellAction {
         args: List<Iota>,
         ctx: CastingEnvironment
     ): SpellAction.Result {
-        val (handStack, hand) = ctx.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isColorizer)
+        val (handStack, hand) = ctx.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isPigment)
             ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, null, "colorizer") // TODO: hack
 
-        if (!IXplatAbstractions.INSTANCE.isColorizer(handStack)) {
+        if (!IXplatAbstractions.INSTANCE.isPigment(handStack)) {
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,

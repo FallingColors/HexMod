@@ -83,7 +83,7 @@ public class HexAdditionalRenderers {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.lineWidth(5f);
 
-        var colorizer = IXplatAbstractions.INSTANCE.getColorizer(owner);
+        var colorizer = IXplatAbstractions.INSTANCE.getPigment(owner);
         var colProvider = colorizer.getColorProvider();
         BiConsumer<float[], float[]> v = (l, r) -> {
             int lcolor = colProvider.getColor(time, new Vec3(l[0], l[1], l[2])),

@@ -144,7 +144,7 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public FrozenPigment getColorizer() {
+    public FrozenPigment getPigment() {
         var impetus = this.getImpetus();
         if (impetus == null)
             return FrozenPigment.DEFAULT.get();

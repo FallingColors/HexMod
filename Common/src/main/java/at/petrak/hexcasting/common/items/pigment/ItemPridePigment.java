@@ -1,7 +1,7 @@
-package at.petrak.hexcasting.common.items.colorizer;
+package at.petrak.hexcasting.common.items.pigment;
 
-import at.petrak.hexcasting.api.addldata.ADColorizer;
-import at.petrak.hexcasting.api.item.ColorizerItem;
+import at.petrak.hexcasting.api.addldata.ADPigment;
+import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Locale;
 import java.util.UUID;
 
-public class ItemPrideColorizer extends Item implements ColorizerItem {
+public class ItemPridePigment extends Item implements PigmentItem {
     public enum Type {
         AGENDER(new int[]{0x16a10c, 0xffffff, 0x7a8081, 0x302f30}),
         AROACE(new int[]{0x7210bc, 0xebf367, 0xffffff, 0x82dceb, 0x2f4dd8}),
@@ -47,7 +47,7 @@ public class ItemPrideColorizer extends Item implements ColorizerItem {
 
     public final Type type;
 
-    public ItemPrideColorizer(Type type, Properties pProperties) {
+    public ItemPridePigment(Type type, Properties pProperties) {
         super(pProperties);
         this.type = type;
     }
@@ -62,7 +62,7 @@ public class ItemPrideColorizer extends Item implements ColorizerItem {
     protected class MyColorProvider extends ColorProvider {
         @Override
         protected int getRawColor(float time, Vec3 position) {
-            return ADColorizer.morphBetweenColors(type.colors, new Vec3(0.1, 0.1, 0.1), time / 400, position);
+            return ADPigment.morphBetweenColors(type.colors, new Vec3(0.1, 0.1, 0.1), time / 400, position);
         }
     }
 }

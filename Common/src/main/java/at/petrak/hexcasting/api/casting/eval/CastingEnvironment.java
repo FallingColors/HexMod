@@ -289,7 +289,7 @@ public abstract class CastingEnvironment {
         EXTRACTION,
     }
 
-    public abstract FrozenPigment getColorizer();
+    public abstract FrozenPigment getPigment();
 
     public abstract @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment);
 
