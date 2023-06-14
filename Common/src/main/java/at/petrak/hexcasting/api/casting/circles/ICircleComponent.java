@@ -106,7 +106,7 @@ public interface ICircleComponent {
         if (impetus == null || impetus.getExecutionState() == null)
             colorizer = new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)), activator);
         else
-            colorizer = impetus.getExecutionState().colorizer;
+            colorizer = impetus.getPigment();
 
         if (bs.getBlock() instanceof BlockCircleComponent bcc) {
             var outDir = bcc.normalDir(pos, bs, world);

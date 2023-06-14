@@ -53,7 +53,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
             )
         }
 
-        val trueName = ctx.caster?.let { MishapOthersName.getTrueNameFromArgs(patterns, it) }
+        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, ctx.caster)
         if (trueName != null)
             throw MishapOthersName(trueName)
 

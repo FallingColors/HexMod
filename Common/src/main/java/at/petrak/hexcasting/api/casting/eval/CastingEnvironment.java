@@ -291,6 +291,8 @@ public abstract class CastingEnvironment {
 
     public abstract FrozenPigment getColorizer();
 
+    public abstract @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment);
+
     public abstract void produceParticles(ParticleSpray particles, FrozenPigment colorizer);
 
     public abstract void printMessage(Component message);
