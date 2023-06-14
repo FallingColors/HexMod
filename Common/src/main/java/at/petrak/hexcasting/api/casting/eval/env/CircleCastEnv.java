@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -167,5 +168,13 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     public void produceParticles(ParticleSpray particles, FrozenPigment colorizer) {
         particles.sprayParticles(this.world, colorizer);
+    }
+
+    @Override
+    public void printMessage(Component message) {
+        var impetus = getImpetus();
+        if (impetus == null)
+            return;
+        impetus.postPrint(message);
     }
 }

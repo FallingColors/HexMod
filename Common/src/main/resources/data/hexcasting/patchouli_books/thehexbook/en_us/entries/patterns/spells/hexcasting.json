@@ -14,7 +14,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:craft/cypher",
       "anchor": "hexcasting:craft/cypher",
-      "input": "entity, list of patterns",
+      "input": "entity, [pattern]",
       "output": "",
       "text": "hexcasting.page.hexcasting_spell.craft/cypher"
     },
@@ -22,7 +22,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:craft/trinket",
       "anchor": "hexcasting:craft/trinket",
-      "input": "entity, list of patterns",
+      "input": "entity, [pattern]",
       "output": "",
       "text": "hexcasting.page.hexcasting_spell.craft/trinket",
       "hex_size": 8
@@ -31,7 +31,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:craft/artifact",
       "anchor": "hexcasting:craft/artifact",
-      "input": "entity, list of patterns",
+      "input": "entity, [pattern]",
       "output": "",
       "text": "hexcasting.page.hexcasting_spell.craft/artifact",
       "hex_size": 5

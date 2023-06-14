@@ -51,6 +51,16 @@
     {
       "type": "patchouli:text",
       "text": "hexcasting.page.patterns_as_iotas.parens.3"
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "hexcasting.rawhook.hexcasting:undo",
+      "anchor": "hexcasting:undo",
+      "text": "hexcasting.page.patterns_as_iotas.undo",
+      "patterns": {
+        "startdir": "EAST",
+        "signature": "eeedw"
+      }
     }
   ]
 }

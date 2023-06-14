@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.common.casting.operators.spells.OpEdifySapling;
-import at.petrak.hexcasting.common.casting.operators.spells.OpMakeBattery;
+import at.petrak.hexcasting.common.casting.actions.spells.OpEdifySapling;
+import at.petrak.hexcasting.common.casting.actions.spells.OpMakeBattery;
 import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;

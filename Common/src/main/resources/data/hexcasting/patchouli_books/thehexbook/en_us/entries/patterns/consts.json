@@ -27,7 +27,7 @@
       "op_id": "hexcasting:const/null",
       "anchor": "hexcasting:const/null",
       "input": "",
-      "output": "influence",
+      "output": "null",
       "text": "hexcasting.page.consts.const/null"
     },
     {

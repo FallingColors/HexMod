@@ -60,7 +60,7 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
                             tile.setPlayer(player.getGameProfile(), entity.getUUID());
                             tile.sync();
 
-                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_STOREDPLAYER_DING,
+                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_REDSTONE_DING,
                                 SoundSource.BLOCKS, 1f, 1f);
                         }
                     }

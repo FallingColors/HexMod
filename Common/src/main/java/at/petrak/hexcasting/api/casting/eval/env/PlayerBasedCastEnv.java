@@ -16,6 +16,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -211,5 +212,10 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     protected boolean isCreativeMode() {
         // not sure what the diff between this and isCreative() is
         return this.caster.getAbilities().instabuild;
+    }
+
+    @Override
+    public void printMessage(Component message) {
+        caster.sendSystemMessage(message);
     }
 }

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -18,11 +19,13 @@ import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class ItemFocus extends Item implements IotaHolderItem {
+public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
     // 0 = no overlay
     // 1 = unsealed
     // 2 = sealed
     public static final ResourceLocation OVERLAY_PRED = modLoc("overlay_layer");
+    public static final ResourceLocation VARIANT_PRED = modLoc("variant");
+    public static final int NUM_VARIANTS = 8;
 
     public static final String TAG_DATA = "data";
     public static final String TAG_SEALED = "sealed";
@@ -73,5 +76,16 @@ public class ItemFocus extends Item implements IotaHolderItem {
 
     public static void seal(ItemStack stack) {
         NBTHelper.putBoolean(stack, TAG_SEALED, true);
+    }
+
+    @Override
+    public int numVariants() {
+        return NUM_VARIANTS;
+    }
+
+    @Override
+    public void setVariant(ItemStack stack, int variant) {
+        if (!isSealed(stack))
+            NBTHelper.putInt(stack, TAG_VARIANT, clampVariant(variant));
     }
 }

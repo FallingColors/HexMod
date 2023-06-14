@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hexcasting:item/cad/4_spellbook_sealed",
+    "layer1": "hexcasting:item/cad/4_spellbook_sealed_overlay"
+  }
+}

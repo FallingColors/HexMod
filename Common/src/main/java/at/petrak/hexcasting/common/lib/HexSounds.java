@@ -41,7 +41,7 @@ public class HexSounds {
     public static final SoundEvent SCROLL_SCRIBBLE = sound("scroll.scribble");
 
     public static final SoundEvent IMPETUS_LOOK_TICK = sound("impetus.fletcher.tick");
-    public static final SoundEvent IMPETUS_STOREDPLAYER_DING = sound("impetus.cleric.register");
+    public static final SoundEvent IMPETUS_REDSTONE_DING = sound("impetus.redstone.register");
 
     public static final SoundEvent READ_LORE_FRAGMENT = sound("lore_fragment.read");
 

@@ -11,14 +11,14 @@
       "op_id": "hexcasting:interop/pehkui/get",
       "anchor": "hexcasting:interop/pehkui/get",
       "input": "entity",
-      "output": "double",
+      "output": "num",
       "text": "hexcasting.page.interop.pehkui.get"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:interop/pehkui/set",
       "anchor": "hexcasting:interop/pehkui/set",
-      "input": "entity, double",
+      "input": "entity, num",
       "output": "",
       "text": "hexcasting.page.interop.pehkui.set"
     }

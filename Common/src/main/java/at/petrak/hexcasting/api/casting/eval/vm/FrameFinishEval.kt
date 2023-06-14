@@ -33,4 +33,6 @@ object FrameFinishEval : ContinuationFrame {
     override fun serializeToNBT() = NBTBuilder {
         "type" %= "end"
     }
+
+    override fun size() = 0
 }

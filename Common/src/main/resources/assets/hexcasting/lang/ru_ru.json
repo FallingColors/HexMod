@@ -170,7 +170,7 @@
 	"hexcasting.subtitles.scroll.dust": "Свиток покрывается пылью",
 	"hexcasting.subtitles.scroll.scribble": "Свиток очищен",
 	"hexcasting.subtitles.impetus.fletcher.tick": "Fletcher Impetus ticks",
-	"hexcasting.subtitles.impetus.cleric.register": "Cleric Impetus dings",
+	"hexcasting.subtitles.redstone.cleric.register": "Cleric Impetus dings",
 
 	"hexcasting.spell.hexcasting:get_caster": "Зеркало нарцисса",
 	"hexcasting.spell.hexcasting:get_entity_pos": "Положение сущности",

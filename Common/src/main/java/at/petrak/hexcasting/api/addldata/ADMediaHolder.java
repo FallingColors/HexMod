@@ -102,7 +102,8 @@ public interface ADMediaHolder {
         return inserting;
     }
 
-    int QUENCHED_ALLAY_PRIORITY = 900;
+    int QUENCHED_ALLAY_PRIORITY = 800;
+    int QUENCHED_SHARD_PRIORITY = 900;
     int CHARGED_AMETHYST_PRIORITY = 1000;
     int AMETHYST_SHARD_PRIORITY = 2000;
     int AMETHYST_DUST_PRIORITY = 3000;

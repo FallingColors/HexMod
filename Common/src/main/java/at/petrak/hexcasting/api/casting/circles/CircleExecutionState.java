@@ -247,7 +247,7 @@ public class CircleExecutionState {
                     && cc.canEnterFromDirection(exit.getSecond(), exit.getFirst(), there, world)) {
                     if (found != null) {
                         // oh no!
-                        impetus.postError(
+                        impetus.postDisplay(
                             Component.translatable("hexcasting.tooltip.circle.many_exits",
                                 Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),
                             new ItemStack(Items.COMPASS));
@@ -273,7 +273,7 @@ public class CircleExecutionState {
                     Objects.requireNonNull(env.getImpetus()), true);
                 currentPos = found.getFirst();
                 enteredFrom = found.getSecond();
-                currentImage = cont.update;
+                currentImage = cont.update.withOverriddenUsedOps(0); // reset ops used after each slate finishes executing
             }
         }
 

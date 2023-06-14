@@ -101,7 +101,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
             IXplatAbstractions.INSTANCE.setStaffcastImage(sender, null);
             IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
         } else {
-            IXplatAbstractions.INSTANCE.setStaffcastImage(sender, vm.getImage());
+            IXplatAbstractions.INSTANCE.setStaffcastImage(sender, vm.getImage().withOverriddenUsedOps(0));
             if (!resolvedPatterns.isEmpty()) {
                 resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
             }
