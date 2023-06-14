@@ -53,6 +53,11 @@ repositories {
     maven { url = "https://maven.theillusivec4.top" }
     // pehkui
     maven { url = "https://jitpack.io" }
+
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
+    flatDir {
+        dir 'libs'
+    }
 }
 
 dependencies {
@@ -61,8 +66,8 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    compileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
+    compileOnly fg.deobf("${modID}:paucal-forge-$minecraftVersion:$paucalVersion")
+    runtimeOnly fg.deobf("${modID}:paucal-forge-$minecraftVersion:$paucalVersion")
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
 

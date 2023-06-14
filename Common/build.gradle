@@ -27,13 +27,18 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
+    flatDir {
+        dir 'libs'
+    }
 }
 
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    compileOnly "at.petra-k.paucal:paucal-common-$minecraftVersion:$paucalVersion"
+    compileOnly "${modID}:paucal-common-$minecraftVersion:$paucalVersion"
     compileOnly "vazkii.patchouli:Patchouli-xplat:$minecraftVersion-$patchouliVersion"
 
     compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
