@@ -104,7 +104,7 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     @Override
     public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
         var thisNormal = this.normalDir(pos, bs, world);
-        return enterDir != thisNormal && enterDir != thisNormal.getOpposite();
+        return enterDir != thisNormal.getOpposite(); // && enterDir != thisNormal;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
         var allDirs = EnumSet.allOf(Direction.class);
         var normal = this.normalDir(pos, bs, world);
         allDirs.remove(normal);
-        allDirs.remove(normal.getOpposite());
+//        allDirs.remove(normal.getOpposite());
         return allDirs;
     }
 

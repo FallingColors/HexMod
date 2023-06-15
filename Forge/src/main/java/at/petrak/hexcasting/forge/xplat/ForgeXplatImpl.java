@@ -4,7 +4,9 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
@@ -332,6 +334,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public @Nullable ADVariantItem findVariantHolder(ItemStack stack) {
+        var maybeCap = stack.getCapability(HexCapabilities.VARIANT_ITEM).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
     public boolean isColorizer(ItemStack stack) {
         return stack.getCapability(HexCapabilities.COLOR).isPresent();
     }
@@ -472,6 +480,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             ResourceKey.createRegistryKey(modLoc("iota_type")),
             HexAPI.MOD_ID + ":null", registry -> HexIotaTypes.NULL)
     );
+    private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
+            ForgeAccessorRegistry.hex$registerSimple(
+                    ResourceKey.createRegistryKey(modLoc("arithmetic")), null)
+    );
     private static final Supplier<Registry<EvalSound>> EVAL_SOUND_REGISTRY = Suppliers.memoize(() ->
         ForgeAccessorRegistry.hex$registerDefaulted(
             ResourceKey.createRegistryKey(modLoc("eval_sound")),
@@ -491,6 +503,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
         return IOTA_TYPE_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<Arithmetic> getArithmeticRegistry() {
+        return ARITHMETIC_REGISTRY.get();
     }
 
     @Override

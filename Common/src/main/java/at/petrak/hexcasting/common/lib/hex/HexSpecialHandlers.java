@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.common.casting.operators.math.SpecialHandlerNumberLiteral;
-import at.petrak.hexcasting.common.casting.operators.stack.SpecialHandlerMask;
+import at.petrak.hexcasting.common.casting.actions.math.SpecialHandlerNumberLiteral;
+import at.petrak.hexcasting.common.casting.actions.stack.SpecialHandlerMask;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.LinkedHashMap;

@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.iota;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -62,8 +63,12 @@ public class Vec3Iota extends Iota {
     };
 
     public static Vec3Iota deserialize(Tag tag) throws IllegalArgumentException {
-        var lat = HexUtils.downcast(tag, LongArrayTag.TYPE);
-        var vec = HexUtils.vecFromNBT(lat.getAsLongArray());
+        Vec3 vec;
+        if (tag.getType() == LongArrayTag.TYPE) {
+            var lat = HexUtils.downcast(tag, LongArrayTag.TYPE);
+            vec = HexUtils.vecFromNBT(lat.getAsLongArray());
+        } else
+            vec = HexUtils.vecFromNBT(HexUtils.downcast(tag, CompoundTag.TYPE));
         return new Vec3Iota(vec);
     }
 

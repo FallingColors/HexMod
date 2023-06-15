@@ -124,10 +124,38 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
 
         blockAndItem(HexBlocks.SLATE_BLOCK, models().cubeAll("slate_block", modLoc("block/slate")));
+        blockAndItem(HexBlocks.SLATE_TILES, models().cubeAll("block/deco/slate_tiles", modLoc("block/deco/slate_tiles")));
+        blockAndItem(HexBlocks.SLATE_BRICKS, models().cubeAll("block/deco/slate_bricks", modLoc("block/deco/slate_bricks")));
+        blockAndItem(HexBlocks.SLATE_BRICKS_SMALL, models().cubeAll("block/deco/slate_bricks_small", modLoc("block/deco/slate_bricks_small")));
+        axisBlock(HexBlocks.SLATE_PILLAR, modLoc("block/deco/slate_pillar"));
         blockAndItem(HexBlocks.AMETHYST_DUST_BLOCK,
             models().singleTexture("amethyst_dust_block", modLoc(BLOCK_FOLDER + "/cube_half_mirrored"), "all",
                 modLoc("block/amethyst_dust_block")));
-        cubeBlockAndItem(HexBlocks.AMETHYST_TILES, "amethyst_tiles");
+        blockAndItem(HexBlocks.AMETHYST_TILES, models().cubeAll("block/deco/amethyst_tiles", modLoc("block/deco/amethyst_tiles")));
+        blockAndItem(HexBlocks.AMETHYST_BRICKS, models().cubeAll("block/deco/amethyst_bricks", modLoc("block/deco/amethyst_bricks")));
+        blockAndItem(HexBlocks.AMETHYST_BRICKS_SMALL, models().cubeAll("block/deco/amethyst_bricks_small", modLoc("block/deco/amethyst_bricks_small")));
+        directionalBlock(HexBlocks.AMETHYST_PILLAR,
+                models().cubeBottomTop("block/deco/amethyst_pillar",
+                        modLoc("block/deco/amethyst_pillar_side"),
+                        modLoc("block/deco/amethyst_pillar_bottom"),
+                        modLoc("block/deco/amethyst_pillar_top")));
+        blockAndItem(HexBlocks.SLATE_AMETHYST_TILES, models().cubeAll("block/deco/slate_amethyst_tiles", modLoc("block/deco/slate_amethyst_tiles")));
+
+        simpleBlock(HexBlocks.SLATE_AMETHYST_BRICKS,
+            new ConfiguredModel(models().cubeAll("block/deco/slate_amethyst_bricks_0", modLoc("block/deco/slate_amethyst_bricks_0"))),
+            new ConfiguredModel(models().cubeAll("block/deco/slate_amethyst_bricks_1", modLoc("block/deco/slate_amethyst_bricks_1"))),
+            new ConfiguredModel(models().cubeAll("block/deco/slate_amethyst_bricks_2", modLoc("block/deco/slate_amethyst_bricks_2")))
+        );
+        simpleBlockItem(HexBlocks.SLATE_AMETHYST_BRICKS, models().cubeAll("block/deco/slate_amethyst_bricks_0", modLoc("block/deco/slate_amethyst_bricks_0")));
+
+        simpleBlock(HexBlocks.SLATE_AMETHYST_BRICKS_SMALL,
+                new ConfiguredModel(models().cubeAll("block/deco/slate_amethyst_bricks_small_0", modLoc("block/deco/slate_amethyst_bricks_small_0"))),
+                new ConfiguredModel(models().cubeAll("block/deco/slate_amethyst_bricks_small_1", modLoc("block/deco/slate_amethyst_bricks_small_1"))),
+                new ConfiguredModel(models().cubeAll("block/deco/slate_amethyst_bricks_small_2", modLoc("block/deco/slate_amethyst_bricks_small_2")))
+        );
+        simpleBlockItem(HexBlocks.SLATE_AMETHYST_BRICKS_SMALL, models().cubeAll("block/deco/slate_amethyst_bricks_small_0", modLoc("block/deco/slate_amethyst_bricks_small_0")));
+
+        axisBlock(HexBlocks.SLATE_AMETHYST_PILLAR, modLoc("block/deco/slate_amethyst_pillar"));
         cubeBlockAndItem(HexBlocks.SCROLL_PAPER, "scroll_paper");
         cubeBlockAndItem(HexBlocks.ANCIENT_SCROLL_PAPER, "ancient_scroll_paper");
 
@@ -143,6 +171,10 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 modLoc("block/ancient_scroll_paper_lantern_top")));
 
         axisBlock(HexBlocks.EDIFIED_LOG, modLoc("block/edified_log"), modLoc("block/edified_log_top"));
+        axisBlock(HexBlocks.EDIFIED_LOG_AMETHYST, modLoc("block/deco/edified_log_amethyst"), modLoc("block/edified_log_top"));
+        axisBlock(HexBlocks.EDIFIED_LOG_AVENTURINE, modLoc("block/deco/edified_log_aventurine"), modLoc("block/edified_log_top"));
+        axisBlock(HexBlocks.EDIFIED_LOG_CITRINE, modLoc("block/deco/edified_log_citrine"), modLoc("block/edified_log_top"));
+        axisBlock(HexBlocks.EDIFIED_LOG_PURPLE, modLoc("block/deco/edified_log_purple"), modLoc("block/edified_log_top"));
         axisBlock(HexBlocks.STRIPPED_EDIFIED_LOG, modLoc("block/stripped_edified_log"),
             modLoc("block/stripped_edified_log_top"));
         axisBlock(HexBlocks.EDIFIED_WOOD, modLoc("block/edified_log"), modLoc("block/edified_log"));
@@ -200,6 +232,9 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
         // for the break particles
         simpleBlock(HexBlocks.QUENCHED_ALLAY, models().cubeAll("quenched_allay", modLoc("block/quenched_allay_0")));
+        simpleBlock(HexBlocks.QUENCHED_ALLAY_TILES, models().cubeAll("quenched_allay_tiles", modLoc("block/deco/quenched_allay_tiles_0")));
+        simpleBlock(HexBlocks.QUENCHED_ALLAY_BRICKS, models().cubeAll("quenched_allay_bricks", modLoc("block/deco/quenched_allay_bricks_0")));
+        simpleBlock(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL, models().cubeAll("quenched_allay_bricks_small", modLoc("block/deco/quenched_allay_bricks_small_0")));
     }
 
     // Assumes that the bottom are always the same
@@ -280,8 +315,13 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             // The front face can never be both lit and unpowered (b/c otherwise it would exit the other way)
             String frontEnding, backEnding;
             if (isLit) {
-                frontEnding = "lit_powered";
-                backEnding = "lit_unpowered";
+                if (isPowered) {
+                    frontEnding = "lit_powered";
+                    backEnding = "dim_powered";
+                } else {
+                    frontEnding = "dim_unpowered";
+                    backEnding = "lit_unpowered";
+                }
             } else {
                 frontEnding = "dim_" + poweredness;
                 backEnding = "dim_" + poweredness;

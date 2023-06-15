@@ -32,7 +32,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         super(generator, HexAPI.MOD_ID, existingFileHelper);
     }
 
-    private static final String[] PHIAL_SIZES = {"small", "medium", "large"};
+    private static final String[] PHIAL_SIZES = {"small", "medium", "large", "larger", "largest"};
 
     private static String getPath(Item item) {
         return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).getPath();
@@ -102,16 +102,22 @@ public class HexItemModels extends PaucalItemModelProvider {
                 "layer0", modLoc(path.getPath())));
         buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY), "block/quenched_allay", (name, path) ->
             cubeAll(path.getPath(), path));
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_TILES), "block/deco/quenched_allay_tiles", (name, path) ->
+                cubeAll(path.getPath(), path));
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS), "block/deco/quenched_allay_bricks", (name, path) ->
+                cubeAll(path.getPath(), path));
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL), "block/deco/quenched_allay_bricks_small", (name, path) ->
+                cubeAll(path.getPath(), path));
 
         simpleItem(modLoc("patchouli_book"));
 
         buildThoughtKnot();
-        buildSealableIotaHolder(HexItems.FOCUS, "focus");
-        buildSealableIotaHolder(HexItems.SPELLBOOK, "spellbook");
+        buildSealableIotaHolder(HexItems.FOCUS, "focus", HexItems.FOCUS.numVariants());
+        buildSealableIotaHolder(HexItems.SPELLBOOK, "spellbook", HexItems.SPELLBOOK.numVariants());
 
-        buildPackagedSpell(HexItems.CYPHER, "cypher");
-        buildPackagedSpell(HexItems.TRINKET, "trinket");
-        buildPackagedSpell(HexItems.ARTIFACT, "artifact");
+        buildPackagedSpell(HexItems.CYPHER, "cypher", HexItems.CYPHER.numVariants());
+        buildPackagedSpell(HexItems.TRINKET, "trinket", HexItems.TRINKET.numVariants());
+        buildPackagedSpell(HexItems.ARTIFACT, "artifact", HexItems.ARTIFACT.numVariants());
 
         int maxFill = 4;
         for (int size = 0; size < PHIAL_SIZES.length; size++) {
@@ -157,6 +163,13 @@ public class HexItemModels extends PaucalItemModelProvider {
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_written")))
             .end();
 
+        getBuilder(getPath(HexBlocks.SLATE_PILLAR)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/slate_pillar")));
+        getBuilder(getPath(HexBlocks.AMETHYST_PILLAR)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/deco/amethyst_pillar")));
+        getBuilder(getPath(HexBlocks.SLATE_AMETHYST_PILLAR)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/slate_amethyst_pillar")));
+
         getBuilder(getPath(HexBlocks.AKASHIC_RECORD)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_record")));
         simpleItem(modLoc("edified_door"));
@@ -164,6 +177,14 @@ public class HexItemModels extends PaucalItemModelProvider {
             new ModelFile.UncheckedModelFile(modLoc("block/edified_trapdoor_bottom")));
         getBuilder(getPath(HexBlocks.EDIFIED_LOG)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_log")));
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_AMETHYST)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_log_amethyst")));
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_AVENTURINE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_log_aventurine")));
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_CITRINE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_log_citrine")));
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_PURPLE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_log_purple")));
         getBuilder(getPath(HexBlocks.STRIPPED_EDIFIED_LOG)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_log")));
         getBuilder(getPath(HexBlocks.EDIFIED_WOOD)).parent(
@@ -194,23 +215,27 @@ public class HexItemModels extends PaucalItemModelProvider {
             .model(written).end();
     }
 
-    private void buildSealableIotaHolder(Item item, String stub) {
+    private void buildSealableIotaHolder(Item item, String stub, int numVariants) {
         var name = getPath(item);
-        var plain = singleTexture(name, new ResourceLocation("item/generated"),
-            "layer0", modLoc("item/" + stub + "_empty"));
-        var unsealed = withExistingParent(name + "_filled", new ResourceLocation("item/generated"))
-            .texture("layer0", modLoc("item/" + stub + "_base"))
-            .texture("layer1", modLoc("item/" + stub) + "_overlay");
-        var sealed = withExistingParent(name + "_sealed", new ResourceLocation("item/generated"))
-            .texture("layer0", modLoc("item/" + stub + "_base_sealed"))
-            .texture("layer1", modLoc("item/" + stub) + "_overlay_sealed");
-        getBuilder(name)
-            .override().predicate(ItemFocus.OVERLAY_PRED, 0f)
-            .model(plain).end()
-            .override().predicate(ItemFocus.OVERLAY_PRED, 1f)
-            .model(unsealed).end()
-            .override().predicate(ItemFocus.OVERLAY_PRED, 2f)
-            .model(sealed).end();
+        var builder = getBuilder(name);
+        for (int i = 0; i < numVariants; i++) {
+            var plain = i == 0 ? singleTexture(name, new ResourceLocation("item/generated"),
+                    "layer0", modLoc("item/cad/" + i + "_" + stub + "_empty"))
+                    : withExistingParent(name + "_" + i, new ResourceLocation("item/generated"))
+                    .texture("layer0", modLoc("item/cad/" + i + "_" + stub + "_empty"));
+            var unsealed = withExistingParent(name + "_" + i + "_filled", new ResourceLocation("item/generated"))
+                    .texture("layer0", modLoc("item/cad/" + i + "_" + stub + "_filled"))
+                    .texture("layer1", modLoc("item/cad/" + i + "_" + stub + "_filled_overlay"));
+            var sealed = withExistingParent(name + "_" + i + "_sealed", new ResourceLocation("item/generated"))
+                    .texture("layer0", modLoc("item/cad/" + i + "_" + stub + "_sealed"))
+                    .texture("layer1", modLoc("item/cad/" + i + "_" + stub + "_sealed_overlay"));
+            builder.override().predicate(ItemFocus.VARIANT_PRED, i).predicate(ItemFocus.OVERLAY_PRED, 0f)
+                .model(plain).end()
+                .override().predicate(ItemFocus.VARIANT_PRED, i).predicate(ItemFocus.OVERLAY_PRED, 1f)
+                .model(unsealed).end()
+                .override().predicate(ItemFocus.VARIANT_PRED, i).predicate(ItemFocus.OVERLAY_PRED, 2f)
+                .model(sealed).end();
+        }
     }
 
     private void buildScroll(Item item, String size) {
@@ -238,18 +263,22 @@ public class HexItemModels extends PaucalItemModelProvider {
             .end();
     }
 
-    private void buildPackagedSpell(Item item, String name) {
-        simpleItem(modLoc(name));
-        simpleItem(modLoc(name + "_filled"));
-        getBuilder(getPath(item))
-            .override()
-            .predicate(ItemPackagedHex.HAS_PATTERNS_PRED, -0.01f)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
-            .end()
-            .override()
-            .predicate(ItemPackagedHex.HAS_PATTERNS_PRED, 1f - 0.01f)
-            .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name + "_filled")))
-            .end();
+    private void buildPackagedSpell(Item item, String stub, int numVariants) {
+        var name = getPath(item);
+        var builder = getBuilder(name);
+        for (int i = 0; i < numVariants; i++) {
+            var plain = i == 0 ? singleTexture(name, new ResourceLocation("item/generated"),
+                    "layer0", modLoc("item/cad/" + i + "_" + stub))
+                    : withExistingParent(name + "_" + i, new ResourceLocation("item/generated"))
+                    .texture("layer0", modLoc("item/cad/" + i + "_" + stub));
+            var filled = withExistingParent(name + "_" + i + "_filled", new ResourceLocation("item/generated"))
+                .texture("layer0", modLoc("item/cad/" + i + "_" + stub))
+                .texture("layer1", modLoc("item/cad/" + i + "_" + stub + "_overlay"));
+            builder.override().predicate(ItemFocus.VARIANT_PRED, i).predicate(ItemPackagedHex.HAS_PATTERNS_PRED, -0.01f)
+                .model(plain).end()
+                .override().predicate(ItemFocus.VARIANT_PRED, i).predicate(ItemPackagedHex.HAS_PATTERNS_PRED, 1f - 0.01f)
+                .model(filled).end();
+        }
     }
 
     private void buildFourVariantGaslight(String name, String path,

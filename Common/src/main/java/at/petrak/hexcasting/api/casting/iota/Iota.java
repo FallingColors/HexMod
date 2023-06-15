@@ -68,14 +68,32 @@ public abstract class Iota {
     }
 
     /**
+     * Returns whether this iota is possible to execute (i.e. whether {@link Iota#execute} has been overridden.
+     */
+    public boolean executable() {
+        return false;
+    }
+
+    /**
      * This method is called to determine whether the iota is above the max serialisation depth/serialisation count
      * limits. It should return every "iota" that is a subelement of this iota.
      * For example, if you implemented a Map&lt;Iota, Iota&gt;, then it should be an iterable over the keys *and*
-     * values of the map. If you implemented a typed List&lt;Double&gt; iota for some reason, it would
-     * probably be a good idea to supply an iterable over those doubles mapped to double iotas.
+     * values of the map. If you implemented a typed List&lt;Double&gt; iota for some reason, you should instad override
+     * {@link Iota#size}.
      */
     public @Nullable Iterable<Iota> subIotas() {
         return null;
+    }
+
+    /**
+     * This method is called to determine whether the iota is above the max serialisation depth/serialisation count limits.
+     * This is an alternative to deriving subIotas for if your Iota is a datastructure of variable size over something that
+     * doesn't make sense to convert to an Iota iterable, such as {@link ContinuationIota}, or a typed List&lt;Double&gt;.
+     * It should return "1" per "iota sized" unit of memory that it would occupy. Easy option, return the element count of
+     * your data structure.
+     */
+    public int size() {
+        return 1;
     }
 
     public Component display() {
@@ -96,5 +114,10 @@ public abstract class Iota {
      */
     public static boolean tolerates(Iota a, Iota b) {
         return a.toleratesOther(b) || b.toleratesOther(a);
+    }
+
+    @Override
+    public int hashCode() {
+        return payload.hashCode();
     }
 }

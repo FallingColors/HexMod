@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
@@ -29,6 +30,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
@@ -38,19 +40,18 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
+import java.util.*;
+import java.util.function.*;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class RegisterClientStuff {
-    public static List<BakedModel> QUENCHED_ALLAY_VARIANTS = new ArrayList<>();
+    public static Map<ResourceLocation, List<BakedModel>> QUENCHED_ALLAY_VARIANTS = new HashMap<>();
+    private static final Map<BlockQuenchedAllay, Boolean> QUENCHED_ALLAY_TYPES = Map.of(
+            HexBlocks.QUENCHED_ALLAY, false,
+            HexBlocks.QUENCHED_ALLAY_TILES, true,
+            HexBlocks.QUENCHED_ALLAY_BRICKS, true,
+            HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL, true);
 
     public static void init() {
         registerSealableDataHolderOverrides(HexItems.FOCUS,
@@ -59,6 +60,11 @@ public class RegisterClientStuff {
         registerSealableDataHolderOverrides(HexItems.SPELLBOOK,
             stack -> HexItems.SPELLBOOK.readIotaTag(stack) != null,
             ItemSpellbook::isSealed);
+        registerVariantOverrides(HexItems.FOCUS, HexItems.FOCUS::getVariant);
+        registerVariantOverrides(HexItems.SPELLBOOK, HexItems.SPELLBOOK::getVariant);
+        registerVariantOverrides(HexItems.CYPHER, HexItems.CYPHER::getVariant);
+        registerVariantOverrides(HexItems.TRINKET, HexItems.TRINKET::getVariant);
+        registerVariantOverrides(HexItems.ARTIFACT, HexItems.ARTIFACT::getVariant);
         IClientXplatAbstractions.INSTANCE.registerItemProperty(HexItems.THOUGHT_KNOT, ItemThoughtKnot.WRITTEN_PRED,
             (stack, level, holder, holderID) -> {
                 if (NBTHelper.contains(stack, ItemThoughtKnot.TAG_DATA)) {
@@ -82,7 +88,7 @@ public class RegisterClientStuff {
             (stack, level, holder, holderID) -> {
                 var item = (ItemMediaBattery) stack.getItem();
                 var max = item.getMaxMedia(stack);
-                return (float) Math.sqrt((float) max / MediaConstants.CRYSTAL_UNIT / 10);
+                return 1.049658f * (float) Math.log((float) max / MediaConstants.CRYSTAL_UNIT + 9.06152f) - 2.1436f;
             });
 
         registerScrollOverrides(HexItems.SCROLL_SMOL);
@@ -104,6 +110,9 @@ public class RegisterClientStuff {
 
         registerGaslight4(HexItems.STAFF_QUENCHED);
         registerGaslight4(HexBlocks.QUENCHED_ALLAY.asItem());
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY_TILES.asItem());
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS.asItem());
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.asItem());
         registerGaslight4(HexItems.QUENCHED_SHARD);
 
         x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
@@ -190,6 +199,11 @@ public class RegisterClientStuff {
             });
     }
 
+    private static void registerVariantOverrides(VariantItem item, Function<ItemStack, Integer> variant) {
+        IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.VARIANT_PRED,
+                (stack, level, holder, holderID) -> variant.apply(stack));
+    }
+
     private static void registerScrollOverrides(ItemScroll scroll) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(scroll, ItemScroll.ANCIENT_PREDICATE,
             (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
@@ -225,6 +239,12 @@ public class RegisterClientStuff {
             BlockEntityAkashicBookshelfRenderer::new);
         registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_TILE,
             BlockEntityQuenchedAllayRenderer::new);
+        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_TILES_TILE,
+                BlockEntityQuenchedAllayRenderer::new);
+        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_BRICKS_TILE,
+                BlockEntityQuenchedAllayRenderer::new);
+        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_BRICKS_SMALL_TILE,
+                BlockEntityQuenchedAllayRenderer::new);
     }
 
     @FunctionalInterface
@@ -234,16 +254,32 @@ public class RegisterClientStuff {
     }
 
     public static void onModelRegister(ResourceManager recMan, Consumer<ResourceLocation> extraModels) {
-        for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-            extraModels.accept(modLoc("block/quenched_allay_" + i));
+        for (var type : QUENCHED_ALLAY_TYPES.entrySet()) {
+            var blockLoc = Registry.BLOCK.getKey(type.getKey());
+            var locStart = "block/";
+            if (type.getValue())
+                locStart += "deco/";
+
+            for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
+                extraModels.accept(modLoc( locStart + blockLoc.getPath() + "_" + i));
+            }
         }
     }
 
     public static void onModelBake(ModelBakery loader, Map<ResourceLocation, BakedModel> map) {
-        for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-            var variantLoc = modLoc("block/quenched_allay_" + i);
-            var model = map.get(variantLoc);
-            QUENCHED_ALLAY_VARIANTS.add(model);
+        for (var type : QUENCHED_ALLAY_TYPES.entrySet()) {
+            var blockLoc = Registry.BLOCK.getKey(type.getKey());
+            var locStart = "block/";
+            if (type.getValue())
+                locStart += "deco/";
+
+            var list = new ArrayList<BakedModel>();
+            for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
+                var variantLoc = modLoc(locStart + blockLoc.getPath() + "_" + i);
+                var model = map.get(variantLoc);
+                list.add(model);
+            }
+            QUENCHED_ALLAY_VARIANTS.put(blockLoc, list);
         }
     }
 }

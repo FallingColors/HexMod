@@ -126,11 +126,11 @@
     ],
     "subtitle": "hexcasting.subtitles.impetus.fletcher.tick"
   },
-  "impetus.cleric.register": {
+  "impetus.redstone.register": {
     "sounds": [
       "minecraft:random/orb"
     ],
-    "subtitle": "hexcasting.subtitles.impetus.cleric.register"
+    "subtitle": "hexcasting.subtitles.impetus.redstone.register"
   },
   
   "lore_fragment.read": {

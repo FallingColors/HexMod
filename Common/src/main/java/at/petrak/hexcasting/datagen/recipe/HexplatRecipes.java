@@ -3,6 +3,7 @@ package at.petrak.hexcasting.datagen.recipe;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.common.blocks.decoration.BlockAkashicLog;
 import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
 import at.petrak.hexcasting.common.lib.HexBlocks;
@@ -35,6 +36,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -43,6 +45,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     private final DataGenerator generator;
     private final IXplatIngredients ingredients;
     private final Function<RecipeBuilder, IXplatConditionsBuilder> conditions;
+
+    private final List<BlockAkashicLog> EDIFIED_LOGS = List.of(
+            HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
+            HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
+            HexBlocks.EDIFIED_LOG_PURPLE);
 
     public HexplatRecipes(DataGenerator generator, IXplatIngredients ingredients,
         Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
@@ -298,11 +305,13 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .requires(HexTags.Items.EDIFIED_LOGS)
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_LOGS)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_WOOD, 3)
-            .define('W', HexBlocks.EDIFIED_LOG)
-            .pattern("WW")
-            .pattern("WW")
-            .unlockedBy("has_item", hasItem(HexBlocks.EDIFIED_LOG)).save(recipes);
+        for (var log : EDIFIED_LOGS) {
+            ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_WOOD, 3)
+                    .define('W', log)
+                    .pattern("WW")
+                    .pattern("WW")
+                    .unlockedBy("has_item", hasItem(log)).save(recipes);
+        }
 
         ShapedRecipeBuilder.shaped(HexBlocks.STRIPPED_EDIFIED_WOOD, 3)
             .define('W', HexBlocks.STRIPPED_EDIFIED_LOG)
@@ -466,14 +475,16 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes, modLoc("compat/create/crushing/amethyst_shard"));
 
         // FD compat
-        this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
-                .withInput(HexBlocks.EDIFIED_LOG)
-                .withTool(ingredients.axeStrip())
-                .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
-                .withOutput("farmersdelight:tree_bark")
-                .withSound(SoundEvents.AXE_STRIP))
-            .whenModLoaded("farmersdelight")
-            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_log"));
+        for (var log : EDIFIED_LOGS) {
+            this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
+                            .withInput(log)
+                            .withTool(ingredients.axeStrip())
+                            .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
+                            .withOutput("farmersdelight:tree_bark")
+                            .withSound(SoundEvents.AXE_STRIP))
+                    .whenModLoaded("farmersdelight")
+                    .save(recipes, modLoc("compat/farmersdelight/cutting/" + Registry.BLOCK.getKey(log).getNamespace()));
+        }
 
         this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
                 .withInput(HexBlocks.EDIFIED_WOOD)
