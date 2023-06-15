@@ -23,11 +23,6 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
-// Adds KFF as dependency and Kotlin libs to the runtime classpath
-// If you already know how to add the Kotlin plugin to Gradle, this is the only line you need for KFF
-apply from: "https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-" +
-        "${kotlinForForgeVersion}.gradle"
-
 pkSubproj {
     platform "forge"
     curseforgeJar jar.archiveFile
@@ -54,6 +49,12 @@ repositories {
     // pehkui
     maven { url = "https://jitpack.io" }
 
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+        content { includeGroup "thedarkcolour" }
+    }
+
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     flatDir {
         dir 'libs'
@@ -64,16 +65,18 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
     compileOnly project(":Common")
 
+    implementation "thedarkcolour:kotlinforforge:$kotlinForForgeVersion"
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     compileOnly fg.deobf("${modID}:paucal-forge-$minecraftVersion:$paucalVersion")
     runtimeOnly fg.deobf("${modID}:paucal-forge-$minecraftVersion:$paucalVersion")
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+//    compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+//    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
 
     // aughh
     testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+//    testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
 
     implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:$caelusVersion")
 
@@ -83,10 +86,10 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion")
     runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion")
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion")
 
-    api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-${minecraftVersion}-forge")
+    api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.19.4-forge")
 }
 
 minecraft {
