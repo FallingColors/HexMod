@@ -11,8 +11,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
-import com.mojang.math.Matrix4f
-import com.mojang.math.Vector3f
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.MultiBufferSource
@@ -25,6 +23,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource
 import net.minecraft.world.level.levelgen.synth.SimplexNoise
 import net.minecraft.world.phys.Vec2
+import org.joml.Matrix4f
+import org.joml.Vector3f
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -424,6 +424,7 @@ fun renderEntity(
 ) {
     val rotation = if (Screen.hasShiftDown()) 0.0f else rotation
 
+    // TODO: Figure out why this is here and whether removing it will break things
     entity.level = world
     ms.pushPose()
     ms.translate(x.toDouble(), y.toDouble(), 50.0)
