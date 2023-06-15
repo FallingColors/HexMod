@@ -306,7 +306,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_LOGS)).save(recipes);
 
         for (var log : EDIFIED_LOGS) {
-            ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_WOOD, 3)
+            ShapedRecipeBuilder.shaped(log, 3)
                     .define('W', log)
                     .pattern("WW")
                     .pattern("WW")
