@@ -105,9 +105,9 @@ def get_format(out: Stream, ty: str, value: Any):
 
 
 def entry_spoilered(root_info: Book, entry: Entry):
-    if entry.raw.advancement is None:
+    if entry.advancement is None:
         return False
-    return str(entry.raw.advancement) in root_info.spoilers
+    return str(entry.advancement) in root_info.spoilers
 
 
 def category_spoilered(root_info: Book, category: Category):
@@ -262,7 +262,7 @@ def write_entry(out: Stream, book: Book, entry: Entry):
             with out.pair_tag("h3", clazz="entry-title page-header"):
                 write_block(out, entry.name)
                 anchor_toc(out)
-                permalink(out, entry.href)
+                permalink(out, entry.id.href)
             for page in entry.pages:
                 write_page(out, entry.id.path, page)
 
@@ -275,7 +275,7 @@ def write_category(out: Stream, book: Book, category: Category):
             with out.pair_tag("h2", clazz="category-title page-header"):
                 write_block(out, category.name)
                 anchor_toc(out)
-                permalink(out, category.href)
+                permalink(out, category.id.href)
             write_block(out, category.description)
         for entry in category.entries:
             if entry.id.path not in book.blacklist:
@@ -299,7 +299,7 @@ def write_toc(out: Stream, book: Book):
             with out.pair_tag("summary"):
                 with out.pair_tag(
                     "a",
-                    href=category.href,
+                    href=category.id.href,
                     clazz="spoilered" if category_spoilered(book, category) else "",
                 ):
                     out.text(category.name)
@@ -308,7 +308,7 @@ def write_toc(out: Stream, book: Book):
                     with out.pair_tag("li"):
                         with out.pair_tag(
                             "a",
-                            href=entry.href,
+                            href=entry.id.href,
                             clazz="spoilered" if entry_spoilered(book, entry) else "",
                         ):
                             out.text(entry.name)
@@ -318,8 +318,8 @@ def write_book(out: Stream, book: Book):
     with out.pair_tag("div", clazz="container"):
         with out.pair_tag("header", clazz="jumbotron"):
             with out.pair_tag("h1", clazz="book-title"):
-                write_block(out, book.name)
-            write_block(out, book.landing_text)
+                write_block(out, book.data.name)
+            write_block(out, book.data.landing_text)
         with out.pair_tag("nav"):
             write_toc(out, book)
         with out.pair_tag("main", clazz="book-body"):

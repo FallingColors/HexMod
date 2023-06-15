@@ -1,75 +1,69 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Self
 
-from common.abstract import Book, Sortable, WithBook, WithPathId
-from common.deserialize import FromJson
+from common.deserialize import from_dict_checked, load_json_data, rename
 from common.formatting import FormatTree
+from common.types import Book, Color, Sortable
+from dacite import DaciteError, from_dict
 from minecraft.i18n import LocalizedStr
 from minecraft.resource import ItemStack, ResourceLocation
 from patchouli.entry import Entry
-from serde import deserialize
 
 
-@deserialize
-class RawCategory(FromJson):
-    """Direct representation of a Category json file.
+@dataclass
+class Category(Sortable):
+    """Category with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/category-json
     """
 
-    # required
-    name: str
-    description: str
-    icon: ItemStack = ItemStack.field()
+    # non-json fields
+    path: Path
+    book: Book
 
-    # optional
-    parent: ResourceLocation | None = ResourceLocation.field(default=None)
+    # required (category.json)
+    name: LocalizedStr
+    description: FormatTree
+    icon: ItemStack
+
+    # optional (category.json)
+    parent_id: ResourceLocation | None = field(default=None, metadata=rename("parent"))
     flag: str | None = None
     sortnum: int = 0
     secret: bool = False
 
-
-@dataclass
-class Category(WithBook, WithPathId, Sortable):
-    """Category with pages and localizations."""
-
-    _book: Book
+    @classmethod
+    def load(cls, path: Path, book: Book) -> Self:
+        # load the raw data from json, and add our extra fields
+        data = load_json_data(cls, path, {"path": path, "book": book})
+        return from_dict_checked(cls, data, book.config(), path)
 
     def __post_init__(self):
-        self.raw: RawCategory = RawCategory.load(self.path)
-
-        # localized strings
-        self.name: LocalizedStr = self.i18n.localize(self.raw.name)
-        self.description: FormatTree = self.book.format(self.raw.description)
-
-        # entries
-        self.entries: list[Entry] = self._load_entries()
-
-    @property
-    def parent(self) -> Category | None:
-        if self.raw.parent is None:
-            return None
-        return self.book.categories[self.raw.parent]
-
-    def _load_entries(self) -> list[Entry]:
+        # load entries
         entry_dir = self.book.entries_dir / self.id.path
-        return sorted(Entry(path, self) for path in entry_dir.glob("*.json"))
+        self.entries: list[Entry] = sorted(
+            Entry.load(path, self) for path in entry_dir.glob("*.json")
+        )
 
     @property
-    def book(self) -> Book:
-        # implement WithBook
-        return self._book
+    def id(self) -> ResourceLocation:
+        return ResourceLocation.file_id(
+            self.book.modid, self.book.categories_dir, self.path
+        )
+
+    def parent(self) -> Category | None:
+        """Get this category's parent from the book. Must not be called until the book
+        is fully initialized."""
+        if self.parent_id is None:
+            return None
+        return self.book.categories[self.parent_id]
 
     @property
-    def base_dir(self) -> Path:
-        # implement WithPathId
-        return self.book.categories_dir
-
-    @property
-    def cmp_key(self) -> tuple[int, ...]:
+    def _cmp_key(self) -> tuple[int, ...]:
         # implement Sortable
-        if self.parent:
-            return self.parent.cmp_key + (self.raw.sortnum,)
-        return (self.raw.sortnum,)
+        if parent := self.parent():
+            return parent._cmp_key + (self.sortnum,)
+        return (self.sortnum,)

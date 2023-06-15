@@ -1,8 +1,9 @@
-import json
 import re
 from dataclasses import InitVar, dataclass
 from pathlib import Path
 from typing import Self
+
+from common.deserialize import load_json
 
 
 # subclass instead of newtype so it exists at runtime, so we can use isinstance
@@ -32,11 +33,10 @@ class I18n:
     default_lang: str
 
     enabled: InitVar[bool]
-    extra_i18n: InitVar[I18nLookup | None] = None
 
-    _lookup: I18nLookup | None = None
-
-    def __post_init__(self, enabled: bool, extra_i18n: I18nLookup | None):
+    def __post_init__(self, enabled: bool):
+        # skip loading the files if we don't need to
+        self._lookup: I18nLookup | None = None
         if not enabled:
             return
 
@@ -44,25 +44,19 @@ class I18n:
         # TODO: load ALL of the i18n files, return dict[str, _Lookup] | None
         # or maybe dict[(str, str), LocalizedStr]
         # we could also use that to ensure all i18n files have the same set of keys
-        # TODO: types, all of this is nasty
         path = self.dir / f"{self.default_lang}.json"
-        self._lookup: I18nLookup | None = json.loads(path.read_text("utf-8"))
+        _lookup = load_json(path)
+        _lookup.update(_EXTRA_I18N)
 
-        # validate
+        # validate fields
         # TODO: there's probably a library we can use to do this for us
-        assert isinstance(
-            self._lookup, dict
-        ), f"Unexpected top-level type `{type(self._lookup)}` in {path}"
-        for k, v in self._lookup.items():
+        for k, v in _lookup.items():
             assert isinstance(k, str), f"Unexpected key type `{type(k)}` in {path}: {k}"
             assert isinstance(
                 v, str
             ), f"Unexpected value type `{type(v)}` in {path}: {v}"
 
-        # add extras
-        self._lookup.update(_EXTRA_I18N)
-        if extra_i18n:
-            self._lookup.update(extra_i18n)
+        self._lookup = _lookup
 
     @property
     def dir(self) -> Path:

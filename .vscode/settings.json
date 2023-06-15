@@ -23,6 +23,7 @@
         "reportMissingTypeArgument": "warning",
         "reportUnusedImport": "information",
         "reportPrivateUsage": "warning",
+        "reportUnnecessaryIsInstance": "information",
     },
     "python.analysis.diagnosticMode": "workspace",
     "python.languageServer": "Pylance",

@@ -1,3 +1,4 @@
+# because Tap.add_argument isn't typed, for some reason
 # pyright: reportUnknownMemberType=false
 
 import sys

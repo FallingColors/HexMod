@@ -25,22 +25,22 @@ def test_resourcelocation(s: str, expected: ResourceLocation, str_prefix: str):
 item_stacks: list[tuple[str, ItemStack, str]] = [
     (
         "stone",
-        ItemStack("minecraft", "stone", None, None),
+        ItemStack.from_parts("minecraft", "stone", None, None),
         "minecraft:",
     ),
     (
         "hexcasting:patchouli_book",
-        ItemStack("hexcasting", "patchouli_book", None, None),
+        ItemStack.from_parts("hexcasting", "patchouli_book", None, None),
         "",
     ),
     (
         "minecraft:stone#64",
-        ItemStack("minecraft", "stone", 64, None),
+        ItemStack.from_parts("minecraft", "stone", 64, None),
         "",
     ),
     (
         "minecraft:diamond_pickaxe{display:{Lore:['A really cool pickaxe']}",
-        ItemStack(
+        ItemStack.from_parts(
             "minecraft",
             "diamond_pickaxe",
             None,
@@ -50,7 +50,7 @@ item_stacks: list[tuple[str, ItemStack, str]] = [
     ),
     (
         "minecraft:diamond_pickaxe#64{display:{Lore:['A really cool pickaxe']}",
-        ItemStack(
+        ItemStack.from_parts(
             "minecraft",
             "diamond_pickaxe",
             64,

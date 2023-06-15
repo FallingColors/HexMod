@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import InitVar, dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
-from common.abstract import Book, Category, Sortable, WithBook, WithPathId
-from common.deserialize import FromJson
+from common.deserialize import from_dict_checked, load_json_data, rename
+from common.types import Book, Category, Color, Sortable
+from dacite import DaciteError, from_dict
 from minecraft.i18n import LocalizedStr
 from minecraft.resource import ItemStack, ResourceLocation
 from patchouli.page import Page, Page_patchouli_text, page_transformers
-from serde import deserialize
 
 
 # TODO: remove
@@ -26,52 +26,52 @@ def do_format(book: Book, obj: Page | dict[str, Any], *names: str) -> None:
             obj[name] = book.format(obj[name])
 
 
-@deserialize
-class RawEntry(FromJson):
-    """Direct representation of an Entry json file.
+@dataclass
+class Entry(Sortable):
+    """Entry json file, with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/entry-json
     """
 
-    # required
-    name: str
-    category: ResourceLocation = ResourceLocation.field()
-    icon: ItemStack = ItemStack.field()
-    pages: list[dict[str, Any] | str]  # TODO: type
+    # non-json fields
+    path: Path
+    category: Category
 
-    # optional
-    advancement: ResourceLocation | None = ResourceLocation.field(default=None)
+    # required (entry.json)
+    name: LocalizedStr
+    category_id: ResourceLocation = field(metadata=rename("category"))
+    icon: ItemStack
+    # TODO: type
+    _pages: list[dict[str, Any] | str] = field(metadata=rename("pages"))
+
+    # optional (entry.json)
+    advancement: ResourceLocation | None = None
     flag: str | None = None
     priority: bool = False
     secret: bool = False
     read_by_default: bool = False
     sortnum: int = 0
-    turnin: ResourceLocation | None = ResourceLocation.field(default=None)
-    # TODO: this should be dict[ItemStack, int] but I have no idea how to make that work
-    extra_recipe_mappings: dict[str, int] | None = None
+    turnin: ResourceLocation | None = None
+    extra_recipe_mappings: dict[ItemStack, int] | None = None
+    entry_color: Color | None = None  # this is undocumented lmao
 
-
-@dataclass
-class Entry(WithBook, WithPathId, Sortable):
-    """Entry with pages and localizations."""
-
-    category: Category
+    @classmethod
+    def load(cls, path: Path, category: Category) -> Self:
+        # load the raw data from json, and add our extra fields
+        data = load_json_data(cls, path, {"path": path, "category": category})
+        return from_dict_checked(cls, data, category.book.config(), path)
 
     def __post_init__(self):
-        # load raw entry and ensure the category matches
-        self.raw: RawEntry = RawEntry.load(self.path)
-        if self.raw.category != self.category.id:
+        # check the category id, just for fun
+        if self.category_id != self.category.id:
             raise ValueError(
-                f"Entry {self.raw.name} has category {self.raw.category} but was initialized by {self.category.id}"
+                f"Entry {self.name} has category {self.category_id} but was initialized by {self.category.id}"
             )
-
-        # localized strings
-        self.name: LocalizedStr = self.i18n.localize(self.raw.name)
 
         # entries
         # TODO: make badn't
         self.pages: list[Page | dict[str, Any]] = []
-        for page in self.raw.pages:
+        for page in self._pages:
             if isinstance(page, str):
                 page = Page_patchouli_text(
                     type="patchouli:text", text=self.book.format(page)
@@ -85,16 +85,16 @@ class Entry(WithBook, WithPathId, Sortable):
 
     @property
     def book(self) -> Book:
-        # implement WithBook
         return self.category.book
 
     @property
-    def base_dir(self) -> Path:
-        # implement WithPathId
-        return self.book.entries_dir
+    def id(self) -> ResourceLocation:
+        return ResourceLocation.file_id(
+            self.book.modid, self.book.entries_dir, self.path
+        )
 
     @property
-    def cmp_key(self) -> tuple[bool, int, LocalizedStr]:
+    def _cmp_key(self) -> tuple[bool, int, LocalizedStr]:
         # implement Sortable
         # note: python sorts false before true, so we invert priority
-        return (not self.raw.priority, self.raw.sortnum, self.name)
+        return (not self.priority, self.sortnum, self.name)

@@ -12,9 +12,10 @@ from typing import (
     TypeVar,
 )
 
-from common.abstract import Book, Entry
 from common.formatting import FormatTree
 from common.pattern_info import PatternInfo, RawPatternInfo
+from common.types import Book
+from minecraft.resource import ResourceLocation
 
 _T_LiteralString = TypeVar("_T_LiteralString", bound=LiteralString)
 
@@ -156,7 +157,7 @@ def slurp(filename: str) -> Any:
 
 
 def resolve_pattern(book: Book, page: Page_hexcasting_pattern) -> None:
-    page["op"] = [book.patterns[page["op_id"]]]
+    page["op"] = [book.patterns[ResourceLocation.from_str(page["op_id"])]]
     page["name"] = book.i18n.localize_pattern(page["op_id"])
 
 

@@ -1,51 +1,101 @@
-# pyright: reportUnknownArgumentType=false, reportUnknownMemberType=false
-
-import dataclasses
-from abc import ABC, abstractmethod
+import json
+from dataclasses import dataclass, field, fields
 from pathlib import Path
-from typing import Any, Self, dataclass_transform
+from typing import Any, Callable, Type, TypeVar
 
-import serde
-from serde import SerdeError
-from serde.json import from_json
+from dacite import Config, DaciteError, from_dict
 
 
-class FromStr(ABC):
-    """Base class for types which are deserialized from a string."""
+class Castable:
+    """Abstract base class for types with a constructor in the form `C(value) -> C`.
 
-    @classmethod
-    @abstractmethod
-    def from_str(cls, s: str) -> Self:
-        ...
-
-    @classmethod
-    def field(cls, *args: Any, factory: str | None = None, **kwargs: Any) -> Any:
-        """Helper method for using this as a dataclass field. You must use this method if
-        you're putting this in a serde class.
-
-        If `factory` is provided, `default_factory` will be set to the following:
-            `lambda: cls.from_str(factory)`
-        """
-        if factory is not None:
-            kwargs["default_factory"] = lambda: cls.from_str(factory)
-        return serde.field(*args, deserializer=cls.from_str, **kwargs)
+    Subclassing this ABC allows for automatic deserialization using Dacite.
+    """
 
 
-# dataclass_transform ensures type checkers work properly with these field specifiers
-@dataclass_transform(field_specifiers=(dataclasses.field, FromStr.field, serde.field))
-class FromJson:
-    """Helper methods for JSON-deserialized dataclasses."""
+TypeHooks = dict[Type[Any], Callable[[Any], Any]]
 
-    @classmethod
-    def from_json(cls, string: str | bytes) -> Self:
-        """Deserializes the given string into this class."""
+
+@dataclass
+class TypedConfig(Config):
+    """Dacite config, but with proper type hints."""
+
+    type_hooks: TypeHooks = field(default_factory=dict)
+    cast: list[Type[Any]] = field(default_factory=list)
+
+
+def metadata(*, rename: str) -> dict[str, Any]:
+    """Helper for specifying dataclass field metadata.
+
+    Args:
+        rename: The value under this key, if any, will instead be assigned to this field.
+    """
+    return {
+        "rename": rename,
+    }
+
+
+def rename(rename: str) -> dict[str, Any]:
+    """Helper for specifying field metadata to rename a FromPath field."""
+    return metadata(rename=rename)
+
+
+def handle_metadata_inplace(data_class: Type[Any], data: dict[str, Any]) -> None:
+    """Applies our custom metadata. Currently this just renames fields."""
+    for field in fields(data_class):
         try:
-            return from_json(cls, string)
-        except SerdeError as e:
-            e.add_note(str(string))
-            raise
+            key_name = field.metadata["rename"]
+            if not isinstance(key_name, str):
+                # TODO: raise?
+                continue
 
-    @classmethod
-    def load(cls, path: Path) -> Self:
-        """Reads and deserializes the JSON file at the given path."""
-        return cls.from_json(path.read_text("utf-8"))
+            if field.name in data:
+                # TODO: could instead keep a set of renamed fields, skip writing from a shadowed field
+                raise ValueError(
+                    f"Can't rename key '{key_name}' to field '{field.name}' because the key '{field.name}' also exists in the dict\n{data}"
+                )
+            data[field.name] = data.pop(key_name)
+        except KeyError:
+            pass
+
+
+_T_json = TypeVar("_T_json", list[Any], dict[str, Any], str, int, bool, None)
+
+
+def load_json(path: Path, _cls: Type[_T_json] = dict) -> _T_json:
+    data: _T_json | Any = json.loads(path.read_text("utf-8"))
+    if not isinstance(data, _cls):
+        raise TypeError(f"Expected to load {_cls} from {path}, but got {type(data)}")
+    return data
+
+
+def load_json_data(
+    data_class: Type[Any],
+    path: Path,
+    extra_data: dict[str, Any] = {},
+) -> dict[str, Any]:
+    """Load a dict from a JSON file and apply metadata transformations to it."""
+    data = load_json(path)
+    handle_metadata_inplace(data_class, data)
+    data.update(extra_data)
+    return data
+
+
+_T = TypeVar("_T")
+
+
+def from_dict_checked(
+    data_class: Type[_T],
+    data: dict[str, Any],
+    config: TypedConfig,
+    path: Path,
+) -> _T:
+    """Convert a dict to a dataclass.
+
+    path is currently just used for error messages.
+    """
+    try:
+        return from_dict(data_class, data, config)
+    except DaciteError as e:
+        e.add_note(str(path))
+        raise

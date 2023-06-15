@@ -2,10 +2,25 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any, Iterator
 
 import pytest
 from main import Args, main
 from syrupy.assertion import SnapshotAssertion
+from syrupy.extensions.amber import AmberSnapshotExtension
+from syrupy.types import SerializedData
+
+
+class NoDiffSnapshotExtension(AmberSnapshotExtension):
+    def diff_snapshots(
+        self, serialized_data: SerializedData, snapshot_data: SerializedData
+    ) -> SerializedData:
+        return "diff-is-disabled".encode()
+
+    def diff_lines(
+        self, serialized_data: SerializedData, snapshot_data: SerializedData
+    ) -> Iterator[str]:
+        return iter(["diff-is-disabled"])
 
 
 @dataclass
@@ -25,7 +40,7 @@ def docgen(tmp_path: Path, snapshot: SnapshotAssertion) -> DocgenArgs:
     out_path = tmp_path / "out.html"
     return DocgenArgs(
         out_path,
-        snapshot,
+        snapshot.use_extension(NoDiffSnapshotExtension),
         [
             "../Common/src/main/resources",
             "hexcasting",
