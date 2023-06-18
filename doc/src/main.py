@@ -5,50 +5,32 @@ import sys
 from pathlib import Path
 
 from collate_data import generate_docs
-from common.pattern_info import PatternStubFile
+from common.properties import Properties
 from patchouli.book import Book
 from tap import Tap
 
 if sys.version_info < (3, 11):
     raise RuntimeError("Minimum Python version: 3.11")
 
-_PATTERN_STUBS = [
-    PatternStubFile(None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"),
-    PatternStubFile(None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"),
-    PatternStubFile(
-        "Fabric",
-        "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java",
-    ),
-]
-
 # CLI arguments
 class Args(Tap):
-    """example: main.py ../Common/src/main/resources hexcasting thehexbook template.html out.html"""
+    """example: main.py properties.toml -o out.html"""
 
-    resources_dir: Path
-    mod_name: str
-    book_name: str
-    template_file: Path
+    properties_file: Path
     output_file: Path | None
 
-    @property
-    def root(self) -> Path:
-        return self.resources_dir
-
     def configure(self):
-        # set all arguments as positional
-        self.add_argument("resources_dir")
-        self.add_argument("mod_name")
-        self.add_argument("book_name")
-        self.add_argument("template_file")
-        self.add_argument("output_file", help="(Path, optional)", nargs="?")
+        # set as positional
+        self.add_argument("properties_file")
 
 
 def main(args: Args) -> None:
-    # read the book and template, then fill the template
-    book = Book(args.root, args.mod_name, args.book_name, _PATTERN_STUBS)
-    template = args.template_file.read_text("utf-8")
+    # load the properties and book
+    properties = Properties.load(args.properties_file)
+    book = Book(properties)
 
+    # load and fill the template
+    template = properties.template.read_text("utf-8")
     docs = generate_docs(book, template)
 
     # if there's an output file specified, write to it

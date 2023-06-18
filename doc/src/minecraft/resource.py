@@ -46,7 +46,7 @@ class ResourceLocation:
         return cls(namespace, path, _match_end=match.end())
 
     @classmethod
-    def file_id(cls, modid: str, base_dir: Path, path: Path) -> ResourceLocation:
+    def from_file(cls, modid: str, base_dir: Path, path: Path) -> ResourceLocation:
         resource_path = path.relative_to(base_dir).with_suffix("").as_posix()
         return ResourceLocation(modid, resource_path)
 
@@ -58,11 +58,19 @@ class ResourceLocation:
         return f"{self.namespace}:{self.path}"
 
 
+# pure unadulterated laziness
+ResLoc = ResourceLocation
+
+
 @dataclass(repr=False, frozen=True)
 class ItemStack:
-    """Represents an item with optional count and NBT tags."""
+    """Represents an item with optional count and NBT tags.
 
-    id: ResourceLocation
+    Does not inherit from ResourceLocation.
+    """
+
+    namespace: str
+    path: str
     count: int | None = None
     nbt: str | None = None
 
@@ -80,17 +88,14 @@ class ItemStack:
         if count is not None:
             count = int(count)
 
-        return cls(id, count, nbt, _match_end=match.end())
+        return cls(id.namespace, id.path, count, nbt, _match_end=match.end())
 
-    @classmethod
-    def from_parts(
-        cls,
-        namespace: str,
-        path: str,
-        count: int | None = None,
-        nbt: str | None = None,
-    ) -> Self:
-        return cls(ResourceLocation(namespace, path), count, nbt)
+    @property
+    def id(self) -> ResourceLocation:
+        return ResourceLocation(self.namespace, self.path)
+
+    def i18n_key(self, root: str = "item") -> str:
+        return f"{root}.{self.namespace}.{self.path}"
 
     def __repr__(self) -> str:
         s = str(self.id)

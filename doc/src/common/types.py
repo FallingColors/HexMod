@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import string
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Mapping, Self, TypeVar
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Any, Mapping, Protocol, Self, TypeVar
 
 from common.deserialize import Castable
 
@@ -80,3 +81,20 @@ _T_Sortable = TypeVar("_T_Sortable", bound=Sortable)
 
 def sorted_dict(d: Mapping[_T, _T_Sortable]) -> dict[_T, _T_Sortable]:
     return dict(sorted(d.items(), key=lambda item: item[1]))
+
+
+class BookHelpers(ABC):
+    """Shortcuts for types with a book field."""
+
+    @property
+    @abstractmethod
+    def book(self) -> Book:
+        ...
+
+    @property
+    def props(self):
+        return self.book.props
+
+    @property
+    def i18n(self):
+        return self.book.i18n

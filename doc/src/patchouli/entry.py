@@ -1,33 +1,18 @@
 from __future__ import annotations
 
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Self
+from typing import Self
 
 from common.deserialize import from_dict_checked, load_json_data, rename
-from common.types import Book, Category, Color, Sortable
-from dacite import DaciteError, from_dict
+from common.types import Book, BookHelpers, Category, Color, Sortable
 from minecraft.i18n import LocalizedStr
 from minecraft.resource import ItemStack, ResourceLocation
-from patchouli.page import Page, Page_patchouli_text, page_transformers
-
-
-# TODO: remove
-def do_localize(book: Book, obj: Page | dict[str, Any], *names: str) -> None:
-    for name in names:
-        if name in obj:
-            obj[name] = book.i18n.localize(obj[name])
-
-
-# TODO: remove
-def do_format(book: Book, obj: Page | dict[str, Any], *names: str) -> None:
-    for name in names:
-        if name in obj:
-            obj[name] = book.format(obj[name])
+from patchouli.page import Page, make_page_hook
 
 
 @dataclass
-class Entry(Sortable):
+class Entry(Sortable, BookHelpers):
     """Entry json file, with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/entry-json
@@ -41,8 +26,7 @@ class Entry(Sortable):
     name: LocalizedStr
     category_id: ResourceLocation = field(metadata=rename("category"))
     icon: ItemStack
-    # TODO: type
-    _pages: list[dict[str, Any] | str] = field(metadata=rename("pages"))
+    pages: list[Page]
 
     # optional (entry.json)
     advancement: ResourceLocation | None = None
@@ -59,29 +43,23 @@ class Entry(Sortable):
     def load(cls, path: Path, category: Category) -> Self:
         # load the raw data from json, and add our extra fields
         data = load_json_data(cls, path, {"path": path, "category": category})
-        return from_dict_checked(cls, data, category.book.config(), path)
+
+        config = category.book.config()
+        config.type_hooks[Page] = make_page_hook(config)
+
+        return from_dict_checked(cls, data, config, path)
 
     def __post_init__(self):
         # check the category id, just for fun
+        # note the _ and . on the left and right respectively
         if self.category_id != self.category.id:
             raise ValueError(
                 f"Entry {self.name} has category {self.category_id} but was initialized by {self.category.id}"
             )
 
-        # entries
-        # TODO: make badn't
-        self.pages: list[Page | dict[str, Any]] = []
-        for page in self._pages:
-            if isinstance(page, str):
-                page = Page_patchouli_text(
-                    type="patchouli:text", text=self.book.format(page)
-                )
-            else:
-                do_format(self.book, page, "text")
-            do_localize(self.book, page, "title", "header")
-            if page_transformer := page_transformers.get(page["type"]):
-                page_transformer(self.book, page)
-            self.pages.append(page)
+        # late-init the pages
+        for page in self.pages:
+            page.entry = self
 
     @property
     def book(self) -> Book:
@@ -89,8 +67,8 @@ class Entry(Sortable):
 
     @property
     def id(self) -> ResourceLocation:
-        return ResourceLocation.file_id(
-            self.book.modid, self.book.entries_dir, self.path
+        return ResourceLocation.from_file(
+            self.props.modid, self.book.entries_dir, self.path
         )
 
     @property

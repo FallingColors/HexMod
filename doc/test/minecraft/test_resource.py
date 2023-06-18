@@ -1,15 +1,15 @@
 import pytest
-from minecraft.resource import ItemStack, ResourceLocation
+from minecraft.resource import ItemStack, ResLoc, ResourceLocation
 
 resource_locations: list[tuple[str, ResourceLocation, str]] = [
     (
         "stone",
-        ResourceLocation("minecraft", "stone"),
+        ResLoc("minecraft", "stone"),
         "minecraft:",
     ),
     (
         "hexcasting:patchouli_book",
-        ResourceLocation("hexcasting", "patchouli_book"),
+        ResLoc("hexcasting", "patchouli_book"),
         "",
     ),
 ]
@@ -25,22 +25,22 @@ def test_resourcelocation(s: str, expected: ResourceLocation, str_prefix: str):
 item_stacks: list[tuple[str, ItemStack, str]] = [
     (
         "stone",
-        ItemStack.from_parts("minecraft", "stone", None, None),
+        ItemStack("minecraft", "stone", None, None),
         "minecraft:",
     ),
     (
         "hexcasting:patchouli_book",
-        ItemStack.from_parts("hexcasting", "patchouli_book", None, None),
+        ItemStack("hexcasting", "patchouli_book", None, None),
         "",
     ),
     (
         "minecraft:stone#64",
-        ItemStack.from_parts("minecraft", "stone", 64, None),
+        ItemStack("minecraft", "stone", 64, None),
         "",
     ),
     (
         "minecraft:diamond_pickaxe{display:{Lore:['A really cool pickaxe']}",
-        ItemStack.from_parts(
+        ItemStack(
             "minecraft",
             "diamond_pickaxe",
             None,
@@ -50,7 +50,7 @@ item_stacks: list[tuple[str, ItemStack, str]] = [
     ),
     (
         "minecraft:diamond_pickaxe#64{display:{Lore:['A really cool pickaxe']}",
-        ItemStack.from_parts(
+        ItemStack(
             "minecraft",
             "diamond_pickaxe",
             64,

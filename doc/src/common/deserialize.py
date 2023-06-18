@@ -1,9 +1,13 @@
+import inspect
 import json
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Type, TypeVar
 
-from dacite import Config, DaciteError, from_dict
+import tomllib
+from common.toml_placeholders import TOMLTable, fill_placeholders
+from dacite import Config, DaciteError, UnionMatchError, from_dict
+from dacite.dataclasses import get_fields
 
 
 class Castable:
@@ -13,15 +17,22 @@ class Castable:
     """
 
 
-TypeHooks = dict[Type[Any], Callable[[Any], Any]]
+TypeFn = Callable[[Any], Any]
+TypeHooks = dict[Type[Any], TypeFn]
 
 
 @dataclass
 class TypedConfig(Config):
-    """Dacite config, but with proper type hints."""
+    """Dacite config, but with proper type hints and sane defaults."""
 
     type_hooks: TypeHooks = field(default_factory=dict)
-    cast: list[Type[Any]] = field(default_factory=list)
+    cast: list[TypeFn] = field(default_factory=list)
+    check_types: bool = True
+    strict: bool = True
+    strict_unions_match: bool = True
+
+    def __post_init__(self):
+        self.cast.append(Castable)
 
 
 def metadata(*, rename: str) -> dict[str, Any]:
@@ -42,7 +53,7 @@ def rename(rename: str) -> dict[str, Any]:
 
 def handle_metadata_inplace(data_class: Type[Any], data: dict[str, Any]) -> None:
     """Applies our custom metadata. Currently this just renames fields."""
-    for field in fields(data_class):
+    for field in get_fields(data_class):
         try:
             key_name = field.metadata["rename"]
             if not isinstance(key_name, str):
@@ -81,6 +92,13 @@ def load_json_data(
     return data
 
 
+def load_toml_data(data_class: Type[Any], path: Path) -> TOMLTable:
+    data = tomllib.loads(path.read_text("utf-8"))
+    fill_placeholders(data)
+    handle_metadata_inplace(data_class, data)
+    return data
+
+
 _T = TypeVar("_T")
 
 
@@ -88,7 +106,7 @@ def from_dict_checked(
     data_class: Type[_T],
     data: dict[str, Any],
     config: TypedConfig,
-    path: Path,
+    path: Path | None = None,
 ) -> _T:
     """Convert a dict to a dataclass.
 
@@ -96,6 +114,21 @@ def from_dict_checked(
     """
     try:
         return from_dict(data_class, data, config)
-    except DaciteError as e:
-        e.add_note(str(path))
+    except Exception as e:
+        if path:
+            e.add_note(str(path))
+
+        # horribly cursed workaround for https://github.com/konradhalas/dacite/issues/234
+        # first, check if the message matches the one Dacite is raising
+        if isinstance(e, KeyError) and e.args[0] == "popitem(): dictionary is empty":
+            # local variables where the bad exception was raised
+            f_locals = inspect.trace()[-1][0].f_locals
+            data_ = f_locals["data"]
+            union = f_locals["union"]
+
+            # raise the actual correct exception
+            new_e = UnionMatchError(union, data_)
+            new_e.add_note(str(data_))
+            raise new_e
+
         raise

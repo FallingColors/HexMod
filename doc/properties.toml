@@ -1,0 +1,47 @@
+modid = "hexcasting"
+book_name = "thehexbook"
+template = "template.html"
+
+# NOTE: _Raw means "don't apply variable interpolation to this value"
+# more on that later
+pattern_regex = {_Raw='HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?'}
+
+
+[common]
+src = "../Common/src"
+package = "{src}/main/java/at/petrak/hexcasting"
+resources = "{src}/main/resources"
+generated = "{src}/generated/resources"
+pattern_stubs = [
+    # these are tables so we have the option to add extra per-stub configs (eg. regex)
+    # NOTE: each ^ is like ../ in a file path (^key and ^.key are both valid)
+    # the parent of an item in an array is the table containing the array, not the array
+    # so in this case, {^package} is common.package
+    { file = "{^package}/common/casting/RegisterPatterns.java" },
+    { file = "{^package}/interop/pehkui/PehkuiInterop.java" },
+]
+
+[fabric]
+src = "../Fabric/src"
+package = "{src}/main/java/at/petrak/hexcasting/fabric"
+resources = "{src}/main/resources"
+generated = "{src}/generated/resources"
+pattern_stubs = [
+    { file = "{^package}/interop/gravity/GravityApiInterop.java" },
+]
+
+[forge]
+src = "../Forge/src"
+package = "{src}/main/java/at/petrak/hexcasting/forge"
+resources = "{src}/main/resources"
+generated = "{src}/generated/resources"
+
+
+[i18n]
+lang = "en_us"
+dir = "{^common.resources}/assets/{^modid}/lang"
+file = "{dir}/{lang}.json"
+    [i18n.extra]
+    "item.minecraft.amethyst_shard" = "Amethyst Shard"
+    "item.minecraft.budding_amethyst" = "Budding Amethyst"
+    "block.hexcasting.slate" = "Blank Slate"

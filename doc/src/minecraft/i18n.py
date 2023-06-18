@@ -1,25 +1,25 @@
 import re
 from dataclasses import InitVar, dataclass
 from pathlib import Path
-from typing import Self
+from typing import Collection, Iterable, Self
 
 from common.deserialize import load_json
+from common.properties import Properties
+from minecraft.resource import ItemStack, ResourceLocation
 
 
 # subclass instead of newtype so it exists at runtime, so we can use isinstance
 class LocalizedStr(str):
     """Represents a string which has been localized."""
 
-    def __new__(cls, s: str) -> Self:
-        return str.__new__(cls, s)
+
+class LocalizedItem(LocalizedStr):
+    pass
 
 
-# TODO: move to config
-_EXTRA_I18N = {
-    "item.minecraft.amethyst_shard": LocalizedStr("Amethyst Shard"),
-    "item.minecraft.budding_amethyst": LocalizedStr("Budding Amethyst"),
-    "block.hexcasting.slate": LocalizedStr("Blank Slate"),
-}
+class LocalizedRecipeResult(LocalizedStr):
+    pass
+
 
 I18nLookup = dict[str, LocalizedStr]
 
@@ -28,10 +28,7 @@ I18nLookup = dict[str, LocalizedStr]
 class I18n:
     """Handles localization of strings."""
 
-    resource_dir: Path
-    modid: str
-    default_lang: str
-
+    props: Properties
     enabled: InitVar[bool]
 
     def __post_init__(self, enabled: bool):
@@ -44,9 +41,10 @@ class I18n:
         # TODO: load ALL of the i18n files, return dict[str, _Lookup] | None
         # or maybe dict[(str, str), LocalizedStr]
         # we could also use that to ensure all i18n files have the same set of keys
-        path = self.dir / f"{self.default_lang}.json"
+        path = self.dir / f"{self.props.lang}.json"
         _lookup = load_json(path)
-        _lookup.update(_EXTRA_I18N)
+        if self.props.i18n.extra:
+            _lookup.update(self.props.i18n.extra)
 
         # validate fields
         # TODO: there's probably a library we can use to do this for us
@@ -61,52 +59,79 @@ class I18n:
     @property
     def dir(self) -> Path:
         """eg. `resources/assets/hexcasting/lang`"""
-        return self.resource_dir / "assets" / self.modid / "lang"
+        return self.props.resources / "assets" / self.props.modid / "lang"
 
     def localize(
         self,
-        key: str,
+        key: str | list[str] | tuple[str, ...],
         default: str | None = None,
         skip_errors: bool = False,
     ) -> LocalizedStr:
         """Looks up the given string in the lang table if i18n is enabled.
         Otherwise, returns the original key.
 
-        Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
-        """
-        if self._lookup is None:
-            return LocalizedStr(key.replace("%%", "%"))
+        If a tuple/list of keys is provided, returns the value of the first key which
+        exists. That is, subsequent keys are treated as fallbacks for the first.
 
-        if default is not None:
-            localized = self._lookup.get(key, default)
-        elif skip_errors:
-            localized = self._lookup.get(key, key)
+        Raises KeyError if i18n is enabled and skip_errors is False but the key has no
+        corresponding localized value.
+        """
+
+        assert isinstance(key, (str, list, tuple))
+
+        if self._lookup is None:
+            # if i18n is disabled, just return the key
+            if not isinstance(key, str):
+                key = key[0]
+            localized = key
+        elif isinstance(key, str):
+            # for a single key, look it up
+            if default is not None:
+                localized = self._lookup.get(key, default)
+            elif skip_errors:
+                localized = self._lookup.get(key, key)
+            else:
+                # raises if not found
+                localized = self._lookup[key]
         else:
-            # raises if not found
-            localized = self._lookup[key]
+            # for a list/tuple of keys, return the first one that matches (by recursing)
+            for current_key in key[:-1]:
+                assert isinstance(current_key, str)
+                try:
+                    return self.localize(current_key)
+                except KeyError:
+                    continue
+            return self.localize(key[-1], default, skip_errors)
 
         return LocalizedStr(localized.replace("%%", "%"))
 
-    def localize_pattern(self, op_id: str, skip_errors: bool = False) -> LocalizedStr:
+    def localize_pattern(
+        self,
+        op_id: ResourceLocation,
+        skip_errors: bool = False,
+    ) -> LocalizedStr:
         """Localizes the given pattern id (internal name, eg. brainsweep).
 
         Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
         """
-        try:
-            # prefer the book-specific translation if it exists
-            # don't pass skip_errors here because we need to catch it below
-            return self.localize(f"hexcasting.spell.book.{op_id}")
-        except KeyError:
-            return self.localize(f"hexcasting.spell.{op_id}", skip_errors=skip_errors)
+        # prefer the book-specific translation if it exists
+        # TODO: should this use op_id.namespace anywhere?
+        return self.localize(
+            (f"hexcasting.spell.book.{op_id.path}", f"hexcasting.spell.{op_id.path}"),
+            skip_errors=skip_errors,
+        )
 
-    def localize_item(self, item: str, skip_errors: bool = False) -> LocalizedStr:
+    def localize_item(
+        self,
+        item: ItemStack,
+        skip_errors: bool = False,
+    ) -> LocalizedItem:
         """Localizes the given item resource name.
 
         Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
         """
-        # FIXME: hack
-        item = re.sub(r"{.*", "", item.replace(":", "."))
-        try:
-            return self.localize(f"block.{item}")
-        except KeyError:
-            return self.localize(f"item.{item}", skip_errors=skip_errors)
+        return LocalizedItem(
+            self.localize(
+                (item.i18n_key("block"), item.i18n_key()), skip_errors=skip_errors
+            )
+        )
