@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.Util
 import net.minecraft.world.item.ItemStack
 
 object OpColorize : SpellAction {
@@ -17,10 +18,10 @@ object OpColorize : SpellAction {
         args: List<Iota>,
         ctx: CastingEnvironment
     ): SpellAction.Result {
-        val (handStack, hand) = ctx.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isColorizer)
+        val (handStack, hand) = ctx.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isPigment)
             ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, null, "colorizer") // TODO: hack
 
-        if (!IXplatAbstractions.INSTANCE.isColorizer(handStack)) {
+        if (!IXplatAbstractions.INSTANCE.isPigment(handStack)) {
             throw MishapBadOffhandItem.of(
                 handStack,
                 hand,
@@ -38,13 +39,8 @@ object OpColorize : SpellAction {
     private data class Spell(val stack: ItemStack) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
             val copy = stack.copy()
-            val caster = ctx.caster
-            if (caster != null && ctx.withdrawItem(copy::sameItem, 1, true)) {
-                IXplatAbstractions.INSTANCE.setColorizer(
-                    ctx.caster,
-                    FrozenPigment(copy, caster.uuid)
-                )
-            }
+            if (ctx.withdrawItem(copy::sameItem, 1, true))
+                ctx.setPigment(FrozenPigment(copy, ctx.caster?.uuid ?: Util.NIL_UUID))
         }
     }
 }

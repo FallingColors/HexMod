@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.client.render.GaslightingTracker;
 import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.items.ItemStaff;
-import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
+import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
 import at.petrak.hexcasting.common.items.storage.ItemFocus;
@@ -138,18 +138,18 @@ public class HexItemModels extends PaucalItemModelProvider {
         }
 
         for (var dye : DyeColor.values()) {
-            singleTexture(getPath(HexItems.DYE_COLORIZERS.get(dye)),
+            singleTexture(getPath(HexItems.DYE_PIGMENTS.get(dye)),
                 new ResourceLocation("item/generated"),
                 "layer0", modLoc("item/colorizer/dye_" + dye.getName()));
         }
-        for (var type : ItemPrideColorizer.Type.values()) {
-            singleTexture(getPath(HexItems.PRIDE_COLORIZERS.get(type)),
+        for (var type : ItemPridePigment.Type.values()) {
+            singleTexture(getPath(HexItems.PRIDE_PIGMENTS.get(type)),
                 new ResourceLocation("item/generated"),
                 "layer0", modLoc("item/colorizer/pride_" + type.getName()));
         }
-        singleTexture(getPath(HexItems.UUID_COLORIZER), new ResourceLocation("item/generated"),
+        singleTexture(getPath(HexItems.UUID_PIGMENT), new ResourceLocation("item/generated"),
             "layer0", modLoc("item/colorizer/uuid"));
-        singleTexture(getPath(HexItems.DEFAULT_COLORIZER), new ResourceLocation("item/generated"),
+        singleTexture(getPath(HexItems.DEFAULT_PIGMENT), new ResourceLocation("item/generated"),
             "layer0", modLoc("item/colorizer/uuid"));
 
         simpleItem(modLoc("slate_blank"));

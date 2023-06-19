@@ -81,7 +81,7 @@ public interface IXplatAbstractions {
 
     boolean isBrainswept(Mob mob);
 
-    void setColorizer(Player target, FrozenPigment colorizer);
+    @Nullable FrozenPigment setPigment(Player target, @Nullable FrozenPigment colorizer);
 
     void setSentinel(Player target, @Nullable Sentinel sentinel);
 
@@ -97,7 +97,7 @@ public interface IXplatAbstractions {
 
     @Nullable AltioraAbility getAltiora(Player player);
 
-    FrozenPigment getColorizer(Player player);
+    FrozenPigment getPigment(Player player);
 
     @Nullable Sentinel getSentinel(Player player);
 
@@ -126,9 +126,9 @@ public interface IXplatAbstractions {
 
     // coooollooorrrs
 
-    boolean isColorizer(ItemStack stack);
+    boolean isPigment(ItemStack stack);
 
-    ColorProvider getColorProvider(FrozenPigment colorizer);
+    ColorProvider getColorProvider(FrozenPigment pigment);
 
     // Items
 

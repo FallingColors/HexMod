@@ -1,6 +1,6 @@
-package at.petrak.hexcasting.common.items.colorizer;
+package at.petrak.hexcasting.common.items.pigment;
 
-import at.petrak.hexcasting.api.item.ColorizerItem;
+import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -9,10 +9,10 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-public class ItemDyeColorizer extends Item implements ColorizerItem {
+public class ItemDyePigment extends Item implements PigmentItem {
     private final DyeColor dyeColor;
 
-    public ItemDyeColorizer(DyeColor dyeColor, Properties pProperties) {
+    public ItemDyePigment(DyeColor dyeColor, Properties pProperties) {
         super(pProperties);
         this.dyeColor = dyeColor;
     }

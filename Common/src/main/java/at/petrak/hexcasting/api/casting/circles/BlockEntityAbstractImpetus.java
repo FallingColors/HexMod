@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.circles;
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -47,7 +48,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         TAG_EXECUTION_STATE = "executor",
         TAG_MEDIA = "media",
         TAG_ERROR_MSG = "errorMsg",
-        TAG_ERROR_DISPLAY = "errorDisplay";
+        TAG_ERROR_DISPLAY = "errorDisplay",
+        TAG_PIGMENT = "pigment";
 
     // We might try to load the executor in loadModData when the level doesn't exist yet,
     // so save the tag and load it lazy
@@ -62,6 +64,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     protected Component displayMsg = null;
     @Nullable
     protected ItemStack displayItem = null;
+    @Nullable
+    protected FrozenPigment pigment = null;
 
 
     public BlockEntityAbstractImpetus(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -228,6 +232,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     public void setMedia(long media) {
         this.media = media;
+        sync();
     }
 
     public long extractMediaFromInsertedItem(ItemStack stack, boolean simulate) {
@@ -264,6 +269,20 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     //endregion
 
+
+    public FrozenPigment getPigment() {
+        if (pigment != null)
+            return pigment;
+        if (executionState != null && executionState.casterPigment != null)
+            return executionState.casterPigment;
+        return FrozenPigment.DEFAULT.get();
+    }
+
+    public @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
+        this.pigment = pigment;
+        return this.pigment;
+    }
+
     @Override
     protected void saveModData(CompoundTag tag) {
         if (this.executionState != null) {
@@ -278,6 +297,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.displayItem.save(itemTag);
             tag.put(TAG_ERROR_DISPLAY, itemTag);
         }
+        if (this.pigment != null)
+            tag.put(TAG_PIGMENT, this.pigment.serializeToNBT());
     }
 
     @Override
@@ -302,6 +323,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.displayMsg = null;
             this.displayItem = null;
         }
+        if (tag.contains(TAG_PIGMENT, Tag.TAG_COMPOUND))
+            this.pigment = FrozenPigment.fromNBT(tag.getCompound(TAG_PIGMENT));
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,

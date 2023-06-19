@@ -53,7 +53,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
             )
         }
 
-        val trueName = ctx.caster?.let { MishapOthersName.getTrueNameFromArgs(patterns, it) }
+        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, ctx.caster)
         if (trueName != null)
             throw MishapOthersName(trueName)
 
@@ -74,7 +74,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
                 val entityStack = itemEntity.item.copy()
                 val mediamount = extractMedia(entityStack, drainForBatteries = true)
                 if (mediamount > 0) {
-                    hexHolder.writeHex(patterns, ctx.colorizer, mediamount)
+                    hexHolder.writeHex(patterns, ctx.pigment, mediamount)
                 }
 
                 itemEntity.item = entityStack

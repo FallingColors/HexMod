@@ -1,7 +1,7 @@
-package at.petrak.hexcasting.common.items.colorizer;
+package at.petrak.hexcasting.common.items.pigment;
 
-import at.petrak.hexcasting.api.addldata.ADColorizer;
-import at.petrak.hexcasting.api.item.ColorizerItem;
+import at.petrak.hexcasting.api.addldata.ADPigment;
+import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -9,8 +9,8 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-public class ItemAmethystAndCopperColorizer extends Item implements ColorizerItem {
-    public ItemAmethystAndCopperColorizer(Properties pProperties) {
+public class ItemAmethystAndCopperPigment extends Item implements PigmentItem {
+    public ItemAmethystAndCopperPigment(Properties pProperties) {
         super(pProperties);
     }
 
@@ -32,7 +32,7 @@ public class ItemAmethystAndCopperColorizer extends Item implements ColorizerIte
 
         @Override
         protected int getRawColor(float time, Vec3 position) {
-            return ADColorizer.morphBetweenColors(COLORS, new Vec3(0.1, 0.1, 0.1), time / 600, position);
+            return ADPigment.morphBetweenColors(COLORS, new Vec3(0.1, 0.1, 0.1), time / 600, position);
         }
     }
 }

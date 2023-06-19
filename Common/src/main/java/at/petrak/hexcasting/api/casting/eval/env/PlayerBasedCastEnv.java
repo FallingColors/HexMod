@@ -15,6 +15,7 @@ import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -186,6 +187,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("y_u_no_cast_angy"));
         var advs = this.caster.getAdvancements();
         return advs.getOrStartProgress(adv).isDone();
+    }
+
+    @Override
+    public @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
+        return IXplatAbstractions.INSTANCE.setPigment(caster, pigment);
     }
 
     @Override

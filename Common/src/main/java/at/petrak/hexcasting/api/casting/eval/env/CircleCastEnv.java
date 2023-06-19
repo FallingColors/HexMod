@@ -9,8 +9,6 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.common.lib.HexItems;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -146,28 +144,24 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public FrozenPigment getColorizer() {
-        var out = this.getColorizerFromImpetus();
-        if (out != null)
-            return out;
-
-        // TODO: colouriser from an adjacent inventory also?
-        return new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.PURPLE)), Util.NIL_UUID);
-    }
-
-    private @Nullable FrozenPigment getColorizerFromImpetus() {
+    public FrozenPigment getPigment() {
         var impetus = this.getImpetus();
         if (impetus == null)
-            return null;
-        var state = impetus.getExecutionState();
-        if (state == null)
-            return null;
-        return state.colorizer;
+            return FrozenPigment.DEFAULT.get();
+        return impetus.getPigment();
     }
 
     @Override
-    public void produceParticles(ParticleSpray particles, FrozenPigment colorizer) {
-        particles.sprayParticles(this.world, colorizer);
+    public @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
+        var impetus = this.getImpetus();
+        if (impetus == null)
+            return null;
+        return impetus.setPigment(pigment);
+    }
+
+    @Override
+    public void produceParticles(ParticleSpray particles, FrozenPigment pigment) {
+        particles.sprayParticles(this.world, pigment);
     }
 
     @Override

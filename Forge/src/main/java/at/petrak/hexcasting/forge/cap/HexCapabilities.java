@@ -15,6 +15,6 @@ public final class HexCapabilities {
     });
     public static final Capability<ADVariantItem> VARIANT_ITEM = CapabilityManager.get(new CapabilityToken<>() {
     });
-    public static final Capability<ADColorizer> COLOR = CapabilityManager.get(new CapabilityToken<>() {
+    public static final Capability<ADPigment> COLOR = CapabilityManager.get(new CapabilityToken<>() {
     });
 }

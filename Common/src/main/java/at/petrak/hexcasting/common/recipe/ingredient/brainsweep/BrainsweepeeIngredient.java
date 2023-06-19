@@ -29,6 +29,11 @@ public abstract class BrainsweepeeIngredient {
 
     public abstract JsonObject serialize();
 
+    public void wrapWrite(FriendlyByteBuf buf) {
+        buf.writeEnum(this.ingrType());
+        this.write(buf);
+    }
+
     public abstract void write(FriendlyByteBuf buf);
 
     /**
@@ -44,8 +49,8 @@ public abstract class BrainsweepeeIngredient {
     public abstract String getSomeKindOfReasonableIDForEmi();
 
     public static BrainsweepeeIngredient read(FriendlyByteBuf buf) {
-        var type = buf.readVarInt();
-        return switch (Type.values()[type]) {
+        var type = buf.readEnum(Type.class);
+        return switch (type) {
             case VILLAGER -> VillagerIngredient.read(buf);
             case ENTITY_TYPE -> EntityTypeIngredient.read(buf);
             case ENTITY_TAG -> EntityTagIngredient.read(buf);

@@ -145,9 +145,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setColorizer(Player target, FrozenPigment colorizer) {
-        var cc = HexCardinalComponents.FAVORED_COLORIZER.get(target);
-        cc.setColorizer(colorizer);
+    public @Nullable FrozenPigment setPigment(Player target, @Nullable FrozenPigment pigment) {
+        var cc = HexCardinalComponents.FAVORED_PIGMENT.get(target);
+        var old = cc.getPigment();
+        cc.setPigment(pigment);
+        return old;
     }
 
     @Override
@@ -197,9 +199,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FrozenPigment getColorizer(Player player) {
-        var cc = HexCardinalComponents.FAVORED_COLORIZER.get(player);
-        return cc.getColorizer();
+    public FrozenPigment getPigment(Player player) {
+        var cc = HexCardinalComponents.FAVORED_PIGMENT.get(player);
+        return cc.getPigment();
     }
 
     @Override
@@ -267,14 +269,14 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean isColorizer(ItemStack stack) {
-        return HexCardinalComponents.COLORIZER.isProvidedBy(stack);
+    public boolean isPigment(ItemStack stack) {
+        return HexCardinalComponents.PIGMENT.isProvidedBy(stack);
     }
 
     @Override
-    public ColorProvider getColorProvider(FrozenPigment colorizer) {
-        var cc = HexCardinalComponents.COLORIZER.maybeGet(colorizer.item());
-        return cc.map(col -> col.provideColor(colorizer.owner())).orElse(ColorProvider.MISSING);
+    public ColorProvider getColorProvider(FrozenPigment pigment) {
+        var cc = HexCardinalComponents.PIGMENT.maybeGet(pigment.item());
+        return cc.map(col -> col.provideColor(pigment.owner())).orElse(ColorProvider.MISSING);
     }
 
     @Override
