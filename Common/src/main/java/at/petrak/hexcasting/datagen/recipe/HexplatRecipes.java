@@ -21,7 +21,7 @@ import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightCuttingRecipeBuilder;
 import at.petrak.paucal.api.datagen.PaucalRecipeProvider;
 import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -33,7 +33,6 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
@@ -42,7 +41,7 @@ import java.util.function.Function;
 
 // TODO: need to do a big refactor of this class cause it's giant and unwieldy, probably as part of #360
 public class HexplatRecipes extends PaucalRecipeProvider {
-    private final DataGenerator generator;
+    private final PackOutput output;
     private final IXplatIngredients ingredients;
     private final Function<RecipeBuilder, IXplatConditionsBuilder> conditions;
 
@@ -51,16 +50,16 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
             HexBlocks.EDIFIED_LOG_PURPLE);
 
-    public HexplatRecipes(DataGenerator generator, IXplatIngredients ingredients,
-        Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
-        super(generator, HexAPI.MOD_ID);
-        this.generator = generator;
+    public HexplatRecipes(PackOutput output, IXplatIngredients ingredients,
+                          Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
+        super(output, HexAPI.MOD_ID);
+        this.output = output;
         this.ingredients = ingredients;
         this.conditions = conditions;
     }
 
     @Override
-    protected void makeRecipes(Consumer<FinishedRecipe> recipes) {
+    protected void buildRecipes(Consumer<FinishedRecipe> recipes) {
         specialRecipe(recipes, SealThingsRecipe.FOCUS_SERIALIZER);
         specialRecipe(recipes, SealThingsRecipe.SPELLBOOK_SERIALIZER);
 

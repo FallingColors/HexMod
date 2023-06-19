@@ -39,7 +39,7 @@ object OpColorize : SpellAction {
     private data class Spell(val stack: ItemStack) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
             val copy = stack.copy()
-            if (ctx.withdrawItem(copy::sameItem, 1, true))
+            if (ctx.withdrawItem({ ItemStack.isSameItemSameTags(copy, it) }, 1, true))
                 ctx.setPigment(FrozenPigment(copy, ctx.caster?.uuid ?: Util.NIL_UUID))
         }
     }

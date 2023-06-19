@@ -16,7 +16,6 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.material.Fluids
-import net.minecraft.world.level.material.Material
 import net.minecraft.world.phys.Vec3
 
 object OpDestroyFluid : SpellAction {
@@ -26,7 +25,7 @@ object OpDestroyFluid : SpellAction {
         ctx: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
-        val pos = BlockPos(vecPos)
+        val pos = BlockPos.containing(vecPos)
         ctx.assertPosInRangeForEditing(pos)
 
         return SpellAction.Result(

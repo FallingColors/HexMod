@@ -24,7 +24,7 @@ class OpCreateFluid(val cost: Int, val bucket: Item, val cauldron: BlockState, v
         ctx: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
-        val pos = BlockPos(vecPos)
+        val pos = BlockPos.containing(vecPos)
 
         if (!ctx.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
                 ctx.world,
