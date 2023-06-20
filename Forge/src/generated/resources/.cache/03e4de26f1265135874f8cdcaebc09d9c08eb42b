@@ -1,9 +1,9 @@
-// 1.19.2	2023-05-23T13:15:17.291274688	Tags for minecraft:item
+// 1.19.2	2023-06-20T13:58:39.356908042	Tags for minecraft:item
 2f5c5bd21580004c998765215166adaa72e0d96b data/forge/tags/items/dusts/amethyst.json
 873bab891e0827973ebfe9fedd352c95778d7fbe data/forge/tags/items/gems.json
 c5aac196bf97183b43d794c6aac8e206f4b71e37 data/hexcasting/tags/items/brainswept_circle_components.json
 5baa4c7098d80a4868ebc95858a0d86a570d2fe3 data/hexcasting/tags/items/directrices.json
-42c76a43081acfb0194e2cee6de18104fb0ba5ad data/hexcasting/tags/items/edified_logs.json
+7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/hexcasting/tags/items/edified_logs.json
 86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/hexcasting/tags/items/edified_planks.json
 03bd3a58ae7367d6a21eb3acbbd70fe65a41b8f6 data/hexcasting/tags/items/grants_root_advancement.json
 7f71f33b0bc9fde24deef080ab64707df38adfd6 data/hexcasting/tags/items/impeti.json
@@ -13,8 +13,8 @@ d878c230cd5cb1b54fbe6e53f3ef71379d080c6f data/hexcasting/tags/items/seal_materia
 841dfbe4970e9167b205e5aa2b0f0936c6b9af60 data/minecraft/tags/items/buttons.json
 cba96d2ff28087e7fd9807e5e80104f3befc2512 data/minecraft/tags/items/doors.json
 6312e44ef31d2401dddbd46c4d3eda03da6e2db3 data/minecraft/tags/items/leaves.json
-42c76a43081acfb0194e2cee6de18104fb0ba5ad data/minecraft/tags/items/logs.json
-42c76a43081acfb0194e2cee6de18104fb0ba5ad data/minecraft/tags/items/logs_that_burn.json
+7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/items/logs.json
+7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/items/logs_that_burn.json
 86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/minecraft/tags/items/planks.json
 087e6cf0dce47d3a4918566058019139b32e1dfa data/minecraft/tags/items/slabs.json
 5c3c820c9b6e18b7916d8a862828707f28ce1f59 data/minecraft/tags/items/trapdoors.json

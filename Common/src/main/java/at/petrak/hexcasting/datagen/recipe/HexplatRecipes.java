@@ -47,9 +47,9 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     private final Function<RecipeBuilder, IXplatConditionsBuilder> conditions;
 
     private final List<BlockAkashicLog> EDIFIED_LOGS = List.of(
-            HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
-            HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
-            HexBlocks.EDIFIED_LOG_PURPLE);
+        HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
+        HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
+        HexBlocks.EDIFIED_LOG_PURPLE);
 
     public HexplatRecipes(DataGenerator generator, IXplatIngredients ingredients,
         Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
@@ -307,10 +307,10 @@ public class HexplatRecipes extends PaucalRecipeProvider {
 
         for (var log : EDIFIED_LOGS) {
             ShapedRecipeBuilder.shaped(log, 3)
-                    .define('W', log)
-                    .pattern("WW")
-                    .pattern("WW")
-                    .unlockedBy("has_item", hasItem(log)).save(recipes);
+                .define('W', log)
+                .pattern("WW")
+                .pattern("WW")
+                .unlockedBy("has_item", hasItem(log)).save(recipes);
         }
 
         ShapedRecipeBuilder.shaped(HexBlocks.STRIPPED_EDIFIED_WOOD, 3)
@@ -477,13 +477,13 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         // FD compat
         for (var log : EDIFIED_LOGS) {
             this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
-                            .withInput(log)
-                            .withTool(ingredients.axeStrip())
-                            .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
-                            .withOutput("farmersdelight:tree_bark")
-                            .withSound(SoundEvents.AXE_STRIP))
-                    .whenModLoaded("farmersdelight")
-                    .save(recipes, modLoc("compat/farmersdelight/cutting/" + Registry.BLOCK.getKey(log).getNamespace()));
+                    .withInput(log)
+                    .withTool(ingredients.axeStrip())
+                    .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
+                    .withOutput("farmersdelight:tree_bark")
+                    .withSound(SoundEvents.AXE_STRIP))
+                .whenModLoaded("farmersdelight")
+                .save(recipes, modLoc("compat/farmersdelight/cutting/" + Registry.BLOCK.getKey(log).getPath()));
         }
 
         this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
