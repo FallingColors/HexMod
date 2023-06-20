@@ -16,7 +16,7 @@ class MishapOthersName(val confidant: Player) : Mishap() {
         dyeColor(DyeColor.BLACK)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        val seconds = if (this.confidant == ctx.caster) 5 else 60;
+        val seconds = if (this.confidant == ctx.caster) 5 else 60
         ctx.mishapEnvironment.blind(seconds * 20)
     }
 
@@ -49,7 +49,7 @@ class MishapOthersName(val confidant: Player) : Mishap() {
         }
 
         @JvmStatic
-        fun getTrueNameFromArgs(datums: List<Iota>, caster: Player): Player? {
+        fun getTrueNameFromArgs(datums: List<Iota>, caster: Player?): Player? {
             return datums.firstNotNullOfOrNull { getTrueNameFromDatum(it, caster) }
         }
     }

@@ -92,7 +92,7 @@ public class HexAPIImpl implements HexAPI {
 
     @Override
     public FrozenPigment getColorizer(Player player) {
-        return IXplatAbstractions.INSTANCE.getColorizer(player);
+        return IXplatAbstractions.INSTANCE.getPigment(player);
     }
 
     ArmorMaterial ARMOR_MATERIAL = new ArmorMaterial() {

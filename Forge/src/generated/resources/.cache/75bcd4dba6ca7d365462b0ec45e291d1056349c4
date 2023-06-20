@@ -1,18 +1,18 @@
-// 1.19.2	2023-05-23T13:15:17.297944258	Tags for minecraft:block
+// 1.19.2	2023-06-20T13:58:39.359624148	Tags for minecraft:block
 c5aac196bf97183b43d794c6aac8e206f4b71e37 data/hexcasting/tags/blocks/brainswept_circle_components.json
 5baa4c7098d80a4868ebc95858a0d86a570d2fe3 data/hexcasting/tags/blocks/directrices.json
-42c76a43081acfb0194e2cee6de18104fb0ba5ad data/hexcasting/tags/blocks/edified_logs.json
+7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/hexcasting/tags/blocks/edified_logs.json
 86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/hexcasting/tags/blocks/edified_planks.json
 7f71f33b0bc9fde24deef080ab64707df38adfd6 data/hexcasting/tags/blocks/impeti.json
 841dfbe4970e9167b205e5aa2b0f0936c6b9af60 data/minecraft/tags/blocks/buttons.json
-136977a539664f25ea6f762ca8c2ee72d430cc49 data/minecraft/tags/blocks/crystal_sound_blocks.json
+8b7d16a34235e6062e47f6b3a3a08be760a3bb85 data/minecraft/tags/blocks/crystal_sound_blocks.json
 cba96d2ff28087e7fd9807e5e80104f3befc2512 data/minecraft/tags/blocks/doors.json
 6312e44ef31d2401dddbd46c4d3eda03da6e2db3 data/minecraft/tags/blocks/leaves.json
-42c76a43081acfb0194e2cee6de18104fb0ba5ad data/minecraft/tags/blocks/logs.json
-42c76a43081acfb0194e2cee6de18104fb0ba5ad data/minecraft/tags/blocks/logs_that_burn.json
-102621940be9f729e9b0e14ae08e784efac89381 data/minecraft/tags/blocks/mineable/axe.json
+7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/blocks/logs.json
+7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/blocks/logs_that_burn.json
+4cb50509cfa6c86b60ca29c396090913f66dc06c data/minecraft/tags/blocks/mineable/axe.json
 6312e44ef31d2401dddbd46c4d3eda03da6e2db3 data/minecraft/tags/blocks/mineable/hoe.json
-625a4ef0b778155b33bdbf64d792b08142c65f18 data/minecraft/tags/blocks/mineable/pickaxe.json
+8686b3e341d9e44f04de609d9f33c63f5439f493 data/minecraft/tags/blocks/mineable/pickaxe.json
 abfa06b8189660656acf8f7cdccc3844fb40600f data/minecraft/tags/blocks/mineable/shovel.json
 86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/minecraft/tags/blocks/planks.json
 ee24953b8f5d4742f03c57842a3588618bbc5a0a data/minecraft/tags/blocks/pressure_plates.json

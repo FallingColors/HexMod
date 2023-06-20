@@ -4,10 +4,10 @@ import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.items.ItemStaff;
-import at.petrak.hexcasting.common.items.colorizer.ItemAmethystAndCopperColorizer;
-import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
-import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
-import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
+import at.petrak.hexcasting.common.items.pigment.ItemAmethystAndCopperPigment;
+import at.petrak.hexcasting.common.items.pigment.ItemDyePigment;
+import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
+import at.petrak.hexcasting.common.items.pigment.ItemUUIDPigment;
 import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -79,25 +79,25 @@ public class HexItems {
     public static final ItemMediaBattery BATTERY = make("battery",
         new ItemMediaBattery(unstackable()));
 
-    public static final EnumMap<DyeColor, ItemDyeColorizer> DYE_COLORIZERS = Util.make(() -> {
-        var out = new EnumMap<DyeColor, ItemDyeColorizer>(DyeColor.class);
+    public static final EnumMap<DyeColor, ItemDyePigment> DYE_PIGMENTS = Util.make(() -> {
+        var out = new EnumMap<DyeColor, ItemDyePigment>(DyeColor.class);
         for (var dye : DyeColor.values()) {
-            out.put(dye, make("dye_colorizer_" + dye.getName(), new ItemDyeColorizer(dye, unstackable())));
+            out.put(dye, make("dye_colorizer_" + dye.getName(), new ItemDyePigment(dye, unstackable())));
         }
         return out;
     });
-    public static final EnumMap<ItemPrideColorizer.Type, ItemPrideColorizer> PRIDE_COLORIZERS = Util.make(() -> {
-        var out = new EnumMap<ItemPrideColorizer.Type, ItemPrideColorizer>(ItemPrideColorizer.Type.class);
-        for (var politicsInMyVidya : ItemPrideColorizer.Type.values()) {
+    public static final EnumMap<ItemPridePigment.Type, ItemPridePigment> PRIDE_PIGMENTS = Util.make(() -> {
+        var out = new EnumMap<ItemPridePigment.Type, ItemPridePigment>(ItemPridePigment.Type.class);
+        for (var politicsInMyVidya : ItemPridePigment.Type.values()) {
             out.put(politicsInMyVidya, make("pride_colorizer_" + politicsInMyVidya.getName(),
-                new ItemPrideColorizer(politicsInMyVidya, unstackable())));
+                new ItemPridePigment(politicsInMyVidya, unstackable())));
         }
         return out;
     });
 
-    public static final Item UUID_COLORIZER = make("uuid_colorizer", new ItemUUIDColorizer(unstackable()));
-    public static final Item DEFAULT_COLORIZER = make("default_colorizer",
-        new ItemAmethystAndCopperColorizer(unstackable()));
+    public static final Item UUID_PIGMENT = make("uuid_colorizer", new ItemUUIDPigment(unstackable()));
+    public static final Item DEFAULT_PIGMENT = make("default_colorizer",
+        new ItemAmethystAndCopperPigment(unstackable()));
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",

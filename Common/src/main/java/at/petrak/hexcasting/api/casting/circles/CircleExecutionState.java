@@ -37,7 +37,7 @@ public class CircleExecutionState {
         TAG_ENTERED_FROM = "entered_from",
         TAG_IMAGE = "image",
         TAG_CASTER = "caster",
-        TAG_COLORIZER = "colorizer";
+        TAG_PIGMENT = "pigment";
 
     public final BlockPos impetusPos;
     public final Direction impetusDir;
@@ -48,14 +48,14 @@ public class CircleExecutionState {
     public Direction enteredFrom;
     public CastingImage currentImage;
     public @Nullable UUID caster;
-    public FrozenPigment colorizer;
+    public @Nullable FrozenPigment casterPigment;
 
     public final AABB bounds;
 
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, Set<BlockPos> knownPositions,
         List<BlockPos> reachedPositions, BlockPos currentPos, Direction enteredFrom,
-        CastingImage currentImage, @Nullable UUID caster, FrozenPigment colorizer) {
+        CastingImage currentImage, @Nullable UUID caster, @Nullable FrozenPigment casterPigment) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
         this.knownPositions = knownPositions;
@@ -64,7 +64,7 @@ public class CircleExecutionState {
         this.enteredFrom = enteredFrom;
         this.currentImage = currentImage;
         this.caster = caster;
-        this.colorizer = colorizer;
+        this.casterPigment = casterPigment;
 
         this.bounds = BlockEntityAbstractImpetus.getBounds(new ArrayList<>(this.knownPositions));
     }
@@ -133,10 +133,9 @@ public class CircleExecutionState {
         reachedPositions.add(impetus.getBlockPos());
         var start = seenGoodPositions.get(0);
 
-        FrozenPigment colorizer;
+        FrozenPigment colorizer = null;
         UUID casterUUID;
         if (caster == null) {
-            colorizer = FrozenPigment.DEFAULT.get();
             casterUUID = null;
         } else {
             colorizer = HexAPI.instance().getColorizer(caster);
@@ -172,7 +171,8 @@ public class CircleExecutionState {
         if (this.caster != null)
             out.putUUID(TAG_CASTER, this.caster);
 
-        out.put(TAG_COLORIZER, this.colorizer.serializeToNBT());
+        if (this.casterPigment != null)
+            out.put(TAG_PIGMENT, this.casterPigment.serializeToNBT());
 
         return out;
     }
@@ -200,10 +200,12 @@ public class CircleExecutionState {
         if (nbt.hasUUID(TAG_CASTER))
             caster = nbt.getUUID(TAG_CASTER);
 
-        FrozenPigment colorizer = FrozenPigment.fromNBT(nbt.getCompound(TAG_COLORIZER));
+        FrozenPigment pigment = null;
+        if (nbt.contains(TAG_PIGMENT, Tag.TAG_COMPOUND))
+            pigment = FrozenPigment.fromNBT(nbt.getCompound(TAG_PIGMENT));
 
         return new CircleExecutionState(startPos, startDir, knownPositions, reachedPositions, currentPos,
-            enteredFrom, image, caster, colorizer);
+            enteredFrom, image, caster, pigment);
     }
 
     /**

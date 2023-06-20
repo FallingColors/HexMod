@@ -15,6 +15,7 @@ import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -189,6 +190,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
+    public @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
+        return IXplatAbstractions.INSTANCE.setPigment(caster, pigment);
+    }
+
+    @Override
     public void produceParticles(ParticleSpray particles, FrozenPigment colorizer) {
         particles.sprayParticles(this.world, colorizer);
     }
@@ -205,7 +211,9 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
     protected void sendMishapMsgToPlayer(OperatorSideEffect.DoMishap mishap) {
         var msg = mishap.getMishap().errorMessageWithName(this, mishap.getErrorCtx());
-        this.caster.sendSystemMessage(msg);
+        if (msg != null) {
+            this.caster.sendSystemMessage(msg);
+        }
     }
 
     @Override

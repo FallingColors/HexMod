@@ -43,8 +43,8 @@ public class ForgePacketHandler {
             MsgBlinkS2C::deserialize, makeClientBoundHandler(MsgBlinkS2C::handle));
         NETWORK.registerMessage(messageIdx++, MsgSentinelStatusUpdateAck.class, MsgSentinelStatusUpdateAck::serialize,
             MsgSentinelStatusUpdateAck::deserialize, makeClientBoundHandler(MsgSentinelStatusUpdateAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgColorizerUpdateAck.class, MsgColorizerUpdateAck::serialize,
-            MsgColorizerUpdateAck::deserialize, makeClientBoundHandler(MsgColorizerUpdateAck::handle));
+        NETWORK.registerMessage(messageIdx++, MsgPigmentUpdateAck.class, MsgPigmentUpdateAck::serialize,
+            MsgPigmentUpdateAck::deserialize, makeClientBoundHandler(MsgPigmentUpdateAck::handle));
         NETWORK.registerMessage(messageIdx++, MsgAltioraUpdateAck.class, MsgAltioraUpdateAck::serialize,
             MsgAltioraUpdateAck::deserialize, makeClientBoundHandler(MsgAltioraUpdateAck::handle));
         NETWORK.registerMessage(messageIdx++, MsgCastParticleS2C.class, MsgCastParticleS2C::serialize,

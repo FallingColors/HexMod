@@ -74,7 +74,7 @@ public class ForgeCapabilityHandler {
         evt.register(ADMediaHolder.class);
         evt.register(ADIotaHolder.class);
         evt.register(ADHexHolder.class);
-        evt.register(ADColorizer.class);
+        evt.register(ADPigment.class);
     }
 
     public static void attachItemCaps(AttachCapabilitiesEvent<ItemStack> evt) {
@@ -124,9 +124,9 @@ public class ForgeCapabilityHandler {
                     provide(stack, HexCapabilities.VARIANT_ITEM, () -> new CapItemVariantItem(variantItem, stack)));
         }
 
-        if (stack.getItem() instanceof ColorizerItem colorizer) {
+        if (stack.getItem() instanceof PigmentItem pigment) {
             evt.addCapability(PIGMENT_CAP,
-                provide(stack, HexCapabilities.COLOR, () -> new CapItemColorizer(colorizer, stack)));
+                provide(stack, HexCapabilities.COLOR, () -> new CapItemPigment(pigment, stack)));
         }
 
         if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Forge.CURIOS_API_ID)

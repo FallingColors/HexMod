@@ -58,7 +58,7 @@ object OpAltiora : SpellAction {
                 if (player.level.random.nextFloat() < 0.02)
                     player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_AMBIENCE, SoundSource.PLAYERS, 0.2f, 1f)
 
-                val color = IXplatAbstractions.INSTANCE.getColorizer(player)
+                val color = IXplatAbstractions.INSTANCE.getPigment(player)
                 ParticleSpray(player.position(), Vec3(0.0, -0.2, 0.0), 0.4, Math.PI * 0.5, count = 3)
                     .sprayParticles(player.getLevel(), color)
             }

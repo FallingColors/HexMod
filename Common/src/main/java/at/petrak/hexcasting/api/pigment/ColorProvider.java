@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.api.pigment;
 
-import at.petrak.hexcasting.api.addldata.ADColorizer;
+import at.petrak.hexcasting.api.addldata.ADPigment;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec3;
 
@@ -30,7 +30,7 @@ public abstract class ColorProvider {
         double luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 0xFF; // Standard relative luminance calculation
 
         if (luminance < 0.05) {
-            int rawMod = ADColorizer.morphBetweenColors(MINIMUM_LUMINANCE_COLOR_WHEEL, new Vec3(0.1, 0.1, 0.1),
+            int rawMod = ADPigment.morphBetweenColors(MINIMUM_LUMINANCE_COLOR_WHEEL, new Vec3(0.1, 0.1, 0.1),
                 time / 20 / 20, position);
 
             r += FastColor.ARGB32.red(rawMod);

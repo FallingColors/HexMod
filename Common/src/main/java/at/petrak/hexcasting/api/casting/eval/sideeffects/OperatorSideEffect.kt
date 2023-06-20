@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.api.casting.eval.sideeffects
 
-import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM
@@ -24,8 +23,6 @@ sealed class OperatorSideEffect {
         override fun performEffect(harness: CastingVM): Boolean {
             harness.env.caster?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
 
-            if (awardStat)
-                HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(harness.env.caster)
 
             return true
         }
@@ -56,7 +53,7 @@ sealed class OperatorSideEffect {
 
     data class Particles(val spray: ParticleSpray) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            harness.env.produceParticles(this.spray, harness.env.colorizer)
+            harness.env.produceParticles(this.spray, harness.env.pigment)
 //            this.spray.sprayParticles(harness.env.world, harness.env.colorizer)
 
             return false
@@ -71,7 +68,7 @@ sealed class OperatorSideEffect {
             spray.sprayParticles(
                 harness.env.world,
                 FrozenPigment(
-                    ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!),
+                    ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!),
                     Util.NIL_UUID
                 )
             )

@@ -89,8 +89,6 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        buf.writeVarInt(Type.ENTITY_TAG.ordinal());
-
         buf.writeResourceLocation(this.entityTypeTag.location());
     }
 

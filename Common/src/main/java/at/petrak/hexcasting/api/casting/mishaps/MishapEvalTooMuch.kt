@@ -9,8 +9,8 @@ class MishapEvalTooMuch : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLUE)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.mishapEnvironment.drown()
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        env.mishapEnvironment.drown()
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
