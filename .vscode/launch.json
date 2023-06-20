@@ -19,10 +19,7 @@
             "cwd": "${workspaceFolder}/doc",
             "program": "src/main.py",
             "args": [
-                "../Common/src/main/resources",
-                "hexcasting",
-                "thehexbook",
-                "template.html",
+                "properties.toml",
             ],
             "console": "integratedTerminal",
             "justMyCode": false

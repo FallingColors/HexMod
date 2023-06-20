@@ -2,18 +2,18 @@ from __future__ import annotations
 
 import string
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Mapping, Protocol, Self, TypeVar
 
 from common.deserialize import Castable
 
 # circular imports are gross
+# redundant import to signal re-export
 if TYPE_CHECKING:
-    from patchouli.book import Book
-    from patchouli.category import Category
-    from patchouli.entry import Entry
+    from patchouli.book import Book as Book
+    from patchouli.category import Category as Category
+    from patchouli.entry import Entry as Entry
 else:
-    Book, Category, Entry = Any, Any, Any
+    Book = Category = Entry = Any
 
 
 class Color(str, Castable):
@@ -60,6 +60,10 @@ class LocalizedStr(str):
         return str.__new__(cls, value)
 
 
+class LocalizedItem(LocalizedStr):
+    pass
+
+
 class Sortable(ABC):
     """ABC for classes which can be sorted."""
 
@@ -78,18 +82,22 @@ _T = TypeVar("_T")
 
 _T_Sortable = TypeVar("_T_Sortable", bound=Sortable)
 
+_T_covariant = TypeVar("_T_covariant", covariant=True)
+
 
 def sorted_dict(d: Mapping[_T, _T_Sortable]) -> dict[_T, _T_Sortable]:
     return dict(sorted(d.items(), key=lambda item: item[1]))
 
 
+class IProperty(Protocol[_T_covariant]):
+    def __get__(self, __instance: Any, __owner: type | None = None, /) -> _T_covariant:
+        ...
+
+
 class BookHelpers(ABC):
     """Shortcuts for types with a book field."""
 
-    @property
-    @abstractmethod
-    def book(self) -> Book:
-        ...
+    book: Book | IProperty[Book]
 
     @property
     def props(self):

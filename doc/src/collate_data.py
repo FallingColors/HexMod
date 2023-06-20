@@ -6,11 +6,27 @@ from html import escape
 from typing import IO, Any
 
 from common.formatting import FormatTree
+from common.types import LocalizedStr
 from patchouli.book import Book
 from patchouli.category import Category
 from patchouli.entry import Entry, Page
+from patchouli.page import (
+    BrainsweepPage,
+    CraftingMultiPage,
+    CraftingPage,
+    EmptyPage,
+    ImagePage,
+    LinkPage,
+    PageWithPattern,
+    PageWithText,
+    PageWithTitle,
+    PatternPage,
+    SpotlightPage,
+    TextPage,
+)
 
 # extra info :(
+# TODO: properties.toml
 repo_names = {
     "hexcasting": "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources",
 }
@@ -147,112 +163,109 @@ def permalink(out: Stream, link: str):
 
 
 def write_page(out: Stream, pageid: str, page: Page):
-    if anchor := page.get("anchor"):
+    if anchor := page.anchor:
         anchor_id = pageid + "@" + anchor
     else:
         anchor_id = None
 
+    # TODO: put this in the page classes - this is just a stopgap to make the tests pass
     with out.pair_tag_if(anchor_id, "div", id=anchor_id):
-        if "header" in page or "title" in page:
-            with out.pair_tag("h4"):
-                out.text(page.get("header", page.get("title", None)))
+        if isinstance(page, PageWithTitle) and page.title is not None:
+            # gross
+            _kwargs = (
+                {"clazz": "pattern-title"} if isinstance(page, PatternPage) else {}
+            )
+            with out.pair_tag("h4", **_kwargs):
+                out.text(page.title)
                 if anchor_id:
                     permalink(out, "#" + anchor_id)
 
-        ty = page["type"]
-        if ty == "patchouli:text":
-            write_block(out, page["text"])
-        elif ty == "patchouli:empty":
-            pass
-        elif ty == "patchouli:link":
-            write_block(out, page["text"])
-            with out.pair_tag("h4", clazz="linkout"):
-                with out.pair_tag("a", href=page["url"]):
-                    out.text(page["link_text"])
-        elif ty == "patchouli:spotlight":
-            with out.pair_tag("h4", clazz="spotlight-title page-header"):
-                out.text(page["item_name"])
-            if "text" in page:
-                write_block(out, page["text"])
-        elif ty == "patchouli:crafting":
-            with out.pair_tag("blockquote", clazz="crafting-info"):
-                out.text(f"Depicted in the book: The crafting recipe for the ")
-                first = True
-                for name in page["item_name"]:
-                    if not first:
-                        out.text(" and ")
-                    first = False
-                    with out.pair_tag("code"):
-                        out.text(name)
-                out.text(".")
-            if "text" in page:
-                write_block(out, page["text"])
-        elif ty == "patchouli:image":
-            with out.pair_tag("p", clazz="img-wrapper"):
-                for img in page["images"]:
-                    modid, coords = img.split(":")
-                    out.empty_pair_tag(
-                        "img", src=f"{repo_names[modid]}/assets/{modid}/{coords}"
-                    )
-            if "text" in page:
-                write_block(out, page["text"])
-        elif ty == "hexcasting:crafting_multi":
-            recipes = page["item_name"]
-            with out.pair_tag("blockquote", clazz="crafting-info"):
-                out.text(f"Depicted in the book: Several crafting recipes, for the ")
-                with out.pair_tag("code"):
-                    out.text(recipes[0])
-                for i in recipes[1:]:
-                    out.text(", ")
-                    with out.pair_tag("code"):
-                        out.text(i)
-                out.text(".")
-            if "text" in page:
-                write_block(out, page["text"])
-        elif ty == "hexcasting:brainsweep":
-            with out.pair_tag("blockquote", clazz="crafting-info"):
-                out.text(f"Depicted in the book: A mind-flaying recipe producing the ")
-                with out.pair_tag("code"):
-                    out.text(page["output_name"])
-                out.text(".")
-            if "text" in page:
-                write_block(out, page["text"])
-        elif ty in (
-            "hexcasting:pattern",
-            "hexcasting:manual_pattern_nosig",
-            "hexcasting:manual_pattern",
-        ):
-            if "name" in page:
-                with out.pair_tag("h4", clazz="pattern-title"):
-                    inp = page.get("input", None) or ""
-                    oup = page.get("output", None) or ""
-                    pipe = f"{inp} \u2192 {oup}".strip()
-                    suffix = f" ({pipe})" if inp or oup else ""
-                    out.text(f"{page['name']}{suffix}")
-                    if anchor_id:
-                        permalink(out, "#" + anchor_id)
-            with out.pair_tag("details", clazz="spell-collapsible"):
-                out.empty_pair_tag("summary", clazz="collapse-spell")
-                for pattern in page["op"]:
-                    with out.pair_tag(
-                        "canvas",
-                        clazz="spell-viz",
-                        width=216,
-                        height=216,
-                        data_string=pattern.angle_sig,
-                        data_start=pattern.direction.lower(),
-                        data_per_world=pattern.is_per_world,
-                    ):
-                        out.text(
-                            "Your browser does not support visualizing patterns. Pattern code: "
-                            + pattern.angle_sig
+        match page:
+            case EmptyPage():
+                pass
+            case LinkPage():
+                write_block(out, page.text)
+                with out.pair_tag("h4", clazz="linkout"):
+                    with out.pair_tag("a", href=page.url):
+                        out.text(page.link_text)
+            case TextPage():
+                # LinkPage is a TextPage, so this needs to be below it
+                write_block(out, page.text)
+            case SpotlightPage():
+                with out.pair_tag("h4", clazz="spotlight-title page-header"):
+                    out.text(page.item)
+                if page.text is not None:
+                    write_block(out, page.text)
+            case CraftingPage():
+                with out.pair_tag("blockquote", clazz="crafting-info"):
+                    out.text(f"Depicted in the book: The crafting recipe for the ")
+                    first = True
+                    for recipe in page.recipes:
+                        if not first:
+                            out.text(" and ")
+                        first = False
+                        with out.pair_tag("code"):
+                            out.text(recipe.result.item)
+                    out.text(".")
+                if page.text is not None:
+                    write_block(out, page.text)
+            case ImagePage():
+                with out.pair_tag("p", clazz="img-wrapper"):
+                    for img in page.images:
+                        # TODO: make a thing for this
+                        out.empty_pair_tag(
+                            "img",
+                            src=f"{repo_names[img.namespace]}/assets/{img.namespace}/{img.path}",
                         )
-            write_block(out, page["text"])
-        else:
-            with out.pair_tag("p", clazz="todo-note"):
-                out.text("TODO: Missing processor for type: " + ty)
-            if "text" in page:
-                write_block(out, page["text"])
+                if page.text is not None:
+                    write_block(out, page.text)
+            case CraftingMultiPage():
+                with out.pair_tag("blockquote", clazz="crafting-info"):
+                    out.text(
+                        f"Depicted in the book: Several crafting recipes, for the "
+                    )
+                    with out.pair_tag("code"):
+                        out.text(page.recipes[0].result.item)
+                    for i in page.recipes[1:]:
+                        out.text(", ")
+                        with out.pair_tag("code"):
+                            out.text(i.result.item)
+                    out.text(".")
+                if page.text is not None:
+                    write_block(out, page.text)
+            case BrainsweepPage():
+                with out.pair_tag("blockquote", clazz="crafting-info"):
+                    out.text(
+                        f"Depicted in the book: A mind-flaying recipe producing the "
+                    )
+                    with out.pair_tag("code"):
+                        out.text(page.recipe.result.name)
+                    out.text(".")
+                if page.text is not None:
+                    write_block(out, page.text)
+            case PageWithPattern():
+                with out.pair_tag("details", clazz="spell-collapsible"):
+                    out.empty_pair_tag("summary", clazz="collapse-spell")
+                    for pattern in page.patterns:
+                        with out.pair_tag(
+                            "canvas",
+                            clazz="spell-viz",
+                            width=216,
+                            height=216,
+                            data_string=pattern.signature,
+                            data_start=pattern.startdir.name.lower(),
+                            data_per_world=pattern.is_per_world,
+                        ):
+                            out.text(
+                                "Your browser does not support visualizing patterns. Pattern code: "
+                                + pattern.signature
+                            )
+                write_block(out, page.text)
+            case _:
+                with out.pair_tag("p", clazz="todo-note"):
+                    out.text(f"TODO: Missing processor for type: {type(page)}")
+                if isinstance(page, PageWithText):
+                    write_block(out, page.text or page.book.format(LocalizedStr("")))
     out.tag("br")
 
 

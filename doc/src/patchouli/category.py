@@ -6,10 +6,7 @@ from typing import Self
 
 from common.deserialize import from_dict_checked, load_json_data, rename
 from common.formatting import FormatTree
-from common.properties import Properties
-from common.types import Book, BookHelpers, Color, Sortable
-from dacite import DaciteError, from_dict
-from minecraft.i18n import LocalizedStr
+from common.types import Book, BookHelpers, LocalizedStr, Sortable
 from minecraft.resource import ItemStack, ResourceLocation
 from patchouli.entry import Entry
 
@@ -23,7 +20,7 @@ class Category(Sortable, BookHelpers):
 
     # non-json fields
     path: Path
-    _book: Book
+    book: Book
 
     # required (category.json)
     name: LocalizedStr
@@ -39,7 +36,7 @@ class Category(Sortable, BookHelpers):
     @classmethod
     def load(cls, path: Path, book: Book) -> Self:
         # load the raw data from json, and add our extra fields
-        data = load_json_data(cls, path, {"path": path, "_book": book})
+        data = load_json_data(cls, path, {"path": path, "book": book})
         return from_dict_checked(cls, data, book.config(), path)
 
     def __post_init__(self):
@@ -48,11 +45,6 @@ class Category(Sortable, BookHelpers):
         self.entries: list[Entry] = sorted(
             Entry.load(path, self) for path in entry_dir.glob("*.json")
         )
-
-    @property
-    def book(self):
-        # implement BookHelpers
-        return self._book
 
     @property
     def id(self) -> ResourceLocation:

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import re
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
@@ -13,13 +12,15 @@ from common.deserialize import (
     rename,
 )
 from common.formatting import FormatTree
-from common.pattern import PatternInfo, PatternStubFile
+from common.pattern import Direction, PatternInfo
 from common.properties import Properties
-from common.types import Color, sorted_dict
-from minecraft.i18n import I18n, LocalizedStr
+from common.tagged_union import get_union_types
+from common.types import Color, LocalizedItem, LocalizedStr, sorted_dict
+from minecraft.i18n import I18n
+from minecraft.recipe import Recipe
 from minecraft.resource import ItemStack, ResLoc, ResourceLocation
 from patchouli.category import Category
-from patchouli.page import Page, make_page_hook
+from patchouli.page import make_page_hooks
 
 _DEFAULT_MACROS = {
     "$(obf)": "$(k)",
@@ -103,15 +104,14 @@ class Book:
 
     props: Properties
 
-    def __post_init__(self) -> None:
-        # required init order: i18n/macros, data/patterns, categories
+    blacklist: set[str] = field(default_factory=set)
+    spoilers: set[str] = field(default_factory=set)
 
-        # standalone non-init fields
-        self.blacklist: set[str] = set()
-        self.spoilers: set[str] = set()
+    def _init_data(self) -> None:
+        """Sets up i18n, macros, Dacite type conversions, and the book.json data."""
 
         # read the raw dict from the json file
-        path = self.dir / "book.json"
+        path = self.props.book_dir / "book.json"
         data = load_json_data(_BookData, path)
 
         self.i18n: I18n = I18n(self.props, data["i18n"])
@@ -120,15 +120,36 @@ class Book:
         # this does make a difference - the snapshot tests fail if the order is reversed
         data["macros"].update(_DEFAULT_MACROS)
 
-        # NOW we can create the book dataclass
-        config = self.config()
-        config.type_hooks[FormatTree] = lambda s: self.format(s, data["macros"])
+        # type hooks - lots of these need a book instance, though not all
+        self._type_hooks: TypeHooks = {
+            ResourceLocation: ResourceLocation.from_str,
+            ItemStack: ItemStack.from_str,
+            Direction: Direction.__getitem__,
+            LocalizedStr: self.i18n.localize,
+            LocalizedItem: self.i18n.localize_item,
+            FormatTree: self.format,
+            **make_page_hooks(self),
+        }
+        for cls_ in get_union_types(Recipe):
+            self._type_hooks[cls_] = cls_.make_type_hook(self)
+
+        # NOW we can convert the actual book data
+        config = self.config(
+            extra_type_hooks={
+                FormatTree: lambda s: self.format(s, data["macros"]),
+            },
+        )
         self.data: _BookData = from_dict_checked(_BookData, data, config, path)
+
+    def __post_init__(self) -> None:
+        # required init order: data, patterns, categories
+        # data
+        self._init_data()
 
         # patterns
         self.patterns: dict[ResourceLocation, PatternInfo] = {}
-        for stub in self.props.pattern_stubs.values():
-            for pattern in stub.load_patterns(self.props):
+        for stub in self.props.pattern_stubs:
+            for pattern in stub.load_patterns(self.props.modid, self.props.pattern_re):
                 # check for key clobbering, because why not
                 if duplicate := self.patterns.get(pattern.id):
                     raise ValueError(
@@ -136,37 +157,28 @@ class Book:
                     )
                 self.patterns[pattern.id] = pattern
 
-        # categories, sorted by sortnum
-        categories = (
-            Category.load(path, self) for path in self.categories_dir.rglob("*.json")
-        )
-        self.categories: dict[ResourceLocation, Category] = {
-            category.id: category for category in categories
-        }
+        # categories
+        self.categories: dict[ResourceLocation, Category] = {}
+        for path in self.categories_dir.rglob("*.json"):
+            category = Category.load(path, self)
+            self.categories[category.id] = category
+
+        # NOTE: category sorting requires book.categories to already contain all of the
+        # categories, because category sorting depends on its parent, and categories get
+        # their parent from the book. it's mildly scuffed, but it works
         self.categories = sorted_dict(self.categories)
 
     @property
-    def dir(self) -> Path:
-        """eg. `resources/data/hexcasting/patchouli_books/thehexbook`"""
-        return (
-            self.props.resources
-            / "data"
-            / self.props.modid
-            / "patchouli_books"
-            / self.props.book_name
-        )
-
-    @property
     def categories_dir(self) -> Path:
-        return self.dir / self.props.i18n.lang / "categories"
+        return self.props.book_dir / self.props.i18n.lang / "categories"
 
     @property
     def entries_dir(self) -> Path:
-        return self.dir / self.props.i18n.lang / "entries"
+        return self.props.book_dir / self.props.i18n.lang / "entries"
 
     @property
     def templates_dir(self) -> Path:
-        return self.dir / self.props.i18n.lang / "templates"
+        return self.props.book_dir / self.props.i18n.lang / "templates"
 
     def format(
         self,
@@ -190,18 +202,6 @@ class Book:
         conflict, extra_type_hooks will be preferred.
         """
 
-        config = TypedConfig(
-            type_hooks={
-                ResourceLocation: ResourceLocation.from_str,
-                ItemStack: ItemStack.from_str,
-                LocalizedStr: self.i18n.localize,
-                FormatTree: self.format,
-            },
+        return TypedConfig(
+            type_hooks={**self._type_hooks, **extra_type_hooks},
         )
-
-        # because it needs a config instance
-        config.type_hooks[Page] = make_page_hook(config)
-
-        # this should be after all other hooks
-        config.type_hooks.update(extra_type_hooks)
-        return config

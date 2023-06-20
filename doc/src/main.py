@@ -1,6 +1,11 @@
 # because Tap.add_argument isn't typed, for some reason
 # pyright: reportUnknownMemberType=false
 
+# make sure we patch dacite before doing any parsing
+# this is also in common.deserialize but hey, it doesn't hurt to put it here too
+# should this be a PR? probably! TODO: i'll do it later
+from common import dacite_patch as _  # isort: skip
+
 import sys
 from pathlib import Path
 
@@ -20,8 +25,8 @@ class Args(Tap):
     output_file: Path | None
 
     def configure(self):
-        # set as positional
         self.add_argument("properties_file")
+        self.add_argument("-o", "--output_file", required=False)
 
 
 def main(args: Args) -> None:

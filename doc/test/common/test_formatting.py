@@ -1,6 +1,6 @@
 # pyright: reportPrivateUsage=false
 from common.formatting import FormatTree, Style
-from minecraft.i18n import LocalizedStr
+from common.types import LocalizedStr
 from patchouli.book import _DEFAULT_MACROS
 
 

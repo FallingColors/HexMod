@@ -1,25 +1,10 @@
-import re
 from dataclasses import InitVar, dataclass
 from pathlib import Path
-from typing import Collection, Iterable, Self
 
 from common.deserialize import load_json
 from common.properties import Properties
+from common.types import LocalizedItem, LocalizedStr
 from minecraft.resource import ItemStack, ResourceLocation
-
-
-# subclass instead of newtype so it exists at runtime, so we can use isinstance
-class LocalizedStr(str):
-    """Represents a string which has been localized."""
-
-
-class LocalizedItem(LocalizedStr):
-    pass
-
-
-class LocalizedRecipeResult(LocalizedStr):
-    pass
-
 
 I18nLookup = dict[str, LocalizedStr]
 
@@ -41,7 +26,7 @@ class I18n:
         # TODO: load ALL of the i18n files, return dict[str, _Lookup] | None
         # or maybe dict[(str, str), LocalizedStr]
         # we could also use that to ensure all i18n files have the same set of keys
-        path = self.dir / f"{self.props.lang}.json"
+        path = self.dir / self.props.i18n.filename
         _lookup = load_json(path)
         if self.props.i18n.extra:
             _lookup.update(self.props.i18n.extra)
@@ -59,7 +44,7 @@ class I18n:
     @property
     def dir(self) -> Path:
         """eg. `resources/assets/hexcasting/lang`"""
-        return self.props.resources / "assets" / self.props.modid / "lang"
+        return self.props.resources_dir / "assets" / self.props.modid / "lang"
 
     def localize(
         self,
@@ -117,19 +102,21 @@ class I18n:
         # prefer the book-specific translation if it exists
         # TODO: should this use op_id.namespace anywhere?
         return self.localize(
-            (f"hexcasting.spell.book.{op_id.path}", f"hexcasting.spell.{op_id.path}"),
+            (f"hexcasting.spell.book.{op_id}", f"hexcasting.spell.{op_id}"),
             skip_errors=skip_errors,
         )
 
     def localize_item(
         self,
-        item: ItemStack,
+        item: ItemStack | str,
         skip_errors: bool = False,
     ) -> LocalizedItem:
         """Localizes the given item resource name.
 
         Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
         """
+        if isinstance(item, str):
+            item = ItemStack.from_str(item)
         return LocalizedItem(
             self.localize(
                 (item.i18n_key("block"), item.i18n_key()), skip_errors=skip_errors

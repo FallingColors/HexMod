@@ -2,25 +2,32 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Iterator
 
 import pytest
+from bs4 import BeautifulSoup as bs
 from main import Args, main
 from syrupy.assertion import SnapshotAssertion
 from syrupy.extensions.amber import AmberSnapshotExtension
 from syrupy.types import SerializedData
 
 
+def prettify(data: SerializedData) -> str:
+    return bs(data, features="html.parser").prettify()
+
+
 class NoDiffSnapshotExtension(AmberSnapshotExtension):
     def diff_snapshots(
         self, serialized_data: SerializedData, snapshot_data: SerializedData
     ) -> SerializedData:
-        return "diff-is-disabled".encode()
+        return super().diff_snapshots(
+            prettify(serialized_data), prettify(snapshot_data)
+        )
 
     def diff_lines(
         self, serialized_data: SerializedData, snapshot_data: SerializedData
     ) -> Iterator[str]:
-        return iter(["diff-is-disabled"])
+        return super().diff_lines(prettify(serialized_data), prettify(snapshot_data))
 
 
 @dataclass
@@ -41,13 +48,7 @@ def docgen(tmp_path: Path, snapshot: SnapshotAssertion) -> DocgenArgs:
     return DocgenArgs(
         out_path,
         snapshot.use_extension(NoDiffSnapshotExtension),
-        [
-            "../Common/src/main/resources",
-            "hexcasting",
-            "thehexbook",
-            "template.html",
-            out_path.as_posix(),
-        ],
+        ["properties.toml", "-o", out_path.as_posix()],
     )
 
 
@@ -68,5 +69,5 @@ def test_cmd(docgen: DocgenArgs):
 
 
 def test_stdout(docgen: DocgenArgs, capsys: pytest.CaptureFixture[str]):
-    main(Args().parse_args(docgen.argv[:-1]))
+    main(Args().parse_args(docgen.argv[:-2]))
     assert capsys.readouterr() == docgen.snapshot

@@ -5,10 +5,9 @@ from pathlib import Path
 from typing import Self
 
 from common.deserialize import from_dict_checked, load_json_data, rename
-from common.types import Book, BookHelpers, Category, Color, Sortable
-from minecraft.i18n import LocalizedStr
+from common.types import Book, BookHelpers, Category, Color, LocalizedStr, Sortable
 from minecraft.resource import ItemStack, ResourceLocation
-from patchouli.page import Page, make_page_hook
+from patchouli.page import Page
 
 
 @dataclass
@@ -43,10 +42,7 @@ class Entry(Sortable, BookHelpers):
     def load(cls, path: Path, category: Category) -> Self:
         # load the raw data from json, and add our extra fields
         data = load_json_data(cls, path, {"path": path, "category": category})
-
         config = category.book.config()
-        config.type_hooks[Page] = make_page_hook(config)
-
         return from_dict_checked(cls, data, config, path)
 
     def __post_init__(self):
@@ -56,10 +52,6 @@ class Entry(Sortable, BookHelpers):
             raise ValueError(
                 f"Entry {self.name} has category {self.category_id} but was initialized by {self.category.id}"
             )
-
-        # late-init the pages
-        for page in self.pages:
-            page.entry = self
 
     @property
     def book(self) -> Book:

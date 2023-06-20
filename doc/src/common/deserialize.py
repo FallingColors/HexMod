@@ -1,4 +1,7 @@
-import inspect
+# make sure we patch dacite before doing any parsing
+# should this be a PR? probably! TODO: i'll do it later
+from common import dacite_patch as _  # isort: skip
+
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -6,7 +9,7 @@ from typing import Any, Callable, Type, TypeVar
 
 import tomllib
 from common.toml_placeholders import TOMLTable, fill_placeholders
-from dacite import Config, DaciteError, UnionMatchError, from_dict
+from dacite import Config, from_dict
 from dacite.dataclasses import get_fields
 
 
@@ -117,18 +120,4 @@ def from_dict_checked(
     except Exception as e:
         if path:
             e.add_note(str(path))
-
-        # horribly cursed workaround for https://github.com/konradhalas/dacite/issues/234
-        # first, check if the message matches the one Dacite is raising
-        if isinstance(e, KeyError) and e.args[0] == "popitem(): dictionary is empty":
-            # local variables where the bad exception was raised
-            f_locals = inspect.trace()[-1][0].f_locals
-            data_ = f_locals["data"]
-            union = f_locals["union"]
-
-            # raise the actual correct exception
-            new_e = UnionMatchError(union, data_)
-            new_e.add_note(str(data_))
-            raise new_e
-
         raise
