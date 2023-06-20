@@ -63,13 +63,13 @@
   "custom": {
     "cardinal-components": [
       "hexcasting:brainswept",
-      "hexcasting:favored_colorizer",
+      "hexcasting:favored_pigment",
       "hexcasting:sentinel",
       "hexcasting:flight",
       "hexcasting:altiora",
       "hexcasting:harness",
       "hexcasting:patterns",
-      "hexcasting:colorizer",
+      "hexcasting:pigment",
       "hexcasting:iota_holder",
       "hexcasting:media_holder",
       "hexcasting:hex_holder"
