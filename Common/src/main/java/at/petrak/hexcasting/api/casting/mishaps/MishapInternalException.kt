@@ -9,7 +9,7 @@ class MishapInternalException(val exception: Exception) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         // NO-OP
     }
 

@@ -16,8 +16,8 @@ class MishapBoolDirectrixNotBool(
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GRAY)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.world.destroyBlock(this.pos, true)
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        env.world.destroyBlock(this.pos, true)
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =

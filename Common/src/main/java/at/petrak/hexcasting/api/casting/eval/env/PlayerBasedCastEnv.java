@@ -204,7 +204,9 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
     protected void sendMishapMsgToPlayer(OperatorSideEffect.DoMishap mishap) {
         var msg = mishap.getMishap().errorMessageWithName(this, mishap.getErrorCtx());
-        this.caster.sendSystemMessage(msg);
+        if (msg != null) {
+            this.caster.sendSystemMessage(msg);
+        }
     }
 
     @Override

@@ -13,7 +13,7 @@ class MishapInvalidPattern : Mishap() {
 
     override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         stack.add(GarbageIota())
     }
 

@@ -10,8 +10,8 @@ class MishapShameOnYou() : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        val caster = ctx.caster
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        val caster = env.caster
         if (caster != null) {
             // FIXME: handle null caster case
             Mishap.trulyHurt(caster, HexDamageSources.SHAME, 69420f)

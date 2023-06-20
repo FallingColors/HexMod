@@ -12,7 +12,7 @@ class MishapBadItem(val item: ItemEntity, val wanted: Component) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BROWN)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         item.deltaMovement = item.deltaMovement.add((Math.random() - 0.5) * 0.05, 0.75, (Math.random() - 0.5) * 0.05)
     }
 
