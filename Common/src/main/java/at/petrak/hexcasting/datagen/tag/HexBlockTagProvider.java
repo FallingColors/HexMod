@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -110,6 +111,9 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
             HexBlocks.EDIFIED_BUTTON);
         add(tag(BlockTags.WOODEN_BUTTONS),
             HexBlocks.EDIFIED_BUTTON);
+
+        add(tag(HexTags.Blocks.WATER_PLANTS),
+            Blocks.KELP, Blocks.KELP_PLANT, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS);
     }
 
     void add(TagAppender<Block> appender, Block... blocks) {

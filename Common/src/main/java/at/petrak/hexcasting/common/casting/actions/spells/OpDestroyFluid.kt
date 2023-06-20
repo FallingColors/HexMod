@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -75,7 +76,6 @@ object OpDestroyFluid : SpellAction {
                                 ctx.caster
                             )
                         ) {
-                            val material = blockstate.material
                             val success =
                                 if (blockstate.block is BucketPickup && !(blockstate.block as BucketPickup).pickupBlock(
                                         ctx.world,
@@ -87,7 +87,7 @@ object OpDestroyFluid : SpellAction {
                                 } else if (blockstate.block is LiquidBlock) {
                                     ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
                                     true
-                                } else if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
+                                } else if (blockstate.tags.anyMatch { it == HexTags.Blocks.WATER_PLANTS }) {
                                     val blockentity: BlockEntity? =
                                         if (blockstate.hasBlockEntity()) ctx.world.getBlockEntity(here) else null
                                     Block.dropResources(blockstate, ctx.world, here, blockentity)

@@ -44,6 +44,9 @@ public class HexTags {
         public static final TagKey<Block> DIRECTRICES = create("directrices");
         public static final TagKey<Block> MINDFLAYED_CIRCLE_COMPONENTS = create("brainswept_circle_components");
 
+        // Used to determine what blocks should be replaced with air by OpDestroyFluid
+        public static final TagKey<Block> WATER_PLANTS = create("water_plants");
+
         public static TagKey<Block> create(String name) {
             return TagKey.create(Registries.BLOCK, modLoc(name));
         }
