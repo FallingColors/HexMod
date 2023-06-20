@@ -197,33 +197,36 @@
   "text.autoconfig.hexcasting.option.server.scrollInjectionsRaw.@Tooltip": "Maps the names of loot tables to the amount of per-world patterns on scrolls should go in them. There's about a 50% chance to get any scrolls in a given chest marked here; once that is met, between 1 and that many scrolls are generated.",
   "text.autoconfig.hexcasting.option.server.amethystShardModification.@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",
   
-  "advancement.hexcasting:root": "Hexcasting Research",
-  "advancement.hexcasting:root.desc": "Find and mine a concentrated form of media growing deep beneath the earth.",
-  "advancement.hexcasting:enlightenment": "Achieve Enlightenment",
-  "advancement.hexcasting:enlightenment.desc": "Shatter a barrier by casting a hex using almost all of your health.",
-  "advancement.hexcasting:wasteful_cast": "Waste Not...",
-  "advancement.hexcasting:wasteful_cast.desc": "Waste a large amount of media when casting a hex.",
-  "advancement.hexcasting:big_cast": "... Want Not",
-  "advancement.hexcasting:big_cast.desc": "Cast a single spell requiring a truly huge amount of media.",
-  "advancement.hexcasting:y_u_no_cast_angy": "Blind Diversion",
-  "advancement.hexcasting:y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
-  "advancement.hexcasting:opened_eyes": "Opened Eyes",
-  "advancement.hexcasting:opened_eyes.desc": "Have nature take a piece of your mind in payment for a hex. What might happen if you let it have more?",
-  "advancement.hexcasting:lore": "Hexcasting Lore",
-  "advancement.hexcasting:lore.desc": "Read a Lore Fragment",
-  "advancement.hexcasting:lore/terabithia1": "Cardamom Steles #1",
-  "advancement.hexcasting:lore/terabithia1.desc": "Letter from Cardamom Steles to Her Father, #1",
-  "advancement.hexcasting:lore/terabithia2": "Cardamom Steles #2",
-  "advancement.hexcasting:lore/terabithia2.desc": "Letter from Cardamom Steles to Her Father, #2",
-  "advancement.hexcasting:lore/terabithia3": "Cardamom Steles #3",
-  "advancement.hexcasting:lore/terabithia3.desc": "Letter from Cardamom Steles to Her Father, #3, 1/2",
-  "advancement.hexcasting:lore/terabithia4": "Cardamom Steles #3 pt2",
-  "advancement.hexcasting:lore/terabithia4.desc": "Letter from Cardamom Steles to Her Father, #3, 2/2",
-  "advancement.hexcasting:lore/terabithia5": "Cardamom Steles #4",
-  "advancement.hexcasting:lore/terabithia5.desc": "Letter from Cardamom Steles to Her Father, #4",
-  "advancement.hexcasting:lore/experiment1": "Wooleye Instance Notes",
-  "advancement.hexcasting:lore/experiment2": "Wooleye Interview Logs",
-  "advancement.hexcasting:lore/inventory": "Restoration Log 72",
+  "advancement.hexcasting:": {
+    "root": "Hexcasting Research",
+    "root.desc": "Find and mine a concentrated form of media growing deep beneath the earth.",
+    "enlightenment": "Achieve Enlightenment",
+    "enlightenment.desc": "Shatter a barrier by casting a hex using almost all of your health.",
+    "wasteful_cast": "Waste Not...",
+    "wasteful_cast.desc": "Waste a large amount of media when casting a hex.",
+    "big_cast": "... Want Not",
+    "big_cast.desc": "Cast a single spell requiring a truly huge amount of media.",
+    "y_u_no_cast_angy": "Blind Diversion",
+    "y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
+    "opened_eyes": "Opened Eyes",
+    "opened_eyes.desc": "Have nature take a piece of your mind in payment for a hex. What might happen if you let it have more?",
+    "lore": "Hexcasting Lore",
+    "lore.desc": "Read a Lore Fragment",
+    "lore/cardamom1": "Cardamom Steles #1",
+    "lore/cardamom1.desc": "Letter from Cardamom Steles to Her Father, #1",
+    "lore/cardamom2": "Cardamom Steles #2",
+    "lore/cardamom2.desc": "Letter from Cardamom Steles to Her Father, #2",
+    "lore/cardamom3": "Cardamom Steles #3",
+    "lore/cardamom3.desc": "Letter from Cardamom Steles to Her Father, #3, 1/2",
+    "lore/cardamom4": "Cardamom Steles #3 pt2",
+    "lore/cardamom4.desc": "Letter from Cardamom Steles to Her Father, #3, 2/2",
+    "lore/cardamom5": "Cardamom Steles #4",
+    "lore/cardamom5.desc": "Letter from Cardamom Steles to Her Father, #4",
+    "lore/experiment1": "Wooleye Instance Notes",
+    "lore/experiment2": "Wooleye Interview Logs",
+    "lore/inventory": "Restoration Log 72",
+  },
+  
   
   "stat.hexcasting.media_used": "Media Consumed (in dust)",
   "stat.hexcasting.media_overcasted": "Media Overcast (in dust)",
@@ -233,13 +236,15 @@
   "death.attack.hexcasting.overcast": "%s's mind was subsumed into energy",
   "death.attack.hexcasting.shame": "Shame on %s!",
   
-  "command.hexcasting.pats.listing": "Patterns in this world:",
-  "command.hexcasting.pats.all": "Gave all %d scrolls to %s",
-  "command.hexcasting.pats.specific.success": "Gave %s with id %s to %s",
-  "command.hexcasting.recalc": "Recalculated patterns",
-  "command.hexcasting.brainsweep": "Brainswept %s",
-  "command.hexcasting.brainsweep.fail.badtype": "%s is not a mob",
-  "command.hexcasting.brainsweep.fail.already": "%s is already empty",
+  "command.hexcasting": {
+    "pats.listing": "Patterns in this world:",
+    "pats.all": "Gave all %d scrolls to %s",
+    "pats.specific.success": "Gave %s with id %s to %s",
+    "recalc": "Recalculated patterns",
+    "brainsweep": "Brainswept %s",
+    "brainsweep.fail.badtype": "%s is not a mob",
+    "brainsweep.fail.already": "%s is already empty",
+  },
   
   hexcasting: {
     "pattern.unknown": "Unknown pattern resource location %s",
@@ -705,40 +710,36 @@
       many_exits: "The flow of media at %s had too many exits"
     },
     
-    // Patchi stuff!
-    landing: ">>>\
-|     I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid.\
-|     It fascinates me. I've decided to start a journal of my thoughts and findings.\
-|     $(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
+
+    // === Patchi stuff! ===
+
+    
+    landing: "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. \
+      It fascinates me. I've decided to start a journal of my thoughts and findings. \
+      $(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
     
     category: {
       basics: {
         "": "Getting Started",
-        "desc": ">>>\
-|         The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)Staff/$-- \
-|         or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them.\
-|         How might I do the same?"
+        "desc": "The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)Staff/$--\
+          or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them.\
+          How might I do the same?"
       },
       casting: {
         "": "Hex Casting",
-        desc: ">>>\
-|         I've started to understand how the old masters cast their _Hexes! It's a bit complicated,\
-|         but I'm sure I can figure it out. Let's see..."
+        desc: "I've started to understand how the old masters cast their _Hexes! It's a bit complicated,\
+          but I'm sure I can figure it out. Let's see..."
       },
       items: {
         "": "Items",
-        desc: ">>>\
-|         I devote this section to the magical and mysterious items I might encounter in my studies.$(br2)\
-|         It seems like many of these items have uses when held alongside my $(l:items/staff)$(item)staff/$.\
-|         I suppose I will have to choose what goes in my other hand carefully."
+        desc: "I devote this section to the magical and mysterious items I might encounter in my studies."
       },
       
       greatwork: {
         "": "The Great Work",
-        desc: ">>>\
-|         I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction.\
-|         I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy.\
-|         I have seen I have seen I have s$(k)get stick bugged lmao/$",
+        desc: "I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction.\
+          I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy.\
+          I have seen I have seen I have s$(k)get stick bugged lmao/$",
         // alwinfy you think you're so funny
       },
       
@@ -752,12 +753,15 @@
       },
       great_spells: {
         "": "Great Spells",
-        desc: ">>>\
-|         The spells catalogued here are purported to be of legendary difficulty and power.\
-|         They seem to have been recorded only sparsely (for good reason, the texts claim).\
-|         It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
-|         What could possibly go wrong?"
+        desc: "The spells catalogued here are purported to be of legendary difficulty and power.\
+          They seem to have been recorded only sparsely (for good reason, the texts claim).\
+          It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
+          What could possibly go wrong?"
       },
+
+      
+      lore: "Lore",
+      interop: "Cross-Mod Interactions",
     },
     // ^ categories
     
@@ -1405,56 +1409,56 @@
       
       
       
-      "lore.terabithia1.1": "$(italic)Full title: Letter from Cardamom Steles to Her Father, #1/$$(br2)Dear Papa,$(br)Every day it seems I have more reason to thank you for saving up to send me to the Grand Library. The amount I am learning is incredible! I feel I don't have the skill with words needed to express myself fully... it is wonderful to be here.",
-      "lore.terabithia1.2": "I sit in the main dome as I write this. It's maintained by the Hexcasting Corps; they have some sort of peculiar mechanism at the top that captures the stray thought energy as it leaks out from the desks and desks of hard-working students, as I understand it. One of my friends in the dormitory, Amanita, is studying the subject, and oh how she loves to explain it to me at length, although I confess I do not understand it very well.",
-      "lore.terabithia1.3": "The way I understand it, our processes of thought--the intangible mechanisms by which I move my pen and by which you read this letter--are not completely efficient. A small amount of that energy is released into the environment, like how a wagon's axle is hot to the touch after it has been turning for a while. This spare energy is called \"media.\" One person's spare media is trifiling, but the hundreds of thinking people in the main dome have a sort of multiplicative effect, and combined with some sort of ingenious mechanism, it can be solidified into a sort of purple crystal.",
-      "lore.terabithia1.4": "But that's enough about her studies. I returned from my first expedition with the Geology Corps today! My apologies for not sending a letter before I left; the date crept up on me. We ventured into a crack in the earth to the east of the Grand and spent the night camping under the rock and soil. We kept to well-lit and well-traveled areas of the cave, of course, and in all honesty it was likely safer in there than the night surface, but oh how I was scared!",
-      "lore.terabithia1.5": "Fortunately the night passed without mishap, and we proceeded deeper into the cave for our examination of the local veins of ore. We were looking for trace veins of a purple crystal called \"amethyst,\" which supposedly occurs in small amounts deep in the rock. We did not find anything, sadly, and returned to the sunlit surface empty-handed.",
-      "lore.terabithia1.6": "Come to think of it, the description of this \"amethyst\" I now realize closely matches those crystals of media Amanita speaks of. Imagine if these nuggets of thought occurred naturally under the ground! I can't imagine why that might happen, though... ",
-      "lore.terabithia1.7": "As a student, I am entitled to send one letter by Akashic post every three months, free of charge. Unfortunately, you know how thin my moneybags are ... so I am afraid this offer is the only method I may communicate with you. I will of course appreciate immensely if you manage to scrounge together the money to send a letter back, but it seems our communications may be limited. I hate to be cut off from you so, but the skills I gain here will be more than repayment. Imagine, I will be the first member of our family to be anything other than a farmer!",
-      "lore.terabithia1.8": "So, I suppose I will write again in three months' time.$(br2)Yours,$(br)-- Cardamom Steles",
+      "lore.cardamom1.1": "$(italic)Full title: Letter from Cardamom Steles to Her Father, #1/$$(br2)Dear Papa,$(br)Every day it seems I have more reason to thank you for saving up to send me to the Grand Library. The amount I am learning is incredible! I feel I don't have the skill with words needed to express myself fully... it is wonderful to be here.",
+      "lore.cardamom1.2": "I sit in the main dome as I write this. It's maintained by the Hexcasting Corps; they have some sort of peculiar mechanism at the top that captures the stray thought energy as it leaks out from the desks and desks of hard-working students, as I understand it. One of my friends in the dormitory, Amanita, is studying the subject, and oh how she loves to explain it to me at length, although I confess I do not understand it very well.",
+      "lore.cardamom1.3": "The way I understand it, our processes of thought--the intangible mechanisms by which I move my pen and by which you read this letter--are not completely efficient. A small amount of that energy is released into the environment, like how a wagon's axle is hot to the touch after it has been turning for a while. This spare energy is called \"media.\" One person's spare media is trifiling, but the hundreds of thinking people in the main dome have a sort of multiplicative effect, and combined with some sort of ingenious mechanism, it can be solidified into a sort of purple crystal.",
+      "lore.cardamom1.4": "But that's enough about her studies. I returned from my first expedition with the Geology Corps today! My apologies for not sending a letter before I left; the date crept up on me. We ventured into a crack in the earth to the east of the Grand and spent the night camping under the rock and soil. We kept to well-lit and well-traveled areas of the cave, of course, and in all honesty it was likely safer in there than the night surface, but oh how I was scared!",
+      "lore.cardamom1.5": "Fortunately the night passed without mishap, and we proceeded deeper into the cave for our examination of the local veins of ore. We were looking for trace veins of a purple crystal called \"amethyst,\" which supposedly occurs in small amounts deep in the rock. We did not find anything, sadly, and returned to the sunlit surface empty-handed.",
+      "lore.cardamom1.6": "Come to think of it, the description of this \"amethyst\" I now realize closely matches those crystals of media Amanita speaks of. Imagine if these nuggets of thought occurred naturally under the ground! I can't imagine why that might happen, though... ",
+      "lore.cardamom1.7": "As a student, I am entitled to send one letter by Akashic post every three months, free of charge. Unfortunately, you know how thin my moneybags are ... so I am afraid this offer is the only method I may communicate with you. I will of course appreciate immensely if you manage to scrounge together the money to send a letter back, but it seems our communications may be limited. I hate to be cut off from you so, but the skills I gain here will be more than repayment. Imagine, I will be the first member of our family to be anything other than a farmer!",
+      "lore.cardamom1.8": "So, I suppose I will write again in three months' time.$(br2)Yours,$(br)-- Cardamom Steles",
       
       
-      "lore.terabithia2.1": "$(italic)Full title: Letter from Cardamom Steles to Her Father, #2/$$(br2)Dear Papa,$(br)... Goodness, what an ordeal it is to try to summarize the last three months into a short letter. Such a cruel task set before me by this miracle I receive entirely for free! Woe is me.",
-      "lore.terabithia2.2": "My studies with the Geology Corps have been progressing smoothly. We have gone on more expeditions, deeper into the earth, to where the smooth gray stone makes way to a hard, flaky slate. It creates such an awful, choking dust under your feet... it's incredible what hostility there is below all of our feet all the time, even disregarding the creatures of the dark. (I have had one or two encounters with them, but I know how you shudder to think of me having to fight for my life, so I will not write of them.)",
-      "lore.terabithia2.3": "We did manage to find some of this amethyst, however. There was a small vein with a few trace crystals on one of our expeditions. We were under strict instructions to keep none of them and turn them in to our Corps prefect immediately. I find the whole affair rather ridiculous; they treat it like some matter of enormous importance and secrecy, and yet have a group of a dozen students, all barely six months at the Grand Library, trying to excavate barely ten drams of the stuff with twelve prospector's picks in a square foot...",
-      "lore.terabithia2.4": "I cannot imagine for what purpose, either. A librarian pointed me to an encyclopedia of gems, and amethyst seems to have next to no purpose; it's used for certain specialty types of glass and lenses, of all things.$(br2)If I were to speculate, I would guess that these amethyst crystals and the media they so resemble are one and the same, as I wrote of last time.",
-      "lore.terabithia2.5": "If this is true, the secrecy, not to mention the prefect's aversion to questioning, may be because this is an original piece of research the Grand Library is not eager to let into the hands of enemy factions.$(br2)However, this theory does not sit quite right with me. The amethyst I handled in the cave and the crystals of media Amanita has shown to me do seem quite similar, but not identical. I would like to see them side-by-side to be sure, but media has a peculiar buzzing or rumbling feel beneath the fingers that amethyst does not.",
-      "lore.terabithia2.6": "It is quite possible I was unable to sense it on the amethyst in the cave due to the stress of being undergound-- my hands were shaking the one time I managed to touch some, and the feeling is very light --but it does not seem the same to me. The light reflects slightly differently.$(br2)I suppose if I ever manage to get my hands on a crystal of amethyst outside of a cave, I will ask Amanita to see if she can cast a spell with it. Every time we meet she seems to have some new fantastic trick.",
-      "lore.terabithia2.7": "Just last week she suspended me in the air supported by nothing at all! It is an immensely strange feeling to have your body tingling and lighter than air with your clothing still the same weight... I am just glad she tugged me over my bed before the effect ran out.$(br2)Yours,$(br)-- Cardamom Steles",
+      "lore.cardamom2.1": "$(italic)Full title: Letter from Cardamom Steles to Her Father, #2/$$(br2)Dear Papa,$(br)... Goodness, what an ordeal it is to try to summarize the last three months into a short letter. Such a cruel task set before me by this miracle I receive entirely for free! Woe is me.",
+      "lore.cardamom2.2": "My studies with the Geology Corps have been progressing smoothly. We have gone on more expeditions, deeper into the earth, to where the smooth gray stone makes way to a hard, flaky slate. It creates such an awful, choking dust under your feet... it's incredible what hostility there is below all of our feet all the time, even disregarding the creatures of the dark. (I have had one or two encounters with them, but I know how you shudder to think of me having to fight for my life, so I will not write of them.)",
+      "lore.cardamom2.3": "We did manage to find some of this amethyst, however. There was a small vein with a few trace crystals on one of our expeditions. We were under strict instructions to keep none of them and turn them in to our Corps prefect immediately. I find the whole affair rather ridiculous; they treat it like some matter of enormous importance and secrecy, and yet have a group of a dozen students, all barely six months at the Grand Library, trying to excavate barely ten drams of the stuff with twelve prospector's picks in a square foot...",
+      "lore.cardamom2.4": "I cannot imagine for what purpose, either. A librarian pointed me to an encyclopedia of gems, and amethyst seems to have next to no purpose; it's used for certain specialty types of glass and lenses, of all things.$(br2)If I were to speculate, I would guess that these amethyst crystals and the media they so resemble are one and the same, as I wrote of last time.",
+      "lore.cardamom2.5": "If this is true, the secrecy, not to mention the prefect's aversion to questioning, may be because this is an original piece of research the Grand Library is not eager to let into the hands of enemy factions.$(br2)However, this theory does not sit quite right with me. The amethyst I handled in the cave and the crystals of media Amanita has shown to me do seem quite similar, but not identical. I would like to see them side-by-side to be sure, but media has a peculiar buzzing or rumbling feel beneath the fingers that amethyst does not.",
+      "lore.cardamom2.6": "It is quite possible I was unable to sense it on the amethyst in the cave due to the stress of being undergound-- my hands were shaking the one time I managed to touch some, and the feeling is very light --but it does not seem the same to me. The light reflects slightly differently.$(br2)I suppose if I ever manage to get my hands on a crystal of amethyst outside of a cave, I will ask Amanita to see if she can cast a spell with it. Every time we meet she seems to have some new fantastic trick.",
+      "lore.cardamom2.7": "Just last week she suspended me in the air supported by nothing at all! It is an immensely strange feeling to have your body tingling and lighter than air with your clothing still the same weight... I am just glad she tugged me over my bed before the effect ran out.$(br2)Yours,$(br)-- Cardamom Steles",
       
       
-      "lore.terabithia3.1": "$(italic)Full title: Letter from Cardamom Steles to her father, #3, part 1/2/$$(br2)Dear Papa,$(br)Two very peculiar things have happened since I last wrote.$(br2)Firstly, the professor in charge of the entry-level Hexcasting Corps students has disappeared. Nobody knows where he has gone. His office and living quarters were found locked, but still in their usual state of disarray.",
-      "lore.terabithia3.2": "Even more peculiarly, any attempts by the students of the Grand to rouse the administrative portions of the gnarled bureaucracy have been very firmly rejected. Even other professors seem reluctant to talk about him.$(br2)As you might imagine, Amanita is sorely distressed. Whatever replacement professors the Grand managed to dredge up have none of the old professor's tact or skill with beginners.",
-      "lore.terabithia3.3": "But amazingly, that is not the stranger of the two things I have to tell you. The most horrendous thing I hope to ever experience happened on another trip out with the Geology Corps. This time, we were due for an expedition near a village.",
-      "lore.terabithia3.4": "Usually when we do such a thing, there is a long process of communication with the mayor or elder of the village to ensure we have permission and establish boundaries on where we are allowed to go and what we are allowed to do. But on this expedition, there was very little of that; we were notified where we were going by a prefect of the Hexcasting Corps scarcely two days before we left.",
-      "lore.terabithia3.5": "We camped near the village, but in a thick forest, even though the nearby plains would have been much more hospitable. We could barely see the village from where we pitched our tents. As I laid down my bedroll the evening we arrived, the peculiar silence troubled me. Even if we couldn't see the village, we should have been able to hear it. But the whole time we were above-ground, there was next to no sound.",
-      "lore.terabithia3.6": "The few things I did hear all sounded like work: the peal of hammers on anvils and the scrape of hoe on dirt, for example. I never heard a shred of conversation.$(br2)The next morning we readied our lanterns and descended into the earth.",
-      "lore.terabithia3.7": "We weren't told exactly what it was we were spelunking for, but one of the other students had overheard we were looking for more amethyst, which seemed reasonable enough. I had my eyes trained for any specks of purple I might find in the cave walls, but just as the gray stone was making way to black slate, an incredible sight unfolded before me.$(br2)It was an entire chamber made of amethyst, nearly ten times as tall as I am. The inside seemed to glow with purple sparks and lanternlight glint, every surface covered with jagged crystal. There was more amethyst here than our entire group had ever excavated since I came to the Grand.",
-      "lore.terabithia3.8": "Gloves were distributed and we were told to get to mining. One of the prefects along with us had a peculiar lavender box I've seen some of the higher-ups in the Grand using for storage, and the other students and I dutifully got to shattering the glassy crystals off the walls of the cave and putting them in the box. Under the outer layers of brittle crystal there seemed to be two types of denser growth. One of them seemed of similar composition to the loose crystal, but one seemed more ... I struggle to find the word.",
-      "lore.terabithia3.9": "I hesitate to say \"important,\" but that's the best I can think of. It had a certain ... gravitas, like the dark, sunken X in its surface held some sacred meaning. Whatever the reason we were under strict instructions not to touch them. Occasionally a misplaced pickaxe would shatter one, and the student responsible would get quite the earful. Although the labor was hard and took most of my attention, I couldn't help but notice how ... lucid I felt. It was a strange mix of feelings: I felt incredibly clear-headed, but I also felt if I stopped to examine the feeling I might never stop.",
-      "lore.terabithia3.10": "It was like each breath in erected a friendly signpost in my head promising the way forward, pointing directly down a steep cliff. I shook my head and immersed myself in the work of mining, which seemed to stave off the signposts.$(br2)I did manage, however, to hide a shard of the crystal in my knapsack.$(br2)We spent nearly the whole day mining, excavating most of the crystal by the time the prefects' chronometer said the sun would set soon.",
-      "lore.terabithia3.11": "As we left, I couldn't help but notice that on the surfaces of those dark, scored places we left unmined, there seemed to be the faintest buds of new crystal, like they were somehow growing out of them. Everything I had learned about the geology of crystals said they took thousands of years to grow, but here there was new growth in less than a day. I suppose the prefects' warnings against breaking those spots were warranted, at least.",
-      "lore.terabithia3.12": "Our journey back to the surface was uneventful, and we got back to our tents just as the sun was setting-- My apologies, I am nearly out of paper for this letter. There's only so much you can write on one Akashic letter ... This tale is worth purchasing another letter for. I'll send them both at once, so they should arrive together.$(br2)Yours,$(br)-- Cardamom Steles",
+      "lore.cardamom3.1": "$(italic)Full title: Letter from Cardamom Steles to her father, #3, part 1/2/$$(br2)Dear Papa,$(br)Two very peculiar things have happened since I last wrote.$(br2)Firstly, the professor in charge of the entry-level Hexcasting Corps students has disappeared. Nobody knows where he has gone. His office and living quarters were found locked, but still in their usual state of disarray.",
+      "lore.cardamom3.2": "Even more peculiarly, any attempts by the students of the Grand to rouse the administrative portions of the gnarled bureaucracy have been very firmly rejected. Even other professors seem reluctant to talk about him.$(br2)As you might imagine, Amanita is sorely distressed. Whatever replacement professors the Grand managed to dredge up have none of the old professor's tact or skill with beginners.",
+      "lore.cardamom3.3": "But amazingly, that is not the stranger of the two things I have to tell you. The most horrendous thing I hope to ever experience happened on another trip out with the Geology Corps. This time, we were due for an expedition near a village.",
+      "lore.cardamom3.4": "Usually when we do such a thing, there is a long process of communication with the mayor or elder of the village to ensure we have permission and establish boundaries on where we are allowed to go and what we are allowed to do. But on this expedition, there was very little of that; we were notified where we were going by a prefect of the Hexcasting Corps scarcely two days before we left.",
+      "lore.cardamom3.5": "We camped near the village, but in a thick forest, even though the nearby plains would have been much more hospitable. We could barely see the village from where we pitched our tents. As I laid down my bedroll the evening we arrived, the peculiar silence troubled me. Even if we couldn't see the village, we should have been able to hear it. But the whole time we were above-ground, there was next to no sound.",
+      "lore.cardamom3.6": "The few things I did hear all sounded like work: the peal of hammers on anvils and the scrape of hoe on dirt, for example. I never heard a shred of conversation.$(br2)The next morning we readied our lanterns and descended into the earth.",
+      "lore.cardamom3.7": "We weren't told exactly what it was we were spelunking for, but one of the other students had overheard we were looking for more amethyst, which seemed reasonable enough. I had my eyes trained for any specks of purple I might find in the cave walls, but just as the gray stone was making way to black slate, an incredible sight unfolded before me.$(br2)It was an entire chamber made of amethyst, nearly ten times as tall as I am. The inside seemed to glow with purple sparks and lanternlight glint, every surface covered with jagged crystal. There was more amethyst here than our entire group had ever excavated since I came to the Grand.",
+      "lore.cardamom3.8": "Gloves were distributed and we were told to get to mining. One of the prefects along with us had a peculiar lavender box I've seen some of the higher-ups in the Grand using for storage, and the other students and I dutifully got to shattering the glassy crystals off the walls of the cave and putting them in the box. Under the outer layers of brittle crystal there seemed to be two types of denser growth. One of them seemed of similar composition to the loose crystal, but one seemed more ... I struggle to find the word.",
+      "lore.cardamom3.9": "I hesitate to say \"important,\" but that's the best I can think of. It had a certain ... gravitas, like the dark, sunken X in its surface held some sacred meaning. Whatever the reason we were under strict instructions not to touch them. Occasionally a misplaced pickaxe would shatter one, and the student responsible would get quite the earful. Although the labor was hard and took most of my attention, I couldn't help but notice how ... lucid I felt. It was a strange mix of feelings: I felt incredibly clear-headed, but I also felt if I stopped to examine the feeling I might never stop.",
+      "lore.cardamom3.10": "It was like each breath in erected a friendly signpost in my head promising the way forward, pointing directly down a steep cliff. I shook my head and immersed myself in the work of mining, which seemed to stave off the signposts.$(br2)I did manage, however, to hide a shard of the crystal in my knapsack.$(br2)We spent nearly the whole day mining, excavating most of the crystal by the time the prefects' chronometer said the sun would set soon.",
+      "lore.cardamom3.11": "As we left, I couldn't help but notice that on the surfaces of those dark, scored places we left unmined, there seemed to be the faintest buds of new crystal, like they were somehow growing out of them. Everything I had learned about the geology of crystals said they took thousands of years to grow, but here there was new growth in less than a day. I suppose the prefects' warnings against breaking those spots were warranted, at least.",
+      "lore.cardamom3.12": "Our journey back to the surface was uneventful, and we got back to our tents just as the sun was setting-- My apologies, I am nearly out of paper for this letter. There's only so much you can write on one Akashic letter ... This tale is worth purchasing another letter for. I'll send them both at once, so they should arrive together.$(br2)Yours,$(br)-- Cardamom Steles",
       
       
-      "lore.terabithia4.1": "$(italic)Full title: Letter from Cardamom Steles to her father, #3, part 2/2/$$(br2)Dear Papa,$(br)As I was saying, I was running out of paper to write my story, so the rest of it is in this letter. We made it back to camp just as the sun was setting. And that night was the most horrible event of the whole strange outing.",
-      "lore.terabithia4.2": "I had gotten up in the middle of the night to relieve myself. The moon was covered with clouds, and I confess I got lost in the winds of the forest and could not find the way back to the camp. Fearing the monsters of the night, I decided I would find my way to the village and see if I could find a bed there. At the least, I would be protected there.",
-      "lore.terabithia4.3": "The village was easy enough to find, though there was very little sound. Even this late at night I would expect the inn to be, if not bustling, at least not silent. But peeking through the inn door I saw absolutely nobody.$(br2)I knocked on the door of one of the houses to no response. The next two houses, too, seemed completely empty.",
-      "lore.terabithia4.4": "My pulse started to rise, and I resolved to enter the next house. I figured whoever might be inside would be understanding of their rest being disturbed. At the least, hearing another voice would have been reassuring, even if they didn't let me stay the night under their roof.$(br2)The house was very small, barely more than a cartographer's table and a bed. I could see there was someone in the bed, and I tried to reassure myself that everyone in the village was just deeply asleep as I turned to leave.",
-      "lore.terabithia4.5": "But then the clouds shifted, and moonlight glinted across the bed's occupant.$(br2)I screamed, and its eyes snapped open. It was ... distinctly, horrendously not human. It was like some awful de-evolution of a man, its forehead too high, its body stocky and dense. I believe it is appropriate to say \"it,\" at least; the thing before me was obviously not as wise as a human, despite how it resembled us.",
-      "lore.terabithia4.6": "Its eyes trained on me-- oh, its eyes were awful, dull and unintelligent like a sheep's! It opened its mouth but a pained mockery of speech poured out, a shuddering, nasal groan.",
-      "lore.terabithia4.7": "I ran. In the light of the newly-revealed moon I caught glimpses of other townspeople through windows, and they were all warped and simplified as the first $(italic)thing/$ I had seen. I sprinted into the darkness of the forest, away from those terrible, terrible animal eyes in those distorted faces.$(br2)The camp was easier to find now that I could see in the moonlight. No-one seemed to have noticed my prolonged absence, thankfully. I crawled back into my bedroll and did my very best to forget the whole night.",
-      "lore.terabithia4.8": "As you can tell from this letter, I did not do a very good job. That warped visage still haunts my dreams. I shudder to think that it once might have been human.$(br2)After we got back to the Grand I showed the shard of crystal I had smuggled out to Amanita. She confirmed my suspicions: it is definitely a crystal of media. What an enormous geode full of it is doing underground, though, is beyond her.",
-      "lore.terabithia4.9": "She also mentioned something interesting: apparently media can be used in a similar way to true amethyst in those niche glasses I mentioned a few letters ago. The physical manner in which they both crystallise happens to be nearly identical, and it has nothing to do with media's magical properties, or so she says.$(br2)I chose not to tell her of the village full of monsters.",
-      "lore.terabithia4.10": "I know how tight money is for you, and how expensive it is to send a letter all the way back to the Grand, but I beg of you, please send a word of advice back. I am greatly distraught, and reading your words would do me much good.$(br2)Yours,$(br)-- Cardamom Steles",
+      "lore.cardamom4.1": "$(italic)Full title: Letter from Cardamom Steles to her father, #3, part 2/2/$$(br2)Dear Papa,$(br)As I was saying, I was running out of paper to write my story, so the rest of it is in this letter. We made it back to camp just as the sun was setting. And that night was the most horrible event of the whole strange outing.",
+      "lore.cardamom4.2": "I had gotten up in the middle of the night to relieve myself. The moon was covered with clouds, and I confess I got lost in the winds of the forest and could not find the way back to the camp. Fearing the monsters of the night, I decided I would find my way to the village and see if I could find a bed there. At the least, I would be protected there.",
+      "lore.cardamom4.3": "The village was easy enough to find, though there was very little sound. Even this late at night I would expect the inn to be, if not bustling, at least not silent. But peeking through the inn door I saw absolutely nobody.$(br2)I knocked on the door of one of the houses to no response. The next two houses, too, seemed completely empty.",
+      "lore.cardamom4.4": "My pulse started to rise, and I resolved to enter the next house. I figured whoever might be inside would be understanding of their rest being disturbed. At the least, hearing another voice would have been reassuring, even if they didn't let me stay the night under their roof.$(br2)The house was very small, barely more than a cartographer's table and a bed. I could see there was someone in the bed, and I tried to reassure myself that everyone in the village was just deeply asleep as I turned to leave.",
+      "lore.cardamom4.5": "But then the clouds shifted, and moonlight glinted across the bed's occupant.$(br2)I screamed, and its eyes snapped open. It was ... distinctly, horrendously not human. It was like some awful de-evolution of a man, its forehead too high, its body stocky and dense. I believe it is appropriate to say \"it,\" at least; the thing before me was obviously not as wise as a human, despite how it resembled us.",
+      "lore.cardamom4.6": "Its eyes trained on me-- oh, its eyes were awful, dull and unintelligent like a sheep's! It opened its mouth but a pained mockery of speech poured out, a shuddering, nasal groan.",
+      "lore.cardamom4.7": "I ran. In the light of the newly-revealed moon I caught glimpses of other townspeople through windows, and they were all warped and simplified as the first $(italic)thing/$ I had seen. I sprinted into the darkness of the forest, away from those terrible, terrible animal eyes in those distorted faces.$(br2)The camp was easier to find now that I could see in the moonlight. No-one seemed to have noticed my prolonged absence, thankfully. I crawled back into my bedroll and did my very best to forget the whole night.",
+      "lore.cardamom4.8": "As you can tell from this letter, I did not do a very good job. That warped visage still haunts my dreams. I shudder to think that it once might have been human.$(br2)After we got back to the Grand I showed the shard of crystal I had smuggled out to Amanita. She confirmed my suspicions: it is definitely a crystal of media. What an enormous geode full of it is doing underground, though, is beyond her.",
+      "lore.cardamom4.9": "She also mentioned something interesting: apparently media can be used in a similar way to true amethyst in those niche glasses I mentioned a few letters ago. The physical manner in which they both crystallise happens to be nearly identical, and it has nothing to do with media's magical properties, or so she says.$(br2)I chose not to tell her of the village full of monsters.",
+      "lore.cardamom4.10": "I know how tight money is for you, and how expensive it is to send a letter all the way back to the Grand, but I beg of you, please send a word of advice back. I am greatly distraught, and reading your words would do me much good.$(br2)Yours,$(br)-- Cardamom Steles",
       
       
-      "lore.terabithia5.1": "$(italic)Full title: Letter from Cardamom Steles to her father, #4/$$(br2)Amanita has disappeared.$(br2)I don't know where she has gone, Papa. The last I saw her was over dinner, and she had just spoken to someone about the disappearances, and then--",
-      "lore.terabithia5.2": "then-- then she was gone too. And no one speaks of her, and I am so so scared, Papa, do they all know? Everyone must have a friend who's just $(italic)vanished/$, into thin air, into non-being.$(br2)Where did they $(italic)go/$?",
-      "lore.terabithia5.3": "They keep shutting things down, too-- we haven't been on a trip for the Geology Corps in weeks, all the apparati that collect media in the main dome are gone, the Apothecary Corps haven't been open for months... it's like termites are eating the Grand from the inside, leaving a hollow shell.$(br2)I think they've started scanning the letters, we write too...",
-      "lore.terabithia5.4": "This letter has taken so much courage to write, and I don't have the courage to tell people myself, but if no one here can hold the knowledge I hope and pray you can send the word out... it's a vain hope for this to spread from somewhere as backwater as Brackenfalls, but please, please, do your best. Remember them, Papa... Amanita Libera, Jasmine Ward, Theodore Cha... please, remember them... and please forgive my cowardice, that I foist the responsibility onto you.",
-      "lore.terabithia5.5": "i can no longer write, my hands shake so much, please, rescue us.",
+      "lore.cardamom5.1": "$(italic)Full title: Letter from Cardamom Steles to her father, #4/$$(br2)Amanita has disappeared.$(br2)I don't know where she has gone, Papa. The last I saw her was over dinner, and she had just spoken to someone about the disappearances, and then--",
+      "lore.cardamom5.2": "then-- then she was gone too. And no one speaks of her, and I am so so scared, Papa, do they all know? Everyone must have a friend who's just $(italic)vanished/$, into thin air, into non-being.$(br2)Where did they $(italic)go/$?",
+      "lore.cardamom5.3": "They keep shutting things down, too-- we haven't been on a trip for the Geology Corps in weeks, all the apparati that collect media in the main dome are gone, the Apothecary Corps haven't been open for months... it's like termites are eating the Grand from the inside, leaving a hollow shell.$(br2)I think they've started scanning the letters, we write too...",
+      "lore.cardamom5.4": "This letter has taken so much courage to write, and I don't have the courage to tell people myself, but if no one here can hold the knowledge I hope and pray you can send the word out... it's a vain hope for this to spread from somewhere as backwater as Brackenfalls, but please, please, do your best. Remember them, Papa... Amanita Libera, Jasmine Ward, Theodore Cha... please, remember them... and please forgive my cowardice, that I foist the responsibility onto you.",
+      "lore.cardamom5.5": "i can no longer write, my hands shake so much, please, rescue us.",
       
       
       "lore.inventory.1": "Cell 39, Restoration Log #72, Detainment Center Beta$(br2)Prisoner Name: Raphael Barr$(br)Crime: Knowledge of Project Wooleye$(br)Reason for Cell Vacancy: Death$(br)Additional notes: The following letter was scrawled over most of the wall space.",
@@ -1501,6 +1505,5 @@
       "interop.pehkui.get": "Get the scale of the entity, as a proportion of their normal size. For most entities, this will be 1.",
       "interop.pehkui.set": "Set the scale of the entity, passing in a proportion of their normal size. Costs about 1 $(item)Amethyst Shard/$."
     }
-  },
-  
+  }
 }
