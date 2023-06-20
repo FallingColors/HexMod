@@ -56,8 +56,6 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        buf.writeVarInt(Type.ENTITY_TYPE.ordinal());
-
         buf.writeVarInt(Registry.ENTITY_TYPE.getId(this.entityType));
     }
 

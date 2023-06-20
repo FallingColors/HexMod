@@ -1,0 +1,21 @@
+{
+  "name": "hexcasting.entry.lore.cardamom3",
+  "icon": "hexcasting:lore_fragment",
+  "category": "hexcasting:lore",
+  "advancement": "hexcasting:lore/cardamom3",
+  "sortnum": 2,
+  "pages": [
+    "hexcasting.page.lore.cardamom3.1",
+    "hexcasting.page.lore.cardamom3.2",
+    "hexcasting.page.lore.cardamom3.3",
+    "hexcasting.page.lore.cardamom3.4",
+    "hexcasting.page.lore.cardamom3.5",
+    "hexcasting.page.lore.cardamom3.6",
+    "hexcasting.page.lore.cardamom3.7",
+    "hexcasting.page.lore.cardamom3.8",
+    "hexcasting.page.lore.cardamom3.9",
+    "hexcasting.page.lore.cardamom3.10",
+    "hexcasting.page.lore.cardamom3.11",
+    "hexcasting.page.lore.cardamom3.12"
+  ]
+}

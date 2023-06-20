@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.Action;
+import at.petrak.hexcasting.api.casting.castables.OperationAction;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
@@ -10,43 +11,24 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.casting.operators.OpEntityHeight;
-import at.petrak.hexcasting.common.casting.operators.OpEntityLook;
-import at.petrak.hexcasting.common.casting.operators.OpEntityPos;
-import at.petrak.hexcasting.common.casting.operators.OpEntityVelocity;
-import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicRead;
-import at.petrak.hexcasting.common.casting.operators.akashic.OpAkashicWrite;
-import at.petrak.hexcasting.common.casting.operators.circles.OpCircleBounds;
-import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusDir;
-import at.petrak.hexcasting.common.casting.operators.circles.OpImpetusPos;
-import at.petrak.hexcasting.common.casting.operators.eval.OpEval;
-import at.petrak.hexcasting.common.casting.operators.eval.OpForEach;
-import at.petrak.hexcasting.common.casting.operators.eval.OpHalt;
-import at.petrak.hexcasting.common.casting.operators.lists.*;
-import at.petrak.hexcasting.common.casting.operators.local.OpPeekLocal;
-import at.petrak.hexcasting.common.casting.operators.local.OpPushLocal;
-import at.petrak.hexcasting.common.casting.operators.math.*;
-import at.petrak.hexcasting.common.casting.operators.math.bit.*;
-import at.petrak.hexcasting.common.casting.operators.math.logic.*;
-import at.petrak.hexcasting.common.casting.operators.math.trig.*;
-import at.petrak.hexcasting.common.casting.operators.raycast.OpBlockAxisRaycast;
-import at.petrak.hexcasting.common.casting.operators.raycast.OpBlockRaycast;
-import at.petrak.hexcasting.common.casting.operators.raycast.OpEntityRaycast;
-import at.petrak.hexcasting.common.casting.operators.rw.*;
-import at.petrak.hexcasting.common.casting.operators.selectors.OpGetCaster;
-import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntitiesBy;
-import at.petrak.hexcasting.common.casting.operators.selectors.OpGetEntityAt;
-import at.petrak.hexcasting.common.casting.operators.spells.*;
-import at.petrak.hexcasting.common.casting.operators.spells.great.*;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpCreateSentinel;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpDestroySentinel;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelPos;
-import at.petrak.hexcasting.common.casting.operators.spells.sentinel.OpGetSentinelWayfind;
-import at.petrak.hexcasting.common.casting.operators.stack.*;
+import at.petrak.hexcasting.common.casting.actions.*;
+import at.petrak.hexcasting.common.casting.actions.akashic.*;
+import at.petrak.hexcasting.common.casting.actions.circles.*;
+import at.petrak.hexcasting.common.casting.actions.eval.*;
+import at.petrak.hexcasting.common.casting.actions.lists.*;
+import at.petrak.hexcasting.common.casting.actions.local.*;
+import at.petrak.hexcasting.common.casting.actions.math.*;
+import at.petrak.hexcasting.common.casting.actions.math.logic.*;
+import at.petrak.hexcasting.common.casting.actions.raycast.*;
+import at.petrak.hexcasting.common.casting.actions.rw.*;
+import at.petrak.hexcasting.common.casting.actions.selectors.*;
+import at.petrak.hexcasting.common.casting.actions.spells.*;
+import at.petrak.hexcasting.common.casting.actions.spells.great.*;
+import at.petrak.hexcasting.common.casting.actions.spells.sentinel.*;
+import at.petrak.hexcasting.common.casting.actions.stack.*;
+import at.petrak.hexcasting.common.casting.actions.eval.OpEvalBreakable;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.interop.pehkui.OpGetScale;
-import at.petrak.hexcasting.interop.pehkui.OpSetScale;
-import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
+import at.petrak.hexcasting.interop.pehkui.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -140,49 +122,49 @@ public class HexActions {
     // == Math ==
 
     public static final ActionRegistryEntry ADD = make("add",
-        new ActionRegistryEntry(HexPattern.fromAngles("waaw", HexDir.NORTH_EAST), OpAdd.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("waaw", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry SUB = make("sub",
-        new ActionRegistryEntry(HexPattern.fromAngles("wddw", HexDir.NORTH_WEST), OpSub.INSTANCE));
-    public static final ActionRegistryEntry MUL_DOT = make("mul_dot",
-        new ActionRegistryEntry(HexPattern.fromAngles("waqaw", HexDir.SOUTH_EAST), OpMulDot.INSTANCE));
-    public static final ActionRegistryEntry DIV_CROSS = make("div_cross",
-        new ActionRegistryEntry(HexPattern.fromAngles("wdedw", HexDir.NORTH_EAST), OpDivCross.INSTANCE));
-    public static final ActionRegistryEntry ABS_LEN = make("abs_len",
-        new ActionRegistryEntry(HexPattern.fromAngles("wqaqw", HexDir.NORTH_EAST), OpAbsLen.INSTANCE));
-    public static final ActionRegistryEntry POW_PROJ = make("pow_proj",
-        new ActionRegistryEntry(HexPattern.fromAngles("wedew", HexDir.NORTH_WEST), OpPowProj.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wddw", HexDir.NORTH_WEST)));
+    public static final ActionRegistryEntry MUL_DOT = make("mul",
+        new OperationAction(HexPattern.fromAngles("waqaw", HexDir.SOUTH_EAST)));
+    public static final ActionRegistryEntry DIV_CROSS = make("div",
+        new OperationAction(HexPattern.fromAngles("wdedw", HexDir.NORTH_EAST)));
+    public static final ActionRegistryEntry ABS = make("abs",
+        new OperationAction(HexPattern.fromAngles("wqaqw", HexDir.NORTH_EAST)));
+    public static final ActionRegistryEntry POW_PROJ = make("pow",
+        new OperationAction(HexPattern.fromAngles("wedew", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry FLOOR = make("floor",
-        new ActionRegistryEntry(HexPattern.fromAngles("ewq", HexDir.EAST), OpFloor.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("ewq", HexDir.EAST)));
     public static final ActionRegistryEntry CEIL = make("ceil",
-        new ActionRegistryEntry(HexPattern.fromAngles("qwe", HexDir.EAST), OpCeil.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qwe", HexDir.EAST)));
 
     public static final ActionRegistryEntry CONSTRUCT_VEC = make("construct_vec",
-        new ActionRegistryEntry(HexPattern.fromAngles("eqqqqq", HexDir.EAST), OpConstructVec.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("eqqqqq", HexDir.EAST)));
     public static final ActionRegistryEntry DECONSTRUCT_VEC = make("deconstruct_vec",
-        new ActionRegistryEntry(HexPattern.fromAngles("qeeeee", HexDir.EAST), OpDeconstructVec.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qeeeee", HexDir.EAST)));
     public static final ActionRegistryEntry COERCE_AXIAL = make("coerce_axial",
         new ActionRegistryEntry(HexPattern.fromAngles("qqqqqaww", HexDir.NORTH_WEST), OpCoerceToAxial.INSTANCE));
 
     // == Logic ==
 
     public static final ActionRegistryEntry AND = make("and",
-        new ActionRegistryEntry(HexPattern.fromAngles("wdw", HexDir.NORTH_EAST), OpBoolAnd.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wdw", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry OR = make("or",
-        new ActionRegistryEntry(HexPattern.fromAngles("waw", HexDir.SOUTH_EAST), OpBoolOr.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("waw", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry XOR = make("xor",
-        new ActionRegistryEntry(HexPattern.fromAngles("dwa", HexDir.NORTH_WEST), OpBoolXor.INSTANCE));
-    public static final ActionRegistryEntry GREATER = make("greater", new ActionRegistryEntry(
-        HexPattern.fromAngles("e", HexDir.SOUTH_EAST), new OpCompare(false, (a, b) -> a > b)
-    ));
-    public static final ActionRegistryEntry LESS = make("less", new ActionRegistryEntry(
-        HexPattern.fromAngles("q", HexDir.SOUTH_WEST), new OpCompare(false, (a, b) -> a < b)
-    ));
-    public static final ActionRegistryEntry GREATER_EQ = make("greater_eq", new ActionRegistryEntry(
-        HexPattern.fromAngles("ee", HexDir.SOUTH_EAST), new OpCompare(true, (a, b) -> a >= b)
-    ));
-    public static final ActionRegistryEntry LESS_EQ = make("less_eq", new ActionRegistryEntry(
-        HexPattern.fromAngles("qq", HexDir.SOUTH_WEST), new OpCompare(true, (a, b) -> a <= b)
-    ));
+        new OperationAction(HexPattern.fromAngles("dwa", HexDir.NORTH_WEST)));
+    public static final ActionRegistryEntry GREATER = make("greater", new OperationAction(
+        HexPattern.fromAngles("e", HexDir.SOUTH_EAST))
+    );
+    public static final ActionRegistryEntry LESS = make("less", new OperationAction(
+        HexPattern.fromAngles("q", HexDir.SOUTH_WEST))
+    );
+    public static final ActionRegistryEntry GREATER_EQ = make("greater_eq", new OperationAction(
+        HexPattern.fromAngles("ee", HexDir.SOUTH_EAST))
+    );
+    public static final ActionRegistryEntry LESS_EQ = make("less_eq", new OperationAction(
+        HexPattern.fromAngles("qq", HexDir.SOUTH_WEST))
+    );
     public static final ActionRegistryEntry EQUALS = make("equals",
         new ActionRegistryEntry(HexPattern.fromAngles("ad", HexDir.EAST), new OpEquality(false)));
     public static final ActionRegistryEntry NOT_EQUALS = make("not_equals",
@@ -191,8 +173,6 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("dw", HexDir.NORTH_WEST), OpBoolNot.INSTANCE));
     public static final ActionRegistryEntry BOOL_COERCE = make("bool_coerce",
         new ActionRegistryEntry(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), OpCoerceToBool.INSTANCE));
-    public static final ActionRegistryEntry BOOL_TO_NUMBER = make("bool_to_number",
-        new ActionRegistryEntry(HexPattern.fromAngles("awd", HexDir.SOUTH_EAST), OpBoolToNumber.INSTANCE));
     public static final ActionRegistryEntry IF = make("if",
         new ActionRegistryEntry(HexPattern.fromAngles("awdd", HexDir.SOUTH_EAST), OpBoolIf.INSTANCE));
 
@@ -202,36 +182,28 @@ public class HexActions {
     // == Advanced Math ==
 
     public static final ActionRegistryEntry SIN = make("sin",
-        new ActionRegistryEntry(HexPattern.fromAngles("qqqqqaa", HexDir.SOUTH_EAST), OpSin.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qqqqqaa", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry COS = make("cos",
-        new ActionRegistryEntry(HexPattern.fromAngles("qqqqqad", HexDir.SOUTH_EAST), OpCos.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qqqqqad", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry TAN = make("tan",
-        new ActionRegistryEntry(HexPattern.fromAngles("wqqqqqadq", HexDir.SOUTH_WEST), OpTan.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wqqqqqadq", HexDir.SOUTH_WEST)));
     public static final ActionRegistryEntry ARCSIN = make("arcsin",
-        new ActionRegistryEntry(HexPattern.fromAngles("ddeeeee", HexDir.SOUTH_EAST), OpArcSin.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("ddeeeee", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry ARCCOS = make("arccos",
-        new ActionRegistryEntry(HexPattern.fromAngles("adeeeee", HexDir.NORTH_EAST), OpArcCos.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("adeeeee", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry ARCTAN = make("arctan",
-        new ActionRegistryEntry(HexPattern.fromAngles("eadeeeeew", HexDir.NORTH_EAST), OpArcTan.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("eadeeeeew", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry ARCTAN2 = make("arctan2",
-        new ActionRegistryEntry(HexPattern.fromAngles("deadeeeeewd", HexDir.WEST), OpArcTan2.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("deadeeeeewd", HexDir.WEST)));
     public static final ActionRegistryEntry LOGARITHM = make("logarithm",
-        new ActionRegistryEntry(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST), OpLog.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry MODULO = make("modulo",
-        new ActionRegistryEntry(HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST), OpModulo.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST)));
 
     // == Sets ==
 
-    public static final ActionRegistryEntry BIT$AND = make("bit/and",
-        new ActionRegistryEntry(HexPattern.fromAngles("wdweaqa", HexDir.NORTH_EAST), OpAnd.INSTANCE));
-    public static final ActionRegistryEntry BIT$OR = make("bit/or",
-        new ActionRegistryEntry(HexPattern.fromAngles("waweaqa", HexDir.SOUTH_EAST), OpOr.INSTANCE));
-    public static final ActionRegistryEntry BIT$XOR = make("bit/xor",
-        new ActionRegistryEntry(HexPattern.fromAngles("dwaeaqa", HexDir.NORTH_WEST), OpXor.INSTANCE));
-    public static final ActionRegistryEntry BIT$NOT = make("bit/not",
-        new ActionRegistryEntry(HexPattern.fromAngles("dweaqa", HexDir.NORTH_WEST), OpNot.INSTANCE));
-    public static final ActionRegistryEntry BIT$TO_SET = make("bit/to_set",
-        new ActionRegistryEntry(HexPattern.fromAngles("aweaqa", HexDir.NORTH_EAST), OpToSet.INSTANCE));
+    public static final ActionRegistryEntry UNIQUE = make("unique",
+        new OperationAction(HexPattern.fromAngles("aweaqa", HexDir.NORTH_EAST)));
 
     // == Spells ==
 
@@ -251,6 +223,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("eeeeede", HexDir.SOUTH_WEST), OpPlaceBlock.INSTANCE));
     public static final ActionRegistryEntry COLORIZE = make("colorize",
         new ActionRegistryEntry(HexPattern.fromAngles("awddwqawqwawq", HexDir.EAST), OpColorize.INSTANCE));
+    public static final ActionRegistryEntry CYCLE_VARIANT = make("cycle_variant",
+            new ActionRegistryEntry(HexPattern.fromAngles("dwaawedwewdwe", HexDir.WEST), OpCycleVariant.INSTANCE));
     public static final ActionRegistryEntry CREATE_WATER = make("create_water",
         new ActionRegistryEntry(HexPattern.fromAngles("aqawqadaq", HexDir.SOUTH_EAST), new OpCreateFluid(
             MediaConstants.DUST_UNIT,
@@ -367,7 +341,7 @@ public class HexActions {
             Items.LAVA_BUCKET,
             Blocks.LAVA_CAULDRON.defaultBlockState(),
             Fluids.LAVA)));
-    public static final ActionRegistryEntry TELEPORT = make("teleport",
+    public static final ActionRegistryEntry TELEPORT = make("teleport/great",
         new ActionRegistryEntry(HexPattern.fromAngles("wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq",
             HexDir.EAST), OpTeleport.INSTANCE));
     public static final ActionRegistryEntry SENTINEL$GREAT = make("sentinel/create/great",
@@ -394,9 +368,10 @@ public class HexActions {
     // eval being a space filling curve feels apt doesn't it
     public static final ActionRegistryEntry EVAL = make("eval",
         new ActionRegistryEntry(HexPattern.fromAngles("deaqq", HexDir.SOUTH_EAST), OpEval.INSTANCE));
+    public static final ActionRegistryEntry EVAL$CC = make("eval/cc",
+        new ActionRegistryEntry(HexPattern.fromAngles("qwaqde", HexDir.NORTH_WEST), OpEvalBreakable.INSTANCE));
     public static final ActionRegistryEntry HALT = make("halt",
         new ActionRegistryEntry(HexPattern.fromAngles("aqdee", HexDir.SOUTH_WEST), OpHalt.INSTANCE));
-    // TODO: install Iris' gambit
 
     public static final ActionRegistryEntry READ = make("read",
         new ActionRegistryEntry(HexPattern.fromAngles("aqqqqq", HexDir.EAST), OpRead.INSTANCE));
@@ -530,37 +505,39 @@ public class HexActions {
     // == Lists ==
 
     public static final ActionRegistryEntry APPEND = make("append",
-        new ActionRegistryEntry(HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST), OpAppend.INSTANCE));
-    public static final ActionRegistryEntry CONCAT = make("concat",
-        new ActionRegistryEntry(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST), OpConcat.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST)));
+    public static final ActionRegistryEntry UNAPPEND = make("unappend",
+            new OperationAction(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST)));
+//    public static final ActionRegistryEntry CONCAT = make("concat",
+//        new ActionRegistryEntry(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST), OpConcat.INSTANCE));
     public static final ActionRegistryEntry INDEX = make("index",
-        new ActionRegistryEntry(HexPattern.fromAngles("deeed", HexDir.NORTH_WEST), OpIndex.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("deeed", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry FOR_EACH = make("for_each",
         new ActionRegistryEntry(HexPattern.fromAngles("dadad", HexDir.NORTH_EAST), OpForEach.INSTANCE));
-    public static final ActionRegistryEntry LIST_SIZE = make("list_size",
-        new ActionRegistryEntry(HexPattern.fromAngles("aqaeaq", HexDir.EAST), OpListSize.INSTANCE));
+//    public static final ActionRegistryEntry LIST_SIZE = make("list_size",
+//        new ActionRegistryEntry(HexPattern.fromAngles("aqaeaq", HexDir.EAST), OpListSize.INSTANCE));
     public static final ActionRegistryEntry SINGLETON = make("singleton",
         new ActionRegistryEntry(HexPattern.fromAngles("adeeed", HexDir.EAST), OpSingleton.INSTANCE));
     public static final ActionRegistryEntry EMPTY_LIST = make("empty_list",
         new ActionRegistryEntry(HexPattern.fromAngles("qqaeaae", HexDir.NORTH_EAST), OpEmptyList.INSTANCE));
-    public static final ActionRegistryEntry REVERSE_LIST = make("reverse_list",
-        new ActionRegistryEntry(HexPattern.fromAngles("qqqaede", HexDir.EAST), OpReverski.INSTANCE));
+    public static final ActionRegistryEntry REVERSE = make("reverse",
+        new OperationAction(HexPattern.fromAngles("qqqaede", HexDir.EAST)));
     public static final ActionRegistryEntry LAST_N_LIST = make("last_n_list",
         new ActionRegistryEntry(HexPattern.fromAngles("ewdqdwe", HexDir.SOUTH_WEST), OpLastNToList.INSTANCE));
     public static final ActionRegistryEntry SPLAT = make("splat",
         new ActionRegistryEntry(HexPattern.fromAngles("qwaeawq", HexDir.NORTH_WEST), OpSplat.INSTANCE));
     public static final ActionRegistryEntry INDEX_OF = make("index_of",
-        new ActionRegistryEntry(HexPattern.fromAngles("dedqde", HexDir.EAST), OpIndexOf.INSTANCE));
-    public static final ActionRegistryEntry LIST_REMOVE = make("list_remove",
-        new ActionRegistryEntry(HexPattern.fromAngles("edqdewaqa", HexDir.SOUTH_WEST), OpRemove.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("dedqde", HexDir.EAST)));
+    public static final ActionRegistryEntry REMOVE_FROM = make("remove_from",
+        new OperationAction(HexPattern.fromAngles("edqdewaqa", HexDir.SOUTH_WEST)));
     public static final ActionRegistryEntry SLICE = make("slice",
-        new ActionRegistryEntry(HexPattern.fromAngles("qaeaqwded", HexDir.NORTH_WEST), OpSlice.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("qaeaqwded", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry MODIFY_IN_PLACE = make("modify_in_place",
-        new ActionRegistryEntry(HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST), OpModifyInPlace.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry CONSTRUCT = make("construct",
-        new ActionRegistryEntry(HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST), OpCons.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry DECONSTRUCT = make("deconstruct",
-        new ActionRegistryEntry(HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST), OpUnCons.INSTANCE));
+        new OperationAction(HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST)));
 
     // Xplat interops
     static {
@@ -573,6 +550,15 @@ public class HexActions {
     }
 
     public static ActionRegistryEntry make(String name, ActionRegistryEntry are) {
+        var old = ACTIONS.put(modLoc(name), are);
+        if (old != null) {
+            throw new IllegalArgumentException("Typo? Duplicate id " + name);
+        }
+        return are;
+    }
+
+    public static ActionRegistryEntry make(String name, OperationAction oa) {
+        var are = new ActionRegistryEntry(oa.getPattern(), oa);
         var old = ACTIONS.put(modLoc(name), are);
         if (old != null) {
             throw new IllegalArgumentException("Typo? Duplicate id " + name);

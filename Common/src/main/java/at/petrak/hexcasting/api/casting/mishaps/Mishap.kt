@@ -41,6 +41,11 @@ abstract class Mishap : Throwable() {
 
     protected abstract fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component?
 
+    fun executeReturnStack(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>): List<Iota> {
+        execute(ctx, errorCtx, stack)
+        return stack
+    }
+
     /**
      * Every error message should be prefixed with the name of the action...
      */
@@ -56,7 +61,7 @@ abstract class Mishap : Throwable() {
 
     protected fun dyeColor(color: DyeColor): FrozenPigment =
         FrozenPigment(
-            ItemStack(HexItems.DYE_COLORIZERS[color]!!),
+            ItemStack(HexItems.DYE_PIGMENTS[color]!!),
             Util.NIL_UUID
         )
 

@@ -53,7 +53,7 @@ sealed class OperatorSideEffect {
 
     data class Particles(val spray: ParticleSpray) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            harness.env.produceParticles(this.spray, harness.env.colorizer)
+            harness.env.produceParticles(this.spray, harness.env.pigment)
 //            this.spray.sprayParticles(harness.env.world, harness.env.colorizer)
 
             return false
@@ -68,12 +68,12 @@ sealed class OperatorSideEffect {
             spray.sprayParticles(
                 harness.env.world,
                 FrozenPigment(
-                    ItemStack(HexItems.DYE_COLORIZERS[DyeColor.RED]!!),
+                    ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!),
                     Util.NIL_UUID
                 )
             )
 
-            mishap.execute(harness.env, errorCtx, harness.image.stack.toMutableList())
+            harness.image = harness.image.copy(stack = mishap.executeReturnStack(harness.env, errorCtx, harness.image.stack.toMutableList()))
 
             return true
         }

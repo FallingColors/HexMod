@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -295,7 +296,11 @@ public abstract class CastingEnvironment {
         EXTRACTION,
     }
 
-    public abstract FrozenPigment getColorizer();
+    public abstract FrozenPigment getPigment();
+
+    public abstract @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment);
 
     public abstract void produceParticles(ParticleSpray particles, FrozenPigment colorizer);
+
+    public abstract void printMessage(Component message);
 }

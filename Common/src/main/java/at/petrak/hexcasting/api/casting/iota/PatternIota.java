@@ -83,7 +83,7 @@ public class PatternIota extends Iota {
                 }
 
                 var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key,
-                    HexTags.Actions.REQUIRES_ENLIGHTENMENT);
+                        HexTags.Actions.REQUIRES_ENLIGHTENMENT);
 
                 castedName = HexAPI.instance().getActionI18n(key, reqsEnlightenment);
                 action = Objects.requireNonNull(IXplatAbstractions.INSTANCE.getActionRegistry().get(key)).action();
@@ -101,10 +101,11 @@ public class PatternIota extends Iota {
 
             // do the actual calculation!!
             var result = action.operate(
-                vm.getEnv(),
-                vm.getImage(),
-                continuation
+                    vm.getEnv(),
+                    vm.getImage(),
+                    continuation
             );
+
             if (result.getNewImage().getOpsConsumed() > HexConfig.server().maxOpCount()) {
                 throw new MishapEvalTooMuch();
             }
@@ -130,6 +131,11 @@ public class PatternIota extends Iota {
                 HexEvalSounds.MISHAP
             );
         }
+    }
+
+    @Override
+    public boolean executable() {
+        return true;
     }
 
     public static IotaType<PatternIota> TYPE = new IotaType<>() {

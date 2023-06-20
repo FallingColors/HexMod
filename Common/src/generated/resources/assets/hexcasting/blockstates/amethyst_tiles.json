@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "hexcasting:block/amethyst_tiles"
+      "model": "hexcasting:block/deco/amethyst_tiles"
     }
   }
 }

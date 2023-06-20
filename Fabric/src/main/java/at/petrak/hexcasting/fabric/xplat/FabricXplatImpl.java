@@ -4,7 +4,9 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
@@ -143,9 +145,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setColorizer(Player target, FrozenPigment colorizer) {
-        var cc = HexCardinalComponents.FAVORED_COLORIZER.get(target);
-        cc.setColorizer(colorizer);
+    public @Nullable FrozenPigment setPigment(Player target, @Nullable FrozenPigment pigment) {
+        var cc = HexCardinalComponents.FAVORED_PIGMENT.get(target);
+        var old = cc.getPigment();
+        cc.setPigment(pigment);
+        return old;
     }
 
     @Override
@@ -195,9 +199,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FrozenPigment getColorizer(Player player) {
-        var cc = HexCardinalComponents.FAVORED_COLORIZER.get(player);
-        return cc.getColorizer();
+    public FrozenPigment getPigment(Player player) {
+        var cc = HexCardinalComponents.FAVORED_PIGMENT.get(player);
+        return cc.getPigment();
     }
 
     @Override
@@ -259,14 +263,20 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean isColorizer(ItemStack stack) {
-        return HexCardinalComponents.COLORIZER.isProvidedBy(stack);
+    public @Nullable ADVariantItem findVariantHolder(ItemStack stack) {
+        var cc = HexCardinalComponents.VARIANT_ITEM.maybeGet(stack);
+        return cc.orElse(null);
     }
 
     @Override
-    public ColorProvider getColorProvider(FrozenPigment colorizer) {
-        var cc = HexCardinalComponents.COLORIZER.maybeGet(colorizer.item());
-        return cc.map(col -> col.provideColor(colorizer.owner())).orElse(ColorProvider.MISSING);
+    public boolean isPigment(ItemStack stack) {
+        return HexCardinalComponents.PIGMENT.isProvidedBy(stack);
+    }
+
+    @Override
+    public ColorProvider getColorProvider(FrozenPigment pigment) {
+        var cc = HexCardinalComponents.PIGMENT.maybeGet(pigment.item());
+        return cc.map(col -> col.provideColor(pigment.owner())).orElse(ColorProvider.MISSING);
     }
 
     @Override
@@ -321,7 +331,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return FabricUnsealedIngredient.of(stack);
     }
 
-    private static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> FabricItemGroupBuilder.create(
+    private static final Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> FabricItemGroupBuilder.create(
             modLoc("creative_tab"))
         .icon(HexItems::tabIcon)
         .build());
@@ -423,6 +433,13 @@ public class FabricXplatImpl implements IXplatAbstractions {
                 Lifecycle.stable(), null))
             .buildAndRegister()
     );
+
+    private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new DefaultedRegistry<Arithmetic>(
+                            HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("arithmetic")),
+                            Lifecycle.stable(), null))
+                    .buildAndRegister()
+    );
     private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new DefaultedRegistry<EvalSound>(
                 HexAPI.MOD_ID + ":nothing", ResourceKey.createRegistryKey(modLoc("eval_sound")),
@@ -443,6 +460,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
         return IOTA_TYPE_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<Arithmetic> getArithmeticRegistry() {
+        return ARITHMETIC_REGISTRY.get();
     }
 
     @Override

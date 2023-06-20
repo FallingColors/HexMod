@@ -63,7 +63,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public FrozenPigment getColorizer() {
+    public FrozenPigment getPigment() {
         return HexAPI.instance().getColorizer(this.caster);
     }
 
@@ -101,7 +101,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
             IXplatAbstractions.INSTANCE.setStaffcastImage(sender, null);
             IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
         } else {
-            IXplatAbstractions.INSTANCE.setStaffcastImage(sender, vm.getImage());
+            IXplatAbstractions.INSTANCE.setStaffcastImage(sender, vm.getImage().withOverriddenUsedOps(0));
             if (!resolvedPatterns.isEmpty()) {
                 resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
             }
@@ -115,7 +115,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
             // Somehow we lost spraying particles on each new pattern, so do it here
             // this also nicely prevents particle spam on trinkets
             new ParticleSpray(sender.position(), new Vec3(0.0, 1.5, 0.0), 0.4, Math.PI / 3, 30)
-                .sprayParticles(sender.getLevel(), IXplatAbstractions.INSTANCE.getColorizer(sender));
+                .sprayParticles(sender.getLevel(), IXplatAbstractions.INSTANCE.getPigment(sender));
         }
     }
 }

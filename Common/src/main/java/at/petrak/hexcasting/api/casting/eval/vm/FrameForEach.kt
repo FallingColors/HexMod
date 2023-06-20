@@ -84,4 +84,6 @@ data class FrameForEach(
             "base" %= baseStack.serializeToNBT()
         "accumulator" %= acc.serializeToNBT()
     }
+
+    override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
 }

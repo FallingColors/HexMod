@@ -62,14 +62,18 @@ class GuiSpellcasting constructor(
     }
 
     fun recvServerUpdate(info: ExecutionClientView, index: Int) {
-        if (info.isStackClear && info.ravenmind == null) {
+        if (info.isStackClear) {
             this.minecraft?.setScreen(null)
             return
         }
 
-        this.patterns.getOrNull(index)?.let {
-            it.type = info.resolutionType
-        }
+        // TODO this is the kinda hacky bit
+        if (info.resolutionType == ResolvedPatternType.UNDONE) {
+            this.patterns.reversed().drop(1).firstOrNull { it.type == ResolvedPatternType.ESCAPED }?.let { it.type = ResolvedPatternType.UNDONE }
+            this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
+        } else this.patterns.getOrNull(index)?.let {
+                it.type = info.resolutionType
+            }
 
         this.cachedStack = info.stackDescs
         this.cachedRavenmind = info.ravenmind
@@ -118,7 +122,7 @@ class GuiSpellcasting constructor(
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
             if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES))
-                onClose()
+                closeForReal()
         }
     }
 
@@ -283,6 +287,13 @@ class GuiSpellcasting constructor(
     }
 
     override fun onClose() {
+        if (drawState == PatternDrawState.BetweenPatterns)
+            closeForReal()
+        else
+            drawState = PatternDrawState.BetweenPatterns
+    }
+
+    fun closeForReal() {
         Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
 
         super.onClose()

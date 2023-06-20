@@ -3,8 +3,9 @@ package at.petrak.hexcasting.datagen.recipe;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.common.blocks.decoration.BlockAkashicLog;
 import at.petrak.hexcasting.common.items.ItemStaff;
-import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
+import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.SealThingsRecipe;
@@ -35,6 +36,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -43,6 +45,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     private final DataGenerator generator;
     private final IXplatIngredients ingredients;
     private final Function<RecipeBuilder, IXplatConditionsBuilder> conditions;
+
+    private final List<BlockAkashicLog> EDIFIED_LOGS = List.of(
+            HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
+            HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
+            HexBlocks.EDIFIED_LOG_PURPLE);
 
     public HexplatRecipes(DataGenerator generator, IXplatIngredients ingredients,
         Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
@@ -154,7 +161,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
 
         for (var dye : DyeColor.values()) {
-            var item = HexItems.DYE_COLORIZERS.get(dye);
+            var item = HexItems.DYE_PIGMENTS.get(dye);
             ShapedRecipeBuilder.shaped(item)
                 .define('D', HexItems.AMETHYST_DUST)
                 .define('C', DyeItem.byColor(dye))
@@ -164,30 +171,30 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                 .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
         }
 
-        gayRecipe(recipes, ItemPrideColorizer.Type.AGENDER, Ingredient.of(Items.GLASS));
-        gayRecipe(recipes, ItemPrideColorizer.Type.AROACE, Ingredient.of(Items.WHEAT_SEEDS));
-        gayRecipe(recipes, ItemPrideColorizer.Type.AROMANTIC, Ingredient.of(Items.ARROW));
-        gayRecipe(recipes, ItemPrideColorizer.Type.ASEXUAL, Ingredient.of(Items.BREAD));
-        gayRecipe(recipes, ItemPrideColorizer.Type.BISEXUAL, Ingredient.of(Items.WHEAT));
-        gayRecipe(recipes, ItemPrideColorizer.Type.DEMIBOY, Ingredient.of(Items.RAW_IRON));
-        gayRecipe(recipes, ItemPrideColorizer.Type.DEMIGIRL, Ingredient.of(Items.RAW_COPPER));
-        gayRecipe(recipes, ItemPrideColorizer.Type.GAY, Ingredient.of(Items.STONE_BRICK_WALL));
-        gayRecipe(recipes, ItemPrideColorizer.Type.GENDERFLUID, Ingredient.of(Items.WATER_BUCKET));
-        gayRecipe(recipes, ItemPrideColorizer.Type.GENDERQUEER, Ingredient.of(Items.GLASS_BOTTLE));
-        gayRecipe(recipes, ItemPrideColorizer.Type.INTERSEX, Ingredient.of(Items.AZALEA));
-        gayRecipe(recipes, ItemPrideColorizer.Type.LESBIAN, Ingredient.of(Items.HONEYCOMB));
-        gayRecipe(recipes, ItemPrideColorizer.Type.NONBINARY, Ingredient.of(Items.MOSS_BLOCK));
-        gayRecipe(recipes, ItemPrideColorizer.Type.PANSEXUAL, ingredients.whenModIngredient(
+        gayRecipe(recipes, ItemPridePigment.Type.AGENDER, Ingredient.of(Items.GLASS));
+        gayRecipe(recipes, ItemPridePigment.Type.AROACE, Ingredient.of(Items.WHEAT_SEEDS));
+        gayRecipe(recipes, ItemPridePigment.Type.AROMANTIC, Ingredient.of(Items.ARROW));
+        gayRecipe(recipes, ItemPridePigment.Type.ASEXUAL, Ingredient.of(Items.BREAD));
+        gayRecipe(recipes, ItemPridePigment.Type.BISEXUAL, Ingredient.of(Items.WHEAT));
+        gayRecipe(recipes, ItemPridePigment.Type.DEMIBOY, Ingredient.of(Items.RAW_IRON));
+        gayRecipe(recipes, ItemPridePigment.Type.DEMIGIRL, Ingredient.of(Items.RAW_COPPER));
+        gayRecipe(recipes, ItemPridePigment.Type.GAY, Ingredient.of(Items.STONE_BRICK_WALL));
+        gayRecipe(recipes, ItemPridePigment.Type.GENDERFLUID, Ingredient.of(Items.WATER_BUCKET));
+        gayRecipe(recipes, ItemPridePigment.Type.GENDERQUEER, Ingredient.of(Items.GLASS_BOTTLE));
+        gayRecipe(recipes, ItemPridePigment.Type.INTERSEX, Ingredient.of(Items.AZALEA));
+        gayRecipe(recipes, ItemPridePigment.Type.LESBIAN, Ingredient.of(Items.HONEYCOMB));
+        gayRecipe(recipes, ItemPridePigment.Type.NONBINARY, Ingredient.of(Items.MOSS_BLOCK));
+        gayRecipe(recipes, ItemPridePigment.Type.PANSEXUAL, ingredients.whenModIngredient(
             Ingredient.of(Items.CARROT),
             "farmersdelight",
             CompatIngredientValue.of("farmersdelight:skillet")
         ));
-        gayRecipe(recipes, ItemPrideColorizer.Type.PLURAL, Ingredient.of(Items.REPEATER));
-        gayRecipe(recipes, ItemPrideColorizer.Type.TRANSGENDER, Ingredient.of(Items.EGG));
+        gayRecipe(recipes, ItemPridePigment.Type.PLURAL, Ingredient.of(Items.REPEATER));
+        gayRecipe(recipes, ItemPridePigment.Type.TRANSGENDER, Ingredient.of(Items.EGG));
 
-        ring(HexItems.UUID_COLORIZER, 1, HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD)
+        ring(HexItems.UUID_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
-        ring(HexItems.DEFAULT_COLORIZER, 1, HexItems.AMETHYST_DUST, Items.COPPER_INGOT)
+        ring(HexItems.DEFAULT_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.COPPER_INGOT)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
 
         ShapedRecipeBuilder.shaped(HexItems.SCROLL_SMOL)
@@ -298,11 +305,13 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .requires(HexTags.Items.EDIFIED_LOGS)
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_LOGS)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_WOOD, 3)
-            .define('W', HexBlocks.EDIFIED_LOG)
-            .pattern("WW")
-            .pattern("WW")
-            .unlockedBy("has_item", hasItem(HexBlocks.EDIFIED_LOG)).save(recipes);
+        for (var log : EDIFIED_LOGS) {
+            ShapedRecipeBuilder.shaped(log, 3)
+                    .define('W', log)
+                    .pattern("WW")
+                    .pattern("WW")
+                    .unlockedBy("has_item", hasItem(log)).save(recipes);
+        }
 
         ShapedRecipeBuilder.shaped(HexBlocks.STRIPPED_EDIFIED_WOOD, 3)
             .define('W', HexBlocks.STRIPPED_EDIFIED_LOG)
@@ -466,14 +475,16 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes, modLoc("compat/create/crushing/amethyst_shard"));
 
         // FD compat
-        this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
-                .withInput(HexBlocks.EDIFIED_LOG)
-                .withTool(ingredients.axeStrip())
-                .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
-                .withOutput("farmersdelight:tree_bark")
-                .withSound(SoundEvents.AXE_STRIP))
-            .whenModLoaded("farmersdelight")
-            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_log"));
+        for (var log : EDIFIED_LOGS) {
+            this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
+                            .withInput(log)
+                            .withTool(ingredients.axeStrip())
+                            .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
+                            .withOutput("farmersdelight:tree_bark")
+                            .withSound(SoundEvents.AXE_STRIP))
+                    .whenModLoaded("farmersdelight")
+                    .save(recipes, modLoc("compat/farmersdelight/cutting/" + Registry.BLOCK.getKey(log).getNamespace()));
+        }
 
         this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
                 .withInput(HexBlocks.EDIFIED_WOOD)
@@ -515,8 +526,8 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes);
     }
 
-    private void gayRecipe(Consumer<FinishedRecipe> recipes, ItemPrideColorizer.Type type, Ingredient material) {
-        var colorizer = HexItems.PRIDE_COLORIZERS.get(type);
+    private void gayRecipe(Consumer<FinishedRecipe> recipes, ItemPridePigment.Type type, Ingredient material) {
+        var colorizer = HexItems.PRIDE_PIGMENTS.get(type);
         ShapedRecipeBuilder.shaped(colorizer)
             .define('D', HexItems.AMETHYST_DUST)
             .define('C', material)

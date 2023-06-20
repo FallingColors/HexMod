@@ -1,0 +1,28 @@
+{
+  "overrides": [
+    {
+      "model": "hexcasting:block/deco/quenched_allay_bricks_small_0",
+      "predicate": {
+        "hexcasting:variant": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:block/deco/quenched_allay_bricks_small_1",
+      "predicate": {
+        "hexcasting:variant": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:block/deco/quenched_allay_bricks_small_2",
+      "predicate": {
+        "hexcasting:variant": 2.0
+      }
+    },
+    {
+      "model": "hexcasting:block/deco/quenched_allay_bricks_small_3",
+      "predicate": {
+        "hexcasting:variant": 3.0
+      }
+    }
+  ]
+}

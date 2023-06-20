@@ -104,9 +104,9 @@ public interface ICircleComponent {
             activator = impetus.getExecutionState().caster;
 
         if (impetus == null || impetus.getExecutionState() == null)
-            colorizer = new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)), activator);
+            colorizer = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)), activator);
         else
-            colorizer = impetus.getExecutionState().colorizer;
+            colorizer = impetus.getPigment();
 
         if (bs.getBlock() instanceof BlockCircleComponent bcc) {
             var outDir = bcc.normalDir(pos, bs, world);
@@ -123,7 +123,7 @@ public interface ICircleComponent {
             var spray = new ParticleSpray(vpos, vecOutDir.scale(success ? 1.0 : 1.5), success ? 0.1 : 0.5,
                 Mth.PI / (success ? 4 : 2), success ? 30 : 100);
             spray.sprayParticles(serverLevel,
-                success ? colorizer : new FrozenPigment(new ItemStack(HexItems.DYE_COLORIZERS.get(DyeColor.RED)),
+                success ? colorizer : new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)),
                     activator));
         }
 

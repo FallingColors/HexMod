@@ -30,8 +30,13 @@ import kotlin.reflect.KProperty
 const val TAU = Math.PI * 2.0
 const val SQRT_3 = 1.7320508f
 
-fun Vec3.serializeToNBT(): LongArrayTag =
-    LongArrayTag(longArrayOf(this.x.toRawBits(), this.y.toRawBits(), this.z.toRawBits()))
+fun Vec3.serializeToNBT(): CompoundTag {
+    val tag = CompoundTag()
+    tag.putDouble("x", this.x)
+    tag.putDouble("y", this.y)
+    tag.putDouble("z", this.z)
+    return tag
+}
 
 fun vecFromNBT(tag: LongArray): Vec3 = if (tag.size != 3) Vec3.ZERO else
     Vec3(
@@ -39,6 +44,12 @@ fun vecFromNBT(tag: LongArray): Vec3 = if (tag.size != 3) Vec3.ZERO else
         Double.fromBits(tag[1]),
         Double.fromBits(tag[2])
     )
+fun vecFromNBT(tag: CompoundTag): Vec3 {
+    return if (!tag.contains("x") || !tag.contains("y") || !tag.contains("z"))
+        Vec3.ZERO
+    else
+        Vec3(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"))
+}
 
 fun Vec2.serializeToNBT(): LongArrayTag =
     LongArrayTag(longArrayOf(this.x.toDouble().toRawBits(), this.y.toDouble().toRawBits()))
@@ -255,6 +266,22 @@ fun Iterable<Iota>.serializeToNBT() =
         ListTag()
     else
         ListIota(this.toList()).serialize()
+
+fun Iterable<Boolean>.serializeToNBT(): ByteArrayTag {
+    val out = ByteArray(if (this is Collection<*>) this.size else 10)
+    for ((i, b) in this.withIndex()) {
+        out[i] = if (b) 1 else 0
+    }
+    return ByteArrayTag(out)
+}
+
+fun <A> List<A>.zipWithDefault(array: ByteArray, default: (idx: Int) -> Byte): List<Pair<A, Byte>> {
+    val list = ArrayList<Pair<A, Byte>>(this.size)
+    var i = 0
+    for (element in this) list.add(element to array.getOrElse(i++, default))
+
+    return list
+}
 
 // Copy the impl from forge
 fun ItemStack.serializeToNBT(): CompoundTag {

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public static final String TAG_PATTERN = "pattern";
     public static final String TAG_IOTA = "iota";
+    public static final String TAG_DUMMY = "dummy";
 
     // This is only not null if this stores any data.
     private HexPattern pattern = null;
@@ -55,8 +56,6 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
         this.pattern = null;
         this.iotaTag = null;
 
-        this.setChanged();
-
         if (!previouslyEmpty) {
             var oldBs = this.getBlockState();
             var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, false);
@@ -72,6 +71,8 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
         if (this.pattern != null && this.iotaTag != null) {
             compoundTag.put(TAG_PATTERN, this.pattern.serializeToNBT());
             compoundTag.put(TAG_IOTA, this.iotaTag);
+        } else {
+            compoundTag.putBoolean(TAG_DUMMY, false);
         }
     }
 
@@ -80,6 +81,9 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
         if (tag.contains(TAG_PATTERN) && tag.contains(TAG_IOTA)) {
             this.pattern = HexPattern.fromNBT(tag.getCompound(TAG_PATTERN));
             this.iotaTag = tag.getCompound(TAG_IOTA);
+        } else if (tag.contains(TAG_DUMMY)) {
+            this.pattern = null;
+            this.iotaTag = null;
         }
     }
 }

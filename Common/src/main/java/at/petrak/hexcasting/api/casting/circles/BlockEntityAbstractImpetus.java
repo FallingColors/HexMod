@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.circles;
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -47,7 +48,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         TAG_EXECUTION_STATE = "executor",
         TAG_MEDIA = "media",
         TAG_ERROR_MSG = "errorMsg",
-        TAG_ERROR_DISPLAY = "errorDisplay";
+        TAG_ERROR_DISPLAY = "errorDisplay",
+        TAG_PIGMENT = "pigment";
 
     // We might try to load the executor in loadModData when the level doesn't exist yet,
     // so save the tag and load it lazy
@@ -59,9 +61,11 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     // these are null together
     @Nullable
-    protected Component errorMsg = null;
+    protected Component displayMsg = null;
     @Nullable
-    protected ItemStack errorDisplay = null;
+    protected ItemStack displayItem = null;
+    @Nullable
+    protected FrozenPigment pigment = null;
 
 
     public BlockEntityAbstractImpetus(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -73,29 +77,33 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     @Nullable
-    public Component getErrorMsg() {
-        return errorMsg;
+    public Component getDisplayMsg() {
+        return displayMsg;
     }
 
-    public void clearError() {
-        this.errorMsg = null;
-        this.errorDisplay = null;
+    public void clearDisplay() {
+        this.displayMsg = null;
+        this.displayItem = null;
         this.sync();
     }
 
-    public void postError(Component error, ItemStack display) {
-        this.errorMsg = error;
-        this.errorDisplay = display;
+    public void postDisplay(Component error, ItemStack display) {
+        this.displayMsg = error;
+        this.displayItem = display;
         this.sync();
     }
 
     public void postMishap(Component mishapDisplay) {
-        this.postError(mishapDisplay, new ItemStack(Items.MUSIC_DISC_11));
+        this.postDisplay(mishapDisplay, new ItemStack(Items.MUSIC_DISC_11));
+    }
+
+    public void postPrint(Component printDisplay) {
+        this.postDisplay(printDisplay, new ItemStack(Items.BOOK));
     }
 
     // Pull this out because we may need to call it both on startup and halfway thru
     public void postNoExits(BlockPos pos) {
-        this.postError(
+        this.postDisplay(
             Component.translatable("hexcasting.tooltip.circle.no_exit",
                 Component.literal(pos.toShortString()).withStyle(ChatFormatting.RED)),
             new ItemStack(Items.OAK_SIGN));
@@ -164,7 +172,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 this.postNoExits(this.getBlockPos());
             } else {
                 ICircleComponent.sfx(errPos, this.level.getBlockState(errPos), this.level, null, false);
-                this.postError(Component.translatable("hexcasting.tooltip.circle.no_closure",
+                this.postDisplay(Component.translatable("hexcasting.tooltip.circle.no_closure",
                         Component.literal(errPos.toShortString()).withStyle(ChatFormatting.RED)),
                     new ItemStack(Items.LEAD));
             }
@@ -173,7 +181,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         }
         this.executionState = result.unwrap();
 
-        this.clearError();
+        this.clearDisplay();
         var serverLevel = (ServerLevel) this.level;
         serverLevel.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(),
             this.executionState.getTickSpeed());
@@ -224,6 +232,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     public void setMedia(long media) {
         this.media = media;
+        sync();
     }
 
     public long extractMediaFromInsertedItem(ItemStack stack, boolean simulate) {
@@ -260,6 +269,20 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     //endregion
 
+
+    public FrozenPigment getPigment() {
+        if (pigment != null)
+            return pigment;
+        if (executionState != null && executionState.casterPigment != null)
+            return executionState.casterPigment;
+        return FrozenPigment.DEFAULT.get();
+    }
+
+    public @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
+        this.pigment = pigment;
+        return this.pigment;
+    }
+
     @Override
     protected void saveModData(CompoundTag tag) {
         if (this.executionState != null) {
@@ -268,12 +291,14 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
         tag.putLong(TAG_MEDIA, this.media);
 
-        if (this.errorMsg != null && this.errorDisplay != null) {
-            tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.errorMsg));
+        if (this.displayMsg != null && this.displayItem != null) {
+            tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.displayMsg));
             var itemTag = new CompoundTag();
-            this.errorDisplay.save(itemTag);
+            this.displayItem.save(itemTag);
             tag.put(TAG_ERROR_DISPLAY, itemTag);
         }
+        if (this.pigment != null)
+            tag.put(TAG_PIGMENT, this.pigment.serializeToNBT());
     }
 
     @Override
@@ -292,12 +317,14 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         if (tag.contains(TAG_ERROR_MSG, Tag.TAG_STRING) && tag.contains(TAG_ERROR_DISPLAY, Tag.TAG_COMPOUND)) {
             var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG));
             var display = ItemStack.of(tag.getCompound(TAG_ERROR_DISPLAY));
-            this.errorMsg = msg;
-            this.errorDisplay = display;
+            this.displayMsg = msg;
+            this.displayItem = display;
         } else {
-            this.errorMsg = null;
-            this.errorDisplay = null;
+            this.displayMsg = null;
+            this.displayItem = null;
         }
+        if (tag.contains(TAG_PIGMENT, Tag.TAG_COMPOUND))
+            this.pigment = FrozenPigment.fromNBT(tag.getCompound(TAG_PIGMENT));
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
@@ -312,8 +339,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
             }
 
-            if (this.errorMsg != null && this.errorDisplay != null) {
-                lines.add(new Pair<>(this.errorDisplay, this.errorMsg));
+            if (this.displayMsg != null && this.displayItem != null) {
+                lines.add(new Pair<>(this.displayItem, this.displayMsg));
             }
         }
     }

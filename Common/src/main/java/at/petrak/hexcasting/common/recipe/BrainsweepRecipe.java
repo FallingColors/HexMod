@@ -95,7 +95,7 @@ public record BrainsweepRecipe(
 		@Override
 		public void toNetwork(FriendlyByteBuf buf, BrainsweepRecipe recipe) {
 			recipe.blockIn.write(buf);
-			recipe.entityIn.write(buf);
+			recipe.entityIn.wrapWrite(buf);
 			buf.writeVarInt(recipe.mediaCost);
 			buf.writeVarInt(Block.getId(recipe.result));
 		}
@@ -103,10 +103,10 @@ public record BrainsweepRecipe(
 		@Override
 		public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
 			var blockIn = StateIngredientHelper.read(buf);
-			var villagerIn = BrainsweepeeIngredient.read(buf);
+			var brainsweepeeIn = BrainsweepeeIngredient.read(buf);
 			var cost = buf.readVarInt();
 			var result = Block.stateById(buf.readVarInt());
-			return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);
+			return new BrainsweepRecipe(recipeID, blockIn, brainsweepeeIn, cost, result);
 		}
 	}
 }

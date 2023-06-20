@@ -4,7 +4,9 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
@@ -179,13 +181,20 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void setColorizer(Player player, FrozenPigment colorizer) {
+    public @Nullable FrozenPigment setPigment(Player player, @Nullable FrozenPigment pigment) {
+        var old = getPigment(player);
+
         CompoundTag tag = player.getPersistentData();
-        tag.put(TAG_COLOR, colorizer.serializeToNBT());
+        if (pigment != null)
+            tag.put(TAG_PIGMENT, pigment.serializeToNBT());
+        else
+            tag.remove(TAG_PIGMENT);
 
         if (player instanceof ServerPlayer serverPlayer) {
-            CapSyncers.syncColorizer(serverPlayer);
+            CapSyncers.syncPigment(serverPlayer);
         }
+
+        return old;
     }
 
     @Override
@@ -253,8 +262,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FrozenPigment getColorizer(Player player) {
-        return FrozenPigment.fromNBT(player.getPersistentData().getCompound(TAG_COLOR));
+    public FrozenPigment getPigment(Player player) {
+        return FrozenPigment.fromNBT(player.getPersistentData().getCompound(TAG_PIGMENT));
     }
 
     @Override
@@ -332,15 +341,21 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean isColorizer(ItemStack stack) {
+    public @Nullable ADVariantItem findVariantHolder(ItemStack stack) {
+        var maybeCap = stack.getCapability(HexCapabilities.VARIANT_ITEM).resolve();
+        return maybeCap.orElse(null);
+    }
+
+    @Override
+    public boolean isPigment(ItemStack stack) {
         return stack.getCapability(HexCapabilities.COLOR).isPresent();
     }
 
     @Override
-    public ColorProvider getColorProvider(FrozenPigment colorizer) {
-        var maybeColorizer = colorizer.item().getCapability(HexCapabilities.COLOR).resolve();
-        if (maybeColorizer.isPresent()) {
-            return maybeColorizer.get().provideColor(colorizer.owner());
+    public ColorProvider getColorProvider(FrozenPigment pigment) {
+        var maybePigment = pigment.item().getCapability(HexCapabilities.COLOR).resolve();
+        if (maybePigment.isPresent()) {
+            return maybePigment.get().provideColor(pigment.owner());
         }
         return ColorProvider.MISSING;
     }
@@ -472,6 +487,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             ResourceKey.createRegistryKey(modLoc("iota_type")),
             HexAPI.MOD_ID + ":null", registry -> HexIotaTypes.NULL)
     );
+    private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
+            ForgeAccessorRegistry.hex$registerSimple(
+                    ResourceKey.createRegistryKey(modLoc("arithmetic")), null)
+    );
     private static final Supplier<Registry<EvalSound>> EVAL_SOUND_REGISTRY = Suppliers.memoize(() ->
         ForgeAccessorRegistry.hex$registerDefaulted(
             ResourceKey.createRegistryKey(modLoc("eval_sound")),
@@ -491,6 +510,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
         return IOTA_TYPE_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<Arithmetic> getArithmeticRegistry() {
+        return ARITHMETIC_REGISTRY.get();
     }
 
     @Override
@@ -544,7 +568,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public static final String TAG_SENTINEL_POSITION = "hexcasting:sentinel_position";
     public static final String TAG_SENTINEL_DIMENSION = "hexcasting:sentinel_dimension";
 
-    public static final String TAG_COLOR = "hexcasting:colorizer";
+    public static final String TAG_PIGMENT = "hexcasting:pigment";
 
     public static final String TAG_FLIGHT_ALLOWED = "hexcasting:flight_allowed";
     public static final String TAG_FLIGHT_TIME = "hexcasting:flight_time";

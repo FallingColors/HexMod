@@ -8,7 +8,7 @@ import kotlin.math.min
  * Uses axial coordinates as per https://www.redblobgames.com/grids/hexagons/
  */
 data class HexCoord(val q: Int, val r: Int) {
-    fun s(): Int = this.q - this.r
+    fun s(): Int = -this.q - this.r
 
     fun shiftedBy(x: HexCoord): HexCoord = HexCoord(this.q + x.q, this.r + x.r)
 

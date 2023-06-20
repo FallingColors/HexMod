@@ -28,10 +28,26 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         private const val PREFIX = "hexcasting.mishap.divide_by_zero"
 
         @JvmStatic
+        fun of(operand1: Double, operand2: Double, suffix: String = "divide"): MishapDivideByZero {
+            if (suffix == "exponent")
+                return MishapDivideByZero(translate(DoubleIota(operand1)), powerOf(DoubleIota(operand2)), suffix)
+            return MishapDivideByZero(translate(DoubleIota(operand1)), translate(DoubleIota(operand2)), suffix)
+        }
+
+        @JvmStatic
         fun of(operand1: Iota, operand2: Iota, suffix: String = "divide"): MishapDivideByZero {
             if (suffix == "exponent")
                 return MishapDivideByZero(translate(operand1), powerOf(operand2), suffix)
             return MishapDivideByZero(translate(operand1), translate(operand2), suffix)
+        }
+
+        @JvmStatic
+        fun tan(angle: Double): MishapDivideByZero {
+            val translatedAngle = translate(DoubleIota(angle))
+            return MishapDivideByZero(
+                    "$PREFIX.sin".asTranslatedComponent(translatedAngle),
+                    "$PREFIX.cos".asTranslatedComponent(translatedAngle)
+            )
         }
 
         @JvmStatic

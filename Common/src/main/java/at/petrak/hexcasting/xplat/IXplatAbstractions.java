@@ -4,7 +4,9 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
@@ -79,7 +81,7 @@ public interface IXplatAbstractions {
 
     boolean isBrainswept(Mob mob);
 
-    void setColorizer(Player target, FrozenPigment colorizer);
+    @Nullable FrozenPigment setPigment(Player target, @Nullable FrozenPigment colorizer);
 
     void setSentinel(Player target, @Nullable Sentinel sentinel);
 
@@ -95,7 +97,7 @@ public interface IXplatAbstractions {
 
     @Nullable AltioraAbility getAltiora(Player player);
 
-    FrozenPigment getColorizer(Player player);
+    FrozenPigment getPigment(Player player);
 
     @Nullable Sentinel getSentinel(Player player);
 
@@ -120,11 +122,13 @@ public interface IXplatAbstractions {
     @Nullable
     ADHexHolder findHexHolder(ItemStack stack);
 
+    @Nullable ADVariantItem findVariantHolder(ItemStack stack);
+
     // coooollooorrrs
 
-    boolean isColorizer(ItemStack stack);
+    boolean isPigment(ItemStack stack);
 
-    ColorProvider getColorProvider(FrozenPigment colorizer);
+    ColorProvider getColorProvider(FrozenPigment pigment);
 
     // Items
 
@@ -167,6 +171,8 @@ public interface IXplatAbstractions {
     Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry();
 
     Registry<IotaType<?>> getIotaTypeRegistry();
+
+    Registry<Arithmetic> getArithmeticRegistry();
 
     Registry<EvalSound> getEvalSoundRegistry();
 

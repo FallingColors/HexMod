@@ -41,6 +41,7 @@ public class HexIotaTypes {
     public static final IotaType<PatternIota> PATTERN = type("pattern", PatternIota.TYPE);
     public static final IotaType<GarbageIota> GARBAGE = type("garbage", GarbageIota.TYPE);
     public static final IotaType<Vec3Iota> VEC3 = type("vec3", Vec3Iota.TYPE);
+    public static final IotaType<ContinuationIota> CONTINUATION = type("continuation", ContinuationIota.TYPE);
 
 
     private static <U extends Iota, T extends IotaType<U>> T type(String name, T type) {
