@@ -2,18 +2,9 @@ from __future__ import annotations
 
 import string
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Mapping, Protocol, Self, TypeVar
+from typing import Any, Mapping, Protocol, Self, TypeVar
 
 from common.deserialize import Castable
-
-# circular imports are gross
-# redundant import to signal re-export
-if TYPE_CHECKING:
-    from patchouli.book import Book as Book
-    from patchouli.category import Category as Category
-    from patchouli.entry import Entry as Entry
-else:
-    Book = Category = Entry = Any
 
 
 class Color(str, Castable):
@@ -92,17 +83,3 @@ def sorted_dict(d: Mapping[_T, _T_Sortable]) -> dict[_T, _T_Sortable]:
 class IProperty(Protocol[_T_covariant]):
     def __get__(self, __instance: Any, __owner: type | None = None, /) -> _T_covariant:
         ...
-
-
-class BookHelpers(ABC):
-    """Shortcuts for types with a book field."""
-
-    book: Book | IProperty[Book]
-
-    @property
-    def props(self):
-        return self.book.props
-
-    @property
-    def i18n(self):
-        return self.book.i18n

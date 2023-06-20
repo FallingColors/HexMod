@@ -4,15 +4,15 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Self
 
+import patchouli
 from common.deserialize import from_dict_checked, load_json_data, rename
 from common.formatting import FormatTree
-from common.types import Book, BookHelpers, LocalizedStr, Sortable
+from common.types import LocalizedStr, Sortable
 from minecraft.resource import ItemStack, ResourceLocation
-from patchouli.entry import Entry
 
 
 @dataclass
-class Category(Sortable, BookHelpers):
+class Category(Sortable, patchouli.BookHelpers):
     """Category with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/category-json
@@ -20,7 +20,7 @@ class Category(Sortable, BookHelpers):
 
     # non-json fields
     path: Path
-    book: Book
+    book: patchouli.Book
 
     # required (category.json)
     name: LocalizedStr
@@ -34,7 +34,7 @@ class Category(Sortable, BookHelpers):
     secret: bool = False
 
     @classmethod
-    def load(cls, path: Path, book: Book) -> Self:
+    def load(cls, path: Path, book: patchouli.Book) -> Self:
         # load the raw data from json, and add our extra fields
         data = load_json_data(cls, path, {"path": path, "book": book})
         return from_dict_checked(cls, data, book.config(), path)
@@ -42,8 +42,8 @@ class Category(Sortable, BookHelpers):
     def __post_init__(self):
         # load entries
         entry_dir = self.book.entries_dir / self.id.path
-        self.entries: list[Entry] = sorted(
-            Entry.load(path, self) for path in entry_dir.glob("*.json")
+        self.entries: list[patchouli.Entry] = sorted(
+            patchouli.Entry.load(path, self) for path in entry_dir.glob("*.json")
         )
 
     @property

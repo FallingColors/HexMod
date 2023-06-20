@@ -1,9 +1,10 @@
+import patchouli
 from common.deserialize import TypeHooks
 from common.tagged_union import get_union_types
 
 from .abstract import *
+from .concrete import *
 from .hexcasting import *
-from .patchouli import *
 
 Page = (
     TextPage
@@ -33,7 +34,7 @@ def _raw_page_hook(data: dict[str, Any] | str) -> dict[str, Any]:
     return data
 
 
-def make_page_hooks(book: Book) -> TypeHooks:
+def make_page_hooks(book: patchouli.Book) -> TypeHooks:
     """Creates type hooks for deserializing Page types."""
 
     type_hooks: TypeHooks = {Page: _raw_page_hook}

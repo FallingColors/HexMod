@@ -11,3 +11,7 @@ pythonpath = ["src", "test"]
 
 [tool.coverage.report]
 include_namespace_packages = true
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true

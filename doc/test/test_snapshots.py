@@ -6,10 +6,11 @@ from typing import Iterator
 
 import pytest
 from bs4 import BeautifulSoup as bs
-from main import Args, main
 from syrupy.assertion import SnapshotAssertion
 from syrupy.extensions.amber import AmberSnapshotExtension
 from syrupy.types import SerializedData
+
+from main import Args, main
 
 
 def prettify(data: SerializedData) -> str:

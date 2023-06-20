@@ -3,14 +3,15 @@
 from common import dacite_patch as _  # isort: skip
 
 import json
+import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Type, TypeVar
 
-import tomllib
-from common.toml_placeholders import TOMLTable, fill_placeholders
 from dacite import Config, from_dict
 from dacite.dataclasses import get_fields
+
+from common.toml_placeholders import TOMLTable, fill_placeholders
 
 
 class Castable:
@@ -20,7 +21,7 @@ class Castable:
     """
 
 
-TypeFn = Callable[[Any], Any]
+TypeFn = Callable[..., Any]
 TypeHooks = dict[Type[Any], TypeFn]
 
 

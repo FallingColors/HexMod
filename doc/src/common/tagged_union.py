@@ -5,8 +5,9 @@ from __future__ import annotations
 from abc import ABC
 from typing import Any, ClassVar, Generator, Type, TypeVar
 
-from common.deserialize import handle_metadata_inplace
 from dacite.types import extract_generic
+
+from common.deserialize import handle_metadata_inplace
 
 
 class UnionSkip(Exception):

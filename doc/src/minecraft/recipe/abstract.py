@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any, Self
 
+import patchouli
 from common.deserialize import TypeFn, load_json_data
 from common.tagged_union import InternallyTaggedUnion
-from common.types import Book
 from minecraft.resource import ResourceLocation
 
 
@@ -19,7 +21,7 @@ class BaseRecipe(InternallyTaggedUnion, tag="type", value=None):
         cls.type = ResourceLocation.from_str(type)
 
     @classmethod
-    def make_type_hook(cls, book: Book) -> TypeFn:
+    def make_type_hook(cls, book: patchouli.Book) -> TypeFn:
         """Creates a type hook which, given a stringified ResourceLocation, loads and
         returns the recipe json at that location."""
 

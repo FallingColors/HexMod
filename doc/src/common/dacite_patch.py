@@ -7,10 +7,11 @@ import traceback
 from typing import Any, Type
 
 import dacite.core
-from common.tagged_union import UnionSkip
 from dacite import Config, DaciteError, StrictUnionMatchError, UnionMatchError
 from dacite.core import _build_value
 from dacite.types import extract_generic, is_instance, is_optional, transform_value
+
+from common.tagged_union import UnionSkip
 
 
 # fixes https://github.com/konradhalas/dacite/issues/234

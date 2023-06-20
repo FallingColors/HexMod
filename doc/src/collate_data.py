@@ -7,9 +7,7 @@ from typing import IO, Any
 
 from common.formatting import FormatTree
 from common.types import LocalizedStr
-from patchouli.book import Book
-from patchouli.category import Category
-from patchouli.entry import Entry, Page
+from patchouli import Category, Entry, HexBook
 from patchouli.page import (
     BrainsweepPage,
     CraftingMultiPage,
@@ -17,6 +15,7 @@ from patchouli.page import (
     EmptyPage,
     ImagePage,
     LinkPage,
+    Page,
     PageWithPattern,
     PageWithText,
     PageWithTitle,
@@ -120,13 +119,13 @@ def get_format(out: Stream, ty: str, value: Any):
     raise ValueError("Unknown format type: " + ty)
 
 
-def entry_spoilered(root_info: Book, entry: Entry):
+def entry_spoilered(root_info: HexBook, entry: Entry):
     if entry.advancement is None:
         return False
     return str(entry.advancement) in root_info.spoilers
 
 
-def category_spoilered(root_info: Book, category: Category):
+def category_spoilered(root_info: HexBook, category: Category):
     return all(entry_spoilered(root_info, ent) for ent in category.entries)
 
 
@@ -269,7 +268,7 @@ def write_page(out: Stream, pageid: str, page: Page):
     out.tag("br")
 
 
-def write_entry(out: Stream, book: Book, entry: Entry):
+def write_entry(out: Stream, book: HexBook, entry: Entry):
     with out.pair_tag("div", id=entry.id.path):
         with out.pair_tag_if(entry_spoilered(book, entry), "div", clazz="spoilered"):
             with out.pair_tag("h3", clazz="entry-title page-header"):
@@ -280,7 +279,7 @@ def write_entry(out: Stream, book: Book, entry: Entry):
                 write_page(out, entry.id.path, page)
 
 
-def write_category(out: Stream, book: Book, category: Category):
+def write_category(out: Stream, book: HexBook, category: Category):
     with out.pair_tag("section", id=category.id.path):
         with out.pair_tag_if(
             category_spoilered(book, category), "div", clazz="spoilered"
@@ -295,7 +294,7 @@ def write_category(out: Stream, book: Book, category: Category):
                 write_entry(out, book, entry)
 
 
-def write_toc(out: Stream, book: Book):
+def write_toc(out: Stream, book: HexBook):
     with out.pair_tag("h2", id="table-of-contents", clazz="page-header"):
         out.text("Table of Contents")
         with out.pair_tag(
@@ -327,12 +326,12 @@ def write_toc(out: Stream, book: Book):
                             out.text(entry.name)
 
 
-def write_book(out: Stream, book: Book):
+def write_book(out: Stream, book: HexBook):
     with out.pair_tag("div", clazz="container"):
         with out.pair_tag("header", clazz="jumbotron"):
             with out.pair_tag("h1", clazz="book-title"):
-                write_block(out, book.data.name)
-            write_block(out, book.data.landing_text)
+                write_block(out, book.name)
+            write_block(out, book.landing_text)
         with out.pair_tag("nav"):
             write_toc(out, book)
         with out.pair_tag("main", clazz="book-body"):
@@ -340,7 +339,7 @@ def write_book(out: Stream, book: Book):
                 write_category(out, book, category)
 
 
-def generate_docs(book: Book, template: str) -> str:
+def generate_docs(book: HexBook, template: str) -> str:
     # FIXME: super hacky temporary solution for returning this as a string
     # just pass a string buffer to everything instead of a file
     with io.StringIO() as output:

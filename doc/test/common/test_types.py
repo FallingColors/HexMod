@@ -1,4 +1,5 @@
 import pytest
+
 from common.types import Color
 
 colors: list[str] = [

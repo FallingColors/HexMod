@@ -2,23 +2,24 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Callable, Self
 
+import patchouli
 from common.deserialize import TypeFn, rename
 from common.formatting import FormatTree
 from common.pattern import RawPatternInfo
 from common.tagged_union import InternallyTaggedUnion
-from common.types import Book, BookHelpers, LocalizedStr
+from common.types import LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import ResourceLocation
 
 
 @dataclass(kw_only=True)
-class BasePage(InternallyTaggedUnion, BookHelpers, tag="type", value=None):
+class BasePage(InternallyTaggedUnion, patchouli.BookHelpers, tag="type", value=None):
     """Fields shared by all Page types.
 
     See: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/page-types
     """
 
-    book: Book
+    book: patchouli.Book
 
     type: ResourceLocation = field(init=False)
     advancement: ResourceLocation | None = None
@@ -31,7 +32,7 @@ class BasePage(InternallyTaggedUnion, BookHelpers, tag="type", value=None):
             cls.type = ResourceLocation.from_str(type)
 
     @classmethod
-    def make_type_hook(cls, book: Book) -> TypeFn:
+    def make_type_hook(cls, book: patchouli.Book) -> TypeFn:
         def type_hook(data: Self | dict[str, Any]) -> Self | dict[str, Any]:
             if isinstance(data, cls):
                 return data
@@ -66,6 +67,8 @@ class PageWithCraftingRecipes(PageWithText, ABC, type=None):
 
 @dataclass(kw_only=True)
 class PageWithPattern(PageWithTitle, ABC, type=None):
+    book: patchouli.HexBook
+
     patterns: list[RawPatternInfo]
     op_id: ResourceLocation | None = None
     header: LocalizedStr | None = None
@@ -76,7 +79,7 @@ class PageWithPattern(PageWithTitle, ABC, type=None):
     _title: None = None
 
     @classmethod
-    def make_type_hook(cls, book: Book) -> Callable[[dict[str, Any]], dict[str, Any]]:
+    def make_type_hook(cls, book: patchouli.Book) -> TypeFn:
         super_hook = super().make_type_hook(book)
 
         def type_hook(data: dict[str, Any]) -> dict[str, Any]:
