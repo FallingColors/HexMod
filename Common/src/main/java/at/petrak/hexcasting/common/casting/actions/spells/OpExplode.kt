@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.level.Explosion
+import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 
 class OpExplode(val fire: Boolean) : SpellAction {
@@ -37,7 +38,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
     private data class Spell(val pos: Vec3, val strength: Double, val fire: Boolean) : RenderedSpell {
         override fun cast(ctx: CastingEnvironment) {
             // TODO: you can use this to explode things *outside* of the worldborder?
-            if (!ctx.canEditBlockAt(BlockPos(pos)))
+            if (!ctx.canEditBlockAt(BlockPos.containing(pos)))
                 return
 
             ctx.world.explode(
@@ -47,7 +48,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
                 pos.z,
                 strength.toFloat(),
                 this.fire,
-                Explosion.BlockInteraction.BREAK
+                Level.ExplosionInteraction.NONE
             )
         }
     }

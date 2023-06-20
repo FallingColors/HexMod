@@ -37,7 +37,7 @@ object OpBrainsweep : SpellAction {
     ): SpellAction.Result {
         val sacrifice = args.getMob(0, argc)
         val vecPos = args.getVec3(1, argc)
-        val pos = BlockPos(vecPos)
+        val pos = BlockPos.containing(vecPos)
 
         ctx.assertVecInRange(vecPos)
         ctx.assertEntityInRange(sacrifice)

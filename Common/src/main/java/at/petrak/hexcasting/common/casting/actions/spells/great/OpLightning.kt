@@ -23,7 +23,7 @@ object OpLightning : SpellAction {
         val target = args.getVec3(0, argc)
         ctx.assertVecInRange(target)
 
-        if (!ctx.canEditBlockAt(BlockPos(target)))
+        if (!ctx.canEditBlockAt(BlockPos.containing(target)))
             throw MishapBadLocation(target, "forbidden")
 
         return SpellAction.Result(

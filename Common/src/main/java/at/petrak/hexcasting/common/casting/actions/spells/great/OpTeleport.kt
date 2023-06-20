@@ -130,7 +130,7 @@ object OpTeleport : SpellAction {
 
         for (player in playersToUpdate) {
             // See TeleportCommand
-            val chunkPos = ChunkPos(BlockPos(delta))
+            val chunkPos = ChunkPos(BlockPos.containing(delta))
             // the `1` is apparently for "distance." i'm not sure what it does but this is what
             // /tp does
             world.chunkSource.addRegionTicket(TicketType.POST_TELEPORT, chunkPos, 1, player.id)

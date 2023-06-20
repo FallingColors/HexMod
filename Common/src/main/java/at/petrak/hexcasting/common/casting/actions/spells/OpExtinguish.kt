@@ -29,7 +29,7 @@ object OpExtinguish : SpellAction {
     ): SpellAction.Result {
         // TODO: sho
         val vecPos = args.getVec3(0, argc)
-        val pos = BlockPos(vecPos)
+        val pos = BlockPos.containing(vecPos)
         ctx.assertPosInRangeForEditing(pos)
 
         return SpellAction.Result(
