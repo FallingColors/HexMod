@@ -17,8 +17,8 @@ public class SpendMediaTrigger extends SimpleCriterionTrigger<SpendMediaTrigger.
     }
 
     @Override
-    protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate,
-        DeserializationContext pContext) {
+    protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate,
+        DeserializationContext context) {
         return new Instance(predicate,
             MinMaxBounds.Ints.fromJson(json.get(TAG_MEDIA_SPENT)),
             MinMaxBounds.Ints.fromJson(json.get(TAG_MEDIA_WASTED)));
@@ -32,7 +32,7 @@ public class SpendMediaTrigger extends SimpleCriterionTrigger<SpendMediaTrigger.
         protected final MinMaxBounds.Ints mediaSpent;
         protected final MinMaxBounds.Ints mediaWasted;
 
-        public Instance(EntityPredicate.Composite predicate, MinMaxBounds.Ints mediaSpent,
+        public Instance(ContextAwarePredicate predicate, MinMaxBounds.Ints mediaSpent,
             MinMaxBounds.Ints mediaWasted) {
             super(SpendMediaTrigger.ID, predicate);
             this.mediaSpent = mediaSpent;
