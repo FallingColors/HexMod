@@ -23,6 +23,7 @@ import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -67,7 +68,7 @@ public interface IXplatAbstractions {
     void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet);
 
     // https://github.com/VazkiiMods/Botania/blob/13b7bcd9cbb6b1a418b0afe455662d29b46f1a7f/Xplat/src/main/java/vazkii/botania/xplat/IXplatAbstractions.java#L157
-    Packet<?> toVanillaClientboundPacket(IMessage message);
+    Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message);
 
     double getReachDistance(Player player);
 

@@ -28,10 +28,7 @@ import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -137,7 +134,7 @@ public class HexLootTables extends PaucalLootTableSubProvider {
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {
         var leafPool = dropThisPool(block, 1)
-            .when(new AlternativeLootItemCondition.Builder(
+            .when(AnyOfCondition.anyOf(
                 IXplatAbstractions.INSTANCE.isShearsCondition(),
                 MatchTool.toolMatches(ItemPredicate.Builder.item()
                     .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))))

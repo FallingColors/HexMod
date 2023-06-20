@@ -4,7 +4,9 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Holder;
+import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -19,7 +21,6 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePla
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.OptionalInt;
@@ -35,27 +36,29 @@ public class AkashicTreeGrower extends AbstractTreeGrower {
         GROWERS.add(buildTreeFeature(HexBlocks.CITRINE_EDIFIED_LEAVES, HexBlocks.EDIFIED_LOG_CITRINE, "3"));
     }
 
-    private static Holder<ConfiguredFeature<TreeConfiguration, ?>> buildTreeFeature(Block leaves, Block altLog, String name) {
-        return FeatureUtils.register(HexAPI.MOD_ID + ":akashic_tree" + name, Feature.TREE,
-            new TreeConfiguration.TreeConfigurationBuilder(
-                new WeightedStateProvider(
-                        SimpleWeightedRandomList.<BlockState>builder()
-                                .add(HexBlocks.EDIFIED_LOG.defaultBlockState(), 8)
-                                .add(altLog.defaultBlockState(), 1)
-                                .build()),
-                // baseHeight, heightRandA, heightRandB
-                new FancyTrunkPlacer(5, 5, 3),
-                BlockStateProvider.simple(leaves),
-                // radius, offset, height
-                new FancyFoliagePlacer(ConstantInt.of(1), ConstantInt.of(5), 5),
-                // limit, lower size, upper size, minclippedheight
-                new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(6))
-            ).build());
+    private static Holder<ConfiguredFeature<TreeConfiguration, ?>> buildTreeFeature(BootstapContext<ConfiguredFeature<?, ?>> context, Block leaves, Block altLog, String name) {
+        return FeatureUtils.register(context,
+                null,
+                null,
+                new TreeConfiguration.TreeConfigurationBuilder(
+                        new WeightedStateProvider(
+                                SimpleWeightedRandomList.<BlockState>builder()
+                                        .add(HexBlocks.EDIFIED_LOG.defaultBlockState(), 8)
+                                        .add(altLog.defaultBlockState(), 1)
+                                        .build()),
+                        // baseHeight, heightRandA, heightRandB
+                        new FancyTrunkPlacer(5, 5, 3),
+                        BlockStateProvider.simple(leaves),
+                        // radius, offset, height
+                        new FancyFoliagePlacer(ConstantInt.of(1), ConstantInt.of(5), 5),
+                        // limit, lower size, upper size, minclippedheight
+                        new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(6))
+                ).build()
+        );
     }
 
-    @Nullable
     @Override
-    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource pRandom, boolean pLargeHive) {
+    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource pRandom, boolean pLargeHive) {
         return GROWERS.get(pRandom.nextInt(GROWERS.size()));
     }
 }

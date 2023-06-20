@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.mod;
 
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
@@ -22,7 +23,7 @@ public class HexStatistics {
 
     private static ResourceLocation makeCustomStat(String key, StatFormatter formatter) {
         ResourceLocation resourcelocation = modLoc(key);
-        Registry.register(Registry.CUSTOM_STAT, key, resourcelocation);
+        Registry.register(BuiltInRegistries.CUSTOM_STAT, key, resourcelocation);
         Stats.CUSTOM.get(resourcelocation, formatter);
         return resourcelocation;
     }

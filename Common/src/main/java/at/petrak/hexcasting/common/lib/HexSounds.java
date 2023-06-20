@@ -50,7 +50,7 @@ public class HexSounds {
 
     private static SoundEvent sound(String name) {
         var id = modLoc(name);
-        var sound = new SoundEvent(id);
+        var sound = SoundEvent.createVariableRangeEvent(id);
         var old = SOUNDS.put(id, sound);
         if (old != null) {
             throw new IllegalArgumentException("Typo? Duplicate id " + name);

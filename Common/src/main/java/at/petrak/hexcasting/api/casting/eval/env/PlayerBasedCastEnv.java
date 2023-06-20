@@ -40,7 +40,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     protected final InteractionHand castingHand;
 
     protected PlayerBasedCastEnv(ServerPlayer caster, InteractionHand castingHand) {
-        super(caster.getLevel());
+        super(caster.serverLevel());
         this.caster = caster;
         this.castingHand = castingHand;
     }
@@ -126,7 +126,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         var sentinel = HexAPI.instance().getSentinel(this.caster);
         if (sentinel != null
             && sentinel.extendsRange()
-            && this.caster.getLevel().dimension() == sentinel.dimension()
+            && this.caster.level().dimension() == sentinel.dimension()
             && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
         ) {
             return true;

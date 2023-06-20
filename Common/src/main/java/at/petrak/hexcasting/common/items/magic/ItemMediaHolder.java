@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.utils.MathUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.network.chat.Component;
@@ -63,7 +64,7 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
 
     @Override
     public void setMedia(ItemStack stack, long media) {
-        NBTHelper.putLong(stack, TAG_MEDIA, Mth.clamp(media, 0, getMaxMedia(stack)));
+        NBTHelper.putLong(stack, TAG_MEDIA, MathUtils.clamp(media, 0, getMaxMedia(stack)));
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -35,7 +36,7 @@ public final class ScryingLensOverlayRegistry {
      * @throws IllegalArgumentException if the block is already registered.
      */
     public static void addDisplayer(Block block, OverlayBuilder displayer) {
-        addDisplayer(Registry.BLOCK.getKey(block), displayer);
+        addDisplayer(BuiltInRegistries.BLOCK.getKey(block), displayer);
     }
 
     /**
@@ -67,7 +68,7 @@ public final class ScryingLensOverlayRegistry {
         Player observer, Level world,
         Direction hitFace) {
         List<Pair<ItemStack, Component>> lines = Lists.newArrayList();
-        var idLookedup = ID_LOOKUP.get(Registry.BLOCK.getKey(state.getBlock()));
+        var idLookedup = ID_LOOKUP.get(BuiltInRegistries.BLOCK.getKey(state.getBlock()));
         if (idLookedup != null) {
             idLookedup.addLines(lines, state, pos, observer, world, hitFace);
         }

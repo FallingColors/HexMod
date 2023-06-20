@@ -24,7 +24,7 @@ public class BrainsweepCommand {
                     }
                     HexAPI.instance().brainsweep(mob);
                     ctx.getSource().sendSuccess(
-                        Component.translatable("command.hexcasting.brainsweep", mob.getDisplayName()), true);
+                        () -> Component.translatable("command.hexcasting.brainsweep", mob.getDisplayName()), true);
                     return 1;
                 } else {
                     ctx.getSource().sendFailure(

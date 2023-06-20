@@ -46,6 +46,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -373,8 +374,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Packet<?> toVanillaClientboundPacket(IMessage message) {
-        return ForgePacketHandler.getNetwork().toVanillaPacket(message, NetworkDirection.PLAY_TO_CLIENT);
+    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message) {
+        //noinspection unchecked
+        return (Packet<ClientGamePacketListener>) ForgePacketHandler.getNetwork().toVanillaPacket(message, NetworkDirection.PLAY_TO_CLIENT);
     }
 
     @Override

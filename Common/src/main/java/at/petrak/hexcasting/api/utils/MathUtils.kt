@@ -4,6 +4,14 @@ import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.*
 
+object MathUtils {
+    @JvmStatic
+    fun clamp(long: Long, min: Long, max: Long): Long
+        =    if (long <= min) min
+        else if (long >= max) max
+        else                  long
+}
+
 object QuaternionfUtils {
     @JvmStatic
     val ONE: Quaternionf

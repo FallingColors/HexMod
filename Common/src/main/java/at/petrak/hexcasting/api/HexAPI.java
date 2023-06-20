@@ -19,6 +19,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -166,12 +167,12 @@ public interface HexAPI {
 
     ArmorMaterial DUMMY_ARMOR_MATERIAL = new ArmorMaterial() {
         @Override
-        public int getDurabilityForSlot(@NotNull EquipmentSlot slot) {
+        public int getDurabilityForType(ArmorItem.Type type) {
             return 0;
         }
 
         @Override
-        public int getDefenseForSlot(@NotNull EquipmentSlot slot) {
+        public int getDefenseForType(ArmorItem.Type type) {
             return 0;
         }
 

@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -68,7 +70,7 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 
     @Override
     public Entity exampleEntity(Level level) {
-        var someEntityTys = Registry.ENTITY_TYPE.getTagOrEmpty(this.entityTypeTag).iterator();
+        var someEntityTys = BuiltInRegistries.ENTITY_TYPE.getTagOrEmpty(this.entityTypeTag).iterator();
         if (someEntityTys.hasNext()) {
             var someTy = someEntityTys.next();
             return someTy.value().create(level);
@@ -97,13 +99,13 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
         if (tagLoc == null) {
             throw new IllegalArgumentException("unknown tag " + obj);
         }
-        var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, tagLoc);
+        var type = TagKey.create(Registries.ENTITY_TYPE, tagLoc);
         return new EntityTagIngredient(type);
     }
 
     public static EntityTagIngredient read(FriendlyByteBuf buf) {
         var typeLoc = buf.readResourceLocation();
-        var type = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, typeLoc);
+        var type = TagKey.create(Registries.ENTITY_TYPE, typeLoc);
         return new EntityTagIngredient(type);
     }
 

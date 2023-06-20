@@ -64,11 +64,11 @@ public class ListPatternsCommand {
             .toList();
 
         var ow = source.getLevel().getServer().overworld();
-        source.sendSuccess(Component.translatable("command.hexcasting.pats.listing"), false);
+        source.sendSuccess(() -> Component.translatable("command.hexcasting.pats.listing"), false);
         for (var key : listing) {
             var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(key, ow);
 
-            source.sendSuccess(Component.literal(key.location().toString())
+            source.sendSuccess(() -> Component.literal(key.location().toString())
                 .append(": ")
                 .append(new PatternIota(pat).display()), false);
         }
@@ -95,12 +95,12 @@ public class ListPatternsCommand {
                     var stackEntity = player.drop(stack, false);
                     if (stackEntity != null) {
                         stackEntity.setNoPickUpDelay();
-                        stackEntity.setOwner(player.getUUID());
+                        stackEntity.setThrower(player.getUUID());
                     }
                 }
             });
 
-            source.sendSuccess(
+            source.sendSuccess(() ->
                 Component.translatable("command.hexcasting.pats.all",
                     lookup.size(),
                     targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
@@ -121,7 +121,7 @@ public class ListPatternsCommand {
             var stack = new ItemStack(HexItems.SCROLL_LARGE);
             stack.setTag(tag);
 
-            source.sendSuccess(
+            source.sendSuccess(() ->
                 Component.translatable(
                     "command.hexcasting.pats.specific.success",
                     stack.getDisplayName(),
@@ -133,7 +133,7 @@ public class ListPatternsCommand {
                 var stackEntity = player.drop(stack, false);
                 if (stackEntity != null) {
                     stackEntity.setNoPickUpDelay();
-                    stackEntity.setOwner(player.getUUID());
+                    stackEntity.setThrower(player.getUUID());
                 }
             }
 

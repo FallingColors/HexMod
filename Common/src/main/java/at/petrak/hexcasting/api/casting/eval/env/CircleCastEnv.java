@@ -108,7 +108,7 @@ public class CircleCastEnv extends CastingEnvironment {
             var sentinel = HexAPI.instance().getSentinel(caster);
             if (sentinel != null
                 && sentinel.extendsRange()
-                && caster.getLevel().dimension() == sentinel.dimension()
+                && caster.level().dimension() == sentinel.dimension()
                 && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
             ) {
                 return true;

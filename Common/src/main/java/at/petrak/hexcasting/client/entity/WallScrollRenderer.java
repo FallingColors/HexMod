@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.client.entity;
 
-import at.petrak.hexcasting.api.utils.Vector3fUtils;
 import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;

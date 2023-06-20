@@ -82,11 +82,6 @@ public class BlockConjuredLight extends BlockConjured implements SimpleWaterlogg
     }
 
     @Override
-    public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {
-        return PushReaction.DESTROY;
-    }
-
-    @Override
     public boolean addLandingEffects(BlockState state, ServerLevel worldserver, BlockPos pos,
         LivingEntity entity, int numberOfParticles) {
         return true;

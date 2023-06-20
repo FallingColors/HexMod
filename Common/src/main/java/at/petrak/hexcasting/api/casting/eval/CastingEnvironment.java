@@ -105,7 +105,7 @@ public abstract class CastingEnvironment {
     public abstract boolean hasEditPermissionsAt(BlockPos vec);
 
     public final boolean isVecInWorld(Vec3 vec) {
-        return this.world.isInWorldBounds(new BlockPos(vec))
+        return this.world.isInWorldBounds(BlockPos.containing(vec))
             && this.world.getWorldBorder().isWithinBounds(vec.x, vec.z, 0.5);
     }
 

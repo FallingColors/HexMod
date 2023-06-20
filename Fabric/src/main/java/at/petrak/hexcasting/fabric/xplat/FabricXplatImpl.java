@@ -53,6 +53,7 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.*;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -73,6 +74,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.phys.Vec3;
@@ -133,7 +135,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Packet<?> toVanillaClientboundPacket(IMessage message) {
+    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message) {
         return ServerPlayNetworking.createS2CPacket(message.getFabricId(), message.toBuf());
     }
 
@@ -395,7 +397,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public LootItemCondition.Builder isShearsCondition() {
-        return AlternativeLootItemCondition.alternative(
+        return AnyOfCondition.anyOf(
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS)),
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(
                 HexTags.Items.create(new ResourceLocation("c", "shears"))))
@@ -417,33 +419,33 @@ public class FabricXplatImpl implements IXplatAbstractions {
     private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new MappedRegistry<ActionRegistryEntry>(
                 ResourceKey.createRegistryKey(modLoc("action")),
-                Lifecycle.stable(), null))
+                Lifecycle.stable()))
             .buildAndRegister()
     );
     private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
         Suppliers.memoize(() ->
             FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler.Factory<?>>(
                     ResourceKey.createRegistryKey(modLoc("special_handler")),
-                    Lifecycle.stable(), null))
+                    Lifecycle.stable()))
                 .buildAndRegister()
         );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
+        FabricRegistryBuilder.from(new DefaultedMappedRegistry<IotaType<?>>(
                 HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
-                Lifecycle.stable(), null))
+                Lifecycle.stable(), false))
             .buildAndRegister()
     );
 
     private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new DefaultedRegistry<Arithmetic>(
+            FabricRegistryBuilder.from(new DefaultedMappedRegistry<Arithmetic>(
                             HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("arithmetic")),
-                            Lifecycle.stable(), null))
+                            Lifecycle.stable(), false))
                     .buildAndRegister()
     );
     private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new DefaultedRegistry<EvalSound>(
+        FabricRegistryBuilder.from(new DefaultedMappedRegistry<EvalSound>(
                 HexAPI.MOD_ID + ":nothing", ResourceKey.createRegistryKey(modLoc("eval_sound")),
-                Lifecycle.stable(), null))
+                Lifecycle.stable(), false))
             .buildAndRegister()
     );
 

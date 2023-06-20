@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.recipe.ingredient;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -33,14 +34,14 @@ public class StateIngredientBlock implements StateIngredient {
     public JsonObject serialize() {
         JsonObject object = new JsonObject();
         object.addProperty("type", "block");
-        object.addProperty("block", Registry.BLOCK.getKey(block).toString());
+        object.addProperty("block", BuiltInRegistries.BLOCK.getKey(block).toString());
         return object;
     }
 
     @Override
     public void write(FriendlyByteBuf buffer) {
         buffer.writeVarInt(1);
-        buffer.writeVarInt(Registry.BLOCK.getId(block));
+        buffer.writeVarInt(BuiltInRegistries.BLOCK.getId(block));
     }
 
     @Override

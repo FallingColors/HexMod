@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -99,7 +100,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
         tooltip.add(BrainsweepeeIngredient.getModNameComponent(
             this.profession == null
                 ? "minecraft"
-                : Registry.VILLAGER_PROFESSION.getKey(this.profession).getNamespace()));
+                : BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.profession).getNamespace()));
 
         return tooltip;
     }
@@ -125,7 +126,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
             if (addedAny) {
                 component.append(" ");
             }
-            var biomeLoc = Registry.VILLAGER_TYPE.getKey(this.biome);
+            var biomeLoc = BuiltInRegistries.VILLAGER_TYPE.getKey(this.biome);
             component.append(Component.translatable("biome." + biomeLoc.getNamespace() + "." + biomeLoc.getPath()));
             addedAny = true;
         }
@@ -133,7 +134,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
         if (profession != null) {
             // We've for sure added something
             component.append(" ");
-            var professionLoc = Registry.VILLAGER_PROFESSION.getKey(this.profession);
+            var professionLoc = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.profession);
             // TODO: what's the convention used for modded villager types?
             // Villager::getTypeName implies that it there's no namespace information.
             // i hope there is some convention
@@ -167,13 +168,13 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     public void write(FriendlyByteBuf buf) {
         if (this.profession != null) {
             buf.writeVarInt(1);
-            buf.writeVarInt(Registry.VILLAGER_PROFESSION.getId(this.profession));
+            buf.writeVarInt(BuiltInRegistries.VILLAGER_PROFESSION.getId(this.profession));
         } else {
             buf.writeVarInt(0);
         }
         if (this.biome != null) {
             buf.writeVarInt(1);
-            buf.writeVarInt(Registry.VILLAGER_TYPE.getId(this.biome));
+            buf.writeVarInt(BuiltInRegistries.VILLAGER_TYPE.getId(this.biome));
         } else {
             buf.writeVarInt(0);
         }
@@ -183,12 +184,12 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     public static VillagerIngredient deserialize(JsonObject json) {
         VillagerProfession profession = null;
         if (json.has("profession") && !json.get("profession").isJsonNull()) {
-            profession = Registry.VILLAGER_PROFESSION.get(new ResourceLocation(GsonHelper.getAsString(json,
+            profession = BuiltInRegistries.VILLAGER_PROFESSION.get(new ResourceLocation(GsonHelper.getAsString(json,
                 "profession")));
         }
         VillagerType biome = null;
         if (json.has("biome") && !json.get("biome").isJsonNull()) {
-            biome = Registry.VILLAGER_TYPE.get(new ResourceLocation(GsonHelper.getAsString(json, "biome")));
+            biome = BuiltInRegistries.VILLAGER_TYPE.get(new ResourceLocation(GsonHelper.getAsString(json, "biome")));
         }
         int minLevel = GsonHelper.getAsInt(json, "minLevel");
         return new VillagerIngredient(profession, biome, minLevel);
@@ -198,12 +199,12 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
         VillagerProfession profession = null;
         var hasProfession = buf.readVarInt();
         if (hasProfession != 0) {
-            profession = Registry.VILLAGER_PROFESSION.byId(buf.readVarInt());
+            profession = BuiltInRegistries.VILLAGER_PROFESSION.byId(buf.readVarInt());
         }
         VillagerType biome = null;
         var hasBiome = buf.readVarInt();
         if (hasBiome != 0) {
-            biome = Registry.VILLAGER_TYPE.byId(buf.readVarInt());
+            biome = BuiltInRegistries.VILLAGER_TYPE.byId(buf.readVarInt());
         }
         int minLevel = buf.readInt();
         return new VillagerIngredient(profession, biome, minLevel);
@@ -218,7 +219,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     public String getSomeKindOfReasonableIDForEmi() {
         var bob = new StringBuilder();
         if (this.profession != null) {
-            var profLoc = Registry.VILLAGER_PROFESSION.getKey(this.profession);
+            var profLoc = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.profession);
             bob.append(profLoc.getNamespace())
                 .append("//")
                 .append(profLoc.getPath());
@@ -227,7 +228,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
         }
         bob.append("_");
         if (this.biome != null) {
-            var biomeLoc = Registry.VILLAGER_TYPE.getKey(this.biome);
+            var biomeLoc = BuiltInRegistries.VILLAGER_TYPE.getKey(this.biome);
             bob.append(biomeLoc.getNamespace())
                 .append("//")
                 .append(biomeLoc.getPath());

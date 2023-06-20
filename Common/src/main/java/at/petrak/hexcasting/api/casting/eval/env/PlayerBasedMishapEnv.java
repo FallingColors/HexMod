@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class PlayerBasedMishapEnv extends MishapEnvironment {
     public PlayerBasedMishapEnv(ServerPlayer player) {
-        super(player.getLevel(), player);
+        super(player.serverLevel(), player);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PlayerBasedMishapEnv extends MishapEnvironment {
     @Override
     public void drown() {
         if (this.caster.getAirSupply() < 200) {
-            this.caster.hurt(DamageSource.DROWN, 2f);
+            this.caster.hurt(this.caster.damageSources().drown(), 2f);
         }
         this.caster.setAirSupply(0);
     }

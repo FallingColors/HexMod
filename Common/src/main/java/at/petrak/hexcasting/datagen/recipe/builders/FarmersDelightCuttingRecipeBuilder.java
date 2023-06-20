@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -138,7 +139,7 @@ public class FarmersDelightCuttingRecipeBuilder implements RecipeBuilder {
             json.add("result", jsonOutputs);
 
             if (sound != null) {
-                json.addProperty("sound", Registry.SOUND_EVENT.getKey(sound).toString());
+                json.addProperty("sound", BuiltInRegistries.SOUND_EVENT.getKey(sound).toString());
             }
         }
 

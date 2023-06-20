@@ -26,6 +26,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -119,6 +120,7 @@ public class HexBlocks {
                 .noLootTable()
                 .isValidSpawn(HexBlocks::never)
                 .instabreak()
+                .pushReaction(PushReaction.DESTROY)
                 .noCollission()
                 .isSuffocating(HexBlocks::never)
                 .isViewBlocking(HexBlocks::never)),
@@ -138,26 +140,36 @@ public class HexBlocks {
         new Item.Properties());
 
     // "no" item because we add it manually
-    public static final BlockSlate SLATE = blockNoItem("slate", new BlockSlate(slateish()));
+    public static final BlockSlate SLATE = blockNoItem("slate",
+        new BlockSlate(slateish()
+            .pushReaction(PushReaction.DESTROY)));
 
-    public static final BlockEmptyImpetus IMPETUS_EMPTY = blockItem("impetus/empty", new BlockEmptyImpetus(slateish()));
+    public static final BlockEmptyImpetus IMPETUS_EMPTY = blockItem("impetus/empty",
+        new BlockEmptyImpetus(slateish()
+            .pushReaction(PushReaction.BLOCK)));
     public static final BlockRightClickImpetus IMPETUS_RIGHTCLICK = blockItem("impetus/rightclick",
         new BlockRightClickImpetus(slateish()
+            .pushReaction(PushReaction.BLOCK)
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
     public static final BlockLookingImpetus IMPETUS_LOOK = blockItem("impetus/look",
         new BlockLookingImpetus(slateish()
+            .pushReaction(PushReaction.BLOCK)
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
     public static final BlockRedstoneImpetus IMPETUS_REDSTONE = blockItem("impetus/redstone",
         new BlockRedstoneImpetus(slateish()
+            .pushReaction(PushReaction.BLOCK)
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
 
     public static final BlockEmptyDirectrix EMPTY_DIRECTRIX = blockItem("directrix/empty",
-        new BlockEmptyDirectrix(slateish()));
+        new BlockEmptyDirectrix(slateish()
+            .pushReaction(PushReaction.BLOCK)));
     public static final BlockRedstoneDirectrix DIRECTRIX_REDSTONE = blockItem("directrix/redstone",
-        new BlockRedstoneDirectrix(slateish()));
+        new BlockRedstoneDirectrix(slateish()
+            .pushReaction(PushReaction.BLOCK)));
     public static final BlockBooleanDirectrix DIRECTRIX_BOOLEAN = blockItem("directrix/boolean",
-        new BlockBooleanDirectrix(slateish()));
+        new BlockBooleanDirectrix(slateish()
+            .pushReaction(PushReaction.BLOCK)));
 
     public static final BlockAkashicRecord AKASHIC_RECORD = blockItem("akashic_record",
         new BlockAkashicRecord(akashicWoodyHard().lightLevel(bs -> 15)));
