@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceProvider;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -12,10 +13,10 @@ import java.util.function.Consumer;
 public class HexShaders {
     private static ShaderInstance grayscale;
 
-    public static void init(ResourceManager resourceManager,
-        Consumer<Pair<ShaderInstance, Consumer<ShaderInstance>>> registrations) throws IOException {
+    public static void init(ResourceProvider resourceProvider,
+                            Consumer<Pair<ShaderInstance, Consumer<ShaderInstance>>> registrations) throws IOException {
         registrations.accept(Pair.of(
-            new ShaderInstance(resourceManager, "hexcasting__grayscale", DefaultVertexFormat.NEW_ENTITY),
+            new ShaderInstance(resourceProvider, "hexcasting__grayscale", DefaultVertexFormat.NEW_ENTITY),
             inst -> grayscale = inst)
         );
     }

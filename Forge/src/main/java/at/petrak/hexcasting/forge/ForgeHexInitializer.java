@@ -32,6 +32,8 @@ import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -92,22 +94,22 @@ public class ForgeHexInitializer {
     }
 
     private static void initRegistry() {
-        bind(Registry.SOUND_EVENT_REGISTRY, HexSounds::registerSounds);
-        bind(Registry.BLOCK_REGISTRY, HexBlocks::registerBlocks);
-        bind(Registry.ITEM_REGISTRY, HexBlocks::registerBlockItems);
-        bind(Registry.BLOCK_ENTITY_TYPE_REGISTRY, HexBlockEntities::registerTiles);
-        bind(Registry.ITEM_REGISTRY, HexItems::registerItems);
+        bind(Registries.SOUND_EVENT, HexSounds::registerSounds);
+        bind(Registries.BLOCK, HexBlocks::registerBlocks);
+        bind(Registries.ITEM, HexBlocks::registerBlockItems);
+        bind(Registries.BLOCK_ENTITY_TYPE, HexBlockEntities::registerTiles);
+        bind(Registries.ITEM, HexItems::registerItems);
 
-        bind(Registry.RECIPE_SERIALIZER_REGISTRY, HexRecipeStuffRegistry::registerSerializers);
-        bind(Registry.RECIPE_TYPE_REGISTRY, HexRecipeStuffRegistry::registerTypes);
+        bind(Registries.RECIPE_SERIALIZER, HexRecipeStuffRegistry::registerSerializers);
+        bind(Registries.RECIPE_TYPE, HexRecipeStuffRegistry::registerTypes);
 
-        bind(Registry.ENTITY_TYPE_REGISTRY, HexEntities::registerEntities);
-        bind(Registry.ATTRIBUTE_REGISTRY, HexAttributes::register);
-        bind(Registry.MOB_EFFECT_REGISTRY, HexMobEffects::register);
-        bind(Registry.POTION_REGISTRY, HexPotions::register);
+        bind(Registries.ENTITY_TYPE, HexEntities::registerEntities);
+        bind(Registries.ATTRIBUTE, HexAttributes::register);
+        bind(Registries.MOB_EFFECT, HexMobEffects::register);
+        bind(Registries.POTION, HexPotions::register);
         HexPotions.addRecipes();
 
-        bind(Registry.PARTICLE_TYPE_REGISTRY, HexParticles::registerParticles);
+        bind(Registries.PARTICLE_TYPE, HexParticles::registerParticles);
 
         bind(IXplatAbstractions.INSTANCE.getIotaTypeRegistry().key(), HexIotaTypes::registerTypes);
         bind(IXplatAbstractions.INSTANCE.getActionRegistry().key(), HexActions::register);
@@ -158,13 +160,13 @@ public class ForgeHexInitializer {
 
         // We have to do these at some point when the registries are still open
         modBus.addListener((RegisterEvent evt) -> {
-            if (evt.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
+            if (evt.getRegistryKey().equals(Registries.ITEM)) {
                 CraftingHelper.register(ForgeUnsealedIngredient.ID, ForgeUnsealedIngredient.Serializer.INSTANCE);
                 CraftingHelper.register(ForgeModConditionalIngredient.ID,
                     ForgeModConditionalIngredient.Serializer.INSTANCE);
                 HexStatistics.register();
                 HexLootFunctions.registerSerializers((lift, id) ->
-                    Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));
+                    Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, id, lift));
             }
         });
 

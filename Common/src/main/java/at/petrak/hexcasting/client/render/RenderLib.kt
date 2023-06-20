@@ -4,8 +4,7 @@ package at.petrak.hexcasting.client.render
 
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.utils.TAU
-import at.petrak.hexcasting.api.utils.Vector3fYP
+import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.client.ClientTickCounter
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
@@ -30,8 +29,6 @@ import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sin
-import at.petrak.hexcasting.api.utils.Vector3fZP
-import at.petrak.hexcasting.api.utils.rotationDegrees
 
 val NOISE: SimplexNoise = SimplexNoise(SingleThreadedRandomSource(9001L))
 
@@ -405,20 +402,6 @@ fun getCenteredPattern(pattern: HexPattern, width: Float, height: Float, minSize
     return scale to lines2
 }
 
-fun renderItemStackInGui(ms: PoseStack, stack: ItemStack, x: Int, y: Int) {
-    transferMsToGl(ms) { Minecraft.getInstance().itemRenderer.renderAndDecorateItem(stack, x, y) }
-}
-
-fun transferMsToGl(ms: PoseStack, toRun: Runnable) {
-    val mvs = RenderSystem.getModelViewStack()
-    mvs.pushPose()
-    mvs.mulPoseMatrix(ms.last().pose())
-    RenderSystem.applyModelViewMatrix()
-    toRun.run()
-    mvs.popPose()
-    RenderSystem.applyModelViewMatrix()
-}
-
 @JvmOverloads
 fun renderEntity(
     ms: PoseStack, entity: Entity, world: Level, x: Float, y: Float, rotation: Float,
@@ -428,13 +411,13 @@ fun renderEntity(
     val rotation = if (Screen.hasShiftDown()) 0.0f else rotation
 
     // TODO: Figure out why this is here and whether removing it will break things
-    entity.level = world
+//    entity.level = world
     ms.pushPose()
     ms.translate(x.toDouble(), y.toDouble(), 50.0)
     ms.scale(renderScale, renderScale, renderScale)
     ms.translate(0.0, offset.toDouble(), 0.0)
-    ms.mulPose(Vector3fZP.rotationDegrees(180.0f))
-    ms.mulPose(Vector3fYP.rotationDegrees(rotation))
+    ms.mulPose(Vector3fUtils.ZP.rotationDegrees(180.0f))
+    ms.mulPose(Vector3fUtils.YP.rotationDegrees(rotation))
     val erd = Minecraft.getInstance().entityRenderDispatcher
     val immediate = Minecraft.getInstance().renderBuffers().bufferSource()
     erd.setRenderShadow(false)
