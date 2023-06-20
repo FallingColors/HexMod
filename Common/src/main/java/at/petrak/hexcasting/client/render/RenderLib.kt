@@ -11,6 +11,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
+import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.MultiBufferSource
@@ -416,8 +417,8 @@ fun renderEntity(
     ms.translate(x.toDouble(), y.toDouble(), 50.0)
     ms.scale(renderScale, renderScale, renderScale)
     ms.translate(0.0, offset.toDouble(), 0.0)
-    ms.mulPose(Vector3fUtils.ZP.rotationDegrees(180.0f))
-    ms.mulPose(Vector3fUtils.YP.rotationDegrees(rotation))
+    ms.mulPose(Axis.ZP.rotationDegrees(180.0f))
+    ms.mulPose(Axis.YP.rotationDegrees(rotation))
     val erd = Minecraft.getInstance().entityRenderDispatcher
     val immediate = Minecraft.getInstance().renderBuffers().bufferSource()
     erd.setRenderShadow(false)

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import com.google.gson.JsonObject;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -55,7 +56,7 @@ public record BrainsweepRecipe(
 	}
 
 	@Override
-	public ItemStack assemble(Container pContainer) {
+	public ItemStack assemble(Container pContainer, RegistryAccess access) {
 		return ItemStack.EMPTY;
 	}
 
@@ -65,7 +66,7 @@ public record BrainsweepRecipe(
 	}
 
 	@Override
-	public ItemStack getResultItem() {
+	public ItemStack getResultItem(RegistryAccess registryAccess) {
 		return ItemStack.EMPTY.copy();
 	}
 

@@ -4,34 +4,6 @@ import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.*
 
-
-object Vector3fUtils {
-    val XP
-        get() = Vector3f(1f, 0f, 0f)
-    val XM
-        get() = Vector3f(-1f, 0f, 0f)
-    val YP
-        get() = Vector3f(0f, 1f, 0f)
-    val YM
-        get() = Vector3f(0f, -1f, 0f)
-    val ZP
-        get() = Vector3f(0f, 0f, 1f)
-    val ZM
-        get() = Vector3f(0f, 0f, -1f)
-}
-
-fun Vector3f.rotationDegrees(degrees: Float): Quaternionf {
-    val rads = degrees * 0.017453292f
-
-    val g = sin(rads / 2.0f)
-    val i = this.x * g
-    val j = this.y * g
-    val k = this.z * g
-    val r = cos(rads / 2.0f)
-
-    return Quaternionf(i, j, k, r)
-}
-
 object QuaternionfUtils {
     @JvmStatic
     val ONE: Quaternionf
@@ -39,7 +11,6 @@ object QuaternionfUtils {
 
     @JvmStatic
     fun fromXYZDegrees(vector3f: Vector3f): Quaternionf {
-
         return fromXYZ(Math.toRadians(vector3f.x().toDouble()).toFloat(), Math.toRadians(vector3f.y().toDouble()).toFloat(), Math.toRadians(vector3f.z().toDouble()).toFloat())
     }
 
