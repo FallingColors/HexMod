@@ -28,16 +28,25 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator gen) {
         HexAPI.LOGGER.info("Starting Fabric-specific datagen");
 
-        gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, HexFabricConditionsBuilder::new));
+        var pack = gen.createPack();
+
+        pack.addProvider((FabricDataGenerator.Pack.Factory<HexplatRecipes>) x -> new HexplatRecipes(x, INGREDIENTS, HexFabricConditionsBuilder::new));
 
         var xtags = IXplatAbstractions.INSTANCE.tags();
-        var blockTagProvider = new HexBlockTagProvider(gen, xtags);
-        gen.addProvider(blockTagProvider);
-        gen.addProvider(new HexItemTagProvider(gen, blockTagProvider, xtags));
+        var btagProviderWrapper = new BlockTagProviderWrapper(); // CURSED
+        pack.addProvider((output, lookup) -> {
+            btagProviderWrapper.provider = new HexBlockTagProvider(output, lookup, xtags);
+            return btagProviderWrapper.provider;
+        });
+        pack.addProvider((output, lookup) -> new HexItemTagProvider(output, lookup, btagProviderWrapper.provider, xtags));
 
-        gen.addProvider(new HexActionTagProvider(gen));
+        pack.addProvider(HexActionTagProvider::new);
 
         gen.addProvider(new HexLootTables(gen));
+    }
+
+    private static class BlockTagProviderWrapper {
+        HexBlockTagProvider provider;
     }
 
     private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {

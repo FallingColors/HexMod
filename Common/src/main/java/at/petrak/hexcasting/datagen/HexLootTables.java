@@ -1,16 +1,17 @@
 package at.petrak.hexcasting.datagen;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.paucal.api.datagen.PaucalLootTableProvider;
+import at.petrak.paucal.api.datagen.PaucalLootTableSubProvider;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -27,16 +28,19 @@ import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.predicates.*;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.Map;
 
-public class HexLootTables extends PaucalLootTableProvider {
-    public HexLootTables(DataGenerator pGenerator) {
-        super(pGenerator);
+public class HexLootTables extends PaucalLootTableSubProvider {
+    public HexLootTables() {
+        super(HexAPI.MOD_ID);
     }
 
     @Override
