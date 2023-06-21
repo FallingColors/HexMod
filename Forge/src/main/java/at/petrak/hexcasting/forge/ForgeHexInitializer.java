@@ -2,6 +2,7 @@ package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting;
@@ -21,6 +22,7 @@ import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
 import at.petrak.hexcasting.forge.datagen.ForgeHexDataGenerators;
+import at.petrak.hexcasting.forge.event.NewRegistryEventHandler;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
 import at.petrak.hexcasting.forge.lib.ForgeHexArgumentTypeRegistry;
@@ -31,6 +33,9 @@ import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.mojang.serialization.Lifecycle;
+import net.minecraft.core.DefaultedMappedRegistry;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -73,6 +78,8 @@ import thedarkcolour.kotlinforforge.KotlinModLoadingContext;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 @Mod(HexAPI.MOD_ID)
 public class ForgeHexInitializer {
     public ForgeHexInitializer() {
@@ -114,6 +121,43 @@ public class ForgeHexInitializer {
         HexPotions.addRecipes();
 
         bind(Registries.PARTICLE_TYPE, HexParticles::registerParticles);
+
+        getModEventBus().addListener(NewRegistryEventHandler::newRegistry);
+
+        bind(ResourceKey.createRegistryKey(BuiltInRegistries.ROOT_REGISTRY_NAME), r -> {
+            r.accept(
+                new MappedRegistry<>(
+                    HexRegistries.ACTION,
+                    Lifecycle.stable()),
+                HexRegistries.ACTION.location()
+            );
+            r.accept(
+                new MappedRegistry<>(
+                    HexRegistries.SPECIAL_HANDLER,
+                    Lifecycle.stable()),
+                HexRegistries.SPECIAL_HANDLER.location()
+            );
+            r.accept(
+                new DefaultedMappedRegistry<>(
+                    HexAPI.MOD_ID + ":null",
+                    HexRegistries.IOTA_TYPE,
+                    Lifecycle.stable(), false),
+                HexRegistries.IOTA_TYPE.location()
+            );
+            r.accept(
+                new MappedRegistry<>(
+                    HexRegistries.ARITHMETIC,
+                    Lifecycle.stable()),
+                HexRegistries.ARITHMETIC.location()
+            );
+            r.accept(
+                new DefaultedMappedRegistry<>(
+                    HexAPI.MOD_ID + ":nothing",
+                    HexRegistries.EVAL_SOUND,
+                    Lifecycle.stable(), false),
+                HexRegistries.EVAL_SOUND.location()
+            );
+        });
 
         bind(IXplatAbstractions.INSTANCE.getIotaTypeRegistry().key(), HexIotaTypes::registerTypes);
         bind(IXplatAbstractions.INSTANCE.getActionRegistry().key(), HexActions::register);

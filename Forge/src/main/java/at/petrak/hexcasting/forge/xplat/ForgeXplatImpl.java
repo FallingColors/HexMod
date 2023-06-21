@@ -22,6 +22,7 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.msgs.IMessage;
@@ -38,10 +39,9 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.google.common.base.Suppliers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
+import net.minecraft.core.*;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -131,7 +131,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public void setBrainsweepAddlData(Mob mob) {
         mob.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
 
-        if (mob.level instanceof ServerLevel) {
+        if (mob.level() instanceof ServerLevel) {
             ForgePacketHandler.getNetwork()
                 .send(PacketDistributor.TRACKING_ENTITY.with(() -> mob), MsgBrainsweepAck.of(mob));
         }
@@ -244,7 +244,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             var timeLeft = tag.getInt(TAG_FLIGHT_TIME);
             var origin = HexUtils.vecFromNBT(tag.getLongArray(TAG_FLIGHT_ORIGIN));
             var radius = tag.getDouble(TAG_FLIGHT_RADIUS);
-            var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
+            var dimension = ResourceKey.create(Registries.DIMENSION,
                 new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
             return new FlightAbility(timeLeft, dimension, origin, radius);
         }
@@ -276,7 +276,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
         var extendsRange = tag.getBoolean(TAG_SENTINEL_GREATER);
         var position = HexUtils.vecFromNBT(tag.getLongArray(TAG_SENTINEL_POSITION));
-        var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
+        var dimension = ResourceKey.create(Registries.DIMENSION,
             new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
 
         return new Sentinel(extendsRange, position, dimension);
@@ -287,7 +287,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         // This is always from a staff because we don't need to load the harness when casting from item
         var ctx = new StaffCastEnv(player, hand);
         return new CastingVM(CastingImage.loadFromNbt(player.getPersistentData().getCompound(TAG_HARNESS),
-            player.getLevel()), ctx);
+            player.serverLevel()), ctx);
     }
 
     @Override
@@ -476,8 +476,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
-        ForgeAccessorRegistry.hex$registerSimple(
-            ResourceKey.createRegistryKey(modLoc("action")), null)
+        BuiltInRegistries.REGISTRY.get(HexRegistries.ACTION)
     );
     private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
         Suppliers.memoize(() ->

@@ -21,6 +21,7 @@ import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop;
@@ -417,34 +418,34 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new MappedRegistry<ActionRegistryEntry>(
-                ResourceKey.createRegistryKey(modLoc("action")),
+        FabricRegistryBuilder.from(new MappedRegistry<>(
+                HexRegistries.ACTION,
                 Lifecycle.stable()))
             .buildAndRegister()
     );
     private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
         Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler.Factory<?>>(
-                    ResourceKey.createRegistryKey(modLoc("special_handler")),
+            FabricRegistryBuilder.from(new MappedRegistry<>(
+                    HexRegistries.SPECIAL_HANDLER,
                     Lifecycle.stable()))
                 .buildAndRegister()
         );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new DefaultedMappedRegistry<IotaType<?>>(
-                HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
+        FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+                HexAPI.MOD_ID + ":null", HexRegistries.IOTA_TYPE,
                 Lifecycle.stable(), false))
             .buildAndRegister()
     );
 
     private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new DefaultedMappedRegistry<Arithmetic>(
-                            HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("arithmetic")),
-                            Lifecycle.stable(), false))
-                    .buildAndRegister()
+            FabricRegistryBuilder.from(new MappedRegistry<>(
+                    HexRegistries.ARITHMETIC,
+                    Lifecycle.stable()))
+                .buildAndRegister()
     );
     private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new DefaultedMappedRegistry<EvalSound>(
-                HexAPI.MOD_ID + ":nothing", ResourceKey.createRegistryKey(modLoc("eval_sound")),
+        FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+                HexAPI.MOD_ID + ":nothing", HexRegistries.EVAL_SOUND,
                 Lifecycle.stable(), false))
             .buildAndRegister()
     );

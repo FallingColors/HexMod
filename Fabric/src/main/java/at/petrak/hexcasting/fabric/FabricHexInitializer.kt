@@ -140,8 +140,6 @@ object FabricHexInitializer : ModInitializer {
 
         HexParticles.registerParticles(bind(BuiltInRegistries.PARTICLE_TYPE))
 
-        HexConfiguredFeatures.registerConfiguredFeatures(bind(Registries.CONFIGURED_FEATURE))
-
         HexLootFunctions.registerSerializers(bind(BuiltInRegistries.LOOT_FUNCTION_TYPE))
 
         HexIotaTypes.registerTypes(bind(IXplatAbstractions.INSTANCE.iotaTypeRegistry))
