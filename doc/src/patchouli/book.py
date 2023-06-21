@@ -153,17 +153,19 @@ class Book:
         self.__post_init_pre_categories__(*args, **kwargs)
 
         # categories
-        self.categories: dict[ResourceLocation, patchouli.Category] = {}
-        for path in self.categories_dir.rglob("*.json"):
-            category = patchouli.Category.load(path, self)
-            self.categories[category.id] = category
+        self.categories = patchouli.Category.load_all(self)
 
-        # NOTE: category sorting requires book.categories to already contain all of the
-        # categories, because category sorting depends on its parent, and categories get
-        # their parent from the book. it's mildly scuffed, but it works
-        self.categories = sorted_dict(self.categories)
+        # entries
+        # must be after categories, since Entry uses book.categories to get the parent
+        for path in self.entries_dir.rglob("*.json"):
+            # i used the entry to insert the entry
+            # pretty sure thanos said that
+            entry = patchouli.Entry.load(path, self)
+            entry.category.entries.append(entry)
 
-        # TODO: entries
+        # we inserted a bunch of entries in no particular order, so sort each category
+        for category in self.categories.values():
+            category.entries.sort()
 
     def __post_init_pre_categories__(self) -> None:
         """Subclasses may override this method to run code just before categories are
@@ -173,16 +175,20 @@ class Book:
         """
 
     @property
+    def _dir_with_lang(self) -> Path:
+        return self.props.book_dir / self.props.i18n.lang
+
+    @property
     def categories_dir(self) -> Path:
-        return self.props.book_dir / self.props.i18n.lang / "categories"
+        return self._dir_with_lang / "categories"
 
     @property
     def entries_dir(self) -> Path:
-        return self.props.book_dir / self.props.i18n.lang / "entries"
+        return self._dir_with_lang / "entries"
 
     @property
     def templates_dir(self) -> Path:
-        return self.props.book_dir / self.props.i18n.lang / "templates"
+        return self._dir_with_lang / "templates"
 
     def format(
         self,

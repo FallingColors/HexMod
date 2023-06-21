@@ -7,7 +7,7 @@ from typing import Self
 import patchouli
 from common.deserialize import from_dict_checked, load_json_data, rename
 from common.formatting import FormatTree
-from common.types import LocalizedStr, Sortable
+from common.types import LocalizedStr, Sortable, sorted_dict
 from minecraft.resource import ItemStack, ResourceLocation
 
 
@@ -28,23 +28,37 @@ class Category(Sortable, patchouli.BookHelpers):
     icon: ItemStack
 
     # optional (category.json)
-    parent_id: ResourceLocation | None = field(default=None, metadata=rename("parent"))
+    _parent_id: ResourceLocation | None = field(default=None, metadata=rename("parent"))
+    parent: Category | None = field(default=None, init=False)
     flag: str | None = None
     sortnum: int = 0
     secret: bool = False
 
+    def __post_init__(self):
+        self.entries: list[patchouli.Entry] = []
+
     @classmethod
-    def load(cls, path: Path, book: patchouli.Book) -> Self:
+    def _load(cls, path: Path, book: patchouli.Book) -> Self:
         # load the raw data from json, and add our extra fields
         data = load_json_data(cls, path, {"path": path, "book": book})
         return from_dict_checked(cls, data, book.config(), path)
 
-    def __post_init__(self):
-        # load entries
-        entry_dir = self.book.entries_dir / self.id.path
-        self.entries: list[patchouli.Entry] = sorted(
-            patchouli.Entry.load(path, self) for path in entry_dir.glob("*.json")
-        )
+    @classmethod
+    def load_all(cls, book: patchouli.Book):
+        categories: dict[ResourceLocation, Self] = {}
+
+        # load
+        for path in book.categories_dir.rglob("*.json"):
+            category = cls._load(path, book)
+            categories[category.id] = category
+
+        # late-init parent
+        for category in categories.values():
+            if category._parent_id is not None:
+                category.parent = categories[category._parent_id]
+
+        # return sorted by sortnum, which requires parent to be initialized
+        return sorted_dict(categories)
 
     @property
     def id(self) -> ResourceLocation:
@@ -54,16 +68,9 @@ class Category(Sortable, patchouli.BookHelpers):
             self.path,
         )
 
-    def parent(self) -> Category | None:
-        """Get this category's parent from the book. Must not be called until the book
-        is fully initialized."""
-        if self.parent_id is None:
-            return None
-        return self.book.categories[self.parent_id]
-
     @property
     def _cmp_key(self) -> tuple[int, ...]:
         # implement Sortable
-        if parent := self.parent():
+        if parent := self.parent:
             return parent._cmp_key + (self.sortnum,)
         return (self.sortnum,)

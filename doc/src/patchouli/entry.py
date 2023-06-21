@@ -19,11 +19,11 @@ class Entry(Sortable, patchouli.BookHelpers):
 
     # non-json fields
     path: Path
-    category: patchouli.Category
+    category: patchouli.Category = field(init=False)
 
     # required (entry.json)
     name: LocalizedStr
-    category_id: ResourceLocation = field(metadata=rename("category"))
+    _category_id: ResourceLocation = field(metadata=rename("category"))
     icon: ItemStack
     pages: list[patchouli.Page]
 
@@ -39,19 +39,14 @@ class Entry(Sortable, patchouli.BookHelpers):
     entry_color: Color | None = None  # this is undocumented lmao
 
     @classmethod
-    def load(cls, path: Path, category: patchouli.Category) -> Self:
-        # load the raw data from json, and add our extra fields
-        data = load_json_data(cls, path, {"path": path, "category": category})
-        config = category.book.config()
-        return from_dict_checked(cls, data, config, path)
+    def load(cls, path: Path, book: patchouli.Book) -> Self:
+        # load and convert the raw data from json
+        data = load_json_data(cls, path, {"path": path})
+        entry = from_dict_checked(cls, data, book.config(), path)
 
-    def __post_init__(self):
-        # check the category id, just for fun
-        # note the _ and . on the left and right respectively
-        if self.category_id != self.category.id:
-            raise ValueError(
-                f"Entry {self.name} has category {self.category_id} but was initialized by {self.category.id}"
-            )
+        # now that it's been type hooked, use the id to get the category
+        entry.category = book.categories[entry._category_id]
+        return entry
 
     @property
     def book(self) -> patchouli.Book:
