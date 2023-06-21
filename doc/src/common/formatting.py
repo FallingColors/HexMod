@@ -42,40 +42,56 @@ class Style(NamedTuple):
     value: str | bool | dict[str, str] | None
 
 
-def parse_style(sty: str) -> tuple[str, Style | None]:
-    # TODO: match, maybe
-    if sty == "br":
-        return "\n", None
-    if sty == "br2":
-        return "", Style("para", {})
-    if sty == "li":
-        return "", Style("para", {"clazz": "fake-li"})
-    if sty[:2] == "k:":
-        return _KEYS[sty[2:]], None
-    if sty[:2] == "l:":
-        return "", Style("link", sty[2:])
-    if sty == "/l":
-        return "", Style("link", None)
-    if sty == "playername":
-        return "[Playername]", None
-    if sty[:2] == "t:":
-        return "", Style("tooltip", sty[2:])
-    if sty == "/t":
-        return "", Style("tooltip", None)
-    if sty[:2] == "c:":
-        return "", Style("cmd_click", sty[2:])
-    if sty == "/c":
-        return "", Style("cmd_click", None)
-    if sty == "r" or not sty:
-        return "", Style("base", None)
-    if sty in _TYPES:
-        return "", Style(_TYPES[sty], True)
-    if sty in _COLORS:
-        return "", Style("color", _COLORS[sty])
-    if sty.startswith("#") and len(sty) in [4, 7]:
-        return "", Style("color", sty[1:])
-    # TODO more style parse
-    raise ValueError("Unknown style: " + sty)
+# TODO: make Style a dataclass, subclass for each type
+def parse_style(style_text: str) -> Style | str:
+    if style_text in _TYPES:
+        return Style(_TYPES[style_text], True)
+    if style_text in _COLORS:
+        return Style("color", _COLORS[style_text])
+    if style_text.startswith("#") and len(style_text) in [4, 7]:
+        return Style("color", style_text[1:])
+
+    # try matching the entire string
+    match style_text:
+        # replacements
+        case "br":
+            return "\n"
+        case "playername":
+            return "[Playername]"
+        # styles
+        case "br2":
+            return Style("para", {})
+        case "li":
+            return Style("para", {"clazz": "fake-li"})
+        case "/l":
+            return Style("link", None)
+        case "/t":
+            return Style("tooltip", None)
+        case "/c":
+            return Style("cmd_click", None)
+        case "reset" | "":
+            # TODO: this was "r" before, but patchouli's code has "reset"
+            # the tests pass either way so I don't think we're using it
+            return Style("base", None)
+        case _:
+            pass
+
+    # command prefixes
+    command, rest = style_text[:2], style_text[2:]
+    match command:
+        # replacement
+        case "k:":
+            return _KEYS[rest]
+        # styles
+        case "l:":
+            return Style("link", rest)
+        case "t:":
+            return Style("tooltip", rest)
+        case "c:":
+            return Style("cmd_click", rest)
+        case _:
+            # TODO more style parse
+            raise ValueError("Unknown style: " + style_text)
 
 
 _FORMAT_RE = re.compile(r"\$\(([^)]*)\)")
@@ -92,10 +108,8 @@ class FormatTree:
 
     @classmethod
     def format(cls, macros: dict[str, str], string: LocalizedStr) -> Self:
-        # FIXME: ew.
-
         # resolve macros
-        # TODO: use ahocorasick?
+        # TODO: use ahocorasick? this feels inefficient
         old_string = None
         while old_string != string:
             old_string = string
@@ -105,20 +119,27 @@ class FormatTree:
         # lex out parsed styles
         text_nodes: list[str] = []
         styles: list[Style] = []
+        text_since_prev_style: list[str] = []
         last_end = 0
-        extra_text = ""
-        for mobj in re.finditer(_FORMAT_RE, string):
-            bonus_text, sty = parse_style(mobj.group(1))
-            text = string[last_end : mobj.start()] + bonus_text
-            if sty:
-                styles.append(sty)
-                text_nodes.append(extra_text + text)
-                extra_text = ""
-            else:
-                extra_text += text
-            last_end = mobj.end()
-        text_nodes.append(extra_text + string[last_end:])
-        first_node, *text_nodes = text_nodes
+
+        for match in re.finditer(_FORMAT_RE, string):
+            # get the text between the previous match and here
+            leading_text = string[last_end : match.start()]
+            text_since_prev_style.append(leading_text)
+            last_end = match.end()
+
+            match parse_style(match[1]):
+                case str(replacement):
+                    # str means "use this instead of the original value"
+                    text_since_prev_style.append(replacement)
+                case Style() as style:
+                    # add this style and collect the text since the previous one
+                    styles.append(style)
+                    text_nodes.append("".join(text_since_prev_style))
+                    text_since_prev_style.clear()
+
+        text_nodes.append("".join(text_since_prev_style) + string[last_end:])
+        first_node = text_nodes.pop(0)
 
         # parse
         style_stack = [
