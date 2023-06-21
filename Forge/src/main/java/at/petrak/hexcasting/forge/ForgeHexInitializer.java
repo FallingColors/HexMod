@@ -44,6 +44,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
@@ -95,6 +96,9 @@ public class ForgeHexInitializer {
 
     private static void initRegistry() {
         bind(Registries.SOUND_EVENT, HexSounds::registerSounds);
+
+        HexBlockSetTypes.registerBlocks(BlockSetType::register);
+
         bind(Registries.BLOCK, HexBlocks::registerBlocks);
         bind(Registries.ITEM, HexBlocks::registerBlockItems);
         bind(Registries.BLOCK_ENTITY_TYPE, HexBlockEntities::registerTiles);

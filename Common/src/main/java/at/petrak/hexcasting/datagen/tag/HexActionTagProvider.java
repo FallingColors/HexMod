@@ -14,7 +14,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexActionTagProvider extends TagsProvider<ActionRegistryEntry> {
     public HexActionTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
-        super(output, IXplatAbstractions.INSTANCE.getActionRegistry(), provider);
+        super(output, IXplatAbstractions.INSTANCE.getActionRegistry().key(), provider);
     }
 
     @Override

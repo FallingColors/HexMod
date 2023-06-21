@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.blocks.decoration;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
+import at.petrak.hexcasting.common.lib.HexBlockSetTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -9,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockHexTrapdoor extends TrapDoorBlock {
     public BlockHexTrapdoor(Properties $$0) {
-        super($$0);
+        super($$0, HexBlockSetTypes.EDIFIED_WOOD);
     }
 
     @SoftImplement("forge")

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.blocks.decoration;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
+import at.petrak.hexcasting.common.lib.HexBlockSetTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -9,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockHexPressurePlate extends PressurePlateBlock {
     public BlockHexPressurePlate(Sensitivity $$0, Properties $$1) {
-        super($$0, $$1);
+        super($$0, $$1, HexBlockSetTypes.EDIFIED_WOOD);
     }
 
 

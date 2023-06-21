@@ -48,6 +48,7 @@ import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
@@ -119,26 +120,26 @@ object FabricHexInitializer : ModInitializer {
     private fun initRegistries() {
         fabricOnlyRegistration()
 
-        HexSounds.registerSounds(bind(Registry.SOUND_EVENT))
-        HexBlocks.registerBlocks(bind(Registry.BLOCK))
-        HexBlocks.registerBlockItems(bind(Registry.ITEM))
-        HexBlockEntities.registerTiles(bind(Registry.BLOCK_ENTITY_TYPE))
-        HexItems.registerItems(bind(Registry.ITEM))
+        HexSounds.registerSounds(bind(BuiltInRegistries.SOUND_EVENT))
+        HexBlocks.registerBlocks(bind(BuiltInRegistries.BLOCK))
+        HexBlocks.registerBlockItems(bind(BuiltInRegistries.ITEM))
+        HexBlockEntities.registerTiles(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE))
+        HexItems.registerItems(bind(BuiltInRegistries.ITEM))
 //        Registry.register(IngredientDeserializer.REGISTRY, FabricUnsealedIngredient.ID, FabricUnsealedIngredient.Deserializer.INSTANCE)
         Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
 
-        HexEntities.registerEntities(bind(Registry.ENTITY_TYPE))
-        HexAttributes.register(bind(Registry.ATTRIBUTE))
-        HexMobEffects.register(bind(Registry.MOB_EFFECT))
-        HexPotions.register(bind(Registry.POTION))
+        HexEntities.registerEntities(bind(BuiltInRegistries.ENTITY_TYPE))
+        HexAttributes.register(bind(BuiltInRegistries.ATTRIBUTE))
+        HexMobEffects.register(bind(BuiltInRegistries.MOB_EFFECT))
+        HexPotions.register(bind(BuiltInRegistries.POTION))
         HexPotions.addRecipes()
 
-        HexRecipeStuffRegistry.registerSerializers(bind(Registry.RECIPE_SERIALIZER))
-        HexRecipeStuffRegistry.registerTypes(bind(Registry.RECIPE_TYPE))
+        HexRecipeStuffRegistry.registerSerializers(bind(BuiltInRegistries.RECIPE_SERIALIZER))
+        HexRecipeStuffRegistry.registerTypes(bind(BuiltInRegistries.RECIPE_TYPE))
 
-        HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
+        HexParticles.registerParticles(bind(BuiltInRegistries.PARTICLE_TYPE))
 
-        HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
+        HexLootFunctions.registerSerializers(bind(BuiltInRegistries.LOOT_FUNCTION_TYPE))
 
         HexIotaTypes.registerTypes(bind(IXplatAbstractions.INSTANCE.iotaTypeRegistry))
         HexActions.register(bind(IXplatAbstractions.INSTANCE.actionRegistry))
