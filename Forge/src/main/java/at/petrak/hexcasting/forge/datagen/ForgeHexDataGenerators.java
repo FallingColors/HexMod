@@ -45,9 +45,10 @@ public class ForgeHexDataGenerators {
         HexAPI.LOGGER.info("Starting cross-platform datagen");
 
         DataGenerator gen = ev.getGenerator();
+        var output = gen.getPackOutput();
         ExistingFileHelper efh = ev.getExistingFileHelper();
-        gen.addProvider(ev.includeClient(), new HexItemModels(gen, efh));
-        gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(gen, efh));
+        gen.addProvider(ev.includeClient(), new HexItemModels(output, efh));
+        gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(output, efh));
         gen.addProvider(ev.includeServer(), new HexAdvancements());
     }
 

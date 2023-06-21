@@ -16,6 +16,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -28,8 +29,8 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 
 public class HexItemModels extends PaucalItemModelProvider {
-    public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, HexAPI.MOD_ID, existingFileHelper);
+    public HexItemModels(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, HexAPI.MOD_ID, existingFileHelper);
     }
 
     private static final String[] PHIAL_SIZES = {"small", "medium", "large", "larger", "largest"};

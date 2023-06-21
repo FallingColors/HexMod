@@ -49,6 +49,7 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
@@ -138,6 +139,8 @@ object FabricHexInitializer : ModInitializer {
         HexRecipeStuffRegistry.registerTypes(bind(BuiltInRegistries.RECIPE_TYPE))
 
         HexParticles.registerParticles(bind(BuiltInRegistries.PARTICLE_TYPE))
+
+        HexConfiguredFeatures.registerConfiguredFeatures(bind(Registries.CONFIGURED_FEATURE))
 
         HexLootFunctions.registerSerializers(bind(BuiltInRegistries.LOOT_FUNCTION_TYPE))
 
