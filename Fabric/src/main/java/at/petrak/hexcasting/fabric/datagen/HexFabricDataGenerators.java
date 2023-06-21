@@ -13,14 +13,17 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.EnumMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
@@ -42,7 +45,9 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
 
         pack.addProvider(HexActionTagProvider::new);
 
-        gen.addProvider(new HexLootTables(gen));
+        pack.addProvider((FabricDataGenerator.Pack.Factory<LootTableProvider>) (output) -> new LootTableProvider(
+                output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS))
+        ));
     }
 
     private static class BlockTagProviderWrapper {

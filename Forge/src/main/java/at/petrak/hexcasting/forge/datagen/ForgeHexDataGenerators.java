@@ -15,12 +15,15 @@ import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.advancements.AdvancementProvider;
+import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -28,6 +31,8 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.EnumMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class ForgeHexDataGenerators {
@@ -46,10 +51,13 @@ public class ForgeHexDataGenerators {
 
         DataGenerator gen = ev.getGenerator();
         var output = gen.getPackOutput();
+        var lookup = ev.getLookupProvider();
         ExistingFileHelper efh = ev.getExistingFileHelper();
         gen.addProvider(ev.includeClient(), new HexItemModels(output, efh));
         gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(output, efh));
-        gen.addProvider(ev.includeServer(), new HexAdvancements());
+        gen.addProvider(ev.includeServer(), new AdvancementProvider(
+            output, lookup, List.of(new HexAdvancements())
+        ));
     }
 
     private static void configureForgeDatagen(GatherDataEvent ev) {
@@ -59,7 +67,9 @@ public class ForgeHexDataGenerators {
         var pack = gen.getPackOutput();
         var lookup = ev.getLookupProvider();
         ExistingFileHelper efh = ev.getExistingFileHelper();
-        gen.addProvider(ev.includeServer(), new HexLootTables());
+        gen.addProvider(ev.includeServer(), new LootTableProvider(
+            pack, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS))
+        ));
         gen.addProvider(ev.includeServer(), new HexplatRecipes(pack, INGREDIENTS, ForgeHexConditionsBuilder::new));
 
         var xtags = IXplatAbstractions.INSTANCE.tags();
