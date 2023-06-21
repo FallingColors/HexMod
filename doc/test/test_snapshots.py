@@ -1,6 +1,5 @@
 import subprocess
 import sys
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterator
 
@@ -17,58 +16,53 @@ def prettify(data: SerializedData) -> str:
     return bs(data, features="html.parser").prettify()
 
 
-class NoDiffSnapshotExtension(AmberSnapshotExtension):
+class NoDiffSnapshotEx(AmberSnapshotExtension):
     def diff_snapshots(
         self, serialized_data: SerializedData, snapshot_data: SerializedData
     ) -> SerializedData:
-        return super().diff_snapshots(
-            prettify(serialized_data), prettify(snapshot_data)
-        )
+        return "no diff"
 
     def diff_lines(
         self, serialized_data: SerializedData, snapshot_data: SerializedData
     ) -> Iterator[str]:
-        return super().diff_lines(prettify(serialized_data), prettify(snapshot_data))
+        yield from ["no diff"]
 
 
-@dataclass
-class DocgenArgs:
-    out_path: Path
-    snapshot: SnapshotAssertion
-    argv: list[str]
+_RUN = [
+    sys.executable,
+    "src/main.py",
+]
+_ARGV = ["properties.toml", "-o"]
 
-    def assert_out_path(self):
-        actual = self.out_path.read_text("utf-8")
-        assert actual == self.snapshot
+longrun = pytest.mark.skipif("not config.getoption('longrun')")
 
 
-@pytest.fixture
-def docgen(tmp_path: Path, snapshot: SnapshotAssertion) -> DocgenArgs:
-    # arguments we want to pass to the docgen
-    out_path = tmp_path / "out.html"
-    return DocgenArgs(
-        out_path,
-        snapshot.use_extension(NoDiffSnapshotExtension),
-        ["properties.toml", "-o", out_path.as_posix()],
-    )
-
-
-def test_file(docgen: DocgenArgs):
+def test_file(tmp_path: Path, snapshot: SnapshotAssertion):
     # generate output docs html file and assert it hasn't changed vs. the snapshot
-    main(Args().parse_args(docgen.argv))
-    docgen.assert_out_path()
+    out_path = tmp_path / "out.html"
+    main(Args().parse_args(_ARGV + [out_path.as_posix()]))
+    assert out_path.read_text("utf-8") == snapshot.use_extension(NoDiffSnapshotEx)
 
 
-def test_cmd(docgen: DocgenArgs):
+@longrun
+def test_file_pretty(tmp_path: Path, snapshot: SnapshotAssertion):
+    # generate output docs html file and assert it hasn't changed vs. the snapshot
+    out_path = tmp_path / "out.html"
+    main(Args().parse_args(_ARGV + [out_path.as_posix()]))
+    assert prettify(out_path.read_text("utf-8")) == snapshot
+
+
+def test_cmd(tmp_path: Path, snapshot: SnapshotAssertion):
     # as above, but running the command we actually want to be using
+    out_path = tmp_path / "out.html"
     subprocess.run(
-        [sys.executable, "src/main.py"] + docgen.argv,
+        _RUN + _ARGV + [out_path.as_posix()],
         stdout=sys.stdout,
         stderr=sys.stderr,
     )
-    docgen.assert_out_path()
+    assert out_path.read_text("utf-8") == snapshot.use_extension(NoDiffSnapshotEx)
 
 
-def test_stdout(docgen: DocgenArgs, capsys: pytest.CaptureFixture[str]):
-    main(Args().parse_args(docgen.argv[:-2]))
-    assert capsys.readouterr() == docgen.snapshot
+def test_stdout(capsys: pytest.CaptureFixture[str], snapshot: SnapshotAssertion):
+    main(Args().parse_args(["properties.toml"]))
+    assert capsys.readouterr() == snapshot.use_extension(NoDiffSnapshotEx)
