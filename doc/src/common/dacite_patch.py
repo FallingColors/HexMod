@@ -11,7 +11,10 @@ from dacite import Config, DaciteError, StrictUnionMatchError, UnionMatchError
 from dacite.core import _build_value
 from dacite.types import extract_generic, is_instance, is_optional, transform_value
 
-from common.tagged_union import UnionSkip
+
+class UnionSkip(Exception):
+    """Tagged union classes may raise this during initialization to say the data doesn't
+    match their type."""
 
 
 # fixes https://github.com/konradhalas/dacite/issues/234

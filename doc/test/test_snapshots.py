@@ -1,7 +1,8 @@
 import subprocess
 import sys
+from dataclasses import Field, fields
 from pathlib import Path
-from typing import Iterator
+from typing import Any, Iterator
 
 import pytest
 from bs4 import BeautifulSoup as bs
@@ -9,7 +10,11 @@ from syrupy.assertion import SnapshotAssertion
 from syrupy.extensions.amber import AmberSnapshotExtension
 from syrupy.types import SerializedData
 
+from common.formatting import FormatTree
+from common.properties import Properties
+from common.types import LocalizedStr
 from main import Args, main
+from patchouli.hex_book import HexBook
 
 
 def prettify(data: SerializedData) -> str:
@@ -66,3 +71,28 @@ def test_cmd(tmp_path: Path, snapshot: SnapshotAssertion):
 def test_stdout(capsys: pytest.CaptureFixture[str], snapshot: SnapshotAssertion):
     main(Args().parse_args(["properties.toml"]))
     assert capsys.readouterr() == snapshot.use_extension(NoDiffSnapshotEx)
+
+
+def test_book_text(snapshot: SnapshotAssertion):
+    def test_field(data_class: Any, field: Field[Any]):
+        value = getattr(data_class, field.name, None)
+        if isinstance(value, (LocalizedStr, FormatTree)):
+            assert value == snapshot
+
+    props = Properties.load(Path("properties.toml"))
+    book = HexBook.load(props)
+
+    for field in fields(book):
+        test_field(book, field)
+
+    for category in book.categories.values():
+        for field in fields(category):
+            test_field(category, field)
+
+        for entry in category.entries:
+            for field in fields(entry):
+                test_field(entry, field)
+
+            for page in entry.pages:
+                for field in fields(page):
+                    test_field(page, field)

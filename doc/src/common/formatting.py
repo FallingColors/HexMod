@@ -78,7 +78,7 @@ def parse_style(sty: str) -> tuple[str, Style | None]:
     raise ValueError("Unknown style: " + sty)
 
 
-_format_re = re.compile(r"\$\(([^)]*)\)")
+_FORMAT_RE = re.compile(r"\$\(([^)]*)\)")
 
 
 @dataclass
@@ -95,7 +95,7 @@ class FormatTree:
         # FIXME: ew.
 
         # resolve macros
-        # TODO: use ahocorasick
+        # TODO: use ahocorasick?
         old_string = None
         while old_string != string:
             old_string = string
@@ -107,7 +107,7 @@ class FormatTree:
         styles: list[Style] = []
         last_end = 0
         extra_text = ""
-        for mobj in re.finditer(_format_re, string):
+        for mobj in re.finditer(_FORMAT_RE, string):
             bonus_text, sty = parse_style(mobj.group(1))
             text = string[last_end : mobj.start()] + bonus_text
             if sty:

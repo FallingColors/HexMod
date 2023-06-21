@@ -7,12 +7,8 @@ from typing import Any, ClassVar, Generator, Type, TypeVar
 
 from dacite.types import extract_generic
 
+from common.dacite_patch import UnionSkip
 from common.deserialize import handle_metadata_inplace
-
-
-class UnionSkip(Exception):
-    """Tagged union classes may raise this during initialization to say the data doesn't
-    match their type."""
 
 
 class InternallyTaggedUnion(ABC):
