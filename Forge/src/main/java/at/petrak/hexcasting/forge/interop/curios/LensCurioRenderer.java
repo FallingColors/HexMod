@@ -2,7 +2,7 @@ package at.petrak.hexcasting.forge.interop.curios;
 
 import at.petrak.hexcasting.api.HexAPI;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
@@ -39,16 +40,17 @@ public class LensCurioRenderer implements ICurioRenderer {
         // Translate and rotate with our head
         matrixStack.pushPose();
         matrixStack.translate(model.head.x / 16.0, model.head.y / 16.0, model.head.z / 16.0);
-        matrixStack.mulPose(Vector3f.YP.rotation(model.head.yRot));
-        matrixStack.mulPose(Vector3f.XP.rotation(model.head.xRot));
+        matrixStack.mulPose(Axis.YP.rotation(model.head.yRot));
+        matrixStack.mulPose(Axis.XP.rotation(model.head.xRot));
 
         // Translate and scale to our head
         matrixStack.translate(0, -0.25, 0);
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0f));
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0f));
         matrixStack.scale(0.625f, 0.625f, 0.625f);
 
         // Render
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.HEAD, light, OverlayTexture.NO_OVERLAY, matrixStack, renderTypeBuffer, 0);
+        var instance = Minecraft.getInstance();
+        instance.getItemRenderer().renderStatic(stack, ItemDisplayContext.HEAD, light, OverlayTexture.NO_OVERLAY, matrixStack, renderTypeBuffer, instance.level, 0);
         matrixStack.popPose();
     }
 }

@@ -4,9 +4,11 @@ import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
@@ -18,10 +20,10 @@ public class BrainsweepProcessor implements IComponentProcessor {
 	private String exampleEntityString;
 
 	@Override
-	public void setup(IVariableProvider vars) {
+	public void setup(Level level, IVariableProvider vars) {
 		var id = new ResourceLocation(vars.get("recipe").asString());
 
-		var recman = Minecraft.getInstance().level.getRecipeManager();
+		var recman = level.getRecipeManager();
 		var brainsweepings = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE);
 		for (var poisonApples : brainsweepings) {
 			if (poisonApples.getId().equals(id)) {
@@ -32,7 +34,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
 	}
 
 	@Override
-	public IVariable process(String key) {
+	public IVariable process(Level level, String key) {
 		if (this.recipe == null) {
 			return null;
 		}
@@ -57,7 +59,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
 						return null;
 					}
 					var bob = new StringBuilder();
-					bob.append(Registry.ENTITY_TYPE.getKey(entity.getType()));
+					bob.append(BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()));
 
 					var tag = new CompoundTag();
 					entity.save(tag);
