@@ -32,7 +32,6 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.google.common.base.Suppliers;
-import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.mojang.serialization.Lifecycle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
@@ -113,10 +112,10 @@ public class FabricXplatImpl implements IXplatAbstractions {
         }
     }
 
-    @Override
-    public double getReachDistance(Player player) {
-        return ReachEntityAttributes.getReachDistance(player, 5.0);
-    }
+//    @Override
+//    public double getReachDistance(Player player) {
+//        return ReachEntityAttributes.getReachDistance(player, 5.0);
+//    }
 
     @Override
     public void sendPacketToPlayer(ServerPlayer target, IMessage packet) {

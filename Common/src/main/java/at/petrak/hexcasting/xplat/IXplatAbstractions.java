@@ -69,7 +69,7 @@ public interface IXplatAbstractions {
     // https://github.com/VazkiiMods/Botania/blob/13b7bcd9cbb6b1a418b0afe455662d29b46f1a7f/Xplat/src/main/java/vazkii/botania/xplat/IXplatAbstractions.java#L157
     Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message);
 
-    double getReachDistance(Player player);
+//    double getReachDistance(Player player);
 
     // Things that used to be caps
 

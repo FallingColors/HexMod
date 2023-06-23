@@ -117,10 +117,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
     }
 
-    @Override
-    public double getReachDistance(Player player) {
-        return player.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
-    }
+//    @Override
+//    public double getReachDistance(Player player) {
+//        return player.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
+//    }
 
     @Override
     public void setBrainsweepAddlData(Mob mob) {
