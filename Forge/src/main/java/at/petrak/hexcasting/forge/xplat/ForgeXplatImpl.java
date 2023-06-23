@@ -28,6 +28,7 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
+import at.petrak.hexcasting.forge.event.NewRegistryEventHandler;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.mixin.ForgeAccessorRegistry;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
@@ -85,6 +86,8 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.caelus.api.CaelusApi;
 import virtuoel.pehkui.api.ScaleTypes;
@@ -475,27 +478,25 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
+    @SuppressWarnings("unchecked")
     private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
-        BuiltInRegistries.REGISTRY.get(HexRegistries.ACTION)
+        (Registry<ActionRegistryEntry>) BuiltInRegistries.REGISTRY.get(HexRegistries.ACTION.location())
     );
-    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
-        Suppliers.memoize(() ->
-            ForgeAccessorRegistry.hex$registerSimple(
-                ResourceKey.createRegistryKey(modLoc("special_handler")), null)
-        );
+    @SuppressWarnings("unchecked")
+    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY = Suppliers.memoize(() ->
+        (Registry<SpecialHandler.Factory<?>>) BuiltInRegistries.REGISTRY.get(HexRegistries.SPECIAL_HANDLER.location())
+    );
+    @SuppressWarnings("unchecked")
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
-        ForgeAccessorRegistry.hex$registerDefaulted(
-            ResourceKey.createRegistryKey(modLoc("iota_type")),
-            HexAPI.MOD_ID + ":null", registry -> HexIotaTypes.NULL)
+        (Registry<IotaType<?>>) BuiltInRegistries.REGISTRY.get(HexRegistries.IOTA_TYPE.location())
     );
+    @SuppressWarnings("unchecked")
     private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
-            ForgeAccessorRegistry.hex$registerSimple(
-                    ResourceKey.createRegistryKey(modLoc("arithmetic")), null)
+        (Registry<Arithmetic>) BuiltInRegistries.REGISTRY.get(HexRegistries.ARITHMETIC.location())
     );
+    @SuppressWarnings("unchecked")
     private static final Supplier<Registry<EvalSound>> EVAL_SOUND_REGISTRY = Suppliers.memoize(() ->
-        ForgeAccessorRegistry.hex$registerDefaulted(
-            ResourceKey.createRegistryKey(modLoc("eval_sound")),
-            HexAPI.MOD_ID + ":nothing", registry -> HexEvalSounds.NOTHING)
+        (Registry<EvalSound>) BuiltInRegistries.REGISTRY.get(HexRegistries.EVAL_SOUND.location())
     );
 
     @Override

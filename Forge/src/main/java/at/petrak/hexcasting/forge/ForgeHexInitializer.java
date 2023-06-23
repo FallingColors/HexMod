@@ -124,41 +124,6 @@ public class ForgeHexInitializer {
 
         getModEventBus().addListener(NewRegistryEventHandler::newRegistry);
 
-        bind(ResourceKey.createRegistryKey(BuiltInRegistries.ROOT_REGISTRY_NAME), r -> {
-            r.accept(
-                new MappedRegistry<>(
-                    HexRegistries.ACTION,
-                    Lifecycle.stable()),
-                HexRegistries.ACTION.location()
-            );
-            r.accept(
-                new MappedRegistry<>(
-                    HexRegistries.SPECIAL_HANDLER,
-                    Lifecycle.stable()),
-                HexRegistries.SPECIAL_HANDLER.location()
-            );
-            r.accept(
-                new DefaultedMappedRegistry<>(
-                    HexAPI.MOD_ID + ":null",
-                    HexRegistries.IOTA_TYPE,
-                    Lifecycle.stable(), false),
-                HexRegistries.IOTA_TYPE.location()
-            );
-            r.accept(
-                new MappedRegistry<>(
-                    HexRegistries.ARITHMETIC,
-                    Lifecycle.stable()),
-                HexRegistries.ARITHMETIC.location()
-            );
-            r.accept(
-                new DefaultedMappedRegistry<>(
-                    HexAPI.MOD_ID + ":nothing",
-                    HexRegistries.EVAL_SOUND,
-                    Lifecycle.stable(), false),
-                HexRegistries.EVAL_SOUND.location()
-            );
-        });
-
         bind(IXplatAbstractions.INSTANCE.getIotaTypeRegistry().key(), HexIotaTypes::registerTypes);
         bind(IXplatAbstractions.INSTANCE.getActionRegistry().key(), HexActions::register);
         bind(IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().key(), HexSpecialHandlers::register);
