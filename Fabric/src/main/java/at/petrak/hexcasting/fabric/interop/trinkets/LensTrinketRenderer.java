@@ -2,7 +2,7 @@ package at.petrak.hexcasting.fabric.interop.trinkets;
 
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.client.TrinketRenderer;
 import net.minecraft.client.Minecraft;
@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -39,12 +40,13 @@ public class LensTrinketRenderer implements TrinketRenderer {
 
             // Translate and scale to our head
             matrices.translate(0, 0, 0.3);
-            matrices.mulPose(Vector3f.ZP.rotationDegrees(180.0f));
+            matrices.mulPose(Axis.ZP.rotationDegrees(180.0f));
             matrices.scale(0.625f, 0.625f, 0.625f);
 
             // Render
-            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.HEAD,
-                light, OverlayTexture.NO_OVERLAY, matrices, multiBufferSource, 0);
+            var instance = Minecraft.getInstance();
+            instance.getItemRenderer().renderStatic(stack, ItemDisplayContext.HEAD,
+                light, OverlayTexture.NO_OVERLAY, matrices, multiBufferSource, instance.level, 0);
             matrices.popPose();
         }
     }

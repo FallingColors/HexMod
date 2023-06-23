@@ -1,13 +1,12 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.emi.api.render.EmiRender;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.SlotWidget;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 
 public class TheCoolerSlotWidget extends SlotWidget {
@@ -35,7 +34,8 @@ public class TheCoolerSlotWidget extends SlotWidget {
     }
 
     @Override
-    public void render(PoseStack poseStack, int x, int y, float delta) {
+    public void render(GuiGraphics graphics, int x, int y, float delta) {
+        var poseStack = graphics.pose();
         Bounds bounds = this.getBounds();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -43,13 +43,12 @@ public class TheCoolerSlotWidget extends SlotWidget {
         int height = bounds.height();
         if (this.drawBack) {
             if (this.textureId != null) {
-                RenderSystem.setShaderTexture(0, this.textureId);
-                GuiComponent.blit(poseStack, bounds.x(), bounds.y(), width, height, (float)this.u, (float)this.v, width, height, 256, 256);
+                graphics.blit(this.textureId, bounds.x(), bounds.y(), width, height, (float)this.u, (float)this.v, width, height, 256, 256);
             } else {
                 if (this.output) {
-                    EmiTexture.LARGE_SLOT.render(poseStack, bounds.x(), bounds.y(), delta);
+                    EmiTexture.LARGE_SLOT.render(graphics, bounds.x(), bounds.y(), delta);
                 } else {
-                    EmiTexture.SLOT.render(poseStack, bounds.x(), bounds.y(), delta);
+                    EmiTexture.SLOT.render(graphics, bounds.x(), bounds.y(), delta);
                 }
             }
         }
@@ -59,9 +58,9 @@ public class TheCoolerSlotWidget extends SlotWidget {
         poseStack.pushPose();
         poseStack.translate(bounds.x() + xOff + xShift, bounds.y() + yOff + yShift, 0);
         poseStack.scale(renderScale, renderScale, 1);
-        this.getStack().render(poseStack, 0, 0, delta);
+        this.getStack().render(graphics, 0, 0, delta);
         if (this.catalyst)
-            EmiRender.renderCatalystIcon(this.getStack(), poseStack, 0, 0);
+            EmiRender.renderCatalystIcon(this.getStack(), graphics, 0, 0);
         poseStack.popPose();
     }
 }

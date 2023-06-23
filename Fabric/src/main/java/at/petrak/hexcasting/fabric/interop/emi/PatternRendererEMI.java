@@ -9,14 +9,13 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import dev.emi.emi.api.render.EmiRenderable;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 
 import java.util.List;
 
 public class PatternRendererEMI implements EmiRenderable {
-
-    private final long startTime = System.currentTimeMillis();
 
     private final int width;
     private final int height;
@@ -53,13 +52,13 @@ public class PatternRendererEMI implements EmiRenderable {
     }
 
     @Override
-    public void render(PoseStack poseStack, int x, int y, float delta) {
-        long time = (System.currentTimeMillis() - startTime) / 50;
-        poseStack.pushPose();
-        poseStack.translate(xOffset + x - 0.5f + width / 2f, yOffset + y + 1 + height / 2f, 0);
-        poseStack.scale(width / 64f, height / 64f, 1f);
-        PatternDrawingUtil.drawPattern(poseStack, 0, 0, this.patterns, this.pathfinderDots, this.strokeOrder,
+    public void render(GuiGraphics graphics, int x, int y, float delta) {
+        var ps = graphics.pose();
+        ps.pushPose();
+        ps.translate(xOffset + x - 0.5f + width / 2f, yOffset + y + 1 + height / 2f, 0);
+        ps.scale(width / 64f, height / 64f, 1f);
+        PatternDrawingUtil.drawPattern(graphics, 0, 0, this.patterns, this.pathfinderDots, this.strokeOrder,
             0xff_333030, 0xff_191818, 0xc8_0c0a0c, 0x80_666363);
-        poseStack.popPose();
+        ps.popPose();
     }
 }

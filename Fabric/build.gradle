@@ -90,8 +90,8 @@ dependencies {
 //    include "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
 
     // apparently the 1.18 version Just Works on 1.19
-//    modImplementation "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
-//    include "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
+    modImplementation "${modID}:serialization-hooks:$serializationHooksVersion"
+    include "${modID}:serialization-hooks:$serializationHooksVersion"
 
     // Optional integrations
 
