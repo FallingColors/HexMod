@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.interop.utils;
 
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
@@ -22,6 +24,9 @@ public class PhialRecipeStackBuilder {
         int dust = HexConfig.common().dustMediaAmount();
         int shard = HexConfig.common().shardMediaAmount();
         int charged = HexConfig.common().chargedCrystalMediaAmount();
+        int quenchedShard = MediaConstants.QUENCHED_SHARD_UNIT;
+        int quenchedBlock = MediaConstants.QUENCHED_BLOCK_UNIT;
+
 
         if (dust > 0) {
             inputItems.add(new ItemStack(HexItems.AMETHYST_DUST, 1));
@@ -43,6 +48,16 @@ public class PhialRecipeStackBuilder {
             inputItems.add(new ItemStack(HexItems.CHARGED_AMETHYST, 64));
             outputItems.add(makeBattery(charged, 64));
         }
+
+        inputItems.add(new ItemStack(HexItems.QUENCHED_SHARD, 1));
+        outputItems.add(makeBattery(quenchedShard, 1));
+        inputItems.add(new ItemStack(HexItems.QUENCHED_SHARD, 64));
+        outputItems.add(makeBattery(quenchedShard, 64));
+
+        inputItems.add(new ItemStack(HexBlocks.QUENCHED_ALLAY, 1));
+        outputItems.add(makeBattery(quenchedBlock, 1));
+        inputItems.add(new ItemStack(HexBlocks.QUENCHED_ALLAY, 64));
+        outputItems.add(makeBattery(quenchedBlock, 64));
 
         return new Pair<>(inputItems, outputItems);
     }
