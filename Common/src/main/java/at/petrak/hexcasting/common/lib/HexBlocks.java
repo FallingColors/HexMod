@@ -21,16 +21,21 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -47,9 +52,15 @@ public class HexBlocks {
         }
     }
 
+    public static void registerBlockCreativeTab(Consumer<Block> r, CreativeModeTab tab) {
+        for (var block : BLOCK_TABS.getOrDefault(tab, List.of())) {
+            r.accept(block);
+        }
+    }
+
     private static final Map<ResourceLocation, Block> BLOCKS = new LinkedHashMap<>();
     private static final Map<ResourceLocation, Pair<Block, Item.Properties>> BLOCK_ITEMS = new LinkedHashMap<>();
-
+    private static final Map<CreativeModeTab, List<Block>> BLOCK_TABS = new LinkedHashMap<>();
 
 
     private static BlockBehaviour.Properties slateish() {
@@ -276,16 +287,25 @@ public class HexBlocks {
         }
         return block;
     }
-
     private static <T extends Block> T blockItem(String name, T block) {
-        return blockItem(name, block, HexItems.props());
+        return blockItem(name, block, HexItems.props(), HexCreativeTabs.HEX);
     }
 
+    private static <T extends Block> T blockItem(String name, T block, @Nullable CreativeModeTab tab) {
+        return blockItem(name, block, HexItems.props(), tab);
+    }
     private static <T extends Block> T blockItem(String name, T block, Item.Properties props) {
+        return blockItem(name, block, props, HexCreativeTabs.HEX);
+    }
+
+    private static <T extends Block> T blockItem(String name, T block, Item.Properties props, @Nullable CreativeModeTab tab) {
         blockNoItem(name, block);
         var old = BLOCK_ITEMS.put(modLoc(name), new Pair<>(block, props));
         if (old != null) {
             throw new IllegalArgumentException("Typo? Duplicate id " + name);
+        }
+        if (tab != null) {
+            BLOCK_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(block);
         }
         return block;
     }

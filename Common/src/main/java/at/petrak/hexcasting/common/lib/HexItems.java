@@ -1,14 +1,15 @@
 package at.petrak.hexcasting.common.lib;
 
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.items.ItemStaff;
+import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.common.items.pigment.ItemAmethystAndCopperPigment;
 import at.petrak.hexcasting.common.items.pigment.ItemDyePigment;
 import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
 import at.petrak.hexcasting.common.items.pigment.ItemUUIDPigment;
-import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.Util;
@@ -16,10 +17,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -32,7 +32,15 @@ public class HexItems {
         }
     }
 
+    public static void registerItemCreativeTab(CreativeModeTab.Output r, CreativeModeTab tab) {
+        for (var item : ITEM_TABS.getOrDefault(tab, List.of())) {
+            item.register(r);
+        }
+    }
+
     private static final Map<ResourceLocation, Item> ITEMS = new LinkedHashMap<>(); // preserve insertion order
+    private static final Map<CreativeModeTab, List<TabEntry>> ITEM_TABS = new LinkedHashMap<>();
+
 
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
     public static final Item CHARGED_AMETHYST = make("charged_amethyst", new Item(props()));
@@ -76,7 +84,29 @@ public class HexItems {
     public static final ItemSlate SLATE = make("slate", new ItemSlate(HexBlocks.SLATE, props()));
 
     public static final ItemMediaBattery BATTERY = make("battery",
-        new ItemMediaBattery(unstackable()));
+        new ItemMediaBattery(unstackable()), null);
+
+    public static final ItemStack BATTERY_DUST_STACK = addToTab(ItemMediaBattery.withMedia(
+            new ItemStack(HexItems.BATTERY),
+            MediaConstants.DUST_UNIT * 64,
+            MediaConstants.DUST_UNIT * 64), HexCreativeTabs.HEX);
+    public static final ItemStack BATTERY_SHARD_STACK = addToTab(ItemMediaBattery.withMedia(
+            new ItemStack(HexItems.BATTERY),
+            MediaConstants.SHARD_UNIT * 64,
+            MediaConstants.SHARD_UNIT * 64), HexCreativeTabs.HEX);
+    public static final ItemStack BATTERY_CRYSTAL_STACK = addToTab(ItemMediaBattery.withMedia(
+            new ItemStack(HexItems.BATTERY),
+            MediaConstants.CRYSTAL_UNIT * 64,
+            MediaConstants.CRYSTAL_UNIT * 64), HexCreativeTabs.HEX);
+    public static final ItemStack BATTERY_QUENCHED_SHARD_STACK = addToTab(ItemMediaBattery.withMedia(
+            new ItemStack(HexItems.BATTERY),
+            MediaConstants.QUENCHED_SHARD_UNIT * 64,
+            MediaConstants.QUENCHED_SHARD_UNIT * 64), HexCreativeTabs.HEX);
+
+    public static final ItemStack BATTERY_QUENCHED_BLOCK_STACK = addToTab(ItemMediaBattery.withMedia(
+            new ItemStack(HexItems.BATTERY),
+            MediaConstants.QUENCHED_BLOCK_UNIT * 64,
+            MediaConstants.QUENCHED_BLOCK_UNIT * 64), HexCreativeTabs.HEX);
 
     public static final EnumMap<DyeColor, ItemDyePigment> DYE_PIGMENTS = Util.make(() -> {
         var out = new EnumMap<DyeColor, ItemDyePigment>(DyeColor.class);
@@ -121,19 +151,57 @@ public class HexItems {
         return props().stacksTo(1);
     }
 
-    private static <T extends Item> T make(ResourceLocation id, T item) {
+    private static <T extends Item> T make(ResourceLocation id, T item, @Nullable CreativeModeTab tab) {
         var old = ITEMS.put(id, item);
         if (old != null) {
             throw new IllegalArgumentException("Typo? Duplicate id " + id);
         }
+        if (tab != null) {
+            ITEM_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(new TabEntry.ItemEntry(item));
+        }
         return item;
     }
 
-    private static <T extends Item> T make(String id, T item) {
-        return make(modLoc(id), item);
+    private static <T extends Item> T make(String id, T item, @Nullable CreativeModeTab tab) {
+        return make(modLoc(id), item, tab);
     }
 
-    public static ItemStack tabIcon() {
-        return new ItemStack(SPELLBOOK);
+    private static <T extends Item> T make(String id, T item) {
+        return make(modLoc(id), item, HexCreativeTabs.HEX);
+    }
+
+    private static ItemStack addToTab(ItemStack stack, CreativeModeTab tab) {
+        ITEM_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(new TabEntry.StackEntry(stack));
+        return stack;
+    }
+
+    private static abstract class TabEntry {
+        abstract void register(CreativeModeTab.Output r);
+
+        static class ItemEntry extends TabEntry {
+            private final Item item;
+
+            ItemEntry(Item item) {
+                this.item = item;
+            }
+
+            @Override
+            void register(CreativeModeTab.Output r) {
+                r.accept(item);
+            }
+        }
+
+        static class StackEntry extends TabEntry {
+            private final ItemStack stack;
+
+            StackEntry(ItemStack stack) {
+                this.stack = stack;
+            }
+
+            @Override
+            void register(CreativeModeTab.Output r) {
+                r.accept(stack);
+            }
+        }
     }
 }

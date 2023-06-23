@@ -20,7 +20,6 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
@@ -36,7 +35,6 @@ import com.google.common.base.Suppliers;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.mojang.serialization.Lifecycle;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -55,7 +53,6 @@ import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.*;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -66,7 +63,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -74,7 +74,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
@@ -87,8 +86,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class FabricXplatImpl implements IXplatAbstractions {
     @Override
@@ -332,16 +329,6 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public Ingredient getUnsealedIngredient(ItemStack stack) {
         return FabricUnsealedIngredient.of(stack);
-    }
-
-    private static final Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> FabricItemGroupBuilder.create(
-            modLoc("creative_tab"))
-        .icon(HexItems::tabIcon)
-        .build());
-
-    @Override
-    public CreativeModeTab getTab() {
-        return TAB.get();
     }
 
     // do a stupid hack from botania

@@ -2,7 +2,6 @@ package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting;
@@ -33,9 +32,6 @@ import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import com.mojang.serialization.Lifecycle;
-import net.minecraft.core.DefaultedMappedRegistry;
-import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -55,6 +51,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -77,8 +74,6 @@ import thedarkcolour.kotlinforforge.KotlinModLoadingContext;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 @Mod(HexAPI.MOD_ID)
 public class ForgeHexInitializer {
@@ -105,6 +100,8 @@ public class ForgeHexInitializer {
         bind(Registries.SOUND_EVENT, HexSounds::registerSounds);
 
         HexBlockSetTypes.registerBlocks(BlockSetType::register);
+
+        bind(Registries.CREATIVE_MODE_TAB, HexCreativeTabs::registerCreativeTabs);
 
         bind(Registries.BLOCK, HexBlocks::registerBlocks);
         bind(Registries.ITEM, HexBlocks::registerBlockItems);
@@ -169,6 +166,11 @@ public class ForgeHexInitializer {
 
                 HexInterop.init();
             }));
+
+        modBus.addListener((BuildCreativeModeTabContentsEvent evt) -> {
+            HexBlocks.registerBlockCreativeTab(evt::accept, evt.getTab());
+            HexItems.registerItemCreativeTab(evt, evt.getTab());
+        });
 
 
         // We have to do these at some point when the registries are still open

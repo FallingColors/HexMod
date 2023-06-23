@@ -31,7 +31,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
@@ -148,8 +147,6 @@ public interface IXplatAbstractions {
     boolean drainAllFluid(Level level, BlockPos pos);
 
     // misc
-
-    CreativeModeTab getTab();
 
     boolean isCorrectTierForDrops(Tier tier, BlockState bs);
 

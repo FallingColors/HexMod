@@ -44,12 +44,12 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
@@ -115,6 +115,11 @@ object FabricHexInitializer : ModInitializer {
             } else {
                 false
             }
+        }
+
+        ItemGroupEvents.MODIFY_ENTRIES_ALL.register { tab, entries ->
+            HexBlocks.registerBlockCreativeTab(entries::accept, tab)
+            HexItems.registerItemCreativeTab(entries, tab)
         }
     }
 

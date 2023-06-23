@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.forge.xplat;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
@@ -21,16 +20,11 @@ import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexRegistries;
-import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
-import at.petrak.hexcasting.forge.event.NewRegistryEventHandler;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
-import at.petrak.hexcasting.forge.mixin.ForgeAccessorRegistry;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
@@ -40,7 +34,9 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.google.common.base.Suppliers;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -59,7 +55,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
@@ -86,8 +81,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.caelus.api.CaelusApi;
 import virtuoel.pehkui.api.ScaleTypes;
@@ -99,7 +92,6 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class ForgeXplatImpl implements IXplatAbstractions {
@@ -414,24 +406,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public Ingredient getUnsealedIngredient(ItemStack stack) {
         return ForgeUnsealedIngredient.of(stack);
-    }
-
-    private final static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() ->
-        new CreativeModeTab(HexAPI.MOD_ID) {
-            @Override
-            public ItemStack makeIcon() {
-                return HexItems.tabIcon();
-            }
-
-            @Override
-            public void fillItemList(NonNullList<ItemStack> items) {
-                super.fillItemList(items);
-            }
-        });
-
-    @Override
-    public CreativeModeTab getTab() {
-        return TAB.get();
     }
 
     @Override
