@@ -64,22 +64,22 @@ public class ForgeHexDataGenerators {
         HexAPI.LOGGER.info("Starting Forge-specific datagen");
 
         DataGenerator gen = ev.getGenerator();
-        var pack = gen.getPackOutput();
+        var output = gen.getPackOutput();
         var lookup = ev.getLookupProvider();
         ExistingFileHelper efh = ev.getExistingFileHelper();
         gen.addProvider(ev.includeServer(), new LootTableProvider(
-            pack, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS))
+            output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS))
         ));
-        gen.addProvider(ev.includeServer(), new HexplatRecipes(pack, INGREDIENTS, ForgeHexConditionsBuilder::new));
+        gen.addProvider(ev.includeServer(), new HexplatRecipes(output, INGREDIENTS, ForgeHexConditionsBuilder::new));
 
         var xtags = IXplatAbstractions.INSTANCE.tags();
-        var blockTagProvider = new HexBlockTagProvider(pack, lookup, xtags);
+        var blockTagProvider = new HexBlockTagProvider(output, lookup, xtags);
         gen.addProvider(ev.includeServer(), blockTagProvider);
-        var itemTagProvider = new HexItemTagProvider(pack, lookup, blockTagProvider, IXplatAbstractions.INSTANCE.tags());
+        var itemTagProvider = new HexItemTagProvider(output, lookup, blockTagProvider, IXplatAbstractions.INSTANCE.tags());
         gen.addProvider(ev.includeServer(), itemTagProvider);
-        gen.addProvider(ev.includeServer(), new HexActionTagProvider(pack, lookup));
+        gen.addProvider(ev.includeServer(), new HexActionTagProvider(output, lookup));
 
-        gen.addProvider(ev.includeServer(), new ForgeHexLootModGen(gen));
+        gen.addProvider(ev.includeServer(), new ForgeHexLootModGen(output));
     }
 
     private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {

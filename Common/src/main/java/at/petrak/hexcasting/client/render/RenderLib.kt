@@ -6,26 +6,24 @@ import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.client.ClientTickCounter
-import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
 import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource
 import net.minecraft.world.level.levelgen.synth.SimplexNoise
 import net.minecraft.world.phys.Vec2
 import org.joml.Matrix4f
-import org.joml.Vector3f
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -78,16 +76,16 @@ fun drawLineSeq(
     val joinAngles = FloatArray(n)
     val joinOffsets = FloatArray(n)
     for (i in 2 until n) {
-        val p0 = points[i - 2];
-        val p1 = points[i - 1];
-        val p2 = points[i];
+        val p0 = points[i - 2]
+        val p1 = points[i - 1]
+        val p2 = points[i]
         val prev = p1.add(p0.negated())
         val next = p2.add(p1.negated())
         val angle =
             Mth.atan2((prev.x * next.y - prev.y * next.x).toDouble(), (prev.x * next.x + prev.y * next.y).toDouble())
                 .toFloat()
         joinAngles[i - 1] = angle
-        val clamp = Math.min(prev.length(), next.length()) / (width * 0.5f);
+        val clamp = Math.min(prev.length(), next.length()) / (width * 0.5f)
         joinOffsets[i - 1] = Mth.clamp(Mth.sin(angle) / (1 + Mth.cos(angle)), -clamp, clamp)
     }
 
@@ -228,7 +226,7 @@ fun drawPatternFromPoints(
             dodge(FastColor.ARGB32.green(head)) / 255f,
             dodge(FastColor.ARGB32.blue(head)) / 255f,
             FastColor.ARGB32.alpha(head) / 255f
-        );
+        )
     }
 }
 
@@ -405,7 +403,7 @@ fun getCenteredPattern(pattern: HexPattern, width: Float, height: Float, minSize
 
 @JvmOverloads
 fun renderEntity(
-    ms: PoseStack, entity: Entity, world: Level, x: Float, y: Float, rotation: Float,
+    graphics: GuiGraphics, entity: Entity, world: Level, x: Float, y: Float, rotation: Float,
     renderScale: Float, offset: Float,
     bufferTransformer: (MultiBufferSource) -> MultiBufferSource = { it -> it }
 ) {
@@ -413,19 +411,21 @@ fun renderEntity(
 
     // TODO: Figure out why this is here and whether removing it will break things
 //    entity.level = world
-    ms.pushPose()
-    ms.translate(x.toDouble(), y.toDouble(), 50.0)
-    ms.scale(renderScale, renderScale, renderScale)
-    ms.translate(0.0, offset.toDouble(), 0.0)
-    ms.mulPose(Axis.ZP.rotationDegrees(180.0f))
-    ms.mulPose(Axis.YP.rotationDegrees(rotation))
+    val ps = graphics.pose()
+
+    ps.pushPose()
+    ps.translate(x.toDouble(), y.toDouble(), 50.0)
+    ps.scale(renderScale, renderScale, renderScale)
+    ps.translate(0.0, offset.toDouble(), 0.0)
+    ps.mulPose(Axis.ZP.rotationDegrees(180.0f))
+    ps.mulPose(Axis.YP.rotationDegrees(rotation))
     val erd = Minecraft.getInstance().entityRenderDispatcher
     val immediate = Minecraft.getInstance().renderBuffers().bufferSource()
     erd.setRenderShadow(false)
-    erd.render(entity, 0.0, 0.0, 0.0, 0.0f, 1.0f, ms, bufferTransformer(immediate), 0xf000f0)
+    erd.render(entity, 0.0, 0.0, 0.0, 0.0f, 1.0f, ps, bufferTransformer(immediate), 0xf000f0)
     erd.setRenderShadow(true)
     immediate.endBatch()
-    ms.popPose()
+    ps.popPose()
 }
 
 /**

@@ -6,17 +6,15 @@ import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
 import at.petrak.hexcasting.interop.utils.PatternEntry;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import mezz.jei.api.gui.drawable.IDrawable;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 
 import java.util.List;
 
 public class PatternDrawable implements IDrawable {
-    private final long startTime = System.currentTimeMillis();
-
     private final int width;
     private final int height;
 
@@ -55,13 +53,13 @@ public class PatternDrawable implements IDrawable {
     }
 
     @Override
-    public void draw(PoseStack poseStack, int xOffset, int yOffset) {
-        long time = (System.currentTimeMillis() - startTime) / 50;
-        poseStack.pushPose();
-        poseStack.translate(xOffset - 0.5f + width / 2f, yOffset + height / 2f, 0);
-        poseStack.scale(width / 64f, height / 64f, 1f);
-        PatternDrawingUtil.drawPattern(poseStack, 0, 0, this.patterns, this.pathfinderDots, this.strokeOrder,
-            0xff_333030, 0xff_191818, 0xc8_0c0a0c, 0x80_666363);
-        poseStack.popPose();
+    public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+        var ps = guiGraphics.pose();
+        ps.pushPose();
+        ps.translate(xOffset - 0.5f + width / 2f, yOffset + height / 2f, 0);
+        ps.scale(width / 64f, height / 64f, 1f);
+        PatternDrawingUtil.drawPattern(guiGraphics, 0, 0, this.patterns, this.pathfinderDots, this.strokeOrder,
+                0xff_333030, 0xff_191818, 0xc8_0c0a0c, 0x80_666363);
+        ps.popPose();
     }
 }
