@@ -20,7 +20,6 @@ import at.petrak.hexcasting.datagen.recipe.builders.CompatIngredientValue;
 import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightCuttingRecipeBuilder;
 import at.petrak.paucal.api.datagen.PaucalRecipeProvider;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -61,7 +60,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> recipes) {
+    public void buildRecipes(Consumer<FinishedRecipe> recipes) {
         specialRecipe(recipes, SealThingsRecipe.FOCUS_SERIALIZER);
         specialRecipe(recipes, SealThingsRecipe.SPELLBOOK_SERIALIZER);
 
