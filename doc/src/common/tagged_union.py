@@ -5,13 +5,13 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from itertools import chain
-from typing import Any, ClassVar, Iterable, Mapping, Self, Type, TypeVar, overload
+from typing import Any, ClassVar, Iterable, Self, Type, TypeVar
 
 from dacite import StrictUnionMatchError, UnionMatchError, from_dict
 
 from common.dacite_patch import UnionSkip
 from common.deserialize import TypedConfig, TypeHooks
-from common.types import JSONValue, isinstance_or_raise
+from common.types import isinstance_or_raise
 
 
 class WrongTag(UnionSkip):

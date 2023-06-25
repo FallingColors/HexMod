@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import InitVar, dataclass
 from itertools import chain
 from pathlib import Path
-from re import sub
 from typing import Any, Collection, Generic, Iterable, Mapping, Self, Type, TypeVar
 
 from common.deserialize import (
@@ -49,7 +48,6 @@ class BookState:
     * `type_hooks`
     * `type_hook_maker`
     """
-    # oh my god
     stateful_unions: InitVar[StatefulUnions[Self] | None] = None
 
     def __post_init__(

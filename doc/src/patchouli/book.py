@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Literal, Self, Type
 
 from common.deserialize import TypeHooks, from_dict_checked, load_json_data, rename
 from common.formatting import FormatTree
 from common.properties import Properties
-from common.state import BookState, Stateful, StatefulUnions
+from common.state import AnyState, BookState, Stateful, StatefulUnions
 from common.types import Color, LocalizedStr
 from minecraft.i18n import I18n
 from minecraft.recipe import Recipe
@@ -51,7 +52,7 @@ _RECIPES: list[Type[Recipe[BookState]]] = [
 
 
 @dataclass
-class Book(Stateful[BookState]):
+class Book(Stateful[AnyState], ABC):
     """Main Patchouli book class.
 
     Includes all data from book.json, categories/entries/pages, and i18n.
@@ -106,9 +107,8 @@ class Book(Stateful[BookState]):
     def load(cls, props: Properties) -> Self:
         """Loads `book.json`, and sets up shared state with `cls._make_state()`.
 
-        Subclasses should generally not override this. To customize state creation,
-        override `_make_state()`. To add type hooks which require a state instance,
-        override `_make_type_hooks()` (remember to call and extend super).
+        Subclasses should generally not override this. To customize state creation or
+        add type hooks (including page or recipe types), override `_init_state()`.
         """
 
         # read the raw dict from the json file
@@ -116,7 +116,7 @@ class Book(Stateful[BookState]):
         data = load_json_data(cls, path)
 
         # construct the shared state object
-        state = cls._init_state(
+        state = data["state"] = cls._init_state(
             data=data,
             props=props,
             i18n=I18n(props, data["do_i18n"]),
@@ -127,12 +127,12 @@ class Book(Stateful[BookState]):
                 Recipe[BookState]: _RECIPES,
             },
         )
-        data["state"] = state
 
         # NOW we can convert the actual book data
         return from_dict_checked(cls, data, state.config, path)
 
     @classmethod
+    @abstractmethod
     def _init_state(
         cls,
         data: dict[str, Any],
@@ -140,15 +140,15 @@ class Book(Stateful[BookState]):
         i18n: I18n,
         macros: dict[str, str],
         type_hooks: TypeHooks[Any],
-        stateful_unions: StatefulUnions[Any],
-    ) -> BookState:
+        stateful_unions: StatefulUnions[AnyState],
+    ) -> AnyState:
         """Constructs the shared state object for this book.
 
-        You can add Page or Recipe types here, to `stateful_unions`.
+        `macros` should not include `DEFAULT_MACROS`; those are added by the BookState
+        constructor.
 
-        Subclasses need not call super if they're instantiating a subclass of BookState.
-        """
-        return BookState(props, i18n, macros, type_hooks, stateful_unions)
+        You can add Page or Recipe types to `stateful_unions`."""
+        ...
 
     def __post_init__(self) -> None:
         """Loads categories and entries."""
