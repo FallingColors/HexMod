@@ -2,9 +2,11 @@ import datetime
 import re
 from typing import Callable, TypeVar
 
+from common.types import isinstance_or_raise
+
 # TODO: there's (figuratively) literally no comments in this file
 
-TOMLTable = dict[str, "TOMLValue"]
+TOMLDict = dict[str, "TOMLValue"]
 
 TOMLValue = (
     str
@@ -15,21 +17,21 @@ TOMLValue = (
     | datetime.date
     | datetime.time
     | list["TOMLValue"]
-    | TOMLTable
+    | TOMLDict
 )
 
 
-def fill_placeholders(data: TOMLTable):
+def fill_placeholders(data: TOMLDict):
     _fill_placeholders(data, [data], set())
 
 
 def _expand_placeholder(
-    data: TOMLTable,
-    stack: list[TOMLTable],
+    data: TOMLDict,
+    stack: list[TOMLDict],
     expanded: set[tuple[int, str | int]],
     placeholder: str,
 ) -> str:
-    tmp_stack = stack[:]
+    tmp_stack: list[TOMLDict] = stack[:]
 
     key = "UNBOUND"
     keys = placeholder.split(".")
@@ -38,14 +40,15 @@ def _expand_placeholder(
             tmp_stack = tmp_stack[:-n]
             key = key.replace("^", "")
         if key and i < len(keys) - 1:
-            assert isinstance(new := tmp_stack[-1][key], dict)
+            # TODO: does this work?
+            assert isinstance_or_raise(new := tmp_stack[-1][key], TOMLDict)
             tmp_stack.append(new)
 
     table = tmp_stack[-1]
     if (id(table), key) not in expanded:
         _handle_child(data, tmp_stack, expanded, key, table[key], table.__setitem__)
 
-    assert isinstance(value := table[key], str)
+    assert isinstance_or_raise(value := table[key], str)
     return value
 
 
@@ -55,8 +58,8 @@ _PLACEHOLDER_RE = re.compile(r"\{(.+?)\}")
 
 
 def _handle_child(
-    data: TOMLTable,
-    stack: list[TOMLTable],
+    data: TOMLDict,
+    stack: list[TOMLDict],
     expanded: set[tuple[int, str | int]],
     key: _T_key,
     value: TOMLValue,
@@ -100,8 +103,8 @@ def _handle_child(
 
 
 def _fill_placeholders(
-    data: TOMLTable,
-    stack: list[TOMLTable],
+    data: TOMLDict,
+    stack: list[TOMLDict],
     expanded: set[tuple[int, str | int]],
 ):
     table = stack[-1]

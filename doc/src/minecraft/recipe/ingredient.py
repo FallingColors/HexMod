@@ -10,6 +10,7 @@ class ItemIngredientData:
     tag: ResourceLocation | None = None
 
 
+# TODO: should be in hex but idk how
 # TODO: tagged union~!
 @dataclass
 class ModConditionalIngredient:
@@ -22,17 +23,3 @@ class ModConditionalIngredient:
 ItemIngredient = (
     ItemIngredientData | ModConditionalIngredient | list[ItemIngredientData]
 )
-
-
-@dataclass
-class VillagerIngredient:
-    minLevel: int
-    profession: ResourceLocation | None = None
-    biome: ResourceLocation | None = None
-
-
-@dataclass
-class BlockStateIngredient:
-    # TODO: StateIngredient should also be a TypeTaggedUnion, probably
-    type: Literal["block"]
-    block: ResourceLocation

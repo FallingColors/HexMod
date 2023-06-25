@@ -1,21 +1,24 @@
 from dataclasses import dataclass
+from typing import Any
 
-import patchouli
 from common.pattern import PatternInfo
+from common.state import BookState
 from minecraft.resource import ResourceLocation
 
 
 @dataclass
-class HexBook(patchouli.Book):
-    """Main docgen dataclass."""
+class HexBookState(BookState):
+    def __post_init__(self, *args: Any, **kwargs: Any):
+        super().__post_init__(*args, **kwargs)
 
-    def __post_init_pre_categories__(self) -> None:
+        # mutable state
         self.blacklist: set[str] = set()
         self.spoilers: set[str] = set()
 
         # patterns
         self.patterns: dict[ResourceLocation, PatternInfo] = {}
         for stub in self.props.pattern_stubs:
+            # for each stub, load all the patterns in the file
             for pattern in stub.load_patterns(self.props.modid, self.props.pattern_re):
                 # check for key clobbering, because why not
                 if duplicate := self.patterns.get(pattern.id):

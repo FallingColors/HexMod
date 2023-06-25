@@ -2,7 +2,23 @@ import re
 from dataclasses import dataclass
 from typing import NamedTuple, Self
 
-from common.types import LocalizedStr
+DEFAULT_MACROS = {
+    "$(obf)": "$(k)",
+    "$(bold)": "$(l)",
+    "$(strike)": "$(m)",
+    "$(italic)": "$(o)",
+    "$(italics)": "$(o)",
+    "$(list": "$(li",
+    "$(reset)": "$()",
+    "$(clear)": "$()",
+    "$(2br)": "$(br2)",
+    "$(p)": "$(br2)",
+    "/$": "$()",
+    "<br>": "$(br)",
+    "$(nocolor)": "$(0)",
+    "$(item)": "$(#b0b)",
+    "$(thing)": "$(#490)",
+}
 
 _COLORS: dict[str, str | None] = {
     "0": None,
@@ -107,14 +123,14 @@ class FormatTree:
         return cls(Style("base", None), [])
 
     @classmethod
-    def format(cls, macros: dict[str, str], string: LocalizedStr) -> Self:
+    def format(cls, macros: dict[str, str], string: str) -> Self:
         # resolve macros
         # TODO: use ahocorasick? this feels inefficient
         old_string = None
         while old_string != string:
             old_string = string
             for macro, replace in macros.items():
-                string = LocalizedStr(string.replace(macro, replace))
+                string = string.replace(macro, replace)
 
         # lex out parsed styles
         text_nodes: list[str] = []

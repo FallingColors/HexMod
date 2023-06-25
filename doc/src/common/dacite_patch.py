@@ -5,17 +5,70 @@
 import copy
 import traceback
 from itertools import zip_longest
-from typing import Any, Collection, Mapping, Type
+from typing import (
+    Any,
+    ClassVar,
+    Collection,
+    Mapping,
+    Type,
+    TypeVar,
+    get_args,
+    get_origin,
+    get_type_hints,
+)
 
 import dacite.core
-from dacite import Config, DaciteError, StrictUnionMatchError, UnionMatchError
+import dacite.types
+from dacite import (
+    Config,
+    DaciteError,
+    StrictUnionMatchError,
+    UnionMatchError,
+    from_dict as _original_from_dict,
+)
+from dacite.cache import cache
 from dacite.core import _build_value
+from dacite.data import Data
+from dacite.dataclasses import get_fields
 from dacite.types import extract_generic, is_instance, is_optional, is_subclass
 
 
 class UnionSkip(Exception):
     """Tagged union classes may raise this during initialization to say the data doesn't
     match their type."""
+
+
+def handle_metadata_inplace(data_class: Type[Any], data: dict[str, Any]) -> None:
+    """Applies our custom metadata. Currently this just renames fields."""
+    # only transform a dict once, in case this is called multiple times
+    if data.get("__metadata_handled"):  # mischief managed?
+        return
+    data["__metadata_handled"] = True
+
+    for field in get_fields(data_class):
+        try:
+            key_name = field.metadata["rename"]
+            if not isinstance(key_name, str):
+                # TODO: raise?
+                continue
+
+            if field.name in data:
+                # TODO: could instead keep a set of renamed fields, skip writing from a shadowed field
+                raise ValueError(
+                    f"Can't rename key '{key_name}' to field '{field.name}' because the key '{field.name}' also exists in the dict\n{data}"
+                )
+            data[field.name] = data.pop(key_name)
+        except KeyError:
+            pass
+
+
+def handle_metadata_inplace_final(data_class: Type[Any], data: dict[str, Any]) -> None:
+    """As `handle_metadata_inplace`, but removes the key marking data as handled.
+
+    Should only be used within a custom from_dict implementation.
+    """
+    handle_metadata_inplace(data_class, data)
+    data.pop("__metadata_handled")
 
 
 # fixes https://github.com/konradhalas/dacite/issues/234
@@ -107,6 +160,43 @@ def _patched_build_value_for_collection(
     return data
 
 
+_T = TypeVar("_T")
+
+
+def _patched_from_dict(
+    data_class: Type[_T],
+    data: Data,
+    config: Config | None = None,
+) -> _T:
+    if isinstance(data, data_class):
+        return data
+    data = dict(data)
+    handle_metadata_inplace_final(data_class, data)
+    return _original_from_dict(data_class, data, config)
+
+
+def _patched_is_valid_generic_class(value: Any, type_: Type[Any]) -> bool:
+    origin = get_origin(type_)
+    if not (origin and isinstance(value, origin)):
+        return False
+    type_args = get_args(type_)
+    type_hints = cache(get_type_hints)(type(value))
+    for field_name, field_type in type_hints.items():
+        field_value = getattr(value, field_name, None)
+        if isinstance(field_type, TypeVar):
+            # TODO: this will fail to detect incorrect type in some cases
+            # see comments on https://github.com/konradhalas/dacite/pull/209
+            if not any(is_instance(field_value, arg) for arg in type_args):
+                return False
+        elif get_origin(field_type) is not ClassVar:
+            if not is_instance(field_value, field_type):
+                return False
+    return True
+
+
 # we do a bit of monkeypatching
+dacite.from_dict = _patched_from_dict
+dacite.core.from_dict = _patched_from_dict
 dacite.core._build_value_for_union = _patched_build_value_for_union
 dacite.core._build_value_for_collection = _patched_build_value_for_collection
+dacite.types.is_valid_generic_class = _patched_is_valid_generic_class

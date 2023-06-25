@@ -13,7 +13,7 @@ from tap import Tap
 
 from collate_data import generate_docs
 from common.properties import Properties
-from patchouli.hex_book import HexBook
+from hexcasting.hex_book import HexBook
 
 if sys.version_info < (3, 11):
     raise RuntimeError("Minimum Python version: 3.11")

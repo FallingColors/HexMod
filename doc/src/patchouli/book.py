@@ -1,79 +1,73 @@
 from __future__ import annotations
 
-from abc import ABC
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Literal, Self
+from typing import Any, Literal, Self, Type
 
-import patchouli
-from common.deserialize import (
-    TypedConfig,
-    TypeHooks,
-    from_dict_checked,
-    load_json_data,
-    rename,
-)
+from common.deserialize import TypeHooks, from_dict_checked, load_json_data, rename
 from common.formatting import FormatTree
-from common.pattern import Direction
 from common.properties import Properties
-from common.tagged_union import get_union_types
-from common.types import Color, IProperty, LocalizedItem, LocalizedStr, sorted_dict
+from common.state import BookState, Stateful, StatefulUnions
+from common.types import Color, LocalizedStr
 from minecraft.i18n import I18n
 from minecraft.recipe import Recipe
+from minecraft.recipe.concrete import CraftingShapedRecipe, CraftingShapelessRecipe
 from minecraft.resource import ItemStack, ResLoc, ResourceLocation
+from patchouli.page.concrete import (
+    CraftingPage,
+    EmptyPage,
+    EntityPage,
+    ImagePage,
+    LinkPage,
+    MultiblockPage,
+    QuestPage,
+    RelationsPage,
+    SmeltingPage,
+    SpotlightPage,
+    TextPage,
+)
 
-_DEFAULT_MACROS = {
-    "$(obf)": "$(k)",
-    "$(bold)": "$(l)",
-    "$(strike)": "$(m)",
-    "$(italic)": "$(o)",
-    "$(italics)": "$(o)",
-    "$(list": "$(li",
-    "$(reset)": "$()",
-    "$(clear)": "$()",
-    "$(2br)": "$(br2)",
-    "$(p)": "$(br2)",
-    "/$": "$()",
-    "<br>": "$(br)",
-    "$(nocolor)": "$(0)",
-    "$(item)": "$(#b0b)",
-    "$(thing)": "$(#490)",
-}
+from .category import Category
+from .entry import Entry
+from .page import Page
 
-_DEFAULT_TYPE_HOOKS: TypeHooks = {
-    ResourceLocation: ResourceLocation.from_str,
-    ItemStack: ItemStack.from_str,
-    Direction: Direction.__getitem__,
-}
+_PAGES: list[Type[Page[BookState]]] = [
+    TextPage,
+    ImagePage,
+    CraftingPage,
+    SmeltingPage,
+    MultiblockPage,
+    EntityPage,
+    SpotlightPage,
+    LinkPage,
+    RelationsPage,
+    QuestPage,
+    EmptyPage,
+]
 
-
-def _format(text: str | LocalizedStr, i18n: I18n, macros: dict[str, str]):
-    if not isinstance(text, LocalizedStr):
-        assert isinstance(text, str), f"Expected str, got {type(text)}: {text}"
-        text = i18n.localize(text)
-    return FormatTree.format(macros, text)
+_RECIPES: list[Type[Recipe[BookState]]] = [
+    CraftingShapedRecipe,
+    CraftingShapelessRecipe,
+]
 
 
 @dataclass
-class Book:
+class Book(Stateful[BookState]):
     """Main Patchouli book class.
 
     Includes all data from book.json, categories/entries/pages, and i18n.
 
-    You should probably not use this to edit and re-serialize book.json, because this sets
-    all the default values as defined by the docs. (TODO: superclass which doesn't do that)
+    You should probably not use this (or any other Patchouli types, eg. Category, Entry)
+    to edit and re-serialize book.json, because this class sets all the default values
+    as defined by the docs. (TODO: superclass which doesn't do that)
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/book-json
     """
 
-    props: Properties
-    i18n: I18n
-
-    # required from book.json
+    # required
     name: LocalizedStr
     landing_text: FormatTree
 
-    # optional from book.json
+    # optional
     book_texture: ResourceLocation = ResLoc("patchouli", "textures/gui/book_brown.png")
     filler_texture: ResourceLocation | None = None
     crafting_texture: ResourceLocation | None = None
@@ -108,114 +102,70 @@ class Book:
     """NOTE: currently this WILL NOT load values from the target book!"""
     allow_extensions: bool = True
 
-    @property
-    def index_icon(self) -> ResourceLocation:
-        # default value as defined by patchouli, apparently
-        return self.model if self._index_icon is None else self._index_icon
-
     @classmethod
     def load(cls, props: Properties) -> Self:
-        """Sets up i18n, macros, and the book.json data."""
+        """Loads `book.json`, and sets up shared state with `cls._make_state()`.
+
+        Subclasses should generally not override this. To customize state creation,
+        override `_make_state()`. To add type hooks which require a state instance,
+        override `_make_type_hooks()` (remember to call and extend super).
+        """
 
         # read the raw dict from the json file
         path = props.book_dir / "book.json"
         data = load_json_data(cls, path)
 
-        data["props"] = props
-
-        i18n = I18n(props, data["do_i18n"])
-        data["i18n"] = i18n
-
-        # TODO: order of operations: should default macros really override book macros?
-        # this does make a difference - the snapshot tests fail if the order is reversed
-        data["macros"].update(_DEFAULT_MACROS)
+        # construct the shared state object
+        state = cls._init_state(
+            data=data,
+            props=props,
+            i18n=I18n(props, data["do_i18n"]),
+            macros=data["macros"],
+            type_hooks={},
+            stateful_unions={
+                Page[BookState]: _PAGES,
+                Recipe[BookState]: _RECIPES,
+            },
+        )
+        data["state"] = state
 
         # NOW we can convert the actual book data
-        initial_type_hooks: TypeHooks = {
-            LocalizedStr: i18n.localize,
-            FormatTree: lambda s: _format(s, i18n, data["macros"]),
-        }
-        config = TypedConfig(type_hooks=_DEFAULT_TYPE_HOOKS | initial_type_hooks)
-        return from_dict_checked(cls, data, config, path)
+        return from_dict_checked(cls, data, state.config, path)
 
-    def __post_init__(self, *args: Any, **kwargs: Any) -> None:
-        # type hooks which need a Book instance
-        # Dacite fails to type-check TypeHooks, so this CANNOT be a dataclass field
-        self.type_hooks: TypeHooks = _DEFAULT_TYPE_HOOKS | {
-            LocalizedStr: self.i18n.localize,
-            LocalizedItem: self.i18n.localize_item,
-            FormatTree: self.format,
-            **patchouli.page.make_page_hooks(self),
-            **{cls: cls.make_type_hook(self) for cls in get_union_types(Recipe)},
-        }
+    @classmethod
+    def _init_state(
+        cls,
+        data: dict[str, Any],
+        props: Properties,
+        i18n: I18n,
+        macros: dict[str, str],
+        type_hooks: TypeHooks[Any],
+        stateful_unions: StatefulUnions[Any],
+    ) -> BookState:
+        """Constructs the shared state object for this book.
 
-        # best name ever tbh
-        self.__post_init_pre_categories__(*args, **kwargs)
+        You can add Page or Recipe types here, to `stateful_unions`.
 
+        Subclasses need not call super if they're instantiating a subclass of BookState.
+        """
+        return BookState(props, i18n, macros, type_hooks, stateful_unions)
+
+    def __post_init__(self) -> None:
+        """Loads categories and entries."""
         # categories
-        self.categories = patchouli.Category.load_all(self)
+        self.categories = Category.load_all(self.state)
 
         # entries
-        # must be after categories, since Entry uses book.categories to get the parent
-        for path in self.entries_dir.rglob("*.json"):
-            # i used the entry to insert the entry
-            # pretty sure thanos said that
-            entry = patchouli.Entry.load(path, self)
-            entry.category.entries.append(entry)
+        for path in self.props.entries_dir.rglob("*.json"):
+            # i used the entry to insert the entry (pretty sure thanos said that)
+            entry = Entry.load(path, self.state)
+            self.categories[entry.category_id].entries.append(entry)
 
         # we inserted a bunch of entries in no particular order, so sort each category
         for category in self.categories.values():
             category.entries.sort()
 
-    def __post_init_pre_categories__(self) -> None:
-        """Subclasses may override this method to run code just before categories are
-        loaded and deserialized.
-
-        Type hooks are initialized before this, so you can add more here if needed.
-        """
-
     @property
-    def _dir_with_lang(self) -> Path:
-        return self.props.book_dir / self.props.i18n.lang
-
-    @property
-    def categories_dir(self) -> Path:
-        return self._dir_with_lang / "categories"
-
-    @property
-    def entries_dir(self) -> Path:
-        return self._dir_with_lang / "entries"
-
-    @property
-    def templates_dir(self) -> Path:
-        return self._dir_with_lang / "templates"
-
-    def format(
-        self,
-        text: str | LocalizedStr,
-        skip_errors: bool = False,
-    ) -> FormatTree:
-        """Converts the given string into a FormatTree, localizing it if necessary."""
-        return _format(text, self.i18n, self.macros)
-
-    def config(self, extra_type_hooks: TypeHooks = {}) -> TypedConfig:
-        """Creates a Dacite config with strict mode and some preset type hooks.
-
-        If passed, extra_type_hooks will be merged with the default hooks. In case of
-        conflict, extra_type_hooks will be preferred.
-        """
-        return TypedConfig(type_hooks={**self.type_hooks, **extra_type_hooks})
-
-
-class BookHelpers(ABC):
-    """Shortcuts for types with a book field."""
-
-    book: Book | IProperty[Book]
-
-    @property
-    def props(self):
-        return self.book.props
-
-    @property
-    def i18n(self):
-        return self.book.i18n
+    def index_icon(self) -> ResourceLocation:
+        # default value as defined by patchouli, apparently
+        return self.model if self._index_icon is None else self._index_icon

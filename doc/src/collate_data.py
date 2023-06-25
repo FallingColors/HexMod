@@ -7,19 +7,22 @@ from typing import IO, Any
 
 from common.formatting import FormatTree
 from common.types import LocalizedStr
-from patchouli import Category, Entry, HexBook
-from patchouli.page import (
+from hexcasting.hex_book import HexBook
+from hexcasting.hex_pages import (
     BrainsweepPage,
     CraftingMultiPage,
+    LookupPatternPage,
+    PageWithPattern,
+)
+from patchouli import Category, Entry
+from patchouli.page import (
     CraftingPage,
     EmptyPage,
     ImagePage,
     LinkPage,
     Page,
-    PageWithPattern,
     PageWithText,
     PageWithTitle,
-    PatternPage,
     SpotlightPage,
     TextPage,
 )
@@ -122,7 +125,7 @@ def get_format(out: Stream, ty: str, value: Any):
 def entry_spoilered(root_info: HexBook, entry: Entry):
     if entry.advancement is None:
         return False
-    return str(entry.advancement) in root_info.spoilers
+    return str(entry.advancement) in root_info.state.spoilers
 
 
 def category_spoilered(root_info: HexBook, category: Category):
@@ -161,7 +164,7 @@ def permalink(out: Stream, link: str):
         out.empty_pair_tag("i", clazz="bi bi-link-45deg")
 
 
-def write_page(out: Stream, pageid: str, page: Page):
+def write_page(out: Stream, pageid: str, page: Page[Any]):
     if anchor := page.anchor:
         anchor_id = pageid + "@" + anchor
     else:
@@ -172,7 +175,9 @@ def write_page(out: Stream, pageid: str, page: Page):
         if isinstance(page, PageWithTitle) and page.title is not None:
             # gross
             _kwargs = (
-                {"clazz": "pattern-title"} if isinstance(page, PatternPage) else {}
+                {"clazz": "pattern-title"}
+                if isinstance(page, LookupPatternPage)
+                else {}
             )
             with out.pair_tag("h4", **_kwargs):
                 out.text(page.title)
@@ -264,7 +269,7 @@ def write_page(out: Stream, pageid: str, page: Page):
                 with out.pair_tag("p", clazz="todo-note"):
                     out.text(f"TODO: Missing processor for type: {type(page)}")
                 if isinstance(page, PageWithText):
-                    write_block(out, page.text or page.book.format(LocalizedStr("")))
+                    write_block(out, page.text or page.state.format(LocalizedStr("")))
     out.tag("br")
 
 
@@ -290,7 +295,7 @@ def write_category(out: Stream, book: HexBook, category: Category):
                 permalink(out, category.id.href)
             write_block(out, category.description)
         for entry in category.entries:
-            if entry.id.path not in book.blacklist:
+            if entry.id.path not in book.state.blacklist:
                 write_entry(out, book, entry)
 
 
@@ -347,11 +352,11 @@ def generate_docs(book: HexBook, template: str) -> str:
         for line in template.splitlines(True):
             if line.startswith("#DO_NOT_RENDER"):
                 _, *blacklist = line.split()
-                book.blacklist.update(blacklist)
+                book.state.blacklist.update(blacklist)
 
             if line.startswith("#SPOILER"):
                 _, *spoilers = line.split()
-                book.spoilers.update(spoilers)
+                book.state.spoilers.update(spoilers)
             elif line == "#DUMP_BODY_HERE\n":
                 write_book(Stream(output), book)
                 print("", file=output)

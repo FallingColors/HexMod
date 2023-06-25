@@ -13,8 +13,8 @@ from syrupy.types import SerializedData
 from common.formatting import FormatTree
 from common.properties import Properties
 from common.types import LocalizedStr
+from hexcasting.hex_book import HexBook
 from main import Args, main
-from patchouli.hex_book import HexBook
 
 
 def prettify(data: SerializedData) -> str:

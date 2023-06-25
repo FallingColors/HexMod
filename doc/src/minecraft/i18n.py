@@ -1,12 +1,10 @@
 from dataclasses import InitVar, dataclass
 from pathlib import Path
 
-from common.deserialize import load_json
+from common.deserialize import load_json_object
 from common.properties import Properties
-from common.types import LocalizedItem, LocalizedStr
+from common.types import LocalizedItem, LocalizedStr, isinstance_or_raise
 from minecraft.resource import ItemStack, ResourceLocation
-
-I18nLookup = dict[str, LocalizedStr]
 
 
 @dataclass
@@ -18,28 +16,22 @@ class I18n:
 
     def __post_init__(self, enabled: bool):
         # skip loading the files if we don't need to
-        self._lookup: I18nLookup | None = None
+        self._lookup: dict[str, LocalizedStr] | None = None
         if not enabled:
             return
 
-        # load, deserialize, validate
+        # load and deserialize
         # TODO: load ALL of the i18n files, return dict[str, _Lookup] | None
         # or maybe dict[(str, str), LocalizedStr]
         # we could also use that to ensure all i18n files have the same set of keys
         path = self.dir / self.props.i18n.filename
-        _lookup = load_json(path)
-        if self.props.i18n.extra:
-            _lookup.update(self.props.i18n.extra)
+        raw_lookup = load_json_object(path) | (self.props.i18n.extra or {})
 
-        # validate fields
-        # TODO: there's probably a library we can use to do this for us
-        for k, v in _lookup.items():
-            assert isinstance(k, str), f"Unexpected key type `{type(k)}` in {path}: {k}"
-            assert isinstance(
-                v, str
-            ), f"Unexpected value type `{type(v)}` in {path}: {v}"
-
-        self._lookup = _lookup
+        # validate and insert
+        self._lookup = {}
+        for key, raw_value in raw_lookup.items():
+            assert isinstance_or_raise(raw_value, str)
+            self._lookup[key] = LocalizedStr(raw_value)
 
     @property
     def dir(self) -> Path:
@@ -62,7 +54,7 @@ class I18n:
         corresponding localized value.
         """
 
-        assert isinstance(key, (str, list, tuple))
+        assert isinstance_or_raise(key, (str, list[str], tuple[str, ...]))
 
         if self._lookup is None:
             # if i18n is disabled, just return the key
@@ -81,7 +73,7 @@ class I18n:
         else:
             # for a list/tuple of keys, return the first one that matches (by recursing)
             for current_key in key[:-1]:
-                assert isinstance(current_key, str)
+                assert isinstance_or_raise(current_key, str)
                 try:
                     return self.localize(current_key)
                 except KeyError:

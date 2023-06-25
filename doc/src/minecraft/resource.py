@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Self
 
+from common.types import isinstance_or_raise
+
 _RESOURCE_LOCATION_RE = re.compile(r"(?:([0-9a-z_\-.]+):)?([0-9a-z_\-./]+)")
 _ITEM_STACK_SUFFIX_RE = re.compile(r"(?:#([0-9]+))?({.*})?")
 _ENTITY_SUFFIX_RE = re.compile(r"({.*})?")
@@ -36,7 +38,7 @@ class BaseResourceLocation:
         raw: str,
         fullmatch: bool = True,
     ) -> tuple[tuple[Any, ...], re.Match[str]]:
-        assert isinstance(raw, str), f"Expected str, got {type(raw)}"
+        assert isinstance_or_raise(raw, str)
 
         match = _match(_RESOURCE_LOCATION_RE, fullmatch, raw)
         if match is None:

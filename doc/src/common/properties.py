@@ -71,6 +71,18 @@ class Properties:
         )
 
     @property
+    def categories_dir(self) -> Path:
+        return self.book_dir / self.lang / "categories"
+
+    @property
+    def entries_dir(self) -> Path:
+        return self.book_dir / self.lang / "entries"
+
+    @property
+    def templates_dir(self) -> Path:
+        return self.book_dir / self.lang / "templates"
+
+    @property
     def platforms(self) -> list[PlatformProps]:
         platforms = [self.common]
         if self.fabric:

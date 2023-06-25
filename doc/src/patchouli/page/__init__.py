@@ -1,45 +1,32 @@
-import patchouli
-from common.deserialize import TypeHooks
-from common.tagged_union import get_union_types
+__all__ = [
+    "Page",
+    "PageWithCraftingRecipes",
+    "PageWithText",
+    "PageWithTitle",
+    "CraftingPage",
+    "EmptyPage",
+    "EntityPage",
+    "ImagePage",
+    "LinkPage",
+    "MultiblockPage",
+    "QuestPage",
+    "RelationsPage",
+    "SmeltingPage",
+    "SpotlightPage",
+    "TextPage",
+]
 
-from .abstract import *
-from .concrete import *
-from .hexcasting import *
-
-Page = (
-    TextPage
-    | ImagePage
-    | CraftingPage
-    | SmeltingPage
-    | MultiblockPage
-    | EntityPage
-    | SpotlightPage
-    | LinkPage
-    | RelationsPage
-    | QuestPage
-    | EmptyPage
-    | PatternPage
-    | ManualPatternNosigPage
-    | ManualOpPatternPage
-    | ManualRawPatternPage
-    | CraftingMultiPage
-    | BrainsweepPage
+from .abstract import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
+from .concrete import (
+    CraftingPage,
+    EmptyPage,
+    EntityPage,
+    ImagePage,
+    LinkPage,
+    MultiblockPage,
+    QuestPage,
+    RelationsPage,
+    SmeltingPage,
+    SpotlightPage,
+    TextPage,
 )
-
-
-def _raw_page_hook(data: dict[str, Any] | str) -> dict[str, Any]:
-    if isinstance(data, str):
-        # special case, thanks patchouli
-        return {"type": "patchouli:text", "text": data}
-    return data
-
-
-def make_page_hooks(book: patchouli.Book) -> TypeHooks:
-    """Creates type hooks for deserializing Page types."""
-
-    type_hooks: TypeHooks = {Page: _raw_page_hook}
-
-    for cls_ in get_union_types(Page):
-        type_hooks[cls_] = cls_.make_type_hook(book)
-
-    return type_hooks

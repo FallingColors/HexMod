@@ -2,9 +2,48 @@ from __future__ import annotations
 
 import string
 from abc import ABC, abstractmethod
-from typing import Any, Mapping, Protocol, Self, TypeVar
+from typing import Any, Mapping, Protocol, Self, Type, TypeGuard, TypeVar
 
-from common.deserialize import Castable
+JSONDict = dict[str, "JSONValue"]
+
+JSONValue = JSONDict | list["JSONValue"] | str | int | float | bool | None
+
+_T = TypeVar("_T")
+
+_DEFAULT_MESSAGE = "Expected type {expected}, got {actual}: {value}"
+
+
+# there may well be a better way to do this but i don't know what it is
+def isinstance_or_raise(
+    val: Any,
+    class_or_tuple: Type[_T] | tuple[Type[_T], ...],
+    message: str = _DEFAULT_MESSAGE,
+) -> TypeGuard[_T]:
+    """Usage: `assert isinstance_or_raise(val, str)`
+
+    message placeholders: `{expected}`, `{actual}`, `{value}`
+    """
+
+    # convert generic types into the origin type
+    if not isinstance(class_or_tuple, tuple):
+        class_or_tuple = (class_or_tuple,)
+    ungenericed_classes = tuple(getattr(t, "__origin__", t) for t in class_or_tuple)
+
+    if not isinstance(val, ungenericed_classes):
+        # just in case the caller messed up the message formatting
+        subs = dict(expected=class_or_tuple, actual=type(val), value=val)
+        try:
+            raise TypeError(message.format(subs))
+        except Exception:
+            raise TypeError(_DEFAULT_MESSAGE.format(subs))
+    return True
+
+
+class Castable:
+    """Abstract base class for types with a constructor in the form `C(value) -> C`.
+
+    Subclassing this ABC allows for automatic deserialization using Dacite.
+    """
 
 
 class Color(str, Castable):
@@ -25,10 +64,11 @@ class Color(str, Castable):
 
     __slots__ = ()
 
-    def __new__(cls, s: str) -> Self:
-        assert isinstance(s, str), f"Expected str, got {type(s)}"
+    def __new__(cls, value: str) -> Self:
+        # this is a castable type hook but we hint str for usability
+        assert isinstance_or_raise(value, str)
 
-        color = s.removeprefix("#").lower()
+        color = value.removeprefix("#").lower()
 
         # 012 -> 001122
         if len(color) == 3:
@@ -36,7 +76,7 @@ class Color(str, Castable):
 
         # length and character check
         if len(color) != 6 or any(c not in string.hexdigits for c in color):
-            raise ValueError(f"invalid color code: {s}")
+            raise ValueError(f"invalid color code: {value}")
 
         return str.__new__(cls, color)
 
@@ -46,8 +86,8 @@ class LocalizedStr(str):
     """Represents a string which has been localized."""
 
     def __new__(cls, value: str) -> Self:
-        # check the type because we use this while deserializing the i18n dict
-        assert isinstance(value, str), f"Expected str, got {type(value)}"
+        # this is a castable type hook but we hint str for usability
+        assert isinstance_or_raise(value, str)
         return str.__new__(cls, value)
 
 
@@ -68,8 +108,6 @@ class Sortable(ABC):
             return self._cmp_key < other._cmp_key
         return NotImplemented
 
-
-_T = TypeVar("_T")
 
 _T_Sortable = TypeVar("_T_Sortable", bound=Sortable)
 

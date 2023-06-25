@@ -1,2 +1,2 @@
-typed-argument-parser==1.8.0 # better argument parsing
-git+https://github.com/mciszczon/dacite@f298260c6aedc1097c7567b1b0a61298a0ddf2a8                # book deserialization
+typed-argument-parser==1.8.0  # better argument parsing
+git+https://github.com/mciszczon/dacite@f298260c6aedc1097c7567b1b0a61298a0ddf2a8  # book deserialization

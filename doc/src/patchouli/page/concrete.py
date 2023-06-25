@@ -5,26 +5,27 @@ from typing import Any
 
 from common.deserialize import rename
 from common.formatting import FormatTree
+from common.state import BookState
 from common.types import LocalizedItem, LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import Entity, ItemStack, ResourceLocation
 
-from .abstract import BasePage, PageWithCraftingRecipes, PageWithText, PageWithTitle
+from .abstract import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
 
 
 @dataclass(kw_only=True)
-class TextPage(PageWithTitle, type="patchouli:text"):
+class TextPage(PageWithTitle[BookState], type="patchouli:text"):
     text: FormatTree
 
 
 @dataclass
-class ImagePage(PageWithTitle, type="patchouli:image"):
+class ImagePage(PageWithTitle[BookState], type="patchouli:image"):
     images: list[ResourceLocation]
     border: bool = False
 
 
 @dataclass
-class CraftingPage(PageWithCraftingRecipes, type="patchouli:crafting"):
+class CraftingPage(PageWithCraftingRecipes[BookState], type="patchouli:crafting"):
     recipe: CraftingRecipe
     recipe2: CraftingRecipe | None = None
 
@@ -38,13 +39,13 @@ class CraftingPage(PageWithCraftingRecipes, type="patchouli:crafting"):
 
 # TODO: this should probably inherit PageWithRecipes too
 @dataclass
-class SmeltingPage(PageWithTitle, type="patchouli:smelting"):
+class SmeltingPage(PageWithTitle[BookState], type="patchouli:smelting"):
     recipe: ItemStack
     recipe2: ItemStack | None = None
 
 
 @dataclass
-class MultiblockPage(PageWithText, type="patchouli:multiblock"):
+class MultiblockPage(PageWithText[BookState], type="patchouli:multiblock"):
     name: LocalizedStr
     multiblock_id: ResourceLocation | None = None
     # TODO: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/multiblocks/
@@ -58,7 +59,7 @@ class MultiblockPage(PageWithText, type="patchouli:multiblock"):
 
 
 @dataclass
-class EntityPage(PageWithText, type="patchouli:entity"):
+class EntityPage(PageWithText[BookState], type="patchouli:entity"):
     entity: Entity
     scale: float = 1
     offset: float = 0
@@ -68,7 +69,7 @@ class EntityPage(PageWithText, type="patchouli:entity"):
 
 
 @dataclass
-class SpotlightPage(PageWithTitle, type="patchouli:spotlight"):
+class SpotlightPage(PageWithTitle[BookState], type="patchouli:spotlight"):
     item: LocalizedItem  # TODO: patchi says this is an ItemStack, so this might break
     link_recipe: bool = False
 
@@ -80,7 +81,7 @@ class LinkPage(TextPage, type="patchouli:link"):
 
 
 @dataclass(kw_only=True)
-class RelationsPage(PageWithTitle, type="patchouli:relations"):
+class RelationsPage(PageWithTitle[BookState], type="patchouli:relations"):
     entries: list[ResourceLocation]
     _title: LocalizedStr = field(
         default=LocalizedStr("Related Chapters"), metadata=rename("title")
@@ -88,7 +89,7 @@ class RelationsPage(PageWithTitle, type="patchouli:relations"):
 
 
 @dataclass
-class QuestPage(PageWithTitle, type="patchouli:quest"):
+class QuestPage(PageWithTitle[BookState], type="patchouli:quest"):
     trigger: ResourceLocation | None = None
     _title: LocalizedStr = field(
         default=LocalizedStr("Objective"), metadata=rename("title")
@@ -96,5 +97,5 @@ class QuestPage(PageWithTitle, type="patchouli:quest"):
 
 
 @dataclass
-class EmptyPage(BasePage, type="patchouli:empty"):
+class EmptyPage(Page[BookState], type="patchouli:empty"):
     draw_filler: bool = True
