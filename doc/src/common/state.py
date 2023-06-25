@@ -1,19 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from itertools import chain
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import (
-    Any,
-    ClassVar,
-    Collection,
-    Generic,
-    Iterable,
-    Mapping,
-    Self,
-    Type,
-    TypeVar,
-)
+from typing import Any, ClassVar, Generic, Self, Type, TypeVar
 
 from common.deserialize import (
     TypedConfig,
@@ -161,17 +150,15 @@ class StatefulInternallyTaggedUnion(
         }
 
 
-StatefulUnions = Mapping[
-    Type[StatefulInternallyTaggedUnion[AnyState]],
-    Collection[Type[StatefulInternallyTaggedUnion[AnyState]]],
-]
+@dataclass(kw_only=True)
+class TypeTaggedUnion(StatefulInternallyTaggedUnion[AnyState], tag="type", value=None):
+    type: ResourceLocation = field(init=False)
 
+    def __init_subclass__(cls, type: str | None) -> None:
+        super().__init_subclass__("type", type)
+        if type is not None:
+            cls.type = ResourceLocation.from_str(type)
 
-def make_stateful_union_hooks(
-    base: Type[StatefulInternallyTaggedUnion[AnyState]],
-    subtypes: Iterable[Type[StatefulInternallyTaggedUnion[AnyState]]],
-    state: AnyState,
-) -> TypeHooks[StatefulInternallyTaggedUnion[AnyState]]:
-    return {
-        subtype: subtype.make_type_hook(state) for subtype in chain([base], subtypes)
-    }
+    @property
+    def _tag_value(self) -> str:
+        return str(self.type)

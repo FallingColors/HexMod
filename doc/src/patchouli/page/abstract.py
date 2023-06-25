@@ -4,28 +4,22 @@ from typing import Any, Self
 
 from common.deserialize import TypeHook, rename
 from common.formatting import FormatTree
-from common.state import AnyState, StatefulInternallyTaggedUnion
+from common.state import AnyState, TypeTaggedUnion
 from common.types import LocalizedStr
 from minecraft.recipe.concrete import CraftingRecipe
 from minecraft.resource import ResourceLocation
 
 
 @dataclass(kw_only=True)
-class Page(StatefulInternallyTaggedUnion[AnyState], tag="type", value=None):
+class Page(TypeTaggedUnion[AnyState], type=None):
     """Base class for Patchouli page types.
 
     See: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/page-types
     """
 
-    type: ResourceLocation = field(init=False)
     advancement: ResourceLocation | None = None
     flag: str | None = None
     anchor: str | None = None
-
-    def __init_subclass__(cls, type: str | None) -> None:
-        super().__init_subclass__("type", type)
-        if type is not None:
-            cls.type = ResourceLocation.from_str(type)
 
     @classmethod
     def make_type_hook(cls, state: AnyState) -> TypeHook[Self]:
@@ -38,10 +32,6 @@ class Page(StatefulInternallyTaggedUnion[AnyState], tag="type", value=None):
             return super_hook(data)
 
         return type_hook
-
-    @property
-    def _tag_value(self) -> str:
-        return str(self.type)
 
 
 @dataclass(kw_only=True)
