@@ -1,58 +1,24 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from dataclasses import dataclass, field
-from typing import Any, Literal, Self, Type
+from typing import Literal, Self
 
-from common.deserialize import TypeHooks, from_dict_checked, load_json_data, rename
+from common.deserialize import from_dict_checked, load_json_data, rename
 from common.formatting import FormatTree
-from common.properties import Properties
-from common.state import AnyState, BookState, Stateful, StatefulUnions
+from common.state import BookState, Stateful
 from common.types import Color, LocalizedStr
 from minecraft.i18n import I18n
 from minecraft.recipe import Recipe
-from minecraft.recipe.concrete import CraftingShapedRecipe, CraftingShapelessRecipe
 from minecraft.resource import ItemStack, ResLoc, ResourceLocation
-from patchouli.page.concrete import (
-    CraftingPage,
-    EmptyPage,
-    EntityPage,
-    ImagePage,
-    LinkPage,
-    MultiblockPage,
-    QuestPage,
-    RelationsPage,
-    SmeltingPage,
-    SpotlightPage,
-    TextPage,
-)
 
 from .category import Category
 from .entry import Entry
 from .page import Page
 
-_PAGES: list[Type[Page[BookState]]] = [
-    TextPage,
-    ImagePage,
-    CraftingPage,
-    SmeltingPage,
-    MultiblockPage,
-    EntityPage,
-    SpotlightPage,
-    LinkPage,
-    RelationsPage,
-    QuestPage,
-    EmptyPage,
-]
-
-_RECIPES: list[Type[Recipe[BookState]]] = [
-    CraftingShapedRecipe,
-    CraftingShapelessRecipe,
-]
-
 
 @dataclass
-class Book(Stateful[AnyState], ABC):
+class Book(Stateful[BookState], ABC):
     """Main Patchouli book class.
 
     Includes all data from book.json, categories/entries/pages, and i18n.
@@ -104,7 +70,7 @@ class Book(Stateful[AnyState], ABC):
     allow_extensions: bool = True
 
     @classmethod
-    def load(cls, props: Properties) -> Self:
+    def load(cls, state: BookState) -> Self:
         """Loads `book.json`, and sets up shared state with `cls._make_state()`.
 
         Subclasses should generally not override this. To customize state creation or
@@ -112,43 +78,15 @@ class Book(Stateful[AnyState], ABC):
         """
 
         # read the raw dict from the json file
-        path = props.book_dir / "book.json"
-        data = load_json_data(cls, path)
+        path = state.props.book_dir / "book.json"
+        data = load_json_data(cls, path, {"state": state})
 
-        # construct the shared state object
-        state = data["state"] = cls._init_state(
-            data=data,
-            props=props,
-            i18n=I18n(props, data["do_i18n"]),
-            macros=data["macros"],
-            type_hooks={},
-            stateful_unions={
-                Page[BookState]: _PAGES,
-                Recipe[BookState]: _RECIPES,
-            },
-        )
+        state.i18n = I18n(state.props, data["do_i18n"])
+        state.add_macros(data["macros"])
+        state.add_stateful_unions(Page[BookState], Recipe[BookState])
 
         # NOW we can convert the actual book data
         return from_dict_checked(cls, data, state.config, path)
-
-    @classmethod
-    @abstractmethod
-    def _init_state(
-        cls,
-        data: dict[str, Any],
-        props: Properties,
-        i18n: I18n,
-        macros: dict[str, str],
-        type_hooks: TypeHooks[Any],
-        stateful_unions: StatefulUnions[AnyState],
-    ) -> AnyState:
-        """Constructs the shared state object for this book.
-
-        `macros` should not include `DEFAULT_MACROS`; those are added by the BookState
-        constructor.
-
-        You can add Page or Recipe types to `stateful_unions`."""
-        ...
 
     def __post_init__(self) -> None:
         """Loads categories and entries."""

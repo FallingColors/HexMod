@@ -31,19 +31,22 @@ class InternallyTaggedUnion(ABC):
 
     _tag_key: ClassVar[str | None] = None
     _expected_tag_value: ClassVar[str | None] = None
-    _union_types: ClassVar[defaultdict[str, list[Type[Self]]]]
+    _all_union_types: ClassVar[list[Type[Self]]]
+    _concrete_union_types: ClassVar[defaultdict[str, list[Type[Self]]]]
 
     def __init_subclass__(cls, tag: str | None, value: str | None) -> None:
         cls._tag_key = tag
         cls._expected_tag_value = value
-        cls._union_types = defaultdict(list)
+        cls._all_union_types = []
+        cls._concrete_union_types = defaultdict(list)
 
         # if cls is a concrete union type, add it to all the lookups of its parents
         # also add it to its own lookup so it can resolve itself
-        if tag is not None and value is not None:
-            cls._union_types[value].append(cls)
-            for base in cls._union_bases():
-                base._union_types[value].append(cls)
+        if tag is not None:
+            for base in [cls] + cls._union_bases():
+                base._all_union_types.append(cls)
+                if value is not None:
+                    base._concrete_union_types[value].append(cls)
 
     @classmethod
     def _union_bases(cls) -> list[Type[InternallyTaggedUnion]]:
@@ -73,7 +76,7 @@ class InternallyTaggedUnion(ABC):
         if tag_value is None:
             raise KeyError(cls._tag_key, data)
 
-        tag_types = cls._union_types.get(tag_value)
+        tag_types = cls._concrete_union_types.get(tag_value)
         if tag_types is None:
             raise TypeError(
                 f"Unhandled tag: {cls._tag_key}={tag_value} for {cls}: {data}"

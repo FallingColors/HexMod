@@ -1,9 +1,19 @@
 from __future__ import annotations
 
-from dataclasses import InitVar, dataclass
+from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
-from typing import Any, Collection, Generic, Iterable, Mapping, Self, Type, TypeVar
+from typing import (
+    Any,
+    ClassVar,
+    Collection,
+    Generic,
+    Iterable,
+    Mapping,
+    Self,
+    Type,
+    TypeVar,
+)
 
 from common.deserialize import (
     TypedConfig,
@@ -29,50 +39,47 @@ class BookState:
     """
 
     props: Properties
-    i18n: I18n
-    macros: InitVar[dict[str, str]]
-    """Extra formatting macros to be merged with the provided defaults.
-    
-    These should generally come from `book.json`.
-    """
-    type_hooks: InitVar[TypeHooks[Any] | None] = None
-    """Extra Dacite type hooks to be merged with the provided defaults.
 
-    This should only be used if necessary to avoid a circular dependency. In general,
-    you should add hooks by subclassing BookState and adding them in __post_init__ after
-    calling super.
-    
-    Hooks are added in the following order. In case of conflict, later values will
-    override earlier ones.
-    * `state._default_hooks()`
-    * `type_hooks`
-    * `type_hook_maker`
-    """
-    stateful_unions: InitVar[StatefulUnions[Self] | None] = None
-
-    def __post_init__(
-        self,
-        macros: dict[str, str],
-        type_hooks: TypeHooks[Any] | None,
-        stateful_unions: StatefulUnions[Self] | None,
-    ):
-        # macros (TODO: order of operations?)
-        self._macros: dict[str, str] = macros | DEFAULT_MACROS
+    def __post_init__(self):
+        self._macros: dict[str, str] = DEFAULT_MACROS
+        self._i18n: I18n | None = None
 
         # type conversion hooks
         self._type_hooks: TypeHooks[Any] = {
             ResourceLocation: ResourceLocation.from_str,
             ItemStack: ItemStack.from_str,
             Direction: Direction.__getitem__,
-            LocalizedStr: self.i18n.localize,
-            LocalizedItem: self.i18n.localize_item,
             FormatTree: self.format,
         }
-        if type_hooks:
-            self._type_hooks |= type_hooks
-        if stateful_unions:
-            for base, subtypes in stateful_unions.items():
-                self._type_hooks |= make_stateful_union_hooks(base, subtypes, self)
+
+    @property
+    def i18n(self) -> I18n:
+        if self._i18n is None:
+            raise RuntimeError("Tried to use state.i18n before initializing it")
+        return self._i18n
+
+    @i18n.setter
+    def i18n(self, i18n: I18n):
+        self._i18n = i18n
+        self._type_hooks |= {
+            LocalizedStr: self.i18n.localize,
+            LocalizedItem: self.i18n.localize_item,
+        }
+
+    def add_macros(self, macros: dict[str, str]):
+        # TODO: order of operations?
+        self._macros = macros | self._macros
+
+    def add_stateful_unions(
+        self,
+        *unions: Type[StatefulInternallyTaggedUnion[Self]],
+    ):
+        for union in unions:
+            self._type_hooks |= union.make_type_hooks(self) | {
+                # we need eg. `Page[BookState]: Page[BookState].make_type_hook(self)`
+                # and `union.make_type_hooks()` can't do that, apparently
+                union: union.make_type_hook(self)
+            }
 
     def format(self, text: str | LocalizedStr) -> FormatTree:
         """Converts the given string into a FormatTree, localizing it if necessary."""
@@ -130,6 +137,9 @@ class StatefulInternallyTaggedUnion(
     tag=None,
     value=None,
 ):
+    # set by InternallyTaggedUnion, but we need the type hint here
+    _all_union_types: ClassVar[list[Type[Self]]]
+
     @classmethod
     def resolve_union_with_state(
         cls,
@@ -143,6 +153,12 @@ class StatefulInternallyTaggedUnion(
     @classmethod
     def make_type_hook(cls, state: AnyState) -> TypeHook[Self]:
         return lambda data: cls.resolve_union_with_state(data, state)
+
+    @classmethod
+    def make_type_hooks(cls, state: BookState) -> TypeHooks[Self]:
+        return {
+            subtype: subtype.make_type_hook(state) for subtype in cls._all_union_types
+        }
 
 
 StatefulUnions = Mapping[

@@ -14,6 +14,7 @@ from common.formatting import FormatTree
 from common.properties import Properties
 from common.types import LocalizedStr
 from hexcasting.hex_book import HexBook
+from hexcasting.hex_state import HexBookState
 from main import Args, main
 
 
@@ -80,7 +81,7 @@ def test_book_text(snapshot: SnapshotAssertion):
             assert value == snapshot
 
     props = Properties.load(Path("properties.toml"))
-    book = HexBook.load(props)
+    book = HexBook.load(HexBookState(props))
 
     for field in fields(book):
         test_field(book, field)
