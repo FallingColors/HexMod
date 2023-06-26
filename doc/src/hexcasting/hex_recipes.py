@@ -3,10 +3,8 @@ from typing import Any, Literal
 
 from common.dacite_patch import UnionSkip
 from common.types import LocalizedItem
-from minecraft.recipe import Recipe
-from minecraft.recipe.concrete import CraftingRecipe
-from minecraft.recipe.ingredient import ItemIngredient, ItemIngredientData
-from minecraft.recipe.result import ItemResult
+from minecraft.recipe import CraftingRecipe, ItemIngredient, ItemResult, Recipe
+from minecraft.recipe.abstract_recipes import ItemIngredientData
 from minecraft.resource import ResourceLocation
 
 from .hex_state import HexBookState
@@ -15,7 +13,7 @@ from .hex_state import HexBookState
 
 
 @dataclass
-class VillagerIngredient:
+class VillagerIngredient:  # lol, lmao
     minLevel: int
     profession: ResourceLocation | None = None
     biome: ResourceLocation | None = None

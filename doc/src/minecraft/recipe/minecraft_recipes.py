@@ -2,8 +2,7 @@ from dataclasses import dataclass
 
 from common.state import BookState
 
-from .abstract import CraftingRecipe
-from .ingredient import ItemIngredient
+from .abstract_recipes import CraftingRecipe, ItemIngredient
 
 
 @dataclass

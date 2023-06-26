@@ -16,8 +16,8 @@ __all__ = [
     "TextPage",
 ]
 
-from .abstract import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
-from .concrete import (
+from .abstract_pages import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
+from .patchouli_pages import (
     CraftingPage,
     EmptyPage,
     EntityPage,

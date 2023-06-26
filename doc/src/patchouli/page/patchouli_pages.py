@@ -10,7 +10,7 @@ from common.types import LocalizedItem, LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import Entity, ItemStack, ResourceLocation
 
-from .abstract import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
+from .abstract_pages import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
 
 
 @dataclass(kw_only=True)

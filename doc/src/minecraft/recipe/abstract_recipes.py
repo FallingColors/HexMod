@@ -5,9 +5,23 @@ from typing import Any, Self
 
 from common.deserialize import TypeHook, load_json_data
 from common.state import AnyState, TypeTaggedUnion
+from common.types import LocalizedItem
 from minecraft.resource import ResourceLocation
 
-from .result import ItemResult
+
+@dataclass
+class ItemIngredientData:
+    item: ResourceLocation | None = None
+    tag: ResourceLocation | None = None
+
+
+ItemIngredient = ItemIngredientData | list[ItemIngredientData]
+
+
+@dataclass
+class ItemResult:
+    item: LocalizedItem
+    count: int | None = None
 
 
 @dataclass(kw_only=True)
