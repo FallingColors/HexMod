@@ -4,12 +4,12 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from common.deserialize import rename
-from common.formatting import FormatTree
 from common.types import LocalizedItem, LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import Entity, ItemStack, ResourceLocation
-from patchouli.state import BookState
 
+from ..formatting import FormatTree
+from ..state import BookState
 from .abstract_pages import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
 
 

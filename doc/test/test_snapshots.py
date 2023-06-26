@@ -10,12 +10,11 @@ from syrupy.assertion import SnapshotAssertion
 from syrupy.extensions.amber import AmberSnapshotExtension
 from syrupy.types import SerializedData
 
-from common.formatting import FormatTree
 from common.properties import Properties
 from common.types import LocalizedStr
 from hexcasting.hex_state import HexBookState
 from main import Args, main
-from patchouli import Book
+from patchouli import Book, FormatTree
 
 
 def prettify(data: SerializedData) -> str:

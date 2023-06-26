@@ -4,12 +4,12 @@ from dataclasses import dataclass, field
 from typing import Self
 
 from common.deserialize import rename
-from common.formatting import FormatTree
 from common.types import LocalizedStr, Sortable, sorted_dict
 from minecraft.resource import ItemStack, ResourceLocation
-from patchouli.state import BookState, StatefulFile
 
 from .entry import Entry
+from .formatting import FormatTree
+from .state import BookState, StatefulFile
 
 
 @dataclass

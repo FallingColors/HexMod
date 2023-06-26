@@ -11,13 +11,14 @@ from common.deserialize import (
     from_dict_checked,
     load_json_data,
 )
-from common.formatting import DEFAULT_MACROS, FormatTree
 from common.pattern import Direction
 from common.properties import Properties
 from common.tagged_union import InternallyTaggedUnion
 from common.types import LocalizedItem, LocalizedStr, isinstance_or_raise
 from minecraft.i18n import I18n
 from minecraft.resource import ItemStack, ResourceLocation
+
+from .formatting import DEFAULT_MACROS, FormatTree
 
 
 @dataclass

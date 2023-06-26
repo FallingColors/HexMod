@@ -1,6 +1,6 @@
 # pyright: reportPrivateUsage=false
-from common.formatting import DEFAULT_MACROS, FormatTree, Style
 from common.types import LocalizedStr
+from patchouli.formatting import DEFAULT_MACROS, FormatTree, Style
 
 
 def test_format_string():

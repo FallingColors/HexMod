@@ -5,7 +5,6 @@ import io
 from html import escape
 from typing import IO, Any
 
-from common.formatting import FormatTree
 from common.types import LocalizedStr
 from hexcasting import HexBook
 from hexcasting.hex_pages import (
@@ -14,7 +13,7 @@ from hexcasting.hex_pages import (
     LookupPatternPage,
     PageWithPattern,
 )
-from patchouli import Category, Entry
+from patchouli import Category, Entry, FormatTree
 from patchouli.page import (
     CraftingPage,
     EmptyPage,
