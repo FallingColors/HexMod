@@ -6,19 +6,19 @@ from typing import Literal, Self
 
 from common.deserialize import from_dict_checked, load_json_data, rename
 from common.formatting import FormatTree
-from common.state import BookState, Stateful
+from common.state import AnyState, Stateful
 from common.types import Color, LocalizedStr
 from minecraft.i18n import I18n
-from minecraft.recipe import Recipe
+from minecraft.recipe import Recipe, minecraft_recipes as _  # ensure unions are loaded
 from minecraft.resource import ItemStack, ResLoc, ResourceLocation
 
 from .category import Category
 from .entry import Entry
-from .page import Page
+from .page import Page, patchouli_pages as _  # ensure unions are loaded
 
 
 @dataclass
-class Book(Stateful[BookState], ABC):
+class Book(Stateful[AnyState], ABC):
     """Main Patchouli book class.
 
     Includes all data from book.json, categories/entries/pages, and i18n.
@@ -70,7 +70,7 @@ class Book(Stateful[BookState], ABC):
     allow_extensions: bool = True
 
     @classmethod
-    def load(cls, state: BookState) -> Self:
+    def load(cls, state: AnyState) -> Self:
         """Loads `book.json`, and sets up shared state with `cls._make_state()`.
 
         Subclasses should generally not override this. To customize state creation or
@@ -83,7 +83,7 @@ class Book(Stateful[BookState], ABC):
 
         state.i18n = I18n(state.props, data["do_i18n"])
         state.add_macros(data["macros"])
-        state.add_stateful_unions(Page[BookState], Recipe[BookState])
+        state.add_stateful_unions(Page, Recipe)
 
         # NOW we can convert the actual book data
         return from_dict_checked(cls, data, state.config, path)

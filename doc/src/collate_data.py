@@ -7,7 +7,7 @@ from typing import IO, Any
 
 from common.formatting import FormatTree
 from common.types import LocalizedStr
-from hexcasting.hex_book import HexBook
+from hexcasting import HexBook
 from hexcasting.hex_pages import (
     BrainsweepPage,
     CraftingMultiPage,

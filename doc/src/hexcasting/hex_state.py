@@ -4,6 +4,7 @@ from typing import Any
 from common.pattern import PatternInfo
 from common.state import BookState
 from minecraft.resource import ResourceLocation
+from patchouli.book import Book
 
 
 @dataclass

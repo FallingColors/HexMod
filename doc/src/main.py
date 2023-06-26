@@ -13,8 +13,8 @@ from tap import Tap
 
 from collate_data import generate_docs
 from common.properties import Properties
-from hexcasting.hex_book import HexBook
 from hexcasting.hex_state import HexBookState
+from patchouli.book import Book
 
 if sys.version_info < (3, 11):
     raise RuntimeError("Minimum Python version: 3.11")
@@ -34,7 +34,7 @@ class Args(Tap):
 def main(args: Args) -> None:
     # load the properties and book
     props = Properties.load(args.properties_file)
-    book = HexBook.load(HexBookState(props))
+    book = Book.load(HexBookState(props))
 
     # load and fill the template
     template = props.template.read_text("utf-8")
