@@ -106,10 +106,10 @@ class CraftingMultiPage(
     type="hexcasting:crafting_multi",
 ):
     heading: LocalizedStr  # ...heading?
-    _recipes: list[CraftingRecipe] = field(metadata=rename("recipes"))
+    _recipes: list[CraftingRecipe[HexBookState]] = field(metadata=rename("recipes"))
 
     @property
-    def recipes(self) -> list[CraftingRecipe]:
+    def recipes(self) -> list[CraftingRecipe[HexBookState]]:
         return self._recipes
 
 

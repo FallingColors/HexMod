@@ -4,13 +4,12 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from itertools import chain
-from typing import Any, ClassVar, Iterable, Self, Type, TypeVar
+from typing import Any, ClassVar, Self, Type
 
 from dacite import StrictUnionMatchError, UnionMatchError, from_dict
 
 from common.dacite_patch import UnionSkip
-from common.deserialize import TypedConfig, TypeHooks
+from common.deserialize import TypedConfig
 from common.types import isinstance_or_raise
 
 
@@ -116,18 +115,3 @@ class InternallyTaggedUnion(ABC):
     @abstractmethod
     def _tag_value(self) -> str:
         ...
-
-
-_T_Union = TypeVar("_T_Union", bound=InternallyTaggedUnion)
-
-
-def make_internally_tagged_hooks(
-    base: Type[_T_Union],
-    subtypes: Iterable[Type[_T_Union]],
-    config: TypedConfig,
-) -> TypeHooks[_T_Union]:
-    """Creates type hooks for an internally tagged union."""
-    return {
-        subtype: lambda data: subtype.resolve_union(data, config)
-        for subtype in chain([base], subtypes)
-    }

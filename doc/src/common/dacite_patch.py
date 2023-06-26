@@ -3,7 +3,6 @@
 # pyright: reportUnknownMemberType=false
 
 import copy
-import traceback
 from itertools import zip_longest
 from typing import (
     Any,
@@ -27,10 +26,12 @@ from dacite import (
     from_dict as _original_from_dict,
 )
 from dacite.cache import cache
-from dacite.core import _build_value
+from dacite.core import _build_value as _original_build_value
 from dacite.data import Data
 from dacite.dataclasses import get_fields
 from dacite.types import extract_generic, is_instance, is_optional, is_subclass
+
+from common.types import isinstance_or_raise
 
 
 class UnionSkip(Exception):
@@ -38,11 +39,12 @@ class UnionSkip(Exception):
     match their type."""
 
 
-def handle_metadata_inplace(data_class: Type[Any], data: dict[str, Any]) -> None:
+def handle_metadata(data_class: Type[Any], data: dict[str, Any]):
     """Applies our custom metadata. Currently this just renames fields."""
     # only transform a dict once, in case this is called multiple times
+    data = data.copy()
     if data.get("__metadata_handled"):  # mischief managed?
-        return
+        return data
     data["__metadata_handled"] = True
 
     for field in get_fields(data_class):
@@ -61,14 +63,25 @@ def handle_metadata_inplace(data_class: Type[Any], data: dict[str, Any]) -> None
         except KeyError:
             pass
 
+    return data
 
-def handle_metadata_inplace_final(data_class: Type[Any], data: dict[str, Any]) -> None:
-    """As `handle_metadata_inplace`, but removes the key marking data as handled.
+
+def handle_metadata_final(data_class: Type[Any], data: dict[str, Any]):
+    """As `handle_metadata`, but removes the key marking data as handled.
 
     Should only be used within a custom from_dict implementation.
     """
-    handle_metadata_inplace(data_class, data)
+    data = handle_metadata(data_class, data)
     data.pop("__metadata_handled")
+    return data
+
+
+def _patched_build_value(type_: Type[Any], data: Any, config: Config) -> Any:
+    if type_ not in config.type_hooks:
+        origin = get_origin(type_)
+        if origin and origin in config.type_hooks:
+            data = config.type_hooks[origin](data)
+    return _original_build_value(type_, data, config)
 
 
 # fixes https://github.com/konradhalas/dacite/issues/234
@@ -78,7 +91,7 @@ def handle_metadata_inplace_final(data_class: Type[Any], data: dict[str, Any]) -
 def _patched_build_value_for_union(union: Type[Any], data: Any, config: Config) -> Any:
     types = extract_generic(union)
     if is_optional(union) and len(types) == 2:
-        return _build_value(type_=types[0], data=data, config=config)
+        return _patched_build_value(type_=types[0], data=data, config=config)
 
     exceptions: list[Exception] = []
     union_matches = {}
@@ -89,7 +102,7 @@ def _patched_build_value_for_union(union: Type[Any], data: Any, config: Config) 
     for inner_type in types:
         try:
             try:
-                value = _build_value(type_=inner_type, data=data, config=config)
+                value = _patched_build_value(type_=inner_type, data=data, config=config)
             except UnionSkip:
                 continue
             except Exception as e:
@@ -115,15 +128,13 @@ def _patched_build_value_for_union(union: Type[Any], data: Any, config: Config) 
     if not config.check_types:
         return data
 
-    for e in exceptions:
-        traceback.print_exception(e, limit=4)
-        print("------------------------")
-
     e = UnionMatchError(field_type=union, value=data)
     e.add_note(f"\noriginal data: {original_data}")
     e.add_note(f"maybe-or-maybe-not-transformed data: {data}")
     e.add_note(f"transformed data: {data_}\n")
-    raise e
+    exceptions.append(e)
+
+    raise ExceptionGroup("Failed to match union", exceptions)
 
 
 # fixes https://github.com/konradhalas/dacite/issues/217
@@ -135,8 +146,8 @@ def _patched_build_value_for_collection(
         key_type, item_type = extract_generic(collection, defaults=(Any, Any))
         return data_type(
             (
-                _build_value(type_=key_type, data=key, config=config),
-                _build_value(type_=item_type, data=value, config=config),
+                _patched_build_value(type_=key_type, data=key, config=config),
+                _patched_build_value(type_=item_type, data=value, config=config),
             )
             for key, value in data.items()
         )
@@ -146,16 +157,18 @@ def _patched_build_value_for_collection(
         types = extract_generic(collection)
         if len(types) == 2 and types[1] == Ellipsis:
             return data_type(
-                _build_value(type_=types[0], data=item, config=config) for item in data
+                _patched_build_value(type_=types[0], data=item, config=config)
+                for item in data
             )
         return data_type(
-            _build_value(type_=type_, data=item, config=config)
+            _patched_build_value(type_=type_, data=item, config=config)
             for item, type_ in zip_longest(data, types)
         )
     elif isinstance(data, Collection) and is_subclass(collection, Collection):
         item_type = extract_generic(collection, defaults=(Any,))[0]
         return data_type(
-            _build_value(type_=item_type, data=item, config=config) for item in data
+            _patched_build_value(type_=item_type, data=item, config=config)
+            for item in data
         )
     return data
 
@@ -170,8 +183,18 @@ def _patched_from_dict(
 ) -> _T:
     if isinstance(data, data_class):
         return data
-    data = dict(data)
-    handle_metadata_inplace_final(data_class, data)
+
+    # ensure it's a dict, or add context
+    try:
+        assert isinstance_or_raise(data, dict)
+    except TypeError as e:
+        if config and data_class not in config.type_hooks:
+            e.add_note(f"Note: {data_class} is not in type_hooks: {config.type_hooks}")
+        else:
+            e.add_note(f"data_class: {data_class}")
+        raise
+
+    data = handle_metadata_final(data_class, data)
     return _original_from_dict(data_class, data, config)
 
 
@@ -197,6 +220,7 @@ def _patched_is_valid_generic_class(value: Any, type_: Type[Any]) -> bool:
 # we do a bit of monkeypatching
 dacite.from_dict = _patched_from_dict
 dacite.core.from_dict = _patched_from_dict
+dacite.core._build_value = _patched_build_value
 dacite.core._build_value_for_union = _patched_build_value_for_union
 dacite.core._build_value_for_collection = _patched_build_value_for_collection
 dacite.types.is_valid_generic_class = _patched_is_valid_generic_class

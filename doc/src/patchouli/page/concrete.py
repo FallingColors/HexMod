@@ -25,12 +25,15 @@ class ImagePage(PageWithTitle[BookState], type="patchouli:image"):
 
 
 @dataclass
-class CraftingPage(PageWithCraftingRecipes[BookState], type="patchouli:crafting"):
-    recipe: CraftingRecipe
-    recipe2: CraftingRecipe | None = None
+class CraftingPage(
+    PageWithCraftingRecipes[BookState],
+    type="patchouli:crafting",
+):
+    recipe: CraftingRecipe[BookState]
+    recipe2: CraftingRecipe[BookState] | None = None
 
     @property
-    def recipes(self) -> list[CraftingRecipe]:
+    def recipes(self) -> list[CraftingRecipe[BookState]]:
         recipes = [self.recipe]
         if self.recipe2:
             recipes.append(self.recipe2)

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import string
 from abc import ABC, abstractmethod
-from typing import Any, Mapping, Protocol, Self, Type, TypeGuard, TypeVar
+from typing import Any, Mapping, Protocol, Self, Type, TypeGuard, TypeVar, get_origin
 
 JSONDict = dict[str, "JSONValue"]
 
@@ -10,7 +10,7 @@ JSONValue = JSONDict | list["JSONValue"] | str | int | float | bool | None
 
 _T = TypeVar("_T")
 
-_DEFAULT_MESSAGE = "Expected type {expected}, got {actual}: {value}"
+_DEFAULT_MESSAGE = "Expected any of {expected}, got {actual}: {value}"
 
 
 # there may well be a better way to do this but i don't know what it is
@@ -27,15 +27,15 @@ def isinstance_or_raise(
     # convert generic types into the origin type
     if not isinstance(class_or_tuple, tuple):
         class_or_tuple = (class_or_tuple,)
-    ungenericed_classes = tuple(getattr(t, "__origin__", t) for t in class_or_tuple)
+    ungenericed_classes = tuple(get_origin(t) or t for t in class_or_tuple)
 
     if not isinstance(val, ungenericed_classes):
         # just in case the caller messed up the message formatting
-        subs = dict(expected=class_or_tuple, actual=type(val), value=val)
+        subs = {"expected": class_or_tuple, "actual": type(val), "value": val}
         try:
-            raise TypeError(message.format(subs))
-        except Exception:
-            raise TypeError(_DEFAULT_MESSAGE.format(subs))
+            raise TypeError(message.format(**subs))
+        except KeyError:
+            raise TypeError(_DEFAULT_MESSAGE.format(**subs))
     return True
 
 

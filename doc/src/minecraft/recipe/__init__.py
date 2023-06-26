@@ -3,5 +3,4 @@ __all__ = [
     "CraftingRecipe",
 ]
 
-from .abstract import Recipe
-from .concrete import CraftingRecipe
+from .abstract import CraftingRecipe, Recipe

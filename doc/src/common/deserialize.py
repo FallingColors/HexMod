@@ -3,14 +3,14 @@
 from common import dacite_patch as _  # isort: skip
 
 import json
-import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Type, TypeVar
 
+import tomllib
 from dacite import Config, from_dict
 
-from common.dacite_patch import handle_metadata_inplace
+from common.dacite_patch import handle_metadata
 from common.toml_placeholders import TOMLDict, fill_placeholders
 from common.types import Castable, JSONDict, JSONValue, isinstance_or_raise
 
@@ -68,15 +68,13 @@ def load_json_data(
 ) -> dict[str, Any]:
     """Load a dict from a JSON file and apply metadata transformations to it."""
     data = load_json_object(path)
-    handle_metadata_inplace(data_class, data)
-    return data | extra_data
+    return handle_metadata(data_class, data) | extra_data
 
 
 def load_toml_data(data_class: Type[Any], path: Path) -> TOMLDict:
     data = tomllib.loads(path.read_text("utf-8"))
     fill_placeholders(data)
-    handle_metadata_inplace(data_class, data)
-    return data
+    return handle_metadata(data_class, data)
 
 
 def from_dict_checked(

@@ -7,6 +7,8 @@ from common.deserialize import TypeHook, load_json_data
 from common.state import AnyState, TypeTaggedUnion
 from minecraft.resource import ResourceLocation
 
+from .result import ItemResult
+
 
 @dataclass(kw_only=True)
 class Recipe(TypeTaggedUnion[AnyState], type=None):
@@ -34,3 +36,8 @@ class Recipe(TypeTaggedUnion[AnyState], type=None):
             return super_hook(data)
 
         return type_hook
+
+
+@dataclass(kw_only=True)
+class CraftingRecipe(Recipe[AnyState], type=None):
+    result: ItemResult

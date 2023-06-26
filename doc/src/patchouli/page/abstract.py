@@ -6,7 +6,7 @@ from common.deserialize import TypeHook, rename
 from common.formatting import FormatTree
 from common.state import AnyState, TypeTaggedUnion
 from common.types import LocalizedStr
-from minecraft.recipe.concrete import CraftingRecipe
+from minecraft.recipe import CraftingRecipe
 from minecraft.resource import ResourceLocation
 
 
@@ -52,5 +52,5 @@ class PageWithTitle(PageWithText[AnyState], type=None):
 class PageWithCraftingRecipes(PageWithText[AnyState], ABC, type=None):
     @property
     @abstractmethod
-    def recipes(self) -> list[CraftingRecipe]:
+    def recipes(self) -> list[CraftingRecipe[AnyState]]:
         ...
