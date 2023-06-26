@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, ClassVar, Generic, Self, Type, TypeVar
+from typing import Any, ClassVar, Generic, Self, TypeVar
 
 from common.deserialize import (
     TypedConfig,
@@ -62,7 +62,7 @@ class BookState:
 
     def add_stateful_unions(
         self,
-        *unions: Type[StatefulInternallyTaggedUnion[Self]],
+        *unions: type[StatefulInternallyTaggedUnion[Self]],
     ):
         for union in unions:
             self._type_hooks |= union.make_type_hooks(self) | {
@@ -128,7 +128,7 @@ class StatefulInternallyTaggedUnion(
     value=None,
 ):
     # set by InternallyTaggedUnion, but we need the type hint here
-    _all_union_types: ClassVar[list[Type[Self]]]
+    _all_union_types: ClassVar[list[type[Self]]]
 
     @classmethod
     def resolve_union_with_state(

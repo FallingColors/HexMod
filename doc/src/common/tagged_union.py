@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import Any, ClassVar, Self, Type
+from typing import Any, ClassVar, Self
 
 from dacite import StrictUnionMatchError, UnionMatchError, from_dict
 
@@ -14,7 +14,7 @@ from common.types import isinstance_or_raise
 
 
 class WrongTag(UnionSkip):
-    def __init__(self, union_type: Type[InternallyTaggedUnion], tag_value: str) -> None:
+    def __init__(self, union_type: type[InternallyTaggedUnion], tag_value: str) -> None:
         super().__init__(
             f"Expected {union_type._tag_key}={union_type._expected_tag_value}, got {tag_value}"
         )
@@ -30,8 +30,8 @@ class InternallyTaggedUnion(ABC):
 
     _tag_key: ClassVar[str | None] = None
     _expected_tag_value: ClassVar[str | None] = None
-    _all_union_types: ClassVar[list[Type[Self]]]
-    _concrete_union_types: ClassVar[defaultdict[str, list[Type[Self]]]]
+    _all_union_types: ClassVar[list[type[Self]]]
+    _concrete_union_types: ClassVar[defaultdict[str, list[type[Self]]]]
 
     def __init_subclass__(cls, tag: str | None, value: str | None) -> None:
         cls._tag_key = tag
@@ -48,8 +48,8 @@ class InternallyTaggedUnion(ABC):
                     base._concrete_union_types[value].append(cls)
 
     @classmethod
-    def _union_bases(cls) -> list[Type[InternallyTaggedUnion]]:
-        union_bases: list[Type[InternallyTaggedUnion]] = []
+    def _union_bases(cls) -> list[type[InternallyTaggedUnion]]:
+        union_bases: list[type[InternallyTaggedUnion]] = []
         for base in cls.__bases__:
             if (
                 issubclass(base, InternallyTaggedUnion)
@@ -83,7 +83,7 @@ class InternallyTaggedUnion(ABC):
 
         # try all the types
         exceptions: list[Exception] = []
-        union_matches: dict[Type[InternallyTaggedUnion], InternallyTaggedUnion] = {}
+        union_matches: dict[type[InternallyTaggedUnion], InternallyTaggedUnion] = {}
 
         for inner_type in tag_types:
             try:

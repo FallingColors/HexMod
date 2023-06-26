@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import string
 from abc import ABC, abstractmethod
-from typing import Any, Mapping, Protocol, Self, Type, TypeGuard, TypeVar, get_origin
+from typing import Any, Mapping, Protocol, Self, TypeGuard, TypeVar, get_origin
 
 JSONDict = dict[str, "JSONValue"]
 
@@ -16,7 +16,7 @@ _DEFAULT_MESSAGE = "Expected any of {expected}, got {actual}: {value}"
 # there may well be a better way to do this but i don't know what it is
 def isinstance_or_raise(
     val: Any,
-    class_or_tuple: Type[_T] | tuple[Type[_T], ...],
+    class_or_tuple: type[_T] | tuple[type[_T], ...],
     message: str = _DEFAULT_MESSAGE,
 ) -> TypeGuard[_T]:
     """Usage: `assert isinstance_or_raise(val, str)`

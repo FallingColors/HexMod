@@ -3,11 +3,11 @@
 from common import dacite_patch as _  # isort: skip
 
 import json
+import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Type, TypeVar
+from typing import Any, Callable, TypeVar
 
-import tomllib
 from dacite import Config, from_dict
 
 from common.dacite_patch import handle_metadata
@@ -20,7 +20,7 @@ _T_Dataclass = TypeVar("_T_Dataclass")
 
 TypeHook = Callable[[_T_Dataclass | Any], _T_Dataclass | dict[str, Any]]
 
-TypeHooks = dict[Type[_T_Dataclass], TypeHook[_T_Dataclass]]
+TypeHooks = dict[type[_T_Dataclass], TypeHook[_T_Dataclass]]
 
 TypeHookMaker = Callable[[_T_Input], TypeHooks[_T_Dataclass]]
 
@@ -62,7 +62,7 @@ def load_json_object(path: Path) -> JSONDict:
 
 
 def load_json_data(
-    data_class: Type[Any],
+    data_class: type[Any],
     path: Path,
     extra_data: dict[str, Any] = {},
 ) -> dict[str, Any]:
@@ -71,14 +71,14 @@ def load_json_data(
     return handle_metadata(data_class, data) | extra_data
 
 
-def load_toml_data(data_class: Type[Any], path: Path) -> TOMLDict:
+def load_toml_data(data_class: type[Any], path: Path) -> TOMLDict:
     data = tomllib.loads(path.read_text("utf-8"))
     fill_placeholders(data)
     return handle_metadata(data_class, data)
 
 
 def from_dict_checked(
-    data_class: Type[_T_Dataclass],
+    data_class: type[_T_Dataclass],
     data: dict[str, Any],
     config: TypedConfig,
     path: Path | None = None,

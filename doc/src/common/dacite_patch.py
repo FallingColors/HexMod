@@ -9,7 +9,6 @@ from typing import (
     ClassVar,
     Collection,
     Mapping,
-    Type,
     TypeVar,
     get_args,
     get_origin,
@@ -39,7 +38,7 @@ class UnionSkip(Exception):
     match their type."""
 
 
-def handle_metadata(data_class: Type[Any], data: dict[str, Any]):
+def handle_metadata(data_class: type[Any], data: dict[str, Any]):
     """Applies our custom metadata. Currently this just renames fields."""
     # only transform a dict once, in case this is called multiple times
     data = data.copy()
@@ -66,7 +65,7 @@ def handle_metadata(data_class: Type[Any], data: dict[str, Any]):
     return data
 
 
-def handle_metadata_final(data_class: Type[Any], data: dict[str, Any]):
+def handle_metadata_final(data_class: type[Any], data: dict[str, Any]):
     """As `handle_metadata`, but removes the key marking data as handled.
 
     Should only be used within a custom from_dict implementation.
@@ -76,7 +75,7 @@ def handle_metadata_final(data_class: Type[Any], data: dict[str, Any]):
     return data
 
 
-def _patched_build_value(type_: Type[Any], data: Any, config: Config) -> Any:
+def _patched_build_value(type_: type[Any], data: Any, config: Config) -> Any:
     if type_ not in config.type_hooks:
         origin = get_origin(type_)
         if origin and origin in config.type_hooks:
@@ -88,7 +87,7 @@ def _patched_build_value(type_: Type[Any], data: Any, config: Config) -> Any:
 # workaround for https://github.com/konradhalas/dacite/issues/218
 # this code is, like, really bad. but to be fair dacite's isn't a whole lot better
 # and as long as it works, does it really matter?
-def _patched_build_value_for_union(union: Type[Any], data: Any, config: Config) -> Any:
+def _patched_build_value_for_union(union: type[Any], data: Any, config: Config) -> Any:
     types = extract_generic(union)
     if is_optional(union) and len(types) == 2:
         return _patched_build_value(type_=types[0], data=data, config=config)
@@ -139,7 +138,7 @@ def _patched_build_value_for_union(union: Type[Any], data: Any, config: Config) 
 
 # fixes https://github.com/konradhalas/dacite/issues/217
 def _patched_build_value_for_collection(
-    collection: Type[Any], data: Any, config: Config
+    collection: type[Any], data: Any, config: Config
 ) -> Any:
     data_type = data.__class__
     if isinstance(data, Mapping) and is_subclass(collection, Mapping):
@@ -177,7 +176,7 @@ _T = TypeVar("_T")
 
 
 def _patched_from_dict(
-    data_class: Type[_T],
+    data_class: type[_T],
     data: Data,
     config: Config | None = None,
 ) -> _T:
@@ -198,7 +197,7 @@ def _patched_from_dict(
     return _original_from_dict(data_class, data, config)
 
 
-def _patched_is_valid_generic_class(value: Any, type_: Type[Any]) -> bool:
+def _patched_is_valid_generic_class(value: Any, type_: type[Any]) -> bool:
     origin = get_origin(type_)
     if not (origin and isinstance(value, origin)):
         return False
