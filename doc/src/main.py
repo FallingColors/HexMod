@@ -14,7 +14,7 @@ from tap import Tap
 from collate_data import generate_docs
 from common.properties import Properties
 from hexcasting.hex_state import HexBookState
-from patchouli.book import Book
+from patchouli import Book
 
 if sys.version_info < (3, 11):
     raise RuntimeError("Minimum Python version: 3.11")

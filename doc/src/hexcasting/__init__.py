@@ -9,8 +9,7 @@ __all__ = [
     "HexBookState",
 ]
 
-from hexcasting.hex_state import HexBookState
-from patchouli.book import Book
+from patchouli import Book
 
 from .hex_recipes import (
     BlockState,
@@ -20,5 +19,6 @@ from .hex_recipes import (
     ModConditionalCraftingShapelessRecipe,
     ModConditionalIngredient,
 )
+from .hex_state import HexBookState
 
 HexBook = Book[HexBookState]

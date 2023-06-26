@@ -15,7 +15,7 @@ from common.properties import Properties
 from common.types import LocalizedStr
 from hexcasting.hex_state import HexBookState
 from main import Args, main
-from patchouli.book import Book
+from patchouli import Book
 
 
 def prettify(data: SerializedData) -> str:

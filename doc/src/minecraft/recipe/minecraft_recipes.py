@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from common.state import BookState
+from patchouli.state import BookState
 
 from .abstract_recipes import CraftingRecipe, ItemIngredient
 

@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from typing import Any, Self
 
 from common.deserialize import TypeHook, load_json_data
-from common.state import AnyState, TypeTaggedUnion
 from common.types import LocalizedItem
 from minecraft.resource import ResourceLocation
+from patchouli.state import AnyState, TypeTaggedUnion
 
 
 @dataclass

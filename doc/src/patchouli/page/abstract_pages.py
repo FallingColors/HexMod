@@ -4,10 +4,10 @@ from typing import Any, Self
 
 from common.deserialize import TypeHook, rename
 from common.formatting import FormatTree
-from common.state import AnyState, TypeTaggedUnion
 from common.types import LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import ResourceLocation
+from patchouli.state import AnyState, TypeTaggedUnion
 
 
 @dataclass(kw_only=True)

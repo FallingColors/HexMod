@@ -3,9 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from common.deserialize import rename
-from common.state import BookState, StatefulFile
 from common.types import Color, LocalizedStr, Sortable
 from minecraft.resource import ItemStack, ResourceLocation
+from patchouli.state import BookState, StatefulFile
 
 from .page import Page
 

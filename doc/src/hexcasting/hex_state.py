@@ -2,9 +2,8 @@ from dataclasses import dataclass
 from typing import Any
 
 from common.pattern import PatternInfo
-from common.state import BookState
 from minecraft.resource import ResourceLocation
-from patchouli.book import Book
+from patchouli.state import BookState
 
 
 @dataclass

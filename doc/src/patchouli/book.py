@@ -6,11 +6,11 @@ from typing import Literal, Self
 
 from common.deserialize import from_dict_checked, load_json_data, rename
 from common.formatting import FormatTree
-from common.state import AnyState, Stateful
 from common.types import Color, LocalizedStr
 from minecraft.i18n import I18n
 from minecraft.recipe import Recipe, minecraft_recipes as _  # ensure unions are loaded
 from minecraft.resource import ItemStack, ResLoc, ResourceLocation
+from patchouli.state import AnyState, Stateful
 
 from .category import Category
 from .entry import Entry
@@ -71,10 +71,11 @@ class Book(Stateful[AnyState], ABC):
 
     @classmethod
     def load(cls, state: AnyState) -> Self:
-        """Loads `book.json`, and sets up shared state with `cls._make_state()`.
+        """Loads `book.json` and finishes initializing the shared state.
 
         Subclasses should generally not override this. To customize state creation or
-        add type hooks (including page or recipe types), override `_init_state()`.
+        add type hooks (including page or recipe types), override `__post_init__()`,
+        calling `super()` at the end (because that's where categories/entries load).
         """
 
         # read the raw dict from the json file
