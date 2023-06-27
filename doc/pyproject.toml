@@ -1,3 +1,45 @@
+# build
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "HexDoc" # TODO: i'm pretty sure i had funnier ideas than this
+version = "0.1.0"
+authors = [
+    { name="Alwinfy" },
+    { name="object-Object", email="object@objectobject.ca" },
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    # better CLI argument parsing
+    "typed-argument-parser>=1.8.0",
+    # dict-to-dataclass (TODO: switch to Pydantic)
+    "dacite@git+https://github.com/mciszczon/dacite@f298260c6aedc1097c7567b1b0a61298a0ddf2a8",
+]
+
+[project.entry-points."tagged_unions.Page"]
+patchouli = "patchouli.page.patchouli_pages"
+hexcasting = "hexcasting.hex_pages"
+
+[project.entry-points."tagged_unions.Recipe"]
+patchouli = "minecraft.recipe.minecraft_recipes"
+hexcasting = "hexcasting.hex_recipes"
+
+[project.entry-points."tagged_unions.ItemIngredient"]
+patchouli = "minecraft.recipe.ingredients"
+hexcasting = "hexcasting.hex_recipes"
+
+[tool.hatch.metadata]
+allow-direct-references = true # TODO: remove when we switch to Pydantic
+
+[tool.hatch.build]
+packages = ["src/common", "src/hexcasting", "src/minecraft", "src/patchouli"]
+
+# tests, formatting, and (TODO:) type checking
+
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib"
@@ -7,7 +49,6 @@ markers = [
     "file_contents: data for fixtures to write to files",
     "fixture_data: other misc data",
 ]
-pythonpath = ["src", "test"]
 
 [tool.coverage.report]
 include_namespace_packages = true

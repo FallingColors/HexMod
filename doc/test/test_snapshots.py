@@ -13,7 +13,7 @@ from syrupy.types import SerializedData
 from common.properties import Properties
 from common.types import LocalizedStr
 from hexcasting.hex_state import HexBookState
-from main import Args, main
+from hexcasting.scripts.main import Args, main
 from patchouli import Book, FormatTree
 
 
@@ -33,10 +33,7 @@ class NoDiffSnapshotEx(AmberSnapshotExtension):
         yield from ["no diff"]
 
 
-_RUN = [
-    sys.executable,
-    "src/main.py",
-]
+_RUN = [sys.executable, "-m" "hexcasting.scripts.main"]
 _ARGV = ["properties.toml", "-o"]
 
 longrun = pytest.mark.skipif("not config.getoption('longrun')")

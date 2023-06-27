@@ -5,7 +5,7 @@ __all__ = [
     "MinecraftItemIdIngredient",
     "ItemResult",
     "Recipe",
-    "minecraft_recipes",
+    "recipes",
     "CraftingRecipe",
     "CraftingShapedRecipe",
     "CraftingShapelessRecipe",
@@ -17,8 +17,4 @@ from .ingredients import (
     MinecraftItemIdIngredient,
     MinecraftItemTagIngredient,
 )
-from .minecraft_recipes import (
-    CraftingRecipe,
-    CraftingShapedRecipe,
-    CraftingShapelessRecipe,
-)
+from .recipes import CraftingRecipe, CraftingShapedRecipe, CraftingShapelessRecipe

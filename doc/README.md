@@ -13,11 +13,11 @@ python -m venv venv
 .\venv\Scripts\activate  # Windows
 source venv/bin/activate # anything other than Windows
 
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 ## Usage
 
 ```sh
-python src/main.py ../Common/src/main/resources hexcasting thehexbook template.html out.html
+python -m hexcasting.scripts.main properties.toml -o out.html
 ```

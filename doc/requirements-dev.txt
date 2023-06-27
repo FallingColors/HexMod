@@ -1,4 +1,4 @@
--r requirements.txt
+-e .  # install package locally as editable
 black==22.10.0  # formatting
 isort==5.12.0  # formatting 2
 pytest==7.3.1  # testing framework
