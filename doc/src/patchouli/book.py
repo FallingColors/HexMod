@@ -7,13 +7,13 @@ from typing import Literal, Self
 from common.deserialize import from_dict_checked, load_json_data, rename
 from common.types import Color, LocalizedStr
 from minecraft.i18n import I18n
-from minecraft.recipe import Recipe, minecraft_recipes as _  # ensure unions are loaded
+from minecraft.recipe import Recipe
 from minecraft.resource import ItemStack, ResLoc, ResourceLocation
 
 from .category import Category
 from .entry import Entry
 from .formatting import FormatTree
-from .page import Page, patchouli_pages as _  # ensure unions are loaded
+from .page import Page
 from .state import AnyState, Stateful
 
 

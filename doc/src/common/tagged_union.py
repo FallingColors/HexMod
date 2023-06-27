@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import Any, ClassVar, Self
+from typing import Any, ClassVar, Generator, Self
 
 from dacite import StrictUnionMatchError, UnionMatchError, from_dict
 
@@ -13,56 +13,98 @@ from common.deserialize import TypedConfig
 from common.types import isinstance_or_raise
 
 
-class WrongTag(UnionSkip):
+class NoValueType(object):
+    """Represents a dict key which is expected to not exist."""
+
+    def __repr__(self) -> str:
+        return "NoValue"
+
+
+NoValue = NoValueType()
+
+TagValue = str | NoValueType
+
+
+class WrongTagSkip(UnionSkip):
     def __init__(self, union_type: type[InternallyTaggedUnion], tag_value: str) -> None:
         super().__init__(
-            f"Expected {union_type._tag_key}={union_type._expected_tag_value}, got {tag_value}"
+            f"Expected {union_type.__tag_key}={union_type.__expected_tag_value}, got {tag_value}"
         )
 
 
 class InternallyTaggedUnion(ABC):
-    """Implements internally tagged unions.
+    """Implements [internally tagged unions](https://serde.rs/enum-representations.html#internally-tagged)
+    using the [Registry pattern](https://charlesreid1.github.io/python-patterns-the-registry.html).
 
-    tag_name and tag should only be None for base classes.
+    NOTE: Make sure the module where you declare your union types is actually imported,
+    or they won't be registered.
 
-    See: https://serde.rs/enum-representations.html#internally-tagged
+    Args:
+        key: The dict key for the internal tag. Should be None for classes which are not
+            part of a union.
+        value: The expected tag value for this class. Should be None for types which
+            shouldn't be instantiated (eg. abstract classes).
     """
 
-    _tag_key: ClassVar[str | None] = None
-    _expected_tag_value: ClassVar[str | None] = None
-    _all_union_types: ClassVar[list[type[Self]]]
-    _concrete_union_types: ClassVar[defaultdict[str, list[type[Self]]]]
+    __tag_key: ClassVar[str | None] = None
+    __expected_tag_value: ClassVar[TagValue | None]
+    __all_subtypes: ClassVar[set[type[Self]]]
+    __concrete_subtypes: ClassVar[defaultdict[TagValue, set[type[Self]]]]
 
-    def __init_subclass__(cls, tag: str | None, value: str | None) -> None:
-        cls._tag_key = tag
-        cls._expected_tag_value = value
-        cls._all_union_types = []
-        cls._concrete_union_types = defaultdict(list)
+    def __init_subclass__(cls, key: str | None, value: TagValue | None) -> None:
+        # don't bother initializing classes which aren't part of any union
+        if key is None:
+            if value is not None:
+                raise ValueError(
+                    f"Expected value=None for {cls} with key=None, got {value}"
+                )
+            return
 
-        # if cls is a concrete union type, add it to all the lookups of its parents
-        # also add it to its own lookup so it can resolve itself
-        if tag is not None:
-            for base in [cls] + cls._union_bases():
-                base._all_union_types.append(cls)
-                if value is not None:
-                    base._concrete_union_types[value].append(cls)
+        # set up per-class data and lookups
+        cls.__tag_key = key
+        cls.__expected_tag_value = value
+        cls.__all_subtypes = set()
+        cls.__concrete_subtypes = defaultdict(set)
 
-    @classmethod
-    def _union_bases(cls) -> list[type[InternallyTaggedUnion]]:
-        union_bases: list[type[InternallyTaggedUnion]] = []
-        for base in cls.__bases__:
-            if (
-                issubclass(base, InternallyTaggedUnion)
-                and base._tag_key is not None
-                and base._tag_key == cls._tag_key
-            ):
-                union_bases += [base] + base._union_bases()
-        return union_bases
+        # add to all the parents
+        is_concrete = value is not None
+        for supertype in cls._supertypes():
+            supertype.__all_subtypes.add(cls)
+            if is_concrete:
+                supertype.__concrete_subtypes[value].add(cls)
 
     @classmethod
-    def resolve_union(cls, data: Self | Any, config: TypedConfig) -> Self:
-        if cls._tag_key is None:
+    def _tag_key_or_raise(cls) -> str:
+        if (tag_key := cls.__tag_key) is None:
             raise NotImplementedError
+        return tag_key
+
+    @classmethod
+    def _supertypes(cls) -> Generator[type[InternallyTaggedUnion], None, None]:
+        tag_key = cls._tag_key_or_raise()
+
+        # we consider a type to be its own supertype/subtype
+        yield cls
+
+        # recursively yield bases
+        # stop when we reach a non-union or a type with a different key (or no key)
+        for base in cls.__bases__:
+            if issubclass(base, InternallyTaggedUnion) and base.__tag_key == tag_key:
+                yield base
+                yield from base._supertypes()
+
+    @classmethod
+    def _all_subtypes(cls):
+        return cls.__all_subtypes
+
+    @classmethod
+    def _concrete_subtypes(cls):
+        return cls.__concrete_subtypes
+
+    @classmethod
+    def _resolve_from_dict(cls, data: Self | Any, config: TypedConfig) -> Self:
+        # do this first so we know it's part of a union
+        tag_key = cls._tag_key_or_raise()
 
         # if it's already instantiated, just return it; otherwise ensure it's a dict
         if isinstance(data, InternallyTaggedUnion):
@@ -70,16 +112,12 @@ class InternallyTaggedUnion(ABC):
             return data
         assert isinstance_or_raise(data, dict[str, Any])
 
-        # get the class objects for this type
-        tag_value = data.get(cls._tag_key)
-        if tag_value is None:
-            raise KeyError(cls._tag_key, data)
+        # tag value, eg. "minecraft:crafting_shaped"
+        tag_value = data.get(tag_key, NoValue)
 
-        tag_types = cls._concrete_union_types.get(tag_value)
-        if tag_types is None:
-            raise TypeError(
-                f"Unhandled tag: {cls._tag_key}={tag_value} for {cls}: {data}"
-            )
+        # list of matching types, eg. [ShapedCraftingRecipe, ModConditionalShapedCraftingRecipe]
+        if (tag_types := cls.__concrete_subtypes.get(tag_value)) is None:
+            raise TypeError(f"Unhandled tag: {tag_key}={tag_value} for {cls}: {data}")
 
         # try all the types
         exceptions: list[Exception] = []
@@ -107,7 +145,7 @@ class InternallyTaggedUnion(ABC):
 
         # oopsies
         raise ExceptionGroup(
-            f"Failed to match {cls} with {cls._tag_key}={tag_value} to any of {tag_types}: {data}",
+            f"Failed to match {cls} with {cls.__tag_key}={tag_value} to any of {tag_types}: {data}",
             exceptions,
         )
 

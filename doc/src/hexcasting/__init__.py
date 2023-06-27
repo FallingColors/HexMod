@@ -7,11 +7,27 @@ __all__ = [
     "ModConditionalIngredient",
     "HexBook",
     "HexBookState",
+    "VillagerIngredient",
+    "PageWithPattern",
+    "LookupPatternPage",
+    "ManualPatternNosigPage",
+    "ManualOpPatternPage",
+    "ManualRawPatternPage",
+    "CraftingMultiPage",
+    "BrainsweepPage",
 ]
 
 from patchouli import Book
 
-from . import hex_pages as _, hex_recipes as _
+from .hex_pages import (
+    BrainsweepPage,
+    CraftingMultiPage,
+    LookupPatternPage,
+    ManualOpPatternPage,
+    ManualPatternNosigPage,
+    ManualRawPatternPage,
+    PageWithPattern,
+)
 from .hex_recipes import (
     BlockState,
     BlockStateIngredient,
@@ -19,6 +35,7 @@ from .hex_recipes import (
     ModConditionalCraftingShapedRecipe,
     ModConditionalCraftingShapelessRecipe,
     ModConditionalIngredient,
+    VillagerIngredient,
 )
 from .hex_state import HexBookState
 

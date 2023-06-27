@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, ClassVar, Generic, Self, TypeVar
+from typing import Any, Generic, Self, TypeVar
 
 from common.deserialize import (
     TypedConfig,
@@ -65,11 +65,7 @@ class BookState:
         *unions: type[StatefulInternallyTaggedUnion[Self]],
     ):
         for union in unions:
-            self._type_hooks |= union.make_type_hooks(self) | {
-                # we need eg. `Page[BookState]: Page[BookState].make_type_hook(self)`
-                # and `union.make_type_hooks()` can't do that, apparently
-                union: union.make_type_hook(self)
-            }
+            self._type_hooks |= union.make_type_hooks(self)
 
     def format(self, text: str | LocalizedStr) -> FormatTree:
         """Converts the given string into a FormatTree, localizing it if necessary."""
@@ -121,38 +117,38 @@ class StatefulFile(Stateful[AnyState]):
         return from_dict_checked(cls, data, state.config, path)
 
 
+_T = TypeVar("_T", dict[str, Any], Any)
+
+
 class StatefulInternallyTaggedUnion(
     Stateful[AnyState],
     InternallyTaggedUnion,
-    tag=None,
+    key=None,
     value=None,
 ):
-    # set by InternallyTaggedUnion, but we need the type hint here
-    _all_union_types: ClassVar[list[type[Self]]]
-
     @classmethod
-    def resolve_union_with_state(
-        cls,
-        data: Self | dict[str, Any] | Any,
-        state: AnyState,
-    ) -> Self | dict[str, Any]:
+    def _with_state(cls, data: _T, state: AnyState) -> _T:
         if isinstance(data, dict):
-            data["state"] = state
-        return cls.resolve_union(data, state.config)
+            return data | {"state": state}
+        return data
 
     @classmethod
     def make_type_hook(cls, state: AnyState) -> TypeHook[Self]:
-        return lambda data: cls.resolve_union_with_state(data, state)
+        def type_hook(data: Self | Any):
+            data = cls._with_state(data, state)
+            return cls._resolve_from_dict(data, state.config)
+
+        return type_hook
 
     @classmethod
     def make_type_hooks(cls, state: BookState) -> TypeHooks[Self]:
         return {
-            subtype: subtype.make_type_hook(state) for subtype in cls._all_union_types
+            subtype: subtype.make_type_hook(state) for subtype in cls._all_subtypes()
         }
 
 
 @dataclass(kw_only=True)
-class TypeTaggedUnion(StatefulInternallyTaggedUnion[AnyState], tag="type", value=None):
+class TypeTaggedUnion(StatefulInternallyTaggedUnion[AnyState], key="type", value=None):
     type: ResourceLocation = field(init=False)
 
     def __init_subclass__(cls, type: str | None) -> None:
