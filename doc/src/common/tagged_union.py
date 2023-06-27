@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections import defaultdict
+from enum import Enum
 from typing import Any, ClassVar, Generator, Self
 
 from dacite import StrictUnionMatchError, UnionMatchError, from_dict
@@ -13,20 +14,25 @@ from common.deserialize import TypedConfig
 from common.types import isinstance_or_raise
 
 
-class NoValueType(object):
-    """Represents a dict key which is expected to not exist."""
+class NoValueType(Enum):
+    """Type of NoValue, a singleton representing the value of a nonexistent dict key."""
 
-    def __repr__(self) -> str:
-        return "NoValue"
+    _token = 0
 
 
-NoValue = NoValueType()
+NoValue = NoValueType._token
+"""A singleton (like None) representing the value of a nonexistent dict key."""
+
 
 TagValue = str | NoValueType
 
 
 class WrongTagSkip(UnionSkip):
-    def __init__(self, union_type: type[InternallyTaggedUnion], tag_value: str) -> None:
+    def __init__(
+        self,
+        union_type: type[InternallyTaggedUnion],
+        tag_value: TagValue,
+    ) -> None:
         super().__init__(
             f"Expected {union_type.__tag_key}={union_type.__expected_tag_value}, got {tag_value}"
         )

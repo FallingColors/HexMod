@@ -29,11 +29,11 @@ class CraftingPage(
     PageWithCraftingRecipes[BookState],
     type="patchouli:crafting",
 ):
-    recipe: CraftingRecipe[BookState]
-    recipe2: CraftingRecipe[BookState] | None = None
+    recipe: CraftingRecipe
+    recipe2: CraftingRecipe | None = None
 
     @property
-    def recipes(self) -> list[CraftingRecipe[BookState]]:
+    def recipes(self) -> list[CraftingRecipe]:
         recipes = [self.recipe]
         if self.recipe2:
             recipes.append(self.recipe2)

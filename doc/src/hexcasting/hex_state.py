@@ -6,7 +6,7 @@ from minecraft.resource import ResourceLocation
 from patchouli.state import BookState
 
 
-@dataclass
+@dataclass(repr=False)
 class HexBookState(BookState):
     def __post_init__(self, *args: Any, **kwargs: Any):
         super().__post_init__(*args, **kwargs)

@@ -1,10 +1,13 @@
 from dataclasses import dataclass
 from typing import Any, Literal
 
-from common.dacite_patch import UnionSkip
 from common.types import LocalizedItem
-from minecraft.recipe import CraftingRecipe, ItemIngredient, ItemResult, Recipe
-from minecraft.recipe.abstract_recipes import ItemIngredientData
+from minecraft.recipe import Recipe
+from minecraft.recipe.ingredients import (
+    ItemIngredient,
+    MinecraftItemIdIngredient,
+    MinecraftItemTagIngredient,
+)
 from minecraft.resource import ResourceLocation
 
 from .hex_state import HexBookState
@@ -26,11 +29,19 @@ class BlockStateIngredient:
     block: ResourceLocation
 
 
+_MinecraftItemIngredient = MinecraftItemIdIngredient | MinecraftItemTagIngredient
+_MinecraftItemIngredientOrList = (
+    _MinecraftItemIngredient | list[_MinecraftItemIngredient]
+)
+
+
 @dataclass
-class ModConditionalIngredient:
-    type: Literal["hexcasting:mod_conditional"]
-    default: ItemIngredientData
-    if_loaded: ItemIngredientData
+class ModConditionalIngredient(
+    ItemIngredient[HexBookState],
+    type="hexcasting:mod_conditional",
+):
+    default: _MinecraftItemIngredientOrList
+    if_loaded: _MinecraftItemIngredientOrList
     modid: str
 
 
@@ -51,35 +62,3 @@ class BrainsweepRecipe(Recipe[HexBookState], type="hexcasting:brainsweep"):
     blockIn: BlockStateIngredient
     villagerIn: VillagerIngredient
     result: BlockState
-
-
-@dataclass
-class ModConditionalCraftingShapedRecipe(
-    CraftingRecipe[HexBookState],
-    type="minecraft:crafting_shaped",
-):
-    pattern: list[str]
-    key: dict[str, ItemIngredient | ModConditionalIngredient]
-
-    def __post_init__(self):
-        if not any(
-            isinstance(ingredient, ModConditionalIngredient)
-            for ingredient in self.key.values()
-        ):
-            raise UnionSkip("Expected ModConditionalIngredient in key")
-
-
-@dataclass
-class ModConditionalCraftingShapelessRecipe(
-    CraftingRecipe[HexBookState],
-    type="minecraft:crafting_shapeless",
-):
-    ingredients: list[ItemIngredient | ModConditionalIngredient]
-    result: ItemResult
-
-    def __post_init__(self):
-        if not any(
-            isinstance(ingredient, ModConditionalIngredient)
-            for ingredient in self.ingredients
-        ):
-            raise UnionSkip("Expected ModConditionalIngredient in ingredients")

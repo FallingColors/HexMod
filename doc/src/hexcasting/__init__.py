@@ -2,8 +2,6 @@ __all__ = [
     "BlockState",
     "BlockStateIngredient",
     "BrainsweepRecipe",
-    "ModConditionalCraftingShapedRecipe",
-    "ModConditionalCraftingShapelessRecipe",
     "ModConditionalIngredient",
     "HexBook",
     "HexBookState",
@@ -32,8 +30,6 @@ from .hex_recipes import (
     BlockState,
     BlockStateIngredient,
     BrainsweepRecipe,
-    ModConditionalCraftingShapedRecipe,
-    ModConditionalCraftingShapelessRecipe,
     ModConditionalIngredient,
     VillagerIngredient,
 )

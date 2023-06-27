@@ -3,19 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Self
 
-from common.deserialize import TypeHook, load_json_data
+from common.deserialize import load_json_data
 from common.types import LocalizedItem
 from minecraft.resource import ResourceLocation
-from patchouli.state import AnyState, TypeTaggedUnion
-
-
-@dataclass
-class ItemIngredientData:
-    item: ResourceLocation | None = None
-    tag: ResourceLocation | None = None
-
-
-ItemIngredient = ItemIngredientData | list[ItemIngredientData]
+from patchouli.state import AnyState, StatefulTypeTaggedUnion
 
 
 @dataclass
@@ -25,33 +16,23 @@ class ItemResult:
 
 
 @dataclass(kw_only=True)
-class Recipe(TypeTaggedUnion[AnyState], type=None):
+class Recipe(StatefulTypeTaggedUnion[AnyState], type=None):
     id: ResourceLocation
     group: str | None = None
 
     @classmethod
-    def make_type_hook(cls, state: AnyState) -> TypeHook[Self]:
-        """Creates a type hook which, given a stringified ResourceLocation, loads and
-        returns the recipe json at that location."""
-        super_hook = super().make_type_hook(state)
+    def stateful_type_hook(cls, data: Self | Any, state: AnyState) -> Self:
+        # if it's a resourcelocation, fetch the data in the corresponding recipe file
+        if isinstance(data, (str, ResourceLocation)):
+            id = ResourceLocation.from_str(data)
 
-        def type_hook(data: str | Any) -> Self | dict[str, Any]:
-            if isinstance(data, str):
-                # FIXME: hack
-                # the point of this is to ensure the recipe exists on all platforms
-                # because we've had issues with that in the past, eg. in Hexal
-                id = ResourceLocation.from_str(data)
-                data = {}
-                for recipe_dir in state.props.recipe_dirs:
-                    # TODO: should this use id.namespace somewhere?
-                    path = recipe_dir / f"{id.path}.json"
-                    data = load_json_data(cls, path, {"id": id})
+            # FIXME: hack
+            # this is to ensure the recipe exists on all platforms, because we've had
+            # issues with that in the past (eg. Hexal's Mote Nexus)
+            data = {}
+            for recipe_dir in state.props.recipe_dirs:
+                # TODO: should this use id.namespace somewhere?
+                path = recipe_dir / f"{id.path}.json"
+                data = load_json_data(cls, path, {"id": id})
 
-            return super_hook(data)
-
-        return type_hook
-
-
-@dataclass(kw_only=True)
-class CraftingRecipe(Recipe[AnyState], type=None):
-    result: ItemResult
+        return super().stateful_type_hook(data, state)

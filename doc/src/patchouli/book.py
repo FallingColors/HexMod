@@ -8,6 +8,7 @@ from common.deserialize import from_dict_checked, load_json_data, rename
 from common.types import Color, LocalizedStr
 from minecraft.i18n import I18n
 from minecraft.recipe import Recipe
+from minecraft.recipe.ingredients import ItemIngredient
 from minecraft.resource import ItemStack, ResLoc, ResourceLocation
 
 from .category import Category
@@ -84,7 +85,7 @@ class Book(Stateful[AnyState], ABC):
 
         state.i18n = I18n(state.props, data["do_i18n"])
         state.add_macros(data["macros"])
-        state.add_stateful_unions(Page, Recipe)
+        state.add_stateful_unions(Page, Recipe, ItemIngredient)
 
         # NOW we can convert the actual book data
         return from_dict_checked(cls, data, state.config, path)

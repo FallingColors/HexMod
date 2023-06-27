@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Generic, Self, TypeVar
+from typing import Any, Generic, Self, TypeVar, cast
 
 from common.deserialize import (
     TypedConfig,
@@ -13,7 +13,7 @@ from common.deserialize import (
 )
 from common.pattern import Direction
 from common.properties import Properties
-from common.tagged_union import InternallyTaggedUnion
+from common.tagged_union import InternallyTaggedUnion, NoValueType, TagValue
 from common.types import LocalizedItem, LocalizedStr, isinstance_or_raise
 from minecraft.i18n import I18n
 from minecraft.resource import ItemStack, ResourceLocation
@@ -21,7 +21,7 @@ from minecraft.resource import ItemStack, ResourceLocation
 from .formatting import DEFAULT_MACROS, FormatTree
 
 
-@dataclass
+@dataclass(repr=False)
 class BookState:
     """Stores data which needs to be accessible/mutable from many different places.
 
@@ -117,9 +117,6 @@ class StatefulFile(Stateful[AnyState]):
         return from_dict_checked(cls, data, state.config, path)
 
 
-_T = TypeVar("_T", dict[str, Any], Any)
-
-
 class StatefulInternallyTaggedUnion(
     Stateful[AnyState],
     InternallyTaggedUnion,
@@ -127,18 +124,15 @@ class StatefulInternallyTaggedUnion(
     value=None,
 ):
     @classmethod
-    def _with_state(cls, data: _T, state: AnyState) -> _T:
+    def stateful_type_hook(cls, data: Self | Any, state: AnyState) -> Self:
         if isinstance(data, dict):
-            return data | {"state": state}
-        return data
+            # FIXME: ew
+            data = cast(dict[str, Any], data) | {"state": state}
+        return cls._resolve_from_dict(data, state.config)
 
     @classmethod
     def make_type_hook(cls, state: AnyState) -> TypeHook[Self]:
-        def type_hook(data: Self | Any):
-            data = cls._with_state(data, state)
-            return cls._resolve_from_dict(data, state.config)
-
-        return type_hook
+        return lambda data: cls.stateful_type_hook(data, state)
 
     @classmethod
     def make_type_hooks(cls, state: BookState) -> TypeHooks[Self]:
@@ -148,13 +142,22 @@ class StatefulInternallyTaggedUnion(
 
 
 @dataclass(kw_only=True)
-class TypeTaggedUnion(StatefulInternallyTaggedUnion[AnyState], key="type", value=None):
-    type: ResourceLocation = field(init=False)
+class StatefulTypeTaggedUnion(
+    StatefulInternallyTaggedUnion[AnyState],
+    key="type",
+    value=None,
+):  # :(
+    type: ResourceLocation | None = field(init=False)
 
-    def __init_subclass__(cls, type: str | None) -> None:
+    def __init_subclass__(cls, type: TagValue | None) -> None:
         super().__init_subclass__("type", type)
-        if type is not None:
-            cls.type = ResourceLocation.from_str(type)
+        match type:
+            case str():
+                cls.type = ResourceLocation.from_str(type)
+            case NoValueType():
+                cls.type = None
+            case None:
+                pass
 
     @property
     def _tag_value(self) -> str:

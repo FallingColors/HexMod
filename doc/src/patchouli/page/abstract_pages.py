@@ -1,18 +1,20 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Self
+from typing import Any, Self, TypeVar
 
-from common.deserialize import TypeHook, rename
+from common.deserialize import rename
 from common.types import LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import ResourceLocation
 
 from ..formatting import FormatTree
-from ..state import AnyState, TypeTaggedUnion
+from ..state import AnyState, StatefulTypeTaggedUnion
+
+_T = TypeVar("_T")
 
 
 @dataclass(kw_only=True)
-class Page(TypeTaggedUnion[AnyState], type=None):
+class Page(StatefulTypeTaggedUnion[AnyState], type=None):
     """Base class for Patchouli page types.
 
     See: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/page-types
@@ -23,16 +25,10 @@ class Page(TypeTaggedUnion[AnyState], type=None):
     anchor: str | None = None
 
     @classmethod
-    def make_type_hook(cls, state: AnyState) -> TypeHook[Self]:
-        super_hook = super().make_type_hook(state)
-
-        def type_hook(data: Self | Any) -> Self | dict[str, Any]:
-            # special case, thanks patchouli
-            if isinstance(data, str):
-                data = {"type": "patchouli:text", "text": data}
-            return super_hook(data)
-
-        return type_hook
+    def stateful_type_hook(cls, data: Self | Any, state: AnyState) -> Self:
+        if isinstance(data, str):
+            data = {"type": "patchouli:text", "text": data}
+        return super().stateful_type_hook(data, state)
 
 
 @dataclass(kw_only=True)
@@ -53,5 +49,5 @@ class PageWithTitle(PageWithText[AnyState], type=None):
 class PageWithCraftingRecipes(PageWithText[AnyState], ABC, type=None):
     @property
     @abstractmethod
-    def recipes(self) -> list[CraftingRecipe[AnyState]]:
+    def recipes(self) -> list[CraftingRecipe]:
         ...
