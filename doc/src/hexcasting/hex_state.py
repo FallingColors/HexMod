@@ -3,6 +3,7 @@ from typing import Any
 
 from common.pattern import PatternInfo
 from minecraft.resource import ResourceLocation
+from patchouli.book import Book
 from patchouli.state import BookState
 
 
@@ -26,3 +27,6 @@ class HexBookState(BookState):
                         f"Duplicate pattern {pattern.id}\n{pattern}\n{duplicate}"
                     )
                 self.patterns[pattern.id] = pattern
+
+
+HexBook = Book[HexBookState]

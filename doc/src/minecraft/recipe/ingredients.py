@@ -5,7 +5,11 @@ from minecraft.resource import ResourceLocation
 from patchouli.state import AnyState, BookState, StatefulTypeTaggedUnion
 
 
-class ItemIngredient(StatefulTypeTaggedUnion[AnyState], type=None):
+class ItemIngredient(
+    StatefulTypeTaggedUnion[AnyState],
+    group="hexdoc.ItemIngredient",
+    type=None,
+):
     pass
 
 

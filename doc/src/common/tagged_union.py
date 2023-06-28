@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from collections import defaultdict
 from enum import Enum
 from typing import Any, ClassVar, Generator, Self
 
 from dacite import StrictUnionMatchError, UnionMatchError, from_dict
+from pkg_resources import iter_entry_points
 
 from common.dacite_patch import UnionSkip
 from common.deserialize import TypedConfig
@@ -34,16 +34,17 @@ class WrongTagSkip(UnionSkip):
         tag_value: TagValue,
     ) -> None:
         super().__init__(
-            f"Expected {union_type.__tag_key}={union_type.__expected_tag_value}, got {tag_value}"
+            f"Expected {union_type._tag_key}={union_type.__expected_tag_value}, got {tag_value}"
         )
 
 
-class InternallyTaggedUnion(ABC):
+class InternallyTaggedUnion:
     """Implements [internally tagged unions](https://serde.rs/enum-representations.html#internally-tagged)
     using the [Registry pattern](https://charlesreid1.github.io/python-patterns-the-registry.html).
 
-    NOTE: Make sure the module where you declare your union types is actually imported,
-    or they won't be registered.
+    To ensure your subtypes are loaded even if they're not imported by any file, add
+    the module as a plugin to your package's entry points. For example, to add subtypes
+    to a union
 
     Args:
         key: The dict key for the internal tag. Should be None for classes which are not
@@ -52,22 +53,46 @@ class InternallyTaggedUnion(ABC):
             shouldn't be instantiated (eg. abstract classes).
     """
 
-    __tag_key: ClassVar[str | None] = None
+    _loaded_groups: ClassVar[set[str]] = set()
+    """Global set of groups whose plugins have already been loaded. Do not overwrite.
+    
+    We use this so we don't have to load the same modules over and over again.
+    """
+
+    _group: ClassVar[str | None] = None
+    _tag_key: ClassVar[str | None] = None
+
     __expected_tag_value: ClassVar[TagValue | None]
+
     __all_subtypes: ClassVar[set[type[Self]]]
     __concrete_subtypes: ClassVar[defaultdict[TagValue, set[type[Self]]]]
 
-    def __init_subclass__(cls, key: str | None, value: TagValue | None) -> None:
-        # don't bother initializing classes which aren't part of any union
-        if key is None:
+    def __init_subclass__(
+        cls,
+        *,
+        group: str | None = None,
+        key: str | None = None,
+        value: TagValue | None,
+    ) -> None:
+        # inherited data, so only set if not None
+        if group is not None:
+            cls._group = group
+        if key is not None:
+            cls._tag_key = key
+
+        # don't bother with rest of init if it's not part of a union
+        if cls._tag_key is None:
+            if cls._group is not None:
+                raise ValueError(
+                    f"Expected cls._group=None for {cls} with key=None, got {cls._group}"
+                )
             if value is not None:
                 raise ValueError(
                     f"Expected value=None for {cls} with key=None, got {value}"
                 )
             return
 
-        # set up per-class data and lookups
-        cls.__tag_key = key
+        # per-class data and lookups
         cls.__expected_tag_value = value
         cls.__all_subtypes = set()
         cls.__concrete_subtypes = defaultdict(set)
@@ -81,7 +106,7 @@ class InternallyTaggedUnion(ABC):
 
     @classmethod
     def _tag_key_or_raise(cls) -> str:
-        if (tag_key := cls.__tag_key) is None:
+        if (tag_key := cls._tag_key) is None:
             raise NotImplementedError
         return tag_key
 
@@ -95,7 +120,7 @@ class InternallyTaggedUnion(ABC):
         # recursively yield bases
         # stop when we reach a non-union or a type with a different key (or no key)
         for base in cls.__bases__:
-            if issubclass(base, InternallyTaggedUnion) and base.__tag_key == tag_key:
+            if issubclass(base, InternallyTaggedUnion) and base._tag_key == tag_key:
                 yield base
                 yield from base._supertypes()
 
@@ -109,6 +134,18 @@ class InternallyTaggedUnion(ABC):
 
     @classmethod
     def _resolve_from_dict(cls, data: Self | Any, config: TypedConfig) -> Self:
+        # if we haven't yet, load plugins from entry points
+        if cls._group is not None and cls._group not in cls._loaded_groups:
+            cls._loaded_groups.add(cls._group)
+            for entry_point in iter_entry_points(cls._group):
+                try:
+                    entry_point.load()
+                except ModuleNotFoundError as e:
+                    e.add_note(
+                        f'Note: Tried to load entry point "{entry_point}" from {entry_point.dist}'
+                    )
+                    raise
+
         # do this first so we know it's part of a union
         tag_key = cls._tag_key_or_raise()
 
@@ -137,8 +174,8 @@ class InternallyTaggedUnion(ABC):
                 union_matches[inner_type] = value
             except UnionSkip:
                 pass
-            except Exception as e:
-                exceptions.append(e)
+            except Exception as entry_point:
+                exceptions.append(entry_point)
 
         # ensure we only matched one
         match len(union_matches):
@@ -151,11 +188,6 @@ class InternallyTaggedUnion(ABC):
 
         # oopsies
         raise ExceptionGroup(
-            f"Failed to match {cls} with {cls.__tag_key}={tag_value} to any of {tag_types}: {data}",
+            f"Failed to match {cls} with {cls._tag_key}={tag_value} to any of {tag_types}: {data}",
             exceptions,
         )
-
-    @property
-    @abstractmethod
-    def _tag_value(self) -> str:
-        ...

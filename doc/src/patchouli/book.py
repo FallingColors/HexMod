@@ -7,8 +7,7 @@ from typing import Literal, Self
 from common.deserialize import from_dict_checked, load_json_data, rename
 from common.types import Color, LocalizedStr
 from minecraft.i18n import I18n
-from minecraft.recipe import Recipe
-from minecraft.recipe.ingredients import ItemIngredient
+from minecraft.recipe import ItemIngredient, Recipe
 from minecraft.resource import ItemStack, ResLoc, ResourceLocation
 
 from .category import Category

@@ -120,6 +120,7 @@ class StatefulFile(Stateful[AnyState]):
 class StatefulInternallyTaggedUnion(
     Stateful[AnyState],
     InternallyTaggedUnion,
+    group=None,
     key=None,
     value=None,
 ):
@@ -149,8 +150,13 @@ class StatefulTypeTaggedUnion(
 ):  # :(
     type: ResourceLocation | None = field(init=False)
 
-    def __init_subclass__(cls, type: TagValue | None) -> None:
-        super().__init_subclass__("type", type)
+    def __init_subclass__(
+        cls,
+        *,
+        group: str | None = None,
+        type: TagValue | None,
+    ) -> None:
+        super().__init_subclass__(group=group, value=type)
         match type:
             case str():
                 cls.type = ResourceLocation.from_str(type)
@@ -158,7 +164,3 @@ class StatefulTypeTaggedUnion(
                 cls.type = None
             case None:
                 pass
-
-    @property
-    def _tag_value(self) -> str:
-        return str(self.type)

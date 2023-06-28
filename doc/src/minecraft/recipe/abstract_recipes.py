@@ -16,7 +16,7 @@ class ItemResult:
 
 
 @dataclass(kw_only=True)
-class Recipe(StatefulTypeTaggedUnion[AnyState], type=None):
+class Recipe(StatefulTypeTaggedUnion[AnyState], group="hexdoc.Recipe", type=None):
     id: ResourceLocation
     group: str | None = None
 

@@ -1,4 +1,4 @@
-# build
+# project metadata
 
 [build-system]
 requires = ["hatchling"]
@@ -20,17 +20,19 @@ dependencies = [
     "dacite@git+https://github.com/mciszczon/dacite@f298260c6aedc1097c7567b1b0a61298a0ddf2a8",
 ]
 
-[project.entry-points."tagged_unions.Page"]
-patchouli = "patchouli.page.patchouli_pages"
-hexcasting = "hexcasting.hex_pages"
+[project.entry-points."hexdoc.Page"]
+hexdoc-patchouli = "patchouli.page.pages"
+hexdoc-hexcasting = "hexcasting.hex_pages"
 
-[project.entry-points."tagged_unions.Recipe"]
-patchouli = "minecraft.recipe.minecraft_recipes"
-hexcasting = "hexcasting.hex_recipes"
+[project.entry-points."hexdoc.Recipe"]
+hexdoc-minecraft = "minecraft.recipe.recipes"
+hexdoc-hexcasting = "hexcasting.hex_recipes"
 
-[project.entry-points."tagged_unions.ItemIngredient"]
-patchouli = "minecraft.recipe.ingredients"
-hexcasting = "hexcasting.hex_recipes"
+[project.entry-points."hexdoc.ItemIngredient"]
+hexdoc-minecraft = "minecraft.recipe.ingredients"
+hexdoc-hexcasting = "hexcasting.hex_recipes"
+
+# Hatch settings (the build backend)
 
 [tool.hatch.metadata]
 allow-direct-references = true # TODO: remove when we switch to Pydantic

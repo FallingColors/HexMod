@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from typing import Any, Literal
 
 from common.types import LocalizedItem
-from minecraft.recipe import Recipe
-from minecraft.recipe.ingredients import (
+from minecraft.recipe import (
     ItemIngredient,
     MinecraftItemIdIngredient,
     MinecraftItemTagIngredient,
+    Recipe,
 )
 from minecraft.resource import ResourceLocation
 

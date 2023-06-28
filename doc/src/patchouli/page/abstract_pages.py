@@ -14,7 +14,7 @@ _T = TypeVar("_T")
 
 
 @dataclass(kw_only=True)
-class Page(StatefulTypeTaggedUnion[AnyState], type=None):
+class Page(StatefulTypeTaggedUnion[AnyState], group="hexdoc.Page", type=None):
     """Base class for Patchouli page types.
 
     See: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/page-types

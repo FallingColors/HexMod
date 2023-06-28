@@ -13,13 +13,12 @@ from hexcasting.hex_pages import (
     LookupPatternPage,
     PageWithPattern,
 )
-from patchouli import Category, Entry, FormatTree
+from patchouli import Category, Entry, FormatTree, Page
 from patchouli.page import (
     CraftingPage,
     EmptyPage,
     ImagePage,
     LinkPage,
-    Page,
     PageWithText,
     PageWithTitle,
     SpotlightPage,
