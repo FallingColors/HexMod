@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "redstone",
   "key": {
     "1": {
       "item": "hexcasting:amethyst_dust"
@@ -25,5 +26,6 @@
   "result": {
     "count": 4,
     "item": "hexcasting:akashic_connector"
-  }
+  },
+  "show_notification": true
 }

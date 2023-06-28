@@ -24,5 +24,6 @@
     [
       "did_the_thing"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

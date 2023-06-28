@@ -30,5 +30,6 @@
     "recipes": [
       "hexcasting:brainsweep/quench_allay"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

@@ -29,5 +29,6 @@
     [
       "health_used"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

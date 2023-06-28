@@ -29,5 +29,6 @@
     [
       "waste_amt"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "A": {
       "item": "hexcasting:charged_amethyst"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "hexcasting:spellbook"
-  }
+  },
+  "show_notification": true
 }

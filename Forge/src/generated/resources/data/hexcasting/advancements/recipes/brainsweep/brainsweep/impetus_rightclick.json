@@ -30,5 +30,6 @@
     "recipes": [
       "hexcasting:brainsweep/impetus_rightclick"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }
