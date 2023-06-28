@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "hexcasting:conjured",
+    "hexcasting:conjured_light",
     "hexcasting:conjured_block",
     "hexcasting:amethyst_tiles",
     "hexcasting:amethyst_sconce"

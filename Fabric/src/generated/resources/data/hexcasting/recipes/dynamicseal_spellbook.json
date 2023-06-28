@@ -1,3 +1,4 @@
 {
-  "type": "hexcasting:seal_spellbook"
+  "type": "hexcasting:seal_spellbook",
+  "category": "misc"
 }

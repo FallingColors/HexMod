@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "C": {
       "item": "minecraft:glass"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "hexcasting:lens"
-  }
+  },
+  "show_notification": true
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "hexcasting:brainsweep/budding_amethyst"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

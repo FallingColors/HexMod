@@ -30,5 +30,6 @@
     "recipes": [
       "hexcasting:decompose_quenched_shard/shard"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }
