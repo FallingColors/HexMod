@@ -42,7 +42,6 @@ import java.util.function.Function;
 
 // TODO: need to do a big refactor of this class cause it's giant and unwieldy, probably as part of #360
 public class HexplatRecipes extends PaucalRecipeProvider {
-    private final PackOutput output;
     private final IXplatIngredients ingredients;
     private final Function<RecipeBuilder, IXplatConditionsBuilder> conditions;
 
@@ -54,7 +53,6 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     public HexplatRecipes(PackOutput output, IXplatIngredients ingredients,
                           Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
         super(output, HexAPI.MOD_ID);
-        this.output = output;
         this.ingredients = ingredients;
         this.conditions = conditions;
     }
@@ -483,7 +481,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                             .withOutput("farmersdelight:tree_bark")
                             .withSound(SoundEvents.AXE_STRIP))
                     .whenModLoaded("farmersdelight")
-                    .save(recipes, modLoc("compat/farmersdelight/cutting/" + BuiltInRegistries.BLOCK.getKey(log).getNamespace()));
+                    .save(recipes, modLoc("compat/farmersdelight/cutting/" + BuiltInRegistries.BLOCK.getKey(log).getPath()));
         }
 
         this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()

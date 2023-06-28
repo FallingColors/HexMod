@@ -60,6 +60,7 @@ public class ForgeHexDataGenerators {
         ));
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private static void configureForgeDatagen(GatherDataEvent ev) {
         HexAPI.LOGGER.info("Starting Forge-specific datagen");
 
@@ -74,10 +75,14 @@ public class ForgeHexDataGenerators {
 
         var xtags = IXplatAbstractions.INSTANCE.tags();
         var blockTagProvider = new HexBlockTagProvider(output, lookup, xtags);
+        ((TagsProviderEFHSetter) blockTagProvider).setEFH(efh);
         gen.addProvider(ev.includeServer(), blockTagProvider);
         var itemTagProvider = new HexItemTagProvider(output, lookup, blockTagProvider, IXplatAbstractions.INSTANCE.tags());
+        ((TagsProviderEFHSetter) itemTagProvider).setEFH(efh);
         gen.addProvider(ev.includeServer(), itemTagProvider);
-        gen.addProvider(ev.includeServer(), new HexActionTagProvider(output, lookup));
+        var hexTagProvider = new HexActionTagProvider(output, lookup);
+        ((TagsProviderEFHSetter) hexTagProvider).setEFH(efh);
+        gen.addProvider(ev.includeServer(), hexTagProvider);
 
         gen.addProvider(ev.includeServer(), new ForgeHexLootModGen(output));
     }

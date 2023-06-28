@@ -6,7 +6,9 @@
   "package": "at.petrak.hexcasting.forge.mixin",
   "mixins": [
     "ForgeAccessorBuiltInRegistries",
-    "ForgeMixinCursedRecipeSerializerBase"
+    "ForgeMixinCursedRecipeSerializerBase",
+    "ForgeMixinDatagenModLoader",
+    "ForgeMixinTagsProvider"
   ],
   "client": [
     "ForgeMixinBlockColors",
