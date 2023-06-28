@@ -44,11 +44,15 @@ class InternallyTaggedUnion:
 
     To ensure your subtypes are loaded even if they're not imported by any file, add
     the module as a plugin to your package's entry points. For example, to add subtypes
-    to a union
+    to a union with `group=foo.bar` using Hatchling, add this to your pyproject.toml:
+    ```toml
+    [project.entry-points."foo.bar"]
+    some-unique-name = "path.to.import.module"
+    ```
 
     Args:
-        key: The dict key for the internal tag. Should be None for classes which are not
-            part of a union.
+        group: Entry point group for this class. If None, the parent's value is used.
+        key: The dict key for the internal tag. If None, the parent's value is used.
         value: The expected tag value for this class. Should be None for types which
             shouldn't be instantiated (eg. abstract classes).
     """
