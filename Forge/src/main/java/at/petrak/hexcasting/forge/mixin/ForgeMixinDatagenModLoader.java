@@ -23,14 +23,14 @@ import java.util.concurrent.CompletableFuture;
 
 @Mixin(DatagenModLoader.class)
 public abstract class ForgeMixinDatagenModLoader {
-    @Shadow @Final
+    @Shadow(remap = false) @Final
     private static Logger LOGGER;
 
-    @Shadow
+    @Shadow(remap = false)
     private static GatherDataEvent.DataGeneratorConfig dataGeneratorConfig;
-    @Shadow
+    @Shadow(remap = false)
     private static ExistingFileHelper existingFileHelper;
-    @Shadow
+    @Shadow(remap = false)
     private static boolean runningDataGen;
 
     /**
