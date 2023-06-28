@@ -5,6 +5,7 @@
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.forge.mixin",
   "mixins": [
+    "ForgeAccessorBuiltInRegistries",
     "ForgeMixinCursedRecipeSerializerBase"
   ],
   "client": [

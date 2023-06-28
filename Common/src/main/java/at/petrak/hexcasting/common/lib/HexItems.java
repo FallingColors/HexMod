@@ -12,6 +12,7 @@ import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
 import at.petrak.hexcasting.common.items.pigment.ItemUUIDPigment;
 import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.google.common.base.Suppliers;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -86,24 +88,24 @@ public class HexItems {
     public static final ItemMediaBattery BATTERY = make("battery",
         new ItemMediaBattery(unstackable()), null);
 
-    public static final ItemStack BATTERY_DUST_STACK = addToTab(ItemMediaBattery.withMedia(
+    public static final Supplier<ItemStack> BATTERY_DUST_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.DUST_UNIT * 64,
             MediaConstants.DUST_UNIT * 64), HexCreativeTabs.HEX);
-    public static final ItemStack BATTERY_SHARD_STACK = addToTab(ItemMediaBattery.withMedia(
+    public static final Supplier<ItemStack> BATTERY_SHARD_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.SHARD_UNIT * 64,
             MediaConstants.SHARD_UNIT * 64), HexCreativeTabs.HEX);
-    public static final ItemStack BATTERY_CRYSTAL_STACK = addToTab(ItemMediaBattery.withMedia(
+    public static final Supplier<ItemStack> BATTERY_CRYSTAL_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.CRYSTAL_UNIT * 64,
             MediaConstants.CRYSTAL_UNIT * 64), HexCreativeTabs.HEX);
-    public static final ItemStack BATTERY_QUENCHED_SHARD_STACK = addToTab(ItemMediaBattery.withMedia(
+    public static final Supplier<ItemStack> BATTERY_QUENCHED_SHARD_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_SHARD_UNIT * 64,
             MediaConstants.QUENCHED_SHARD_UNIT * 64), HexCreativeTabs.HEX);
 
-    public static final ItemStack BATTERY_QUENCHED_BLOCK_STACK = addToTab(ItemMediaBattery.withMedia(
+    public static final Supplier<ItemStack> BATTERY_QUENCHED_BLOCK_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_BLOCK_UNIT * 64,
             MediaConstants.QUENCHED_BLOCK_UNIT * 64), HexCreativeTabs.HEX);
@@ -170,9 +172,10 @@ public class HexItems {
         return make(modLoc(id), item, HexCreativeTabs.HEX);
     }
 
-    private static ItemStack addToTab(ItemStack stack, CreativeModeTab tab) {
-        ITEM_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(new TabEntry.StackEntry(stack));
-        return stack;
+    private static Supplier<ItemStack> addToTab(Supplier<ItemStack> stack, CreativeModeTab tab) {
+        var memoised = Suppliers.memoize(stack::get);
+        ITEM_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(new TabEntry.StackEntry(memoised));
+        return memoised;
     }
 
     private static abstract class TabEntry {
@@ -192,15 +195,15 @@ public class HexItems {
         }
 
         static class StackEntry extends TabEntry {
-            private final ItemStack stack;
+            private final Supplier<ItemStack> stack;
 
-            StackEntry(ItemStack stack) {
+            StackEntry(Supplier<ItemStack> stack) {
                 this.stack = stack;
             }
 
             @Override
             void register(CreativeModeTab.Output r) {
-                r.accept(stack);
+                r.accept(stack.get());
             }
         }
     }

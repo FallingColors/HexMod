@@ -89,7 +89,7 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion")
 
-    api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.19.4-forge")
+    api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-$minecraftVersion-forge")
 }
 
 minecraft {

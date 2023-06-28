@@ -21,7 +21,6 @@ import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
 import at.petrak.hexcasting.forge.datagen.ForgeHexDataGenerators;
-import at.petrak.hexcasting.forge.event.NewRegistryEventHandler;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
 import at.petrak.hexcasting.forge.lib.ForgeHexArgumentTypeRegistry;
@@ -32,6 +31,7 @@ import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -79,6 +79,7 @@ import java.util.function.Consumer;
 public class ForgeHexInitializer {
     public ForgeHexInitializer() {
         initConfig();
+        initRegistries();
         initRegistry();
         initListeners();
     }
@@ -94,6 +95,19 @@ public class ForgeHexInitializer {
         mlc.registerConfig(ModConfig.Type.COMMON, config.getRight());
         mlc.registerConfig(ModConfig.Type.CLIENT, clientConfig.getRight());
         mlc.registerConfig(ModConfig.Type.SERVER, serverConfig.getRight());
+    }
+
+    public static void initRegistries() {
+        if (!(BuiltInRegistries.REGISTRY instanceof MappedRegistry<?> rootRegistry)) return;
+        rootRegistry.unfreeze();
+
+        IXplatAbstractions.INSTANCE.getActionRegistry();
+        IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry();
+        IXplatAbstractions.INSTANCE.getIotaTypeRegistry();
+        IXplatAbstractions.INSTANCE.getArithmeticRegistry();
+        IXplatAbstractions.INSTANCE.getEvalSoundRegistry();
+
+        rootRegistry.freeze();
     }
 
     private static void initRegistry() {
@@ -119,13 +133,11 @@ public class ForgeHexInitializer {
 
         bind(Registries.PARTICLE_TYPE, HexParticles::registerParticles);
 
-        getModEventBus().addListener(NewRegistryEventHandler::newRegistry);
-
-        bind(IXplatAbstractions.INSTANCE.getIotaTypeRegistry().key(), HexIotaTypes::registerTypes);
-        bind(IXplatAbstractions.INSTANCE.getActionRegistry().key(), HexActions::register);
-        bind(IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().key(), HexSpecialHandlers::register);
-        bind(IXplatAbstractions.INSTANCE.getArithmeticRegistry().key(), HexArithmetics::register);
-        bind(IXplatAbstractions.INSTANCE.getEvalSoundRegistry().key(), HexEvalSounds::register);
+        bind(HexRegistries.IOTA_TYPE, HexIotaTypes::registerTypes);
+        bind(HexRegistries.ACTION, HexActions::register);
+        bind(HexRegistries.SPECIAL_HANDLER, HexSpecialHandlers::register);
+        bind(HexRegistries.ARITHMETIC, HexArithmetics::register);
+        bind(HexRegistries.EVAL_SOUND, HexEvalSounds::register);
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
         ForgeHexLootMods.REGISTRY.register(getModEventBus());
