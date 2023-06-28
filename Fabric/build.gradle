@@ -92,6 +92,7 @@ dependencies {
     // apparently the 1.18 version Just Works on 1.19
     modImplementation "${modID}:serialization-hooks:$serializationHooksVersion"
     include "${modID}:serialization-hooks:$serializationHooksVersion"
+    implementation(include("com.github.LlamaLad7:MixinExtras:0.1.1"))
 
     // Optional integrations
 
