@@ -20,6 +20,7 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
@@ -47,6 +48,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -174,9 +176,11 @@ public interface IXplatAbstractions {
 
     Registry<EvalSound> getEvalSoundRegistry();
 
-    boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player);
+    GameProfile HEXCASTING = new GameProfile(UUID.fromString("8BE7E9DA-1667-11EE-BE56-0242AC120002"), "[HexCasting]");
 
-    boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player);
+    boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player);
+
+    boolean isPlacingAllowed(ServerLevel world, BlockPos pos, ItemStack blockStack, @Nullable Player player);
 
     // interop
 

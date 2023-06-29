@@ -33,6 +33,7 @@ import at.petrak.hexcasting.xplat.Platform;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Lifecycle;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -458,13 +459,17 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player) {
+    public boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player) {
+        if (player == null)
+            player = FakePlayer.get(world, HEXCASTING);
         return PlayerBlockBreakEvents.BEFORE.invoker()
             .beforeBlockBreak(world, player, pos, state, world.getBlockEntity(pos));
     }
 
     @Override
-    public boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player) {
+    public boolean isPlacingAllowed(ServerLevel world, BlockPos pos, ItemStack blockStack, @Nullable Player player) {
+        if (player == null)
+            player = FakePlayer.get(world, HEXCASTING);
         ItemStack cached = player.getMainHandItem();
         player.setItemInHand(InteractionHand.MAIN_HAND, blockStack.copy());
         var success = UseItemCallback.EVENT.invoker().interact(player, world, InteractionHand.MAIN_HAND);

@@ -73,6 +73,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.*;
 import net.minecraftforge.common.loot.CanToolPerformAction;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
@@ -505,12 +506,16 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player) {
+    public boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player) {
+        if (player == null)
+            player = FakePlayerFactory.get(world, HEXCASTING);
         return !MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player));
     }
 
     @Override
-    public boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player) {
+    public boolean isPlacingAllowed(ServerLevel world, BlockPos pos, ItemStack blockStack, @Nullable Player player) {
+        if (player == null)
+            player = FakePlayerFactory.get(world, HEXCASTING);
         ItemStack cached = player.getMainHandItem();
         player.setItemInHand(InteractionHand.MAIN_HAND, blockStack.copy());
         var evt = ForgeHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos,
