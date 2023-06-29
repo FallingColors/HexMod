@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import io
+from dataclasses import InitVar, dataclass
 from html import escape
 from typing import IO, Any
 
@@ -40,17 +41,17 @@ def tag_args(kwargs: dict[str, Any]):
     )
 
 
+@dataclass
 class PairTag:
-    __slots__ = ["stream", "name", "kwargs"]
+    stream: IO[str]
+    name: str
+    args: InitVar[dict[str, Any]]
 
-    # TODO: type
-    def __init__(self, stream: IO[str], name: str, **kwargs: Any):
-        self.stream = stream
-        self.name = name
-        self.kwargs = tag_args(kwargs)
+    def __post_init__(self, args: dict[str, Any]):
+        self.args_str = tag_args(args)
 
     def __enter__(self):
-        print(f"<{self.name}{self.kwargs}>", file=self.stream, end="")
+        print(f"<{self.name}{self.args_str}>", file=self.stream, end="")
 
     def __exit__(self, _1: Any, _2: Any, _3: Any):
         print(f"</{self.name}>", file=self.stream, end="")
@@ -76,7 +77,7 @@ class Stream:
         return self
 
     def pair_tag(self, name: str, **kwargs: Any):
-        return PairTag(self.stream, name, **kwargs)
+        return PairTag(self.stream, name, kwargs)
 
     def pair_tag_if(self, cond: Any, name: str, **kwargs: Any):
         return self.pair_tag(name, **kwargs) if cond else Empty()
