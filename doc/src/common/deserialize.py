@@ -3,16 +3,22 @@
 from common import dacite_patch as _  # isort: skip
 
 import json
-import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 
+import tomllib
 from dacite import Config, from_dict
+from pydantic import ConfigDict
 
 from common.dacite_patch import handle_metadata
 from common.toml_placeholders import TOMLDict, fill_placeholders
 from common.types import Castable, JSONDict, JSONValue, isinstance_or_raise
+
+DEFAULT_CONFIG = ConfigDict(
+    strict=True,
+    extra="forbid",
+)
 
 _T_Input = TypeVar("_T_Input")
 

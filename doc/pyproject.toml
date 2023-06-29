@@ -14,10 +14,8 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    # better CLI argument parsing
     "typed-argument-parser>=1.8.0",
-    # dict-to-dataclass (TODO: switch to Pydantic)
-    "dacite@git+https://github.com/mciszczon/dacite@f298260c6aedc1097c7567b1b0a61298a0ddf2a8",
+    "pydantic==2.0b3",
 ]
 
 [project.entry-points."hexdoc.Page"]
