@@ -40,7 +40,7 @@ public class CCSentinel implements Component, AutoSyncedComponent {
         var hasSentinel = tag.getBoolean(TAG_HAS_SENTINEL);
         if (hasSentinel) {
             var extendsRange = tag.getBoolean(TAG_EXTENDS_RANGE);
-            var position = HexUtils.vecFromNBT(tag.getLongArray(TAG_POSITION));
+            var position = HexUtils.vecFromNBT(tag.getCompound(TAG_POSITION));
             var dim = ResourceKey.create(Registries.DIMENSION,
                 new ResourceLocation(tag.getString(TAG_DIMENSION)));
             this.sentinel = new Sentinel(extendsRange, position, dim);

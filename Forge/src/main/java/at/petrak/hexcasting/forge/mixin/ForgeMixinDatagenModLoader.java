@@ -34,8 +34,7 @@ public abstract class ForgeMixinDatagenModLoader {
     private static boolean runningDataGen;
 
     /**
-     * @author Talia
-     * @reason Make it so non-vanilla registries can actually be tagged.
+     * Make it so non-vanilla registries can actually be tagged.
      */
     @Overwrite(remap = false)
     public static void begin(final Set<String> mods, final Path path, final Collection<Path> inputs, Collection<Path> existingPacks,

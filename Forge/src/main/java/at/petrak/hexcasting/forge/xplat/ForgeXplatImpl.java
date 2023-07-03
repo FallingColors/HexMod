@@ -200,7 +200,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public void setSentinel(Player player, @Nullable Sentinel sentinel) {
         CompoundTag tag = player.getPersistentData();
-        tag.putBoolean(TAG_SENTINEL_EXISTS, sentinel == null);
+        tag.putBoolean(TAG_SENTINEL_EXISTS, sentinel != null);
         if (sentinel != null) {
             tag.putBoolean(TAG_SENTINEL_GREATER, sentinel.extendsRange());
             tag.put(TAG_SENTINEL_POSITION, HexUtils.serializeToNBT(sentinel.position()));
@@ -274,7 +274,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             return null;
         }
         var extendsRange = tag.getBoolean(TAG_SENTINEL_GREATER);
-        var position = HexUtils.vecFromNBT(tag.getLongArray(TAG_SENTINEL_POSITION));
+        var position = HexUtils.vecFromNBT(tag.getCompound(TAG_SENTINEL_POSITION));
         var dimension = ResourceKey.create(Registries.DIMENSION,
             new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
 
