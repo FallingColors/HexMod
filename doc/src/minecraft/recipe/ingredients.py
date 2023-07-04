@@ -1,26 +1,24 @@
-from dataclasses import dataclass
-
-from common.tagged_union import NoValue
+from common.tagged_union import NoValue, TypeTaggedUnion
 from minecraft.resource import ResourceLocation
-from patchouli.state import AnyState, BookState, StatefulTypeTaggedUnion
+from patchouli.context import AnyBookContext, BookContext
 
 
 class ItemIngredient(
-    StatefulTypeTaggedUnion[AnyState],
+    TypeTaggedUnion[AnyBookContext],
     group="hexdoc.ItemIngredient",
     type=None,
 ):
     pass
 
 
-ItemIngredientOrList = ItemIngredient[AnyState] | list[ItemIngredient[AnyState]]
+ItemIngredientOrList = (
+    ItemIngredient[AnyBookContext] | list[ItemIngredient[AnyBookContext]]
+)
 
 
-@dataclass
-class MinecraftItemIdIngredient(ItemIngredient[BookState], type=NoValue):
+class MinecraftItemIdIngredient(ItemIngredient[BookContext], type=NoValue):
     item: ResourceLocation
 
 
-@dataclass
-class MinecraftItemTagIngredient(ItemIngredient[BookState], type=NoValue):
+class MinecraftItemTagIngredient(ItemIngredient[BookContext], type=NoValue):
     tag: ResourceLocation

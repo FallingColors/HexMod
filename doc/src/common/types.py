@@ -2,97 +2,63 @@ from __future__ import annotations
 
 import string
 from abc import ABC, abstractmethod
-from typing import Any, Mapping, Protocol, Self, TypeGuard, TypeVar, get_origin
+from typing import Any, Mapping, Protocol, TypeVar
 
-JSONDict = dict[str, "JSONValue"]
+from pydantic import field_validator, model_validator
+from pydantic.dataclasses import dataclass
 
-JSONValue = JSONDict | list["JSONValue"] | str | int | float | bool | None
+from common.model import DEFAULT_CONFIG
 
 _T = TypeVar("_T")
 
-_DEFAULT_MESSAGE = "Expected any of {expected}, got {actual}: {value}"
 
-
-# there may well be a better way to do this but i don't know what it is
-def isinstance_or_raise(
-    val: Any,
-    class_or_tuple: type[_T] | tuple[type[_T], ...],
-    message: str = _DEFAULT_MESSAGE,
-) -> TypeGuard[_T]:
-    """Usage: `assert isinstance_or_raise(val, str)`
-
-    message placeholders: `{expected}`, `{actual}`, `{value}`
-    """
-
-    # convert generic types into the origin type
-    if not isinstance(class_or_tuple, tuple):
-        class_or_tuple = (class_or_tuple,)
-    ungenericed_classes = tuple(get_origin(t) or t for t in class_or_tuple)
-
-    if not isinstance(val, ungenericed_classes):
-        # just in case the caller messed up the message formatting
-        subs = {"expected": class_or_tuple, "actual": type(val), "value": val}
-        try:
-            raise TypeError(message.format(**subs))
-        except KeyError:
-            raise TypeError(_DEFAULT_MESSAGE.format(**subs))
-    return True
-
-
-class Castable:
-    """Abstract base class for types with a constructor in the form `C(value) -> C`.
-
-    Subclassing this ABC allows for automatic deserialization using Dacite.
-    """
-
-
-class Color(str, Castable):
-    """Newtype-style class representing a hexadecimal color.
+@dataclass(config=DEFAULT_CONFIG, frozen=True)
+class Color:
+    """Represents a hexadecimal color.
 
     Inputs are coerced to lowercase `rrggbb`. Raises ValueError on invalid input.
 
     Valid formats, all of which would be converted to `0099ff`:
-    - `#0099FF`
-    - `#0099ff`
-    - `#09F`
-    - `#09f`
-    - `0099FF`
-    - `0099ff`
-    - `09F`
-    - `09f`
+    - `"#0099FF"`
+    - `"#0099ff"`
+    - `"#09F"`
+    - `"#09f"`
+    - `"0099FF"`
+    - `"0099ff"`
+    - `"09F"`
+    - `"09f"`
+    - `0x0099ff`
     """
 
-    __slots__ = ()
+    value: str
 
-    def __new__(cls, value: str) -> Self:
-        # this is a castable type hook but we hint str for usability
-        assert isinstance_or_raise(value, str)
+    @model_validator(mode="before")
+    def _pre_root(cls, value: Any):
+        if isinstance(value, (str, int)):
+            return {"value": value}
+        return value
 
-        color = value.removeprefix("#").lower()
+    @field_validator("value", mode="before")
+    def _check_value(cls, value: str | int | Any) -> str:
+        # type check
+        match value:
+            case str():
+                value = value.removeprefix("#").lower()
+            case int():
+                # int to hex string
+                value = f"{value:0>6x}"
+            case _:
+                raise TypeError(f"Expected str or int, got {type(value)}")
 
         # 012 -> 001122
-        if len(color) == 3:
-            color = "".join(c + c for c in color)
+        if len(value) == 3:
+            value = "".join(c + c for c in value)
 
         # length and character check
-        if len(color) != 6 or any(c not in string.hexdigits for c in color):
+        if len(value) != 6 or any(c not in string.hexdigits for c in value):
             raise ValueError(f"invalid color code: {value}")
 
-        return str.__new__(cls, color)
-
-
-# subclass instead of newtype so it exists at runtime, so we can use isinstance
-class LocalizedStr(str):
-    """Represents a string which has been localized."""
-
-    def __new__(cls, value: str) -> Self:
-        # this is a castable type hook but we hint str for usability
-        assert isinstance_or_raise(value, str)
-        return str.__new__(cls, value)
-
-
-class LocalizedItem(LocalizedStr):
-    pass
+        return value
 
 
 class Sortable(ABC):

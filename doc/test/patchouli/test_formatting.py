@@ -1,5 +1,4 @@
 # pyright: reportPrivateUsage=false
-from common.types import LocalizedStr
 from patchouli.formatting import DEFAULT_MACROS, FormatTree, Style
 
 
@@ -8,7 +7,7 @@ def test_format_string():
     test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
 
     # act
-    tree = FormatTree.format(DEFAULT_MACROS, LocalizedStr(test_str))
+    tree = FormatTree.format(test_str, DEFAULT_MACROS)
 
     # assert
     # TODO: possibly make this less lazy

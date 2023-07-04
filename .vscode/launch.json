@@ -17,7 +17,7 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}/doc",
-            "program": "src/main.py",
+            "module": "hexcasting.scripts.main",
             "args": [
                 "properties.toml",
             ],

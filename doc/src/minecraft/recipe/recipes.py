@@ -1,27 +1,30 @@
-from dataclasses import dataclass
+from common.model import HexDocModel
+from minecraft.i18n import LocalizedItem
+from patchouli.context import BookContext
 
-from patchouli.state import BookState
-
-from .abstract_recipes import ItemResult, Recipe
+from .abstract_recipes import Recipe
 from .ingredients import ItemIngredientOrList
 
 
-@dataclass
+class ItemResult(HexDocModel[BookContext]):
+    item: LocalizedItem
+    count: int | None = None
+
+
 class CraftingShapedRecipe(
-    Recipe[BookState],
+    Recipe[BookContext],
     type="minecraft:crafting_shaped",
 ):
     pattern: list[str]
-    key: dict[str, ItemIngredientOrList[BookState]]
+    key: dict[str, ItemIngredientOrList[BookContext]]
     result: ItemResult
 
 
-@dataclass
 class CraftingShapelessRecipe(
-    Recipe[BookState],
+    Recipe[BookContext],
     type="minecraft:crafting_shapeless",
 ):
-    ingredients: list[ItemIngredientOrList[BookState]]
+    ingredients: list[ItemIngredientOrList[BookContext]]
     result: ItemResult
 
 

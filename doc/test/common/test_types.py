@@ -16,4 +16,4 @@ colors: list[str] = [
 
 @pytest.mark.parametrize("s", colors)
 def test_color(s: str):
-    assert Color(s) == "0099ff"
+    assert Color(s).value == "0099ff"

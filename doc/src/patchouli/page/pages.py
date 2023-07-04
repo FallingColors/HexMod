@@ -1,32 +1,29 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from typing import Any
 
-from common.deserialize import rename
-from common.types import LocalizedItem, LocalizedStr
+from pydantic import Field
+
+from minecraft.i18n import LocalizedItem, LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import Entity, ItemStack, ResourceLocation
+from patchouli.context import BookContext
 
 from ..formatting import FormatTree
-from ..state import BookState
 from .abstract_pages import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
 
 
-@dataclass(kw_only=True)
-class TextPage(PageWithTitle[BookState], type="patchouli:text"):
+class TextPage(PageWithTitle[BookContext], type="patchouli:text"):
     text: FormatTree
 
 
-@dataclass
-class ImagePage(PageWithTitle[BookState], type="patchouli:image"):
+class ImagePage(PageWithTitle[BookContext], type="patchouli:image"):
     images: list[ResourceLocation]
     border: bool = False
 
 
-@dataclass
 class CraftingPage(
-    PageWithCraftingRecipes[BookState],
+    PageWithCraftingRecipes[BookContext],
     type="patchouli:crafting",
 ):
     recipe: CraftingRecipe
@@ -41,18 +38,16 @@ class CraftingPage(
 
 
 # TODO: this should probably inherit PageWithRecipes too
-@dataclass
-class SmeltingPage(PageWithTitle[BookState], type="patchouli:smelting"):
+class SmeltingPage(PageWithTitle[BookContext], type="patchouli:smelting"):
     recipe: ItemStack
     recipe2: ItemStack | None = None
 
 
-@dataclass
-class MultiblockPage(PageWithText[BookState], type="patchouli:multiblock"):
+class MultiblockPage(PageWithText[BookContext], type="patchouli:multiblock"):
     name: LocalizedStr
     multiblock_id: ResourceLocation | None = None
     # TODO: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/multiblocks/
-    # this should be a dataclass, but hex doesn't have any multiblock pages so idc
+    # this should be a modeled class, but hex doesn't have any multiblock pages so idc
     multiblock: Any | None = None
     enable_visualize: bool = True
 
@@ -61,8 +56,7 @@ class MultiblockPage(PageWithText[BookState], type="patchouli:multiblock"):
             raise ValueError(f"One of multiblock_id or multiblock must be set\n{self}")
 
 
-@dataclass
-class EntityPage(PageWithText[BookState], type="patchouli:entity"):
+class EntityPage(PageWithText[BookContext], type="patchouli:entity"):
     entity: Entity
     scale: float = 1
     offset: float = 0
@@ -71,34 +65,31 @@ class EntityPage(PageWithText[BookState], type="patchouli:entity"):
     name: LocalizedStr | None = None
 
 
-@dataclass
-class SpotlightPage(PageWithTitle[BookState], type="patchouli:spotlight"):
+class SpotlightPage(PageWithTitle[BookContext], type="patchouli:spotlight"):
     item: LocalizedItem  # TODO: patchi says this is an ItemStack, so this might break
     link_recipe: bool = False
 
 
-@dataclass
 class LinkPage(TextPage, type="patchouli:link"):
     url: str
     link_text: LocalizedStr
 
 
-@dataclass(kw_only=True)
-class RelationsPage(PageWithTitle[BookState], type="patchouli:relations"):
+class RelationsPage(PageWithTitle[BookContext], type="patchouli:relations"):
     entries: list[ResourceLocation]
-    _title: LocalizedStr = field(
-        default=LocalizedStr("Related Chapters"), metadata=rename("title")
+    title_: LocalizedStr = Field(
+        default=LocalizedStr.skip_key("Related Chapters"),
+        alias="title",
     )
 
 
-@dataclass
-class QuestPage(PageWithTitle[BookState], type="patchouli:quest"):
+class QuestPage(PageWithTitle[BookContext], type="patchouli:quest"):
     trigger: ResourceLocation | None = None
-    _title: LocalizedStr = field(
-        default=LocalizedStr("Objective"), metadata=rename("title")
+    title_: LocalizedStr = Field(
+        default=LocalizedStr.skip_key("Objective"),
+        alias="title",
     )
 
 
-@dataclass
-class EmptyPage(Page[BookState], type="patchouli:empty"):
+class EmptyPage(Page[BookContext], type="patchouli:empty"):
     draw_filler: bool = True

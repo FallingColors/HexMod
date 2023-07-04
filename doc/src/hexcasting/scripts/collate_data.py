@@ -6,14 +6,10 @@ from dataclasses import InitVar, dataclass
 from html import escape
 from typing import IO, Any
 
-from common.types import LocalizedStr
 from hexcasting import HexBook
-from hexcasting.hex_pages import (
-    BrainsweepPage,
-    CraftingMultiPage,
-    LookupPatternPage,
-    PageWithPattern,
-)
+from hexcasting.abstract_hex_pages import PageWithPattern
+from hexcasting.hex_pages import BrainsweepPage, CraftingMultiPage, LookupPatternPage
+from minecraft.i18n import LocalizedStr
 from patchouli import Category, Entry, FormatTree, Page
 from patchouli.page import (
     CraftingPage,
@@ -86,8 +82,8 @@ class Stream:
         with self.pair_tag(name, **kwargs):
             pass
 
-    def text(self, txt: str):
-        print(escape(txt), file=self.stream, end="")
+    def text(self, txt: str | LocalizedStr):
+        print(escape(str(txt)), file=self.stream, end="")
         return self
 
 
@@ -124,14 +120,16 @@ def get_format(out: Stream, ty: str, value: Any):
 def entry_spoilered(root_info: HexBook, entry: Entry):
     if entry.advancement is None:
         return False
-    return str(entry.advancement) in root_info.state.spoilers
+    return str(entry.advancement) in root_info.context["spoilers"]
 
 
 def category_spoilered(root_info: HexBook, category: Category):
     return all(entry_spoilered(root_info, ent) for ent in category.entries)
 
 
-def write_block(out: Stream, block: FormatTree | str):
+def write_block(out: Stream, block: FormatTree | str | LocalizedStr):
+    if isinstance(block, LocalizedStr):
+        block = str(block)
     if isinstance(block, str):
         first = False
         for line in block.split("\n"):
@@ -268,7 +266,7 @@ def write_page(out: Stream, pageid: str, page: Page[Any]):
                 with out.pair_tag("p", clazz="todo-note"):
                     out.text(f"TODO: Missing processor for type: {type(page)}")
                 if isinstance(page, PageWithText):
-                    write_block(out, page.text or page.state.format(LocalizedStr("")))
+                    write_block(out, page.text or FormatTree.empty())
     out.tag("br")
 
 
@@ -294,7 +292,7 @@ def write_category(out: Stream, book: HexBook, category: Category):
                 permalink(out, category.id.href)
             write_block(out, category.description)
         for entry in category.entries:
-            if entry.id.path not in book.state.blacklist:
+            if entry.id.path not in book.context["blacklist"]:
                 write_entry(out, book, entry)
 
 
@@ -351,11 +349,11 @@ def generate_docs(book: HexBook, template: str) -> str:
         for line in template.splitlines(True):
             if line.startswith("#DO_NOT_RENDER"):
                 _, *blacklist = line.split()
-                book.state.blacklist.update(blacklist)
+                book.context["blacklist"].update(blacklist)
 
             if line.startswith("#SPOILER"):
                 _, *spoilers = line.split()
-                book.state.spoilers.update(spoilers)
+                book.context["spoilers"].update(spoilers)
             elif line == "#DUMP_BODY_HERE\n":
                 write_book(Stream(output), book)
                 print("", file=output)

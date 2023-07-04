@@ -1,17 +1,19 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from pathlib import Path
 
-from common.deserialize import rename
-from common.types import Color, LocalizedStr, Sortable
+from pydantic import Field
+
+from common.properties import Properties
+from common.types import Color, Sortable
+from minecraft.i18n import LocalizedStr
 from minecraft.resource import ItemStack, ResourceLocation
-from patchouli.state import BookState, StatefulFile
 
+from .context import BookContext, BookModelFile
 from .page import Page
 
 
-@dataclass
-class Entry(StatefulFile[BookState], Sortable):
+class Entry(BookModelFile[BookContext, BookContext], Sortable):
     """Entry json file, with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/entry-json
@@ -19,9 +21,9 @@ class Entry(StatefulFile[BookState], Sortable):
 
     # required (entry.json)
     name: LocalizedStr
-    category_id: ResourceLocation = field(metadata=rename("category"))
+    category_id: ResourceLocation = Field(alias="category")
     icon: ItemStack
-    pages: list[Page[BookState]]
+    pages: list[Page[BookContext]]
 
     # optional (entry.json)
     advancement: ResourceLocation | None = None
@@ -34,11 +36,9 @@ class Entry(StatefulFile[BookState], Sortable):
     extra_recipe_mappings: dict[ItemStack, int] | None = None
     entry_color: Color | None = None  # this is undocumented lmao
 
-    @property
-    def id(self) -> ResourceLocation:
-        return ResourceLocation.from_file(
-            self.props.modid, self.props.entries_dir, self.path
-        )
+    @classmethod
+    def _id_base_dir(cls, props: Properties) -> Path:
+        return props.entries_dir
 
     @property
     def _cmp_key(self) -> tuple[bool, int, LocalizedStr]:

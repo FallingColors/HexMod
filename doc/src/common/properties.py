@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 import re
-from dataclasses import InitVar, dataclass, field
 from pathlib import Path
-from typing import Self
+from typing import Any, Self
 
-from common.deserialize import TypedConfig, from_dict_checked, load_toml_data, rename
-from common.pattern import PatternStubFile
-from common.types import LocalizedStr
+from pydantic import Field, model_validator
+
+from common.model import HexDocModel
+from common.toml_placeholders import load_toml
+from hexcasting.pattern import PatternStubFile
 
 
-@dataclass
-class PlatformProps:
+class PlatformProps(HexDocModel[Any]):
     resources: Path
     generated: Path
     src: Path
@@ -19,37 +19,31 @@ class PlatformProps:
     pattern_stubs: list[PatternStubFile] | None = None
 
 
-@dataclass
-class I18nProps:
+class I18nProps(HexDocModel[Any]):
     lang: str
     filename: str
-    extra: dict[str, LocalizedStr] | None = None
+    extra: dict[str, str] | None = None
 
 
-@dataclass(kw_only=True)
-class Properties:
+class Properties(HexDocModel[Any]):
     modid: str
     book_name: str
     template: Path
-    recipe_dirs: list[Path]
 
-    _pattern_regex: InitVar[str] = field(metadata=rename("pattern_regex"))
-    pattern_re: re.Pattern[str] = field(init=False)
+    recipe_dirs: list[Path]
+    default_recipe_dir_index_: int = Field(alias="default_recipe_dir")
+
+    pattern_regex: re.Pattern[str]
 
     i18n: I18nProps
 
     common: PlatformProps
-    fabric: PlatformProps  # TODO: non-shitty way to make these optional for addons
+    fabric: PlatformProps  # TODO: some way to make these optional for addons
     forge: PlatformProps
-
-    def __post_init__(self, _pattern_regex: str):
-        object.__setattr__(self, "pattern_re", re.compile(_pattern_regex))
 
     @classmethod
     def load(cls, path: Path) -> Self:
-        data = load_toml_data(cls, path)
-        config = TypedConfig(cast=[LocalizedStr, Path])
-        return from_dict_checked(cls, data, config)
+        return cls.model_validate(load_toml(path))
 
     @property
     def resources_dir(self):
@@ -83,6 +77,10 @@ class Properties:
         return self.book_dir / self.lang / "templates"
 
     @property
+    def default_recipe_dir(self) -> Path:
+        return self.recipe_dirs[self.default_recipe_dir_index_]
+
+    @property
     def platforms(self) -> list[PlatformProps]:
         platforms = [self.common]
         if self.fabric:
@@ -99,3 +97,11 @@ class Properties:
             if platform.pattern_stubs
             for stub in platform.pattern_stubs
         ]
+
+    @model_validator(mode="after")
+    def _check_default_recipe_dir(self):
+        if self.default_recipe_dir_index_ >= len(self.recipe_dirs):
+            raise ValueError(
+                f"default_recipe_dir must be a valid index of recipe_dirs (expected <={len(self.recipe_dirs)}, got {self.default_recipe_dir_index_})"
+            )
+        return self

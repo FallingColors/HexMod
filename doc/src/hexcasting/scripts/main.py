@@ -1,19 +1,13 @@
 # because Tap.add_argument isn't typed, for some reason
 # pyright: reportUnknownMemberType=false
 
-# make sure we patch dacite before doing any parsing
-# this is also in common.deserialize but hey, it doesn't hurt to put it here too
-# should this be a PR? probably! TODO: i'll do it later
-from common import dacite_patch as _  # isort: skip
-
 import sys
 from pathlib import Path
 
 from tap import Tap
 
 from common.properties import Properties
-from hexcasting.hex_state import HexBookState
-from patchouli import Book
+from hexcasting.hex_book import HexBook
 
 from .collate_data import generate_docs
 
@@ -35,7 +29,7 @@ class Args(Tap):
 def main(args: Args) -> None:
     # load the properties and book
     props = Properties.load(args.properties_file)
-    book = Book.load(HexBookState(props))
+    book = HexBook.load(*HexBook.prepare(props))
 
     # load and fill the template
     template = props.template.read_text("utf-8")

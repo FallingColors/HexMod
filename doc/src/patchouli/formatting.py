@@ -1,6 +1,14 @@
+from __future__ import annotations
+
 import re
-from dataclasses import dataclass
-from typing import NamedTuple, Self
+from typing import NamedTuple, Self, cast
+
+from pydantic import ValidationInfo, model_validator
+from pydantic.dataclasses import dataclass
+from pydantic.functional_validators import ModelWrapValidatorHandler
+
+from common.model import DEFAULT_CONFIG
+from minecraft.i18n import I18nContext, LocalizedStr
 
 DEFAULT_MACROS = {
     "$(obf)": "$(k)",
@@ -113,17 +121,21 @@ def parse_style(style_text: str) -> Style | str:
 _FORMAT_RE = re.compile(r"\$\(([^)]*)\)")
 
 
-@dataclass
+class FormatContext(I18nContext):
+    macros: dict[str, str]
+
+
+@dataclass(config=DEFAULT_CONFIG)
 class FormatTree:
     style: Style
-    children: list[Self | str]
+    children: list[FormatTree | str]
 
     @classmethod
     def empty(cls) -> Self:
         return cls(Style("base", None), [])
 
     @classmethod
-    def format(cls, macros: dict[str, str], string: str) -> Self:
+    def format(cls, string: str, macros: dict[str, str]) -> Self:
         # resolve macros
         # TODO: use ahocorasick? this feels inefficient
         old_string = None
@@ -187,3 +199,19 @@ class FormatTree:
             style_stack[-1].children.append(last_node)
 
         return style_stack[0]
+
+    @model_validator(mode="wrap")
+    @classmethod
+    def _wrap_root(
+        cls,
+        value: str | LocalizedStr | Self,
+        handler: ModelWrapValidatorHandler[Self],
+        info: ValidationInfo,
+    ):
+        context = cast(FormatContext, info.context)
+        if not context or isinstance(value, FormatTree):
+            return handler(value)
+
+        if not isinstance(value, LocalizedStr):
+            value = context["i18n"].localize(value)
+        return cls.format(value.value, context["macros"])

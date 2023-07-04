@@ -1,8 +1,11 @@
 import datetime
 import re
+from pathlib import Path
 from typing import Callable, TypeVar
 
-from common.types import isinstance_or_raise
+import tomllib
+
+from common.deserialize import isinstance_or_raise
 
 # TODO: there's (figuratively) literally no comments in this file
 
@@ -110,3 +113,9 @@ def _fill_placeholders(
     table = stack[-1]
     for key, child in table.items():
         _handle_child(data, stack, expanded, key, child, table.__setitem__)
+
+
+def load_toml(path: Path) -> TOMLDict:
+    data = tomllib.loads(path.read_text("utf-8"))
+    fill_placeholders(data)
+    return data

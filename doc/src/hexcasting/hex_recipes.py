@@ -1,7 +1,8 @@
-from dataclasses import dataclass
 from typing import Any, Literal
 
-from common.types import LocalizedItem
+from common.model import HexDocModel
+from hexcasting.hex_book import HexContext
+from minecraft.i18n import LocalizedItem
 from minecraft.recipe import (
     ItemIngredient,
     MinecraftItemIdIngredient,
@@ -10,20 +11,16 @@ from minecraft.recipe import (
 )
 from minecraft.resource import ResourceLocation
 
-from .hex_state import HexBookState
-
 # ingredients
 
 
-@dataclass
-class VillagerIngredient:  # lol, lmao
+class VillagerIngredient(HexDocModel[HexContext]):  # lol, lmao
     minLevel: int
     profession: ResourceLocation | None = None
     biome: ResourceLocation | None = None
 
 
-@dataclass
-class BlockStateIngredient:
+class BlockStateIngredient(HexDocModel[HexContext]):
     # TODO: StateIngredient should also be a TypeTaggedUnion, probably
     type: Literal["block"]
     block: ResourceLocation
@@ -35,9 +32,8 @@ _MinecraftItemIngredientOrList = (
 )
 
 
-@dataclass
 class ModConditionalIngredient(
-    ItemIngredient[HexBookState],
+    ItemIngredient[HexContext],
     type="hexcasting:mod_conditional",
 ):
     default: _MinecraftItemIngredientOrList
@@ -48,8 +44,7 @@ class ModConditionalIngredient(
 # results
 
 
-@dataclass(kw_only=True)
-class BlockState:
+class BlockState(HexDocModel[HexContext]):
     name: LocalizedItem
     properties: dict[str, Any] | None = None
 
@@ -57,8 +52,7 @@ class BlockState:
 # recipes
 
 
-@dataclass
-class BrainsweepRecipe(Recipe[HexBookState], type="hexcasting:brainsweep"):
+class BrainsweepRecipe(Recipe[HexContext], type="hexcasting:brainsweep"):
     blockIn: BlockStateIngredient
     villagerIn: VillagerIngredient
     result: BlockState

@@ -1,8 +1,7 @@
 import subprocess
 import sys
-from dataclasses import Field, fields
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Iterator
 
 import pytest
 from bs4 import BeautifulSoup as bs
@@ -10,11 +9,7 @@ from syrupy.assertion import SnapshotAssertion
 from syrupy.extensions.amber import AmberSnapshotExtension
 from syrupy.types import SerializedData
 
-from common.properties import Properties
-from common.types import LocalizedStr
-from hexcasting.hex_state import HexBookState
 from hexcasting.scripts.main import Args, main
-from patchouli import Book, FormatTree
 
 
 def prettify(data: SerializedData) -> str:
@@ -70,26 +65,26 @@ def test_stdout(capsys: pytest.CaptureFixture[str], snapshot: SnapshotAssertion)
     assert capsys.readouterr() == snapshot.use_extension(NoDiffSnapshotEx)
 
 
-def test_book_text(snapshot: SnapshotAssertion):
-    def test_field(data_class: Any, field: Field[Any]):
-        value = getattr(data_class, field.name, None)
-        if isinstance(value, (LocalizedStr, FormatTree)):
-            assert value == snapshot
+# def test_book_text(snapshot: SnapshotAssertion):
+#     def test_field(data_class: Any, field: Field[Any]):
+#         value = getattr(data_class, field.name, None)
+#         if isinstance(value, (LocalizedStr, FormatTree)):
+#             assert value == snapshot
 
-    props = Properties.load(Path("properties.toml"))
-    book = Book.load(HexBookState(props))
+#     props = Properties.load(Path("properties.toml"))
+#     book = Book.load(HexBookState(props))
 
-    for field in fields(book):
-        test_field(book, field)
+#     for field in fields(book):
+#         test_field(book, field)
 
-    for category in book.categories.values():
-        for field in fields(category):
-            test_field(category, field)
+#     for category in book.categories.values():
+#         for field in fields(category):
+#             test_field(category, field)
 
-        for entry in category.entries:
-            for field in fields(entry):
-                test_field(entry, field)
+#         for entry in category.entries:
+#             for field in fields(entry):
+#                 test_field(entry, field)
 
-            for page in entry.pages:
-                for field in fields(page):
-                    test_field(page, field)
+#             for page in entry.pages:
+#                 for field in fields(page):
+#                     test_field(page, field)

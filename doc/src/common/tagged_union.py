@@ -4,14 +4,18 @@ from __future__ import annotations
 
 from collections import defaultdict
 from enum import Enum
-from typing import Any, ClassVar, Generator, Self
+from typing import TYPE_CHECKING, Any, ClassVar, Generator, Self, cast
 
-from dacite import StrictUnionMatchError, UnionMatchError, from_dict
 from pkg_resources import iter_entry_points
+from pydantic import ValidationInfo, model_validator
+from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from common.dacite_patch import UnionSkip
-from common.deserialize import TypedConfig
-from common.types import isinstance_or_raise
+from minecraft.resource import ResourceLocation
+
+from .model import AnyContext, HexDocModel
+
+if TYPE_CHECKING:
+    from pydantic.root_model import Model
 
 
 class NoValueType(Enum):
@@ -27,18 +31,27 @@ NoValue = NoValueType._token
 TagValue = str | NoValueType
 
 
-class WrongTagSkip(UnionSkip):
-    def __init__(
-        self,
-        union_type: type[InternallyTaggedUnion],
-        tag_value: TagValue,
-    ) -> None:
-        super().__init__(
-            f"Expected {union_type._tag_key}={union_type.__expected_tag_value}, got {tag_value}"
-        )
+_loaded_groups: set[str] = set()
+_rebuilt_models: set[type[Any]] = set()
 
 
-class InternallyTaggedUnion:
+def load_entry_points(group: str):
+    # don't load a group multiple times
+    if group in _loaded_groups:
+        return
+    _loaded_groups.add(group)
+
+    for entry_point in iter_entry_points(group):
+        try:
+            entry_point.load()
+        except ModuleNotFoundError as e:
+            e.add_note(
+                f'Note: Tried to load entry point "{entry_point}" from {entry_point.dist}'
+            )
+            raise
+
+
+class InternallyTaggedUnion(HexDocModel[AnyContext]):
     """Implements [internally tagged unions](https://serde.rs/enum-representations.html#internally-tagged)
     using the [Registry pattern](https://charlesreid1.github.io/python-patterns-the-registry.html).
 
@@ -57,17 +70,11 @@ class InternallyTaggedUnion:
             shouldn't be instantiated (eg. abstract classes).
     """
 
-    _loaded_groups: ClassVar[set[str]] = set()
-    """Global set of groups whose plugins have already been loaded. Do not overwrite.
-    
-    We use this so we don't have to load the same modules over and over again.
-    """
-
+    # inherited
     _group: ClassVar[str | None] = None
     _tag_key: ClassVar[str | None] = None
 
-    __expected_tag_value: ClassVar[TagValue | None]
-
+    # per-class
     __all_subtypes: ClassVar[set[type[Self]]]
     __concrete_subtypes: ClassVar[defaultdict[TagValue, set[type[Self]]]]
 
@@ -97,7 +104,6 @@ class InternallyTaggedUnion:
             return
 
         # per-class data and lookups
-        cls.__expected_tag_value = value
         cls.__all_subtypes = set()
         cls.__concrete_subtypes = defaultdict(set)
 
@@ -115,7 +121,9 @@ class InternallyTaggedUnion:
         return tag_key
 
     @classmethod
-    def _supertypes(cls) -> Generator[type[InternallyTaggedUnion], None, None]:
+    def _supertypes(
+        cls,
+    ) -> Generator[type[InternallyTaggedUnion[AnyContext]], None, None]:
         tag_key = cls._tag_key_or_raise()
 
         # we consider a type to be its own supertype/subtype
@@ -137,27 +145,61 @@ class InternallyTaggedUnion:
         return cls.__concrete_subtypes
 
     @classmethod
-    def _resolve_from_dict(cls, data: Self | Any, config: TypedConfig) -> Self:
-        # if we haven't yet, load plugins from entry points
-        if cls._group is not None and cls._group not in cls._loaded_groups:
-            cls._loaded_groups.add(cls._group)
-            for entry_point in iter_entry_points(cls._group):
-                try:
-                    entry_point.load()
-                except ModuleNotFoundError as e:
-                    e.add_note(
-                        f'Note: Tried to load entry point "{entry_point}" from {entry_point.dist}'
-                    )
-                    raise
+    def model_validate(
+        cls: type[Model],
+        obj: Any,
+        *,
+        strict: bool | None = None,
+        from_attributes: bool | None = None,
+        context: AnyContext | None = None,
+    ) -> Model:
+        # resolve forward references, because apparently we need to do this
+        if cls not in _rebuilt_models:
+            _rebuilt_models.add(cls)
+            cls.model_rebuild(
+                _types_namespace={
+                    "ResourceLocation": ResourceLocation,
+                }
+            )
 
-        # do this first so we know it's part of a union
+        return super().model_validate(
+            obj,
+            strict=strict,
+            from_attributes=from_attributes,
+            context=context,
+        )
+
+    @model_validator(mode="wrap")
+    @classmethod
+    def _resolve_from_dict(
+        cls,
+        data: dict[str, Any] | Self | Any,
+        handler: ModelWrapValidatorHandler[Self],
+        info: ValidationInfo,
+    ) -> Self:
+        # load plugins from entry points
+        if cls._group is not None:
+            load_entry_points(cls._group)
+
+        # do this early so we know it's part of a union before returning anything
         tag_key = cls._tag_key_or_raise()
 
         # if it's already instantiated, just return it; otherwise ensure it's a dict
-        if isinstance(data, InternallyTaggedUnion):
-            assert isinstance_or_raise(data, cls)
-            return data
-        assert isinstance_or_raise(data, dict[str, Any])
+        match data:
+            case InternallyTaggedUnion():
+                return data
+            case dict():
+                # ew
+                data = cast(dict[str, Any], data)
+            case _:
+                return handler(data)
+
+        # don't infinite loop calling this same validator forever
+        if "__resolved" in data or not info.context:
+            data.pop("__resolved")
+            return handler(data)
+        data["__resolved"] = True
+        context = cast(AnyContext, info.context)
 
         # tag value, eg. "minecraft:crafting_shaped"
         tag_value = data.get(tag_key, NoValue)
@@ -168,30 +210,44 @@ class InternallyTaggedUnion:
 
         # try all the types
         exceptions: list[Exception] = []
-        union_matches: dict[type[InternallyTaggedUnion], InternallyTaggedUnion] = {}
+        matches: dict[type[Self], Self] = {}
 
         for inner_type in tag_types:
             try:
-                value = from_dict(inner_type, data, config)
-                if not config.strict_unions_match:
-                    return value
-                union_matches[inner_type] = value
-            except UnionSkip:
-                pass
-            except Exception as entry_point:
-                exceptions.append(entry_point)
+                matches[inner_type] = inner_type.model_validate(data, context=context)
+            except Exception as e:
+                exceptions.append(e)
 
         # ensure we only matched one
-        match len(union_matches):
+        match len(matches):
             case 1:
-                return union_matches.popitem()[1]
-            case x if x > 1 and config.strict_unions_match:
-                exceptions.append(StrictUnionMatchError(union_matches))
+                return matches.popitem()[1]
+            case x if x > 1:
+                raise ExceptionGroup(
+                    f"Ambiguous union match for {cls} with {cls._tag_key}={tag_value}: {matches.keys()}: {data}",
+                    exceptions,
+                )
             case _:
-                exceptions.append(UnionMatchError(tag_types, data))
+                raise ExceptionGroup(
+                    f"Failed to match {cls} with {cls._tag_key}={tag_value} to any of {tag_types}: {data}",
+                    exceptions,
+                )
 
-        # oopsies
-        raise ExceptionGroup(
-            f"Failed to match {cls} with {cls._tag_key}={tag_value} to any of {tag_types}: {data}",
-            exceptions,
-        )
+
+class TypeTaggedUnion(InternallyTaggedUnion[AnyContext], key="type", value=None):
+    type: ResourceLocation | None
+
+    def __init_subclass__(
+        cls,
+        *,
+        group: str | None = None,
+        type: TagValue | None,
+    ) -> None:
+        super().__init_subclass__(group=group, value=type)
+        match type:
+            case str():
+                cls.type = ResourceLocation.from_str(type)
+            case NoValueType():
+                cls.type = None
+            case None:
+                pass

@@ -1,118 +1,71 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from typing import Any, cast
 
-from common.deserialize import rename
-from common.pattern import RawPatternInfo
-from common.types import LocalizedStr
+from pydantic import Field, ValidationInfo, model_validator
+
+from hexcasting.pattern import RawPatternInfo
+from minecraft.i18n import LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import ResourceLocation
-from patchouli.page import PageWithCraftingRecipes, PageWithText, PageWithTitle
+from patchouli.page import PageWithCraftingRecipes, PageWithText
 
+from .abstract_hex_pages import PageWithOpPattern, PageWithRawPattern
+from .hex_book import HexContext
 from .hex_recipes import BrainsweepRecipe
-from .hex_state import HexBookState
 
 
-@dataclass(kw_only=True)
-class PageWithPattern(PageWithTitle[HexBookState], ABC, type=None):
-    _patterns: RawPatternInfo | list[RawPatternInfo] = field(
-        metadata=rename("patterns")
-    )
-    op_id: ResourceLocation | None = None
-    header: LocalizedStr | None = None
-    input: str | None = None
-    output: str | None = None
-    hex_size: int | None = None
+class LookupPatternPage(
+    PageWithOpPattern[HexContext],
+    type="hexcasting:pattern",
+):
+    patterns_: list[RawPatternInfo]
 
-    _title: None = None
+    @model_validator(mode="before")
+    def _check_patterns(cls, data: dict[str, Any], info: ValidationInfo):
+        context = cast(HexContext, info.context)
+        if not context:
+            return data
 
-    @property
-    @abstractmethod
-    def name(self) -> LocalizedStr:
-        ...
-
-    @property
-    def args(self) -> str | None:
-        inp = self.input or ""
-        oup = self.output or ""
-        if inp or oup:
-            return f"{inp} \u2192 {oup}".strip()
-        return None
-
-    @property
-    def title(self) -> LocalizedStr:
-        suffix = f" ({self.args})" if self.args else ""
-        return LocalizedStr(self.name + suffix)
-
-    @property
-    def patterns(self) -> list[RawPatternInfo]:
-        if isinstance(self._patterns, list):
-            return self._patterns
-        return [self._patterns]
+        # look up the pattern from the op id
+        op_id = ResourceLocation.from_str(data["op_id"])
+        pattern = context["patterns"][op_id]
+        return data | {"patterns_": [pattern], "op_id": op_id}
 
 
-@dataclass
-class LookupPatternPage(PageWithPattern, type="hexcasting:pattern"):
-    state: HexBookState
-
-    _patterns: list[RawPatternInfo] = field(init=False)
-    op_id: ResourceLocation
-    header: None
-
-    def __post_init__(self):
-        self._patterns = [self.state.patterns[self.op_id]]
-
-    @property
-    def name(self) -> LocalizedStr:
-        return self.i18n.localize_pattern(self.op_id)
+class ManualOpPatternPage(
+    PageWithOpPattern[HexContext],
+    type="hexcasting:manual_pattern",
+):
+    pass
 
 
-@dataclass
-class ManualPatternNosigPage(PageWithPattern, type="hexcasting:manual_pattern_nosig"):
-    header: LocalizedStr
-    op_id: None
-    input: None
-    output: None
-
-    @property
-    def name(self) -> LocalizedStr:
-        return self.header
+class ManualRawPatternPage(
+    PageWithRawPattern[HexContext],
+    type="hexcasting:manual_pattern",
+):
+    pass
 
 
-@dataclass
-class ManualOpPatternPage(PageWithPattern, type="hexcasting:manual_pattern"):
-    op_id: ResourceLocation
-    header: None
-
-    @property
-    def name(self) -> LocalizedStr:
-        return self.i18n.localize_pattern(self.op_id)
+class ManualPatternNosigPage(
+    PageWithRawPattern[HexContext],
+    type="hexcasting:manual_pattern_nosig",
+):
+    input: None = None
+    output: None = None
 
 
-@dataclass
-class ManualRawPatternPage(PageWithPattern, type="hexcasting:manual_pattern"):
-    op_id: None
-    header: LocalizedStr
-
-    @property
-    def name(self) -> LocalizedStr:
-        return self.header
-
-
-@dataclass
 class CraftingMultiPage(
-    PageWithCraftingRecipes[HexBookState],
+    PageWithCraftingRecipes[HexContext],
     type="hexcasting:crafting_multi",
 ):
     heading: LocalizedStr  # ...heading?
-    _recipes: list[CraftingRecipe] = field(metadata=rename("recipes"))
+    recipes_: list[CraftingRecipe] = Field(alias="recipes", include=True)
 
     @property
     def recipes(self) -> list[CraftingRecipe]:
-        return self._recipes
+        return self.recipes_
 
 
-@dataclass
-class BrainsweepPage(PageWithText[HexBookState], type="hexcasting:brainsweep"):
+class BrainsweepPage(PageWithText[HexContext], type="hexcasting:brainsweep"):
     recipe: BrainsweepRecipe

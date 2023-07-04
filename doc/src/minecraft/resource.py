@@ -3,72 +3,71 @@
 from __future__ import annotations
 
 import re
-from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Self
+from typing import Any, ClassVar, Self
 
-from pydantic import field_validator, model_validator, validator
+from pydantic import field_validator, model_serializer, model_validator
 from pydantic.dataclasses import dataclass
+from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from common.deserialize import DEFAULT_CONFIG
-from common.types import isinstance_or_raise
+from common.model import DEFAULT_CONFIG
 
 
-def _make_re(count: bool = False, nbt: bool = False) -> re.Pattern[str]:
-    pattern = r"(?:([0-9a-z_\-.]+):)?([0-9a-z_\-./]+)"
+def _make_regex(count: bool = False, nbt: bool = False) -> re.Pattern[str]:
+    pattern = r"(?:(?P<namespace>[0-9a-z_\-.]+):)?(?P<path>[0-9a-z_\-./]+)"
     if count:
-        pattern += r"(?:#([0-9]+))?"
+        pattern += r"(?:#(?P<count>[0-9]+))?"
     if nbt:
-        pattern += r"({.*})?"
+        pattern += r"(?P<nbt>{.*})?"
     return re.compile(pattern)
 
 
-_RESOURCE_LOCATION_RE = _make_re()
-_ITEM_STACK_RE = _make_re(count=True, nbt=True)
-_ENTITY_RE = _make_re(nbt=True)
-
-
-@dataclass(config=DEFAULT_CONFIG, repr=False, frozen=True)
-class BaseResourceLocation(ABC):
-    """Represents a Minecraft resource location / namespaced ID."""
-
+@dataclass(config=DEFAULT_CONFIG, frozen=True, repr=False)
+class BaseResourceLocation:
     namespace: str
     path: str
 
-    @classmethod  # TODO: model_validator
-    def from_str(cls, raw: Self | str) -> Self:
-        if isinstance(raw, BaseResourceLocation):
-            return raw
-        return cls(*cls._match_groups(raw))
+    _from_str_regex: ClassVar[re.Pattern[str]]
+
+    def __init_subclass__(cls, regex: re.Pattern[str]) -> None:
+        cls._from_str_regex = regex
 
     @classmethod
-    def _match_groups(cls, raw: str) -> tuple[str, ...]:
-        assert isinstance_or_raise(raw, str)  # TODO: remove
-
-        match = cls._fullmatch(raw)
+    def from_str(cls, raw: str) -> Self:
+        match = cls._from_str_regex.fullmatch(raw)
         if match is None:
             raise ValueError(f"Invalid {cls.__name__} string: {raw}")
 
-        namespace, *rest = match.groups()
-        return (namespace or "minecraft", *rest)
+        return cls(**match.groupdict())
 
+    @model_validator(mode="wrap")
     @classmethod
-    @abstractmethod
-    def _fullmatch(cls, string: str) -> re.Match[str] | None:
-        ...
+    def _pre_root(cls, values: str | Any, handler: ModelWrapValidatorHandler[Self]):
+        # before validating the fields, if it's a string instead of a dict, convert it
+        if isinstance(values, str):
+            return cls.from_str(values)
+        return handler(values)
+
+    @field_validator("namespace", mode="before")
+    def _default_namespace(cls, value: str | None) -> str:
+        if value is None:
+            return "minecraft"
+        return value
+
+    @model_serializer
+    def _ser_model(self) -> str:
+        return str(self)
 
     def __repr__(self) -> str:
         return f"{self.namespace}:{self.path}"
 
 
-@dataclass(config=DEFAULT_CONFIG, repr=False, frozen=True)
-class ResourceLocation(BaseResourceLocation):
-    @classmethod
-    def _fullmatch(cls, string: str) -> re.Match[str] | None:
-        return _RESOURCE_LOCATION_RE.fullmatch(string)
+@dataclass(config=DEFAULT_CONFIG, frozen=True, repr=False)
+class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
+    """Represents a Minecraft resource location / namespaced ID."""
 
     @classmethod
-    def from_file(cls, modid: str, base_dir: Path, path: Path) -> ResourceLocation:
+    def from_file(cls, modid: str, base_dir: Path, path: Path) -> Self:
         resource_path = path.relative_to(base_dir).with_suffix("").as_posix()
         return ResourceLocation(modid, resource_path)
 
@@ -81,8 +80,8 @@ class ResourceLocation(BaseResourceLocation):
 ResLoc = ResourceLocation
 
 
-@dataclass(config=DEFAULT_CONFIG, repr=False, frozen=True)
-class ItemStack(BaseResourceLocation):
+@dataclass(config=DEFAULT_CONFIG, frozen=True, repr=False)
+class ItemStack(BaseResourceLocation, regex=_make_regex(count=True, nbt=True)):
     """Represents an item with optional count and NBT.
 
     Inherits from BaseResourceLocation, not ResourceLocation.
@@ -90,16 +89,6 @@ class ItemStack(BaseResourceLocation):
 
     count: int | None = None
     nbt: str | None = None
-
-    @field_validator("count", mode="before")  # TODO: move this into _match_groups?
-    def convert_count(cls, count: str | int | None):
-        if isinstance(count, str):
-            return int(count)
-        return count
-
-    @classmethod
-    def _fullmatch(cls, string: str) -> re.Match[str] | None:
-        return _ITEM_STACK_RE.fullmatch(string)
 
     def i18n_key(self, root: str = "item") -> str:
         return f"{root}.{self.namespace}.{self.path}"
@@ -113,18 +102,14 @@ class ItemStack(BaseResourceLocation):
         return s
 
 
-@dataclass(repr=False, frozen=True)
-class Entity(BaseResourceLocation):
+@dataclass(config=DEFAULT_CONFIG, frozen=True, repr=False)
+class Entity(BaseResourceLocation, regex=_make_regex(nbt=True)):
     """Represents an entity with optional NBT.
 
     Inherits from BaseResourceLocation, not ResourceLocation.
     """
 
     nbt: str | None = None
-
-    @classmethod
-    def _fullmatch(cls, string: str) -> re.Match[str] | None:
-        return _ENTITY_RE.fullmatch(string)
 
     def __repr__(self) -> str:
         s = super().__repr__()

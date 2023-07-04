@@ -1,9 +1,11 @@
 import re
-from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Generator
+from typing import Annotated, Any, Generator
 
+from pydantic import BeforeValidator
+
+from common.model import HexDocModel
 from minecraft.resource import ResourceLocation
 
 
@@ -15,27 +17,37 @@ class Direction(Enum):
     WEST = 4
     NORTH_WEST = 5
 
+    @classmethod
+    def validate(cls, value: str | int | Any):
+        match value:
+            case str():
+                return cls[value]
+            case int():
+                return cls(value)
+            case _:
+                return value
 
-@dataclass(kw_only=True)
-class RawPatternInfo:
-    startdir: Direction
+
+DirectionField = Annotated[Direction, BeforeValidator(Direction.validate)]
+
+
+class RawPatternInfo(HexDocModel[Any]):
+    startdir: DirectionField
     signature: str
     is_per_world: bool = False
     q: int | None = None
     r: int | None = None
 
 
-@dataclass(kw_only=True)
 class PatternInfo(RawPatternInfo):
     id: ResourceLocation
 
     @property
-    def op_id(self):
+    def name(self):
         return self.id.path
 
 
-@dataclass
-class PatternStubFile:
+class PatternStubFile(HexDocModel[Any]):
     file: Path
 
     def load_patterns(

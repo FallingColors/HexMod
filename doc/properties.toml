@@ -7,6 +7,7 @@ recipe_dirs = [
     "{fabric.generated}/data/{modid}/recipes",
     "{forge.generated}/data/{modid}/recipes",
 ]
+default_recipe_dir = 0
 
 # NOTE: _Raw means "don't apply variable interpolation to this value"
 # more on that later

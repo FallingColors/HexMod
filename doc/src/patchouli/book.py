@@ -1,24 +1,23 @@
 from __future__ import annotations
 
-from abc import ABC
-from dataclasses import dataclass, field
-from typing import Literal, Self
+from typing import Any, Generic, Literal, Self, cast
 
-from common.deserialize import from_dict_checked, load_json_data, rename
-from common.types import Color, LocalizedStr
-from minecraft.i18n import I18n
-from minecraft.recipe import ItemIngredient, Recipe
+from pydantic import Field, ValidationInfo, model_validator
+
+from common.deserialize import isinstance_or_raise, load_json
+from common.model import AnyContext, HexDocModel
+from common.properties import Properties
+from common.types import Color
+from minecraft.i18n import I18n, LocalizedStr
 from minecraft.resource import ItemStack, ResLoc, ResourceLocation
 
 from .category import Category
+from .context import AnyBookContext, BookContext
 from .entry import Entry
-from .formatting import FormatTree
-from .page import Page
-from .state import AnyState, Stateful
+from .formatting import DEFAULT_MACROS, FormatTree
 
 
-@dataclass
-class Book(Stateful[AnyState], ABC):
+class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     """Main Patchouli book class.
 
     Includes all data from book.json, categories/entries/pages, and i18n.
@@ -29,6 +28,10 @@ class Book(Stateful[AnyState], ABC):
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/book-json
     """
+
+    # not in book.json
+    context: AnyBookContext = Field(default_factory=dict)
+    categories: dict[ResourceLocation, Category] = Field(default_factory=dict)
 
     # required
     name: LocalizedStr
@@ -48,9 +51,7 @@ class Book(Stateful[AnyState], ABC):
     progress_bar_background: Color = Color("DDDDDD")
     open_sound: ResourceLocation | None = None
     flip_sound: ResourceLocation | None = None
-    _index_icon: ResourceLocation | None = field(
-        default=None, metadata=rename("index_icon")
-    )
+    index_icon_: ResourceLocation | None = Field(default=None, alias="index_icon")
     pamphlet: bool = False
     show_progress: bool = True
     version: str | int = 0
@@ -61,8 +62,8 @@ class Book(Stateful[AnyState], ABC):
     custom_book_item: ItemStack | None = None
     show_toasts: bool = True
     use_blocky_font: bool = False
-    do_i18n: bool = field(default=False, metadata=rename("i18n"))
-    macros: dict[str, str] = field(default_factory=dict)
+    do_i18n: bool = Field(default=False, alias="i18n")
+    macros: dict[str, str] = Field(default_factory=dict)
     pause_game: bool = False
     text_overflow_mode: Literal["overflow", "resize", "truncate"] | None = None
     extend: str | None = None
@@ -70,41 +71,45 @@ class Book(Stateful[AnyState], ABC):
     allow_extensions: bool = True
 
     @classmethod
-    def load(cls, state: AnyState) -> Self:
-        """Loads `book.json` and finishes initializing the shared state.
+    def load(cls, data: dict[str, Any], context: AnyBookContext):
+        return cls.model_validate(data, context=context)
 
-        Subclasses should generally not override this. To customize state creation or
-        add type hooks (including page or recipe types), override `__post_init__()`,
-        calling `super()` at the end (because that's where categories/entries load).
-        """
-
+    @classmethod
+    def prepare(cls, props: Properties) -> tuple[dict[str, Any], BookContext]:
         # read the raw dict from the json file
-        path = state.props.book_dir / "book.json"
-        data = load_json_data(cls, path, {"state": state})
-
-        state.i18n = I18n(state.props, data["do_i18n"])
-        state.add_macros(data["macros"])
-        state.add_stateful_unions(Page, Recipe, ItemIngredient)
+        path = props.book_dir / "book.json"
+        data = load_json(path)
+        assert isinstance_or_raise(data, dict[str, Any])
 
         # NOW we can convert the actual book data
-        return from_dict_checked(cls, data, state.config, path)
+        return data, {
+            "i18n": I18n(props, data["i18n"]),
+            "props": props,
+            "macros": data["macros"] | DEFAULT_MACROS,
+        }
 
-    def __post_init__(self) -> None:
+    @model_validator(mode="after")
+    def _post_root(self, info: ValidationInfo) -> Self:
         """Loads categories and entries."""
+        context = cast(AnyBookContext, info.context)
+        self.context = context
+
         # categories
-        self.categories = Category.load_all(self.state)
+        self.categories = Category.load_all(context)
 
         # entries
-        for path in self.props.entries_dir.rglob("*.json"):
+        for path in context["props"].entries_dir.rglob("*.json"):
             # i used the entry to insert the entry (pretty sure thanos said that)
-            entry = Entry.load(path, self.state)
+            entry = Entry.load(path, context)
             self.categories[entry.category_id].entries.append(entry)
 
         # we inserted a bunch of entries in no particular order, so sort each category
         for category in self.categories.values():
             category.entries.sort()
 
+        return self
+
     @property
     def index_icon(self) -> ResourceLocation:
         # default value as defined by patchouli, apparently
-        return self.model if self._index_icon is None else self._index_icon
+        return self.model if self.index_icon_ is None else self.index_icon_

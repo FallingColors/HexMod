@@ -14,13 +14,15 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "typed-argument-parser>=1.8.0",
-    "pydantic==2.0b3",
+    "typing_extensions~=4.7.0",
+    "typed-argument-parser~=1.8.0",
+    "pydantic==2.0",
 ]
 
 [project.entry-points."hexdoc.Page"]
 hexdoc-patchouli = "patchouli.page.pages"
 hexdoc-hexcasting = "hexcasting.hex_pages"
+hexdoc-abstract-hexcasting = "hexcasting.abstract_hex_pages"
 
 [project.entry-points."hexdoc.Recipe"]
 hexdoc-minecraft = "minecraft.recipe.recipes"

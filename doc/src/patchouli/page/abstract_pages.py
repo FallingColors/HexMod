@@ -1,20 +1,19 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Any, Self, TypeVar
+from typing import Any, Self
 
-from common.deserialize import rename
-from common.types import LocalizedStr
+from pydantic import Field, model_validator
+from pydantic.functional_validators import ModelWrapValidatorHandler
+
+from common.tagged_union import TypeTaggedUnion
+from minecraft.i18n import LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import ResourceLocation
 
+from ..context import AnyBookContext
 from ..formatting import FormatTree
-from ..state import AnyState, StatefulTypeTaggedUnion
-
-_T = TypeVar("_T")
 
 
-@dataclass(kw_only=True)
-class Page(StatefulTypeTaggedUnion[AnyState], group="hexdoc.Page", type=None):
+class Page(TypeTaggedUnion[AnyBookContext], group="hexdoc.Page", type=None):
     """Base class for Patchouli page types.
 
     See: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/page-types
@@ -24,29 +23,27 @@ class Page(StatefulTypeTaggedUnion[AnyState], group="hexdoc.Page", type=None):
     flag: str | None = None
     anchor: str | None = None
 
+    @model_validator(mode="wrap")
     @classmethod
-    def stateful_type_hook(cls, data: Self | Any, state: AnyState) -> Self:
-        if isinstance(data, str):
-            data = {"type": "patchouli:text", "text": data}
-        return super().stateful_type_hook(data, state)
+    def _pre_root(cls, value: str | Any, handler: ModelWrapValidatorHandler[Self]):
+        if isinstance(value, str):
+            return handler({"type": "patchouli:text", "text": value})
+        return handler(value)
 
 
-@dataclass(kw_only=True)
-class PageWithText(Page[AnyState], type=None):
+class PageWithText(Page[AnyBookContext], type=None):
     text: FormatTree | None = None
 
 
-@dataclass(kw_only=True)
-class PageWithTitle(PageWithText[AnyState], type=None):
-    _title: LocalizedStr | None = field(default=None, metadata=rename("title"))
+class PageWithTitle(PageWithText[AnyBookContext], type=None):
+    title_: LocalizedStr | None = Field(default=None, alias="title")
 
     @property
-    def title(self) -> LocalizedStr | None:
-        return self._title
+    def title(self) -> str | None:
+        return self.title_.value if self.title_ else None
 
 
-@dataclass(kw_only=True)
-class PageWithCraftingRecipes(PageWithText[AnyState], ABC, type=None):
+class PageWithCraftingRecipes(PageWithText[AnyBookContext], ABC, type=None):
     @property
     @abstractmethod
     def recipes(self) -> list[CraftingRecipe]:

@@ -1,101 +1,43 @@
-# make sure we patch dacite before doing any parsing
-# should this be a PR? probably! TODO: i'll do it later
-from common import dacite_patch as _  # isort: skip
-
 import json
-from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, TypeVar
+from typing import Any, TypeGuard, TypeVar, get_origin
 
-import tomllib
-from dacite import Config, from_dict
-from pydantic import ConfigDict
+_T = TypeVar("_T")
 
-from common.dacite_patch import handle_metadata
-from common.toml_placeholders import TOMLDict, fill_placeholders
-from common.types import Castable, JSONDict, JSONValue, isinstance_or_raise
+_DEFAULT_MESSAGE = "Expected any of {expected}, got {actual}: {value}"
 
-DEFAULT_CONFIG = ConfigDict(
-    strict=True,
-    extra="forbid",
-)
+# there may well be a better way to do this but i don't know what it is
+def isinstance_or_raise(
+    val: Any,
+    class_or_tuple: type[_T] | tuple[type[_T], ...],
+    message: str = _DEFAULT_MESSAGE,
+) -> TypeGuard[_T]:
+    """Usage: `assert isinstance_or_raise(val, str)`
 
-_T_Input = TypeVar("_T_Input")
-
-_T_Dataclass = TypeVar("_T_Dataclass")
-
-TypeHook = Callable[[_T_Dataclass | Any], _T_Dataclass | dict[str, Any]]
-
-TypeHooks = dict[type[_T_Dataclass], TypeHook[_T_Dataclass]]
-
-TypeHookMaker = Callable[[_T_Input], TypeHooks[_T_Dataclass]]
-
-
-@dataclass
-class TypedConfig(Config):
-    """Dacite config, but with proper type hints and sane defaults."""
-
-    type_hooks: TypeHooks[Any] = field(default_factory=dict)
-    cast: list[TypeHook[Any]] = field(default_factory=list)
-    check_types: bool = True
-    strict: bool = True
-    strict_unions_match: bool = True
-
-    def __post_init__(self):
-        self.cast.append(Castable)
-
-
-def metadata(*, rename: str) -> dict[str, Any]:
-    """Helper for specifying dataclass field metadata.
-
-    Args:
-        rename: The value under this key, if any, will instead be assigned to this field.
+    message placeholders: `{expected}`, `{actual}`, `{value}`
     """
-    return {
-        "rename": rename,
-    }
+
+    # convert generic types into the origin type
+    if not isinstance(class_or_tuple, tuple):
+        class_or_tuple = (class_or_tuple,)
+    ungenericed_classes = tuple(get_origin(t) or t for t in class_or_tuple)
+
+    if not isinstance(val, ungenericed_classes):
+        # just in case the caller messed up the message formatting
+        subs = {"expected": class_or_tuple, "actual": type(val), "value": val}
+        try:
+            raise TypeError(message.format(**subs))
+        except KeyError:
+            raise TypeError(_DEFAULT_MESSAGE.format(**subs))
+    return True
 
 
-def rename(rename: str) -> dict[str, Any]:
-    """Helper for specifying field metadata to rename a FromPath field."""
-    return metadata(rename=rename)
+JSONDict = dict[str, "JSONValue"]
+
+JSONValue = JSONDict | list["JSONValue"] | str | int | float | bool | None
 
 
-def load_json_object(path: Path) -> JSONDict:
+def load_json(path: Path) -> JSONDict:
     data: JSONValue = json.loads(path.read_text("utf-8"))
     assert isinstance_or_raise(data, dict)
     return data
-
-
-def load_json_data(
-    data_class: type[Any],
-    path: Path,
-    extra_data: dict[str, Any] = {},
-) -> dict[str, Any]:
-    """Load a dict from a JSON file and apply metadata transformations to it."""
-    data = load_json_object(path)
-    return handle_metadata(data_class, data) | extra_data
-
-
-def load_toml_data(data_class: type[Any], path: Path) -> TOMLDict:
-    data = tomllib.loads(path.read_text("utf-8"))
-    fill_placeholders(data)
-    return handle_metadata(data_class, data)
-
-
-def from_dict_checked(
-    data_class: type[_T_Dataclass],
-    data: dict[str, Any],
-    config: TypedConfig,
-    path: Path | None = None,
-) -> _T_Dataclass:
-    """Convert a dict to a dataclass.
-
-    path is currently just used for error messages.
-    """
-    try:
-        return from_dict(data_class, data, config)
-    except Exception as e:
-        if path:
-            e.add_note(str(path))
-        raise
