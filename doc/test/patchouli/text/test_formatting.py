@@ -1,5 +1,5 @@
 # pyright: reportPrivateUsage=false
-from patchouli.formatting import DEFAULT_MACROS, FormatTree, Style
+from patchouli.text import DEFAULT_MACROS, FormatTree, Style
 
 
 def test_format_string():

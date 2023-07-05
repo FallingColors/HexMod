@@ -10,7 +10,7 @@ from minecraft.resource import ItemStack, ResourceLocation
 
 from .context import BookContext, BookModelFile
 from .entry import Entry
-from .formatting import FormatTree
+from .text import FormatTree
 
 
 class Category(BookModelFile[BookContext, BookContext], Sortable):

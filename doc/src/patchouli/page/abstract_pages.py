@@ -10,7 +10,7 @@ from minecraft.recipe import CraftingRecipe
 from minecraft.resource import ResourceLocation
 
 from ..context import AnyBookContext
-from ..formatting import FormatTree
+from ..text import FormatTree
 
 
 class Page(TypeTaggedUnion[AnyBookContext], group="hexdoc.Page", type=None):

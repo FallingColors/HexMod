@@ -12,7 +12,7 @@ from minecraft.resource import ItemStack, ResLoc, ResourceLocation
 from .category import Category
 from .context import AnyBookContext, BookContext
 from .entry import Entry
-from .formatting import DEFAULT_MACROS, FormatTree
+from .text import DEFAULT_MACROS, FormatTree
 
 
 class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):

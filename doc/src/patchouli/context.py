@@ -7,7 +7,7 @@ from pydantic import ValidationInfo, model_validator
 from common.model import AnyContext, HexDocModelFile
 from common.properties import Properties
 from minecraft.resource import ResourceLocation
-from patchouli.formatting import FormatContext
+from patchouli.text import FormatContext
 
 
 class BookContext(FormatContext):

@@ -7,7 +7,7 @@ from minecraft.recipe import CraftingRecipe
 from minecraft.resource import Entity, ItemStack, ResourceLocation
 from patchouli.context import BookContext
 
-from ..formatting import FormatTree
+from ..text import FormatTree
 from .abstract_pages import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
 
 
