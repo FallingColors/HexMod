@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Any, Self, cast
 
 from pydantic import ValidationInfo, model_validator

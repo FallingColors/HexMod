@@ -72,7 +72,7 @@ def test_stdout(capsys: pytest.CaptureFixture[str], snapshot: SnapshotAssertion)
 #             assert value == snapshot
 
 #     props = Properties.load(Path("properties.toml"))
-#     book = Book.load(HexBookState(props))
+#     book = HexBook.load(HexBookState(props))
 
 #     for field in fields(book):
 #         test_field(book, field)

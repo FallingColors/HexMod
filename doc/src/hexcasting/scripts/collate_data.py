@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 import io
 from dataclasses import InitVar, dataclass
 from html import escape

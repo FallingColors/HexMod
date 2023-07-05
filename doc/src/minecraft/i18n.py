@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import InitVar
 from functools import total_ordering
 from pathlib import Path
 from typing import Any, Callable, Self, cast
@@ -68,7 +67,7 @@ class LocalizedStr(HexDocModel[I18nContext]):
     def __str__(self) -> str:
         return self.value
 
-    def __eq__(self, other: LocalizedStr | str | Any):
+    def __eq__(self, other: Self | str | Any):
         match other:
             case LocalizedStr():
                 return self.value == other.value
@@ -77,7 +76,7 @@ class LocalizedStr(HexDocModel[I18nContext]):
             case _:
                 return super().__eq__(other)
 
-    def __lt__(self, other: LocalizedStr | str):
+    def __lt__(self, other: Self | str):
         match other:
             case LocalizedStr():
                 return self.value < other.value
@@ -96,12 +95,14 @@ class I18n:
     """Handles localization of strings."""
 
     props: Properties
-    enabled: InitVar[bool]
+    enabled: bool
 
-    def __post_init__(self, enabled: bool):
+    lookup: dict[str, LocalizedStr] | None = None
+
+    def __post_init__(self):
         # skip loading the files if we don't need to
-        self._lookup: dict[str, LocalizedStr] | None = None
-        if not enabled:
+        self.lookup = None
+        if not self.enabled:
             return
 
         # load and deserialize
@@ -112,10 +113,10 @@ class I18n:
         raw_lookup = load_json(path) | (self.props.i18n.extra or {})
 
         # validate and insert
-        self._lookup = {}
+        self.lookup = {}
         for key, raw_value in raw_lookup.items():
             assert isinstance_or_raise(raw_value, str)
-            self._lookup[key] = LocalizedStr(
+            self.lookup[key] = LocalizedStr(
                 key=key,
                 value=raw_value.replace("%%", "%"),
             )
@@ -141,15 +142,15 @@ class I18n:
         """
 
         # if i18n is disabled, just return the key
-        if self._lookup is None:
+        if self.lookup is None:
             return LocalizedStr.skip_i18n(keys[0])
 
         # for a single key, look it up
         if len(keys) == 1:
             if default is not None:
-                return self._lookup.get(keys[0], LocalizedStr.skip_i18n(default))
+                return self.lookup.get(keys[0], LocalizedStr.skip_i18n(default))
             # raises if not found
-            return self._lookup[keys[0]]
+            return self.lookup[keys[0]]
 
         # for a list/tuple of keys, return the first one that matches (by recursing)
         for current_key in keys[:-1]:

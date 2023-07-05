@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Any, Generic, Literal, Self, cast
 
 from pydantic import Field, ValidationInfo, model_validator
@@ -92,6 +90,8 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     def _post_root(self, info: ValidationInfo) -> Self:
         """Loads categories and entries."""
         context = cast(AnyBookContext, info.context)
+        if not context:
+            return self
         self.context = context
 
         # categories

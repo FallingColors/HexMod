@@ -128,7 +128,7 @@ class FormatContext(I18nContext):
 @dataclass(config=DEFAULT_CONFIG)
 class FormatTree:
     style: Style
-    children: list[FormatTree | str]
+    children: list[FormatTree | str]  # this can't be Self, it breaks Pydantic
 
     @classmethod
     def empty(cls) -> Self:

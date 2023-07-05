@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import string
 from abc import ABC, abstractmethod
 from typing import Any, Mapping, Protocol, TypeVar

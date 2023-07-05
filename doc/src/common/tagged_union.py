@@ -194,12 +194,11 @@ class InternallyTaggedUnion(HexDocModel[AnyContext]):
             case _:
                 return handler(data)
 
-        # don't infinite loop calling this same validator forever
-        if "__resolved" in data or not info.context:
+        # don't infinite loop calling the same validator forever
+        if "__resolved" in data:
             data.pop("__resolved")
             return handler(data)
         data["__resolved"] = True
-        context = cast(AnyContext, info.context)
 
         # tag value, eg. "minecraft:crafting_shaped"
         tag_value = data.get(tag_key, NoValue)
@@ -212,6 +211,7 @@ class InternallyTaggedUnion(HexDocModel[AnyContext]):
         exceptions: list[Exception] = []
         matches: dict[type[Self], Self] = {}
 
+        context = cast(AnyContext | None, info.context)
         for inner_type in tag_types:
             try:
                 matches[inner_type] = inner_type.model_validate(data, context=context)
