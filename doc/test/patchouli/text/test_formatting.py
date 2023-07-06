@@ -1,5 +1,6 @@
 # pyright: reportPrivateUsage=false
-from patchouli.text import DEFAULT_MACROS, FormatTree, Style
+from patchouli.text import DEFAULT_MACROS, FormatTree
+from patchouli.text.formatting import ClearStyle, ColorStyle, LinkStyle, ParagraphStyle
 
 
 def test_format_string():
@@ -12,65 +13,57 @@ def test_format_string():
     # assert
     # TODO: possibly make this less lazy
     assert tree == FormatTree(
-        style=Style(type="base", value=True),
+        style=ClearStyle(),
         children=[
             FormatTree(
-                style=Style(type="para", value={}),
+                style=ParagraphStyle(),
                 children=[
                     "Write the given iota to my ",
                     FormatTree(
-                        style=Style(
-                            type="link",
-                            value="patterns/readwrite#hexcasting:write/local",
-                        ),
+                        style=LinkStyle("patterns/readwrite#hexcasting:write/local"),
                         children=[
                             FormatTree(
-                                style=Style(type="color", value="490"),
+                                style=ColorStyle("490"),
                                 children=["local"],
                             )
                         ],
                     ),
                     ".\nThe ",
                     FormatTree(
-                        style=Style(
-                            type="link",
-                            value="patterns/readwrite#hexcasting:write/local",
-                        ),
+                        style=LinkStyle("patterns/readwrite#hexcasting:write/local"),
                         children=[
                             FormatTree(
-                                style=Style(type="color", value="490"),
+                                style=ColorStyle("490"),
                                 children=["local"],
                             )
                         ],
                     ),
                     " is a lot like a ",
                     FormatTree(
-                        style=Style(type="link", value="items/focus"),
+                        style=LinkStyle("items/focus"),
                         children=[
                             FormatTree(
-                                style=Style(type="color", value="b0b"),
+                                style=ColorStyle("b0b"),
                                 children=["Focus"],
                             )
                         ],
                     ),
                     ". It's cleared when I stop casting a Hex, starts with ",
                     FormatTree(
-                        style=Style(type="link", value="casting/influences"),
+                        style=LinkStyle("casting/influences"),
                         children=[
                             FormatTree(
-                                style=Style(type="color", value="490"),
+                                style=ColorStyle("490"),
                                 children=["Null"],
                             )
                         ],
                     ),
                     " in it, and is preserved between casts of ",
                     FormatTree(
-                        style=Style(
-                            type="link", value="patterns/meta#hexcasting:for_each"
-                        ),
+                        style=LinkStyle("patterns/meta#hexcasting:for_each"),
                         children=[
                             FormatTree(
-                                style=Style(type="color", value="fc77be"),
+                                style=ColorStyle("fc77be"),
                                 children=["Thoth's Gambit"],
                             )
                         ],

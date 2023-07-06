@@ -85,3 +85,16 @@ def sorted_dict(d: Mapping[_T, _T_Sortable]) -> dict[_T, _T_Sortable]:
 class IProperty(Protocol[_T_covariant]):
     def __get__(self, __instance: Any, __owner: type | None = None, /) -> _T_covariant:
         ...
+
+
+_K = TypeVar("_K")
+_V = TypeVar("_V")
+
+
+class NoClobberDict(dict[_K, _V]):
+    """Dict which raises KeyError if the key being assigned to is already present."""
+
+    def __setitem__(self, key: Any, value: Any) -> None:
+        if key in self:
+            raise KeyError(f"Key {key} already exists in dict")
+        super().__setitem__(key, value)

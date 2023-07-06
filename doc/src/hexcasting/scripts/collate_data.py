@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import io
-from dataclasses import InitVar, dataclass
-from html import escape
-from typing import IO, Any
+from typing import Any
 
 from hexcasting import HexBook
 from hexcasting.abstract_hex_pages import PageWithPattern
@@ -19,100 +17,13 @@ from patchouli.page import (
     SpotlightPage,
     TextPage,
 )
+from patchouli.text.formatting import Stream
 
 # extra info :(
 # TODO: properties.toml
 repo_names = {
     "hexcasting": "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources",
 }
-
-
-# TODO: type
-def tag_args(kwargs: dict[str, Any]):
-    return "".join(
-        f" {'class' if key == 'clazz' else key.replace('_', '-')}={repr(escape(str(value)))}"
-        for key, value in kwargs.items()
-    )
-
-
-@dataclass
-class PairTag:
-    stream: IO[str]
-    name: str
-    args: InitVar[dict[str, Any]]
-
-    def __post_init__(self, args: dict[str, Any]):
-        self.args_str = tag_args(args)
-
-    def __enter__(self):
-        print(f"<{self.name}{self.args_str}>", file=self.stream, end="")
-
-    def __exit__(self, _1: Any, _2: Any, _3: Any):
-        print(f"</{self.name}>", file=self.stream, end="")
-
-
-class Empty:
-    def __enter__(self):
-        pass
-
-    def __exit__(self, _1: Any, _2: Any, _3: Any):
-        pass
-
-
-class Stream:
-    __slots__ = ["stream"]
-
-    def __init__(self, stream: IO[str]):
-        self.stream = stream
-
-    def tag(self, name: str, **kwargs: Any):
-        keywords = tag_args(kwargs)
-        print(f"<{name}{keywords} />", file=self.stream, end="")
-        return self
-
-    def pair_tag(self, name: str, **kwargs: Any):
-        return PairTag(self.stream, name, kwargs)
-
-    def pair_tag_if(self, cond: Any, name: str, **kwargs: Any):
-        return self.pair_tag(name, **kwargs) if cond else Empty()
-
-    def empty_pair_tag(self, name: str, **kwargs: Any):
-        with self.pair_tag(name, **kwargs):
-            pass
-
-    def text(self, txt: str | LocalizedStr):
-        print(escape(str(txt)), file=self.stream, end="")
-        return self
-
-
-# TODO: move
-def get_format(out: Stream, ty: str, value: Any):
-    if ty == "para":
-        return out.pair_tag("p", **value)
-    if ty == "color":
-        return out.pair_tag("span", style=f"color: #{value}")
-    if ty == "link":
-        link = value
-        if "://" not in link:
-            link = "#" + link.replace("#", "@")
-        return out.pair_tag("a", href=link)
-    if ty == "tooltip":
-        return out.pair_tag("span", clazz="has-tooltip", title=value)
-    if ty == "cmd_click":
-        return out.pair_tag(
-            "span", clazz="has-cmd_click", title="When clicked, would execute: " + value
-        )
-    if ty == "obf":
-        return out.pair_tag("span", clazz="obfuscated")
-    if ty == "bold":
-        return out.pair_tag("strong")
-    if ty == "italic":
-        return out.pair_tag("i")
-    if ty == "strikethrough":
-        return out.pair_tag("s")
-    if ty == "underline":
-        return out.pair_tag("span", style="text-decoration: underline")
-    raise ValueError("Unknown format type: " + ty)
 
 
 def entry_spoilered(root_info: HexBook, entry: Entry):
@@ -136,13 +47,7 @@ def write_block(out: Stream, block: FormatTree | str | LocalizedStr):
             first = True
             out.text(line)
         return
-    sty_type = block.style.type
-    if sty_type == "base":
-        for child in block.children:
-            write_block(out, child)
-        return
-    tag = get_format(out, sty_type, block.style.value)
-    with tag:
+    with block.style.tag(out):
         for child in block.children:
             write_block(out, child)
 
