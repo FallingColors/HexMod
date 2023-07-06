@@ -195,7 +195,7 @@ class EndFunctionStyle(BaseStyleCommand, names=[]):
 
 @dataclass(config=DEFAULT_CONFIG)
 class BaseStyleFunction(Style):
-    value: str | None
+    value: str
 
     def __init_subclass__(cls, names: list[str]) -> None:
         for name in names:
@@ -282,7 +282,7 @@ class ColorStyle(BaseStyleFunction, names=[]):
 class LinkStyle(BaseStyleFunction, names=["l"]):
     def tag(self, out: Stream):
         href = self.value
-        if href is not None and not href.startswith(("http:", "https:")):
+        if not href.startswith(("http:", "https:")):
             href = "#" + href.replace("#", "@")
         return out.pair_tag("a", href=href)
 
