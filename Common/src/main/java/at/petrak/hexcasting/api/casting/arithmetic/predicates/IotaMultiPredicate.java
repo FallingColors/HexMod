@@ -34,6 +34,14 @@ public interface IotaMultiPredicate {
 	static IotaMultiPredicate any(IotaPredicate needs, IotaPredicate fallback) {
 		return new Any(needs, fallback);
 	}
+
+	/**
+	 * The resulting IotaMultiPredicate returns true if either the first returns true or the second returns true.
+	 */
+	static IotaMultiPredicate either(IotaMultiPredicate first, IotaMultiPredicate second) {
+		return new Either(first, second);
+	}
+
 	record Pair(IotaPredicate first, IotaPredicate second) implements IotaMultiPredicate {
 		@Override
 		public boolean test(Iterable<Iota> iotas) {
@@ -71,6 +79,13 @@ public interface IotaMultiPredicate {
 				}
 			}
 			return true;
+		}
+	}
+
+	record Either(IotaMultiPredicate first, IotaMultiPredicate second) implements IotaMultiPredicate {
+		@Override
+		public boolean test(Iterable<Iota> iotas) {
+			return first.test(iotas) || second.test(iotas);
 		}
 	}
 }
