@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.server;
 
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.math.EulerPathFinder;
 import at.petrak.hexcasting.api.casting.math.HexDir;
-import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.nbt.CompoundTag;
@@ -44,12 +45,6 @@ public class ScrungledPatternsSave extends SavedData {
         this.lookup.forEach((sig, entry) -> {
             this.reverseLookup.put(entry.key, sig);
         });
-    }
-
-    public void insert(HexPattern scrungledPattern, ResourceKey<ActionRegistryEntry> key) {
-        this.lookup.put(scrungledPattern.anglesSignature(), new PerWorldEntry(key, scrungledPattern.getStartDir()));
-        this.reverseLookup.put(key, scrungledPattern.anglesSignature());
-        this.setDirty();
     }
 
     @Nullable
@@ -98,13 +93,25 @@ public class ScrungledPatternsSave extends SavedData {
 
     public static ScrungledPatternsSave createFromScratch(long seed) {
         var map = new HashMap<String, PerWorldEntry>();
-        for (var key : PatternRegistryManifest.getAllPerWorldActions()) {
-            var regiEntry = IXplatAbstractions.INSTANCE.getActionRegistry().get(key);
-            var scrungled = PatternRegistryManifest.scrunglePattern(regiEntry.prototype(), seed);
-            map.put(scrungled.anglesSignature(), new PerWorldEntry(key, scrungled.getStartDir()));
+
+        var registry = IXplatAbstractions.INSTANCE.getActionRegistry();
+
+        // TODO: this version of the code doesn't have overlap protection
+        // this means if some hilarious funny person makes a great spell that has the same shape as a normal spell
+        // there might be overlap.
+        // I'm going to file that under "don't do that"
+        // (the number literal phial incident won't happen though because we check for special handlers first now)
+        for (var key : registry.registryKeySet()) {
+            var entry = registry.get(key);
+            if (HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
+                var scrungledPat = EulerPathFinder.findAltDrawing(entry.prototype(), seed);
+                map.put(scrungledPat.anglesSignature(), new PerWorldEntry(key, scrungledPat.getStartDir()));
+            }
         }
 
-        return new ScrungledPatternsSave(map);
+        var out = new ScrungledPatternsSave(map);
+        out.setDirty();
+        return out;
     }
 
     public static ScrungledPatternsSave open(ServerLevel overworld) {
