@@ -5,6 +5,8 @@ import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
+import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -127,6 +129,12 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var ctx = new PackagedItemCastEnv(sPlayer, usedHand);
         var harness = CastingVM.empty(ctx);
         var clientView = harness.queueExecuteAndWrapIotas(instrs, sPlayer.getLevel());
+        // TODO FROM AMO: Make this client sided, i don't have time
+        for(Iota i : instrs) {
+            if(i instanceof PatternIota pi){
+                ClientCastingStack.addPattern(pi.getPattern(), 140);
+            }
+        }
 
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 

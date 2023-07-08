@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
+import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
@@ -55,6 +56,9 @@ public record MsgNewSpellPatternS2C(ExecutionClientView info, int index) impleme
             if (self.info().isStackClear()) {
                 // don't pay attention to the screen, so it also stops when we die
                 mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getLocation(), null);
+                ClientCastingStack.getPatterns().forEach(hex -> {
+                    hex.setLifetime(140);
+                });
             }
             var screen = Minecraft.getInstance().screen;
             if (screen instanceof GuiSpellcasting spellGui) {

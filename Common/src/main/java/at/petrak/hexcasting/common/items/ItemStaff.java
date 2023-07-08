@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -27,6 +28,7 @@ public class ItemStaff extends Item {
         if (player.isShiftKeyDown()) {
             if (world.isClientSide()) {
                 player.playSound(HexSounds.STAFF_RESET, 1f, 1f);
+                ClientCastingStack.clear();
             } else if (player instanceof ServerPlayer serverPlayer) {
                 IXplatAbstractions.INSTANCE.clearCastingData(serverPlayer);
             }

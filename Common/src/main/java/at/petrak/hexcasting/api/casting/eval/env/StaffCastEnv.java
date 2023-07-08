@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
+import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S;
@@ -106,6 +107,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
                 resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
             }
             IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
+            ClientCastingStack.addPattern(msg.pattern(), 1238467235);
         }
 
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,

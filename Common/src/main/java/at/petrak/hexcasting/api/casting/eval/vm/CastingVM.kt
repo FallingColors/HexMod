@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.*
+import at.petrak.hexcasting.api.client.ClientCastingStack
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.nbt.CompoundTag
@@ -75,6 +76,10 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
      */
     @Throws()
     fun executeInner(iota: Iota, world: ServerLevel, continuation: SpellContinuation): CastResult {
+        if(iota is PatternIota){
+            // TODO FROM AMO: Make this client sided, i don't have time
+            ClientCastingStack.addPattern(iota.pattern, 140)
+        }
         try {
             // TODO we can have a special intro/retro sound
             // ALSO TODO need to add reader macro-style things
