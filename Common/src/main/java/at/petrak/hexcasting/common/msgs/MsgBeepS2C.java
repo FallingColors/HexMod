@@ -47,7 +47,7 @@ public record MsgBeepS2C(Vec3 target, int note, NoteBlockInstrument instrument) 
                 if (world != null) {
                     float pitch = (float) Math.pow(2, (msg.note() - 12) / 12.0);
                     world.playLocalSound(msg.target().x, msg.target().y, msg.target().z,
-                        msg.instrument().getSoundEvent(), SoundSource.PLAYERS, 3, pitch, false);
+                        msg.instrument().getSoundEvent().value(), SoundSource.PLAYERS, 3, pitch, false);
                     world.addParticle(ParticleTypes.NOTE, msg.target().x, msg.target().y + 0.2, msg.target().z,
                         msg.note() / 24.0, 0, 0);
                 }

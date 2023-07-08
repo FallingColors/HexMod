@@ -3,22 +3,29 @@ package at.petrak.hexcasting.datagen.tag;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+<<<<<<< HEAD
 import at.petrak.hexcasting.xplat.Platform;
 import net.minecraft.data.DataGenerator;
+=======
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+>>>>>>> talia-1.20/1.20.1
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 
+import java.util.concurrent.CompletableFuture;
+
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexActionTagProvider extends TagsProvider<ActionRegistryEntry> {
-    public HexActionTagProvider(DataGenerator generator) {
-        super(generator, IXplatAbstractions.INSTANCE.getActionRegistry());
+    public HexActionTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+        super(output, IXplatAbstractions.INSTANCE.getActionRegistry().key(), provider);
     }
 
     @Override
-    protected void addTags() {
+    protected void addTags(HolderLookup.Provider provider) {
         // In-game almost all great spells are always per-world
         for (var normalGreat : new String[]{
             "lightning", "flight", "create_lava", "teleport/great", "sentinel/create/great",

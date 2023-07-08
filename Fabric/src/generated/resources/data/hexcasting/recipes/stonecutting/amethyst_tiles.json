@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 1,
-  "ingredient": {
-    "item": "minecraft:amethyst_block"
-  },
-  "result": "hexcasting:amethyst_tiles"
-}

@@ -18,12 +18,12 @@ import net.minecraft.world.item.ItemStack
 object OpRecharge : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)
 
-        val (handStack, hand) = ctx.getHeldItemToOperateOn {
+        val (handStack, hand) = env.getHeldItemToOperateOn {
             val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)
             media != null && media.canRecharge() && media.insertMedia(-1, true) != 0L
         }
@@ -38,7 +38,7 @@ object OpRecharge : SpellAction {
                 "rechargable"
             )
 
-        ctx.assertEntityInRange(entity)
+        env.assertEntityInRange(entity)
 
         if (!isMediaItem(entity.item)) {
             throw MishapBadItem.of(
@@ -61,7 +61,7 @@ object OpRecharge : SpellAction {
     }
 
     private data class Spell(val itemEntity: ItemEntity, val stack: ItemStack) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             val media = IXplatAbstractions.INSTANCE.findMediaHolder(stack)
 
             if (media != null && itemEntity.isAlive) {

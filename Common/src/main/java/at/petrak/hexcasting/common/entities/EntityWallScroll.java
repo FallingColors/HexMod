@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -68,7 +69,7 @@ public class EntityWallScroll extends HangingEntity {
         CompoundTag patternTag = NBTHelper.getCompound(scroll, ItemScroll.TAG_PATTERN);
         if (patternTag != null) {
             this.pattern = HexPattern.fromNBT(patternTag);
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 var pair = RenderLib.getCenteredPattern(pattern, 128f / 3 * blockSize, 128f / 3 * blockSize,
                     16f / 3 * blockSize);
                 var dots = pair.getSecond();
@@ -112,7 +113,7 @@ public class EntityWallScroll extends HangingEntity {
 
     @Override
     public void dropItem(@Nullable Entity pBrokenEntity) {
-        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
             this.playSound(SoundEvents.PAINTING_BREAK, 1.0F, 1.0F);
             if (pBrokenEntity instanceof Player player) {
                 if (player.getAbilities().instabuild) {
@@ -133,9 +134,9 @@ public class EntityWallScroll extends HangingEntity {
             }
             this.setShowsStrokeOrder(true);
 
-            pPlayer.level.playSound(pPlayer, this, HexSounds.SCROLL_DUST, SoundSource.PLAYERS, 1f, 1f);
+            pPlayer.level().playSound(pPlayer, this, HexSounds.SCROLL_DUST, SoundSource.PLAYERS, 1f, 1f);
 
-            if (pPlayer.getLevel() instanceof ServerLevel slevel) {
+            if (pPlayer.level() instanceof ServerLevel slevel) {
                 IXplatAbstractions.INSTANCE.sendPacketNear(this.position(), 32.0, slevel,
                     new MsgRecalcWallScrollDisplayS2C(this.getId(), true));
             } else {
@@ -153,7 +154,7 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return IXplatAbstractions.INSTANCE.toVanillaClientboundPacket(
             new MsgNewWallScrollS2C(new ClientboundAddEntityPacket(this),
                 pos, direction, scroll, getShowsStrokeOrder(), blockSize));
@@ -204,7 +205,7 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements,
         boolean pTeleport) {
-        BlockPos blockpos = this.pos.offset(pX - this.getX(), pY - this.getY(), pZ - this.getZ());
+        BlockPos blockpos = this.pos.offset((int) (pX - this.getX()), (int) (pY - this.getY()), (int) (pZ - this.getZ()));
         this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
     }
 

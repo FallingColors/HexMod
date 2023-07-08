@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "front": "hexcasting:block/akashic_bookshelf",
-    "side": "hexcasting:block/akashic_bookshelf_horiz",
-    "top": "hexcasting:block/akashic_bookshelf_vert"
-  }
-}

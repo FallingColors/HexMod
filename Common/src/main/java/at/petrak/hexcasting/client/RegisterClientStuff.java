@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
@@ -255,7 +256,7 @@ public class RegisterClientStuff {
 
     public static void onModelRegister(ResourceManager recMan, Consumer<ResourceLocation> extraModels) {
         for (var type : QUENCHED_ALLAY_TYPES.entrySet()) {
-            var blockLoc = Registry.BLOCK.getKey(type.getKey());
+            var blockLoc = BuiltInRegistries.BLOCK.getKey(type.getKey());
             var locStart = "block/";
             if (type.getValue())
                 locStart += "deco/";
@@ -268,7 +269,7 @@ public class RegisterClientStuff {
 
     public static void onModelBake(ModelBakery loader, Map<ResourceLocation, BakedModel> map) {
         for (var type : QUENCHED_ALLAY_TYPES.entrySet()) {
-            var blockLoc = Registry.BLOCK.getKey(type.getKey());
+            var blockLoc = BuiltInRegistries.BLOCK.getKey(type.getKey());
             var locStart = "block/";
             if (type.getValue())
                 locStart += "deco/";

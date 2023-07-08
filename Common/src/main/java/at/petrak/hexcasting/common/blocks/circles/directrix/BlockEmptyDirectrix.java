@@ -62,11 +62,6 @@ public class BlockEmptyDirectrix extends BlockCircleComponent {
     }
 
     @Override
-    public PushReaction getPistonPushReaction(BlockState pState) {
-        return PushReaction.BLOCK;
-    }
-
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING);

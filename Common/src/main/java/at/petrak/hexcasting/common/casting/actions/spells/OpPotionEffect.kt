@@ -18,15 +18,15 @@ class OpPotionEffect(
         get() = if (this.allowPotency) 3 else 2
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getLivingEntityButNotArmorStand(0, argc)
         val duration = args.getPositiveDouble(1, argc)
         val potency = if (this.allowPotency)
             args.getPositiveDoubleUnderInclusive(2, 127.0, argc)
         else 1.0
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
 
         val cost = this.baseCost * duration * if (potencyCubic) {
@@ -43,7 +43,7 @@ class OpPotionEffect(
 
     private class Spell(val effect: MobEffect, val target: LivingEntity, val duration: Double, val potency: Double) :
         RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             if (duration > 1.0 / 20.0) {
                 val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt() - 1)
                 target.addEffect(effectInst)

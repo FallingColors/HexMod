@@ -9,14 +9,20 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.Explosion
+import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 
 class MishapBadBlock(val pos: BlockPos, val expected: Component) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.LIME)
 
+<<<<<<< HEAD
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         env.world.explode(null, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 0.25f, Explosion.BlockInteraction.NONE)
+=======
+    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        ctx.world.explode(null, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 0.25f, Level.ExplosionInteraction.NONE)
+>>>>>>> talia-1.20/1.20.1
     }
 
     override fun particleSpray(ctx: CastingEnvironment) =

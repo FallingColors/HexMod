@@ -80,7 +80,7 @@ abstract class Mishap : Throwable() {
     companion object {
         @JvmStatic
         fun trulyHurt(entity: LivingEntity, source: DamageSource, amount: Float) {
-            entity.setHurtWithStamp(source, entity.level.gameTime)
+            entity.setHurtWithStamp(source, entity.level().gameTime)
 
             val targetHealth = entity.health - amount
             if (entity.invulnerableTime > 10) {
@@ -92,7 +92,7 @@ abstract class Mishap : Throwable() {
             }
             if (!entity.hurt(source, amount) &&
                 !entity.isInvulnerableTo(source) &&
-                !entity.level.isClientSide &&
+                !entity.level().isClientSide &&
                 !entity.isDeadOrDying
             ) {
 

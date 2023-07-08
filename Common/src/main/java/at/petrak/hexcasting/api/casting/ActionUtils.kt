@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import com.mojang.datafixers.util.Either
-import com.mojang.math.Vector3f
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
@@ -17,6 +16,7 @@ import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 import java.util.function.DoubleUnaryOperator
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -238,7 +238,7 @@ fun List<Iota>.getIntBetween(idx: Int, min: Int, max: Int, argc: Int = 0): Int {
 fun List<Iota>.getBlockPos(idx: Int, argc: Int = 0): BlockPos {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is Vec3Iota) {
-        return BlockPos(x.vec3)
+        return BlockPos.containing(x.vec3)
     }
 
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "vector")

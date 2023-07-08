@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.tropheusj.serialization_hooks.ingredient.BaseCustomIngredient;
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -56,7 +56,7 @@ public class FabricUnsealedIngredient extends BaseCustomIngredient {
     public @NotNull JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", Objects.toString(ID));
-        json.addProperty("item", Objects.toString(Registry.ITEM.getKey(this.stack.getItem())));
+        json.addProperty("item", Objects.toString(BuiltInRegistries.ITEM.getKey(this.stack.getItem())));
         return json;
     }
 

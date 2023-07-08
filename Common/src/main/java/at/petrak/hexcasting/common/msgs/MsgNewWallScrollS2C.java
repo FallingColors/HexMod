@@ -49,7 +49,7 @@ public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos
                 var player = Minecraft.getInstance().player;
                 if (player != null) {
                     player.connection.handleAddEntity(self.inner);
-                    var e = player.level.getEntity(self.inner.getId());
+                    var e = player.level().getEntity(self.inner.getId());
                     if (e instanceof EntityWallScroll scroll) {
                         scroll.readSpawnData(self.pos, self.dir, self.scrollItem, self.showsStrokeOrder,
                             self.blockSize);

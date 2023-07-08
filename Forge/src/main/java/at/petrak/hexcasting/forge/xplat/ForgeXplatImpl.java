@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.forge.xplat;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
@@ -21,14 +20,14 @@ import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
-import at.petrak.hexcasting.forge.mixin.ForgeAccessorRegistry;
+import at.petrak.hexcasting.forge.mixin.ForgeAccessorBuiltInRegistries;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
@@ -40,12 +39,13 @@ import at.petrak.hexcasting.xplat.Platform;
 import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -57,7 +57,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
@@ -74,6 +73,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.*;
 import net.minecraftforge.common.loot.CanToolPerformAction;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
@@ -121,16 +121,16 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
     }
 
-    @Override
-    public double getReachDistance(Player player) {
-        return player.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
-    }
+//    @Override
+//    public double getReachDistance(Player player) {
+//        return player.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
+//    }
 
     @Override
     public void setBrainsweepAddlData(Mob mob) {
         mob.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
 
-        if (mob.level instanceof ServerLevel) {
+        if (mob.level() instanceof ServerLevel) {
             ForgePacketHandler.getNetwork()
                 .send(PacketDistributor.TRACKING_ENTITY.with(() -> mob), MsgBrainsweepAck.of(mob));
         }
@@ -200,7 +200,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public void setSentinel(Player player, @Nullable Sentinel sentinel) {
         CompoundTag tag = player.getPersistentData();
-        tag.putBoolean(TAG_SENTINEL_EXISTS, sentinel == null);
+        tag.putBoolean(TAG_SENTINEL_EXISTS, sentinel != null);
         if (sentinel != null) {
             tag.putBoolean(TAG_SENTINEL_GREATER, sentinel.extendsRange());
             tag.put(TAG_SENTINEL_POSITION, HexUtils.serializeToNBT(sentinel.position()));
@@ -243,7 +243,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             var timeLeft = tag.getInt(TAG_FLIGHT_TIME);
             var origin = HexUtils.vecFromNBT(tag.getLongArray(TAG_FLIGHT_ORIGIN));
             var radius = tag.getDouble(TAG_FLIGHT_RADIUS);
-            var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
+            var dimension = ResourceKey.create(Registries.DIMENSION,
                 new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
             return new FlightAbility(timeLeft, dimension, origin, radius);
         }
@@ -274,8 +274,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             return null;
         }
         var extendsRange = tag.getBoolean(TAG_SENTINEL_GREATER);
-        var position = HexUtils.vecFromNBT(tag.getLongArray(TAG_SENTINEL_POSITION));
-        var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY,
+        var position = HexUtils.vecFromNBT(tag.getCompound(TAG_SENTINEL_POSITION));
+        var dimension = ResourceKey.create(Registries.DIMENSION,
             new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
 
         return new Sentinel(extendsRange, position, dimension);
@@ -286,7 +286,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         // This is always from a staff because we don't need to load the harness when casting from item
         var ctx = new StaffCastEnv(player, hand);
         return new CastingVM(CastingImage.loadFromNbt(player.getPersistentData().getCompound(TAG_HARNESS),
-            player.getLevel()), ctx);
+            player.serverLevel()), ctx);
     }
 
     @Override
@@ -373,8 +373,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Packet<?> toVanillaClientboundPacket(IMessage message) {
-        return ForgePacketHandler.getNetwork().toVanillaPacket(message, NetworkDirection.PLAY_TO_CLIENT);
+    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message) {
+        //noinspection unchecked
+        return (Packet<ClientGamePacketListener>) ForgePacketHandler.getNetwork().toVanillaPacket(message, NetworkDirection.PLAY_TO_CLIENT);
     }
 
     @Override
@@ -409,24 +410,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public Ingredient getUnsealedIngredient(ItemStack stack) {
         return ForgeUnsealedIngredient.of(stack);
-    }
-
-    private final static Supplier<CreativeModeTab> TAB = Suppliers.memoize(() ->
-        new CreativeModeTab(HexAPI.MOD_ID) {
-            @Override
-            public ItemStack makeIcon() {
-                return HexItems.tabIcon();
-            }
-
-            @Override
-            public void fillItemList(NonNullList<ItemStack> items) {
-                super.fillItemList(items);
-            }
-        });
-
-    @Override
-    public CreativeModeTab getTab() {
-        return TAB.get();
     }
 
     @Override
@@ -474,27 +457,27 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
-        ForgeAccessorRegistry.hex$registerSimple(
-            ResourceKey.createRegistryKey(modLoc("action")), null)
+            ForgeAccessorBuiltInRegistries.hex$registerSimple(
+                HexRegistries.ACTION, null)
     );
     private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
         Suppliers.memoize(() ->
-            ForgeAccessorRegistry.hex$registerSimple(
-                ResourceKey.createRegistryKey(modLoc("special_handler")), null)
+            ForgeAccessorBuiltInRegistries.hex$registerSimple(
+                HexRegistries.SPECIAL_HANDLER, null)
         );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
-        ForgeAccessorRegistry.hex$registerDefaulted(
-            ResourceKey.createRegistryKey(modLoc("iota_type")),
-            HexAPI.MOD_ID + ":null", registry -> HexIotaTypes.NULL)
+            ForgeAccessorBuiltInRegistries.hex$registerDefaulted(
+                HexRegistries.IOTA_TYPE,
+                modLoc("null").toString(), registry -> HexIotaTypes.NULL)
     );
     private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
-            ForgeAccessorRegistry.hex$registerSimple(
-                    ResourceKey.createRegistryKey(modLoc("arithmetic")), null)
+            ForgeAccessorBuiltInRegistries.hex$registerSimple(
+                HexRegistries.ARITHMETIC, null)
     );
     private static final Supplier<Registry<EvalSound>> EVAL_SOUND_REGISTRY = Suppliers.memoize(() ->
-        ForgeAccessorRegistry.hex$registerDefaulted(
-            ResourceKey.createRegistryKey(modLoc("eval_sound")),
-            HexAPI.MOD_ID + ":nothing", registry -> HexEvalSounds.NOTHING)
+            ForgeAccessorBuiltInRegistries.hex$registerDefaulted(
+                HexRegistries.EVAL_SOUND,
+                modLoc("nothing").toString(), registry -> HexEvalSounds.NOTHING)
     );
 
     @Override
@@ -523,12 +506,16 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player) {
+    public boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player) {
+        if (player == null)
+            player = FakePlayerFactory.get(world, HEXCASTING);
         return !MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player));
     }
 
     @Override
-    public boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player) {
+    public boolean isPlacingAllowed(ServerLevel world, BlockPos pos, ItemStack blockStack, @Nullable Player player) {
+        if (player == null)
+            player = FakePlayerFactory.get(world, HEXCASTING);
         ItemStack cached = player.getMainHandItem();
         player.setItemInHand(InteractionHand.MAIN_HAND, blockStack.copy());
         var evt = ForgeHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos,

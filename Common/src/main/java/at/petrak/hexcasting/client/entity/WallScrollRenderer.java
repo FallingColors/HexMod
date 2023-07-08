@@ -5,9 +5,7 @@ import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,6 +16,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 import java.util.List;
 
@@ -45,10 +45,10 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
 
         ps.pushPose();
 
-        ps.mulPose(Vector3f.YP.rotationDegrees(180f - yaw));
-        ps.mulPose(Vector3f.ZP.rotationDegrees(180f));
+        ps.mulPose(Axis.YP.rotationDegrees(180f - yaw));
+        ps.mulPose(Axis.ZP.rotationDegrees(180f));
 
-        int light = LevelRenderer.getLightColor(wallScroll.level, wallScroll.getPos());
+        int light = LevelRenderer.getLightColor(wallScroll.level(), wallScroll.getPos());
 
         {
             ps.pushPose();
@@ -103,7 +103,7 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             var points = wallScroll.zappyPoints;
             ps.pushPose();
 
-            ps.mulPose(Vector3f.YP.rotationDegrees(180f));
+            ps.mulPose(Axis.YP.rotationDegrees(180f));
             ps.translate(0, 0, 1.1f / 16f);
             // make smaller scrolls not be charlie kirk-sized
             // i swear, learning about these functions with asymptotes where slope != 0 is the most useful thing
@@ -158,8 +158,8 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
     }
 
     private static void vertex(Matrix4f mat, Matrix3f normal, int light, VertexConsumer verts, float x, float y,
-        float z, float u,
-        float v, float nx, float ny, float nz) {
+            float z, float u,
+            float v, float nx, float ny, float nz) {
         verts.vertex(mat, x, y, z)
             .color(0xffffffff)
             .uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light)

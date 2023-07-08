@@ -53,7 +53,7 @@ public class ItemLoreFragment extends Item {
         var shuffled = new ArrayList<>(NAMES);
         Collections.shuffle(shuffled);
         for (var advID : shuffled) {
-            var adv = splayer.level.getServer().getAdvancements().getAdvancement(advID);
+            var adv = splayer.server.getAdvancements().getAdvancement(advID);
             if (adv == null) {
                 continue; // uh oh
             }

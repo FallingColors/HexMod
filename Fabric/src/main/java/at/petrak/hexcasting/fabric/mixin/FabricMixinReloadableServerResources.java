@@ -5,6 +5,8 @@ import at.petrak.hexcasting.fabric.loot.FabricHexLootModJankery;
 import at.petrak.hexcasting.mixin.accessor.AccessorLootTable;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.LootDataId;
+import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,11 +22,11 @@ public class FabricMixinReloadableServerResources {
     @Inject(method = "loadResources", at = @At("RETURN"), cancellable = true)
     private static void onLoadResources(CallbackInfoReturnable<CompletableFuture<ReloadableServerResources>> cir) {
         cir.setReturnValue(cir.getReturnValue().thenApply((rsr) -> {
-            var amethystTable = rsr.getLootTables().get(Blocks.AMETHYST_CLUSTER.getLootTable());
+            var amethystTable = rsr.getLootData().getLootTable(Blocks.AMETHYST_CLUSTER.getLootTable());
             var theCoolerAmethystTable = (AccessorLootTable) amethystTable;
             var oldFuncs = theCoolerAmethystTable.hex$getFunctions();
             var newFuncs = Arrays.copyOf(oldFuncs, oldFuncs.length + 1);
-            var shardReducer = rsr.getItemModifierManager().get(FabricHexLootModJankery.FUNC_AMETHYST_SHARD_REDUCER);
+            var shardReducer = rsr.getLootData().getElement(new LootDataId<>(LootDataType.MODIFIER, FabricHexLootModJankery.FUNC_AMETHYST_SHARD_REDUCER));
             if (shardReducer != null) {
                 newFuncs[newFuncs.length - 1] = shardReducer;
                 theCoolerAmethystTable.hex$setFunctions(newFuncs);

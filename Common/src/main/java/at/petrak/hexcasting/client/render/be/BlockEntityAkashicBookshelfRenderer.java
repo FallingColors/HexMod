@@ -6,14 +6,15 @@ import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
 
 public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<BlockEntityAkashicBookshelf> {
     public BlockEntityAkashicBookshelfRenderer(BlockEntityRendererProvider.Context ctx) {
@@ -38,8 +39,8 @@ public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<
 
         ps.translate(0.5, 0.5, 0.5);
         var quarters = (-bs.getValue(BlockAkashicBookshelf.FACING).get2DDataValue()) % 4;
-        ps.mulPose(new Quaternion(Vector3f.YP, Mth.HALF_PI * quarters, false));
-        ps.mulPose(new Quaternion(Vector3f.ZP, Mth.PI, false));
+        ps.mulPose(Axis.YP.rotation(Mth.HALF_PI * quarters));
+        ps.mulPose(Axis.ZP.rotation(Mth.PI));
 
         // and now Z is out?
         ps.translate(0, 0, 0.5);

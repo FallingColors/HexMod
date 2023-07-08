@@ -126,7 +126,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var sPlayer = (ServerPlayer) player;
         var ctx = new PackagedItemCastEnv(sPlayer, usedHand);
         var harness = CastingVM.empty(ctx);
-        var clientView = harness.queueExecuteAndWrapIotas(instrs, sPlayer.getLevel());
+        var clientView = harness.queueExecuteAndWrapIotas(instrs, sPlayer.serverLevel());
 
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 
@@ -144,13 +144,13 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
             // Somehow we lost spraying particles on each new pattern, so do it here
             // this also nicely prevents particle spam on trinkets
             new ParticleSpray(player.position(), new Vec3(0.0, 1.5, 0.0), 0.4, Math.PI / 3, 30)
-                    .sprayParticles(sPlayer.getLevel(), ctx.getPigment());
+                    .sprayParticles(sPlayer.serverLevel(), ctx.getPigment());
         }
 
         var sound = ctx.getSound().sound();
         if (sound != null) {
             var soundPos = sPlayer.position();
-            sPlayer.level.playSound(null, soundPos.x, soundPos.y, soundPos.z,
+            sPlayer.level().playSound(null, soundPos.x, soundPos.y, soundPos.z,
                     sound, SoundSource.PLAYERS, 1f, 1f);
         }
 

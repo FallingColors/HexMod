@@ -21,13 +21,13 @@ interface SpellAction : Action {
 
     fun execute(
         args: List<Iota>,
-        ctx: CastingEnvironment
+        env: CastingEnvironment
     ): Result
 
     fun executeWithUserdata(
-        args: List<Iota>, ctx: CastingEnvironment, userData: CompoundTag
+        args: List<Iota>, env: CastingEnvironment, userData: CompoundTag
     ): Result {
-        return this.execute(args, ctx)
+        return this.execute(args, env)
     }
 
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {

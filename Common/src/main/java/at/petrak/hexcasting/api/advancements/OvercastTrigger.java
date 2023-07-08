@@ -24,7 +24,7 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
     }
 
     @Override
-    protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate,
+    protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate,
         DeserializationContext pContext) {
         return new Instance(predicate,
             MinMaxBounds.Ints.fromJson(json.get(TAG_MEDIA_GENERATED)),
@@ -47,7 +47,7 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
         // DID YOU KNOW THERES ONE TO CHECK THE WORLD TIME, BUT NOT THE HEALTH!?
         protected final MinMaxBounds.Doubles healthLeft;
 
-        public Instance(EntityPredicate.Composite predicate, MinMaxBounds.Ints mediaGenerated,
+        public Instance(ContextAwarePredicate predicate, MinMaxBounds.Ints mediaGenerated,
             MinMaxBounds.Doubles healthUsed, MinMaxBounds.Doubles healthLeft) {
             super(OvercastTrigger.ID, predicate);
             this.mediaGenerated = mediaGenerated;

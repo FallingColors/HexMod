@@ -10,10 +10,10 @@ import net.minecraft.world.item.ArmorItem;
  * On fabric: hook in ClientInit
  */
 public class ItemRobes extends ArmorItem {
-    public final EquipmentSlot slot;
+    public final ArmorItem.Type type;
 
-    public ItemRobes(EquipmentSlot slot, Properties properties) {
-        super(HexAPI.instance().robesMaterial(), slot, properties);
-        this.slot = slot;
+    public ItemRobes(ArmorItem.Type type, Properties properties) {
+        super(HexAPI.instance().robesMaterial(), type, properties);
+        this.type = type;
     }
 }

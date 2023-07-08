@@ -19,9 +19,9 @@ import kotlin.math.max
 object OpAltiora : SpellAction {
     override val argc = 1
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): SpellAction.Result {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val target = args.getPlayer(0, argc)
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
         return SpellAction.Result(
             Spell(target),
@@ -34,7 +34,7 @@ object OpAltiora : SpellAction {
     }
 
     private data class Spell(val target: ServerPlayer) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             target.push(0.0, 1.5, 0.0)
             // They won't move otherwise?
             target.hurtMarked = true
@@ -48,19 +48,19 @@ object OpAltiora : SpellAction {
     fun checkPlayerCollision(player: ServerPlayer) {
         val altiora = IXplatAbstractions.INSTANCE.getAltiora(player);
         if (altiora != null) {
-            if (altiora.gracePeriod == 0 && (player.isOnGround || player.horizontalCollision)) {
+            if (altiora.gracePeriod == 0 && (player.onGround() || player.horizontalCollision)) {
                 IXplatAbstractions.INSTANCE.setAltiora(player, null)
-                player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_FINISH, SoundSource.PLAYERS, 2f, 1f)
+                player.level().playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_FINISH, SoundSource.PLAYERS, 2f, 1f)
             } else {
                 val grace2 = max(altiora.gracePeriod - 1, 0)
                 IXplatAbstractions.INSTANCE.setAltiora(player, AltioraAbility(grace2))
 
-                if (player.level.random.nextFloat() < 0.02)
-                    player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_AMBIENCE, SoundSource.PLAYERS, 0.2f, 1f)
+                if (player.level().random.nextFloat() < 0.02)
+                    player.level().playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_AMBIENCE, SoundSource.PLAYERS, 0.2f, 1f)
 
                 val color = IXplatAbstractions.INSTANCE.getPigment(player)
                 ParticleSpray(player.position(), Vec3(0.0, -0.2, 0.0), 0.4, Math.PI * 0.5, count = 3)
-                    .sprayParticles(player.getLevel(), color)
+                    .sprayParticles(player.serverLevel(), color)
             }
         }
     }

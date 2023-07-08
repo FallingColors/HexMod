@@ -12,8 +12,8 @@ import net.minecraft.world.item.ItemStack
 object OpCycleVariant : SpellAction {
     override val argc = 0
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): SpellAction.Result {
-        val (handStack, hand) = ctx.getHeldItemToOperateOn {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+        val (handStack, hand) = env.getHeldItemToOperateOn {
             IXplatAbstractions.INSTANCE.findVariantHolder(it) != null
         } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "variant") // TODO: hack
 
@@ -28,7 +28,7 @@ object OpCycleVariant : SpellAction {
     }
 
     private data class Spell(val variantHolder: ADVariantItem) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             variantHolder.variant = (variantHolder.variant + 1) % variantHolder.numVariants()
         }
     }

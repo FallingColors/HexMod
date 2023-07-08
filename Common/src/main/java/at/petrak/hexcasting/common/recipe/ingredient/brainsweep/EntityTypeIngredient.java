@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +37,7 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     public List<Component> getTooltip(boolean advanced) {
         return List.of(
             this.entityType.getDescription(),
-            BrainsweepeeIngredient.getModNameComponent(Registry.ENTITY_TYPE.getKey(this.entityType).getNamespace())
+            BrainsweepeeIngredient.getModNameComponent(BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType).getNamespace())
         );
     }
 
@@ -49,27 +50,27 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     public JsonObject serialize() {
         var obj = new JsonObject();
         obj.addProperty("type", Type.ENTITY_TYPE.getSerializedName());
-        obj.addProperty("entityType", Registry.ENTITY_TYPE.getKey(this.entityType).toString());
+        obj.addProperty("entityType", BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType).toString());
 
         return obj;
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        buf.writeVarInt(Registry.ENTITY_TYPE.getId(this.entityType));
+        buf.writeVarInt(BuiltInRegistries.ENTITY_TYPE.getId(this.entityType));
     }
 
     public static EntityTypeIngredient deserialize(JsonObject obj) {
         var typeLoc = ResourceLocation.tryParse(GsonHelper.getAsString(obj, "entityType"));
-        if (typeLoc == null || !Registry.ENTITY_TYPE.containsKey(typeLoc)) {
+        if (typeLoc == null || !BuiltInRegistries.ENTITY_TYPE.containsKey(typeLoc)) {
             throw new IllegalArgumentException("unknown entity type " + typeLoc);
         }
-        return new EntityTypeIngredient(Registry.ENTITY_TYPE.get(typeLoc));
+        return new EntityTypeIngredient(BuiltInRegistries.ENTITY_TYPE.get(typeLoc));
     }
 
     public static EntityTypeIngredient read(FriendlyByteBuf buf) {
         var tyId = buf.readVarInt();
-        return new EntityTypeIngredient(Registry.ENTITY_TYPE.byId(tyId));
+        return new EntityTypeIngredient(BuiltInRegistries.ENTITY_TYPE.byId(tyId));
     }
 
     @Override
@@ -79,7 +80,7 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
 
     @Override
     public String getSomeKindOfReasonableIDForEmi() {
-        var resloc = Registry.ENTITY_TYPE.getKey(this.entityType);
+        var resloc = BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType);
         return resloc.getNamespace()
             + "//"
             + resloc.getPath();

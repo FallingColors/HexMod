@@ -26,22 +26,4 @@ public class ItemMediaBattery extends ItemMediaHolder {
     public boolean canRecharge(ItemStack stack) {
         return true;
     }
-
-    @Override
-    public void fillItemCategory(@NotNull CreativeModeTab tab, @NotNull NonNullList<ItemStack> items) {
-        // who was drunk at the wheel when they named this
-        if (allowedIn(tab)) {
-            var mediamounts = new int[]{
-                MediaConstants.CRYSTAL_UNIT,
-                20 * MediaConstants.CRYSTAL_UNIT,
-                64 * MediaConstants.CRYSTAL_UNIT,
-                640 * MediaConstants.CRYSTAL_UNIT,
-                6400 * MediaConstants.CRYSTAL_UNIT,
-            };
-            for (int mediamount : mediamounts) {
-                var stack = new ItemStack(this);
-                items.add(ItemMediaHolder.withMedia(stack, mediamount, mediamount));
-            }
-        }
-    }
 }

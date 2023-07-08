@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.phys.AABB;
 
 // TODO: this doesn't cover the block being *behind* something. Is it possible to cleanly do that?
@@ -29,7 +30,7 @@ public class BlockEntityQuenchedAllayRenderer implements BlockEntityRenderer<Blo
         var pose = ps.last();
 
         var idx = Math.abs(GaslightingTracker.getGaslightingAmount() % BlockQuenchedAllay.VARIANTS);
-        var model = RegisterClientStuff.QUENCHED_ALLAY_VARIANTS.get(Registry.BLOCK.getKey(block)).get(idx);
+        var model = RegisterClientStuff.QUENCHED_ALLAY_VARIANTS.get(BuiltInRegistries.BLOCK.getKey(block)).get(idx);
 
         dispatcher.getModelRenderer().renderModel(pose, buffer, null, model, 1f, 1f, 1f, packedLight, packedOverlay);
     }

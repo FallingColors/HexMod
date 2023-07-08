@@ -25,7 +25,7 @@ public class CCStaffcastImage implements Component {
     public CastingVM getVM(InteractionHand hand) {
         var img = this.lazyLoadedTag.isEmpty()
             ? new CastingImage()
-            : CastingImage.loadFromNbt(this.lazyLoadedTag, this.owner.getLevel());
+            : CastingImage.loadFromNbt(this.lazyLoadedTag, this.owner.serverLevel());
         var env = new StaffCastEnv(this.owner, hand);
         return new CastingVM(img, env);
     }

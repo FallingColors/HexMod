@@ -24,13 +24,13 @@ import net.minecraft.world.phys.Vec3
 object OpExtinguish : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         // TODO: sho
         val vecPos = args.getVec3(0, argc)
-        val pos = BlockPos(vecPos)
-        ctx.assertPosInRangeForEditing(pos)
+        val pos = BlockPos.containing(vecPos)
+        env.assertPosInRangeForEditing(pos)
 
         return SpellAction.Result(
             Spell(pos),
@@ -42,7 +42,7 @@ object OpExtinguish : SpellAction {
     const val MAX_DESTROY_COUNT = 1024
 
     private data class Spell(val target: BlockPos) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             // how many levels of "borrowed" code are we on now
             val todo = ArrayDeque<BlockPos>()
             val seen = HashSet<BlockPos>()
@@ -53,14 +53,14 @@ object OpExtinguish : SpellAction {
                 val here = todo.removeFirst()
                 val distFromTarget =
                     target.distSqr(here) // max distance to prevent runaway shenanigans
-                if (ctx.canEditBlockAt(here) && distFromTarget < 10 * 10 && seen.add(here)) {
+                if (env.canEditBlockAt(here) && distFromTarget < 10 * 10 && seen.add(here)) {
                     // never seen this pos in my life
-                    val blockstate = ctx.world.getBlockState(here)
-                    if (IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, here, blockstate, ctx.caster)) {
+                    val blockstate = env.world.getBlockState(here)
+                    if (IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, here, blockstate, env.caster)) {
                         val success =
                             when (blockstate.block) {
                                 is BaseFireBlock -> {
-                                    ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
+                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
                                 }
 
                                 is CampfireBlock -> {
@@ -70,7 +70,7 @@ object OpExtinguish : SpellAction {
                                         val hereVec = Vec3.atCenterOf(here)
                                         wilson.useOn(
                                             UseOnContext(
-                                                ctx.world,
+                                                env.world,
                                                 null,
                                                 InteractionHand.MAIN_HAND,
                                                 ItemStack(wilson),
@@ -82,19 +82,19 @@ object OpExtinguish : SpellAction {
 
                                 is AbstractCandleBlock -> {
                                     if (blockstate.getValue(AbstractCandleBlock.LIT)) { // same check for candles
-                                        AbstractCandleBlock.extinguish(null, blockstate, ctx.world, here); true
+                                        AbstractCandleBlock.extinguish(null, blockstate, env.world, here); true
                                     } else false
                                 }
 
                                 is NetherPortalBlock -> {
-                                    ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
+                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
                                 }
 
                                 else -> false
                             }
 
                         if (success) {
-                            ctx.world.sendParticles(
+                            env.world.sendParticles(
                                 ParticleTypes.SMOKE,
                                 here.x + 0.5 + Math.random() * 0.4 - 0.2,
                                 here.y + 0.5 + Math.random() * 0.4 - 0.2,
@@ -115,7 +115,7 @@ object OpExtinguish : SpellAction {
             }
 
             if (successes > 0) {
-                ctx.world.playSound(
+                env.world.playSound(
                     null,
                     target.x.toDouble(),
                     target.y.toDouble(),

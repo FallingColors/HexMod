@@ -139,7 +139,7 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
 
         pitch *= (increase ? 1.05f : 0.95f);
         pitch += (Math.random() - 0.5) * 0.1;
-        sender.level.playSound(null, sender.getX(), sender.getY(), sender.getZ(),
+        sender.level().playSound(null, sender.getX(), sender.getY(), sender.getZ(),
             HexSounds.ABACUS, SoundSource.PLAYERS, 0.5f, pitch);
 
         var datumTag = HexItems.ABACUS.readIotaTag(stack);

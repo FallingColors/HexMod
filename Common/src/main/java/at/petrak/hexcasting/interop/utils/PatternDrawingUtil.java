@@ -8,6 +8,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
@@ -18,9 +19,10 @@ import java.util.HashSet;
 import java.util.List;
 
 public final class PatternDrawingUtil {
-    public static void drawPattern(PoseStack poseStack, int x, int y, List<PatternEntry> patterns, List<Vec2> dots,
-        boolean strokeOrder, int outer, int innerLight, int innerDark,
-        int dotColor) {
+    public static void drawPattern(GuiGraphics graphics, int x, int y, List<PatternEntry> patterns, List<Vec2> dots,
+                   boolean strokeOrder, int outer, int innerLight, int innerDark,
+                   int dotColor) {
+        var poseStack = graphics.pose();
         poseStack.pushPose();
         poseStack.translate(x, y, 1);
         var mat = poseStack.last().pose();

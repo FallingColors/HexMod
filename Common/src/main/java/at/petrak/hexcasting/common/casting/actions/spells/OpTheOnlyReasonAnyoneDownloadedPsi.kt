@@ -20,11 +20,11 @@ import net.minecraft.world.phys.Vec3
 object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getBlockPos(0, argc)
-        ctx.assertPosInRangeForEditing(target)
+        env.assertPosInRangeForEditing(target)
 
         return SpellAction.Result(
             Spell(target),
@@ -34,10 +34,10 @@ object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
     }
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/PieceTrickOvergrow.java
             val hit = BlockHitResult(Vec3.ZERO, Direction.UP, pos, false)
-            val fakeContext = UseOnContext(ctx.world, ctx.caster, InteractionHand.MAIN_HAND, ItemStack(Items.BONE_MEAL), hit)
+            val fakeContext = UseOnContext(env.world, env.caster, InteractionHand.MAIN_HAND, ItemStack(Items.BONE_MEAL), hit)
             Items.BONE_MEAL.useOn(fakeContext)
         }
     }

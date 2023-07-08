@@ -16,9 +16,11 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -28,8 +30,8 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 
 public class HexItemModels extends PaucalItemModelProvider {
-    public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, HexAPI.MOD_ID, existingFileHelper);
+    public HexItemModels(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, HexAPI.MOD_ID, existingFileHelper);
     }
 
     private static final String[] PHIAL_SIZES = {"small", "medium", "large", "larger", "largest"};
@@ -71,7 +73,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         simpleItem(HexItems.SCRYING_LENS);
         getBuilder(getPath(HexItems.SCRYING_LENS))
             .transforms()
-            .transform(ItemTransforms.TransformType.HEAD)
+            .transform(ItemDisplayContext.HEAD)
             .rotation(0f, 0f, 0f)
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);

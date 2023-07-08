@@ -12,7 +12,7 @@ import dev.emi.trinkets.api.TrinketsApi;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class TrinketsApiInterop {
     public static void init() {
-        Registry.ITEM.stream().forEach(item -> {
+        BuiltInRegistries.ITEM.stream().forEach(item -> {
             if (item instanceof HexBaubleItem bauble) {
                 TrinketsApi.registerTrinket(item, new Trinket() {
                     @Override

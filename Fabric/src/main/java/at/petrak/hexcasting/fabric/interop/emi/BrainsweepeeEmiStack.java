@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.nbt.CompoundTag;
@@ -21,14 +22,12 @@ import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
 public class BrainsweepeeEmiStack extends EmiStack {
     public final BrainsweepeeIngredient ingredient;
     private final ResourceLocation id;
-    private final BrainsweepeeEntry entry;
 
     public BrainsweepeeEmiStack(BrainsweepeeIngredient ingr) {
         this.ingredient = ingr;
 
         var bareId = this.ingredient.getSomeKindOfReasonableIDForEmi();
         this.id = modLoc(bareId);
-        this.entry = new BrainsweepeeEntry(this.ingredient);
     }
 
     @Override
@@ -49,11 +48,6 @@ public class BrainsweepeeEmiStack extends EmiStack {
     @Override
     public Object getKey() {
         return id;
-    }
-
-    @Override
-    public Entry<?> getEntry() {
-        return entry;
     }
 
     @Override
@@ -83,7 +77,7 @@ public class BrainsweepeeEmiStack extends EmiStack {
     }
 
     @Override
-    public void render(PoseStack poseStack, int x, int y, float delta, int flags) {
+    public void render(GuiGraphics graphics, int x, int y, float delta, int flags) {
         if ((flags & RENDER_ICON) != 0) {
             Minecraft mc = Minecraft.getInstance();
             ClientLevel level = mc.level;
@@ -92,29 +86,12 @@ public class BrainsweepeeEmiStack extends EmiStack {
 
                 RenderSystem.enableBlend();
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                renderEntity(poseStack, example, level, x + 8, y + 16, ClientTickCounter.getTotal(), 8, 0, it -> it);
+                renderEntity(graphics, example, level, x + 8, y + 16, ClientTickCounter.getTotal(), 8, 0, it -> it);
             }
         }
 
 //		if ((flags & RENDER_REMAINDER) != 0) {
 //			EmiRender.renderRemainderIcon(this, poseStack, x, y);
 //		}
-    }
-
-    public static class BrainsweepeeEntry extends EmiStack.Entry<BrainsweepeeIngredient> {
-
-        public BrainsweepeeEntry(BrainsweepeeIngredient variant) {
-            super(variant);
-        }
-
-        @Override
-        public Class<? extends BrainsweepeeIngredient> getType() {
-            return BrainsweepeeIngredient.class;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof BrainsweepeeIngredient bi && bi.equals(this.getValue());
-        }
     }
 }

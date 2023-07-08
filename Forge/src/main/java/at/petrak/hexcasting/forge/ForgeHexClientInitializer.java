@@ -55,7 +55,7 @@ public class ForgeHexClientInitializer {
         });
 
         evBus.addListener((RenderGuiEvent.Post e) -> {
-            HexAdditionalRenderers.overlayGui(e.getPoseStack(), e.getPartialTick());
+            HexAdditionalRenderers.overlayGui(e.getGuiGraphics(), e.getPartialTick());
         });
 
 
@@ -82,7 +82,7 @@ public class ForgeHexClientInitializer {
 
     @SubscribeEvent
     public static void registerShaders(RegisterShadersEvent evt) throws IOException {
-        HexShaders.init(evt.getResourceManager(), p -> evt.registerShader(p.getFirst(), p.getSecond()));
+        HexShaders.init(evt.getResourceProvider(), p -> evt.registerShader(p.getFirst(), p.getSecond()));
     }
 
     // https://github.com/VazkiiMods/Botania/blob/1.19.x/Forge/src/main/java/vazkii/botania/forge/client/ForgeClientInitializer.java#L225
@@ -92,7 +92,7 @@ public class ForgeHexClientInitializer {
             @Override
             public <T extends ParticleOptions> void register(ParticleType<T> type, Function<SpriteSet,
                 ParticleProvider<T>> constructor) {
-                evt.register(type, constructor::apply);
+                evt.registerSpriteSet(type, constructor::apply);
             }
         });
     }

@@ -7,6 +7,7 @@ import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
 import at.petrak.hexcasting.interop.utils.PatternEntry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.phys.Vec2;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
@@ -39,10 +40,10 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
     public abstract boolean showStrokeOrder();
 
     @Override
-    public void render(PoseStack poseStack, IComponentRenderContext ctx, float partialTicks, int mouseX, int mouseY) {
-        PatternDrawingUtil.drawPattern(poseStack, this.x, this.y, this.patterns, this.zappyPoints,
-            this.showStrokeOrder(),
-            0xff_d2c8c8, 0xc8_aba2a2, 0xc8_322b33, 0x80_d1cccc);
+    public void render(GuiGraphics graphics, IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
+        PatternDrawingUtil.drawPattern(graphics, this.x, this.y, this.patterns, this.zappyPoints,
+                this.showStrokeOrder(),
+                0xff_d2c8c8, 0xc8_aba2a2, 0xc8_322b33, 0x80_d1cccc);
     }
 
     @Override

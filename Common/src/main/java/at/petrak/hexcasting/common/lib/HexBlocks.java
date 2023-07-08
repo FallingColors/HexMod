@@ -21,16 +21,21 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -47,45 +52,58 @@ public class HexBlocks {
         }
     }
 
+    public static void registerBlockCreativeTab(Consumer<Block> r, CreativeModeTab tab) {
+        for (var block : BLOCK_TABS.getOrDefault(tab, List.of())) {
+            r.accept(block);
+        }
+    }
+
     private static final Map<ResourceLocation, Block> BLOCKS = new LinkedHashMap<>();
     private static final Map<ResourceLocation, Pair<Block, Item.Properties>> BLOCK_ITEMS = new LinkedHashMap<>();
+    private static final Map<CreativeModeTab, List<Block>> BLOCK_TABS = new LinkedHashMap<>();
+
 
     private static BlockBehaviour.Properties slateish() {
         return BlockBehaviour.Properties
-            .of(Material.STONE, MaterialColor.DEEPSLATE)
-            .sound(SoundType.DEEPSLATE_TILES)
+            .copy(Blocks.DEEPSLATE_TILES)
             .strength(4f, 4f);
     }
 
-    private static BlockBehaviour.Properties papery(MaterialColor color) {
+    private static BlockBehaviour.Properties papery(MapColor color) {
         return BlockBehaviour.Properties
-            .of(Material.PLANT, color)
+            .copy(Blocks.TALL_GRASS)
+            .mapColor(color)
             .sound(SoundType.GRASS)
             .instabreak();
     }
 
     private static BlockBehaviour.Properties akashicWoodyHard() {
-        return woodyHard(MaterialColor.COLOR_PURPLE);
+        return woodyHard(MapColor.COLOR_PURPLE);
     }
 
-    private static BlockBehaviour.Properties woodyHard(MaterialColor color) {
-        return BlockBehaviour.Properties.of(Material.WOOD, color)
+    private static BlockBehaviour.Properties woodyHard(MapColor color) {
+        return BlockBehaviour.Properties
+            .copy(Blocks.OAK_LOG)
+            .mapColor(color)
             .sound(SoundType.WOOD)
             .strength(3f, 4f);
     }
 
     private static BlockBehaviour.Properties edifiedWoody() {
-        return woody(MaterialColor.COLOR_PURPLE);
+        return woody(MapColor.COLOR_PURPLE);
     }
 
-    private static BlockBehaviour.Properties woody(MaterialColor color) {
-        return BlockBehaviour.Properties.of(Material.WOOD, color)
+    private static BlockBehaviour.Properties woody(MapColor color) {
+        return BlockBehaviour.Properties
+            .copy(Blocks.OAK_LOG)
+            .mapColor(color)
             .sound(SoundType.WOOD)
             .strength(2f);
     }
 
-    private static BlockBehaviour.Properties leaves(MaterialColor color) {
-        return BlockBehaviour.Properties.of(Material.LEAVES, color)
+    private static BlockBehaviour.Properties leaves(MapColor color) {
+        return BlockBehaviour.Properties
+            .copy(Blocks.OAK_LEAVES)
             .strength(0.2F)
             .randomTicks()
             .sound(SoundType.GRASS)
@@ -98,27 +116,30 @@ public class HexBlocks {
     // we have to make it emit light because otherwise it occludes itself and is always dark
     private static BlockBehaviour.Properties quenched() {
         return BlockBehaviour.Properties
-                .copy(Blocks.AMETHYST_BLOCK)
-                .lightLevel($ -> 4)
-                .noOcclusion();
+            .copy(Blocks.AMETHYST_BLOCK)
+            .lightLevel($ -> 4)
+            .noOcclusion();
     }
 
     // we give these faux items so Patchi can have an item to view with
     public static final Block CONJURED_LIGHT = blockItem("conjured_light",
         new BlockConjuredLight(
-            BlockBehaviour.Properties.of(Material.GLASS, MaterialColor.NONE)
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.NONE)
                 .sound(SoundType.AMETHYST)
                 .lightLevel((state) -> 15)
                 .noLootTable()
                 .isValidSpawn(HexBlocks::never)
                 .instabreak()
+                .pushReaction(PushReaction.DESTROY)
                 .noCollission()
                 .isSuffocating(HexBlocks::never)
                 .isViewBlocking(HexBlocks::never)),
         new Item.Properties());
     public static final Block CONJURED_BLOCK = blockItem("conjured_block",
         new BlockConjured(
-            BlockBehaviour.Properties.of(Material.GLASS, MaterialColor.NONE)
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.NONE)
                 .sound(SoundType.AMETHYST)
                 .lightLevel((state) -> 2)
                 .noLootTable()
@@ -130,26 +151,36 @@ public class HexBlocks {
         new Item.Properties());
 
     // "no" item because we add it manually
-    public static final BlockSlate SLATE = blockNoItem("slate", new BlockSlate(slateish()));
+    public static final BlockSlate SLATE = blockNoItem("slate",
+        new BlockSlate(slateish()
+            .pushReaction(PushReaction.DESTROY)));
 
-    public static final BlockEmptyImpetus IMPETUS_EMPTY = blockItem("impetus/empty", new BlockEmptyImpetus(slateish()));
+    public static final BlockEmptyImpetus IMPETUS_EMPTY = blockItem("impetus/empty",
+        new BlockEmptyImpetus(slateish()
+            .pushReaction(PushReaction.BLOCK)));
     public static final BlockRightClickImpetus IMPETUS_RIGHTCLICK = blockItem("impetus/rightclick",
         new BlockRightClickImpetus(slateish()
+            .pushReaction(PushReaction.BLOCK)
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
     public static final BlockLookingImpetus IMPETUS_LOOK = blockItem("impetus/look",
         new BlockLookingImpetus(slateish()
+            .pushReaction(PushReaction.BLOCK)
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
     public static final BlockRedstoneImpetus IMPETUS_REDSTONE = blockItem("impetus/redstone",
         new BlockRedstoneImpetus(slateish()
+            .pushReaction(PushReaction.BLOCK)
             .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
 
 
     public static final BlockEmptyDirectrix EMPTY_DIRECTRIX = blockItem("directrix/empty",
-        new BlockEmptyDirectrix(slateish()));
+        new BlockEmptyDirectrix(slateish()
+            .pushReaction(PushReaction.BLOCK)));
     public static final BlockRedstoneDirectrix DIRECTRIX_REDSTONE = blockItem("directrix/redstone",
-        new BlockRedstoneDirectrix(slateish()));
+        new BlockRedstoneDirectrix(slateish()
+            .pushReaction(PushReaction.BLOCK)));
     public static final BlockBooleanDirectrix DIRECTRIX_BOOLEAN = blockItem("directrix/boolean",
-        new BlockBooleanDirectrix(slateish()));
+        new BlockBooleanDirectrix(slateish()
+            .pushReaction(PushReaction.BLOCK)));
 
     public static final BlockAkashicRecord AKASHIC_RECORD = blockItem("akashic_record",
         new BlockAkashicRecord(akashicWoodyHard().lightLevel(bs -> 15)));
@@ -171,7 +202,7 @@ public class HexBlocks {
     public static final Block SLATE_BRICKS_SMALL = blockItem("slate_bricks_small", new Block(slateish().strength(2f, 4f)));
     public static final RotatedPillarBlock SLATE_PILLAR = blockItem("slate_pillar", new RotatedPillarBlock(slateish().strength(2f, 4f)));
     public static final SandBlock AMETHYST_DUST_BLOCK = blockItem("amethyst_dust_block",
-        new SandBlock(0xff_b38ef3, BlockBehaviour.Properties.of(Material.SAND, MaterialColor.COLOR_PURPLE)
+        new SandBlock(0xff_b38ef3, BlockBehaviour.Properties.copy(Blocks.SAND).mapColor(MapColor.COLOR_PURPLE)
             .strength(0.5f).sound(SoundType.SAND)));
     public static final AmethystBlock AMETHYST_TILES = blockItem("amethyst_tiles",
         new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
@@ -187,16 +218,17 @@ public class HexBlocks {
     public static final RotatedPillarBlock SLATE_AMETHYST_PILLAR = blockItem("slate_amethyst_pillar",
             new RotatedPillarBlock(slateish().strength(2f, 4f)));
     public static final Block SCROLL_PAPER = blockItem("scroll_paper",
-        new BlockFlammable(papery(MaterialColor.TERRACOTTA_WHITE), 100, 60));
+        new BlockFlammable(papery(MapColor.TERRACOTTA_WHITE), 100, 60));
     public static final Block ANCIENT_SCROLL_PAPER = blockItem("ancient_scroll_paper",
-        new BlockFlammable(papery(MaterialColor.TERRACOTTA_ORANGE), 100, 60));
+        new BlockFlammable(papery(MapColor.TERRACOTTA_ORANGE), 100, 60));
     public static final Block SCROLL_PAPER_LANTERN = blockItem("scroll_paper_lantern",
-        new BlockFlammable(papery(MaterialColor.TERRACOTTA_WHITE).lightLevel($ -> 15), 100, 60));
+        new BlockFlammable(papery(MapColor.TERRACOTTA_WHITE).lightLevel($ -> 15), 100, 60));
     public static final Block ANCIENT_SCROLL_PAPER_LANTERN = blockItem(
         "ancient_scroll_paper_lantern",
-        new BlockFlammable(papery(MaterialColor.TERRACOTTA_ORANGE).lightLevel($ -> 12), 100, 60));
+        new BlockFlammable(papery(MapColor.TERRACOTTA_ORANGE).lightLevel($ -> 12), 100, 60));
     public static final BlockSconce SCONCE = blockItem("amethyst_sconce",
-        new BlockSconce(BlockBehaviour.Properties.of(Material.AMETHYST, MaterialColor.COLOR_PURPLE)
+        new BlockSconce(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_PURPLE)
             .sound(SoundType.AMETHYST)
             .strength(1f)
             .lightLevel($ -> 15)),
@@ -232,17 +264,17 @@ public class HexBlocks {
         new BlockHexStairs(EDIFIED_PLANKS.defaultBlockState(), edifiedWoody().noOcclusion()));
     public static final SlabBlock EDIFIED_SLAB = blockItem("edified_slab",
         new BlockHexSlab(edifiedWoody().noOcclusion()));
-    public static final WoodButtonBlock EDIFIED_BUTTON = blockItem("edified_button",
+    public static final ButtonBlock EDIFIED_BUTTON = blockItem("edified_button",
         new BlockHexWoodButton(edifiedWoody().noOcclusion().noCollission()));
     public static final PressurePlateBlock EDIFIED_PRESSURE_PLATE = blockItem("edified_pressure_plate",
         new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING,
             edifiedWoody().noOcclusion().noCollission()));
     public static final BlockAkashicLeaves AMETHYST_EDIFIED_LEAVES = blockItem("amethyst_edified_leaves",
-        new BlockAkashicLeaves(leaves(MaterialColor.COLOR_PURPLE)));
+        new BlockAkashicLeaves(leaves(MapColor.COLOR_PURPLE)));
     public static final BlockAkashicLeaves AVENTURINE_EDIFIED_LEAVES = blockItem("aventurine_edified_leaves",
-        new BlockAkashicLeaves(leaves(MaterialColor.COLOR_BLUE)));
+        new BlockAkashicLeaves(leaves(MapColor.COLOR_BLUE)));
     public static final BlockAkashicLeaves CITRINE_EDIFIED_LEAVES = blockItem("citrine_edified_leaves",
-        new BlockAkashicLeaves(leaves(MaterialColor.COLOR_YELLOW)));
+        new BlockAkashicLeaves(leaves(MapColor.COLOR_YELLOW)));
 
     private static boolean never(Object... args) {
         return false;
@@ -255,16 +287,25 @@ public class HexBlocks {
         }
         return block;
     }
-
     private static <T extends Block> T blockItem(String name, T block) {
-        return blockItem(name, block, HexItems.props());
+        return blockItem(name, block, HexItems.props(), HexCreativeTabs.HEX);
     }
 
+    private static <T extends Block> T blockItem(String name, T block, @Nullable CreativeModeTab tab) {
+        return blockItem(name, block, HexItems.props(), tab);
+    }
     private static <T extends Block> T blockItem(String name, T block, Item.Properties props) {
+        return blockItem(name, block, props, HexCreativeTabs.HEX);
+    }
+
+    private static <T extends Block> T blockItem(String name, T block, Item.Properties props, @Nullable CreativeModeTab tab) {
         blockNoItem(name, block);
         var old = BLOCK_ITEMS.put(modLoc(name), new Pair<>(block, props));
         if (old != null) {
             throw new IllegalArgumentException("Typo? Duplicate id " + name);
+        }
+        if (tab != null) {
+            BLOCK_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(block);
         }
         return block;
     }

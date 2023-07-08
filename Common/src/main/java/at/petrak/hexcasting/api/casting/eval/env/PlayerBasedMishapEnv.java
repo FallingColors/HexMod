@@ -2,10 +2,9 @@ package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
-import at.petrak.hexcasting.api.misc.HexDamageSources;
+import at.petrak.hexcasting.common.lib.HexDamageTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +12,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class PlayerBasedMishapEnv extends MishapEnvironment {
     public PlayerBasedMishapEnv(ServerPlayer player) {
-        super(player.getLevel(), player);
+        super(player.serverLevel(), player);
     }
 
     @Override
@@ -36,13 +35,13 @@ public class PlayerBasedMishapEnv extends MishapEnvironment {
 
     @Override
     public void damage(float healthProportion) {
-        Mishap.trulyHurt(this.caster, HexDamageSources.OVERCAST, this.caster.getHealth() * healthProportion);
+        Mishap.trulyHurt(this.caster, this.caster.damageSources().source(HexDamageTypes.OVERCAST), this.caster.getHealth() * healthProportion);
     }
 
     @Override
     public void drown() {
         if (this.caster.getAirSupply() < 200) {
-            this.caster.hurt(DamageSource.DROWN, 2f);
+            this.caster.hurt(this.caster.damageSources().drown(), 2f);
         }
         this.caster.setAirSupply(0);
     }

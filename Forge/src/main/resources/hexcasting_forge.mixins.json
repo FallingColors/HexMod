@@ -5,8 +5,10 @@
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.forge.mixin",
   "mixins": [
-    "ForgeAccessorRegistry",
-    "ForgeMixinCursedRecipeSerializerBase"
+    "ForgeAccessorBuiltInRegistries",
+    "ForgeMixinCursedRecipeSerializerBase",
+    "ForgeMixinDatagenModLoader",
+    "ForgeMixinTagsProvider"
   ],
   "client": [
     "ForgeMixinBlockColors",

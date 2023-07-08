@@ -9,12 +9,12 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
-import at.petrak.hexcasting.api.misc.HexDamageSources;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
+import at.petrak.hexcasting.common.lib.HexDamageTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -40,7 +41,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     protected final InteractionHand castingHand;
 
     protected PlayerBasedCastEnv(ServerPlayer caster, InteractionHand castingHand) {
-        super(caster.getLevel());
+        super(caster.serverLevel());
         this.caster = caster;
         this.castingHand = castingHand;
     }
@@ -121,12 +122,54 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             this.castingHand));
     }
 
+    ItemStack getAlternateItem() {
+        var otherHand = HexUtils.otherHand(this.castingHand);
+        var stack = this.caster.getItemInHand(otherHand);
+        if (stack.isEmpty()) {
+            return ItemStack.EMPTY.copy();
+        } else {
+            return stack;
+        }
+    }
+
+    @Override
+    public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
+        if (caster == null)
+            return false;
+
+        if (hand != null && stackOk.test(caster.getItemInHand(hand))) {
+            caster.setItemInHand(hand, replaceWith);
+            return true;
+        }
+
+        Inventory inv = this.caster.getInventory();
+        for (int i = inv.items.size() - 1; i >= 0; i--) {
+            if (i != inv.selected) {
+                if (stackOk.test(inv.items.get(i))) {
+                    inv.setItem(i, replaceWith);
+                    return true;
+                }
+            }
+        }
+
+        if (stackOk.test(caster.getItemInHand(getOtherHand()))) {
+            caster.setItemInHand(getOtherHand(), replaceWith);
+            return true;
+        }
+        if (stackOk.test(caster.getItemInHand(getCastingHand()))) {
+            caster.setItemInHand(getCastingHand(), replaceWith);
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public boolean isVecInRange(Vec3 vec) {
         var sentinel = HexAPI.instance().getSentinel(this.caster);
         if (sentinel != null
             && sentinel.extendsRange()
-            && this.caster.getLevel().dimension() == sentinel.dimension()
+            && this.caster.level().dimension() == sentinel.dimension()
             && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
         ) {
             return true;
@@ -138,17 +181,6 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     @Override
     public boolean hasEditPermissionsAt(BlockPos vec) {
         return this.caster.gameMode.getGameModeForPlayer() != GameType.ADVENTURE && this.world.mayInteract(this.caster, vec);
-    }
-
-    @Override
-    public ItemStack getAlternateItem() {
-        var otherHand = HexUtils.otherHand(this.castingHand);
-        var stack = this.caster.getItemInHand(otherHand);
-        if (stack.isEmpty()) {
-            return ItemStack.EMPTY.copy();
-        } else {
-            return stack;
-        }
     }
 
     /**
@@ -170,7 +202,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             double healthToRemove = Math.max(costLeft / mediaToHealth, 0.5);
             var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
 
-            Mishap.trulyHurt(this.caster, HexDamageSources.OVERCAST, (float) healthToRemove);
+            Mishap.trulyHurt(this.caster, this.caster.damageSources().source(HexDamageTypes.OVERCAST), (float) healthToRemove);
 
             var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
 

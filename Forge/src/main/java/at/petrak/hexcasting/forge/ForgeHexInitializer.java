@@ -31,7 +31,10 @@ import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -42,11 +45,13 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -74,6 +79,7 @@ import java.util.function.Consumer;
 public class ForgeHexInitializer {
     public ForgeHexInitializer() {
         initConfig();
+        initRegistries();
         initRegistry();
         initListeners();
     }
@@ -91,29 +97,47 @@ public class ForgeHexInitializer {
         mlc.registerConfig(ModConfig.Type.SERVER, serverConfig.getRight());
     }
 
+    public static void initRegistries() {
+        if (!(BuiltInRegistries.REGISTRY instanceof MappedRegistry<?> rootRegistry)) return;
+        rootRegistry.unfreeze();
+
+        IXplatAbstractions.INSTANCE.getActionRegistry();
+        IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry();
+        IXplatAbstractions.INSTANCE.getIotaTypeRegistry();
+        IXplatAbstractions.INSTANCE.getArithmeticRegistry();
+        IXplatAbstractions.INSTANCE.getEvalSoundRegistry();
+
+        rootRegistry.freeze();
+    }
+
     private static void initRegistry() {
-        bind(Registry.SOUND_EVENT_REGISTRY, HexSounds::registerSounds);
-        bind(Registry.BLOCK_REGISTRY, HexBlocks::registerBlocks);
-        bind(Registry.ITEM_REGISTRY, HexBlocks::registerBlockItems);
-        bind(Registry.BLOCK_ENTITY_TYPE_REGISTRY, HexBlockEntities::registerTiles);
-        bind(Registry.ITEM_REGISTRY, HexItems::registerItems);
+        bind(Registries.SOUND_EVENT, HexSounds::registerSounds);
 
-        bind(Registry.RECIPE_SERIALIZER_REGISTRY, HexRecipeStuffRegistry::registerSerializers);
-        bind(Registry.RECIPE_TYPE_REGISTRY, HexRecipeStuffRegistry::registerTypes);
+        HexBlockSetTypes.registerBlocks(BlockSetType::register);
 
-        bind(Registry.ENTITY_TYPE_REGISTRY, HexEntities::registerEntities);
-        bind(Registry.ATTRIBUTE_REGISTRY, HexAttributes::register);
-        bind(Registry.MOB_EFFECT_REGISTRY, HexMobEffects::register);
-        bind(Registry.POTION_REGISTRY, HexPotions::register);
+        bind(Registries.CREATIVE_MODE_TAB, HexCreativeTabs::registerCreativeTabs);
+
+        bind(Registries.BLOCK, HexBlocks::registerBlocks);
+        bind(Registries.ITEM, HexBlocks::registerBlockItems);
+        bind(Registries.BLOCK_ENTITY_TYPE, HexBlockEntities::registerTiles);
+        bind(Registries.ITEM, HexItems::registerItems);
+
+        bind(Registries.RECIPE_SERIALIZER, HexRecipeStuffRegistry::registerSerializers);
+        bind(Registries.RECIPE_TYPE, HexRecipeStuffRegistry::registerTypes);
+
+        bind(Registries.ENTITY_TYPE, HexEntities::registerEntities);
+        bind(Registries.ATTRIBUTE, HexAttributes::register);
+        bind(Registries.MOB_EFFECT, HexMobEffects::register);
+        bind(Registries.POTION, HexPotions::register);
         HexPotions.addRecipes();
 
-        bind(Registry.PARTICLE_TYPE_REGISTRY, HexParticles::registerParticles);
+        bind(Registries.PARTICLE_TYPE, HexParticles::registerParticles);
 
-        bind(IXplatAbstractions.INSTANCE.getIotaTypeRegistry().key(), HexIotaTypes::registerTypes);
-        bind(IXplatAbstractions.INSTANCE.getActionRegistry().key(), HexActions::register);
-        bind(IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().key(), HexSpecialHandlers::register);
-        bind(IXplatAbstractions.INSTANCE.getArithmeticRegistry().key(), HexArithmetics::register);
-        bind(IXplatAbstractions.INSTANCE.getEvalSoundRegistry().key(), HexEvalSounds::register);
+        bind(HexRegistries.IOTA_TYPE, HexIotaTypes::registerTypes);
+        bind(HexRegistries.ACTION, HexActions::register);
+        bind(HexRegistries.SPECIAL_HANDLER, HexSpecialHandlers::register);
+        bind(HexRegistries.ARITHMETIC, HexArithmetics::register);
+        bind(HexRegistries.EVAL_SOUND, HexEvalSounds::register);
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
         ForgeHexLootMods.REGISTRY.register(getModEventBus());
@@ -155,16 +179,21 @@ public class ForgeHexInitializer {
                 HexInterop.init();
             }));
 
+        modBus.addListener((BuildCreativeModeTabContentsEvent evt) -> {
+            HexBlocks.registerBlockCreativeTab(evt::accept, evt.getTab());
+            HexItems.registerItemCreativeTab(evt, evt.getTab());
+        });
+
 
         // We have to do these at some point when the registries are still open
         modBus.addListener((RegisterEvent evt) -> {
-            if (evt.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
+            if (evt.getRegistryKey().equals(Registries.ITEM)) {
                 CraftingHelper.register(ForgeUnsealedIngredient.ID, ForgeUnsealedIngredient.Serializer.INSTANCE);
                 CraftingHelper.register(ForgeModConditionalIngredient.ID,
                     ForgeModConditionalIngredient.Serializer.INSTANCE);
                 HexStatistics.register();
                 HexLootFunctions.registerSerializers((lift, id) ->
-                    Registry.register(Registry.LOOT_FUNCTION_TYPE, id, lift));
+                    Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, id, lift));
             }
         });
 

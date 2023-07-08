@@ -1,16 +1,17 @@
 package at.petrak.hexcasting.datagen;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.paucal.api.datagen.PaucalLootTableProvider;
+import at.petrak.paucal.api.datagen.PaucalLootTableSubProvider;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -34,9 +35,9 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.Map;
 
-public class HexLootTables extends PaucalLootTableProvider {
-    public HexLootTables(DataGenerator pGenerator) {
-        super(pGenerator);
+public class HexLootTables extends PaucalLootTableSubProvider {
+    public HexLootTables() {
+        super(HexAPI.MOD_ID);
     }
 
     @Override
@@ -133,7 +134,7 @@ public class HexLootTables extends PaucalLootTableProvider {
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {
         var leafPool = dropThisPool(block, 1)
-            .when(new AlternativeLootItemCondition.Builder(
+            .when(AnyOfCondition.anyOf(
                 IXplatAbstractions.INSTANCE.isShearsCondition(),
                 MatchTool.toolMatches(ItemPredicate.Builder.item()
                     .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))))

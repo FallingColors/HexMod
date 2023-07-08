@@ -77,11 +77,11 @@ public class EmiEdifyRecipe implements EmiRecipe {
     @Override
     public void addWidgets(WidgetHolder widgets) {
         widgets.addTexture(OVERLAY, 0, 0, getDisplayWidth(), getDisplayHeight(), 0, 0, getDisplayWidth(), getDisplayHeight(), 128, 128);
-        widgets.addSlot(saplings, 11, 21).drawBack(false).custom(null, 0, 0, 19, 19);
+        widgets.addSlot(saplings, 11, 21).drawBack(false).customBackground(null, 0, 0, 19, 19);
         widgets.addGeneratedSlot(r -> {
             var stacks = leaves.getEmiStacks();
             return stacks.get(r.nextInt(stacks.size()));
-        }, 0, 50, 9).drawBack(false).recipeContext(this).custom(null, 0, 0, 19, 19);
-        widgets.addSlot(log, 50, 34).drawBack(false).recipeContext(this).custom(null, 0, 0, 19, 19);
+        }, 0, 50, 9).drawBack(false).recipeContext(this).customBackground(null, 0, 0, 19, 19);
+        widgets.addSlot(log, 50, 34).drawBack(false).recipeContext(this).customBackground(null, 0, 0, 19, 19);
     }
 }
