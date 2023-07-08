@@ -217,33 +217,35 @@
   "text.autoconfig.hexcasting.option.server.scrollInjectionsRaw.@Tooltip": "Maps the names of loot tables to the amount of per-world patterns on scrolls should go in them. There's about a 50% chance to get any scrolls in a given chest marked here; once that is met, between 1 and that many scrolls are generated.",
   "text.autoconfig.hexcasting.option.server.amethystShardModification.@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",
   
-  "advancement.hexcasting:root": "Hexcasting Research",
-  "advancement.hexcasting:root.desc": "Find and mine a concentrated form of media growing deep beneath the earth.",
-  "advancement.hexcasting:enlightenment": "Achieve Enlightenment",
-  "advancement.hexcasting:enlightenment.desc": "Shatter a barrier by casting a hex using almost all of your health.",
-  "advancement.hexcasting:wasteful_cast": "Waste Not...",
-  "advancement.hexcasting:wasteful_cast.desc": "Waste a large amount of media when casting a hex.",
-  "advancement.hexcasting:big_cast": "... Want Not",
-  "advancement.hexcasting:big_cast.desc": "Cast a single spell requiring a truly huge amount of media.",
-  "advancement.hexcasting:y_u_no_cast_angy": "Blind Diversion",
-  "advancement.hexcasting:y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
-  "advancement.hexcasting:opened_eyes": "Opened Eyes",
-  "advancement.hexcasting:opened_eyes.desc": "Have nature take a piece of your mind in payment for a hex. What might happen if you let it have more?",
-  "advancement.hexcasting:lore": "Hexcasting Lore",
-  "advancement.hexcasting:lore.desc": "Read a Lore Fragment",
-  "advancement.hexcasting:lore/cardamom1": "Cardamom Steles #1",
-  "advancement.hexcasting:lore/cardamom1.desc": "Letter from Cardamom Steles to Her Father, #1",
-  "advancement.hexcasting:lore/cardamom2": "Cardamom Steles #2",
-  "advancement.hexcasting:lore/cardamom2.desc": "Letter from Cardamom Steles to Her Father, #2",
-  "advancement.hexcasting:lore/cardamom3": "Cardamom Steles #3",
-  "advancement.hexcasting:lore/cardamom3.desc": "Letter from Cardamom Steles to Her Father, #3, 1/2",
-  "advancement.hexcasting:lore/cardamom4": "Cardamom Steles #3 pt2",
-  "advancement.hexcasting:lore/cardamom4.desc": "Letter from Cardamom Steles to Her Father, #3, 2/2",
-  "advancement.hexcasting:lore/cardamom5": "Cardamom Steles #4",
-  "advancement.hexcasting:lore/cardamom5.desc": "Letter from Cardamom Steles to Her Father, #4",
-  "advancement.hexcasting:lore/experiment1": "Wooleye Instance Notes",
-  "advancement.hexcasting:lore/experiment2": "Wooleye Interview Logs",
-  "advancement.hexcasting:lore/inventory": "Restoration Log 72",
+  "advancement.hexcasting:": {
+    "root": "Hexcasting Research",
+    "root.desc": "Find and mine a concentrated form of media growing deep beneath the earth.",
+    "enlightenment": "Achieve Enlightenment",
+    "enlightenment.desc": "Shatter a barrier by casting a hex using almost all of your health.",
+    "wasteful_cast": "Waste Not...",
+    "wasteful_cast.desc": "Waste a large amount of media when casting a hex.",
+    "big_cast": "... Want Not",
+    "big_cast.desc": "Cast a single spell requiring a truly huge amount of media.",
+    "y_u_no_cast_angy": "Blind Diversion",
+    "y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
+    "opened_eyes": "Opened Eyes",
+    "opened_eyes.desc": "Have nature take a piece of your mind in payment for a hex. What might happen if you let it have more?",
+    "lore": "Hexcasting Lore",
+    "lore.desc": "Read a Lore Fragment",
+    "lore/cardamom1": "Cardamom Steles #1",
+    "lore/cardamom1.desc": "Letter from Cardamom Steles to Her Father, #1",
+    "lore/cardamom2": "Cardamom Steles #2",
+    "lore/cardamom2.desc": "Letter from Cardamom Steles to Her Father, #2",
+    "lore/cardamom3": "Cardamom Steles #3",
+    "lore/cardamom3.desc": "Letter from Cardamom Steles to Her Father, #3, 1/2",
+    "lore/cardamom4": "Cardamom Steles #3 pt2",
+    "lore/cardamom4.desc": "Letter from Cardamom Steles to Her Father, #3, 2/2",
+    "lore/cardamom5": "Cardamom Steles #4",
+    "lore/cardamom5.desc": "Letter from Cardamom Steles to Her Father, #4",
+    "lore/experiment1": "Wooleye Instance Notes",
+    "lore/experiment2": "Wooleye Interview Logs",
+    "lore/inventory": "Restoration Log 72",
+  },
   
   "stat.hexcasting.media_used": "Media Consumed (in dust)",
   "stat.hexcasting.media_overcasted": "Media Overcast (in dust)",
@@ -253,13 +255,15 @@
   "death.attack.hexcasting.overcast": "%s's mind was subsumed into energy",
   "death.attack.hexcasting.shame": "Shame on %s!",
   
-  "command.hexcasting.pats.listing": "Patterns in this world:",
-  "command.hexcasting.pats.all": "Gave all %d scrolls to %s",
-  "command.hexcasting.pats.specific.success": "Gave %s with id %s to %s",
-  "command.hexcasting.recalc": "Recalculated patterns",
-  "command.hexcasting.brainsweep": "Brainswept %s",
-  "command.hexcasting.brainsweep.fail.badtype": "%s is not a mob",
-  "command.hexcasting.brainsweep.fail.already": "%s is already empty",
+  "command.hexcasting": {
+    "pats.listing": "Patterns in this world:",
+    "pats.all": "Gave all %d scrolls to %s",
+    "pats.specific.success": "Gave %s with id %s to %s",
+    "recalc": "Recalculated patterns",
+    "brainsweep": "Brainswept %s",
+    "brainsweep.fail.badtype": "%s is not a mob",
+    "brainsweep.fail.already": "%s is already empty",
+  },
   
   hexcasting: {
     "pattern.unknown": "Unknown pattern resource location %s",
@@ -734,40 +738,36 @@
       many_exits: "The flow of media at %s had too many exits"
     },
     
-    // Patchi stuff!
-    landing: ">>>\
-|     I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid.\
-|     It fascinates me. I've decided to start a journal of my thoughts and findings.\
-|     $(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
+
+    // === Patchi stuff! ===
+
+    
+    landing: "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. \
+      It fascinates me. I've decided to start a journal of my thoughts and findings. \
+      $(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
     
     category: {
       basics: {
         "": "Getting Started",
-        "desc": ">>>\
-|         The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)Staff/$-- \
-|         or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them.\
-|         How might I do the same?"
+        "desc": "The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)Staff/$--\
+          or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them.\
+          How might I do the same?"
       },
       casting: {
         "": "Hex Casting",
-        desc: ">>>\
-|         I've started to understand how the old masters cast their _Hexes! It's a bit complicated,\
-|         but I'm sure I can figure it out. Let's see..."
+        desc: "I've started to understand how the old masters cast their _Hexes! It's a bit complicated,\
+          but I'm sure I can figure it out. Let's see..."
       },
       items: {
         "": "Items",
-        desc: ">>>\
-|         I devote this section to the magical and mysterious items I might encounter in my studies.$(br2)\
-|         It seems like many of these items have uses when held alongside my $(l:items/staff)$(item)staff/$.\
-|         I suppose I will have to choose what goes in my other hand carefully."
+        desc: "I devote this section to the magical and mysterious items I might encounter in my studies."
       },
       
       greatwork: {
         "": "The Great Work",
-        desc: ">>>\
-|         I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction.\
-|         I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy.\
-|         I have seen I have seen I have s$(k)get stick bugged lmao/$",
+        desc: "I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction.\
+          I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy.\
+          I have seen I have seen I have s$(k)get stick bugged lmao/$",
         // alwinfy you think you're so funny
       },
 
@@ -794,12 +794,15 @@
       },
       great_spells: {
         "": "Great Spells",
-        desc: ">>>\
-|         The spells catalogued here are purported to be of legendary difficulty and power.\
-|         They seem to have been recorded only sparsely (for good reason, the texts claim).\
-|         It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
-|         What could possibly go wrong?"
+        desc: "The spells catalogued here are purported to be of legendary difficulty and power.\
+          They seem to have been recorded only sparsely (for good reason, the texts claim).\
+          It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
+          What could possibly go wrong?"
       },
+
+      
+      lore: "Lore",
+      interop: "Cross-Mod Interactions",
     },
     // ^ categories
     
@@ -1561,6 +1564,5 @@
       "interop.pehkui.get": "Get the scale of the entity, as a proportion of their normal size. For most entities, this will be 1.",
       "interop.pehkui.set": "Set the scale of the entity, passing in a proportion of their normal size. Costs about 1 $(item)Amethyst Shard/$."
     }
-  },
-  
+  }
 }
