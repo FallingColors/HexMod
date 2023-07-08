@@ -23,12 +23,12 @@ object OpMakeBattery : SpellAction {
     override val argc = 1
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)
 
-        val (handStack, hand) = ctx.getHeldItemToOperateOn { it.`is`(HexTags.Items.PHIAL_BASE) }
+        val (handStack, hand) = env.getHeldItemToOperateOn { it.`is`(HexTags.Items.PHIAL_BASE) }
             ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "bottle") // TODO: hack
 
         if (hand == null)
@@ -49,7 +49,7 @@ object OpMakeBattery : SpellAction {
             )
         }
 
-        ctx.assertEntityInRange(entity)
+        env.assertEntityInRange(entity)
 
         if (!isMediaItem(entity.item) || extractMedia(
                 entity.item,
@@ -71,12 +71,12 @@ object OpMakeBattery : SpellAction {
     }
 
     private data class Spell(val itemEntity: ItemEntity, val hand: InteractionHand) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             if (itemEntity.isAlive) {
                 val entityStack = itemEntity.item.copy()
                 val mediamount = extractMedia(entityStack, drainForBatteries = true)
                 if (mediamount > 0) {
-                    ctx.caster?.setItemInHand(
+                    env.caster?.setItemInHand(
                         hand,
                         ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY), mediamount, mediamount)
                     ) ?: return

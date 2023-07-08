@@ -33,8 +33,8 @@ object OpPrint : Action {
     }
 
     private data class Spell(val datum: Iota) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
-            ctx.printMessage(datum.display())
+        override fun cast(env: CastingEnvironment) {
+            env.printMessage(datum.display())
         }
     }
 }

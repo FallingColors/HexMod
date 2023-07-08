@@ -21,13 +21,13 @@ object OpAddMotion : SpellAction {
     val MAX_MOTION: Double = 8192.0
 
     override fun executeWithUserdata(
-        args: List<Iota>,
-        ctx: CastingEnvironment,
-        userData: CompoundTag
+            args: List<Iota>,
+            env: CastingEnvironment,
+            userData: CompoundTag
     ): SpellAction.Result {
         val target = args.getEntity(0, argc)
         val motion = args.getVec3(1, argc)
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
         var motionForCost = motion.lengthSqr()
         if (CastingImage.checkAndMarkGivenMotion(userData, target))
@@ -51,12 +51,12 @@ object OpAddMotion : SpellAction {
         )
     }
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): SpellAction.Result {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         throw IllegalStateException()
     }
 
     private data class Spell(val target: Entity, val motion: Vec3) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             target.push(motion.x, motion.y, motion.z)
             target.hurtMarked = true // Whyyyyy
         }

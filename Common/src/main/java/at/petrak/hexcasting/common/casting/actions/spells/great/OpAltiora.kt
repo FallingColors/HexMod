@@ -19,9 +19,9 @@ import kotlin.math.max
 object OpAltiora : SpellAction {
     override val argc = 1
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): SpellAction.Result {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val target = args.getPlayer(0, argc)
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
         return SpellAction.Result(
             Spell(target),
@@ -34,7 +34,7 @@ object OpAltiora : SpellAction {
     }
 
     private data class Spell(val target: ServerPlayer) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             target.push(0.0, 1.5, 0.0)
             // They won't move otherwise?
             target.hurtMarked = true

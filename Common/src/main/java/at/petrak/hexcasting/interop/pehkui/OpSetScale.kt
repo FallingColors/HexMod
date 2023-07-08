@@ -14,8 +14,8 @@ object OpSetScale : SpellAction {
     override val argc = 2
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getEntity(0, argc)
         val scale = args.getDoubleBetween(1, 1.0 / 32.0, 8.0, argc)
@@ -28,7 +28,7 @@ object OpSetScale : SpellAction {
     }
 
     private data class Spell(val target: Entity, val scale: Double) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             IXplatAbstractions.INSTANCE.pehkuiApi.setScale(target, scale.toFloat())
         }
     }

@@ -13,10 +13,10 @@ object OpErase : SpellAction {
     override val argc = 0
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
-        val (handStack, hand) = ctx.getHeldItemToOperateOn {
+        val (handStack, hand) = env.getHeldItemToOperateOn {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
@@ -40,7 +40,7 @@ object OpErase : SpellAction {
     }
 
     private data class Spell(val stack: ItemStack) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(stack)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack)
 

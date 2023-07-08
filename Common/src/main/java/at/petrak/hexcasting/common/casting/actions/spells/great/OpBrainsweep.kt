@@ -32,17 +32,17 @@ object OpBrainsweep : SpellAction {
     override fun hasCastingSound(ctx: CastingEnvironment) = false
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val sacrifice = args.getMob(0, argc)
         val vecPos = args.getVec3(1, argc)
         val pos = BlockPos.containing(vecPos)
 
-        ctx.assertVecInRange(vecPos)
-        ctx.assertEntityInRange(sacrifice)
+        env.assertVecInRange(vecPos)
+        env.assertEntityInRange(sacrifice)
 
-        if (!ctx.canEditBlockAt(pos))
+        if (!env.canEditBlockAt(pos))
             throw MishapBadLocation(vecPos, "forbidden")
 
         if (sacrifice.type.`is`(HexTags.Entities.NO_BRAINSWEEPING))
@@ -51,11 +51,11 @@ object OpBrainsweep : SpellAction {
         if (IXplatAbstractions.INSTANCE.isBrainswept(sacrifice))
             throw MishapAlreadyBrainswept(sacrifice)
 
-        val state = ctx.world.getBlockState(pos)
+        val state = env.world.getBlockState(pos)
 
-        val recman = ctx.world.recipeManager
+        val recman = env.world.recipeManager
         val recipes = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)
-        val recipe = recipes.find { it.matches(state, sacrifice, ctx.world) }
+        val recipe = recipes.find { it.matches(state, sacrifice, env.world) }
             ?: throw MishapBadBrainsweep(sacrifice, pos)
 
         return SpellAction.Result(
@@ -71,18 +71,18 @@ object OpBrainsweep : SpellAction {
         val sacrifice: Mob,
         val recipe: BrainsweepRecipe
     ) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
-            ctx.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
+        override fun cast(env: CastingEnvironment) {
+            env.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
 
             IXplatAbstractions.INSTANCE.setBrainsweepAddlData(sacrifice)
             if (sacrifice is Villager && HexConfig.server().doVillagersTakeOffenseAtMindMurder()) {
-                ctx.caster?.let { sacrifice.tellWitnessesThatIWasMurdered(it) }
+                env.caster?.let { sacrifice.tellWitnessesThatIWasMurdered(it) }
             }
 
             val sound = (sacrifice as AccessorLivingEntity).`hex$getDeathSound`()
             if (sound != null)
-                ctx.world.playSound(null, sacrifice, sound, SoundSource.AMBIENT, 0.8f, 1f)
-            ctx.world.playSound(null, sacrifice, SoundEvents.PLAYER_LEVELUP, SoundSource.AMBIENT, 0.5f, 0.8f)
+                env.world.playSound(null, sacrifice, sound, SoundSource.AMBIENT, 0.8f, 1f)
+            env.world.playSound(null, sacrifice, SoundEvents.PLAYER_LEVELUP, SoundSource.AMBIENT, 0.5f, 0.8f)
         }
     }
 }

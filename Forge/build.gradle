@@ -34,6 +34,11 @@ pkSubproj {
 repositories {
     mavenCentral()
 
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
+    flatDir {
+        dir 'libs'
+    }
+
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
@@ -53,11 +58,6 @@ repositories {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
         content { includeGroup "thedarkcolour" }
-    }
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    flatDir {
-        dir 'libs'
     }
 }
 

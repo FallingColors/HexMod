@@ -27,12 +27,12 @@ import kotlin.math.roundToInt
 class OpFlight(val type: Type) : SpellAction {
     override val argc = 2
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getPlayer(0, argc)
         val theArg = args.getPositiveDouble(1, argc)
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
         val cost = when (this.type) {
             Type.LimitRange -> theArg * MediaConstants.DUST_UNIT
@@ -55,7 +55,7 @@ class OpFlight(val type: Type) : SpellAction {
     }
 
     data class Spell(val type: Type, val target: ServerPlayer, val theArg: Double) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             if (target.abilities.mayfly) {
                 // Don't accidentally clobber someone else's flight
                 // TODO make this a mishap?

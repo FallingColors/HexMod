@@ -18,14 +18,14 @@ object OpEdifySapling : SpellAction {
     override val argc = 1
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
         val pos = BlockPos.containing(vecPos)
-        ctx.assertPosInRangeForEditing(pos)
+        env.assertPosInRangeForEditing(pos)
 
-        val bs = ctx.world.getBlockState(pos)
+        val bs = env.world.getBlockState(pos)
         if (!bs.`is`(BlockTags.SAPLINGS))
             throw MishapBadBlock.of(pos, "sapling")
 
@@ -37,21 +37,21 @@ object OpEdifySapling : SpellAction {
     }
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
-            val blockstate = ctx.world.getBlockState(pos)
-            if (!ctx.canEditBlockAt(pos) ||
-                !IXplatAbstractions.INSTANCE.isBreakingAllowed(ctx.world, pos, blockstate, ctx.caster)
+        override fun cast(env: CastingEnvironment) {
+            val blockstate = env.world.getBlockState(pos)
+            if (!env.canEditBlockAt(pos) ||
+                !IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockstate, env.caster)
             )
                 return
 
-            val bs = ctx.world.getBlockState(pos)
+            val bs = env.world.getBlockState(pos)
             for (i in 0 until 8) {
                 val success = AkashicTreeGrower.INSTANCE.growTree(
-                    ctx.world,
-                    ctx.world.chunkSource.generator,
+                    env.world,
+                    env.world.chunkSource.generator,
                     pos,
                     bs,
-                    ctx.world.getRandom()
+                    env.world.getRandom()
                 )
                 if (success) break
             }

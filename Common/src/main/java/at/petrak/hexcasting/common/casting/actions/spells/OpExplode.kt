@@ -10,7 +10,6 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
-import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 
@@ -19,12 +18,12 @@ class OpExplode(val fire: Boolean) : SpellAction {
         get() = 2
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val pos = args.getVec3(0, argc)
         val strength = args.getPositiveDoubleUnderInclusive(1, 10.0, argc)
-        ctx.assertVecInRange(pos)
+        env.assertVecInRange(pos)
 
         val clampedStrength = Mth.clamp(strength, 0.0, 10.0)
         val cost = MediaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 1.0 else 0.125)
@@ -36,13 +35,13 @@ class OpExplode(val fire: Boolean) : SpellAction {
     }
 
     private data class Spell(val pos: Vec3, val strength: Double, val fire: Boolean) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             // TODO: you can use this to explode things *outside* of the worldborder?
-            if (!ctx.canEditBlockAt(BlockPos.containing(pos)))
+            if (!env.canEditBlockAt(BlockPos.containing(pos)))
                 return
 
-            ctx.world.explode(
-                ctx.caster,
+            env.world.explode(
+                env.caster,
                 pos.x,
                 pos.y,
                 pos.z,

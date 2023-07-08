@@ -22,12 +22,12 @@ import net.minecraft.world.phys.Vec3
 object OpDestroyFluid : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
         val pos = BlockPos.containing(vecPos)
-        ctx.assertPosInRangeForEditing(pos)
+        env.assertPosInRangeForEditing(pos)
 
         return SpellAction.Result(
             Spell(pos),
@@ -40,14 +40,14 @@ object OpDestroyFluid : SpellAction {
 
     private data class Spell(val basePos: BlockPos) : RenderedSpell {
 
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             // Try draining from fluid handlers first, and if so, don't do the normal behavior
-            if (IXplatAbstractions.INSTANCE.drainAllFluid(ctx.world, basePos)) {
+            if (IXplatAbstractions.INSTANCE.drainAllFluid(env.world, basePos)) {
                 return
             } else {
-                val state = ctx.world.getBlockState(basePos)
+                val state = env.world.getBlockState(basePos)
                 if (state.block is AbstractCauldronBlock && state.block != Blocks.CAULDRON) {
-                    ctx.world.setBlock(basePos, Blocks.CAULDRON.defaultBlockState(), 3)
+                    env.world.setBlock(basePos, Blocks.CAULDRON.defaultBlockState(), 3)
                     return
                 }
             }
@@ -64,41 +64,41 @@ object OpDestroyFluid : SpellAction {
             var successes = 0
             while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
                 val here = todo.removeFirst()
-                if (ctx.canEditBlockAt(here) && seen.add(here)) {
+                if (env.canEditBlockAt(here) && seen.add(here)) {
                     // never seen this pos in my life
-                    val fluid = ctx.world.getFluidState(here)
+                    val fluid = env.world.getFluidState(here)
                     if (fluid != Fluids.EMPTY.defaultFluidState()) {
-                        val blockstate = ctx.world.getBlockState(here)
+                        val blockstate = env.world.getBlockState(here)
                         if (IXplatAbstractions.INSTANCE.isBreakingAllowed(
-                                ctx.world,
+                                env.world,
                                 here,
                                 blockstate,
-                                ctx.caster
+                                env.caster
                             )
                         ) {
                             val success =
                                 if (blockstate.block is BucketPickup && !(blockstate.block as BucketPickup).pickupBlock(
-                                        ctx.world,
+                                        env.world,
                                         here,
                                         blockstate
                                     ).isEmpty
                                 ) {
                                     true
                                 } else if (blockstate.block is LiquidBlock) {
-                                    ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
+                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
                                     true
                                 } else if (blockstate.tags.anyMatch { it == HexTags.Blocks.WATER_PLANTS }) {
                                     val blockentity: BlockEntity? =
-                                        if (blockstate.hasBlockEntity()) ctx.world.getBlockEntity(here) else null
-                                    Block.dropResources(blockstate, ctx.world, here, blockentity)
-                                    ctx.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
+                                        if (blockstate.hasBlockEntity()) env.world.getBlockEntity(here) else null
+                                    Block.dropResources(blockstate, env.world, here, blockentity)
+                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
                                     true
                                 } else {
                                     false
                                 }
 
                             if (success) {
-                                ctx.world.sendParticles(
+                                env.world.sendParticles(
                                     ParticleTypes.SMOKE,
                                     here.x + 0.5 + Math.random() * 0.4 - 0.2,
                                     here.y + 0.5 + Math.random() * 0.4 - 0.2,
@@ -120,7 +120,7 @@ object OpDestroyFluid : SpellAction {
             }
 
             if (successes > 0) {
-                ctx.world.playSound(
+                env.world.playSound(
                     null,
                     basePos.x + 0.5,
                     basePos.y + 0.5,

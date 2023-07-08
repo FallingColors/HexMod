@@ -19,21 +19,21 @@ object OpAkashicWrite : SpellAction {
     override val argc = 3
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val pos = args.getBlockPos(0, argc)
         val key = args.getPattern(1, argc)
         val datum = args.get(2)
 
-        ctx.assertPosInRange(pos)
+        env.assertPosInRange(pos)
 
-        val record = ctx.world.getBlockState(pos).block
+        val record = env.world.getBlockState(pos).block
         if (record !is BlockAkashicRecord) {
             throw MishapNoAkashicRecord(pos)
         }
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.caster)
         if (trueName != null)
             throw MishapOthersName(trueName)
 
@@ -51,10 +51,10 @@ object OpAkashicWrite : SpellAction {
         val datum: Iota
     ) :
         RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
-            record.addNewDatum(recordPos, ctx.world, key, datum)
+        override fun cast(env: CastingEnvironment) {
+            record.addNewDatum(recordPos, env.world, key, datum)
 
-            ctx.world.playSound(
+            env.world.playSound(
                 null, recordPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
                 1f, 0.8f
             )

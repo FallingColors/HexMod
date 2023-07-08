@@ -17,12 +17,12 @@ object OpBreakBlock : SpellAction {
         get() = 1
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
         val pos = BlockPos.containing(vecPos)
-        ctx.assertPosInRangeForEditing(pos)
+        env.assertPosInRangeForEditing(pos)
 
         return SpellAction.Result(
             Spell(pos),
@@ -32,16 +32,16 @@ object OpBreakBlock : SpellAction {
     }
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
-            val blockstate = ctx.world.getBlockState(pos)
+        override fun cast(env: CastingEnvironment) {
+            val blockstate = env.world.getBlockState(pos)
             val tier = HexConfig.server().opBreakHarvestLevel()
 
             if (
                 !blockstate.isAir
-                && blockstate.getDestroySpeed(ctx.world, pos) >= 0f // fix being able to break bedrock &c
+                && blockstate.getDestroySpeed(env.world, pos) >= 0f // fix being able to break bedrock &c
                 && IXplatAbstractions.INSTANCE.isCorrectTierForDrops(tier, blockstate)
             ) {
-                ctx.world.destroyBlock(pos, true, ctx.caster)
+                env.world.destroyBlock(pos, true, env.caster)
             }
         }
     }

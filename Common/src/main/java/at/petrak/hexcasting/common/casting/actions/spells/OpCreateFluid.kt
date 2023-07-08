@@ -20,17 +20,17 @@ import net.minecraft.world.phys.Vec3
 class OpCreateFluid(val cost: Int, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
         val pos = BlockPos.containing(vecPos)
 
-        if (!ctx.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
-                ctx.world,
+        if (!env.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
+                env.world,
                 pos,
                 ItemStack(bucket),
-                ctx.caster
+                env.caster
             )
         )
             throw MishapBadLocation(vecPos, "forbidden")
@@ -43,20 +43,20 @@ class OpCreateFluid(val cost: Int, val bucket: Item, val cauldron: BlockState, v
     }
 
     private data class Spell(val pos: BlockPos, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
 
-            val state = ctx.world.getBlockState(pos)
+            val state = env.world.getBlockState(pos)
 
             if (state.block == Blocks.CAULDRON)
-                ctx.world.setBlock(pos, cauldron, 3)
+                env.world.setBlock(pos, cauldron, 3)
             else if (!IXplatAbstractions.INSTANCE.tryPlaceFluid(
-                    ctx.world,
-                    ctx.castingHand,
+                    env.world,
+                    env.castingHand,
                     pos,
                     fluid
                 ) && bucket is BucketItem) {
                 // make the player null so we don't give them a usage statistic for example
-                bucket.emptyContents(null, ctx.world, pos, null)
+                bucket.emptyContents(null, env.world, pos, null)
             }
         }
     }

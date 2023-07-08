@@ -17,13 +17,13 @@ object OpLightning : SpellAction {
     override val argc = 1
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getVec3(0, argc)
-        ctx.assertVecInRange(target)
+        env.assertVecInRange(target)
 
-        if (!ctx.canEditBlockAt(BlockPos.containing(target)))
+        if (!env.canEditBlockAt(BlockPos.containing(target)))
             throw MishapBadLocation(target, "forbidden")
 
         return SpellAction.Result(
@@ -34,11 +34,11 @@ object OpLightning : SpellAction {
     }
 
     private data class Spell(val target: Vec3) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
 
-            val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, ctx.world)
+            val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, env.world)
             lightning.setPosRaw(target.x, target.y, target.z)
-            ctx.world.addWithUUID(lightning) // why the hell is it called this it doesnt even involve a uuid
+            env.world.addWithUUID(lightning) // why the hell is it called this it doesnt even involve a uuid
         }
     }
 }

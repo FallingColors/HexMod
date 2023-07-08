@@ -28,23 +28,23 @@ import net.minecraft.world.phys.Vec3
 object OpTeleport : SpellAction {
     override val argc = 2
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
 
         val teleportee = args.getEntity(0, argc)
         val delta = args.getVec3(1, argc)
-        ctx.assertEntityInRange(teleportee)
+        env.assertEntityInRange(teleportee)
 
         if (!teleportee.canChangeDimensions() || teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
 
         val targetPos = teleportee.position().add(delta)
-        if (!HexConfig.server().canTeleportInThisDimension(ctx.world.dimension()))
+        if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
             throw MishapBadLocation(targetPos, "bad_dimension")
 
-        ctx.assertVecInWorld(targetPos)
-        if (!ctx.isVecInWorld(targetPos.subtract(0.0, 1.0, 0.0)))
+        env.assertVecInWorld(targetPos)
+        if (!env.isVecInWorld(targetPos.subtract(0.0, 1.0, 0.0)))
             throw MishapBadLocation(targetPos, "too_close_to_out")
 
         val targetMiddlePos = teleportee.position().add(0.0, teleportee.eyeHeight / 2.0, 0.0)
@@ -57,12 +57,12 @@ object OpTeleport : SpellAction {
     }
 
     private data class Spell(val teleportee: Entity, val delta: Vec3) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             val distance = delta.length()
 
-            teleportRespectSticky(teleportee, delta, ctx.world)
+            teleportRespectSticky(teleportee, delta, env.world)
 
-            if (teleportee is ServerPlayer && teleportee == ctx.caster) {
+            if (teleportee is ServerPlayer && teleportee == env.caster) {
                 // Drop items conditionally, based on distance teleported.
                 // MOST IMPORTANT: Never drop main hand item, since if it's a trinket, it will get duplicated later.
 
