@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Map;
 
@@ -22,11 +23,12 @@ public class FabricModelManagerMixin {
     private Map<ResourceLocation, BakedModel> bakedRegistry;
 
     @Inject(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/ModelBakery;" +
-        "getBakedTopLevelModels()Ljava/util/Map;", shift = At.Shift.AFTER), method = "Lnet/minecraft/client/" +
-            "resources/model/ModelManager;apply(Lnet/minecraft/client/resources/model/ModelManager$ReloadState;" +
-            "Lnet/minecraft/util/profiling/ProfilerFiller;)V")
-    private void onModelBake(ModelBakery modelLoader, ResourceManager resourceManager, ProfilerFiller profiler,
-        CallbackInfo ci) {
+        "getBakedTopLevelModels()Ljava/util/Map;", shift = At.Shift.AFTER),
+        method = "Lnet/minecraft/client/resources/model/ModelManager;apply(" +
+                "Lnet/minecraft/client/resources/model/ModelManager$ReloadState;" +
+                "Lnet/minecraft/util/profiling/ProfilerFiller;)V",
+        locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    private void onModelBake(ModelManager.ReloadState reloadState, ProfilerFiller profiler, CallbackInfo ci, ModelBakery modelLoader) {
         RegisterClientStuff.onModelBake(modelLoader, this.bakedRegistry);
     }
 }

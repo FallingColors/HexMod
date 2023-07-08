@@ -49,16 +49,15 @@
     "minecraft": "=1.20.1",
     "java": ">=17",
     "fabricloader": ">=0.14",
-    "fabric": ">=0.64",
-    "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
+    "fabric": ">=0.84",
+    "fabric-language-kotlin": ">=1.9.5+kotlin.1.8.22",
     "cardinal-components": "~5.2.1",
     "paucal": "0.6.x",
     "cloth-config": "11.0.x",
     "patchouli": ">=1.20.1-80"
   },
   "suggests": {
-    "gravitychanger": "0.7.21+fabric",
-    "pehkui": "3.6.0+1.14.4-1.19"
+    "pehkui": "3.7.6"
   },
   "custom": {
     "cardinal-components": [
@@ -72,7 +71,8 @@
       "hexcasting:pigment",
       "hexcasting:iota_holder",
       "hexcasting:media_holder",
-      "hexcasting:hex_holder"
+      "hexcasting:hex_holder",
+      "hexcasting:variant_item"
     ]
   }
 }
