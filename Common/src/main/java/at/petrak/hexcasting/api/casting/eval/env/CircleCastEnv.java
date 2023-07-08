@@ -15,13 +15,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv.SENTINEL_RADIUS;
 
@@ -129,11 +129,6 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public ItemStack getAlternateItem() {
-        return ItemStack.EMPTY.copy(); // TODO: adjacent inventory/item frame?
-    }
-
-    @Override
     protected List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
         return new ArrayList<>(); // TODO: Could do something like get items in inventories adjacent to the circle?
     }
@@ -141,6 +136,11 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     protected List<HeldItemInfo> getPrimaryStacks() {
         return List.of(); // TODO: Adjacent inv!
+    }
+
+    @Override
+    public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
+        return false; // TODO: Adjacent inv!
     }
 
     @Override

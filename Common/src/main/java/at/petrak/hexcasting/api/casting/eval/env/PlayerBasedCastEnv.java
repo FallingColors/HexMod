@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -121,6 +122,48 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             this.castingHand));
     }
 
+    ItemStack getAlternateItem() {
+        var otherHand = HexUtils.otherHand(this.castingHand);
+        var stack = this.caster.getItemInHand(otherHand);
+        if (stack.isEmpty()) {
+            return ItemStack.EMPTY.copy();
+        } else {
+            return stack;
+        }
+    }
+
+    @Override
+    public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
+        if (caster == null)
+            return false;
+
+        if (hand != null && stackOk.test(caster.getItemInHand(hand))) {
+            caster.setItemInHand(hand, replaceWith);
+            return true;
+        }
+
+        Inventory inv = this.caster.getInventory();
+        for (int i = inv.items.size() - 1; i >= 0; i--) {
+            if (i != inv.selected) {
+                if (stackOk.test(inv.items.get(i))) {
+                    inv.setItem(i, replaceWith);
+                    return true;
+                }
+            }
+        }
+
+        if (stackOk.test(caster.getItemInHand(getOtherHand()))) {
+            caster.setItemInHand(getOtherHand(), replaceWith);
+            return true;
+        }
+        if (stackOk.test(caster.getItemInHand(getCastingHand()))) {
+            caster.setItemInHand(getCastingHand(), replaceWith);
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public boolean isVecInRange(Vec3 vec) {
         var sentinel = HexAPI.instance().getSentinel(this.caster);
@@ -138,17 +181,6 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     @Override
     public boolean hasEditPermissionsAt(BlockPos vec) {
         return this.caster.gameMode.getGameModeForPlayer() != GameType.ADVENTURE && this.world.mayInteract(this.caster, vec);
-    }
-
-    @Override
-    public ItemStack getAlternateItem() {
-        var otherHand = HexUtils.otherHand(this.castingHand);
-        var stack = this.caster.getItemInHand(otherHand);
-        if (stack.isEmpty()) {
-            return ItemStack.EMPTY.copy();
-        } else {
-            return stack;
-        }
     }
 
     /**

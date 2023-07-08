@@ -31,9 +31,6 @@ object OpMakeBattery : SpellAction {
         val (handStack, hand) = env.getHeldItemToOperateOn { it.`is`(HexTags.Items.PHIAL_BASE) }
             ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "bottle") // TODO: hack
 
-        if (hand == null)
-            throw MishapBadOffhandItem.of(handStack, null, "havent_handled_null_hand_yet") // TODO: hack!
-
         if (!handStack.`is`(HexTags.Items.PHIAL_BASE)) {
             throw MishapBadOffhandItem.of(
                 handStack,
@@ -64,28 +61,27 @@ object OpMakeBattery : SpellAction {
         }
 
         return SpellAction.Result(
-            Spell(entity, hand),
+            Spell(entity, handStack, hand),
             MediaConstants.CRYSTAL_UNIT,
             listOf(ParticleSpray.burst(entity.position(), 0.5))
         )
     }
 
-    private data class Spell(val itemEntity: ItemEntity, val hand: InteractionHand) : RenderedSpell {
+    private data class Spell(val itemEntity: ItemEntity, val handStack: ItemStack, val hand: InteractionHand?) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            if (itemEntity.isAlive) {
-                val entityStack = itemEntity.item.copy()
-                val mediamount = extractMedia(entityStack, drainForBatteries = true)
-                if (mediamount > 0) {
-                    env.caster?.setItemInHand(
-                        hand,
-                        ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY), mediamount, mediamount)
-                    ) ?: return
-                }
+            if (!itemEntity.isAlive)
+                return
 
-                itemEntity.item = entityStack
-                if (entityStack.isEmpty)
-                    itemEntity.kill()
+            val entityStack = itemEntity.item.copy()
+            val mediamount = extractMedia(entityStack, drainForBatteries = true)
+            if (mediamount > 0) {
+                if (!env.replaceItem({ it == handStack }, ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY), mediamount, mediamount), hand))
+                    return
             }
+
+            itemEntity.item = entityStack
+            if (entityStack.isEmpty)
+                itemEntity.kill()
         }
     }
 }

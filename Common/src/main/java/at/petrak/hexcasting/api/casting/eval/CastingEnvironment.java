@@ -169,14 +169,6 @@ public abstract class CastingEnvironment {
     }
 
     /**
-     * Get the item in the "other hand."
-     * <p>
-     * If that hand is empty, or if they cannot have that hand, return Empty.
-     * Probably return a clone of Empty, actually...
-     */
-    public abstract ItemStack getAlternateItem();
-
-    /**
      * Get all the item stacks this env can use.
      */
     protected abstract List<ItemStack> getUsableStacks(StackDiscoveryMode mode);
@@ -251,6 +243,9 @@ public abstract class CastingEnvironment {
             if (stackOk.test(stack)) {
                 presentCount += stack.getCount();
                 matches.add(stack);
+
+                if (presentCount >= count)
+                    break;
             }
         }
         if (presentCount < count) {
@@ -261,7 +256,7 @@ public abstract class CastingEnvironment {
             return true;
         } // Otherwise do the removal
 
-        var remaining = presentCount;
+        var remaining = count;
         for (ItemStack match : matches) {
             var toWithdraw = Math.min(match.getCount(), remaining);
             match.shrink(toWithdraw);
@@ -274,6 +269,12 @@ public abstract class CastingEnvironment {
 
         throw new IllegalStateException("unreachable");
     }
+
+    /**
+     * Attempt to replace the first stack found which matches the predicate with the stack to replace with.
+     * @return whether it was successful.
+     */
+    public abstract boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand);
 
     /**
      * The order/mode stacks should be discovered in
