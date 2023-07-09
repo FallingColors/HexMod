@@ -422,7 +422,7 @@
         "index_of": "Locator's Distillation",
         "remove_from": "Excisor's Distillation",
         "slice": "Selection Exaltation",
-        "modify_in_place": "Surgeon's Exaltation",
+        "replace": "Surgeon's Exaltation",
         "construct": "Speaker's Distillation",
         "deconstruct": "Speaker's Decomposition",
         
@@ -1307,7 +1307,7 @@
       "lists.reverse": "Reverse the list at the top of the stack.",
       "lists.index_of": "Remove the iota at the top of the stack, then replace the list at the top with the first index of that iota within the list (starting from 0). Replaces the list with -1 if the iota doesn't exist in the list.",
       "lists.remove_from": "Remove the number at the top of the stack, then remove the nth element of the list at the top of the stack (where n is the number you removed).",
-      "lists.modify_in_place": "Remove the top iota of the stack and the number at the top, then set the nth element of the list at the top of the stack to that iota (where n is the number you removed). Does nothing if the number is out of bounds.",
+      "lists.replace": "Remove the top iota of the stack and the number at the top, then set the nth element of the list at the top of the stack to that iota (where n is the number you removed). Does nothing if the number is out of bounds.",
       "lists.last_n_list": "Remove $(italic)num/$ elements from the stack, then add them to a list at the top of the stack.",
       "lists.splat": "Remove the list at the top of the stack, then push its contents to the stack.",
       "lists.construct": "Remove the top iota, then add it as the first element to the list at the top of the stack.",
