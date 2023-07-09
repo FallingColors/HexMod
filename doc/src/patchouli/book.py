@@ -83,7 +83,7 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
         return data, {
             "i18n": I18n(props, data["i18n"]),
             "props": props,
-            "macros": data["macros"] | DEFAULT_MACROS,
+            "macros": DEFAULT_MACROS | data["macros"],
         }
 
     @model_validator(mode="after")
