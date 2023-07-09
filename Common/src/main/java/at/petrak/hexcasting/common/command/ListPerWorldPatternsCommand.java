@@ -1,15 +1,21 @@
 package at.petrak.hexcasting.common.command;
 
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.server.ScrungledPatternsSave;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,9 +25,9 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Collection;
 import java.util.List;
 
-public class ListPatternsCommand {
+public class ListPerWorldPatternsCommand {
     public static void add(LiteralArgumentBuilder<CommandSourceStack> cmd) {
-        cmd.then(Commands.literal("patterns")
+        cmd.then(Commands.literal("perWorldPatterns")
             .requires(dp -> dp.hasPermission(Commands.LEVEL_GAMEMASTERS))
             .then(Commands.literal("list")
                 .executes(ctx -> list(ctx.getSource())))
@@ -57,7 +63,8 @@ public class ListPatternsCommand {
     }
 
     private static int list(CommandSourceStack source) {
-        var keys = PatternRegistryManifest.getAllPerWorldActions();
+
+        var keys = IXplatAbstractions.INSTANCE.getActionRegistry().registryKeySet();
         var listing = keys
             .stream()
             .sorted((a, b) -> compareResLoc(a.location(), b.location()))
@@ -78,34 +85,44 @@ public class ListPatternsCommand {
 
     private static int giveAll(CommandSourceStack source, Collection<ServerPlayer> targets) {
         if (!targets.isEmpty()) {
-            var lookup = PatternRegistryManifest.getAllPerWorldActions();
             var ow = source.getLevel().getServer().overworld();
+            var save = ScrungledPatternsSave.open(ow);
+            Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
 
-            lookup.forEach(key -> {
-                var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(key, ow);
+            int count = 0;
+            for (var entry : regi.entrySet()) {
+                var key = entry.getKey();
+                if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN)) {
+                    var found = save.lookupReverse(key);
+                    var signature = found.getFirst();
+                    var startDir = found.getSecond().canonicalStartDir();
+                    var pat = HexPattern.fromAngles(signature, startDir);
 
-                var tag = new CompoundTag();
-                tag.putString(ItemScroll.TAG_OP_ID, key.location().toString());
-                tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
+                    var tag = new CompoundTag();
+                    tag.putString(ItemScroll.TAG_OP_ID, key.location().toString());
+                    tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
 
-                var stack = new ItemStack(HexItems.SCROLL_LARGE);
-                stack.setTag(tag);
+                    var stack = new ItemStack(HexItems.SCROLL_LARGE);
+                    stack.setTag(tag);
 
-                for (var player : targets) {
-                    var stackEntity = player.drop(stack, false);
-                    if (stackEntity != null) {
-                        stackEntity.setNoPickUpDelay();
-                        stackEntity.setOwner(player.getUUID());
+                    for (var player : targets) {
+                        var stackEntity = player.drop(stack, false);
+                        if (stackEntity != null) {
+                            stackEntity.setNoPickUpDelay();
+                            stackEntity.setOwner(player.getUUID());
+                        }
                     }
+
+                    count++;
                 }
-            });
+            }
 
             source.sendSuccess(
                 Component.translatable("command.hexcasting.pats.all",
-                    lookup.size(),
+                    count,
                     targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
                 true);
-            return lookup.size();
+            return count;
         } else {
             return 0;
         }
