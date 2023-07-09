@@ -1,6 +1,7 @@
 import string
 from abc import ABC, abstractmethod
-from typing import Any, Mapping, Protocol, TypeVar
+from enum import Enum, unique
+from typing import Any, Generic, Mapping, Protocol, TypeVar
 
 from pydantic import field_validator, model_validator
 from pydantic.dataclasses import dataclass
@@ -91,10 +92,11 @@ _K = TypeVar("_K")
 _V = TypeVar("_V")
 
 
-class NoClobberDict(dict[_K, _V]):
-    """Dict which raises KeyError if the key being assigned to is already present."""
-
-    def __setitem__(self, key: Any, value: Any) -> None:
-        if key in self:
-            raise KeyError(f"Key {key} already exists in dict")
-        super().__setitem__(key, value)
+@unique
+class TryGetEnum(Enum):
+    @classmethod
+    def get(cls, value: Any):
+        try:
+            return cls(value)
+        except ValueError:
+            return None

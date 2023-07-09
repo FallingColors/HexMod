@@ -2,20 +2,22 @@
 
 from __future__ import annotations
 
-import contextlib
 import re
 from abc import ABC, abstractmethod
-from dataclasses import InitVar, dataclass as py_dataclass
-from html import escape
-from typing import IO, Any, Callable, ContextManager, Self, cast
+from contextlib import nullcontext
+from enum import Enum, auto
+from typing import Any, Literal, Self, cast
 
 from pydantic import ValidationInfo, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from common.model import DEFAULT_CONFIG
-from common.types import NoClobberDict
+from common.model import DEFAULT_CONFIG, HexDocModel
+from common.properties import Properties
+from common.types import TryGetEnum
 from minecraft.i18n import I18nContext, LocalizedStr
+
+from .tags import PairTag, Stream
 
 DEFAULT_MACROS = {
     "$(obf)": "$(k)",
@@ -35,8 +37,13 @@ DEFAULT_MACROS = {
     "$(thing)": "$(#490)",
 }
 
+_REPLACEMENTS = {
+    "br": "\n",
+    "playername": "[Playername]",
+}
+
 _COLORS = {
-    # "0": None, # TODO: find an actual value for this
+    "0": "000",
     "1": "00a",
     "2": "0a0",
     "3": "0aa",
@@ -59,249 +66,175 @@ _KEYS = {
     "sneak": "Left Shift",
 }
 
-# TODO: type
-def tag_args(kwargs: dict[str, Any]):
-    return "".join(
-        f" {'class' if key == 'clazz' else key.replace('_', '-')}={repr(escape(str(value)))}"
-        for key, value in kwargs.items()
-    )
+
+class CommandStyleType(TryGetEnum):
+    """Command styles, like `$(type)`."""
+
+    obfuscated = "k"
+    bold = "l"
+    strikethrough = "m"
+    underline = "n"
+    italic = "o"
 
 
-@py_dataclass
-class PairTag:
-    stream: IO[str]
-    name: str
-    args: InitVar[dict[str, Any]]
+class FunctionStyleType(TryGetEnum):
+    """Function styles, like `$(type:value)`."""
 
-    def __post_init__(self, args: dict[str, Any]):
-        self.args_str = tag_args(args)
-
-    def __enter__(self):
-        # TODO: self.stream.write??????????
-        print(f"<{self.name}{self.args_str}>", file=self.stream, end="")
-
-    def __exit__(self, _1: Any, _2: Any, _3: Any):
-        print(f"</{self.name}>", file=self.stream, end="")
+    link = "l"
+    tooltip = "t"
+    cmd_click = "c"
 
 
-class Empty:
-    def __enter__(self):
-        pass
+class SpecialStyleType(Enum):
+    """Styles with no defined name, like `$(#0080ff)`, or styles which must be handled
+    differently than the normal styles, like `$()`."""
 
-    def __exit__(self, _1: Any, _2: Any, _3: Any):
-        pass
-
-
-class Stream:
-    __slots__ = ["stream"]
-
-    def __init__(self, stream: IO[str]):
-        self.stream = stream
-
-    def tag(self, name: str, **kwargs: Any):
-        keywords = tag_args(kwargs)
-        print(f"<{name}{keywords} />", file=self.stream, end="")
-        return self
-
-    def pair_tag(self, name: str, **kwargs: Any):
-        return PairTag(self.stream, name, kwargs)
-
-    def pair_tag_if(self, cond: Any, name: str, **kwargs: Any):
-        return self.pair_tag(name, **kwargs) if cond else Empty()
-
-    def empty_pair_tag(self, name: str, **kwargs: Any):
-        with self.pair_tag(name, **kwargs):
-            pass
-
-    def text(self, txt: str | LocalizedStr):
-        print(escape(str(txt)), file=self.stream, end="")
-        return self
+    base = auto()
+    paragraph = auto()
+    color = auto()
 
 
-_COMMAND_LOOKUPS: list[CommandLookup] = []
-_COMMANDS: dict[str, StyleCommand] = NoClobberDict()
-_FUNCTIONS: dict[str, StyleFunction] = NoClobberDict()
+BaseStyleType = Literal[SpecialStyleType.base]
+
+ParagraphStyleType = Literal[SpecialStyleType.paragraph]
+
+ColorStyleType = Literal[SpecialStyleType.color]
 
 
-def command_lookup(fn: CommandLookup) -> CommandLookup:
-    _COMMAND_LOOKUPS.append(fn)
-    return fn
+class Style(ABC, HexDocModel[Any], frozen=True):
+    type: CommandStyleType | FunctionStyleType | SpecialStyleType
 
+    @staticmethod
+    def parse(style_str: str, is_0_black: bool) -> Style | _CloseTag | str:
+        # direct text replacements
+        if style_str in _REPLACEMENTS:
+            return _REPLACEMENTS[style_str]
 
-# TODO: refactor literally all of everything, this is still pretty disgusting
-@dataclass(config=DEFAULT_CONFIG)
-class Style(ABC):
-    @classmethod
-    def parse(cls, style_text: str) -> Style | str:
-        # command lookups (includes commands and functions)
-        for lookup in _COMMAND_LOOKUPS:
-            if (style := lookup(style_text)) is not None:
-                return style
+        # paragraph
+        if style := ParagraphStyle.try_parse(style_str):
+            return style
+
+        # commands
+        if style_type := CommandStyleType.get(style_str):
+            return CommandStyle(type=style_type)
+
+        # reset color, but only if 0 is considered reset instead of black
+        if not is_0_black and style_str == "0":
+            return _CloseTag(type=SpecialStyleType.color)
+
+        # preset colors
+        if style_str in _COLORS:
+            return FunctionStyle(type=SpecialStyleType.color, value=_COLORS[style_str])
+
+        # hex colors (#rgb and #rrggbb)
+        if style_str.startswith("#") and len(style_str) in [4, 7]:
+            return FunctionStyle(type=SpecialStyleType.color, value=style_str[1:])
+
+        # functions
+        if ":" in style_str:
+            name, value = style_str.split(":", 1)
+
+            # keys
+            if name == "k":
+                if value in _KEYS:
+                    return _KEYS[value]
+
+            # all the other functions
+            if style_type := FunctionStyleType.get(name):
+                return FunctionStyle(type=style_type, value=value)
+
+        # reset
+        if style_str == "":
+            return _CloseTag(type=SpecialStyleType.base)
+
+        # close functions
+        if style_str.startswith("/"):
+            if style_type := FunctionStyleType.get(style_str[1:]):
+                return _CloseTag(type=style_type)
 
         # oopsies
-        raise ValueError(f"Unhandled style: {style_text}")
+        raise ValueError(f"Unhandled style: {style_str}")
 
     @abstractmethod
-    def tag(self, out: Stream) -> ContextManager[None]:
+    def tag(self, out: Stream) -> PairTag | nullcontext[None]:
         ...
 
-    def can_close(self, other: Style) -> bool:
-        return isinstance(self, type(other)) or isinstance(other, type(self))
+
+class CommandStyle(Style, frozen=True):
+    type: CommandStyleType | BaseStyleType
+
+    def tag(self, out: Stream) -> PairTag | nullcontext[None]:
+        match self.type:
+            case CommandStyleType.obfuscated:
+                return out.pair_tag("span", clazz="obfuscated")
+            case CommandStyleType.bold:
+                return out.pair_tag("strong")
+            case CommandStyleType.strikethrough:
+                return out.pair_tag("s")
+            case CommandStyleType.underline:
+                return out.pair_tag("span", style="text-decoration: underline")
+            case CommandStyleType.italic:
+                return out.pair_tag("i")
+            case SpecialStyleType.base:
+                return out.null_tag()
 
 
-@command_lookup
-def replacement_processor(name: str):
-    match name:
-        case "br":
-            return "\n"
-        case "playername":
-            return "[Playername]"
-        case _:
-            return None
+class ParagraphStyle(Style, frozen=True):
+    type: ParagraphStyleType = SpecialStyleType.paragraph
+    attributes: dict[str, str]
+
+    @classmethod
+    def try_parse(cls, style_str: str) -> Self | None:
+        match style_str:
+            case "br2":
+                return cls.paragraph()
+            case "li":
+                return cls.list_item()
+            case _:
+                pass
+
+    @classmethod
+    def paragraph(cls) -> Self:
+        return cls(attributes={})
+
+    @classmethod
+    def list_item(cls) -> Self:
+        return cls(attributes={"clazz": "fake-li"})
+
+    def tag(self, out: Stream) -> PairTag:
+        return out.pair_tag("p", **self.attributes)
 
 
-@command_lookup
-def command_processor(name: str):
-    if style_type := _COMMANDS.get(name):
-        return style_type()
+def _format_href(value: str) -> str:
+    if not value.startswith(("http:", "https:")):
+        return "#" + value.replace("#", "@")
+    return value
 
 
-@command_lookup
-def function_processor(style_text: str):
-    if ":" in style_text:
-        name, param = style_text.split(":", 1)
-        if style_type := _FUNCTIONS.get(name):
-            return style_type(param)
-        raise ValueError(f"Unhandled function: {style_text}")
-
-
-@dataclass(config=DEFAULT_CONFIG)
-class BaseStyleCommand(Style):
-    def __init_subclass__(cls, names: list[str]) -> None:
-        for name in names:
-            _COMMANDS[name] = cls
-
-
-@dataclass(config=DEFAULT_CONFIG)
-class EndFunctionStyle(BaseStyleCommand, names=[]):
-    function_type: type[BaseStyleFunction]
-
-    def tag(self, out: Stream):
-        return contextlib.nullcontext()
-
-    def can_close(self, other: Style) -> bool:
-        return super().can_close(other) or isinstance(other, self.function_type)
-
-
-@dataclass(config=DEFAULT_CONFIG)
-class BaseStyleFunction(Style):
+class FunctionStyle(Style, frozen=True):
+    type: FunctionStyleType | ColorStyleType
     value: str
 
-    def __init_subclass__(cls, names: list[str]) -> None:
-        for name in names:
-            _FUNCTIONS[name] = cls
-            _COMMANDS[f"/{name}"] = lambda: EndFunctionStyle(cls)
+    def tag(self, out: Stream) -> PairTag:
+        match self.type:
+            case FunctionStyleType.link:
+                return out.pair_tag("a", href=_format_href(self.value))
+            case FunctionStyleType.tooltip:
+                return out.pair_tag("span", clazz="has-tooltip", title=self.value)
+            case FunctionStyleType.cmd_click:
+                return out.pair_tag(
+                    "span",
+                    clazz="has-cmd_click",
+                    title=f"When clicked, would execute: {self.value}",
+                )
+            case SpecialStyleType.color:
+                return out.pair_tag("span", style=f"color: #{self.value}")
 
 
-CommandLookup = Callable[[str], Style | str | None]
-
-StyleCommand = Callable[[], Style | str]
-
-StyleFunction = Callable[[str], BaseStyleFunction | str]
-
-
-def style_function(name: str):
-    def wrap(fn: StyleFunction) -> StyleFunction:
-        _FUNCTIONS[name] = fn
-        return fn
-
-    return wrap
-
-
-class ClearStyle(BaseStyleCommand, names=[""]):
-    def tag(self, out: Stream):
-        return contextlib.nullcontext()
-
-
-class ParagraphStyle(BaseStyleCommand, names=["br2"]):
-    def tag(self, out: Stream):
-        return out.pair_tag("p")
-
-
-class ListItemStyle(ParagraphStyle, names=["li"]):
-    def tag(self, out: Stream):
-        return out.pair_tag("p", clazz="fake-li")
-
-
-class ObfuscatedStyle(BaseStyleCommand, names=["k"]):
-    def tag(self, out: Stream):
-        return out.pair_tag("span", clazz="obfuscated")
-
-
-class BoldStyle(BaseStyleCommand, names=["l"]):
-    def tag(self, out: Stream):
-        return out.pair_tag("strong")
-
-
-class StrikethroughStyle(BaseStyleCommand, names=["m"]):
-    def tag(self, out: Stream):
-        return out.pair_tag("s")
-
-
-class UnderlineStyle(BaseStyleCommand, names=["n"]):
-    def tag(self, out: Stream):
-        return out.pair_tag("span", style="text-decoration: underline")
-
-
-class ItalicStyle(BaseStyleCommand, names=["o"]):
-    def tag(self, out: Stream):
-        return out.pair_tag("i")
-
-
-@style_function("k")
-def get_keybind_key(param: str):
-    if (key := _KEYS.get(param)) is not None:
-        return key
-    raise ValueError(f"Unhandled key: {param}")
-
-
-# TODO: this should use Color but i'm pretty sure that will fail the snapshots
-class ColorStyle(BaseStyleFunction, names=[]):
-    @command_lookup
-    @staticmethod
-    def processor(param: str):
-        if param in _COLORS:
-            return ColorStyle(_COLORS[param])
-        if param.startswith("#") and len(param) in [4, 7]:
-            return ColorStyle(param[1:])
-
-    def tag(self, out: Stream):
-        return out.pair_tag("span", style=f"color: #{self.value}")
-
-
-class LinkStyle(BaseStyleFunction, names=["l"]):
-    def tag(self, out: Stream):
-        href = self.value
-        if not href.startswith(("http:", "https:")):
-            href = "#" + href.replace("#", "@")
-        return out.pair_tag("a", href=href)
-
-
-class TooltipStyle(BaseStyleFunction, names=["t"]):
-    def tag(self, out: Stream):
-        return out.pair_tag("span", clazz="has-tooltip", title=self.value)
-
-
-class CmdClickStyle(BaseStyleFunction, names=["c"]):
-    def tag(self, out: Stream):
-        return out.pair_tag(
-            "span",
-            clazz="has-cmd_click",
-            title=f"When clicked, would execute: {self.value}",
-        )
-
-
-# class GangnamStyle: pass
+# intentionally not inheriting from Style, because this is basically an implementation
+# detail of the parser and should not be returned or exposed anywhere
+class _CloseTag(HexDocModel[Any], frozen=True):
+    type: FunctionStyleType | BaseStyleType | ColorStyleType
 
 
 _FORMAT_RE = re.compile(r"\$\(([^)]*)\)")
@@ -309,6 +242,7 @@ _FORMAT_RE = re.compile(r"\$\(([^)]*)\)")
 
 class FormatContext(I18nContext):
     macros: dict[str, str]
+    props: Properties
 
 
 @dataclass(config=DEFAULT_CONFIG)
@@ -317,11 +251,7 @@ class FormatTree:
     children: list[FormatTree | str]  # this can't be Self, it breaks Pydantic
 
     @classmethod
-    def empty(cls) -> Self:
-        return cls(ClearStyle(), [])
-
-    @classmethod
-    def format(cls, string: str, macros: dict[str, str]) -> Self:
+    def format(cls, string: str, macros: dict[str, str], is_0_black: bool) -> Self:
         # resolve macros
         # TODO: use ahocorasick? this feels inefficient
         old_string = None
@@ -332,7 +262,7 @@ class FormatTree:
 
         # lex out parsed styles
         text_nodes: list[str] = []
-        styles: list[Style] = []
+        styles: list[Style | _CloseTag] = []
         text_since_prev_style: list[str] = []
         last_end = 0
 
@@ -342,11 +272,11 @@ class FormatTree:
             text_since_prev_style.append(leading_text)
             last_end = match.end()
 
-            match Style.parse(match[1]):
+            match Style.parse(match[1], is_0_black):
                 case str(replacement):
                     # str means "use this instead of the original value"
                     text_since_prev_style.append(replacement)
-                case Style() as style:
+                case Style() | _CloseTag() as style:
                     # add this style and collect the text since the previous one
                     styles.append(style)
                     text_nodes.append("".join(text_since_prev_style))
@@ -357,27 +287,27 @@ class FormatTree:
 
         # parse
         style_stack = [
-            FormatTree(ClearStyle(), []),
-            FormatTree(ParagraphStyle(), [first_node]),
+            FormatTree(CommandStyle(type=SpecialStyleType.base), []),
+            FormatTree(ParagraphStyle.paragraph(), [first_node]),
         ]
         for style, text in zip(styles, text_nodes):
             tmp_stylestack: list[Style] = []
-            if isinstance(style, ClearStyle):
-                while not isinstance(style_stack[-1].style, ParagraphStyle):
+            if style.type == SpecialStyleType.base:
+                while style_stack[-1].style.type != SpecialStyleType.paragraph:
                     last_node = style_stack.pop()
                     style_stack[-1].children.append(last_node)
-            elif any(style.can_close(tree.style) for tree in style_stack):
+            elif any(tree.style.type == style.type for tree in style_stack):
                 while len(style_stack) >= 2:
                     last_node = style_stack.pop()
                     style_stack[-1].children.append(last_node)
-                    if style.can_close(last_node.style):
+                    if last_node.style.type == style.type:
                         break
                     tmp_stylestack.append(last_node.style)
 
             for sty in tmp_stylestack:
                 style_stack.append(FormatTree(sty, []))
 
-            if isinstance(style, (EndFunctionStyle, ClearStyle)):
+            if isinstance(style, _CloseTag):
                 if text:
                     style_stack[-1].children.append(text)
             else:
@@ -403,4 +333,4 @@ class FormatTree:
 
         if not isinstance(value, LocalizedStr):
             value = context["i18n"].localize(value)
-        return cls.format(value.value, context["macros"])
+        return cls.format(value.value, context["macros"], context["props"].is_0_black)

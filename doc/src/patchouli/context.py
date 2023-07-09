@@ -11,7 +11,7 @@ from patchouli.text import FormatContext
 
 
 class BookContext(FormatContext):
-    props: Properties
+    pass
 
 
 AnyBookContext = TypeVar("AnyBookContext", bound=BookContext)

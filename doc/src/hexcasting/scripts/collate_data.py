@@ -17,7 +17,7 @@ from patchouli.page import (
     SpotlightPage,
     TextPage,
 )
-from patchouli.text.formatting import Stream
+from patchouli.text.tags import Stream
 
 # extra info :(
 # TODO: properties.toml
@@ -169,7 +169,7 @@ def write_page(out: Stream, pageid: str, page: Page[Any]):
                 with out.pair_tag("p", clazz="todo-note"):
                     out.text(f"TODO: Missing processor for type: {type(page)}")
                 if isinstance(page, PageWithText):
-                    write_block(out, page.text or FormatTree.empty())
+                    write_block(out, page.text)
     out.tag("br")
 
 

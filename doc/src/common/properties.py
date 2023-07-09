@@ -33,6 +33,10 @@ class Properties(HexDocModel[Any]):
 
     pattern_regex: re.Pattern[str]
 
+    is_0_black: bool = False
+    """If true, the style `$(0)` changes the text color to black; otherwise it resets
+    the text color to the default."""
+
     i18n: I18nProps
 
     common: PlatformProps
