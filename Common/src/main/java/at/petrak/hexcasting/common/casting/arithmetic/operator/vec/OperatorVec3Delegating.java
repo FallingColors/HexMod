@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.IterPair;
 import at.petrak.hexcasting.api.casting.arithmetic.TripleIterable;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero;
 import at.petrak.hexcasting.common.casting.arithmetic.DoubleArithmetic;
@@ -32,7 +33,7 @@ public class OperatorVec3Delegating extends Operator {
 	}
 
 	@Override
-	public @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas) throws Mishap {
+	public @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas, @NotNull CastingEnvironment env) throws Mishap {
 		var it = iotas.iterator();
 		var left = it.next();
 		var right = it.next();
@@ -43,9 +44,9 @@ public class OperatorVec3Delegating extends Operator {
 			var lh = left instanceof Vec3Iota l ? l.getVec3() : triplicate(downcast(left, DOUBLE).getDouble());
 			var rh = right instanceof Vec3Iota r ? r.getVec3() : triplicate(downcast(right, DOUBLE).getDouble());
 			return new TripleIterable<>(
-					fb.apply(new IterPair<>(new DoubleIota(lh.x()), new DoubleIota(rh.x()))),
-					fb.apply(new IterPair<>(new DoubleIota(lh.y()), new DoubleIota(rh.y()))),
-					fb.apply(new IterPair<>(new DoubleIota(lh.z()), new DoubleIota(rh.z()))),
+					fb.apply(new IterPair<>(new DoubleIota(lh.x()), new DoubleIota(rh.x())), env),
+					fb.apply(new IterPair<>(new DoubleIota(lh.y()), new DoubleIota(rh.y())), env),
+					fb.apply(new IterPair<>(new DoubleIota(lh.z()), new DoubleIota(rh.z())), env),
 					(x, y, z) -> new Vec3Iota(new Vec3(downcast(x, DOUBLE).getDouble(), downcast(y, DOUBLE).getDouble(), downcast(z, DOUBLE).getDouble()))
 			);
 		} catch (MishapDivideByZero e) {
