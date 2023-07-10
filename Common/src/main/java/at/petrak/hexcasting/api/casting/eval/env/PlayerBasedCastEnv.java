@@ -47,7 +47,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public @Nullable ServerPlayer getCaster() {
+    public ServerPlayer getCaster() {
         return this.caster;
     }
 

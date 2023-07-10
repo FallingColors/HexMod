@@ -39,7 +39,7 @@ sealed class OperatorSideEffect {
     ) :
         OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            this.spell.cast(harness.env)
+            this.spell.cast(harness.env, harness.image)?.let { harness.image = it }
             if (awardStat)
                 harness.env.caster?.awardStat(HexStatistics.SPELLS_CAST)
 
