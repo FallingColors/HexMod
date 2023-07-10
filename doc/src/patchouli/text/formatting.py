@@ -67,6 +67,17 @@ _KEYS = {
 }
 
 
+# Higgledy piggledy
+# Old fuck Alwinfy said,
+# "Eschew your typechecks and
+# live with a pair,"
+#
+# Making poor Object do
+# Incessant rewrites, till
+# Winfy gave in to her
+# Classical flair.
+
+
 class CommandStyleType(TryGetEnum):
     """Command styles, like `$(type)`."""
 
