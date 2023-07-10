@@ -73,8 +73,8 @@ _KEYS = {
 # live with a pair,"
 #
 # Making poor Object do
-# Incessant rewrites, till
-# Winfy gave in to her
+# Re-re-re-factoring
+# Till Winfy took up her
 # Classical flair.
 
 
