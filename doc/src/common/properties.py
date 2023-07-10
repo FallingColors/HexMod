@@ -1,12 +1,24 @@
 import re
 from pathlib import Path
-from typing import Any, Self
+from typing import Annotated, Any, Self
 
-from pydantic import Field, model_validator
+from pydantic import (
+    AfterValidator,
+    Field,
+    FieldValidationInfo,
+    HttpUrl,
+    field_validator,
+)
 
 from common.model import HexDocModel
 from common.toml_placeholders import load_toml
 from hexcasting.pattern import PatternStubFile
+
+NoTrailingSlashHttpUrl = Annotated[
+    str,
+    HttpUrl,
+    AfterValidator(lambda u: str(u).rstrip("/")),
+]
 
 
 class PlatformProps(HexDocModel[Any]):
@@ -27,15 +39,17 @@ class Properties(HexDocModel[Any]):
     modid: str
     book_name: str
     template: Path
+    is_0_black: bool
+    """If true, the style `$(0)` changes the text color to black; otherwise it resets
+    the text color to the default."""
 
     recipe_dirs: list[Path]
     default_recipe_dir_index_: int = Field(alias="default_recipe_dir")
 
     pattern_regex: re.Pattern[str]
 
-    is_0_black: bool = False
-    """If true, the style `$(0)` changes the text color to black; otherwise it resets
-    the text color to the default."""
+    base_asset_urls: dict[str, NoTrailingSlashHttpUrl]
+    """Mapping from modid to the url of that mod's `resources` directory on GitHub."""
 
     i18n: I18nProps
 
@@ -100,10 +114,11 @@ class Properties(HexDocModel[Any]):
             for stub in platform.pattern_stubs
         ]
 
-    @model_validator(mode="after")
-    def _check_default_recipe_dir(self):
-        if self.default_recipe_dir_index_ >= len(self.recipe_dirs):
+    @field_validator("default_recipe_dir_index_")
+    def _check_default_recipe_dir(cls, value: int, info: FieldValidationInfo) -> int:
+        num_dirs = len(info.data["recipe_dirs"])
+        if value >= num_dirs:
             raise ValueError(
-                f"default_recipe_dir must be a valid index of recipe_dirs (expected <={len(self.recipe_dirs)}, got {self.default_recipe_dir_index_})"
+                f"default_recipe_dir must be a valid index of recipe_dirs (expected <={num_dirs - 1}, got {value})"
             )
-        return self
+        return value

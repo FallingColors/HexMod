@@ -11,7 +11,7 @@ from patchouli.page import PageWithTitle
 from .hex_book import AnyHexContext, HexContext
 
 
-# TODO: make anchor required
+# TODO: make anchor required (breaks because of Greater Sentinel)
 class PageWithPattern(PageWithTitle[AnyHexContext], ABC, type=None):
     title_: None = Field(default=None, include=True)
 

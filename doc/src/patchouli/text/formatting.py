@@ -17,7 +17,7 @@ from common.properties import Properties
 from common.types import TryGetEnum
 from minecraft.i18n import I18nContext, LocalizedStr
 
-from .tags import PairTag, Stream
+from .html import HTMLElement, HTMLStream
 
 DEFAULT_MACROS = {
     "$(obf)": "$(k)",
@@ -167,27 +167,27 @@ class Style(ABC, HexDocModel[Any], frozen=True):
         raise ValueError(f"Unhandled style: {style_str}")
 
     @abstractmethod
-    def tag(self, out: Stream) -> PairTag | nullcontext[None]:
+    def element(self, out: HTMLStream) -> HTMLElement | nullcontext[None]:
         ...
 
 
 class CommandStyle(Style, frozen=True):
     type: CommandStyleType | BaseStyleType
 
-    def tag(self, out: Stream) -> PairTag | nullcontext[None]:
+    def element(self, out: HTMLStream) -> HTMLElement | nullcontext[None]:
         match self.type:
             case CommandStyleType.obfuscated:
-                return out.pair_tag("span", clazz="obfuscated")
+                return out.element("span", clazz="obfuscated")
             case CommandStyleType.bold:
-                return out.pair_tag("strong")
+                return out.element("strong")
             case CommandStyleType.strikethrough:
-                return out.pair_tag("s")
+                return out.element("s")
             case CommandStyleType.underline:
-                return out.pair_tag("span", style="text-decoration: underline")
+                return out.element("span", style="text-decoration: underline")
             case CommandStyleType.italic:
-                return out.pair_tag("i")
+                return out.element("i")
             case SpecialStyleType.base:
-                return out.null_tag()
+                return nullcontext()
 
 
 class ParagraphStyle(Style, frozen=True):
@@ -212,8 +212,8 @@ class ParagraphStyle(Style, frozen=True):
     def list_item(cls) -> Self:
         return cls(attributes={"clazz": "fake-li"})
 
-    def tag(self, out: Stream) -> PairTag:
-        return out.pair_tag("p", **self.attributes)
+    def element(self, out: HTMLStream) -> HTMLElement:
+        return out.element("p", **self.attributes)
 
 
 def _format_href(value: str) -> str:
@@ -226,20 +226,20 @@ class FunctionStyle(Style, frozen=True):
     type: FunctionStyleType | ColorStyleType
     value: str
 
-    def tag(self, out: Stream) -> PairTag:
+    def element(self, out: HTMLStream) -> HTMLElement:
         match self.type:
             case FunctionStyleType.link:
-                return out.pair_tag("a", href=_format_href(self.value))
+                return out.element("a", href=_format_href(self.value))
             case FunctionStyleType.tooltip:
-                return out.pair_tag("span", clazz="has-tooltip", title=self.value)
+                return out.element("span", clazz="has-tooltip", title=self.value)
             case FunctionStyleType.cmd_click:
-                return out.pair_tag(
+                return out.element(
                     "span",
                     clazz="has-cmd_click",
                     title=f"When clicked, would execute: {self.value}",
                 )
             case SpecialStyleType.color:
-                return out.pair_tag("span", style=f"color: #{self.value}")
+                return out.element("span", style=f"color: #{self.value}")
 
 
 # intentionally not inheriting from Style, because this is basically an implementation
