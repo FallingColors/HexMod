@@ -13,6 +13,7 @@ from pydantic import (
 from common.model import HexDocModel
 from common.toml_placeholders import load_toml
 from hexcasting.pattern import PatternStubFile
+from minecraft.resource import ResourceLocation
 
 NoTrailingSlashHttpUrl = Annotated[
     str,
@@ -42,6 +43,9 @@ class Properties(HexDocModel[Any]):
     is_0_black: bool
     """If true, the style `$(0)` changes the text color to black; otherwise it resets
     the text color to the default."""
+
+    spoilers: set[ResourceLocation]
+    blacklist: set[ResourceLocation]
 
     recipe_dirs: list[Path]
     default_recipe_dir_index_: int = Field(alias="default_recipe_dir")

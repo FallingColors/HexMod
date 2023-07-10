@@ -113,3 +113,7 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     def index_icon(self) -> ResourceLocation:
         # default value as defined by patchouli, apparently
         return self.model if self.index_icon_ is None else self.index_icon_
+
+    @property
+    def props(self) -> Properties:
+        return self.context["props"]

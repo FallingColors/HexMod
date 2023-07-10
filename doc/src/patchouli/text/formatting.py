@@ -177,7 +177,7 @@ class CommandStyle(Style, frozen=True):
     def element(self, out: HTMLStream) -> HTMLElement | nullcontext[None]:
         match self.type:
             case CommandStyleType.obfuscated:
-                return out.element("span", clazz="obfuscated")
+                return out.element("span", class_name="obfuscated")
             case CommandStyleType.bold:
                 return out.element("strong")
             case CommandStyleType.strikethrough:
@@ -210,7 +210,7 @@ class ParagraphStyle(Style, frozen=True):
 
     @classmethod
     def list_item(cls) -> Self:
-        return cls(attributes={"clazz": "fake-li"})
+        return cls(attributes={"class_name": "fake-li"})
 
     def element(self, out: HTMLStream) -> HTMLElement:
         return out.element("p", **self.attributes)
@@ -231,11 +231,11 @@ class FunctionStyle(Style, frozen=True):
             case FunctionStyleType.link:
                 return out.element("a", href=_format_href(self.value))
             case FunctionStyleType.tooltip:
-                return out.element("span", clazz="has-tooltip", title=self.value)
+                return out.element("span", class_name="has-tooltip", title=self.value)
             case FunctionStyleType.cmd_click:
                 return out.element(
                     "span",
-                    clazz="has-cmd_click",
+                    class_name="has-cmd_click",
                     title=f"When clicked, would execute: {self.value}",
                 )
             case SpecialStyleType.color:

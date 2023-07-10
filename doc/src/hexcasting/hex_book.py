@@ -9,8 +9,6 @@ from patchouli.context import AnyBookContext, BookContext
 
 
 class HexContext(BookContext):
-    blacklist: set[str]
-    spoilers: set[str]
     patterns: dict[ResourceLocation, PatternInfo]
 
 
@@ -44,8 +42,6 @@ class HexBookModel(
         # build new context
         return data, {
             **context,
-            "blacklist": set(),
-            "spoilers": set(),
             "patterns": patterns,
         }
 
