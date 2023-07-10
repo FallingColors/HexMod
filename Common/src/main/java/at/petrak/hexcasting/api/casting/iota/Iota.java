@@ -78,7 +78,7 @@ public abstract class Iota {
      * This method is called to determine whether the iota is above the max serialisation depth/serialisation count
      * limits. It should return every "iota" that is a subelement of this iota.
      * For example, if you implemented a Map&lt;Iota, Iota&gt;, then it should be an iterable over the keys *and*
-     * values of the map. If you implemented a typed List&lt;Double&gt; iota for some reason, you should instad override
+     * values of the map. If you implemented a typed List&lt;Double&gt; iota for some reason, you should instead override
      * {@link Iota#size}.
      */
     public @Nullable Iterable<Iota> subIotas() {

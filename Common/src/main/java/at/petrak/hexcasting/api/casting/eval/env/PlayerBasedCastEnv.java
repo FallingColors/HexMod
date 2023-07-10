@@ -227,8 +227,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public void produceParticles(ParticleSpray particles, FrozenPigment colorizer) {
-        particles.sprayParticles(this.world, colorizer);
+    public void produceParticles(ParticleSpray particles, FrozenPigment pigment) {
+        particles.sprayParticles(this.world, pigment);
     }
 
     @Override
