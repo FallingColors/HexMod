@@ -23,8 +23,8 @@ class MishapNoSpellCircle : Mishap() {
         }
     }
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        val caster = ctx.caster
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        val caster = env.caster
         if (caster != null) {
             // FIXME: handle null caster case
             dropAll(caster, caster.inventory.items)

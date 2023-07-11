@@ -13,8 +13,8 @@ class MishapBadOffhandItem(val item: ItemStack, val hand: InteractionHand?, val 
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BROWN)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.mishapEnvironment.dropHeldItems()
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        env.mishapEnvironment.dropHeldItems()
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = if (item.isEmpty)

@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooMuch;
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidPattern;
+import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
@@ -85,8 +86,12 @@ public class PatternIota extends Iota {
                         HexTags.Actions.REQUIRES_ENLIGHTENMENT);
 
                 castedName = HexAPI.instance().getActionI18n(key, reqsEnlightenment);
-
                 action = Objects.requireNonNull(IXplatAbstractions.INSTANCE.getActionRegistry().get(key)).action();
+
+                if (reqsEnlightenment && !vm.getEnv().isEnlightened()) {
+                    // this gets caught down below
+                    throw new MishapUnenlightened();
+                }
             } else if (lookup instanceof PatternShapeMatch.Special special) {
                 castedName = special.handler.getName();
                 action = special.handler.act();

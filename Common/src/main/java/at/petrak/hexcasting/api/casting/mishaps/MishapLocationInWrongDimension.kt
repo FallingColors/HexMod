@@ -12,7 +12,7 @@ class MishapLocationInWrongDimension(val properDimension: ResourceLocation) : Mi
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.MAGENTA)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         stack.add(GarbageIota())
     }
 

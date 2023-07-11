@@ -16,9 +16,9 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.RED)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         stack.add(GarbageIota())
-        ctx.mishapEnvironment.damage(0.5f)
+        env.mishapEnvironment.damage(0.5f)
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

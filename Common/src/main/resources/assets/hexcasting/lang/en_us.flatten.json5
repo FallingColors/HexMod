@@ -217,33 +217,35 @@
   "text.autoconfig.hexcasting.option.server.scrollInjectionsRaw.@Tooltip": "Maps the names of loot tables to the amount of per-world patterns on scrolls should go in them. There's about a 50% chance to get any scrolls in a given chest marked here; once that is met, between 1 and that many scrolls are generated.",
   "text.autoconfig.hexcasting.option.server.amethystShardModification.@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",
   
-  "advancement.hexcasting:root": "Hexcasting Research",
-  "advancement.hexcasting:root.desc": "Find and mine a concentrated form of media growing deep beneath the earth.",
-  "advancement.hexcasting:enlightenment": "Achieve Enlightenment",
-  "advancement.hexcasting:enlightenment.desc": "Shatter a barrier by casting a hex using almost all of your health.",
-  "advancement.hexcasting:wasteful_cast": "Waste Not...",
-  "advancement.hexcasting:wasteful_cast.desc": "Waste a large amount of media when casting a hex.",
-  "advancement.hexcasting:big_cast": "... Want Not",
-  "advancement.hexcasting:big_cast.desc": "Cast a single spell requiring a truly huge amount of media.",
-  "advancement.hexcasting:y_u_no_cast_angy": "Blind Diversion",
-  "advancement.hexcasting:y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
-  "advancement.hexcasting:opened_eyes": "Opened Eyes",
-  "advancement.hexcasting:opened_eyes.desc": "Have nature take a piece of your mind in payment for a hex. What might happen if you let it have more?",
-  "advancement.hexcasting:lore": "Hexcasting Lore",
-  "advancement.hexcasting:lore.desc": "Read a Lore Fragment",
-  "advancement.hexcasting:lore/cardamom1": "Cardamom Steles #1",
-  "advancement.hexcasting:lore/cardamom1.desc": "Letter from Cardamom Steles to Her Father, #1",
-  "advancement.hexcasting:lore/cardamom2": "Cardamom Steles #2",
-  "advancement.hexcasting:lore/cardamom2.desc": "Letter from Cardamom Steles to Her Father, #2",
-  "advancement.hexcasting:lore/cardamom3": "Cardamom Steles #3",
-  "advancement.hexcasting:lore/cardamom3.desc": "Letter from Cardamom Steles to Her Father, #3, 1/2",
-  "advancement.hexcasting:lore/cardamom4": "Cardamom Steles #3 pt2",
-  "advancement.hexcasting:lore/cardamom4.desc": "Letter from Cardamom Steles to Her Father, #3, 2/2",
-  "advancement.hexcasting:lore/cardamom5": "Cardamom Steles #4",
-  "advancement.hexcasting:lore/cardamom5.desc": "Letter from Cardamom Steles to Her Father, #4",
-  "advancement.hexcasting:lore/experiment1": "Wooleye Instance Notes",
-  "advancement.hexcasting:lore/experiment2": "Wooleye Interview Logs",
-  "advancement.hexcasting:lore/inventory": "Restoration Log 72",
+  "advancement.hexcasting:": {
+    "root": "Hexcasting Research",
+    "root.desc": "Find and mine a concentrated form of media growing deep beneath the earth.",
+    "enlightenment": "Achieve Enlightenment",
+    "enlightenment.desc": "Shatter a barrier by casting a hex using almost all of your health.",
+    "wasteful_cast": "Waste Not...",
+    "wasteful_cast.desc": "Waste a large amount of media when casting a hex.",
+    "big_cast": "... Want Not",
+    "big_cast.desc": "Cast a single spell requiring a truly huge amount of media.",
+    "y_u_no_cast_angy": "Blind Diversion",
+    "y_u_no_cast_angy.desc": "Try to cast a spell from a scroll, but fail.",
+    "opened_eyes": "Opened Eyes",
+    "opened_eyes.desc": "Have nature take a piece of your mind in payment for a hex. What might happen if you let it have more?",
+    "lore": "Hexcasting Lore",
+    "lore.desc": "Read a Lore Fragment",
+    "lore/cardamom1": "Cardamom Steles #1",
+    "lore/cardamom1.desc": "Letter from Cardamom Steles to Her Father, #1",
+    "lore/cardamom2": "Cardamom Steles #2",
+    "lore/cardamom2.desc": "Letter from Cardamom Steles to Her Father, #2",
+    "lore/cardamom3": "Cardamom Steles #3",
+    "lore/cardamom3.desc": "Letter from Cardamom Steles to Her Father, #3, 1/2",
+    "lore/cardamom4": "Cardamom Steles #3 pt2",
+    "lore/cardamom4.desc": "Letter from Cardamom Steles to Her Father, #3, 2/2",
+    "lore/cardamom5": "Cardamom Steles #4",
+    "lore/cardamom5.desc": "Letter from Cardamom Steles to Her Father, #4",
+    "lore/experiment1": "Wooleye Instance Notes",
+    "lore/experiment2": "Wooleye Interview Logs",
+    "lore/inventory": "Restoration Log 72",
+  },
   
   "stat.hexcasting.media_used": "Media Consumed (in dust)",
   "stat.hexcasting.media_overcasted": "Media Overcast (in dust)",
@@ -253,13 +255,15 @@
   "death.attack.hexcasting.overcast": "%s's mind was subsumed into energy",
   "death.attack.hexcasting.shame": "Shame on %s!",
   
-  "command.hexcasting.pats.listing": "Patterns in this world:",
-  "command.hexcasting.pats.all": "Gave all %d scrolls to %s",
-  "command.hexcasting.pats.specific.success": "Gave %s with id %s to %s",
-  "command.hexcasting.recalc": "Recalculated patterns",
-  "command.hexcasting.brainsweep": "Brainswept %s",
-  "command.hexcasting.brainsweep.fail.badtype": "%s is not a mob",
-  "command.hexcasting.brainsweep.fail.already": "%s is already empty",
+  "command.hexcasting": {
+    "pats.listing": "Patterns in this world:",
+    "pats.all": "Gave all %d scrolls to %s",
+    "pats.specific.success": "Gave %s with id %s to %s",
+    "recalc": "Recalculated patterns",
+    "brainsweep": "Brainswept %s",
+    "brainsweep.fail.badtype": "%s is not a mob",
+    "brainsweep.fail.already": "%s is already empty",
+  },
   
   hexcasting: {
     "pattern.unknown": "Unknown pattern resource location %s",
@@ -299,8 +303,6 @@
         "many_exits": "The flow of media had too many exits at %s",
         no_closure: "The flow of media will not be able to return to the impetus at %s"
       },
-      
-
       
       lens: {
         impetus: {
@@ -734,40 +736,36 @@
       many_exits: "The flow of media at %s had too many exits"
     },
     
-    // Patchi stuff!
-    landing: ">>>\
-|     I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid.\
-|     It fascinates me. I've decided to start a journal of my thoughts and findings.\
-|     $(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
+
+    // === Patchi stuff! ===
+
+    
+    landing: "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. \
+      It fascinates me. I've decided to start a journal of my thoughts and findings. \
+      $(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
     
     category: {
       basics: {
         "": "Getting Started",
-        "desc": ">>>\
-|         The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)Staff/$-- \
-|         or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them.\
-|         How might I do the same?"
+        "desc": "The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)Staff/$--\
+          or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them.\
+          How might I do the same?"
       },
       casting: {
         "": "Hex Casting",
-        desc: ">>>\
-|         I've started to understand how the old masters cast their _Hexes! It's a bit complicated,\
-|         but I'm sure I can figure it out. Let's see..."
+        desc: "I've started to understand how the old masters cast their _Hexes! It's a bit complicated,\
+          but I'm sure I can figure it out. Let's see..."
       },
       items: {
         "": "Items",
-        desc: ">>>\
-|         I devote this section to the magical and mysterious items I might encounter in my studies.$(br2)\
-|         It seems like many of these items have uses when held alongside my $(l:items/staff)$(item)staff/$.\
-|         I suppose I will have to choose what goes in my other hand carefully."
+        desc: "I devote this section to the magical and mysterious items I might encounter in my studies."
       },
       
       greatwork: {
         "": "The Great Work",
-        desc: ">>>\
-|         I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction.\
-|         I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy.\
-|         I have seen I have seen I have s$(k)get stick bugged lmao/$",
+        desc: "I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction.\
+          I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy.\
+          I have seen I have seen I have s$(k)get stick bugged lmao/$",
         // alwinfy you think you're so funny
       },
 
@@ -794,12 +792,14 @@
       },
       great_spells: {
         "": "Great Spells",
-        desc: ">>>\
-|         The spells catalogued here are purported to be of legendary difficulty and power.\
-|         They seem to have been recorded only sparsely (for good reason, the texts claim).\
-|         It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
-|         What could possibly go wrong?"
+        desc: "The spells catalogued here are purported to be of legendary difficulty and power.\
+          They seem to have been recorded only sparsely (for good reason, the texts claim).\
+          It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
+          What could possibly go wrong?"
       },
+      
+      lore: "Lore",
+      interop: "Cross-Mod Interactions",
     },
     // ^ categories
     
@@ -922,10 +922,73 @@
       "start_to_see.2": "That... that was...$(p)...that was one of the $(italic)worst/$ things I've $(italic)ever/$ experienced. I offered my plan to Nature, and got a firm smile and a tearing sensation in return-- a piece of myself breaking away, like amethyst dust in the rain.$(p)I feel lucky to have $(italic)survived/$, much less have the sagacity to write this-- I should declare the matter closed, double-check my math before I cast any more _Hexes, and never make such a mistake again.",
       "start_to_see.3": "...But.$(br2)But for the scarcest instant, that part of myself... it $(italic)saw/$... $(l:greatwork/the_work)$(thing)something/$. A place-- a design, perhaps? (Such distinctions didn't seem to matter in the face of... that.)$(p)And a... a membrane-barrier-skin-border, separating myself from a realm of raw thought-flow-light-energy. I remember-- I saw-thought-recalled-felt-- the barrier fuzzing at its edges, just so slightly.$(p)I wanted $(italic)through./$",
       "start_to_see.4": "I shouldn't. I $(italic)know/$ I shouldn't. It's dangerous. It's too dangerous. The force required... I'd have to bring myself within a hair's breadth of Death itself with a $(italic)single stroke/$.$(br2)But I'm. So. $(italic)Close/$.$(p)$(italic)This/$ is the culmination of my art. This is the $(#54398a)Enlightenment/$ I've been seeking. $(br2)I want more. I need to see it again. I $(italic)will/$ see it.$(p)What is my mortal mind against immortal glory?",
+
+      casting: {
+        overview: {
+          "1": ">>>\
+            I believe it's good to always start off on the right foot. So, I've compiled the patterns for a _Hex that will cause a modest explosion at the position I am looking at. I believe examining the inner workings of this _Hex will be quite edifying."
+        },
+
+        grid: {
+          "1": ">>>\
+            I will generally provide my patterns to Nature via my $(l:items/staff)$(item)Staff/$.\
+            Pressing $(thing)$(k:use)/$ with one in my hand will cause a hexagonal grid of dots to appear in front of me.\
+            I can then click, drag from dot to dot, and release to draw patterns.$(br2)\
+            Once I submit a pattern, it is executed (see the next chapter).",
+          "2": ">>>\
+            Pressing $(thing)$(k:escape)/$ saves and closes the grid; when I next use my staff, all my patterns and iotas will still be there.$(br2)\
+            Should I wish to reset my casting state, I can do so by sneaking while opening the grid."
+        },
+        "patterns&actions": {
+          "1": ">>>\
+            $(thing)Patterns/$ are paths traced through the grid of _media. I believe the sixfold symmetry of patterns is what gives my art its name.$(br2)\
+            $(thing)Actions/$, meanwhile, are what patterns $(italic)do/$.",
+          "2": ">>>\
+            The difference is similar to the difference between $(italic)words/$ and $(italic)meanings/$.\
+            Any jumble of letters forms a word, but most of them (like \"xnopyt\") don't mean anything.\
+            Similarly, any squiggle yanked through the _media is technically a pattern, but most of them won't do anything.",
+          "3": ">>>\
+            Actions are somewhat like commands to the grand systems rules that govern the universe (which I have seen some texts personify as \"Nature.\").\
+            They tend to do one of a few things:\
+              $(li)Gather some information about the world, such as finding the position of a entity.\
+              $(li)Manipulate the info gathered, like finding the distance between two positions.\
+              $(li)Perform some magical effect on the world, like summoning lightning or an explosion.$(br)\
+            These last kinds of actions are called \"spells.\", and are generally what attract people to the art.",
+          "4": ">>>\
+            A _Hex, then, is a sequence of valid patterns presented to Nature in sequence.\
+            Nature interprets each of these patterns one-by-one and, if it understands, changes the world to my whims.\
+            (Or, what it thinks my whims are.)",
+          "5": ">>>\
+            Although some actions can be performed easily, some require a payment in the form of coalesced _media.\
+            I believe the concentrated mental energy is used as a sort of argument to Nature, convincing it that it should indeed do as I ask.\
+            Most spells require this kind of payment, but a few non-spell actions do too.$(br2)\
+            I've recorded the costs, if any, of each action on their respective pages."
+        },
+        iotas: {
+          "1": ">>>\
+            The \"nouns\" in Nature's language are called $(thing)iotas/$.\
+            At its most basic level, Hexcasting is the art of manipulating iotas.$(br2)\
+            Iotas come in many different types:\
+              $(li)Numbers (which some legends called \"doubles\").\
+              $(li)Vectors, a collection of three numbers representing a position, movement, or direction.\
+              $(li)Booleans or \"bools\" for short, representing an abstract True or False.\
+              $(li)Entities, like myself, chickens, and minecarts.",
+          "2": ">>>\
+              $(li)Influences, peculiar types of iota that seem to represent abstract ideas.\
+              $(li)Patterns themselves, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$.\
+              $(li)A list of several of the above, gathered into a single iota.",
+          "3": ">>>\
+            Generally, I provide iotas to actions.\
+            For example, take $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$.\
+            This spell requires a number iota, to indicate the strength, and a vector iota, to indicate the location.$(br2)\
+            Or, take $(l:patterns/basic#hexcasting:get_pos)$(action)Compass Purification/$.\
+            This takes an entity iota and transforms it into a vector iota, representing the position of that entity."
+        }
+      },
       
       // Casting
       "101.1": "Casting a _Hex is quite difficult-- no wonder this art was lost to time! I'll have to re-read my notes carefully.$(br2)I can start a _Hex by pressing $(k:use) with a $(l:items/staff)$(item)Staff/$ in my hand-- this will cause a hexagonal grid of dots to appear in front of me. Then I can click and drag from dot to dot to draw patterns in the _media of the grid; finishing a pattern will run its corresponding action (more on that later).",
-      "101.2": "Once I've drawn enough patterns to cast a spell, the grid will disappear as the _media I've stored up is released. Holding $(k:sneak) while using my $(l:items/staff)$(item)staff/$ will also clear the grid, if I don't mind the chance of mishap. (It seems that the more _media I've built up, the more likely I'll meet misfortune.)$(br2)So how do patterns work? In short:$(li)$(italic)Patterns/$ will execute...$(li)$(italic)Actions/$, which manipulate...$(li)$(l:casting/stack)$(italic)The Stack/$, which is a list of...$(li)$(italic)Iotas/$, which are simply units of information.",
+      "101.2": "Once I've drawn enough patterns to cast a spell, the grid will disappear as the _media I've stored up is released. Holding $(k:sneak) while using my $(l:items/staff)$(item)staff/$ will also clear the grid.$(br2)So how do patterns work? In short:$(li)$(italic)Patterns/$ will execute...$(li)$(italic)Actions/$, which manipulate...$(li)$(l:casting/stack)$(italic)The Stack/$, which is a list of...$(li)$(italic)Iotas/$, which are simply units of information.",
       "101.3": "First, $(thing)patterns/$. These are essential-- they're what I use to manipulate the _media around me. Certain patterns, when drawn, will cause $(thing)actions/$ to happen. Actions are what actually $(italic)do/$ the magic; all patterns influence _media in particular ways, and when those influences end up doing something useful, we call it an action.$(br2)_Media can be fickle: if I draw an invalid pattern, I'll get some $(l:casting/influences)$(action)garbage/$ result somewhere on my stack (read on...)",
       "101.4.header": "An Example",
       "101.4": "It's interesting to note that the $(italic)rotation/$ of a pattern doesn't seem to matter at all. These two patterns both perform an action called $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, for example.",
@@ -951,7 +1014,7 @@
       
       
       "mishaps.1": "Unfortunately, I am not (yet) a perfect being. I make mistakes from time to time in my study and casting of _Hexes; for example, misdrawing a pattern, or trying to an invoke an action with the wrong iotas. And Nature usually doesn't look too kindly on my mistakes-- causing what is called a $(italic)mishap/$.",
-      "mishaps.2": "A pattern that causes a mishap will glow red in my grid. Depending on the type of mistake, I can also expect a certain deleterious effect and a spray of red and colorful sparks as the mishandled _media curdles into light of a given color.$(br2)I also get a helpful error message in my chat, but a nagging feeling tells that will change once the \"mod updates,\" whatever that means. I shouldn't rely on always having it.",
+      "mishaps.2": "A pattern that causes a mishap will glow red in my grid. Depending on the type of mistake, I can also expect a certain deleterious effect and a spray of red and colorful sparks as the mishandled _media curdles into light of a given color.",
       "mishaps.3": "Fortunately, although the bad effects of mishaps are certainly $(italic)annoying/$, none of them are especially destructive in the long term. Nothing better to do than dust myself off and try again ... but I should strive for better anyways.$(br2)Following is a list of mishaps I have compiled.",
       "mishaps.invalid_pattern.title": "Invalid Pattern",
       "mishaps.invalid_pattern": "The pattern drawn is not associated with any action.$(br2)Causes yellow sparks, and a $(l:casting/influences)$(action)Garbage/$ will be pushed to the top of my stack.",
@@ -995,7 +1058,7 @@
       
       
       "influences.1": "Influences are ... strange, to say the least. Whereas most iotas seem to represent something about the world, influences represent something more... abstract, or formless.$(br2)For example, one influence I've named $(l:casting/influences)$(thing)Null/$ seems to represent nothing at all. It's created when there isn't a suitable answer to a question asked, such as an $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$ facing the sky.",
-      "influences.2": "In addition, I've discovered a curious triplet of influences I've named $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$, $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$, $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, and $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$. They seem to have properties of both patterns and other influences, yet act very differently. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:patterns/patterns_as_iotas)My notes on the subject are here/$.",
+      "influences.2": "In addition, I've discovered a curious quartet of influences I've named $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$, $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$, $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, and $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$. They seem to have properties of both patterns and other influences, yet act very differently. I can use these to add patterns to my stack as iotas, instead of matching them to actions. $(l:patterns/patterns_as_iotas)My notes on the subject are here/$.",
       "influences.3": "Finally, there seems to be an infinite family of influences that just seem to be a tangled mess of _media. I've named them $(l:casting/influences)$(action)Garbage/$, as they are completely useless. They seem to appear in my stack at various places in response to $(l:casting/mishaps)$(thing)mishaps/$, and appear to my senses as a nonsense jumble.",
       
       
@@ -1182,8 +1245,8 @@
       "numbers.example.7": "This pattern pushes 7: 5 + 1 + 1.",
       "numbers.example.-32.header": "Example 3",
       "numbers.example.-32": "This pattern pushes -32: negate 1 + 5 + 10 * 2.",
-      "numbers.example.4.5.header": "Example 4",
-      "numbers.example.4.5": "This pattern pushes 4.5: 5 / 2 + 1 + 1.",
+      "numbers.example.45.header": "Example 4",
+      "numbers.example.45": "This pattern pushes 45: 5 / 2 + 1 + 1.",
       "numbers.3": "In certain cases it might be easier to just use an $(l:items/abacus)$(item)Abacus/$. But, it's worth knowing the \"proper\" way to do things.",
       
       
@@ -1555,6 +1618,5 @@
       "interop.pehkui.get": "Get the scale of the entity, as a proportion of their normal size. For most entities, this will be 1.",
       "interop.pehkui.set": "Set the scale of the entity, passing in a proportion of their normal size. Costs about 1 $(item)Amethyst Shard/$."
     }
-  },
-  
+  }
 }

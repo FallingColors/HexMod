@@ -46,9 +46,9 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     private final Function<RecipeBuilder, IXplatConditionsBuilder> conditions;
 
     private final List<BlockAkashicLog> EDIFIED_LOGS = List.of(
-            HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
-            HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
-            HexBlocks.EDIFIED_LOG_PURPLE);
+        HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
+        HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
+        HexBlocks.EDIFIED_LOG_PURPLE);
 
     public HexplatRecipes(PackOutput output, IXplatIngredients ingredients,
                           Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
@@ -304,11 +304,19 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_LOGS)).save(recipes);
 
         for (var log : EDIFIED_LOGS) {
+<<<<<<< HEAD
+            ShapedRecipeBuilder.shaped(log, 3)
+                .define('W', log)
+                .pattern("WW")
+                .pattern("WW")
+                .unlockedBy("has_item", hasItem(log)).save(recipes);
+=======
             ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, log, 3)
                     .define('W', log)
                     .pattern("WW")
                     .pattern("WW")
                     .unlockedBy("has_item", hasItem(log)).save(recipes);
+>>>>>>> talia-1.20/1.20.1
         }
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.STRIPPED_EDIFIED_WOOD, 3)
@@ -475,6 +483,15 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         // FD compat
         for (var log : EDIFIED_LOGS) {
             this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
+<<<<<<< HEAD
+                    .withInput(log)
+                    .withTool(ingredients.axeStrip())
+                    .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
+                    .withOutput("farmersdelight:tree_bark")
+                    .withSound(SoundEvents.AXE_STRIP))
+                .whenModLoaded("farmersdelight")
+                .save(recipes, modLoc("compat/farmersdelight/cutting/" + Registry.BLOCK.getKey(log).getPath()));
+=======
                             .withInput(log)
                             .withTool(ingredients.axeStrip())
                             .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
@@ -482,6 +499,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                             .withSound(SoundEvents.AXE_STRIP))
                     .whenModLoaded("farmersdelight")
                     .save(recipes, modLoc("compat/farmersdelight/cutting/" + BuiltInRegistries.BLOCK.getKey(log).getPath()));
+>>>>>>> talia-1.20/1.20.1
         }
 
         this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()

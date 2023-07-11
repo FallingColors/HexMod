@@ -10,7 +10,7 @@ class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.LIGHT_GRAY)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         repeat(expected - got) { stack.add(GarbageIota()) }
     }
 

@@ -92,6 +92,13 @@ public abstract class CastingEnvironment {
     public abstract Vec3 mishapSprayPos();
 
     /**
+     * Return whether this env can cast great spells.
+     */
+    public boolean isEnlightened() {
+        return false;
+    }
+
+    /**
      * Attempt to extract the given amount of media. Returns the amount of media left in the cost.
      * <p>
      * If there was enough media found, it will return less or equal to zero; if there wasn't, it will be

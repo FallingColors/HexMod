@@ -12,8 +12,13 @@ class MishapAlreadyBrainswept(val mob: Mob) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GREEN)
 
+<<<<<<< HEAD
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        mob.hurt(HexDamageSources.overcastDamageFrom(env.caster), mob.health)
+=======
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         mob.hurt(mob.damageSources().source(HexDamageTypes.OVERCAST, ctx.caster), mob.health)
+>>>>>>> talia-1.20/1.20.1
     }
 
     override fun particleSpray(ctx: CastingEnvironment) =

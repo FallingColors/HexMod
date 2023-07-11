@@ -4,93 +4,53 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
-import at.petrak.hexcasting.api.casting.math.EulerPathFinder;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.server.ScrungledPatternsSave;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.datafixers.util.Unit;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 // Now an internal-only class used to do final processing on the registered stuff
 public class PatternRegistryManifest {
-    /* Map actions to their entry except for the per-world ones
-     *
-     * This can be static because the patterns that are per-world don't change in one server lifecycle.
-     */
     private static final ConcurrentMap<String, ResourceKey<ActionRegistryEntry>> NORMAL_ACTION_LOOKUP =
-        new ConcurrentHashMap<>();
-
-    /**
-     * A set of all the per-world patterns. This doesn't store <em>what</em> they are, just that
-     * they exist.
-     */
-    private static final ConcurrentMap<ResourceKey<ActionRegistryEntry>, Unit> PER_WORLD_ACTIONS =
         new ConcurrentHashMap<>();
 
     /**
      * Process the registry!
      * <p>
-     * Pass null for the OW to signal we're on the client
+     * This no longer checks any kind of per-world-pattern-ness because both this and ScrungledPatternsSave depends on
+     * the other to be done first. lol lmao. It just caches signature->action for the non-per-world-pats
+     * so it's an O(1) lookup.
      */
     // TODO i just realized that logically, this should not be run every time the client/server connects
     // just run it on startup, the info gathered here i think is static per world ... except for the per-worldies
     // that need to be recalced...
+    //
+    // Client is passed in currently for no reason, again will be required for shape-matching
     public static void processRegistry(@Nullable ServerLevel overworld) {
-        ScrungledPatternsSave perWorldPatterns = null;
-        if (overworld != null) {
-            perWorldPatterns = ScrungledPatternsSave.open(overworld);
-        }
-
-        var postCalculationNeeders = new ArrayList<ResourceKey<ActionRegistryEntry>>();
+        int perWorldActionCount = 0;
 
         var registry = IXplatAbstractions.INSTANCE.getActionRegistry();
         for (var key : registry.registryKeySet()) {
             var entry = registry.get(key);
-            if (HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
-                // We might be double-inserting here, once when the client does it and once when the server does
-                // However, we do need both to happen (what if it's a dedicated client connecting to a dedicated
-                // server?)
-                // hence, a set
-                PER_WORLD_ACTIONS.put(key, Unit.INSTANCE);
-
-                // Then we need to create this only on the server, gulp
-                if (perWorldPatterns != null) {
-                    var precalced = perWorldPatterns.lookup(entry.prototype().anglesSignature());
-                    if (precalced == null) {
-                        postCalculationNeeders.add(key);
-                    }
-                } else {
-                    // We're on the client, TODO implement the client guessing code
-                }
-
-            } else {
+            if (!HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
                 NORMAL_ACTION_LOOKUP.put(entry.prototype().anglesSignature(), key);
-            }
-        }
-
-        if (perWorldPatterns != null) {
-            for (var postNeederKey : postCalculationNeeders) {
-                var regiEntry = registry.get(postNeederKey);
-                var scrungledPat = scrunglePattern(regiEntry.prototype(), overworld.getSeed());
-
-                perWorldPatterns.insert(scrungledPat, postNeederKey);
+            } else {
+                perWorldActionCount++;
             }
         }
 
         HexAPI.LOGGER.info(("We're on the %s! " +
             "Loaded %d regular actions, %d per-world actions, and %d special handlers").formatted(
-            (overworld == null) ? "client" : "server", NORMAL_ACTION_LOOKUP.size(), PER_WORLD_ACTIONS.size(),
+            (overworld == null) ? "client" : "server", NORMAL_ACTION_LOOKUP.size(), perWorldActionCount,
             IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().size()
         ));
     }
@@ -158,22 +118,5 @@ public class PatternRegistryManifest {
         var sig = pair.getFirst();
         var entry = pair.getSecond();
         return HexPattern.fromAngles(sig, entry.canonicalStartDir());
-    }
-
-    /**
-     * Get the IDs of all the patterns marked as per-world
-     */
-    public static Collection<ResourceKey<ActionRegistryEntry>> getAllPerWorldActions() {
-        return PER_WORLD_ACTIONS.keySet();
-    }
-
-    /**
-     * Find a valid alternate drawing for this pattern that won't collide with anything pre-existing
-     */
-    public static HexPattern scrunglePattern(HexPattern prototype, long seed) {
-        return EulerPathFinder.findAltDrawing(prototype, seed, it -> {
-            var sig = it.anglesSignature();
-            return !NORMAL_ACTION_LOOKUP.containsKey(sig);
-        });
     }
 }

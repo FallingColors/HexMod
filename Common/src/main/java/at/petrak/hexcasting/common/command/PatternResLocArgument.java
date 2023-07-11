@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.common.command;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.brigadier.context.CommandContext;
@@ -15,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 public class PatternResLocArgument extends ResourceLocationArgument {
@@ -29,8 +32,15 @@ public class PatternResLocArgument extends ResourceLocationArgument {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(
-            PatternRegistryManifest.getAllPerWorldActions().stream().map(key -> key.location().toString()), builder);
+        var suggestions = new ArrayList<String>();
+        var registry = IXplatAbstractions.INSTANCE.getActionRegistry();
+        for (var key : registry.registryKeySet()) {
+            if (HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
+                suggestions.add(key.location().toString());
+            }
+        }
+
+        return SharedSuggestionProvider.suggest(suggestions, builder);
     }
 
     public static HexPattern getPattern(

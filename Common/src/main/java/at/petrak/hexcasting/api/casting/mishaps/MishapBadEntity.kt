@@ -14,8 +14,8 @@ class MishapBadEntity(val entity: Entity, val wanted: Component) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BROWN)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.mishapEnvironment.yeetHeldItemsTowards(entity.position())
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        env.mishapEnvironment.yeetHeldItemsTowards(entity.position())
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

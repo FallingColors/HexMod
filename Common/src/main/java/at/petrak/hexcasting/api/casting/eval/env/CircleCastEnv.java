@@ -89,7 +89,9 @@ public class CircleCastEnv extends CastingEnvironment {
             for (var sideEffect : result.getSideEffects()) {
                 if (sideEffect instanceof OperatorSideEffect.DoMishap doMishap) {
                     var msg = doMishap.getMishap().errorMessageWithName(this, doMishap.getErrorCtx());
-                    imp.postMishap(msg);
+                    if (msg != null) {
+                        imp.postMishap(msg);
+                    }
                 }
             }
         }

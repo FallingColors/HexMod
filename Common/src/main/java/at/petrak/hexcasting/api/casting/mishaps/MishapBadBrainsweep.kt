@@ -14,8 +14,13 @@ class MishapBadBrainsweep(val mob: Mob, val pos: BlockPos) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GREEN)
 
+<<<<<<< HEAD
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        trulyHurt(mob, HexDamageSources.overcastDamageFrom(env.caster), 1f)
+=======
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         trulyHurt(mob, mob.damageSources().source(HexDamageTypes.OVERCAST, ctx.caster), 1f)
+>>>>>>> talia-1.20/1.20.1
     }
 
     override fun particleSpray(ctx: CastingEnvironment): ParticleSpray {

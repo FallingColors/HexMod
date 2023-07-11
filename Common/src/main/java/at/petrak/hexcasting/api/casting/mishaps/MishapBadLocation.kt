@@ -12,8 +12,8 @@ class MishapBadLocation(val location: Vec3, val type: String = "too_far") : Mish
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.MAGENTA)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.mishapEnvironment.yeetHeldItemsTowards(this.location)
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        env.mishapEnvironment.yeetHeldItemsTowards(this.location)
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
