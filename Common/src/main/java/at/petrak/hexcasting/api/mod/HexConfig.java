@@ -13,11 +13,11 @@ import java.util.List;
 public class HexConfig {
     public interface CommonConfigAccess {
 
-        int dustMediaAmount();
+        long dustMediaAmount();
 
-        int shardMediaAmount();
+        long shardMediaAmount();
 
-        int chargedCrystalMediaAmount();
+        long chargedCrystalMediaAmount();
 
         double mediaToHealthRate();
 
@@ -27,9 +27,9 @@ public class HexConfig {
 
         int artifactCooldown();
 
-        int DEFAULT_DUST_MEDIA_AMOUNT = MediaConstants.DUST_UNIT;
-        int DEFAULT_SHARD_MEDIA_AMOUNT = MediaConstants.SHARD_UNIT;
-        int DEFAULT_CHARGED_MEDIA_AMOUNT = MediaConstants.CRYSTAL_UNIT;
+        long DEFAULT_DUST_MEDIA_AMOUNT = MediaConstants.DUST_UNIT;
+        long DEFAULT_SHARD_MEDIA_AMOUNT = MediaConstants.SHARD_UNIT;
+        long DEFAULT_CHARGED_MEDIA_AMOUNT = MediaConstants.CRYSTAL_UNIT;
         double DEFAULT_MEDIA_TO_HEALTH_RATE = 2 * MediaConstants.CRYSTAL_UNIT / 20.0;
 
         int DEFAULT_CYPHER_COOLDOWN = 8;

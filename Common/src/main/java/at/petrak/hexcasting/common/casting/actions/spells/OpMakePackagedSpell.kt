@@ -18,7 +18,7 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
 // TODO: How to handle in circles
-class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) : SpellAction {
+class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Long) : SpellAction {
     override val argc = 2
     override fun execute(
             args: List<Iota>,

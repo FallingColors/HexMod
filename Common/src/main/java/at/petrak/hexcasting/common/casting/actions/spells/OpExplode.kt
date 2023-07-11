@@ -29,7 +29,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
         val cost = MediaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 1.0 else 0.125)
         return SpellAction.Result(
             Spell(pos, strength, this.fire),
-            cost.toInt(),
+            cost.toLong(),
             listOf(ParticleSpray.burst(pos, strength, 50))
         )
     }

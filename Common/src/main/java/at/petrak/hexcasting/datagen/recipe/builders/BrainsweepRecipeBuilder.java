@@ -23,13 +23,13 @@ import java.util.function.Consumer;
 public class BrainsweepRecipeBuilder implements RecipeBuilder {
 	private final StateIngredient blockIn;
 	private final BrainsweepeeIngredient entityIn;
-	private final int mediaCost;
+	private final long mediaCost;
 	private final BlockState result;
 
 	private final Advancement.Builder advancement;
 
 	public BrainsweepRecipeBuilder(StateIngredient blockIn, BrainsweepeeIngredient entityIn, BlockState result,
-		int mediaCost) {
+		long mediaCost) {
 		this.blockIn = blockIn;
 		this.entityIn = entityIn;
 		this.result = result;
@@ -71,7 +71,7 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 	}
 
 	public record Result(ResourceLocation id, StateIngredient blockIn, BrainsweepeeIngredient villagerIn,
-						 int mediaCost, BlockState result, Advancement.Builder advancement,
+						 long mediaCost, BlockState result, Advancement.Builder advancement,
 						 ResourceLocation advancementId) implements FinishedRecipe {
 		@Override
 		public void serializeRecipeData(JsonObject json) {

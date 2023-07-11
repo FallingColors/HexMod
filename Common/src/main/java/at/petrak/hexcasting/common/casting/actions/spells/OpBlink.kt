@@ -15,7 +15,7 @@ import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.common.casting.actions.spells.great.OpTeleport
 import net.minecraft.world.entity.Entity
 import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 object OpBlink : SpellAction {
     override val argc = 2
@@ -46,7 +46,7 @@ object OpBlink : SpellAction {
 
         return SpellAction.Result(
             Spell(target, delta),
-            (MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).roundToInt(),
+            (MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).roundToLong(),
             listOf(
                 ParticleSpray.cloud(targetMiddlePos, 2.0, 50),
                 ParticleSpray.burst(targetMiddlePos.add(dvec), 2.0, 100)

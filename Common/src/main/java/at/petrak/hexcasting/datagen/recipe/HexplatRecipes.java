@@ -236,19 +236,19 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, HexItems.AMETHYST_DUST,
-                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.DUST_UNIT) + 1)
+                (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.DUST_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD)
             .requires(HexItems.AMETHYST_DUST)
             .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
             .save(recipes, modLoc("decompose_quenched_shard/dust"));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.AMETHYST_SHARD,
-                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.SHARD_UNIT) + 1)
+                (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.SHARD_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD)
             .requires(Items.AMETHYST_SHARD)
             .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
             .save(recipes, modLoc("decompose_quenched_shard/shard"));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, HexItems.CHARGED_AMETHYST,
-                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.CRYSTAL_UNIT) + 1)
+                (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.CRYSTAL_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD)
             .requires(HexItems.CHARGED_AMETHYST)
             .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))

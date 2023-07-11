@@ -8,12 +8,12 @@ import java.util.function.Supplier;
 /**
  * Things that always hold a constant amount of media, like amethyst
  */
-public record CapStaticMediaHolder(Supplier<Integer> baseWorth,
+public record CapStaticMediaHolder(Supplier<Long> baseWorth,
                                    int consumptionPriority,
                                    ItemStack stack) implements ADMediaHolder {
     @Override
     public long getMedia() {
-        return (long) baseWorth.get() * stack.getCount();
+        return baseWorth.get() * stack.getCount();
     }
 
     @Override

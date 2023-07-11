@@ -2,15 +2,20 @@ package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.circles.CircleExecutionState;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -53,6 +58,17 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     public MishapEnvironment getMishapEnvironment() {
         return new CircleMishapEnv(this.world, this.execState);
+    }
+
+    @Override
+    public void precheckAction(PatternShapeMatch match) throws Mishap {
+        super.precheckAction(match);
+
+        ResourceLocation key = actionKey(match);
+
+        if (!HexConfig.server().isActionAllowedInCircles(key)) {
+            throw new MishapDisallowedSpell("disallowed_circle");
+        }
     }
 
     @Override

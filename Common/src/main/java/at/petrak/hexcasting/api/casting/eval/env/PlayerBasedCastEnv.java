@@ -189,6 +189,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     protected long extractMediaFromInventory(long costLeft, boolean allowOvercast) {
         List<ADMediaHolder> sources = MediaHelper.scanPlayerForMediaStuff(this.caster);
 
+        var startCost = costLeft;
+
         for (var source : sources) {
             var found = MediaHelper.extractMedia(source, (int) costLeft, true, false);
             costLeft -= found;
@@ -211,6 +213,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
             costLeft -= actuallyTaken;
         }
+
+        this.caster.awardStat(HexStatistics.MEDIA_USED, (int) (startCost - costLeft));
 
         return costLeft;
     }

@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.Vec3
 
-class OpCreateFluid(val cost: Int, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : SpellAction {
+class OpCreateFluid(val cost: Long, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : SpellAction {
     override val argc = 1
     override fun execute(
             args: List<Iota>,

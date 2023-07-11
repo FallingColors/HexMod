@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.sideeffects
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
+import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.api.mod.HexStatistics
