@@ -56,7 +56,10 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     public FrozenPigment getPigment() {
         var casterStack = this.caster.getItemInHand(this.castingHand);
         var casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack);
-        return casterHexHolder.getPigment();
+        var hexHolderPigment = casterHexHolder.getPigment();
+        if (hexHolderPigment != null)
+            return hexHolderPigment;
+        return IXplatAbstractions.INSTANCE.getPigment(this.caster);
     }
 
     public EvalSound getSound() {
