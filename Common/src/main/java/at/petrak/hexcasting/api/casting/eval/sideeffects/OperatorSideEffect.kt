@@ -47,9 +47,9 @@ sealed class OperatorSideEffect {
         }
     }
 
-    data class ConsumeMedia(val amount: Int) : OperatorSideEffect() {
+    data class ConsumeMedia(val amount: Long) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            val leftoverMedia = harness.env.extractMedia(this.amount.toLong())
+            val leftoverMedia = harness.env.extractMedia(this.amount)
             return leftoverMedia > 0
         }
     }
