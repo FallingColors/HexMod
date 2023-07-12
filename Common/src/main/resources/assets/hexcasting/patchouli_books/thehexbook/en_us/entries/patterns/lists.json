@@ -67,7 +67,7 @@
       "type": "hexcasting:pattern",
       "header": "hexcasting.action.hexcasting:list_size",
       "op_id": "hexcasting:abs",
-      "anchor": "hexcasting:abs",
+      "anchor": "hexcasting:list_size",
       "input": "list",
       "output": "num",
       "text": "hexcasting.page.lists.list_size"
