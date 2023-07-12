@@ -105,29 +105,22 @@ public class ListPerWorldPatternsCommand {
                     var stack = new ItemStack(HexItems.SCROLL_LARGE);
                     stack.setTag(tag);
 
-<<<<<<< HEAD:Common/src/main/java/at/petrak/hexcasting/common/command/ListPerWorldPatternsCommand.java
                     for (var player : targets) {
                         var stackEntity = player.drop(stack, false);
                         if (stackEntity != null) {
                             stackEntity.setNoPickUpDelay();
-                            stackEntity.setOwner(player.getUUID());
+                            stackEntity.setThrower(player.getUUID());
                         }
-=======
-                for (var player : targets) {
-                    var stackEntity = player.drop(stack, false);
-                    if (stackEntity != null) {
-                        stackEntity.setNoPickUpDelay();
-                        stackEntity.setThrower(player.getUUID());
->>>>>>> talia-1.20/1.20.1:Common/src/main/java/at/petrak/hexcasting/common/command/ListPatternsCommand.java
-                    }
 
-                    count++;
+                        count++;
+                    }
                 }
             }
 
+            int finalCount = count;
             source.sendSuccess(() ->
                 Component.translatable("command.hexcasting.pats.all",
-                    count,
+                    finalCount,
                     targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
                 true);
             return count;
