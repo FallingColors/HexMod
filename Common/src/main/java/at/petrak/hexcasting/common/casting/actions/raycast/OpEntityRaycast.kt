@@ -49,37 +49,36 @@ object OpEntityRaycast : ConstMediaAction {
         var hitEntity: Entity? = null
         var hitPos: Vec3? = null
         val allValidInAABB: Iterator<*> = level.getEntities(entity, aabb, isValid).iterator()
-        while (true) {
-            while (allValidInAABB.hasNext()) {
-                val nextEntity = allValidInAABB.next() as Entity
-                val hitBox = nextEntity.boundingBox.inflate(nextEntity.pickRadius.toDouble())
-                val overlapBox = hitBox.clip(startPos, endPos)
-                if (hitBox.contains(startPos)) {
-                    if (sqrLength >= 0.0) {
-                        hitEntity = nextEntity
-                        hitPos = overlapBox.orElse(startPos)
-                        sqrLength = 0.0
-                    }
-                } else if (overlapBox.isPresent) {
-                    val maybePos = overlapBox.get()
-                    val sqrDist = startPos.distanceToSqr(maybePos)
-                    if (sqrDist < sqrLength || sqrLength == 0.0) {
-                        if (nextEntity.rootVehicle === entity?.rootVehicle) {
-                            if (sqrLength == 0.0) {
-                                hitEntity = nextEntity
-                                hitPos = maybePos
-                            }
-                        } else {
+
+        while (allValidInAABB.hasNext()) {
+            val nextEntity = allValidInAABB.next() as Entity
+            val hitBox = nextEntity.boundingBox.inflate(nextEntity.pickRadius.toDouble())
+            val overlapBox = hitBox.clip(startPos, endPos)
+            if (hitBox.contains(startPos)) {
+                if (sqrLength >= 0.0) {
+                    hitEntity = nextEntity
+                    hitPos = overlapBox.orElse(startPos)
+                    sqrLength = 0.0
+                }
+            } else if (overlapBox.isPresent) {
+                val maybePos = overlapBox.get()
+                val sqrDist = startPos.distanceToSqr(maybePos)
+                if (sqrDist < sqrLength || sqrLength == 0.0) {
+                    if (nextEntity.rootVehicle === entity?.rootVehicle) {
+                        if (sqrLength == 0.0) {
                             hitEntity = nextEntity
                             hitPos = maybePos
-                            sqrLength = sqrDist
                         }
+                    } else {
+                        hitEntity = nextEntity
+                        hitPos = maybePos
+                        sqrLength = sqrDist
                     }
                 }
             }
-            return if (hitEntity == null) {
-                null
-            } else EntityHitResult(hitEntity, hitPos)
         }
+        return if (hitEntity == null) {
+            null
+        } else EntityHitResult(hitEntity, hitPos!!) // hitEntity != null <=> hitPos != null
     }
 }

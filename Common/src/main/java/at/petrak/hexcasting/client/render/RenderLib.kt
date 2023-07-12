@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.client.ClientTickCounter
+import at.petrak.hexcasting.client.gui.GuiSpellcasting
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
