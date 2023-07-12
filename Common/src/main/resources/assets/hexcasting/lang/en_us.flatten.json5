@@ -1245,8 +1245,8 @@
       "numbers.example.7": "This pattern pushes 7: 5 + 1 + 1.",
       "numbers.example.-32.header": "Example 3",
       "numbers.example.-32": "This pattern pushes -32: negate 1 + 5 + 10 * 2.",
-      "numbers.example.45.header": "Example 4",
-      "numbers.example.45": "This pattern pushes 45: 5 / 2 + 1 + 1.",
+      "numbers.example.4.5.header": "Example 4",
+      "numbers.example.4.5": "This pattern pushes 4.5: 5 / 2 + 1 + 1.",
       "numbers.3": "In certain cases it might be easier to just use an $(l:items/abacus)$(item)Abacus/$. But, it's worth knowing the \"proper\" way to do things.",
       
       
