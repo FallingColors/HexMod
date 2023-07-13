@@ -86,7 +86,7 @@ fun drawLineSeq(
             Mth.atan2((prev.x * next.y - prev.y * next.x).toDouble(), (prev.x * next.x + prev.y * next.y).toDouble())
                 .toFloat()
         joinAngles[i - 1] = angle
-        val clamp = Math.min(prev.length(), next.length()) / (width * 0.5f)
+        val clamp = prev.length().coerceAtMost(next.length()) / (width * 0.5f)
         joinOffsets[i - 1] = Mth.clamp(Mth.sin(angle) / (1 + Mth.cos(angle)), -clamp, clamp)
     }
 

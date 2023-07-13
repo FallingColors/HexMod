@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.server.level.ServerLevel
@@ -22,6 +23,7 @@ object FrameFinishEval : ContinuationFrame {
         harness: CastingVM
     ): CastResult {
         return CastResult(
+            NullIota(),
             continuation,
             null,
             listOf(),

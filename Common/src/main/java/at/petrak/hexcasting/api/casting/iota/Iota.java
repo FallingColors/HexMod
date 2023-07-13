@@ -54,17 +54,17 @@ public abstract class Iota {
      */
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         return new CastResult(
+            this,
             continuation,
-            null,
+            null,  // Should never matter
             List.of(
                 new OperatorSideEffect.DoMishap(
                     new MishapUnescapedValue(this),
                     new Mishap.Context(new HexPattern(HexDir.WEST, List.of()), null)
                 )
-            ), // Should never matter
+            ),
             ResolvedPatternType.INVALID,
-            HexEvalSounds.MISHAP
-        );
+            HexEvalSounds.MISHAP);
     }
 
     /**

@@ -373,6 +373,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public void sendPacketTracking(Entity entity, IMessage packet) {
+        ForgePacketHandler.getNetwork().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
+    }
+
+    @Override
     public Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message) {
         //noinspection unchecked
         return (Packet<ClientGamePacketListener>) ForgePacketHandler.getNetwork().toVanillaPacket(message, NetworkDirection.PLAY_TO_CLIENT);

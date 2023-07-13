@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.serializeToNBT
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
@@ -39,7 +40,7 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
             }
         } else {
             // If there are no patterns (e.g. empty Hermes), just return OK.
-            CastResult(continuation, null, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES)
+            CastResult(ListIota(list), continuation, null, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES)
         }
     }
 

@@ -2,11 +2,15 @@ package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
+import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+
+import java.util.List;
 
 public class PackagedItemCastEnv extends PlayerBasedCastEnv {
 
@@ -19,6 +23,15 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     @Override
     public void postExecution(CastResult result) {
         super.postExecution(result);
+
+        if (result.component1() instanceof PatternIota patternIota) {
+            var packet = new MsgNewSpiralPatternsS2C(
+                    this.caster.getUUID(), List.of(patternIota.getPattern()), 140
+            );
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(this.caster, packet);
+            IXplatAbstractions.INSTANCE.sendPacketTracking(this.caster, packet);
+        }
+
         // TODO: how do we know when to actually play this sound?
         this.sound = this.sound.greaterOf(result.getSound());
     }

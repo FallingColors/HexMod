@@ -20,6 +20,7 @@ import at.petrak.hexcasting.common.misc.RegisterMisc;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
+import at.petrak.hexcasting.forge.cap.adimpl.CapClientCastingStack;
 import at.petrak.hexcasting.forge.datagen.ForgeHexDataGenerators;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
@@ -196,6 +197,8 @@ public class ForgeHexInitializer {
                     Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, id, lift));
             }
         });
+
+        evBus.register(CapClientCastingStack.class);
 
         evBus.addListener((PlayerInteractEvent.EntityInteract evt) -> {
             var res = BrainsweepingEvents.interactWithBrainswept(

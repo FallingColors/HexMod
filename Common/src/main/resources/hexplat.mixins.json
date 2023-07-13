@@ -26,6 +26,7 @@
     "accessor.client.AccessorMouseHandler",
     "accessor.client.AccessorRenderStateShard",
     "accessor.client.AccessorRenderType",
-    "client.MixinClientLevel"
+    "client.MixinClientLevel",
+    "client.MixinPlayerRenderer"
   ]
 }

@@ -52,8 +52,6 @@ data class FrameForEach(
 
         // If we still have data to process...
         val (stackTop, newImage, newCont) = if (data.nonEmpty) {
-            // Increment the evaluation depth,
-
             // push the next datum to the top of the stack,
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
@@ -68,6 +66,7 @@ data class FrameForEach(
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
         return CastResult(
+            ListIota(code),
             newCont,
             newImage.copy(stack = tStack),
             listOf(),

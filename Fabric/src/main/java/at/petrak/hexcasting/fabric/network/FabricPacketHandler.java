@@ -39,6 +39,10 @@ public class FabricPacketHandler {
             makeClientBoundHandler(MsgNewWallScrollS2C::deserialize, MsgNewWallScrollS2C::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgRecalcWallScrollDisplayS2C.ID,
             makeClientBoundHandler(MsgRecalcWallScrollDisplayS2C::deserialize, MsgRecalcWallScrollDisplayS2C::handle));
+        ClientPlayNetworking.registerGlobalReceiver(MsgNewSpiralPatternsS2C.ID,
+                makeClientBoundHandler(MsgNewSpiralPatternsS2C::deserialize, MsgNewSpiralPatternsS2C::handle));
+        ClientPlayNetworking.registerGlobalReceiver(MsgClearSpiralPatternsS2C.ID,
+                makeClientBoundHandler(MsgClearSpiralPatternsS2C::deserialize, MsgClearSpiralPatternsS2C::handle));
     }
 
     private static <T> ClientPlayNetworking.PlayChannelHandler makeClientBoundHandler(
