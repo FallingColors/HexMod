@@ -1,1 +1,16 @@
-category goes here
+{% import "macros.html.jinja" as macros %}
+<section id="{{ category.id.path }}">
+  {% call macros.maybe_spoilered(category) %}
+    <h2 class="category-title page-header">
+      {{ category.name | hexdoc_block }}
+      {{ macros.jump_to_top() }}
+      {{ macros.permalink(category.id.path) }}
+    </h2>
+    {{ category.description | hexdoc_block }}
+  {% endcall %}
+  {% for entry in category.entries %}
+    {% if entry.id not in blacklist %}
+      entry
+    {% endif %}
+  {% endfor %}
+</section>

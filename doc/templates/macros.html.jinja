@@ -9,3 +9,19 @@
     {{- value.name -}}
   </a>
 {%- endmacro %}
+
+{% macro maybe_spoilered(value) %}
+  {% if value.is_spoiler %}
+    <div class="spoilered">
+      {{ caller() }}
+    </div>
+  {% else %}
+    {{ caller() }}
+  {% endif %}
+{%- endmacro %}
+
+{% macro jump_to_top() %}
+  <a href="#table-of-contents" class="permalink small" title="Jump to top">
+    <i class="bi bi-box-arrow-up"></i>
+  </a>
+{%- endmacro %}
