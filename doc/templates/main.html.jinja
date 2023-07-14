@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ description }}">
+    <meta name="author" content="{{ author }}">
+    <link rel="icon" href="{{ icon_href }}">
+
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <style>
+      summary { display: list-item; }
+
+      details.spell-collapsible {
+        display: inline-block;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        padding: .5em .5em 0;
+        margin-bottom: .5em;
+      }
+
+      summary.collapse-spell {
+        font-weight: bold;
+        margin: -.5em -.5em 0;
+        padding: .5em;
+      }
+
+      details.spell-collapsible[open] {
+        padding: .5em;
+      }
+
+      details[open] summary.collapse-spell {
+        border-bottom: 1px solid #aaa;
+        margin-bottom: .5em;
+      }
+
+      details .collapse-spell::before {
+        content: "Click to show spell";
+      }
+      details[open] .collapse-spell::before {
+        content: "Click to hide spell";
+      }
+      blockquote.crafting-info {
+        font-size: inherit;
+      }
+      a.permalink {
+        margin-left: 0.5em;
+      }
+      a.permalink:hover {
+        color: lightgray;
+      }
+      p {
+        margin: 0.5ex 0;
+      }
+      p.fake-li {
+        margin: 0;
+      }
+      p.fake-li::before {
+        content: "\2022";
+        margin: 1ex;
+      }
+      .linkout::before {
+        content: "Link: ";
+      }
+      p.todo-note {
+        font-style: italic;
+        color: lightgray;
+      }
+      .obfuscated {
+        filter: blur(1em);
+      }
+      .spoilered {
+        filter: blur(1ex);
+        -moz-transition: filter 0.04s linear;
+      }
+      .spoilered:hover {
+        filter: blur(0.5ex);
+      }
+      .spoilered.unspoilered {
+        filter: blur(0);
+      }
+      canvas.spell-viz {
+        --dot-color: #777f;
+        --dot-color: #777f;
+        --start-dot-color: #f009;
+        --moving-dot-color: #0fa9;
+
+        --path-color: darkgray;
+        --visited-path-color: #0c8;
+
+        --dot-scale: 0.0625;
+        --moving-dot-scale: 0.125;
+        --line-scale: 0.08333;
+        --pausetext-scale: 0.5;
+        --dark-mode: 0;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #201a20;
+          color: #ddd;
+        }
+
+        .jumbotron {
+          background-color: #323;
+        }
+        
+        canvas.spell-viz {
+          /* hack */
+          --dark-mode: 1;
+        }
+      }
+
+    </style>
+    <noscript>
+        <style>
+        /* for accessibility */
+        .spoilered {
+          filter: none !important;
+        }
+
+        </style>
+    </noscript>
+    <script>
+      {# TODO: kinda hacky #}
+      {% include_raw "main.js" %}
+
+    </script>
+
+</head>
+<body>
+<div class="container" style="margin-top: 3em;">
+    <blockquote>
+        <h1>This is the online version of the {{ mod_name }} documentation.</h1>
+        <p>Embedded images and patterns are included, but not crafting recipes or items. There's an in-game book for
+            those.</p>
+        {% if is_bleeding_edge %}
+        <p>Additionally, this is built from the latest code on GitHub. It may describe <b>newer</b> features that you
+            may not necessarily have, even on the latest CurseForge version!</p>
+        {% endif %}
+        <p><b>Entries which are blurred are spoilers</b>. Click to reveal them, but be aware that they may spoil endgame
+            progression. Alternatively, click <a href="?nospoiler">here</a> to get a version with all spoilers showing.
+        </p>
+    </blockquote>
+</div>
+{% filter hexdoc_minify %}
+  {% include "book.html.jinja" %}
+{% endfilter +%}
+</body>
+</html>

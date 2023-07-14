@@ -1,6 +1,13 @@
 from pathlib import Path
+from typing import Any, cast
 
-from pydantic import Field
+from pydantic import (
+    Field,
+    FieldValidationInfo,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 from common.properties import Properties
 from common.types import Color, Sortable
@@ -16,6 +23,8 @@ class Entry(BookModelFile[BookContext, BookContext], Sortable):
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/entry-json
     """
+
+    is_spoiler: bool = False
 
     # required (entry.json)
     name: LocalizedStr
@@ -43,3 +52,12 @@ class Entry(BookModelFile[BookContext, BookContext], Sortable):
         # implement Sortable
         # note: python sorts false before true, so we invert priority
         return (not self.priority, self.sortnum, self.name)
+
+    @model_validator(mode="after")
+    def _check_is_spoiler(self, info: ValidationInfo):
+        context = cast(BookContext | None, info.context)
+        if not context or self.advancement is None:
+            return self
+
+        self.is_spoiler = self.advancement in context["props"].spoilers
+        return self

@@ -4,12 +4,14 @@
 import sys
 from pathlib import Path
 
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
+
+# from jinja2.sandbox import SandboxedEnvironment
 from tap import Tap
 
 from common.properties import Properties
+from common.templates import IncludeRawExtension, hexdoc_block, hexdoc_minify
 from hexcasting.hex_book import HexBook
-
-from .collate_data import generate_docs
 
 if sys.version_info < (3, 11):
     raise RuntimeError("Minimum Python version: 3.11")
@@ -31,9 +33,30 @@ def main(args: Args) -> None:
     props = Properties.load(args.properties_file)
     book = HexBook.load(*HexBook.prepare(props))
 
-    # load and fill the template
-    template = props.template.read_text("utf-8")
-    docs = generate_docs(book, template)
+    # set up Jinja environment
+    # TODO: SandboxedEnvironment
+    env = Environment(
+        # TODO: ChoiceLoader w/ ModuleLoader, but we need the directory restructure
+        loader=FileSystemLoader("./templates"),
+        undefined=StrictUndefined,
+        lstrip_blocks=True,
+        trim_blocks=True,
+        autoescape=False,
+        extensions=[IncludeRawExtension],
+    )
+    env.filters["hexdoc_minify"] = hexdoc_minify
+    env.filters["hexdoc_block"] = hexdoc_block
+
+    # load and render template
+    template = env.get_template(props.template)
+    docs = template.render(
+        props.template_args
+        | {
+            "book": book,
+            "spoilers": props.spoilers,
+            "blacklist": props.blacklist,
+        }
+    )
 
     # if there's an output file specified, write to it
     # otherwise just print the generated docs

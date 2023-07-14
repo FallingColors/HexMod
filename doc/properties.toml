@@ -2,7 +2,6 @@
 
 modid = "hexcasting"
 book_name = "thehexbook"
-template = "template.html"
 is_0_black = false
 
 recipe_dirs = [
@@ -11,6 +10,10 @@ recipe_dirs = [
 ]
 default_recipe_dir = 0
 
+# NOTE: _Raw means "don't apply variable interpolation to this value"
+pattern_regex = {_Raw='HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?'}
+
+template = "main.html.jinja"
 spoilers = [
     "hexcasting:opened_eyes",
     "hexcasting:y_u_no_cast_angy",
@@ -18,9 +21,14 @@ spoilers = [
 ]
 blacklist = []
 
-# NOTE: _Raw means "don't apply variable interpolation to this value"
-# more on that later
-pattern_regex = {_Raw='HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?'}
+[template_args]
+title = "Hex Book"
+mod_name = "Hexcasting"
+author = "petrak@, Alwinfy"
+description = "The Hex Book, all in one place."
+icon_href = "icon.png"
+is_bleeding_edge = true
+show_landing_text = true
 
 [base_asset_urls]
 hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources"

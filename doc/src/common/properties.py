@@ -39,18 +39,20 @@ class I18nProps(HexDocModel[Any]):
 class Properties(HexDocModel[Any]):
     modid: str
     book_name: str
-    template: Path
     is_0_black: bool
     """If true, the style `$(0)` changes the text color to black; otherwise it resets
     the text color to the default."""
-
-    spoilers: set[ResourceLocation]
-    blacklist: set[ResourceLocation]
 
     recipe_dirs: list[Path]
     default_recipe_dir_index_: int = Field(alias="default_recipe_dir")
 
     pattern_regex: re.Pattern[str]
+
+    template: str
+    spoilers: set[ResourceLocation]
+    blacklist: set[ResourceLocation]
+
+    template_args: dict[str, Any]
 
     base_asset_urls: dict[str, NoTrailingSlashHttpUrl]
     """Mapping from modid to the url of that mod's `resources` directory on GitHub."""

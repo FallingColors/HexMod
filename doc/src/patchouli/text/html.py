@@ -1,4 +1,5 @@
 # TODO: type
+import io
 from contextlib import nullcontext
 from dataclasses import dataclass
 from html import escape
@@ -27,17 +28,14 @@ class HTMLElement:
         self.stream.write(f"</{self.name}>")
 
 
-@dataclass
-class HTMLStream:
-    stream: IO[str]
-
+class HTMLStream(io.StringIO):
     def void_element(self, name: str, **kwargs: Any):
         """Like `<img />`."""
         keywords = attributes_to_str(kwargs)
-        self.stream.write(f"<{name}{keywords} />")
+        self.write(f"<{name}{keywords} />")
 
     def element(self, name: str, /, **kwargs: Any):
-        return HTMLElement(self.stream, name, kwargs)
+        return HTMLElement(self, name, kwargs)
 
     def element_if(self, condition: bool, name: str, /, **kwargs: Any):
         if condition:
@@ -49,5 +47,5 @@ class HTMLStream:
             pass
 
     def text(self, txt: str | LocalizedStr):
-        self.stream.write(escape(str(txt)))
+        self.write(escape(str(txt)))
         return self

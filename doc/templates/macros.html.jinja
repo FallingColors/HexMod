@@ -1,0 +1,11 @@
+{% macro permalink(href) %}
+  <a href="#{{ href }}" class="permalink small" title="Permalink">
+    <i class="bi bi-link-45deg"></i>
+  </a>
+{% endmacro %}
+
+{% macro maybe_spoilered_link(value) %}
+  <a href="#{{ value.id.path }}" class="{{ 'spoilered' if value.is_spoiler else '' }}">
+    {{- value.name -}}
+  </a>
+{%- endmacro %}

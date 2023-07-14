@@ -1,7 +1,7 @@
 from pathlib import Path
-from typing import Self
+from typing import Self, cast
 
-from pydantic import Field
+from pydantic import Field, FieldValidationInfo, field_validator
 
 from common.properties import Properties
 from common.types import Sortable, sorted_dict
@@ -73,6 +73,10 @@ class Category(BookModelFile[BookContext, BookContext], Sortable):
     def _id_base_dir(cls, props: Properties) -> Path:
         # implement BookModelFile
         return props.categories_dir
+
+    @property
+    def is_spoiler(self) -> bool:
+        return all(entry.is_spoiler for entry in self.entries)
 
     @property
     def _is_cmp_key_ready(self) -> bool:

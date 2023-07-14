@@ -1,0 +1,22 @@
+{% import "macros.html.jinja" as macros %}
+<h2 id="table-of-contents" class="page-header">
+  Table of Contents
+  <a href="javascript:void(0)" class="permalink toggle-link small" data_target="toc-category" title="Toggle all">
+    <i class="bi bi-list-nested"></i>
+  </a>
+  {{ macros.permalink("table-of-contents") }}
+</h2>
+{% for category in book.categories.values() %}
+  <details class="toc-category">
+    <summary>
+      {{ macros.maybe_spoilered_link(category) }}
+    </summary>
+    <ul>
+      {% for entry in category.entries %}
+        <li>
+          {{ macros.maybe_spoilered_link(entry) }}
+        </li>
+      {% endfor %}
+    </ul>
+  </details>
+{% endfor %}
