@@ -1,0 +1,10 @@
+{% import "macros.html.jinja" as macros -%}
+
+<div id="{{ entry.id.path }}">
+  {% call macros.maybe_spoilered(entry) %}
+    {{ macros.header(entry, "entry-title") }}
+    {% for page in entry.pages %}
+      page
+    {% endfor %}
+  {% endcall %}
+</div>

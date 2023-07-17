@@ -25,3 +25,11 @@
     <i class="bi bi-box-arrow-up"></i>
   </a>
 {%- endmacro %}
+
+{% macro header(value, class_name) %}
+  <h3 class="{{ class_name }} page-header">
+    {{ value.name | hexdoc_block }}
+    {{ jump_to_top() }}
+    {{ permalink(value.id.path) }}
+  </h3>
+{%- endmacro %}
