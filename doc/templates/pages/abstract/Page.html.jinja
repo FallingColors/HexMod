@@ -1,0 +1,8 @@
+{% if page.anchor %}
+  <div id="{{ entry.id.path ~ '#' ~ page.anchor }}">
+    {% block body scoped required %}{% endblock %}
+  </div>
+{% else %}
+  {% self.body() %}
+{% endif %}
+<br />

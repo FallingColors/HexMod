@@ -38,7 +38,7 @@ def hexdoc_minify(value: str) -> str:
     # )
 
 
-def hexdoc_block(value: Any) -> str:
+def hexdoc_block(value: Any, allow_none: bool = False) -> str:
     match value:
         case LocalizedStr() | str():
             lines = str(value).splitlines()
@@ -49,5 +49,7 @@ def hexdoc_block(value: Any) -> str:
                     for child in value.children:
                         out.write(hexdoc_block(child))
                 return out.getvalue()
+        case None if allow_none:
+            return ""
         case _:
             raise TypeError(value)

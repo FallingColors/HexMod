@@ -4,7 +4,7 @@
   {% call macros.maybe_spoilered(entry) %}
     {{ macros.header(entry, "entry-title") }}
     {% for page in entry.pages %}
-      page
+      {% include "pages/" ~ page.__class__.__name__ ~ ".html.jinja" %}
     {% endfor %}
   {% endcall %}
 </div>
