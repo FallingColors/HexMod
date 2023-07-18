@@ -13,7 +13,7 @@ public abstract class FabricClipContextMixin {
 
     @Redirect(method = "<init>",
             at = @At(
-                    value = "INVOKE_ASSIGN",
+                    value = "INVOKE",
                     target = "Lnet/minecraft/world/phys/shapes/CollisionContext;of" +
                             "(Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/phys/shapes/CollisionContext;"))
     public CollisionContext hex$getCollisionContext(Entity entity) {
