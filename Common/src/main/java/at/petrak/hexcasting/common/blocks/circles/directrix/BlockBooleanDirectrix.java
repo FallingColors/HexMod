@@ -90,6 +90,13 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
     }
 
     @Override
+    public BlockState endEnergized(BlockPos pos, BlockState bs, Level world) {
+        var newState = bs.setValue(ENERGIZED, false).setValue(STATE, State.NEITHER);
+        world.setBlockAndUpdate(pos, newState);
+        return newState;
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(STATE, FACING);
