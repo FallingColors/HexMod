@@ -1,8 +1,7 @@
 from typing import Any, cast
 
-from pydantic import Field, ValidationInfo, model_validator
+from pydantic import ValidationInfo, model_validator
 
-from hexcasting.pattern import RawPatternInfo
 from minecraft.i18n import LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import ResourceLocation

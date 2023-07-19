@@ -3,7 +3,7 @@ import io
 from contextlib import nullcontext
 from dataclasses import dataclass
 from html import escape
-from typing import IO, Any, Self
+from typing import IO, Any
 
 from minecraft.i18n import LocalizedStr
 

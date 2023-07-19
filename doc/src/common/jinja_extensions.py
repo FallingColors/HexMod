@@ -33,6 +33,7 @@ _BETWEEN_TAGS_RE = re.compile(r"<br />\s+<")
 
 def hexdoc_minify(value: str) -> str:
     merged_lines = "".join(line.strip() for line in value.splitlines())
+    # FIXME: hack
     return _BETWEEN_TAGS_RE.sub("<br /><", merged_lines)
 
     # return minify_html.minify(
@@ -68,4 +69,5 @@ def hexdoc_wrap(value: str, *args: str):
         attributes = " " + " ".join(attributes)
     else:
         attributes = ""
+    # FIXME: hack (also all the incorrect uses of hexdoc_block)
     return Markup(f"<{tag}{attributes}>{escape(str(value))}</{tag}>")

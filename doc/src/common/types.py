@@ -1,7 +1,7 @@
 import string
 from abc import ABC, abstractmethod
 from enum import Enum, unique
-from typing import Any, Generic, Mapping, Protocol, TypeVar
+from typing import Any, Mapping, Protocol, TypeVar
 
 from pydantic import field_validator, model_validator
 from pydantic.dataclasses import dataclass
