@@ -1,6 +1,6 @@
 {% import "macros.html.jinja" as macros -%}
 
-<section id="{{ category.id.path }}">
+<section id='{{ category.id.path }}'>
   {% call macros.maybe_spoilered(category) %}
     {{ macros.section_header(category, "h2", "category-title") }}
     {{ category.description|hexdoc_block }}

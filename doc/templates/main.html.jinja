@@ -127,8 +127,8 @@
     <script>
       {# TODO: kinda hacky #}
       {% filter indent(6) %}
-        {% include_raw "main.js" %}
-      {% endfilter %}
+      {%+ include_raw "main.js" %}
+      {% endfilter +%}
 
     </script>
 
@@ -153,3 +153,4 @@
 {% endfilter +%}
 </body>
 </html>
+

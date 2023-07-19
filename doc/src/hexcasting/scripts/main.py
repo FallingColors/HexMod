@@ -46,7 +46,7 @@ def main(args: Args) -> None:
         undefined=StrictUndefined,
         lstrip_blocks=True,
         trim_blocks=True,
-        autoescape=False,
+        autoescape=True,
         extensions=[IncludeRawExtension],
     )
     env.filters |= dict(  # for some reason, pylance doesn't like the {} here

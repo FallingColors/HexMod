@@ -1,7 +1,7 @@
-<div class="container">
+<div class='container'>
   {% if show_landing_text %}
-    <header class="jumbotron">
-      <h1 class="book-title">
+    <header class='jumbotron'>
+      <h1 class='book-title'>
         {{ book.name }}
       </h1>
       {{ book.landing_text|hexdoc_block }}
@@ -10,7 +10,7 @@
   <nav>
     {% include "tableofcontents.html.jinja" %}
   </nav>
-  <main class="book-body">
+  <main class='book-body'>
     {% for category in book.categories.values() %}
       {% include "category.html.jinja" -%}
     {% endfor -%}

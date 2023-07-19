@@ -1,18 +1,18 @@
 {% macro permalink(href) %}
-  <a href="#{{ href }}" class="permalink small" title="Permalink">
-    <i class="bi bi-link-45deg"></i>
+  <a href='#{{ href }}' class='permalink small' title='Permalink'>
+    <i class='bi bi-link-45deg'></i>
   </a>
 {% endmacro %}
 
 {% macro maybe_spoilered_link(value) %}
-  <a href="#{{ value.id.path }}" class="{{ 'spoilered' if value.is_spoiler else '' }}">
-    {{- value.name -}}
+  <a href='#{{ value.id.path }}' class='{{ "spoilered" if value.is_spoiler else "" }}'>
+    {{- value.name|hexdoc_block -}}
   </a>
 {%- endmacro %}
 
 {% macro maybe_spoilered(value) %}
   {% if value.is_spoiler %}
-    <div class="spoilered">
+    <div class='spoilered'>
       {{ caller() }}
     </div>
   {% else %}
@@ -21,13 +21,13 @@
 {%- endmacro %}
 
 {% macro jump_to_top() %}
-  <a href="#table-of-contents" class="permalink small" title="Jump to top">
-    <i class="bi bi-box-arrow-up"></i>
+  <a href='#table-of-contents' class='permalink small' title='Jump to top'>
+    <i class='bi bi-box-arrow-up'></i>
   </a>
 {%- endmacro %}
 
 {% macro section_header(value, header_tag, class_name) %}
-  <{{ header_tag }} class="{{ class_name }} page-header">
+  <{{ header_tag }} class='{{ class_name }} page-header'>
     {{ value.name|hexdoc_block }}
     {{ jump_to_top() }}
     {{ permalink(value.id.path) }}
@@ -35,11 +35,11 @@
 {%- endmacro %}
 
 {% macro recipe_block(recipes, result_attribute, description, separator) %}
-  <blockquote class="crafting-info">
+  <blockquote class='crafting-info'>
     Depicted in the book: {{ description }} {{
       recipes
-      |map(attribute="result." ~ result_attribute)
-      |map("hexdoc_wrap", "code")
+      |map(attribute='result.' ~ result_attribute)
+      |map('hexdoc_wrap', 'code')
       |join(separator)
     }}.
   </blockquote>

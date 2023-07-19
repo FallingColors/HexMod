@@ -5,9 +5,8 @@
   {% if page.title is not none %}
     {# we need title_attrs for PageWithPattern #}
     <h4{% block title_attrs %}{% endblock %}>
-      {{ page.title }}
-      {# page_anchor_id is conditionally defined in Page #}
-      {% if page_anchor_id is defined %}
+      {{ page.title|hexdoc_block }}
+      {% if page_anchor_id is defined %} {# note: page_anchor_id is conditionally defined in Page #}
         {{ macros.permalink(page_anchor_id) }}
       {% endif %}
     </h4>
