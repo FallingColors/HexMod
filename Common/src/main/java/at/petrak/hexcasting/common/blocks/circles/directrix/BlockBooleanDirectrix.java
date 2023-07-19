@@ -32,8 +32,8 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 
-    public BlockBooleanDirectrix(Properties p_49795_) {
-        super(p_49795_);
+    public BlockBooleanDirectrix(Properties properties) {
+        super(properties);
         this.registerDefaultState(this.stateDefinition.any()
             .setValue(ENERGIZED, false)
             .setValue(STATE, State.NEITHER)
@@ -56,6 +56,8 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
                 new MishapBoolDirectrixNotBool(last, pos));
             return new ControlFlow.Stop();
         }
+
+        world.setBlockAndUpdate(pos, bs.setValue(STATE, biota.getBool() ? State.TRUE : State.FALSE));
 
         var outputDir = biota.getBool()
             ? bs.getValue(FACING)
