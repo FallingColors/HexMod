@@ -1,12 +1,10 @@
-from abc import ABC, abstractmethod
-from typing import Any, Self
+from typing import Any, ClassVar, Self
 
-from pydantic import Field, model_validator
+from pydantic import model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from common.tagged_union import TypeTaggedUnion
+from common.tagged_union import TagValue, TypeTaggedUnion
 from minecraft.i18n import LocalizedStr
-from minecraft.recipe import CraftingRecipe
 from minecraft.resource import ResourceLocation
 
 from ..context import AnyBookContext
@@ -19,9 +17,31 @@ class Page(TypeTaggedUnion[AnyBookContext], group="hexdoc.Page", type=None):
     See: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/page-types
     """
 
+    __template: ClassVar[str]
+
     advancement: ResourceLocation | None = None
     flag: str | None = None
     anchor: str | None = None
+
+    def __init_subclass__(
+        cls,
+        *,
+        type: TagValue | None,
+        template: str | None = None,
+        template_name: str | None = None,
+    ) -> None:
+        super().__init_subclass__(group=None, type=type)
+
+        # jinja template
+        match template, template_name:
+            case str(), None:
+                cls.__template = template
+            case None, str():
+                cls.__template = f"pages/{template_name}.html.jinja"
+            case None, None:
+                cls.__template = f"pages/{cls.__name__}.html.jinja"
+            case _:
+                raise ValueError("Must specify at most one of template, template_name")
 
     @model_validator(mode="wrap")
     @classmethod
@@ -30,21 +50,14 @@ class Page(TypeTaggedUnion[AnyBookContext], group="hexdoc.Page", type=None):
             return handler({"type": "patchouli:text", "text": value})
         return handler(value)
 
+    @property
+    def template(self) -> str:
+        return self.__template
+
 
 class PageWithText(Page[AnyBookContext], type=None):
     text: FormatTree | None = None
 
 
 class PageWithTitle(PageWithText[AnyBookContext], type=None):
-    title_: LocalizedStr | None = Field(default=None, alias="title")
-
-    @property
-    def title(self) -> str | None:
-        return self.title_.value if self.title_ else None
-
-
-class PageWithCraftingRecipes(PageWithText[AnyBookContext], ABC, type=None):
-    @property
-    @abstractmethod
-    def recipes(self) -> list[CraftingRecipe]:
-        ...
+    title: LocalizedStr | None = None

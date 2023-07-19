@@ -1,6 +1,5 @@
 __all__ = [
     "Page",
-    "PageWithCraftingRecipes",
     "PageWithText",
     "PageWithTitle",
     "CraftingPage",
@@ -16,7 +15,7 @@ __all__ = [
     "TextPage",
 ]
 
-from .abstract_pages import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
+from .abstract_pages import Page, PageWithText, PageWithTitle
 from .pages import (
     CraftingPage,
     EmptyPage,

@@ -126,7 +126,9 @@
     </noscript>
     <script>
       {# TODO: kinda hacky #}
-      {% include_raw "main.js" %}
+      {% filter indent(6) %}
+        {% include_raw "main.js" %}
+      {% endfilter %}
 
     </script>
 

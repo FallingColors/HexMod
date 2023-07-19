@@ -2,11 +2,11 @@
 
 <section id="{{ category.id.path }}">
   {% call macros.maybe_spoilered(category) %}
-    {{ macros.header(category, "category-title") }}
-    {{ category.description | hexdoc_block }}
+    {{ macros.section_header(category, "h2", "category-title") }}
+    {{ category.description|hexdoc_block }}
   {% endcall %}
   {% for entry in category.entries %}
-    {% if entry.id not in blacklist %}
+    {% if entry.id not in props.blacklist %}
       {% include "entry.html.jinja" %}
     {% endif %}
   {% endfor %}

@@ -1,0 +1,13 @@
+{% extends "pages/PageWithTitle.html.jinja" %}
+
+{% block inner_body %}
+  <details class="spell-collapsible">
+    <summary class="collapse-spell"></summary>
+    {% for pattern in page.patterns %}
+      <canvas class="spell-viz" width=216 height=216 data-string="{{ pattern.signature }}" data-start="{{ pattern.startdir.name.lower() }}" data-per-world="{{ pattern.is_per_world }}">
+        Your browser does not support visualizing patterns. Pattern code: {{ pattern.signature }}
+      </canvas>
+    {% endfor %}
+  </details>
+  {{ super() }}
+{% endblock inner_body %}

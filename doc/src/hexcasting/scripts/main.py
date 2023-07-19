@@ -9,8 +9,13 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 # from jinja2.sandbox import SandboxedEnvironment
 from tap import Tap
 
+from common.jinja_extensions import (
+    IncludeRawExtension,
+    hexdoc_block,
+    hexdoc_minify,
+    hexdoc_wrap,
+)
 from common.properties import Properties
-from common.templates import IncludeRawExtension, hexdoc_block, hexdoc_minify
 from hexcasting.hex_book import HexBook
 
 if sys.version_info < (3, 11):
@@ -44,8 +49,11 @@ def main(args: Args) -> None:
         autoescape=False,
         extensions=[IncludeRawExtension],
     )
-    env.filters["hexdoc_minify"] = hexdoc_minify
-    env.filters["hexdoc_block"] = hexdoc_block
+    env.filters |= dict(  # for some reason, pylance doesn't like the {} here
+        hexdoc_minify=hexdoc_minify,
+        hexdoc_block=hexdoc_block,
+        hexdoc_wrap=hexdoc_wrap,
+    )
 
     # load and render template
     template = env.get_template(props.template)
@@ -53,8 +61,7 @@ def main(args: Args) -> None:
         props.template_args
         | {
             "book": book,
-            "spoilers": props.spoilers,
-            "blacklist": props.blacklist,
+            "props": props,
         }
     )
 

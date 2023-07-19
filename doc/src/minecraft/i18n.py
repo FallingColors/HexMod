@@ -32,7 +32,7 @@ class LocalizedStr(HexDocModel[I18nContext]):
         return cls(key=key, value=key)
 
     @classmethod
-    def skip_key(cls, value: str) -> Self:
+    def with_value(cls, value: str) -> Self:
         """Returns an instance of this class with an empty key."""
         return cls(key="", value=value)
 

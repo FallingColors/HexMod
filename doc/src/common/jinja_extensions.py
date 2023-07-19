@@ -1,4 +1,3 @@
-from html import escape
 from typing import Any
 
 from jinja2 import nodes
@@ -41,15 +40,25 @@ def hexdoc_minify(value: str) -> str:
 def hexdoc_block(value: Any, allow_none: bool = False) -> str:
     match value:
         case LocalizedStr() | str():
+            # use Markup to tell Jinja not to escape this string for us
             lines = str(value).splitlines()
-            return "<br />".join(escape(line) for line in lines)
+            return Markup("<br />".join(Markup.escape(line) for line in lines))
         case FormatTree():
             with HTMLStream() as out:
                 with value.style.element(out):
                     for child in value.children:
                         out.write(hexdoc_block(child))
-                return out.getvalue()
+                return Markup(out.getvalue())
         case None if allow_none:
             return ""
         case _:
             raise TypeError(value)
+
+
+def hexdoc_wrap(value: str, *args: str):
+    tag, *attributes = args
+    if attributes:
+        attributes = " " + " ".join(attributes)
+    else:
+        attributes = ""
+    return f"<{tag}{attributes}>{value}</{tag}>"

@@ -1,0 +1,7 @@
+{% extends "pages/PageWithTitle.html.jinja" %}
+{% include "macros.html.jinja" %}
+
+{% block inner_body %}
+  {{ macros.recipe_block(page.recipes, "item", "The crafting recipe for the", " and ") }}
+  {{ super() }}
+{% endblock inner_body %}

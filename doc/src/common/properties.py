@@ -120,6 +120,10 @@ class Properties(HexDocModel[Any]):
             for stub in platform.pattern_stubs
         ]
 
+    def asset_url(self, asset: ResourceLocation, path: str = "assets") -> str:
+        base_url = self.base_asset_urls[asset.namespace]
+        return f"{base_url}/{path}/{asset.full_path}"
+
     @field_validator("default_recipe_dir_index_")
     def _check_default_recipe_dir(cls, value: int, info: FieldValidationInfo) -> int:
         num_dirs = len(info.data["recipe_dirs"])

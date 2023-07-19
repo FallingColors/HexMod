@@ -1,0 +1,5 @@
+{% extends "pages/Page.html.jinja" %}
+
+{% block body %}
+  {{ page.text|hexdoc_block(true) }}
+{% endblock body %}

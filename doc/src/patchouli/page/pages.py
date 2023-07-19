@@ -1,17 +1,19 @@
 from typing import Any
 
-from pydantic import Field
-
 from minecraft.i18n import LocalizedItem, LocalizedStr
 from minecraft.recipe import CraftingRecipe
 from minecraft.resource import Entity, ItemStack, ResourceLocation
 from patchouli.context import BookContext
 
 from ..text import FormatTree
-from .abstract_pages import Page, PageWithCraftingRecipes, PageWithText, PageWithTitle
+from .abstract_pages import Page, PageWithText, PageWithTitle
 
 
-class TextPage(PageWithTitle[BookContext], type="patchouli:text"):
+class TextPage(
+    PageWithTitle[BookContext],
+    type="patchouli:text",
+    template_name="PageWithTitle",
+):
     text: FormatTree
 
 
@@ -20,22 +22,15 @@ class ImagePage(PageWithTitle[BookContext], type="patchouli:image"):
     border: bool = False
 
 
-class CraftingPage(
-    PageWithCraftingRecipes[BookContext],
-    type="patchouli:crafting",
-):
+class CraftingPage(PageWithTitle[BookContext], type="patchouli:crafting"):
     recipe: CraftingRecipe
     recipe2: CraftingRecipe | None = None
 
     @property
     def recipes(self) -> list[CraftingRecipe]:
-        recipes = [self.recipe]
-        if self.recipe2:
-            recipes.append(self.recipe2)
-        return recipes
+        return [r for r in [self.recipe, self.recipe2] if r is not None]
 
 
-# TODO: this should probably inherit PageWithRecipes too
 class SmeltingPage(PageWithTitle[BookContext], type="patchouli:smelting"):
     recipe: ItemStack
     recipe2: ItemStack | None = None
@@ -75,19 +70,13 @@ class LinkPage(TextPage, type="patchouli:link"):
 
 class RelationsPage(PageWithTitle[BookContext], type="patchouli:relations"):
     entries: list[ResourceLocation]
-    title_: LocalizedStr = Field(
-        default=LocalizedStr.skip_key("Related Chapters"),
-        alias="title",
-    )
+    title: LocalizedStr = LocalizedStr.with_value("Related Chapters")
 
 
 class QuestPage(PageWithTitle[BookContext], type="patchouli:quest"):
     trigger: ResourceLocation | None = None
-    title_: LocalizedStr = Field(
-        default=LocalizedStr.skip_key("Objective"),
-        alias="title",
-    )
+    title: LocalizedStr = LocalizedStr.with_value("Objective")
 
 
-class EmptyPage(Page[BookContext], type="patchouli:empty"):
+class EmptyPage(Page[BookContext], type="patchouli:empty", template_name="Page"):
     draw_filler: bool = True

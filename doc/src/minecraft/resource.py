@@ -56,6 +56,10 @@ class BaseResourceLocation:
     def _ser_model(self) -> str:
         return str(self)
 
+    @property
+    def full_path(self) -> str:
+        return f"{self.namespace}/{self.path}"
+
     def __repr__(self) -> str:
         return f"{self.namespace}:{self.path}"
 

@@ -2,9 +2,9 @@
 
 <div id="{{ entry.id.path }}">
   {% call macros.maybe_spoilered(entry) %}
-    {{ macros.header(entry, "entry-title") }}
+    {{ macros.section_header(entry, "h3", "entry-title") }}
     {% for page in entry.pages %}
-      {% include "pages/" ~ page.__class__.__name__ ~ ".html.jinja" %}
+      {% include page.template %}
     {% endfor %}
   {% endcall %}
 </div>
