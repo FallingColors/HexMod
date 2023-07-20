@@ -1,7 +1,7 @@
 {% extends "pages/PageWithTitle.html.jinja" %}
 
 {% block inner_body %}
-  {{ super() }}
+  {{- super() }}
   <h4 class='linkout'>
     <a href='{{ page.url|hexdoc_block }}'>{{ page.link_text }}</a>
   </h4>

@@ -1,12 +1,9 @@
-{% if page.anchor %}
-  {# set a variable so children can use this value #}
-  {% set page_anchor_id = entry.id.path ~ "@" ~ page.anchor %}
+{%- if page.anchor -%}
+  {%- set page_anchor_id = entry.id.path ~ "@" ~ page.anchor -%}{# set a variable so children can use this value -#}
   <div id='{{ page_anchor_id }}'>
-    {# body isn' required because EmptyPage uses this template directly #}
-    {% block body scoped %}{% endblock %}
+    {% block body scoped %}{% endblock %}{# not required because EmptyPage uses this template directly -#}
   </div>
-{% else %}
-  {# can't define a block twice in the same template, so just reference it with self #}
-  {{ self.body() }}
-{% endif %}
+{%- else -%}
+  {{ self.body() }}{# can't define a block twice in the same template, so just reference it #}
+{%- endif -%}
 <br />

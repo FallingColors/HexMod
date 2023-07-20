@@ -28,21 +28,8 @@ class IncludeRawExtension(Extension):
         return Markup(source[0])
 
 
-_BETWEEN_TAGS_RE = re.compile(r"<br />\s+<")
-
-
 def hexdoc_minify(value: str) -> str:
-    merged_lines = "".join(line.strip() for line in value.splitlines())
-    # FIXME: hack
-    return _BETWEEN_TAGS_RE.sub("<br /><", merged_lines)
-
-    # return minify_html.minify(
-    #     code=value,
-    #     keep_closing_tags=True,
-    #     keep_html_and_head_opening_tags=True,
-    #     keep_spaces_between_attributes=True,
-    #     ensure_spec_compliant_unquoted_attribute_values=True,
-    # )
+    return "".join(line.strip() for line in value.splitlines())
 
 
 def hexdoc_block(value: Any, allow_none: bool = False) -> str:

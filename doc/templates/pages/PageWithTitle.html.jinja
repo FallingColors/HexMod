@@ -2,9 +2,8 @@
 {% import "macros.html.jinja" as macros %}
 
 {% block body %}
-  {% if page.title is not none %}
-    {# we need title_attrs for PageWithPattern #}
-    <h4{% block title_attrs %}{% endblock %}>
+  {%- if page.title is not none -%}
+    <h4{% block title_attrs %}{% endblock %}>{# we need title_attrs for PageWithPattern -#}
       {{ page.title|hexdoc_block }}
       {% if page_anchor_id is defined %} {# note: page_anchor_id is conditionally defined in Page #}
         {{ macros.permalink(page_anchor_id) }}
@@ -12,7 +11,7 @@
     </h4>
   {% endif %}
   {# pretty sure this is the only good way to do this #}
-  {# and yes, winfy - this probably would have worked just fine in python too #}
-  {% set outer_body = super() %}
-  {% block inner_body scoped %}{{ outer_body }}{% endblock %}
+  {# and yes, this probably would have worked just fine in python too #}
+  {% set super_body = super() %}
+  {% block inner_body scoped %}{{ super_body }}{% endblock %}
 {% endblock body %}
