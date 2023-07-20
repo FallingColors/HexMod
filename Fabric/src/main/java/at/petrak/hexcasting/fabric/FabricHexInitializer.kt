@@ -2,9 +2,6 @@ package at.petrak.hexcasting.fabric
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry
-import at.petrak.hexcasting.api.casting.math.HexDir
-import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
@@ -15,11 +12,7 @@ import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.lib.*
-import at.petrak.hexcasting.common.lib.hex.HexActions
-import at.petrak.hexcasting.common.lib.hex.HexArithmetics
-import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
-import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
+import at.petrak.hexcasting.common.lib.hex.*
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
@@ -50,6 +43,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.block.state.properties.BlockSetType
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
@@ -123,12 +117,15 @@ object FabricHexInitializer : ModInitializer {
     private fun initRegistries() {
         fabricOnlyRegistration()
 
+        HexBlockSetTypes.registerBlocks(BlockSetType::register)
+
+        HexCreativeTabs.registerCreativeTabs(bind(BuiltInRegistries.CREATIVE_MODE_TAB))
+
         HexSounds.registerSounds(bind(BuiltInRegistries.SOUND_EVENT))
         HexBlocks.registerBlocks(bind(BuiltInRegistries.BLOCK))
         HexBlocks.registerBlockItems(bind(BuiltInRegistries.ITEM))
         HexBlockEntities.registerTiles(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE))
         HexItems.registerItems(bind(BuiltInRegistries.ITEM))
-//        Registry.register(IngredientDeserializer.REGISTRY, FabricUnsealedIngredient.ID, FabricUnsealedIngredient.Deserializer.INSTANCE)
         Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
 
         HexEntities.registerEntities(bind(BuiltInRegistries.ENTITY_TYPE))
