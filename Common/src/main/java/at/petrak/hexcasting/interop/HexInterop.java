@@ -67,6 +67,8 @@ public class HexInterop {
             }
         }
 
-        PatchouliAPI.get().setConfigFlag(PATCHOULI_ANY_INTEROP_FLAG, anyInterop);
+        if (anyInterop) {
+            PatchouliAPI.get().setConfigFlag(PATCHOULI_ANY_INTEROP_FLAG, true);
+        }
     }
 }
