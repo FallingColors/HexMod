@@ -45,7 +45,7 @@ public class HexLootTables extends PaucalLootTableSubProvider {
         Map<ResourceLocation, LootTable.Builder> lootTables) {
         dropSelf(blockTables, HexBlocks.IMPETUS_EMPTY,
             HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE,
-            HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.EMPTY_DIRECTRIX,
+            HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.DIRECTRIX_BOOLEAN,
             HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_LIGATURE,
             HexBlocks.SLATE_BLOCK, HexBlocks.SLATE_TILES, HexBlocks.SLATE_BRICKS, HexBlocks.SLATE_BRICKS_SMALL,
             HexBlocks.SLATE_PILLAR, HexBlocks.AMETHYST_DUST_BLOCK, HexBlocks.AMETHYST_TILES, HexBlocks.AMETHYST_BRICKS,

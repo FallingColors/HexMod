@@ -60,8 +60,8 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
         world.setBlockAndUpdate(pos, bs.setValue(STATE, biota.getBool() ? State.TRUE : State.FALSE));
 
         var outputDir = biota.getBool()
-            ? bs.getValue(FACING)
-            : bs.getValue(FACING).getOpposite();
+            ? bs.getValue(FACING).getOpposite()
+            : bs.getValue(FACING);
         var imageOut = imageIn.copy(stack, imageIn.getParenCount(), imageIn.getParenthesized(),
             imageIn.getEscapeNext(), imageIn.getOpsConsumed(), imageIn.getUserData());
 
