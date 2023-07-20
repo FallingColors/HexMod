@@ -22,7 +22,7 @@ import net.minecraft.server.level.ServerLevel
  * Once the stack of frames is empty, there are no more computations to run, so we're done.
  *
  */
-sealed interface ContinuationFrame {
+interface ContinuationFrame {
     /**
      * Step the evaluation forward once.
      * For Evaluate, this consumes one pattern; for ForEach this queues the next iteration of the outer loop.
