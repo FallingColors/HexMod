@@ -1,7 +1,7 @@
-{% extends "pages/PageWithText.html.jinja" %}
+{% extends "pages/Page.html.jinja" %}
 {% include "macros.html.jinja" %}
 
 {% block body %}
   {{ macros.recipe_block([page.recipe], "name", "A mind-flaying recipe producing the", "") }}
-  {{ super() }}
+  {{ page.text|hexdoc_block }}
 {% endblock body %}

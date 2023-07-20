@@ -12,6 +12,7 @@ from tap import Tap
 from common.jinja_extensions import (
     IncludeRawExtension,
     hexdoc_block,
+    hexdoc_escape,
     hexdoc_minify,
     hexdoc_wrap,
 )
@@ -53,6 +54,7 @@ def main(args: Args) -> None:
         hexdoc_minify=hexdoc_minify,
         hexdoc_block=hexdoc_block,
         hexdoc_wrap=hexdoc_wrap,
+        hexdoc_escape=hexdoc_escape,
     )
 
     # load and render template

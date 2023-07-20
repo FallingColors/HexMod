@@ -1,16 +1,35 @@
-{% macro permalink(href) %}
-  <a href='#{{ href }}' class='permalink small' title='Permalink'>
-    <i class='bi bi-link-45deg'></i>
-  </a>
-{% endmacro %}
-
-{% macro maybe_spoilered_link(value) %}
-  <a href='#{{ value.id.path }}' class='{{ "spoilered" if value.is_spoiler else "" }}'>
-    {{- value.name|hexdoc_block -}}
+{# jump to top icon in section headers #}
+{% macro jump_to_top() -%}
+  <a href='#table-of-contents' class='permalink small' title='Jump to top'>
+    <i class='bi bi-box-arrow-up'></i>
   </a>
 {%- endmacro %}
 
-{% macro maybe_spoilered(value) %}
+{# link icon in section headers to get a permalink to that section #}
+{% macro permalink(href) -%}
+  <a href='#{{ href }}' class='permalink small' title='Permalink'>
+    <i class='bi bi-link-45deg'></i>
+  </a>
+{%- endmacro %}
+
+{# header for categories and entries #}
+{% macro section_header(value, header_tag, class_name) -%}
+  <{{ header_tag }} class='{{ class_name }} page-header'>
+    {{ value.name|hexdoc_escape }}
+    {{ jump_to_top() }}
+    {{ permalink(value.id.path) }}
+  </{{ header_tag }}>
+{%- endmacro %}
+
+{# link to value.id, with spoiler blur if value is a spoiler #}
+{% macro maybe_spoilered_link(value) -%}
+  <a href='#{{ value.id.path }}' class='{{ "spoilered" if value.is_spoiler else "" }}'>
+    {{- value.name|hexdoc_escape -}}
+  </a>
+{%- endmacro %}
+
+{# macro block which spoiler blurs its content if value is a spoiler #}
+{% macro maybe_spoilered(value) -%}
   {% if value.is_spoiler %}
     <div class='spoilered'>
       {{ caller() }}
@@ -20,21 +39,8 @@
   {% endif %}
 {%- endmacro %}
 
-{% macro jump_to_top() %}
-  <a href='#table-of-contents' class='permalink small' title='Jump to top'>
-    <i class='bi bi-box-arrow-up'></i>
-  </a>
-{%- endmacro %}
-
-{% macro section_header(value, header_tag, class_name) %}
-  <{{ header_tag }} class='{{ class_name }} page-header'>
-    {{ value.name|hexdoc_block }}
-    {{ jump_to_top() }}
-    {{ permalink(value.id.path) }}
-  </{{ header_tag }}>
-{%- endmacro %}
-
-{% macro recipe_block(recipes, result_attribute, description, separator) %}
+{# shows the names of all the recipe results in a list of recipes #}
+{% macro recipe_block(recipes, result_attribute, description, separator) -%}
   <blockquote class='crafting-info'>
     Depicted in the book: {{ description }} {{
       recipes

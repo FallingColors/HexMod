@@ -1,17 +1,19 @@
-{% extends "pages/PageWithText.html.jinja" %}
+{% extends "pages/Page.html.jinja" %}
 {% import "macros.html.jinja" as macros %}
 
 {% block body %}
-  {%- if page.title is not none -%}
-    <h4{% block title_attrs %}{% endblock %}>{# we need title_attrs for PageWithPattern -#}
-      {{ page.title|hexdoc_block }}
-      {% if page_anchor_id is defined %} {# note: page_anchor_id is conditionally defined in Page #}
+  {% if page.title is not none %}
+    {# need title_attrs for LookupPatternPage -#}
+    <h4{% block title_attrs %}{% endblock %}>
+      {{ page.title|hexdoc_escape }}
+      {% if page_anchor_id is defined %} {# conditionally defined in Page #}
         {{ macros.permalink(page_anchor_id) }}
       {% endif %}
     </h4>
   {% endif %}
-  {# pretty sure this is the only good way to do this #}
-  {# and yes, this probably would have worked just fine in python too #}
-  {% set super_body = super() %}
-  {% block inner_body scoped %}{{ super_body }}{% endblock %}
+
+  {# within a separate block so we can control if the text goes before or after page-specific content #}
+  {% block inner_body %}
+    {{- page.text|hexdoc_block }}
+  {% endblock inner_body %}
 {% endblock body %}

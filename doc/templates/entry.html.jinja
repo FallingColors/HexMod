@@ -4,7 +4,7 @@
   {% call macros.maybe_spoilered(entry) %}
     {{ macros.section_header(entry, "h3", "entry-title") }}
     {% for page in entry.pages %}
-      {% include page.template %}
+      {%- include page.template -%}
     {% endfor %}
   {% endcall %}
 </div>
