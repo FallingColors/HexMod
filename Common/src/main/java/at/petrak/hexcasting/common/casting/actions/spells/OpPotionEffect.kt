@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity
 
 class OpPotionEffect(
     val effect: MobEffect,
-    val baseCost: Int,
+    val baseCost: Long,
     val allowPotency: Boolean,
     val potencyCubic: Boolean,
 ) : SpellAction {
@@ -36,7 +36,7 @@ class OpPotionEffect(
         }
         return SpellAction.Result(
             Spell(effect, target, duration, potency),
-            cost.toInt(),
+            cost.toLong(),
             listOf(ParticleSpray.cloud(target.position().add(0.0, target.eyeHeight / 2.0, 0.0), 1.0))
         )
     }

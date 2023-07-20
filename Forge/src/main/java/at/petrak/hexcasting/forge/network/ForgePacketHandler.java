@@ -55,13 +55,14 @@ public class ForgePacketHandler {
             MsgBeepS2C::deserialize, makeClientBoundHandler(MsgBeepS2C::handle));
         NETWORK.registerMessage(messageIdx++, MsgBrainsweepAck.class, MsgBrainsweepAck::serialize,
             MsgBrainsweepAck::deserialize, makeClientBoundHandler(MsgBrainsweepAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgNewWallScrollS2C.class,
-            MsgNewWallScrollS2C::serialize,
-            MsgNewWallScrollS2C::deserialize,
-            makeClientBoundHandler(MsgNewWallScrollS2C::handle));
-        NETWORK.registerMessage(messageIdx++, MsgRecalcWallScrollDisplayS2C.class,
-            MsgRecalcWallScrollDisplayS2C::serialize,
+        NETWORK.registerMessage(messageIdx++, MsgNewWallScrollS2C.class, MsgNewWallScrollS2C::serialize,
+            MsgNewWallScrollS2C::deserialize, makeClientBoundHandler(MsgNewWallScrollS2C::handle));
+        NETWORK.registerMessage(messageIdx++, MsgRecalcWallScrollDisplayS2C.class, MsgRecalcWallScrollDisplayS2C::serialize,
             MsgRecalcWallScrollDisplayS2C::deserialize, makeClientBoundHandler(MsgRecalcWallScrollDisplayS2C::handle));
+        NETWORK.registerMessage(messageIdx++, MsgNewSpiralPatternsS2C.class, MsgNewSpiralPatternsS2C::serialize,
+                MsgNewSpiralPatternsS2C::deserialize, makeClientBoundHandler(MsgNewSpiralPatternsS2C::handle));
+        NETWORK.registerMessage(messageIdx++, MsgClearSpiralPatternsS2C.class, MsgClearSpiralPatternsS2C::serialize,
+                MsgClearSpiralPatternsS2C::deserialize, makeClientBoundHandler(MsgClearSpiralPatternsS2C::handle));
     }
 
     private static <T> BiConsumer<T, Supplier<NetworkEvent.Context>> makeServerBoundHandler(

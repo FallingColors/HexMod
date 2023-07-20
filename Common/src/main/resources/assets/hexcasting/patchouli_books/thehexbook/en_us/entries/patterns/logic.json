@@ -16,6 +16,7 @@
     },
     {
       "type": "hexcasting:pattern",
+      "header": "hexcasting.action.book.hexcasting:bool_to_number",
       "op_id": "hexcasting:abs",
       "anchor": "hexcasting:abs",
       "input": "bool",

@@ -39,7 +39,7 @@ object OpAddMotion : SpellAction {
             motion
         return SpellAction.Result(
             Spell(target, shrunkMotion),
-            (motionForCost * MediaConstants.DUST_UNIT).toInt(),
+            (motionForCost * MediaConstants.DUST_UNIT).toLong(),
             listOf(
                 ParticleSpray(
                     target.position().add(0.0, target.eyeHeight / 2.0, 0.0),

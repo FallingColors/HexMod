@@ -4,6 +4,7 @@ package at.petrak.hexcasting.common.casting.arithmetic.operator.vec;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
@@ -20,7 +21,7 @@ public class OperatorPack extends Operator {
 	public static OperatorPack INSTANCE = new OperatorPack();
 
 	@Override
-	public @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas) {
+	public @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas, @NotNull CastingEnvironment env) {
 		var it = iotas.iterator();
 		return List.of(new Vec3Iota(new Vec3(
 			downcast(it.next(), HexIotaTypes.DOUBLE).getDouble(),

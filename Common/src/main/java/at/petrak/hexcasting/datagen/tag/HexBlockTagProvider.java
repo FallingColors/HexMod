@@ -26,7 +26,7 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
         add(tag(HexTags.Blocks.IMPETI),
             HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_REDSTONE);
         add(tag(HexTags.Blocks.DIRECTRICES),
-            HexBlocks.DIRECTRIX_REDSTONE);
+            HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.DIRECTRIX_BOOLEAN);
         tag(HexTags.Blocks.MINDFLAYED_CIRCLE_COMPONENTS)
             .addTag(HexTags.Blocks.IMPETI)
             .addTag(HexTags.Blocks.DIRECTRICES);
@@ -34,7 +34,7 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
         add(tag(BlockTags.MINEABLE_WITH_PICKAXE),
             HexBlocks.SLATE_BLOCK, HexBlocks.SLATE_TILES, HexBlocks.SLATE_BRICKS,
             HexBlocks.SLATE_BRICKS_SMALL, HexBlocks.SLATE_PILLAR, HexBlocks.SLATE,
-            HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE,
+            HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.DIRECTRIX_BOOLEAN,
             HexBlocks.IMPETUS_EMPTY,
             HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE,
             HexBlocks.AMETHYST_TILES, HexBlocks.AMETHYST_BRICKS, HexBlocks.AMETHYST_BRICKS_SMALL,

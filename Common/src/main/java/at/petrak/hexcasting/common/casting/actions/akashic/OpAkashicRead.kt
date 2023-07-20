@@ -12,7 +12,7 @@ import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
 
 object OpAkashicRead : ConstMediaAction {
     override val argc = 2
-    override val mediaCost = MediaConstants.DUST_UNIT
+    override val mediaCost: Long = MediaConstants.DUST_UNIT
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val pos = args.getBlockPos(0, argc)

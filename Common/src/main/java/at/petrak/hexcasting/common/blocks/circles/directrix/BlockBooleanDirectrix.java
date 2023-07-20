@@ -32,8 +32,8 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 
-    public BlockBooleanDirectrix(Properties p_49795_) {
-        super(p_49795_);
+    public BlockBooleanDirectrix(Properties properties) {
+        super(properties);
         this.registerDefaultState(this.stateDefinition.any()
             .setValue(ENERGIZED, false)
             .setValue(STATE, State.NEITHER)
@@ -57,9 +57,11 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
             return new ControlFlow.Stop();
         }
 
+        world.setBlockAndUpdate(pos, bs.setValue(STATE, biota.getBool() ? State.TRUE : State.FALSE));
+
         var outputDir = biota.getBool()
-            ? bs.getValue(FACING)
-            : bs.getValue(FACING).getOpposite();
+            ? bs.getValue(FACING).getOpposite()
+            : bs.getValue(FACING);
         var imageOut = imageIn.copy(stack, imageIn.getParenCount(), imageIn.getParenthesized(),
             imageIn.getEscapeNext(), imageIn.getOpsConsumed(), imageIn.getUserData());
 
@@ -85,6 +87,13 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
     @Override
     public float particleHeight(BlockPos pos, BlockState bs, Level world) {
         return 0.5f;
+    }
+
+    @Override
+    public BlockState endEnergized(BlockPos pos, BlockState bs, Level world) {
+        var newState = bs.setValue(ENERGIZED, false).setValue(STATE, State.NEITHER);
+        world.setBlockAndUpdate(pos, newState);
+        return newState;
     }
 
     @Override

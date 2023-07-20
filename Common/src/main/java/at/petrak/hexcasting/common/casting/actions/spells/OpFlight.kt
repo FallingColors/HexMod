@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 import kotlin.math.max
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 class OpFlight(val type: Type) : SpellAction {
     override val argc = 2
@@ -38,7 +39,7 @@ class OpFlight(val type: Type) : SpellAction {
             Type.LimitRange -> theArg * MediaConstants.DUST_UNIT
             // A second of flight should cost 1 shard
             Type.LimitTime -> theArg * MediaConstants.SHARD_UNIT
-        }.roundToInt()
+        }.roundToLong()
 
         // Convert to ticks
         return SpellAction.Result(

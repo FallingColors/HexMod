@@ -376,7 +376,7 @@
   "hexcasting.action.hexcasting:index_of": "定位器之馏化",
   "hexcasting.action.hexcasting:list_remove": "切除器之馏化",
   "hexcasting.action.hexcasting:slice": "选择之提整",
-  "hexcasting.action.hexcasting:modify_in_place": "外科医师之提整",
+  "hexcasting.action.hexcasting:replace": "外科医师之提整",
   "hexcasting.action.hexcasting:construct": "演讲者之馏化",
   "hexcasting.action.hexcasting:deconstruct": "演讲者之分解",
 
@@ -1048,7 +1048,7 @@
   "hexcasting.page.lists.reverse_list": "倒置栈顶列表。",
   "hexcasting.page.lists.index_of": "移除栈顶元素，并将栈顶列表变为该元素在其中第一次出现的位置（从 0 开始）。若没有出现过则返回 -1。",
   "hexcasting.page.lists.list_remove": "移除栈顶的数，而后移除栈顶列表中下标为该数（就是被移除的那个数）的元素。",
-  "hexcasting.page.lists.modify_in_place": "移除栈顶元素和栈顶的数，而后将栈顶列表中下标为该数（就是被移除的那个数）变为该元素。若该数越界则不进行操作。",
+  "hexcasting.page.lists.replace": "移除栈顶元素和栈顶的数，而后将栈顶列表中下标为该数（就是被移除的那个数）变为该元素。若该数越界则不进行操作。",
   "hexcasting.page.lists.last_n_list": "移除$(italic)所给数/$个元素，并将这些元素加入列表并将该列表压入栈顶。",
   "hexcasting.page.lists.splat": "移除栈顶列表，而后将其中元素全部压入栈顶。",
   "hexcasting.page.lists.construct": "移除栈顶元素，将其加到栈顶列表的开头。",

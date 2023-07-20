@@ -32,10 +32,10 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
         HexAPI.LOGGER.info("Starting Fabric-specific datagen");
 
         var pack = gen.createPack();
+        var xtags = IXplatAbstractions.INSTANCE.tags();
 
         pack.addProvider((FabricDataGenerator.Pack.Factory<HexplatRecipes>) x -> new HexplatRecipes(x, INGREDIENTS, HexFabricConditionsBuilder::new));
 
-        var xtags = IXplatAbstractions.INSTANCE.tags();
         var btagProviderWrapper = new BlockTagProviderWrapper(); // CURSED
         pack.addProvider((output, lookup) -> {
             btagProviderWrapper.provider = new HexBlockTagProvider(output, lookup, xtags);

@@ -67,7 +67,7 @@
       "type": "hexcasting:pattern",
       "header": "hexcasting.action.hexcasting:list_size",
       "op_id": "hexcasting:abs",
-      "anchor": "hexcasting:abs",
+      "anchor": "hexcasting:list_size",
       "input": "list",
       "output": "num",
       "text": "hexcasting.page.lists.list_size"
@@ -98,11 +98,11 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:modify_in_place",
-      "anchor": "hexcasting:modify_in_place",
+      "op_id": "hexcasting:replace",
+      "anchor": "hexcasting:replace",
       "input": "list, num, any",
       "output": "list",
-      "text": "hexcasting.page.lists.modify_in_place"
+      "text": "hexcasting.page.lists.replace"
     },
     {
       "type": "hexcasting:pattern",

@@ -26,7 +26,7 @@ public record BrainsweepRecipe(
 	ResourceLocation id,
 	StateIngredient blockIn,
 	BrainsweepeeIngredient entityIn,
-	int mediaCost,
+	long mediaCost,
 	BlockState result
 ) implements Recipe<Container> {
 	public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
@@ -97,7 +97,7 @@ public record BrainsweepRecipe(
 		public void toNetwork(FriendlyByteBuf buf, BrainsweepRecipe recipe) {
 			recipe.blockIn.write(buf);
 			recipe.entityIn.wrapWrite(buf);
-			buf.writeVarInt(recipe.mediaCost);
+			buf.writeVarLong(recipe.mediaCost);
 			buf.writeVarInt(Block.getId(recipe.result));
 		}
 
@@ -105,7 +105,7 @@ public record BrainsweepRecipe(
 		public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
 			var blockIn = StateIngredientHelper.read(buf);
 			var brainsweepeeIn = BrainsweepeeIngredient.read(buf);
-			var cost = buf.readVarInt();
+			var cost = buf.readVarLong();
 			var result = Block.stateById(buf.readVarInt());
 			return new BrainsweepRecipe(recipeID, blockIn, brainsweepeeIn, cost, result);
 		}

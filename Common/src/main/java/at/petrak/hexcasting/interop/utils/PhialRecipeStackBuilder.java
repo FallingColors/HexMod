@@ -13,7 +13,7 @@ import net.minecraft.world.item.Items;
 import java.util.List;
 
 public class PhialRecipeStackBuilder {
-    private static ItemStack makeBattery(int unit, int size) {
+    private static ItemStack makeBattery(long unit, int size) {
         return ItemMediaBattery.withMedia(new ItemStack(HexItems.BATTERY), unit * size, unit * size);
     }
 
@@ -21,11 +21,11 @@ public class PhialRecipeStackBuilder {
         List<ItemStack> inputItems = Lists.newArrayList();
         List<ItemStack> outputItems = Lists.newArrayList();
 
-        int dust = HexConfig.common().dustMediaAmount();
-        int shard = HexConfig.common().shardMediaAmount();
-        int charged = HexConfig.common().chargedCrystalMediaAmount();
-        int quenchedShard = MediaConstants.QUENCHED_SHARD_UNIT;
-        int quenchedBlock = MediaConstants.QUENCHED_BLOCK_UNIT;
+        long dust = HexConfig.common().dustMediaAmount();
+        long shard = HexConfig.common().shardMediaAmount();
+        long charged = HexConfig.common().chargedCrystalMediaAmount();
+        long quenchedShard = MediaConstants.QUENCHED_SHARD_UNIT;
+        long quenchedBlock = MediaConstants.QUENCHED_BLOCK_UNIT;
 
 
         if (dust > 0) {

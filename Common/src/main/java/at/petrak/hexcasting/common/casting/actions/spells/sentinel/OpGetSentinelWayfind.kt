@@ -14,7 +14,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 // TODO standardize "a negligible amount" of media to be 1/8 a dust
 object OpGetSentinelWayfind : ConstMediaAction {
     override val argc = 1
-    override val mediaCost = MediaConstants.DUST_UNIT / 10
+    override val mediaCost: Long = MediaConstants.DUST_UNIT / 10
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val from = args.getVec3(0, argc)
 

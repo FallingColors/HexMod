@@ -46,7 +46,7 @@ repositories {
     maven { url = 'https://maven.blamejared.com' }
     // modmenu and clothconfig
     maven { url "https://maven.shedaniel.me/" }
-    maven { url 'https://ladysnake.jfrog.io/artifactory/mods' }
+    maven { url 'https://maven.ladysnake.org/releases' }
     // Entity reach
     maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
     maven { url "https://mvn.devos.one/snapshots/" }
@@ -84,7 +84,11 @@ dependencies {
     modImplementation "${modID}:paucal-fabric-$minecraftVersion:$paucalVersion"
     modImplementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FABRIC-SNAPSHOT"
 
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:$cardinalComponentsVersion"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
+//    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-util:$cardinalComponentsVersion"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:$cardinalComponentsVersion"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:$cardinalComponentsVersion"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-block:$cardinalComponentsVersion"
 
 //    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
 //    include "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"

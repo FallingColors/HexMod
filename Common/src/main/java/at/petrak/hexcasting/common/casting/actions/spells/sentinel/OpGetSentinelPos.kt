@@ -11,10 +11,10 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 object OpGetSentinelPos : ConstMediaAction {
     override val argc = 0
-    override val mediaCost = MediaConstants.DUST_UNIT / 10
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(ctx.caster) ?: return listOf(NullIota())
-        if (sentinel.dimension != ctx.world.dimension())
+    override val mediaCost: Long = MediaConstants.DUST_UNIT / 10
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.caster) ?: return listOf(NullIota())
+        if (sentinel.dimension != env.world.dimension())
             throw MishapLocationInWrongDimension(sentinel.dimension.location())
         return sentinel.position.asActionResult
     }

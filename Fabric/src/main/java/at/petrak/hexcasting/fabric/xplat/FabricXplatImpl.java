@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
@@ -80,6 +81,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import virtuoel.pehkui.api.ScaleTypes;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -121,9 +123,17 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet) {
+        sendPacketToPlayers(PlayerLookup.around(dimension, pos, radius), packet);
+    }
+
+    @Override
+    public void sendPacketTracking(Entity entity, IMessage packet) {
+        sendPacketToPlayers(PlayerLookup.tracking(entity), packet);
+    }
+
+    private void sendPacketToPlayers(Collection<ServerPlayer> players, IMessage packet) {
         var pkt = ServerPlayNetworking.createS2CPacket(packet.getFabricId(), packet.toBuf());
-        var nears = PlayerLookup.around(dimension, pos, radius);
-        for (var p : nears) {
+        for (var p : players) {
             p.connection.send(pkt);
         }
     }
@@ -426,6 +436,14 @@ public class FabricXplatImpl implements IXplatAbstractions {
                     Lifecycle.stable()))
                 .buildAndRegister()
     );
+
+    private static final Supplier<Registry<ContinuationFrame.Type<?>>> CONTINUATION_TYPE_REGISTRY = Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+                            HexAPI.MOD_ID + ":end", HexRegistries.CONTINUATION_TYPE,
+                            Lifecycle.stable(), false))
+                    .buildAndRegister()
+    );
+
     private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                 HexAPI.MOD_ID + ":nothing", HexRegistries.EVAL_SOUND,
@@ -451,6 +469,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public Registry<Arithmetic> getArithmeticRegistry() {
         return ARITHMETIC_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry() {
+        return CONTINUATION_TYPE_REGISTRY.get();
     }
 
     @Override

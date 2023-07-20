@@ -14,7 +14,7 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
  */
 interface ConstMediaAction : Action {
     val argc: Int
-    val mediaCost: Int
+    val mediaCost: Long
         get() = 0
 
     fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota>

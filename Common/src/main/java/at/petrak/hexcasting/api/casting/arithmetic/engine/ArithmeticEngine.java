@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.casting.arithmetic.engine;
 
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
@@ -65,10 +66,11 @@ public class ArithmeticEngine {
      * @param pattern The pattern that was drawn, used to determine which operators are candidates.
      * @param iotas The current stack.
      * @param startingLength The length of the stack before the operator executes (used for errors).
+     * @param env The casting environment.
      * @return The iotas to be added to the stack.
      * @throws Mishap mishaps if invalid input to the operators is given by the caster.
      */
-    public Iterable<Iota> run(HexPattern pattern, Stack<Iota> iotas, int startingLength) throws Mishap {
+    public Iterable<Iota> run(HexPattern pattern, Stack<Iota> iotas, int startingLength, CastingEnvironment env) throws Mishap {
         var candidates = operators.get(pattern);
         if (candidates == null)
             throw new InvalidOperatorException("the pattern " + pattern + " is not an operator."); //
@@ -84,7 +86,7 @@ public class ArithmeticEngine {
         }
         Collections.reverse(args);
         var op = resolveCandidates(args, hash, candidates);
-        return op.apply(args);
+        return op.apply(args, env);
     }
 
     private Operator resolveCandidates(List<Iota> args, HashCons hash, OpCandidates candidates) {

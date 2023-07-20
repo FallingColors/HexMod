@@ -62,6 +62,15 @@ public abstract class CastingEnvironment {
     public void precheckAction(PatternShapeMatch match) throws Mishap {
         // TODO: this doesn't let you select special handlers.
         // Might be worth making a "no casting" tag on each thing
+        ResourceLocation key = actionKey(match);
+
+        if (!HexConfig.server().isActionAllowed(key)) {
+            throw new MishapDisallowedSpell();
+        }
+    }
+
+    @Nullable
+    protected ResourceLocation actionKey(PatternShapeMatch match) {
         ResourceLocation key;
         if (match instanceof PatternShapeMatch.Normal normal) {
             key = normal.key.location();
@@ -72,9 +81,7 @@ public abstract class CastingEnvironment {
         } else {
             key = null;
         }
-        if (!HexConfig.server().isActionAllowed(key)) {
-            throw new MishapDisallowedSpell();
-        }
+        return key;
     }
 
     /**

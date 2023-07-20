@@ -28,7 +28,7 @@ object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
 
         return SpellAction.Result(
             Spell(target),
-            (MediaConstants.DUST_UNIT * 1.125).toInt(),
+            (MediaConstants.DUST_UNIT * 1.125).toLong(),
             listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(target)), 1.0))
         )
     }

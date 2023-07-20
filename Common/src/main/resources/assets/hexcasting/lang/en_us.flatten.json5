@@ -424,7 +424,7 @@
         "index_of": "Locator's Distillation",
         "remove_from": "Excisor's Distillation",
         "slice": "Selection Exaltation",
-        "modify_in_place": "Surgeon's Exaltation",
+        "replace": "Surgeon's Exaltation",
         "construct": "Speaker's Distillation",
         "deconstruct": "Speaker's Decomposition",
         
@@ -1245,8 +1245,8 @@
       "numbers.example.7": "This pattern pushes 7: 5 + 1 + 1.",
       "numbers.example.-32.header": "Example 3",
       "numbers.example.-32": "This pattern pushes -32: negate 1 + 5 + 10 * 2.",
-      "numbers.example.45.header": "Example 4",
-      "numbers.example.45": "This pattern pushes 45: 5 / 2 + 1 + 1.",
+      "numbers.example.4.5.header": "Example 4",
+      "numbers.example.4.5": "This pattern pushes 4.5: 5 / 2 + 1 + 1.",
       "numbers.3": "In certain cases it might be easier to just use an $(l:items/abacus)$(item)Abacus/$. But, it's worth knowing the \"proper\" way to do things.",
       
       
@@ -1370,7 +1370,7 @@
       "lists.reverse": "Reverse the list at the top of the stack.",
       "lists.index_of": "Remove the iota at the top of the stack, then replace the list at the top with the first index of that iota within the list (starting from 0). Replaces the list with -1 if the iota doesn't exist in the list.",
       "lists.remove_from": "Remove the number at the top of the stack, then remove the nth element of the list at the top of the stack (where n is the number you removed).",
-      "lists.modify_in_place": "Remove the top iota of the stack and the number at the top, then set the nth element of the list at the top of the stack to that iota (where n is the number you removed). Does nothing if the number is out of bounds.",
+      "lists.replace": "Remove the top iota of the stack and the number at the top, then set the nth element of the list at the top of the stack to that iota (where n is the number you removed). Does nothing if the number is out of bounds.",
       "lists.last_n_list": "Remove $(italic)num/$ elements from the stack, then add them to a list at the top of the stack.",
       "lists.splat": "Remove the list at the top of the stack, then push its contents to the stack.",
       "lists.construct": "Remove the top iota, then add it as the first element to the list at the top of the stack.",

@@ -5,9 +5,12 @@ import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -127,6 +130,14 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var ctx = new PackagedItemCastEnv(sPlayer, usedHand);
         var harness = CastingVM.empty(ctx);
         var clientView = harness.queueExecuteAndWrapIotas(instrs, sPlayer.serverLevel());
+
+        var patterns = instrs.stream()
+                .filter(i -> i instanceof PatternIota)
+                .map(i -> ((PatternIota) i).getPattern())
+                .toList();
+        var packet = new MsgNewSpiralPatternsS2C(sPlayer.getUUID(), patterns, 140);
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(sPlayer, packet);
+        IXplatAbstractions.INSTANCE.sendPacketTracking(sPlayer, packet);
 
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 

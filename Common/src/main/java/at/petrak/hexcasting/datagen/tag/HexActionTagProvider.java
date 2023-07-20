@@ -3,13 +3,9 @@ package at.petrak.hexcasting.datagen.tag;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-<<<<<<< HEAD
 import at.petrak.hexcasting.xplat.Platform;
-import net.minecraft.data.DataGenerator;
-=======
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
->>>>>>> talia-1.20/1.20.1
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

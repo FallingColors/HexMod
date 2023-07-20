@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
@@ -21,6 +22,7 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexRegistries;
+import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.msgs.IMessage;
@@ -373,6 +375,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public void sendPacketTracking(Entity entity, IMessage packet) {
+        ForgePacketHandler.getNetwork().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
+    }
+
+    @Override
     public Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message) {
         //noinspection unchecked
         return (Packet<ClientGamePacketListener>) ForgePacketHandler.getNetwork().toVanillaPacket(message, NetworkDirection.PLAY_TO_CLIENT);
@@ -474,6 +481,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             ForgeAccessorBuiltInRegistries.hex$registerSimple(
                 HexRegistries.ARITHMETIC, null)
     );
+    private static final Supplier<Registry<ContinuationFrame.Type<?>>> CONTINUATION_TYPE_REGISTRY = Suppliers.memoize(() ->
+            ForgeAccessorBuiltInRegistries.hex$registerDefaulted(
+                    HexRegistries.CONTINUATION_TYPE,
+                    modLoc("end").toString(), registry -> HexContinuationTypes.END)
+    );
     private static final Supplier<Registry<EvalSound>> EVAL_SOUND_REGISTRY = Suppliers.memoize(() ->
             ForgeAccessorBuiltInRegistries.hex$registerDefaulted(
                 HexRegistries.EVAL_SOUND,
@@ -498,6 +510,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public Registry<Arithmetic> getArithmeticRegistry() {
         return ARITHMETIC_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry() {
+        return CONTINUATION_TYPE_REGISTRY.get();
     }
 
     @Override

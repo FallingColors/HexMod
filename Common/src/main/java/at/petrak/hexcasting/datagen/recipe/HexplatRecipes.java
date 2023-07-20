@@ -236,19 +236,19 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, HexItems.AMETHYST_DUST,
-                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.DUST_UNIT) + 1)
+                (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.DUST_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD)
             .requires(HexItems.AMETHYST_DUST)
             .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
             .save(recipes, modLoc("decompose_quenched_shard/dust"));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.AMETHYST_SHARD,
-                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.SHARD_UNIT) + 1)
+                (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.SHARD_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD)
             .requires(Items.AMETHYST_SHARD)
             .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
             .save(recipes, modLoc("decompose_quenched_shard/shard"));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, HexItems.CHARGED_AMETHYST,
-                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.CRYSTAL_UNIT) + 1)
+                (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.CRYSTAL_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD)
             .requires(HexItems.CHARGED_AMETHYST)
             .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
@@ -304,19 +304,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_LOGS)).save(recipes);
 
         for (var log : EDIFIED_LOGS) {
-<<<<<<< HEAD
-            ShapedRecipeBuilder.shaped(log, 3)
-                .define('W', log)
-                .pattern("WW")
-                .pattern("WW")
-                .unlockedBy("has_item", hasItem(log)).save(recipes);
-=======
             ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, log, 3)
                     .define('W', log)
                     .pattern("WW")
                     .pattern("WW")
                     .unlockedBy("has_item", hasItem(log)).save(recipes);
->>>>>>> talia-1.20/1.20.1
         }
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.STRIPPED_EDIFIED_WOOD, 3)
@@ -483,23 +475,13 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         // FD compat
         for (var log : EDIFIED_LOGS) {
             this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
-<<<<<<< HEAD
                     .withInput(log)
                     .withTool(ingredients.axeStrip())
                     .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
                     .withOutput("farmersdelight:tree_bark")
                     .withSound(SoundEvents.AXE_STRIP))
                 .whenModLoaded("farmersdelight")
-                .save(recipes, modLoc("compat/farmersdelight/cutting/" + Registry.BLOCK.getKey(log).getPath()));
-=======
-                            .withInput(log)
-                            .withTool(ingredients.axeStrip())
-                            .withOutput(HexBlocks.STRIPPED_EDIFIED_LOG)
-                            .withOutput("farmersdelight:tree_bark")
-                            .withSound(SoundEvents.AXE_STRIP))
-                    .whenModLoaded("farmersdelight")
-                    .save(recipes, modLoc("compat/farmersdelight/cutting/" + BuiltInRegistries.BLOCK.getKey(log).getPath()));
->>>>>>> talia-1.20/1.20.1
+                .save(recipes, modLoc("compat/farmersdelight/cutting/" + BuiltInRegistries.BLOCK.getKey(log).getPath()));
         }
 
         this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()

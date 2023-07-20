@@ -182,28 +182,28 @@ mixin {
 // > Gradle task execution avoidance breaks it that way
 // > At one point i got it to work reliably bu forcing some specific task to always run i just don't remember the syntax and which task it was
 // > It might have been compileJava
-task invalidateJavaForRefmap {
-    doFirst {
-        compileJava {
-            if (!didWork) {
-                outputs.upToDateWhen { false }
-            }
-        }
-        compileKotlin {
-            if (!didWork) {
-                outputs.upToDateWhen { false }
-            }
-        }
-    }
-}
+//task invalidateJavaForRefmap {
+//    doFirst {
+//        compileJava {
+//            if (!didWork) {
+//                outputs.upToDateWhen { false }
+//            }
+//        }
+//        compileKotlin {
+//            if (!didWork) {
+//                outputs.upToDateWhen { false }
+//            }
+//        }
+//    }
+//}
 
 compileJava {
     source(project(":Common").sourceSets.main.allSource)
-    shouldRunAfter(invalidateJavaForRefmap)
+//    shouldRunAfter(invalidateJavaForRefmap)
 }
 compileKotlin {
     source(project(":Common").sourceSets.main.kotlin)
-    shouldRunAfter(invalidateJavaForRefmap)
+//    shouldRunAfter(invalidateJavaForRefmap)
 }
 compileTestKotlin {
     source(project(":Common").sourceSets.main.kotlin)
@@ -216,7 +216,7 @@ sourceSets {
 }
 
 jar {
-    dependsOn(invalidateJavaForRefmap)
+//    dependsOn(invalidateJavaForRefmap)
 }
 
 processResources {

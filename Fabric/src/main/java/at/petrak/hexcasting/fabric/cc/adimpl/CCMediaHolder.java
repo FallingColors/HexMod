@@ -71,10 +71,10 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
     }
 
     public static class Static extends CCMediaHolder {
-        private final Supplier<Integer> baseWorth;
+        private final Supplier<Long> baseWorth;
         private final int consumptionPriority;
 
-        public Static(Supplier<Integer> baseWorth, int consumptionPriority, ItemStack stack) {
+        public Static(Supplier<Long> baseWorth, int consumptionPriority, ItemStack stack) {
             super(stack);
             this.baseWorth = baseWorth;
             this.consumptionPriority = consumptionPriority;
@@ -82,7 +82,7 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
 
         @Override
         public long getMedia() {
-            return (long) baseWorth.get() * stack.getCount();
+            return baseWorth.get() * stack.getCount();
         }
 
         @Override

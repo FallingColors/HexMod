@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
@@ -67,6 +68,8 @@ public interface IXplatAbstractions {
     void sendPacketToPlayer(ServerPlayer target, IMessage packet);
 
     void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet);
+
+    void sendPacketTracking(Entity entity, IMessage packet);
 
     // https://github.com/VazkiiMods/Botania/blob/13b7bcd9cbb6b1a418b0afe455662d29b46f1a7f/Xplat/src/main/java/vazkii/botania/xplat/IXplatAbstractions.java#L157
     Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message);
@@ -173,6 +176,7 @@ public interface IXplatAbstractions {
     Registry<IotaType<?>> getIotaTypeRegistry();
 
     Registry<Arithmetic> getArithmeticRegistry();
+    Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry();
 
     Registry<EvalSound> getEvalSoundRegistry();
 

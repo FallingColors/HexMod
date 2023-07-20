@@ -64,5 +64,5 @@ interface SpellAction : Action {
         return OperationResult(image2, sideEffects, continuation, sound)
     }
 
-    data class Result(val effect: RenderedSpell, val cost: Int, val particles: List<ParticleSpray>, val opCount: Long = 1)
+    data class Result(val effect: RenderedSpell, val cost: Long, val particles: List<ParticleSpray>, val opCount: Long = 1)
 }

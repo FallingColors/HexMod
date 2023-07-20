@@ -11,9 +11,9 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexStatistics {
     public static final ResourceLocation MEDIA_USED = makeCustomStat("media_used",
-        mediamount -> StatFormatter.DEFAULT.format(mediamount / MediaConstants.DUST_UNIT));
+        mediamount -> StatFormatter.DEFAULT.format((int) (mediamount / MediaConstants.DUST_UNIT)));
     public static final ResourceLocation MEDIA_OVERCAST = makeCustomStat("media_overcast",
-        mediamount -> StatFormatter.DEFAULT.format(mediamount / MediaConstants.DUST_UNIT));
+        mediamount -> StatFormatter.DEFAULT.format((int) (mediamount / MediaConstants.DUST_UNIT)));
     public static final ResourceLocation PATTERNS_DRAWN = makeCustomStat("patterns_drawn", StatFormatter.DEFAULT);
     public static final ResourceLocation SPELLS_CAST = makeCustomStat("spells_cast", StatFormatter.DEFAULT);
 

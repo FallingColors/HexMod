@@ -27,7 +27,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -85,8 +84,8 @@ public class HexAdditionalRenderers {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.lineWidth(5f);
 
-        var colorizer = IXplatAbstractions.INSTANCE.getPigment(owner);
-        var colProvider = colorizer.getColorProvider();
+        var pigment = IXplatAbstractions.INSTANCE.getPigment(owner);
+        var colProvider = pigment.getColorProvider();
         BiConsumer<float[], float[]> v = (l, r) -> {
             int lcolor = colProvider.getColor(time, new Vec3(l[0], l[1], l[2])),
                 rcolor = colProvider.getColor(time, new Vec3(r[0], r[1], r[2]));

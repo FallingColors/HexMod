@@ -14,7 +14,7 @@ import net.minecraft.world.phys.Vec3
 
 object OpBlockRaycast : ConstMediaAction {
     override val argc = 2
-    override val mediaCost = MediaConstants.DUST_UNIT / 100
+    override val mediaCost: Long = MediaConstants.DUST_UNIT / 100
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val origin = args.getVec3(0, argc)
         val look = args.getVec3(1, argc)
