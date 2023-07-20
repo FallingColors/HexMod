@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
@@ -435,6 +436,14 @@ public class FabricXplatImpl implements IXplatAbstractions {
                     Lifecycle.stable()))
                 .buildAndRegister()
     );
+
+    private static final Supplier<Registry<ContinuationFrame.Type<?>>> CONTINUATION_TYPE_REGISTRY = Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+                            HexAPI.MOD_ID + ":end", HexRegistries.CONTINUATION_TYPE,
+                            Lifecycle.stable(), false))
+                    .buildAndRegister()
+    );
+
     private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                 HexAPI.MOD_ID + ":nothing", HexRegistries.EVAL_SOUND,
@@ -460,6 +469,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public Registry<Arithmetic> getArithmeticRegistry() {
         return ARITHMETIC_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry() {
+        return CONTINUATION_TYPE_REGISTRY.get();
     }
 
     @Override

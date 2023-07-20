@@ -3,14 +3,12 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.utils.getList
-import at.petrak.hexcasting.api.utils.hasList
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
+import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 
-// TODO this should probably be a registry too
 /**
  * A single frame of evaluation during the execution of a spell.
  *
@@ -49,34 +47,62 @@ sealed interface ContinuationFrame {
      */
     fun size(): Int
 
+    val type: Type<*>
+
+    interface Type<U : ContinuationFrame> {
+        fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): U?
+    }
+
     companion object {
+        /**
+         * Takes a tag containing the ContinuationFrame.Type resourcelocation and the serialized continuation frame, and returns
+         * the deserialized continuation frame.
+         */
         @JvmStatic
         fun fromNBT(tag: CompoundTag, world: ServerLevel): ContinuationFrame {
-            return when (tag.getString("type")) {
-                "evaluate" -> FrameEvaluate(
-                    HexIotaTypes.LIST.deserialize(
-                        tag.getList("patterns", Tag.TAG_COMPOUND),
-                        world
-                    )!!.list,
-                    tag.getBoolean("isMetacasting")
-                )
+            val type = getTypeFromTag(tag) ?: return FrameEvaluate(SpellList.LList(0, listOf()), false)
 
-                "end" -> FrameFinishEval
-                "foreach" -> FrameForEach(
-                    HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
-                    HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
-                    if (tag.hasList("base", Tag.TAG_COMPOUND))
-                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
-                    else
-                        null,
-                    HexIotaTypes.LIST.deserialize(
-                        tag.getList("accumulator", Tag.TAG_COMPOUND),
-                        world
-                    )!!.list.toMutableList()
-                )
+            return (tag.get(HexContinuationTypes.KEY_DATA) as? CompoundTag)?.let { type.deserializeFromNBT(it, world) }
+                    ?: FrameEvaluate(SpellList.LList(0, listOf()), false)
+        }
 
-                else -> FrameEvaluate(SpellList.LList(0, listOf()), false)
+        /**
+         * Takes a continuation frame and serializes it along with its type.
+         */
+        @JvmStatic
+        fun toNBT(frame: ContinuationFrame): CompoundTag {
+            val type = frame.type
+            val typeId = HexContinuationTypes.REGISTRY.getKey(type)
+                ?: throw IllegalStateException(
+                    "Tried to serialize an unregistered continuation type. Continuation: " + frame
+                        + " ; Type" + type.javaClass.typeName)
+
+            val data = frame.serializeToNBT()
+
+            val out = CompoundTag()
+            out.putString(HexContinuationTypes.KEY_TYPE, typeId.toString())
+            out.put(HexContinuationTypes.KEY_DATA, data)
+            return out
+        }
+
+        /**
+         * This method attempts to find the type from the `type` key.
+         * See [ContinuationFrame.serializeToNBT] for the storage format.
+         *
+         * @return `null` if it cannot get the type.
+         */
+        private fun getTypeFromTag(tag: CompoundTag): Type<*>? {
+            if (!tag.contains(HexContinuationTypes.KEY_TYPE, Tag.TAG_STRING.toInt())) {
+                return null
             }
+
+            val typeKey = tag.getString(HexContinuationTypes.KEY_TYPE)
+            if (!ResourceLocation.isValidResourceLocation(typeKey)) {
+                return null
+            }
+
+            val typeLoc = ResourceLocation(typeKey)
+            return HexContinuationTypes.REGISTRY[typeLoc]
         }
     }
 }

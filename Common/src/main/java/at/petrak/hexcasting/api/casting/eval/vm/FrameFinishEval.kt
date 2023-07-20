@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -32,9 +33,14 @@ object FrameFinishEval : ContinuationFrame {
         )
     }
 
-    override fun serializeToNBT() = NBTBuilder {
-        "type" %= "end"
-    }
+    override fun serializeToNBT() = CompoundTag()
 
     override fun size() = 0
+
+    @JvmField
+    val TYPE: ContinuationFrame.Type<FrameFinishEval> = object : ContinuationFrame.Type<FrameFinishEval> {
+        override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel) = FrameFinishEval
+    }
+
+    override val type = TYPE
 }

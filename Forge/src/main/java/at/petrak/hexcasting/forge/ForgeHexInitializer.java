@@ -106,6 +106,7 @@ public class ForgeHexInitializer {
         IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry();
         IXplatAbstractions.INSTANCE.getIotaTypeRegistry();
         IXplatAbstractions.INSTANCE.getArithmeticRegistry();
+        IXplatAbstractions.INSTANCE.getContinuationTypeRegistry();
         IXplatAbstractions.INSTANCE.getEvalSoundRegistry();
 
         rootRegistry.freeze();
@@ -138,6 +139,7 @@ public class ForgeHexInitializer {
         bind(HexRegistries.ACTION, HexActions::register);
         bind(HexRegistries.SPECIAL_HANDLER, HexSpecialHandlers::register);
         bind(HexRegistries.ARITHMETIC, HexArithmetics::register);
+        bind(HexRegistries.CONTINUATION_TYPE, HexContinuationTypes::registerContinuations);
         bind(HexRegistries.EVAL_SOUND, HexEvalSounds::register);
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());

@@ -6,8 +6,12 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
+import at.petrak.hexcasting.api.utils.getList
 import at.petrak.hexcasting.api.utils.serializeToNBT
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -45,10 +49,26 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
     }
 
     override fun serializeToNBT() = NBTBuilder {
-        "type" %= "evaluate"
         "patterns" %= list.serializeToNBT()
         "isMetacasting" %= isMetacasting
     }
 
     override fun size() = list.size()
+
+    override val type: ContinuationFrame.Type<*> = TYPE
+
+    companion object {
+        @JvmField
+        val TYPE: ContinuationFrame.Type<FrameEvaluate> = object : ContinuationFrame.Type<FrameEvaluate> {
+            override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameEvaluate {
+                return FrameEvaluate(
+                    HexIotaTypes.LIST.deserialize(
+                        tag.getList("patterns", Tag.TAG_COMPOUND),
+                        world
+                    )!!.list,
+                    tag.getBoolean("isMetacasting"))
+            }
+
+        }
+    }
 }

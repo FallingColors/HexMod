@@ -145,6 +145,7 @@ object FabricHexInitializer : ModInitializer {
         HexActions.register(bind(IXplatAbstractions.INSTANCE.actionRegistry))
         HexSpecialHandlers.register(bind(IXplatAbstractions.INSTANCE.specialHandlerRegistry))
         HexArithmetics.register(bind(IXplatAbstractions.INSTANCE.arithmeticRegistry))
+        HexContinuationTypes.registerContinuations(bind(IXplatAbstractions.INSTANCE.continuationTypeRegistry))
         HexEvalSounds.register(bind(IXplatAbstractions.INSTANCE.evalSoundRegistry))
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for

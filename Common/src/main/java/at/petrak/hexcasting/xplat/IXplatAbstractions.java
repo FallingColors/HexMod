@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
@@ -175,6 +176,7 @@ public interface IXplatAbstractions {
     Registry<IotaType<?>> getIotaTypeRegistry();
 
     Registry<Arithmetic> getArithmeticRegistry();
+    Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry();
 
     Registry<EvalSound> getEvalSoundRegistry();
 
