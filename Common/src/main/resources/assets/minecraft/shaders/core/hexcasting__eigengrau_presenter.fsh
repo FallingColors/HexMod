@@ -1,22 +1,19 @@
 #version 150
 
-// see PostPass.java: the game texture has a defined name
 uniform sampler2D DiffuseSampler;
 uniform sampler2D veil;
 uniform sampler2D bz;
 
-uniform vec2 ScreenSize;
-
-const float resolution = 5.0;
+uniform float Resolution;
+uniform float ScreenSize;
 
 in vec2 texCoord0;
-out vec4 fragColor;
 
 ivec2 pxToHex(vec2 px) {
     float sqrt3 = sqrt(3.0);
 
-    float x = px.x / (resolution * sqrt3);
-    float y = px.y / (resolution * sqrt3);
+    float x = px.x / (Resolution * sqrt3);
+    float y = px.y / (Resolution * sqrt3);
 
     float tmp = floor(x + sqrt3 * y + 1.0);
     int q = int((floor(2.0 * x + 1.0) + tmp) / 3.0);
@@ -33,7 +30,7 @@ vec2 hexToPx(ivec2 hex) {
         sqrt3 * float(hex.x - hex.y) + sqrt3 / 2.0 * float(hex.y),
         1.5 * float(hex.y)
     );
-    return xy * resolution;
+    return xy * Resolution;
 }
 
 void main() {
@@ -47,7 +44,7 @@ void main() {
     float brightness = (worldSample.r + worldSample.g + worldSample.b) / 3.0;
     float eigengrauAmount = clamp(veil.r + mix(0.0, veil.g, 1.0 - brightness), 0.5, 1.0);
 
-    vec2 st = vec2(float(hex.x), float(hex.y)) / resolution;
+    vec2 st = vec2(float(hex.x), float(hex.y)) / Resolution;
     float eigengrauSample = texture(bz, st).r / 100.0;
     //    vec3 col = smoothstep(worldSample, vec3(eigengrauSample), vec3(eigengrauAmount));
     vec3 col = worldSample;

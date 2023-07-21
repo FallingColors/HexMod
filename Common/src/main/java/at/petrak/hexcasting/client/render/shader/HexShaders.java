@@ -17,6 +17,7 @@ public class HexShaders {
      * Spins the BZ simulation in the background
      */
     public static ShaderInstance EIGENGRAU_BZ;
+    public static ShaderInstance EIGENGRAU_PRESENTER;
 
     public static void init(ResourceProvider resourceProvider,
         Consumer<Pair<ShaderInstance, Consumer<ShaderInstance>>> registrations) throws IOException {
@@ -27,6 +28,10 @@ public class HexShaders {
         registrations.accept(Pair.of(
             new ShaderInstance(resourceProvider, "hexcasting__eigengrau_bz", DefaultVertexFormat.POSITION_TEX),
             inst -> EIGENGRAU_BZ = inst
+        ));
+        registrations.accept(Pair.of(
+            new ShaderInstance(resourceProvider, "hexcasting__eigengrau_presenter", DefaultVertexFormat.POSITION_TEX),
+            inst -> EIGENGRAU_PRESENTER = inst
         ));
 
         // Good a time as any I guess?

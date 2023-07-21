@@ -1,17 +1,14 @@
 package at.petrak.hexcasting.client.render.overlays;
 
 import at.petrak.hexcasting.client.render.shader.HexShaders;
-import at.petrak.hexcasting.mixin.accessor.client.AccessorGameRenderer;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * How eigengrau works
@@ -23,21 +20,12 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class EigengrauOverlay {
     public static TextureTarget EIGENGRAU_BZ_SIMULATION;
     public static TextureTarget EIGENGRAU_VEIL;
-    public static final ResourceLocation SPECIAL_BZ_SIM_ID = modLoc("eigengrau/simulation");
-    public static final ResourceLocation SPECIAL_BZ_VEIL_ID = modLoc("eigengrau/veil");
     /**
      * "Radius" of a hex cell in pixels
      */
     private static final int RESOLUTION = 5;
 
     public static void renderEigengrau() {
-        // Post-processing
-        if (Minecraft.getInstance().gameRenderer.currentEffect() == null) {
-            var mogrwbjah = (AccessorGameRenderer) Minecraft.getInstance().gameRenderer;
-            mogrwbjah.hex$loadEffect(new ResourceLocation(
-                "shaders/post/hexcasting__eigengrau_presenter_entrypoint.json"));
-        }
-
         var window = Minecraft.getInstance().getWindow();
         int w = window.getWidth();
         int h = window.getHeight();
@@ -54,6 +42,20 @@ public class EigengrauOverlay {
         var tess = Tesselator.getInstance();
         var buf = tess.getBuilder();
 
+        renderOverAll(w, h, mat, tess, buf);
+
+        RenderSystem.setShader(() -> HexShaders.EIGENGRAU_PRESENTER);
+        RenderSystem.setShaderTexture(0, Minecraft.getInstance().getMainRenderTarget().getColorTextureId());
+        RenderSystem.setShaderTexture(1, EIGENGRAU_VEIL.getColorTextureId());
+        RenderSystem.setShaderTexture(2, EIGENGRAU_BZ_SIMULATION.getColorTextureId());
+        HexShaders.EIGENGRAU_PRESENTER.getUniform("ScreenSize").set((float) w, (float) h);
+        HexShaders.EIGENGRAU_PRESENTER.getUniform("Resolution").set((float) RESOLUTION);
+        renderOverAll(w, h, mat, tess, buf);
+
+        RenderSystem.setShader(() -> prevShader);
+    }
+
+    private static void renderOverAll(int w, int h, Matrix4f mat, Tesselator tess, BufferBuilder buf) {
         buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buf.vertex(mat, 0, 0, 0)
             .uv(0, 0)
@@ -68,8 +70,6 @@ public class EigengrauOverlay {
             .uv(1, 0)
             .endVertex();
         tess.end();
-
-        RenderSystem.setShader(() -> prevShader);
     }
 
     public static void initTextures() {
