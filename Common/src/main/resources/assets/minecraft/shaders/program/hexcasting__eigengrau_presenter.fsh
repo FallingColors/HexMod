@@ -10,7 +10,6 @@ uniform vec2 ScreenSize;
 const float resolution = 5.0;
 
 in vec2 texCoord0;
-out vec4 fragColor;
 
 ivec2 pxToHex(vec2 px) {
     float sqrt3 = sqrt(3.0);

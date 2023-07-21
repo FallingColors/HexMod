@@ -25,10 +25,10 @@
     "accessor.client.AccessorEmptyTextureStateShard",
     "accessor.client.AccessorGameRenderer",
     "accessor.client.AccessorMouseHandler",
+    "accessor.client.AccessorPostChain",
     "accessor.client.AccessorRenderStateShard",
     "accessor.client.AccessorRenderType",
     "client.MixinClientLevel",
-    "client.MixinPlayerRenderer",
-    "client.MixinPostChain"
+    "client.MixinPlayerRenderer"
   ]
 }

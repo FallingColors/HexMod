@@ -2,6 +2,7 @@ package at.petrak.hexcasting.client.render.overlays;
 
 import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.mixin.accessor.client.AccessorGameRenderer;
+import at.petrak.hexcasting.mixin.accessor.client.AccessorPostChain;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -10,8 +11,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * How eigengrau works
@@ -23,8 +22,6 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class EigengrauOverlay {
     public static TextureTarget EIGENGRAU_BZ_SIMULATION;
     public static TextureTarget EIGENGRAU_VEIL;
-    public static final ResourceLocation SPECIAL_BZ_SIM_ID = modLoc("eigengrau/simulation");
-    public static final ResourceLocation SPECIAL_BZ_VEIL_ID = modLoc("eigengrau/veil");
     /**
      * "Radius" of a hex cell in pixels
      */
@@ -34,8 +31,21 @@ public class EigengrauOverlay {
         // Post-processing
         if (Minecraft.getInstance().gameRenderer.currentEffect() == null) {
             var mogrwbjah = (AccessorGameRenderer) Minecraft.getInstance().gameRenderer;
+
             mogrwbjah.hex$loadEffect(new ResourceLocation(
                 "shaders/post/hexcasting__eigengrau_presenter_entrypoint.json"));
+            var post = mogrwbjah.hex$postEffect();
+            var passes = ((AccessorPostChain) post).hex$getPasses();
+
+            var window = Minecraft.getInstance().getWindow();
+            int w = window.getWidth();
+            int h = window.getHeight();
+
+            var passPresent = passes.get(0);
+            passPresent.getEffect().setSampler("simulation",
+                () -> EIGENGRAU_BZ_SIMULATION.getColorTextureId());
+            passPresent.getEffect().setSampler("veil",
+                () -> EIGENGRAU_VEIL.getColorTextureId());
         }
 
         var window = Minecraft.getInstance().getWindow();
