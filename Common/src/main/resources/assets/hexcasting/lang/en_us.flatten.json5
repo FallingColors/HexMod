@@ -328,7 +328,9 @@
       "list_contents": "[%s]",
       "null_iota": "Null",
       "jump_iota": "[Jump]",
-      "pattern_iota": "HexPattern(%s)"
+      "pattern_iota": "HexPattern(%s)",
+      "boolean_true": "True",
+      "boolean_false": "False"
     },
     // ^ tooltip
     spelldata: {
