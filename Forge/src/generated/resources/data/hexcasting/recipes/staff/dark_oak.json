@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "hexcasting:charged_amethyst"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "item": "minecraft:dark_oak_planks"
+    }
+  },
+  "pattern": [
+    " SA",
+    " WS",
+    "S  "
+  ],
+  "result": {
+    "item": "hexcasting:staff/dark_oak"
+  },
+  "show_notification": true
+}

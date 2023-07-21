@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:lightning",
+    "hexcasting:flight",
+    "hexcasting:create_lava",
+    "hexcasting:teleport/great",
+    "hexcasting:sentinel/create/great",
+    "hexcasting:dispel_rain",
+    "hexcasting:summon_rain",
+    "hexcasting:brainsweep",
+    "hexcasting:craft/battery",
+    "hexcasting:potion/regeneration",
+    "hexcasting:potion/night_vision",
+    "hexcasting:potion/absorption",
+    "hexcasting:potion/haste",
+    "hexcasting:potion/strength"
+  ]
+}

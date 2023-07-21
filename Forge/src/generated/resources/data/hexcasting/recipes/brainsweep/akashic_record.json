@@ -1,0 +1,16 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "block",
+    "block": "hexcasting:akashic_connector"
+  },
+  "cost": 1000000,
+  "entityIn": {
+    "type": "villager",
+    "minLevel": 5,
+    "profession": "librarian"
+  },
+  "result": {
+    "name": "hexcasting:akashic_record"
+  }
+}

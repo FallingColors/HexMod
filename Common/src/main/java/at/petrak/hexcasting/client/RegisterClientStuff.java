@@ -8,7 +8,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.render.GaslightingTracker;
-import at.petrak.hexcasting.client.render.ScryingLensOverlays;
+import at.petrak.hexcasting.client.render.HexScryingLensOverlays;
 import at.petrak.hexcasting.client.render.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.render.be.BlockEntityQuenchedAllayRenderer;
 import at.petrak.hexcasting.client.render.be.BlockEntitySlateRenderer;
@@ -30,7 +30,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -49,10 +48,10 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class RegisterClientStuff {
     public static Map<ResourceLocation, List<BakedModel>> QUENCHED_ALLAY_VARIANTS = new HashMap<>();
     private static final Map<BlockQuenchedAllay, Boolean> QUENCHED_ALLAY_TYPES = Map.of(
-            HexBlocks.QUENCHED_ALLAY, false,
-            HexBlocks.QUENCHED_ALLAY_TILES, true,
-            HexBlocks.QUENCHED_ALLAY_BRICKS, true,
-            HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL, true);
+        HexBlocks.QUENCHED_ALLAY, false,
+        HexBlocks.QUENCHED_ALLAY_TILES, true,
+        HexBlocks.QUENCHED_ALLAY_BRICKS, true,
+        HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL, true);
 
     public static void init() {
         registerSealableDataHolderOverrides(HexItems.FOCUS,
@@ -140,7 +139,7 @@ public class RegisterClientStuff {
 //            Minecraft.getInstance().getTextureManager().bindForSetup(tex);
 //        }
 
-        ScryingLensOverlays.addScryingLensStuff();
+        HexScryingLensOverlays.addScryingLensStuff();
     }
 
     private static void registerGaslight4(Item item) {
@@ -202,7 +201,7 @@ public class RegisterClientStuff {
 
     private static void registerVariantOverrides(VariantItem item, Function<ItemStack, Integer> variant) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.VARIANT_PRED,
-                (stack, level, holder, holderID) -> variant.apply(stack));
+            (stack, level, holder, holderID) -> variant.apply(stack));
     }
 
     private static void registerScrollOverrides(ItemScroll scroll) {
@@ -241,11 +240,11 @@ public class RegisterClientStuff {
         registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_TILE,
             BlockEntityQuenchedAllayRenderer::new);
         registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_TILES_TILE,
-                BlockEntityQuenchedAllayRenderer::new);
+            BlockEntityQuenchedAllayRenderer::new);
         registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_BRICKS_TILE,
-                BlockEntityQuenchedAllayRenderer::new);
+            BlockEntityQuenchedAllayRenderer::new);
         registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_BRICKS_SMALL_TILE,
-                BlockEntityQuenchedAllayRenderer::new);
+            BlockEntityQuenchedAllayRenderer::new);
     }
 
     @FunctionalInterface
@@ -262,7 +261,7 @@ public class RegisterClientStuff {
                 locStart += "deco/";
 
             for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-                extraModels.accept(modLoc( locStart + blockLoc.getPath() + "_" + i));
+                extraModels.accept(modLoc(locStart + blockLoc.getPath() + "_" + i));
             }
         }
     }

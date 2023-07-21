@@ -1,0 +1,45 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    [
+      {
+        "item": "minecraft:brown_dye"
+      },
+      {
+        "tag": "c:brown_dye"
+      },
+      {
+        "tag": "c:brown_dyes"
+      }
+    ],
+    {
+      "item": "hexcasting:scroll_paper_lantern"
+    },
+    {
+      "item": "hexcasting:scroll_paper_lantern"
+    },
+    {
+      "item": "hexcasting:scroll_paper_lantern"
+    },
+    {
+      "item": "hexcasting:scroll_paper_lantern"
+    },
+    {
+      "item": "hexcasting:scroll_paper_lantern"
+    },
+    {
+      "item": "hexcasting:scroll_paper_lantern"
+    },
+    {
+      "item": "hexcasting:scroll_paper_lantern"
+    },
+    {
+      "item": "hexcasting:scroll_paper_lantern"
+    }
+  ],
+  "result": {
+    "count": 8,
+    "item": "hexcasting:ancient_scroll_paper_lantern"
+  }
+}

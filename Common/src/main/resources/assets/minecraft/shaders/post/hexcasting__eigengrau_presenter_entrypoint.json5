@@ -1,0 +1,32 @@
+// This is the ENTRYPOINT for the presenter.
+{
+  targets: [
+    "swap",
+    "hexcasting:eigengrau/simulation",
+    "hexcasting:eigengrau/veil"
+  ],
+  passes: [
+    {
+      // Due to 1984, we can't have this in the hexcasting namespace.
+      // This is minecraft:shaders/program/hexcasting__eigengray_presenter.json, which loads the .fsh
+      name: "hexcasting__eigengrau_presenter",
+      intarget: "minecraft:main",
+      outtarget: "swap",
+      auxtargets: [
+        {
+          name: "bz",
+          id: "hexcasting:eigengrau/simulation",
+        },
+        {
+          name: "veil",
+          id: "hexcasting:eigengrau/veil",
+        }
+      ],
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

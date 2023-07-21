@@ -23,10 +23,12 @@
     "accessor.client.AccessorBlockEntityRenderDispatcher",
     "accessor.client.AccessorCompositeRenderType",
     "accessor.client.AccessorEmptyTextureStateShard",
+    "accessor.client.AccessorGameRenderer",
     "accessor.client.AccessorMouseHandler",
     "accessor.client.AccessorRenderStateShard",
     "accessor.client.AccessorRenderType",
     "client.MixinClientLevel",
-    "client.MixinPlayerRenderer"
+    "client.MixinPlayerRenderer",
+    "client.MixinPostChain"
   ]
 }

@@ -6,7 +6,7 @@ import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.client.model.AltioraLayer;
 import at.petrak.hexcasting.client.model.HexModelLayers;
-import at.petrak.hexcasting.client.render.HexAdditionalRenderers;
+import at.petrak.hexcasting.client.render.overlays.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.HexParticles;
@@ -15,7 +15,6 @@ import at.petrak.hexcasting.interop.HexInterop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
@@ -131,7 +130,8 @@ public class ForgeHexClientInitializer {
     @SubscribeEvent
     public static void addPlayerLayers(EntityRenderersEvent.AddLayers evt) {
         evt.getSkins().forEach(skinName -> {
-            var skin = (LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>) evt.getSkin(skinName);
+            var skin =
+                (LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>) evt.getSkin(skinName);
 
             skin.addLayer(new AltioraLayer<>(skin, evt.getEntityModels()));
         });
