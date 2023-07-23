@@ -23,7 +23,7 @@ blacklist = []
 
 [template_args]
 title = "Hex Book"
-mod_name = "Hexcasting"
+mod_name = "Hex Casting"
 author = "petrak@, Alwinfy"
 description = "The Hex Book, all in one place."
 icon_href = "icon.png"

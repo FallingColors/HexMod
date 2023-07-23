@@ -9,18 +9,17 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 # from jinja2.sandbox import SandboxedEnvironment
 from tap import Tap
 
-from common.jinja_extensions import (
-    IncludeRawExtension,
-    hexdoc_block,
-    hexdoc_escape,
-    hexdoc_minify,
-    hexdoc_wrap,
-)
+from common.jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
 from common.properties import Properties
 from hexcasting.hex_book import HexBook
 
 if sys.version_info < (3, 11):
     raise RuntimeError("Minimum Python version: 3.11")
+
+
+def strip_empty_lines(text: str) -> str:
+    return "\n".join(s for s in text.splitlines() if s.strip())
+
 
 # CLI arguments
 class Args(Tap):
@@ -51,20 +50,18 @@ def main(args: Args) -> None:
         extensions=[IncludeRawExtension],
     )
     env.filters |= dict(  # for some reason, pylance doesn't like the {} here
-        hexdoc_minify=hexdoc_minify,
         hexdoc_block=hexdoc_block,
         hexdoc_wrap=hexdoc_wrap,
-        hexdoc_escape=hexdoc_escape,
     )
 
     # load and render template
     template = env.get_template(props.template)
-    docs = template.render(
-        props.template_args
-        | {
-            "book": book,
-            "props": props,
-        }
+    docs = strip_empty_lines(
+        template.render(
+            **props.template_args,
+            book=book,
+            props=props,
+        )
     )
 
     # if there's an output file specified, write to it

@@ -1,0 +1,117 @@
+summary {
+  display: list-item;
+}
+
+details.spell-collapsible {
+  display: inline-block;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0.5em 0.5em 0;
+  margin-bottom: 0.5em;
+}
+
+summary.collapse-spell {
+  font-weight: bold;
+  margin: -0.5em -0.5em 0;
+  padding: 0.5em;
+}
+
+details.spell-collapsible[open] {
+  padding: 0.5em;
+}
+
+details[open] summary.collapse-spell {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.5em;
+}
+
+details .collapse-spell::before {
+  content: "Click to show spell";
+}
+
+details[open] .collapse-spell::before {
+  content: "Click to hide spell";
+}
+
+blockquote.crafting-info {
+  font-size: inherit;
+}
+
+a.permalink {
+  margin-left: 0.5em;
+}
+
+a.permalink:hover {
+  color: lightgray;
+}
+
+p {
+  margin: 0.5ex 0;
+}
+
+p.fake-li {
+  margin: 0;
+}
+
+p.fake-li::before {
+  content: "\2022";
+  margin: 1ex;
+}
+
+.linkout::before {
+  content: "Link: ";
+}
+
+p.todo-note {
+  font-style: italic;
+  color: lightgray;
+}
+
+.obfuscated {
+  filter: blur(1em);
+}
+
+.spoilered {
+  filter: blur(1ex);
+  -moz-transition: filter 0.04s linear;
+}
+
+.spoilered:hover {
+  filter: blur(0.5ex);
+}
+
+.spoilered.unspoilered {
+  filter: blur(0);
+}
+
+canvas.spell-viz {
+  --dot-color: #777f;
+  --dot-color: #777f;
+  --start-dot-color: #f009;
+  --moving-dot-color: #0fa9;
+
+  --path-color: darkgray;
+  --visited-path-color: #0c8;
+
+  --dot-scale: 0.0625;
+  --moving-dot-scale: 0.125;
+  --line-scale: 0.08333;
+  --pausetext-scale: 0.5;
+  --dark-mode: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #201a20;
+    color: #ddd;
+  }
+
+  .jumbotron {
+    background-color: #323;
+  }
+
+  canvas.spell-viz {
+    /* hack */
+    --dark-mode: 1;
+  }
+}

@@ -6,6 +6,9 @@
         },
         "editor.rulers": [88],
     },
+    "[html][jinja-html]": {
+        "editor.rulers": [120],
+    },
     "python.formatting.provider": "black",
     "python.analysis.typeCheckingMode": "strict", // god save us
     "python.analysis.diagnosticSeverityOverrides": {
