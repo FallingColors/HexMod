@@ -9,11 +9,7 @@ from ..text import FormatTree
 from .abstract_pages import Page, PageWithText, PageWithTitle
 
 
-class TextPage(
-    PageWithTitle[BookContext],
-    type="patchouli:text",
-    template_name="PageWithTitle",
-):
+class TextPage(PageWithTitle[BookContext], type="patchouli:text"):
     text: FormatTree
 
 
@@ -78,5 +74,9 @@ class QuestPage(PageWithTitle[BookContext], type="patchouli:quest"):
     title: LocalizedStr = LocalizedStr.with_value("Objective")
 
 
-class EmptyPage(Page[BookContext], type="patchouli:empty", template_name="Page"):
+class EmptyPage(
+    Page[BookContext],
+    type="patchouli:empty",
+    template_type="patchouli:page",
+):
     draw_filler: bool = True

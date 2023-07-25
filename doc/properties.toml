@@ -14,6 +14,9 @@ default_recipe_dir = 0
 pattern_regex = {_Raw='HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?'}
 
 template = "main.html.jinja"
+template_dirs = []
+template_packages = []
+
 spoilers = [
     "hexcasting:opened_eyes",
     "hexcasting:y_u_no_cast_angy",

@@ -3,7 +3,13 @@
 
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
+from jinja2 import (
+    ChoiceLoader,
+    Environment,
+    FileSystemLoader,
+    PackageLoader,
+    StrictUndefined,
+)
 
 # from jinja2.sandbox import SandboxedEnvironment
 from tap import Tap
@@ -41,8 +47,12 @@ def main(args: Args | None = None) -> None:
     # set up Jinja environment
     # TODO: SandboxedEnvironment
     env = Environment(
-        # TODO: ChoiceLoader w/ ModuleLoader, but we need the directory restructure
-        loader=FileSystemLoader("./templates"),
+        # search order: template_dirs, template_packages, built-in hexdoc templates
+        loader=ChoiceLoader(
+            [FileSystemLoader(props.template_dirs)]
+            + [PackageLoader(name, str(path)) for name, path in props.template_packages]
+            + [PackageLoader("hexdoc", "_templates")]
+        ),
         undefined=StrictUndefined,
         lstrip_blocks=True,
         trim_blocks=True,

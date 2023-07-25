@@ -51,6 +51,9 @@ class Properties(HexDocModel[Any]):
     pattern_regex: re.Pattern[str]
 
     template: str
+    template_dirs: list[Path]
+    template_packages: list[tuple[str, Path]]
+
     spoilers: set[ResourceLocation]
     blacklist: set[ResourceLocation]
 
@@ -95,10 +98,6 @@ class Properties(HexDocModel[Any]):
     @property
     def entries_dir(self) -> Path:
         return self.book_dir / self.lang / "entries"
-
-    @property
-    def templates_dir(self) -> Path:
-        return self.book_dir / self.lang / "templates"
 
     @property
     def default_recipe_dir(self) -> Path:

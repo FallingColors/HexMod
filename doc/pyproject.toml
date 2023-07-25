@@ -2,6 +2,9 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build]
+packages = ["src/hexdoc"]
+
 
 [project]
 name = "HexDoc"
@@ -41,10 +44,6 @@ hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
 [project.entry-points."hexdoc.ItemIngredient"]
 hexdoc-minecraft = "hexdoc.minecraft.recipe.ingredients"
 hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
-
-
-[tool.hatch.build]
-packages = ["src/hexdoc"]
 
 
 [tool.pytest.ini_options]

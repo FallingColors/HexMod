@@ -12,10 +12,7 @@ from ..hex_recipes import BrainsweepRecipe
 from .abstract_hex_pages import PageWithOpPattern, PageWithPattern
 
 
-class LookupPatternPage(
-    PageWithOpPattern[HexContext],
-    type="hexcasting:pattern",
-):
+class LookupPatternPage(PageWithOpPattern[HexContext], type="hexcasting:pattern"):
     @model_validator(mode="before")
     def _pre_root_lookup(cls, values: dict[str, Any], info: ValidationInfo):
         context = cast(HexContext, info.context)
@@ -34,7 +31,6 @@ class LookupPatternPage(
 class ManualOpPatternPage(
     PageWithOpPattern[HexContext],
     type="hexcasting:manual_pattern",
-    template_name="PageWithPattern",
 ):
     pass
 
@@ -42,7 +38,6 @@ class ManualOpPatternPage(
 class ManualRawPatternPage(
     PageWithPattern[HexContext],
     type="hexcasting:manual_pattern",
-    template_name="PageWithPattern",
 ):
     pass
 
@@ -50,7 +45,7 @@ class ManualRawPatternPage(
 class ManualPatternNosigPage(
     PageWithPattern[HexContext],
     type="hexcasting:manual_pattern_nosig",
-    template_name="PageWithPattern",
+    template_type="hexcasting:manual_pattern",
 ):
     input: None = None
     output: None = None

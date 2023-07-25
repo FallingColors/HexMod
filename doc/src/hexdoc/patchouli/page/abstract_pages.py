@@ -5,7 +5,6 @@ from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.resource import ResourceLocation, TypeTaggedUnion
-from hexdoc.utils import TagValue
 
 from ..model import AnyBookContext
 from ..text import FormatTree
@@ -19,6 +18,7 @@ class Page(TypeTaggedUnion[AnyBookContext], group="hexdoc.Page", type=None):
 
     __template: ClassVar[str]
 
+    type: ResourceLocation | None
     advancement: ResourceLocation | None = None
     flag: str | None = None
     anchor: str | None = None
@@ -26,22 +26,19 @@ class Page(TypeTaggedUnion[AnyBookContext], group="hexdoc.Page", type=None):
     def __init_subclass__(
         cls,
         *,
-        type: TagValue | None,
-        template: str | None = None,
-        template_name: str | None = None,
+        type: str | None,
+        template_type: str | None = None,
     ) -> None:
         super().__init_subclass__(group=None, type=type)
 
-        # jinja template
-        match template, template_name:
-            case str(), None:
-                cls.__template = template
-            case None, str():
-                cls.__template = f"pages/{template_name}.html.jinja"
-            case None, None:
-                cls.__template = f"pages/{cls.__name__}.html.jinja"
-            case _:
-                raise ValueError("Must specify at most one of template, template_name")
+        # jinja template path
+        if template_type is not None:
+            template = ResourceLocation.from_str(template_type)
+        else:
+            template = cls.type
+
+        if template:
+            cls.__template = f"pages/{template.namespace}/{template.path}.html.jinja"
 
     @model_validator(mode="wrap")
     @classmethod

@@ -1,5 +1,5 @@
-{% extends "pages/PageWithTitle.html.jinja" %}
-{% include "macros.html.jinja" %}
+{% extends "pages/patchouli/text.html.jinja" %}
+{% include "common/macros.html.jinja" %}
 
 {% block inner_body %}
   {{ macros.recipe_block(page.recipes, "item", "Several crafting recipes, for the", ", ") }}

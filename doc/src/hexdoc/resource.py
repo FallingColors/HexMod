@@ -131,7 +131,7 @@ class Entity(BaseResourceLocation, regex=_make_regex(nbt=True)):
 
 
 class TypeTaggedUnion(InternallyTaggedUnion[AnyContext], key="type", value=None):
-    type: ResourceLocation | None
+    type: ResourceLocation | NoValueType | None
 
     def __init_subclass__(
         cls,
@@ -143,7 +143,5 @@ class TypeTaggedUnion(InternallyTaggedUnion[AnyContext], key="type", value=None)
         match type:
             case str():
                 cls.type = ResourceLocation.from_str(type)
-            case NoValueType():
-                cls.type = None
-            case None:
-                pass
+            case _:
+                cls.type = type
