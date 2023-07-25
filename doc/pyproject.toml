@@ -1,11 +1,10 @@
-# project metadata
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+
 [project]
-name = "HexDoc" # TODO: i'm pretty sure i had funnier ideas than this
+name = "HexDoc"
 version = "0.1.0"
 authors = [
     { name="Alwinfy" },
@@ -16,45 +15,108 @@ requires-python = ">=3.11"
 dependencies = [
     "typing_extensions~=4.7.0",
     "typed-argument-parser~=1.8.0",
-    "pydantic==2.0",
+    "pydantic~=2.0",
+    "Jinja2~=3.1.2",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "black==23.7.0",
+    "isort==5.12.0",
+    "pytest==7.3.1",
+    "syrupy==4.0.2",
+]
+
+[project.scripts]
+hexdoc = "hexdoc.scripts.hexdoc:main"
 
 [project.entry-points."hexdoc.Page"]
-hexdoc-patchouli = "patchouli.page.pages"
-hexdoc-hexcasting = "hexcasting.hex_pages"
-hexdoc-abstract-hexcasting = "hexcasting.abstract_hex_pages"
+hexdoc-patchouli = "hexdoc.patchouli.page.pages"
+hexdoc-hexcasting = "hexdoc.hexcasting.page.hex_pages"
 
 [project.entry-points."hexdoc.Recipe"]
-hexdoc-minecraft = "minecraft.recipe.recipes"
-hexdoc-hexcasting = "hexcasting.hex_recipes"
+hexdoc-minecraft = "hexdoc.minecraft.recipe.recipes"
+hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
 
 [project.entry-points."hexdoc.ItemIngredient"]
-hexdoc-minecraft = "minecraft.recipe.ingredients"
-hexdoc-hexcasting = "hexcasting.hex_recipes"
+hexdoc-minecraft = "hexdoc.minecraft.recipe.ingredients"
+hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
 
-# Hatch settings (the build backend)
-
-[tool.hatch.metadata]
-allow-direct-references = true # TODO: remove when we switch to Pydantic
 
 [tool.hatch.build]
-packages = ["src/common", "src/hexcasting", "src/minecraft", "src/patchouli"]
+packages = ["src/hexdoc"]
 
-# tests, formatting, and (TODO:) type checking
 
 [tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib"
-]
+addopts = ["--import-mode=importlib"]
 markers = [
     "filename: name of file for fixtures to create",
     "file_contents: data for fixtures to write to files",
     "fixture_data: other misc data",
 ]
 
+
 [tool.coverage.report]
 include_namespace_packages = true
+
 
 [tool.isort]
 profile = "black"
 combine_as_imports = true
+
+
+[tool.pyright]
+pythonVersion = "3.11"
+pythonPlatform = "All"
+
+# mostly we use strict mode
+# but pyright doesn't allow decreasing error severity in strict mode
+# so we need to manually specify all of the strict mode overrides so we can do that :/
+typeCheckingMode = "basic"
+
+strictDictionaryInference = true
+strictListInference = true
+strictSetInference = true
+
+reportAssertAlwaysTrue = "error"
+reportConstantRedefinition = "error"
+reportDeprecated = "error"
+reportDuplicateImport = "error"
+reportFunctionMemberAccess = "error"
+reportIncompatibleMethodOverride = "error"
+reportIncompatibleVariableOverride = "error"
+reportIncompleteStub = "error"
+reportInconsistentConstructor = "error"
+reportInvalidStringEscapeSequence = "error"
+reportInvalidStubStatement = "error"
+reportInvalidTypeVarUse = "error"
+reportMatchNotExhaustive = "error"
+reportMissingParameterType = "error"
+reportMissingTypeStubs = "error"
+reportOverlappingOverload = "error"
+reportSelfClsParameterName = "error"
+reportTypeCommentUsage = "error"
+reportUnknownParameterType = "error"
+reportUnnecessaryCast = "error"
+reportUnnecessaryContains = "error"
+reportUnsupportedDunderAll = "error"
+reportUntypedBaseClass = "error"
+reportUntypedClassDecorator = "error"
+reportUntypedFunctionDecorator = "error"
+reportUntypedNamedTuple = "error"
+reportUnusedClass = "error"
+reportUnusedExpression = "error"
+reportUnusedFunction = "error"
+reportUnusedVariable = "error"
+reportWildcardImportFromLibrary = "error"
+
+reportMissingTypeArgument = "warning"
+reportPrivateUsage = "warning"
+reportUnknownArgumentType = "warning"
+reportUnknownLambdaType = "warning"
+reportUnknownMemberType = "warning"
+reportUnnecessaryComparison = "warning"
+reportUnnecessaryIsInstance =  	"warning"
+reportUnusedImport = "warning"
+
+reportUnknownVariableType = "none"

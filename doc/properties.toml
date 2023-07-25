@@ -51,12 +51,8 @@ package = "{src}/main/java/at/petrak/hexcasting"
 resources = "{src}/main/resources"
 generated = "{src}/generated/resources"
 pattern_stubs = [
-    # these are tables so we have the option to add extra per-stub configs (eg. regex)
-    # NOTE: each ^ is like ../ in a file path (^key and ^.key are both valid)
-    # the parent of an item in an array is the table containing the array, not the array
-    # so in this case, {^.package} is common.package
-    { file = "{^.package}/common/casting/RegisterPatterns.java" },
-    { file = "{^.package}/interop/pehkui/PehkuiInterop.java" },
+    "{package}/common/casting/RegisterPatterns.java",
+    "{package}/interop/pehkui/PehkuiInterop.java",
 ]
 
 [fabric]
@@ -65,7 +61,7 @@ package = "{src}/main/java/at/petrak/hexcasting/fabric"
 resources = "{src}/main/resources"
 generated = "{src}/generated/resources"
 pattern_stubs = [
-    { file = "{^.package}/interop/gravity/GravityApiInterop.java" },
+    "{package}/interop/gravity/GravityApiInterop.java",
 ]
 
 [forge]

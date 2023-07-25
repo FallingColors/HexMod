@@ -1,6 +1,6 @@
 import pytest
 
-from minecraft.resource import ItemStack, ResLoc, ResourceLocation
+from hexdoc.resource import ItemStack, ResLoc, ResourceLocation
 
 resource_locations: list[tuple[str, ResourceLocation, str]] = [
     (
