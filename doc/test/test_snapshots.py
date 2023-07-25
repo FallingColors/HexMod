@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from syrupy.assertion import SnapshotAssertion
 
-from hexdoc.scripts.hexdoc import Args, main
+from hexdoc.hexdoc import Args, main
 
 _RUN = ["hexdoc"]
 _ARGV = ["properties.toml", "-o"]

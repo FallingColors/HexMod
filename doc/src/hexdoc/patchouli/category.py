@@ -4,12 +4,11 @@ from typing import Self
 from pydantic import Field
 
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.properties import Properties
-from hexdoc.resource import ItemStack, ResourceLocation
+from hexdoc.utils import ItemStack, Properties, ResourceLocation
 from hexdoc.utils.types import Sortable, sorted_dict
 
+from .book_models import BookContext, BookFileModel
 from .entry import Entry
-from .model import BookContext, BookFileModel
 from .text import FormatTree
 
 

@@ -2,9 +2,9 @@ from typing import Any
 
 from hexdoc.minecraft import LocalizedItem, LocalizedStr
 from hexdoc.minecraft.recipe import CraftingRecipe
-from hexdoc.resource import Entity, ItemStack, ResourceLocation
+from hexdoc.utils import Entity, ItemStack, ResourceLocation
 
-from ..model import BookContext
+from ..book_models import BookContext
 from ..text import FormatTree
 from .abstract_pages import Page, PageWithText, PageWithTitle
 

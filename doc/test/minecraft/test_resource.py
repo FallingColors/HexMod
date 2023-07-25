@@ -1,6 +1,6 @@
 import pytest
 
-from hexdoc.resource import ItemStack, ResLoc, ResourceLocation
+from hexdoc.utils import ItemStack, ResLoc, ResourceLocation
 
 resource_locations: list[tuple[str, ResourceLocation, str]] = [
     (

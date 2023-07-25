@@ -2,8 +2,7 @@ from typing import Any, Self, cast
 
 from pydantic import ValidationInfo, model_validator
 
-from hexdoc.properties import AnyPropsContext
-from hexdoc.resource import ResourceLocation, TypeTaggedUnion
+from hexdoc.utils import AnyPropsContext, ResourceLocation, TypeTaggedUnion
 from hexdoc.utils.deserialize import load_json
 
 

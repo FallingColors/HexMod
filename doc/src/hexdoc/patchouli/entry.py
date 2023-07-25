@@ -4,12 +4,10 @@ from typing import cast
 from pydantic import Field, ValidationInfo, model_validator
 
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.properties import Properties
-from hexdoc.resource import ItemStack, ResourceLocation
-from hexdoc.utils import Color
+from hexdoc.utils import Color, ItemStack, Properties, ResourceLocation
 from hexdoc.utils.types import Sortable
 
-from .model import BookContext, BookFileModel
+from .book_models import BookContext, BookFileModel
 from .page.pages import Page
 
 

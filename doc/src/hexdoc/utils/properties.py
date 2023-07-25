@@ -13,9 +13,9 @@ from pydantic import (
 )
 from typing_extensions import TypedDict
 
-from hexdoc.resource import ResourceLocation
-from hexdoc.utils.model import HexDocModel
-from hexdoc.utils.toml_placeholders import load_toml
+from .model import HexDocModel
+from .resource import ResourceLocation
+from .toml_placeholders import load_toml
 
 NoTrailingSlashHttpUrl = Annotated[
     str,

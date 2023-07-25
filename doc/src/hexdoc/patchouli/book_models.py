@@ -4,9 +4,7 @@ from typing import Any, Generic, TypeVar, cast, dataclass_transform
 
 from pydantic import ValidationInfo, model_validator
 
-from hexdoc.properties import Properties
-from hexdoc.resource import ResourceLocation
-from hexdoc.utils import AnyContext, HexDocFileModel
+from hexdoc.utils import AnyContext, HexDocFileModel, Properties, ResourceLocation
 
 from .text.formatting import FormatContext
 

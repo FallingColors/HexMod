@@ -9,9 +9,13 @@ from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 from typing_extensions import TypedDict
 
-from hexdoc.properties import Properties
-from hexdoc.resource import ItemStack, ResourceLocation
-from hexdoc.utils import DEFAULT_CONFIG, HexDocModel
+from hexdoc.utils import (
+    DEFAULT_CONFIG,
+    HexDocModel,
+    ItemStack,
+    Properties,
+    ResourceLocation,
+)
 from hexdoc.utils.deserialize import isinstance_or_raise, load_json
 
 

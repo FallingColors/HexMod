@@ -3,14 +3,20 @@ from typing import Any, Generic, Literal, Self, cast
 from pydantic import Field, ValidationInfo, model_validator
 
 from hexdoc.minecraft import I18n, LocalizedStr
-from hexdoc.properties import Properties
-from hexdoc.resource import ItemStack, ResLoc, ResourceLocation
-from hexdoc.utils import AnyContext, Color, HexDocModel
+from hexdoc.utils import (
+    AnyContext,
+    Color,
+    HexDocModel,
+    ItemStack,
+    Properties,
+    ResLoc,
+    ResourceLocation,
+)
 from hexdoc.utils.deserialize import isinstance_or_raise, load_json
 
+from .book_models import AnyBookContext, BookContext
 from .category import Category
 from .entry import Entry
-from .model import AnyBookContext, BookContext
 from .text import DEFAULT_MACROS, FormatTree
 
 

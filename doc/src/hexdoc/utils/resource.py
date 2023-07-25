@@ -12,13 +12,7 @@ from pydantic import field_validator, model_serializer, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from hexdoc.utils import (
-    DEFAULT_CONFIG,
-    AnyContext,
-    InternallyTaggedUnion,
-    NoValueType,
-    TagValue,
-)
+from .model import DEFAULT_CONFIG
 
 
 def _make_regex(count: bool = False, nbt: bool = False) -> re.Pattern[str]:
@@ -128,20 +122,3 @@ class Entity(BaseResourceLocation, regex=_make_regex(nbt=True)):
         if self.nbt is not None:
             s += self.nbt
         return s
-
-
-class TypeTaggedUnion(InternallyTaggedUnion[AnyContext], key="type", value=None):
-    type: ResourceLocation | NoValueType | None
-
-    def __init_subclass__(
-        cls,
-        *,
-        group: str | None = None,
-        type: TagValue | None,
-    ) -> None:
-        super().__init_subclass__(group=group, value=type)
-        match type:
-            case str():
-                cls.type = ResourceLocation.from_str(type)
-            case _:
-                cls.type = type

@@ -16,8 +16,7 @@
             "name": "Python: Generate Docs",
             "type": "python",
             "request": "launch",
-            "cwd": "${workspaceFolder}/doc",
-            "module": "hexdoc",
+            "module": "hexdoc.hexdoc",
             "args": [
                 "properties.toml",
             ],

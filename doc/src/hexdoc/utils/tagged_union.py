@@ -1,22 +1,17 @@
 # pyright: reportPrivateUsage=false
 
-from __future__ import annotations
+# from __future__ import annotations
 
 from collections import defaultdict
 from enum import Enum
-from typing import TYPE_CHECKING, Any, ClassVar, Generator, Self, cast
+from typing import Any, ClassVar, Generator, Self, cast
 
 from pkg_resources import iter_entry_points
 from pydantic import ValidationInfo, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from .model import AnyContext, HexDocModel
-
-# from hexdoc.minecraft import ResourceLocation
-
-
-if TYPE_CHECKING:
-    from pydantic.root_model import Model
+from .resource import ResourceLocation
 
 
 class NoValueType(Enum):
@@ -28,12 +23,9 @@ class NoValueType(Enum):
 NoValue = NoValueType._token
 """A singleton (like None) representing the value of a nonexistent dict key."""
 
-
 TagValue = str | NoValueType
 
-
 _loaded_groups: set[str] = set()
-_rebuilt_models: set[type[Any]] = set()
 
 
 def load_entry_points(group: str):
@@ -122,9 +114,7 @@ class InternallyTaggedUnion(HexDocModel[AnyContext]):
         return tag_key
 
     @classmethod
-    def _supertypes(
-        cls,
-    ) -> Generator[type[InternallyTaggedUnion[AnyContext]], None, None]:
+    def _supertypes(cls) -> Generator[type[Self], None, None]:
         tag_key = cls._tag_key_or_raise()
 
         # we consider a type to be its own supertype/subtype
@@ -144,31 +134,6 @@ class InternallyTaggedUnion(HexDocModel[AnyContext]):
     @classmethod
     def _concrete_subtypes(cls):
         return cls.__concrete_subtypes
-
-    @classmethod
-    def model_validate(
-        cls: type[Model],
-        obj: Any,
-        *,
-        strict: bool | None = None,
-        from_attributes: bool | None = None,
-        context: AnyContext | None = None,
-    ) -> Model:
-        # resolve forward references, because apparently we need to do this
-        # if cls not in _rebuilt_models:
-        #     _rebuilt_models.add(cls)
-        #     cls.model_rebuild(
-        #         _types_namespace={
-        #             "ResourceLocation": ResourceLocation,
-        #         }
-        #     )
-
-        return super().model_validate(
-            obj,
-            strict=strict,
-            from_attributes=from_attributes,
-            context=context,
-        )
 
     @model_validator(mode="wrap")
     @classmethod
@@ -233,3 +198,20 @@ class InternallyTaggedUnion(HexDocModel[AnyContext]):
                     f"Failed to match {cls} with {cls._tag_key}={tag_value} to any of {tag_types}: {data}",
                     exceptions,
                 )
+
+
+class TypeTaggedUnion(InternallyTaggedUnion[AnyContext], key="type", value=None):
+    type: ResourceLocation | NoValueType | None
+
+    def __init_subclass__(
+        cls,
+        *,
+        group: str | None = None,
+        type: TagValue | None,
+    ) -> None:
+        super().__init_subclass__(group=group, value=type)
+        match type:
+            case str():
+                cls.type = ResourceLocation.from_str(type)
+            case _:
+                cls.type = type

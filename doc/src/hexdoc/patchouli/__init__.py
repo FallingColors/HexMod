@@ -9,8 +9,8 @@ __all__ = [
 ]
 
 from .book import Book
+from .book_models import AnyBookContext, BookContext
 from .category import Category
 from .entry import Entry
-from .model import AnyBookContext, BookContext
 from .page import Page
 from .text import FormatTree

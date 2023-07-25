@@ -9,6 +9,14 @@ __all__ = [
     "NoValue",
     "NoValueType",
     "TagValue",
+    "AnyPropsContext",
+    "Properties",
+    "PropsContext",
+    "Entity",
+    "ItemStack",
+    "ResLoc",
+    "ResourceLocation",
+    "TypeTaggedUnion",
 ]
 
 from .model import (
@@ -18,5 +26,13 @@ from .model import (
     HexDocFileModel,
     HexDocModel,
 )
-from .tagged_union import InternallyTaggedUnion, NoValue, NoValueType, TagValue
+from .properties import AnyPropsContext, Properties, PropsContext
+from .resource import Entity, ItemStack, ResLoc, ResourceLocation
+from .tagged_union import (
+    InternallyTaggedUnion,
+    NoValue,
+    NoValueType,
+    TagValue,
+    TypeTaggedUnion,
+)
 from .types import Color

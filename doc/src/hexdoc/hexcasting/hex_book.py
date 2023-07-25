@@ -2,9 +2,7 @@ from pathlib import Path
 from typing import Any, Generic, TypeVar
 
 from hexdoc.patchouli import AnyBookContext, Book, BookContext
-from hexdoc.properties import Properties
-from hexdoc.resource import ResourceLocation
-from hexdoc.utils import AnyContext
+from hexdoc.utils import AnyContext, Properties, ResourceLocation
 
 from .pattern import Direction, PatternInfo
 

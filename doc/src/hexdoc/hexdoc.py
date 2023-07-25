@@ -15,8 +15,9 @@ from jinja2 import (
 from tap import Tap
 
 from hexdoc.hexcasting import HexBook
-from hexdoc.properties import Properties
-from hexdoc.utils.jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
+from hexdoc.utils import Properties
+
+from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
 
 
 def strip_empty_lines(text: str) -> str:

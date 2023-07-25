@@ -14,8 +14,7 @@ from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
-from hexdoc.properties import PropsContext
-from hexdoc.utils import DEFAULT_CONFIG, HexDocModel
+from hexdoc.utils import DEFAULT_CONFIG, HexDocModel, PropsContext
 from hexdoc.utils.types import TryGetEnum
 
 from .html import HTMLElement, HTMLStream

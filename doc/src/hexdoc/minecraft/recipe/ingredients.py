@@ -1,7 +1,6 @@
 from typing import Any
 
-from hexdoc.resource import ResourceLocation, TypeTaggedUnion
-from hexdoc.utils import AnyContext, NoValue
+from hexdoc.utils import AnyContext, NoValue, ResourceLocation, TypeTaggedUnion
 
 
 class ItemIngredient(

@@ -5,7 +5,7 @@ from pydantic import ValidationInfo, model_validator
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.recipe import CraftingRecipe
 from hexdoc.patchouli.page import PageWithText, PageWithTitle
-from hexdoc.resource import ResourceLocation
+from hexdoc.utils import ResourceLocation
 
 from ..hex_book import HexContext
 from ..hex_recipes import BrainsweepRecipe

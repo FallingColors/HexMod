@@ -4,9 +4,9 @@ from pydantic import model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.resource import ResourceLocation, TypeTaggedUnion
+from hexdoc.utils import ResourceLocation, TypeTaggedUnion
 
-from ..model import AnyBookContext
+from ..book_models import AnyBookContext
 from ..text import FormatTree
 
 

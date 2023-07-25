@@ -6,8 +6,7 @@ from hexdoc.minecraft.recipe import (
     MinecraftItemIdIngredient,
     MinecraftItemTagIngredient,
 )
-from hexdoc.resource import ResourceLocation
-from hexdoc.utils import HexDocModel
+from hexdoc.utils import HexDocModel, ResourceLocation
 
 from .hex_book import HexContext
 
