@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar, dataclass_transfo
 from pydantic import BaseModel, ConfigDict
 from typing_extensions import TypedDict
 
-from .deserialize import load_json
+from .deserialize import load_json_dict
 
 if TYPE_CHECKING:
     from pydantic.root_model import Model
@@ -56,5 +56,5 @@ class FrozenHexDocModel(Generic[AnyContext], HexDocModel[AnyContext]):
 class HexDocFileModel(HexDocModel[AnyContext]):
     @classmethod
     def load(cls, path: Path, context: AnyContext) -> Self:
-        data = load_json(path) | {"__path": path}
+        data = load_json_dict(path) | {"__path": path}
         return cls.model_validate(data, context=context)

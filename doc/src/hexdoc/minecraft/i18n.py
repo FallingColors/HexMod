@@ -16,7 +16,7 @@ from hexdoc.utils import (
     Properties,
     ResourceLocation,
 )
-from hexdoc.utils.deserialize import isinstance_or_raise, load_json
+from hexdoc.utils.deserialize import isinstance_or_raise, load_json_dict
 
 
 class I18nContext(TypedDict):
@@ -115,7 +115,7 @@ class I18n:
         # we could also use that to ensure all i18n files have the same set of keys
         lang_dir = props.resources_dir / "assets" / props.modid / "lang"
         path = lang_dir / props.i18n.filename
-        raw_lookup = load_json(path) | (props.i18n.extra or {})
+        raw_lookup = load_json_dict(path) | (props.i18n.extra or {})
 
         # validate and insert
         self.lookup = {}

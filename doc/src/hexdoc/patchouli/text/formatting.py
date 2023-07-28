@@ -216,10 +216,14 @@ class ParagraphStyle(Style, frozen=True):
         return out.element("p", **self.attributes)
 
 
+def is_external_link(value: str) -> bool:
+    return value.startswith(("https:", "http:"))
+
+
 def _format_href(value: str) -> str:
-    if not value.startswith(("http:", "https:")):
-        return "#" + value.replace("#", "@")
-    return value
+    if is_external_link(value):
+        return value
+    return f"#{value.replace('#', '@')}"
 
 
 class FunctionStyle(Style, frozen=True):

@@ -37,8 +37,8 @@ show_landing_text = true
 hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources"
 
 [i18n]
-lang = "en_us"
-filename = "{lang}.json"
+default_lang = "en_us"
+filename = "{default_lang}.json"
     [i18n.extra]
     "item.minecraft.amethyst_shard" = "Amethyst Shard"
     "item.minecraft.budding_amethyst" = "Budding Amethyst"

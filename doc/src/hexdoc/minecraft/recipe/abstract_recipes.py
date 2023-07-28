@@ -3,7 +3,7 @@ from typing import Any, Self, cast
 from pydantic import ValidationInfo, model_validator
 
 from hexdoc.utils import AnyPropsContext, ResourceLocation, TypeTaggedUnion
-from hexdoc.utils.deserialize import load_json
+from hexdoc.utils.deserialize import load_json_dict
 
 
 class Recipe(TypeTaggedUnion[AnyPropsContext], group="hexdoc.Recipe", type=None):
@@ -35,7 +35,7 @@ class Recipe(TypeTaggedUnion[AnyPropsContext], group="hexdoc.Recipe", type=None)
             path = recipe_dir / f"{id.path}.json"
             if recipe_dir == context["props"].default_recipe_dir:
                 # only load from one file
-                values = load_json(path) | {"id": id}
+                values = load_json_dict(path) | {"id": id}
             elif not path.exists():
                 # this is to ensure the recipe at least exists on all platforms
                 # because we've had issues with that before (eg. Hexal's Mote Nexus)

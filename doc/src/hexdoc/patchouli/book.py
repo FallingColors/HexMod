@@ -1,3 +1,5 @@
+from importlib import resources
+from importlib.metadata import entry_points
 from typing import Any, Generic, Literal, Self, cast
 
 from pydantic import Field, ValidationInfo, model_validator
@@ -12,7 +14,7 @@ from hexdoc.utils import (
     ResLoc,
     ResourceLocation,
 )
-from hexdoc.utils.deserialize import isinstance_or_raise, load_json
+from hexdoc.utils.deserialize import isinstance_or_raise, load_json_dict
 
 from .book_models import AnyBookContext, BookContext
 from .category import Category
@@ -33,8 +35,7 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     """
 
     # not in book.json
-    context: AnyBookContext = Field(default_factory=dict)
-    categories: dict[ResourceLocation, Category] = Field(default_factory=dict)
+    i18n_data: I18n
 
     # required
     name: LocalizedStr
@@ -65,30 +66,53 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     custom_book_item: ItemStack | None = None
     show_toasts: bool = True
     use_blocky_font: bool = False
-    do_i18n: bool = Field(default=False, alias="i18n")
+    i18n: bool = False
     macros: dict[str, str] = Field(default_factory=dict)
     pause_game: bool = False
     text_overflow_mode: Literal["overflow", "resize", "truncate"] | None = None
-    extend: str | None = None
-    """NOTE: currently this WILL NOT load values from the target book!"""
+    extend: ResourceLocation | None = None
     allow_extensions: bool = True
-
-    @classmethod
-    def load(cls, data: dict[str, Any], context: AnyBookContext):
-        return cls.model_validate(data, context=context)
 
     @classmethod
     def prepare(cls, props: Properties) -> tuple[dict[str, Any], BookContext]:
         # read the raw dict from the json file
         path = props.book_dir / "book.json"
-        data = load_json(path)
-        assert isinstance_or_raise(data, dict[str, Any])
+        data = load_json_dict(path)
 
-        # NOW we can convert the actual book data
-        return data, {
-            "i18n": I18n(props, data["i18n"]),
+        # set up the deserialization context object
+        assert isinstance_or_raise(data["i18n"], bool)
+        assert isinstance_or_raise(data["macros"], dict)
+        context: BookContext = {
             "props": props,
+            "i18n": I18n(props, data["i18n"]),
             "macros": DEFAULT_MACROS | data["macros"],
+        }
+
+        return data, context
+
+    @classmethod
+    def load(cls, data: dict[str, Any], context: AnyBookContext) -> Self:
+        return cls.model_validate(data, context=context)
+
+    @classmethod
+    def from_id(cls, book_id: ResourceLocation) -> Self:
+        # load the module for the given book id using the entry point
+        # TODO: this is untested because it needs to change for 0.11 anyway :/
+        books = entry_points(group="hexdoc.book_data")
+        book_module = books[str(book_id)].load()
+
+        # read and validate the actual data file
+        book_path = resources.files(book_module) / book_module.BOOK_DATA_PATH
+        return cls.model_validate_json(book_path.read_text("utf-8"))
+
+    @model_validator(mode="before")
+    def _pre_root(cls, data: dict[str, Any], info: ValidationInfo) -> dict[str, Any]:
+        context = cast(AnyBookContext, info.context)
+        if not context:
+            return data
+
+        return data | {
+            "i18n_data": context["i18n"],
         }
 
     @model_validator(mode="after")
@@ -97,19 +121,18 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
         context = cast(AnyBookContext, info.context)
         if not context:
             return self
-        self.context = context
 
-        # categories
-        self.categories = Category.load_all(context)
+        # load categories
+        self._categories: dict[ResourceLocation, Category] = Category.load_all(context)
 
-        # entries
+        # load entries
         for path in context["props"].entries_dir.rglob("*.json"):
-            # i used the entry to insert the entry (pretty sure thanos said that)
             entry = Entry.load(path, context)
-            self.categories[entry.category_id].entries.append(entry)
+            # i used the entry to insert the entry (pretty sure thanos said that)
+            self._categories[entry.category_id].entries.append(entry)
 
         # we inserted a bunch of entries in no particular order, so sort each category
-        for category in self.categories.values():
+        for category in self._categories.values():
             category.entries.sort()
 
         return self
@@ -120,5 +143,5 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
         return self.model if self.index_icon_ is None else self.index_icon_
 
     @property
-    def props(self) -> Properties:
-        return self.context["props"]
+    def categories(self):
+        return self._categories

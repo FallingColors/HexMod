@@ -35,12 +35,16 @@ class BaseResourceLocation:
         cls._from_str_regex = regex
 
     @classmethod
-    def from_str(cls, raw: str) -> Self:
+    def from_str(cls, raw: str, default_namespace: str | None = None) -> Self:
         match = cls._from_str_regex.fullmatch(raw)
         if match is None:
             raise ValueError(f"Invalid {cls.__name__} string: {raw}")
 
-        return cls(**match.groupdict())
+        groups = match.groupdict()
+        if not groups.get("namespace") and default_namespace is not None:
+            groups["namespace"] = default_namespace
+
+        return cls(**groups)
 
     @model_validator(mode="wrap")
     @classmethod

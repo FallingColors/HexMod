@@ -33,7 +33,7 @@ class PlatformProps(HexDocModel[Any]):
 
 
 class I18nProps(HexDocModel[Any]):
-    lang: str
+    default_lang: str
     filename: str
     extra: dict[str, str] | None = None
 
@@ -78,7 +78,7 @@ class Properties(HexDocModel[Any]):
 
     @property
     def lang(self):
-        return self.i18n.lang
+        return self.i18n.default_lang
 
     @property
     def book_dir(self) -> Path:

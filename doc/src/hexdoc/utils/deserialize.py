@@ -38,7 +38,7 @@ JSONDict = dict[str, "JSONValue"]
 JSONValue = JSONDict | list["JSONValue"] | str | int | float | bool | None
 
 
-def load_json(path: Path) -> JSONDict:
+def load_json_dict(path: Path) -> JSONDict:
     data: JSONValue = json.loads(path.read_text("utf-8"))
     assert isinstance_or_raise(data, dict)
     return data
