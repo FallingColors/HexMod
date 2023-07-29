@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
+import at.petrak.hexcasting.client.render.HexPatternPoints;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -14,6 +15,8 @@ public class BlockEntitySlate extends HexBlockEntity {
 
     @Nullable
     public HexPattern pattern;
+
+    public HexPatternPoints points;
 
     public BlockEntitySlate(BlockPos pos, BlockState state) {
         super(HexBlockEntities.SLATE_TILE, pos, state);
