@@ -155,7 +155,7 @@ public class HexBlocks {
         new BlockAkashicRecord(akashicWoodyHard().lightLevel(bs -> 15)));
     public static final BlockAkashicBookshelf AKASHIC_BOOKSHELF = blockItem("akashic_bookshelf",
         new BlockAkashicBookshelf(akashicWoodyHard()
-            .lightLevel(bs -> (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS)) ? 4 : 0)));
+            .lightLevel(bs -> (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS)) ? 15 : 0)));
     public static final BlockAkashicLigature AKASHIC_LIGATURE = blockItem("akashic_connector",
         new BlockAkashicLigature(akashicWoodyHard().lightLevel(bs -> 4)));
 
