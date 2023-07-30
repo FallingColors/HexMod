@@ -33,6 +33,7 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
     public static final ResourceLocation SLATE_BG = modLoc("textures/gui/slate.png");
 
     private static final float RENDER_SIZE = 128f;
+    private static final int TEXTURE_SIZE = 48;
 
     private final HexPattern pattern;
     private final List<Vec2> zappyPoints;
@@ -103,11 +104,13 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
     }
 
     private static void renderBG(GuiGraphics graphics, ResourceLocation background) {
-//        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-//        RenderSystem.setShaderTexture(0, background);
-        // x y blitoffset sw sh w h ... ?
-        // parchment doesn't have this mapped
-        graphics.blit(background, 0, 0, 0, 0, (int) RENDER_SIZE, (int) RENDER_SIZE);
+        graphics.blit(
+            background, // texture
+            0, 0, // x, y
+            (int) RENDER_SIZE, (int) RENDER_SIZE, // renderWidth, renderHeight
+            0f, 0f, // u, v (textureCoords)
+            TEXTURE_SIZE, TEXTURE_SIZE, // regionWidth, regionHeight (texture sample dimensions)
+            TEXTURE_SIZE, TEXTURE_SIZE); // textureWidth, textureHeight (total dimensions of texture)
     }
 
     @Override
