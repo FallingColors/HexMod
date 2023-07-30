@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 /**
  * Environment within which hexes are cast.
  * <p>
@@ -95,7 +97,15 @@ public abstract class CastingEnvironment {
      * Return whether this env can cast great spells.
      */
     public boolean isEnlightened() {
-        return false;
+        var caster = this.getCaster();
+        if (caster == null)
+            return false;
+
+        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("enlightenment"));
+        if (adv == null)
+            return false;
+
+        return caster.getAdvancements().getOrStartProgress(adv).isDone();
     }
 
     /**
