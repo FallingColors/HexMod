@@ -1,0 +1,11 @@
+{
+	"only_if_present": "hexcasting",
+	"name": "slate_pillar",
+	"base_block": "hexcasting:slate_pillar",
+	"textures": "hexcasting:block/slate_pillar",
+	"recipes": "stonecutting",
+	"map_color": "pink",
+	"types_to_generate": [
+		"wall_column", "facade", "octagonal_column"
+	]
+}

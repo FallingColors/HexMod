@@ -1,0 +1,11 @@
+{
+	"only_if_present": "hexcasting",
+	"name": "amethyst_pillar",
+	"base_block": "hexcasting:amethyst_pillar",
+	"textures": "hexcasting:block/amethyst_pillar",
+	"recipes": "stonecutting",
+	"map_color": "pink",
+	"types_to_generate": [
+		"wall_column", "facade", "octagonal_column"
+	]
+}

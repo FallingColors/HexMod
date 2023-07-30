@@ -1,0 +1,11 @@
+{
+	"only_if_present": "hexcasting",
+	"name": "edified",
+	"base_block": "hexcasting:edified_log",
+	"textures": "wood_with_log",
+	"recipes": "sawing",
+	"map_color": "purple",
+	"types_to_generate": [
+		"facade", "octagonal_column", "beam", "joist"
+	]
+}

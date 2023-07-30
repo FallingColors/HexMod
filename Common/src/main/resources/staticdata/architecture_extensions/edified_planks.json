@@ -1,0 +1,13 @@
+{
+	"only_if_present": "hexcasting",
+	"name": "edified",
+	"base_block": "hexcasting:edified_planks",
+	"textures": "hexcasting:block/edified_planks",
+	"recipes": "sawing",
+	"map_color": "purple",
+	"types_to_generate": [
+		"facade", "round_fence_post", "round_arch",
+		"octagonal_column", "fence_post", "crown_molding",
+		"post_cap", "post_lantern", "lattice", "transom"
+	]
+}
