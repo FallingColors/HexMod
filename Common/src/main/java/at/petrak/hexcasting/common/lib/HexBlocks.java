@@ -71,10 +71,12 @@ public class HexBlocks {
 
     private static BlockBehaviour.Properties papery(MapColor color) {
         return BlockBehaviour.Properties
-            .copy(Blocks.TALL_GRASS)
+            .of()
             .mapColor(color)
             .sound(SoundType.GRASS)
-            .instabreak();
+            .instabreak()
+            .ignitedByLava()
+            .pushReaction(PushReaction.DESTROY);
     }
 
     private static BlockBehaviour.Properties akashicWoodyHard() {
