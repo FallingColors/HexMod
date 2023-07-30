@@ -13,6 +13,7 @@ object OperatorIndexOf : Operator(2, IotaMultiPredicate.pair(IotaPredicate.ofTyp
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
         val list = it.nextList(arity).toList()
-        return list.indexOf(it.next().value).asActionResult
+        val toFind = it.next().value
+        return list.indexOfFirst { Iota.tolerates(toFind, it) }.asActionResult
     }
 }
