@@ -8,14 +8,14 @@ public interface CastingEnvironmentComponent {
 
     interface Key<C extends CastingEnvironmentComponent> {}
 
-    interface PostExecutionComponent extends CastingEnvironmentComponent {
+    interface PostExecution extends CastingEnvironmentComponent {
         /**
          * Do whatever you like after a pattern is executed.
          */
         void onPostExecution(CastResult result);
     }
 
-    interface ExtractMediaComponent extends CastingEnvironmentComponent {
+    interface ExtractMedia extends CastingEnvironmentComponent {
         /**
          * Receives the cost that is being extracted, should return the
          * remaining cost after deducting whatever cost source this component
@@ -25,14 +25,14 @@ public interface CastingEnvironmentComponent {
         long onExtractMedia(long cost);
     }
 
-    interface IsVecInRangeComponent extends CastingEnvironmentComponent {
+    interface IsVecInRange extends CastingEnvironmentComponent {
         /**
          * Receives the vec, and the current return value, and returns the new return value.
          */
         boolean onIsVecInRange(Vec3 vec, boolean current);
     }
 
-    interface HasEditPermissionsAtComponent extends CastingEnvironmentComponent {
+    interface HasEditPermissionsAt extends CastingEnvironmentComponent {
         /**
          * Receives the vec, and the current return value, and returns the new return value.
          */

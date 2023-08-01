@@ -64,10 +64,10 @@ public abstract class CastingEnvironment {
     protected final ServerLevel world;
 
     protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap = new HashMap<>();
-    private final List<PostExecutionComponent> postExecutionComponents = new ArrayList<>();
-    private final List<ExtractMediaComponent> extractMediaComponents = new ArrayList<>();
-    private final List<IsVecInRangeComponent> isVecInRangeComponents = new ArrayList<>();
-    private final List<HasEditPermissionsAtComponent> hasEditPermissionsAtComponents = new ArrayList<>();
+    private final List<PostExecution> postExecutions = new ArrayList<>();
+    private final List<ExtractMedia> extractMedias = new ArrayList<>();
+    private final List<IsVecInRange> isVecInRanges = new ArrayList<>();
+    private final List<HasEditPermissionsAt> hasEditPermissionsAts = new ArrayList<>();
 
     protected CastingEnvironment(ServerLevel world) {
         this.world = world;
@@ -93,14 +93,14 @@ public abstract class CastingEnvironment {
 
     public <T extends CastingEnvironmentComponent> void addExtension(@NotNull T extension) {
         componentMap.put(extension.getKey(), extension);
-        if (extension instanceof PostExecutionComponent postExecutionComponent)
-            postExecutionComponents.add(postExecutionComponent);
-        if (extension instanceof ExtractMediaComponent extractMediaComponent)
-            extractMediaComponents.add(extractMediaComponent);
-        if (extension instanceof IsVecInRangeComponent isVecInRangeComponent)
-            isVecInRangeComponents.add(isVecInRangeComponent);
-        if (extension instanceof HasEditPermissionsAtComponent hasEditPermissionsAtComponent)
-            hasEditPermissionsAtComponents.add(hasEditPermissionsAtComponent);
+        if (extension instanceof PostExecution postExecution)
+            postExecutions.add(postExecution);
+        if (extension instanceof ExtractMedia extractMedia)
+            extractMedias.add(extractMedia);
+        if (extension instanceof IsVecInRange isVecInRange)
+            isVecInRanges.add(isVecInRange);
+        if (extension instanceof HasEditPermissionsAt hasEditPermissionsAt)
+            hasEditPermissionsAts.add(hasEditPermissionsAt);
     }
 
     public void removeExtension(@NotNull CastingEnvironmentComponent.Key<?> key) {
@@ -108,14 +108,14 @@ public abstract class CastingEnvironment {
         if (extension == null)
             return;
 
-        if (extension instanceof PostExecutionComponent postExecutionComponent)
-            postExecutionComponents.remove(postExecutionComponent);
-        if (extension instanceof ExtractMediaComponent extractMediaComponent)
-            extractMediaComponents.remove(extractMediaComponent);
-        if (extension instanceof IsVecInRangeComponent isVecInRangeComponent)
-            isVecInRangeComponents.remove(isVecInRangeComponent);
-        if (extension instanceof HasEditPermissionsAtComponent hasEditPermissionsAtComponent)
-            hasEditPermissionsAtComponents.remove(hasEditPermissionsAtComponent);
+        if (extension instanceof PostExecution postExecution)
+            postExecutions.remove(postExecution);
+        if (extension instanceof ExtractMedia extractMedia)
+            extractMedias.remove(extractMedia);
+        if (extension instanceof IsVecInRange isVecInRange)
+            isVecInRanges.remove(isVecInRange);
+        if (extension instanceof HasEditPermissionsAt hasEditPermissionsAt)
+            hasEditPermissionsAts.remove(hasEditPermissionsAt);
     }
 
     @Nullable
@@ -158,7 +158,7 @@ public abstract class CastingEnvironment {
      * Do whatever you like after a pattern is executed.
      */
     public void postExecution(CastResult result) {
-        for (var postExecutionComponent : postExecutionComponents)
+        for (var postExecutionComponent : postExecutions)
             postExecutionComponent.onPostExecution(result);
     }
 
@@ -186,7 +186,7 @@ public abstract class CastingEnvironment {
      * positive.
      */
     public long extractMedia(long cost) {
-        for (var extractMediaComponent : extractMediaComponents)
+        for (var extractMediaComponent : extractMedias)
             cost = extractMediaComponent.onExtractMedia(cost);
         return extractMediaEnvironment(cost);
     }
@@ -206,7 +206,7 @@ public abstract class CastingEnvironment {
      */
     public boolean isVecInRange(Vec3 vec) {
         boolean isInRange = isVecInRangeEnvironment(vec);
-        for (var isVecInRangeComponent : isVecInRangeComponents)
+        for (var isVecInRangeComponent : isVecInRanges)
             isInRange = isVecInRangeComponent.onIsVecInRange(vec, isInRange);
         return isInRange;
     }
@@ -223,7 +223,7 @@ public abstract class CastingEnvironment {
      */
     public boolean hasEditPermissionsAt(BlockPos pos) {
         boolean hasEditPermissionsAt = hasEditPermissionsAtEnvironment(pos);
-        for (var hasEditPermissionsAtComponent : hasEditPermissionsAtComponents)
+        for (var hasEditPermissionsAtComponent : hasEditPermissionsAts)
             hasEditPermissionsAt = hasEditPermissionsAtComponent.onHasEditPermissionsAt(pos, hasEditPermissionsAt);
         return hasEditPermissionsAt;
     }
