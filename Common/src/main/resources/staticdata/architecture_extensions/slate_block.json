@@ -1,8 +1,8 @@
 {
 	"only_if_present": "hexcasting",
-	"name": "slate_block",
-	"base_block": "hexcasting:slate_block",
-	"textures": "hexcasting:block/slate_block",
+	"name": "slate",
+	"base_block": "hexcasting:slate",
+	"textures": "hexcasting:block/slate",
 	"recipes": "stonecutting",
 	"map_color": "pink",
 	"types_to_generate": [
