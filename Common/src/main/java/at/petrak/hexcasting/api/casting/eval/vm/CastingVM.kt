@@ -23,6 +23,10 @@ import net.minecraft.server.level.ServerLevel
  * [CastingEnvironment] to affect the world.
  */
 class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
+    init {
+        env.triggerCreateEvent()
+    }
+
     /**
      * Execute a single iota.
      */

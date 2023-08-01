@@ -73,6 +73,8 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     public void postExecution(CastResult result) {
+        super.postExecution(result);
+
         // we always want to play this sound one at a time
         var sound = result.getSound().sound();
         if (sound != null) {
@@ -103,7 +105,7 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public long extractMedia(long cost) {
+    public long extractMediaEnvironment(long cost) {
         var entity = this.getImpetus();
         if (entity == null)
             return cost;
@@ -120,7 +122,7 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public boolean isVecInRange(Vec3 vec) {
+    public boolean isVecInRangeEnvironment(Vec3 vec) {
         var caster = this.execState.getCaster(this.world);
         if (caster != null) {
             var sentinel = HexAPI.instance().getSentinel(caster);
@@ -137,7 +139,7 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public boolean hasEditPermissionsAt(BlockPos vec) {
+    public boolean hasEditPermissionsAtEnvironment(BlockPos pos) {
         return true;
     }
 

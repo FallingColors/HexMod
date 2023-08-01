@@ -52,7 +52,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public long extractMedia(long cost) {
+    public long extractMediaEnvironment(long cost) {
         if (this.caster.isCreative())
             return 0;
 
