@@ -345,6 +345,6 @@ class FormatTree:
         if not context or isinstance(value, FormatTree):
             return handler(value)
 
-        if not isinstance(value, LocalizedStr):
+        if isinstance(value, str):
             value = context["i18n"].localize(value)
         return cls.format(value.value, context["macros"], context["props"].is_0_black)
