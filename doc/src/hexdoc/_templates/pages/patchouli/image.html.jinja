@@ -1,0 +1,10 @@
+{% extends "pages/patchouli/text.html.jinja" %}
+
+{% block inner_body %}
+  <p class="img-wrapper">
+    {% for image in page.images %}
+      <img src="{{ props.asset_url(image) }}"></img>
+    {% endfor %}
+  </p>
+  {{ super() }}
+{% endblock inner_body %}

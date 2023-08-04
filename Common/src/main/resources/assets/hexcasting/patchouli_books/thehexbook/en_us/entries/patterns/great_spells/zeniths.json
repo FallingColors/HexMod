@@ -3,7 +3,6 @@
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:potion{Potion:'minecraft:regeneration'}",
   "advancement": "hexcasting:root",
-  "sort_num": 4,
   "read_by_default": true,
   "pages": [
     {

@@ -1,0 +1,20 @@
+{% extends "pages/patchouli/page.html.jinja" %}
+{% import "common/macros.html.jinja" as macros %}
+
+{% block body %}
+  {% if page.title is not none %}
+    {# need title_attrs for LookupPatternPage -#}
+    <h4{% block title_attrs %}{% endblock %}>
+      {{- page.title -}}
+      {# conditionally defined in Page #}
+      {%- if page_anchor_id is defined %}
+        {{- macros.permalink(page_anchor_id) -}}
+      {% endif -%}
+    </h4>
+  {% endif %}
+
+  {# within a separate block so we can control if the text goes before or after page-specific content #}
+  {% block inner_body %}
+    {{ page.text|hexdoc_block }}
+  {% endblock inner_body %}
+{% endblock body %}

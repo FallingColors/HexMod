@@ -1,0 +1,12 @@
+{% import "common/macros.html.jinja" as macros %}
+
+<section id="{{ category.id.path }}">
+  {% call macros.maybe_spoilered(category) %}
+    {{- macros.section_header(category, "h2", "category-title") }}
+    {{ category.description|hexdoc_block }}
+  {% endcall %}
+
+  {% for entry in category.entries if entry.id not in props.blacklist +%}
+    {% include "entry.html.jinja" %}
+  {% endfor +%}
+</section>

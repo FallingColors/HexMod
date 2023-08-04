@@ -1,0 +1,12 @@
+{% if page.anchor %}
+  {# set variable to allow children to use this value too #}
+  {% set page_anchor_id = entry.id.path ~ "@" ~ page.anchor %}
+
+  {#- page content (not required because EmptyPage uses this template directly) #}
+  <div id="{{ page_anchor_id }}">
+    {% block body scoped %}{% endblock %}
+  </div>
+{% else %}
+  {{ self.body() }}
+{% endif %}
+<br />

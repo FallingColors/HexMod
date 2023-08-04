@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ description }}">
+    <meta name="author" content="{{ author }}">
+    <link rel="icon" href="{{ icon_href }}">
+
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+    <style>
+      {% filter indent(6) %}
+      {%+ include "main.css.jinja" %}
+      {% endfilter %}
+    </style>
+
+    <noscript>
+      <style>
+        /* for accessibility */
+        .spoilered {
+          filter: none !important;
+        }
+      </style>
+    </noscript>
+
+    <script>
+      {% filter indent(6) %}
+      {%+ include_raw "main.js" %}
+      {% endfilter %}
+    </script>
+  </head>
+
+  <body>
+    {% include "components/welcome.html.jinja" +%}
+    {% include "book.html.jinja" +%}
+  </body>
+</html>
