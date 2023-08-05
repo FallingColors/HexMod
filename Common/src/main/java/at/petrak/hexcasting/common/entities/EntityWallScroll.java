@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.entities;
 
+import at.petrak.hexcasting.client.render.HexPatternPoints;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -30,11 +31,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class EntityWallScroll extends HangingEntity {
     private static final EntityDataAccessor<Boolean> SHOWS_STROKE_ORDER = SynchedEntityData.defineId(
@@ -46,7 +44,7 @@ public class EntityWallScroll extends HangingEntity {
     public boolean isAncient;
     public int blockSize;
     // Client-side only!
-    public List<Vec2> zappyPoints;
+    public HexPatternPoints points;
 
     public EntityWallScroll(EntityType<? extends EntityWallScroll> type, Level world) {
         super(type, world);
@@ -74,14 +72,15 @@ public class EntityWallScroll extends HangingEntity {
                 var dots = pair.getSecond();
                 var readOffset = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_READABILITY_OFFSET : 0f;
                 var lastProp = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP : 1f;
-                this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10, 0.4f,
+                var zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10, 0.4f,
                     0f, 0f, readOffset, lastProp, this.getId());
+                points = new HexPatternPoints(zappyPoints);
             }
 
             this.isAncient = NBTHelper.hasString(scroll, ItemScroll.TAG_OP_ID);
         } else {
             this.pattern = null;
-            this.zappyPoints = null;
+            this.points = null;
             this.isAncient = false;
         }
     }
