@@ -37,10 +37,6 @@ public class EigengrauOverlay {
             var post = mogrwbjah.hex$postEffect();
             var passes = ((AccessorPostChain) post).hex$getPasses();
 
-            var window = Minecraft.getInstance().getWindow();
-            int w = window.getWidth();
-            int h = window.getHeight();
-
             var passPresent = passes.get(0);
             passPresent.getEffect().setSampler("simulation",
                 () -> EIGENGRAU_BZ_SIMULATION.getColorTextureId());

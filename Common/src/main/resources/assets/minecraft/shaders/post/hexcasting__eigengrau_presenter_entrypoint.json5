@@ -12,14 +12,34 @@
       outtarget: "swap",
       auxtargets: [
         {
-          name: "bz",
+          name: "BZSampler",
           id: "simulation",
         },
         {
-          name: "veil",
+          name: "VeilSampler",
           id: "veil",
         }
       ],
+      uniforms: [
+        {
+          "name": "InSize",
+          "type": "float",
+          "count": 2,
+          "values": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "name": "OutSize",
+          "type": "float",
+          "count": 2,
+          "values": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
     },
     {
       "name": "blit",

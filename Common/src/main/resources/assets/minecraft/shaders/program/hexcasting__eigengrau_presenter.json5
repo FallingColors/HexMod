@@ -4,7 +4,7 @@
     "srcrgb": "one",
     "dstrgb": "zero"
   },
-  "vertex": "screenquad",
+  "vertex": "sobel",
   "fragment": "hexcasting__eigengrau_presenter",
   "attributes": [
     "Position"
@@ -14,10 +14,10 @@
       "name": "DiffuseSampler"
     },
     {
-      name: "veil"
+      name: "BZSampler"
     },
     {
-      name: "bz"
+      name: "VeilSampler"
     }
   ],
   "uniforms": [

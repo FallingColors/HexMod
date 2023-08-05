@@ -2,10 +2,12 @@
 
 // see PostPass.java: the game texture has a defined name
 uniform sampler2D DiffuseSampler;
-uniform sampler2D veil;
-uniform sampler2D bz;
+uniform sampler2D BZSampler;
+uniform sampler2D VeilSampler;
 
 uniform vec2 ScreenSize;
+uniform vec2 InSize;
+uniform vec2 OutSize;
 
 const float resolution = 5.0;
 
@@ -42,12 +44,12 @@ void main() {
     ivec2 hex = pxToHex(texCoord0 * ScreenSize);
     vec2 pxAgain = hexToPx(hex);
 
-    vec2 veil = texture(veil, texCoord0).rg;
+    vec2 veil = texture(VeilSampler, texCoord0).rg;
     float brightness = (worldSample.r + worldSample.g + worldSample.b) / 3.0;
     float eigengrauAmount = clamp(veil.r + mix(0.0, veil.g, 1.0 - brightness), 0.5, 1.0);
 
     vec2 st = vec2(float(hex.x), float(hex.y)) / resolution;
-    float eigengrauSample = texture(bz, st).r / 100.0;
+    float eigengrauSample = texture(BZSampler, st).r / 100.0;
     //    vec3 col = smoothstep(worldSample, vec3(eigengrauSample), vec3(eigengrauAmount));
     vec3 col = worldSample;
     gl_FragColor = vec4(col, worldSample4.a);
