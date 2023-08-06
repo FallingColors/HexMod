@@ -1,0 +1,4 @@
+{
+    "python.analysis.exclude": ["**"],
+    "python.analysis.indexing": false,
+}

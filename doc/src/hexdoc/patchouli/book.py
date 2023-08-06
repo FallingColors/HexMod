@@ -40,6 +40,7 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     # required
     name: LocalizedStr
     landing_text: FormatTree
+    use_resource_pack: Literal[True]
 
     # optional
     book_texture: ResourceLocation = ResLoc("patchouli", "textures/gui/book_brown.png")
@@ -60,7 +61,7 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     show_progress: bool = True
     version: str | int = 0
     subtitle: LocalizedStr | None = None
-    creative_tab: str = "misc"  # TODO: this was changed in 1.19.3+, and again in 1.20
+    creative_tab: str | None = None
     advancements_tab: str | None = None
     dont_generate_book: bool = False
     custom_book_item: ItemStack | None = None
@@ -70,14 +71,11 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     macros: dict[str, str] = Field(default_factory=dict)
     pause_game: bool = False
     text_overflow_mode: Literal["overflow", "resize", "truncate"] | None = None
-    extend: ResourceLocation | None = None
-    allow_extensions: bool = True
 
     @classmethod
     def prepare(cls, props: Properties) -> tuple[dict[str, Any], BookContext]:
         # read the raw dict from the json file
-        path = props.book_dir / "book.json"
-        data = load_json_dict(path)
+        data = load_json_dict(props.book_path)
 
         # set up the deserialization context object
         assert isinstance_or_raise(data["i18n"], bool)

@@ -16,7 +16,7 @@ from hexdoc.utils import (
     Properties,
     ResourceLocation,
 )
-from hexdoc.utils.deserialize import isinstance_or_raise, load_json_dict
+from hexdoc.utils.deserialize import isinstance_or_raise, load_and_flatten_json_dict
 
 
 class I18nContext(TypedDict):
@@ -53,7 +53,6 @@ class LocalizedStr(HexDocModel[I18nContext]):
         if not isinstance(value, str):
             return handler(value)
 
-        # this is nasty, but we need to use cast to get type checking for context
         context = cast(I18nContext, info.context)
         return cls._localize(context["i18n"], value)
 
@@ -113,24 +112,16 @@ class I18n:
         # TODO: load ALL of the i18n files, return dict[str, _Lookup] | None
         # or maybe dict[(str, str), LocalizedStr]
         # we could also use that to ensure all i18n files have the same set of keys
-        lang_dir = props.resources_dir / "assets" / props.modid / "lang"
-        path = lang_dir / props.i18n.filename
-        raw_lookup = load_json_dict(path) | (props.i18n.extra or {})
+        path = props.assets_dir / "lang" / props.i18n.filename
+        raw_lookup = load_and_flatten_json_dict(path) | props.i18n.extra
 
         # validate and insert
-        self.lookup = {}
-        for key, raw_value in raw_lookup.items():
-            assert isinstance_or_raise(raw_value, str)
-            self.lookup[key] = LocalizedStr(
-                key=key,
-                value=raw_value.replace("%%", "%"),
-            )
+        self.lookup = {
+            key: LocalizedStr(key=key, value=value.replace("%%", "%"))
+            for key, value in raw_lookup.items()
+        }
 
-    def localize(
-        self,
-        *keys: str,
-        default: str | None = None,
-    ) -> LocalizedStr:
+    def localize(self, *keys: str, default: str | None = None) -> LocalizedStr:
         """Looks up the given string in the lang table if i18n is enabled. Otherwise,
         returns the original key.
 
@@ -170,8 +161,8 @@ class I18n:
         # prefer the book-specific translation if it exists
         # TODO: should this use op_id.namespace anywhere?
         return self.localize(
-            f"hexcasting.spell.book.{op_id}",
-            f"hexcasting.spell.{op_id}",
+            f"hexcasting.action.book.{op_id}",
+            f"hexcasting.action.{op_id}",
         )
 
     def localize_item(self, item: ItemStack | str) -> LocalizedItem:

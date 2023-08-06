@@ -114,7 +114,7 @@ def _fill_placeholders(
         _handle_child(data, stack, expanded, key, child, table.__setitem__)
 
 
-def load_toml(path: Path) -> TOMLDict:
+def load_toml_with_placeholders(path: Path) -> TOMLDict:
     data = tomllib.loads(path.read_text("utf-8"))
     fill_placeholders(data)
     return data

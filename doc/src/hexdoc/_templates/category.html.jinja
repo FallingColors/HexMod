@@ -6,7 +6,7 @@
     {{ category.description|hexdoc_block }}
   {% endcall %}
 
-  {% for entry in category.entries if entry.id not in props.blacklist +%}
+  {% for entry in category.entries if entry.id not in props.entry_id_blacklist +%}
     {% include "entry.html.jinja" %}
   {% endfor +%}
 </section>

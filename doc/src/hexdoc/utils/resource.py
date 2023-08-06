@@ -5,6 +5,7 @@
 # basically, just leave it here
 
 import re
+from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, ClassVar, Self
 
@@ -16,7 +17,7 @@ from .model import DEFAULT_CONFIG
 
 
 def _make_regex(count: bool = False, nbt: bool = False) -> re.Pattern[str]:
-    pattern = r"(?:(?P<namespace>[0-9a-z_\-.]+):)?(?P<path>[0-9a-z_\-./]+)"
+    pattern = r"(?:(?P<namespace>[0-9a-z_\-.]+):)?(?P<path>[0-9a-z_\-./*]+)"
     if count:
         pattern += r"(?:#(?P<count>[0-9]+))?"
     if nbt:
@@ -58,7 +59,11 @@ class BaseResourceLocation:
     def _default_namespace(cls, value: str | None) -> str:
         if value is None:
             return "minecraft"
-        return value
+        return value.lower()
+
+    @field_validator("path")
+    def _lower_path(cls, value: str):
+        return value.lower()
 
     @model_serializer
     def _ser_model(self) -> str:
@@ -85,6 +90,9 @@ class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
     def href(self) -> str:
         return f"#{self.path}"
 
+    def match(self, pattern: Self) -> bool:
+        return fnmatch(str(self), str(pattern))
+
 
 # pure unadulterated laziness
 ResLoc = ResourceLocation
@@ -101,7 +109,8 @@ class ItemStack(BaseResourceLocation, regex=_make_regex(count=True, nbt=True)):
     nbt: str | None = None
 
     def i18n_key(self, root: str = "item") -> str:
-        return f"{root}.{self.namespace}.{self.path}"
+        # TODO: is this how i18n works?????
+        return f"{root}.{self.namespace}.{self.path.replace('/', '.')}"
 
     def __repr__(self) -> str:
         s = super().__repr__()

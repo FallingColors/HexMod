@@ -1,4 +1,7 @@
 # pyright: reportPrivateUsage=false
+from argparse import Namespace
+from typing import cast
+
 from hexdoc.patchouli.text import DEFAULT_MACROS, FormatTree
 from hexdoc.patchouli.text.formatting import (
     CommandStyle,
@@ -7,14 +10,16 @@ from hexdoc.patchouli.text.formatting import (
     ParagraphStyle,
     SpecialStyleType,
 )
+from hexdoc.utils.properties import Properties
 
 
 def test_format_string():
     # arrange
     test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
+    mock_props = Namespace(is_0_black=False, i18n=Namespace(keys={}))
 
     # act
-    tree = FormatTree.format(test_str, DEFAULT_MACROS, is_0_black=False)
+    tree = FormatTree.format(test_str, DEFAULT_MACROS, cast(Properties, mock_props))
 
     # assert
     # TODO: possibly make this less lazy

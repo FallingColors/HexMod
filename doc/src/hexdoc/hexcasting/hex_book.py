@@ -1,8 +1,9 @@
-from pathlib import Path
+import logging
 from typing import Any, Generic, TypeVar
 
 from hexdoc.patchouli import AnyBookContext, Book, BookContext
 from hexdoc.utils import AnyContext, Properties, ResourceLocation
+from hexdoc.utils.properties import PatternStubProps
 
 from .pattern import Direction, PatternInfo
 
@@ -25,6 +26,7 @@ class HexBookType(
         # load patterns
         patterns = dict[ResourceLocation, PatternInfo]()
         signatures = dict[str, PatternInfo]()  # just for duplicate checking
+
         for stub in props.pattern_stubs:
             # for each stub, load all the patterns in the file
             for pattern in cls.load_patterns(stub, props):
@@ -35,8 +37,11 @@ class HexBookType(
                     raise ValueError(
                         f"Duplicate pattern {pattern.id}\n{pattern}\n{duplicate}"
                     )
+
                 patterns[pattern.id] = pattern
                 signatures[pattern.signature] = pattern
+
+        logging.getLogger(__name__).debug(f"Patterns: {patterns.keys()}")
 
         # build new context
         return data, {
@@ -45,16 +50,16 @@ class HexBookType(
         }
 
     @classmethod
-    def load_patterns(cls, path: Path, props: Properties):
+    def load_patterns(cls, stub: PatternStubProps, props: Properties):
         # TODO: add Gradle task to generate json with this data. this is dumb and fragile.
-        stub_text = path.read_text("utf-8")
-        for match in props.pattern_regex.finditer(stub_text):
-            signature, startdir, name, is_per_world = match.groups()
+        stub_text = stub.path.read_text("utf-8")
+        for match in stub.regex.finditer(stub_text):
+            groups = match.groupdict()
             yield PatternInfo(
-                startdir=Direction[startdir],
-                signature=signature,
-                is_per_world=bool(is_per_world),
-                id=ResourceLocation(props.modid, name),
+                startdir=Direction[groups["startdir"]],
+                signature=groups["signature"],
+                # is_per_world=bool(is_per_world), # FIXME: idfk how to do this now
+                id=ResourceLocation(props.modid, groups["name"]),
             )
 
 

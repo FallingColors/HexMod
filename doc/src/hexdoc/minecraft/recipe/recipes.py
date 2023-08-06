@@ -16,9 +16,10 @@ class CraftingShapedRecipe(
     Recipe[Any],
     type="minecraft:crafting_shaped",
 ):
-    pattern: list[str]
     key: dict[str, ItemIngredientOrList[Any]]
+    pattern: list[str]
     result: ItemResult
+    show_notification: bool
 
 
 class CraftingShapelessRecipe(

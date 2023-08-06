@@ -1,7 +1,9 @@
+import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar, dataclass_transform
 
 from pydantic import BaseModel, ConfigDict
+from pydantic.config import ConfigDict
 from typing_extensions import TypedDict
 
 from .deserialize import load_json_dict
@@ -47,14 +49,14 @@ class HexDocModel(Generic[AnyContext], BaseModel):
             ...
 
 
-@dataclass_transform(frozen_default=True)
-class FrozenHexDocModel(Generic[AnyContext], HexDocModel[AnyContext]):
-    model_config = DEFAULT_CONFIG | {"frozen": True}
-
-
 @dataclass_transform()
 class HexDocFileModel(HexDocModel[AnyContext]):
     @classmethod
     def load(cls, path: Path, context: AnyContext) -> Self:
+        logging.getLogger(__name__).debug(f"Load {cls}\n  path: {path}")
         data = load_json_dict(path) | {"__path": path}
-        return cls.model_validate(data, context=context)
+        try:
+            return cls.model_validate(data, context=context)
+        except Exception as e:
+            e.add_note(f"File: {path}")
+            raise

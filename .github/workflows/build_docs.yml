@@ -1,8 +1,9 @@
-name: Build the Python doc-gen
+name: Build the web book
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build_docs:
@@ -11,19 +12,30 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v3
+
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install docgen
+      run: pip install ./doc
+
     - name: Generate file
-      run: doc/collate_data.py Common/src/main/resources hexcasting thehexbook doc/template.html index.html.uncommitted
+      run: hexdoc doc/properties.toml -o index.html.uncommitted
+
     - name: Check out gh-pages
       uses: actions/checkout@v3
       with:
         clean: false
         ref: gh-pages
+
     - name: Overwrite file and commmit
       run: |
           mv index.html.uncommitted index.html
-          git config user.name "Documentation Generation Bot"
+          git config user.name "HexDoc Bot"
           git config user.email "noreply@github.com"
           git add index.html
-          git diff-index --quiet HEAD || git commit -m "Update docs at index.html from $GITHUB_REF"
+          git diff-index --quiet HEAD || git commit -m "Update web book from $GITHUB_REF"
+
     - name: Upload changes
       run: git push

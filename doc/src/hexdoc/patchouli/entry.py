@@ -52,5 +52,8 @@ class Entry(BookFileModel[BookContext, BookContext], Sortable):
         if not context or self.advancement is None:
             return self
 
-        self.is_spoiler = self.advancement in context["props"].spoilers
+        self.is_spoiler = any(
+            self.advancement.match(spoiler)
+            for spoiler in context["props"].spoilered_advancements
+        )
         return self

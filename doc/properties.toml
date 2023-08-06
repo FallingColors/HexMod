@@ -4,25 +4,21 @@ modid = "hexcasting"
 book_name = "thehexbook"
 is_0_black = false
 
-recipe_dirs = [
-    "{fabric.generated}/data/{modid}/recipes",
-    "{forge.generated}/data/{modid}/recipes",
-]
-default_recipe_dir = 0
-
 # NOTE: _Raw means "don't apply variable interpolation to this value"
-pattern_regex = {_Raw='HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?'}
+pattern_regex = {_Raw='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)'}
 
 template = "main.html.jinja"
 template_dirs = []
 template_packages = []
 
-spoilers = [
+spoilered_advancements = [
     "hexcasting:opened_eyes",
     "hexcasting:y_u_no_cast_angy",
     "hexcasting:enlightenment",
+    "hexcasting:lore/*",
 ]
-blacklist = []
+entry_id_blacklist = []
+
 
 [template_args]
 title = "Hex Book"
@@ -33,42 +29,56 @@ icon_href = "icon.png"
 is_bleeding_edge = true
 show_landing_text = true
 
+
 [base_asset_urls]
 hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources"
 
+
 [i18n]
 default_lang = "en_us"
-filename = "{default_lang}.json"
-    [i18n.extra]
-    "item.minecraft.amethyst_shard" = "Amethyst Shard"
-    "item.minecraft.budding_amethyst" = "Budding Amethyst"
-    "block.hexcasting.slate" = "Blank Slate"
+filename = "{default_lang}.flatten.json5"
+
+[i18n.extra]
+"item.minecraft.amethyst_shard" = "Amethyst Shard"
+"item.minecraft.budding_amethyst" = "Budding Amethyst"
+"block.hexcasting.slate" = "Blank Slate"
+
+[i18n.keys]
+use = "Right Click"
+sneak = "Left Shift"
+jump = "Space"
 
 
 # platforms
 
 [common]
 src = "../Common/src"
-# NOTE: {...} is variable interpolation from the current table
 package = "{src}/main/java/at/petrak/hexcasting"
 resources = "{src}/main/resources"
 generated = "{src}/generated/resources"
-pattern_stubs = [
-    "{package}/common/casting/RegisterPatterns.java",
-    "{package}/interop/pehkui/PehkuiInterop.java",
-]
+
+[[common.pattern_stubs]]
+path = "{^package}/common/lib/hex/HexActions.java"
+regex = "{^^pattern_regex}"
+
 
 [fabric]
 src = "../Fabric/src"
 package = "{src}/main/java/at/petrak/hexcasting/fabric"
 resources = "{src}/main/resources"
 generated = "{src}/generated/resources"
-pattern_stubs = [
-    "{package}/interop/gravity/GravityApiInterop.java",
-]
+recipes = "{generated}/data/{^modid}/recipes"
+tags = "{generated}/data/{^modid}/tags"
+
+[[fabric.pattern_stubs]]
+path = "{^package}/FabricHexInitializer.kt"
+regex = "{^^pattern_regex}"
+
 
 [forge]
 src = "../Forge/src"
 package = "{src}/main/java/at/petrak/hexcasting/forge"
 resources = "{src}/main/resources"
 generated = "{src}/generated/resources"
+recipes = "{generated}/data/{^modid}/recipes"
+tags = "{generated}/data/{^modid}/tags"

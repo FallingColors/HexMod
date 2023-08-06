@@ -6,21 +6,39 @@ from hexdoc.minecraft.recipe import (
     MinecraftItemIdIngredient,
     MinecraftItemTagIngredient,
 )
-from hexdoc.utils import HexDocModel, ResourceLocation
+from hexdoc.utils import HexDocModel, ResourceLocation, TypeTaggedUnion
+from hexdoc.utils.model import AnyContext
 
 from .hex_book import HexContext
 
 # ingredients
 
 
-class VillagerIngredient(HexDocModel[HexContext]):  # lol, lmao
+class BrainsweepeeIngredient(
+    TypeTaggedUnion[AnyContext],
+    group="hexdoc.BrainsweepeeIngredient",
+    type=None,
+):
+    pass
+
+
+# lol, lmao
+class VillagerIngredient(BrainsweepeeIngredient[HexContext], type="villager"):
     minLevel: int
     profession: ResourceLocation | None = None
     biome: ResourceLocation | None = None
 
 
+class EntityTypeIngredient(BrainsweepeeIngredient[HexContext], type="entity_type"):
+    entityType: ResourceLocation
+
+
+class EntityTagIngredient(BrainsweepeeIngredient[HexContext], type="entity_tag"):
+    tag: ResourceLocation
+
+
 class BlockStateIngredient(HexDocModel[HexContext]):
-    # TODO: StateIngredient should also be a TypeTaggedUnion, probably
+    # TODO: tagged union
     type: Literal["block"]
     block: ResourceLocation
 
@@ -53,5 +71,6 @@ class BlockState(HexDocModel[HexContext]):
 
 class BrainsweepRecipe(Recipe[HexContext], type="hexcasting:brainsweep"):
     blockIn: BlockStateIngredient
-    villagerIn: VillagerIngredient
+    cost: int
+    entityIn: BrainsweepeeIngredient[HexContext]
     result: BlockState

@@ -1,6 +1,5 @@
 __all__ = [
     "HexDocModel",
-    "FrozenHexDocModel",
     "HexDocFileModel",
     "InternallyTaggedUnion",
     "Color",
@@ -19,13 +18,7 @@ __all__ = [
     "TypeTaggedUnion",
 ]
 
-from .model import (
-    DEFAULT_CONFIG,
-    AnyContext,
-    FrozenHexDocModel,
-    HexDocFileModel,
-    HexDocModel,
-)
+from .model import DEFAULT_CONFIG, AnyContext, HexDocFileModel, HexDocModel
 from .properties import AnyPropsContext, Properties, PropsContext
 from .resource import Entity, ItemStack, ResLoc, ResourceLocation
 from .tagged_union import (

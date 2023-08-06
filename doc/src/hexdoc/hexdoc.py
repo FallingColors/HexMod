@@ -1,7 +1,8 @@
-# because Tap.add_argument isn't typed, for some reason
-# pyright: reportUnknownMemberType=false
-
+import logging
+from argparse import ArgumentParser
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Self, Sequence
 
 from jinja2 import (
     ChoiceLoader,
@@ -11,13 +12,13 @@ from jinja2 import (
     StrictUndefined,
 )
 
-# from jinja2.sandbox import SandboxedEnvironment
-from tap import Tap
-
 from hexdoc.hexcasting import HexBook
 from hexdoc.utils import Properties
 
 from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
+
+# TODO: enable
+# from jinja2.sandbox import SandboxedEnvironment
 
 
 def strip_empty_lines(text: str) -> str:
@@ -25,21 +26,39 @@ def strip_empty_lines(text: str) -> str:
 
 
 # CLI arguments
-class Args(Tap):
+@dataclass
+class Args:
     """example: main.py properties.toml -o out.html"""
 
     properties_file: Path
     output_file: Path | None
+    verbose: bool
 
-    def configure(self):
-        self.add_argument("properties_file")
-        self.add_argument("-o", "--output_file", required=False)
+    @classmethod
+    def parse_args(cls, args: Sequence[str] | None = None) -> Self:
+        parser = ArgumentParser()
+
+        parser.add_argument("properties_file", type=Path)
+        parser.add_argument("--output_file", "-o", type=Path)
+        parser.add_argument("--verbose", "-v", action="store_true")
+
+        return cls(**vars(parser.parse_args(args)))
 
 
 def main(args: Args | None = None) -> None:
     # allow passing Args for test cases, but parse by default
     if args is None:
-        args = Args().parse_args()
+        args = Args.parse_args()
+
+    logging.basicConfig(
+        style="{",
+        format="[{levelname}][{name}] {message}",
+    )
+    logger = logging.getLogger(__name__)
+
+    if args.verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+        logger.debug("Log level set to DEBUG")
 
     # load the properties and book
     props = Properties.load(args.properties_file)
@@ -60,7 +79,7 @@ def main(args: Args | None = None) -> None:
         autoescape=True,
         extensions=[IncludeRawExtension],
     )
-    env.filters |= dict(  # for some reason, pylance doesn't like the {} here
+    env.filters |= dict(  # pyright: ignore[reportUnknownMemberType]
         hexdoc_block=hexdoc_block,
         hexdoc_wrap=hexdoc_wrap,
     )

@@ -4,18 +4,12 @@ import re
 from pathlib import Path
 from typing import Annotated, Any, Self, TypeVar
 
-from pydantic import (
-    AfterValidator,
-    Field,
-    FieldValidationInfo,
-    HttpUrl,
-    field_validator,
-)
+from pydantic import AfterValidator, Field, HttpUrl
 from typing_extensions import TypedDict
 
 from .model import HexDocModel
 from .resource import ResourceLocation
-from .toml_placeholders import load_toml
+from .toml_placeholders import load_toml_with_placeholders
 
 NoTrailingSlashHttpUrl = Annotated[
     str,
@@ -24,38 +18,43 @@ NoTrailingSlashHttpUrl = Annotated[
 ]
 
 
-class PlatformProps(HexDocModel[Any]):
-    resources: Path
-    generated: Path
+class PatternStubProps(HexDocModel[Any], extra="ignore"):
+    path: Path
+    regex: re.Pattern[str]
+
+
+class XplatProps(HexDocModel[Any], extra="ignore"):
     src: Path
     package: Path
-    pattern_stubs: list[Path] | None = None
+    pattern_stubs: list[PatternStubProps] | None = None
+    resources: Path
 
 
-class I18nProps(HexDocModel[Any]):
+class PlatformProps(XplatProps):
+    recipes: Path
+    tags: Path
+
+
+class I18nProps(HexDocModel[Any], extra="ignore"):
     default_lang: str
     filename: str
-    extra: dict[str, str] | None = None
+    extra: dict[str, str] = Field(default_factory=dict)
+    keys: dict[str, str] = Field(default_factory=dict)
 
 
-class Properties(HexDocModel[Any]):
+class Properties(HexDocModel[Any], extra="ignore"):
     modid: str
     book_name: str
     is_0_black: bool
     """If true, the style `$(0)` changes the text color to black; otherwise it resets
     the text color to the default."""
 
-    recipe_dirs: list[Path]
-    default_recipe_dir_index_: int = Field(alias="default_recipe_dir")
-
-    pattern_regex: re.Pattern[str]
-
     template: str
     template_dirs: list[Path]
     template_packages: list[tuple[str, Path]]
 
-    spoilers: set[ResourceLocation]
-    blacklist: set[ResourceLocation]
+    spoilered_advancements: set[ResourceLocation]
+    entry_id_blacklist: set[ResourceLocation]
 
     template_args: dict[str, Any]
 
@@ -64,13 +63,13 @@ class Properties(HexDocModel[Any]):
 
     i18n: I18nProps
 
-    common: PlatformProps
+    common: XplatProps
     fabric: PlatformProps  # TODO: some way to make these optional for addons
     forge: PlatformProps
 
     @classmethod
     def load(cls, path: Path) -> Self:
-        return cls.model_validate(load_toml(path))
+        return cls.model_validate(load_toml_with_placeholders(path))
 
     @property
     def resources_dir(self):
@@ -81,30 +80,37 @@ class Properties(HexDocModel[Any]):
         return self.i18n.default_lang
 
     @property
-    def book_dir(self) -> Path:
-        """eg. `resources/data/hexcasting/patchouli_books/thehexbook`"""
+    def book_path(self) -> Path:
+        """eg. `resources/data/hexcasting/patchouli_books/thehexbook/book.json`"""
         return (
             self.resources_dir
             / "data"
             / self.modid
             / "patchouli_books"
             / self.book_name
+            / "book.json"
         )
 
     @property
+    def assets_dir(self) -> Path:
+        """eg. `resources/assets/hexcasting`"""
+        return self.resources_dir / "assets" / self.modid
+
+    @property
+    def book_assets_dir(self) -> Path:
+        """eg. `resources/assets/hexcasting/patchouli_books/thehexbook`"""
+        return self.assets_dir / "patchouli_books" / self.book_name
+
+    @property
     def categories_dir(self) -> Path:
-        return self.book_dir / self.lang / "categories"
+        return self.book_assets_dir / self.lang / "categories"
 
     @property
     def entries_dir(self) -> Path:
-        return self.book_dir / self.lang / "entries"
+        return self.book_assets_dir / self.lang / "entries"
 
     @property
-    def default_recipe_dir(self) -> Path:
-        return self.recipe_dirs[self.default_recipe_dir_index_]
-
-    @property
-    def platforms(self) -> list[PlatformProps]:
+    def platforms(self) -> list[XplatProps]:
         platforms = [self.common]
         if self.fabric:
             platforms.append(self.fabric)
@@ -113,7 +119,7 @@ class Properties(HexDocModel[Any]):
         return platforms
 
     @property
-    def pattern_stubs(self) -> list[Path]:
+    def pattern_stubs(self):
         return [
             stub
             for platform in self.platforms
@@ -124,15 +130,6 @@ class Properties(HexDocModel[Any]):
     def asset_url(self, asset: ResourceLocation, path: str = "assets") -> str:
         base_url = self.base_asset_urls[asset.namespace]
         return f"{base_url}/{path}/{asset.full_path}"
-
-    @field_validator("default_recipe_dir_index_")
-    def _check_default_recipe_dir(cls, value: int, info: FieldValidationInfo) -> int:
-        num_dirs = len(info.data["recipe_dirs"])
-        if value >= num_dirs:
-            raise ValueError(
-                f"default_recipe_dir must be a valid index of recipe_dirs (expected <={num_dirs - 1}, got {value})"
-            )
-        return value
 
 
 class PropsContext(TypedDict):

@@ -14,9 +14,9 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "typing_extensions~=4.7.0",
-    "typed-argument-parser~=1.8.0",
     "pydantic~=2.1.1",
     "Jinja2~=3.1.2",
+    "pyjson5~=1.6.3",
 ]
 
 [project.optional-dependencies]
@@ -45,6 +45,9 @@ hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
 
 [project.entry-points."hexdoc.ItemIngredient"]
 hexdoc-minecraft = "hexdoc.minecraft.recipe.ingredients"
+hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
+
+[project.entry-points."hexdoc.BrainsweepeeIngredient"]
 hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
 
 
