@@ -21,7 +21,7 @@ jobs:
       run: pip install ./doc
 
     - name: Generate file
-      run: hexdoc doc/properties.toml -o index.html.uncommitted
+      run: hexdoc doc/properties.toml -o index.html.uncommitted --ci
 
     - name: Check out gh-pages
       uses: actions/checkout@v3

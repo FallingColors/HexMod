@@ -1,4 +1,5 @@
 import logging
+import os
 from argparse import ArgumentParser
 from dataclasses import dataclass
 from pathlib import Path
@@ -34,6 +35,7 @@ class Args:
     properties_file: Path
     output_file: Path | None
     verbose: bool
+    ci: bool
 
     @classmethod
     def parse_args(cls, args: Sequence[str] | None = None) -> Self:
@@ -42,6 +44,7 @@ class Args:
         parser.add_argument("properties_file", type=Path)
         parser.add_argument("--output_file", "-o", type=Path)
         parser.add_argument("--verbose", "-v", action="store_true")
+        parser.add_argument("--ci", action="store_true")
 
         return cls(**vars(parser.parse_args(args)))
 
@@ -49,6 +52,9 @@ class Args:
         self.properties_file = self.properties_file.resolve()
         if self.output_file:
             self.output_file = self.output_file.resolve()
+
+        if self.ci and os.getenv("RUNNER_DEBUG") == "1":
+            self.verbose = True
 
 
 def main(args: Args | None = None) -> None:
