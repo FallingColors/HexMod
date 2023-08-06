@@ -1,0 +1,10 @@
+{
+  "type": "hexcasting:inject_lore",
+  "chance": 0.4,
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/village/village_snowy_house"
+    }
+  ]
+}

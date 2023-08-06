@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:wheat_seeds"
+    },
+    "D": {
+      "item": "hexcasting:amethyst_dust"
+    }
+  },
+  "pattern": [
+    " D ",
+    "DCD",
+    " D "
+  ],
+  "result": {
+    "item": "hexcasting:pride_colorizer_aroace"
+  },
+  "show_notification": true
+}
