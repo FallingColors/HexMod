@@ -2,7 +2,7 @@ name: Build the web book
 
 on:
   push:
-    branches: [main]
+    # branches: [main]
   workflow_dispatch:
 
 jobs:
