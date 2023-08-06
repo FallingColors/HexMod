@@ -14,6 +14,7 @@ from jinja2 import (
 
 from hexdoc.hexcasting import HexBook
 from hexdoc.utils import Properties
+from hexdoc.utils.cd import cd
 
 from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
 
@@ -44,64 +45,75 @@ class Args:
 
         return cls(**vars(parser.parse_args(args)))
 
+    def __post_init__(self):
+        self.properties_file = self.properties_file.resolve()
+        if self.output_file:
+            self.output_file = self.output_file.resolve()
+
 
 def main(args: Args | None = None) -> None:
     # allow passing Args for test cases, but parse by default
     if args is None:
         args = Args.parse_args()
 
-    logging.basicConfig(
-        style="{",
-        format="[{levelname}][{name}] {message}",
-    )
-    logger = logging.getLogger(__name__)
-
-    if args.verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
-        logger.debug("Log level set to DEBUG")
-
-    # load the properties and book
-    props = Properties.load(args.properties_file)
-    book = HexBook.load(*HexBook.prepare(props))
-
-    # set up Jinja environment
-    # TODO: SandboxedEnvironment
-    env = Environment(
-        # search order: template_dirs, template_packages, built-in hexdoc templates
-        loader=ChoiceLoader(
-            [FileSystemLoader(props.template_dirs)]
-            + [PackageLoader(name, str(path)) for name, path in props.template_packages]
-            + [PackageLoader("hexdoc", "_templates")]
-        ),
-        undefined=StrictUndefined,
-        lstrip_blocks=True,
-        trim_blocks=True,
-        autoescape=True,
-        extensions=[IncludeRawExtension],
-    )
-    env.filters |= dict(  # pyright: ignore[reportUnknownMemberType]
-        hexdoc_block=hexdoc_block,
-        hexdoc_wrap=hexdoc_wrap,
-    )
-
-    # load and render template
-    template = env.get_template(props.template)
-    docs = strip_empty_lines(
-        template.render(
-            **props.template_args,
-            book=book,
-            props=props,
+    # treat all paths as relative to the location of the properties file by cd-ing there
+    with cd(args.properties_file.parent):
+        # set up logging
+        logging.basicConfig(
+            style="{",
+            format="[{levelname}][{name}] {message}",
         )
-    )
+        logger = logging.getLogger(__name__)
+        if args.verbose:
+            logging.getLogger().setLevel(logging.DEBUG)
+            logger.debug("Log level set to DEBUG")
 
-    # if there's an output file specified, write to it
-    # otherwise just print the generated docs
-    if args.output_file:
-        args.output_file.write_text(docs, "utf-8")
-    else:
-        print(docs)
+        # load the book
+        props = Properties.load(args.properties_file)
+        book = HexBook.load(*HexBook.prepare(props))
+
+        # set up Jinja environment
+        # TODO: SandboxedEnvironment
+        env = Environment(
+            # search order: template_dirs, template_packages, built-in hexdoc templates
+            loader=ChoiceLoader(
+                [FileSystemLoader(props.template_dirs)]
+                + [
+                    PackageLoader(name, str(path))
+                    for name, path in props.template_packages
+                ]
+                + [PackageLoader("hexdoc", "_templates")]
+            ),
+            undefined=StrictUndefined,
+            lstrip_blocks=True,
+            trim_blocks=True,
+            autoescape=True,
+            extensions=[
+                IncludeRawExtension,
+            ],
+        )
+        env.filters |= dict(  # pyright: ignore[reportUnknownMemberType]
+            hexdoc_block=hexdoc_block,
+            hexdoc_wrap=hexdoc_wrap,
+        )
+
+        # load and render template
+        template = env.get_template(props.template)
+        docs = strip_empty_lines(
+            template.render(
+                **props.template_args,
+                book=book,
+                props=props,
+            )
+        )
+
+        # if there's an output file specified, write to it
+        # otherwise just print the generated docs
+        if args.output_file:
+            args.output_file.write_text(docs, "utf-8")
+        else:
+            print(docs)
 
 
-# entry point: just read the CLI args and pass them to the actual logic
 if __name__ == "__main__":
     main()
