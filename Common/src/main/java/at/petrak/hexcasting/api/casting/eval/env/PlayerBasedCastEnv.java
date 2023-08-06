@@ -53,6 +53,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
     @Override
     public void postExecution(CastResult result) {
+        super.postExecution(result);
+
         for (var sideEffect : result.getSideEffects()) {
             if (sideEffect instanceof OperatorSideEffect.DoMishap doMishap) {
                 this.sendMishapMsgToPlayer(doMishap);
@@ -165,7 +167,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public boolean isVecInRange(Vec3 vec) {
+    public boolean isVecInRangeEnvironment(Vec3 vec) {
         var sentinel = HexAPI.instance().getSentinel(this.caster);
         if (sentinel != null
             && sentinel.extendsRange()
@@ -179,8 +181,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public boolean hasEditPermissionsAt(BlockPos vec) {
-        return this.caster.gameMode.getGameModeForPlayer() != GameType.ADVENTURE && this.world.mayInteract(this.caster, vec);
+    public boolean hasEditPermissionsAtEnvironment(BlockPos pos) {
+        return this.caster.gameMode.getGameModeForPlayer() != GameType.ADVENTURE && this.world.mayInteract(this.caster, pos);
     }
 
     /**

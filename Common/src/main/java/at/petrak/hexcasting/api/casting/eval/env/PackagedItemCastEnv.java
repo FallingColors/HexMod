@@ -37,12 +37,14 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public long extractMedia(long costLeft) {
+    public long extractMediaEnvironment(long costLeft) {
         if (this.caster.isCreative())
             return 0;
 
         var casterStack = this.caster.getItemInHand(this.castingHand);
         var casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack);
+        if (casterHexHolder == null)
+            return costLeft;
         var canCastFromInv = casterHexHolder.canDrawMediaFromInventory();
 
         var casterMediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(casterStack);
@@ -69,6 +71,8 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     public FrozenPigment getPigment() {
         var casterStack = this.caster.getItemInHand(this.castingHand);
         var casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack);
+        if (casterHexHolder == null)
+            return IXplatAbstractions.INSTANCE.getPigment(this.caster);
         var hexHolderPigment = casterHexHolder.getPigment();
         if (hexHolderPigment != null)
             return hexHolderPigment;

@@ -16,13 +16,21 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import static at.petrak.hexcasting.api.casting.eval.CastingEnvironmentComponent.*;
 
 /**
  * Environment within which hexes are cast.
@@ -30,7 +38,36 @@ import java.util.function.Predicate;
  * Stuff like "the player with a staff," "the player with a trinket," "spell circles,"
  */
 public abstract class CastingEnvironment {
+    /**
+     * Stores all listeners that should be notified whenever a CastingEnvironment is initialised.
+     */
+    private static final List<Consumer<CastingEnvironment>> createEventListeners = new ArrayList<>();
+
+    /**
+     * Add a listener that will be called whenever a new CastingEnvironment is created.
+     */
+    public static void addCreateEventListener(Consumer<CastingEnvironment> listener) {
+        createEventListeners.add(listener);
+    }
+
+    private boolean createEventTriggered = false;
+
+    public final void triggerCreateEvent() {
+        if (!createEventTriggered) {
+            for (var listener : createEventListeners)
+                listener.accept(this);
+            createEventTriggered = true;
+        }
+    }
+
+
     protected final ServerLevel world;
+
+    protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap = new HashMap<>();
+    private final List<PostExecution> postExecutions = new ArrayList<>();
+    private final List<ExtractMedia> extractMedias = new ArrayList<>();
+    private final List<IsVecInRange> isVecInRanges = new ArrayList<>();
+    private final List<HasEditPermissionsAt> hasEditPermissionsAts = new ArrayList<>();
 
     protected CastingEnvironment(ServerLevel world) {
         this.world = world;
@@ -53,6 +90,39 @@ public abstract class CastingEnvironment {
      * Get an interface used to do mishaps
      */
     public abstract MishapEnvironment getMishapEnvironment();
+
+    public <T extends CastingEnvironmentComponent> void addExtension(@NotNull T extension) {
+        componentMap.put(extension.getKey(), extension);
+        if (extension instanceof PostExecution postExecution)
+            postExecutions.add(postExecution);
+        if (extension instanceof ExtractMedia extractMedia)
+            extractMedias.add(extractMedia);
+        if (extension instanceof IsVecInRange isVecInRange)
+            isVecInRanges.add(isVecInRange);
+        if (extension instanceof HasEditPermissionsAt hasEditPermissionsAt)
+            hasEditPermissionsAts.add(hasEditPermissionsAt);
+    }
+
+    public void removeExtension(@NotNull CastingEnvironmentComponent.Key<?> key) {
+        var extension = componentMap.remove(key);
+        if (extension == null)
+            return;
+
+        if (extension instanceof PostExecution postExecution)
+            postExecutions.remove(postExecution);
+        if (extension instanceof ExtractMedia extractMedia)
+            extractMedias.remove(extractMedia);
+        if (extension instanceof IsVecInRange isVecInRange)
+            isVecInRanges.remove(isVecInRange);
+        if (extension instanceof HasEditPermissionsAt hasEditPermissionsAt)
+            hasEditPermissionsAts.remove(hasEditPermissionsAt);
+    }
+
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public <T extends CastingEnvironmentComponent> T getExtension(@NotNull CastingEnvironmentComponent.Key<T> key) {
+        return (T) componentMap.get(key);
+    }
 
     /**
      * If something about this ARE itself is invalid, mishap.
@@ -87,7 +157,10 @@ public abstract class CastingEnvironment {
     /**
      * Do whatever you like after a pattern is executed.
      */
-    public abstract void postExecution(CastResult result);
+    public void postExecution(CastResult result) {
+        for (var postExecutionComponent : postExecutions)
+            postExecutionComponent.onPostExecution(result);
+    }
 
     public abstract Vec3 mishapSprayPos();
 
@@ -95,7 +168,15 @@ public abstract class CastingEnvironment {
      * Return whether this env can cast great spells.
      */
     public boolean isEnlightened() {
-        return false;
+        var caster = this.getCaster();
+        if (caster == null)
+            return false;
+
+        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("enlightenment"));
+        if (adv == null)
+            return false;
+
+        return caster.getAdvancements().getOrStartProgress(adv).isDone();
     }
 
     /**
@@ -104,19 +185,53 @@ public abstract class CastingEnvironment {
      * If there was enough media found, it will return less or equal to zero; if there wasn't, it will be
      * positive.
      */
-    public abstract long extractMedia(long cost);
+    public long extractMedia(long cost) {
+        for (var extractMediaComponent : extractMedias)
+            cost = extractMediaComponent.onExtractMedia(cost);
+        return extractMediaEnvironment(cost);
+    }
+
+    /**
+     * Attempt to extract the given amount of media. Returns the amount of media left in the cost.
+     * <p>
+     * If there was enough media found, it will return less or equal to zero; if there wasn't, it will be
+     * positive.
+     */
+    protected abstract long extractMediaEnvironment(long cost);
 
     /**
      * Get if the vec is close enough, to the player or sentinel ...
      * <p>
      * Doesn't take into account being out of the <em>world</em>.
      */
-    public abstract boolean isVecInRange(Vec3 vec);
+    public boolean isVecInRange(Vec3 vec) {
+        boolean isInRange = isVecInRangeEnvironment(vec);
+        for (var isVecInRangeComponent : isVecInRanges)
+            isInRange = isVecInRangeComponent.onIsVecInRange(vec, isInRange);
+        return isInRange;
+    }
+
+    /**
+     * Get if the vec is close enough, to the player or sentinel ...
+     * <p>
+     * Doesn't take into account being out of the <em>world</em>.
+     */
+    protected abstract boolean isVecInRangeEnvironment(Vec3 vec);
 
     /**
      * Return whether the caster can edit blocks at the given permission (i.e. not adventure mode, etc.)
      */
-    public abstract boolean hasEditPermissionsAt(BlockPos vec);
+    public boolean hasEditPermissionsAt(BlockPos pos) {
+        boolean hasEditPermissionsAt = hasEditPermissionsAtEnvironment(pos);
+        for (var hasEditPermissionsAtComponent : hasEditPermissionsAts)
+            hasEditPermissionsAt = hasEditPermissionsAtComponent.onHasEditPermissionsAt(pos, hasEditPermissionsAt);
+        return hasEditPermissionsAt;
+    }
+
+    /**
+     * Return whether the caster can edit blocks at the given permission (i.e. not adventure mode, etc.)
+     */
+    protected abstract boolean hasEditPermissionsAtEnvironment(BlockPos pos);
 
     public final boolean isVecInWorld(Vec3 vec) {
         return this.world.isInWorldBounds(BlockPos.containing(vec))
@@ -128,7 +243,7 @@ public abstract class CastingEnvironment {
     }
 
     public final boolean isEntityInRange(Entity e) {
-        return this.isVecInRange(e.position());
+        return e instanceof Player || this.isVecInRange(e.position());
     }
 
     /**
