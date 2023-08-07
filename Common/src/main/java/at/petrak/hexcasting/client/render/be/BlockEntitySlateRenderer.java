@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client.render.be;
 
+import at.petrak.hexcasting.client.render.PatternTextureManager;
 import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
@@ -23,11 +24,15 @@ public class BlockEntitySlateRenderer implements BlockEntityRenderer<BlockEntity
     @Override
     public void render(BlockEntitySlate tile, float pPartialTick, PoseStack ps,
         MultiBufferSource buffer, int light, int overlay) {
-        if (tile.pattern == null) {
+
+        if (tile.pattern == null)
             return;
-        }
 
         var bs = tile.getBlockState();
+        if(PatternTextureManager.useTextures && !bs.getValue(BlockSlate.ENERGIZED)) {
+            PatternTextureManager.renderPatternForSlate(tile, tile.pattern, ps, buffer, light, bs);
+            return;
+        }
 
         var oldShader = RenderSystem.getShader();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
