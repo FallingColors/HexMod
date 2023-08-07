@@ -2,6 +2,7 @@
 
 modid = "hexcasting"
 book_name = "thehexbook"
+url = "https://gamma-delta.github.io/HexMod"
 is_0_black = false
 
 # NOTE: _Raw means "don't apply variable interpolation to this value"

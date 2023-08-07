@@ -45,6 +45,7 @@ class I18nProps(HexDocModel[Any], extra="ignore"):
 class Properties(HexDocModel[Any], extra="ignore"):
     modid: str
     book_name: str
+    url: NoTrailingSlashHttpUrl
     is_0_black: bool
     """If true, the style `$(0)` changes the text color to black; otherwise it resets
     the text color to the default."""
