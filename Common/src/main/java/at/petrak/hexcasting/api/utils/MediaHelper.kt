@@ -41,7 +41,7 @@ fun extractMedia(
  * Extract [cost] media from [holder]. If [cost] is less than zero, extract all media instead.
  * This may mutate the stack underlying [holder] (and may consume it) unless [simulate] is set.
  *
- * If [drainForBatteries] is false, this will only consider forms of media that can be used to make new batteries.
+ * If [drainForBatteries] is true, this will only consider forms of media that can be used to make new batteries.
  *
  * Return the amount of media extracted. This may be over [cost] if media is wasted.
  */
