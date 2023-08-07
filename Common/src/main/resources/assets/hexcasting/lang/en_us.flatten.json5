@@ -996,19 +996,19 @@
 
     
     landing: "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. \
-      It fascinates me. I've decided to start a journal of my thoughts and findings. \
+      It fascinates me. I've decided to start a journal of my thoughts and findings.\
       $(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
     
     category: {
       basics: {
         "": "Getting Started",
-        desc: "The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)Staff/$--\
-          or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them.\
+        desc: "The practitioners of this art would cast their so-called _Hexes by drawing strange patterns in the air with a $(l:items/staff)$(item)Staff/$ -- \
+          or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them. \
           How might I do the same?",
       },
       casting: {
         "": "Hex Casting",
-        desc: "I've started to understand how the old masters cast their _Hexes! It's a bit complicated,\
+        desc: "I've started to understand how the old masters cast their _Hexes! It's a bit complicated, \
           but I'm sure I can figure it out. Let's see...",
       },
       items: {
@@ -1018,15 +1018,15 @@
       
       greatwork: {
         "": "The Great Work",
-        desc: "I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction.\
-          I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy.\
+        desc: "I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction. \
+          I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy. \
           I have seen I have seen I have s$(k)get stick bugged lmao/$",
         // alwinfy you think you're so funny
       },
 
       lore: {
         "": "Lore",
-        desc: "I have uncovered some letters and text not of direct relevance to my art.\
+        desc: "I have uncovered some letters and text not of direct relevance to my art. \
           But, I think I may be able to divine some of the history of the world from these. Let me see...",
       },
 
@@ -1045,8 +1045,8 @@
       },
       great_spells: {
         "": "Great Spells",
-        desc: "The spells catalogued here are purported to be of legendary difficulty and power.\
-          They seem to have been recorded only sparsely (for good reason, the texts claim).\
+        desc: "The spells catalogued here are purported to be of legendary difficulty and power. \
+          They seem to have been recorded only sparsely (for good reason, the texts claim). \
           It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
           What could possibly go wrong?",
       },
@@ -1184,8 +1184,8 @@
         },
 
         grid: {
-          "1": "I will generally provide my patterns to Nature via my $(l:items/staff)$(item)Staff/$.\
-            Pressing $(thing)$(k:use)/$ with one in my hand will cause a hexagonal grid of dots to appear in front of me.\
+          "1": "I will generally provide my patterns to Nature via my $(l:items/staff)$(item)Staff/$. \
+            Pressing $(thing)$(k:use)/$ with one in my hand will cause a hexagonal grid of dots to appear in front of me. \
             I can then click, drag from dot to dot, and release to draw patterns.$(br2)\
             Once I submit a pattern, it is executed (see the next chapter).",
           "2": "Pressing $(thing)$(k:escape)/$ saves and closes the grid; when I next use my staff, all my patterns and iotas will still be there.$(br2)\
@@ -1194,25 +1194,25 @@
         "patterns&actions": {
           "1": "$(thing)Patterns/$ are paths traced through the grid of _media. I believe the sixfold symmetry of patterns is what gives my art its name.$(br2)\
             $(thing)Actions/$, meanwhile, are what patterns $(italic)do/$.",
-          "2": "The difference is similar to the difference between $(italic)words/$ and $(italic)meanings/$.\
-            Any jumble of letters forms a word, but most of them (like \"xnopyt\") don't mean anything.\
+          "2": "The difference is similar to the difference between $(italic)words/$ and $(italic)meanings/$. \
+            Any jumble of letters forms a word, but most of them (like \"xnopyt\") don't mean anything. \
             Similarly, any squiggle yanked through the _media is technically a pattern, but most of them won't do anything.",
-          "3": "Actions are somewhat like commands to the grand systems rules that govern the universe (which I have seen some texts personify as \"Nature.\").\
+          "3": "Actions are somewhat like commands to the grand systems rules that govern the universe (which I have seen some texts personify as \"Nature.\"). \
             They tend to do one of a few things:\
               $(li)Gather some information about the world, such as finding the position of a entity.\
               $(li)Manipulate the info gathered, like finding the distance between two positions.\
               $(li)Perform some magical effect on the world, like summoning lightning or an explosion.$(br)\
             These last kinds of actions are called \"spells.\", and are generally what attract people to the art.",
-          "4": "A _Hex, then, is a sequence of valid patterns presented to Nature in sequence.\
-            Nature interprets each of these patterns one-by-one and, if it understands, changes the world to my whims.\
+          "4": "A _Hex, then, is a sequence of valid patterns presented to Nature in sequence. \
+            Nature interprets each of these patterns one-by-one and, if it understands, changes the world to my whims. \
             (Or, what it thinks my whims are.)",
-          "5": "Although some actions can be performed easily, some require a payment in the form of coalesced _media.\
-            I believe the concentrated mental energy is used as a sort of argument to Nature, convincing it that it should indeed do as I ask.\
+          "5": "Although some actions can be performed easily, some require a payment in the form of coalesced _media. \
+            I believe the concentrated mental energy is used as a sort of argument to Nature, convincing it that it should indeed do as I ask. \
             Most spells require this kind of payment, but a few non-spell actions do too.$(br2)\
             I've recorded the costs, if any, of each action on their respective pages.",
         },
         iotas: {
-          "1": "The \"nouns\" in Nature's language are called $(thing)iotas/$.\
+          "1": "The \"nouns\" in Nature's language are called $(thing)iotas/$. \
             At its most basic level, Hexcasting is the art of manipulating iotas.$(br2)\
             Iotas come in many different types:\
               $(li)Numbers (which some legends called \"doubles\").\
@@ -1222,10 +1222,10 @@
           "2": "$(li)Influences, peculiar types of iota that seem to represent abstract ideas.\
               $(li)Patterns themselves, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$.\
               $(li)A list of several of the above, gathered into a single iota.",
-          "3": "Generally, I provide iotas to actions.\
-            For example, take $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$.\
+          "3": "Generally, I provide iotas to actions. \
+            For example, take $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$. \
             This spell requires a number iota, to indicate the strength, and a vector iota, to indicate the location.$(br2)\
-            Or, take $(l:patterns/basic#hexcasting:get_pos)$(action)Compass Purification/$.\
+            Or, take $(l:patterns/basic#hexcasting:get_pos)$(action)Compass Purification/$. \
             This takes an entity iota and transforms it into a vector iota, representing the position of that entity.",
         },
       },
