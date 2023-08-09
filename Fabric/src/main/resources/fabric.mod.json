@@ -55,7 +55,7 @@
     "cardinal-components-entity": "~5.2.1",
     "cardinal-components-item": "~5.2.1",
     "cardinal-components-block": "~5.2.1",
-    "paucal": "0.6.*",
+    "paucal": "*",
     "cloth-config": "11.1.*",
     "patchouli": ">=1.20.1-80"
   },
