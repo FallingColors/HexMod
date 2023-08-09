@@ -112,8 +112,20 @@ class I18n:
         # TODO: load ALL of the i18n files, return dict[str, _Lookup] | None
         # or maybe dict[(str, str), LocalizedStr]
         # we could also use that to ensure all i18n files have the same set of keys
-        path = props.find_resource("assets", "lang", props.mod_loc(props.i18n.filename))
-        raw_lookup = load_and_flatten_json_dict(path) | props.i18n.extra
+        raw_lookup: dict[str, str] = {}
+        for _, path in props.find_resources(
+            type="assets",
+            folder="lang",
+            base_id=props.mod_loc(""),
+            glob=[
+                f"{props.i18n.default_lang}.json",
+                f"{props.i18n.default_lang}.json5",
+                f"{props.i18n.default_lang}.flatten.json",
+                f"{props.i18n.default_lang}.flatten.json5",
+            ],
+        ):
+            raw_lookup |= load_and_flatten_json_dict(path)
+        raw_lookup |= props.i18n.extra
 
         # validate and insert
         self.lookup = {

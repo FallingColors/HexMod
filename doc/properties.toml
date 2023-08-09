@@ -6,10 +6,9 @@ url = "https://gamma-delta.github.io/HexMod"
 
 is_0_black = false
 
+# top takes priority
 resource_dirs = [
-    # hot path (these are the most common directories, so put them first)
     "{_common.src}/main/resources",
-    # cold path (order doesn't matter below this point)
     "{_common.src}/generated/resources",
     "{_fabric.src}/main/resources",
     "{_fabric.src}/generated/resources",

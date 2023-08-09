@@ -117,7 +117,8 @@ class Properties(HexDocStripHiddenModel[Any]):
         type: ResourceType,
         folder: str,
         base_id: ResourceLocation,
-        glob: str = "**/*",
+        glob: str | list[str] = "**/*",
+        reverse: bool = True,
     ) -> Iterator[tuple[ResourceLocation, Path]]:
         """Search for a glob under a given resource location in all of `resource_dirs`.
 
@@ -146,33 +147,39 @@ class Properties(HexDocStripHiddenModel[Any]):
         # eg. assets/hexcasting/patchouli_books/thehexbook/en_us/entries
         base_path_stub = base_id.file_path_stub(type, folder, assume_json=False)
 
+        globs = [glob] if isinstance(glob, str) else glob
+
         # glob for json files if not provided
-        if not Path(glob).suffix:
-            glob += ".json"
+        for i in range(len(globs)):
+            if not Path(globs[i]).suffix:
+                globs[i] += ".json"
 
         # find all files matching the resloc
         found_any = False
-        for resource_dir in self.resource_dirs:
+        for resource_dir in (
+            reversed(self.resource_dirs) if reverse else self.resource_dirs
+        ):
             # eg. .../resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries
             base_path = resource_dir / base_path_stub
 
             # eg. .../resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/**/*.json
-            for path in base_path.glob(glob):
-                # only yield actual files
-                if not path.is_file():
-                    continue
-                found_any = True
+            for glob_ in globs:
+                for path in base_path.glob(glob_):
+                    # only yield actual files
+                    if not path.is_file():
+                        continue
+                    found_any = True
 
-                # determine the resource location of this file
-                path_stub = path.relative_to(base_path).with_suffix("")
-                id = ResourceLocation(base_id.namespace, path_stub.as_posix())
+                    # determine the resource location of this file
+                    path_stub = path.relative_to(base_path).with_suffix("")
+                    id = ResourceLocation(base_id.namespace, path_stub.as_posix())
 
-                yield id, path
+                    yield id, path
 
         # if we never yielded any files, raise an error
         if not found_any:
             raise FileNotFoundError(
-                f"No files found under {base_path_stub} in any resource dir"
+                f"No files found under {base_path_stub}/{globs} in any resource dir"
             )
 
 

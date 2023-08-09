@@ -52,6 +52,8 @@ def load_json_dict(path: Path) -> JSONDict:
 # implement pkpcpbp's flattening in python
 # https://github.com/gamma-delta/PKPCPBP/blob/786194a590f/src/main/java/at/petrak/pkpcpbp/filters/JsonUtil.java
 def load_and_flatten_json_dict(path: Path) -> dict[str, str]:
+    logging.getLogger(__name__).debug(f"Load and flatten json from {path}")
+
     # load file, replace `\<LF>       foobar` with `\<LF>foobar`
     json_str = re.sub(r"\\\n\s*", "\\\n", path.read_text("utf-8"))
 
