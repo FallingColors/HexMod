@@ -1,16 +1,24 @@
 # general properties/settings
 
 modid = "hexcasting"
-book_name = "thehexbook"
+book = "hexcasting:thehexbook"
 url = "https://gamma-delta.github.io/HexMod"
+
 is_0_black = false
 
-# NOTE: _Raw means "don't apply variable interpolation to this value"
-pattern_regex = {_Raw='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)'}
+resource_dirs = [
+    # hot path (these are the most common directories, so put them first)
+    "{_common.src}/main/resources",
+    # cold path (order doesn't matter below this point)
+    "{_common.src}/generated/resources",
+    "{_fabric.src}/main/resources",
+    "{_fabric.src}/generated/resources",
+    "{_forge.src}/main/resources",
+    "{_forge.src}/generated/resources",
+]
 
-template = "main.html.jinja"
-template_dirs = []
-template_packages = []
+# NOTE: "!Raw" means "don't apply variable interpolation to this value"
+_pattern_regex = {"!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)'}
 
 spoilered_advancements = [
     "hexcasting:opened_eyes",
@@ -19,6 +27,10 @@ spoilered_advancements = [
     "hexcasting:lore/*",
 ]
 entry_id_blacklist = []
+
+template = "main.html.jinja"
+template_dirs = []
+template_packages = []
 
 
 [template_args]
@@ -50,36 +62,27 @@ sneak = "Left Shift"
 jump = "Space"
 
 
+[[pattern_stubs]]
+path = "{^_common.package}/common/lib/hex/HexActions.java"
+regex = "{^_pattern_regex}"
+
+[[pattern_stubs]]
+path = "{^_fabric.package}/FabricHexInitializer.kt"
+regex = "{^_pattern_regex}"
+
+
 # platforms
 
-[common]
+[_common]
 src = "../Common/src"
 package = "{src}/main/java/at/petrak/hexcasting"
-resources = "{src}/main/resources"
-generated = "{src}/generated/resources"
-
-[[common.pattern_stubs]]
-path = "{^package}/common/lib/hex/HexActions.java"
-regex = "{^^pattern_regex}"
 
 
-[fabric]
+[_fabric]
 src = "../Fabric/src"
 package = "{src}/main/java/at/petrak/hexcasting/fabric"
-resources = "{src}/main/resources"
-generated = "{src}/generated/resources"
-recipes = "{generated}/data/{^modid}/recipes"
-tags = "{generated}/data/{^modid}/tags"
-
-[[fabric.pattern_stubs]]
-path = "{^package}/FabricHexInitializer.kt"
-regex = "{^^pattern_regex}"
 
 
-[forge]
+[_forge]
 src = "../Forge/src"
 package = "{src}/main/java/at/petrak/hexcasting/forge"
-resources = "{src}/main/resources"
-generated = "{src}/generated/resources"
-recipes = "{generated}/data/{^modid}/recipes"
-tags = "{generated}/data/{^modid}/tags"

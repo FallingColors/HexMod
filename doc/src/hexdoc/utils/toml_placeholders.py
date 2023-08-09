@@ -86,7 +86,7 @@ def _handle_child(
             expanded.add((id(stack[-1]), key))
             update(key, value)
 
-        case {"_Raw": raw} if len(value) == 1:
+        case {"!Raw": raw} if len(value) == 1:
             # interpolaten't
             expanded.add((id(stack[-1]), key))
             update(key, raw)

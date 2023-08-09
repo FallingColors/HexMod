@@ -1,10 +1,9 @@
-from pathlib import Path
 from typing import Self
 
 from pydantic import Field
 
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.utils import ItemStack, Properties, ResourceLocation
+from hexdoc.utils import ItemStack, ResourceLocation
 from hexdoc.utils.types import Sortable, sorted_dict
 
 from .book_models import BookContext, BookFileModel
@@ -37,9 +36,9 @@ class Category(BookFileModel[BookContext, BookContext], Sortable):
         categories: dict[ResourceLocation, Self] = {}
 
         # load
-        for path in context["props"].categories_dir.rglob("*.json"):
-            category = cls.load(path, context)
-            categories[category.id] = category
+        for id, path in context["props"].find_book_assets("categories"):
+            category = cls.load(id, path, context)
+            categories[id] = category
 
         # late-init _parent_cmp_key
         # track iterations to avoid an infinite loop if for some reason there's a cycle
@@ -67,11 +66,6 @@ class Category(BookFileModel[BookContext, BookContext], Sortable):
 
         # return sorted by sortnum, which requires parent to be initialized
         return sorted_dict(categories)
-
-    @classmethod
-    def _id_base_dir(cls, props: Properties) -> Path:
-        # implement BookModelFile
-        return props.categories_dir
 
     @property
     def is_spoiler(self) -> bool:

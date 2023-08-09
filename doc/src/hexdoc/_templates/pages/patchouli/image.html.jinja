@@ -3,7 +3,7 @@
 {% block inner_body %}
   <p class="img-wrapper">
     {% for image in page.images %}
-      <img src="{{ props.asset_url(image) }}"></img>
+      <img src="{{ props.get_asset_url(image) }}"></img>
     {% endfor %}
   </p>
   {{ super() }}

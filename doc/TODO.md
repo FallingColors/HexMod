@@ -1,0 +1,6 @@
+- [x] Better resource loading
+- [ ] Sandbox for Jinja
+- [ ] First-class addon support
+- [ ] Language picker
+- [ ] Version picker
+- [ ] Re-add edified wood recipe to [Common/src/main/resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/items/edified.json](items/edified) when it actually exists

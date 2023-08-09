@@ -7,7 +7,7 @@
 import re
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import Any, ClassVar, Self
+from typing import Any, ClassVar, Literal, Self
 
 from pydantic import field_validator, model_serializer, model_validator
 from pydantic.dataclasses import dataclass
@@ -62,16 +62,12 @@ class BaseResourceLocation:
         return value.lower()
 
     @field_validator("path")
-    def _lower_path(cls, value: str):
-        return value.lower()
+    def _validate_path(cls, value: str):
+        return value.lower().rstrip("/")
 
     @model_serializer
     def _ser_model(self) -> str:
         return str(self)
-
-    @property
-    def full_path(self) -> str:
-        return f"{self.namespace}/{self.path}"
 
     def __repr__(self) -> str:
         return f"{self.namespace}:{self.path}"
@@ -92,6 +88,31 @@ class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
 
     def match(self, pattern: Self) -> bool:
         return fnmatch(str(self), str(pattern))
+
+    def file_path_stub(
+        self,
+        type: Literal["assets", "data"],
+        folder: str = "",
+        assume_json: bool = True,
+    ) -> Path:
+        """Returns the path to find this resource within a resource directory.
+
+        If `assume_json` is True and no file extension is provided, `.json` is assumed.
+
+        For example:
+        ```py
+        ResLoc("hexcasting", "thehexbook/book").file_path_stub("data", "patchouli_books")
+        # data/hexcasting/patchouli_books/thehexbook/book.json
+        ```
+        """
+        # if folder is an empty string, Path won't add an extra slash
+        path = Path(type) / self.namespace / folder / self.path
+        if assume_json and not path.suffix:
+            return path.with_suffix(".json")
+        return path
+
+    def __truediv__(self, other: str) -> Self:
+        return ResourceLocation(self.namespace, f"{self.path}/{other}")
 
 
 # pure unadulterated laziness

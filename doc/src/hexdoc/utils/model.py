@@ -1,12 +1,8 @@
-import logging
-from pathlib import Path
-from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar, dataclass_transform
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, dataclass_transform
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_validator
 from pydantic.config import ConfigDict
 from typing_extensions import TypedDict
-
-from .deserialize import load_json_dict
 
 if TYPE_CHECKING:
     from pydantic.root_model import Model
@@ -50,13 +46,16 @@ class HexDocModel(Generic[AnyContext], BaseModel):
 
 
 @dataclass_transform()
-class HexDocFileModel(HexDocModel[AnyContext]):
-    @classmethod
-    def load(cls, path: Path, context: AnyContext) -> Self:
-        logging.getLogger(__name__).debug(f"Load {cls}\n  path: {path}")
-        data = load_json_dict(path) | {"__path": path}
-        try:
-            return cls.model_validate(data, context=context)
-        except Exception as e:
-            e.add_note(f"File: {path}")
-            raise
+class HexDocStripHiddenModel(HexDocModel[AnyContext]):
+    """Base model which removes all keys starting with _ before validation."""
+
+    @model_validator(mode="before")
+    def _pre_root_strip_hidden(cls, values: Any) -> Any:
+        if not isinstance(values, dict):
+            return values
+
+        return {
+            key: value
+            for key, value in values.items()
+            if not (isinstance(key, str) and key.startswith("_"))
+        }

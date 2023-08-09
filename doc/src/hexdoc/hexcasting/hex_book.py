@@ -59,7 +59,7 @@ class HexBookType(
                 startdir=Direction[groups["startdir"]],
                 signature=groups["signature"],
                 # is_per_world=bool(is_per_world), # FIXME: idfk how to do this now
-                id=ResourceLocation(props.modid, groups["name"]),
+                id=props.mod_loc(groups["name"]),
             )
 
 

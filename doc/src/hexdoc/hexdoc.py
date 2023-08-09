@@ -1,5 +1,7 @@
+import io
 import logging
 import os
+import sys
 from argparse import ArgumentParser
 from dataclasses import dataclass
 from pathlib import Path
@@ -64,10 +66,15 @@ def main(args: Args | None = None) -> None:
 
     # treat all paths as relative to the location of the properties file by cd-ing there
     with cd(args.properties_file.parent):
+        # set stdout to utf-8 so printing to pipe or redirect doesn't break on Windows
+        # (common windows L)
+        assert isinstance(sys.stdout, io.TextIOWrapper)
+        sys.stdout.reconfigure(encoding="utf-8")
+
         # set up logging
         logging.basicConfig(
             style="{",
-            format="[{levelname}][{name}] {message}",
+            format="\033[1m[{relativeCreated:.02f} | {levelname} | {name}]\033[0m {message}",
         )
         logger = logging.getLogger(__name__)
         if args.verbose:

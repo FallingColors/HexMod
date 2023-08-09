@@ -1,3 +1,4 @@
+import logging
 import re
 from pathlib import Path
 from typing import Any, TypeGuard, TypeVar, get_origin
@@ -42,6 +43,7 @@ JSONValue = JSONDict | list["JSONValue"] | str | int | float | bool | None
 
 
 def load_json_dict(path: Path) -> JSONDict:
+    logging.getLogger(__name__).debug(f"Load json from {path}")
     data = pyjson5.decode(path.read_text("utf-8"))
     assert isinstance_or_raise(data, dict)
     return data

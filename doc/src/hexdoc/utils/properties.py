@@ -1,15 +1,18 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Annotated, Any, Self, TypeVar
+from typing import Annotated, Any, Literal, Self, TypeVar
 
 from pydantic import AfterValidator, Field, HttpUrl
 from typing_extensions import TypedDict
 
-from .model import HexDocModel
+from .model import HexDocStripHiddenModel
 from .resource import ResourceLocation
 from .toml_placeholders import load_toml_with_placeholders
+
+ResourceType = Literal["assets", "data"]
 
 NoTrailingSlashHttpUrl = Annotated[
     str,
@@ -18,14 +21,13 @@ NoTrailingSlashHttpUrl = Annotated[
 ]
 
 
-class PatternStubProps(HexDocModel[Any], extra="ignore"):
+class PatternStubProps(HexDocStripHiddenModel[Any]):
     path: Path
     regex: re.Pattern[str]
 
 
-class XplatProps(HexDocModel[Any], extra="ignore"):
+class XplatProps(HexDocStripHiddenModel[Any]):
     src: Path
-    package: Path
     pattern_stubs: list[PatternStubProps] | None = None
     resources: Path
 
@@ -35,27 +37,30 @@ class PlatformProps(XplatProps):
     tags: Path
 
 
-class I18nProps(HexDocModel[Any], extra="ignore"):
+class I18nProps(HexDocStripHiddenModel[Any]):
     default_lang: str
     filename: str
     extra: dict[str, str] = Field(default_factory=dict)
     keys: dict[str, str] = Field(default_factory=dict)
 
 
-class Properties(HexDocModel[Any], extra="ignore"):
+class Properties(HexDocStripHiddenModel[Any]):
     modid: str
-    book_name: str
+    book: ResourceLocation
     url: NoTrailingSlashHttpUrl
+
     is_0_black: bool
     """If true, the style `$(0)` changes the text color to black; otherwise it resets
     the text color to the default."""
 
-    template: str
-    template_dirs: list[Path]
-    template_packages: list[tuple[str, Path]]
+    resource_dirs: list[Path]
 
     spoilered_advancements: set[ResourceLocation]
     entry_id_blacklist: set[ResourceLocation]
+
+    template: str
+    template_dirs: list[Path]
+    template_packages: list[tuple[str, Path]]
 
     template_args: dict[str, Any]
 
@@ -64,73 +69,111 @@ class Properties(HexDocModel[Any], extra="ignore"):
 
     i18n: I18nProps
 
-    common: XplatProps
-    fabric: PlatformProps  # TODO: some way to make these optional for addons
-    forge: PlatformProps
+    pattern_stubs: list[PatternStubProps]
 
     @classmethod
     def load(cls, path: Path) -> Self:
         return cls.model_validate(load_toml_with_placeholders(path))
 
-    @property
-    def resources_dir(self):
-        return self.common.resources
+    def mod_loc(self, path: str) -> ResourceLocation:
+        """Returns a ResourceLocation with self.modid as the namespace."""
+        return ResourceLocation(self.modid, path)
 
-    @property
-    def lang(self):
-        return self.i18n.default_lang
+    def get_asset_url(self, id: ResourceLocation) -> str:
+        base_url = self.base_asset_urls[id.namespace]
+        return f"{base_url}/{id.file_path_stub('assets').as_posix()}"
 
-    @property
-    def book_path(self) -> Path:
-        """eg. `resources/data/hexcasting/patchouli_books/thehexbook/book.json`"""
-        return (
-            self.resources_dir
-            / "data"
-            / self.modid
-            / "patchouli_books"
-            / self.book_name
-            / "book.json"
+    def find_book_assets(self, folder: Literal["categories", "entries", "templates"]):
+        return self.find_resources(
+            type="assets",
+            folder="patchouli_books",
+            base_id=self.book / self.i18n.default_lang / folder,
         )
 
-    @property
-    def assets_dir(self) -> Path:
-        """eg. `resources/assets/hexcasting`"""
-        return self.resources_dir / "assets" / self.modid
+    def find_resource(
+        self,
+        type: ResourceType,
+        folder: str,
+        id: ResourceLocation,
+    ) -> Path:
+        """Find the first file with this resource location in `resource_dirs`.
 
-    @property
-    def book_assets_dir(self) -> Path:
-        """eg. `resources/assets/hexcasting/patchouli_books/thehexbook`"""
-        return self.assets_dir / "patchouli_books" / self.book_name
+        If no file extension is provided, `.json` is assumed.
 
-    @property
-    def categories_dir(self) -> Path:
-        return self.book_assets_dir / self.lang / "categories"
+        Raises FileNotFoundError if the file does not exist.
+        """
 
-    @property
-    def entries_dir(self) -> Path:
-        return self.book_assets_dir / self.lang / "entries"
+        # check in each directory, return the first that exists
+        path_stub = id.file_path_stub(type, folder)
+        for resource_dir in self.resource_dirs:
+            path = resource_dir / path_stub
+            if path.is_file():
+                return path
 
-    @property
-    def platforms(self) -> list[XplatProps]:
-        platforms = [self.common]
-        if self.fabric:
-            platforms.append(self.fabric)
-        if self.forge:
-            platforms.append(self.forge)
-        return platforms
+        raise FileNotFoundError(f"Path {path_stub} not found in any resource dir")
 
-    @property
-    def pattern_stubs(self):
-        return [
-            stub
-            for platform in self.platforms
-            if platform.pattern_stubs
-            for stub in platform.pattern_stubs
-        ]
+    def find_resources(
+        self,
+        type: ResourceType,
+        folder: str,
+        base_id: ResourceLocation,
+        glob: str = "**/*",
+    ) -> Iterator[tuple[ResourceLocation, Path]]:
+        """Search for a glob under a given resource location in all of `resource_dirs`.
 
-    def asset_url(self, asset: ResourceLocation, path: str = "assets") -> str:
-        base_url = self.base_asset_urls[asset.namespace]
-        return f"{base_url}/{path}/{asset.full_path}"
+        The path of the returned resource location is relative to the path of base_id.
+
+        If no file extension is provided for glob, `.json` is assumed.
+
+        Raises FileNotFoundError if no files were found in any resource dir.
+
+        For example:
+        ```py
+        props.book = ResLoc("hexcasting", "thehexbook")
+        lang = "en_us"
+
+        props.find_resources(
+            type="assets",
+            folder="patchouli_books",
+            base_id=props.book / lang / "entries",
+            glob="**/*",
+        )
+
+        # [(hexcasting:basics/couldnt_cast, .../resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/couldnt_cast.json)]
+        ```
+        """
+
+        # eg. assets/hexcasting/patchouli_books/thehexbook/en_us/entries
+        base_path_stub = base_id.file_path_stub(type, folder, assume_json=False)
+
+        # glob for json files if not provided
+        if not Path(glob).suffix:
+            glob += ".json"
+
+        # find all files matching the resloc
+        found_any = False
+        for resource_dir in self.resource_dirs:
+            # eg. .../resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries
+            base_path = resource_dir / base_path_stub
+
+            # eg. .../resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/**/*.json
+            for path in base_path.glob(glob):
+                # only yield actual files
+                if not path.is_file():
+                    continue
+                found_any = True
+
+                # determine the resource location of this file
+                path_stub = path.relative_to(base_path).with_suffix("")
+                id = ResourceLocation(base_id.namespace, path_stub.as_posix())
+
+                yield id, path
+
+        # if we never yielded any files, raise an error
+        if not found_any:
+            raise FileNotFoundError(
+                f"No files found under {base_path_stub} in any resource dir"
+            )
 
 
 class PropsContext(TypedDict):

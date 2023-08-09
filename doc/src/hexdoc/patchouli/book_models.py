@@ -1,10 +1,11 @@
-from abc import ABC, abstractmethod
+import logging
+from abc import ABC
 from pathlib import Path
-from typing import Any, Generic, TypeVar, cast, dataclass_transform
+from typing import Generic, Self, TypeVar, dataclass_transform
 
-from pydantic import ValidationInfo, model_validator
-
-from hexdoc.utils import AnyContext, HexDocFileModel, Properties, ResourceLocation
+from hexdoc.utils import AnyContext, ResourceLocation
+from hexdoc.utils.deserialize import load_json_dict
+from hexdoc.utils.model import HexDocModel
 
 from .text.formatting import FormatContext
 
@@ -19,26 +20,18 @@ AnyBookContext = TypeVar("AnyBookContext", bound=BookContext)
 @dataclass_transform()
 class BookFileModel(
     Generic[AnyContext, AnyBookContext],
-    HexDocFileModel[AnyBookContext],
+    HexDocModel[AnyBookContext],
     ABC,
 ):
     id: ResourceLocation
 
     @classmethod
-    @abstractmethod
-    def _id_base_dir(cls, props: Properties) -> Path:
-        ...
+    def load(cls, id: ResourceLocation, path: Path, context: AnyBookContext) -> Self:
+        logging.getLogger(__name__).debug(f"Load {cls}\n  path: {path}")
 
-    @model_validator(mode="before")
-    def _pre_root(cls, values: dict[str, Any], info: ValidationInfo) -> dict[str, Any]:
-        if not info.context:
-            return values
-
-        context = cast(AnyBookContext, info.context)
-        return values | {
-            "id": ResourceLocation.from_file(
-                modid=context["props"].modid,
-                base_dir=cls._id_base_dir(context["props"]),
-                path=values.pop("__path"),
-            )
-        }
+        try:
+            data = load_json_dict(path) | {"id": id}
+            return cls.model_validate(data, context=context)
+        except Exception as e:
+            e.add_note(f"File: {path}")
+            raise

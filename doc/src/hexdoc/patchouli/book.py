@@ -75,7 +75,8 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     @classmethod
     def prepare(cls, props: Properties) -> tuple[dict[str, Any], BookContext]:
         # read the raw dict from the json file
-        data = load_json_dict(props.book_path)
+        path = props.find_resource("data", "patchouli_books", props.book / "book")
+        data = load_json_dict(path)
 
         # set up the deserialization context object
         assert isinstance_or_raise(data["i18n"], bool)
@@ -124,8 +125,8 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
         self._categories: dict[ResourceLocation, Category] = Category.load_all(context)
 
         # load entries
-        for path in context["props"].entries_dir.rglob("*.json"):
-            entry = Entry.load(path, context)
+        for id, path in context["props"].find_book_assets("entries"):
+            entry = Entry.load(id, path, context)
             # i used the entry to insert the entry (pretty sure thanos said that)
             self._categories[entry.category_id].entries.append(entry)
 
