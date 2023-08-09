@@ -48,7 +48,6 @@ hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/s
 
 [i18n]
 default_lang = "en_us"
-filename = "{default_lang}.flatten.json5"
 
 [i18n.extra]
 "item.minecraft.amethyst_shard" = "Amethyst Shard"
@@ -76,11 +75,9 @@ regex = "{^_pattern_regex}"
 src = "../Common/src"
 package = "{src}/main/java/at/petrak/hexcasting"
 
-
 [_fabric]
 src = "../Fabric/src"
 package = "{src}/main/java/at/petrak/hexcasting/fabric"
-
 
 [_forge]
 src = "../Forge/src"

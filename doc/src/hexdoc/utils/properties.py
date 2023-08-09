@@ -39,7 +39,6 @@ class PlatformProps(XplatProps):
 
 class I18nProps(HexDocStripHiddenModel[Any]):
     default_lang: str
-    filename: str
     extra: dict[str, str] = Field(default_factory=dict)
     keys: dict[str, str] = Field(default_factory=dict)
 
@@ -130,26 +129,22 @@ class Properties(HexDocStripHiddenModel[Any]):
 
         For example:
         ```py
-        props.book = ResLoc("hexcasting", "thehexbook")
-        lang = "en_us"
-
         props.find_resources(
             type="assets",
-            folder="patchouli_books",
-            base_id=props.book / lang / "entries",
-            glob="**/*",
+            folder="lang",
+            base_id=ResLoc("*", "subdir"),
+            glob="*.flatten.json5",
         )
 
-        # [(hexcasting:basics/couldnt_cast, .../resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/basics/couldnt_cast.json)]
+        # [(hexcasting:en_us, .../resources/assets/hexcasting/lang/subdir/en_us.json)]
         ```
         """
 
-        # eg. assets/hexcasting/patchouli_books/thehexbook/en_us/entries
+        # eg. assets/*/lang/subdir
         base_path_stub = base_id.file_path_stub(type, folder, assume_json=False)
 
-        globs = [glob] if isinstance(glob, str) else glob
-
         # glob for json files if not provided
+        globs = [glob] if isinstance(glob, str) else glob
         for i in range(len(globs)):
             if not Path(globs[i]).suffix:
                 globs[i] += ".json"
@@ -159,22 +154,24 @@ class Properties(HexDocStripHiddenModel[Any]):
         for resource_dir in (
             reversed(self.resource_dirs) if reverse else self.resource_dirs
         ):
-            # eg. .../resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries
-            base_path = resource_dir / base_path_stub
+            # eg. .../resources/assets/*/lang/subdir
+            for base_path in resource_dir.glob(base_path_stub.as_posix()):
+                for glob_ in globs:
+                    # eg. .../resources/assets/hexcasting/lang/subdir/*.flatten.json5
+                    for path in base_path.glob(glob_):
+                        # only yield actual files
+                        if not path.is_file():
+                            continue
+                        found_any = True
 
-            # eg. .../resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/**/*.json
-            for glob_ in globs:
-                for path in base_path.glob(glob_):
-                    # only yield actual files
-                    if not path.is_file():
-                        continue
-                    found_any = True
+                        # determine the resource location of this file
+                        # eg. en_us.flatten.json5 -> hexcasting:en_us
+                        path_stub = path.relative_to(base_path)
+                        while path_stub.suffix:
+                            path_stub = path_stub.with_suffix("")
+                        id = ResourceLocation(base_id.namespace, path_stub.as_posix())
 
-                    # determine the resource location of this file
-                    path_stub = path.relative_to(base_path).with_suffix("")
-                    id = ResourceLocation(base_id.namespace, path_stub.as_posix())
-
-                    yield id, path
+                        yield id, path
 
         # if we never yielded any files, raise an error
         if not found_any:

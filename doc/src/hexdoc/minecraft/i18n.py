@@ -116,7 +116,7 @@ class I18n:
         for _, path in props.find_resources(
             type="assets",
             folder="lang",
-            base_id=props.mod_loc(""),
+            base_id=ResourceLocation("*", ""),
             glob=[
                 f"{props.i18n.default_lang}.json",
                 f"{props.i18n.default_lang}.json5",
