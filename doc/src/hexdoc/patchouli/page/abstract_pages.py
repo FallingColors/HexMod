@@ -6,11 +6,10 @@ from pydantic.functional_validators import ModelWrapValidatorHandler
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.utils import ResourceLocation, TypeTaggedUnion
 
-from ..book_models import AnyBookContext
 from ..text import FormatTree
 
 
-class Page(TypeTaggedUnion[AnyBookContext], group="hexdoc.Page", type=None):
+class Page(TypeTaggedUnion, group="hexdoc.Page", type=None):
     """Base class for Patchouli page types.
 
     See: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/page-types
@@ -26,7 +25,7 @@ class Page(TypeTaggedUnion[AnyBookContext], group="hexdoc.Page", type=None):
     def __init_subclass__(
         cls,
         *,
-        type: str | None,
+        type: str | None = None,  # FIXME:
         template_type: str | None = None,
     ) -> None:
         super().__init_subclass__(group=None, type=type)
@@ -52,9 +51,9 @@ class Page(TypeTaggedUnion[AnyBookContext], group="hexdoc.Page", type=None):
         return self.__template
 
 
-class PageWithText(Page[AnyBookContext], type=None):
+class PageWithText(Page, type=None):
     text: FormatTree | None = None
 
 
-class PageWithTitle(PageWithText[AnyBookContext], type=None):
+class PageWithTitle(PageWithText, type=None):
     title: LocalizedStr | None = None

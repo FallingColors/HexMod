@@ -1,16 +1,12 @@
-# pyright: reportPrivateUsage=false
-
-# from __future__ import annotations
-
 from collections import defaultdict
 from enum import Enum
-from typing import Any, ClassVar, Generator, Self, cast
+from typing import Any, ClassVar, Generator, Self
 
 from pkg_resources import iter_entry_points
 from pydantic import ValidationInfo, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from .model import AnyContext, HexDocModel
+from .model import HexDocModel
 from .resource import ResourceLocation
 
 
@@ -20,7 +16,7 @@ class NoValueType(Enum):
     _token = 0
 
 
-NoValue = NoValueType._token
+NoValue = NoValueType._token  # pyright: ignore[reportPrivateUsage]
 """A singleton (like None) representing the value of a nonexistent dict key."""
 
 TagValue = str | NoValueType
@@ -44,7 +40,7 @@ def load_entry_points(group: str):
             raise
 
 
-class InternallyTaggedUnion(HexDocModel[AnyContext]):
+class InternallyTaggedUnion(HexDocModel):
     """Implements [internally tagged unions](https://serde.rs/enum-representations.html#internally-tagged)
     using the [Registry pattern](https://charlesreid1.github.io/python-patterns-the-registry.html).
 
@@ -139,7 +135,7 @@ class InternallyTaggedUnion(HexDocModel[AnyContext]):
     @classmethod
     def _resolve_from_dict(
         cls,
-        data: dict[str, Any] | Self | Any,
+        value: Any,
         handler: ModelWrapValidatorHandler[Self],
         info: ValidationInfo,
     ) -> Self:
@@ -151,14 +147,13 @@ class InternallyTaggedUnion(HexDocModel[AnyContext]):
         tag_key = cls._tag_key_or_raise()
 
         # if it's already instantiated, just return it; otherwise ensure it's a dict
-        match data:
+        match value:
             case InternallyTaggedUnion():
-                return data
+                return value
             case dict():
-                # ew
-                data = cast(dict[str, Any], data)
+                data: dict[str, Any] = value
             case _:
-                return handler(data)
+                return handler(value)
 
         # don't infinite loop calling the same validator forever
         if "__resolved" in data:
@@ -177,10 +172,12 @@ class InternallyTaggedUnion(HexDocModel[AnyContext]):
         exceptions: list[Exception] = []
         matches: dict[type[Self], Self] = {}
 
-        context = cast(AnyContext | None, info.context)
         for inner_type in tag_types:
             try:
-                matches[inner_type] = inner_type.model_validate(data, context=context)
+                matches[inner_type] = inner_type.model_validate(
+                    data,
+                    context=info.context,
+                )
             except Exception as e:
                 exceptions.append(e)
 
@@ -200,14 +197,14 @@ class InternallyTaggedUnion(HexDocModel[AnyContext]):
                 )
 
 
-class TypeTaggedUnion(InternallyTaggedUnion[AnyContext], key="type", value=None):
+class TypeTaggedUnion(InternallyTaggedUnion, key="type", value=None):
     type: ResourceLocation | NoValueType | None
 
     def __init_subclass__(
         cls,
         *,
         group: str | None = None,
-        type: TagValue | None,
+        type: TagValue | None = None,  # FIXME: see pydantic/7171
     ) -> None:
         super().__init_subclass__(group=group, value=type)
         match type:

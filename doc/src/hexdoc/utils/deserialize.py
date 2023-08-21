@@ -1,6 +1,4 @@
-import logging
 import re
-from pathlib import Path
 from typing import Any, TypeGuard, TypeVar, get_origin
 
 import pyjson5
@@ -11,7 +9,6 @@ _T_cov = TypeVar("_T_cov", covariant=True)
 _DEFAULT_MESSAGE = "Expected any of {expected}, got {actual}: {value}"
 
 
-# there may well be a better way to do this but i don't know what it is
 def isinstance_or_raise(
     val: Any,
     class_or_tuple: type[_T] | tuple[type[_T], ...],
@@ -37,31 +34,35 @@ def isinstance_or_raise(
     return True
 
 
+def cast_or_raise(
+    val: Any,
+    class_or_tuple: type[_T] | tuple[type[_T], ...],
+    message: str = _DEFAULT_MESSAGE,
+) -> _T:
+    assert isinstance_or_raise(val, class_or_tuple, message)
+    return val
+
+
 JSONDict = dict[str, "JSONValue"]
 
 JSONValue = JSONDict | list["JSONValue"] | str | int | float | bool | None
 
 
-def load_json_dict(path: Path) -> JSONDict:
-    logging.getLogger(__name__).debug(f"Load json from {path}")
-    data = pyjson5.decode(path.read_text("utf-8"))
-    assert isinstance_or_raise(data, dict)
-    return data
+def decode_json_dict(data: str) -> JSONDict:
+    decoded = pyjson5.decode(data)
+    assert isinstance_or_raise(decoded, dict)
+    return decoded
 
 
 # implement pkpcpbp's flattening in python
 # https://github.com/gamma-delta/PKPCPBP/blob/786194a590f/src/main/java/at/petrak/pkpcpbp/filters/JsonUtil.java
-def load_and_flatten_json_dict(path: Path) -> dict[str, str]:
-    logging.getLogger(__name__).debug(f"Load and flatten json from {path}")
+def decode_and_flatten_json_dict(data: str) -> dict[str, str]:
+    # replace `\<LF>       foobar` with `\<LF>foobar`
+    data = re.sub(r"\\\n\s*", "\\\n", data)
 
-    # load file, replace `\<LF>       foobar` with `\<LF>foobar`
-    json_str = re.sub(r"\\\n\s*", "\\\n", path.read_text("utf-8"))
-
-    # decode json5 and flatten
-    data = pyjson5.decode(json_str)
-    assert isinstance_or_raise(data, JSONDict)
-
-    return _flatten_inner(data, "")
+    # decode and flatten
+    decoded = decode_json_dict(data)
+    return _flatten_inner(decoded, "")
 
 
 def _flatten_inner(obj: JSONDict, prefix: str) -> dict[str, str]:

@@ -6,15 +6,16 @@ import re
 from abc import ABC, abstractmethod
 from contextlib import nullcontext
 from enum import Enum, auto
-from typing import Any, Literal, Self, cast
+from typing import Literal, Self
 
-from pydantic import ValidationInfo, model_validator
+from pydantic import ValidationInfo, field_validator, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.minecraft.i18n import I18nContext
+from hexdoc.minecraft.i18n import I18n, I18nContext
 from hexdoc.utils import DEFAULT_CONFIG, HexDocModel, Properties, PropsContext
+from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.types import TryGetEnum
 
 from .html import HTMLElement, HTMLStream
@@ -107,11 +108,11 @@ ParagraphStyleType = Literal[SpecialStyleType.paragraph]
 ColorStyleType = Literal[SpecialStyleType.color]
 
 
-class Style(ABC, HexDocModel[Any], frozen=True):
+class Style(ABC, HexDocModel, frozen=True):
     type: CommandStyleType | FunctionStyleType | SpecialStyleType
 
     @staticmethod
-    def parse(style_str: str, props: Properties) -> Style | _CloseTag | str:
+    def parse(style_str: str, props: Properties, i18n: I18n) -> Style | _CloseTag | str:
         # direct text replacements
         if style_str in _REPLACEMENTS:
             return _REPLACEMENTS[style_str]
@@ -141,8 +142,8 @@ class Style(ABC, HexDocModel[Any], frozen=True):
             name, value = style_str.split(":", 1)
 
             # keys
-            if name == "k" and (key := props.i18n.keys.get(value)):
-                return key
+            if name == "k":
+                return str(i18n.localize_key(value))
 
             # all the other functions
             if style_type := FunctionStyleType.get(name):
@@ -242,15 +243,20 @@ class FunctionStyle(Style, frozen=True):
 
 # intentionally not inheriting from Style, because this is basically an implementation
 # detail of the parser and should not be returned or exposed anywhere
-class _CloseTag(HexDocModel[Any], frozen=True):
+class _CloseTag(HexDocModel, frozen=True):
     type: FunctionStyleType | BaseStyleType | ColorStyleType
 
 
 _FORMAT_RE = re.compile(r"\$\(([^)]*)\)")
 
 
-class FormatContext(I18nContext, PropsContext):
+class FormattingContext(I18nContext, PropsContext):
     macros: dict[str, str]
+
+    @field_validator("macros")
+    @classmethod
+    def _add_default_macros(cls, macros: dict[str, str]) -> dict[str, str]:
+        return DEFAULT_MACROS | macros
 
 
 @dataclass(config=DEFAULT_CONFIG)
@@ -259,7 +265,13 @@ class FormatTree:
     children: list[FormatTree | str]  # this can't be Self, it breaks Pydantic
 
     @classmethod
-    def format(cls, string: str, macros: dict[str, str], props: Properties) -> Self:
+    def format(
+        cls,
+        string: str,
+        macros: dict[str, str],
+        props: Properties,
+        i18n: I18n,
+    ) -> Self:
         # resolve macros
         # TODO: use ahocorasick? this feels inefficient
         old_string = None
@@ -280,7 +292,7 @@ class FormatTree:
             text_since_prev_style.append(leading_text)
             last_end = match.end()
 
-            match Style.parse(match[1], props):
+            match Style.parse(match[1], props, i18n):
                 case str(replacement):
                     # str means "use this instead of the original value"
                     text_since_prev_style.append(replacement)
@@ -335,10 +347,18 @@ class FormatTree:
         handler: ModelWrapValidatorHandler[Self],
         info: ValidationInfo,
     ):
-        context = cast(FormatContext, info.context)
-        if not context or isinstance(value, FormatTree):
+        if not info.context or isinstance(value, FormatTree):
             return handler(value)
+        context = cast_or_raise(info.context, FormattingContext)
 
         if isinstance(value, str):
-            value = context["i18n"].localize(value)
-        return cls.format(value.value, context["macros"], context["props"])
+            value = context.i18n.localize(value)
+        return cls.format(
+            value.value,
+            macros=context.macros,
+            props=context.props,
+            i18n=context.i18n,
+        )
+
+
+FormatTree._wrap_root

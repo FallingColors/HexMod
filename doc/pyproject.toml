@@ -13,42 +13,42 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "typing_extensions~=4.7.0",
-    "pydantic~=2.1.1",
-    "Jinja2~=3.1.2",
-    "pyjson5~=1.6.3",
+    "typing_extensions>=4.7.0",
+    "importlib_resources>=6.0.1",
+    "pydantic>=2.2.0",
+    "Jinja2>=3.1.2",
+    "pyjson5>=1.6.3",
 ]
 
 [project.optional-dependencies]
 dev = [
     "black==23.7.0",
     "isort==5.12.0",
-    "pytest~=7.3.1",
-    "syrupy~=4.0.2",
-    "pyright==1.1.318",
+    "pytest>=7.3.1",
+    "syrupy>=4.0.2",
     "hatchling",
 ]
 
 [project.scripts]
 hexdoc = "hexdoc.hexdoc:main"
 
-[project.entry-points."hexdoc.book_data"]
-"hexcasting:thehexbook" = "hexdoc._book_data"
+[project.entry-points."hexdoc.export"]
+hexcasting = "hexdoc._export:__resources__"
 
 [project.entry-points."hexdoc.Page"]
-hexdoc-patchouli = "hexdoc.patchouli.page.pages"
-hexdoc-hexcasting = "hexdoc.hexcasting.page.hex_pages"
+patchouli = "hexdoc.patchouli.page.pages"
+hexcasting = "hexdoc.hexcasting.page.hex_pages"
 
 [project.entry-points."hexdoc.Recipe"]
-hexdoc-minecraft = "hexdoc.minecraft.recipe.recipes"
-hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
+minecraft = "hexdoc.minecraft.recipe.recipes"
+hexcasting = "hexdoc.hexcasting.hex_recipes"
 
 [project.entry-points."hexdoc.ItemIngredient"]
-hexdoc-minecraft = "hexdoc.minecraft.recipe.ingredients"
-hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
+minecraft = "hexdoc.minecraft.recipe.ingredients"
+hexcasting = "hexdoc.hexcasting.hex_recipes"
 
 [project.entry-points."hexdoc.BrainsweepeeIngredient"]
-hexdoc-hexcasting = "hexdoc.hexcasting.hex_recipes"
+hexcasting = "hexdoc.hexcasting.hex_recipes"
 
 
 [tool.hatch.build]
@@ -76,8 +76,6 @@ combine_as_imports = true
 [tool.pyright]
 pythonVersion = "3.11"
 pythonPlatform = "All"
-
-include = ["src"]
 
 # mostly we use strict mode
 # but pyright doesn't allow decreasing error severity in strict mode

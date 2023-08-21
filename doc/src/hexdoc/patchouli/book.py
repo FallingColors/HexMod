@@ -1,28 +1,31 @@
-from importlib import resources
-from importlib.metadata import entry_points
-from typing import Any, Generic, Literal, Self, cast
+from typing import Any, Literal, Self
 
 from pydantic import Field, ValidationInfo, model_validator
 
 from hexdoc.minecraft import I18n, LocalizedStr
+from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.utils import (
-    AnyContext,
     Color,
     HexDocModel,
     ItemStack,
-    Properties,
+    LoaderContext,
+    ModResourceLoader,
     ResLoc,
     ResourceLocation,
 )
-from hexdoc.utils.deserialize import isinstance_or_raise, load_json_dict
+from hexdoc.utils.deserialize import cast_or_raise
 
-from .book_models import AnyBookContext, BookContext
 from .category import Category
 from .entry import Entry
-from .text import DEFAULT_MACROS, FormatTree
+from .text import FormatTree
+from .text.formatting import FormattingContext
 
 
-class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
+class BookContext(FormattingContext, LoaderContext):
+    pass
+
+
+class Book(HexDocModel):
     """Main Patchouli book class.
 
     Includes all data from book.json, categories/entries/pages, and i18n.
@@ -73,62 +76,44 @@ class Book(Generic[AnyContext, AnyBookContext], HexDocModel[AnyBookContext]):
     text_overflow_mode: Literal["overflow", "resize", "truncate"] | None = None
 
     @classmethod
-    def prepare(cls, props: Properties) -> tuple[dict[str, Any], BookContext]:
-        # read the raw dict from the json file
-        path = props.find_resource("data", "patchouli_books", props.book / "book")
-        data = load_json_dict(path)
-
-        # set up the deserialization context object
-        assert isinstance_or_raise(data["i18n"], bool)
-        assert isinstance_or_raise(data["macros"], dict)
-        context: BookContext = {
-            "props": props,
-            "i18n": I18n(props, data["i18n"]),
-            "macros": DEFAULT_MACROS | data["macros"],
-        }
-
-        return data, context
-
-    @classmethod
-    def load(cls, data: dict[str, Any], context: AnyBookContext) -> Self:
+    def load_all(cls, data: dict[str, Any], context: BookContext) -> Self:
         return cls.model_validate(data, context=context)
 
     @classmethod
-    def from_id(cls, book_id: ResourceLocation) -> Self:
-        # load the module for the given book id using the entry point
-        # TODO: this is untested because it needs to change for 0.11 anyway :/
-        books = entry_points(group="hexdoc.book_data")
-        book_module = books[str(book_id)].load()
-
-        # read and validate the actual data file
-        book_path = resources.files(book_module) / book_module.BOOK_DATA_PATH
-        return cls.model_validate_json(book_path.read_text("utf-8"))
+    def load_book_json(cls, loader: ModResourceLoader, id: ResourceLocation):
+        return loader.load_resource(
+            type="data",
+            folder="patchouli_books",
+            id=id / "book",
+        )
 
     @model_validator(mode="before")
     def _pre_root(cls, data: dict[str, Any], info: ValidationInfo) -> dict[str, Any]:
-        context = cast(AnyBookContext, info.context)
-        if not context:
+        if not info.context:
             return data
+        context = cast_or_raise(info.context, I18nContext)
 
         return data | {
-            "i18n_data": context["i18n"],
+            "i18n_data": context.i18n,
         }
 
     @model_validator(mode="after")
     def _post_root(self, info: ValidationInfo) -> Self:
         """Loads categories and entries."""
-        context = cast(AnyBookContext, info.context)
-        if not context:
+        if not info.context:
             return self
+        context = cast_or_raise(info.context, BookContext)
 
         # load categories
         self._categories: dict[ResourceLocation, Category] = Category.load_all(context)
 
         # load entries
-        for id, path in context["props"].find_book_assets("entries"):
-            entry = Entry.load(id, path, context)
+        for resource_dir, id, data in context.loader.load_book_assets("entries"):
+            entry = Entry.load(id, data, context)
+
             # i used the entry to insert the entry (pretty sure thanos said that)
-            self._categories[entry.category_id].entries.append(entry)
+            if not resource_dir.external:
+                self._categories[entry.category_id].entries.append(entry)
 
         # we inserted a bunch of entries in no particular order, so sort each category
         for category in self._categories.values():

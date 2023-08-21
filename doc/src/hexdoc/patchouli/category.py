@@ -3,15 +3,15 @@ from typing import Self
 from pydantic import Field
 
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.utils import ItemStack, ResourceLocation
+from hexdoc.utils import ItemStack, LoaderContext, ResourceLocation
 from hexdoc.utils.types import Sortable, sorted_dict
 
-from .book_models import BookContext, BookFileModel
+from ..utils.model import HexDocFileModel
 from .entry import Entry
 from .text import FormatTree
 
 
-class Category(BookFileModel[BookContext, BookContext], Sortable):
+class Category(HexDocFileModel, Sortable):
     """Category with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/category-json
@@ -32,12 +32,12 @@ class Category(BookFileModel[BookContext, BookContext], Sortable):
     secret: bool = False
 
     @classmethod
-    def load_all(cls, context: BookContext):
+    def load_all(cls, context: LoaderContext):
         categories: dict[ResourceLocation, Self] = {}
 
         # load
-        for id, path in context["props"].find_book_assets("categories"):
-            category = cls.load(id, path, context)
+        for _, id, data in context.loader.load_book_assets("categories"):
+            category = cls.load(id, data, context)
             categories[id] = category
 
         # late-init _parent_cmp_key

@@ -1,18 +1,19 @@
 from types import NoneType
-from typing import Any, cast
+from typing import Any
 
 from pydantic import ValidationInfo, model_validator
 
 from hexdoc.minecraft import LocalizedStr
+from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.patchouli.page import PageWithText
 from hexdoc.utils import ResourceLocation
+from hexdoc.utils.deserialize import cast_or_raise
 
-from ..hex_book import AnyHexContext, HexContext
 from ..pattern import RawPatternInfo
 
 
 # TODO: make anchor required (breaks because of Greater Sentinel)
-class PageWithPattern(PageWithText[AnyHexContext], type=None):
+class PageWithPattern(PageWithText, type=None):
     header: LocalizedStr
     patterns: list[RawPatternInfo]
     input: str | None = None
@@ -41,16 +42,16 @@ class PageWithPattern(PageWithText[AnyHexContext], type=None):
         return f"{self.header}{suffix}"
 
 
-class PageWithOpPattern(PageWithPattern[AnyHexContext], type=None):
+class PageWithOpPattern(PageWithPattern, type=None):
     op_id: ResourceLocation
 
     @model_validator(mode="before")
     def _pre_root_header(cls, values: dict[str, Any], info: ValidationInfo):
-        context = cast(HexContext, info.context)
-        if not context:
+        if not info.context:
             return values
+        context = cast_or_raise(info.context, I18nContext)
 
         # use the pattern name as the header
         return values | {
-            "header": context["i18n"].localize_pattern(values["op_id"]),
+            "header": context.i18n.localize_pattern(values["op_id"]),
         }

@@ -1,6 +1,7 @@
 import string
 from abc import ABC, abstractmethod
 from enum import Enum, unique
+from pathlib import Path
 from typing import Any, Mapping, Protocol, TypeVar
 
 from pydantic import field_validator, model_validator
@@ -38,7 +39,7 @@ class Color:
         return value
 
     @field_validator("value", mode="before")
-    def _check_value(cls, value: str | int | Any) -> str:
+    def _check_value(cls, value: Any) -> str:
         # type check
         match value:
             case str():
@@ -100,3 +101,9 @@ class TryGetEnum(Enum):
             return cls(value)
         except ValueError:
             return None
+
+
+def without_suffix(path: Path) -> Path:
+    while path.suffix:
+        path = path.with_suffix("")
+    return path

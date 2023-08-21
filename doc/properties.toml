@@ -8,6 +8,7 @@ is_0_black = false
 
 # top takes priority
 resource_dirs = [
+    { path = "src/hexdoc/_export/resources", reexport = false },
     "{_common.src}/main/resources",
     "{_common.src}/generated/resources",
     "{_fabric.src}/main/resources",
@@ -15,9 +16,10 @@ resource_dirs = [
     "{_forge.src}/main/resources",
     "{_forge.src}/generated/resources",
 ]
+export_dir = "src/hexdoc/_export/generated"
 
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
-_pattern_regex = {"!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)'}
+_pattern_regex = { "!Raw" = 'make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
 
 spoilered_advancements = [
     "hexcasting:opened_eyes",
@@ -48,16 +50,6 @@ hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/s
 
 [i18n]
 default_lang = "en_us"
-
-[i18n.extra]
-"item.minecraft.amethyst_shard" = "Amethyst Shard"
-"item.minecraft.budding_amethyst" = "Budding Amethyst"
-"block.hexcasting.slate" = "Blank Slate"
-
-[i18n.keys]
-use = "Right Click"
-sneak = "Left Shift"
-jump = "Space"
 
 
 [[pattern_stubs]]

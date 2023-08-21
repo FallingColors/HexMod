@@ -1,0 +1,16 @@
+{
+    key: {
+        use: "Right Click",
+        sneak: "Left Shift",
+        jump: "Space",
+    },
+
+    "item.minecraft": {
+        amethyst_shard: "Amethyst Shard",
+        budding_amethyst: "Budding Amethyst",
+    },
+
+    "block.hexcasting": {
+        slate: "Blank Slate",
+    },
+}

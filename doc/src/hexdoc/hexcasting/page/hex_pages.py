@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import Any
 
 from pydantic import ValidationInfo, model_validator
 
@@ -6,22 +6,23 @@ from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.recipe import CraftingRecipe
 from hexdoc.patchouli.page import PageWithText, PageWithTitle
 from hexdoc.utils import ResourceLocation
+from hexdoc.utils.deserialize import cast_or_raise
 
 from ..hex_book import HexContext
 from ..hex_recipes import BrainsweepRecipe
 from .abstract_hex_pages import PageWithOpPattern, PageWithPattern
 
 
-class LookupPatternPage(PageWithOpPattern[HexContext], type="hexcasting:pattern"):
+class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
     @model_validator(mode="before")
     def _pre_root_lookup(cls, values: dict[str, Any], info: ValidationInfo):
-        context = cast(HexContext, info.context)
-        if not context:
+        if not info.context:
             return values
+        context = cast_or_raise(info.context, HexContext)
 
         # look up the pattern from the op id
         op_id = ResourceLocation.from_str(values["op_id"])
-        pattern = context["patterns"][op_id]
+        pattern = context.patterns[op_id]
         return values | {
             "op_id": op_id,
             "patterns": [pattern],
@@ -29,21 +30,21 @@ class LookupPatternPage(PageWithOpPattern[HexContext], type="hexcasting:pattern"
 
 
 class ManualOpPatternPage(
-    PageWithOpPattern[HexContext],
+    PageWithOpPattern,
     type="hexcasting:manual_pattern",
 ):
     pass
 
 
 class ManualRawPatternPage(
-    PageWithPattern[HexContext],
+    PageWithPattern,
     type="hexcasting:manual_pattern",
 ):
     pass
 
 
 class ManualPatternNosigPage(
-    PageWithPattern[HexContext],
+    PageWithPattern,
     type="hexcasting:manual_pattern_nosig",
     template_type="hexcasting:manual_pattern",
 ):
@@ -51,10 +52,10 @@ class ManualPatternNosigPage(
     output: None = None
 
 
-class CraftingMultiPage(PageWithTitle[HexContext], type="hexcasting:crafting_multi"):
+class CraftingMultiPage(PageWithTitle, type="hexcasting:crafting_multi"):
     heading: LocalizedStr  # TODO: should this be renamed to header?
     recipes: list[CraftingRecipe]
 
 
-class BrainsweepPage(PageWithText[HexContext], type="hexcasting:brainsweep"):
+class BrainsweepPage(PageWithText, type="hexcasting:brainsweep"):
     recipe: BrainsweepRecipe

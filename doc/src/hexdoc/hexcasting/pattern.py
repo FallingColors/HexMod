@@ -28,7 +28,7 @@ class Direction(Enum):
 DirectionField = Annotated[Direction, BeforeValidator(Direction.validate)]
 
 
-class RawPatternInfo(HexDocModel[Any]):
+class RawPatternInfo(HexDocModel):
     startdir: DirectionField
     signature: str
     is_per_world: bool = False

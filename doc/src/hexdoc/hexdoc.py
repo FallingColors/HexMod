@@ -5,7 +5,7 @@ import sys
 from argparse import ArgumentParser
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Self, Sequence
+from typing import Any, Self, Sequence
 
 from jinja2 import (
     ChoiceLoader,
@@ -15,9 +15,13 @@ from jinja2 import (
     StrictUndefined,
 )
 
-from hexdoc.hexcasting import HexBook
+from hexdoc.hexcasting.hex_book import HexContext, load_patterns
+from hexdoc.minecraft.i18n import I18n
+from hexdoc.patchouli.book import Book
 from hexdoc.utils import Properties
 from hexdoc.utils.cd import cd
+from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.utils.resource_loader import ModResourceLoader
 
 from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
 
@@ -51,6 +55,7 @@ class Args:
         return cls(**vars(parser.parse_args(args)))
 
     def __post_init__(self):
+        # make paths absolute because we're cd'ing later
         self.properties_file = self.properties_file.resolve()
         if self.output_file:
             self.output_file = self.output_file.resolve()
@@ -83,7 +88,22 @@ def main(args: Args | None = None) -> None:
 
         # load the book
         props = Properties.load(args.properties_file)
-        book = HexBook.load(*HexBook.prepare(props))
+        with ModResourceLoader.load_all(props) as loader:
+            _, book_data = Book.load_book_json(loader, props.book)
+            book = Book.load_all(
+                book_data,
+                HexContext(
+                    props=props,
+                    loader=loader,
+                    i18n=I18n(
+                        props=props,
+                        loader=loader,
+                        enabled=cast_or_raise(book_data["i18n"], bool),
+                    ),
+                    macros=cast_or_raise(book_data["macros"], dict[Any, Any]),
+                    patterns=load_patterns(props),
+                ),
+            )
 
         # set up Jinja environment
         # TODO: SandboxedEnvironment

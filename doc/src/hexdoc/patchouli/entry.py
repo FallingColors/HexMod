@@ -1,16 +1,16 @@
-from typing import cast
-
 from pydantic import Field, ValidationInfo, model_validator
 
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.utils import Color, ItemStack, ResourceLocation
+from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.utils.properties import PropsContext
 from hexdoc.utils.types import Sortable
 
-from .book_models import BookContext, BookFileModel
+from ..utils.model import HexDocFileModel
 from .page.pages import Page
 
 
-class Entry(BookFileModel[BookContext, BookContext], Sortable):
+class Entry(HexDocFileModel, Sortable):
     """Entry json file, with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/entry-json
@@ -22,7 +22,7 @@ class Entry(BookFileModel[BookContext, BookContext], Sortable):
     name: LocalizedStr
     category_id: ResourceLocation = Field(alias="category")
     icon: ItemStack
-    pages: list[Page[BookContext]]
+    pages: list[Page]
 
     # optional (entry.json)
     advancement: ResourceLocation | None = None
@@ -43,12 +43,12 @@ class Entry(BookFileModel[BookContext, BookContext], Sortable):
 
     @model_validator(mode="after")
     def _check_is_spoiler(self, info: ValidationInfo):
-        context = cast(BookContext | None, info.context)
-        if not context or self.advancement is None:
+        if not info.context or self.advancement is None:
             return self
+        context = cast_or_raise(info.context, PropsContext)
 
         self.is_spoiler = any(
             self.advancement.match(spoiler)
-            for spoiler in context["props"].spoilered_advancements
+            for spoiler in context.props.spoilered_advancements
         )
         return self

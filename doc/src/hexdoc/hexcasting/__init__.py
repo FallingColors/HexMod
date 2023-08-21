@@ -1,7 +1,4 @@
 __all__ = [
-    "AnyHexContext",
-    "HexBook",
-    "HexBookType",
     "HexContext",
     "Direction",
     "PatternInfo",
@@ -9,5 +6,5 @@ __all__ = [
 ]
 
 
-from .hex_book import AnyHexContext, HexBook, HexBookType, HexContext
+from .hex_book import HexContext
 from .pattern import Direction, PatternInfo, RawPatternInfo

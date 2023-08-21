@@ -1,19 +1,35 @@
-# pyright: reportPrivateUsage=false
+# pyright: reportUnknownArgumentType=information, reportUnknownMemberType=information
 
 # this file is used by basically everything
-# so if it's in literally any namespace, everything fucking dies from circular deps
+# so if it's in literally any other place, everything fucking dies from circular deps
 # basically, just leave it here
 
-import re
-from fnmatch import fnmatch
-from pathlib import Path
-from typing import Any, ClassVar, Literal, Self
+from __future__ import annotations
 
-from pydantic import field_validator, model_serializer, model_validator
+import re
+from abc import ABC, abstractmethod
+from collections.abc import Iterator
+from contextlib import ExitStack, contextmanager
+from fnmatch import fnmatch
+from importlib import metadata
+from pathlib import Path
+from typing import Any, ClassVar, ContextManager, Iterable, Literal, Self
+
+import importlib_resources as resources
+from importlib_resources.abc import Traversable
+from pydantic import (
+    FieldValidationInfo,
+    field_validator,
+    model_serializer,
+    model_validator,
+)
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from .model import DEFAULT_CONFIG
+from .model import DEFAULT_CONFIG, HexDocModel
+
+HEXDOC_EXPORTS_GROUP = "hexdoc.exports"
+"""Entry point group name for bundled hexdoc data."""
 
 
 def _make_regex(count: bool = False, nbt: bool = False) -> re.Pattern[str]:
@@ -49,7 +65,7 @@ class BaseResourceLocation:
 
     @model_validator(mode="wrap")
     @classmethod
-    def _pre_root(cls, values: str | Any, handler: ModelWrapValidatorHandler[Self]):
+    def _pre_root(cls, values: Any, handler: ModelWrapValidatorHandler[Self]):
         # before validating the fields, if it's a string instead of a dict, convert it
         if isinstance(values, str):
             return cls.from_str(values)
@@ -85,6 +101,16 @@ class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
     @property
     def href(self) -> str:
         return f"#{self.path}"
+
+    def with_namespace(self, namespace: str):
+        """Returns a copy of this ResourceLocation with the given namespace."""
+        return ResourceLocation(namespace, self.path)
+
+    def with_path(self, path: str | Path):
+        """Returns a copy of this ResourceLocation with the given path."""
+        if isinstance(path, Path):
+            path = path.as_posix()
+        return ResourceLocation(self.namespace, path)
 
     def match(self, pattern: Self) -> bool:
         return fnmatch(str(self), str(pattern))
@@ -156,3 +182,102 @@ class Entity(BaseResourceLocation, regex=_make_regex(nbt=True)):
         if self.nbt is not None:
             s += self.nbt
         return s
+
+
+ResourceType = Literal["assets", "data"]
+
+
+class BaseResourceDir(HexDocModel, ABC):
+    external: bool
+    reexport: bool
+    """If not set, the default value will be `not self.external`.
+    
+    Must be defined AFTER `external` in the Pydantic model.
+    """
+
+    @abstractmethod
+    def load(self) -> ContextManager[Iterable[PathResourceDir]]:
+        ...
+
+    @field_validator("reexport", mode="before")
+    def _default_reexport(cls, value: Any, info: FieldValidationInfo):
+        if value is None and "external" in info.data:
+            return not info.data["external"]
+        return value
+
+
+class PathResourceDir(BaseResourceDir):
+    path: Path
+
+    # direct paths are probably from this mod
+    external: bool = False
+    reexport: bool = True
+
+    @contextmanager
+    def load(self):
+        yield [self]
+
+    @model_validator(mode="before")
+    def _pre_root(cls: Any, value: Any):
+        # treat plain strings as paths
+        if isinstance(value, str):
+            return {"path": value}
+        return value
+
+
+class EntryPointResourceDir(BaseResourceDir):
+    modid: str
+
+    # entry points are probably from other mods/packages
+    external: bool = True
+    reexport: bool = False
+
+    @contextmanager
+    def load(self):
+        with ExitStack() as stack:
+            # NOT "yield from"
+            yield [
+                PathResourceDir(
+                    path=stack.enter_context(resources.as_file(traversable)),
+                    external=self.external,
+                    reexport=self.reexport,
+                )
+                for traversable in self._load_traversables()
+            ]
+
+    def _load_traversables(self) -> Iterator[Traversable]:
+        entry_point = self._entry_point()
+        base_traversable = resources.files(entry_point.module)
+
+        match entry_point.load():
+            case str(stub) | Path(stub):
+                yield base_traversable / stub
+
+            case [*stubs]:
+                for stub in stubs:
+                    # this will probably give some vague error if stub isn't a StrPath
+                    yield base_traversable / stub
+
+            case value:
+                raise TypeError(
+                    f"Expected a string/path or sequence of strings/paths at {entry_point}, got {type(value)}: {value}"
+                )
+
+    def _entry_point(self) -> metadata.EntryPoint:
+        match metadata.entry_points(group=HEXDOC_EXPORTS_GROUP, name=self.modid):
+            case []:
+                # too cold
+                raise ModuleNotFoundError(
+                    f"No entry points found in group {HEXDOC_EXPORTS_GROUP} with name {self.modid}"
+                )
+            case [entry_point]:
+                # just right
+                return entry_point
+            case [*entry_points]:
+                # too hot
+                raise ImportError(
+                    f"Multiple entry points found in group {HEXDOC_EXPORTS_GROUP} with name {self.modid}: {entry_points}"
+                )
+
+
+ResourceDir = PathResourceDir | EntryPointResourceDir

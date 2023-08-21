@@ -1,22 +1,16 @@
-from typing import Any
-
-from hexdoc.utils import AnyContext, NoValue, ResourceLocation, TypeTaggedUnion
+from hexdoc.utils import NoValue, ResourceLocation, TypeTaggedUnion
 
 
-class ItemIngredient(
-    TypeTaggedUnion[AnyContext],
-    group="hexdoc.ItemIngredient",
-    type=None,
-):
+class ItemIngredient(TypeTaggedUnion, group="hexdoc.ItemIngredient", type=None):
     pass
 
 
-ItemIngredientOrList = ItemIngredient[AnyContext] | list[ItemIngredient[AnyContext]]
+ItemIngredientOrList = ItemIngredient | list[ItemIngredient]
 
 
-class MinecraftItemIdIngredient(ItemIngredient[Any], type=NoValue):
+class MinecraftItemIdIngredient(ItemIngredient, type=NoValue):
     item: ResourceLocation
 
 
-class MinecraftItemTagIngredient(ItemIngredient[Any], type=NoValue):
+class MinecraftItemTagIngredient(ItemIngredient, type=NoValue):
     tag: ResourceLocation

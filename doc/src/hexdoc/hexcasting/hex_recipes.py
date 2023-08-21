@@ -7,15 +7,12 @@ from hexdoc.minecraft.recipe import (
     MinecraftItemTagIngredient,
 )
 from hexdoc.utils import HexDocModel, ResourceLocation, TypeTaggedUnion
-from hexdoc.utils.model import AnyContext
-
-from .hex_book import HexContext
 
 # ingredients
 
 
 class BrainsweepeeIngredient(
-    TypeTaggedUnion[AnyContext],
+    TypeTaggedUnion,
     group="hexdoc.BrainsweepeeIngredient",
     type=None,
 ):
@@ -23,21 +20,21 @@ class BrainsweepeeIngredient(
 
 
 # lol, lmao
-class VillagerIngredient(BrainsweepeeIngredient[HexContext], type="villager"):
+class VillagerIngredient(BrainsweepeeIngredient, type="villager"):
     minLevel: int
     profession: ResourceLocation | None = None
     biome: ResourceLocation | None = None
 
 
-class EntityTypeIngredient(BrainsweepeeIngredient[HexContext], type="entity_type"):
+class EntityTypeIngredient(BrainsweepeeIngredient, type="entity_type"):
     entityType: ResourceLocation
 
 
-class EntityTagIngredient(BrainsweepeeIngredient[HexContext], type="entity_tag"):
+class EntityTagIngredient(BrainsweepeeIngredient, type="entity_tag"):
     tag: ResourceLocation
 
 
-class BlockStateIngredient(HexDocModel[HexContext]):
+class BlockStateIngredient(HexDocModel):
     # TODO: tagged union
     type: Literal["block"]
     block: ResourceLocation
@@ -50,7 +47,7 @@ _MinecraftItemIngredientOrList = (
 
 
 class ModConditionalIngredient(
-    ItemIngredient[HexContext],
+    ItemIngredient,
     type="hexcasting:mod_conditional",
 ):
     default: _MinecraftItemIngredientOrList
@@ -61,7 +58,7 @@ class ModConditionalIngredient(
 # results
 
 
-class BlockState(HexDocModel[HexContext]):
+class BlockState(HexDocModel):
     name: LocalizedItem
     properties: dict[str, Any] | None = None
 
@@ -69,8 +66,8 @@ class BlockState(HexDocModel[HexContext]):
 # recipes
 
 
-class BrainsweepRecipe(Recipe[HexContext], type="hexcasting:brainsweep"):
+class BrainsweepRecipe(Recipe, type="hexcasting:brainsweep"):
     blockIn: BlockStateIngredient
     cost: int
-    entityIn: BrainsweepeeIngredient[HexContext]
+    entityIn: BrainsweepeeIngredient
     result: BlockState

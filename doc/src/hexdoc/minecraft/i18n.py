@@ -1,30 +1,34 @@
 from __future__ import annotations
 
+import json
 from dataclasses import InitVar
 from functools import total_ordering
-from typing import Any, Callable, Self, cast
+from pathlib import Path
+from typing import Any, Callable, Self
 
 from pydantic import ValidationInfo, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
-from typing_extensions import TypedDict
 
 from hexdoc.utils import (
     DEFAULT_CONFIG,
     HexDocModel,
     ItemStack,
+    ModResourceLoader,
     Properties,
     ResourceLocation,
 )
-from hexdoc.utils.deserialize import isinstance_or_raise, load_and_flatten_json_dict
-
-
-class I18nContext(TypedDict):
-    i18n: I18n
+from hexdoc.utils.deserialize import (
+    cast_or_raise,
+    decode_and_flatten_json_dict,
+    isinstance_or_raise,
+)
+from hexdoc.utils.model import HexDocValidationContext
+from hexdoc.utils.types import without_suffix
 
 
 @total_ordering
-class LocalizedStr(HexDocModel[I18nContext]):
+class LocalizedStr(HexDocModel):
     """Represents a string which has been localized."""
 
     key: str
@@ -53,8 +57,8 @@ class LocalizedStr(HexDocModel[I18nContext]):
         if not isinstance(value, str):
             return handler(value)
 
-        context = cast(I18nContext, info.context)
-        return cls._localize(context["i18n"], value)
+        context = cast_or_raise(info.context, I18nContext)
+        return cls._localize(context.i18n, value)
 
     @classmethod
     def _localize(cls, i18n: I18n, key: str) -> Self:
@@ -98,11 +102,12 @@ class I18n:
     """Handles localization of strings."""
 
     props: InitVar[Properties]
+    loader: InitVar[ModResourceLoader]
     enabled: bool
 
     lookup: dict[str, LocalizedStr] | None = None
 
-    def __post_init__(self, props: Properties):
+    def __post_init__(self, props: Properties, loader: ModResourceLoader):
         # skip loading the files if we don't need to
         self.lookup = None
         if not self.enabled:
@@ -113,7 +118,7 @@ class I18n:
         # or maybe dict[(str, str), LocalizedStr]
         # we could also use that to ensure all i18n files have the same set of keys
         raw_lookup: dict[str, str] = {}
-        for _, path in props.find_resources(
+        for _, _, data in loader.load_resources(
             type="assets",
             folder="lang",
             base_id=ResourceLocation("*", ""),
@@ -123,15 +128,27 @@ class I18n:
                 f"{props.i18n.default_lang}.flatten.json",
                 f"{props.i18n.default_lang}.flatten.json5",
             ],
+            decode=decode_and_flatten_json_dict,
+            export=self._export,
         ):
-            raw_lookup |= load_and_flatten_json_dict(path)
-        raw_lookup |= props.i18n.extra
+            raw_lookup |= data
 
         # validate and insert
         self.lookup = {
             key: LocalizedStr(key=key, value=value.replace("%%", "%"))
             for key, value in raw_lookup.items()
         }
+
+    def _export(self, path: Path, value: dict[str, str]):
+        path = without_suffix(path).with_suffix(".json")
+
+        try:
+            current = decode_and_flatten_json_dict(path.read_text("utf-8"))
+        except FileNotFoundError:
+            current = {}
+
+        with path.open("w", encoding="utf-8") as f:
+            json.dump(current | value, f)
 
     def localize(self, *keys: str, default: str | None = None) -> LocalizedStr:
         """Looks up the given string in the lang table if i18n is enabled. Otherwise,
@@ -140,7 +157,7 @@ class I18n:
         If multiple keys are provided, returns the value of the first key which exists.
         That is, subsequent keys are treated as fallbacks for the first.
 
-        Raises KeyError if i18n is enabled and skip_errors is False but the key has no
+        Raises KeyError if i18n is enabled and default is None but the key has no
         corresponding localized value.
         """
 
@@ -190,3 +207,10 @@ class I18n:
             item.i18n_key(),
         )
         return LocalizedItem(key=localized.key, value=localized.value)
+
+    def localize_key(self, key: str) -> LocalizedStr:
+        return self.localize(f"key.{key}")
+
+
+class I18nContext(HexDocValidationContext):
+    i18n: I18n
