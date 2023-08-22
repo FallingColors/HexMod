@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.include.com.google.common.base.Strings;
+import com.google.common.base.Strings;
 
 /** Helper to limit usage for players in adventure mode
  * canUseLoose allows adventure-mode players to use a non-filtered version of the item
