@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.hexcasting.common.misc.AdventureHelper;
 import at.petrak.hexcasting.common.msgs.MsgClearSpiralPatternsS2C;
 import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -25,6 +26,9 @@ public class ItemStaff extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        if (!AdventureHelper.canUseLoose(player, player.getItemInHand(hand), world, player.position())) {
+            return InteractionResultHolder.success(player.getItemInHand(hand));
+        }
         if (player.isShiftKeyDown()) {
             if (world.isClientSide()) {
                 player.playSound(HexSounds.STAFF_RESET, 1f, 1f);
