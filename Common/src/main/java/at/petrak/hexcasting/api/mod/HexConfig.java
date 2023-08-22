@@ -27,6 +27,8 @@ public class HexConfig {
 
         int artifactCooldown();
 
+        double castingVolumeMultiplier();
+
         long DEFAULT_DUST_MEDIA_AMOUNT = MediaConstants.DUST_UNIT;
         long DEFAULT_SHARD_MEDIA_AMOUNT = MediaConstants.SHARD_UNIT;
         long DEFAULT_CHARGED_MEDIA_AMOUNT = MediaConstants.CRYSTAL_UNIT;
@@ -36,9 +38,11 @@ public class HexConfig {
         int DEFAULT_TRINKET_COOLDOWN = 5;
         int DEFAULT_ARTIFACT_COOLDOWN = 3;
 
+        double DEFAULT_CASTING_VOLUME_MULTIPLIER = 0.05;
     }
 
     public interface ClientConfigAccess {
+
         boolean ctrlTogglesOffStrokeOrder();
 
         boolean invertSpellbookScrollDirection();
@@ -54,6 +58,7 @@ public class HexConfig {
     }
 
     public interface ServerConfigAccess {
+
         int opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort();
 
         int maxOpCount();

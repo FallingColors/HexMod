@@ -20,6 +20,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     private static ForgeConfigSpec.IntValue trinketCooldown;
     private static ForgeConfigSpec.IntValue artifactCooldown;
 
+    private static ForgeConfigSpec.DoubleValue castingVolumeMultiplier;
+
     public ForgeHexConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Media Amounts");
         dustMediaAmount = builder.comment("How much media a single Amethyst Dust item is worth")
@@ -40,6 +42,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         artifactCooldown = builder.comment("Cooldown in ticks of a artifact")
             .defineInRange("artifactCooldown", DEFAULT_ARTIFACT_COOLDOWN, 0, Integer.MAX_VALUE);
         builder.pop();
+
+        castingVolumeMultiplier = builder.comment(
+                        "Multiplier for casting sounds made by circles, staff casting and casting items")
+                .defineInRange("castingVolumeMultiplier", DEFAULT_CASTING_VOLUME_MULTIPLIER, 0.0, 1.0);
     }
 
     @Override
@@ -75,6 +81,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     @Override
     public int artifactCooldown() {
         return artifactCooldown.get();
+    }
+
+    @Override
+    public double castingVolumeMultiplier() {
+        return castingVolumeMultiplier.get();
     }
 
     public static class Client implements HexConfig.ClientConfigAccess {

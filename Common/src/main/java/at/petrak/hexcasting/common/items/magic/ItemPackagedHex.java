@@ -7,8 +7,10 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.item.HexHolderItem;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.misc.AdventureHelper;
 import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.nbt.CompoundTag;
@@ -122,6 +124,10 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
             return InteractionResultHolder.success(stack);
         }
 
+        if (AdventureHelper.canUseLoose(player, stack, world, player.position())) {
+            return InteractionResultHolder.success(stack);
+        }
+
         List<Iota> instrs = getHex(stack, (ServerLevel) world);
         if (instrs == null) {
             return InteractionResultHolder.fail(stack);
@@ -162,7 +168,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         if (sound != null) {
             var soundPos = sPlayer.position();
             sPlayer.level().playSound(null, soundPos.x, soundPos.y, soundPos.z,
-                    sound, SoundSource.PLAYERS, 1f, 1f);
+                    sound, SoundSource.PLAYERS, (float) HexConfig.common().castingVolumeMultiplier(), 1f);
         }
 
         if (broken) {

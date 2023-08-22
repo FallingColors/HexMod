@@ -79,7 +79,7 @@ public class CircleCastEnv extends CastingEnvironment {
         var sound = result.getSound().sound();
         if (sound != null) {
             var soundPos = this.execState.currentPos;
-            this.world.playSound(null, soundPos, sound, SoundSource.PLAYERS, 1f, 1f);
+            this.world.playSound(null, soundPos, sound, SoundSource.PLAYERS, (float) HexConfig.common().castingVolumeMultiplier(), 1f);
         }
 
         // TODO: this is gonna bite us in the bum someday

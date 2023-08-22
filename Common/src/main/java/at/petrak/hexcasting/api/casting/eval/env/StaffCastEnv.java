@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.msgs.*;
@@ -47,7 +48,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
         if (sound != null) {
             var soundPos = this.caster.position();
             this.world.playSound(null, soundPos.x, soundPos.y, soundPos.z,
-                sound, SoundSource.PLAYERS, 1f, 1f);
+                sound, SoundSource.PLAYERS, (float) HexConfig.common().castingVolumeMultiplier(), 1f);
         }
     }
 

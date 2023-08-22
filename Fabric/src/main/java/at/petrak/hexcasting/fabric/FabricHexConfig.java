@@ -77,6 +77,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private int artifactCooldown = DEFAULT_ARTIFACT_COOLDOWN;
 
+        @ConfigEntry.Gui.Tooltip
+        private double castingVolumeMultiplier = DEFAULT_CASTING_VOLUME_MULTIPLIER;
+
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -119,6 +122,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public int artifactCooldown() {
             return artifactCooldown;
+        }
+
+        @Override
+        public double castingVolumeMultiplier() {
+            return castingVolumeMultiplier;
         }
     }
 
