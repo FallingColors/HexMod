@@ -32,7 +32,7 @@ class Args:
 
     properties_file: Path
     output_file: Path | None
-    verbose: bool
+    verbose: int
     ci: bool
 
     @classmethod
@@ -41,7 +41,7 @@ class Args:
 
         parser.add_argument("properties_file", type=Path)
         parser.add_argument("--output_file", "-o", type=Path)
-        parser.add_argument("--verbose", "-v", action="store_true")
+        parser.add_argument("--verbose", "-v", action="count", default=0)
         parser.add_argument("--ci", action="store_true")
 
         return cls(**vars(parser.parse_args(args)))
@@ -54,6 +54,16 @@ class Args:
 
         if self.ci and os.getenv("RUNNER_DEBUG") == "1":
             self.verbose = True
+
+    @property
+    def log_level(self) -> int:
+        match self.verbose:
+            case 0:
+                return logging.WARNING
+            case 1:
+                return logging.INFO
+            case _:
+                return logging.DEBUG
 
 
 def main(args: Args | None = None) -> None:
@@ -72,11 +82,8 @@ def main(args: Args | None = None) -> None:
         logging.basicConfig(
             style="{",
             format="\033[1m[{relativeCreated:.02f} | {levelname} | {name}]\033[0m {message}",
+            level=args.log_level,
         )
-        logger = logging.getLogger(__name__)
-        if args.verbose:
-            logging.getLogger().setLevel(logging.DEBUG)
-            logger.debug("Log level set to DEBUG")
 
         # load the book
         props = Properties.load(args.properties_file)

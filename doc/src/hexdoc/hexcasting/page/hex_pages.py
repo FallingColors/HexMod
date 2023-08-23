@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Self
 
 from pydantic import ValidationInfo, model_validator
 
@@ -31,6 +31,12 @@ class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
                 }
             case _:
                 return values
+
+    @model_validator(mode="after")
+    def _check_anchor(self) -> Self:
+        if str(self.op_id) != self.anchor:
+            raise ValueError(f"op_id={self.op_id} does not equal anchor={self.anchor}")
+        return self
 
 
 class ManualOpPatternPage(

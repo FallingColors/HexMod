@@ -599,9 +599,7 @@
 
         append: "Integration Distillation",
         unappend: "Derivation Distillation",
-        concat: "Combination Distillation",
         index: "Selection Distillation",
-        list_size: "Abacus Purification",
         singleton: "Single's Purification",
         empty_list: "Vacant Reflection",
         reverse: "Retrograde Purification",
@@ -1604,7 +1602,7 @@
         numlist: "Set operations are odd, in that some of them can accept two numbers or two lists, but not a combination thereof. Such arguments will be written as \"(num, num)|(list, list)\".$(br2)When numbers are used in those operations, they are being used as so-called binary \"bitsets\", lists of 1 and 0, true and false, \"on\" and \"off\".",
 
         "or.1": "Unifies two sets.",
-        "or.2": "As such:$(li)With two numbers at the top of the stack, combines them into a bitset containing every \"on\" bit in either bitset.$(li)With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to $(l:patterns/lists#hexcasting:concat)$(action)Combination Distillation/$.",
+        "or.2": "As such:$(li)With two numbers at the top of the stack, combines them into a bitset containing every \"on\" bit in either bitset.$(li)With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to $(l:patterns/lists#hexcasting:add)$(action)Combination Distillation/$.",
 
         "and.1": "Takes the intersection of two sets.",
         "and.2": "As such:$(li)With two numbers at the top of the stack, combines them into a bitset containing every \"on\" bit present in $(italics)both/$ bitsets.$(li)With two lists, this creates a list of every element from the first list that is also in the second list.",
@@ -1709,10 +1707,10 @@
         slice: "Remove the two numbers at the top of the stack, then take a sublist of the list at the top of the stack between those indices, lower bound inclusive, upper bound exclusive. For example, the 0, 2 sublist of [0, 1, 2, 3, 4] would be [0, 1].",
         append: "Remove the top of the stack, then add it to the end of the list at the top of the stack.",
         unappend: "Remove the iota on the end of the list at the top of the stack, and add it to the top of the stack.",
-        concat: "Remove the list at the top of the stack, then add all its elements to the end of the list at the top of the stack.",
+        add: "Remove the list at the top of the stack, then add all its elements to the end of the list at the top of the stack.",
         empty_list: "Push an empty list to the top of the stack.",
         singleton: "Remove the top of the stack, then push a list containing only that element.",
-        list_size: "Remove the list at the top of the stack, then push the number of elements in the list to the stack.",
+        abs: "Remove the list at the top of the stack, then push the number of elements in the list to the stack.",
         reverse: "Reverse the list at the top of the stack.",
         index_of: "Remove the iota at the top of the stack, then replace the list at the top with the first index of that iota within the list (starting from 0). Replaces the list with -1 if the iota doesn't exist in the list.",
         remove_from: "Remove the number at the top of the stack, then remove the nth element of the list at the top of the stack (where n is the number you removed).",

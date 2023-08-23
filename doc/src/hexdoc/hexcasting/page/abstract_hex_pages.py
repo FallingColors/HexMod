@@ -12,7 +12,6 @@ from hexdoc.utils.deserialize import cast_or_raise
 from ..pattern import RawPatternInfo
 
 
-# TODO: make anchor required (breaks because of Greater Sentinel)
 class PageWithPattern(PageWithText, type=None):
     header: LocalizedStr
     patterns: list[RawPatternInfo]
@@ -44,6 +43,7 @@ class PageWithPattern(PageWithText, type=None):
 
 class PageWithOpPattern(PageWithPattern, type=None):
     op_id: ResourceLocation
+    anchor: str
 
     @model_validator(mode="before")
     def _pre_root_header(cls, values: Any, info: ValidationInfo):

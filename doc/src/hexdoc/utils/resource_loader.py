@@ -202,7 +202,9 @@ class ModResourceLoader:
         if not path.is_file():
             raise FileNotFoundError(path)
 
-        logging.getLogger(__name__).debug(f"Loading {path}")
+        logger = logging.getLogger(__name__)
+        logger.info(f"Loading {path}")
+
         data = path.read_text("utf-8")
         value = decode(data)
 
@@ -210,7 +212,7 @@ class ModResourceLoader:
             out_path = self.props.export_dir / path.relative_to(resource_dir.path)
             out_path.parent.mkdir(parents=True, exist_ok=True)
 
-            logging.getLogger(__name__).debug(f"Exporting {path} to {out_path}")
+            logger.debug(f"Exporting {path} to {out_path}")
             match export:
                 case None:
                     out_data = data

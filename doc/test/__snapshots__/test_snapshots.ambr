@@ -3762,9 +3762,9 @@
         <p>Remove the iota on the end of the list at the top of the stack, and add it to the top of the stack.</p>
     </div>
   <br />
-    <div id="patterns/lists@hexcasting:concat">
+    <div id="patterns/lists@hexcasting:add">
   <h4 class="pattern-title">Additive Distillation (list, list → list)<a
-      href="#patterns/lists@hexcasting:concat"
+      href="#patterns/lists@hexcasting:add"
       class="permalink small"
       title="Permalink"
     ><i class="bi bi-link-45deg"></i></a></h4>
@@ -3822,9 +3822,9 @@
         <p>Remove the top of the stack, then push a list containing only that element.</p>
     </div>
   <br />
-    <div id="patterns/lists@hexcasting:list_size">
+    <div id="patterns/lists@hexcasting:abs">
   <h4 class="pattern-title">Length Purification (list → num)<a
-      href="#patterns/lists@hexcasting:list_size"
+      href="#patterns/lists@hexcasting:abs"
       class="permalink small"
       title="Permalink"
     ><i class="bi bi-link-45deg"></i></a></h4>
@@ -4530,7 +4530,7 @@
         <p>Unifies two sets.</p>
     </div>
   <br />
-      <p>As such:</p><p class='fake-li'>With two numbers at the top of the stack, combines them into a bitset containing every &#34;on&#34; bit in either bitset.</p><p class='fake-li'>With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to <a href='#patterns/lists@hexcasting:concat'><span style='color: #fc77be'>Combination Distillation</span></a>.</p>
+      <p>As such:</p><p class='fake-li'>With two numbers at the top of the stack, combines them into a bitset containing every &#34;on&#34; bit in either bitset.</p><p class='fake-li'>With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to <a href='#patterns/lists@hexcasting:add'><span style='color: #fc77be'>Combination Distillation</span></a>.</p>
   <br />
     <div id="patterns/sets@hexcasting:and">
   <h4 class="pattern-title">Conjunction Distillation ((num, num)|(list, list) → num|list)<a
@@ -5943,7 +5943,12 @@
       class="permalink small"
       title="Permalink"
     ><i class="bi bi-link-45deg"></i></a></h3>
-    <h4 class="pattern-title">Summon Greater Sentinel (vector →)</h4>
+    <div id="patterns/great_spells/greater_sentinel@hexcasting:sentinel/create/great">
+  <h4 class="pattern-title">Summon Greater Sentinel (vector →)<a
+      href="#patterns/great_spells/greater_sentinel@hexcasting:sentinel/create/great"
+      class="permalink small"
+      title="Permalink"
+    ><i class="bi bi-link-45deg"></i></a></h4>
     <details class="spell-collapsible">
       <summary class="collapse-spell"></summary>
         <canvas
@@ -5956,6 +5961,7 @@
         >Your browser does not support visualizing patterns. Pattern code: waeawaeqqqwqwqqwq</canvas>
     </details>
         <p>Summon a greater version of my <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>Sentinel</span></a>. Costs about two <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a>.</p>
+    </div>
   <br />
       <p>The stronger <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>sentinel</span></a> acts like the normal one I can summon without the use of a Great Spell, if a little more visually interesting. However, the range in which my spells can work is extended to a small region around my greater <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>sentinel</span></a>, about 16 blocks. In other words, no matter where in the world I am, I can interact with things around my <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>sentinel</span></a> (the mysterious forces of chunkloading notwithstanding).</p>
   <br />
@@ -9794,9 +9800,9 @@
         <p>Remove the iota on the end of the list at the top of the stack, and add it to the top of the stack.</p>
     </div>
   <br />
-    <div id="patterns/lists@hexcasting:concat">
+    <div id="patterns/lists@hexcasting:add">
   <h4 class="pattern-title">Additive Distillation (list, list → list)<a
-      href="#patterns/lists@hexcasting:concat"
+      href="#patterns/lists@hexcasting:add"
       class="permalink small"
       title="Permalink"
     ><i class="bi bi-link-45deg"></i></a></h4>
@@ -9854,9 +9860,9 @@
         <p>Remove the top of the stack, then push a list containing only that element.</p>
     </div>
   <br />
-    <div id="patterns/lists@hexcasting:list_size">
+    <div id="patterns/lists@hexcasting:abs">
   <h4 class="pattern-title">Length Purification (list → num)<a
-      href="#patterns/lists@hexcasting:list_size"
+      href="#patterns/lists@hexcasting:abs"
       class="permalink small"
       title="Permalink"
     ><i class="bi bi-link-45deg"></i></a></h4>
@@ -10562,7 +10568,7 @@
         <p>Unifies two sets.</p>
     </div>
   <br />
-      <p>As such:</p><p class='fake-li'>With two numbers at the top of the stack, combines them into a bitset containing every &#34;on&#34; bit in either bitset.</p><p class='fake-li'>With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to <a href='#patterns/lists@hexcasting:concat'><span style='color: #fc77be'>Combination Distillation</span></a>.</p>
+      <p>As such:</p><p class='fake-li'>With two numbers at the top of the stack, combines them into a bitset containing every &#34;on&#34; bit in either bitset.</p><p class='fake-li'>With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to <a href='#patterns/lists@hexcasting:add'><span style='color: #fc77be'>Combination Distillation</span></a>.</p>
   <br />
     <div id="patterns/sets@hexcasting:and">
   <h4 class="pattern-title">Conjunction Distillation ((num, num)|(list, list) → num|list)<a
@@ -11975,7 +11981,12 @@
       class="permalink small"
       title="Permalink"
     ><i class="bi bi-link-45deg"></i></a></h3>
-    <h4 class="pattern-title">Summon Greater Sentinel (vector →)</h4>
+    <div id="patterns/great_spells/greater_sentinel@hexcasting:sentinel/create/great">
+  <h4 class="pattern-title">Summon Greater Sentinel (vector →)<a
+      href="#patterns/great_spells/greater_sentinel@hexcasting:sentinel/create/great"
+      class="permalink small"
+      title="Permalink"
+    ><i class="bi bi-link-45deg"></i></a></h4>
     <details class="spell-collapsible">
       <summary class="collapse-spell"></summary>
         <canvas
@@ -11988,6 +11999,7 @@
         >Your browser does not support visualizing patterns. Pattern code: waeawaeqqqwqwqqwq</canvas>
     </details>
         <p>Summon a greater version of my <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>Sentinel</span></a>. Costs about two <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a>.</p>
+    </div>
   <br />
       <p>The stronger <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>sentinel</span></a> acts like the normal one I can summon without the use of a Great Spell, if a little more visually interesting. However, the range in which my spells can work is extended to a small region around my greater <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>sentinel</span></a>, about 16 blocks. In other words, no matter where in the world I am, I can interact with things around my <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>sentinel</span></a> (the mysterious forces of chunkloading notwithstanding).</p>
   <br />
@@ -15828,9 +15840,9 @@
             <p>Remove the iota on the end of the list at the top of the stack, and add it to the top of the stack.</p>
         </div>
       <br />
-        <div id="patterns/lists@hexcasting:concat">
+        <div id="patterns/lists@hexcasting:add">
       <h4 class="pattern-title">Additive Distillation (list, list → list)<a
-          href="#patterns/lists@hexcasting:concat"
+          href="#patterns/lists@hexcasting:add"
           class="permalink small"
           title="Permalink"
         ><i class="bi bi-link-45deg"></i></a></h4>
@@ -15888,9 +15900,9 @@
             <p>Remove the top of the stack, then push a list containing only that element.</p>
         </div>
       <br />
-        <div id="patterns/lists@hexcasting:list_size">
+        <div id="patterns/lists@hexcasting:abs">
       <h4 class="pattern-title">Length Purification (list → num)<a
-          href="#patterns/lists@hexcasting:list_size"
+          href="#patterns/lists@hexcasting:abs"
           class="permalink small"
           title="Permalink"
         ><i class="bi bi-link-45deg"></i></a></h4>
@@ -16596,7 +16608,7 @@
             <p>Unifies two sets.</p>
         </div>
       <br />
-          <p>As such:</p><p class='fake-li'>With two numbers at the top of the stack, combines them into a bitset containing every &#34;on&#34; bit in either bitset.</p><p class='fake-li'>With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to <a href='#patterns/lists@hexcasting:concat'><span style='color: #fc77be'>Combination Distillation</span></a>.</p>
+          <p>As such:</p><p class='fake-li'>With two numbers at the top of the stack, combines them into a bitset containing every &#34;on&#34; bit in either bitset.</p><p class='fake-li'>With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to <a href='#patterns/lists@hexcasting:add'><span style='color: #fc77be'>Combination Distillation</span></a>.</p>
       <br />
         <div id="patterns/sets@hexcasting:and">
       <h4 class="pattern-title">Conjunction Distillation ((num, num)|(list, list) → num|list)<a
@@ -18009,7 +18021,12 @@
           class="permalink small"
           title="Permalink"
         ><i class="bi bi-link-45deg"></i></a></h3>
-        <h4 class="pattern-title">Summon Greater Sentinel (vector →)</h4>
+        <div id="patterns/great_spells/greater_sentinel@hexcasting:sentinel/create/great">
+      <h4 class="pattern-title">Summon Greater Sentinel (vector →)<a
+          href="#patterns/great_spells/greater_sentinel@hexcasting:sentinel/create/great"
+          class="permalink small"
+          title="Permalink"
+        ><i class="bi bi-link-45deg"></i></a></h4>
         <details class="spell-collapsible">
           <summary class="collapse-spell"></summary>
             <canvas
@@ -18022,6 +18039,7 @@
             >Your browser does not support visualizing patterns. Pattern code: waeawaeqqqwqwqqwq</canvas>
         </details>
             <p>Summon a greater version of my <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>Sentinel</span></a>. Costs about two <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a>.</p>
+        </div>
       <br />
           <p>The stronger <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>sentinel</span></a> acts like the normal one I can summon without the use of a Great Spell, if a little more visually interesting. However, the range in which my spells can work is extended to a small region around my greater <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>sentinel</span></a>, about 16 blocks. In other words, no matter where in the world I am, I can interact with things around my <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>sentinel</span></a> (the mysterious forces of chunkloading notwithstanding).</p>
       <br />
