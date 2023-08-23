@@ -46,10 +46,6 @@ class Properties(HexDocStripHiddenModel):
     book: ResourceLocation
     url: NoTrailingSlashHttpUrl
 
-    is_0_black: bool
-    """If true, the style `$(0)` changes the text color to black; otherwise it resets
-    the text color to the default."""
-
     resource_dirs: list[ResourceDir]
     export_dir: Path
 
@@ -58,6 +54,10 @@ class Properties(HexDocStripHiddenModel):
     template: str
     template_dirs: list[Path]
     template_packages: list[tuple[str, Path]]
+
+    is_0_black: bool
+    """If true, the style `$(0)` changes the text color to black; otherwise it resets
+    the text color to the default."""
 
     template_args: dict[str, Any]
 

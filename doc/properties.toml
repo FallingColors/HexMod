@@ -4,8 +4,6 @@ modid = "hexcasting"
 book = "hexcasting:thehexbook"
 url = "https://gamma-delta.github.io/HexMod"
 
-is_0_black = false
-
 # top takes priority
 resource_dirs = [
     { path = "src/hexdoc/_export/resources", reexport = false },
@@ -26,6 +24,8 @@ entry_id_blacklist = []
 template = "main.html.jinja"
 template_dirs = []
 template_packages = []
+
+is_0_black = false
 
 
 [template_args]
