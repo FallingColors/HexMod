@@ -18,7 +18,7 @@ TagValue = ResourceLocation | OptionalTagValue
 
 class Tag(HexDocModel):
     registry: str = Field(exclude=True)
-    values: set[TagValue]
+    raw_values: set[TagValue] = Field(alias="values")
     replace: bool
 
     @classmethod
@@ -52,8 +52,11 @@ class Tag(HexDocModel):
         )
 
     @property
-    def unwrapped_values(self) -> Iterator[ResourceLocation]:
-        for value in self.values:
+    def values(self) -> set[ResourceLocation]:
+        return set(self.iter_values())
+
+    def iter_values(self) -> Iterator[ResourceLocation]:
+        for value in self.raw_values:
             match value:
                 case ResourceLocation():
                     yield value
@@ -64,11 +67,14 @@ class Tag(HexDocModel):
         if self.replace or current is None:
             return self.model_dump_json()
 
-        merged = self.model_copy(update={"values": current.values | self.values})
-        return merged.model_dump_json()
+        return self.model_copy(
+            update={
+                "raw_values": current.raw_values | self.raw_values,
+            },
+        ).model_dump_json()
 
     def _load_values(self, context: LoaderContext) -> Iterator[TagValue]:
-        for value in self.values:
+        for value in self.raw_values:
             match value:
                 case (
                     (ResourceLocation() as child_id) | OptionalTagValue(id=child_id)

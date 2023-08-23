@@ -5674,7 +5674,7 @@
           height="216"
           data-string="eaqawqadaqd"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: eaqawqadaqd</canvas>
     </details>
         <p>Summon a block of lava (or insert up to a bucket&#39;s worth) into a block at the given position. Costs about one <a href='#items/amethyst'><span style='color: #b0b'>Charged Amethyst</span></a>.</p>
@@ -5709,7 +5709,7 @@
           height="216"
           data-string="qqqqaawawaedd"
           data-start="north_west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qqqqaawawaedd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>regeneration</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per second.</p>
@@ -5729,7 +5729,7 @@
           height="216"
           data-string="qqqaawawaeqdd"
           data-start="west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qqqaawawaeqdd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>night vision</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per 5 seconds.</p>
@@ -5749,7 +5749,7 @@
           height="216"
           data-string="qqaawawaeqqdd"
           data-start="south_west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qqaawawaeqqdd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>absorption</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per second.</p>
@@ -5769,7 +5769,7 @@
           height="216"
           data-string="qaawawaeqqqdd"
           data-start="south_east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qaawawaeqqqdd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>haste</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per 3 seconds.</p>
@@ -5789,7 +5789,7 @@
           height="216"
           data-string="aawawaeqqqqdd"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: aawawaeqqqqdd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>strength</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per 3 seconds.</p>
@@ -5820,7 +5820,7 @@
           height="216"
           data-string="waadwawdaaweewq"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: waadwawdaaweewq</canvas>
     </details>
         <p>I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it. Costs about three <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Shards</span></a>.</p>
@@ -5840,7 +5840,7 @@
           height="216"
           data-string="wwweeewwweewdawdwad"
           data-start="west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: wwweeewwweewdawdwad</canvas>
     </details>
         <p>I control the clouds! This spell will summon rain across the world I cast it upon. Costs about one <a href='#items/amethyst'><span style='color: #b0b'>Charged Amethyst</span></a>. Does nothing if it is already raining.</p>
@@ -5860,7 +5860,7 @@
           height="216"
           data-string="eeewwweeewwaqqddqdqd"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: eeewwweeewwaqqddqdqd</canvas>
     </details>
         <p>A counterpart to summoning rain. This spell will dispel rain across the world I cast it upon. Costs about one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Shard</span></a>. Does nothing if the skies are already clear.</p>
@@ -5891,7 +5891,7 @@
           height="216"
           data-string="eawwaeawawaa"
           data-start="north_west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: eawwaeawawaa</canvas>
     </details>
         <p>Summon a sheaf of <span style='color: #74b3f2'>media</span> about me in the shape of wings, endowed with enough substance to allow gliding.</p>
@@ -5924,7 +5924,7 @@
           height="216"
           data-string="wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq</canvas>
     </details>
         <p>Far more powerful than <a href='#patterns/spells/basic@hexcasting:blink'><span style='color: #fc77be'>Blink</span></a>, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is <i>much</i> greater than the normal radius of influence I am used to.</p>
@@ -5952,7 +5952,7 @@
           height="216"
           data-string="waeawaeqqqwqwqqwq"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: waeawaeqqqwqwqqwq</canvas>
     </details>
         <p>Summon a greater version of my <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>Sentinel</span></a>. Costs about two <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a>.</p>
@@ -5984,7 +5984,7 @@
           height="216"
           data-string="aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw"
           data-start="south_west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw</canvas>
     </details>
         <p>Infuse a bottle with <span style='color: #74b3f2'>media</span> to form a <a href='#items/phials'><span style='color: #b0b'>Phial.</span></a></p>
@@ -6017,7 +6017,7 @@
           height="216"
           data-string="qeqwqwqwqwqeqaeqeaqeqaeqaqded"
           data-start="north_east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qeqwqwqwqwqeqaeqeaqeqaeqaqded</canvas>
     </details>
         <p>I cannot make heads or tails of this spell... To be honest, I&#39;m not sure I want to know what it does.</p>
@@ -11706,7 +11706,7 @@
           height="216"
           data-string="eaqawqadaqd"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: eaqawqadaqd</canvas>
     </details>
         <p>Summon a block of lava (or insert up to a bucket&#39;s worth) into a block at the given position. Costs about one <a href='#items/amethyst'><span style='color: #b0b'>Charged Amethyst</span></a>.</p>
@@ -11741,7 +11741,7 @@
           height="216"
           data-string="qqqqaawawaedd"
           data-start="north_west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qqqqaawawaedd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>regeneration</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per second.</p>
@@ -11761,7 +11761,7 @@
           height="216"
           data-string="qqqaawawaeqdd"
           data-start="west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qqqaawawaeqdd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>night vision</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per 5 seconds.</p>
@@ -11781,7 +11781,7 @@
           height="216"
           data-string="qqaawawaeqqdd"
           data-start="south_west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qqaawawaeqqdd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>absorption</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per second.</p>
@@ -11801,7 +11801,7 @@
           height="216"
           data-string="qaawawaeqqqdd"
           data-start="south_east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qaawawaeqqqdd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>haste</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per 3 seconds.</p>
@@ -11821,7 +11821,7 @@
           height="216"
           data-string="aawawaeqqqqdd"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: aawawaeqqqqdd</canvas>
     </details>
         <p>Bestows <span style='color: #8d6acc'>strength</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per 3 seconds.</p>
@@ -11852,7 +11852,7 @@
           height="216"
           data-string="waadwawdaaweewq"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: waadwawdaaweewq</canvas>
     </details>
         <p>I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it. Costs about three <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Shards</span></a>.</p>
@@ -11872,7 +11872,7 @@
           height="216"
           data-string="wwweeewwweewdawdwad"
           data-start="west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: wwweeewwweewdawdwad</canvas>
     </details>
         <p>I control the clouds! This spell will summon rain across the world I cast it upon. Costs about one <a href='#items/amethyst'><span style='color: #b0b'>Charged Amethyst</span></a>. Does nothing if it is already raining.</p>
@@ -11892,7 +11892,7 @@
           height="216"
           data-string="eeewwweeewwaqqddqdqd"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: eeewwweeewwaqqddqdqd</canvas>
     </details>
         <p>A counterpart to summoning rain. This spell will dispel rain across the world I cast it upon. Costs about one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Shard</span></a>. Does nothing if the skies are already clear.</p>
@@ -11923,7 +11923,7 @@
           height="216"
           data-string="eawwaeawawaa"
           data-start="north_west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: eawwaeawawaa</canvas>
     </details>
         <p>Summon a sheaf of <span style='color: #74b3f2'>media</span> about me in the shape of wings, endowed with enough substance to allow gliding.</p>
@@ -11956,7 +11956,7 @@
           height="216"
           data-string="wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq</canvas>
     </details>
         <p>Far more powerful than <a href='#patterns/spells/basic@hexcasting:blink'><span style='color: #fc77be'>Blink</span></a>, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is <i>much</i> greater than the normal radius of influence I am used to.</p>
@@ -11984,7 +11984,7 @@
           height="216"
           data-string="waeawaeqqqwqwqqwq"
           data-start="east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: waeawaeqqqwqwqqwq</canvas>
     </details>
         <p>Summon a greater version of my <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>Sentinel</span></a>. Costs about two <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a>.</p>
@@ -12016,7 +12016,7 @@
           height="216"
           data-string="aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw"
           data-start="south_west"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw</canvas>
     </details>
         <p>Infuse a bottle with <span style='color: #74b3f2'>media</span> to form a <a href='#items/phials'><span style='color: #b0b'>Phial.</span></a></p>
@@ -12049,7 +12049,7 @@
           height="216"
           data-string="qeqwqwqwqwqeqaeqeaqeqaeqaqded"
           data-start="north_east"
-          data-per-world="False"
+          data-per-world="True"
         >Your browser does not support visualizing patterns. Pattern code: qeqwqwqwqwqeqaeqeaqeqaeqaqded</canvas>
     </details>
         <p>I cannot make heads or tails of this spell... To be honest, I&#39;m not sure I want to know what it does.</p>
@@ -17740,7 +17740,7 @@
               height="216"
               data-string="eaqawqadaqd"
               data-start="east"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: eaqawqadaqd</canvas>
         </details>
             <p>Summon a block of lava (or insert up to a bucket&#39;s worth) into a block at the given position. Costs about one <a href='#items/amethyst'><span style='color: #b0b'>Charged Amethyst</span></a>.</p>
@@ -17775,7 +17775,7 @@
               height="216"
               data-string="qqqqaawawaedd"
               data-start="north_west"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: qqqqaawawaedd</canvas>
         </details>
             <p>Bestows <span style='color: #8d6acc'>regeneration</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per second.</p>
@@ -17795,7 +17795,7 @@
               height="216"
               data-string="qqqaawawaeqdd"
               data-start="west"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: qqqaawawaeqdd</canvas>
         </details>
             <p>Bestows <span style='color: #8d6acc'>night vision</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per 5 seconds.</p>
@@ -17815,7 +17815,7 @@
               height="216"
               data-string="qqaawawaeqqdd"
               data-start="south_west"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: qqaawawaeqqdd</canvas>
         </details>
             <p>Bestows <span style='color: #8d6acc'>absorption</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per second.</p>
@@ -17835,7 +17835,7 @@
               height="216"
               data-string="qaawawaeqqqdd"
               data-start="south_east"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: qaawawaeqqqdd</canvas>
         </details>
             <p>Bestows <span style='color: #8d6acc'>haste</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per 3 seconds.</p>
@@ -17855,7 +17855,7 @@
               height="216"
               data-string="aawawaeqqqqdd"
               data-start="east"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: aawawaeqqqqdd</canvas>
         </details>
             <p>Bestows <span style='color: #8d6acc'>strength</span>. Base cost is one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a> per 3 seconds.</p>
@@ -17886,7 +17886,7 @@
               height="216"
               data-string="waadwawdaaweewq"
               data-start="east"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: waadwawdaaweewq</canvas>
         </details>
             <p>I command the heavens! This spell will summon a bolt of lightning to strike the earth where I direct it. Costs about three <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Shards</span></a>.</p>
@@ -17906,7 +17906,7 @@
               height="216"
               data-string="wwweeewwweewdawdwad"
               data-start="west"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: wwweeewwweewdawdwad</canvas>
         </details>
             <p>I control the clouds! This spell will summon rain across the world I cast it upon. Costs about one <a href='#items/amethyst'><span style='color: #b0b'>Charged Amethyst</span></a>. Does nothing if it is already raining.</p>
@@ -17926,7 +17926,7 @@
               height="216"
               data-string="eeewwweeewwaqqddqdqd"
               data-start="east"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: eeewwweeewwaqqddqdqd</canvas>
         </details>
             <p>A counterpart to summoning rain. This spell will dispel rain across the world I cast it upon. Costs about one <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Shard</span></a>. Does nothing if the skies are already clear.</p>
@@ -17957,7 +17957,7 @@
               height="216"
               data-string="eawwaeawawaa"
               data-start="north_west"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: eawwaeawawaa</canvas>
         </details>
             <p>Summon a sheaf of <span style='color: #74b3f2'>media</span> about me in the shape of wings, endowed with enough substance to allow gliding.</p>
@@ -17990,7 +17990,7 @@
               height="216"
               data-string="wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq"
               data-start="east"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq</canvas>
         </details>
             <p>Far more powerful than <a href='#patterns/spells/basic@hexcasting:blink'><span style='color: #fc77be'>Blink</span></a>, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is <i>much</i> greater than the normal radius of influence I am used to.</p>
@@ -18018,7 +18018,7 @@
               height="216"
               data-string="waeawaeqqqwqwqqwq"
               data-start="east"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: waeawaeqqqwqwqqwq</canvas>
         </details>
             <p>Summon a greater version of my <a href='#patterns/spells/sentinels'><span style='color: #8d6acc'>Sentinel</span></a>. Costs about two <a href='#items/amethyst'><span style='color: #b0b'>Amethyst Dust</span></a>.</p>
@@ -18050,7 +18050,7 @@
               height="216"
               data-string="aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw"
               data-start="south_west"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw</canvas>
         </details>
             <p>Infuse a bottle with <span style='color: #74b3f2'>media</span> to form a <a href='#items/phials'><span style='color: #b0b'>Phial.</span></a></p>
@@ -18083,7 +18083,7 @@
               height="216"
               data-string="qeqwqwqwqwqeqaeqeaqeqaeqaqded"
               data-start="north_east"
-              data-per-world="False"
+              data-per-world="True"
             >Your browser does not support visualizing patterns. Pattern code: qeqwqwqwqwqeqaeqeaqeqaeqaqded</canvas>
         </details>
             <p>I cannot make heads or tails of this spell... To be honest, I&#39;m not sure I want to know what it does.</p>

@@ -15,7 +15,7 @@ from jinja2 import (
     StrictUndefined,
 )
 
-from hexdoc.hexcasting.hex_book import HexContext, load_patterns
+from hexdoc.hexcasting.hex_book import HexContext
 from hexdoc.minecraft.i18n import I18n
 from hexdoc.patchouli.book import Book
 from hexdoc.utils import Properties
@@ -101,7 +101,6 @@ def main(args: Args | None = None) -> None:
                         enabled=cast_or_raise(book_data["i18n"], bool),
                     ),
                     macros=cast_or_raise(book_data["macros"], dict[Any, Any]),
-                    patterns=load_patterns(props),
                 ),
             )
 
