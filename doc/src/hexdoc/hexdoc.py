@@ -7,13 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Self, Sequence
 
-from jinja2 import (
-    ChoiceLoader,
-    Environment,
-    FileSystemLoader,
-    PackageLoader,
-    StrictUndefined,
-)
+from jinja2 import ChoiceLoader, FileSystemLoader, PackageLoader, StrictUndefined
+from jinja2.sandbox import SandboxedEnvironment
 
 from hexdoc.hexcasting.hex_book import HexContext
 from hexdoc.minecraft.i18n import I18n
@@ -24,9 +19,6 @@ from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.resource_loader import ModResourceLoader
 
 from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
-
-# TODO: enable
-# from jinja2.sandbox import SandboxedEnvironment
 
 
 def strip_empty_lines(text: str) -> str:
@@ -105,8 +97,7 @@ def main(args: Args | None = None) -> None:
             )
 
         # set up Jinja environment
-        # TODO: SandboxedEnvironment
-        env = Environment(
+        env = SandboxedEnvironment(
             # search order: template_dirs, template_packages, built-in hexdoc templates
             loader=ChoiceLoader(
                 [FileSystemLoader(props.template_dirs)]
