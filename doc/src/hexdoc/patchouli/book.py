@@ -103,8 +103,10 @@ class Book(HexDocModel):
         self._categories: dict[ResourceLocation, Category] = Category.load_all(context)
 
         # load entries
+        entries = dict[ResourceLocation, Entry]()
         for resource_dir, id, data in context.loader.load_book_assets("entries"):
             entry = Entry.load(id, data, context)
+            entries[id] = entry
 
             # i used the entry to insert the entry (pretty sure thanos said that)
             if not resource_dir.external:
@@ -113,6 +115,23 @@ class Book(HexDocModel):
         # we inserted a bunch of entries in no particular order, so sort each category
         for category in self._categories.values():
             category.entries.sort()
+
+        # now that we loaded all of the book text, go back and check the links
+        errors = list[str]()
+        for id, anchor, full_str in context.links_to_check:
+            e = f"    id={id}, anchor={anchor}\n      {full_str}"
+            if id in entries:
+                if anchor is not None and anchor not in entries[id].anchors:
+                    errors.append(e)
+            elif id in self._categories:
+                if anchor is not None:
+                    errors.append(e)
+            else:
+                errors.append(e)
+
+        context.links_to_check.clear()
+        if errors:
+            raise ValueError("broken links:\n" + "\n".join(errors) + "\n")
 
         return self
 

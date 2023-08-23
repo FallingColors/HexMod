@@ -8,7 +8,7 @@ from contextlib import nullcontext
 from enum import Enum, auto
 from typing import Literal, Self
 
-from pydantic import ValidationInfo, field_validator, model_validator
+from pydantic import Field, ValidationInfo, field_validator, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
@@ -16,6 +16,7 @@ from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.utils import DEFAULT_CONFIG, HexDocModel, PropsContext
 from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.utils.resource import ResourceLocation
 from hexdoc.utils.types import TryGetEnum
 
 from .html import HTMLElement, HTMLStream
@@ -61,6 +62,19 @@ _COLORS = {
     "e": "ff5",
     "f": "fff",
 }
+
+
+class FormattingContext(I18nContext, PropsContext, arbitrary_types_allowed=True):
+    macros: dict[str, str]
+    links_to_check: list[tuple[ResourceLocation, str | None, str]] = Field(
+        default_factory=list
+    )
+    """id, anchor"""
+
+    @field_validator("macros")
+    @classmethod
+    def _add_default_macros(cls, macros: dict[str, str]) -> dict[str, str]:
+        return DEFAULT_MACROS | macros
 
 
 # Higgledy piggledy
@@ -112,7 +126,9 @@ class Style(ABC, HexDocModel, frozen=True):
     type: CommandStyleType | FunctionStyleType | SpecialStyleType
 
     @staticmethod
-    def parse(style_str: str, context: FormattingContext) -> Style | _CloseTag | str:
+    def parse(
+        style_str: str, full_str: str, context: FormattingContext
+    ) -> Style | _CloseTag | str:
         # direct text replacements
         if style_str in _REPLACEMENTS:
             return _REPLACEMENTS[style_str]
@@ -147,6 +163,8 @@ class Style(ABC, HexDocModel, frozen=True):
 
             # all the other functions
             if style_type := FunctionStyleType.get(name):
+                if style_type is FunctionStyleType.link:
+                    value = _format_href(value, full_str, context)
                 return FunctionStyle(type=style_type, value=value)
 
         # reset
@@ -164,6 +182,37 @@ class Style(ABC, HexDocModel, frozen=True):
     @abstractmethod
     def element(self, out: HTMLStream) -> HTMLElement | nullcontext[None]:
         ...
+
+
+def is_external_link(value: str) -> bool:
+    return value.startswith(("https:", "http:"))
+
+
+def _format_href(value: str, full_str: str, context: FormattingContext) -> str:
+    if is_external_link(value):
+        return value
+
+    # anchor
+    if "#" in value:
+        id_str, anchor = value.split("#", 1)
+    else:
+        id_str, anchor = value, None
+
+    # id of category or entry being linked to
+    if ":" in id_str:
+        id = ResourceLocation.from_str(id_str)
+    else:
+        id = context.props.book.with_path(id_str)
+
+    # add entry to list to check after loading all pages
+    context.links_to_check.append((id, anchor, full_str))
+
+    # external book link prefix
+    if id.namespace != context.props.book.namespace:
+        # TODO: implement (probably put in loader?)
+        raise NotImplementedError
+
+    return f"#{value.replace('#', '@')}"
 
 
 class CommandStyle(Style, frozen=True):
@@ -211,16 +260,6 @@ class ParagraphStyle(Style, frozen=True):
         return out.element("p", **self.attributes)
 
 
-def is_external_link(value: str) -> bool:
-    return value.startswith(("https:", "http:"))
-
-
-def _format_href(value: str) -> str:
-    if is_external_link(value):
-        return value
-    return f"#{value.replace('#', '@')}"
-
-
 class FunctionStyle(Style, frozen=True):
     type: FunctionStyleType | ColorStyleType
     value: str
@@ -228,7 +267,7 @@ class FunctionStyle(Style, frozen=True):
     def element(self, out: HTMLStream) -> HTMLElement:
         match self.type:
             case FunctionStyleType.link:
-                return out.element("a", href=_format_href(self.value))
+                return out.element("a", href=self.value)
             case FunctionStyleType.tooltip:
                 return out.element("span", class_name="has-tooltip", title=self.value)
             case FunctionStyleType.cmd_click:
@@ -248,15 +287,6 @@ class _CloseTag(HexDocModel, frozen=True):
 
 
 _FORMAT_RE = re.compile(r"\$\(([^)]*)\)")
-
-
-class FormattingContext(I18nContext, PropsContext):
-    macros: dict[str, str]
-
-    @field_validator("macros")
-    @classmethod
-    def _add_default_macros(cls, macros: dict[str, str]) -> dict[str, str]:
-        return DEFAULT_MACROS | macros
 
 
 @dataclass(config=DEFAULT_CONFIG)
@@ -286,7 +316,7 @@ class FormatTree:
             text_since_prev_style.append(leading_text)
             last_end = match.end()
 
-            match Style.parse(match[1], context):
+            match Style.parse(match[1], string, context):
                 case str(replacement):
                     # str means "use this instead of the original value"
                     text_since_prev_style.append(replacement)

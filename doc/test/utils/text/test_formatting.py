@@ -13,19 +13,27 @@ from hexdoc.patchouli.text.formatting import (
     SpecialStyleType,
 )
 from hexdoc.utils.properties import Properties
+from hexdoc.utils.resource import ResourceLocation
 
 
 def test_format_string():
     # arrange
     test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
     mock_i18n = cast(I18n, Namespace(keys={}))
-    mock_props = cast(Properties, Namespace(is_0_black=False))
+    mock_props = cast(
+        Properties,
+        Namespace(
+            is_0_black=False,
+            book=ResourceLocation("hexcasting", "thehexbook"),
+        ),
+    )
     mock_context = cast(
         FormattingContext,
         Namespace(
             i18n=mock_i18n,
             props=mock_props,
             macros=DEFAULT_MACROS,
+            links_to_check=[],
         ),
     )
 
@@ -44,7 +52,7 @@ def test_format_string():
                     FormatTree(
                         style=FunctionStyle(
                             type=FunctionStyleType.link,
-                            value="patterns/readwrite#hexcasting:write/local",
+                            value="#patterns/readwrite@hexcasting:write/local",
                         ),
                         children=[
                             FormatTree(
@@ -60,7 +68,7 @@ def test_format_string():
                     FormatTree(
                         style=FunctionStyle(
                             type=FunctionStyleType.link,
-                            value="patterns/readwrite#hexcasting:write/local",
+                            value="#patterns/readwrite@hexcasting:write/local",
                         ),
                         children=[
                             FormatTree(
@@ -76,7 +84,7 @@ def test_format_string():
                     FormatTree(
                         style=FunctionStyle(
                             type=FunctionStyleType.link,
-                            value="items/focus",
+                            value="#items/focus",
                         ),
                         children=[
                             FormatTree(
@@ -92,7 +100,7 @@ def test_format_string():
                     FormatTree(
                         style=FunctionStyle(
                             type=FunctionStyleType.link,
-                            value="casting/influences",
+                            value="#casting/influences",
                         ),
                         children=[
                             FormatTree(
@@ -108,7 +116,7 @@ def test_format_string():
                     FormatTree(
                         style=FunctionStyle(
                             type=FunctionStyleType.link,
-                            value="patterns/meta#hexcasting:for_each",
+                            value="#patterns/meta@hexcasting:for_each",
                         ),
                         children=[
                             FormatTree(

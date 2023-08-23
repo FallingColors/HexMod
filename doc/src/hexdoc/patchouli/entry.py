@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from pydantic import Field, ValidationInfo, model_validator
 
 from hexdoc.minecraft import LocalizedStr
@@ -40,6 +42,12 @@ class Entry(HexDocFileModel, Sortable):
         # implement Sortable
         # note: python sorts false before true, so we invert priority
         return (not self.priority, self.sortnum, self.name)
+
+    @property
+    def anchors(self) -> Iterable[str]:
+        for page in self.pages:
+            if page.anchor is not None:
+                yield page.anchor
 
     @model_validator(mode="after")
     def _check_is_spoiler(self, info: ValidationInfo):

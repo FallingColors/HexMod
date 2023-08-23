@@ -124,10 +124,10 @@ def main(args: Args | None = None) -> None:
                 IncludeRawExtension,
             ],
         )
-        env.filters |= dict(  # pyright: ignore[reportUnknownMemberType]
-            hexdoc_block=hexdoc_block,
-            hexdoc_wrap=hexdoc_wrap,
-        )
+        env.filters |= {  # type: ignore
+            "hexdoc_block": hexdoc_block,
+            "hexdoc_wrap": hexdoc_wrap,
+        }
 
         # load and render template
         template = env.get_template(props.template)

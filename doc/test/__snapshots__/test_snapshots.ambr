@@ -1380,7 +1380,7 @@
   <br />
       <p>There is also a limit on the number of blocks the wave can travel through before it disintegrates, but it is large enough I doubt I will have any trouble.</p><p>Conversely, there are some actions that can only be cast from a circle. Fortunately, none of them are spells; they all seem to deal with components of the circle itself. My notes on the subject are <a href='#patterns/circle'>here</a>.</p>
   <br />
-      <p>I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.</p><p>The patterns there would have been executed counter-clockwise, starting with <a href='#patterns/basics@hexcasting:get_caster'><span style='color: #fc77be'>Mind&#39;s Reflection</span></a> and ending with <a href='#patterns/great_spells/teleport@hexcasting:teleport'><span style='color: #fc77be'>Greater Teleport</span></a>.</p>
+      <p>I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.</p><p>The patterns there would have been executed counter-clockwise, starting with <a href='#patterns/basics@hexcasting:get_caster'><span style='color: #fc77be'>Mind&#39;s Reflection</span></a> and ending with <a href='#patterns/great_spells/teleport@hexcasting:teleport/great'><span style='color: #fc77be'>Greater Teleport</span></a>.</p>
   <br />
     <h4>Teleportation Circle</h4>
     <p class="img-wrapper">
@@ -3077,7 +3077,7 @@
           data-per-world="False"
         >Your browser does not support visualizing patterns. Pattern code: aw</canvas>
     </details>
-        <p>Convert an argument to a boolean. The number <span style='color: #8d6acc'>0</span>, <a href='#influences@null'><span style='color: #8d6acc'>Null</span></a>, and the empty list become False; everything else becomes True.</p>
+        <p>Convert an argument to a boolean. The number <span style='color: #8d6acc'>0</span>, <a href='#casting/influences'><span style='color: #8d6acc'>Null</span></a>, and the empty list become False; everything else becomes True.</p>
     </div>
   <br />
     <div id="patterns/logic@hexcasting:abs">
@@ -7412,7 +7412,7 @@
   <br />
       <p>There is also a limit on the number of blocks the wave can travel through before it disintegrates, but it is large enough I doubt I will have any trouble.</p><p>Conversely, there are some actions that can only be cast from a circle. Fortunately, none of them are spells; they all seem to deal with components of the circle itself. My notes on the subject are <a href='#patterns/circle'>here</a>.</p>
   <br />
-      <p>I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.</p><p>The patterns there would have been executed counter-clockwise, starting with <a href='#patterns/basics@hexcasting:get_caster'><span style='color: #fc77be'>Mind&#39;s Reflection</span></a> and ending with <a href='#patterns/great_spells/teleport@hexcasting:teleport'><span style='color: #fc77be'>Greater Teleport</span></a>.</p>
+      <p>I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.</p><p>The patterns there would have been executed counter-clockwise, starting with <a href='#patterns/basics@hexcasting:get_caster'><span style='color: #fc77be'>Mind&#39;s Reflection</span></a> and ending with <a href='#patterns/great_spells/teleport@hexcasting:teleport/great'><span style='color: #fc77be'>Greater Teleport</span></a>.</p>
   <br />
     <h4>Teleportation Circle</h4>
     <p class="img-wrapper">
@@ -9109,7 +9109,7 @@
           data-per-world="False"
         >Your browser does not support visualizing patterns. Pattern code: aw</canvas>
     </details>
-        <p>Convert an argument to a boolean. The number <span style='color: #8d6acc'>0</span>, <a href='#influences@null'><span style='color: #8d6acc'>Null</span></a>, and the empty list become False; everything else becomes True.</p>
+        <p>Convert an argument to a boolean. The number <span style='color: #8d6acc'>0</span>, <a href='#casting/influences'><span style='color: #8d6acc'>Null</span></a>, and the empty list become False; everything else becomes True.</p>
     </div>
   <br />
     <div id="patterns/logic@hexcasting:abs">
@@ -13446,7 +13446,7 @@
       <br />
           <p>There is also a limit on the number of blocks the wave can travel through before it disintegrates, but it is large enough I doubt I will have any trouble.</p><p>Conversely, there are some actions that can only be cast from a circle. Fortunately, none of them are spells; they all seem to deal with components of the circle itself. My notes on the subject are <a href='#patterns/circle'>here</a>.</p>
       <br />
-          <p>I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.</p><p>The patterns there would have been executed counter-clockwise, starting with <a href='#patterns/basics@hexcasting:get_caster'><span style='color: #fc77be'>Mind&#39;s Reflection</span></a> and ending with <a href='#patterns/great_spells/teleport@hexcasting:teleport'><span style='color: #fc77be'>Greater Teleport</span></a>.</p>
+          <p>I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.</p><p>The patterns there would have been executed counter-clockwise, starting with <a href='#patterns/basics@hexcasting:get_caster'><span style='color: #fc77be'>Mind&#39;s Reflection</span></a> and ending with <a href='#patterns/great_spells/teleport@hexcasting:teleport/great'><span style='color: #fc77be'>Greater Teleport</span></a>.</p>
       <br />
         <h4>Teleportation Circle</h4>
         <p class="img-wrapper">
@@ -15143,7 +15143,7 @@
               data-per-world="False"
             >Your browser does not support visualizing patterns. Pattern code: aw</canvas>
         </details>
-            <p>Convert an argument to a boolean. The number <span style='color: #8d6acc'>0</span>, <a href='#influences@null'><span style='color: #8d6acc'>Null</span></a>, and the empty list become False; everything else becomes True.</p>
+            <p>Convert an argument to a boolean. The number <span style='color: #8d6acc'>0</span>, <a href='#casting/influences'><span style='color: #8d6acc'>Null</span></a>, and the empty list become False; everything else becomes True.</p>
         </div>
       <br />
         <div id="patterns/logic@hexcasting:abs">

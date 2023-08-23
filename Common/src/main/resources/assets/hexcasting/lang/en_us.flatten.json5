@@ -1467,7 +1467,7 @@
         "4": "Miracle of miracles, the circle will withdraw _media neither from my inventory nor my mind. Instead, crystallized shards of _media must be provided to the $(l:greatwork/impetus)$(item)Impetus/$ via hopper, or other such artifice.$(br2)The application of a $(l:items/lens)$(item)Scrying Lens/$ will show how much _media is inside an $(l:greatwork/impetus)$(item)Impetus/$, in units of dust.",
         "5": "However, a spell cast from a circle does have one major limitation: it is unable to affect anything outside of the circle's bounds. That is, it cannot interact with anything outside of the cuboid of minimum size which encloses every block composing it (so a concave spell circle can still affect things in the concavity).",
         "6": "There is also a limit on the number of blocks the wave can travel through before it disintegrates, but it is large enough I doubt I will have any trouble.$(br2)Conversely, there are some actions that can only be cast from a circle. Fortunately, none of them are spells; they all seem to deal with components of the circle itself. My notes on the subject are $(l:patterns/circle)here/$.",
-        "7": "I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.$(br2)The patterns there would have been executed counter-clockwise, starting with $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$ and ending with $(l:patterns/great_spells/teleport#hexcasting:teleport)$(action)Greater Teleport/$.",
+        "7": "I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.$(br2)The patterns there would have been executed counter-clockwise, starting with $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$ and ending with $(l:patterns/great_spells/teleport#hexcasting:teleport/great)$(action)Greater Teleport/$.",
         "teleport_circle.title": "Teleportation Circle",
       },
 
@@ -1664,7 +1664,7 @@
       },
 
       logic: {
-        bool_coerce: "Convert an argument to a boolean. The number $(thing)0/$, $(l:influences#null)$(thing)Null/$, and the empty list become False; everything else becomes True.",
+        bool_coerce: "Convert an argument to a boolean. The number $(thing)0/$, $(l:casting/influences)$(thing)Null/$, and the empty list become False; everything else becomes True.",
         bool_to_number: "Convert a boolean to a number; True becomes $(thing)1/$, and False becomes $(thing)0/$.",
         not: "If the argument is True, return False; if it is False, return True.",
         or: "Returns True if at least one of the arguments are True; otherwise returns False.",
