@@ -13,8 +13,8 @@ from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.minecraft.i18n import I18n, I18nContext
-from hexdoc.utils import DEFAULT_CONFIG, HexDocModel, Properties, PropsContext
+from hexdoc.minecraft.i18n import I18nContext
+from hexdoc.utils import DEFAULT_CONFIG, HexDocModel, PropsContext
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.types import TryGetEnum
 
@@ -112,7 +112,7 @@ class Style(ABC, HexDocModel, frozen=True):
     type: CommandStyleType | FunctionStyleType | SpecialStyleType
 
     @staticmethod
-    def parse(style_str: str, props: Properties, i18n: I18n) -> Style | _CloseTag | str:
+    def parse(style_str: str, context: FormattingContext) -> Style | _CloseTag | str:
         # direct text replacements
         if style_str in _REPLACEMENTS:
             return _REPLACEMENTS[style_str]
@@ -126,7 +126,7 @@ class Style(ABC, HexDocModel, frozen=True):
             return CommandStyle(type=style_type)
 
         # reset color, but only if 0 is considered reset instead of black
-        if not props.is_0_black and style_str == "0":
+        if not context.props.is_0_black and style_str == "0":
             return _CloseTag(type=SpecialStyleType.color)
 
         # preset colors
@@ -143,7 +143,7 @@ class Style(ABC, HexDocModel, frozen=True):
 
             # keys
             if name == "k":
-                return str(i18n.localize_key(value))
+                return str(context.i18n.localize_key(value))
 
             # all the other functions
             if style_type := FunctionStyleType.get(name):
@@ -265,19 +265,13 @@ class FormatTree:
     children: list[FormatTree | str]  # this can't be Self, it breaks Pydantic
 
     @classmethod
-    def format(
-        cls,
-        string: str,
-        macros: dict[str, str],
-        props: Properties,
-        i18n: I18n,
-    ) -> Self:
+    def format(cls, string: str, context: FormattingContext) -> Self:
         # resolve macros
         # TODO: use ahocorasick? this feels inefficient
         old_string = None
         while old_string != string:
             old_string = string
-            for macro, replace in macros.items():
+            for macro, replace in context.macros.items():
                 string = string.replace(macro, replace)
 
         # lex out parsed styles
@@ -292,7 +286,7 @@ class FormatTree:
             text_since_prev_style.append(leading_text)
             last_end = match.end()
 
-            match Style.parse(match[1], props, i18n):
+            match Style.parse(match[1], context):
                 case str(replacement):
                     # str means "use this instead of the original value"
                     text_since_prev_style.append(replacement)
@@ -353,12 +347,7 @@ class FormatTree:
 
         if isinstance(value, str):
             value = context.i18n.localize(value)
-        return cls.format(
-            value.value,
-            macros=context.macros,
-            props=context.props,
-            i18n=context.i18n,
-        )
+        return cls.format(value.value, context)
 
 
 FormatTree._wrap_root
