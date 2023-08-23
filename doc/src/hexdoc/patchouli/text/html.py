@@ -1,4 +1,3 @@
-# TODO: type
 import io
 from contextlib import nullcontext
 from dataclasses import dataclass
@@ -29,21 +28,21 @@ class HTMLElement:
 
 
 class HTMLStream(io.StringIO):
-    def void_element(self, name: str, **kwargs: Any):
+    def void_element(self, name: str, **attributes: str):
         """Like `<img />`."""
-        keywords = attributes_to_str(kwargs)
+        keywords = attributes_to_str(attributes)
         self.write(f"<{name}{keywords} />")
 
-    def element(self, name: str, /, **kwargs: Any):
-        return HTMLElement(self, name, kwargs)
+    def element(self, name: str, /, **attributes: str):
+        return HTMLElement(self, name, attributes)
 
-    def element_if(self, condition: bool, name: str, /, **kwargs: Any):
+    def element_if(self, condition: bool, name: str, /, **attributes: str):
         if condition:
-            return self.element(name, **kwargs)
+            return self.element(name, **attributes)
         return nullcontext()
 
-    def empty_element(self, name: str, **kwargs: Any):
-        with self.element(name, **kwargs):
+    def empty_element(self, name: str, **attributes: str):
+        with self.element(name, **attributes):
             pass
 
     def text(self, txt: str | LocalizedStr):

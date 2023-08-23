@@ -297,7 +297,7 @@ class FormatTree:
     @classmethod
     def format(cls, string: str, context: FormattingContext) -> Self:
         # resolve macros
-        # TODO: use ahocorasick? this feels inefficient
+        # this could use ahocorasick, but it works fine for now
         old_string = None
         while old_string != string:
             old_string = string

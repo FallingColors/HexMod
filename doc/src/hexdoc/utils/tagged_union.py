@@ -52,6 +52,9 @@ class InternallyTaggedUnion(HexDocModel):
     some-unique-name = "path.to.import.module"
     ```
 
+    Subclasses MUST NOT be generic unless they provide a default value for all
+    `__init_subclass__` arguments. See pydantic/7171 for more info.
+
     Args:
         group: Entry point group for this class. If None, the parent's value is used.
         key: The dict key for the internal tag. If None, the parent's value is used.
@@ -204,7 +207,7 @@ class TypeTaggedUnion(InternallyTaggedUnion, key="type", value=None):
         cls,
         *,
         group: str | None = None,
-        type: TagValue | None = None,  # FIXME: see pydantic/7171
+        type: TagValue | None,
     ) -> None:
         super().__init_subclass__(group=group, value=type)
         match type:

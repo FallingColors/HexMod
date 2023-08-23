@@ -50,7 +50,7 @@ class LocalizedStr(HexDocModel):
         handler: ModelWrapValidatorHandler[Self],
         info: ValidationInfo,
     ):
-        # TODO: if we need LocalizedStr to work as a dict key, add another check which
+        # NOTE: if we need LocalizedStr to work as a dict key, add another check which
         # returns cls.skip_i18n(value) if info.context is falsy
         if not isinstance(value, str):
             return handler(value)
@@ -178,7 +178,6 @@ class I18n:
         Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
         """
         # prefer the book-specific translation if it exists
-        # TODO: should this use op_id.namespace anywhere?
         return self.localize(
             f"hexcasting.action.book.{op_id}",
             f"hexcasting.action.{op_id}",

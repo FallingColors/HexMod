@@ -41,7 +41,6 @@ def test_format_string():
     tree = FormatTree.format(test_str, mock_context)
 
     # assert
-    # TODO: possibly make this less lazy
     assert tree == FormatTree(
         style=CommandStyle(type=SpecialStyleType.base),
         children=[

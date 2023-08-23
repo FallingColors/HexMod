@@ -175,7 +175,7 @@ class ItemStack(BaseResourceLocation, regex=_make_regex(count=True, nbt=True)):
     nbt: str | None = None
 
     def i18n_key(self, root: str = "item") -> str:
-        # TODO: is this how i18n works?????
+        # TODO: is this how i18n works????? (apparently, because it's working)
         return f"{root}.{self.namespace}.{self.path.replace('/', '.')}"
 
     def __repr__(self) -> str:

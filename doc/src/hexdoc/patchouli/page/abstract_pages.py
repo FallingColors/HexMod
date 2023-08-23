@@ -25,7 +25,7 @@ class Page(TypeTaggedUnion, group="hexdoc.Page", type=None):
     def __init_subclass__(
         cls,
         *,
-        type: str | None = None,  # FIXME:
+        type: str | None,
         template_type: str | None = None,
     ) -> None:
         super().__init_subclass__(group=None, type=type)

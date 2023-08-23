@@ -27,7 +27,7 @@ class Book(HexDocModel):
 
     You should probably not use this (or any other Patchouli types, eg. Category, Entry)
     to edit and re-serialize book.json, because this class sets all the default values
-    as defined by the docs. (TODO: superclass which doesn't do that)
+    as defined by the docs.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/book-json
     """

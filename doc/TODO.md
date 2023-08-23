@@ -1,7 +1,7 @@
 - [x] Better resource loading
 - [x] Fix model_validator type hints (before should take Any and narrow from there)
-- [ ] Sandbox for Jinja
-- [ ] First-class addon support
+- [x] Sandbox for Jinja
+- [x] First-class addon support
 - [ ] Language picker
 - [ ] Version picker
 - [ ] Re-add edified wood recipe to [Common/src/main/resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/items/edified.json](items/edified) when it actually exists

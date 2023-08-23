@@ -4,7 +4,7 @@ import tomllib
 from pathlib import Path
 from typing import Callable, TypeVar
 
-from .deserialize import isinstance_or_raise
+from .deserialize import cast_or_raise
 
 # TODO: there's (figuratively) literally no comments in this file
 
@@ -43,14 +43,14 @@ def _expand_placeholder(
             key = key.replace("^", "")
         if key and i < len(keys) - 1:
             # TODO: does this work?
-            assert isinstance_or_raise(new := tmp_stack[-1][key], TOMLDict)
+            new = cast_or_raise(tmp_stack[-1][key], TOMLDict)
             tmp_stack.append(new)
 
     table = tmp_stack[-1]
     if (id(table), key) not in expanded:
         _handle_child(data, tmp_stack, expanded, key, table[key], table.__setitem__)
 
-    assert isinstance_or_raise(value := table[key], str)
+    value = cast_or_raise(table[key], str)
     return value
 
 
