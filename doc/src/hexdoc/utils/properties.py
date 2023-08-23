@@ -53,7 +53,6 @@ class Properties(HexDocStripHiddenModel):
     resource_dirs: list[ResourceDir]
     export_dir: Path
 
-    spoilered_advancements: set[ResourceLocation]
     entry_id_blacklist: set[ResourceLocation]
 
     template: str

@@ -8,21 +8,16 @@ from hexdoc.utils import (
     Color,
     HexDocModel,
     ItemStack,
-    LoaderContext,
     ModResourceLoader,
     ResLoc,
     ResourceLocation,
 )
 from hexdoc.utils.deserialize import cast_or_raise
 
+from .book_context import BookContext
 from .category import Category
 from .entry import Entry
 from .text import FormatTree
-from .text.formatting import FormattingContext
-
-
-class BookContext(FormattingContext, LoaderContext):
-    pass
 
 
 class Book(HexDocModel):

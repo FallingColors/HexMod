@@ -3,10 +3,10 @@ from pydantic import Field, ValidationInfo, model_validator
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.utils import Color, ItemStack, ResourceLocation
 from hexdoc.utils.deserialize import cast_or_raise
-from hexdoc.utils.properties import PropsContext
+from hexdoc.utils.model import HexDocFileModel
 from hexdoc.utils.types import Sortable
 
-from ..utils.model import HexDocFileModel
+from .book_context import BookContext
 from .page.pages import Page
 
 
@@ -45,10 +45,10 @@ class Entry(HexDocFileModel, Sortable):
     def _check_is_spoiler(self, info: ValidationInfo):
         if not info.context or self.advancement is None:
             return self
-        context = cast_or_raise(info.context, PropsContext)
+        context = cast_or_raise(info.context, BookContext)
 
         self.is_spoiler = any(
             self.advancement.match(spoiler)
-            for spoiler in context.props.spoilered_advancements
+            for spoiler in context.spoilered_advancements
         )
         return self

@@ -51,6 +51,15 @@ class Tag(HexDocModel):
             context=context,
         )
 
+    @property
+    def unwrapped_values(self) -> Iterator[ResourceLocation]:
+        for value in self.values:
+            match value:
+                case ResourceLocation():
+                    yield value
+                case OptionalTagValue(id=id):
+                    yield id
+
     def _export(self, current: Self | None):
         if self.replace or current is None:
             return self.model_dump_json()

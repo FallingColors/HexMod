@@ -21,12 +21,6 @@ export_dir = "src/hexdoc/_export/generated"
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
 _pattern_regex = { "!Raw" = 'make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
 
-spoilered_advancements = [
-    "hexcasting:opened_eyes",
-    "hexcasting:y_u_no_cast_angy",
-    "hexcasting:enlightenment",
-    "hexcasting:lore/*",
-]
 entry_id_blacklist = []
 
 template = "main.html.jinja"
