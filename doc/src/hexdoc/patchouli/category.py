@@ -26,7 +26,7 @@ class Category(HexDocFileModel, Sortable):
 
     # optional
     parent_id: ResourceLocation | None = Field(default=None, alias="parent")
-    parent_cmp_key_: tuple[int, ...] | None = None
+    _parent_cmp_key: tuple[int, ...] | None = None
     flag: str | None = None
     sortnum: int = 0
     secret: bool = False
@@ -55,7 +55,7 @@ class Category(HexDocFileModel, Sortable):
 
                 # only set _parent_cmp_key if the parent has been initialized
                 if parent._is_cmp_key_ready:
-                    category.parent_cmp_key_ = parent._cmp_key
+                    category._parent_cmp_key = parent._cmp_key
                 else:
                     done = False
 
@@ -73,11 +73,11 @@ class Category(HexDocFileModel, Sortable):
 
     @property
     def _is_cmp_key_ready(self) -> bool:
-        return self.parent_id is None or self.parent_cmp_key_ is not None
+        return self.parent_id is None or self._parent_cmp_key is not None
 
     @property
     def _cmp_key(self) -> tuple[int, ...]:
         # implement Sortable
-        if parent_cmp_key := self.parent_cmp_key_:
+        if parent_cmp_key := self._parent_cmp_key:
             return parent_cmp_key + (self.sortnum,)
         return (self.sortnum,)

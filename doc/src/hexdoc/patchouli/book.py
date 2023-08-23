@@ -54,7 +54,7 @@ class Book(HexDocModel):
     progress_bar_background: Color = Color("DDDDDD")
     open_sound: ResourceLocation | None = None
     flip_sound: ResourceLocation | None = None
-    index_icon_: ResourceLocation | None = Field(default=None, alias="index_icon")
+    index_icon: ResourceLocation | None = None
     pamphlet: bool = False
     show_progress: bool = True
     version: str | int = 0
@@ -90,6 +90,7 @@ class Book(HexDocModel):
 
         return data | {
             "i18n_data": context.i18n,
+            "index_icon": data.get("index_icon") or data.get("model"),
         }
 
     @model_validator(mode="after")
@@ -134,11 +135,6 @@ class Book(HexDocModel):
             raise ValueError("broken links:\n" + "\n".join(errors) + "\n")
 
         return self
-
-    @property
-    def index_icon(self) -> ResourceLocation:
-        # default value as defined by patchouli, apparently
-        return self.model if self.index_icon_ is None else self.index_icon_
 
     @property
     def categories(self):
