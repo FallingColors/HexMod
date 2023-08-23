@@ -1,15 +1,15 @@
-# pyright: reportPrivateUsage=information, reportUnknownArgumentType=information, reportUnknownMemberType=information
+# pyright: reportInvalidTypeVarUse=information
 
 import logging
-import shutil
+import subprocess
 from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
 from pathlib import Path
-from typing import Callable, Literal, Self, TypeVar
+from typing import Callable, Literal, Self, TypeVar, overload
 
 from pydantic.dataclasses import dataclass
 
-from hexdoc.utils.deserialize import decode_json_dict
+from hexdoc.utils.deserialize import JSONDict, decode_json_dict
 from hexdoc.utils.model import DEFAULT_CONFIG, HexDocValidationContext
 from hexdoc.utils.types import without_suffix
 
@@ -28,10 +28,7 @@ class ModResourceLoader:
     @contextmanager
     def load_all(cls, props: Properties) -> Iterator[Self]:
         # clear the export dir so we start with a clean slate
-        try:
-            shutil.rmtree(props.export_dir)
-        except FileNotFoundError:
-            pass
+        subprocess.run(["git", "clean", "-fdX", props.export_dir])
 
         with ExitStack() as stack:
             yield cls(
@@ -43,21 +40,25 @@ class ModResourceLoader:
                 ],
             )
 
-    def load_book_assets(self, folder: Literal["categories", "entries", "templates"]):
-        return self.load_resources(
+    def load_book_assets(
+        self, folder: Literal["categories", "entries", "templates"]
+    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, JSONDict]]:
+        yield from self.load_resources(
             type="assets",
-            folder="patchouli_books",
-            base_id=self.props.book / self.props.i18n.default_lang / folder,
+            folder=Path("patchouli_books")
+            / self.props.book.path
+            / self.props.i18n.default_lang
+            / folder,
+            namespace=self.props.book.namespace,
         )
 
     def load_resource(
         self,
         type: ResourceType,
-        folder: str,
+        folder: str | Path,
         id: ResourceLocation,
-        *,
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[Path, _T], None] | None = None,
+        export: Callable[[_T, _T | None], str] | None = None,
     ) -> tuple[PathResourceDir, _T]:
         """Find the first file with this resource location in `resource_dirs`.
 
@@ -73,7 +74,7 @@ class ModResourceLoader:
             try:
                 return resource_dir, self._load_path(
                     resource_dir,
-                    path=resource_dir.path / path_stub,
+                    resource_dir.path / path_stub,
                     decode=decode,
                     export=export,
                 )
@@ -82,33 +83,57 @@ class ModResourceLoader:
 
         raise FileNotFoundError(f"Path {path_stub} not found in any resource dir")
 
+    @overload
     def load_resources(
         self,
         type: ResourceType,
-        folder: str,
-        base_id: ResourceLocation,
+        folder: str | Path,
         *,
+        namespace: str,
         glob: str | list[str] = "**/*",
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[Path, _T], None] | None = None,
+        export: Callable[[_T, _T | None], str] | None = None,
+    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
+        ...
+
+    @overload
+    def load_resources(
+        self,
+        type: ResourceType,
+        folder: str | Path,
+        id: ResourceLocation,
+        *,
+        decode: Callable[[str], _T] = decode_json_dict,
+        export: Callable[[_T, _T | None], str] | None = None,
+    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
+        ...
+
+    def load_resources(
+        self,
+        type: ResourceType,
+        folder: str | Path,
+        id: ResourceLocation | None = None,
+        *,
+        namespace: str | None = None,
+        glob: str | list[str] = "**/*",
+        decode: Callable[[str], _T] = decode_json_dict,
+        export: Callable[[_T, _T | None], str] | None = None,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
         """Search for a glob under a given resource location in all of `resource_dirs`.
 
         Files are returned from lowest to highest priority in the load order, ie. later
         files should overwrite earlier ones.
 
-        The path of the returned resource location is relative to the path of base_id.
-
         If no file extension is provided for glob, `.json` is assumed.
 
         Raises FileNotFoundError if no files were found in any resource dir.
 
-        For example (albeit somewhat contrived):
+        For example:
         ```py
         props.find_resources(
-            type="assets",
-            folder="lang",
-            base_id=ResLoc("*", "subdir"),
+            "assets",
+            "lang/subdir",
+            namespace="*",
             glob="*.flatten.json5",
         )
 
@@ -116,8 +141,17 @@ class ModResourceLoader:
         ```
         """
 
+        if id is not None:
+            namespace = id.namespace
+            glob = id.path
+
         # eg. assets/*/lang/subdir
-        base_path_stub = base_id.file_path_stub(type, folder, assume_json=False)
+        if namespace is not None:
+            base_path_stub = Path(type) / namespace / folder
+        else:
+            raise RuntimeError(
+                "No overload matches the specified arguments (expected id or namespace)"
+            )
 
         # glob for json files if not provided
         globs = [glob] if isinstance(glob, str) else glob
@@ -140,7 +174,12 @@ class ModResourceLoader:
                         )
 
                         try:
-                            value = self._load_path(resource_dir, path, decode, export)
+                            value = self._load_path(
+                                resource_dir,
+                                path,
+                                decode=decode,
+                                export=export,
+                            )
                             found_any = True
                             yield resource_dir, id, value
                         except FileNotFoundError:
@@ -156,9 +195,10 @@ class ModResourceLoader:
         self,
         resource_dir: PathResourceDir,
         path: Path,
+        *,
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[Path, _T], None] | None = None,
-    ):
+        export: Callable[[_T, _T | None], str] | None = None,
+    ) -> _T:
         if not path.is_file():
             raise FileNotFoundError(path)
 
@@ -171,10 +211,16 @@ class ModResourceLoader:
             out_path.parent.mkdir(parents=True, exist_ok=True)
 
             logging.getLogger(__name__).debug(f"Exporting {path} to {out_path}")
-            if export:
-                export(out_path, value)
-            else:
-                out_path.write_text(data, "utf-8")
+            match export:
+                case None:
+                    out_data = data
+                case _:
+                    try:
+                        old_value = decode(out_path.read_text("utf-8"))
+                    except FileNotFoundError:
+                        old_value = None
+                    out_data = export(value, old_value)
+            out_path.write_text(out_data, "utf-8")
 
         return value
 

@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 from dataclasses import InitVar
 from functools import total_ordering
-from pathlib import Path
 from typing import Any, Callable, Self
 
 from pydantic import ValidationInfo, model_validator
@@ -24,7 +23,6 @@ from hexdoc.utils.deserialize import (
     isinstance_or_raise,
 )
 from hexdoc.utils.model import HexDocValidationContext
-from hexdoc.utils.types import without_suffix
 
 
 @total_ordering
@@ -121,7 +119,7 @@ class I18n:
         for _, _, data in loader.load_resources(
             type="assets",
             folder="lang",
-            base_id=ResourceLocation("*", ""),
+            namespace="*",
             glob=[
                 f"{props.i18n.default_lang}.json",
                 f"{props.i18n.default_lang}.json5",
@@ -139,16 +137,8 @@ class I18n:
             for key, value in raw_lookup.items()
         }
 
-    def _export(self, path: Path, value: dict[str, str]):
-        path = without_suffix(path).with_suffix(".json")
-
-        try:
-            current = decode_and_flatten_json_dict(path.read_text("utf-8"))
-        except FileNotFoundError:
-            current = {}
-
-        with path.open("w", encoding="utf-8") as f:
-            json.dump(current | value, f)
+    def _export(self, new: dict[str, str], current: dict[str, str] | None):
+        return json.dumps((current or {}) | new)
 
     def localize(self, *keys: str, default: str | None = None) -> LocalizedStr:
         """Looks up the given string in the lang table if i18n is enabled. Otherwise,

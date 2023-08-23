@@ -93,6 +93,15 @@ class BaseResourceLocation:
 class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
     """Represents a Minecraft resource location / namespaced ID."""
 
+    is_tag: bool = False
+
+    @classmethod
+    def from_str(cls, raw: str, default_namespace: str | None = None) -> Self:
+        id = super().from_str(raw.removeprefix("#"), default_namespace)
+        if raw.startswith("#"):
+            object.__setattr__(id, "is_tag", True)
+        return id
+
     @classmethod
     def from_file(cls, modid: str, base_dir: Path, path: Path) -> Self:
         resource_path = path.relative_to(base_dir).with_suffix("").as_posix()
@@ -118,7 +127,7 @@ class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
     def file_path_stub(
         self,
         type: Literal["assets", "data"],
-        folder: str = "",
+        folder: str | Path = "",
         assume_json: bool = True,
     ) -> Path:
         """Returns the path to find this resource within a resource directory.
@@ -139,6 +148,12 @@ class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
 
     def __truediv__(self, other: str) -> Self:
         return ResourceLocation(self.namespace, f"{self.path}/{other}")
+
+    def __repr__(self) -> str:
+        s = super().__repr__()
+        if self.is_tag:
+            return f"#{s}"
+        return s
 
 
 # pure unadulterated laziness
