@@ -21,12 +21,12 @@ class PageWithPattern(PageWithText, type=None):
     hex_size: int | None = None
 
     @model_validator(mode="before")
-    def _pre_root_patterns(cls, values: dict[str, Any]):
-        # patterns may be a list or a single pattern, so make sure we always get a list
-        patterns = values.get("patterns")
-        if isinstance(patterns, (NoneType, list)):
-            return values
-        return values | {"patterns": [patterns]}
+    def _pre_root_patterns(cls, values: Any):
+        match values:
+            case {"patterns": patterns} if not isinstance(patterns, (list, NoneType)):
+                return values | {"patterns": [patterns]}
+            case _:
+                return values
 
     @property
     def args(self) -> str | None:
@@ -46,12 +46,14 @@ class PageWithOpPattern(PageWithPattern, type=None):
     op_id: ResourceLocation
 
     @model_validator(mode="before")
-    def _pre_root_header(cls, values: dict[str, Any], info: ValidationInfo):
+    def _pre_root_header(cls, values: Any, info: ValidationInfo):
         if not info.context:
             return values
         context = cast_or_raise(info.context, I18nContext)
 
-        # use the pattern name as the header
-        return values | {
-            "header": context.i18n.localize_pattern(values["op_id"]),
-        }
+        match values:
+            case {"op_id": op_id}:
+                # use the pattern name as the header
+                return values | {"header": context.i18n.localize_pattern(op_id)}
+            case _:
+                return values

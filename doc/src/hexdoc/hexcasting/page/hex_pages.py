@@ -15,18 +15,22 @@ from .abstract_hex_pages import PageWithOpPattern, PageWithPattern
 
 class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
     @model_validator(mode="before")
-    def _pre_root_lookup(cls, values: dict[str, Any], info: ValidationInfo):
+    def _pre_root_lookup(cls, values: Any, info: ValidationInfo):
         if not info.context:
             return values
         context = cast_or_raise(info.context, HexContext)
 
-        # look up the pattern from the op id
-        op_id = ResourceLocation.from_str(values["op_id"])
-        pattern = context.patterns[op_id]
-        return values | {
-            "op_id": op_id,
-            "patterns": [pattern],
-        }
+        match values:
+            case {"op_id": op_id}:
+                # look up the pattern from the op id
+                id = ResourceLocation.from_str(op_id)
+                pattern = context.patterns[id]
+                return values | {
+                    "op_id": id,
+                    "patterns": [pattern],
+                }
+            case _:
+                return values
 
 
 class ManualOpPatternPage(

@@ -72,10 +72,14 @@ class BaseResourceLocation:
         return handler(values)
 
     @field_validator("namespace", mode="before")
-    def _default_namespace(cls, value: str | None) -> str:
-        if value is None:
-            return "minecraft"
-        return value.lower()
+    def _default_namespace(cls, value: Any):
+        match value:
+            case str():
+                return value.lower()
+            case None:
+                return "minecraft"
+            case _:
+                return value
 
     @field_validator("path")
     def _validate_path(cls, value: str):

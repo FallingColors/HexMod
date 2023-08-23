@@ -83,15 +83,19 @@ class Book(HexDocModel):
         )
 
     @model_validator(mode="before")
-    def _pre_root(cls, data: dict[str, Any], info: ValidationInfo) -> dict[str, Any]:
+    def _pre_root(cls, data: Any, info: ValidationInfo):
         if not info.context:
             return data
         context = cast_or_raise(info.context, I18nContext)
 
-        return data | {
-            "i18n_data": context.i18n,
-            "index_icon": data.get("index_icon") or data.get("model"),
-        }
+        match data:
+            case {**values}:
+                return values | {
+                    "i18n_data": context.i18n,
+                    "index_icon": values.get("index_icon") or values.get("model"),
+                }
+            case _:
+                return data
 
     @model_validator(mode="after")
     def _post_root(self, info: ValidationInfo) -> Self:

@@ -1,5 +1,5 @@
-- [ ] Better resource loading
-- [ ] Fix model_validator type hints (before should take Any and narrow from there)
+- [x] Better resource loading
+- [x] Fix model_validator type hints (before should take Any and narrow from there)
 - [ ] Sandbox for Jinja
 - [ ] First-class addon support
 - [ ] Language picker
