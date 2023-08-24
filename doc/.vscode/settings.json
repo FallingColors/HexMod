@@ -1,12 +1,12 @@
 {
     "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
             "source.organizeImports": true,
         },
         "editor.rulers": [88],
     },
-    "python.formatting.provider": "black",
     "isort.importStrategy": "fromEnvironment",
     "python.languageServer": "Pylance",
     "python.analysis.diagnosticMode": "workspace",
