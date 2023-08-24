@@ -4,14 +4,14 @@ from pydantic import Field
 
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.utils import ItemStack, LoaderContext, ResourceLocation
+from hexdoc.utils.resource import HexDocIDModel
 from hexdoc.utils.types import Sortable, sorted_dict
 
-from ..utils.model import HexDocFileModel
 from .entry import Entry
 from .text import FormatTree
 
 
-class Category(HexDocFileModel, Sortable):
+class Category(HexDocIDModel, Sortable):
     """Category with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/category-json
@@ -36,8 +36,8 @@ class Category(HexDocFileModel, Sortable):
         categories: dict[ResourceLocation, Self] = {}
 
         # load
-        for _, id, data in context.loader.load_book_assets("categories"):
-            category = cls.load(id, data, context)
+        for resource_dir, id, data in context.loader.load_book_assets("categories"):
+            category = cls.load(resource_dir, id, data, context)
             categories[id] = category
 
         # late-init _parent_cmp_key

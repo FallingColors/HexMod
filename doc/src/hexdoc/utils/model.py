@@ -1,18 +1,12 @@
 from __future__ import annotations
 
-import logging
-from abc import ABC
-from typing import TYPE_CHECKING, Any, Self, dataclass_transform
+from typing import TYPE_CHECKING, Any, dataclass_transform
 
 from pydantic import BaseModel, ConfigDict, model_validator
 from pydantic.config import ConfigDict
 
-from .deserialize import JSONDict
-
 if TYPE_CHECKING:
     from pydantic.root_model import Model
-
-    from .resource import ResourceLocation
 
 
 DEFAULT_CONFIG = ConfigDict(
@@ -67,18 +61,3 @@ class HexDocStripHiddenModel(HexDocModel):
             for key, value in values.items()
             if not (isinstance(key, str) and key.startswith("_"))
         }
-
-
-@dataclass_transform()
-class HexDocFileModel(HexDocModel, ABC):
-    id: ResourceLocation
-
-    @classmethod
-    def load(
-        cls,
-        id: ResourceLocation,
-        data: JSONDict,
-        context: HexDocValidationContext,
-    ) -> Self:
-        logging.getLogger(__name__).debug(f"Load {cls} at {id}")
-        return cls.model_validate(data | {"id": id}, context=context)

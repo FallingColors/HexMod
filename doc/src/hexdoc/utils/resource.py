@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import logging
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
@@ -13,7 +14,15 @@ from contextlib import ExitStack, contextmanager
 from fnmatch import fnmatch
 from importlib import metadata
 from pathlib import Path
-from typing import Any, ClassVar, ContextManager, Iterable, Literal, Self
+from typing import (
+    Any,
+    ClassVar,
+    ContextManager,
+    Iterable,
+    Literal,
+    Self,
+    dataclass_transform,
+)
 
 import importlib_resources as resources
 from importlib_resources.abc import Traversable
@@ -26,10 +35,13 @@ from pydantic import (
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from .model import DEFAULT_CONFIG, HexDocModel
+from .deserialize import JSONDict
+from .model import DEFAULT_CONFIG, HexDocModel, HexDocValidationContext
 
 HEXDOC_EXPORTS_GROUP = "hexdoc.exports"
 """Entry point group name for bundled hexdoc data."""
+
+ResourceType = Literal["assets", "data", ""]
 
 
 def _make_regex(count: bool = False, nbt: bool = False) -> re.Pattern[str]:
@@ -52,16 +64,12 @@ class BaseResourceLocation:
         cls._from_str_regex = regex
 
     @classmethod
-    def from_str(cls, raw: str, default_namespace: str | None = None) -> Self:
+    def from_str(cls, raw: str) -> Self:
         match = cls._from_str_regex.fullmatch(raw)
         if match is None:
             raise ValueError(f"Invalid {cls.__name__} string: {raw}")
 
-        groups = match.groupdict()
-        if not groups.get("namespace") and default_namespace is not None:
-            groups["namespace"] = default_namespace
-
-        return cls(**groups)
+        return cls(**match.groupdict())
 
     @model_validator(mode="wrap")
     @classmethod
@@ -100,8 +108,8 @@ class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
     is_tag: bool = False
 
     @classmethod
-    def from_str(cls, raw: str, default_namespace: str | None = None) -> Self:
-        id = super().from_str(raw.removeprefix("#"), default_namespace)
+    def from_str(cls, raw: str) -> Self:
+        id = super().from_str(raw.removeprefix("#"))
         if raw.startswith("#"):
             object.__setattr__(id, "is_tag", True)
         return id
@@ -130,7 +138,7 @@ class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
 
     def file_path_stub(
         self,
-        type: Literal["assets", "data"],
+        type: ResourceType,
         folder: str | Path = "",
         assume_json: bool = True,
     ) -> Path:
@@ -203,9 +211,6 @@ class Entity(BaseResourceLocation, regex=_make_regex(nbt=True)):
         return s
 
 
-ResourceType = Literal["assets", "data"]
-
-
 class BaseResourceDir(HexDocModel, ABC):
     external: bool
     reexport: bool
@@ -232,6 +237,13 @@ class PathResourceDir(BaseResourceDir):
     external: bool = False
     reexport: bool = True
 
+    # not a props field
+    _modid: str | None = None
+
+    @property
+    def modid(self):
+        return self._modid
+
     @contextmanager
     def load(self):
         yield [self]
@@ -254,20 +266,23 @@ class EntryPointResourceDir(BaseResourceDir):
     @contextmanager
     def load(self):
         with ExitStack() as stack:
+            entry_point = self._entry_point()
+
             # NOT "yield from"
             yield [
                 PathResourceDir(
                     path=stack.enter_context(resources.as_file(traversable)),
                     external=self.external,
                     reexport=self.reexport,
+                    _modid=self.modid,
                 )
-                for traversable in self._load_traversables()
+                for traversable in self._load_traversables(entry_point)
             ]
 
-    def _load_traversables(self) -> Iterator[Traversable]:
-        entry_point = self._entry_point()
+    def _load_traversables(
+        self, entry_point: metadata.EntryPoint
+    ) -> Iterator[Traversable]:
         base_traversable = resources.files(entry_point.module)
-
         match entry_point.load():
             case str(stub) | Path(stub):
                 yield base_traversable / stub
@@ -300,3 +315,23 @@ class EntryPointResourceDir(BaseResourceDir):
 
 
 ResourceDir = PathResourceDir | EntryPointResourceDir
+
+
+@dataclass_transform()
+class HexDocIDModel(HexDocModel, ABC):
+    id: ResourceLocation
+    resource_dir: PathResourceDir
+
+    @classmethod
+    def load(
+        cls,
+        resource_dir: PathResourceDir,
+        id: ResourceLocation,
+        data: JSONDict,
+        context: HexDocValidationContext,
+    ) -> Self:
+        logging.getLogger(__name__).debug(f"Load {cls} at {id}")
+        return cls.model_validate(
+            data | {"id": id, "resource_dir": resource_dir},
+            context=context,
+        )

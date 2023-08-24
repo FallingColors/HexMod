@@ -103,39 +103,40 @@ def main(args: Args | None = None) -> None:
                 ),
             )
 
-        # set up Jinja environment
-        env = SandboxedEnvironment(
-            # search order: template_dirs, template_packages, built-in hexdoc templates
-            loader=ChoiceLoader(
-                [FileSystemLoader(props.template_dirs)]
-                + [
-                    PackageLoader(name, str(path))
-                    for name, path in props.template_packages
-                ]
-                + [PackageLoader("hexdoc", "_templates")]
-            ),
-            undefined=StrictUndefined,
-            lstrip_blocks=True,
-            trim_blocks=True,
-            autoescape=True,
-            extensions=[
-                IncludeRawExtension,
-            ],
-        )
-        env.filters |= {  # type: ignore
-            "hexdoc_block": hexdoc_block,
-            "hexdoc_wrap": hexdoc_wrap,
-        }
-
-        # load and render template
-        template = env.get_template(props.template)
-        docs = strip_empty_lines(
-            template.render(
-                **props.template_args,
-                book=book,
-                props=props,
+            # set up Jinja environment
+            env = SandboxedEnvironment(
+                # search order: template_dirs, template_packages, built-in hexdoc templates
+                loader=ChoiceLoader(
+                    [FileSystemLoader(props.template_dirs)]
+                    + [
+                        PackageLoader(name, str(path))
+                        for name, path in props.template_packages
+                    ]
+                    + [PackageLoader("hexdoc", "_templates")]
+                ),
+                undefined=StrictUndefined,
+                lstrip_blocks=True,
+                trim_blocks=True,
+                autoescape=True,
+                extensions=[
+                    IncludeRawExtension,
+                ],
             )
-        )
+            env.filters |= {  # type: ignore
+                "hexdoc_block": hexdoc_block,
+                "hexdoc_wrap": hexdoc_wrap,
+            }
+
+            # load and render template
+            template = env.get_template(props.template)
+            docs = strip_empty_lines(
+                template.render(
+                    **props.template_args,
+                    book=book,
+                    props=props,
+                    mod_metadata=loader.mod_metadata,
+                )
+            )
 
         # if there's an output file specified, write to it
         # otherwise just print the generated docs

@@ -6,17 +6,20 @@ import re
 from abc import ABC, abstractmethod
 from contextlib import nullcontext
 from enum import Enum, auto
-from typing import Literal, Self
+from typing import Any, Literal, Self
 
-from pydantic import Field, ValidationInfo, field_validator, model_validator
+from pydantic import ValidationInfo, field_validator, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
+from hexdoc.patchouli.text.html import HTMLElement, HTMLStream
 from hexdoc.utils import DEFAULT_CONFIG, HexDocModel, PropsContext
 from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.utils.properties import Properties
 from hexdoc.utils.resource import ResourceLocation
+from hexdoc.utils.resource_loader import LoaderContext
 from hexdoc.utils.types import TryGetEnum
 
 from .html import HTMLElement, HTMLStream
@@ -64,17 +67,48 @@ _COLORS = {
 }
 
 
-class FormattingContext(I18nContext, PropsContext, arbitrary_types_allowed=True):
+class FormattingContext(
+    I18nContext,
+    PropsContext,
+    LoaderContext,
+    arbitrary_types_allowed=True,
+):
     macros: dict[str, str]
-    links_to_check: list[tuple[ResourceLocation, str | None, str]] = Field(
-        default_factory=list
-    )
-    """id, anchor"""
 
     @field_validator("macros")
     @classmethod
     def _add_default_macros(cls, macros: dict[str, str]) -> dict[str, str]:
         return DEFAULT_MACROS | macros
+
+
+class BookLink(HexDocModel):
+    raw_value: str
+    id: ResourceLocation
+    anchor: str | None
+
+    @classmethod
+    def from_str(cls, raw_value: str, book_id: ResourceLocation) -> Self:
+        # anchor
+        if "#" in raw_value:
+            id_str, anchor = raw_value.split("#", 1)
+        else:
+            id_str, anchor = raw_value, None
+
+        # id of category or entry being linked to
+        if ":" in id_str:
+            id = ResourceLocation.from_str(id_str)
+        else:
+            id = book_id.with_path(id_str)
+
+        return cls(raw_value=raw_value, id=id, anchor=anchor)
+
+    @property
+    def as_tuple(self) -> tuple[ResourceLocation, str | None]:
+        return (self.id, self.anchor)
+
+    @property
+    def fragment(self) -> str:
+        return f"#{self.raw_value.replace('#', '@')}"
 
 
 # Higgledy piggledy
@@ -101,7 +135,6 @@ class CommandStyleType(TryGetEnum):
 class FunctionStyleType(TryGetEnum):
     """Function styles, like `$(type:value)`."""
 
-    link = "l"
     tooltip = "t"
     cmd_click = "c"
 
@@ -113,22 +146,14 @@ class SpecialStyleType(Enum):
     base = auto()
     paragraph = auto()
     color = auto()
-
-
-BaseStyleType = Literal[SpecialStyleType.base]
-
-ParagraphStyleType = Literal[SpecialStyleType.paragraph]
-
-ColorStyleType = Literal[SpecialStyleType.color]
+    link = "l"
 
 
 class Style(ABC, HexDocModel, frozen=True):
     type: CommandStyleType | FunctionStyleType | SpecialStyleType
 
     @staticmethod
-    def parse(
-        style_str: str, full_str: str, context: FormattingContext
-    ) -> Style | _CloseTag | str:
+    def parse(style_str: str, context: FormattingContext) -> Style | _CloseTag | str:
         # direct text replacements
         if style_str in _REPLACEMENTS:
             return _REPLACEMENTS[style_str]
@@ -161,10 +186,12 @@ class Style(ABC, HexDocModel, frozen=True):
             if name == "k":
                 return str(context.i18n.localize_key(value))
 
+            # links
+            if name == SpecialStyleType.link.value:
+                return LinkStyle(value=_format_href(value, context.props))
+
             # all the other functions
             if style_type := FunctionStyleType.get(name):
-                if style_type is FunctionStyleType.link:
-                    value = _format_href(value, full_str, context)
                 return FunctionStyle(type=style_type, value=value)
 
         # reset
@@ -180,7 +207,12 @@ class Style(ABC, HexDocModel, frozen=True):
         raise ValueError(f"Unhandled style: {style_str}")
 
     @abstractmethod
-    def element(self, out: HTMLStream) -> HTMLElement | nullcontext[None]:
+    def element(
+        self,
+        out: HTMLStream,
+        link_bases: dict[tuple[ResourceLocation, str | None], str],
+        /,
+    ) -> HTMLElement | nullcontext[None]:
         ...
 
 
@@ -188,37 +220,16 @@ def is_external_link(value: str) -> bool:
     return value.startswith(("https:", "http:"))
 
 
-def _format_href(value: str, full_str: str, context: FormattingContext) -> str:
+def _format_href(value: str, props: Properties) -> str | BookLink:
     if is_external_link(value):
         return value
-
-    # anchor
-    if "#" in value:
-        id_str, anchor = value.split("#", 1)
-    else:
-        id_str, anchor = value, None
-
-    # id of category or entry being linked to
-    if ":" in id_str:
-        id = ResourceLocation.from_str(id_str)
-    else:
-        id = context.props.book.with_path(id_str)
-
-    # add entry to list to check after loading all pages
-    context.links_to_check.append((id, anchor, full_str))
-
-    # external book link prefix
-    if id.namespace != context.props.book.namespace:
-        # TODO: implement (probably put in loader?)
-        raise NotImplementedError
-
-    return f"#{value.replace('#', '@')}"
+    return BookLink.from_str(value, props.book)
 
 
 class CommandStyle(Style, frozen=True):
-    type: CommandStyleType | BaseStyleType
+    type: CommandStyleType | Literal[SpecialStyleType.base]
 
-    def element(self, out: HTMLStream) -> HTMLElement | nullcontext[None]:
+    def element(self, out: HTMLStream, *_: Any) -> HTMLElement | nullcontext[None]:
         match self.type:
             case CommandStyleType.obfuscated:
                 return out.element("span", class_name="obfuscated")
@@ -235,7 +246,7 @@ class CommandStyle(Style, frozen=True):
 
 
 class ParagraphStyle(Style, frozen=True):
-    type: ParagraphStyleType = SpecialStyleType.paragraph
+    type: Literal[SpecialStyleType.paragraph] = SpecialStyleType.paragraph
     attributes: dict[str, str]
 
     @classmethod
@@ -256,18 +267,16 @@ class ParagraphStyle(Style, frozen=True):
     def list_item(cls) -> Self:
         return cls(attributes={"class_name": "fake-li"})
 
-    def element(self, out: HTMLStream) -> HTMLElement:
+    def element(self, out: HTMLStream, *_: Any) -> HTMLElement:
         return out.element("p", **self.attributes)
 
 
 class FunctionStyle(Style, frozen=True):
-    type: FunctionStyleType | ColorStyleType
+    type: FunctionStyleType | Literal[SpecialStyleType.color]
     value: str
 
-    def element(self, out: HTMLStream) -> HTMLElement:
+    def element(self, out: HTMLStream, *_: Any) -> HTMLElement:
         match self.type:
-            case FunctionStyleType.link:
-                return out.element("a", href=self.value)
             case FunctionStyleType.tooltip:
                 return out.element("span", class_name="has-tooltip", title=self.value)
             case FunctionStyleType.cmd_click:
@@ -280,10 +289,29 @@ class FunctionStyle(Style, frozen=True):
                 return out.element("span", style=f"color: #{self.value}")
 
 
+class LinkStyle(Style, frozen=True):
+    type: Literal[SpecialStyleType.link] = SpecialStyleType.link
+    value: str | BookLink
+
+    def element(
+        self,
+        out: HTMLStream,
+        link_bases: dict[tuple[ResourceLocation, str | None], str],
+    ) -> HTMLElement:
+        match self.value:
+            case BookLink(as_tuple=key) as book_link:
+                if key not in link_bases:
+                    raise ValueError(f"broken link: {book_link}")
+                href = link_bases[key] + book_link.fragment
+            case str(href):
+                pass
+        return out.element("a", href=href)
+
+
 # intentionally not inheriting from Style, because this is basically an implementation
 # detail of the parser and should not be returned or exposed anywhere
 class _CloseTag(HexDocModel, frozen=True):
-    type: FunctionStyleType | BaseStyleType | ColorStyleType
+    type: FunctionStyleType | Literal[SpecialStyleType.base, SpecialStyleType.color]
 
 
 _FORMAT_RE = re.compile(r"\$\(([^)]*)\)")
@@ -316,7 +344,7 @@ class FormatTree:
             text_since_prev_style.append(leading_text)
             last_end = match.end()
 
-            match Style.parse(match[1], string, context):
+            match Style.parse(match[1], context):
                 case str(replacement):
                     # str means "use this instead of the original value"
                     text_since_prev_style.append(replacement)

@@ -1,13 +1,16 @@
 from typing import Any
 
-from jinja2 import nodes
+from jinja2 import nodes, pass_context
 from jinja2.ext import Extension
 from jinja2.parser import Parser
+from jinja2.runtime import Context
 from markupsafe import Markup
 
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.patchouli import FormatTree
+from hexdoc.patchouli.book import Book
 from hexdoc.patchouli.text import HTMLStream
+from hexdoc.utils.deserialize import cast_or_raise
 
 
 # https://stackoverflow.com/a/64392515
@@ -26,18 +29,22 @@ class IncludeRawExtension(Extension):
         return Markup(source[0])
 
 
-def hexdoc_block(value: Any) -> str:
+@pass_context
+def hexdoc_block(context: Context, value: Any) -> str:
     match value:
         case LocalizedStr() | str():
             # use Markup to tell Jinja not to escape this string for us
             lines = str(value).splitlines()
             return Markup("<br />".join(Markup.escape(line) for line in lines))
+
         case FormatTree():
+            book = cast_or_raise(context["book"], Book)
             with HTMLStream() as out:
-                with value.style.element(out):
+                with value.style.element(out, book.link_bases):
                     for child in value.children:
-                        out.write(hexdoc_block(child))
+                        out.write(hexdoc_block(context, child))
                 return Markup(out.getvalue())
+
         case None:
             return ""
         case _:

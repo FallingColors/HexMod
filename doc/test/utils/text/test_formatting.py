@@ -5,10 +5,11 @@ from typing import cast
 from hexdoc.minecraft.i18n import I18n
 from hexdoc.patchouli.text import DEFAULT_MACROS, FormatTree
 from hexdoc.patchouli.text.formatting import (
+    BookLink,
     CommandStyle,
     FormattingContext,
     FunctionStyle,
-    FunctionStyleType,
+    LinkStyle,
     ParagraphStyle,
     SpecialStyleType,
 )
@@ -49,9 +50,11 @@ def test_format_string():
                 children=[
                     "Write the given iota to my ",
                     FormatTree(
-                        style=FunctionStyle(
-                            type=FunctionStyleType.link,
-                            value="#patterns/readwrite@hexcasting:write/local",
+                        style=LinkStyle(
+                            value=BookLink.from_str(
+                                "patterns/readwrite#hexcasting:write/local",
+                                ResourceLocation("hexcasting", "thehexbook"),
+                            ),
                         ),
                         children=[
                             FormatTree(
@@ -65,9 +68,11 @@ def test_format_string():
                     ),
                     ".\nThe ",
                     FormatTree(
-                        style=FunctionStyle(
-                            type=FunctionStyleType.link,
-                            value="#patterns/readwrite@hexcasting:write/local",
+                        style=LinkStyle(
+                            value=BookLink.from_str(
+                                "patterns/readwrite#hexcasting:write/local",
+                                ResourceLocation("hexcasting", "thehexbook"),
+                            ),
                         ),
                         children=[
                             FormatTree(
@@ -81,9 +86,11 @@ def test_format_string():
                     ),
                     " is a lot like a ",
                     FormatTree(
-                        style=FunctionStyle(
-                            type=FunctionStyleType.link,
-                            value="#items/focus",
+                        style=LinkStyle(
+                            value=BookLink.from_str(
+                                "items/focus",
+                                ResourceLocation("hexcasting", "thehexbook"),
+                            ),
                         ),
                         children=[
                             FormatTree(
@@ -97,9 +104,11 @@ def test_format_string():
                     ),
                     ". It's cleared when I stop casting a Hex, starts with ",
                     FormatTree(
-                        style=FunctionStyle(
-                            type=FunctionStyleType.link,
-                            value="#casting/influences",
+                        style=LinkStyle(
+                            value=BookLink.from_str(
+                                "casting/influences",
+                                ResourceLocation("hexcasting", "thehexbook"),
+                            ),
                         ),
                         children=[
                             FormatTree(
@@ -113,9 +122,11 @@ def test_format_string():
                     ),
                     " in it, and is preserved between casts of ",
                     FormatTree(
-                        style=FunctionStyle(
-                            type=FunctionStyleType.link,
-                            value="#patterns/meta@hexcasting:for_each",
+                        style=LinkStyle(
+                            value=BookLink.from_str(
+                                "patterns/meta#hexcasting:for_each",
+                                ResourceLocation("hexcasting", "thehexbook"),
+                            ),
                         ),
                         children=[
                             FormatTree(
