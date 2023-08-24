@@ -112,7 +112,6 @@ def main(args: Args | None = None) -> None:
                         PackageLoader(name, str(path))
                         for name, path in props.template_packages
                     ]
-                    + [PackageLoader("hexdoc", "_templates")]
                 ),
                 undefined=StrictUndefined,
                 lstrip_blocks=True,

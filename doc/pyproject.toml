@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "hexdoc"
-version = "0.1.0"
+version = "0.1.0+0.11.1-7" # TODO: make a Hatch plugin to auto-set the mod version after the +
 authors = [
     { name="Alwinfy" },
     { name="object-Object", email="object@objectobject.ca" },
@@ -57,11 +57,6 @@ packages = ["src/hexdoc"]
 
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
-markers = [
-    "filename: name of file for fixtures to create",
-    "file_contents: data for fixtures to write to files",
-    "fixture_data: other misc data",
-]
 
 
 [tool.coverage.report]

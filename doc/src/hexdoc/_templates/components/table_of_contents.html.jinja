@@ -9,7 +9,7 @@
   ><i class="bi bi-list-nested"></i></a>{{ macros.permalink("table-of-contents") }}
 </h2>
 
-{% for category in book.categories.values() %}
+{% for category in book.categories.values() if category.entries %}
   <details class="toc-category">
     {# category #}
     <summary>{{ macros.maybe_spoilered_link(category) }}</summary>

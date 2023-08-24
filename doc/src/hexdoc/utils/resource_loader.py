@@ -17,12 +17,19 @@ from .properties import Properties
 from .resource import PathResourceDir, ResourceLocation, ResourceType
 
 _T = TypeVar("_T")
+_T_Model = TypeVar("_T_Model", bound=HexDocModel)
+
+METADATA_SUFFIX = ".hexdoc.json"
 
 
 class HexDocMetadata(HexDocModel):
     """Automatically generated at `export_dir/modid.hexdoc.json`."""
 
     book_url: str
+
+    @classmethod
+    def path(cls, modid: str) -> Path:
+        return Path(f"{modid}.hexdoc.json")
 
 
 @dataclass(config=DEFAULT_CONFIG, kw_only=True)
@@ -37,7 +44,7 @@ class ModResourceLoader:
         subprocess.run(["git", "clean", "-fdX", props.export_dir])
 
         with ExitStack() as stack:
-            yield cls(
+            loader = cls(
                 props=props,
                 resource_dirs=[
                     path_resource_dir
@@ -46,26 +53,46 @@ class ModResourceLoader:
                 ],
             )
 
-    def __post_init__(self):
-        self.mod_metadata = dict[str, HexDocMetadata]()
-
-        for resource_dir in self.resource_dirs:
-            # skip if we've already loaded this mod's metadata
-            modid = resource_dir.modid
-            if modid is None or modid in self.mod_metadata:
-                continue
-
-            _, self.mod_metadata[modid] = self.load_resource(
-                Path(f"{modid}.hexdoc.json"),
-                decode=HexDocMetadata.model_validate_json,
-                export=False,
+            # export this mod's metadata
+            loader.export(
+                path=HexDocMetadata.path(props.modid),
+                data=HexDocMetadata(
+                    book_url=props.url,
+                ).model_dump_json(),
             )
+
+            yield loader
+
+    def __post_init__(self):
+        self.mod_metadata = self.load_metadata("{modid}", HexDocMetadata)
 
     def get_link_base(self, resource_dir: PathResourceDir) -> str:
         modid = resource_dir.modid
         if modid is None or modid == self.props.modid:
             return ""
         return self.mod_metadata[modid].book_url
+
+    def load_metadata(
+        self,
+        name_pattern: str,
+        model_type: type[_T_Model],
+    ) -> dict[str, _T_Model]:
+        """eg. `"{modid}.patterns"`"""
+        metadata = dict[str, _T_Model]()
+
+        for resource_dir in self.resource_dirs:
+            # skip if we've already loaded this mod's metadata
+            modid = resource_dir.modid
+            if modid is None or modid in metadata:
+                continue
+
+            _, metadata[modid] = self.load_resource(
+                Path(name_pattern.format(modid=modid) + METADATA_SUFFIX),
+                decode=model_type.model_validate_json,
+                export=False,
+            )
+
+        return metadata
 
     def load_book_assets(
         self, folder: Literal["categories", "entries", "templates"]
@@ -257,29 +284,63 @@ class ModResourceLoader:
         if not path.is_file():
             raise FileNotFoundError(path)
 
-        logger = logging.getLogger(__name__)
-        logger.info(f"Loading {path}")
+        logging.getLogger(__name__).info(f"Loading {path}")
 
         data = path.read_text("utf-8")
         value = decode(data)
 
         if resource_dir.reexport and export is not False:
-            out_path = self.props.export_dir / path.relative_to(resource_dir.path)
-            out_path.parent.mkdir(parents=True, exist_ok=True)
-
-            logger.debug(f"Exporting {path} to {out_path}")
-            match export:
-                case None:
-                    out_data = data
-                case _:
-                    try:
-                        old_value = decode(out_path.read_text("utf-8"))
-                    except FileNotFoundError:
-                        old_value = None
-                    out_data = export(value, old_value)
-            out_path.write_text(out_data, "utf-8")
+            self.export(
+                path.relative_to(resource_dir.path),
+                data,
+                value,
+                decode=decode,
+                export=export,
+            )
 
         return value
+
+    @overload
+    def export(self, /, path: Path, data: str) -> None:
+        ...
+
+    @overload
+    def export(
+        self,
+        /,
+        path: Path,
+        data: str,
+        value: _T,
+        *,
+        decode: Callable[[str], _T] = decode_json_dict,
+        export: Callable[[_T, _T | None], str] | None = None,
+    ) -> None:
+        ...
+
+    def export(
+        self,
+        path: Path,
+        data: str,
+        value: _T = None,
+        *,
+        decode: Callable[[str], _T] = decode_json_dict,
+        export: Callable[[_T, _T | None], str] | None = None,
+    ) -> None:
+        out_path = self.props.export_dir / path
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        logging.getLogger(__name__).debug(f"Exporting {path} to {out_path}")
+        match export:
+            case None:
+                out_data = data
+            case _:
+                try:
+                    old_value = decode(out_path.read_text("utf-8"))
+                except FileNotFoundError:
+                    old_value = None
+                out_data = export(value, old_value)
+
+        out_path.write_text(out_data, "utf-8")
 
 
 class LoaderContext(HexDocValidationContext):

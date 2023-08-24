@@ -2,6 +2,9 @@
 - [x] Fix model_validator type hints (before should take Any and narrow from there)
 - [x] Sandbox for Jinja
 - [x] First-class addon support
+- [ ] GitHub Actions
+- [ ] Pypi releasing
+- [ ] API improvements (disable exporting, make it easier (possible?) to generate book for imported mods)
 - [ ] Language picker
 - [ ] Version picker
 - [ ] Re-add edified wood recipe to [Common/src/main/resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/items/edified.json](items/edified) when it actually exists

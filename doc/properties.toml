@@ -23,7 +23,9 @@ entry_id_blacklist = []
 
 template = "main.html.jinja"
 template_dirs = []
-template_packages = []
+template_packages = [
+    ["hexdoc", "_templates"],
+]
 
 is_0_black = false
 

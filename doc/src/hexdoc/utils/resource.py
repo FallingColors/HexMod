@@ -38,7 +38,7 @@ from pydantic.functional_validators import ModelWrapValidatorHandler
 from .deserialize import JSONDict
 from .model import DEFAULT_CONFIG, HexDocModel, HexDocValidationContext
 
-HEXDOC_EXPORTS_GROUP = "hexdoc.exports"
+HEXDOC_EXPORTS_GROUP = "hexdoc.export"
 """Entry point group name for bundled hexdoc data."""
 
 ResourceType = Literal["assets", "data", ""]
@@ -244,6 +244,10 @@ class PathResourceDir(BaseResourceDir):
     def modid(self):
         return self._modid
 
+    def set_modid(self, modid: str) -> Self:
+        self._modid = modid
+        return self
+
     @contextmanager
     def load(self):
         yield [self]
@@ -274,8 +278,7 @@ class EntryPointResourceDir(BaseResourceDir):
                     path=stack.enter_context(resources.as_file(traversable)),
                     external=self.external,
                     reexport=self.reexport,
-                    _modid=self.modid,
-                )
+                ).set_modid(self.modid)
                 for traversable in self._load_traversables(entry_point)
             ]
 

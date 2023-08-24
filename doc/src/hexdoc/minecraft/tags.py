@@ -65,13 +65,12 @@ class Tag(HexDocModel):
 
     def _export(self, current: Self | None):
         if self.replace or current is None:
-            return self.model_dump_json()
-
-        return self.model_copy(
-            update={
-                "raw_values": current.raw_values | self.raw_values,
-            },
-        ).model_dump_json()
+            tag = self
+        else:
+            tag = self.model_copy(
+                update={"raw_values": current.raw_values | self.raw_values},
+            )
+        return tag.model_dump_json(by_alias=True)
 
     def _load_values(self, context: LoaderContext) -> Iterator[TagValue]:
         for value in self.raw_values:
