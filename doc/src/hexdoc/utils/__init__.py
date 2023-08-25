@@ -2,7 +2,7 @@ __all__ = [
     "HexDocModel",
     "InternallyTaggedUnion",
     "Color",
-    "HexDocValidationContext",
+    "ValidationContext",
     "DEFAULT_CONFIG",
     "NoValue",
     "NoValueType",
@@ -18,7 +18,7 @@ __all__ = [
     "LoaderContext",
 ]
 
-from .model import DEFAULT_CONFIG, HexDocModel, HexDocValidationContext
+from .model import DEFAULT_CONFIG, HexDocModel, ValidationContext
 from .properties import Properties, PropsContext
 from .resource import Entity, ItemStack, ResLoc, ResourceLocation
 from .resource_loader import LoaderContext, ModResourceLoader

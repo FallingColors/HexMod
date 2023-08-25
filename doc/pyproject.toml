@@ -15,7 +15,7 @@ requires-python = ">=3.11"
 dependencies = [
     "typing_extensions>=4.7.0",
     "importlib_resources>=6.0.1",
-    "pydantic>=2.2.0",
+    "pydantic>=2.3.0",
     "Jinja2>=3.1.2",
     "pyjson5>=1.6.3",
 ]

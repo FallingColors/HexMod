@@ -10,7 +10,7 @@ from typing import Callable, Literal, Self, TypeVar, overload
 from pydantic.dataclasses import dataclass
 
 from hexdoc.utils.deserialize import JSONDict, decode_json_dict
-from hexdoc.utils.model import DEFAULT_CONFIG, HexDocModel, HexDocValidationContext
+from hexdoc.utils.model import DEFAULT_CONFIG, HexDocModel, ValidationContext
 from hexdoc.utils.types import without_suffix
 
 from .properties import Properties
@@ -343,5 +343,5 @@ class ModResourceLoader:
         out_path.write_text(out_data, "utf-8")
 
 
-class LoaderContext(HexDocValidationContext):
+class LoaderContext(ValidationContext):
     loader: ModResourceLoader

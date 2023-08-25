@@ -1,13 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, dataclass_transform
+from typing import TYPE_CHECKING, Any, Self, dataclass_transform
 
 from pydantic import BaseModel, ConfigDict, model_validator
 from pydantic.config import ConfigDict
-
-if TYPE_CHECKING:
-    from pydantic.root_model import Model
-
 
 DEFAULT_CONFIG = ConfigDict(
     extra="forbid",
@@ -15,7 +11,20 @@ DEFAULT_CONFIG = ConfigDict(
 
 
 @dataclass_transform()
+class ValidationContext(BaseModel):
+    """Base class for Pydantic validation context for `HexDocModel`."""
+
+    model_config = DEFAULT_CONFIG
+
+
+@dataclass_transform()
 class HexDocModel(BaseModel):
+    """Base class for most Pydantic models in hexdoc.
+
+    Includes type overrides to require using subclasses of `ValidationContext` for
+    validation context.
+    """
+
     model_config = DEFAULT_CONFIG
 
     # pydantic core actually allows PyAny for context, so I'm pretty sure this is fine
@@ -23,32 +32,28 @@ class HexDocModel(BaseModel):
 
         @classmethod
         def model_validate(  # pyright: ignore[reportIncompatibleMethodOverride]
-            cls: type[Model],
+            cls,
             obj: Any,
             *,
             strict: bool | None = None,
             from_attributes: bool | None = None,
-            context: HexDocValidationContext | None = None,
-        ) -> Model:
+            context: ValidationContext | None = None,
+        ) -> Self:
             ...
 
         @classmethod
         def model_validate_json(  # pyright: ignore[reportIncompatibleMethodOverride]
-            cls: type[Model],
+            cls,
             json_data: str | bytes | bytearray,
             *,
             strict: bool | None = None,
-            context: HexDocValidationContext | None = None,
-        ) -> Model:
+            context: ValidationContext | None = None,
+        ) -> Self:
             ...
 
 
-class HexDocValidationContext(HexDocModel):
-    pass
-
-
 @dataclass_transform()
-class HexDocStripHiddenModel(HexDocModel):
+class StripHiddenModel(HexDocModel):
     """Base model which removes all keys starting with _ before validation."""
 
     @model_validator(mode="before")

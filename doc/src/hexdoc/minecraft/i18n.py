@@ -22,7 +22,7 @@ from hexdoc.utils.deserialize import (
     decode_and_flatten_json_dict,
     isinstance_or_raise,
 )
-from hexdoc.utils.model import HexDocValidationContext
+from hexdoc.utils.model import ValidationContext
 
 
 @total_ordering
@@ -201,5 +201,5 @@ class I18n:
         return self.localize(f"key.{key}")
 
 
-class I18nContext(HexDocValidationContext):
+class I18nContext(ValidationContext):
     i18n: I18n

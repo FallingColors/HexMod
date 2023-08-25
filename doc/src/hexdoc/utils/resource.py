@@ -36,7 +36,7 @@ from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from .deserialize import JSONDict
-from .model import DEFAULT_CONFIG, HexDocModel, HexDocValidationContext
+from .model import DEFAULT_CONFIG, HexDocModel, ValidationContext
 
 HEXDOC_EXPORTS_GROUP = "hexdoc.export"
 """Entry point group name for bundled hexdoc data."""
@@ -331,7 +331,7 @@ class HexDocIDModel(HexDocModel, ABC):
         resource_dir: PathResourceDir,
         id: ResourceLocation,
         data: JSONDict,
-        context: HexDocValidationContext,
+        context: ValidationContext,
     ) -> Self:
         logging.getLogger(__name__).debug(f"Load {cls} at {id}")
         return cls.model_validate(

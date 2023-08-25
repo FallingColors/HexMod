@@ -6,7 +6,7 @@ from typing import Annotated, Any, Self
 
 from pydantic import AfterValidator, HttpUrl
 
-from .model import HexDocModel, HexDocStripHiddenModel, HexDocValidationContext
+from .model import HexDocModel, StripHiddenModel, ValidationContext
 from .resource import ResourceDir, ResourceLocation
 from .toml_placeholders import load_toml_with_placeholders
 
@@ -21,12 +21,12 @@ class HexDocMeta(HexDocModel):
     book_url: NoTrailingSlashHttpUrl
 
 
-class PatternStubProps(HexDocStripHiddenModel):
+class PatternStubProps(StripHiddenModel):
     path: Path
     regex: re.Pattern[str]
 
 
-class XplatProps(HexDocStripHiddenModel):
+class XplatProps(StripHiddenModel):
     src: Path
     pattern_stubs: list[PatternStubProps] | None = None
     resources: Path
@@ -37,11 +37,11 @@ class PlatformProps(XplatProps):
     tags: Path
 
 
-class I18nProps(HexDocStripHiddenModel):
+class I18nProps(StripHiddenModel):
     default_lang: str
 
 
-class Properties(HexDocStripHiddenModel):
+class Properties(StripHiddenModel):
     modid: str
     book: ResourceLocation
     url: NoTrailingSlashHttpUrl
@@ -81,5 +81,5 @@ class Properties(HexDocStripHiddenModel):
         return f"{base_url}/{id.file_path_stub('assets').as_posix()}"
 
 
-class PropsContext(HexDocValidationContext):
+class PropsContext(ValidationContext):
     props: Properties
