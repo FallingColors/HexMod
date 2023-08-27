@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from typing import Iterator, Self
+from typing import Any, Iterator, Self
 
 from pydantic import Field
 
-from hexdoc.utils import HexDocModel, LoaderContext, ResourceLocation
+from hexdoc.utils import HexdocModel, LoaderContext, ResourceLocation
 from hexdoc.utils.deserialize import decode_json_dict
 
 
-class OptionalTagValue(HexDocModel, frozen=True):
+class OptionalTagValue(HexdocModel, frozen=True):
     id: ResourceLocation
     required: bool
 
@@ -16,7 +16,7 @@ class OptionalTagValue(HexDocModel, frozen=True):
 TagValue = ResourceLocation | OptionalTagValue
 
 
-class Tag(HexDocModel):
+class Tag(HexdocModel):
     registry: str = Field(exclude=True)
     raw_values: set[TagValue] = Field(alias="values")
     replace: bool
@@ -63,7 +63,7 @@ class Tag(HexDocModel):
                 case OptionalTagValue(id=id):
                     yield id
 
-    def _export(self, current: Self | None):
+    def _export(self, current: Self | None, *_: Any):
         if self.replace or current is None:
             tag = self
         else:

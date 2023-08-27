@@ -6,7 +6,7 @@ from hexdoc.minecraft import I18n, LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.utils import (
     Color,
-    HexDocModel,
+    HexdocModel,
     ItemStack,
     ModResourceLoader,
     ResLoc,
@@ -20,7 +20,7 @@ from .entry import Entry
 from .text import FormatTree
 
 
-class Book(HexDocModel):
+class Book(HexdocModel):
     """Main Patchouli book class.
 
     Includes all data from book.json, categories/entries/pages, and i18n.

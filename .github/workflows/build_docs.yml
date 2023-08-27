@@ -18,7 +18,7 @@ jobs:
         python-version: "3.11"
 
     - name: Install docgen
-      run: pip install ./doc
+      run: pip install .
 
     - name: Generate file
       run: hexdoc doc/properties.toml -o index.html.uncommitted --ci

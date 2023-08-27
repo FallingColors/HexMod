@@ -6,7 +6,7 @@ from hexdoc.minecraft.recipe import (
     MinecraftItemIdIngredient,
     MinecraftItemTagIngredient,
 )
-from hexdoc.utils import HexDocModel, ResourceLocation, TypeTaggedUnion
+from hexdoc.utils import HexdocModel, ResourceLocation, TypeTaggedUnion
 
 # ingredients
 
@@ -34,7 +34,7 @@ class EntityTagIngredient(BrainsweepeeIngredient, type="entity_tag"):
     tag: ResourceLocation
 
 
-class BlockStateIngredient(HexDocModel):
+class BlockStateIngredient(HexdocModel):
     # TODO: tagged union
     type: Literal["block"]
     block: ResourceLocation
@@ -58,7 +58,7 @@ class ModConditionalIngredient(
 # results
 
 
-class BlockState(HexDocModel):
+class BlockState(HexdocModel):
     name: LocalizedItem
     properties: dict[str, Any] | None = None
 

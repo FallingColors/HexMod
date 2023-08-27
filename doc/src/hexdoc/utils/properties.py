@@ -35,7 +35,7 @@ class TemplateProps(StripHiddenModel):
 
         for i, value in enumerate(values):
             if isinstance(value, str):
-                values[i] = (value, Path())
+                values[i] = (value, Path("_templates"))
         return values
 
 

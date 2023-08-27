@@ -25,9 +25,9 @@ def init_context(value: Any) -> Iterator[None]:
 
 
 @dataclass_transform()
-class HexDocBaseModel(BaseModel):
+class HexdocBaseModel(BaseModel):
     """Base class for all Pydantic models in hexdoc. You should probably use
-    `HexDocModel` or `ValidationContext` instead.
+    `HexdocModel` or `ValidationContext` instead.
 
     Sets the default model config, and overrides __init__ to allow using the
     `init_context` context manager to set validation context for constructors.
@@ -47,12 +47,12 @@ class HexDocBaseModel(BaseModel):
 
 
 @dataclass_transform()
-class ValidationContext(HexDocBaseModel):
-    """Base class for Pydantic validation context for `HexDocModel`."""
+class ValidationContext(HexdocBaseModel):
+    """Base class for Pydantic validation context for `HexdocModel`."""
 
 
 @dataclass_transform()
-class HexDocModel(HexDocBaseModel):
+class HexdocModel(HexdocBaseModel):
     """Base class for most Pydantic models in hexdoc.
 
     Includes type overrides to require using subclasses of `ValidationContext` for
@@ -87,7 +87,7 @@ class HexDocModel(HexDocBaseModel):
 
 
 @dataclass_transform()
-class StripHiddenModel(HexDocModel):
+class StripHiddenModel(HexdocModel):
     """Base model which removes all keys starting with _ before validation."""
 
     @model_validator(mode="before")

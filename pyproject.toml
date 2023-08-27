@@ -1,16 +1,20 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-gradle-version>=0.2.0"]
 build-backend = "hatchling.build"
 
+# project metadata
 
 [project]
 name = "hexdoc"
-version = "0.11.0.1.0" # TODO: make a Hatch plugin to auto-set the mod version after the +
+dynamic = ["version"]
 authors = [
     { name="object-Object", email="object@objectobject.ca" },
     { name="Alwinfy" },
 ]
-readme = "README.md"
+readme = "doc/README.md"
+classifiers = [
+    "Framework :: Hatch",
+]
 requires-python = ">=3.11"
 dependencies = [
     "typing_extensions>=4.7.0",
@@ -26,18 +30,32 @@ dev = [
     "isort==5.12.0",
     "pytest>=7.3.1",
     "syrupy>=4.0.2",
-    "hatchling",
-]
-
-[tool.hatch.build]
-packages = [
-    "src/hexdoc",
-    "src/hexdoc_templates",
 ]
 
 [project.scripts]
 hexdoc = "hexdoc.hexdoc:main"
 
+# Gradle version/deps
+
+[tool.hatch.version]
+source = "gradle-properties"
+py-version = "1.0"
+
+# directory inclusion
+
+[tool.hatch.build]
+only-include = [
+    "doc/src/hexdoc",
+    "gradle.properties",
+]
+artifacts = [
+    "/doc/src/hexdoc/_export/generated",
+]
+
+[tool.hatch.build.targets.wheel]
+sources = ["doc/src"]
+
+# hexdoc entry points
 
 [project.entry-points."hexdoc.export"]
 hexcasting = "hexdoc._export:__resources__"
@@ -57,6 +75,7 @@ hexcasting = "hexdoc.hexcasting.hex_recipes"
 [project.entry-points."hexdoc.BrainsweepeeIngredient"]
 hexcasting = "hexdoc.hexcasting.hex_recipes"
 
+# Pytest
 
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
@@ -64,13 +83,21 @@ addopts = ["--import-mode=importlib"]
 [tool.coverage.report]
 include_namespace_packages = true
 
+# formatting and linting
+
 [tool.isort]
 profile = "black"
 combine_as_imports = true
+known_first_party = ["hexdoc"]
 
 [tool.pyright]
 pythonVersion = "3.11"
 pythonPlatform = "All"
+
+include = [
+    "doc/src/hexdoc",
+    "doc/src/hexdoc_templates",
+]
 
 # mostly we use strict mode
 # but pyright doesn't allow decreasing error severity in strict mode

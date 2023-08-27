@@ -3,7 +3,7 @@ from typing import Annotated, Any
 
 from pydantic import BeforeValidator
 
-from hexdoc.utils import HexDocModel, ResourceLocation
+from hexdoc.utils import HexdocModel, ResourceLocation
 
 
 class Direction(Enum):
@@ -28,7 +28,7 @@ class Direction(Enum):
 DirectionField = Annotated[Direction, BeforeValidator(Direction.validate)]
 
 
-class RawPatternInfo(HexDocModel):
+class RawPatternInfo(HexdocModel):
     startdir: DirectionField
     signature: str
     is_per_world: bool = False

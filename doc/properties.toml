@@ -37,7 +37,7 @@ hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/s
 [template]
 main = "main.html.jinja"
 packages = [
-    "hexdoc_templates",
+    "hexdoc",
 ]
 
 [template.args]

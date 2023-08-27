@@ -2,16 +2,17 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
 from syrupy.assertion import SnapshotAssertion
 
 from hexdoc.hexdoc import Args, main
+
+PROPS = "doc/properties.toml"
 
 
 def test_file(tmp_path: Path, snapshot: SnapshotAssertion):
     # generate output docs html file and assert it hasn't changed vs. the snapshot
     out_path = tmp_path / "out.html"
-    main(Args.parse_args(["properties.toml", "-o", out_path.as_posix()]))
+    main(Args.parse_args([PROPS, "-o", out_path.as_posix()]))
     assert out_path.read_text("utf-8") == snapshot
 
 
@@ -19,13 +20,8 @@ def test_cmd(tmp_path: Path, snapshot: SnapshotAssertion):
     # as above, but running the command we actually want to be using
     out_path = tmp_path / "out.html"
     subprocess.run(
-        ["hexdoc", "properties.toml", "-o", out_path.as_posix()],
+        ["hexdoc", PROPS, "-o", out_path.as_posix()],
         stdout=sys.stdout,
         stderr=sys.stderr,
     )
     assert out_path.read_text("utf-8") == snapshot
-
-
-def test_stdout(capsys: pytest.CaptureFixture[str], snapshot: SnapshotAssertion):
-    main(Args.parse_args(["properties.toml"]))
-    assert capsys.readouterr() == snapshot

@@ -10,19 +10,21 @@ from typing import Callable, Literal, Self, TypeVar, overload
 from pydantic.dataclasses import dataclass
 
 from hexdoc.utils.deserialize import JSONDict, decode_json_dict
-from hexdoc.utils.model import DEFAULT_CONFIG, HexDocModel, ValidationContext
-from hexdoc.utils.types import without_suffix
+from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
+from hexdoc.utils.types import strip_suffixes
 
 from .properties import Properties
 from .resource import PathResourceDir, ResourceLocation, ResourceType
 
-_T = TypeVar("_T")
-_T_Model = TypeVar("_T_Model", bound=HexDocModel)
-
 METADATA_SUFFIX = ".hexdoc.json"
 
+_T = TypeVar("_T")
+_T_Model = TypeVar("_T_Model", bound=HexdocModel)
 
-class HexDocMetadata(HexDocModel):
+ExportFn = Callable[[_T, _T | None, Path], str | tuple[str, Path]]
+
+
+class HexdocMetadata(HexdocModel):
     """Automatically generated at `export_dir/modid.hexdoc.json`."""
 
     book_url: str
@@ -55,8 +57,8 @@ class ModResourceLoader:
 
             # export this mod's metadata
             loader.export(
-                path=HexDocMetadata.path(props.modid),
-                data=HexDocMetadata(
+                path=HexdocMetadata.path(props.modid),
+                data=HexdocMetadata(
                     book_url=props.url,
                 ).model_dump_json(),
             )
@@ -64,7 +66,7 @@ class ModResourceLoader:
             yield loader
 
     def __post_init__(self):
-        self.mod_metadata = self.load_metadata("{modid}", HexDocMetadata)
+        self.mod_metadata = self.load_metadata("{modid}", HexdocMetadata)
 
     def get_link_base(self, resource_dir: PathResourceDir) -> str:
         modid = resource_dir.modid
@@ -114,7 +116,7 @@ class ModResourceLoader:
         id: ResourceLocation,
         *,
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[_T, _T | None], str] | Literal[False] | None = None,
+        export: ExportFn[_T] | Literal[False] | None = None,
     ) -> tuple[PathResourceDir, _T]:
         ...
 
@@ -125,7 +127,7 @@ class ModResourceLoader:
         /,
         *,
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[_T, _T | None], str] | Literal[False] | None = None,
+        export: ExportFn[_T] | Literal[False] | None = None,
     ) -> tuple[PathResourceDir, _T]:
         ...
 
@@ -136,7 +138,7 @@ class ModResourceLoader:
         id: ResourceLocation | None = None,
         *,
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[_T, _T | None], str] | Literal[False] | None = None,
+        export: ExportFn[_T] | Literal[False] | None = None,
     ) -> tuple[PathResourceDir, _T]:
         """Find the first file with this resource location in `resource_dirs`.
 
@@ -174,7 +176,7 @@ class ModResourceLoader:
         namespace: str,
         glob: str | list[str] = "**/*",
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[_T, _T | None], str] | Literal[False] | None = None,
+        export: ExportFn[_T] | Literal[False] | None = None,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
         ...
 
@@ -186,7 +188,7 @@ class ModResourceLoader:
         id: ResourceLocation,
         *,
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[_T, _T | None], str] | Literal[False] | None = None,
+        export: ExportFn[_T] | Literal[False] | None = None,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
         ...
 
@@ -199,7 +201,7 @@ class ModResourceLoader:
         namespace: str | None = None,
         glob: str | list[str] = "**/*",
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[_T, _T | None], str] | Literal[False] | None = None,
+        export: ExportFn[_T] | Literal[False] | None = None,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
         """Search for a glob under a given resource location in all of `resource_dirs`.
 
@@ -252,7 +254,7 @@ class ModResourceLoader:
                         id = ResourceLocation(
                             # eg. ["assets", "hexcasting", "lang", ...][1]
                             namespace=path.relative_to(resource_dir.path).parts[1],
-                            path=without_suffix(path.relative_to(base_path)).as_posix(),
+                            path=strip_suffixes(path.relative_to(base_path)).as_posix(),
                         )
 
                         try:
@@ -279,7 +281,7 @@ class ModResourceLoader:
         path: Path,
         *,
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[_T, _T | None], str] | Literal[False] | None = None,
+        export: ExportFn[_T] | Literal[False] | None = None,
     ) -> _T:
         if not path.is_file():
             raise FileNotFoundError(path)
@@ -313,7 +315,7 @@ class ModResourceLoader:
         value: _T,
         *,
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[_T, _T | None], str] | None = None,
+        export: ExportFn[_T] | None = None,
     ) -> None:
         ...
 
@@ -324,22 +326,26 @@ class ModResourceLoader:
         value: _T = None,
         *,
         decode: Callable[[str], _T] = decode_json_dict,
-        export: Callable[[_T, _T | None], str] | None = None,
+        export: ExportFn[_T] | None = None,
     ) -> None:
         out_path = self.props.export_dir / path
-        out_path.parent.mkdir(parents=True, exist_ok=True)
 
         logging.getLogger(__name__).debug(f"Exporting {path} to {out_path}")
-        match export:
-            case None:
-                out_data = data
-            case _:
-                try:
-                    old_value = decode(out_path.read_text("utf-8"))
-                except FileNotFoundError:
-                    old_value = None
-                out_data = export(value, old_value)
+        if export is None:
+            out_data = data
+        else:
+            try:
+                old_value = decode(out_path.read_text("utf-8"))
+            except FileNotFoundError:
+                old_value = None
 
+            match export(value, old_value, out_path):
+                case str(out_data):
+                    pass
+                case (str(out_data), Path() as out_path):
+                    pass
+
+        out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(out_data, "utf-8")
 
 

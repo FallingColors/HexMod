@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from dataclasses import InitVar
 from functools import total_ordering
+from pathlib import Path
 from typing import Any, Callable, Self
 
 from pydantic import Field, ValidationInfo, model_validator
@@ -11,7 +12,7 @@ from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.utils import (
     DEFAULT_CONFIG,
-    HexDocModel,
+    HexdocModel,
     ItemStack,
     ModResourceLoader,
     Properties,
@@ -23,10 +24,11 @@ from hexdoc.utils.deserialize import (
     isinstance_or_raise,
 )
 from hexdoc.utils.resource_loader import LoaderContext
+from hexdoc.utils.types import replace_suffixes
 
 
 @total_ordering
-class LocalizedStr(HexDocModel):
+class LocalizedStr(HexdocModel):
     """Represents a string which has been localized."""
 
     key: str
@@ -137,8 +139,15 @@ class I18n:
             for key, value in raw_lookup.items()
         }
 
-    def _export(self, new: dict[str, str], current: dict[str, str] | None):
-        return json.dumps((current or {}) | new)
+    def _export(
+        self,
+        new: dict[str, str],
+        current: dict[str, str] | None,
+        path: Path,
+    ):
+        data = json.dumps((current or {}) | new)
+        path = replace_suffixes(path, ".json")
+        return data, path
 
     def localize(self, *keys: str, default: str | None = None) -> LocalizedStr:
         """Looks up the given string in the lang table if i18n is enabled. Otherwise,

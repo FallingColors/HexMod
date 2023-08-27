@@ -3,16 +3,15 @@ from pathlib import Path
 
 from pydantic import Field, model_validator
 
-from hexdoc.minecraft.tags import Tag
-from hexdoc.patchouli.book import BookContext
-from hexdoc.utils import ResourceLocation
-from hexdoc.utils.model import HexDocModel
+from hexdoc.minecraft import Tag
+from hexdoc.patchouli import BookContext
+from hexdoc.utils import HexdocModel, ResourceLocation
 from hexdoc.utils.properties import PatternStubProps
 
 from .pattern import Direction, PatternInfo
 
 
-class PatternMetadata(HexDocModel):
+class PatternMetadata(HexdocModel):
     """Automatically generated at `export_dir/modid.patterns.hexdoc.json`."""
 
     patterns: dict[ResourceLocation, PatternInfo]

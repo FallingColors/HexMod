@@ -15,7 +15,7 @@ from pydantic.functional_validators import ModelWrapValidatorHandler
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.patchouli.text.html import HTMLElement, HTMLStream
-from hexdoc.utils import DEFAULT_CONFIG, HexDocModel
+from hexdoc.utils import DEFAULT_CONFIG, HexdocModel
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.properties import Properties
 from hexdoc.utils.resource import ResourceLocation
@@ -82,7 +82,7 @@ class FormattingContext(
         return self
 
 
-class BookLink(HexDocModel):
+class BookLink(HexdocModel):
     raw_value: str
     id: ResourceLocation
     anchor: str | None
@@ -150,7 +150,7 @@ class SpecialStyleType(Enum):
     link = "l"
 
 
-class Style(ABC, HexDocModel, frozen=True):
+class Style(ABC, HexdocModel, frozen=True):
     type: CommandStyleType | FunctionStyleType | SpecialStyleType
 
     @staticmethod
@@ -311,7 +311,7 @@ class LinkStyle(Style, frozen=True):
 
 # intentionally not inheriting from Style, because this is basically an implementation
 # detail of the parser and should not be returned or exposed anywhere
-class _CloseTag(HexDocModel, frozen=True):
+class _CloseTag(HexdocModel, frozen=True):
     type: FunctionStyleType | Literal[SpecialStyleType.base, SpecialStyleType.color]
 
 

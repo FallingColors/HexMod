@@ -1,11 +1,11 @@
-from hexdoc.utils import HexDocModel
+from hexdoc.utils import HexdocModel
 
 from ..i18n import LocalizedItem
 from .abstract_recipes import Recipe
 from .ingredients import ItemIngredientOrList
 
 
-class ItemResult(HexDocModel):
+class ItemResult(HexdocModel):
     item: LocalizedItem
     count: int | None = None
 

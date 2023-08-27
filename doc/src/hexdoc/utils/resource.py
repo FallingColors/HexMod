@@ -36,7 +36,7 @@ from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from .deserialize import JSONDict
-from .model import DEFAULT_CONFIG, HexDocModel, ValidationContext
+from .model import DEFAULT_CONFIG, HexdocModel, ValidationContext
 
 HEXDOC_EXPORTS_GROUP = "hexdoc.export"
 """Entry point group name for bundled hexdoc data."""
@@ -211,7 +211,7 @@ class Entity(BaseResourceLocation, regex=_make_regex(nbt=True)):
         return s
 
 
-class BaseResourceDir(HexDocModel, ABC):
+class BaseResourceDir(HexdocModel, ABC):
     external: bool
     reexport: bool
     """If not set, the default value will be `not self.external`.
@@ -321,7 +321,7 @@ ResourceDir = PathResourceDir | EntryPointResourceDir
 
 
 @dataclass_transform()
-class HexDocIDModel(HexDocModel, ABC):
+class HexdocIDModel(HexdocModel, ABC):
     id: ResourceLocation
     resource_dir: PathResourceDir
 

@@ -14,7 +14,7 @@ from hexdoc.hexcasting.hex_book import HexContext
 from hexdoc.patchouli.book import Book
 from hexdoc.utils import Properties
 from hexdoc.utils.cd import cd
-from hexdoc.utils.model import HexDocModel, init_context
+from hexdoc.utils.model import HexdocModel, init_context
 from hexdoc.utils.resource_loader import ModResourceLoader
 
 from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
@@ -25,7 +25,7 @@ def strip_empty_lines(text: str) -> str:
 
 
 # CLI arguments
-class Args(HexDocModel):
+class Args(HexdocModel):
     """example: main.py properties.toml -o out.html"""
 
     properties_file: Path

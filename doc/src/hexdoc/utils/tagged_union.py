@@ -6,7 +6,7 @@ from pkg_resources import iter_entry_points
 from pydantic import ValidationInfo, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from .model import HexDocModel
+from .model import HexdocModel
 from .resource import ResourceLocation
 
 
@@ -40,7 +40,7 @@ def load_entry_points(group: str):
             raise
 
 
-class InternallyTaggedUnion(HexDocModel):
+class InternallyTaggedUnion(HexdocModel):
     """Implements [internally tagged unions](https://serde.rs/enum-representations.html#internally-tagged)
     using the [Registry pattern](https://charlesreid1.github.io/python-patterns-the-registry.html).
 
