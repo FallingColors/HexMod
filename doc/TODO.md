@@ -2,6 +2,7 @@
 - [x] Fix model_validator type hints (before should take Any and narrow from there)
 - [x] Sandbox for Jinja
 - [x] First-class addon support
+- [x] Versioning
 - [ ] GitHub Actions
 - [ ] Pypi releasing
 - [ ] API improvements (disable exporting, make it easier (possible?) to generate book for imported mods)

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling", "hatch-gradle-version>=0.2.0"]
+requires = ["hatchling", "hatch-gradle-version>=0.2.1"]
 build-backend = "hatchling.build"
 
 # project metadata
