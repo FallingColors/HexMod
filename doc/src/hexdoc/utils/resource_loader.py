@@ -41,7 +41,7 @@ class ModResourceLoader:
 
     @classmethod
     @contextmanager
-    def load_all(cls, props: Properties) -> Iterator[Self]:
+    def clean_and_load_all(cls, props: Properties) -> Iterator[Self]:
         # clear the export dir so we start with a clean slate
         subprocess.run(["git", "clean", "-fdX", props.export_dir])
 

@@ -1,6 +1,8 @@
 import io
 import logging
 import os
+import shutil
+import subprocess
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
@@ -99,7 +101,7 @@ def main(args: Args | None = None) -> None:
 
         # load the book
         props = Properties.load(args.properties_file)
-        with ModResourceLoader.load_all(props) as loader:
+        with ModResourceLoader.clean_and_load_all(props) as loader:
             _, book_data = Book.load_book_json(loader, props.book)
 
             with init_context(book_data):
@@ -144,7 +146,14 @@ def main(args: Args | None = None) -> None:
             )
         )
 
+        # write docs
+        subprocess.run(["git", "clean", "-fdX", args.output_dir])
         args.output_dir.mkdir(parents=True, exist_ok=True)
+
+        static_dir = Path("static")
+        if static_dir.is_dir():
+            shutil.copytree(static_dir, args.output_dir, dirs_exist_ok=True)
+
         (args.output_dir / "index.html").write_text(docs, "utf-8")
 
 
