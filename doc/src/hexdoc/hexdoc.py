@@ -3,18 +3,18 @@ import logging
 import os
 import sys
 from argparse import ArgumentParser
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Self, Sequence
 
 from jinja2 import ChoiceLoader, FileSystemLoader, PackageLoader, StrictUndefined
 from jinja2.sandbox import SandboxedEnvironment
+from pydantic import field_validator, model_validator
 
 from hexdoc.hexcasting.hex_book import HexContext
 from hexdoc.patchouli.book import Book
 from hexdoc.utils import Properties
 from hexdoc.utils.cd import cd
-from hexdoc.utils.model import init_context
+from hexdoc.utils.model import HexDocModel, init_context
 from hexdoc.utils.resource_loader import ModResourceLoader
 
 from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
@@ -25,12 +25,12 @@ def strip_empty_lines(text: str) -> str:
 
 
 # CLI arguments
-@dataclass
-class Args:
+class Args(HexDocModel):
     """example: main.py properties.toml -o out.html"""
 
     properties_file: Path
     output_file: Path | None
+    export_only: bool
     verbose: int
     ci: bool
 
@@ -39,20 +39,33 @@ class Args:
         parser = ArgumentParser()
 
         parser.add_argument("properties_file", type=Path)
-        parser.add_argument("--output_file", "-o", type=Path)
         parser.add_argument("--verbose", "-v", action="count", default=0)
         parser.add_argument("--ci", action="store_true")
 
-        return cls(**vars(parser.parse_args(args)))
+        group = parser.add_mutually_exclusive_group(required=True)
+        group.add_argument("--output_file", "-o", type=Path)
+        group.add_argument("--export-only", "-e", action="store_true")
 
-    def __post_init__(self):
+        return cls.model_validate(vars(parser.parse_args(args)))
+
+    @field_validator("properties_file", "output_file", mode="after")
+    def _resolve_path(cls, value: Path | None):
         # make paths absolute because we're cd'ing later
-        self.properties_file = self.properties_file.resolve()
-        if self.output_file:
-            self.output_file = self.output_file.resolve()
+        match value:
+            case Path():
+                return value.resolve()
+            case _:
+                return value
 
+    @model_validator(mode="after")
+    def _post_root(self):
         if self.ci and os.getenv("RUNNER_DEBUG") == "1":
             self.verbose = True
+
+        # exactly one of these must be truthy (should be enforced by group above)
+        assert bool(self.output_file) != self.export_only
+
+        return self
 
     @property
     def log_level(self) -> int:
@@ -94,6 +107,10 @@ def main(args: Args | None = None) -> None:
 
             book = Book.model_validate(book_data, context=context)
 
+        if args.export_only:
+            return
+        assert args.output_file
+
         # set up Jinja environment
         env = SandboxedEnvironment(
             # search order: template_dirs, template_packages
@@ -127,12 +144,7 @@ def main(args: Args | None = None) -> None:
             )
         )
 
-        # if there's an output file specified, write to it
-        # otherwise just print the generated docs
-        if args.output_file:
-            args.output_file.write_text(docs, "utf-8")
-        else:
-            print(docs)
+        args.output_file.write_text(docs, "utf-8")
 
 
 if __name__ == "__main__":

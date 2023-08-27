@@ -15,9 +15,10 @@ __all__ = [
     "ModResourceLoader",
     "TypeTaggedUnion",
     "LoaderContext",
+    "init_context",
 ]
 
-from .model import DEFAULT_CONFIG, HexDocModel, ValidationContext
+from .model import DEFAULT_CONFIG, HexDocModel, ValidationContext, init_context
 from .properties import Properties
 from .resource import Entity, ItemStack, ResLoc, ResourceLocation
 from .resource_loader import LoaderContext, ModResourceLoader
