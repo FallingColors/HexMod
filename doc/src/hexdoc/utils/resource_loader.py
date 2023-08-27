@@ -101,7 +101,7 @@ class ModResourceLoader:
             type="assets",
             folder=Path("patchouli_books")
             / self.props.book.path
-            / self.props.i18n.default_lang
+            / self.props.default_lang
             / folder,
             namespace=self.props.book.namespace,
         )

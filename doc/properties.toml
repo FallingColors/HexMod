@@ -3,6 +3,7 @@
 modid = "hexcasting"
 book = "hexcasting:thehexbook"
 url = "https://gamma-delta.github.io/HexMod"
+default_lang = "en_us"
 
 # top takes priority
 resource_dirs = [
@@ -19,34 +20,6 @@ export_dir = "src/hexdoc/_export/generated"
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
 _pattern_regex = { "!Raw" = 'make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
 
-entry_id_blacklist = []
-
-template = "main.html.jinja"
-template_dirs = []
-template_packages = [
-    ["hexdoc", "_templates"],
-]
-
-is_0_black = false
-
-
-[template_args]
-title = "Hex Book"
-mod_name = "Hex Casting"
-author = "petrak@, Alwinfy"
-description = "The Hex Book, all in one place."
-icon_href = "logo.png"
-is_bleeding_edge = true
-show_landing_text = true
-
-
-[base_asset_urls]
-hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources"
-
-
-[i18n]
-default_lang = "en_us"
-
 
 [[pattern_stubs]]
 path = "{^_common.package}/common/lib/hex/HexActions.java"
@@ -55,6 +28,26 @@ regex = "{^_pattern_regex}"
 [[pattern_stubs]]
 path = "{^_fabric.package}/FabricHexInitializer.kt"
 regex = "{^_pattern_regex}"
+
+
+[base_asset_urls]
+hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources"
+
+
+[template]
+main = "main.html.jinja"
+packages = [
+    "hexdoc_templates",
+]
+
+[template.args]
+title = "Hex Book"
+mod_name = "Hex Casting"
+author = "petrak@, Alwinfy"
+description = "The Hex Book, all in one place."
+icon_href = "logo.png"
+is_bleeding_edge = true
+show_landing_text = true
 
 
 # platforms

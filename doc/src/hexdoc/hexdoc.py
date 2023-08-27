@@ -98,10 +98,10 @@ def main(args: Args | None = None) -> None:
         env = SandboxedEnvironment(
             # search order: template_dirs, template_packages
             loader=ChoiceLoader(
-                [FileSystemLoader(props.template_dirs)]
+                [FileSystemLoader(props.template.dirs)]
                 + [
                     PackageLoader(name, str(path))
-                    for name, path in props.template_packages
+                    for name, path in props.template.packages
                 ]
             ),
             undefined=StrictUndefined,
@@ -118,10 +118,10 @@ def main(args: Args | None = None) -> None:
         }
 
         # load and render template
-        template = env.get_template(props.template)
+        template = env.get_template(props.template.main)
         docs = strip_empty_lines(
             template.render(
-                **props.template_args,
+                **props.template.args,
                 book=book,
                 props=props,
             )

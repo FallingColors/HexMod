@@ -5,10 +5,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "hexdoc"
-version = "0.1.0+0.11.1-7" # TODO: make a Hatch plugin to auto-set the mod version after the +
+version = "0.11.0.1.0" # TODO: make a Hatch plugin to auto-set the mod version after the +
 authors = [
-    { name="Alwinfy" },
     { name="object-Object", email="object@objectobject.ca" },
+    { name="Alwinfy" },
 ]
 readme = "README.md"
 requires-python = ">=3.11"
@@ -29,8 +29,15 @@ dev = [
     "hatchling",
 ]
 
+[tool.hatch.build]
+packages = [
+    "src/hexdoc",
+    "src/hexdoc_templates",
+]
+
 [project.scripts]
 hexdoc = "hexdoc.hexdoc:main"
+
 
 [project.entry-points."hexdoc.export"]
 hexcasting = "hexdoc._export:__resources__"
@@ -51,22 +58,15 @@ hexcasting = "hexdoc.hexcasting.hex_recipes"
 hexcasting = "hexdoc.hexcasting.hex_recipes"
 
 
-[tool.hatch.build]
-packages = ["src/hexdoc"]
-
-
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
-
 
 [tool.coverage.report]
 include_namespace_packages = true
 
-
 [tool.isort]
 profile = "black"
 combine_as_imports = true
-
 
 [tool.pyright]
 pythonVersion = "3.11"

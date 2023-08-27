@@ -4,9 +4,9 @@ import re
 from pathlib import Path
 from typing import Annotated, Any, Self
 
-from pydantic import AfterValidator, HttpUrl
+from pydantic import AfterValidator, Field, HttpUrl, field_validator
 
-from .model import HexDocModel, StripHiddenModel
+from .model import StripHiddenModel
 from .resource import ResourceDir, ResourceLocation
 from .toml_placeholders import load_toml_with_placeholders
 
@@ -17,56 +17,48 @@ NoTrailingSlashHttpUrl = Annotated[
 ]
 
 
-class HexDocMeta(HexDocModel):
-    book_url: NoTrailingSlashHttpUrl
-
-
 class PatternStubProps(StripHiddenModel):
     path: Path
     regex: re.Pattern[str]
 
 
-class XplatProps(StripHiddenModel):
-    src: Path
-    pattern_stubs: list[PatternStubProps] | None = None
-    resources: Path
+class TemplateProps(StripHiddenModel):
+    main: str
+    dirs: list[Path] = Field(default_factory=list)
+    packages: list[tuple[str, Path]]
+    args: dict[str, Any]
 
+    @field_validator("packages", mode="before")
+    def _check_packages(cls, values: Any | list[Any]):
+        if not isinstance(values, list):
+            return values
 
-class PlatformProps(XplatProps):
-    recipes: Path
-    tags: Path
-
-
-class I18nProps(StripHiddenModel):
-    default_lang: str
+        for i, value in enumerate(values):
+            if isinstance(value, str):
+                values[i] = (value, Path())
+        return values
 
 
 class Properties(StripHiddenModel):
     modid: str
     book: ResourceLocation
     url: NoTrailingSlashHttpUrl
+    default_lang: str
+    is_0_black: bool = Field(default=False)
+    """If true, the style `$(0)` changes the text color to black; otherwise it resets
+    the text color to the default."""
 
     resource_dirs: list[ResourceDir]
     export_dir: Path
 
-    entry_id_blacklist: set[ResourceLocation]
+    entry_id_blacklist: set[ResourceLocation] = Field(default_factory=set)
 
-    template: str
-    template_dirs: list[Path]
-    template_packages: list[tuple[str, Path]]
-
-    is_0_black: bool
-    """If true, the style `$(0)` changes the text color to black; otherwise it resets
-    the text color to the default."""
-
-    template_args: dict[str, Any]
+    pattern_stubs: list[PatternStubProps]
 
     base_asset_urls: dict[str, NoTrailingSlashHttpUrl]
     """Mapping from modid to the url of that mod's `resources` directory on GitHub."""
 
-    i18n: I18nProps
-
-    pattern_stubs: list[PatternStubProps]
+    template: TemplateProps
 
     @classmethod
     def load(cls, path: Path) -> Self:
