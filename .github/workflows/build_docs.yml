@@ -6,14 +6,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_docs:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+
     steps:
     - uses: actions/checkout@v3
 
-    - uses: actions/setup-python@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
         python-version: "3.11"
 
@@ -21,21 +21,22 @@ jobs:
       run: pip install .
 
     - name: Generate file
-      run: hexdoc doc/properties.toml -o index.html.uncommitted --ci
+      run: hexdoc doc/properties.toml --ci -o out
 
-    - name: Check out gh-pages
-      uses: actions/checkout@v3
+    - name: Upload Pages artifact
+      uses: actions/upload-pages-artifact@v2
       with:
-        clean: false
-        ref: gh-pages
+        path: ./out
+  
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
 
-    - name: Overwrite file and commmit
-      run: |
-          mv index.html.uncommitted index.html
-          git config user.name "HexDoc Bot"
-          git config user.email "noreply@github.com"
-          git add index.html
-          git diff-index --quiet HEAD || git commit -m "Update web book from $GITHUB_REF"
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-    - name: Upload changes
-      run: git push
+    steps:
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

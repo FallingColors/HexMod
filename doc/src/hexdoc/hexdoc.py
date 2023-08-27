@@ -29,7 +29,7 @@ class Args(HexdocModel):
     """example: main.py properties.toml -o out.html"""
 
     properties_file: Path
-    output_file: Path | None
+    output_dir: Path | None
     export_only: bool
     verbose: int
     ci: bool
@@ -43,12 +43,12 @@ class Args(HexdocModel):
         parser.add_argument("--ci", action="store_true")
 
         group = parser.add_mutually_exclusive_group(required=True)
-        group.add_argument("--output_file", "-o", type=Path)
+        group.add_argument("--output_dir", "-o", type=Path)
         group.add_argument("--export-only", "-e", action="store_true")
 
         return cls.model_validate(vars(parser.parse_args(args)))
 
-    @field_validator("properties_file", "output_file", mode="after")
+    @field_validator("properties_file", "output_dir", mode="after")
     def _resolve_path(cls, value: Path | None):
         # make paths absolute because we're cd'ing later
         match value:
@@ -63,7 +63,7 @@ class Args(HexdocModel):
             self.verbose = True
 
         # exactly one of these must be truthy (should be enforced by group above)
-        assert bool(self.output_file) != self.export_only
+        assert bool(self.output_dir) != self.export_only
 
         return self
 
@@ -109,7 +109,7 @@ def main(args: Args | None = None) -> None:
 
         if args.export_only:
             return
-        assert args.output_file
+        assert args.output_dir
 
         # set up Jinja environment
         env = SandboxedEnvironment(
@@ -144,7 +144,8 @@ def main(args: Args | None = None) -> None:
             )
         )
 
-        args.output_file.write_text(docs, "utf-8")
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        (args.output_dir / "index.html").write_text(docs, "utf-8")
 
 
 if __name__ == "__main__":
