@@ -8,7 +8,6 @@ __all__ = [
     "NoValueType",
     "TagValue",
     "Properties",
-    "PropsContext",
     "Entity",
     "ItemStack",
     "ResLoc",
@@ -19,7 +18,7 @@ __all__ = [
 ]
 
 from .model import DEFAULT_CONFIG, HexDocModel, ValidationContext
-from .properties import Properties, PropsContext
+from .properties import Properties
 from .resource import Entity, ItemStack, ResLoc, ResourceLocation
 from .resource_loader import LoaderContext, ModResourceLoader
 from .tagged_union import (

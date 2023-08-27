@@ -1,6 +1,5 @@
 import logging
 from pathlib import Path
-from typing import Self
 
 from pydantic import Field, model_validator
 
@@ -28,7 +27,7 @@ class HexContext(BookContext):
     patterns: dict[ResourceLocation, PatternInfo] = Field(default_factory=dict)
 
     @model_validator(mode="after")
-    def _post_root_load_patterns(self) -> Self:
+    def _load_patterns(self):
         # load the tag that specifies which patterns are random per world
         per_world = Tag.load(
             registry="action",
@@ -44,11 +43,12 @@ class HexContext(BookContext):
                 self._add_pattern(pattern, signatures)
 
         # export patterns so addons can use them
+        pattern_metadata = PatternMetadata(
+            patterns=self.patterns,
+        )
         self.loader.export(
             path=PatternMetadata.path(self.props.modid),
-            data=PatternMetadata(
-                patterns=self.patterns,
-            ).model_dump_json(warnings=False),
+            data=pattern_metadata.model_dump_json(warnings=False),
         )
 
         # add external patterns AFTER exporting so we don't reexport them

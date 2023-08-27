@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Self, dataclass_transform
+from contextlib import contextmanager
+from contextvars import ContextVar
+from typing import TYPE_CHECKING, Any, Iterator, Self, dataclass_transform
 
 from pydantic import BaseModel, ConfigDict, model_validator
 from pydantic.config import ConfigDict
@@ -9,16 +11,48 @@ DEFAULT_CONFIG = ConfigDict(
     extra="forbid",
 )
 
+_init_context_var = ContextVar[Any]("_init_context_var", default=None)
+
+
+@contextmanager
+def init_context(value: Any) -> Iterator[None]:
+    """https://docs.pydantic.dev/latest/usage/validators/#using-validation-context-with-basemodel-initialization"""
+    token = _init_context_var.set(value)
+    try:
+        yield
+    finally:
+        _init_context_var.reset(token)
+
 
 @dataclass_transform()
-class ValidationContext(BaseModel):
-    """Base class for Pydantic validation context for `HexDocModel`."""
+class HexDocBaseModel(BaseModel):
+    """Base class for all Pydantic models in hexdoc. You should probably use
+    `HexDocModel` or `ValidationContext` instead.
+
+    Sets the default model config, and overrides __init__ to allow using the
+    `init_context` context manager to set validation context for constructors.
+    """
 
     model_config = DEFAULT_CONFIG
 
+    def __init__(__pydantic_self__, **data: Any) -> None:  # type: ignore
+        __tracebackhide__ = True
+        __pydantic_self__.__pydantic_validator__.validate_python(
+            data,
+            self_instance=__pydantic_self__,
+            context=_init_context_var.get(),
+        )
+
+    __init__.__pydantic_base_init__ = True  # type: ignore
+
 
 @dataclass_transform()
-class HexDocModel(BaseModel):
+class ValidationContext(HexDocBaseModel):
+    """Base class for Pydantic validation context for `HexDocModel`."""
+
+
+@dataclass_transform()
+class HexDocModel(HexDocBaseModel):
     """Base class for most Pydantic models in hexdoc.
 
     Includes type overrides to require using subclasses of `ValidationContext` for

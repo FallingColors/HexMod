@@ -5,7 +5,7 @@ from dataclasses import InitVar
 from functools import total_ordering
 from typing import Any, Callable, Self
 
-from pydantic import ValidationInfo, model_validator
+from pydantic import Field, ValidationInfo, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
@@ -22,7 +22,7 @@ from hexdoc.utils.deserialize import (
     decode_and_flatten_json_dict,
     isinstance_or_raise,
 )
-from hexdoc.utils.model import ValidationContext
+from hexdoc.utils.resource_loader import LoaderContext
 
 
 @total_ordering
@@ -201,5 +201,16 @@ class I18n:
         return self.localize(f"key.{key}")
 
 
-class I18nContext(ValidationContext):
-    i18n: I18n
+class I18nContext(LoaderContext):
+    i18n: I18n = Field(default=None)
+
+    @model_validator(mode="after")
+    def _init_i18n(self, info: ValidationInfo):
+        if self.i18n is None:  # pyright: ignore[reportUnnecessaryComparison]
+            context = cast_or_raise(info.context, dict)
+            self.i18n = I18n(
+                props=self.props,
+                loader=self.loader,
+                enabled=cast_or_raise(context["i18n"], bool),
+            )
+        return self

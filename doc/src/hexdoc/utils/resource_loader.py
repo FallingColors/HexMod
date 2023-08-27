@@ -345,3 +345,7 @@ class ModResourceLoader:
 
 class LoaderContext(ValidationContext):
     loader: ModResourceLoader
+
+    @property
+    def props(self):
+        return self.loader.props

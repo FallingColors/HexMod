@@ -5,17 +5,16 @@ import sys
 from argparse import ArgumentParser
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Self, Sequence
+from typing import Self, Sequence
 
 from jinja2 import ChoiceLoader, FileSystemLoader, PackageLoader, StrictUndefined
 from jinja2.sandbox import SandboxedEnvironment
 
 from hexdoc.hexcasting.hex_book import HexContext
-from hexdoc.minecraft.i18n import I18n
 from hexdoc.patchouli.book import Book
 from hexdoc.utils import Properties
 from hexdoc.utils.cd import cd
-from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.utils.model import init_context
 from hexdoc.utils.resource_loader import ModResourceLoader
 
 from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
@@ -89,53 +88,44 @@ def main(args: Args | None = None) -> None:
         props = Properties.load(args.properties_file)
         with ModResourceLoader.load_all(props) as loader:
             _, book_data = Book.load_book_json(loader, props.book)
-            book = Book.load_all(
-                book_data,
-                HexContext(
-                    props=props,
-                    loader=loader,
-                    i18n=I18n(
-                        props=props,
-                        loader=loader,
-                        enabled=cast_or_raise(book_data["i18n"], bool),
-                    ),
-                    macros=cast_or_raise(book_data["macros"], dict[Any, Any]),
-                ),
-            )
 
-            # set up Jinja environment
-            env = SandboxedEnvironment(
-                # search order: template_dirs, template_packages, built-in hexdoc templates
-                loader=ChoiceLoader(
-                    [FileSystemLoader(props.template_dirs)]
-                    + [
-                        PackageLoader(name, str(path))
-                        for name, path in props.template_packages
-                    ]
-                ),
-                undefined=StrictUndefined,
-                lstrip_blocks=True,
-                trim_blocks=True,
-                autoescape=True,
-                extensions=[
-                    IncludeRawExtension,
-                ],
-            )
-            env.filters |= {  # type: ignore
-                "hexdoc_block": hexdoc_block,
-                "hexdoc_wrap": hexdoc_wrap,
-            }
+            with init_context(book_data):
+                context = HexContext(loader=loader)
 
-            # load and render template
-            template = env.get_template(props.template)
-            docs = strip_empty_lines(
-                template.render(
-                    **props.template_args,
-                    book=book,
-                    props=props,
-                    mod_metadata=loader.mod_metadata,
-                )
+            book = Book.model_validate(book_data, context=context)
+
+        # set up Jinja environment
+        env = SandboxedEnvironment(
+            # search order: template_dirs, template_packages
+            loader=ChoiceLoader(
+                [FileSystemLoader(props.template_dirs)]
+                + [
+                    PackageLoader(name, str(path))
+                    for name, path in props.template_packages
+                ]
+            ),
+            undefined=StrictUndefined,
+            lstrip_blocks=True,
+            trim_blocks=True,
+            autoescape=True,
+            extensions=[
+                IncludeRawExtension,
+            ],
+        )
+        env.filters |= {  # type: ignore
+            "hexdoc_block": hexdoc_block,
+            "hexdoc_wrap": hexdoc_wrap,
+        }
+
+        # load and render template
+        template = env.get_template(props.template)
+        docs = strip_empty_lines(
+            template.render(
+                **props.template_args,
+                book=book,
+                props=props,
             )
+        )
 
         # if there's an output file specified, write to it
         # otherwise just print the generated docs

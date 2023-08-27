@@ -8,14 +8,14 @@ from contextlib import nullcontext
 from enum import Enum, auto
 from typing import Any, Literal, Self
 
-from pydantic import ValidationInfo, field_validator, model_validator
+from pydantic import Field, ValidationInfo, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.patchouli.text.html import HTMLElement, HTMLStream
-from hexdoc.utils import DEFAULT_CONFIG, HexDocModel, PropsContext
+from hexdoc.utils import DEFAULT_CONFIG, HexDocModel
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.properties import Properties
 from hexdoc.utils.resource import ResourceLocation
@@ -69,16 +69,17 @@ _COLORS = {
 
 class FormattingContext(
     I18nContext,
-    PropsContext,
     LoaderContext,
     arbitrary_types_allowed=True,
 ):
-    macros: dict[str, str]
+    macros: dict[str, str] = Field(default_factory=dict)
 
-    @field_validator("macros")
-    @classmethod
-    def _add_default_macros(cls, macros: dict[str, str]) -> dict[str, str]:
-        return DEFAULT_MACROS | macros
+    @model_validator(mode="after")
+    def _add_macros(self, info: ValidationInfo) -> Self:
+        # precedence: ctx arguments, book macros, default macros
+        context = cast_or_raise(info.context, dict)
+        self.macros = DEFAULT_MACROS | context["macros"] | self.macros
+        return self
 
 
 class BookLink(HexDocModel):

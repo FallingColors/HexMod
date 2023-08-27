@@ -6,7 +6,7 @@ from typing import Annotated, Any, Self
 
 from pydantic import AfterValidator, HttpUrl
 
-from .model import HexDocModel, StripHiddenModel, ValidationContext
+from .model import HexDocModel, StripHiddenModel
 from .resource import ResourceDir, ResourceLocation
 from .toml_placeholders import load_toml_with_placeholders
 
@@ -79,7 +79,3 @@ class Properties(StripHiddenModel):
     def get_asset_url(self, id: ResourceLocation) -> str:
         base_url = self.base_asset_urls[id.namespace]
         return f"{base_url}/{id.file_path_stub('assets').as_posix()}"
-
-
-class PropsContext(ValidationContext):
-    props: Properties
