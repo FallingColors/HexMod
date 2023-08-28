@@ -6,8 +6,11 @@ on:
     inputs:
       publish:
         description: Whether to publish the docgen to PyPI.
-        type: boolean
-        required: true
+        type: choice
+        options:
+          - PyPI
+          - TestPyPI
+        required: false
       segment:
         description: The version segment to bump with Hatch.
         type: string
@@ -92,18 +95,15 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v2
 
-  publish:
+  publish-testpypi:
     runs-on: ubuntu-latest
     needs: build
-    if: |-
-      inputs.publish == true ||
-      startsWith(github.ref, 'refs/tags') ||
-      startsWith(github.event.head_commit.message, '[Release]')
+    if: inputs.publish == 'TestPyPI'
 
     environment:
       name: testpypi
-      url: https://pypi.org/p/hexdoc
-    
+      url: https://test.pypi.org/p/hexdoc
+
     permissions:
       id-token: write
 
@@ -116,4 +116,28 @@ jobs:
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          repository-url: https://test.pypi.org/simple/
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-pypi:
+    runs-on: ubuntu-latest
+    needs: build
+    if: |-
+      inputs.publish == 'PyPI' ||
+      startsWith(github.ref, 'refs/tags') ||
+      startsWith(github.event.head_commit.message, '[Release]')
+
+    environment:
+      name: pypi
+      url: https://pypi.org/p/hexdoc
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download hexdoc artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: hexdoc-build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
