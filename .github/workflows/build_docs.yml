@@ -3,11 +3,19 @@ name: Build the web book
 on:
   push:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Whether to publish the docgen to PyPI.
+        type: boolean
+        default: false
+      segment:
+        description: The version segment to bump with Hatch.
+        type: string
+        required: false
 
 permissions:
   contents: read
   pages: write
-  id-token: write
 
 concurrency:
   group: "pages"
@@ -16,28 +24,54 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # only execute on the default branch or when invoked manually
     if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) || github.event_name == 'workflow_dispatch'
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
+      - name: Install docgen
+        run: pip install . hatch
 
-    - name: Install docgen
-      run: pip install .
+      - name: Bump version
+        if: inputs.segment
+        run: hatch version ${{ inputs.segment }}
+        
+      - name: Commit updated version
+        if: inputs.segment
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Bump version from ${{ github.ref }}
 
-    - name: Generate file
-      run: hexdoc doc/properties.toml --ci -o out
+      - name: Generate web book
+        run: hexdoc doc/properties.toml --ci -o out
+      
+      - name: Build docgen
+        run: hatch build
+      
+      - name: Upload hexdoc artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hexdoc-build
+          path: dist/
+      
+      - name: Copy build to Pages
+        run: |
+          mkdir out/dist
+          cp dist/*.whl out/dist/latest.whl
+          cp dist/*.tar.gz out/dist/latest.tar.gz
 
-    - name: Upload Pages artifact
-      uses: actions/upload-pages-artifact@v2
-      with:
-        path: ./out
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./out
   
-  deploy:
+  deploy-pages:
     runs-on: ubuntu-latest
     needs: build
 
@@ -49,3 +83,26 @@ jobs:
       - name: Deploy to Pages
         id: deployment
         uses: actions/deploy-pages@v2
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    if: inputs.publish == true
+
+    environment:
+      name: testpypi
+      url: https://pypi.org/p/hexdoc
+    
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download hexdoc artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: hexdoc-build
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/simple/
