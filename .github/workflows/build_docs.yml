@@ -27,7 +27,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # only execute on the default branch or when invoked manually
-    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) || github.event_name == 'workflow_dispatch'
+    if: |-
+      github.event_name == 'workflow_dispatch' ||
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
 
     steps:
       - uses: actions/checkout@v3
@@ -95,35 +97,11 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v2
 
-  publish-testpypi:
-    runs-on: ubuntu-latest
-    needs: build
-    if: inputs.publish == 'TestPyPI'
-
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/hexdoc
-
-    permissions:
-      id-token: write
-
-    steps:
-      - name: Download hexdoc artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: hexdoc-build
-          path: dist
-
-      - name: Publish to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-
   publish-pypi:
     runs-on: ubuntu-latest
     needs: build
     if: |-
-      inputs.publish == 'PyPI' ||
+      github.event_name == 'workflow_dispatch' && inputs.publish == 'PyPI' ||
       startsWith(github.ref, 'refs/tags') ||
       startsWith(github.event.head_commit.message, '[Release]')
 
@@ -143,3 +121,27 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-testpypi:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && inputs.publish == 'TestPyPI'
+
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/hexdoc
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download hexdoc artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: hexdoc-build
+          path: dist
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
