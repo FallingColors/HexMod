@@ -1,12 +1,9 @@
-# general properties/settings
-
 modid = "hexcasting"
 book = "hexcasting:thehexbook"
 url = "https://gamma-delta.github.io/HexMod"
 default_lang = "en_us"
 
-# top takes priority
-resource_dirs = [
+resource_dirs = [  # top takes priority
     { path = "src/hexdoc/_export/resources", reexport = false },
     "{_common.src}/main/resources",
     "{_common.src}/generated/resources",
@@ -36,6 +33,7 @@ hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/s
 
 [template]
 main = "main.html.jinja"
+static_dir = "static"
 packages = [
     "hexdoc",
 ]

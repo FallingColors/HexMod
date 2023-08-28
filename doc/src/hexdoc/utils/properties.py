@@ -24,6 +24,7 @@ class PatternStubProps(StripHiddenModel):
 
 class TemplateProps(StripHiddenModel):
     main: str
+    static_dir: Path | None = None
     dirs: list[Path] = Field(default_factory=list)
     packages: list[tuple[str, Path]]
     args: dict[str, Any]
@@ -49,11 +50,11 @@ class Properties(StripHiddenModel):
     the text color to the default."""
 
     resource_dirs: list[ResourceDir]
-    export_dir: Path
-
-    entry_id_blacklist: set[ResourceLocation] = Field(default_factory=set)
+    export_dir: Path | None = None
 
     pattern_stubs: list[PatternStubProps]
+
+    entry_id_blacklist: set[ResourceLocation] = Field(default_factory=set)
 
     base_asset_urls: dict[str, NoTrailingSlashHttpUrl]
     """Mapping from modid to the url of that mod's `resources` directory on GitHub."""

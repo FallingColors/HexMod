@@ -43,7 +43,8 @@ class ModResourceLoader:
     @contextmanager
     def clean_and_load_all(cls, props: Properties) -> Iterator[Self]:
         # clear the export dir so we start with a clean slate
-        subprocess.run(["git", "clean", "-fdX", props.export_dir])
+        if props.export_dir:
+            subprocess.run(["git", "clean", "-fdX", props.export_dir])
 
         with ExitStack() as stack:
             loader = cls(
@@ -328,6 +329,8 @@ class ModResourceLoader:
         decode: Callable[[str], _T] = decode_json_dict,
         export: ExportFn[_T] | None = None,
     ) -> None:
+        if not self.props.export_dir:
+            return
         out_path = self.props.export_dir / path
 
         logging.getLogger(__name__).debug(f"Exporting {path} to {out_path}")

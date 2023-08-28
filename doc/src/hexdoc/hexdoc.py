@@ -150,8 +150,8 @@ def main(args: Args | None = None) -> None:
         subprocess.run(["git", "clean", "-fdX", args.output_dir])
         args.output_dir.mkdir(parents=True, exist_ok=True)
 
-        static_dir = Path("static")
-        if static_dir.is_dir():
+        static_dir = props.template.static_dir
+        if static_dir and static_dir.is_dir():
             shutil.copytree(static_dir, args.output_dir, dirs_exist_ok=True)
 
         (args.output_dir / "index.html").write_text(docs, "utf-8")

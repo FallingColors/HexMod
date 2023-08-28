@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling", "hatch-gradle-version>=0.2.1"]
+requires = ["hatchling", "hatch-gradle-version>=0.3.0"]
 build-backend = "hatchling.build"
 
 # project metadata
@@ -38,8 +38,9 @@ hexdoc = "hexdoc.hexdoc:main"
 # Gradle version/deps
 
 [tool.hatch.version]
+scheme = "gradle"
 source = "gradle-properties"
-py-version = "1.0"
+py-path = "doc/src/hexdoc/__version__.py"
 
 # directory inclusion
 
