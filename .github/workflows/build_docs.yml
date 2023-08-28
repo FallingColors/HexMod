@@ -5,15 +5,14 @@ on:
   workflow_dispatch:
     inputs:
       publish:
-        description: Whether to publish the docgen to PyPI.
+        description: Package index to publish the docgen to
         type: choice
         options:
+          - none
           - PyPI
           - TestPyPI
-        required: false
-        default:
       segment:
-        description: The version segment to bump with Hatch.
+        description: Version segment to bump with Hatch
         type: string
         required: false
 
