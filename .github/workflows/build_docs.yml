@@ -139,6 +139,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: hexdoc-build
+          path: dist
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
