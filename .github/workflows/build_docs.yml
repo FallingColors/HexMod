@@ -15,10 +15,9 @@ on:
 
 permissions:
   contents: read
-  pages: write
 
 concurrency:
-  group: "pages"
+  group: "hexdoc"
   cancel-in-progress: false
 
 jobs:
@@ -78,6 +77,10 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
+    permissions:
+      id-token: write
+      pages: write
 
     steps:
       - name: Deploy to Pages
