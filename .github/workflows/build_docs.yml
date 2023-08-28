@@ -11,6 +11,7 @@ on:
           - PyPI
           - TestPyPI
         required: false
+        default:
       segment:
         description: The version segment to bump with Hatch.
         type: string
