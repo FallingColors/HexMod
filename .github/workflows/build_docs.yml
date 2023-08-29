@@ -108,9 +108,14 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
+      
+      - name: Download hexdoc artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: hexdoc-build
 
       - name: Install docgen
-        run: pip install . hatch
+        run: pip install *.whl
 
       - name: Build web book
         id: build-web-book
