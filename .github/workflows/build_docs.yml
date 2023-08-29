@@ -137,6 +137,8 @@ jobs:
       - name: Deploy to Pages
         id: deployment
         uses: actions/deploy-pages@v2
+        with:
+          timeout: 300000 # 5 minutes
 
   publish-pypi:
     runs-on: ubuntu-latest
