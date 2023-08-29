@@ -80,12 +80,6 @@ jobs:
           cp dist/*.whl _site/dist/latest.whl
           cp dist/*.tar.gz _site/dist/latest.tar.gz
 
-      - name: Fix permissions
-        run: |
-          chmod -c -R +rX "out/" | while read line; do
-            echo "::warning title=Invalid file permissions automatically fixed::$line"
-          done
-
       - name: Upload temporary Pages artifact
         uses: actions/upload-artifact@v3
         with:
@@ -137,6 +131,12 @@ jobs:
         with:
           name: github-pages-tmp
           path: _site/
+
+      - name: Fix permissions
+        run: |
+          chmod -c -R +rX "_site/" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
