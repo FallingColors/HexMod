@@ -138,6 +138,9 @@ jobs:
         with:
           name: hexdoc-build
 
+      - name: Install docgen
+        run: pip install *.whl
+
       - name: Download temporary Pages artifact
         uses: actions/download-artifact@v3
         with:
